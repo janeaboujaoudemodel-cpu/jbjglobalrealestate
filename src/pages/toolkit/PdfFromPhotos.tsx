@@ -931,11 +931,7 @@ export default PdfFromPhotos;
 
 function GoldCard({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl p-6" style={{
-      background: "linear-gradient(145deg, #111520, #0D1019)",
-      border: "1px solid rgba(200,167,102,0.18)",
-      boxShadow: "0 2px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(200,167,102,0.06)",
-    }}>
+    <div className="rounded-2xl p-6 bg-white border border-stone-200 shadow-sm">
       {children}
     </div>
   );
