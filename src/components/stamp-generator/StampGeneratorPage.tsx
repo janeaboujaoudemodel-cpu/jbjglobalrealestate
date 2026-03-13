@@ -353,6 +353,12 @@ export default function StampGeneratorPage() {
 
   function handleSelectConcept(concept: StampDesignConcept) {
     setSelectedId(concept.id);
+    // Only update the live preview — don't open the modal
+    toast.success('Design selected — click "Edit & Export" or expand preview to view on documents', { duration: 3000 });
+  }
+
+  function handleOpenPreview(concept: StampDesignConcept) {
+    setSelectedId(concept.id);
     setPreviewConcept(concept);
   }
 
