@@ -605,7 +605,7 @@ export function StampPreviewModal({
                     {/* Stamp as emblem */}
                     <div className="relative flex items-center justify-center p-5 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0.15)' }}>
                       <div style={{ filter: 'brightness(0) invert(1) opacity(0.92)' }}>
-                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" size={140}/>
+                        <StampSVGRenderer svgSource={displaySvg} tintColor="#ffffff" secondaryColor="#ffffff" accentColor="#ffffff" fontFamily={fontFamily} fontWeight={fontWeight} fontStyle={fontStyle} fontSize={fontSize} size={140}/>
                       </div>
                     </div>
                     {/* Title area */}
