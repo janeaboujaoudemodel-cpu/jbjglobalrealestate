@@ -17083,6 +17083,7 @@ export type Database = {
           bedrooms_max: number | null
           bedrooms_min: number | null
           building_count: number | null
+          card_image_url: string | null
           community_id: string | null
           construction_progress: number | null
           construction_start_date: string | null
@@ -17102,6 +17103,7 @@ export type Database = {
           floor_plan_types: Json | null
           floors: number | null
           furnished_status: string | null
+          gallery_start_image_url: string | null
           handover_date: string | null
           highlights: Json | null
           id: string
@@ -17171,6 +17173,7 @@ export type Database = {
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           building_count?: number | null
+          card_image_url?: string | null
           community_id?: string | null
           construction_progress?: number | null
           construction_start_date?: string | null
@@ -17190,6 +17193,7 @@ export type Database = {
           floor_plan_types?: Json | null
           floors?: number | null
           furnished_status?: string | null
+          gallery_start_image_url?: string | null
           handover_date?: string | null
           highlights?: Json | null
           id?: string
@@ -17259,6 +17263,7 @@ export type Database = {
           bedrooms_max?: number | null
           bedrooms_min?: number | null
           building_count?: number | null
+          card_image_url?: string | null
           community_id?: string | null
           construction_progress?: number | null
           construction_start_date?: string | null
@@ -17278,6 +17283,7 @@ export type Database = {
           floor_plan_types?: Json | null
           floors?: number | null
           furnished_status?: string | null
+          gallery_start_image_url?: string | null
           handover_date?: string | null
           highlights?: Json | null
           id?: string

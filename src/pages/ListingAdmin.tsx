@@ -55,6 +55,7 @@ import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel"
 import { EnrichmentCenter } from "@/components/listing-admin/EnrichmentCenter";
 import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
 import { ProjectPreviewModal } from "@/components/listing-admin/ProjectPreviewModal";
+import { ProjectMediaManager } from "@/components/listing-admin/ProjectMediaManager";
 import { SafeImage } from "@/components/SafeImage";
 import type { UnifiedProject } from "@/types/unifiedProject";
 import { logAdminEdit, detectChangedFields, useLatestEditLogs, formatRelativeTime } from "@/hooks/useAdminEditLog";
@@ -1415,53 +1416,17 @@ const ListingAdmin = () => {
                   </TabsContent>
 
                   <TabsContent value="images" className="space-y-4">
-                    {/* Image Upload */}
-                    <Button
-                      onClick={() => imageInputRef.current?.click()}
-                      variant="secondary"
-                    >
-                      <Image className="w-4 h-4 mr-2" />
-                      {t('listingAdmin.uploadImages')}
-                    </Button>
-                    <input
-                      ref={imageInputRef}
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageUpload}
-                    />
-
-                    {/* Image Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {selectedProject?.images?.map((img: any) => (
-                        <div
-                          key={img.id}
-                          className="relative aspect-video rounded-lg overflow-hidden bg-[#EDE4D3] border-2 border-gold/30"
-                        >
-                          <img
-                            src={img.image_url}
-                            alt="Project"
-                            className="w-full h-full object-cover"
-                            referrerPolicy="no-referrer"
-                            onError={(e) => {
-                              (e.currentTarget as HTMLImageElement).src = "/placeholder.svg";
-                            }}
-                          />
-                          {img.is_primary && (
-                            <Badge className="absolute top-2 left-2 bg-gold text-black">
-                              {t('listingAdmin.primary')}
-                            </Badge>
-                          )}
-                        </div>
-                      ))}
-                      {(!selectedProject?.images || selectedProject.images.length === 0) && (
-                        <div className="col-span-full text-center py-12 text-zinc-500">
-                          <Image className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                          <p>{t('listingAdmin.noImages')}</p>
-                        </div>
-                      )}
-                    </div>
+                    {selectedProject ? (
+                      <ProjectMediaManager
+                        project={selectedProject}
+                        onRefresh={refetchProjects}
+                      />
+                    ) : (
+                      <div className="text-center py-12 text-muted-foreground">
+                        <Image className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                        <p>Save the project first to manage images</p>
+                      </div>
+                    )}
                   </TabsContent>
                 </Tabs>
               </CardContent>
