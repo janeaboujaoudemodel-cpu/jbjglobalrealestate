@@ -34,7 +34,56 @@ import { Label } from "@/components/ui/label";
 
 const INQUIRY_FORM_URL = "https://JBJ.ae/contact";
 
-const Favorites = () => {
+const DESIGN_TYPE_ICONS: Record<string, React.ReactNode> = {
+  stamp: <Stamp className="w-4 h-4 text-gold" />,
+  business_card: <Briefcase className="w-4 h-4 text-gold" />,
+  letterhead: <FileText className="w-4 h-4 text-gold" />,
+  cv: <File className="w-4 h-4 text-gold" />,
+  logo: <PenTool className="w-4 h-4 text-gold" />,
+  cover_letter: <FileText className="w-4 h-4 text-gold" />,
+  document: <File className="w-4 h-4 text-gold" />,
+};
+const getDesignTypeIcon = (type: string) => DESIGN_TYPE_ICONS[type] || <File className="w-4 h-4 text-gold" />;
+
+const DESIGN_TYPE_ROUTES: Record<string, string> = {
+  stamp: "/toolkit/stamp-generator",
+  business_card: "/toolkit/business-card",
+  letterhead: "/toolkit/letterhead",
+  cv: "/toolkit/cv-builder",
+  logo: "/toolkit/logo-maker",
+};
+
+function DesignCard({ item, onRemove }: { item: { id: string; item_name: string | null; item_type: string; item_id: string; thumbnail_svg: string | null; created_at: string }; onRemove: () => void }) {
+  const route = DESIGN_TYPE_ROUTES[item.item_type];
+  return (
+    <div className="bg-white/70 rounded-xl border border-gold/20 overflow-hidden group hover:border-gold/40 transition-all">
+      <div className="aspect-square bg-[#F5F0E6] flex items-center justify-center p-4 relative">
+        {item.thumbnail_svg ? (
+          <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: item.thumbnail_svg.slice(0, 50000) }} />
+        ) : (
+          <div className="text-gold/30">{getDesignTypeIcon(item.item_type)}</div>
+        )}
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemove(); }}
+          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 border border-gold/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50 hover:border-red-200"
+        >
+          <Trash2 className="w-3.5 h-3.5 text-red-400" />
+        </button>
+      </div>
+      <div className="p-3">
+        <p className="text-sm font-medium text-black truncate">{item.item_name || DESIGN_TYPE_LABELS[item.item_type as DesignItemType] || "Design"}</p>
+        <p className="text-xs text-black/40 mt-1">{new Date(item.created_at).toLocaleDateString()}</p>
+        {route && (
+          <Link to={`${route}/${item.item_id}`} className="text-xs text-gold hover:underline mt-1 inline-block">
+            Open in editor →
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get("tab") === "shortlist" ? "shortlist" : searchParams.get("tab") === "designs" ? "designs" : "favorites";
