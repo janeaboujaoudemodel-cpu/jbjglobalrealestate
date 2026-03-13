@@ -717,9 +717,9 @@ export default function ScanSignPage() {
                   <div
                     className="w-full rounded-xl p-6 text-center cursor-pointer transition-all hover:opacity-90"
                     style={{ border: `2px dashed rgba(200,167,102,0.3)`, background: pages.length > 0 ? "rgba(200,167,102,0.05)" : "rgba(255,255,255,0.02)" }}
-                    onClick={pages.length > 0 ? startSignatureDrawing : undefined}>
-                    <Pen className="w-9 h-9 mx-auto mb-3" style={{ color: pages.length > 0 ? G.accentLight : "rgba(255,255,255,0.15)" }} />
-                    <p className="text-sm font-semibold" style={{ color: pages.length > 0 ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.25)" }}>
+                     onClick={pages.length > 0 ? startSignatureDrawing : undefined}>
+                    <Pen className="w-9 h-9 mx-auto mb-3" style={{ color: pages.length > 0 ? G.accentLight : "rgba(0,0,0,0.15)" }} />
+                    <p className="text-sm font-semibold" style={{ color: pages.length > 0 ? "rgba(0,0,0,0.7)" : "rgba(0,0,0,0.25)" }}>
                       {pages.length > 0 ? "Click to Draw Signature" : "Add pages first to sign"}
                     </p>
                   </div>
