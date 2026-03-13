@@ -92,13 +92,17 @@ const BUSINESS_TYPES = [
   'Healthcare', 'Education', 'Food & Beverage', 'Tourism', 'Finance', 'Legal', 'Other'
 ];
 
-const SEPARATOR_OPTIONS: { key: SeparatorStyle; icon: React.ReactNode; label: string }[] = [
-  { key: 'dot', icon: <Circle size={10} className="fill-current"/>, label: 'Dots' },
-  { key: 'star', icon: <Star size={10} className="fill-current"/>, label: 'Stars' },
-  { key: 'dash', icon: <Minus size={10}/>, label: 'Dash' },
-  { key: 'circle', icon: <Hash size={10}/>, label: 'Ring' },
-  { key: 'none', icon: <X size={10}/>, label: 'None' },
-];
+const SEPARATOR_GLYPHS: Record<SeparatorStyle, string> = {
+  'dot': '●', 'star': '★', 'square': '■', 'diamond': '◆',
+  'line': '—', 'double-line': '═', 'triangle': '▲', 'cross': '✦',
+  'floral': '❀', 'ornament': '❖', 'dash': '—', 'circle': '◉', 'none': '⊘',
+};
+
+const SEPARATOR_OPTIONS: { key: SeparatorStyle; glyph: string; label: string }[] = ALL_SEPARATOR_STYLES.map(key => ({
+  key,
+  glyph: SEPARATOR_GLYPHS[key],
+  label: separatorLabel(key),
+}));
 
 const OptionButton = ({ selected, onClick, children, className = '' }: {
   selected: boolean; onClick: () => void; children: React.ReactNode; className?: string;
