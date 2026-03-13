@@ -12,7 +12,8 @@ import {
   Send, Plus, Hash, Smile, Paperclip, Settings,
   Users, Search, Bell, Phone, Video, MoreVertical, MessageSquare,
   ArrowLeft, Menu, Building2, Lock, BellOff, Archive, Copy,
-  X, Check, Eye, ChevronDown, ChevronRight, Sparkles, Star
+  X, Check, Eye, ChevronDown, ChevronRight, Sparkles, Star,
+  Mail
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
