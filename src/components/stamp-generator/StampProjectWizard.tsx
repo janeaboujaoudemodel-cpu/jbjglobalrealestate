@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 import {
   Stamp, Building2, Palette, Image, Check, Type, Upload, X, Globe, FileText,
   RotateCcw, MapPin, Undo2, Redo2, RotateCw, Save, Circle, Star, Minus, Hash,
-  Wand2, Download, Printer, FileDown,
+  Wand2, Download, Printer, FileDown, ChevronDown,
 } from 'lucide-react';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
