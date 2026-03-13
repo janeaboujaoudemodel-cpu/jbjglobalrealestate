@@ -1,42 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Diagnosis
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-Both `renderTopArcTextPath` and `renderBottomArcTextPath` use the **exact same SVG arc path**:
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-```
-M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}
-```
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-This path draws the **top half** of the circle in both cases. That's why Arabic (top) and English (bottom) are rendering on top of each other — they're both placed on the same top arc.
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-The same issue affects the location arcs: English location top arc and Arabic location bottom arc both sit on the top half.
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-## Fix (single file: `src/lib/stampOfficialTemplate.ts`)
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-### 1. Fix `renderBottomArcTextPath` — use actual bottom arc path
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-Change the arc path from the top semicircle to the **bottom semicircle**:
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-```
-M ${cx + r} ${cy} A ${r} ${r} 0 1 1 ${cx - r} ${cy}
-```
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-This sweeps from right (3 o'clock) clockwise through the bottom to left (9 o'clock). Text placed on this path sits along the bottom half. The existing string-reversal logic for English text will keep it reading left-to-right.
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-### 2. Fix location English arc — swap to bottom, Arabic to top
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-Currently the layout has English location on top arc and Arabic on bottom. Per the user's rule (Arabic always on top, English always on bottom), swap them:
-- **Arabic location** → top arc (using `renderTopArcTextPath`)
-- **English location** → bottom arc (using `renderBottomArcTextPath`)
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-### Summary of changes
-
-| What | Current (broken) | Fixed |
-|------|-----------------|-------|
-| `renderBottomArcTextPath` arc path | Same as top: left→right via top | Right→left via **bottom** semicircle |
-| Location Arabic | Bottom arc | **Top** arc |
-| Location English | Top arc | **Bottom** arc |
-
-No geometry or font size changes needed — only the arc path direction and location arc assignment.
-
+### Files Changed
+| File | Action |
+|------|--------|
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

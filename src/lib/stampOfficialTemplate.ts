@@ -162,9 +162,8 @@ function renderBottomArcTextPath(
   isArabic: boolean, pathId: string, fontWeight = '800'
 ): string {
   if (!text) return '';
-  // Bottom arc path: from (cx-r, cy) sweeping clockwise through bottom to (cx+r, cy)
-  // This makes text read left-to-right naturally (upright characters)
-  const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}`;
+  // Bottom arc path: from (cx+r, cy) sweeping clockwise through bottom to (cx-r, cy)
+  const arcPath = `M ${cx + r} ${cy} A ${r} ${r} 0 1 1 ${cx - r} ${cy}`;
   // Reverse text so characters appear in correct reading order on the reversed path
   const reversed = text.split('').reverse().join('');
   const displayText = isArabic ? text : reversed;
@@ -314,22 +313,17 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     const locFontSize = fitFontSize(locEn, 10, locArcLen, 0.55);
     const locArFontSize = fitFontSize(locAr, 10, locArcLen, 0.48);
 
-    // English location on TOP arc (between middle ring and inner ring)
-    const locTopArc = `M ${cx - clampedLocTextR} ${cy} A ${clampedLocTextR} ${clampedLocTextR} 0 1 1 ${cx + clampedLocTextR} ${cy}`;
-    
-    // Arabic location on BOTTOM arc
-    const locArContent = renderBottomArcTextPath(
-      locAr, cx, cy, clampedLocTextR, locArFontSize, ARABIC_FONT, secColor, 1, true, 'loc-bottom', '600'
+    // Arabic location on TOP arc (between middle ring and inner ring)
+    const locArContent = renderTopArcTextPath(
+      locAr, cx, cy, clampedLocTextR, locArFontSize, ARABIC_FONT, secColor, 1, true, 'loc-top', '600'
     );
 
-    // English location on TOP
-    locationContent = `
-      <defs><path id="loc-top" d="${locTopArc}"/></defs>
-      <text font-family="${enFont}" font-size="${locFontSize}" fill="${secColor}" letter-spacing="1.5" font-weight="600">
-        <textPath href="#loc-top" startOffset="50%" text-anchor="middle">${locEn.toUpperCase()}</textPath>
-      </text>
-      ${locArContent}
-    `;
+    // English location on BOTTOM arc
+    const locEnContent = renderBottomArcTextPath(
+      locEn.toUpperCase(), cx, cy, clampedLocTextR, locFontSize, enFont, secColor, 1.5, false, 'loc-bottom', '600'
+    );
+
+    locationContent = `${locArContent}${locEnContent}`;
 
     // Optional location separator
     if (config.locationSeparatorStyle && config.locationSeparatorStyle !== 'none') {
