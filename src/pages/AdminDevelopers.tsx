@@ -383,8 +383,11 @@ const AdminDevelopers = () => {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="dubai" className="space-y-6">
+        <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+              📊 Overview
+            </TabsTrigger>
             <TabsTrigger value="dubai" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
               Dubai ({dubaiDevelopers.length})
             </TabsTrigger>
@@ -395,6 +398,10 @@ const AdminDevelopers = () => {
               📅 Briefings
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="overview">
+            <DeveloperOverviewTab />
+          </TabsContent>
 
           <TabsContent value="dubai" className="space-y-4">
             {dubaiDevelopers.map(dev => (
