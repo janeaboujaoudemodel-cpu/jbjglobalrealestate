@@ -609,6 +609,7 @@ export default function StampGeneratorPage() {
                 { key: 'text' as const, icon: Type, label: 'Text' },
                 { key: 'centerart' as const, icon: Stamp, label: 'Art' },
                 { key: 'logo' as const, icon: Upload, label: 'Logo' },
+                { key: 'mystamp' as const, icon: Sparkles, label: 'My Stamp' },
               ]).map(t => (
                 <button key={t.key} onClick={() => setLeftTab(t.key)}
                   className={`flex-1 flex items-center justify-center gap-0.5 py-1 rounded-md text-[9px] font-medium transition-all ${leftTab === t.key ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
