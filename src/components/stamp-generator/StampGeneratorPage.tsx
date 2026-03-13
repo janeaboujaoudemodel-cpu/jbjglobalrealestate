@@ -689,6 +689,15 @@ export default function StampGeneratorPage() {
               <RefreshCw size={10} className={generating ? 'animate-spin' : ''}/>
               {generating ? 'Generating…' : 'Regenerate'}
             </Button>
+            <Button variant="outline" size="sm" onClick={generateVariations} disabled={variationsLoading} className="gap-1 text-[10px] h-7 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))]">
+              <Sparkles size={10}/> AI Variations
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setShowVersionSelector(true)} className="gap-1 text-[10px] h-7">
+              <Clock size={10}/> Previous
+            </Button>
+            <Button variant="outline" size="sm" onClick={saveCurrentAsBrandAsset} disabled={!selectedId} className="gap-1 text-[10px] h-7">
+              <Package size={10}/> Save Asset
+            </Button>
             {selectedId && (
               <Button size="sm" className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1 text-[10px] h-7"
                 onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}>
