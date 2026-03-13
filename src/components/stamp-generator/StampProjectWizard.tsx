@@ -520,15 +520,16 @@ export default function StampProjectWizard() {
                     <Switch checked={form.show_location} onCheckedChange={v => set('show_location', v)}/>
                   </div>
 
-                  {/* Toggle: Show License (only if entered) */}
-                  {form.registration_number_optional && (
-                    <div className="flex items-center justify-between px-3 py-2 rounded-lg border border-[hsl(var(--border))]">
-                      <div className="flex items-center gap-2">
-                        <FileText size={12} className="text-[hsl(var(--gold))]"/>
-                        <span className="text-[11px] font-medium">Show License Number</span>
-                      </div>
-                      <Switch checked={form.show_license_number} onCheckedChange={v => set('show_license_number', v)}/>
+                  {/* Toggle: Show License Number — always visible */}
+                  <div className="flex items-center justify-between px-3 py-2 rounded-lg border border-[hsl(var(--border))]">
+                    <div className="flex items-center gap-2">
+                      <FileText size={12} className="text-[hsl(var(--gold))]"/>
+                      <span className="text-[11px] font-medium">Show Trade License Number</span>
                     </div>
+                    <Switch checked={form.show_license_number} onCheckedChange={v => set('show_license_number', v)}/>
+                  </div>
+                  {form.show_license_number && !form.registration_number_optional && (
+                    <Input value={form.registration_number_optional} onChange={e => set('registration_number_optional', e.target.value)} placeholder="Enter trade license number" className="h-8 text-sm"/>
                   )}
                 </div>
               </ScrollArea>

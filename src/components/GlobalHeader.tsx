@@ -1068,30 +1068,6 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                     <Link to="/ticket-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-red-600 rounded-lg border border-red-500/30 hover:bg-red-50/50 transition-colors w-full">
                       <ClipboardCheck className="w-3.5 h-3.5 text-red-500" />Create or Follow Up Ticket
                     </Link>
-                    {user ? (
-                      <button
-                        onClick={async () => { await supabase.auth.signOut(); setMobileMenuOpen(false); }}
-                        className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-black/70 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50 transition-colors w-full"
-                      >
-                        <LogOut className="w-3.5 h-3.5 text-red-500" />Sign Out
-                      </button>
-                    ) : (
-                      <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center gap-2 py-2.5 text-xs font-bold text-black/70 rounded-lg border border-gold/30 hover:bg-gold/10 transition-colors w-full">
-                        <User className="w-3.5 h-3.5" />Sign In
-                      </Link>
-                    )}
-                  </div>
-
-                  {/* Gold Divider */}
-                  <div className="h-px bg-gold/30 my-3" />
-
-                  {/* JBJ Monogram at the very bottom */}
-                  <div className="flex justify-center pt-2 pb-4">
-                    <img 
-                      src={jbjMonogramLightBg}
-                      alt="JBJ Global Real Estate"
-                      className="w-16 h-16 object-contain opacity-60"
-                    />
                   </div>
                 </div>
 
