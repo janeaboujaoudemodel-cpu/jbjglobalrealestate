@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
-import { User, ArrowRight } from "lucide-react";
+import { User, ArrowRight, Compass } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { usePopupVisibility } from "@/contexts/PopupCoordinatorContext";
 import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
@@ -45,14 +45,19 @@ const WelcomeModal = () => {
     setShouldShow(false);
   };
 
-  // Guest mode removed — users must sign in
-
   const handleLogin = () => {
     localStorage.setItem(WELCOME_MODAL_KEY, "true");
     localStorage.setItem(RETURNING_USER_KEY, "true");
     dismiss();
     setShouldShow(false);
     navigate("/auth");
+  };
+
+  const handleExplore = () => {
+    localStorage.setItem(WELCOME_MODAL_KEY, "true");
+    localStorage.setItem(RETURNING_USER_KEY, "true");
+    dismiss();
+    setShouldShow(false);
   };
 
   if (!shouldShow) return null;
@@ -138,26 +143,47 @@ const WelcomeModal = () => {
               <div className="absolute left-1/2 -translate-x-1/2 -top-1.5 w-3 h-3 bg-gold/80 rotate-45" />
             </div>
 
-              {/* Action Button — Sign In Only */}
-              <div className="space-y-4">
-                <Button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleLogin();
-                  }}
-                  type="button"
-                  className="w-full py-6 bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-black font-bold text-base shadow-xl rounded-xl group relative overflow-hidden transition-all duration-300"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                  <User className="w-5 h-5 mr-3 relative z-10" strokeWidth={2} />
-                  <span className="flex-1 text-left relative z-10">Sign In / Create Account</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" strokeWidth={2} />
-                </Button>
-              </div>
+            {/* Action Buttons — Sign In + Explore */}
+            <div className="space-y-3">
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleLogin();
+                }}
+                type="button"
+                className="w-full py-6 bg-gold hover:bg-gold/90 text-black font-bold text-base shadow-xl rounded-xl group relative overflow-hidden transition-all duration-300"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                <User className="w-5 h-5 mr-3 relative z-10" strokeWidth={2} />
+                <span className="flex-1 text-left relative z-10">Sign In / Create Account</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10" strokeWidth={2} />
+              </Button>
+
+              <Button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleExplore();
+                }}
+                type="button"
+                variant="outline"
+                className="w-full py-6 bg-transparent border border-gold/30 text-gold hover:bg-gold/10 font-semibold text-base rounded-xl group relative overflow-hidden transition-all duration-300"
+              >
+                <Compass className="w-5 h-5 mr-3 relative z-10" strokeWidth={2} />
+                <span className="flex-1 text-left relative z-10">Explore the Platform</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform relative z-10 opacity-50" strokeWidth={2} />
+              </Button>
+            </div>
+
+            {/* Loyalty hint */}
+            <p className="text-center text-zinc-500 text-xs mt-6 leading-relaxed">
+              Sign in to earn loyalty points on every activity —<br />
+              redeemable on purchases & subscriptions
+            </p>
 
             {/* Footer text with copyright */}
-            <p className="text-center text-zinc-500 text-xs mt-8">
+            <p className="text-center text-zinc-600 text-[10px] mt-4">
               © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
             </p>
           </div>
