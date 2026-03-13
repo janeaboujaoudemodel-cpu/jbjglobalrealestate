@@ -328,7 +328,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
 
     // Optional location separator
     if (config.locationSeparatorStyle && config.locationSeparatorStyle !== 'none') {
-      locationContent += renderSeparators(cx, cy, clampedLocTextR, config.locationSeparatorStyle, secColor);
+      locationContent += renderSeparators(cx, cy, clampedLocTextR, config.locationSeparatorStyle, secColor, 'loc-separator');
     }
   }
 
