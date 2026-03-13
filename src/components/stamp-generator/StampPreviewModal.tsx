@@ -630,7 +630,7 @@ export function StampPreviewModal({
         </div>
       </div>
 
-      {/* Fullscreen stamp overlay */}
+      {/* Fullscreen stamp overlay with editing toolbar */}
       {stampFullscreen && (
         <div
           className="fixed inset-0 z-[10100] bg-black/90 flex items-center justify-center"
@@ -648,8 +648,38 @@ export function StampPreviewModal({
               tintColor={tintColor}
               secondaryColor={secondaryColor}
               accentColor={accentColor}
+              fontFamily={fontFamily}
+              fontWeight={fontWeight}
+              fontStyle={fontStyle}
+              fontSize={fontSize}
+              inkMode={false}
               size={420}
             />
+          </div>
+          {/* Floating editing toolbar in fullscreen */}
+          <div className="absolute bottom-16 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur rounded-2xl shadow-2xl border border-[hsl(var(--border))] px-5 py-3 flex items-center gap-4" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center gap-2">
+              <span className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase">Colors</span>
+              <div className="w-6 h-6 rounded-full border-2 border-white shadow-sm cursor-pointer" style={{ backgroundColor: tintColor }} title="Primary color"/>
+              {secondaryColor && <div className="w-5 h-5 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: secondaryColor }} title="Secondary"/>}
+              {accentColor && <div className="w-5 h-5 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: accentColor }} title="Accent"/>}
+            </div>
+            <div className="w-px h-6 bg-[hsl(var(--border))]"/>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase">Align</span>
+              {([
+                { key: 'left' as const, icon: AlignLeft },
+                { key: 'center' as const, icon: AlignCenter },
+                { key: 'right' as const, icon: AlignRight },
+              ]).map(a => (
+                <button key={a.key} onClick={() => setStampAlign(a.key)}
+                  className={`p-1.5 rounded-lg transition-all ${stampAlign === a.key ? 'bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))]' : 'text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]'}`}>
+                  <a.icon size={13}/>
+                </button>
+              ))}
+            </div>
+            <div className="w-px h-6 bg-[hsl(var(--border))]"/>
+            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Expand for better editing</p>
           </div>
           <p className="absolute bottom-6 text-white/40 text-xs">Click outside to close</p>
         </div>
