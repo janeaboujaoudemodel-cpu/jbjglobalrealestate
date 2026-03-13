@@ -121,8 +121,8 @@ const projectSchema = {
 
 // ========== BATCH PROCESSING: Fetch files from storage & process in groups ==========
 
-const BATCH_SIZE = 4;
-const AI_FETCH_TIMEOUT_MS = 55000; // 55s to stay within edge function limits
+const BATCH_SIZE = 6;
+const AI_FETCH_TIMEOUT_MS = 40000; // 40s — flash model is faster
 
 async function updateJobProgress(supabase: any, jobId: string, progress: string) {
   await supabase.from("ai_job_master").update({
@@ -356,7 +356,7 @@ MULTI-PROJECT RULE:
 
         try {
           const aiBody = JSON.stringify({
-            model: "google/gemini-2.5-pro",
+            model: "google/gemini-3-flash-preview",
             max_tokens: 16000,
             temperature: 0.05,
             messages: [{ role: "user", content: contentParts }],
@@ -386,7 +386,7 @@ MULTI-PROJECT RULE:
                 ];
                 const singleRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
                   method: "POST", headers: aiHeaders,
-                  body: JSON.stringify({ model: "google/gemini-2.5-pro", max_tokens: 8000, temperature: 0.05,
+                  body: JSON.stringify({ model: "google/gemini-2.5-pro", max_tokens: 8000, temperature: 0.05, // fallback to pro for single-file retries
                     messages: [{ role: "user", content: singleParts }],
                     tools: [{ type: "function", function: { name: "extract_projects", description: "Extract structured data for real estate projects.", parameters: { type: "object", properties: { projects: { type: "array", items: projectSchema } }, required: ["projects"] } } }],
                     tool_choice: { type: "function", function: { name: "extract_projects" } },
@@ -449,7 +449,7 @@ MULTI-PROJECT RULE:
       if (description) contentParts.push({ type: "text", text: `\n\n--- ADDITIONAL DESCRIPTION ---\n${description}` });
       contentParts.push({ type: "text", text: "\n\nExtract ALL project data now. If MULTIPLE distinct projects, return each separately." });
 
-      const model = "google/gemini-2.5-pro";
+      const model = "google/gemini-3-flash-preview";
       const aiRes = await fetchAIWithTimeout("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: { "Authorization": `Bearer ${lovableApiKey}`, "Content-Type": "application/json" },

@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,6 +38,7 @@ import {
 import { toast } from "sonner";
 import { ProvidentSyncButton } from "@/components/admin/ProvidentSyncButton";
 import BriefingManagement from "@/components/admin/BriefingManagement";
+import DeveloperOverviewTab from "@/components/admin/DeveloperOverviewTab";
 
 interface Developer {
   id: string;
@@ -382,8 +384,11 @@ const AdminDevelopers = () => {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="dubai" className="space-y-6">
+        <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
+              📊 Overview
+            </TabsTrigger>
             <TabsTrigger value="dubai" className="data-[state=active]:bg-white data-[state=active]:shadow-md">
               Dubai ({dubaiDevelopers.length})
             </TabsTrigger>
@@ -394,6 +399,10 @@ const AdminDevelopers = () => {
               📅 Briefings
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="overview">
+            <DeveloperOverviewTab />
+          </TabsContent>
 
           <TabsContent value="dubai" className="space-y-4">
             {dubaiDevelopers.map(dev => (
