@@ -3,7 +3,7 @@
  * 
  * Double-ring circular layout with:
  * - Arabic text arcing the TOP half (default)
- * - English text arcing the BOTTOM half (default) — reads LEFT-TO-RIGHT naturally
+ * - English text arcing the BOTTOM half — reads LEFT-TO-RIGHT naturally (right-side up)
  * - Two dot separators at 3/9 o'clock positions
  * - Center area for monogram/logo with optional inner text ring for location
  * - Corporate Official Blue ink: #1B3A8C
@@ -39,7 +39,7 @@ function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 
   const est = text.length * baseSize * charW;
   if (est <= maxArcLen) return baseSize;
   const fitted = maxArcLen / (text.length * charW);
-  return Math.max(7, fitted); // minimum 7px for legibility
+  return Math.max(8, fitted);
 }
 
 function separatorGlyph(style: SeparatorStyle): string {
@@ -55,12 +55,11 @@ function separatorGlyph(style: SeparatorStyle): string {
 function renderSeparators(cx: number, cy: number, r: number, style: SeparatorStyle, ink: string): string {
   if (style === 'none') return '';
   const glyph = separatorGlyph(style);
-  const sepR = r;
-  const fontSize = style === 'dash' ? 14 : 11;
+  const fontSize = style === 'dash' ? 16 : 13;
   return `
-    <text x="${cx + sepR}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+    <text x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>
-    <text x="${cx - sepR}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+    <text x="${cx - r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>
   `;
 }
@@ -72,13 +71,14 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const ink = config.inkColor || INK_BLUE;
   const enFont = config.fontFamily || ENGLISH_FONT;
 
-  // Ring radii — generous spacing so text never clips
+  // Ring radii
   const outerR = S * 0.46;
-  const innerR = outerR - S * 0.05;
-  const textArcR = (outerR + innerR) / 2; // text sits between the two rings
+  const innerR = outerR - S * 0.06;
+  // Push text arc inward so it sits well between rings
+  const textArcR = innerR + (outerR - innerR) * 0.5;
 
   // Inner circle for location text
-  const locationR = outerR * 0.48;
+  const locationR = outerR * 0.46;
   const locationTextR = locationR - 3;
 
   // Monogram/logo area
@@ -92,33 +92,34 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const topFont = topIsArabic ? ARABIC_FONT : enFont;
   const bottomFont = bottomIsArabic ? ARABIC_FONT : enFont;
 
-  // Arc lengths for font sizing — use 75% of half-circle for safe text area
+  // Arc lengths for font sizing — use 70% of half-circle for safe text area
   const arcLen = textArcR * Math.PI;
-  const safeArc = arcLen * 0.75;
-  const topBaseFontSize = topIsArabic ? 15 : 14;
-  const bottomBaseFontSize = bottomIsArabic ? 15 : 14;
-  const topFontSize = fitFontSize(topText, topBaseFontSize, safeArc, topIsArabic ? 0.52 : 0.56);
-  const bottomFontSize = fitFontSize(bottomText, bottomBaseFontSize, safeArc, bottomIsArabic ? 0.52 : 0.56);
+  const safeArc = arcLen * 0.70;
+  const topBaseFontSize = topIsArabic ? 16 : 15;
+  const bottomBaseFontSize = bottomIsArabic ? 16 : 15;
+  const topFontSize = fitFontSize(topText, topBaseFontSize, safeArc, topIsArabic ? 0.50 : 0.54);
+  const bottomFontSize = fitFontSize(bottomText, bottomBaseFontSize, safeArc, bottomIsArabic ? 0.50 : 0.54);
 
-  // Top arc: text reads left-to-right over the top half
+  // Top arc: LEFT to RIGHT over the top half (clockwise sweep)
   const topArcPath = `M ${cx - textArcR} ${cy} A ${textArcR} ${textArcR} 0 1 1 ${cx + textArcR} ${cy}`;
   
-  // Bottom arc: RIGHT to LEFT through bottom (counter-clockwise) so text is RIGHT-SIDE UP
-  // This makes the English text readable from the outside, curving along the bottom
-  const botArcPath = `M ${cx + textArcR} ${cy} A ${textArcR} ${textArcR} 0 0 0 ${cx - textArcR} ${cy}`;
+  // Bottom arc: LEFT to RIGHT through bottom half (counter-clockwise sweep)
+  // This makes text readable right-side up from outside the circle
+  const botArcPath = `M ${cx - textArcR} ${cy} A ${textArcR} ${textArcR} 0 1 0 ${cx + textArcR} ${cy}`;
 
   // Location text arcs (inner ring)
   let locationContent = '';
   if (config.showLocation) {
     const locEn = config.locationTextEn || 'Dubai, UAE';
     const locAr = config.locationTextAr || 'دبي، الإمارات';
-    const locArcLen = locationTextR * Math.PI * 0.75;
+    const locArcLen = locationTextR * Math.PI * 0.70;
     const locFontSize = fitFontSize(locEn, 9, locArcLen, 0.55);
     const locArFontSize = fitFontSize(locAr, 10, locArcLen, 0.48);
 
-    // Location bottom arc: RIGHT to LEFT through bottom so English text is right-side up
-    const locBotArc = `M ${cx + locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 0 0 ${cx - locationTextR} ${cy}`;
+    // Location top arc (Arabic): left-to-right over top
     const locTopArc = `M ${cx - locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 1 1 ${cx + locationTextR} ${cy}`;
+    // Location bottom arc (English): left-to-right through bottom (counter-clockwise)
+    const locBotArc = `M ${cx - locationTextR} ${cy} A ${locationTextR} ${locationTextR} 0 1 0 ${cx + locationTextR} ${cy}`;
 
     locationContent = `
       <circle cx="${cx}" cy="${cy}" r="${locationR}" fill="none" stroke="${ink}" stroke-width="1.5"/>
@@ -166,7 +167,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     if (regY < cy + innerR - 6) {
       regContent = `
         <text x="${cx}" y="${regY}" text-anchor="middle" font-family="${enFont}" 
-          font-size="6" fill="${ink}" letter-spacing="0.8" opacity="0.7">${config.registrationNumber}</text>
+          font-size="7" fill="${ink}" letter-spacing="0.8" opacity="0.7">${config.registrationNumber}</text>
       `;
     }
   }
@@ -178,9 +179,9 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     </defs>
 
     <!-- Outer ring -->
-    <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${ink}" stroke-width="4"/>
+    <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${ink}" stroke-width="5"/>
     <!-- Inner ring -->
-    <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="2.2"/>
+    <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="2.5"/>
 
     <!-- Top arc text -->
     <text font-family="${topFont}" font-size="${topFontSize}" fill="${ink}" 

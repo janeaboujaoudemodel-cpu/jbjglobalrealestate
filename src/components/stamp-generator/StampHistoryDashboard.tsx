@@ -383,7 +383,7 @@ function GridView({ rows, getTint, navigate }: {
               <Button
                 size="sm"
                 className="w-full h-7 text-xs bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1"
-                onClick={() => navigate(`/toolkit/stamp-generator/${row.project_id}/generate`)}
+                onClick={() => navigate(`/toolkit/stamp-generator/${row.project_id}/export/${row.design_id}`)}
               >
                 <ExternalLink size={10}/> Open in Editor
               </Button>
@@ -454,7 +454,7 @@ function ListView({ rows, getTint, navigate }: {
               <Button
                 size="sm"
                 className="h-7 text-xs bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1"
-                onClick={() => navigate(`/toolkit/stamp-generator/${row.project_id}/generate`)}
+                onClick={() => navigate(`/toolkit/stamp-generator/${row.project_id}/export/${row.design_id}`)}
               >
                 <ExternalLink size={11}/> Open Editor
               </Button>

@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
-import { InteractiveStampCanvas, createDefaultLayers, StampLayer } from '@/components/stamp-generator/InteractiveStampCanvas';
 import { useStampHistory } from '@/hooks/useStampHistory';
 import { OFFICIAL_INK_BLUE, type SeparatorStyle } from '@/lib/stampOfficialTemplate';
 
@@ -176,32 +175,12 @@ export default function StampProjectWizard() {
     };
   });
 
-  const [layers, setLayers] = useState<StampLayer[]>(() =>
-    createDefaultLayers({ languageMode: 'BILINGUAL', iconStyle: 'MONOGRAM', density: 3, showLicenseNumber: false })
-  );
-
   const history = useStampHistory<FormState>(form);
 
   // Persist form
   useEffect(() => {
     try { sessionStorage.setItem('stamp-wizard-form', JSON.stringify(form)); } catch {}
   }, [form]);
-
-  // Update layers when form changes
-  useEffect(() => {
-    setLayers(prev => {
-      const newLayers = createDefaultLayers({
-        languageMode: form.language_mode, iconStyle: form.icon_style, density: form.density,
-        registrationNumber: form.registration_number_optional, showLicenseNumber: form.show_license_number,
-        city: form.city_optional,
-      });
-      // Preserve visibility from previous layers
-      return newLayers.map(nl => {
-        const existing = prev.find(p => p.id === nl.id);
-        return existing ? { ...nl, visible: existing.visible, locked: existing.locked } : nl;
-      });
-    });
-  }, [form.language_mode, form.icon_style, form.density, form.registration_number_optional, form.show_license_number, form.city_optional]);
 
   const set = (key: keyof FormState, val: any) => {
     setForm(f => { const next = { ...f, [key]: val }; history.push(next); return next; });
@@ -292,6 +271,40 @@ export default function StampProjectWizard() {
     }
   }, []);
 
+  // Export helpers
+  const handleExportSVG = useCallback(() => {
+    const el = document.querySelector('#stamp-preview-container svg');
+    if (!el) { toast.error('No stamp to export'); return; }
+    const svgData = new XMLSerializer().serializeToString(el);
+    const blob = new Blob([svgData], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = `${form.company_name || 'stamp'}.svg`; a.click();
+    URL.revokeObjectURL(url);
+    toast.success('SVG downloaded');
+  }, [form.company_name]);
+
+  const handleExportPNG = useCallback((size: number) => {
+    const el = document.querySelector('#stamp-preview-container svg');
+    if (!el) { toast.error('No stamp to export'); return; }
+    const svgData = new XMLSerializer().serializeToString(el);
+    const canvas = document.createElement('canvas');
+    canvas.width = size; canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const img = new window.Image();
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, size, size);
+      canvas.toBlob(blob => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `${form.company_name || 'stamp'}-${size}px.png`; a.click();
+        URL.revokeObjectURL(url);
+        toast.success(`PNG ${size}px downloaded`);
+      });
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+  }, [form.company_name]);
+
   const previewProps = {
     companyName: form.company_name, arabicCompanyName: form.arabic_company_name,
     city: form.city_optional, country: form.country_optional,
@@ -303,8 +316,6 @@ export default function StampProjectWizard() {
     showLocation: form.show_location, separatorStyle: form.separator_style,
     inkColor: form.ink_color, arabicCity: form.arabic_city,
   };
-
-  const previewSize = 340;
 
   return (
     <div className="h-[calc(100vh-52px)] flex flex-col bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] overflow-hidden">
@@ -344,10 +355,10 @@ export default function StampProjectWizard() {
         </div>
       </div>
 
-      {/* ── Main body: fixed center preview + tabbed controls ── */}
+      {/* ── Main body: controls left + centered preview right ── */}
       <div className="flex-1 flex min-h-0 overflow-hidden">
-        {/* Left: Tabbed controls panel */}
-        <div className="w-[380px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white flex flex-col min-h-0">
+        {/* Left: Tabbed controls panel — narrower */}
+        <div className="w-[320px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white flex flex-col min-h-0">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col flex-1 min-h-0">
             <TabsList className="flex-shrink-0 w-full rounded-none border-b border-[hsl(var(--border))] bg-[hsl(var(--pearl-1))] h-9 px-1">
               <TabsTrigger value="company" className="text-[11px] gap-1 data-[state=active]:bg-white"><Building2 size={11}/>Company</TabsTrigger>
@@ -666,65 +677,58 @@ export default function StampProjectWizard() {
             <TabsContent value="export" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-3">
-                  <p className="text-[11px] text-[hsl(var(--muted-foreground))]">
-                    First <strong>Generate Concepts</strong> to unlock full export options. After generation you can download as PNG, SVG, PDF, JPG, WEBP, or a complete Media Kit.
+                  <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Download Current Preview</p>
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                    Export the live stamp preview directly. Enter company details first for best results.
                   </p>
-                  
-                  <Button size="sm" onClick={handleCreate} disabled={saving || !form.company_name.trim()}
-                    className="w-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1.5 text-xs h-9">
-                    <Wand2 size={13}/> {saving ? 'Creating...' : 'Generate Concepts'}
-                  </Button>
 
-                  <div className="border border-[hsl(var(--border))] rounded-xl p-3 space-y-2">
-                    <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Available after generation:</p>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      {['PNG', 'SVG', 'PDF', 'JPG', 'WEBP', 'Media Kit'].map(fmt => (
-                        <div key={fmt} className="flex items-center gap-1.5 text-[10px] text-[hsl(var(--muted-foreground))] px-2 py-1.5 rounded-lg bg-[hsl(var(--pearl-1))] border border-[hsl(var(--border))]">
-                          <FileDown size={10}/> {fmt}
-                        </div>
-                      ))}
-                    </div>
+                  <div className="space-y-2">
+                    <Button variant="outline" size="sm" onClick={handleExportSVG} className="w-full gap-2 text-xs h-9 justify-start">
+                      <FileDown size={13}/> Download SVG <span className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))]">Vector</span>
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => handleExportPNG(512)} className="w-full gap-2 text-xs h-9 justify-start">
+                      <FileDown size={13}/> Download PNG <span className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))]">512px</span>
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => handleExportPNG(1024)} className="w-full gap-2 text-xs h-9 justify-start">
+                      <FileDown size={13}/> Download PNG <span className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))]">1024px HD</span>
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => window.print()} className="w-full gap-2 text-xs h-9 justify-start">
+                      <Printer size={13}/> Print Preview
+                    </Button>
                   </div>
 
-                  <div className="border border-[hsl(var(--border))] rounded-xl p-3 space-y-2">
-                    <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Background options:</p>
-                    <div className="flex gap-1.5 flex-wrap">
-                      {['Transparent', 'White', 'Black', 'Blue', 'Custom'].map(bg => (
-                        <span key={bg} className="text-[9px] px-2 py-1 rounded-md bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]">{bg}</span>
-                      ))}
-                    </div>
+                  <div className="border-t border-[hsl(var(--border))] pt-3 mt-3">
+                    <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] mb-2">Generate AI Concepts</p>
+                    <p className="text-[9px] text-[hsl(var(--muted-foreground))] mb-2">
+                      Create multiple stamp variations with AI for more options.
+                    </p>
+                    <Button size="sm" onClick={handleCreate} disabled={saving || !form.company_name.trim()}
+                      className="w-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1.5 text-xs h-9">
+                      <Wand2 size={13}/> {saving ? 'Creating...' : 'Generate Concepts'}
+                    </Button>
                   </div>
 
-                  <Button variant="outline" size="sm" onClick={handleSaveDraft} className="w-full gap-1.5 text-xs h-8">
-                    <Save size={11}/> Save Draft
-                  </Button>
-                  <Button variant="outline" size="sm" onClick={() => window.print()} className="w-full gap-1.5 text-xs h-8">
-                    <Printer size={11}/> Print Preview
-                  </Button>
+                  <div className="border-t border-[hsl(var(--border))] pt-3">
+                    <Button variant="outline" size="sm" onClick={handleSaveDraft} className="w-full gap-1.5 text-xs h-8">
+                      <Save size={11}/> Save Draft
+                    </Button>
+                  </div>
                 </div>
               </ScrollArea>
             </TabsContent>
           </Tabs>
         </div>
 
-        {/* Center: Fixed preview area */}
-        <div className="flex-1 flex items-center justify-center min-h-0 p-4 bg-[hsl(var(--pearl-1)/0.5)]">
-          <div className="flex flex-col items-center gap-3">
-            <div className="bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.2)] shadow-[0_8px_40px_hsl(var(--gold)/0.08)] p-6">
-              <InteractiveStampCanvas
-                size={previewSize}
-                layers={layers}
-                onLayersChange={setLayers}
-                onDeleteLayer={(id) => {
-                  setLayers(prev => prev.map(l => l.id === id ? { ...l, visible: false } : l));
-                  toast('Layer hidden — use Undo to restore');
-                }}
-                interactive={true}
-              >
-                <LiveStampPreview {...previewProps} size={previewSize} />
-              </InteractiveStampCanvas>
+        {/* Center: Fixed preview area — takes remaining space */}
+        <div className="flex-1 flex items-center justify-center min-h-0 p-6 bg-[hsl(var(--pearl-1)/0.3)]">
+          <div className="flex flex-col items-center gap-4">
+            <div
+              id="stamp-preview-container"
+              className="bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.15)] shadow-[0_8px_40px_hsl(var(--gold)/0.06)] p-8"
+            >
+              <LiveStampPreview {...previewProps} size={380} />
             </div>
-            <p className="text-[9px] text-[hsl(var(--muted-foreground))] text-center">
+            <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center max-w-[300px]">
               {form.company_name || <span className="italic">Enter company name to see live preview</span>}
             </p>
           </div>
