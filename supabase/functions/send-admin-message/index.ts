@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { SITE_URL, emailShell, sharedSections, teamReplyCard, inquiryStages, userGreetingRow } from "../_shared/email-html.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const RESEND_API_URL = "https://api.resend.com/emails";
 const VERIFIED_SENDER = "jbj@jbj.ae";
@@ -167,6 +168,15 @@ const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Rate limit: 20 requests per 15 min per IP
+  const { response: blocked } = await enforceRateLimit(req, {
+    functionName: 'send-admin-message',
+    maxRequests: 20,
+    windowMinutes: 15,
+    keyType: 'ip',
+  }, corsHeaders);
+  if (blocked) return blocked;
 
   try {
     const body: AdminMessageRequest = await req.json();

@@ -830,6 +830,39 @@ export type Database = {
         }
         Relationships: []
       }
+      api_security_events: {
+        Row: {
+          client_ip: string | null
+          created_at: string
+          details: Json | null
+          event_type: string
+          function_name: string
+          id: string
+          severity: string
+          user_id: string | null
+        }
+        Insert: {
+          client_ip?: string | null
+          created_at?: string
+          details?: Json | null
+          event_type: string
+          function_name: string
+          id?: string
+          severity?: string
+          user_id?: string | null
+        }
+        Update: {
+          client_ip?: string | null
+          created_at?: string
+          details?: Json | null
+          event_type?: string
+          function_name?: string
+          id?: string
+          severity?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       app_settings: {
         Row: {
           created_at: string | null
@@ -24266,6 +24299,27 @@ export type Database = {
           is_current?: boolean | null
           snapshot?: Json | null
           version_id?: string
+        }
+        Relationships: []
+      }
+      webhook_replay_log: {
+        Row: {
+          event_id: string
+          id: string
+          received_at: string
+          webhook_source: string
+        }
+        Insert: {
+          event_id: string
+          id?: string
+          received_at?: string
+          webhook_source: string
+        }
+        Update: {
+          event_id?: string
+          id?: string
+          received_at?: string
+          webhook_source?: string
         }
         Relationships: []
       }

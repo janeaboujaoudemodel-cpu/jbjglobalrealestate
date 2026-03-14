@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,7 +13,9 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Rate limit: 5 requests per 15 min per user
     const authHeader = req.headers.get("Authorization");
+    // We'll apply rate limit after auth check below
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
@@ -33,6 +36,16 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    // Rate limit after auth - per user
+    const { response: rateLimited } = await enforceRateLimit(req, {
+      functionName: 'generate-crm-report',
+      maxRequests: 5,
+      windowMinutes: 15,
+      keyType: 'user',
+      customKey: userData.user.id,
+    }, corsHeaders, userData.user.id);
+    if (rateLimited) return rateLimited;
 
     // Check CRM role
     const { data: profile } = await supabase

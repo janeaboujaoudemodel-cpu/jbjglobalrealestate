@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { emailShell, sharedSections, progressSteps, ticketSummaryCard, ticketSummaryCardAr, arabicDivider, userGreetingRow } from "../_shared/email-html.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 // Standard Resend API endpoint (Tokyo region is DNS verification location only, API is global)
 const RESEND_API_URL = "https://api.resend.com/emails";
@@ -58,6 +59,15 @@ const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Rate limit: 5 requests per 15 min per IP
+  const { response: blocked } = await enforceRateLimit(req, {
+    functionName: 'submit-support-ticket',
+    maxRequests: 5,
+    windowMinutes: 15,
+    keyType: 'ip',
+  }, corsHeaders);
+  if (blocked) return blocked;
 
   try {
     const supabaseClient = createClient(
