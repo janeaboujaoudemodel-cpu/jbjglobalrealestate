@@ -4739,6 +4739,36 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_field_permissions: {
+        Row: {
+          can_edit: boolean
+          can_view: boolean
+          created_at: string
+          crm_role: string
+          field_name: string
+          id: string
+          show_masked: boolean
+        }
+        Insert: {
+          can_edit?: boolean
+          can_view?: boolean
+          created_at?: string
+          crm_role: string
+          field_name: string
+          id?: string
+          show_masked?: boolean
+        }
+        Update: {
+          can_edit?: boolean
+          can_view?: boolean
+          created_at?: string
+          crm_role?: string
+          field_name?: string
+          id?: string
+          show_masked?: boolean
+        }
+        Relationships: []
+      }
       crm_imports: {
         Row: {
           completed_at: string | null
@@ -4942,6 +4972,61 @@ export type Database = {
           },
           {
             foreignKeyName: "crm_lead_reports_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_lead_shares: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          lead_id: string
+          permission_level: string
+          revoked_at: string | null
+          shared_by: string
+          shared_with: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          lead_id: string
+          permission_level?: string
+          revoked_at?: string | null
+          shared_by: string
+          shared_with: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          lead_id?: string
+          permission_level?: string
+          revoked_at?: string | null
+          shared_by?: string
+          shared_with?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_lead_shares_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_shares_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "crm_leads_secure"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_lead_shares_lead_id_fkey"
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_vip_leads"
@@ -5401,6 +5486,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crm_security_events: {
+        Row: {
+          created_at: string
+          details: Json | null
+          event_type: string
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          details?: Json | null
+          event_type: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          details?: Json | null
+          event_type?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       crm_tasks: {
         Row: {
@@ -25536,6 +25651,15 @@ export type Database = {
         Returns: {
           content: string
           original_content: string
+        }[]
+      }
+      get_crm_field_permissions: {
+        Args: { p_role: string }
+        Returns: {
+          can_edit: boolean
+          can_view: boolean
+          field_name: string
+          show_masked: boolean
         }[]
       }
       get_employee_full_bank_details: {
