@@ -26,7 +26,7 @@ const USAGE_RIGHTS_TEXT = `By registering on the ${COMPANY_FULL_NAME} Developer 
 • Upload marketing materials, brochures, and project documents
 • Track your project listing status in real-time
 • Manage launch events and developer invitations
-• Access our CRM pipeline for your submitted projects
+• Track your submission status and receive updates on your projects
 
 This portal is provided exclusively for authorized representatives of real estate developers. Your account and all uploaded content remain subject to review and approval by ${COMPANY_FULL_NAME}. We reserve the right to revoke access at any time if the terms are violated.`;
 
