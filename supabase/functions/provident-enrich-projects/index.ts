@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { fetchProvidentPageDataDetail, PageDataProjectDetail } from "../_shared/provident/pagedata-detail.ts";
 import { fetchProvidentPageDataPdfUrls } from "../_shared/provident/pagedata.ts";
 import { mirrorRemotePdfToPublicStorage } from "../_shared/provident/storage.ts";
+import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
