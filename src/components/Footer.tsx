@@ -252,7 +252,7 @@ const Footer = () => {
     { label: "Explore All Services", href: "/services" },
     { label: t('footer.buyerAdvisory') || "Buyer Advisory", href: "/services/buying-advisory" },
     { label: t('footer.sellerAdvisory') || "Seller Advisory", href: "/services/selling-advisory" },
-    { label: t('footer.leasingAdvisory') || "Leasing Advisory", href: "/services/leasing-advisory" },
+    { label: t('footer.leasingAdvisory') || "Rental Advisory", href: "/services/rental-advisory" },
     { label: t('footer.investmentAdvisory') || "Investment Advisory", href: "/services/investment-advisory" },
     { label: "Snagging & Inspection", href: "/services/snagging" },
     { label: "Property Management", href: "/services/property-management" },
