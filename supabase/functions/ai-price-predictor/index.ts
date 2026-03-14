@@ -334,7 +334,7 @@ IMPORTANT:
       functionName: "ai-price-predictor",
       userId,
       clientIp,
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-3-flash-preview",
       success: false,
       errorType: error instanceof Error ? error.message : "Unknown error",
       responseTimeMs: Date.now() - startTime,
