@@ -469,9 +469,26 @@ const DeveloperPortal = () => {
       toast.error("Please upload at least one file");
       return;
     }
+
+    // Enforce duplicate blocking
+    if (duplicateBlocking) {
+      toast.error("A project with this name already exists. Please use the 'Update Existing' flow instead.");
+      logActivity({
+        activityType: 'duplicate_attempt',
+        entityType: 'project',
+        entityName: currentProject.project_name,
+        details: { blocked: true },
+        riskFlags: ['duplicate_blocked'],
+        developerName: effectiveDevName,
+        developerEmail: effectiveDevEmail,
+      });
+      return;
+    }
+
     setSubmittingProject(true);
     try {
-      const { error } = await supabase.from("developer_launch_uploads").insert({
+      // Sanitize submission data to strip protected fields
+      const submissionData = sanitizeSubmissionData({
         developer_name: effectiveDevName,
         developer_email: effectiveDevEmail,
         project_name: currentProject.project_name,
@@ -479,8 +496,20 @@ const DeveloperPortal = () => {
         location: currentProject.location || null,
         launch_date: currentProject.launch_date || null,
         uploaded_files: currentProject.files,
-      } as any);
+      });
+
+      const { error } = await supabase.from("developer_launch_uploads").insert(submissionData as any);
       if (error) throw error;
+
+      // Log activity
+      logActivity({
+        activityType: 'upload',
+        entityType: 'project',
+        entityName: currentProject.project_name,
+        details: { fileCount: currentProject.files.length },
+        developerName: effectiveDevName,
+        developerEmail: effectiveDevEmail,
+      });
 
       try {
         await supabase.from("admin_tasks").insert({
@@ -499,6 +528,15 @@ const DeveloperPortal = () => {
       queryClient.invalidateQueries({ queryKey: ["dev-portal-projects"] });
     } catch (err: any) {
       toast.error(err.message || "Failed to submit project");
+      logActivity({
+        activityType: 'failed_upload',
+        entityType: 'project',
+        entityName: currentProject.project_name,
+        details: { error: err.message },
+        riskFlags: ['submission_error'],
+        developerName: effectiveDevName,
+        developerEmail: effectiveDevEmail,
+      });
     } finally {
       setSubmittingProject(false);
     }
