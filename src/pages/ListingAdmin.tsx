@@ -162,7 +162,7 @@ const ListingAdmin = () => {
       'data-sources': 'data-ops',
     };
     const mappedView = legacyToNew[view || ''] || view;
-    const allowed = new Set(["chat", "projects", "editor", "data-ops"]);
+    const allowed = new Set(["chat", "projects", "editor", "data-ops", "project-detail"]);
     
     if (mappedView && allowed.has(mappedView) && mappedView !== activeView) {
       setActiveView(mappedView as any);
