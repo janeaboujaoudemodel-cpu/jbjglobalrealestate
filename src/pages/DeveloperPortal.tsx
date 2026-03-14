@@ -1999,7 +1999,7 @@ const DeveloperPortal = () => {
                         ) : (
                           <div className="py-8 text-center text-muted-foreground">
                             <Star className="w-10 h-10 mx-auto mb-3 opacity-40" />
-                            <p>No interest registrations yet</p>
+                            <p>No launch interests yet</p>
                           </div>
                         )}
                       </CardContent>
