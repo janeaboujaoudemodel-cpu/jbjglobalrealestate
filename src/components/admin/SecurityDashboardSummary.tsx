@@ -865,6 +865,14 @@ export const SecurityDashboardSummary = () => {
           </div>
         </Card>
       )}
+
+      <ReAuthModal
+        open={stepUp.modalOpen}
+        onOpenChange={stepUp.onModalOpenChange}
+        onSuccess={stepUp.onModalSuccess}
+        actionLabel={stepUp.modalActionLabel}
+        severity={stepUp.modalSeverity}
+      />
     </div>
   );
 };

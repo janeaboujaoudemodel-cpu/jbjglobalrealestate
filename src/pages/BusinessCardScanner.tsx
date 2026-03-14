@@ -266,7 +266,7 @@ const BusinessCardScanner = () => {
     }
   };
 
-  const handleExportCSV = () => {
+  const doExportCSV = () => {
     if (scannedContacts.length === 0) {
       toast.error("No contacts to export");
       return;
@@ -293,18 +293,31 @@ const BusinessCardScanner = () => {
     link.href = URL.createObjectURL(blob);
     link.download = `business_cards_${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
+
+    logExportEvent({
+      exportType: "business_cards",
+      exportFormat: "csv",
+      recordCount: scannedContacts.length,
+      containsPii: true,
+      fieldsExported: ["name", "email", "phone", "company"],
+      requiredStepUp: true,
+    });
+
     toast.success("CSV exported successfully");
   };
 
-  const handleExportExcel = () => {
-    // For Excel, we'll use CSV with proper encoding that Excel understands
+  const handleExportCSV = () => {
+    stepUp.requireStepUp("Export Business Cards (CSV)", "normal", doExportCSV);
+  };
+
+  const doExportExcel = () => {
     if (scannedContacts.length === 0) {
       toast.error("No contacts to export");
       return;
     }
 
     const headers = ["Name", "Job Title", "Company", "Email", "Phone", "Mobile", "Address", "Website", "Notes"];
-    const csvContent = "\uFEFF" + [ // BOM for Excel UTF-8
+    const csvContent = "\uFEFF" + [
       headers.join("\t"),
       ...scannedContacts.map(contact => [
         contact.name || '',
@@ -324,7 +337,21 @@ const BusinessCardScanner = () => {
     link.href = URL.createObjectURL(blob);
     link.download = `business_cards_${new Date().toISOString().split('T')[0]}.xls`;
     link.click();
+
+    logExportEvent({
+      exportType: "business_cards",
+      exportFormat: "xls",
+      recordCount: scannedContacts.length,
+      containsPii: true,
+      fieldsExported: ["name", "email", "phone", "company"],
+      requiredStepUp: true,
+    });
+
     toast.success("Excel file exported successfully");
+  };
+
+  const handleExportExcel = () => {
+    stepUp.requireStepUp("Export Business Cards (Excel)", "normal", doExportExcel);
   };
 
   if (showPrivacyNotice && !consentGiven) {
