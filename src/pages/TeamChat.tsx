@@ -23,11 +23,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { allTeamMembers, TeamMember } from "@/config/team-members";
 import QuickCalendarWidget from "@/components/shared/QuickCalendarWidget";
 import QuickNoteWidget from "@/components/shared/QuickNoteWidget";
-import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { supabase } from "@/integrations/supabase/client";
-import { allTeamMembers, TeamMember } from "@/config/team-members";
 
 interface Message {
   id: string;
