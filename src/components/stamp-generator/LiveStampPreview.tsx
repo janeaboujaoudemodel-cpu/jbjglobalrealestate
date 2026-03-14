@@ -139,8 +139,8 @@ export function LiveStampPreview({
     const locAr = arabicCity || (city ? ARABIC_CITY_MAP[city.toLowerCase()] || `${city}، الإمارات` : 'دبي، الإمارات');
 
     // Convert slider values to config params
-    // arabicArcSpread slider: 20-80 → map to 0.40-0.95 spread
-    const arcSpreadVal = arabicArcSpread != null ? 0.40 + (arabicArcSpread - 20) / 60 * 0.55 : undefined;
+    // arabicArcSpread slider: 20-100 → map to 0.40-0.95 spread (default 80 → 0.88)
+    const arcSpreadVal = arabicArcSpread != null ? 0.40 + (arabicArcSpread - 20) / 80 * 0.55 : undefined;
     const circleGapVal = circleGap != null ? circleGap : undefined;
     const centerScaleVal = centerContentSize != null ? centerContentSize / 50 : undefined;
 
