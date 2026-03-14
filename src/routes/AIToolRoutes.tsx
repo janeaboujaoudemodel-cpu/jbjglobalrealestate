@@ -20,7 +20,7 @@ const AIObjectionHandlerPage = lazy(() => import("@/pages/AIObjectionHandlerPage
 const AIFollowupSchedulerPage = lazy(() => import("@/pages/AIFollowupSchedulerPage"));
 const AIMeetingSummarizerPage = lazy(() => import("@/pages/AIMeetingSummarizerPage"));
 const AITranslationHubPage = lazy(() => import("@/pages/AITranslationHubPage"));
-const AIVideoTourScriptPage = lazy(() => import("@/pages/AIVideoTourScriptPage"));
+
 const AIContractReviewerPage = lazy(() => import("@/pages/AIContractReviewerPage"));
 const AIDocumentGeneratorPage = lazy(() => import("@/pages/AIDocumentGeneratorPage"));
 const AICallSummarizerPage = lazy(() => import("@/pages/AICallSummarizerPage"));
@@ -47,7 +47,7 @@ export const AIToolRoutes = () => (
     <Route path="/ai-follow-up-scheduler" element={<Navigate to="/ai-followup-scheduler" replace />} />
     <Route path="/ai-meeting-summarizer" element={<BrokerGuard><AIMeetingSummarizerPage /></BrokerGuard>} />
     <Route path="/ai-translation-hub" element={<AITranslationHubPage />} />
-    <Route path="/ai-video-tour-script" element={<Navigate to="/toolkit/video-studio" replace />} />
+    <Route path="/ai-video-tour-script" element={<Navigate to="/toolkit/video-suite" replace />} />
     <Route path="/ai-contract-reviewer" element={<BrokerGuard><AIContractReviewerPage /></BrokerGuard>} />
     <Route path="/ai-document-generator" element={<AIDocumentGeneratorPage />} />
     <Route path="/ai-call-summarizer" element={<BrokerGuard><AICallSummarizerPage /></BrokerGuard>} />

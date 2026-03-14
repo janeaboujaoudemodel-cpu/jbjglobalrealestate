@@ -139,7 +139,7 @@ export const ALL_TOOL_CATEGORIES: ToolCategory[] = [
     tools: [
       { id: 'email-generator', name: 'Email Generator', icon: Mail, description: 'Create professional follow-up and marketing emails', href: '/ai-email-generator' },
       { id: 'translation-hub', name: 'Translation Hub', icon: Languages, description: 'Translate content into multiple languages', href: '/ai-translation-hub' },
-      { id: 'video-tour-script', name: 'Video Tour Script', icon: Video, description: 'Generate engaging property tour scripts', href: '/ai-video-tour-script' },
+      { id: 'video-tour-script', name: 'Video Tour Script', icon: Video, description: 'Generate engaging property tour scripts', href: '/toolkit/video-suite' },
       { id: 'objection-handler', name: 'Objection Handler', icon: MessageSquare, description: 'Get expert responses to buyer objections', href: '/ai-objection-handler' },
       { id: 'social-media', name: 'Social Media', icon: Share2, description: 'Generate social media posts for listings', href: '/ai-social-media' },
       { id: 'description-writer', name: 'Description Writer', icon: PenTool, description: 'Create compelling property descriptions', href: '/ai-description-writer' },

@@ -26,7 +26,7 @@ const tools = [
     icon: Video,
     title: "Video Tour Script",
     description: "Generate engaging video tour scripts with scene suggestions and call-to-actions.",
-    href: "/ai-video-tour-script",
+    href: "/toolkit/video-suite",
     colorClass: "text-pink-700",
     borderColorClass: "border-pink-500/40",
     gradientFrom: "from-pink-600",
