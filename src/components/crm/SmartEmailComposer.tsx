@@ -47,6 +47,7 @@ const SmartEmailComposer = ({ lead, onSend }: SmartEmailComposerProps) => {
   const [template, setTemplate] = useState("");
   const [customPrompt, setCustomPrompt] = useState("");
   const [loading, setLoading] = useState(false);
+  const [alsoNotifyChat, setAlsoNotifyChat] = useState(false);
 
   const generateEmail = async () => {
     setLoading(true);
