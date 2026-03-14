@@ -24,6 +24,7 @@ import {
   errorResponse,
   APPROVED_CONTACT,
 } from "../_shared/ai-utils.ts";
+import { enforceWAF } from "../_shared/waf-middleware.ts";
 
 interface VideoScriptRequest {
   propertyName: string;
@@ -41,6 +42,10 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // WAF Layer
+  const waf = await enforceWAF(req, corsHeaders, "ai", "ai-video-tour-script");
+  if (waf.blocked) return waf.response!;
 
   const startTime = Date.now();
   const clientIp = getClientIp(req);

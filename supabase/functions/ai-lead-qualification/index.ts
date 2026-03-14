@@ -31,6 +31,7 @@ import {
   trackAIUsage,
   errorResponse,
 } from "../_shared/ai-utils.ts";
+import { enforceWAF } from "../_shared/waf-middleware.ts";
 
 interface LeadInfo {
   name?: string;
@@ -160,6 +161,10 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // WAF Layer
+  const waf = await enforceWAF(req, corsHeaders, "ai", "ai-lead-qualification");
+  if (waf.blocked) return waf.response!;
 
   const startTime = Date.now();
   const clientIp = getClientIp(req);

@@ -32,6 +32,7 @@ import {
   trackAIUsage,
   errorResponse,
 } from "../_shared/ai-utils.ts";
+import { enforceWAF } from "../_shared/waf-middleware.ts";
 
 interface PredictionRequest {
   location: string;
@@ -57,6 +58,10 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // WAF Layer — bot detection, body size, UA filter
+  const waf = await enforceWAF(req, corsHeaders, "ai", "ai-price-predictor");
+  if (waf.blocked) return waf.response!;
 
   const startTime = Date.now();
   const clientIp = getClientIp(req);
