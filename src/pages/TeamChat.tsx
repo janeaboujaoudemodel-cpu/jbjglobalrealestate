@@ -16,6 +16,8 @@ import {
   Mail, FileText, Pin, Calendar, BookOpen
 } from "lucide-react";
 import { DocumentAttachmentPicker, AttachmentChip, ChatAttachmentRenderer, type DocumentAttachment } from "@/components/shared/DocumentAttachmentPicker";
+import { CrossChannelToggle } from "@/components/shared/CrossChannelToggle";
+import { useCrossChannelSend } from "@/hooks/useCrossChannelSend";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
