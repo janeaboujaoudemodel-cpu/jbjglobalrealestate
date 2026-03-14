@@ -25,7 +25,7 @@ Deno.serve(async (req) => {
     const { data: { user }, error: authErr } = await sb.auth.getUser(token);
     if (authErr || !user) return jsonResponse(401, { error: "Unauthorized" });
     const { data: roleCheck } = await sb.rpc("has_role", { _user_id: user.id, _role: "admin" });
-    if (!roleCheck) return jsonResponse({ error: "Forbidden" }, 403);
+    if (!roleCheck) return jsonResponse(403, { error: "Forbidden" });
 
     const body = await req.json().catch(() => ({}));
     const runType = body.run_type || "manual";
