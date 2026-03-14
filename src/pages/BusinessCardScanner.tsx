@@ -31,6 +31,9 @@ import BusinessCardUpload from "@/components/business-card/BusinessCardUpload";
 import BusinessCardResults from "@/components/business-card/BusinessCardResults";
 import BusinessCardPrivacyNotice from "@/components/business-card/BusinessCardPrivacyNotice";
 import { ScannedContact, encryptData, decryptData, generateEncryptionKey } from "@/utils/businessCardEncryption";
+import { useStepUpAuth } from "@/hooks/useStepUpAuth";
+import ReAuthModal from "@/components/security/ReAuthModal";
+import { logExportEvent } from "@/utils/dlpExportLogger";
 
 const BusinessCardScanner = () => {
   const { user } = useAuth();
