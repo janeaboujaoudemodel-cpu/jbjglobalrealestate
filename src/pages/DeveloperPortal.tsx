@@ -1012,9 +1012,33 @@ const DeveloperPortal = () => {
                   </p>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* Approval banner */}
+                  <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 flex items-center gap-2 text-sm text-blue-800">
+                    <Info className="w-4 h-4 flex-shrink-0" />
+                    All submissions require admin approval before going live.
+                  </div>
+
                   <div className="space-y-2">
                     <Label>Project Name *</Label>
-                    <Input value={currentProject.project_name} onChange={(e) => setCurrentProject(p => ({ ...p, project_name: e.target.value }))} placeholder="The Residences at Marina" />
+                    <Input value={currentProject.project_name} onChange={(e) => { setCurrentProject(p => ({ ...p, project_name: e.target.value })); setDuplicateBlocking(false); }} placeholder="The Residences at Marina" />
+                    {currentProject.project_name.trim().length >= 3 && (
+                      <ProjectDuplicateInspector
+                        projectName={currentProject.project_name}
+                        blocking={true}
+                        onAction={(action, matchId) => {
+                          if (action === "stop") {
+                            setCurrentProject(emptyProject());
+                            setDuplicateBlocking(false);
+                          } else if (action === "merge" && matchId) {
+                            setActiveTab("projects");
+                            toast.info("Redirected to existing projects for review.");
+                          } else if (action === "create_new") {
+                            setDuplicateBlocking(false);
+                          }
+                        }}
+                        className="mt-2"
+                      />
+                    )}
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
