@@ -144,6 +144,8 @@ const DEMO_EMAILS: Email[] = [
 ];
 
 const EmailClient = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [emails, setEmails] = useState<Email[]>(DEMO_EMAILS);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [activeFolder, setActiveFolder] = useState<"inbox" | "sent" | "drafts" | "trash" | "archive">("inbox");
