@@ -125,7 +125,7 @@ CRITICAL: Keep every section SHORT. Max 2-3 bullet points. One line per bullet. 
       fullAnalysis = await callLovableAI({
         systemPrompt,
         userPrompt,
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3-flash-preview",
         maxTokens: 800,
         temperature: 0.4,
       });

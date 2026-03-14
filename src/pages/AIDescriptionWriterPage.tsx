@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContentDark, SelectItemDark, SelectTriggerDark, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import AIToolPremiumLayout from "@/components/ai-tools/AIToolPremiumLayout";
@@ -135,17 +135,17 @@ export default function AIDescriptionWriterPage() {
               <div>
                 <Label className="text-zinc-300">Property Type</Label>
                 <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="bg-zinc-800 border-lime-500/30 text-white">
+                  <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="apartment">Apartment</SelectItem>
-                    <SelectItem value="villa">Villa</SelectItem>
-                    <SelectItem value="townhouse">Townhouse</SelectItem>
-                    <SelectItem value="penthouse">Penthouse</SelectItem>
-                    <SelectItem value="studio">Studio</SelectItem>
-                    <SelectItem value="duplex">Duplex</SelectItem>
-                  </SelectContent>
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-lime-500/30">
+                    <SelectItemDark value="apartment">Apartment</SelectItemDark>
+                    <SelectItemDark value="villa">Villa</SelectItemDark>
+                    <SelectItemDark value="townhouse">Townhouse</SelectItemDark>
+                    <SelectItemDark value="penthouse">Penthouse</SelectItemDark>
+                    <SelectItemDark value="studio">Studio</SelectItemDark>
+                    <SelectItemDark value="duplex">Duplex</SelectItemDark>
+                  </SelectContentDark>
                 </Select>
               </div>
               <div>
@@ -163,14 +163,14 @@ export default function AIDescriptionWriterPage() {
               <div>
                 <Label className="text-zinc-300">Bedrooms</Label>
                 <Select value={bedrooms} onValueChange={setBedrooms}>
-                  <SelectTrigger className="bg-zinc-800 border-lime-500/30 text-white">
+                  <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-lime-500/30">
                     {["Studio", "1", "2", "3", "4", "5", "6+"].map(n => (
-                      <SelectItem key={n} value={n}>{n}</SelectItem>
+                      <SelectItemDark key={n} value={n}>{n}</SelectItemDark>
                     ))}
-                  </SelectContent>
+                  </SelectContentDark>
                 </Select>
               </div>
               <div>
@@ -216,15 +216,15 @@ export default function AIDescriptionWriterPage() {
               <div>
                 <Label className="text-zinc-300">Writing Style</Label>
                 <Select value={style} onValueChange={setStyle}>
-                  <SelectTrigger className="bg-zinc-800 border-lime-500/30 text-white">
+                  <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="luxury">Luxury & Exclusive</SelectItem>
-                    <SelectItem value="professional">Professional</SelectItem>
-                    <SelectItem value="casual">Friendly & Casual</SelectItem>
-                    <SelectItem value="factual">Factual & Concise</SelectItem>
-                  </SelectContent>
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-lime-500/30">
+                    <SelectItemDark value="luxury">Luxury & Exclusive</SelectItemDark>
+                    <SelectItemDark value="professional">Professional</SelectItemDark>
+                    <SelectItemDark value="casual">Friendly & Casual</SelectItemDark>
+                    <SelectItemDark value="factual">Factual & Concise</SelectItemDark>
+                  </SelectContentDark>
                 </Select>
               </div>
             </div>

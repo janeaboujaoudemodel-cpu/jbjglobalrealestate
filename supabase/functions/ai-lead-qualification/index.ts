@@ -279,7 +279,7 @@ Provide your qualification assessment as a JSON object.`;
 
     // 7. Call AI
     const aiResponse = await callLovableAI({
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-3-flash-preview",
       systemPrompt,
       userPrompt,
       temperature: 0.3, // Lower temperature for more consistent scoring
@@ -292,7 +292,7 @@ Provide your qualification assessment as a JSON object.`;
         functionName: "ai-lead-qualification",
         userId: user.id,
         clientIp,
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3-flash-preview",
         success: false,
         errorType: aiResponse.error,
         responseTimeMs: processingTimeMs,
@@ -373,7 +373,7 @@ Provide your qualification assessment as a JSON object.`;
       functionName: "ai-lead-qualification",
       userId: user.id,
       clientIp,
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-3-flash-preview",
       success: true,
       responseTimeMs: processingTimeMs,
     });
@@ -404,7 +404,7 @@ Provide your qualification assessment as a JSON object.`;
     await trackAIUsage(supabaseAdmin, {
       functionName: "ai-lead-qualification",
       clientIp,
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-3-flash-preview",
       success: false,
       errorType: error instanceof Error ? error.message : "Unknown error",
       responseTimeMs: Date.now() - startTime,

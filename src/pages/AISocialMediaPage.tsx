@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContentDark, SelectItemDark, SelectTriggerDark, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -173,28 +173,28 @@ export default function AISocialMediaPage() {
               <div>
                 <Label className="text-zinc-300">Content Type</Label>
                 <Select value={contentType} onValueChange={setContentType}>
-                  <SelectTrigger className="bg-zinc-800 border-pink-500/30 text-white">
+                  <SelectTriggerDark className="border-pink-500/30 hover:border-pink-500/50">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-pink-500/30">
                     {contentTypes.map(type => (
-                      <SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>
+                      <SelectItemDark key={type.value} value={type.value}>{type.label}</SelectItemDark>
                     ))}
-                  </SelectContent>
+                  </SelectContentDark>
                 </Select>
               </div>
               <div>
                 <Label className="text-zinc-300">Tone</Label>
                 <Select value={tone} onValueChange={setTone}>
-                  <SelectTrigger className="bg-zinc-800 border-pink-500/30 text-white">
+                  <SelectTriggerDark className="border-pink-500/30 hover:border-pink-500/50">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="professional">Professional</SelectItem>
-                    <SelectItem value="casual">Casual & Fun</SelectItem>
-                    <SelectItem value="luxury">Luxury & Exclusive</SelectItem>
-                    <SelectItem value="urgent">Urgent & Exciting</SelectItem>
-                  </SelectContent>
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-pink-500/30">
+                    <SelectItemDark value="professional">Professional</SelectItemDark>
+                    <SelectItemDark value="casual">Casual & Fun</SelectItemDark>
+                    <SelectItemDark value="luxury">Luxury & Exclusive</SelectItemDark>
+                    <SelectItemDark value="urgent">Urgent & Exciting</SelectItemDark>
+                  </SelectContentDark>
                 </Select>
               </div>
             </div>

@@ -1,11 +1,19 @@
 import { useState, useRef } from "react";
-import { Phone, Upload, Mic, FileAudio, Loader2, CheckCircle, User, ListChecks, Target, ArrowRight, AlertCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Phone, Upload, Mic, FileAudio, Loader2, CheckCircle,
+  User, ListChecks, Target, ArrowRight, Copy, Check, Download, Sparkles
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import AIToolPremiumLayout from "../AIToolPremiumLayout";
+import AIToolGuide from "../AIToolGuide";
 
 interface CallSummary {
   summary: string;
@@ -23,6 +31,7 @@ const AICallSummarizerPremium = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<CallSummary | null>(null);
+  const [copied, setCopied] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -48,9 +57,7 @@ const AICallSummarizerPremium = () => {
       chunksRef.current = [];
 
       mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          chunksRef.current.push(e.data);
-        }
+        if (e.data.size > 0) chunksRef.current.push(e.data);
       };
 
       mediaRecorder.onstop = () => {
@@ -85,18 +92,11 @@ const AICallSummarizerPremium = () => {
 
     setIsProcessing(true);
     try {
-      // For now, we'll use text-based summarization
-      // Audio transcription would require a dedicated edge function
       const { data, error } = await supabase.functions.invoke('ai-call-summarizer', {
-        body: {
-          clientName,
-          callNotes,
-          hasAudio: !!audioFile,
-        },
+        body: { clientName, callNotes, hasAudio: !!audioFile },
       });
 
       if (error) throw error;
-
       setResult(data.summary);
       toast.success("Call summary generated!");
     } catch (error) {
@@ -107,200 +107,281 @@ const AICallSummarizerPremium = () => {
     }
   };
 
+  const copyToClipboard = () => {
+    if (!result) return;
+    const text = `Call Summary: ${result.summary}\n\nAction Items:\n${result.actionItems.map(i => `- ${i}`).join('\n')}\n\nClient Needs:\n${result.clientNeeds.map(n => `- ${n}`).join('\n')}\n\nNext Steps:\n${result.nextSteps.map((s, i) => `${i + 1}. ${s}`).join('\n')}`;
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    toast.success("Copied to clipboard");
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const downloadReport = () => {
+    if (!result) return;
+    const content = `# Call Summary Report\n## Client: ${clientName || 'Unknown'}\n## Date: ${new Date().toLocaleDateString()}\n## Sentiment: ${result.sentiment}\n\n---\n\n### Summary\n${result.summary}\n\n### Action Items\n${result.actionItems.map(i => `- ${i}`).join('\n')}\n\n### Client Needs\n${result.clientNeeds.map(n => `- ${n}`).join('\n')}\n\n### Next Steps\n${result.nextSteps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n### Key Topics\n${result.keyTopics.map(t => `- ${t}`).join('\n')}`;
+    const blob = new Blob([content], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `call-summary-${clientName.replace(/\s+/g, "-").toLowerCase() || "report"}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Report downloaded!");
+  };
+
+  const sentimentColor = (s: string) => {
+    if (s === "positive") return "text-emerald-400 bg-emerald-500/20 border-emerald-500/30";
+    if (s === "negative") return "text-red-400 bg-red-500/20 border-red-500/30";
+    if (s === "mixed") return "text-amber-400 bg-amber-500/20 border-amber-500/30";
+    return "text-zinc-400 bg-zinc-500/20 border-zinc-500/30";
+  };
+
   return (
-    <div className="min-h-screen bg-black">
-      {/* Hero Section */}
-      <div className="relative py-16 px-4 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-orange-950/40 via-black to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-orange-600/20 via-transparent to-transparent opacity-50" />
-        
-        <div className="relative max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 border border-orange-500/30 rounded-full mb-6">
-            <Phone className="w-5 h-5 text-orange-400" />
-            <span className="text-orange-400 font-medium text-sm">AI Call Intelligence</span>
-          </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            AI Call <span className="text-orange-400">Summarizer</span>
-          </h1>
-          
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-            Summarize phone calls with clients instantly. Upload audio or enter call notes 
-            to get AI-generated summaries, action items, and next steps.
-          </p>
-        </div>
-      </div>
+    <AIToolPremiumLayout
+      title="AI Call Summarizer"
+      subtitle="Summarize phone calls with clients instantly. Get AI-generated summaries, action items, and next steps."
+      icon={<Phone className="h-8 w-8 text-orange-400" />}
+      accentColor="orange"
+      gradientFrom="orange"
+      badge="Call Intelligence"
+    >
+      <AIToolGuide
+        description="Upload audio or enter call notes to get structured summaries with action items, client needs, and next steps."
+        steps={[
+          "Enter client name and call notes",
+          "Optionally upload or record audio",
+          "Generate AI-powered summary",
+          "Download or copy the report"
+        ]}
+        benefits={[
+          "Instant call summarization",
+          "Auto-extracted action items",
+          "Client needs detection",
+          "Sentiment analysis"
+        ]}
+        accentColor="orange"
+      />
 
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 pb-20">
-        <div className="bg-zinc-900/80 border border-orange-500/30 rounded-2xl p-6 md:p-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-600 to-amber-600 flex items-center justify-center">
-              <Phone className="w-5 h-5 text-white" />
-            </div>
-            <h2 className="text-xl font-bold text-white">Call Details</h2>
-          </div>
-
-          <div className="space-y-6">
-            {/* Client Name */}
-            <div>
-              <Label className="text-zinc-300 mb-2 block">Client Name</Label>
-              <Input
-                value={clientName}
-                onChange={(e) => setClientName(e.target.value)}
-                placeholder="Enter client name"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
-              />
+      <div className="space-y-8">
+        {/* Input Section */}
+        <Card className="bg-orange-900/20 border-orange-500/30">
+          <CardContent className="p-6 space-y-6">
+            <div className="flex items-center gap-2 text-orange-400 mb-4">
+              <Phone className="h-5 w-5" />
+              <span className="font-semibold">Call Details</span>
             </div>
 
-            {/* Audio Upload/Record */}
-            <div>
-              <Label className="text-zinc-300 mb-2 block">Audio Recording (Optional)</Label>
-              <div className="flex flex-wrap gap-3">
-                <Button
-                  type="button"
-                  variant="dark-outline"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="border-orange-500/50 hover:bg-orange-500/10"
-                >
-                  <Upload className="w-4 h-4 mr-2" />
-                  Upload Audio
-                </Button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="audio/*"
-                  onChange={handleFileUpload}
-                  className="hidden"
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Client Name</Label>
+                <Input
+                  value={clientName}
+                  onChange={(e) => setClientName(e.target.value)}
+                  placeholder="Enter client name"
+                  className="bg-zinc-900/50 border-orange-500/30 text-white hover:border-orange-500/50 focus:border-orange-400 transition-colors"
                 />
-                
-                {!isRecording ? (
+              </div>
+              <div className="space-y-2">
+                <Label className="text-zinc-300">Audio Recording (Optional)</Label>
+                <div className="flex flex-wrap gap-2">
                   <Button
                     type="button"
                     variant="dark-outline"
-                    onClick={startRecording}
+                    size="sm"
+                    onClick={() => fileInputRef.current?.click()}
                     className="border-orange-500/50 hover:bg-orange-500/10"
                   >
-                    <Mic className="w-4 h-4 mr-2" />
-                    Record
+                    <Upload className="w-4 h-4 mr-1" />
+                    Upload
                   </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    onClick={stopRecording}
-                    className="bg-red-600 hover:bg-red-500 text-white"
-                  >
-                    <Mic className="w-4 h-4 mr-2 animate-pulse" />
-                    Stop Recording
-                  </Button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="audio/*"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
+                  {!isRecording ? (
+                    <Button
+                      type="button"
+                      variant="dark-outline"
+                      size="sm"
+                      onClick={startRecording}
+                      className="border-orange-500/50 hover:bg-orange-500/10"
+                    >
+                      <Mic className="w-4 h-4 mr-1" />
+                      Record
+                    </Button>
+                  ) : (
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={stopRecording}
+                      className="bg-red-600 hover:bg-red-500 text-white"
+                    >
+                      <Mic className="w-4 h-4 mr-1 animate-pulse" />
+                      Stop
+                    </Button>
+                  )}
+                </div>
+                {audioFile && (
+                  <div className="flex items-center gap-2 text-sm text-orange-400 mt-1">
+                    <FileAudio className="w-3 h-3" />
+                    {audioFile.name}
+                  </div>
                 )}
               </div>
-              
-              {audioFile && (
-                <div className="mt-3 flex items-center gap-2 text-sm text-orange-400">
-                  <FileAudio className="w-4 h-4" />
-                  {audioFile.name}
-                </div>
-              )}
             </div>
 
-            {/* Call Notes */}
-            <div>
-              <Label className="text-zinc-300 mb-2 block">Call Notes</Label>
+            <div className="space-y-2">
+              <Label className="text-zinc-300">Call Notes</Label>
               <Textarea
                 value={callNotes}
                 onChange={(e) => setCallNotes(e.target.value)}
                 placeholder="Enter your call notes, key discussion points, and any important details..."
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 min-h-[150px]"
+                className="bg-zinc-900/50 border-orange-500/30 text-white hover:border-orange-500/50 focus:border-orange-400 transition-colors min-h-[150px]"
               />
             </div>
 
-            {/* Submit Button */}
             <Button
               onClick={handleSubmit}
               disabled={isProcessing || (!clientName && !callNotes && !audioFile)}
-              className="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold py-6 text-lg"
+              className="w-full bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-semibold py-6"
             >
               {isProcessing ? (
                 <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
                   Processing...
                 </>
               ) : (
                 <>
-                  <Phone className="w-5 h-5 mr-2" />
+                  <Sparkles className="h-5 w-5 mr-2" />
                   Summarize Call
                 </>
               )}
             </Button>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Results */}
-        {result && (
-          <div className="mt-8 space-y-6">
-            {/* Summary */}
-            <div className="bg-zinc-900/80 border border-orange-500/30 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <CheckCircle className="w-6 h-6 text-orange-400" />
-                <h3 className="text-xl font-bold text-white">Call Summary</h3>
+        <AnimatePresence mode="wait">
+          {result ? (
+            <motion.div
+              key="results"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="space-y-4"
+            >
+              {/* Actions Bar */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Badge className={`${sentimentColor(result.sentiment)} border`}>
+                    {result.sentiment.charAt(0).toUpperCase() + result.sentiment.slice(1)}
+                  </Badge>
+                  {result.keyTopics.slice(0, 3).map((topic, i) => (
+                    <Badge key={i} variant="outline" className="border-orange-500/30 text-orange-300 text-xs">
+                      {topic}
+                    </Badge>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="dark-outline" size="sm" onClick={copyToClipboard}>
+                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  </Button>
+                  <Button variant="dark-outline" size="sm" onClick={downloadReport}>
+                    <Download className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-              <p className="text-zinc-300 leading-relaxed">{result.summary}</p>
-            </div>
 
-            {/* Action Items */}
-            <div className="bg-zinc-900/80 border border-orange-500/30 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <ListChecks className="w-6 h-6 text-orange-400" />
-                <h3 className="text-xl font-bold text-white">Action Items</h3>
-              </div>
-              <ul className="space-y-2">
-                {result.actionItems.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-zinc-300">
-                    <ArrowRight className="w-4 h-4 text-orange-400 mt-1 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+              {/* Summary */}
+              <Card className="bg-orange-500/10 border-orange-500/30">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <CheckCircle className="h-4 w-4 text-orange-400" />
+                    <span className="text-sm font-semibold text-white">Call Summary</span>
+                  </div>
+                  <p className="text-zinc-300 leading-relaxed">{result.summary}</p>
+                </CardContent>
+              </Card>
 
-            {/* Client Needs */}
-            <div className="bg-zinc-900/80 border border-orange-500/30 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <Target className="w-6 h-6 text-orange-400" />
-                <h3 className="text-xl font-bold text-white">Client Needs</h3>
-              </div>
-              <ul className="space-y-2">
-                {result.clientNeeds.map((need, i) => (
-                  <li key={i} className="flex items-start gap-2 text-zinc-300">
-                    <User className="w-4 h-4 text-orange-400 mt-1 flex-shrink-0" />
-                    {need}
-                  </li>
-                ))}
-              </ul>
-            </div>
+              {/* Action Items */}
+              <Card className="bg-orange-900/20 border-orange-500/30">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <ListChecks className="h-4 w-4 text-orange-400" />
+                    <span className="text-sm font-semibold text-white">Action Items</span>
+                  </div>
+                  <ul className="space-y-2">
+                    {result.actionItems.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-zinc-300 text-sm">
+                        <ArrowRight className="w-4 h-4 text-orange-400 mt-0.5 flex-shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
 
-            {/* Next Steps */}
-            <div className="bg-zinc-900/80 border border-orange-500/30 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <ArrowRight className="w-6 h-6 text-orange-400" />
-                <h3 className="text-xl font-bold text-white">Next Steps</h3>
+              {/* Client Needs + Next Steps side by side */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Card className="bg-orange-900/20 border-orange-500/30">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Target className="h-4 w-4 text-orange-400" />
+                      <span className="text-sm font-semibold text-white">Client Needs</span>
+                    </div>
+                    <ul className="space-y-2">
+                      {result.clientNeeds.map((need, i) => (
+                        <li key={i} className="flex items-start gap-2 text-zinc-300 text-sm">
+                          <User className="w-3 h-3 text-orange-400 mt-1 flex-shrink-0" />
+                          {need}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-orange-900/20 border-orange-500/30">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <ArrowRight className="h-4 w-4 text-orange-400" />
+                      <span className="text-sm font-semibold text-white">Next Steps</span>
+                    </div>
+                    <ul className="space-y-2">
+                      {result.nextSteps.map((step, i) => (
+                        <li key={i} className="flex items-start gap-2 text-zinc-300 text-sm">
+                          <span className="w-5 h-5 rounded-full bg-orange-500/20 text-orange-400 text-xs flex items-center justify-center flex-shrink-0">
+                            {i + 1}
+                          </span>
+                          {step}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
               </div>
-              <ul className="space-y-2">
-                {result.nextSteps.map((step, i) => (
-                  <li key={i} className="flex items-start gap-2 text-zinc-300">
-                    <span className="w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-sm flex items-center justify-center flex-shrink-0">
-                      {i + 1}
-                    </span>
-                    {step}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="placeholder"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center py-12 text-center"
+            >
+              <div className="p-6 rounded-full bg-orange-500/10 mb-4">
+                <Phone className="h-12 w-12 text-orange-400/50" />
+              </div>
+              <h3 className="text-lg font-semibold text-zinc-400">Ready to Summarize</h3>
+              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+                Enter call details above to generate an AI-powered summary with action items and next steps
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </div>
+    </AIToolPremiumLayout>
   );
 };
 

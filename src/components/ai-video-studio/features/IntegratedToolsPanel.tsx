@@ -5,12 +5,14 @@ import {
   Sparkles, 
   Mic, 
   Languages, 
-  Maximize2
+  Maximize2,
+  Film
 } from 'lucide-react';
 import { BeautyFiltersPanel } from './BeautyFiltersPanel';
 import { VideoResizePanel } from './VideoResizePanel';
 import { VoiceoverRecorder } from './VoiceoverRecorder';
 import { CaptionTranslator } from './CaptionTranslator';
+import { VideoScriptPanel } from './VideoScriptPanel';
 
 interface SubtitleSegment {
   id: string;
@@ -33,11 +35,11 @@ export function IntegratedToolsPanel({ onAddVoiceover, onAddAIVoice }: Integrate
   const tabs = [
     { id: 'captions', label: 'Captions', icon: Languages },
     { id: 'voice', label: 'Voice', icon: Mic },
+    { id: 'script', label: 'Script', icon: Film },
     { id: 'beauty', label: 'Beauty', icon: Sparkles },
     { id: 'resize', label: 'Resize', icon: Maximize2 },
   ];
 
-  // No-op stub — CaptionTranslator now handles its own transcription internally
   const handleTranscribe = async (): Promise<SubtitleSegment[]> => [];
 
   return (
@@ -70,6 +72,10 @@ export function IntegratedToolsPanel({ onAddVoiceover, onAddAIVoice }: Integrate
               onRecordingComplete={(blob, duration) => onAddVoiceover?.(blob, duration)}
               onAIVoiceGenerated={(url, duration) => onAddAIVoice?.(url, duration)}
             />
+          </TabsContent>
+
+          <TabsContent value="script" className="mt-0 h-full">
+            <VideoScriptPanel />
           </TabsContent>
 
           <TabsContent value="beauty" className="mt-0 h-full">
