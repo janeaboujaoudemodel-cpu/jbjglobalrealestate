@@ -13,7 +13,9 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Rate limit: 5 requests per 15 min per user
     const authHeader = req.headers.get("Authorization");
+    // We'll apply rate limit after auth check below
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
