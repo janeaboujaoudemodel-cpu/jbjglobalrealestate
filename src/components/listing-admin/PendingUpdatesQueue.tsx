@@ -480,7 +480,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
 
                             {/* Source & Date */}
                             <div className="flex items-center justify-between text-xs text-muted-foreground pt-1 border-t border-border">
-                              <span>{update.source?.name || "External Source"}</span>
+                              <span>{update.source?.name || "Source"}</span>
                               <div className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
                                 {format(new Date(update.created_at), "MMM d, yyyy")}

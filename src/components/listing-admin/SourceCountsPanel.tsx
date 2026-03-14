@@ -85,16 +85,16 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
         {/* Realporter API (right side — minimized/disabled) */}
         <Card
           className={`cursor-pointer transition-all border-2 ${
-            selectedSource === "source-a"
+            selectedSource === "reelly"
               ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-lg"
               : "border-border hover:border-gold/40 bg-card opacity-75"
           }`}
-          onClick={() => handleSourceSelect(selectedSource === "source-a" ? "none" : "source-a")}
+          onClick={() => handleSourceSelect(selectedSource === "reelly" ? "none" : "reelly")}
         >
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm text-foreground">
               <Globe className="w-4 h-4 text-muted-foreground" />
-              Reelly Portal
+              REELLY API
               <Badge variant="outline" className="ml-auto border-muted-foreground/30 text-muted-foreground text-[10px] flex items-center gap-1">
                 <AlertTriangle className="w-2.5 h-2.5" />
                 Disabled

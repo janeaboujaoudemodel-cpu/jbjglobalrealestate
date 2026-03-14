@@ -183,7 +183,7 @@ export function ExtractionJobsPanel() {
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">{source.name}</span>
+                      <span className="font-medium">{source.name.replace(/external\s*/i, "").replace(/source\s*a/i, "Reelly API").replace(/source\s*b/i, "Provident") || source.name}</span>
                       <Badge variant={source.is_active ? "default" : "secondary"}>
                         {source.is_active ? "Active" : "Inactive"}
                       </Badge>

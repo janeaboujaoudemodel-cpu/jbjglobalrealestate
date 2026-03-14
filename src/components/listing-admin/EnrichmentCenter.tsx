@@ -595,7 +595,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
               <CardHeader className="pb-3">
                 <CardTitle className="text-foreground text-base flex items-center gap-2">
                   <Globe className="w-5 h-5 text-gold" />
-                  External API Auto-Enrichment (Background)
+                  Reelly API Auto-Enrichment (Background)
                 </CardTitle>
                 <p className="text-muted-foreground text-sm">
                   Runs entirely on the server — processes all projects even if you close this page.
