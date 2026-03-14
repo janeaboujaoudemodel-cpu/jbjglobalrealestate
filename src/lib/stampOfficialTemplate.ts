@@ -19,11 +19,6 @@
  * - Navy Ink default: #1B3A8C
  * 
  * Safe zone: 7px minimum clearance between text and ring strokes.
- * 
- * Color tokens for StampSVGRenderer tinting:
- * - #1a2744 → Primary (outer ring, company text, borders)
- * - #2a3a5c → Secondary (inner rings, location text, decorative accents)
- * - #8b6914 → Accent (monogram, registration, center dividers)
  */
 
 export type SeparatorStyle = 'dot' | 'star' | 'square' | 'diamond' | 'line' | 'double-line' | 'triangle' | 'cross' | 'floral' | 'ornament' | 'dash' | 'circle' | 'none';
@@ -61,16 +56,23 @@ export interface OfficialStampConfig {
   centerMode?: CenterContentMode;
   /** Preset icon for center (when centerMode = 'icon') */
   centerIcon?: CenterIconType;
+  /** Arabic arc spread override (0.4 – 0.95) */
+  arabicArcSpread?: number;
+  /** Arabic letter spacing override in px */
+  arabicLetterSpacing?: number;
+  /** Arabic font family override */
+  arabicFont?: string;
+  /** Arabic font weight override */
+  arabicFontWeight?: string;
+  /** Circle gap override as % of radius for outer→middle */
+  circleGap?: number;
+  /** Center content scale factor (0.3 – 1.2) */
+  centerContentScale?: number;
 }
 
 const ARABIC_FONT = '"Noto Naskh Arabic", "Arabic Typesetting", "Traditional Arabic", serif';
 const ENGLISH_FONT = 'Georgia, "Times New Roman", serif';
 const INK_BLUE = '#1B3A8C';
-
-// Color tokens — these are replaced by StampSVGRenderer
-const C_PRI = '#1a2744';
-const C_SEC = '#2a3a5c';
-const C_ACC = '#8b6914';
 
 // ── Ring geometry constants (as % of stamp radius) ──
 const OUTER_R_PCT = 0.46;     // outer ring radius
@@ -78,14 +80,14 @@ const MIDDLE_R_PCT = 0.33;    // middle ring — wide premium gap from outer (~1
 const INNER_R_PCT = 0.26;     // inner ring — tighter gap from middle
 
 // ── Stroke widths (tapering hierarchy — ministry-level precision) ──
-const OUTER_STROKE = 4;       // boldest — clean, not chunky (matches real UAE ministry stamps)
+const OUTER_STROKE = 4;       // boldest — clean, not chunky
 const MIDDLE_STROKE = 2.5;    // medium
 const INNER_STROKE = 1.2;     // thinnest
 const DECORATIVE_STROKE = 0.5; // thin decorative ring just inside outer ring
 
 // ── Safe zone ──
 const SAFE_ZONE = 5;          // minimum px between text and ring strokes
-const ARC_SPREAD_LIMIT = 0.88; // max fraction of semicircle for text — increased for full arc distribution
+const ARC_SPREAD_LIMIT = 0.88; // max fraction of semicircle for text
 
 function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6): number {
   if (!text) return baseSize;
@@ -97,7 +99,6 @@ function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 
 
 /**
  * Compute dynamic letter-spacing so arc text fills the available arc segment evenly.
- * Returns spacing in px that distributes remaining arc space across character gaps.
  */
 function computeArcLetterSpacing(
   text: string, fontSize: number, arcRadius: number,
@@ -110,18 +111,18 @@ function computeArcLetterSpacing(
   if (gaps <= 0) return minSpacing;
   const extraSpace = availableArc - textWidth;
   const spacing = extraSpace / gaps;
-  return Math.max(minSpacing, Math.min(spacing, 12)); // cap at 12px
+  return Math.max(minSpacing, Math.min(spacing, 12));
 }
 
 /**
  * Compute safe font size and letter-spacing for arc text to prevent collisions.
- * Returns { fontSize, letterSpacing } that guarantees no character overlap.
  */
 function safeArcFontSize(
   text: string, maxRadius: number, isArabic: boolean,
   baseFontSize: number, spreadLimit = ARC_SPREAD_LIMIT
 ): { fontSize: number; letterSpacing: number } {
-  const charW = isArabic ? 0.50 : 0.54;
+  // Use same charW for both languages to ensure equal spread
+  const charW = 0.54;
   const minSpacing = isArabic ? 0.5 : 1;
   const arcLen = maxRadius * Math.PI * spreadLimit;
   const fontSize = fitFontSize(text, baseFontSize, arcLen, charW);
@@ -175,7 +176,6 @@ export const ALL_SEPARATOR_STYLES: SeparatorStyle[] = [
 function renderSeparators(cx: number, cy: number, r: number, style: SeparatorStyle, ink: string, dataPrefix = 'separator'): string {
   if (style === 'none') return '';
   const glyph = separatorGlyph(style);
-  // Scale font size based on separator type
   const fontSize = (style === 'line' || style === 'double-line' || style === 'dash') ? 16
     : (style === 'floral' || style === 'ornament') ? 14
     : 13;
@@ -189,8 +189,6 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
 
 /**
  * Bottom arc text using SVG textPath — text follows the BOTTOM half of a circle.
- * Path sweeps LEFT→RIGHT through the bottom semicircle (counterclockwise).
- * Text reads naturally left-to-right — NO character reversal needed.
  */
 function renderBottomArcTextPath(
   text: string, cx: number, cy: number, r: number,
@@ -198,8 +196,6 @@ function renderBottomArcTextPath(
   isArabic: boolean, pathId: string, fontWeight = '800'
 ): string {
   if (!text) return '';
-  // Bottom arc path: left (cx-r, cy) → counterclockwise through bottom → right (cx+r, cy)
-  // large-arc=0, sweep=0 → takes the shorter (bottom) arc counterclockwise
   const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx + r} ${cy}`;
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
@@ -257,7 +253,7 @@ function renderDivider(cx: number, y: number, color: string, width: number, styl
 
 /** SVG paths for preset center icons */
 function renderCenterIcon(cx: number, cy: number, iconR: number, iconType: CenterIconType, color: string): string {
-  const s = iconR * 0.7; // scale factor
+  const s = iconR * 0.7;
   switch (iconType) {
     case 'shield':
       return `<path d="M ${cx} ${cy - s} L ${cx + s * 0.8} ${cy - s * 0.4} L ${cx + s * 0.8} ${cy + s * 0.2} Q ${cx + s * 0.4} ${cy + s} ${cx} ${cy + s * 1.1} Q ${cx - s * 0.4} ${cy + s} ${cx - s * 0.8} ${cy + s * 0.2} L ${cx - s * 0.8} ${cy - s * 0.4} Z" fill="none" stroke="${color}" stroke-width="1.5"/>`;
@@ -288,17 +284,22 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const cx = S / 2;
   const cy = S / 2;
   const enFont = config.fontFamily || ENGLISH_FONT;
+  const arFont = config.arabicFont || ARABIC_FONT;
   const bs = config.borderStyle || 'DOUBLE';
   const ds = config.dividerStyle || 'diamond';
 
-  const priColor = C_PRI;
-  const secColor = C_SEC;
-  const accColor = C_ACC;
+  // Use ink color directly — no more color token replacement needed
+  const ink = config.inkColor || INK_BLUE;
+  // Derive secondary (slightly lighter) and accent (complementary) from ink
+  const priColor = ink;
+  const secColor = ink;
+  const accColor = ink;
 
-  // ── 3-circle radii with tapering gap hierarchy ──
+  // ── 3-circle radii with configurable gap ──
+  const gapPct = config.circleGap != null ? config.circleGap / 100 : 0.13;
   const outerR = S * OUTER_R_PCT;
-  const middleR = S * MIDDLE_R_PCT;  // renamed from innerR for clarity
-  const innerR = S * INNER_R_PCT;    // renamed from centerR for clarity
+  const middleR = S * (OUTER_R_PCT - gapPct);
+  const innerR = middleR - S * 0.07;
 
   // ── Company name text arc — centered between outer and middle rings ──
   const rawTextArcR = (outerR + middleR) / 2;
@@ -315,19 +316,27 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const bottomText = config.companyNameEn.toUpperCase();
   const topIsArabic = true;
   const bottomIsArabic = false;
-  const topFont = ARABIC_FONT;
+  const topFont = arFont;
   const bottomFont = enFont;
+
+  // Arabic arc spread — default to same as English (0.88)
+  const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
+  const englishSpread = ARC_SPREAD_LIMIT;
 
   // Dynamic font size and letter-spacing — fills arc evenly, prevents collisions
   const topBaseFontSize = topIsArabic ? 17 : 15;
   const bottomBaseFontSize = bottomIsArabic ? 17 : 15;
-  const topSafe = safeArcFontSize(topText, clampedTextArcR, topIsArabic, topBaseFontSize);
-  const bottomSafe = safeArcFontSize(bottomText, clampedTextArcR, bottomIsArabic, bottomBaseFontSize);
+  const topSafe = safeArcFontSize(topText, clampedTextArcR, topIsArabic, topBaseFontSize, arabicSpread);
+  const bottomSafe = safeArcFontSize(bottomText, clampedTextArcR, bottomIsArabic, bottomBaseFontSize, englishSpread);
+
+  // Apply Arabic letter spacing override if provided
+  const topLetterSpacing = config.arabicLetterSpacing ?? topSafe.letterSpacing;
+  const topFontWeight = config.arabicFontWeight === 'normal' ? '600' : '800';
 
   const topArcContent = renderTopArcTextPath(
     topText || (topIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
     cx, cy, clampedTextArcR, topSafe.fontSize, topFont, priColor,
-    topSafe.letterSpacing, topIsArabic, 'top-arc'
+    topLetterSpacing, topIsArabic, 'top-arc', topFontWeight
   );
 
   const bottomArcContent = renderBottomArcTextPath(
@@ -345,19 +354,16 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     const locFontSize = fitFontSize(locEn, 10, locArcLen, 0.55);
     const locArFontSize = fitFontSize(locAr, 10, locArcLen, 0.48);
 
-    // Arabic location on TOP arc (between middle ring and inner ring)
     const locArContent = renderTopArcTextPath(
-      locAr, cx, cy, clampedLocTextR, locArFontSize, ARABIC_FONT, secColor, 1, true, 'loc-top', '600'
+      locAr, cx, cy, clampedLocTextR, locArFontSize, arFont, secColor, 1, true, 'loc-top', '600'
     );
 
-    // English location on BOTTOM arc
     const locEnContent = renderBottomArcTextPath(
       locEn.toUpperCase(), cx, cy, clampedLocTextR, locFontSize, enFont, secColor, 1.5, false, 'loc-bottom', '600'
     );
 
     locationContent = `${locArContent}${locEnContent}`;
 
-    // Optional location separator
     if (config.locationSeparatorStyle && config.locationSeparatorStyle !== 'none') {
       locationContent += renderSeparators(cx, cy, clampedLocTextR, config.locationSeparatorStyle, secColor, 'loc-separator');
     }
@@ -367,11 +373,12 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   let centerContent = '';
   const centerMode = config.centerMode || (config.showLogo ? 'logo' : config.showMonogram ? 'monogram' : 'none');
   const mono = config.monogramText || '';
+  const centerScale = config.centerContentScale ?? 1;
 
   switch (centerMode) {
     case 'logo':
       if (config.logoUrl) {
-        const imgSize = innerR * 1.5;
+        const imgSize = innerR * 1.5 * centerScale;
       centerContent = `
           <defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${innerR - 2}"/></clipPath></defs>
           <image data-stamp-element="center" href="${config.logoUrl}" 
@@ -386,7 +393,8 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
 
     case 'monogram':
       if (mono) {
-        const monoSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
+        const baseMonoSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
+        const monoSize = baseMonoSize * centerScale;
         centerContent = `
           <text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
             font-family="${enFont}" font-size="${monoSize}" fill="${accColor}" 
@@ -398,7 +406,8 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     case 'initials': {
       const initials = deriveInitials(config.companyNameEn) || mono;
       if (initials) {
-        const initSize = initials.length === 1 ? innerR * 0.85 : initials.length === 2 ? innerR * 0.65 : innerR * 0.50;
+        const baseInitSize = initials.length === 1 ? innerR * 0.85 : initials.length === 2 ? innerR * 0.65 : innerR * 0.50;
+        const initSize = baseInitSize * centerScale;
         centerContent = `
           <text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
             font-family="${enFont}" font-size="${initSize}" fill="${accColor}" 
@@ -409,7 +418,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
     }
 
     case 'icon':
-      centerContent = renderCenterIcon(cx, cy, innerR * 0.8, config.centerIcon || 'shield', accColor);
+      centerContent = renderCenterIcon(cx, cy, innerR * 0.8 * centerScale, config.centerIcon || 'shield', accColor);
       break;
 
     case 'license':
@@ -431,7 +440,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   // Fallback: legacy showLogo/showMonogram when centerMode not set
   if (!config.centerMode && !centerContent) {
     if (config.showLogo && config.logoUrl) {
-      const imgSize = innerR * 1.5;
+      const imgSize = innerR * 1.5 * centerScale;
       centerContent = `
         <defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${innerR - 2}"/></clipPath></defs>
         <image href="${config.logoUrl}" 
@@ -442,7 +451,8 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
           image-rendering="optimizeQuality"/>
       `;
     } else if (config.showMonogram && mono) {
-      const monoSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
+      const baseMonoSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
+      const monoSize = baseMonoSize * centerScale;
       centerContent = `
         <text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-family="${enFont}" font-size="${monoSize}" fill="${accColor}" 
@@ -465,9 +475,11 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const outerStrokeWidth = config.outerBorderWidth ?? OUTER_STROKE;
   const outerRingEl = renderOuterRing(cx, cy, outerR, priColor, bs, outerStrokeWidth);
 
-  // Decorative thin ring just inside outer ring (ministry double-line effect)
+  // Decorative thin ring just inside outer ring (double-line effect)
   const decorativeR = outerR - outerStrokeWidth / 2 - 2;
-  const decorativeRingEl = `<circle cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${priColor}" stroke-width="${DECORATIVE_STROKE}" opacity="0.5"/>`;
+  const decorativeRingEl = (bs === 'DOUBLE' || bs === 'RING' || bs === 'CUSTOM')
+    ? `<circle cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${priColor}" stroke-width="${DECORATIVE_STROKE}" opacity="0.5"/>`
+    : '';
 
   const middleStrokeWidth = config.innerBorderWidth ?? MIDDLE_STROKE;
   const middleRingEl = `<circle cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${secColor}" stroke-width="${middleStrokeWidth}"/>`;
@@ -477,7 +489,7 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
     <!-- Outer ring (boldest — ${outerStrokeWidth}px) -->
     ${outerRingEl}
-    <!-- Decorative inner-outer ring (ministry double-line) -->
+    <!-- Decorative inner-outer ring -->
     ${decorativeRingEl}
     <!-- Middle ring (medium — ${middleStrokeWidth}px) -->
     ${middleRingEl}
