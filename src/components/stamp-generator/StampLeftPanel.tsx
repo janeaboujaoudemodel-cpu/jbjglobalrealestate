@@ -67,6 +67,14 @@ const STAMP_FONTS = [
   { label: 'Cinzel (Imperial)', value: '"Palatino Linotype", "Palatino", serif' },
 ];
 
+const ARABIC_FONTS = [
+  { label: 'Noto Naskh Arabic', value: '"Noto Naskh Arabic", serif' },
+  { label: 'Amiri (Classic)', value: '"Amiri", serif' },
+  { label: 'Cairo (Modern)', value: '"Cairo", sans-serif' },
+  { label: 'Tajawal (Clean)', value: '"Tajawal", sans-serif' },
+  { label: 'Scheherazade (Ornate)', value: '"Scheherazade New", serif' },
+];
+
 type ColorStop = 'primary' | 'secondary' | 'accent';
 
 interface StampLeftPanelProps {
