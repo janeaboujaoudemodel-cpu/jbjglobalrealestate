@@ -922,10 +922,18 @@ export default function StampGeneratorPage() {
                   ))}
                 </div>
                 {localIconStyle === 'MONOGRAM' && (
-                  <input type="text" maxLength={3} value={localMonogramText}
-                    onChange={e => setLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
-                    placeholder={project?.company_name?.slice(0, 2) || 'AB'}
-                    className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]"/>
+                  <>
+                    <input type="text" maxLength={3} value={localMonogramText}
+                      onChange={e => setLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
+                      placeholder={project?.company_name?.slice(0, 2) || 'AB'}
+                      className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]"/>
+                    <MonogramColorEditor
+                      monogramText={localMonogramText || project?.company_name?.slice(0, 2) || ''}
+                      colors={monogramLetterColors}
+                      onChange={setMonogramLetterColors}
+                      defaultColor={primaryColor}
+                    />
+                  </>
                 )}
                 {localIconStyle === 'UPLOADED_LOGO' && (
                   <label className="flex flex-col items-center gap-1 p-3 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))]">
