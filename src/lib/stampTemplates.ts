@@ -908,7 +908,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <path id="t13top" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}"/>
-        <path id="t13bot" d="M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}"/>
+        <path id="t13bot" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx + arcR} ${cy}"/>
       </defs>
       <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
