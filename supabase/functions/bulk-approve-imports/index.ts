@@ -63,6 +63,10 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // ZERO TRUST: Verify owner identity
+  const ownerAuth = await requireOwnerAuth(req, corsHeaders);
+  if (ownerAuth.response) return ownerAuth.response;
+
   // Rate limit: 10 requests per 15 min per IP
   const { response: blocked } = await enforceRateLimit(req, {
     functionName: 'bulk-approve-imports',
