@@ -216,15 +216,15 @@ export default function AIDescriptionWriterPage() {
               <div>
                 <Label className="text-zinc-300">Writing Style</Label>
                 <Select value={style} onValueChange={setStyle}>
-                  <SelectTrigger className="bg-zinc-800 border-lime-500/30 text-white">
+                  <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="luxury">Luxury & Exclusive</SelectItem>
-                    <SelectItem value="professional">Professional</SelectItem>
-                    <SelectItem value="casual">Friendly & Casual</SelectItem>
-                    <SelectItem value="factual">Factual & Concise</SelectItem>
-                  </SelectContent>
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-lime-500/30">
+                    <SelectItemDark value="luxury">Luxury & Exclusive</SelectItemDark>
+                    <SelectItemDark value="professional">Professional</SelectItemDark>
+                    <SelectItemDark value="casual">Friendly & Casual</SelectItemDark>
+                    <SelectItemDark value="factual">Factual & Concise</SelectItemDark>
+                  </SelectContentDark>
                 </Select>
               </div>
             </div>
