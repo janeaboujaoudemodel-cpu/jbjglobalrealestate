@@ -723,7 +723,7 @@ export default function ProjectDetailLayout({
                 </button>
               </div>
             </div>
-            <PremiumHorizontalScrollHint scrollRef={tabNavRef} className="pb-1" />
+            
           </div>
         </div>
       </div>

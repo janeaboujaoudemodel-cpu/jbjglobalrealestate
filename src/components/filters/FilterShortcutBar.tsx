@@ -722,7 +722,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         )}
 
         </div>
-          <PremiumHorizontalScrollHint scrollRef={row2Ref} />
         </div>
       </div>
 
