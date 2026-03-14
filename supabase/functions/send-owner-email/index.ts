@@ -78,6 +78,58 @@ serve(async (req: Request) => {
     const body = await req.json();
     const action = body.action;
 
+    // ─── ACTION: check_recipient ───
+    if (action === "check_recipient") {
+      const email = body.email?.trim()?.toLowerCase();
+      if (!email) {
+        return jsonResponse({ isRegistered: false, userId: null, displayName: null });
+      }
+
+      // Check crm_users_profile
+      const { data: crmProfile } = await serviceClient
+        .from("crm_users_profile")
+        .select("user_id, display_name, crm_role")
+        .ilike("email", email)
+        .maybeSingle();
+
+      if (crmProfile) {
+        return jsonResponse({
+          isRegistered: true,
+          userId: crmProfile.user_id,
+          displayName: crmProfile.display_name,
+          teamMemberId: null,
+        });
+      }
+
+      // Check profiles table
+      const { data: profile } = await serviceClient
+        .from("profiles")
+        .select("id, display_name, email")
+        .ilike("email", email)
+        .maybeSingle();
+
+      if (profile) {
+        return jsonResponse({
+          isRegistered: true,
+          userId: profile.id,
+          displayName: profile.display_name,
+          teamMemberId: null,
+        });
+      }
+
+      // Check if it's a @jbj.ae domain (internal team email)
+      if (email.endsWith("@jbj.ae")) {
+        return jsonResponse({
+          isRegistered: true,
+          userId: null,
+          displayName: email.split("@")[0],
+          teamMemberId: email.split("@")[0],
+        });
+      }
+
+      return jsonResponse({ isRegistered: false, userId: null, displayName: null });
+    }
+
     // ─── ACTION: check_status ───
     if (action === "check_status") {
       const { data: settings } = await serviceClient
