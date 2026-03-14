@@ -48,8 +48,6 @@ Deno.serve(async (req) => {
     if (rateLimited) return rateLimited;
 
     // Check CRM role
-
-    // Check CRM role
     const { data: profile } = await supabase
       .from("crm_users_profile")
       .select("crm_role")
