@@ -451,7 +451,7 @@ export default function StampProjectWizard() {
           <Button variant="outline" size="sm" onClick={handleSaveDraft} className="gap-1 text-xs h-7 px-2.5">
             <Save size={11}/> Save Draft
           </Button>
-          <Button size="sm" onClick={handleCreate} disabled={saving || !form.company_name.trim()}
+          <Button size="sm" onClick={handleCreate} disabled={saving}
             className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1 text-xs h-7 px-3">
             <Wand2 size={11}/> {saving ? 'Creating...' : 'Generate Concepts'}
           </Button>
