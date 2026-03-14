@@ -123,9 +123,8 @@ const ResaleProperties = () => {
     queryKey: ["resale-listings", areaFilter, typeFilter, bedroomFilter, handoverFilter, priceFilter, furnishingFilter, developerFilter],
     queryFn: async () => {
       let query: any = supabase
-        .from("resale_listings")
+        .from("resale_listings_public")
         .select("*")
-        .eq("status", "active")
         .order("created_at", { ascending: false });
 
       if (areaFilter !== "all") query = query.eq("area_name", areaFilter);
