@@ -16,16 +16,16 @@ Deno.serve(async (req) => {
     // Verify caller is owner/admin
     const authHeader = req.headers.get("authorization");
     if (!authHeader) {
-      return jsonResponse({ error: "Unauthorized" }, 401);
+      return jsonResponse(401, { error: "Unauthorized" });
     }
     const token = authHeader.replace("Bearer ", "");
     const { data: { user }, error: authErr } = await sb.auth.getUser(token);
     if (authErr || !user) {
-      return jsonResponse({ error: "Unauthorized" }, 401);
+      return jsonResponse(401, { error: "Unauthorized" });
     }
     const { data: roleCheck } = await sb.rpc("has_role", { _user_id: user.id, _role: "admin" });
     if (!roleCheck) {
-      return jsonResponse({ error: "Forbidden" }, 403);
+      return jsonResponse(403, { error: "Forbidden" });
     }
 
     const snapshot: Record<string, unknown> = {};
@@ -127,10 +127,10 @@ Deno.serve(async (req) => {
 
     if (insertErr) {
       console.error("Failed to save snapshot:", insertErr.message);
-      return jsonResponse({ error: "Failed to save snapshot" }, 500);
+      return jsonResponse(500, { error: "Failed to save snapshot" });
     }
 
-    return jsonResponse({
+    return jsonResponse(200, {
       success: true,
       backup_id: record.id,
       created_at: record.created_at,
@@ -140,6 +140,6 @@ Deno.serve(async (req) => {
     });
   } catch (err) {
     console.error("Snapshot error:", err);
-    return jsonResponse({ error: "Internal error" }, 500);
+    return jsonResponse(500, { error: "Internal error" });
   }
 });
