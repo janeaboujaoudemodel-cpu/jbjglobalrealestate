@@ -170,6 +170,10 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // ZERO TRUST: Verify owner identity
+  const auth = await requireOwnerAuth(req, corsHeaders);
+  if (auth.response) return auth.response;
+
   // Rate limit: 20 requests per 15 min per IP
   const { response: blocked } = await enforceRateLimit(req, {
     functionName: 'send-admin-message',
