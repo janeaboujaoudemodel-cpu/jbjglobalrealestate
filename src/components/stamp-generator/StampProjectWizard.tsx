@@ -173,6 +173,8 @@ export default function StampProjectWizard() {
   const [draftTime, setDraftTime] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('company');
   const [licenseOpen, setLicenseOpen] = useState(false);
+  const [savePresetOpen, setSavePresetOpen] = useState(false);
+  const [presetName, setPresetName] = useState('');
 
   const [form, setForm] = useState<FormState>(() => {
     try {
