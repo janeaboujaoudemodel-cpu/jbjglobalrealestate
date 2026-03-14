@@ -719,10 +719,10 @@ const ListingAdmin = () => {
               </Button>
               <Button
                 onClick={() => { setActiveView('projects'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
-                variant={activeView === 'projects' ? 'primary' : 'secondary'}
+                variant={activeView === 'projects' || activeView === 'project-detail' ? 'primary' : 'secondary'}
               >
                 <FolderOpen className="w-4 h-4 mr-2" />
-                {t('listingAdmin.projects')} ({totalCount ?? 0})
+                Project Hub ({totalCount ?? 0})
               </Button>
               {/* UNIFIED: Single Data Ops button replaces 3 separate buttons */}
               <Button
