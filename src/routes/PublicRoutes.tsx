@@ -152,6 +152,7 @@ const QRCodeGenerator = lazy(() => import("@/pages/QRCodeGenerator"));
 const ContractForms = lazy(() => import("@/pages/ContractForms"));
 const VideoMeeting = lazy(() => import("@/pages/VideoMeeting"));
 const Presentations = lazy(() => import("@/pages/Presentations"));
+const DocumentStudio = lazy(() => import("@/pages/DocumentStudio"));
 const Sitemap = lazy(() => import("@/pages/Sitemap"));
 const Pricing = lazy(() => import("@/pages/Pricing"));
 
