@@ -30,6 +30,10 @@ interface AuthContextType {
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
   updatePassword: (newPassword: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
+  /** Sign out from all sessions (global) */
+  signOutAllSessions: () => Promise<void>;
+  /** Sign out from all other sessions except current */
+  signOutOtherSessions: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -231,11 +235,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [verifyOwner]);
 
+  // Helper to record login event (fire-and-forget)
+  const recordLoginEvent = async (
+    eventType: string,
+    email: string | null,
+    failureReason?: string
+  ) => {
+    try {
+      // Generate fingerprint inline
+      const raw = [
+        navigator.userAgent,
+        screen.width.toString(),
+        screen.height.toString(),
+        navigator.language,
+        navigator.platform,
+        Intl.DateTimeFormat().resolvedOptions().timeZone,
+      ].join("|");
+      const data = new TextEncoder().encode(raw);
+      const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+      const fp = Array.from(new Uint8Array(hashBuffer))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+
+      await supabase.functions.invoke("record-login-event", {
+        body: {
+          event_type: eventType,
+          email,
+          device_fingerprint: fp,
+          failure_reason: failureReason || null,
+        },
+      });
+    } catch {
+      // Non-critical — don't block auth flow
+    }
+  };
+
   const signIn = async (email: string, password: string) => {
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+    // Record login event (fire-and-forget)
+    recordLoginEvent(
+      error ? "failure" : "success",
+      email,
+      error?.message
+    );
     return { error: error as Error | null };
   };
 
@@ -281,21 +326,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     try {
-      // Clear local state first to ensure UI updates immediately
       setUser(null);
       setSession(null);
       setIsOwner(false);
       setOwnerError(null);
-      
-      // Clear any role selection from localStorage
       localStorage.removeItem('jj_role_selected');
       localStorage.removeItem('jj_employee_welcomed');
-      
-      // Attempt to sign out - ignore errors if session already expired
       await supabase.auth.signOut({ scope: 'local' });
     } catch (error) {
-      // Session may already be invalid - that's fine, just clear local state
       console.log('Sign out completed (session may have been expired)');
+    }
+  };
+
+  const signOutAllSessions = async () => {
+    try {
+      setUser(null);
+      setSession(null);
+      setIsOwner(false);
+      setOwnerError(null);
+      localStorage.removeItem('jj_role_selected');
+      localStorage.removeItem('jj_employee_welcomed');
+      await supabase.auth.signOut({ scope: 'global' });
+    } catch {
+      console.log('Global sign out completed');
+    }
+  };
+
+  const signOutOtherSessions = async () => {
+    try {
+      await supabase.auth.signOut({ scope: 'others' });
+    } catch {
+      console.log('Other sessions sign out completed');
     }
   };
 
@@ -315,6 +376,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         resetPassword,
         updatePassword,
         signOut,
+        signOutAllSessions,
+        signOutOtherSessions,
       }}
     >
       {children}

@@ -555,3 +555,6 @@ verify_jwt = false
 
 [functions.crm-data-encrypt]
 verify_jwt = false
+
+[functions.record-login-event]
+verify_jwt = false
