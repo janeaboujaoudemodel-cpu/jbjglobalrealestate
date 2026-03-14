@@ -153,9 +153,6 @@ interface StampLeftPanelProps {
   onSetCircleGap: (v: number) => void;
   onSetSeparatorDistance: (v: number) => void;
   onSetCenterContentSize: (v: number) => void;
-  // Government Mode
-  governmentMode: boolean;
-  onSetGovernmentMode: (v: boolean) => void;
 }
 
 export function StampLeftPanel(props: StampLeftPanelProps) {
