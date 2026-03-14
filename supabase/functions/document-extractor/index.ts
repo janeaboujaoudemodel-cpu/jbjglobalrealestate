@@ -95,7 +95,7 @@ Use empty string "" for missing text fields and [] for missing arrays. No explan
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3-flash-preview",
         messages: [
           {
             role: "user",

@@ -279,7 +279,7 @@ Provide your qualification assessment as a JSON object.`;
 
     // 7. Call AI
     const aiResponse = await callLovableAI({
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-3-flash-preview",
       systemPrompt,
       userPrompt,
       temperature: 0.3, // Lower temperature for more consistent scoring
