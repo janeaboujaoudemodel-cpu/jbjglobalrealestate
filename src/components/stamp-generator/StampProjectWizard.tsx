@@ -466,21 +466,7 @@ export default function StampProjectWizard() {
             <TabsContent value="company" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-3">
-                  {/* Preset Library */}
-                  <StampPresetLibrary
-                    onSelectPreset={handlePresetSelect}
-                    selectedPresetId={form.selected_preset ? undefined : undefined}
-                  />
-                  {form.selected_preset && (
-                    <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)]">
-                      <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border-[hsl(var(--gold)/0.3)] text-[8px]">
-                        Based on: {form.selected_preset}
-                      </Badge>
-                      <button onClick={() => set('selected_preset', '')} className="text-[8px] text-[hsl(var(--muted-foreground))] hover:text-destructive ml-auto">
-                        <X size={10} />
-                      </button>
-                    </div>
-                  )}
+                  {/* Smart Auto-Fill from Trade License — primary entry */}
 
                   {/* Save as Custom Template */}
                   {savePresetOpen ? (
