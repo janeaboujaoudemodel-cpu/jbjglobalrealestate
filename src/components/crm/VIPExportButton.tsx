@@ -9,9 +9,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { Crown, Download, FileSpreadsheet, FileText, ChevronDown } from "lucide-react";
+import { useStepUpAuth } from "@/hooks/useStepUpAuth";
+import ReAuthModal from "@/components/security/ReAuthModal";
+import { logExportEvent, maskExportField } from "@/utils/dlpExportLogger";
 
 const VIPExportButton = () => {
   const [exporting, setExporting] = useState(false);
+  const stepUp = useStepUpAuth();
 
   const fetchVIPLeads = async () => {
     const { data, error } = await supabase
@@ -38,6 +42,9 @@ const VIPExportButton = () => {
         return;
       }
 
+      const masked = !stepUp.isElevated;
+      const fieldsMasked = masked ? ["phone_e164", "email_lower"] : [];
+
       const headers = [
         "Full Name", "Phone", "Email", "Company", "Nationality", 
         "Language", "Country", "Source", "Tags", "VIP Tagged At", "Created At"
@@ -47,8 +54,8 @@ const VIPExportButton = () => {
         headers.join(","),
         ...leads.map(lead => [
           `"${(lead.full_name || '').replace(/"/g, '""')}"`,
-          lead.phone_e164 || '',
-          lead.email_lower || '',
+          masked ? maskExportField("phone_e164", lead.phone_e164) : (lead.phone_e164 || ''),
+          masked ? maskExportField("email_lower", lead.email_lower) : (lead.email_lower || ''),
           `"${(lead.company_name || '').replace(/"/g, '""')}"`,
           lead.nationality || '',
           lead.preferred_language || '',
@@ -68,8 +75,18 @@ const VIPExportButton = () => {
       a.download = `jbj_vip_leads_${new Date().toISOString().split('T')[0]}.csv`;
       a.click();
       URL.revokeObjectURL(url);
+
+      await logExportEvent({
+        exportType: "vip_leads",
+        exportFormat: "csv",
+        recordCount: leads.length,
+        containsPii: true,
+        fieldsExported: ["full_name", "phone_e164", "email_lower", "company_name", "nationality"],
+        fieldsMasked,
+        requiredStepUp: true,
+      });
       
-      toast.success(`Exported ${leads.length} VIP leads to CSV`);
+      toast.success(`Exported ${leads.length} VIP leads to CSV${masked ? " (PII masked)" : ""}`);
     } catch (err) {
       console.error("Export failed:", err);
       toast.error("Failed to export VIP leads");
@@ -88,14 +105,18 @@ const VIPExportButton = () => {
         return;
       }
 
+      const masked = !stepUp.isElevated;
+      const fieldsMasked = masked ? ["phone_e164", "email_lower"] : [];
+
       const jsonData = {
         export_date: new Date().toISOString(),
         total_vip_leads: leads.length,
+        pii_masked: masked,
         leads: leads.map(lead => ({
           id: lead.id,
           full_name: lead.full_name,
-          phone: lead.phone_e164,
-          email: lead.email_lower,
+          phone: masked ? maskExportField("phone_e164", lead.phone_e164) : lead.phone_e164,
+          email: masked ? maskExportField("email_lower", lead.email_lower) : lead.email_lower,
           company: lead.company_name,
           nationality: lead.nationality,
           language: lead.preferred_language,
@@ -115,8 +136,18 @@ const VIPExportButton = () => {
       a.download = `jbj_vip_leads_${new Date().toISOString().split('T')[0]}.json`;
       a.click();
       URL.revokeObjectURL(url);
+
+      await logExportEvent({
+        exportType: "vip_leads",
+        exportFormat: "json",
+        recordCount: leads.length,
+        containsPii: true,
+        fieldsExported: ["full_name", "phone_e164", "email_lower", "company_name", "nationality"],
+        fieldsMasked,
+        requiredStepUp: true,
+      });
       
-      toast.success(`Exported ${leads.length} VIP leads to JSON`);
+      toast.success(`Exported ${leads.length} VIP leads to JSON${masked ? " (PII masked)" : ""}`);
     } catch (err) {
       console.error("Export failed:", err);
       toast.error("Failed to export VIP leads");
@@ -125,37 +156,55 @@ const VIPExportButton = () => {
     }
   };
 
+  const handleExportCSV = () => {
+    stepUp.requireStepUp("Export VIP Leads (CSV)", "critical", exportToCSV);
+  };
+
+  const handleExportJSON = () => {
+    stepUp.requireStepUp("Export VIP Leads (JSON)", "critical", exportToJSON);
+  };
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button 
-          variant="outline" 
-          size="sm"
-          className="text-black border-gold/50 hover:bg-gold/20"
-          disabled={exporting}
-        >
-          <Crown className="h-4 w-4 mr-2 text-gold" />
-          Export VIP
-          <ChevronDown className="h-3 w-3 ml-2" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
-        <DropdownMenuItem 
-          onClick={exportToCSV}
-          className="text-black hover:bg-gold/20 cursor-pointer"
-        >
-          <FileSpreadsheet className="h-4 w-4 mr-2" />
-          Export as CSV
-        </DropdownMenuItem>
-        <DropdownMenuItem 
-          onClick={exportToJSON}
-          className="text-black hover:bg-gold/20 cursor-pointer"
-        >
-          <FileText className="h-4 w-4 mr-2" />
-          Export as JSON
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="text-black border-gold/50 hover:bg-gold/20"
+            disabled={exporting}
+          >
+            <Crown className="h-4 w-4 mr-2 text-gold" />
+            Export VIP
+            <ChevronDown className="h-3 w-3 ml-2" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+          <DropdownMenuItem 
+            onClick={handleExportCSV}
+            className="text-black hover:bg-gold/20 cursor-pointer"
+          >
+            <FileSpreadsheet className="h-4 w-4 mr-2" />
+            Export as CSV
+          </DropdownMenuItem>
+          <DropdownMenuItem 
+            onClick={handleExportJSON}
+            className="text-black hover:bg-gold/20 cursor-pointer"
+          >
+            <FileText className="h-4 w-4 mr-2" />
+            Export as JSON
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <ReAuthModal
+        open={stepUp.modalOpen}
+        onOpenChange={stepUp.onModalOpenChange}
+        onSuccess={stepUp.onModalSuccess}
+        actionLabel={stepUp.modalActionLabel}
+        severity={stepUp.modalSeverity}
+      />
+    </>
   );
 };
 

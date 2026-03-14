@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Download, FileText, Loader2, User } from "lucide-react";
 import { toast } from "sonner";
 import { generateCompanyProfilePDF } from "@/utils/generateCompanyProfilePDF";
+import { logExportEvent } from "@/utils/dlpExportLogger";
 
 export const CompanyProfileDownload = () => {
   const [isGeneratingStandard, setIsGeneratingStandard] = useState(false);
@@ -14,6 +15,15 @@ export const CompanyProfileDownload = () => {
     setter(true);
     try {
       await generateCompanyProfilePDF(includeFounder);
+
+      await logExportEvent({
+        exportType: "company_profile",
+        exportFormat: "pdf",
+        recordCount: 1,
+        containsPii: false,
+        fieldsExported: includeFounder ? ["company_profile", "founder_details"] : ["company_profile"],
+      });
+
       toast.success(`Company Profile ${includeFounder ? "(With Founder)" : "(Standard)"} downloaded!`);
     } catch (error) {
       console.error("PDF generation error:", error);
