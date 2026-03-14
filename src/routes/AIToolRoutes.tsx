@@ -20,7 +20,7 @@ const AIObjectionHandlerPage = lazy(() => import("@/pages/AIObjectionHandlerPage
 const AIFollowupSchedulerPage = lazy(() => import("@/pages/AIFollowupSchedulerPage"));
 const AIMeetingSummarizerPage = lazy(() => import("@/pages/AIMeetingSummarizerPage"));
 const AITranslationHubPage = lazy(() => import("@/pages/AITranslationHubPage"));
-const AIVideoTourScriptPage = lazy(() => import("@/pages/AIVideoTourScriptPage"));
+
 const AIContractReviewerPage = lazy(() => import("@/pages/AIContractReviewerPage"));
 const AIDocumentGeneratorPage = lazy(() => import("@/pages/AIDocumentGeneratorPage"));
 const AICallSummarizerPage = lazy(() => import("@/pages/AICallSummarizerPage"));
