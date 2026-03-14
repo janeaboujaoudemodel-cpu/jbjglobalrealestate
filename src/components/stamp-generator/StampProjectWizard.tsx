@@ -752,17 +752,20 @@ export default function StampProjectWizard() {
                     </div>
                   </div>
 
-                  {/* Color Palette Swatches */}
+                  {/* Color Palette */}
                   <div>
-                    <Label className="text-[11px] font-medium mb-1.5 block">Quick Colors</Label>
+                    <Label className="text-[11px] font-medium mb-1.5 block">Color Palette</Label>
                     <div className="flex gap-1.5 flex-wrap">
                       {[
-                        { color: '#1B3A8C', label: 'Navy' },
+                        { color: '#1B3A8C', label: 'Ink Standard (Navy)' },
                         { color: '#000000', label: 'Black' },
-                        { color: '#8B0000', label: 'Red' },
-                        { color: '#0B5345', label: 'Green' },
-                        { color: '#4A235A', label: 'Purple' },
+                        { color: '#8B0000', label: 'Dark Red' },
+                        { color: '#0B5345', label: 'Forest Green' },
+                        { color: '#4A235A', label: 'Royal Purple' },
                         { color: '#1C2833', label: 'Charcoal' },
+                        { color: '#1A5276', label: 'Ocean Blue' },
+                        { color: '#7D6608', label: 'Gold' },
+                        { color: '#6C3483', label: 'Plum' },
                       ].map(swatch => (
                         <button key={swatch.color} type="button"
                           onClick={() => set('ink_color', swatch.color)}
@@ -772,7 +775,7 @@ export default function StampProjectWizard() {
                               : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
                           }`}>
                           <div className="w-6 h-6 rounded-full border border-[hsl(var(--border))]" style={{ backgroundColor: swatch.color }} />
-                          <span className="text-[8px] font-medium">{swatch.label}</span>
+                          <span className="text-[7px] font-medium text-center leading-tight max-w-[48px]">{swatch.label}</span>
                         </button>
                       ))}
                     </div>
