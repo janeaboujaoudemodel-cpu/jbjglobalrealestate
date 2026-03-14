@@ -1,90 +1,39 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+# Fix: Desktop/Mobile Navigation Hybrid Bug at Intermediate Widths
 
-### Session Status
+## Problem
+At ~1083px viewport (e.g., when Lovable chat panel is open), the layout enters a broken hybrid state:
+- **GlobalHeader** (mobile nav) is hidden at `lg:` (1024px+) — gone
+- **HorizontalUtilityBar** (desktop bar) renders at ALL widths — shows but half-broken
+- **GlobalVerticalNav** (sidebar) renders at `lg:` but may not have revealed yet (3s delay on homepage)
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+Result: user sees a truncated horizontal bar, no sidebar, no mobile header. A broken in-between state.
 
----
+## Root Cause
+The desktop breakpoint is `lg` (1024px), which is too low for the L-shaped navigation (sidebar 200px + utility bar + content). The HorizontalUtilityBar also lacks any breakpoint gate — it always renders.
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+## Fix: Raise Desktop Navigation Breakpoint to `xl` (1280px)
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+Below 1280px → clean mobile view (GlobalHeader only).  
+At 1280px+ → full desktop view (vertical sidebar + horizontal utility bar).
 
----
+### File 1: `src/components/MainLayout.tsx`
+- Line 243: `lg:hidden` → `xl:hidden` (GlobalHeader visibility)
+- Line 248: `hidden lg:block` → `hidden xl:block` (vertical nav visibility)
+- Line 253-255: Wrap HorizontalUtilityBar in `hidden xl:block` div
+- Line 259: Change all `lg:pl-[200px]`, `lg:pl-[48px]`, `lg:pt-[52px]` → `xl:` variants
+- Line 270: Same `lg:pl-` → `xl:pl-` for footer wrapper
 
-### Route Map
+### File 2: `src/components/navigation/HorizontalUtilityBar.tsx`
+- Line 107: `hidden lg:inline` → `hidden xl:inline` for label class
+- Line 112: Change `lg:px-5`, `lg:pr-10` → `xl:px-5`, `xl:pr-10`
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+### File 3: `src/components/navigation/GlobalVerticalNav.tsx`
+- No changes needed — it's already gated by the `hidden lg:block` wrapper in MainLayout
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+### What stays the same
+- `useIsMobile` (768px) and `useIsTouchLayout` (1024px) hooks unchanged — they serve different purposes (component-level responsive behavior)
+- All content `lg:px-8` padding unrelated to the nav system stays as-is
+- Owner dashboard shell is unaffected (uses its own sidebar logic)
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
