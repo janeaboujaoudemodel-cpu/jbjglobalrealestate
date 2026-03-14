@@ -157,6 +157,16 @@ const TeamChat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // ── Prefill from navigation state (ExclusiveDocuments, DocumentStudio) ──
+  useEffect(() => {
+    const state = location.state as any;
+    if (state?.prefillMessage || state?.prefillAttachment) {
+      if (state.prefillMessage) setNewMessage(state.prefillMessage);
+      if (state.prefillAttachment) setPendingAttachments([state.prefillAttachment]);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
     const activeChannelData = channels.find(c => c.id === activeChannel);
