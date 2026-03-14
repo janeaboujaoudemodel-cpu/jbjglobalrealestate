@@ -105,18 +105,7 @@ const DeveloperPortal = () => {
     || user?.email?.split('@')[0]
     || 'Developer';
 
-  // Fetch developer names for autocomplete (owner mode)
-  const { data: developersList } = useQuery({
-    queryKey: ["developers-list-autocomplete"],
-    queryFn: async () => {
-      const { data } = await (supabase as any)
-        .from('developers')
-        .select('id, name')
-        .order('name');
-      return data || [];
-    },
-    enabled: isOwner,
-  });
+  // Developer list is now handled by DeveloperSelectDropdown component
 
   // Check if user has a registered rep profile
   const { data: repProfile, isLoading: loadingRep, refetch: refetchRep } = useQuery({
