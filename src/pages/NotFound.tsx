@@ -50,10 +50,10 @@ const NotFound = () => {
 
   return (
     <>
-      {/* Add top padding to account for fixed header (h-24 sm:h-28 lg:h-32) */}
-      <div className="jj-hero-fullscreen min-h-screen bg-black relative overflow-hidden flex items-center justify-center py-12 pt-32 lg:pt-40">
+      {/* Safe-area padding: top clears fixed header stack, bottom ensures Need Assistance is never clipped */}
+      <div className="jj-hero-fullscreen min-h-[100dvh] bg-black relative flex items-center justify-center py-8 pt-28 sm:pt-32 lg:pt-24 pb-16 sm:pb-20">
         {/* Decorative background elements */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-gold/3 rounded-full blur-2xl" />
         </div>
@@ -73,14 +73,14 @@ const NotFound = () => {
                 <img
                   src={jbjMonogramLightBg}
                   alt="JBJ Global Real Estate"
-                  className="w-28 h-28 md:w-32 md:h-32 mx-auto object-contain"
+                  className="w-24 h-24 md:w-28 md:h-28 mx-auto object-contain"
                 />
               </motion.div>
 
               {/* 404 */}
               <motion.h1
                 variants={fadeInUp}
-                className="text-6xl md:text-[100px] font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold leading-none"
+                className="text-5xl md:text-[80px] font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold leading-none"
                 style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 404
@@ -154,7 +154,7 @@ const NotFound = () => {
                 </Button>
               </motion.div>
 
-              {/* Contact Details */}
+              {/* Contact Details — Need Assistance */}
               <motion.div variants={fadeInUp} className="pt-6 border-t border-gold/20">
                 <p className="text-black/60 text-xs uppercase tracking-wider mb-3">Need Assistance?</p>
                 <div className="flex flex-col sm:flex-row gap-2 justify-center">
