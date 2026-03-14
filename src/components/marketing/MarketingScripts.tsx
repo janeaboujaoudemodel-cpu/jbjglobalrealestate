@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useMarketingConsent } from '@/hooks/useMarketingConsent';
+import { supabase } from '@/integrations/supabase/client';
 
 interface MarketingConfig {
   ga4MeasurementId?: string;
@@ -10,11 +11,35 @@ interface MarketingConfig {
   tiktokPixelId?: string;
 }
 
-// Get config from localStorage (set via Owner settings)
-const getMarketingConfig = (): MarketingConfig => {
+// Load config from marketing_config DB table (cached)
+let configCache: MarketingConfig | null = null;
+let configCacheTime = 0;
+const CONFIG_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+const getMarketingConfig = async (): Promise<MarketingConfig> => {
+  if (configCache && Date.now() - configCacheTime < CONFIG_CACHE_TTL) {
+    return configCache;
+  }
+
   try {
-    const stored = localStorage.getItem('jj_marketing_config');
-    return stored ? JSON.parse(stored) : {};
+    const { data, error } = await supabase
+      .from('marketing_config')
+      .select('key, value');
+    
+    if (error || !data) return {};
+    
+    const config: MarketingConfig = {};
+    data.forEach((row: { key: string; value: string }) => {
+      if (row.key in config || [
+        'ga4MeasurementId', 'gtmContainerId', 'metaPixelId',
+        'linkedInPartnerId', 'clarityProjectId', 'tiktokPixelId'
+      ].includes(row.key)) {
+        (config as any)[row.key] = row.value;
+      }
+    });
+    configCache = config;
+    configCacheTime = Date.now();
+    return config;
   } catch {
     return {};
   }
@@ -40,17 +65,19 @@ export const MarketingScripts = () => {
   useEffect(() => {
     if (!isLoaded) return;
 
-    const config = getMarketingConfig();
+    const init = async () => {
+      const config = await getMarketingConfig();
 
-    // Initialize analytics scripts only with consent
-    if (hasAnalyticsConsent()) {
-      initializeAnalytics(config);
-    }
+      if (hasAnalyticsConsent()) {
+        initializeAnalytics(config);
+      }
 
-    // Initialize marketing scripts only with consent
-    if (hasMarketingConsent()) {
-      initializeMarketing(config);
-    }
+      if (hasMarketingConsent()) {
+        initializeMarketing(config);
+      }
+    };
+
+    init();
   }, [isLoaded, hasAnalyticsConsent, hasMarketingConsent]);
 
   return null;
@@ -75,8 +102,6 @@ const initializeGA4 = (measurementId: string) => {
     anonymize_ip: true,
     cookie_flags: 'SameSite=None;Secure',
   });
-
-  console.log('[Marketing] GA4 initialized:', measurementId);
 };
 
 // Google Tag Manager
@@ -95,7 +120,6 @@ const initializeGTM = (containerId: string) => {
   script.src = `https://www.googletagmanager.com/gtm.js?id=${containerId}`;
   document.head.appendChild(script);
 
-  // GTM noscript iframe (for body)
   const noscript = document.createElement('noscript');
   const iframe = document.createElement('iframe');
   iframe.src = `https://www.googletagmanager.com/ns.html?id=${containerId}`;
@@ -105,8 +129,6 @@ const initializeGTM = (containerId: string) => {
   iframe.style.visibility = 'hidden';
   noscript.appendChild(iframe);
   document.body.insertBefore(noscript, document.body.firstChild);
-
-  console.log('[Marketing] GTM initialized:', containerId);
 };
 
 // Microsoft Clarity
@@ -124,8 +146,6 @@ const initializeClarity = (projectId: string) => {
     y = l.getElementsByTagName(r)[0] as HTMLScriptElement;
     y.parentNode?.insertBefore(t, y);
   })(window, document, 'clarity', 'script', projectId);
-
-  console.log('[Marketing] Clarity initialized:', projectId);
 };
 
 // Meta (Facebook/Instagram) Pixel
@@ -152,8 +172,6 @@ const initializeMetaPixel = (pixelId: string) => {
 
   window.fbq('init', pixelId);
   window.fbq('track', 'PageView');
-
-  console.log('[Marketing] Meta Pixel initialized:', pixelId);
 };
 
 // LinkedIn Insight Tag
@@ -175,11 +193,9 @@ const initializeLinkedIn = (partnerId: string) => {
       s.parentNode?.insertBefore(b, s);
     }
   })(document);
-
-  console.log('[Marketing] LinkedIn Insight initialized:', partnerId);
 };
 
-// TikTok Pixel (placeholder for future)
+// TikTok Pixel
 const initializeTikTokPixel = (pixelId: string) => {
   if (!pixelId || window.ttq) return;
 
@@ -221,34 +237,20 @@ const initializeTikTokPixel = (pixelId: string) => {
     ttq.load(pixelId);
     ttq.page();
   })(window, document, 'ttq');
-
-  console.log('[Marketing] TikTok Pixel initialized:', pixelId);
 };
 
 // Initialize all analytics tools
 const initializeAnalytics = (config: MarketingConfig) => {
-  if (config.ga4MeasurementId) {
-    initializeGA4(config.ga4MeasurementId);
-  }
-  if (config.gtmContainerId) {
-    initializeGTM(config.gtmContainerId);
-  }
-  if (config.clarityProjectId) {
-    initializeClarity(config.clarityProjectId);
-  }
+  if (config.ga4MeasurementId) initializeGA4(config.ga4MeasurementId);
+  if (config.gtmContainerId) initializeGTM(config.gtmContainerId);
+  if (config.clarityProjectId) initializeClarity(config.clarityProjectId);
 };
 
 // Initialize all marketing tools
 const initializeMarketing = (config: MarketingConfig) => {
-  if (config.metaPixelId) {
-    initializeMetaPixel(config.metaPixelId);
-  }
-  if (config.linkedInPartnerId) {
-    initializeLinkedIn(config.linkedInPartnerId);
-  }
-  if (config.tiktokPixelId) {
-    initializeTikTokPixel(config.tiktokPixelId);
-  }
+  if (config.metaPixelId) initializeMetaPixel(config.metaPixelId);
+  if (config.linkedInPartnerId) initializeLinkedIn(config.linkedInPartnerId);
+  if (config.tiktokPixelId) initializeTikTokPixel(config.tiktokPixelId);
 };
 
 export default MarketingScripts;

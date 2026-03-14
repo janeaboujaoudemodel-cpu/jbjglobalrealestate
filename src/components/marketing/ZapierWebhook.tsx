@@ -1,4 +1,5 @@
 // Zapier Webhook utility for sending data to Google Sheets and automations
+import { supabase } from '@/integrations/supabase/client';
 
 interface ZapierWebhookData {
   type: 'lead' | 'newsletter' | 'inquiry' | 'booking' | 'report_download';
@@ -7,22 +8,39 @@ interface ZapierWebhookData {
   data: Record<string, any>;
 }
 
-// Get webhook URL from localStorage (set via Owner settings)
-const getZapierWebhookUrl = (): string | null => {
-  try {
-    const config = localStorage.getItem('jj_marketing_config');
-    if (config) {
-      const parsed = JSON.parse(config);
-      return parsed.zapierWebhookUrl || null;
-    }
-  } catch (e) {
-    console.error('Error getting Zapier webhook URL:', e);
+// Get webhook URL from marketing_config DB table (owner-only RLS)
+let cachedWebhookUrl: string | null = null;
+let cacheTimestamp = 0;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+const getZapierWebhookUrl = async (): Promise<string | null> => {
+  // Use cached value if fresh
+  if (cachedWebhookUrl !== null && Date.now() - cacheTimestamp < CACHE_TTL) {
+    return cachedWebhookUrl;
   }
-  return null;
+
+  try {
+    const { data, error } = await supabase
+      .from('marketing_config')
+      .select('value')
+      .eq('key', 'zapierWebhookUrl')
+      .maybeSingle();
+    
+    if (error || !data) {
+      cachedWebhookUrl = null;
+    } else {
+      cachedWebhookUrl = data.value || null;
+    }
+    cacheTimestamp = Date.now();
+  } catch (e) {
+    console.error('[Zapier] Error fetching webhook URL:', e);
+    cachedWebhookUrl = null;
+  }
+  return cachedWebhookUrl;
 };
 
 export const sendToZapier = async (data: ZapierWebhookData): Promise<boolean> => {
-  const webhookUrl = getZapierWebhookUrl();
+  const webhookUrl = await getZapierWebhookUrl();
   
   if (!webhookUrl) {
     console.log('[Zapier] No webhook URL configured, skipping');
