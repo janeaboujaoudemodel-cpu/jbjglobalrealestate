@@ -338,7 +338,7 @@ const Footer = () => {
   const brokerAcademyLinks = [
     { href: "/broker-toolkit", label: "Broker Portal" },
     { href: "/onboarding", label: "JBJ Academy" },
-    { href: "/academy-graduates", label: "Academy Graduates" },
+    { href: "/academy/graduates", label: "Academy Graduates" },
     { href: "/broker-education", label: "Broker Education" },
     { href: "/broker-resources", label: "Broker Resources" },
     { href: "/listing-portal", label: "Listing Portal" },
