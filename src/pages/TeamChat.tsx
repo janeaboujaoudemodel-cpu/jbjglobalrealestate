@@ -727,6 +727,40 @@ const TeamChat = () => {
         </div>
       )}
 
+      {/* Productivity Panel */}
+      {showProductivityPanel && !isMobile && (
+        <div className="w-64 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] border-l border-[#C9A84C]/15 flex flex-col overflow-y-auto">
+          <div className="p-4 border-b border-[#C9A84C]/15">
+            <h3 className="text-xs font-semibold text-black/40 uppercase tracking-wider flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-[#C9A84C]" /> Chat Productivity
+            </h3>
+          </div>
+          <div className="p-4 space-y-4">
+            <QuickCalendarWidget source="chat" />
+            <div className="h-px bg-[#C9A84C]/10" />
+            <QuickNoteWidget source="chat" />
+            <div className="h-px bg-[#C9A84C]/10" />
+            <div>
+              <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-2 flex items-center gap-1">
+                <Pin className="w-3 h-3" /> Pinned Messages
+              </p>
+              {pinnedMessages.size > 0 ? (
+                <div className="space-y-1">
+                  {channelMessages.filter(m => pinnedMessages.has(m.id)).map(m => (
+                    <div key={m.id} className="text-xs text-black/60 bg-white/70 rounded-lg border border-[#C9A84C]/15 px-2.5 py-2">
+                      <span className="font-medium text-black/80">{m.userName}</span>
+                      <p className="truncate mt-0.5">{m.content}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-[10px] text-black/30 text-center py-2">No pinned messages</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Settings Dialog */}
       <Dialog open={showSettings} onOpenChange={setShowSettings}>
         <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
