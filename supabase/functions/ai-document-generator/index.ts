@@ -237,6 +237,10 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // WAF Layer
+  const waf = await enforceWAF(req, corsHeaders, "ai", "ai-document-generator");
+  if (waf.blocked) return waf.response!;
+
   const startTime = Date.now();
   const clientIp = getClientIp(req);
   const authHeader = req.headers.get("Authorization");
