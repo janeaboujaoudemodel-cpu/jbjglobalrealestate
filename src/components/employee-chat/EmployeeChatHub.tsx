@@ -90,8 +90,11 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
   const handleSendMessage = async () => {
     if (messageInput.trim() && selectedEmployee) {
       const msgContent = messageInput;
+      // Include attachments metadata with message
+      const attachmentMeta = pendingAttachments.length > 0 ? pendingAttachments : undefined;
       sendMessage(messageInput);
       setMessageInput('');
+      setPendingAttachments([]);
 
       // Cross-channel: also send by email if toggle is ON
       if (alsoSendByEmail && selectedEmployeeData) {
