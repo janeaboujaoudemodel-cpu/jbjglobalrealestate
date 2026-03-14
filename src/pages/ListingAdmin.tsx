@@ -53,6 +53,7 @@ import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel"
 import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel";
 // EmergencyMirrorPanel removed — Mirror tab dropped per user request
 import { EnrichmentCenter } from "@/components/listing-admin/EnrichmentCenter";
+import { ProvidentPortalHub } from "@/components/listing-admin/ProvidentPortalHub";
 import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
 import { ProjectPreviewModal } from "@/components/listing-admin/ProjectPreviewModal";
 import { ProjectMediaManager } from "@/components/listing-admin/ProjectMediaManager";
