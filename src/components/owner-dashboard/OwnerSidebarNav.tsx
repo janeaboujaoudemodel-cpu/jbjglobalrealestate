@@ -84,6 +84,7 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "CREATIVE",
     items: [
+      { label: "Brand Assets", icon: Crown, path: "/owner/brand-assets" },
       { label: "Studio", icon: Video, path: "/owner/studio" },
       { label: "Founder & Podcast Control", icon: Users, path: "/owner/founder-settings" },
       { label: "Podcast Studio", icon: Headphones, path: "/owner/podcast-studio" },

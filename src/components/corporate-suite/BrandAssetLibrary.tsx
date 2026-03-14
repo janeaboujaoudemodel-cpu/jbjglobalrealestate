@@ -73,15 +73,54 @@ export function BrandAssetLibrary({
     if (!user) return;
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      // Query design_assets (primary)
+      const { data: designData, error: designError } = await supabase
         .from("design_assets")
         .select("*")
         .eq("user_id", user.id)
         .in("asset_type", assetTypes)
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      setAssets((data || []) as BrandAsset[]);
+      if (designError) throw designError;
+
+      // Also query brand_assets for stamps/logos saved from stamp generator
+      const brandTypeMap: Record<string, string> = { stamp: "stamp", logo: "logo", monogram: "stamp" };
+      const brandTypes = assetTypes.filter(t => t in brandTypeMap);
+      let brandAssets: BrandAsset[] = [];
+
+      if (brandTypes.length > 0) {
+        const { data: brandData } = await supabase
+          .from("brand_assets")
+          .select("*")
+          .eq("user_id", user.id)
+          .in("asset_type", brandTypes)
+          .order("created_at", { ascending: false });
+
+        if (brandData) {
+          brandAssets = (brandData as any[]).map(b => ({
+            id: `ba-${b.id}`,
+            name: b.name,
+            asset_type: b.asset_type as AssetType,
+            file_url: b.svg_content
+              ? `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(b.svg_content)))}`
+              : b.thumbnail_url || "",
+            thumbnail_url: b.thumbnail_url,
+            created_at: b.created_at,
+          }));
+        }
+      }
+
+      // Merge and dedupe by name+type
+      const seen = new Set<string>();
+      const merged: BrandAsset[] = [];
+      for (const a of [...(designData || []) as BrandAsset[], ...brandAssets]) {
+        const key = `${a.asset_type}:${a.name}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          merged.push(a);
+        }
+      }
+      setAssets(merged);
     } catch (err) {
       console.error("Failed to load assets:", err);
     } finally {

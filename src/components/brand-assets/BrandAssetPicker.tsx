@@ -152,6 +152,24 @@ export function useSaveBrandAsset() {
       source_id: params.sourceId || null,
     }).select('id').single();
     if (error) { toast.error('Failed to save brand asset'); return null; }
+
+    // Dual-insert into design_assets for cross-tool visibility
+    if (params.svgContent) {
+      try {
+        const svgBase64 = btoa(unescape(encodeURIComponent(params.svgContent)));
+        const dataUri = `data:image/svg+xml;base64,${svgBase64}`;
+        await supabase.from('design_assets').insert({
+          user_id: user.id,
+          asset_type: params.assetType === 'stamp' ? 'stamp' : params.assetType === 'logo' ? 'logo' : 'monogram',
+          name: params.name,
+          file_url: dataUri,
+          thumbnail_url: params.thumbnailUrl || dataUri,
+        });
+      } catch (e) {
+        console.warn('Dual-insert to design_assets failed (non-critical):', e);
+      }
+    }
+
     toast.success('Saved as brand asset');
     return data?.id;
   };

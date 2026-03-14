@@ -101,5 +101,6 @@ export const OwnerRoutes = () => (
     <Route path="listing-admin/preview/:id" element={<ListingAdminGuard><Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/listing-admin/PendingImportPreview")))}</Suspense></ListingAdminGuard>} />
     <Route path="mode-hub" element={<ModeHub />} />
     <Route path="notes" element={<FoundersNotesPanel />} />
+    <Route path="brand-assets" element={<BrandAssetsDashboard />} />
   </Route>
 );
