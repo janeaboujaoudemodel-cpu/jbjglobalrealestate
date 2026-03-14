@@ -83,10 +83,35 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
     }
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (messageInput.trim() && selectedEmployee) {
+      const msgContent = messageInput;
       sendMessage(messageInput);
       setMessageInput('');
+
+      // Cross-channel: also send by email if toggle is ON
+      if (alsoSendByEmail && selectedEmployeeData) {
+        const recipientEmail = `${selectedEmployee}@jbj.ae`;
+        try {
+          await supabase.functions.invoke("send-owner-email", {
+            body: {
+              to: recipientEmail,
+              subject: `Chat message regarding ${selectedEmployeeData.name}`,
+              body: msgContent,
+              senderId: "owner",
+              senderName: "Jane Bou Jaoude",
+              senderEmail: "ceo@jbj.ae",
+              senderTitle: "Founder & CEO",
+              account: "company",
+              useResend: true,
+              alsoSendByEmail: true,
+            },
+          });
+          toast.success(`Also emailed to ${selectedEmployeeData.name}`);
+        } catch (err) {
+          console.error("Cross-channel email error:", err);
+        }
+      }
     }
   };
 
