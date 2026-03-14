@@ -350,10 +350,10 @@ const Footer = () => {
 
   // Partners
   const partnersLinks = [
-    { href: "/services/mortgage", label: "Mortgage" },
-    { href: "/services/law-firm", label: "Legal" },
-    { href: "/services/company-setup", label: "Company Setup" },
-    { href: "/services/visa", label: "Visa Services" },
+    { href: "/partners/mortgage", label: "Mortgage" },
+    { href: "/partners/legal", label: "Legal" },
+    { href: "/partners/company-setup", label: "Company Setup" },
+    { href: "/partners/visa-services", label: "Visa Services" },
     { href: "/partner-governance", label: "Partners Hub" },
   ];
 
