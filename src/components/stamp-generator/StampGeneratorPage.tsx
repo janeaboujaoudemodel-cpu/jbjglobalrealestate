@@ -33,6 +33,17 @@ import { StampRecentlyDeleted, DeletedStamp } from './StampRecentlyDeleted';
 import { StampVersionSelector } from './StampVersionSelector';
 import { useSaveBrandAsset } from '@/components/brand-assets/BrandAssetPicker';
 import ShortlistBadgeButton from '@/components/ShortlistBadgeButton';
+import { MonogramColorEditor, applyMonogramColors, DEFAULT_MONOGRAM_COLORS } from './MonogramColorEditor';
+import type { MonogramLetterColors } from './MonogramColorEditor';
+
+// 5 mandatory standard export colors — always visible, cannot be removed
+const STANDARD_EXPORT_COLORS = [
+  { label: 'White',        hex: '#ffffff' },
+  { label: 'Black',        hex: '#0d0d0d' },
+  { label: 'Navy Ink',     hex: '#1B3A8C' },
+  { label: 'Brand Gold',   hex: '#C8A766' },
+  { label: 'Dark Gold',    hex: '#B8860B' },
+];
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -197,6 +208,9 @@ export default function StampGeneratorPage() {
   const setCustomPalette = (v: string[]) => { setCustomPaletteRaw(v); try { localStorage.setItem('stamp-custom-palette', JSON.stringify(v)); } catch {} };
   const addCustomColor = (hex: string) => { if (customPalette.length >= 5) { toast.error('Max 5 custom colors'); return; } if (customPalette.includes(hex)) return; setCustomPalette([...customPalette, hex]); toast.success('Color saved'); };
   const removeCustomColor = (hex: string) => { setCustomPalette(customPalette.filter(c => c !== hex)); };
+
+  // Monogram per-letter color state
+  const [monogramLetterColors, setMonogramLetterColors] = useState<MonogramLetterColors>(DEFAULT_MONOGRAM_COLORS);
 
   // Preview modal
   const [previewConcept, setPreviewConcept] = useState<StampDesignConcept | null>(null);
@@ -439,8 +453,13 @@ export default function StampGeneratorPage() {
 
     const newOverrides: Record<string, string> = { ...svgOverrides };
     [...favoriteConcepts, ...concepts].forEach(c => {
-      const base = svgOverrides[c.id] || c.svgSource;
-      newOverrides[c.id] = injectCenterArt(base, localIconStyle, localMonogramText, localLogoUrl);
+      let base = svgOverrides[c.id] || c.svgSource;
+      base = injectCenterArt(base, localIconStyle, localMonogramText, localLogoUrl);
+      // Apply per-letter monogram colors if applicable
+      if (localIconStyle === 'MONOGRAM' && localMonogramText) {
+        base = applyMonogramColors(base, localMonogramText, monogramLetterColors, primaryColor);
+      }
+      newOverrides[c.id] = base;
     });
     setSvgOverrides(newOverrides);
     toast.success('Logo applied to all stamps');
@@ -739,10 +758,27 @@ export default function StampGeneratorPage() {
             {leftTab === 'color' && (
               <>
                 {/* Reset to Standard button */}
-                <button onClick={() => { setPrimaryColor('#1B3A8C'); setSecondaryColor('#1a2d6e'); setAccentColor('#1B3A8C'); toast.success('Colors reset to Corporate Official Blue'); }}
+                <button onClick={() => { setPrimaryColor('#1B3A8C'); setSecondaryColor('#1a2d6e'); setAccentColor('#1B3A8C'); setMonogramLetterColors(DEFAULT_MONOGRAM_COLORS); toast.success('Colors reset to Corporate Official Blue'); }}
                   className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[10px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all">
                   <RotateCw size={10}/> Reset to Standard (Ink Blue)
                 </button>
+
+                {/* Standard Export Colors — locked, always visible */}
+                <div className="border border-[hsl(var(--gold)/0.2)] rounded-lg p-2 bg-[hsl(var(--gold)/0.03)]">
+                  <p className="text-[8px] font-semibold text-[hsl(var(--gold-dark))] uppercase mb-1.5 flex items-center gap-1">
+                    <Award size={8}/> Standard Export Colors
+                  </p>
+                  <div className="flex gap-1.5">
+                    {STANDARD_EXPORT_COLORS.map(c => (
+                      <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
+                        className={`flex flex-col items-center gap-0.5 transition-all hover:scale-110 ${activeColor === c.hex ? 'scale-110' : ''}`}>
+                        <div className={`w-6 h-6 rounded-full border-2 shadow-sm ${activeColor === c.hex ? 'border-[hsl(var(--gold))]' : c.hex === '#ffffff' ? 'border-[hsl(var(--border))]' : 'border-white'}`}
+                          style={{ backgroundColor: c.hex }}/>
+                        <span className="text-[6px] text-[hsl(var(--muted-foreground))] leading-tight">{c.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <div className="flex gap-1">
                   {stopDefs.map(s => (
                     <button key={s.key} onClick={() => setActiveStop(s.key)} title={s.label}
@@ -886,10 +922,18 @@ export default function StampGeneratorPage() {
                   ))}
                 </div>
                 {localIconStyle === 'MONOGRAM' && (
-                  <input type="text" maxLength={3} value={localMonogramText}
-                    onChange={e => setLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
-                    placeholder={project?.company_name?.slice(0, 2) || 'AB'}
-                    className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]"/>
+                  <>
+                    <input type="text" maxLength={3} value={localMonogramText}
+                      onChange={e => setLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
+                      placeholder={project?.company_name?.slice(0, 2) || 'AB'}
+                      className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]"/>
+                    <MonogramColorEditor
+                      monogramText={localMonogramText || project?.company_name?.slice(0, 2) || ''}
+                      colors={monogramLetterColors}
+                      onChange={setMonogramLetterColors}
+                      defaultColor={primaryColor}
+                    />
+                  </>
                 )}
                 {localIconStyle === 'UPLOADED_LOGO' && (
                   <label className="flex flex-col items-center gap-1 p-3 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))]">
@@ -939,10 +983,18 @@ export default function StampGeneratorPage() {
                   </div>
                 )}
                 {localIconStyle === 'MONOGRAM' && (
-                  <input type="text" maxLength={3} value={localMonogramText}
-                    onChange={e => setLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
-                    placeholder={project?.company_name?.slice(0, 2) || 'AB'}
-                    className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]"/>
+                  <>
+                    <input type="text" maxLength={3} value={localMonogramText}
+                      onChange={e => setLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
+                      placeholder={project?.company_name?.slice(0, 2) || 'AB'}
+                      className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]"/>
+                    <MonogramColorEditor
+                      monogramText={localMonogramText || project?.company_name?.slice(0, 2) || ''}
+                      colors={monogramLetterColors}
+                      onChange={setMonogramLetterColors}
+                      defaultColor={primaryColor}
+                    />
+                  </>
                 )}
                 <button onClick={applyLogoToAllConcepts}
                   className="w-full py-2 rounded-lg bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-[10px] font-semibold flex items-center justify-center gap-1 hover:opacity-90">

@@ -203,6 +203,15 @@ const PACK_COLORS = [
   { label: 'Bronze', hex: '#8B4513' },
 ];
 
+// 5 mandatory standard export colors — always present in export
+const STANDARD_EXPORT_COLORS = [
+  { label: 'White',      hex: '#ffffff' },
+  { label: 'Black',      hex: '#0d0d0d' },
+  { label: 'Navy Ink',   hex: '#1B3A8C' },
+  { label: 'Brand Gold', hex: '#C8A766' },
+  { label: 'Dark Gold',  hex: '#B8860B' },
+];
+
 const PRESET_COLORS = [
   { label: 'Navy', hex: '#1a2744' },
   { label: 'Gold', hex: '#B8860B' },
@@ -251,8 +260,8 @@ export default function StampExportPage() {
   const [project, setProject] = useState<any>(null);
   const [generating, setGenerating] = useState(false);
 
-  // Three-color system
-  const [primaryColor, setPrimaryColor] = useState('#1a2744');
+  // Three-color system — default to Navy Ink standard
+  const [primaryColor, setPrimaryColor] = useState('#1B3A8C');
   const [secondaryColor, setSecondaryColor] = useState<string | undefined>(undefined);
   const [accentColor, setAccentColor] = useState<string | undefined>(undefined);
   const [activeStop, setActiveStop] = useState<ColorStop>('primary');
@@ -264,9 +273,9 @@ export default function StampExportPage() {
     transparent: true,
   });
 
-  // Multi-color pack
+  // Multi-color pack — pre-select all 5 standard export colors
   const [multiColorMode, setMultiColorMode] = useState(false);
-  const [packColors, setPackColors] = useState<{ label: string; hex: string }[]>([PACK_COLORS[0], PACK_COLORS[5]]);
+  const [packColors, setPackColors] = useState<{ label: string; hex: string }[]>([...STANDARD_EXPORT_COLORS]);
   const [generatingZip, setGeneratingZip] = useState(false);
 
   // Per-file export status
@@ -452,7 +461,6 @@ export default function StampExportPage() {
       const arabicCity = project?.arabic_city_optional;
       if (arabicName && tintedSvg.includes('textPath')) {
         try {
-          // Arabic-top variant: swap top/bottom text arcs
           const arabicTopSvg = swapBilingualArcs(tintedSvg);
           const biFolder = zip.folder('bilingual_arabic_top')!;
           biFolder.file(`${companySlug}_stamp_arabic_top.svg`, arabicTopSvg);
@@ -463,6 +471,21 @@ export default function StampExportPage() {
           fileCount += 3;
         } catch (err) {
           console.warn('Bilingual variant generation failed:', err);
+        }
+      }
+
+      // ── Standard Export Colors — add 5 mandatory color sub-folders ──
+      const standardColorsFolder = zip.folder('standard_colors')!;
+      for (const { label, hex } of STANDARD_EXPORT_COLORS) {
+        try {
+          const colorFolder = standardColorsFolder.folder(label.toLowerCase().replace(/\s+/g, '_'))!;
+          const coloredSvg = tintSvgFull(design.svg_source, hex);
+          colorFolder.file(`${companySlug}_${label.toLowerCase().replace(/\s+/g, '_')}.svg`, coloredSvg);
+          const pngBlob = await svgToPng(coloredSvg, 1024, true);
+          colorFolder.file(`${companySlug}_${label.toLowerCase().replace(/\s+/g, '_')}_1024px.png`, pngBlob);
+          fileCount += 2;
+        } catch (err) {
+          console.warn(`Standard color ${label} failed:`, err);
         }
       }
 
@@ -691,7 +714,38 @@ export default function StampExportPage() {
                       style={{ backgroundColor: c.hex }}
                     />
                   ))}
-                </div>
+            </div>
+
+            {/* Standard Export Colors — mandatory 5 colors */}
+            <div className="bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.25)] p-5 space-y-3">
+              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
+                <Palette size={14} className="text-[hsl(var(--gold))]"/> Standard Export Colors
+              </p>
+              <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Click any standard color to instantly download a PNG in that ink.</p>
+              <div className="flex flex-wrap gap-2">
+                {STANDARD_EXPORT_COLORS.map(c => (
+                  <button key={c.hex} title={`Download in ${c.label}`}
+                    onClick={async () => {
+                      try {
+                        toast.info(`Generating ${c.label}…`);
+                        const colored = tintSvgFull(design.svg_source, c.hex);
+                        const blob = await svgToPng(colored, 1024, true);
+                        triggerDownload(blob, `${companySlug}_stamp_${c.label.toLowerCase().replace(/\s+/g, '_')}_1024px.png`);
+                        toast.success(`${c.label} downloaded!`);
+                      } catch { toast.error('Download failed'); }
+                    }}
+                    className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all hover:border-[hsl(var(--gold))] hover:scale-105 border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.02)] ${c.hex === '#ffffff' ? 'bg-[hsl(var(--muted))]' : ''}`}>
+                    <div className={`w-10 h-10 rounded-full shadow-md ${c.hex === '#ffffff' ? 'border-2 border-[hsl(var(--border))]' : 'border-2 border-white'}`} style={{ backgroundColor: c.hex }}/>
+                    <span className="text-[9px] text-[hsl(var(--foreground))] font-semibold">{c.label}</span>
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => { setPrimaryColor('#1B3A8C'); setSecondaryColor(undefined); setAccentColor(undefined); toast.success('Reset to Navy Ink standard'); }}
+                className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg border border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))] text-[10px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all">
+                Reset to Standard (Navy Ink)
+              </button>
+            </div>
               </div>
             </div>
 
