@@ -163,14 +163,14 @@ export default function AIDescriptionWriterPage() {
               <div>
                 <Label className="text-zinc-300">Bedrooms</Label>
                 <Select value={bedrooms} onValueChange={setBedrooms}>
-                  <SelectTrigger className="bg-zinc-800 border-lime-500/30 text-white">
+                  <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-lime-500/30">
                     {["Studio", "1", "2", "3", "4", "5", "6+"].map(n => (
-                      <SelectItem key={n} value={n}>{n}</SelectItem>
+                      <SelectItemDark key={n} value={n}>{n}</SelectItemDark>
                     ))}
-                  </SelectContent>
+                  </SelectContentDark>
                 </Select>
               </div>
               <div>
