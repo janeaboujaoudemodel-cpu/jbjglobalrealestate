@@ -67,7 +67,6 @@ export function useAuditLog() {
         metadata: details as Record<string, unknown>,
         criticality: ["delete", "block", "unblock"].includes(actionType) ? "high" : "medium",
       }).catch(() => {});
-      }
 
       return { success: true };
     } catch (err) {
