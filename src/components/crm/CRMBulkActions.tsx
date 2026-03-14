@@ -1,13 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -19,8 +12,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { Trash2, UserPlus, RefreshCw, X, Download, CheckSquare, Square } from "lucide-react";
+import { Trash2, RefreshCw, X, Download, CheckSquare } from "lucide-react";
 import { PIPELINE_STATUSES } from "./LeadStatusBadge";
+import { useStepUpAuth } from "@/hooks/useStepUpAuth";
+import ReAuthModal from "@/components/security/ReAuthModal";
+import { logExportEvent, maskExportField } from "@/utils/dlpExportLogger";
 
 interface CRMBulkActionsProps {
   selectedIds: Set<string>;
@@ -49,8 +45,8 @@ const CRMBulkActions = ({
   const [isUpdating, setIsUpdating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [brokers, setBrokers] = useState<Broker[]>([]);
+  const stepUp = useStepUpAuth();
 
-  // Fetch brokers for assignment
   useEffect(() => {
     const fetchBrokers = async () => {
       const { data } = await supabase
@@ -77,8 +73,6 @@ const CRMBulkActions = ({
     setIsUpdating(true);
     try {
       const ids = Array.from(selectedIds);
-      
-      // Upsert lead states
       const upserts = ids.map(leadId => ({
         lead_id: leadId,
         user_id: userId,
@@ -92,7 +86,6 @@ const CRMBulkActions = ({
         .upsert(upserts, { onConflict: "lead_id,user_id" });
 
       if (error) throw error;
-
       toast.success(`Updated ${ids.length} leads to "${newStatus}"`);
       onSuccess();
       onClear();
@@ -110,14 +103,12 @@ const CRMBulkActions = ({
     setIsUpdating(true);
     try {
       const ids = Array.from(selectedIds);
-      
       const { error } = await supabase
         .from("crm_leads")
         .update({ assigned_to_user_id: brokerId })
         .in("id", ids);
 
       if (error) throw error;
-
       toast.success(`Assigned ${ids.length} leads`);
       onSuccess();
       onClear();
@@ -137,8 +128,6 @@ const CRMBulkActions = ({
 
     try {
       const ids = Array.from(selectedIds);
-
-      // Server-side hard delete (single RPC) to guarantee ZERO TRACES
       const { data, error } = await supabase.rpc("crm_hard_delete_leads", {
         p_lead_ids: ids,
       });
@@ -164,31 +153,31 @@ const CRMBulkActions = ({
     }
   };
 
-  const handleExportSelected = async () => {
+  const doExport = async () => {
     if (selectedIds.size === 0) return;
     
     setIsExporting(true);
     try {
       const ids = Array.from(selectedIds);
-      
       const { data: leads, error } = await supabase
         .from("crm_leads")
         .select("full_name, phone_e164, email_lower, company_name, nationality, current_location_country, current_location_city, source, created_at")
         .in("id", ids);
 
       if (error) throw error;
-
       if (!leads || leads.length === 0) {
         toast.error("No leads to export");
         return;
       }
 
-      // Create CSV
+      const masked = !stepUp.isElevated;
+      const fieldsMasked = masked ? ["phone_e164", "email_lower"] : [];
+
       const headers = ["Name", "Phone", "Email", "Company", "Nationality", "Country", "City", "Source", "Created"];
       const rows = leads.map(lead => [
         lead.full_name || "",
-        lead.phone_e164 || "",
-        lead.email_lower || "",
+        masked ? maskExportField("phone_e164", lead.phone_e164) : (lead.phone_e164 || ""),
+        masked ? maskExportField("email_lower", lead.email_lower) : (lead.email_lower || ""),
         lead.company_name || "",
         lead.nationality || "",
         lead.current_location_country || "",
@@ -210,13 +199,27 @@ const CRMBulkActions = ({
       a.click();
       URL.revokeObjectURL(url);
 
-      toast.success(`Exported ${leads.length} leads`);
+      await logExportEvent({
+        exportType: "bulk_leads",
+        exportFormat: "csv",
+        recordCount: leads.length,
+        containsPii: true,
+        fieldsExported: ["full_name", "phone_e164", "email_lower", "company_name", "nationality"],
+        fieldsMasked,
+        requiredStepUp: true,
+      });
+
+      toast.success(`Exported ${leads.length} leads${masked ? " (PII masked)" : ""}`);
     } catch (err: any) {
       console.error("Export failed:", err);
       toast.error(`Failed to export leads: ${err?.message || 'Unknown error'}`);
     } finally {
       setIsExporting(false);
     }
+  };
+
+  const handleExportSelected = () => {
+    stepUp.requireStepUp("Export CRM Leads", "critical", doExport);
   };
 
   if (selectedIds.size === 0) return null;
@@ -226,7 +229,6 @@ const CRMBulkActions = ({
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-card border border-border rounded-lg shadow-xl p-4 flex items-center gap-3 z-50 flex-wrap max-w-[95vw]">
         <span className="text-sm font-bold text-foreground">{selectedIds.size} selected</span>
         
-        {/* Select All */}
         {onSelectAll && totalCount > selectedIds.size && (
           <Button 
             variant="outline" 
@@ -239,7 +241,6 @@ const CRMBulkActions = ({
           </Button>
         )}
 
-        {/* Native select for guaranteed visibility */}
         <select
           onChange={(e) => {
             if (e.target.value) handleBulkStatusChange(e.target.value);
@@ -258,7 +259,6 @@ const CRMBulkActions = ({
           ))}
         </select>
 
-        {/* Bulk Assign - Native select */}
         {brokers.length > 0 && (
           <select
             onChange={(e) => {
@@ -279,7 +279,6 @@ const CRMBulkActions = ({
           </select>
         )}
 
-        {/* Export Selected */}
         <Button 
           variant="outline" 
           size="sm"
@@ -295,7 +294,6 @@ const CRMBulkActions = ({
           Export
         </Button>
 
-        {/* Bulk Delete */}
         <Button 
           variant="destructive" 
           size="sm"
@@ -306,13 +304,11 @@ const CRMBulkActions = ({
           Delete
         </Button>
 
-        {/* Unselect All */}
         <Button variant="ghost" size="sm" onClick={onClear} className="text-muted-foreground">
           <X className="h-4 w-4" />
         </Button>
       </div>
 
-      {/* Delete Confirmation */}
       <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
         <AlertDialogContent className="bg-card border-border">
           <AlertDialogHeader>
@@ -346,6 +342,14 @@ const CRMBulkActions = ({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <ReAuthModal
+        open={stepUp.modalOpen}
+        onOpenChange={stepUp.onModalOpenChange}
+        onSuccess={stepUp.onModalSuccess}
+        actionLabel={stepUp.modalActionLabel}
+        severity={stepUp.modalSeverity}
+      />
     </>
   );
 };

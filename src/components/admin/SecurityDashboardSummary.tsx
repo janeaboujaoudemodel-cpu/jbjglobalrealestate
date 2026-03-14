@@ -257,14 +257,12 @@ export const SecurityDashboardSummary = () => {
   const CHART_COLORS = ['#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899'];
 
   // Export to CSV
-  const exportToCSV = useCallback(() => {
+  const doExportCSV = useCallback(() => {
     const reportDate = format(new Date(), "yyyy-MM-dd_HH-mm");
     
-    // Build CSV content
     let csvContent = "JBJ Global Real Estate - Security Report\n";
     csvContent += `Generated: ${format(new Date(), "PPpp")}\n\n`;
     
-    // Summary stats
     csvContent += "=== SUMMARY ===\n";
     csvContent += `Total Blocked IPs,${totalBlocked}\n`;
     csvContent += `Auto Blocked,${autoBlocked}\n`;
@@ -273,7 +271,6 @@ export const SecurityDashboardSummary = () => {
     csvContent += `Total Requests Tracked,${totalRequests}\n`;
     csvContent += `Unique IPs,${uniqueIPs}\n\n`;
     
-    // Blocked IPs
     csvContent += "=== BLOCKED IPS ===\n";
     csvContent += "IP Address,Reason,Blocked At,Is Permanent,Block Count\n";
     blockedIPs.forEach(ip => {
@@ -281,7 +278,6 @@ export const SecurityDashboardSummary = () => {
     });
     csvContent += "\n";
     
-    // Rate Limit Entries
     csvContent += "=== RATE LIMIT ENTRIES ===\n";
     csvContent += "Function Name,Rate Key,Request Count,Window Start\n";
     rateLimits.forEach(entry => {
@@ -289,23 +285,34 @@ export const SecurityDashboardSummary = () => {
     });
     csvContent += "\n";
     
-    // Security Events
     csvContent += "=== SECURITY EVENTS ===\n";
     csvContent += "Type,IP Address,Function,Reason,Severity,Timestamp\n";
     securityEvents.forEach(event => {
       csvContent += `${escapeCsv(event.type)},${escapeCsv(event.ip_address)},${escapeCsv(event.function_name || 'N/A')},${escapeCsv(event.reason || 'N/A')},${escapeCsv(event.severity)},${escapeCsv(format(new Date(event.timestamp), "PPpp"))}\n`;
     });
     
-    // Create and download file
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = `security-report_${reportDate}.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
+
+    logExportEvent({
+      exportType: "security_report",
+      exportFormat: "csv",
+      recordCount: blockedIPs.length + securityEvents.length,
+      containsPii: false,
+      fieldsExported: ["ip_address", "function_name", "severity"],
+      requiredStepUp: true,
+    });
     
     toast.success("CSV report downloaded successfully");
   }, [blockedIPs, rateLimits, securityEvents, totalBlocked, autoBlocked, blockedToday, rateLimitViolations, totalRequests, uniqueIPs]);
+
+  const exportToCSV = useCallback(() => {
+    stepUp.requireStepUp("Export Security Report (CSV)", "normal", doExportCSV);
+  }, [stepUp, doExportCSV]);
 
   // Export to PDF (HTML-based)
   const exportToPDF = useCallback(() => {
