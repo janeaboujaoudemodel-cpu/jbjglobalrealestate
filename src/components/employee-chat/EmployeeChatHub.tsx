@@ -20,8 +20,10 @@ import {
   Paperclip,
   Smile,
   ArrowLeft,
-  Mail
+  Mail,
+  FileText
 } from 'lucide-react';
+import { DocumentAttachmentPicker, AttachmentChip, ChatAttachmentRenderer, type DocumentAttachment } from '@/components/shared/DocumentAttachmentPicker';
 import { toast } from 'sonner';
 import { allTeamMembers, TeamMember } from '@/config/team-members';
 import { useEmployeeChat } from '@/hooks/useEmployeeChat';
