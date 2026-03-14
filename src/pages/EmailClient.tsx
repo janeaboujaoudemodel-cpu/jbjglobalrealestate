@@ -742,14 +742,18 @@ const EmailClient = () => {
       {/* Productivity Panel (collapsible) */}
       {showProductivity && (
         <div className="w-64 border-r border-[#C9A84C]/15 bg-[#FDFBF7] overflow-y-auto">
+        <div className="w-72 border-r border-[#C9A84C]/15 bg-[#FDFBF7] overflow-y-auto">
           <EmailProductivityPanel
             emails={emails}
-            analysisCache={analysisCache}
+            analysisCache={analysisCacheRef.current}
             onSelectEmail={(id) => {
               const email = emails.find(e => e.id === id);
               if (email) { setSelectedEmail(email); markAsRead(email.id); }
             }}
+            selectedEmailSubject={selectedEmail?.subject}
+            onBulkAnalyze={bulkAnalyzeInbox}
           />
+        </div>
         </div>
       )}
 
