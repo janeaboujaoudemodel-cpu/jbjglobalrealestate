@@ -452,6 +452,106 @@ export default function IncidentReadinessPanel() {
           )}
         </CardContent>
       </Card>
+
+      {/* Export Audit Section */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Eye className="w-5 h-5" />
+                Export Audit Trail (DLP)
+              </CardTitle>
+              <CardDescription>
+                {totalExportsToday} exports today · {piiExportsToday} containing PII
+              </CardDescription>
+            </div>
+            <div className="flex gap-1">
+              {["all", "vip_leads", "bulk_leads", "document_download", "security_report", "business_cards", "company_profile"].map(f => (
+                <Button
+                  key={f}
+                  size="sm"
+                  variant={exportFilter === f ? "default" : "outline"}
+                  onClick={() => setExportFilter(f)}
+                  className="text-xs h-7 px-2"
+                >
+                  {f === "all" ? "All" : f.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {/* Summary cards */}
+          <div className="grid grid-cols-3 gap-3 mb-4">
+            <div className="rounded-lg border border-border p-3 text-center">
+              <p className="text-2xl font-bold text-foreground">{totalExportsToday}</p>
+              <p className="text-xs text-muted-foreground">Exports Today</p>
+            </div>
+            <div className="rounded-lg border border-border p-3 text-center">
+              <p className="text-2xl font-bold text-amber-500">{piiExportsToday}</p>
+              <p className="text-xs text-muted-foreground">PII Exports</p>
+            </div>
+            <div className="rounded-lg border border-border p-3 text-center">
+              <p className="text-2xl font-bold text-foreground">
+                {exportEvents.filter(e => e.required_step_up).length}
+              </p>
+              <p className="text-xs text-muted-foreground">Step-Up Required</p>
+            </div>
+          </div>
+
+          {exportLoading ? (
+            <div className="space-y-2">
+              {[1,2,3].map(i => <Skeleton key={i} className="h-12 w-full" />)}
+            </div>
+          ) : exportEvents.length === 0 ? (
+            <p className="text-muted-foreground text-sm text-center py-4">No export events found.</p>
+          ) : (
+            <ScrollArea className="h-[400px]">
+              <div className="space-y-2">
+                {exportEvents.map((evt: any) => (
+                  <div key={evt.id} className="flex items-center justify-between p-3 rounded-lg border border-border/50 hover:bg-muted/30">
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        {evt.contains_pii ? (
+                          <Shield className="w-4 h-4 text-amber-500" />
+                        ) : (
+                          <FileSpreadsheet className="w-4 h-4 text-muted-foreground" />
+                        )}
+                        <div>
+                          <p className="text-sm font-medium text-foreground">
+                            {evt.export_type.replace(/_/g, " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {evt.user_email || "Unknown"} · {timeAgo(evt.created_at)} · {evt.record_count} records
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="text-xs">{evt.export_format}</Badge>
+                      {evt.contains_pii && (
+                        <Badge variant="destructive" className="text-xs">PII</Badge>
+                      )}
+                      {evt.required_step_up && (
+                        <Badge className="text-xs bg-primary/20 text-primary border-primary/30">
+                          <Lock className="w-3 h-3 mr-0.5" />
+                          Step-Up
+                        </Badge>
+                      )}
+                      {(evt.fields_masked?.length ?? 0) > 0 && (
+                        <Badge variant="secondary" className="text-xs">
+                          {evt.fields_masked.length} masked
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
