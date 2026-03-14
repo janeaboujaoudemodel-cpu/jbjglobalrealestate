@@ -80,10 +80,10 @@ Deno.serve(async (req: Request): Promise<Response> => {
   const lovableApiKey = Deno.env.get("LOVABLE_API_KEY") || "";
 
   if (!supabaseUrl || !supabaseKey) {
-    return json(500, { error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY" });
+    return json(500, { error: "Service configuration error" });
   }
   if (!lovableApiKey) {
-    return json(500, { error: "Missing LOVABLE_API_KEY for AI generation" });
+    return json(500, { error: "Service configuration error" });
   }
 
   const supabase = createClient(supabaseUrl, supabaseKey);
