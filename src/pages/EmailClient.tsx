@@ -1,4 +1,5 @@
-import { useState, useCallback, useRef, lazy, Suspense } from "react";
+import { useState, useCallback, useRef, useEffect, lazy, Suspense } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -144,6 +145,8 @@ const DEMO_EMAILS: Email[] = [
 ];
 
 const EmailClient = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [emails, setEmails] = useState<Email[]>(DEMO_EMAILS);
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
   const [activeFolder, setActiveFolder] = useState<"inbox" | "sent" | "drafts" | "trash" | "archive">("inbox");
@@ -194,6 +197,24 @@ const EmailClient = () => {
   const [attachments, setAttachments] = useState<DocumentAttachment[]>([]);
   const [showAttachPicker, setShowAttachPicker] = useState(false);
   const emailsPerPage = 20;
+
+  // ── Prefill from navigation state (ExclusiveDocuments, DocumentStudio, EnvelopeDetail) ──
+  useEffect(() => {
+    const state = location.state as any;
+    if (state?.prefillBody || state?.prefillSubject || state?.prefillAttachment) {
+      setNewEmail(prev => ({
+        ...prev,
+        subject: state.prefillSubject || prev.subject,
+        body: state.prefillBody || prev.body,
+      }));
+      if (state.prefillAttachment) {
+        setAttachments([state.prefillAttachment]);
+      }
+      setComposeOpen(true);
+      // Clear state so refresh doesn't re-trigger
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   // Cross-channel: detect if recipient is a registered platform user
   const recipientDetection = useCrossChannelDetection(newEmail.to);
@@ -322,6 +343,12 @@ const EmailClient = () => {
           useResend: sendViaResend,
           alsoNotifyChat,
           chatRecipientId: recipientDetection.userId || recipientDetection.teamMemberId || undefined,
+          // Wire attachments to edge function
+          attachments: attachments.map(att => ({
+            filename: att.name,
+            content: att.content,
+            type: att.mimeType || 'application/octet-stream',
+          })),
         },
       });
 
@@ -335,7 +362,7 @@ const EmailClient = () => {
         subject: newEmail.subject,
         body: newEmail.body,
         date: new Date().toISOString(),
-        read: true, starred: false, folder: "sent", labels: [], hasAttachment: false,
+        read: true, starred: false, folder: "sent", labels: [], hasAttachment: attachments.length > 0,
         account: currentSender.account,
       };
       setEmails([...emails, email]);
@@ -447,10 +474,16 @@ const EmailClient = () => {
                   className="min-h-[200px]"
                 />
 
-                {/* Signature info */}
+                {/* Signature info + persona consistency badge */}
                 <div className="bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg p-3">
                   <p className="text-xs text-black/60 mb-1">Sending as: <strong className="text-black">{currentSender.name}</strong></p>
                   <p className="text-[10px] text-black/40">{currentSender.title} · {currentSender.email}</p>
+                  {attachments.some(a => ['stamp', 'signature', 'letterhead'].includes(a.type)) && (
+                    <p className="text-[10px] text-[#C9A84C] mt-1.5 font-medium flex items-center gap-1">
+                      <Shield className="w-3 h-3" />
+                      Brand assets attached — sending as {currentSender.name}
+                    </p>
+                  )}
                 </div>
 
                 {/* Attachment chips */}

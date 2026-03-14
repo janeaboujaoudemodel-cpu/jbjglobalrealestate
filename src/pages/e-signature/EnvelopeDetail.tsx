@@ -216,13 +216,35 @@ export default function EnvelopeDetail() {
                 </Button>
               )}
               {signedDoc && (
-                <Button 
-                  onClick={() => handleDownload(signedDoc.document_url, signedDoc.document_filename)}
-                  className="bg-[#C8A766] hover:bg-[#B8973F] text-black font-semibold"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Signed
-                </Button>
+                <>
+                  <Button 
+                    onClick={() => handleDownload(signedDoc.document_url, signedDoc.document_filename)}
+                    className="bg-[#C8A766] hover:bg-[#B8973F] text-black font-semibold"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Download Signed
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate("/owner/email-client", {
+                      state: {
+                        prefillSubject: `Signed Document: ${envelope.name}`,
+                        prefillBody: `Please find attached the signed document "${envelope.name}".`,
+                        prefillAttachment: {
+                          id: crypto.randomUUID(),
+                          name: signedDoc.document_filename || `${envelope.name}-signed.pdf`,
+                          type: 'file' as const,
+                          content: signedDoc.document_url,
+                          mimeType: 'application/pdf',
+                        },
+                      },
+                    })}
+                    className="border-[#C8A766]/30 text-zinc-800 hover:bg-[#C8A766]/10"
+                  >
+                    <Mail className="w-4 h-4 mr-2" />
+                    Send via Email
+                  </Button>
+                </>
               )}
               {!signedDoc && (
                 <Button 

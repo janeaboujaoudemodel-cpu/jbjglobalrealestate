@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -101,6 +102,7 @@ const generateStatuses = (members: TeamMember[]): Record<string, 'online' | 'awa
 
 const TeamChat = () => {
   const isMobile = useIsMobile();
+  const location = useLocation();
   const { sendSecondaryEmail } = useCrossChannelSend();
   const chatMembers = useMemo(() => getTeamChatMembers(), []);
   const departmentGroups = useMemo(() => groupByDepartment(chatMembers), [chatMembers]);
@@ -155,6 +157,16 @@ const TeamChat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // ── Prefill from navigation state (ExclusiveDocuments, DocumentStudio) ──
+  useEffect(() => {
+    const state = location.state as any;
+    if (state?.prefillMessage || state?.prefillAttachment) {
+      if (state.prefillMessage) setNewMessage(state.prefillMessage);
+      if (state.prefillAttachment) setPendingAttachments([state.prefillAttachment]);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
     const activeChannelData = channels.find(c => c.id === activeChannel);
@@ -191,6 +203,9 @@ const TeamChat = () => {
           senderName: currentUser.name,
           senderTitle: currentUser.role,
           recipientName: recipientMember.name,
+          attachments: pendingAttachments.length > 0
+            ? pendingAttachments.map(a => ({ filename: a.name, content: a.content, type: a.mimeType }))
+            : undefined,
         });
       }
     }
