@@ -114,7 +114,6 @@ export default function LeadSharingPanel({ leadId, isOwner }: LeadSharingPanelPr
       details: { lead_id: leadId, share_id: shareId } as any,
       user_agent: navigator.userAgent,
     }]);
-    });
 
     toast.success("Access revoked");
     fetchShares();
