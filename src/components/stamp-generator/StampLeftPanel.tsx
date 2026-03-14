@@ -420,24 +420,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
             </AccordionContent>
           </AccordionItem>
 
-          {/* ─── 5d. Government Mode ─── */}
-          <AccordionItem value="government" className="border-b border-[hsl(var(--border)/0.5)]">
-            <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
-              <span className="flex items-center gap-1.5">
-                <Landmark size={12} className="text-[hsl(var(--gold))]" />
-                Government Mode
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="pb-3 space-y-2">
-              <div className="flex items-center justify-between p-2 rounded-lg border-2 border-[hsl(var(--border))]">
-                <div>
-                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Official Government Style</p>
-                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Thick outer ring, minimal decoration, centered layout</p>
-                </div>
-                <Switch checked={props.governmentMode} onCheckedChange={props.onSetGovernmentMode} />
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+
 
           <AccordionItem value="colors" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">

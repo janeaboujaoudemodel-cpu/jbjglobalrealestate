@@ -174,9 +174,8 @@ export default function StampGeneratorPage() {
   const [centerContentSize, setCenterContentSizeRaw] = useState(() => ssGet(ssKey('centerContentSize'), 40));
   const setCenterContentSize = (v: number) => { setCenterContentSizeRaw(v); ssSave(ssKey('centerContentSize'), v); };
 
-  // Government Mode — persisted
-  const [governmentMode, setGovernmentModeRaw] = useState(() => ssGet(ssKey('governmentMode'), false));
-  const setGovernmentMode = (v: boolean) => { setGovernmentModeRaw(v); ssSave(ssKey('governmentMode'), v); };
+
+
 
   // Preview modal
   const [previewConcept, setPreviewConcept] = useState<StampDesignConcept | null>(null);
