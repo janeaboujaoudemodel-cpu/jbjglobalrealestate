@@ -239,7 +239,7 @@ export default function AIToolsControlPanel() {
   const revertFix = async (toolId: string, versionId?: string) => {
     // Find previous published version
     const prev = versions.find(v => v.tool_id === toolId && v.status === "published");
-    const { error } = await supabase.from("ai_tool_versions").insert({
+    const { error } = await (supabase.from("ai_tool_versions") as any).insert({
       tool_id: toolId,
       version_number: getNextVersion(toolId),
       status: "reverted",
