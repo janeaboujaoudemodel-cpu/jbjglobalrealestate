@@ -1,4 +1,4 @@
-import { useState, useCallback, lazy, Suspense } from "react";
+import { useState, useCallback, useRef, lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -32,6 +32,8 @@ import EmailAssistantPanel from "@/components/email/EmailAssistantPanel";
 import EmailProductivityPanel from "@/components/email/EmailProductivityPanel";
 import { useCrossChannelDetection } from "@/hooks/useCrossChannelDetection";
 import { DocumentAttachmentPicker, AttachmentChip, type DocumentAttachment } from "@/components/shared/DocumentAttachmentPicker";
+import QuickCalendarWidget from "@/components/shared/QuickCalendarWidget";
+import QuickNoteWidget from "@/components/shared/QuickNoteWidget";
 
 // ─── Sender Identities — mapped to real JBJ team personas ───
 interface SenderIdentity {
@@ -157,7 +159,37 @@ const EmailClient = () => {
   const [showEmailSettings, setShowEmailSettings] = useState(false);
   const [showProductivity, setShowProductivity] = useState(false);
   const [isDraftingWithAI, setIsDraftingWithAI] = useState(false);
-  const [analysisCache] = useState<Map<string, { needs_reply: boolean; priority: string; action_items: string[] }>>(new Map());
+  const analysisCacheRef = useRef<Map<string, { needs_reply: boolean; priority: string; action_items: string[] }>>(new Map());
+  const [analysisCacheVersion, setAnalysisCacheVersion] = useState(0);
+
+  const handleAnalysisComplete = useCallback((emailId: string, analysis: { needs_reply: boolean; priority: string; action_items: string[] }) => {
+    analysisCacheRef.current.set(emailId, analysis);
+    setAnalysisCacheVersion(v => v + 1);
+  }, []);
+
+  const bulkAnalyzeInbox = useCallback(async () => {
+    const unanalyzed = emails.filter(e => e.folder === "inbox" && !analysisCacheRef.current.has(e.id)).slice(0, 5);
+    if (unanalyzed.length === 0) {
+      toast.info("All inbox emails already analyzed");
+      return;
+    }
+    toast.info(`Analyzing ${unanalyzed.length} emails...`);
+    for (const email of unanalyzed) {
+      try {
+        const { data, error } = await supabase.functions.invoke("ai-email-assistant", {
+          body: { action: "summarize", emailId: email.id, subject: email.subject, body: email.body },
+        });
+        if (!error && data) {
+          handleAnalysisComplete(email.id, {
+            needs_reply: data.needs_reply,
+            priority: data.priority,
+            action_items: data.action_items,
+          });
+        }
+      } catch { /* continue */ }
+    }
+    toast.success("Bulk analysis complete");
+  }, [emails, handleAnalysisComplete]);
   const [attachments, setAttachments] = useState<DocumentAttachment[]>([]);
   const [showAttachPicker, setShowAttachPicker] = useState(false);
   const emailsPerPage = 20;
@@ -712,14 +744,18 @@ const EmailClient = () => {
       {/* Productivity Panel (collapsible) */}
       {showProductivity && (
         <div className="w-64 border-r border-[#C9A84C]/15 bg-[#FDFBF7] overflow-y-auto">
+        <div className="w-72 border-r border-[#C9A84C]/15 bg-[#FDFBF7] overflow-y-auto">
           <EmailProductivityPanel
             emails={emails}
-            analysisCache={analysisCache}
+            analysisCache={analysisCacheRef.current}
             onSelectEmail={(id) => {
               const email = emails.find(e => e.id === id);
               if (email) { setSelectedEmail(email); markAsRead(email.id); }
             }}
+            selectedEmailSubject={selectedEmail?.subject}
+            onBulkAnalyze={bulkAnalyzeInbox}
           />
+        </div>
         </div>
       )}
 
@@ -731,9 +767,27 @@ const EmailClient = () => {
             <Checkbox checked={selectedIds.size > 0 && selectedIds.size === paginatedEmails.length} onCheckedChange={toggleSelectAll} className="border-[#C9A84C]/30" />
             {selectedIds.size > 0 && (
               <>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={markSelectedRead}><MailOpen className="w-3.5 h-3.5 text-black/60" /></Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToArchive(Array.from(selectedIds))}><Archive className="w-3.5 h-3.5 text-black/60" /></Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToTrash(Array.from(selectedIds))}><Trash2 className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={markSelectedRead} title="Mark read"><MailOpen className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToArchive(Array.from(selectedIds))} title="Archive"><Archive className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToTrash(Array.from(selectedIds))} title="Trash"><Trash2 className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" title="Star selected" onClick={() => {
+                  setEmails(emails.map(e => selectedIds.has(e.id) ? { ...e, starred: true } : e));
+                  toast.success(`${selectedIds.size} email(s) starred`);
+                }}><Star className="w-3.5 h-3.5 text-[#C9A84C]" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" title="AI Analyze selected" onClick={async () => {
+                  const toAnalyze = emails.filter(e => selectedIds.has(e.id) && !analysisCacheRef.current.has(e.id)).slice(0, 5);
+                  if (toAnalyze.length === 0) { toast.info("Already analyzed"); return; }
+                  toast.info(`Analyzing ${toAnalyze.length}...`);
+                  for (const email of toAnalyze) {
+                    try {
+                      const { data, error } = await supabase.functions.invoke("ai-email-assistant", {
+                        body: { action: "summarize", emailId: email.id, subject: email.subject, body: email.body },
+                      });
+                      if (!error && data) handleAnalysisComplete(email.id, { needs_reply: data.needs_reply, priority: data.priority, action_items: data.action_items });
+                    } catch { /* skip */ }
+                  }
+                  toast.success("Analysis complete");
+                }}><Sparkles className="w-3.5 h-3.5 text-[#C9A84C]" /></Button>
                 <span className="text-[10px] text-black/40">{selectedIds.size} selected</span>
               </>
             )}
@@ -852,11 +906,12 @@ const EmailClient = () => {
                   setNewEmail({ to: selectedEmail.fromEmail, subject: `Re: ${selectedEmail.subject}`, body: text });
                   setComposeOpen(true);
                 }}
+                onAnalysisComplete={handleAnalysisComplete}
               />
             </ScrollArea>
 
-            {/* Actions — Reply / Reply All / Forward / Draft with Amanda */}
-            <div className="p-4 border-t border-[#C9A84C]/15 flex gap-2">
+            {/* Actions — Reply / Reply All / Forward / Calendar / Notes / Draft with Amanda */}
+            <div className="p-4 border-t border-[#C9A84C]/15 flex flex-wrap gap-2">
               <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10" onClick={() => openReply("reply")}>
                 <Reply className="w-4 h-4 mr-1.5" /> Reply
               </Button>
@@ -866,6 +921,8 @@ const EmailClient = () => {
               <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10" onClick={() => openReply("forward")}>
                 <Forward className="w-4 h-4 mr-1.5" /> Forward
               </Button>
+              <QuickCalendarWidget compact source="email" prefillTitle={selectedEmail.subject} />
+              <QuickNoteWidget compact source="email" prefillTitle={selectedEmail.subject} prefillContent={selectedEmail.body.substring(0, 200)} />
               <Button
                 variant="outline"
                 size="sm"
