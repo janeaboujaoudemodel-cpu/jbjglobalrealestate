@@ -276,6 +276,20 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
                       <p className="text-xs text-muted-foreground line-clamp-2">{project.description}</p>
                     )}
 
+                    {/* Read-only restricted fields */}
+                    <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground pt-1 border-t border-border">
+                      <Lock className="h-2.5 w-2.5" />
+                      <span>AI analysis & scoring managed by JBJ</span>
+                    </div>
+
+                    {/* Pending CR indicator */}
+                    {changeRequests.some(cr => cr.project_id === project.id && cr.status === "pending") && (
+                      <div className="flex items-center gap-1.5 text-[10px] text-amber-700 bg-amber-50 rounded px-2 py-1">
+                        <Clock className="h-2.5 w-2.5" />
+                        Change request pending review
+                      </div>
+                    )}
+
                     {/* Actions */}
                     <div className="flex items-center gap-2 pt-2 border-t border-border">
                       <Button size="sm" variant="outline" className="flex-1 gap-1 text-xs" onClick={() => startEdit(project)}>
