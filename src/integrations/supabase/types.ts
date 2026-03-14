@@ -528,6 +528,7 @@ export type Database = {
           source: string
           status: string | null
           title: string
+          tool_id: string | null
           updated_at: string | null
           user_id: string
         }
@@ -545,6 +546,7 @@ export type Database = {
           source: string
           status?: string | null
           title: string
+          tool_id?: string | null
           updated_at?: string | null
           user_id: string
         }
@@ -562,6 +564,7 @@ export type Database = {
           source?: string
           status?: string | null
           title?: string
+          tool_id?: string | null
           updated_at?: string | null
           user_id?: string
         }
@@ -600,6 +603,101 @@ export type Database = {
           tool_type?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      ai_tool_test_logs: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          result: string
+          tester_id: string | null
+          tool_id: string
+          tool_url: string | null
+          version_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          result: string
+          tester_id?: string | null
+          tool_id: string
+          tool_url?: string | null
+          version_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          result?: string
+          tester_id?: string | null
+          tool_id?: string
+          tool_url?: string | null
+          version_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_tool_test_logs_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "ai_tool_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_tool_versions: {
+        Row: {
+          after_snapshot: Json | null
+          applied_by: string | null
+          before_snapshot: Json | null
+          change_reason: string | null
+          changes_description: string | null
+          created_at: string
+          id: string
+          published_at: string | null
+          reverted_at: string | null
+          status: string
+          test_notes: string | null
+          test_result: string | null
+          tested_at: string | null
+          tool_id: string
+          version_number: number
+        }
+        Insert: {
+          after_snapshot?: Json | null
+          applied_by?: string | null
+          before_snapshot?: Json | null
+          change_reason?: string | null
+          changes_description?: string | null
+          created_at?: string
+          id?: string
+          published_at?: string | null
+          reverted_at?: string | null
+          status?: string
+          test_notes?: string | null
+          test_result?: string | null
+          tested_at?: string | null
+          tool_id: string
+          version_number?: number
+        }
+        Update: {
+          after_snapshot?: Json | null
+          applied_by?: string | null
+          before_snapshot?: Json | null
+          change_reason?: string | null
+          changes_description?: string | null
+          created_at?: string
+          id?: string
+          published_at?: string | null
+          reverted_at?: string | null
+          status?: string
+          test_notes?: string | null
+          test_result?: string | null
+          tested_at?: string | null
+          tool_id?: string
+          version_number?: number
         }
         Relationships: []
       }
