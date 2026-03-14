@@ -176,22 +176,28 @@ export default function StampProjectWizard() {
   const [savePresetOpen, setSavePresetOpen] = useState(false);
   const [presetName, setPresetName] = useState('');
 
+  const defaultForm: FormState = {
+    project_name: 'My Stamp Project', company_name: '', arabic_company_name: '', trade_name_optional: '',
+    registration_number_optional: '', address_optional: '', phone_optional: '', email_optional: '',
+    website_optional: '', city_optional: 'Dubai', country_optional: 'UAE', arabic_city: '',
+    language_mode: 'BILINGUAL' as LanguageMode, stamp_type: 'ROUND' as StampType,
+    style_theme: 'CLASSIC' as StyleTheme, border_style: 'DOUBLE' as BorderStyle,
+    typography_style: 'SERIF' as TypographyStyle, density: 3, icon_style: 'MONOGRAM' as IconStyle,
+    monogram_text: '', uploaded_logo_url: '', language_reversed: true,
+    show_license_number: false, show_location: true, business_type: '',
+    separator_style: 'dot' as SeparatorStyle, ink_color: OFFICIAL_INK_BLUE,
+    government_mode: false, arabic_font: 'Noto Naskh Arabic',
+    arabic_letter_spacing: 2, arabic_arc_spread: 50, arabic_font_weight: 'bold',
+    arc_text_spacing: 2, circle_gap: 13, separator_distance: 50, center_content_size: 50,
+    selected_preset: '',
+  };
+
   const [form, setForm] = useState<FormState>(() => {
     try {
       const saved = localStorage.getItem('stamp-wizard-form');
-      if (saved) return JSON.parse(saved);
+      if (saved) return { ...defaultForm, ...JSON.parse(saved) };
     } catch { /* ignore */ }
-    return {
-      project_name: 'My Stamp Project', company_name: '', arabic_company_name: '', trade_name_optional: '',
-      registration_number_optional: '', address_optional: '', phone_optional: '', email_optional: '',
-      website_optional: '', city_optional: 'Dubai', country_optional: 'UAE', arabic_city: '',
-      language_mode: 'BILINGUAL' as LanguageMode, stamp_type: 'ROUND' as StampType,
-      style_theme: 'CLASSIC' as StyleTheme, border_style: 'DOUBLE' as BorderStyle,
-      typography_style: 'SERIF' as TypographyStyle, density: 3, icon_style: 'MONOGRAM' as IconStyle,
-      monogram_text: '', uploaded_logo_url: '', language_reversed: true,
-      show_license_number: false, show_location: true, business_type: '',
-      separator_style: 'dot' as SeparatorStyle, ink_color: OFFICIAL_INK_BLUE,
-    };
+    return defaultForm;
   });
 
   const history = useStampHistory<FormState>(form);
