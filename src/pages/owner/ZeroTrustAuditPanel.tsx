@@ -1,12 +1,17 @@
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useTrustedDevice } from "@/hooks/useTrustedDevice";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Shield, ShieldAlert, ShieldCheck, RefreshCw, Users, Lock, AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
+import {
+  Shield, ShieldAlert, ShieldCheck, Users, Lock, AlertTriangle,
+  CheckCircle2, Monitor, LogOut, Smartphone, Globe, MapPin,
+} from "lucide-react";
 import { toast } from "sonner";
 import {
   PERMISSION_MATRIX,
@@ -40,10 +45,11 @@ const RiskBadge = ({ risk }: { risk: string }) => {
 };
 
 const ZeroTrustAuditPanel = () => {
-  const queryClient = useQueryClient();
+  const { signOutAllSessions, signOutOtherSessions } = useAuth();
+  const { devices, revokeDevice, revokeAllDevices, loading: devicesLoading } = useTrustedDevice();
   const [activeTab, setActiveTab] = useState("matrix");
 
-  // Fetch recent denied requests from api_security_events
+  // Fetch recent denied requests
   const { data: deniedRequests = [], isLoading: loadingDenied } = useQuery({
     queryKey: ["zero-trust-denied"],
     queryFn: async () => {
@@ -60,7 +66,7 @@ const ZeroTrustAuditPanel = () => {
     },
   });
 
-  // Fetch current user_roles for role integrity
+  // Fetch user roles
   const { data: userRoles = [], isLoading: loadingRoles } = useQuery({
     queryKey: ["zero-trust-roles"],
     queryFn: async () => {
@@ -73,9 +79,42 @@ const ZeroTrustAuditPanel = () => {
     },
   });
 
+  // Fetch login events
+  const { data: loginEvents = [], isLoading: loadingLogins } = useQuery({
+    queryKey: ["zero-trust-logins"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("login_events")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  // Fetch anomaly alerts (suspicious logins)
+  const { data: anomalyAlerts = [] } = useQuery({
+    queryKey: ["zero-trust-anomalies"],
+    queryFn: async () => {
+      const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      const { data, error } = await supabase
+        .from("api_security_events")
+        .select("*")
+        .eq("event_type", "suspicious_login")
+        .gte("created_at", since)
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
   const criticalDenied = deniedRequests.filter(
     (e: any) => e.severity === "critical" || e.event_type === "privilege_escalation_attempt"
   );
+
+  const suspiciousLogins = loginEvents.filter((e: any) => e.is_suspicious);
 
   const categories = [...new Set(PERMISSION_MATRIX.map((m) => m.category))];
   const roleKeys = ["public", "authenticated", "broker", "developer", "owner"] as const;
@@ -89,10 +128,16 @@ const ZeroTrustAuditPanel = () => {
             Zero Trust Audit
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Permission matrix, access controls, and security posture
+            Permission matrix, access controls, login activity, and security posture
           </p>
         </div>
         <div className="flex items-center gap-3">
+          {suspiciousLogins.length > 0 && (
+            <Badge variant="destructive" className="flex items-center gap-1">
+              <AlertTriangle className="w-3 h-3" />
+              {suspiciousLogins.length} suspicious
+            </Badge>
+          )}
           {criticalDenied.length > 0 ? (
             <Badge variant="destructive" className="flex items-center gap-1">
               <ShieldAlert className="w-3 h-3" />
@@ -108,9 +153,19 @@ const ZeroTrustAuditPanel = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-muted/50">
+        <TabsList className="bg-muted/50 flex-wrap">
           <TabsTrigger value="matrix">Permission Matrix</TabsTrigger>
           <TabsTrigger value="functions">Edge Functions</TabsTrigger>
+          <TabsTrigger value="logins">
+            Login Activity
+            {suspiciousLogins.length > 0 && (
+              <Badge variant="destructive" className="ml-1.5 text-[10px] px-1.5 py-0">
+                {suspiciousLogins.length}
+              </Badge>
+            )}
+          </TabsTrigger>
+          <TabsTrigger value="devices">Trusted Devices</TabsTrigger>
+          <TabsTrigger value="sessions">Session Controls</TabsTrigger>
           <TabsTrigger value="denied">
             Denied Requests
             {deniedRequests.length > 0 && (
@@ -120,6 +175,14 @@ const ZeroTrustAuditPanel = () => {
             )}
           </TabsTrigger>
           <TabsTrigger value="roles">Role Integrity</TabsTrigger>
+          <TabsTrigger value="anomalies">
+            Anomalies
+            {anomalyAlerts.length > 0 && (
+              <Badge variant="destructive" className="ml-1.5 text-[10px] px-1.5 py-0">
+                {anomalyAlerts.length}
+              </Badge>
+            )}
+          </TabsTrigger>
         </TabsList>
 
         {/* Permission Matrix */}
@@ -127,9 +190,7 @@ const ZeroTrustAuditPanel = () => {
           {categories.map((cat) => (
             <Card key={cat} className="border-border/50">
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm uppercase tracking-wider text-muted-foreground">
-                  {cat}
-                </CardTitle>
+                <CardTitle className="text-sm uppercase tracking-wider text-muted-foreground">{cat}</CardTitle>
               </CardHeader>
               <CardContent className="p-0">
                 <Table>
@@ -137,9 +198,7 @@ const ZeroTrustAuditPanel = () => {
                     <TableRow>
                       <TableHead className="w-[200px]">Module</TableHead>
                       {roleKeys.map((r) => (
-                        <TableHead key={r} className="text-center text-xs">
-                          {ROLE_LABELS[r]}
-                        </TableHead>
+                        <TableHead key={r} className="text-center text-xs">{ROLE_LABELS[r]}</TableHead>
                       ))}
                       <TableHead className="text-center text-xs">Backend</TableHead>
                     </TableRow>
@@ -170,7 +229,6 @@ const ZeroTrustAuditPanel = () => {
               </CardContent>
             </Card>
           ))}
-
           <div className="flex flex-wrap gap-4 text-xs text-muted-foreground p-4 bg-muted/30 rounded-lg">
             {Object.entries(ACCESS_LEVEL_LABELS).map(([key, val]) => (
               <span key={key} className="flex items-center gap-1">
@@ -181,7 +239,7 @@ const ZeroTrustAuditPanel = () => {
           </div>
         </TabsContent>
 
-        {/* Edge Functions Auth Status */}
+        {/* Edge Functions */}
         <TabsContent value="functions">
           <Card className="border-border/50">
             <CardContent className="p-0">
@@ -214,6 +272,185 @@ const ZeroTrustAuditPanel = () => {
                   ))}
                 </TableBody>
               </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Login Activity */}
+        <TabsContent value="logins">
+          <Card className="border-border/50">
+            <CardHeader>
+              <CardTitle className="text-sm flex items-center gap-2">
+                <Globe className="w-4 h-4 text-primary" />
+                Recent Login Events
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              {loadingLogins ? (
+                <div className="p-8 text-center text-muted-foreground">Loading…</div>
+              ) : loginEvents.length === 0 ? (
+                <div className="p-8 text-center text-muted-foreground">No login events recorded yet</div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Time</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Browser/OS</TableHead>
+                      <TableHead>Country</TableHead>
+                      <TableHead>Anomalies</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {loginEvents.map((event: any) => (
+                      <TableRow key={event.id} className={event.is_suspicious ? "bg-red-500/5" : ""}>
+                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                          {new Date(event.created_at).toLocaleString()}
+                        </TableCell>
+                        <TableCell className="text-sm font-mono">{event.email || "—"}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className={
+                            event.event_type === "success" ? "border-green-500/50 text-green-400" :
+                            event.event_type === "suspicious" ? "border-red-500/50 text-red-400" :
+                            "border-amber-500/50 text-amber-400"
+                          }>
+                            {event.event_type}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground">
+                          {event.browser || "?"} / {event.os || "?"}
+                        </TableCell>
+                        <TableCell className="text-xs">
+                          {event.country ? (
+                            <span className="flex items-center gap-1">
+                              <MapPin className="w-3 h-3" />
+                              {event.country}
+                            </span>
+                          ) : "—"}
+                        </TableCell>
+                        <TableCell className="text-xs">
+                          {event.anomaly_reasons?.length ? (
+                            <span className="text-red-400">{event.anomaly_reasons.join(", ")}</span>
+                          ) : "—"}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Trusted Devices */}
+        <TabsContent value="devices">
+          <Card className="border-border/50">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-sm flex items-center gap-2">
+                <Smartphone className="w-4 h-4 text-primary" />
+                Trusted Devices
+              </CardTitle>
+              {devices.length > 0 && (
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={async () => {
+                    await revokeAllDevices();
+                    toast.success("All devices revoked");
+                  }}
+                >
+                  Revoke All
+                </Button>
+              )}
+            </CardHeader>
+            <CardContent>
+              {devicesLoading ? (
+                <div className="p-8 text-center text-muted-foreground">Loading…</div>
+              ) : devices.length === 0 ? (
+                <div className="p-8 text-center text-muted-foreground">
+                  No trusted devices registered
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {devices.map((device) => (
+                    <div
+                      key={device.id}
+                      className="flex items-center justify-between p-3 rounded-lg bg-muted/30 border border-border/30"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Monitor className="w-5 h-5 text-muted-foreground" />
+                        <div>
+                          <p className="text-sm font-medium">{device.device_name || "Unknown Device"}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {device.browser} / {device.os} · Trusted {device.trusted_at ? new Date(device.trusted_at).toLocaleDateString() : "—"}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Expires: {device.expires_at ? new Date(device.expires_at).toLocaleDateString() : "—"}
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-destructive border-destructive/30 hover:bg-destructive/10"
+                        onClick={async () => {
+                          await revokeDevice(device.id);
+                          toast.success("Device revoked");
+                        }}
+                      >
+                        Revoke
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Session Controls */}
+        <TabsContent value="sessions">
+          <Card className="border-border/50">
+            <CardHeader>
+              <CardTitle className="text-sm flex items-center gap-2">
+                <LogOut className="w-4 h-4 text-primary" />
+                Session Management
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="p-4 rounded-lg bg-muted/30 border border-border/30">
+                <h3 className="text-sm font-medium mb-2">Sign Out Other Sessions</h3>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Invalidate all sessions except the current one. Use this if you suspect unauthorized access.
+                </p>
+                <Button
+                  variant="outline"
+                  onClick={async () => {
+                    await signOutOtherSessions();
+                    toast.success("All other sessions have been signed out");
+                  }}
+                >
+                  Sign Out Other Sessions
+                </Button>
+              </div>
+
+              <div className="p-4 rounded-lg bg-destructive/5 border border-destructive/20">
+                <h3 className="text-sm font-medium text-destructive mb-2">Sign Out All Sessions</h3>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Invalidate ALL sessions including this one. You will be redirected to the login page.
+                </p>
+                <Button
+                  variant="destructive"
+                  onClick={async () => {
+                    await signOutAllSessions();
+                    toast.success("All sessions signed out. Redirecting…");
+                    window.location.href = "/auth";
+                  }}
+                >
+                  Sign Out Everything
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -309,7 +546,6 @@ const ZeroTrustAuditPanel = () => {
                   </TableBody>
                 </Table>
               )}
-
               <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg text-sm">
                 <div className="flex items-center gap-2 text-green-400 font-medium">
                   <Lock className="w-4 h-4" />
@@ -320,6 +556,58 @@ const ZeroTrustAuditPanel = () => {
                   Only the service role (backend) can modify role assignments.
                 </p>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Anomaly Alerts */}
+        <TabsContent value="anomalies">
+          <Card className="border-border/50">
+            <CardHeader>
+              <CardTitle className="text-sm flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-400" />
+                Anomaly Alerts (Last 30 Days)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              {anomalyAlerts.length === 0 ? (
+                <div className="p-8 text-center">
+                  <CheckCircle2 className="w-8 h-8 text-green-400 mx-auto mb-2" />
+                  <p className="text-muted-foreground">No anomalies detected</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Time</TableHead>
+                      <TableHead>Severity</TableHead>
+                      <TableHead>IP</TableHead>
+                      <TableHead>Details</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {anomalyAlerts.map((alert: any) => (
+                      <TableRow key={alert.id}>
+                        <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
+                          {new Date(alert.created_at).toLocaleString()}
+                        </TableCell>
+                        <TableCell><RiskBadge risk={alert.severity} /></TableCell>
+                        <TableCell className="font-mono text-xs">{alert.client_ip || "—"}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground max-w-[300px]">
+                          {alert.details ? (
+                            <div>
+                              {(alert.details as any)?.anomaly_reasons?.join(", ") || ""}
+                              {(alert.details as any)?.email && (
+                                <span className="ml-2 text-foreground">{(alert.details as any).email}</span>
+                              )}
+                            </div>
+                          ) : "—"}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
