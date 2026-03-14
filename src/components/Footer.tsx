@@ -265,7 +265,7 @@ const Footer = () => {
     { label: "Architecture", href: "/services/architecture" },
     { label: "Interior Design", href: "/services/interior-design" },
     { label: "Fit-Out", href: "/services/fit-out" },
-    { label: "Design & Build", href: "/services/design-and-build" },
+    { label: "Design & Build", href: "/services/design-build" },
     { label: "Law Firm", href: "/services/law-firm" },
     { label: "Broker Certification", href: "/services/broker-certification" },
     { label: "Complaint Procedures", href: "/services/complaint-procedures" },
