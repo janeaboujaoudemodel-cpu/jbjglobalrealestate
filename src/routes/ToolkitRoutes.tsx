@@ -11,6 +11,7 @@ const PdfFromPhotos = lazy(() => import("@/pages/toolkit/PdfFromPhotos"));
 const ImageResize = lazy(() => import("@/pages/toolkit/ImageResize"));
 const VoiceStudio = lazy(() => import("@/pages/toolkit/VoiceStudio"));
 const VoiceStudioPro = lazy(() => import("@/pages/toolkit/VoiceStudioPro"));
+const VirtualStagingPage = lazy(() => import("@/pages/toolkit/VirtualStagingPage"));
 const AIVideoStudioPage = lazy(() => import("@/pages/toolkit/AIVideoStudioPage"));
 const StampGeneratorLanding = lazy(() => import("@/pages/toolkit/StampGeneratorPage"));
 const ScanSignToolkitPage = lazy(() => import("@/pages/toolkit/ScanSignPage"));
@@ -107,6 +108,7 @@ export const ToolkitRoutes = () => (
     <Route path="/toolkit/captions-translate" element={<L><CaptionsTranslate /></L>} />
     <Route path="/toolkit/background-ai" element={<L><BackgroundAI /></L>} />
     <Route path="/toolkit/beauty-filters" element={<L><BeautyFilters /></L>} />
+    <Route path="/virtual-staging-ai" element={<L><VirtualStagingPage /></L>} />
 
     {/* Business Suite Routes */}
     <Route path="/business-suite/all" element={<L><AllToolsSuite /></L>} />

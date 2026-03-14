@@ -98,7 +98,7 @@ const tools: ToolCardProps[] = [
     title: 'JBJ AI Video Studio™',
     description: 'Professional CapCut-style video editor with multi-track timeline, AI captions, voiceover, effects, and smart reframing.',
     icon: <Play className="h-7 w-7" />,
-    href: '/toolkit/ai-video-studio',
+    href: '/toolkit/video-suite',
     tags: ['Video', 'AI', 'Captions', 'Effects'],
     isFlagship: true,
   },
@@ -275,7 +275,7 @@ export default function ToolkitLanding() {
           </p>
           
           <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/toolkit/ai-video-studio">
+            <Link to="/toolkit/video-suite">
               <Button variant="primary" size="lg" className="gap-2">
                 <Play className="h-5 w-5" />
                 Open AI Video Studio

@@ -382,7 +382,7 @@ const productivityTools = [
 
 // ── MERGED FROM ROYAL TOOLS REGISTRY (deduplicated) ──
 const mediaAndCreativeTools = [
-  { id: "ai-video-studio", title: "JBJ Creative Video Suite", description: "Professional video editor with multi-track timeline, AI captions, voiceover, and effects.", icon: Play, link: "/toolkit/ai-video-studio", category: "design" as ToolCategory },
+  { id: "ai-video-studio", title: "JBJ Creative Video Suite", description: "Professional video editor with multi-track timeline, AI captions, voiceover, and effects.", icon: Play, link: "/toolkit/video-suite", category: "design" as ToolCategory },
   { id: "video-resize-pack", title: "JBJ Video Resize + Smart Reframe", description: "Resize videos for any social platform with AI-powered subject tracking.", icon: Video, link: "/toolkit/video-resize-pack", category: "design" as ToolCategory },
   { id: "voice-studio", title: "JBJ Voice Studio", description: "AI voice generation, text-to-speech with multiple voices and languages.", icon: Mic, link: "/toolkit/voice-studio", category: "design" as ToolCategory },
   { id: "pdf-from-photos", title: "JBJ Photo → PDF Generator", description: "Convert photos to professional PDFs with custom layouts and title pages.", icon: FileText, link: "/toolkit/pdf-from-photos", category: "design" as ToolCategory },

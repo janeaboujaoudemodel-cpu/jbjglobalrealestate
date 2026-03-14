@@ -19,7 +19,7 @@ const quickTools = [
   { icon: Sparkles, label: "Beauty Filters", href: "/toolkit/beauty-filters", color: "#E85C4A" },
   { icon: ImageIcon, label: "Image Resize", href: "/toolkit/image-resize", color: "#7B5BF5" },
   { icon: FileText, label: "PDF Suite", href: "/toolkit/pdf-suite", color: "#E8A84A" },
-  { icon: Film, label: "Video Studio", href: "/toolkit/ai-video-studio", color: "#4AE8A8" },
+  { icon: Film, label: "Video Studio", href: "/toolkit/video-suite", color: "#4AE8A8" },
   { icon: Mic, label: "Voice Studio", href: "/toolkit/voice-studio", color: "#E84A9A" },
   { icon: Languages, label: "Captions", href: "/toolkit/captions-translate", color: "#A84AE8" },
   { icon: Palette, label: "Interior AI", href: "/interior-design", color: "#4A9AE8" },

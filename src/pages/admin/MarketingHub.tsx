@@ -69,7 +69,7 @@ const AI_TOOLS = [
   { label: 'AI Property Evaluation', icon: Lightbulb, route: '/ai/property-evaluation', color: 'text-gold' },
   { label: 'AI Presentation Generator', icon: Palette, route: '/ai/presentation-generator', color: 'text-gold' },
   { label: 'Marketing Creative Suite', icon: Palette, route: '/studio', color: 'text-gold' },
-  { label: 'AI Video Studio', icon: Video, route: '/toolkit/ai-video-studio', color: 'text-gold' },
+  { label: 'AI Video Studio', icon: Video, route: '/toolkit/video-suite', color: 'text-gold' },
 ];
 
 const ADMIN_SHORTCUTS = [
