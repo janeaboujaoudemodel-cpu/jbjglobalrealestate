@@ -169,7 +169,7 @@ const ListingAdmin = () => {
     }
     
     // Handle syncTab URL param for Data Ops sub-tabs
-    if (syncTab && ['reelly', 'approvals', 'external', 'enrichment', 'dev-visibility'].includes(syncTab)) {
+    if (syncTab && ['reelly', 'approvals', 'external', 'enrichment', 'dev-visibility', 'provident-hub'].includes(syncTab)) {
       setDataOpsTab(syncTab);
     }
     // Handle source param
