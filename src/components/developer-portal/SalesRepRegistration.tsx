@@ -369,7 +369,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5">
                 Personal Email <span className="text-muted-foreground text-xs">(optional)</span>
-                <Lock className="w-3 h-3 text-muted-foreground" title="Restricted — visible only to admins" />
+                <Lock className="w-3 h-3 text-muted-foreground" />
               </Label>
               <Input type="email" value={form.personal_email} onChange={(e) => setForm(f => ({ ...f, personal_email: e.target.value }))} placeholder="john.personal@gmail.com" />
               <p className="text-[10px] text-muted-foreground">Restricted. Used as a backup contact only.</p>
