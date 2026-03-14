@@ -198,6 +198,24 @@ const EmailClient = () => {
   const [showAttachPicker, setShowAttachPicker] = useState(false);
   const emailsPerPage = 20;
 
+  // ── Prefill from navigation state (ExclusiveDocuments, DocumentStudio, EnvelopeDetail) ──
+  useEffect(() => {
+    const state = location.state as any;
+    if (state?.prefillBody || state?.prefillSubject || state?.prefillAttachment) {
+      setNewEmail(prev => ({
+        ...prev,
+        subject: state.prefillSubject || prev.subject,
+        body: state.prefillBody || prev.body,
+      }));
+      if (state.prefillAttachment) {
+        setAttachments([state.prefillAttachment]);
+      }
+      setComposeOpen(true);
+      // Clear state so refresh doesn't re-trigger
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
   // Cross-channel: detect if recipient is a registered platform user
   const recipientDetection = useCrossChannelDetection(newEmail.to);
 
