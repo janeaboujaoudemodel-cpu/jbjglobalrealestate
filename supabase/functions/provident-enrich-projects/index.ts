@@ -2,6 +2,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 import { fetchProvidentPageDataDetail, PageDataProjectDetail } from "../_shared/provident/pagedata-detail.ts";
 import { fetchProvidentPageDataPdfUrls } from "../_shared/provident/pagedata.ts";
 import { mirrorRemotePdfToPublicStorage } from "../_shared/provident/storage.ts";
+import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -260,6 +261,10 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // ZERO TRUST: Verify owner identity
+  const auth = await requireOwnerAuth(req, corsHeaders);
+  if (auth.response) return auth.response;
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;

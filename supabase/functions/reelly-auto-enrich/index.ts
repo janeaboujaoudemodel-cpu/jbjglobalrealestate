@@ -4,6 +4,7 @@ import {
   extractGalleryImages, extractDocuments, extractAmenities, extractAmenityImages
 } from "../_shared/reelly-types.ts";
 import { acquireLock, releaseLock } from "../_shared/safe-execution.ts";
+import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
 
 const FUNCTION_NAME = "reelly-auto-enrich";
 
@@ -17,6 +18,10 @@ function json(status: number, body: unknown) {
 // Wrap entire handler with concurrency lock
 const originalServe = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  // ZERO TRUST: Verify owner identity
+  const auth = await requireOwnerAuth(req, corsHeaders);
+  if (auth.response) return auth.response;
 
   // Concurrency guard — skip if already running
   const gotLock = await acquireLock(FUNCTION_NAME, 12);
