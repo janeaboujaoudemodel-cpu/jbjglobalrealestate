@@ -452,7 +452,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
             </div>
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5">
-                Date of Joining Company
+                Date of Joining Company *
                 {developerName && <span className="text-[10px] text-muted-foreground font-normal">at {developerName}</span>}
               </Label>
               <Input type="date" value={form.date_of_join} onChange={(e) => setForm(f => ({ ...f, date_of_join: e.target.value }))} />
