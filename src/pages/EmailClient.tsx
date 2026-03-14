@@ -157,7 +157,37 @@ const EmailClient = () => {
   const [showEmailSettings, setShowEmailSettings] = useState(false);
   const [showProductivity, setShowProductivity] = useState(false);
   const [isDraftingWithAI, setIsDraftingWithAI] = useState(false);
-  const [analysisCache] = useState<Map<string, { needs_reply: boolean; priority: string; action_items: string[] }>>(new Map());
+  const analysisCacheRef = useRef<Map<string, { needs_reply: boolean; priority: string; action_items: string[] }>>(new Map());
+  const [analysisCacheVersion, setAnalysisCacheVersion] = useState(0);
+
+  const handleAnalysisComplete = useCallback((emailId: string, analysis: { needs_reply: boolean; priority: string; action_items: string[] }) => {
+    analysisCacheRef.current.set(emailId, analysis);
+    setAnalysisCacheVersion(v => v + 1);
+  }, []);
+
+  const bulkAnalyzeInbox = useCallback(async () => {
+    const unanalyzed = emails.filter(e => e.folder === "inbox" && !analysisCacheRef.current.has(e.id)).slice(0, 5);
+    if (unanalyzed.length === 0) {
+      toast.info("All inbox emails already analyzed");
+      return;
+    }
+    toast.info(`Analyzing ${unanalyzed.length} emails...`);
+    for (const email of unanalyzed) {
+      try {
+        const { data, error } = await supabase.functions.invoke("ai-email-assistant", {
+          body: { action: "summarize", emailId: email.id, subject: email.subject, body: email.body },
+        });
+        if (!error && data) {
+          handleAnalysisComplete(email.id, {
+            needs_reply: data.needs_reply,
+            priority: data.priority,
+            action_items: data.action_items,
+          });
+        }
+      } catch { /* continue */ }
+    }
+    toast.success("Bulk analysis complete");
+  }, [emails, handleAnalysisComplete]);
   const [attachments, setAttachments] = useState<DocumentAttachment[]>([]);
   const [showAttachPicker, setShowAttachPicker] = useState(false);
   const emailsPerPage = 20;
