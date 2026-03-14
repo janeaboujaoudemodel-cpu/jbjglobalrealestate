@@ -115,5 +115,6 @@ export const OwnerRoutes = () => (
     <Route path="global-audit" element={<GlobalAuditDashboard />} />
     <Route path="developer-moderation" element={<DeveloperModerationQueue />} />
     <Route path="api-security" element={<APISecurityDashboard />} />
+    <Route path="incident-readiness" element={<IncidentReadinessPanel />} />
   </Route>
 );
