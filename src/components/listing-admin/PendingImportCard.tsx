@@ -309,6 +309,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
             className="w-full h-full object-cover"
             fallbackSrc="/placeholder.svg"
             referrerPolicy="no-referrer"
+            loading={currentImageIndex === 0 ? "eager" : "lazy"}
           />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-muted/50">
