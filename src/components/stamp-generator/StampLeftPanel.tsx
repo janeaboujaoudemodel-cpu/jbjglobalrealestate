@@ -333,12 +333,45 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </span>
             </AccordionTrigger>
             <AccordionContent className="pb-3 space-y-2.5">
-              <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
-                Arabic font settings are configured in the Style tab of the project wizard. Use the wizard to select Arabic font family, letter spacing, arc spread, and weight.
-              </p>
-              <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
-                Supported fonts: Noto Naskh Arabic, Amiri, Cairo, Tajawal, Scheherazade
-              </p>
+              {/* Arabic Font Family */}
+              <div>
+                <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Font Family</p>
+                <div className="space-y-1 max-h-[140px] overflow-y-auto">
+                  {ARABIC_FONTS.map(f => (
+                    <button key={f.value} onClick={() => props.onSetArabicFont(f.value)}
+                      className={`w-full text-left p-2 rounded-lg border-2 transition-all ${props.arabicFont === f.value ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))]'}`}>
+                      <p className="text-[10px] font-medium text-[hsl(var(--foreground))]">{f.label}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Arabic Letter Spacing */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Letter Spacing</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.arabicLetterSpacing}px</span>
+                </div>
+                <Slider min={0} max={12} step={0.5} value={[props.arabicLetterSpacing]}
+                  onValueChange={([v]) => props.onSetArabicLetterSpacing(v)} />
+              </div>
+              {/* Arabic Arc Spread */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Spread</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{Math.round(props.arabicArcSpread * 100)}%</span>
+                </div>
+                <Slider min={50} max={100} step={1} value={[Math.round(props.arabicArcSpread * 100)]}
+                  onValueChange={([v]) => props.onSetArabicArcSpread(v / 100)} />
+              </div>
+              {/* Arabic Font Weight */}
+              <div className="flex gap-1.5">
+                {(['normal', 'bold'] as const).map(w => (
+                  <button key={w} onClick={() => props.onSetArabicFontWeight(w)}
+                    className={`flex-1 py-1.5 rounded-lg border-2 text-[10px] capitalize transition-all ${props.arabicFontWeight === w ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] font-bold' : 'border-[hsl(var(--border))]'}`}>
+                    {w}
+                  </button>
+                ))}
+              </div>
             </AccordionContent>
           </AccordionItem>
 
@@ -350,10 +383,62 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 Spacing & Layout
               </span>
             </AccordionTrigger>
+            <AccordionContent className="pb-3 space-y-2.5">
+              {/* Arc Text Spacing */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Text Spacing</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.arcTextSpacing}px</span>
+                </div>
+                <Slider min={0} max={10} step={0.5} value={[props.arcTextSpacing]}
+                  onValueChange={([v]) => props.onSetArcTextSpacing(v)} />
+              </div>
+              {/* Circle Gap */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Ring Gap</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.circleGap}%</span>
+                </div>
+                <Slider min={5} max={25} step={1} value={[props.circleGap]}
+                  onValueChange={([v]) => props.onSetCircleGap(v)} />
+              </div>
+              {/* Separator Distance */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Separator Distance</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.separatorDistance}px</span>
+                </div>
+                <Slider min={0} max={20} step={1} value={[props.separatorDistance]}
+                  onValueChange={([v]) => props.onSetSeparatorDistance(v)} />
+              </div>
+              {/* Center Content Size */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Center Content Size</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.centerContentSize}%</span>
+                </div>
+                <Slider min={20} max={60} step={1} value={[props.centerContentSize]}
+                  onValueChange={([v]) => props.onSetCenterContentSize(v)} />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* ─── 5d. Government Mode ─── */}
+          <AccordionItem value="government" className="border-b border-[hsl(var(--border)/0.5)]">
+            <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
+              <span className="flex items-center gap-1.5">
+                <Landmark size={12} className="text-[hsl(var(--gold))]" />
+                Government Mode
+              </span>
+            </AccordionTrigger>
             <AccordionContent className="pb-3 space-y-2">
-              <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
-                Fine-tune arc text spacing, ring gaps, separator distance, and center content size via the Style tab in the wizard. Changes apply to all generated concepts.
-              </p>
+              <div className="flex items-center justify-between p-2 rounded-lg border-2 border-[hsl(var(--border))]">
+                <div>
+                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Official Government Style</p>
+                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Thick outer ring, minimal decoration, centered layout</p>
+                </div>
+                <Switch checked={props.governmentMode} onCheckedChange={props.onSetGovernmentMode} />
+              </div>
             </AccordionContent>
           </AccordionItem>
 
