@@ -1,72 +1,59 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: Pending Project Debugging — 5 Fixes
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Task 1: Fix Broken First Image
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+**Problem**: The first image in pending approval cards may fail to load due to overly aggressive URL filtering in `filterValidImages()` or cross-origin issues with `referrerPolicy`.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+**Fix in `PendingImportCard.tsx`**:
+- Add `referrerPolicy="no-referrer"` to the `SafeImage` component (line 306) — some external CDN images (especially Provident/Reelly) get blocked by strict referrer policies.
+- Also update the `filterValidImages` call to preserve the original first image even if it looks like a "site asset" — add `reelly-backend.s3.amazonaws.com` and `ggfx-providentestate.s3` to `TRUSTED_IMAGE_DOMAINS` in `imageUtils.ts` if not already there.
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+**Fix in `imageUtils.ts`**: Add `reelly-backend.s3.amazonaws.com` and `ggfx-providentestate.s3.eu-west-2.amazonaws.com` to `TRUSTED_IMAGE_DOMAINS`.
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+### Task 2: Fix Developer Link to Specific Developer Page
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+**Problem**: `PendingImportCard.tsx` line 388 constructs the developer slug from the developer name using `encodeURIComponent(item.developer_name.toLowerCase().replace(/\s+/g, '-'))`. This is fragile and may not match the actual developer slug in the database. The card type doesn't include a `developer_slug` field.
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+**Fix**:
+- Add `developer_slug?: string | null` to `PendingImportCardItem` type.
+- In `ProjectApprovalQueue.tsx` where items are passed to `PendingImportCard`, look up the developer slug from the `developer_id` or pass it from the pending import data.
+- Update the `Link` in `PendingImportCard.tsx` line 388 to use `item.developer_slug` when available, falling back to the name-based slug.
+- In `ProjectApprovalQueue.tsx`, fetch developer slugs for the batch of imports and attach them.
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+### Task 3: Fix Back Button Behavior
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+**Problem**: The "Back to Queue" button in `PendingImportPreview.tsx` (line 584) navigates to `/listing-admin?view=data-ops&syncTab=approvals`. This is correct. However, `ListingAdmin.tsx` defaults `activeView` to `'data-ops'` and `dataOpsTab` to `"provident-hub"` (line 147). If the URL params don't override correctly (e.g., due to the `useEffect` dependency on `location.search` not re-triggering), the user lands on Provident Hub instead of Approvals.
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+**Fix**: The `useEffect` at line 153 has `activeView` in its condition check (`mappedView !== activeView`), which may prevent re-setting the view if it's already `data-ops`. Remove the `!== activeView` guard so the syncTab always gets applied. Also ensure the route uses the full path `/listing-admin` not just relative.
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+### Task 4: Fix Missing Handover Dates
 
-### Files Changed
-| File | Action |
+**Problem**: This is a data-level issue. Many projects in the `pending_project_imports` table have null `handover_date` fields.
+
+**Fix**: This requires running an enrichment pass, not a code change. The existing Provident enrichment tools can fill these. No code changes needed — but we should ensure the card clearly shows "No handover" instead of hiding it silently. Already handled by line 93 in `PendingImportCard.tsx` which flags it as optional missing.
+
+### Task 5: Fix Card Edge Spacing
+
+**Problem**: The grid container in `ProjectApprovalQueue.tsx` line 1211 wraps cards in `p-6` padding inside a bordered div, but the outer `CardContent` may not have sufficient horizontal padding.
+
+**Fix**: Ensure the grid wrapper at line 1211 has adequate padding. Currently `p-6` which should be fine. Check if the parent `CardContent` or the overall Listing Admin container has edge-to-edge layout issues. Add `px-2 sm:px-4` to the grid wrapper if needed. Also check `ListingAdmin.tsx` container padding around the approvals tab content.
+
+### Files Summary
+
+| File | Change |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| `src/lib/imageUtils.ts` | Add Reelly/Provident S3 domains to `TRUSTED_IMAGE_DOMAINS` |
+| `src/components/listing-admin/PendingImportCard.tsx` | Add `referrerPolicy="no-referrer"` to SafeImage, add `developer_slug` field, use it in Link |
+| `src/components/listing-admin/ProjectApprovalQueue.tsx` | Fetch developer slugs, pass `developer_slug` to PendingImportCard, add padding to grid container |
+| `src/pages/ListingAdmin.tsx` | Fix URL param sync logic to always apply `syncTab` param |
+| `src/pages/listing-admin/PendingImportPreview.tsx` | No changes needed — back button URL is correct |
+
+### Implementation Order
+
+1. Fix image loading (imageUtils + PendingImportCard referrerPolicy)
+2. Fix developer slug linking
+3. Fix back button URL param sync
+4. Fix card edge spacing
+
