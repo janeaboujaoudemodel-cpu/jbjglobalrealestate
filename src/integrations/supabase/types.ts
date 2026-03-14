@@ -14335,6 +14335,60 @@ export type Database = {
         }
         Relationships: []
       }
+      login_events: {
+        Row: {
+          anomaly_reasons: string[] | null
+          browser: string | null
+          city: string | null
+          client_ip: string | null
+          country: string | null
+          created_at: string | null
+          device_fingerprint: string | null
+          email: string | null
+          event_type: string
+          failure_reason: string | null
+          id: string
+          is_suspicious: boolean | null
+          os: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          anomaly_reasons?: string[] | null
+          browser?: string | null
+          city?: string | null
+          client_ip?: string | null
+          country?: string | null
+          created_at?: string | null
+          device_fingerprint?: string | null
+          email?: string | null
+          event_type?: string
+          failure_reason?: string | null
+          id?: string
+          is_suspicious?: boolean | null
+          os?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          anomaly_reasons?: string[] | null
+          browser?: string | null
+          city?: string | null
+          client_ip?: string | null
+          country?: string | null
+          created_at?: string | null
+          device_fingerprint?: string | null
+          email?: string | null
+          event_type?: string
+          failure_reason?: string | null
+          id?: string
+          is_suspicious?: boolean | null
+          os?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       market_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -22006,6 +22060,48 @@ export type Database = {
           is_trending?: boolean | null
           name?: string
           slug?: string
+        }
+        Relationships: []
+      }
+      trusted_devices: {
+        Row: {
+          browser: string | null
+          created_at: string | null
+          device_fingerprint: string
+          device_name: string | null
+          expires_at: string | null
+          id: string
+          is_revoked: boolean | null
+          last_used_at: string | null
+          os: string | null
+          trusted_at: string | null
+          user_id: string
+        }
+        Insert: {
+          browser?: string | null
+          created_at?: string | null
+          device_fingerprint: string
+          device_name?: string | null
+          expires_at?: string | null
+          id?: string
+          is_revoked?: boolean | null
+          last_used_at?: string | null
+          os?: string | null
+          trusted_at?: string | null
+          user_id: string
+        }
+        Update: {
+          browser?: string | null
+          created_at?: string | null
+          device_fingerprint?: string
+          device_name?: string | null
+          expires_at?: string | null
+          id?: string
+          is_revoked?: boolean | null
+          last_used_at?: string | null
+          os?: string | null
+          trusted_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
