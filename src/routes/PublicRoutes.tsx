@@ -152,6 +152,7 @@ const QRCodeGenerator = lazy(() => import("@/pages/QRCodeGenerator"));
 const ContractForms = lazy(() => import("@/pages/ContractForms"));
 const VideoMeeting = lazy(() => import("@/pages/VideoMeeting"));
 const Presentations = lazy(() => import("@/pages/Presentations"));
+const DocumentStudio = lazy(() => import("@/pages/DocumentStudio"));
 const Sitemap = lazy(() => import("@/pages/Sitemap"));
 const Pricing = lazy(() => import("@/pages/Pricing"));
 
@@ -362,6 +363,7 @@ export const PublicRoutes = () => (
     <Route path="/contract-forms" element={<AuthRequiredRoute><ContractForms /></AuthRequiredRoute>} />
     <Route path="/video-meeting" element={<AuthRequiredRoute><VideoMeeting /></AuthRequiredRoute>} />
     <Route path="/presentations" element={<Presentations />} />
+    <Route path="/document-studio" element={<AuthRequiredRoute><DocumentStudio /></AuthRequiredRoute>} />
 
     {/* ── Broker Pages (Tier 2 — login required) ── */}
     <Route path="/broker-toolkit" element={<AuthRequiredRoute><BrokerToolkit /></AuthRequiredRoute>} />

@@ -1,102 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Unified Document Generation System
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Current State
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-The platform has document tools scattered across multiple locations:
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-| Tool | Location | Access |
-|------|----------|--------|
-| **AI Document Generator** | `/ai-document-generator` (AIDocumentGeneratorPremium) | Auth-gated, public |
-| **CV Resume Builder** | `/toolkit/corporate-suite/cv-resume` | Public toolkit |
-| **Cover Letter Generator** | `/toolkit/corporate-suite/cover-letter` | Public toolkit |
-| **Company Profile Builder** | `/toolkit/corporate-suite/company-profile` | Public toolkit |
-| **Presentations** | `/presentations` | Public (any user) |
-| **E-Signature** | `/e-signature/*` (5 pages) | Owner-only (OwnerGuard) |
-| **Contract Reviewer** | `/e-signature/contract-review` | Owner-only |
-| **Document Scanner** | `/toolkit/scan-sign` | Public toolkit |
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-E-signature system is fully built with `esign_envelopes`, `esign_recipients`, `esign_audit_log`, and `esign_signed_documents` tables.
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-### Implementation
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-#### Task 1: Public Document Hub (`/document-studio`)
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-Create a unified landing page that consolidates public document tools into one tabbed interface.
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-**New file: `src/pages/DocumentStudio.tsx`**
-- Tabbed hub with sections:
-  - **Generate** — Embeds `AIDocumentGeneratorPremium` (listing, email, SMS, social, brochure, newsletter, client report)
-  - **CV & Resume** — Links to existing `/toolkit/corporate-suite/cv-resume`
-  - **Cover Letter** — Links to existing `/toolkit/corporate-suite/cover-letter`
-  - **Company Profile** — Links to existing `/toolkit/corporate-suite/company-profile`
-  - **Presentations** — Links to existing `/presentations`
-- Each tab either embeds the component inline or navigates to the existing route
-- Premium black/gold styling consistent with the platform
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**Route:** Add `/document-studio` to `PublicRoutes.tsx` as an `AuthRequiredRoute`.
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-#### Task 2: JBJ Exclusive Documents (Owner-Only)
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-Create an owner-exclusive document hub for contracts, NDAs, HR letters, and RERA forms.
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-**New file: `src/pages/owner/ExclusiveDocuments.tsx`**
-- Categorized grid of document templates:
-  - **Contracts**: Offer Letter, Employment Contract, Commission Agreement, MOU
-  - **HR Letters**: Recommendation Letter, Termination Letter, Salary Certificate, NOC
-  - **Legal**: NDA, Non-Compete, Vendor Agreement
-  - **RERA Forms**: Form F, Form A, Form B, Form I
-- Each template card opens a generation modal/form with pre-filled template fields
-- Output integrates with existing stamp (`DocumentStampIntegration`) and e-signature (`DocumentESignIntegration`) modules
-- Protected by `OwnerGuard`
-
-**Route:** Add `/owner/exclusive-documents` to `AdminRoutes.tsx` wrapped in `OwnerGuard`.
-
-#### Task 3: AI Prompt Contract Generation
-
-Add a free-form AI prompt mode to the Exclusive Documents page.
-
-**Changes to `src/pages/owner/ExclusiveDocuments.tsx`:**
-- Add an "AI Generate" tab with a single large `Textarea` prompt input
-- Example placeholder: *"Generate an offer letter for John Smith with 20% commission, start date 1 April 2026"*
-- Document type auto-detected from prompt, or user picks from dropdown
-- Calls existing `ai-document-generator` edge function with `documentType: "contract-prompt"` and the raw prompt as `details`
-- Output rendered in an editable preview with copy/download/sign actions
-
-**Edge function update (`supabase/functions/ai-document-generator/index.ts`):**
-- Add handling for `documentType: "contract-prompt"` — passes the raw prompt directly to the AI with a system prompt tuned for legal/HR document generation
-- Restrict this document type to owner-only by checking `auth.uid()` against owner verification
-
-#### Task 4: E-Signature Integration for Clients
-
-The e-signature system already exists and works (envelopes, recipients, signing flow). The public signing route `/sign/:token` is already in `StandaloneRoutes.tsx`. 
-
-**Changes needed:**
-- **Link from generated documents to e-signature**: Add a "Send for Signature" button on both Document Studio and Exclusive Documents output panels that navigates to `/e-signature/create` with the generated document pre-loaded
-- **In `ExclusiveDocuments.tsx`**: After generating a contract/letter, show a prominent "Send for E-Signature" CTA that passes the generated content to `CreateEnvelope`
-- **In `DocumentStudio.tsx`**: Add a secondary "Sign" button on generation results (links to `/e-signature/create`)
-- **Route state passing**: Use `navigate('/e-signature/create', { state: { prefillDocument: generatedContent, documentName: title } })` and update `CreateEnvelope.tsx` to accept and pre-fill from `location.state`
-
-**Update `src/pages/e-signature/CreateEnvelope.tsx`:**
-- Read `location.state.prefillDocument` on mount
-- If present, auto-populate the document content/name fields
-
-### Files Summary
-
-| File | Change |
+### Files Changed
+| File | Action |
 |------|--------|
-| **New**: `src/pages/DocumentStudio.tsx` | Public unified document hub with tabs |
-| **New**: `src/pages/owner/ExclusiveDocuments.tsx` | Owner-only contracts, NDA, HR letters, RERA forms with AI prompt mode |
-| `src/routes/PublicRoutes.tsx` | Add `/document-studio` route |
-| `src/routes/AdminRoutes.tsx` | Add `/owner/exclusive-documents` route |
-| `src/pages/e-signature/CreateEnvelope.tsx` | Accept prefill from navigation state |
-| `supabase/functions/ai-document-generator/index.ts` | Add `contract-prompt` document type handling |
-
-### Implementation Order
-1. Create `DocumentStudio.tsx` public hub (Task 1)
-2. Create `ExclusiveDocuments.tsx` owner hub with template grid (Task 2)
-3. Add AI prompt generation mode to exclusive hub (Task 3)
-4. Wire e-signature integration and prefill flow (Task 4)
-5. Add routes to both route files
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

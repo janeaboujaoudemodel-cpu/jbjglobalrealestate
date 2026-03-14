@@ -66,6 +66,7 @@ const SignatureStudio = lazy(() => import("@/pages/e-signature/SignatureStudio")
 const ContractReview = lazy(() => import("@/pages/e-signature/ContractReview"));
 const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
+const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
 const LegalComplianceCenter = lazy(() => import("@/pages/admin/LegalComplianceCenter"));
 
 export const AdminRoutes = () => (
@@ -144,6 +145,9 @@ export const AdminRoutes = () => (
     <Route path="/whiteboard" element={<OwnerGuard><Whiteboard /></OwnerGuard>} />
     <Route path="/mindmap" element={<OwnerGuard><MindMap /></OwnerGuard>} />
     <Route path="/form-builder" element={<OwnerGuard><FormBuilder /></OwnerGuard>} />
+
+    {/* ── Exclusive Documents ── */}
+    <Route path="/owner/exclusive-documents" element={<OwnerGuard><ExclusiveDocuments /></OwnerGuard>} />
 
     {/* ── E-Signature ── */}
     <Route path="/e-signature" element={<OwnerGuard><ESignatureDashboard /></OwnerGuard>} />

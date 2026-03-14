@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -95,6 +95,7 @@ const steps = [
 
 export default function CreateEnvelope() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -102,6 +103,17 @@ export default function CreateEnvelope() {
   // Step 1: Document
   const [documentName, setDocumentName] = useState("");
   const [documentDescription, setDocumentDescription] = useState("");
+
+  // Prefill from navigation state (e.g. from Document Studio / Exclusive Documents)
+  useEffect(() => {
+    const state = location.state as { prefillDocument?: string; documentName?: string } | null;
+    if (state?.prefillDocument) {
+      setDocumentDescription(state.prefillDocument);
+    }
+    if (state?.documentName) {
+      setDocumentName(state.documentName);
+    }
+  }, [location.state]);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
