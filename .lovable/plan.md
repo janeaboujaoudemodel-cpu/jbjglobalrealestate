@@ -1,72 +1,117 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: Security Layer 4G — Application Security Testing + Deployment Gates
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Current State
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+**Already exists:**
+- `run-security-checklist` edge function — 8 automated checks (DB connectivity, rate limits, IP blocklist, security events, backup freshness, audit anomalies)
+- `IncidentReadinessPanel` — owner dashboard showing backups, checklists, deployments, alerts
+- `deployment_records` table — tracks versions, stable releases, rollback status, impacted modules
+- `security_checklist_runs` table — stores check results with pass/fail/warning
+- `system_backup_records` table — snapshot history with restore testing
+- Permission matrix (`permissionMatrix.ts`) defining access rules for all modules
+- WAF middleware on AI/admin edge functions
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+**Gaps:**
+- No **pre-deployment validation** — nothing checks auth, permissions, env vars, or API health before a release is marked stable
+- No **deployment gate** that blocks marking a release as "stable" until checks pass
+- No way to **record test evidence** for security-sensitive changes
+- Security checklist doesn't verify **route protection**, **env var presence**, or **edge function auth coverage**
+- No **staging verification workflow** — no structured "test then promote" flow
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+### Implementation
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+#### 1. Edge Function: `run-deployment-gate` (New)
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+Owner-only function that runs a comprehensive pre-publish validation suite:
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+**Checks performed:**
+- **Auth system health** — verify Supabase auth responds, test token validation
+- **Edge function auth coverage** — cross-reference `permissionMatrix.ts` function list against functions that have `requireOwnerAuth` or WAF middleware (report unprotected high-risk functions)
+- **Critical env vars** — verify `OWNER_EMAIL`, `OPENAI_API_KEY` (or equivalent) are set via secrets
+- **RLS policy presence** — query `pg_policies` to confirm sensitive tables have RLS enabled
+- **Recent security checklist** — require a passing checklist run within the last 24h
+- **API health probe** — ping 3-5 critical edge functions (verify-owner, run-security-checklist, waf-health-check) and confirm 200/401 responses (not 500)
+- **Active critical alerts** — block if unresolved critical security events exist in last 6h
+- **Backup freshness** — require a backup within the last 7 days
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+Returns: `{ gate_status: "pass" | "fail", checks: [...], blocked_reasons: [...] }`
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+Saves result to a new `deployment_gate_runs` table.
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+#### 2. Database: `deployment_gate_runs` Table
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+```sql
+CREATE TABLE deployment_gate_runs (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at timestamptz DEFAULT now(),
+  triggered_by uuid REFERENCES auth.users(id),
+  gate_status text NOT NULL CHECK (gate_status IN ('pass', 'fail')),
+  checks jsonb NOT NULL DEFAULT '[]',
+  blocked_reasons text[] DEFAULT '{}',
+  deployment_record_id uuid REFERENCES deployment_records(id),
+  notes text
+);
+ALTER TABLE deployment_gate_runs ENABLE ROW LEVEL SECURITY;
+-- Owner-only read/insert
+```
 
-### Files Changed
-| File | Action |
+#### 3. Enhance `IncidentReadinessPanel.tsx`
+
+Add a **"Deployment Gate"** card section between the overview cards and security checklist:
+
+- "Run Pre-Publish Gate" button — invokes `run-deployment-gate`
+- Shows last gate run result with pass/fail per check
+- Blocked reasons displayed prominently in red
+- Gate history (last 10 runs) with expandable details
+- When gate fails: show actionable remediation steps per failed check
+
+#### 4. Enhance `run-security-checklist` — Add 3 New Checks
+
+Extend the existing checklist with:
+- **Check 9: Owner Route Protection** — verify OwnerGuard routes from permission matrix are listed
+- **Check 10: Edge Function Auth Audit** — count functions with/without auth middleware
+- **Check 11: Exposed Public Routes** — flag any new routes not in the known public allowlist
+
+#### 5. Test Evidence Recording
+
+Add to `deployment_records`:
+```sql
+ALTER TABLE deployment_records 
+  ADD COLUMN IF NOT EXISTS gate_run_id uuid REFERENCES deployment_gate_runs(id),
+  ADD COLUMN IF NOT EXISTS test_evidence jsonb DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS security_sign_off boolean DEFAULT false;
+```
+
+When marking a deployment as stable, require:
+- A passing gate run linked to the deployment
+- Owner confirmation (security sign-off toggle)
+
+#### 6. Hook: `useDeploymentGate`
+
+New hook providing:
+- `runGate()` — invoke the edge function
+- `lastGateRun` — latest result
+- `gateHistory` — last 10 runs
+- `canMarkStable` — derived boolean (gate passed + no critical alerts)
+
+### Files Summary
+
+| File | Change |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| **New**: `supabase/functions/run-deployment-gate/index.ts` | Pre-publish validation suite |
+| **New**: `src/hooks/useDeploymentGate.ts` | Gate invocation + history hook |
+| **Migration** | Create `deployment_gate_runs`, add columns to `deployment_records` |
+| **Update**: `supabase/functions/run-security-checklist/index.ts` | Add 3 new checks (route protection, auth audit, public routes) |
+| **Update**: `src/pages/owner/IncidentReadinessPanel.tsx` | Add Deployment Gate card with run/history/remediation UI |
+| **Update**: `src/hooks/useIncidentReadiness.ts` | Add gate-related queries |
+| **Update**: `supabase/config.toml` | Register `run-deployment-gate` |
+
+### Implementation Order
+1. Database migration (new table + columns)
+2. Create `run-deployment-gate` edge function
+3. Enhance `run-security-checklist` with 3 new checks
+4. Create `useDeploymentGate` hook
+5. Update `IncidentReadinessPanel` with gate UI
+
