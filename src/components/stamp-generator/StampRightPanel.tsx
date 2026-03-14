@@ -75,8 +75,12 @@ export function StampRightPanel(props: StampRightPanelProps) {
   const [conceptPage, setConceptPage] = useState(0);
   const [activeTab, setActiveTab] = useState('concepts');
 
-  const totalPages = Math.ceil(props.concepts.length / CONCEPTS_PER_PAGE);
-  const pagedConcepts = props.concepts.slice(conceptPage * CONCEPTS_PER_PAGE, (conceptPage + 1) * CONCEPTS_PER_PAGE);
+  // Build concepts list: standard first (excluded from regular list), then the rest
+  const nonStandardConcepts = props.standardConcept
+    ? props.concepts.filter(c => c.id !== props.standardConcept!.id)
+    : props.concepts;
+  const totalPages = Math.ceil(nonStandardConcepts.length / CONCEPTS_PER_PAGE);
+  const pagedConcepts = nonStandardConcepts.slice(conceptPage * CONCEPTS_PER_PAGE, (conceptPage + 1) * CONCEPTS_PER_PAGE);
 
   return (
     <div className="w-[340px] xl:w-[400px] flex-shrink-0 min-w-0 flex flex-col overflow-hidden bg-white/80 border-l border-[hsl(var(--border))]">
