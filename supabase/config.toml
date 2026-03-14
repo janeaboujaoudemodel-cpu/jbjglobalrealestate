@@ -561,3 +561,6 @@ verify_jwt = false
 
 [functions.rls-hardening-proof]
 verify_jwt = false
+
+[functions.waf-health-check]
+verify_jwt = false
