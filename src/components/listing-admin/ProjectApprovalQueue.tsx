@@ -1134,6 +1134,32 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           {/* New Project Detector */}
           <NewProjectDetector />
 
+          {/* Search & Developer Filter */}
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            <div className="relative flex-1 min-w-[200px] max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by project name or developer..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <Select value={developerFilter} onValueChange={setDeveloperFilter}>
+              <SelectTrigger className="w-[220px] h-9 text-sm bg-background border-gold/30">
+                <SelectValue placeholder="All Developers" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Developers</SelectItem>
+                {distinctDevelopers.map(dev => (
+                  <SelectItem key={dev} value={dev}>
+                    <span className="flex items-center gap-2"><Building2 className="h-3.5 w-3.5 text-muted-foreground" /> {dev}</span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Source filter dropdown */}
           <div className="flex items-center gap-3 p-2 bg-muted/50 border border-border rounded-lg mb-4">
             <span className="text-sm font-medium text-foreground">Source:</span>
