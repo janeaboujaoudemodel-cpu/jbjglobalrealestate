@@ -749,6 +749,24 @@ export default function StampGeneratorPage() {
           onSetRefinePrompt={setRefinePrompt}
           onRefineWithAI={handleRefineWithAI}
           hasSelectedSvg={!!selectedSvg}
+          arabicFont={arabicFont}
+          arabicLetterSpacing={arabicLetterSpacing}
+          arabicArcSpread={arabicArcSpread}
+          arabicFontWeight={arabicFontWeight}
+          onSetArabicFont={setArabicFont}
+          onSetArabicLetterSpacing={setArabicLetterSpacing}
+          onSetArabicArcSpread={setArabicArcSpread}
+          onSetArabicFontWeight={setArabicFontWeight}
+          arcTextSpacing={arcTextSpacing}
+          circleGap={circleGap}
+          separatorDistance={separatorDistance}
+          centerContentSize={centerContentSize}
+          onSetArcTextSpacing={setArcTextSpacing}
+          onSetCircleGap={setCircleGap}
+          onSetSeparatorDistance={setSeparatorDistance}
+          onSetCenterContentSize={setCenterContentSize}
+          governmentMode={governmentMode}
+          onSetGovernmentMode={setGovernmentMode}
         />
 
         {/* ── CENTER: Premium Canvas Preview ── */}
