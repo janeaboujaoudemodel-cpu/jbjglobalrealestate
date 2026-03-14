@@ -524,7 +524,7 @@ export default function StampGeneratorPage() {
   async function softDeleteConcept(conceptId: string) {
     const isDbId = conceptId.length === 36;
     if (isDbId) {
-      await supabase.from('stamp_designs').update({ deleted_at: new Date().toISOString() } as any).eq('id', conceptId);
+      await supabase.from('stamp_designs').update({ deleted_at: new Date().toISOString() }).eq('id', conceptId);
       const deleted = concepts.find(c => c.id === conceptId) || favoriteConcepts.find(c => c.id === conceptId);
       if (deleted) {
         setDeletedStamps(prev => [...prev, { id: conceptId, svg_source: svgOverrides[conceptId] || deleted.svgSource, template_key: deleted.templateKey, deleted_at: new Date().toISOString(), label: deleted.label }]);
