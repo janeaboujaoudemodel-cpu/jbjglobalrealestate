@@ -4,6 +4,7 @@ import {
   extractGalleryImages, extractDocuments, extractAmenities, extractAmenityImages
 } from "../_shared/reelly-types.ts";
 import { acquireLock, releaseLock } from "../_shared/safe-execution.ts";
+import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
 
 const FUNCTION_NAME = "reelly-auto-enrich";
 
