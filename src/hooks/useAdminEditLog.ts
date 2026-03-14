@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { logGlobalAudit } from "@/hooks/useGlobalAudit";
 
 export interface AdminEditLogEntry {
   id: string;
