@@ -240,23 +240,25 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </Suspense>
       )}
       {/* Mobile: horizontal header | Desktop: vertical sidebar */}
-      <div className="lg:hidden">
+      <div className="xl:hidden">
         <GlobalHeader forceSolid={needsHeaderSpacing} />
       </div>
       {!isBackOfficeRoute && (
         <>
-          <div className="hidden lg:block fixed left-0 top-0 h-screen z-[9997]">
+          <div className="hidden xl:block fixed left-0 top-0 h-screen z-[9997]">
             <Suspense fallback={null}>
               <GlobalVerticalNav />
             </Suspense>
           </div>
-          <Suspense fallback={null}>
-            <HorizontalUtilityBar />
-          </Suspense>
+          <div className="hidden xl:block">
+            <Suspense fallback={null}>
+              <HorizontalUtilityBar />
+            </Suspense>
+          </div>
         </>
       )}
       <GlobalContactGating>
-        <main className={`w-full max-w-full overflow-x-hidden transition-all duration-300 ${!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:lg:pl-[200px] [body.jj-vertical-nav-collapsed_&]:lg:pl-[48px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-28 lg:pt-[52px]" : "lg:pt-[52px] pt-0"}`}>
+        <main className={`w-full max-w-full overflow-x-hidden transition-all duration-300 ${!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:xl:pl-[200px] [body.jj-vertical-nav-collapsed_&]:xl:pl-[48px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-28 xl:pt-[52px]" : "xl:pt-[52px] pt-0"}`}>
           {layoutGuardTriggered && isServiceRoute && (
             <div role="alert" className="mx-auto mt-4 w-full max-w-6xl px-4 sm:px-6 lg:px-8">
               <div className="rounded-lg border border-destructive/30 bg-background/95 px-4 py-3 text-sm text-foreground shadow-sm backdrop-blur">
