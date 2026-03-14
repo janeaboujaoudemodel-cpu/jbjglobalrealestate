@@ -1249,6 +1249,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       item={{
                         ...item,
                         slug: item.slug,
+                        developer_slug: item.developer_id ? developerSlugs[item.developer_id] || null : null,
                         review_notes: !item.description || item.images.length === 0 || item.developer_name?.toLowerCase() === 'unknown' ? 'INCOMPLETE' : null
                       }}
                       formatPrice={formatPrice}
