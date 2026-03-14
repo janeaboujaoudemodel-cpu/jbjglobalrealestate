@@ -60,6 +60,9 @@ const DeveloperPortal = () => {
   const { user, isOwner } = useAuth();
   const { isDeveloperMode } = useUserModeContext();
   const queryClient = useQueryClient();
+  const { logActivity, logFileValidation } = useDeveloperActivityLog();
+  const [sessionUploadedBytes, setSessionUploadedBytes] = useState(0);
+  const [sessionFileNames, setSessionFileNames] = useState<string[]>([]);
   const initialTab = searchParams.get("tab") || "projects";
   const [activeTab, setActiveTab] = useState(initialTab);
   const fileInputRef = useRef<HTMLInputElement>(null);
