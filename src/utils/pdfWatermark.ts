@@ -60,16 +60,20 @@ export const logDocumentDownload = async (
   userId?: string,
   userEmail?: string
 ): Promise<void> => {
-  // This can be extended to log to database
-  console.log('[Document Download]', {
-    documentId,
-    documentType,
-    watermarkId,
-    userId,
-    userEmail,
-    timestamp: new Date().toISOString(),
-    userAgent: navigator.userAgent,
-  });
+  // Log to DLP audit table
+  try {
+    const { logExportEvent } = await import("@/utils/dlpExportLogger");
+    await logExportEvent({
+      exportType: "document_download",
+      exportFormat: "pdf",
+      recordCount: 1,
+      containsPii: false,
+      watermarkId,
+      fieldsExported: [documentType],
+    });
+  } catch (err) {
+    console.error("[DLP] Document download log failed:", err);
+  }
 };
 
 /**

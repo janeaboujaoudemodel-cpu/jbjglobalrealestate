@@ -1,103 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Security Layer 4I — Data Loss Prevention + Safe Export Controls
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Current State
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-**Exists:**
-- `logDocumentDownload` in `pdfWatermark.ts` — only logs to `console.log`, NOT to database
-- `useCRMFieldPermissions` — role-based field masking for CRM (phone, email)
-- `ReAuthModal` + `useStepUpAuth` — step-up re-authentication with 10-min elevated session
-- `VIPExportButton` — exports VIP leads CSV/JSON with NO logging, NO auth gate, raw PII
-- `CRMBulkActions.handleExportSelected` — exports selected leads CSV with NO logging, raw PII
-- `SecurityDashboardSummary.exportToCSV` — exports security report with NO logging
-- `DocumentDownloads` — watermark IDs generated but `logDocumentDownload` only does `console.log`
-- `BusinessCardScanner` — exports scanned contacts CSV/Excel with NO logging
-- `DataRoomExportService` — in-memory export log, never persisted to database
-- `CompanyProfileDownload` — generates PDF with NO logging
-- Various `navigator.clipboard.writeText` calls across AI tools (no logging)
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-**Gaps:**
-- No `dlp_export_events` table — exports are completely untracked in the database
-- No step-up auth gate on sensitive exports (CRM, VIP, security reports)
-- `logDocumentDownload` is a no-op (console.log only)
-- Exported CRM data includes raw PII (phone, email) — no masking applied
-- No owner dashboard for viewing all export activity
-- Clipboard copy of sensitive data is unmonitored
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-### Implementation
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-#### 1. Database: `dlp_export_events` Table
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-Centralized export audit log:
-- `id`, `created_at`, `user_id`, `user_email`
-- `export_type` — 'crm_leads', 'vip_leads', 'security_report', 'document_download', 'business_cards', 'company_profile', 'data_room', 'bulk_leads'
-- `export_format` — 'csv', 'json', 'pdf', 'html'
-- `record_count` integer
-- `contains_pii` boolean
-- `fields_exported` text[]
-- `fields_masked` text[]
-- `watermark_id` text
-- `ip_address` text
-- `user_agent` text
-- `required_step_up` boolean — whether step-up auth was triggered
-- `status` — 'completed', 'blocked', 'pending_approval'
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-Owner-only RLS (select). Authenticated insert.
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-#### 2. Utility: `src/utils/dlpExportLogger.ts`
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-Central function `logExportEvent(params)` that inserts into `dlp_export_events`. Used by all export points.
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-Also: `maskExportField(fieldName, value)` — reusable masking for exports (phone → `+971 ••• 234`, email → `ab•••@domain.com`).
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-#### 3. Wire Step-Up Auth to Critical Exports
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-Wrap these with `useStepUpAuth.requireStepUp()`:
-- **VIPExportButton** — critical severity (contains VIP PII)
-- **CRMBulkActions.handleExportSelected** — critical severity (bulk PII)
-- **SecurityDashboardSummary.exportToCSV** — normal severity (security data)
-- **BusinessCardScanner exports** — normal severity
-
-#### 4. Apply PII Masking to Exports
-
-For CRM and VIP exports, mask `phone_e164` and `email_lower` in the exported data unless the user has an elevated session. The masking uses the same logic from `useCRMFieldPermissions.maskValue`.
-
-#### 5. Wire `logDocumentDownload` to Database
-
-Replace the `console.log` in `pdfWatermark.ts` with an actual insert into `dlp_export_events`.
-
-#### 6. Owner Export Audit Dashboard
-
-New section in `IncidentReadinessPanel` (or as a tab):
-- **Export Activity Feed** — latest 50 exports with type, user, record count, PII flag, timestamp
-- **Summary cards** — total exports today, PII exports, blocked exports
-- **Filter** by export type, date range, user
-- Expandable row showing fields exported/masked
-
-#### 7. Clipboard Copy Logging (Lightweight)
-
-For sensitive modules (CRM lead detail, call review), intercept `navigator.clipboard.writeText` calls and log to `dlp_export_events` with `export_type: 'clipboard_copy'`.
-
-### Files
-
+### Files Changed
 | File | Action |
 |------|--------|
-| **Migration** | Create `dlp_export_events` table with RLS |
-| **New**: `src/utils/dlpExportLogger.ts` | Central export logging + masking utility |
-| **Update**: `src/utils/pdfWatermark.ts` | Wire `logDocumentDownload` to database |
-| **Update**: `src/components/crm/VIPExportButton.tsx` | Add step-up auth + logging + PII masking |
-| **Update**: `src/components/crm/CRMBulkActions.tsx` | Add step-up auth + logging + PII masking |
-| **Update**: `src/components/admin/SecurityDashboardSummary.tsx` | Add step-up auth + logging |
-| **Update**: `src/pages/BusinessCardScanner.tsx` | Add step-up auth + logging |
-| **Update**: `src/components/admin/CompanyProfileDownload.tsx` | Add export logging |
-| **Update**: `src/components/DocumentDownloads.tsx` | Wire to DLP logger |
-| **Update**: `src/pages/owner/IncidentReadinessPanel.tsx` | Add Export Audit section |
-
-### Implementation Order
-1. Database migration (`dlp_export_events`)
-2. Create `dlpExportLogger.ts` utility
-3. Update `pdfWatermark.ts` to log to DB
-4. Wire step-up auth + logging + masking into VIPExportButton, CRMBulkActions, SecurityDashboardSummary, BusinessCardScanner, CompanyProfileDownload, DocumentDownloads
-5. Add Export Audit section to IncidentReadinessPanel
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

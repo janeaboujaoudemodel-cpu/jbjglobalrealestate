@@ -7606,6 +7606,60 @@ export type Database = {
         }
         Relationships: []
       }
+      dlp_export_events: {
+        Row: {
+          contains_pii: boolean | null
+          created_at: string
+          export_format: string | null
+          export_type: string
+          fields_exported: string[] | null
+          fields_masked: string[] | null
+          id: string
+          ip_address: string | null
+          record_count: number | null
+          required_step_up: boolean | null
+          status: string
+          user_agent: string | null
+          user_email: string | null
+          user_id: string | null
+          watermark_id: string | null
+        }
+        Insert: {
+          contains_pii?: boolean | null
+          created_at?: string
+          export_format?: string | null
+          export_type: string
+          fields_exported?: string[] | null
+          fields_masked?: string[] | null
+          id?: string
+          ip_address?: string | null
+          record_count?: number | null
+          required_step_up?: boolean | null
+          status?: string
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+          watermark_id?: string | null
+        }
+        Update: {
+          contains_pii?: boolean | null
+          created_at?: string
+          export_format?: string | null
+          export_type?: string
+          fields_exported?: string[] | null
+          fields_masked?: string[] | null
+          id?: string
+          ip_address?: string | null
+          record_count?: number | null
+          required_step_up?: boolean | null
+          status?: string
+          user_agent?: string | null
+          user_email?: string | null
+          user_id?: string | null
+          watermark_id?: string | null
+        }
+        Relationships: []
+      }
       docusign_envelopes: {
         Row: {
           completed_at: string | null

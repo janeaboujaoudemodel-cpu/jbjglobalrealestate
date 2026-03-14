@@ -55,7 +55,7 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
   const handleDownload = async (doc: Document) => {
     const watermarkId = generateWatermarkId();
     
-    // Log the download with watermark tracking
+    // Log the download with watermark tracking (now writes to DB via DLP logger)
     await logDocumentDownload(
       doc.id,
       doc.document_type,
@@ -64,7 +64,6 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
       user?.email || undefined
     );
 
-    // Show watermark notice
     toast.info("Document Downloaded", {
       description: `Watermark ID: ${watermarkId} - This download is tracked for IP protection.`,
       duration: 5000,
@@ -97,7 +96,6 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
     return null;
   }
 
-  // Group documents by type
   const groupedDocs = documents.reduce((acc, doc) => {
     if (!acc[doc.document_type]) {
       acc[doc.document_type] = [];
@@ -109,9 +107,7 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
   return (
     <div className="jj-card-inner">
       <div className="flex flex-col gap-3 mb-4">
-        <h3
-          className="text-foreground text-h3 font-medium"
-        >
+        <h3 className="text-foreground text-h3 font-medium">
           Project Materials
         </h3>
         {documents.length > 1 && (
@@ -127,7 +123,6 @@ const DocumentDownloads = ({ documents }: DocumentDownloadsProps) => {
         )}
       </div>
 
-      {/* Watermark Notice */}
       <div className="flex items-center gap-2 mb-4 p-3 bg-gold/10 border border-gold/20 rounded-lg">
         <Shield className="w-4 h-4 text-gold flex-shrink-0" />
         <p className="text-xs text-muted-foreground">
