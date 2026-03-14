@@ -598,6 +598,15 @@ const TeamChat = () => {
             </div>
           </div>
         </div>
+
+        {/* Attachment Picker Modal */}
+        {showAttachPicker && (
+          <DocumentAttachmentPicker
+            context="chat"
+            onAttach={(att) => setPendingAttachments(prev => [...prev, att])}
+            onClose={() => setShowAttachPicker(false)}
+          />
+        )}
       </div>
 
       {/* ─── Members Sidebar (real employees by department) ─── */}

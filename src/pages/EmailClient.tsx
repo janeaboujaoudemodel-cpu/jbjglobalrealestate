@@ -560,6 +560,27 @@ const EmailClient = () => {
                     <div className="whitespace-pre-wrap text-black leading-relaxed min-h-[120px]">
                       {newEmail.body}
                     </div>
+                    {/* Attached assets preview in Approve & Send */}
+                    {attachments.length > 0 && (
+                      <div className="mt-4 pt-3 border-t border-[#C9A84C]/10">
+                        <p className="text-xs text-black/40 mb-2 uppercase tracking-wider font-medium">Attachments</p>
+                        <div className="flex flex-wrap gap-3">
+                          {attachments.map(att => {
+                            const isImage = att.mimeType?.startsWith('image/') || ['stamp', 'signature', 'logo', 'letterhead', 'business_card', 'email_signature'].includes(att.type);
+                            return (
+                              <div key={att.id} className="flex items-center gap-2 bg-[#FDFBF7] border border-[#C9A84C]/15 rounded-lg px-3 py-2">
+                                {isImage && att.content ? (
+                                  <img src={att.content} alt={att.name} className="w-8 h-8 object-contain rounded" />
+                                ) : (
+                                  <FileText className="w-5 h-5 text-[#C9A84C]" />
+                                )}
+                                <span className="text-xs text-black font-medium">{att.name}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   {/* Dynamic Signature Block per Persona */}
                   <div className="px-6 py-4 bg-[#FDFBF7] border-t border-[#C9A84C]/15">

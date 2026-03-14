@@ -457,6 +457,24 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                   )}
                 </Button>
               </div>
+              {/* Pending attachments */}
+              {pendingAttachments.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-1.5 px-1">
+                  {pendingAttachments.map(att => (
+                    <AttachmentChip key={att.id} attachment={att} onRemove={() => setPendingAttachments(prev => prev.filter(a => a.id !== att.id))} />
+                  ))}
+                </div>
+              )}
+
+              {/* Attachment Picker Modal */}
+              {showAttachPicker && (
+                <DocumentAttachmentPicker
+                  context="chat"
+                  onAttach={(att) => setPendingAttachments(prev => [...prev, att])}
+                  onClose={() => setShowAttachPicker(false)}
+                />
+              )}
+
               <div className="flex items-center justify-between mt-1.5 px-1">
                 <p className="text-[10px] text-black/30 px-1">
                   Press Enter to send · AI-powered responses · Encrypted
