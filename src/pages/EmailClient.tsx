@@ -484,6 +484,15 @@ const EmailClient = () => {
                   </div>
                 </div>
 
+                {/* Document Attachment Picker Modal */}
+                {showAttachPicker && (
+                  <DocumentAttachmentPicker
+                    context="email"
+                    onAttach={(att) => setAttachments(prev => [...prev, att])}
+                    onClose={() => setShowAttachPicker(false)}
+                  />
+                )}
+
                 {/* Also notify in chat toggle — only shown for registered users */}
                 {recipientDetection.isLoading ? (
                   <div className="flex items-center gap-2 bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg px-3 py-2">
