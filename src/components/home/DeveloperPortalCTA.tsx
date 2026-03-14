@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Upload, FolderOpen, PartyPopper, ListChecks, Briefcase, FileSignature, UserCheck, Crown, CalendarSearch, Users, Rocket, Settings } from "lucide-react";
+import { Upload, FolderOpen, PartyPopper, ListChecks, Briefcase, FileSignature, UserCheck, Crown, CalendarSearch, Users, Rocket, Settings, UserCog } from "lucide-react";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useAuth } from "@/contexts/AuthContext";
 
