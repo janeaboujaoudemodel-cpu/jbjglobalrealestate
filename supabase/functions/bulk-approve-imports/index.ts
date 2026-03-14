@@ -62,6 +62,15 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Rate limit: 10 requests per 15 min per IP
+  const { response: blocked } = await enforceRateLimit(req, {
+    functionName: 'bulk-approve-imports',
+    maxRequests: 10,
+    windowMinutes: 15,
+    keyType: 'ip',
+  }, corsHeaders);
+  if (blocked) return blocked;
+
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
   const supabase = createClient(supabaseUrl, supabaseServiceKey);

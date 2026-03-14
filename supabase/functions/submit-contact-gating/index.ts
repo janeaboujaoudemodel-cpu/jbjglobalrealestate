@@ -55,6 +55,15 @@ Deno.serve(async (req) => {
   const origin = req.headers.get('origin');
   const headers = getCorsHeaders(origin);
 
+  // Rate limit: 10 requests per 15 min per IP
+  const { response: blocked } = await enforceRateLimit(req, {
+    functionName: 'submit-contact-gating',
+    maxRequests: 10,
+    windowMinutes: 15,
+    keyType: 'ip',
+  }, { ...headers, 'Content-Type': 'application/json' });
+  if (blocked) return blocked;
+
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,

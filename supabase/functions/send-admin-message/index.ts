@@ -169,6 +169,15 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Rate limit: 20 requests per 15 min per IP
+  const { response: blocked } = await enforceRateLimit(req, {
+    functionName: 'send-admin-message',
+    maxRequests: 20,
+    windowMinutes: 15,
+    keyType: 'ip',
+  }, corsHeaders);
+  if (blocked) return blocked;
+
   try {
     const body: AdminMessageRequest = await req.json();
     if (!body.recipientEmail || !body.message || !body.subject) {

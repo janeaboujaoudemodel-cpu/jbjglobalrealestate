@@ -60,6 +60,15 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Rate limit: 5 requests per 15 min per IP
+  const { response: blocked } = await enforceRateLimit(req, {
+    functionName: 'submit-support-ticket',
+    maxRequests: 5,
+    windowMinutes: 15,
+    keyType: 'ip',
+  }, corsHeaders);
+  if (blocked) return blocked;
+
   try {
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
