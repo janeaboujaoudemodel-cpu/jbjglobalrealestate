@@ -181,6 +181,20 @@ export default function LogoCreator() {
         thumbnail_url: dataUri,
       });
       if (assetError) throw assetError;
+
+      // Dual-insert into brand_assets for cross-tool visibility
+      try {
+        await supabase.from("brand_assets").insert({
+          user_id: session.user.id,
+          asset_type: "logo" as any,
+          name: `${name} Logo`,
+          svg_content: displayLogo.svgContent,
+          thumbnail_url: dataUri,
+          metadata: {},
+        });
+      } catch (e) {
+        console.warn("Dual-insert to brand_assets failed (non-critical):", e);
+      }
       let code: string | null = null;
       if (name.trim()) {
         try {
