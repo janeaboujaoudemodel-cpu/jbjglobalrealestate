@@ -1516,6 +1516,14 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                 Feedback links are appended automatically to the sent email.
               </p>
 
+              {/* Cross-channel toggle — shared component */}
+              <CrossChannelToggle
+                recipientEmail={selectedCV?.email || ''}
+                channel="email-first"
+                checked={alsoNotifyChat}
+                onToggle={setAlsoNotifyChat}
+              />
+
               <div className="flex gap-2">
                 <Button
                   className="flex-1 bg-gold hover:bg-gold/90 text-black font-bold"
