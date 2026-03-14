@@ -98,7 +98,7 @@ const tools: ToolCardProps[] = [
     title: 'JBJ AI Video Studio™',
     description: 'Professional CapCut-style video editor with multi-track timeline, AI captions, voiceover, effects, and smart reframing.',
     icon: <Play className="h-7 w-7" />,
-    href: '/toolkit/ai-video-studio',
+    href: '/toolkit/video-suite',
     tags: ['Video', 'AI', 'Captions', 'Effects'],
     isFlagship: true,
   },
