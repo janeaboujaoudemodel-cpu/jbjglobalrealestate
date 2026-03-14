@@ -433,7 +433,7 @@ const MEGA_MENU_LINKS: Record<MegaMenuKey, Array<{ label: string; href: string; 
     { label: 'ROI Calculator', icon: Calculator, href: '/ai-roi-calculator' },
     { label: 'Email Generator', icon: Mail, href: '/ai-email-generator' },
     { label: 'Translation Hub', icon: Languages, href: '/ai-translation-hub' },
-    { label: 'Video Tour Script', icon: Video, href: '/ai-video-tour-script' },
+    { label: 'Video Tour Script', icon: Video, href: '/toolkit/video-suite' },
     { label: 'Social Media', icon: Share2, href: '/ai-social-media' },
     { label: 'Description Writer', icon: PenTool, href: '/ai-description-writer' },
     { label: 'Meeting Summarizer', icon: Mic, href: '/ai-meeting-summarizer' },
