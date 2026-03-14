@@ -46,7 +46,7 @@ Deno.serve(async (req: Request): Promise<Response> => {
   const reellyApiKey = Deno.env.get("REELLY_API_KEY") || "";
 
   if (!supabaseUrl || !supabaseKey || !reellyApiKey) {
-    return json(500, { error: "Missing config (SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, REELLY_API_KEY)" });
+    return json(500, { error: "Service configuration error" });
   }
 
   const supabase = createClient(supabaseUrl, supabaseKey);

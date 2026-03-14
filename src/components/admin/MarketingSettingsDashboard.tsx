@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { 
+import { useState, useEffect, useCallback } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import {
   BarChart3, 
   Settings, 
   CheckCircle, 
@@ -39,7 +40,7 @@ interface MarketingConfig {
   trustpilotUrl: string;
 }
 
-const STORAGE_KEY = 'jj_marketing_config';
+// Config is now stored in marketing_config DB table (owner-only RLS)
 
 const defaultConfig: MarketingConfig = {
   ga4MeasurementId: '',
@@ -64,32 +65,50 @@ export const MarketingSettingsDashboard = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
-  useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored) {
-      try {
-        setConfig({ ...defaultConfig, ...JSON.parse(stored) });
-      } catch (e) {
-        console.error('Failed to load marketing config:', e);
+  const loadConfig = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('marketing_config')
+        .select('key, value');
+      if (error) throw error;
+      if (data && data.length > 0) {
+        const loaded = { ...defaultConfig };
+        data.forEach((row: { key: string; value: string }) => {
+          if (row.key in loaded) {
+            (loaded as any)[row.key] = row.value;
+          }
+        });
+        setConfig(loaded);
       }
+    } catch (e) {
+      console.error('Failed to load marketing config:', e);
     }
   }, []);
+
+  useEffect(() => { loadConfig(); }, [loadConfig]);
 
   const handleChange = (field: keyof MarketingConfig, value: string) => {
     setConfig(prev => ({ ...prev, [field]: value }));
     setHasChanges(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
-      toast.success('Marketing settings saved!', {
-        description: 'Changes will take effect on page refresh.',
+      // Upsert each config key
+      const entries = Object.entries(config).filter(([_, v]) => v !== '');
+      for (const [key, value] of entries) {
+        const { error } = await supabase
+          .from('marketing_config')
+          .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: 'key' });
+        if (error) throw error;
+      }
+      toast.success('Marketing settings saved securely!', {
+        description: 'Settings stored in encrypted backend.',
       });
       setHasChanges(false);
-    } catch (e) {
-      toast.error('Failed to save settings');
+    } catch (e: any) {
+      toast.error('Failed to save settings: ' + (e.message || 'Unknown error'));
     } finally {
       setIsSaving(false);
     }

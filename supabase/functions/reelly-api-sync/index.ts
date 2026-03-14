@@ -103,7 +103,7 @@ function mapProject(p: ReellyProject, areaId: string | null, devId: string | nul
 }
 
 async function fetchPage(apiKey: string, url: string): Promise<ReellyResponse> {
-  console.log(`[fetchPage] URL: ${url}, key starts: ${apiKey.slice(0, 20)}...`);
+  console.log(`[fetchPage] URL: ${url}`);
   const res = await fetchReellyWithRetry(url, apiKey, 4);
   if (!res.ok) {
     const body = await res.text();

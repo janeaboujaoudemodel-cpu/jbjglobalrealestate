@@ -103,10 +103,10 @@ ${sharedSections("newsletter subscription", "JBJ Global Real Estate Team")}
     if (!emailRes.ok) {
       console.error("Resend API error:", JSON.stringify(emailResponse));
     } else {
-      console.log("Welcome email sent:", emailResponse);
+      console.log("Welcome email sent successfully");
     }
 
-    return new Response(JSON.stringify({ success: true, emailResponse }), {
+    return new Response(JSON.stringify({ success: true, id: emailResponse?.id }), {
       status: 200,
       headers: { "Content-Type": "application/json", ...corsHeaders },
     });

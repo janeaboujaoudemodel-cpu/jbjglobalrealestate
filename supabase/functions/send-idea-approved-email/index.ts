@@ -131,7 +131,7 @@ ${arabicDivider()}${sharedSections("idea submission")}</td></tr>`;
     const emailResponse = await emailRes.json();
     if (!emailRes.ok) console.error("Resend API error:", JSON.stringify(emailResponse));
 
-    return new Response(JSON.stringify({ success: true, emailResponse }), {
+    return new Response(JSON.stringify({ success: true }), {
       status: 200, headers: { "Content-Type": "application/json", ...corsHeaders },
     });
   } catch (error: any) {
