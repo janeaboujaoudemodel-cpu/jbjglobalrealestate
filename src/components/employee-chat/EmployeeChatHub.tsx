@@ -477,15 +477,14 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                 <p className="text-[10px] text-black/30 px-1">
                   Press Enter to send · AI-powered responses · Encrypted
                 </p>
-                <div className="flex items-center gap-1.5">
-                  <Mail className="w-3 h-3 text-black/25" />
-                  <span className="text-[10px] text-black/30">Also email</span>
-                  <Switch
-                    checked={alsoSendByEmail}
-                    onCheckedChange={setAlsoSendByEmail}
-                    className="h-4 w-7 data-[state=checked]:bg-[#C9A84C]"
-                  />
-                </div>
+                {/* Cross-channel toggle — shared component */}
+                <CrossChannelToggle
+                  recipientEmail=""
+                  channel="chat-first"
+                  checked={alsoSendByEmail}
+                  onToggle={setAlsoSendByEmail}
+                  compact
+                />
               </div>
             </div>
           </>

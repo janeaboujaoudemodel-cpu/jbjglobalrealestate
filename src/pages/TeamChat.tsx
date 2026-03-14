@@ -181,26 +181,16 @@ const TeamChat = () => {
       const recipientMember = chatMembers.find(m => m.id === activeChannelData.dmUserId);
       if (recipientMember) {
         const recipientEmail = `${recipientMember.id}@jbj.ae`;
-        try {
-          await supabase.functions.invoke("send-owner-email", {
-            body: {
-              to: recipientEmail,
-              subject: `Chat message from ${currentUser.name}`,
-              body: newMessage,
-              senderId: "owner",
-              senderName: currentUser.name,
-              senderEmail: "ceo@jbj.ae",
-              senderTitle: currentUser.role,
-              account: "company",
-              useResend: true,
-              alsoSendByEmail: true,
-              chatRecipientEmail: recipientEmail,
-            },
-          });
-          toast.success(`Also emailed to ${recipientMember.name}`);
-        } catch (err) {
-          console.error("Cross-channel email error:", err);
-        }
+        sendSecondaryEmail({
+          primaryChannel: "chat",
+          recipientEmail,
+          subject: `Chat message from ${currentUser.name}`,
+          body: newMessage,
+          alsoSendSecondary: true,
+          senderName: currentUser.name,
+          senderTitle: currentUser.role,
+          recipientName: recipientMember.name,
+        });
       }
     }
 
