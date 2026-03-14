@@ -47,7 +47,7 @@ export const AIToolRoutes = () => (
     <Route path="/ai-follow-up-scheduler" element={<Navigate to="/ai-followup-scheduler" replace />} />
     <Route path="/ai-meeting-summarizer" element={<BrokerGuard><AIMeetingSummarizerPage /></BrokerGuard>} />
     <Route path="/ai-translation-hub" element={<AITranslationHubPage />} />
-    <Route path="/ai-video-tour-script" element={<AIVideoTourScriptPage />} />
+    <Route path="/ai-video-tour-script" element={<Navigate to="/toolkit/video-studio" replace />} />
     <Route path="/ai-contract-reviewer" element={<BrokerGuard><AIContractReviewerPage /></BrokerGuard>} />
     <Route path="/ai-document-generator" element={<AIDocumentGeneratorPage />} />
     <Route path="/ai-call-summarizer" element={<BrokerGuard><AICallSummarizerPage /></BrokerGuard>} />
