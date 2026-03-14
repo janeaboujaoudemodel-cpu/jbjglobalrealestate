@@ -700,7 +700,38 @@ export default function StampExportPage() {
                       style={{ backgroundColor: c.hex }}
                     />
                   ))}
-                </div>
+            </div>
+
+            {/* Standard Export Colors — mandatory 5 colors */}
+            <div className="bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.25)] p-5 space-y-3">
+              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
+                <Palette size={14} className="text-[hsl(var(--gold))]"/> Standard Export Colors
+              </p>
+              <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Click any standard color to instantly download a PNG in that ink.</p>
+              <div className="flex flex-wrap gap-2">
+                {STANDARD_EXPORT_COLORS.map(c => (
+                  <button key={c.hex} title={`Download in ${c.label}`}
+                    onClick={async () => {
+                      try {
+                        toast.info(`Generating ${c.label}…`);
+                        const colored = tintSvgFull(design.svg_source, c.hex);
+                        const blob = await svgToPng(colored, 1024, true);
+                        triggerDownload(blob, `${companySlug}_stamp_${c.label.toLowerCase().replace(/\s+/g, '_')}_1024px.png`);
+                        toast.success(`${c.label} downloaded!`);
+                      } catch { toast.error('Download failed'); }
+                    }}
+                    className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all hover:border-[hsl(var(--gold))] hover:scale-105 border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.02)] ${c.hex === '#ffffff' ? 'bg-[hsl(var(--muted))]' : ''}`}>
+                    <div className={`w-10 h-10 rounded-full shadow-md ${c.hex === '#ffffff' ? 'border-2 border-[hsl(var(--border))]' : 'border-2 border-white'}`} style={{ backgroundColor: c.hex }}/>
+                    <span className="text-[9px] text-[hsl(var(--foreground))] font-semibold">{c.label}</span>
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => { setPrimaryColor('#1B3A8C'); setSecondaryColor(undefined); setAccentColor(undefined); toast.success('Reset to Navy Ink standard'); }}
+                className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg border border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))] text-[10px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all">
+                Reset to Standard (Navy Ink)
+              </button>
+            </div>
               </div>
             </div>
 
