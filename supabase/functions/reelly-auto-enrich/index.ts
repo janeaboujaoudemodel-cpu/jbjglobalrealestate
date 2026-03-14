@@ -19,6 +19,10 @@ function json(status: number, body: unknown) {
 const originalServe = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  // ZERO TRUST: Verify owner identity
+  const auth = await requireOwnerAuth(req, corsHeaders);
+  if (auth.response) return auth.response;
+
   // Concurrency guard — skip if already running
   const gotLock = await acquireLock(FUNCTION_NAME, 12);
   if (!gotLock) {
