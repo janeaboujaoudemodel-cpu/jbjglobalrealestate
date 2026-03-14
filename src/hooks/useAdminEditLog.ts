@@ -37,6 +37,18 @@ export async function logAdminEdit(params: {
     changed_fields: params.changed_fields || null,
     summary: params.summary || null,
   });
+
+  // Dual-write to global audit
+  logGlobalAudit({
+    action: params.action,
+    entityType: params.entity_type,
+    entityId: params.entity_id,
+    entityName: params.entity_name,
+    module: params.entity_type,
+    changedFields: params.changed_fields,
+    description: params.summary || `${params.action} ${params.entity_type} ${params.entity_id}`,
+    criticality: params.action === "delete" ? "high" : "medium",
+  }).catch(() => {});
 }
 
 /**

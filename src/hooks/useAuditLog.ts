@@ -57,6 +57,18 @@ export function useAuditLog() {
         return { success: false, error: error.message };
       }
 
+      // Dual-write to global audit (fire-and-forget, trigger also does this but ensures frontend-originated events are captured)
+      logGlobalAudit({
+        action: actionType,
+        entityType: resourceType,
+        entityId: resourceId,
+        module: resourceType,
+        description,
+        metadata: details as Record<string, unknown>,
+        criticality: ["delete", "block", "unblock"].includes(actionType) ? "high" : "medium",
+      }).catch(() => {});
+      }
+
       return { success: true };
     } catch (err) {
       console.error("Audit log error:", err);
