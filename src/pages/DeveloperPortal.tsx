@@ -26,6 +26,7 @@ import {
   Rocket, Search, EyeOff, Settings, MapPin, Lock, ShieldCheck, ShieldOff, ToggleLeft, ToggleRight,
 } from "lucide-react";
 import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistration";
+import { DeveloperSelectDropdown } from "@/components/developer-portal/DeveloperSelectDropdown";
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
 import DeveloperMessageForm from "@/components/developer-portal/DeveloperMessageForm";
 import ExistingProjectsReview from "@/components/developer-portal/ExistingProjectsReview";
