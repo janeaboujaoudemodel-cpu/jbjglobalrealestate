@@ -190,6 +190,14 @@ export default function OwnerCommSettings() {
             className="mb-6"
           >
             <div className="flex items-center gap-4 bg-white/80 backdrop-blur-sm border-2 border-gold/30 rounded-2xl p-4 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate(-1)}
+                className="h-10 w-10 rounded-xl border border-gold/20 hover:bg-gold/10"
+              >
+                <ArrowLeft className="h-5 w-5 text-foreground" />
+              </Button>
               <div className="p-3 rounded-xl bg-gradient-to-br from-gold/20 to-gold/5 border-2 border-gold/30">
                 <Settings className="h-6 w-6 text-gold" />
               </div>
