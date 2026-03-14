@@ -34,6 +34,10 @@ export interface OfficialStampConfig {
   logoUrl?: string;
   showMonogram: boolean;
   showLogo: boolean;
+  /** Per-letter monogram color overrides keyed by character index */
+  monogramLetterColors?: Record<number, string>;
+  /** Monogram divider line color override */
+  monogramDividerColor?: string;
   inkColor?: string;
   fontFamily?: string;
   size?: number;
@@ -352,8 +356,8 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   if (config.showLocation && mode === 'BILINGUAL') {
     const locEn = config.locationTextEn || 'Dubai, UAE';
     const locAr = config.locationTextAr || 'دبي، الإمارات';
-    const locEnSafe = safeArcFontSize(locEn.toUpperCase(), clampedLocTextR, false, 10, ARC_SPREAD_LIMIT);
-    const locArSafe = safeArcFontSize(locAr, clampedLocTextR, true, 10, ARC_SPREAD_LIMIT);
+    const locEnSafe = safeArcFontSize(locEn.toUpperCase(), clampedLocTextR, false, 12, ARC_SPREAD_LIMIT);
+    const locArSafe = safeArcFontSize(locAr, clampedLocTextR, true, 12, ARC_SPREAD_LIMIT);
 
     locationContent = renderTopArcTextPath(
       locAr, cx, cy, clampedLocTextR, locArSafe.fontSize, arFont, ink, locArSafe.letterSpacing, true, 'loc-top', '600'
@@ -588,15 +592,23 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
         const baseSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
         const scaledSize = baseSize * centerScale;
         const upper = mono.toUpperCase();
-        // Locked brand rule: index 0,2 = ink color, index 1 = gold
+        const userLetterColors = config.monogramLetterColors;
+        const userDividerColor = config.monogramDividerColor;
+        // Per-letter coloring: user overrides > locked brand rule (index 0,2 = ink, index 1 = gold)
         const tspans = upper.split('').map((ch, i) => {
-          const fill = (i === 1 && upper.length >= 2) ? GOLD : ink;
+          let fill: string;
+          if (userLetterColors && userLetterColors[i] !== undefined) {
+            fill = userLetterColors[i];
+          } else {
+            fill = (i === 1 && upper.length >= 2) ? GOLD : ink;
+          }
           return `<tspan fill="${fill}">${ch}</tspan>`;
         }).join('');
+        const divColor = userDividerColor ?? GOLD;
         // Gold divider lines flanking the middle letter
         const divW = scaledSize * 0.6;
         const divY = cy + scaledSize * 0.45;
-        const divider = upper.length >= 2 ? `<line x1="${cx - divW}" y1="${divY}" x2="${cx + divW}" y2="${divY}" stroke="${GOLD}" stroke-width="1.2" opacity="0.8"/>` : '';
+        const divider = upper.length >= 2 ? `<line x1="${cx - divW}" y1="${divY}" x2="${cx + divW}" y2="${divY}" stroke="${divColor}" stroke-width="1.2" opacity="0.8"/>` : '';
         return `<text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
           font-family="${enFont}" font-size="${scaledSize}" font-weight="700" letter-spacing="2">${tspans}</text>${divider}`;
       }

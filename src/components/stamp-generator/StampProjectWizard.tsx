@@ -21,6 +21,7 @@ import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview'
 import { useStampHistory } from '@/hooks/useStampHistory';
 import { OFFICIAL_INK_BLUE, ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
 import { StampPresetLibrary, saveCustomPreset, type PresetConfig } from '@/components/stamp-generator/StampPresetLibrary';
+import { MonogramColorEditor, DEFAULT_MONOGRAM_COLORS, type MonogramLetterColors } from '@/components/stamp-generator/MonogramColorEditor';
 
 // UAE phone normalization
 function normalizePhone(raw: string): string {
@@ -160,6 +161,7 @@ interface FormState {
   separator_distance: number;
   center_content_size: number;
   selected_preset: string;
+  monogram_colors: MonogramLetterColors;
 }
 
 export default function StampProjectWizard() {
@@ -187,9 +189,10 @@ export default function StampProjectWizard() {
     show_license_number: false, show_location: true, business_type: '',
     separator_style: 'dot' as SeparatorStyle, ink_color: OFFICIAL_INK_BLUE,
     government_mode: false, arabic_font: 'Noto Naskh Arabic',
-    arabic_letter_spacing: 2, arabic_arc_spread: 80, arabic_font_weight: 'bold',
+    arabic_letter_spacing: 2, arabic_arc_spread: 88, arabic_font_weight: 'bold',
     arc_text_spacing: 2, circle_gap: 13, separator_distance: 50, center_content_size: 50,
     selected_preset: '',
+    monogram_colors: DEFAULT_MONOGRAM_COLORS,
   };
 
   const [form, setForm] = useState<FormState>(() => {
@@ -406,8 +409,7 @@ export default function StampProjectWizard() {
       setActiveTab('style');
     }
 
-    // Clear highlight after 2s
-    setTimeout(() => setSelectedElement(null), 2000);
+    // Persistent highlight — clears only when clicking a different element or outside
   }, []);
 
   const previewProps = {
@@ -427,6 +429,12 @@ export default function StampProjectWizard() {
     circleGap: form.circle_gap,
     centerContentSize: form.center_content_size,
     onElementClick: handleElementClick,
+    monogramLetterColors: form.monogram_colors.allLetters
+      ? undefined  // allLetters means user set uniform color, let template handle
+      : Object.keys(form.monogram_colors.letters).length > 0
+        ? form.monogram_colors.letters
+        : undefined,
+    monogramDividerColor: form.monogram_colors.divider || undefined,
   };
 
   return (
@@ -829,7 +837,7 @@ export default function StampProjectWizard() {
                           <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Spread</label>
                           <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.arabic_arc_spread}%</span>
                         </div>
-                        <input type="range" min={20} max={80} step={1} value={form.arabic_arc_spread}
+                        <input type="range" min={20} max={100} step={1} value={form.arabic_arc_spread}
                           onChange={e => set('arabic_arc_spread', parseInt(e.target.value))}
                           className="w-full h-2 accent-[hsl(var(--gold))]" />
                       </div>
@@ -907,12 +915,22 @@ export default function StampProjectWizard() {
                   </div>
 
                   {form.icon_style === 'MONOGRAM' && (
-                    <div>
-                      <Label className="text-[11px] font-medium mb-1 block">Monogram Text (1–3 letters)</Label>
-                      <Input value={form.monogram_text} onChange={e => set('monogram_text', e.target.value.slice(0, 3))}
-                        placeholder={form.company_name.slice(0, 2) || 'JJ'} maxLength={3} className="uppercase h-8 text-sm"/>
-                      <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">Leave blank for auto initials</p>
-                    </div>
+                    <>
+                      <div>
+                        <Label className="text-[11px] font-medium mb-1 block">Monogram Text (1–3 letters)</Label>
+                        <Input value={form.monogram_text} onChange={e => set('monogram_text', e.target.value.slice(0, 3))}
+                          placeholder={form.company_name.slice(0, 2) || 'JJ'} maxLength={3} className="uppercase h-8 text-sm"/>
+                        <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">Leave blank for auto initials</p>
+                      </div>
+                      <div className="border border-[hsl(var(--border))] rounded-xl p-3">
+                        <MonogramColorEditor
+                          monogramText={form.monogram_text || form.company_name.slice(0, 3)}
+                          colors={form.monogram_colors}
+                          onChange={(colors) => set('monogram_colors', colors)}
+                          defaultColor={form.ink_color}
+                        />
+                      </div>
+                    </>
                   )}
 
                   {form.icon_style === 'UPLOADED_LOGO' && (
@@ -1015,7 +1033,7 @@ export default function StampProjectWizard() {
         </div>
 
         {/* Center: Fixed preview area — takes remaining space */}
-        <div className="flex-1 flex items-center justify-center min-h-0 p-6 bg-[hsl(var(--pearl-1)/0.3)]">
+        <div className="flex-1 flex items-center justify-center min-h-0 p-6 bg-[hsl(var(--pearl-1)/0.3)]" onClick={() => setSelectedElement(null)}>
           <div className="flex flex-col items-center gap-4">
             <div
               id="stamp-preview-container"
