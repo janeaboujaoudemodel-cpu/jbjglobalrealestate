@@ -872,7 +872,7 @@ const DeveloperPortal = () => {
         </div>
 
         {/* Owner Mode Banner */}
-        {isOwner && (
+        {isOwner && !isDeveloperMode && (
           <div className="container mx-auto px-4 py-4 max-w-4xl">
             <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-gold/10 to-gold/5 border-2 border-gold/30">
               <div className="flex items-center gap-3">
