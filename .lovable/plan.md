@@ -1,72 +1,128 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: WAF / Edge Defense / DDoS / Bot Protection (Security Layer 4E)
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Current State
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+**Already in place:**
+- `enforceRateLimit` middleware used on 12 edge functions (auth, OTP, contact, admin, support)
+- `checkIPBlocklist` with auto-block after 5 rate limit violations (12h block)
+- `detectCredentialStuffing` — 10 failures in 30min → critical event
+- `AntiBot` component — client-side behavioral analysis (mouse, scroll, click timing, honeypot)
+- `ObfuscationLayer` — decoy DOM elements for scraper confusion
+- `_headers` — CSP, X-Frame-Options, nosniff
+- Origin validation in `auth-utils.ts` (CORS allowlist)
+- `record-login-event` — impossible travel + new device detection
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+**Gaps identified:**
+- **72 of 84 edge functions have NO rate limiting** — including all AI tools, data sync, scraping, and internal endpoints
+- **No request-body-size enforcement** — large payloads can exhaust resources
+- **No user-agent blocking** — known bot UAs (curl, python-requests, scrapy) not filtered
+- **No progressive penalty** — repeated offenders get same 12h block regardless of severity
+- **AntiBot is client-only** — easily bypassed; no server-side bot signal verification
+- **No global middleware** — each function must manually import/call rate limiting
+- **Admin/owner endpoints inconsistently protected** — some use `requireOwnerAuth` without rate limiting
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+### Implementation
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+#### 1. Create `supabase/functions/_shared/waf-middleware.ts`
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+A unified "WAF layer" function that combines all edge defenses into a single call:
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+```typescript
+export async function enforceWAF(req, config): Promise<WAFResult>
+```
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+This will chain:
+1. **Request size check** — reject bodies > 1MB (configurable per function)
+2. **User-agent filter** — block known bot UAs (python-requests, scrapy, wget, curl without browser headers, headless Chrome identifiers)
+3. **Origin validation** — reject requests from non-allowed origins on browser-facing functions
+4. **IP blocklist check** — existing `checkIPBlocklist`
+5. **Rate limiting** — existing `enforceRateLimit` with per-function config
+6. **Credential stuffing check** — on auth-related functions
+7. Return `{ allowed, response, clientIp, serviceClient }` — same pattern as existing middleware
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+Config tiers (preset profiles):
+- `"auth"` — 5 req/15min, credential stuffing check, strict UA filter
+- `"ai"` — 10 req/5min per user, 30 req/15min per IP
+- `"admin"` — 20 req/15min, owner-auth required
+- `"public"` — 60 req/5min per IP, basic UA filter
+- `"internal"` — 5 req/5min, owner-auth + strict origin
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+#### 2. Apply WAF to Unprotected Edge Functions
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+Update the highest-risk unprotected functions to use `enforceWAF`:
 
-### Files Changed
-| File | Action |
+**AI tools (15 functions)** — `ai-virtual-staging`, `ai-price-predictor`, `ai-neighborhood-insights`, `ai-lead-qualification`, `ai-followup-scheduler`, `ai-objection-handler`, `ai-market-report`, `ai-competitor-analysis`, `ai-roi-calculator`, `ai-meeting-summarizer`, `ai-translation-hub`, `ai-video-tour-script`, `ai-contract-reviewer`, `ai-document-generator`, `ai-property-analyzer` — apply `"ai"` tier
+
+**Admin/sync functions** — `reelly-api-sync`, `daily-reelly-auto-sync`, `reelly-backfill-projects`, `sync-developer-images`, `enrich-pending-imports`, `provident-enrich-projects` — apply `"internal"` tier
+
+**Public-facing** — `account-lifecycle`, `handover-alerts`, `record-login-event` — apply `"public"` tier
+
+#### 3. Progressive Penalty Escalation
+
+Update `autoBlockIP` in `ai-utils.ts`:
+- 1st block: 12 hours
+- 2nd block: 48 hours  
+- 3rd block: 7 days
+- 4th+ block: 30 days (semi-permanent)
+- Calculate from `block_count` already tracked in `ip_blocklist`
+
+#### 4. Bot User-Agent Detection
+
+Add to `waf-middleware.ts`:
+
+```typescript
+const BOT_UA_PATTERNS = [
+  /python-requests/i, /scrapy/i, /wget/i, /curl\//i,
+  /HeadlessChrome/i, /PhantomJS/i, /Selenium/i,
+  /bot/i, /spider/i, /crawl/i, /slurp/i,
+];
+// Exception: Googlebot, Bingbot (legitimate crawlers for SEO)
+const ALLOWED_BOTS = [/Googlebot/i, /bingbot/i, /Applebot/i];
+```
+
+Log blocked bot attempts to `api_security_events` with severity `medium`.
+
+#### 5. Request Body Size Enforcement
+
+In `waf-middleware.ts`, check `Content-Length` header and reject if > configured max (default 1MB, 5MB for file-upload functions).
+
+#### 6. Enhanced Security Headers
+
+Update `public/_headers` to add:
+- `X-Permitted-Cross-Domain-Policies: none`
+- Tighten CSP `connect-src` to include only production domains
+- Add `Cross-Origin-Opener-Policy: same-origin`
+- Add `Cross-Origin-Resource-Policy: same-origin`
+
+#### 7. Edge Function: `waf-health-check`
+
+A verification function (owner-only) that:
+- Lists all edge functions and their WAF protection status
+- Shows current IP blocklist stats
+- Shows rate limit violation trends (last 24h)
+- Returns a JSON report for the security dashboard
+
+---
+
+### Files Summary
+
+| File | Change |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| **New**: `supabase/functions/_shared/waf-middleware.ts` | Unified WAF middleware |
+| **New**: `supabase/functions/waf-health-check/index.ts` | WAF status verification |
+| **Update**: `supabase/functions/_shared/ai-utils.ts` | Progressive penalty escalation |
+| **Update**: `public/_headers` | Additional security headers |
+| **Update**: ~20 edge functions | Add `enforceWAF` calls |
+| **Update**: `supabase/config.toml` | Register new function |
+
+### Implementation Order
+1. Create `waf-middleware.ts` with tiered profiles
+2. Update `ai-utils.ts` for progressive penalties
+3. Apply WAF to AI tool functions (highest abuse risk)
+4. Apply WAF to admin/sync functions
+5. Apply WAF to remaining public functions
+6. Harden `_headers`
+7. Create `waf-health-check` verification function
+
