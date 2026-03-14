@@ -279,9 +279,12 @@ export default function StampGeneratorPage() {
   const generateConcepts = useCallback(async (proj?: any) => {
     const p = proj || project;
     if (!p) return;
-    setGenerating(true);
+    // Only show center spinner on very first generation (no standard yet)
+    const isFirstGen = !standardConcept;
+    if (isFirstGen) setGenerating(true);
+    setGeneratingInPanel(true);
     setBlocked(false);
-    setSvgOverrides({});
+    // Don't clear svgOverrides — preserve standard edits
     try {
       if (session?.access_token) {
         const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
@@ -291,7 +294,7 @@ export default function StampGeneratorPage() {
         });
         if (res.ok) {
           const json = await res.json();
-          if (json.blocked) { setBlocked(true); setGenerating(false); return; }
+          if (json.blocked) { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); return; }
           if (json.concepts?.length) {
             const { data: saved } = await supabase
               .from('stamp_designs')
@@ -301,12 +304,18 @@ export default function StampGeneratorPage() {
               .order('created_at', { ascending: false })
               .limit(11);
             if (saved && saved.length > 0) {
-              setConcepts(saved.map((d: any) => ({
+              const newConcepts = saved.map((d: any) => ({
                 id: d.id, templateKey: d.template_key || 'classic-double',
                 label: (d.template_key || 'classic-double').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
-                tags: [], svgSource: d.svg_source || '', isFavorite: false,
-              })));
+                tags: [] as string[], svgSource: d.svg_source || '', isFavorite: false,
+              }));
+              setConcepts(newConcepts);
+              if (!standardConcept && newConcepts[0]) {
+                setStandardConcept(newConcepts[0]);
+                setSelectedId(newConcepts[0].id);
+              }
               setGenerating(false);
+              setGeneratingInPanel(false);
               return;
             }
           }
@@ -314,11 +323,16 @@ export default function StampGeneratorPage() {
       }
     } catch (_) {}
     const clientConcepts = generateStampConcepts(project ? { ...project, ...p } : p);
-    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); return; }
+    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); return; }
     setConcepts(clientConcepts);
-    if (clientConcepts.length > 0 && !selectedId) setSelectedId(clientConcepts[0].id);
+    // Set standard on first generation
+    if (!standardConcept && clientConcepts.length > 0) {
+      setStandardConcept(clientConcepts[0]);
+      setSelectedId(clientConcepts[0].id);
+    }
     setGenerating(false);
-  }, [project, session, projectId]);
+    setGeneratingInPanel(false);
+  }, [project, session, projectId, standardConcept]);
 
   async function toggleFavorite(concept: StampDesignConcept) {
     setTogglingFav(concept.id);
