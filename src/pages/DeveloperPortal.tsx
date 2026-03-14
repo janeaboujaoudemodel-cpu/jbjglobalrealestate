@@ -1403,7 +1403,7 @@ const DeveloperPortal = () => {
                 <Card className="border-2 border-gold/30">
                   <CardHeader>
                     <CardTitle className="text-sm flex items-center gap-2 text-foreground">
-                      <CheckCircle className="w-4 h-4 text-gold" /> Your Interest Registrations
+                      <CheckCircle className="w-4 h-4 text-gold" /> Your Launch Interests
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
