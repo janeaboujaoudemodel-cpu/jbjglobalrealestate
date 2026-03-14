@@ -104,6 +104,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [statusFilter, setStatusFilter] = useState<"all" | "complete" | "needs_work">("all");
   // Source filter: "all" | "reelly" | "manual" | "provident"
   const [sourceFilter, setSourceFilter] = useState<"all" | "reelly" | "manual" | "provident">("all");
+  // Search & developer filter
+  const [searchQuery, setSearchQuery] = useState("");
+  const [developerFilter, setDeveloperFilter] = useState("all");
+  const [distinctDevelopers, setDistinctDevelopers] = useState<string[]>([]);
   // Confirmation dialog state
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [confirmDialogMode, setConfirmDialogMode] = useState<"all" | "selected">("all");
