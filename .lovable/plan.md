@@ -1,72 +1,139 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: Security Operations + Backup + Recovery + Incident Readiness
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Current State
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+**Already exists:**
+- `db-health-check` edge function — monitors DB latency, connection count, active locks
+- `ai_tool_versions` table — versioned AI tool history with restore capability
+- `project_change_requests` — before/after tracking for listing/project changes
+- `global_audit_events` — immutable audit log (Session 12)
+- `api_security_events` — rate limit hits, auth failures (Session 14)
+- `OwnerSafetyPage` — kill switches for AI features (local state only)
+- Multiple repair/restore edge functions exist (repair-project-images, restore-developer-logos, etc.)
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+**What's missing:**
+- No backup tracking or snapshot system
+- No restore test framework
+- No incident readiness dashboard consolidating health + security + backup status
+- No deployment rollback tracking
+- No automated security checklist engine
+- No recovery point management for templates/permissions
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+### Implementation
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+#### 1. Database Migration
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+**New table: `system_backup_records`** — Track backup/snapshot events:
+```
+id (uuid PK), backup_type (text: database/storage/config/template/audit_log/tool_version),
+status (text: pending/completed/failed/verified),
+source_module (text), snapshot_data (jsonb nullable),
+file_path (text nullable), size_bytes (bigint nullable),
+restore_tested (bool default false), restore_tested_at (timestamptz),
+restore_test_result (text), notes (text),
+created_by (uuid), created_at (timestamptz default now())
+```
+Owner-only RLS. No DELETE.
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+**New table: `security_checklist_runs`** — Periodic security checklist results:
+```
+id (uuid PK), run_type (text: scheduled/manual),
+checks (jsonb), -- array of {name, status, severity, details}
+passed_count (int), failed_count (int), warning_count (int),
+overall_status (text: healthy/warning/critical),
+created_at (timestamptz default now())
+```
+Owner-only RLS. No UPDATE/DELETE.
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+**New table: `deployment_records`** — Track releases and rollback points:
+```
+id (uuid PK), version_label (text), deployed_at (timestamptz default now()),
+is_stable (bool default false), notes (text),
+impacted_modules (text[]), rollback_available (bool default true),
+rolled_back (bool default false), rolled_back_at (timestamptz),
+created_by (uuid)
+```
+Owner-only RLS.
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+#### 2. Edge Function: `run-security-checklist`
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+Automated checks:
+- DB connectivity (reuse db-health-check logic)
+- RLS policy count on critical tables (ensure not dropped)
+- Rate limit table health (stale entries)
+- IP blocklist status
+- Recent audit log anomalies (>100 events/hour from single user)
+- Failed edge function invocations (from api_security_events)
+- Backup freshness (last backup age)
+- Webhook replay log cleanup status
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+Returns structured checklist result, inserts into `security_checklist_runs`.
 
-### Files Changed
-| File | Action |
+#### 3. Edge Function: `create-config-snapshot`
+
+Creates point-in-time snapshots of:
+- App settings (`app_settings` table dump)
+- AI tool versions (current published versions)
+- Template configurations (document templates metadata)
+- Permission/role assignments (`user_roles` snapshot)
+
+Stores as JSON in `system_backup_records` with `backup_type: 'config'`.
+
+#### 4. Owner Incident Readiness Dashboard
+
+**New: `src/pages/owner/IncidentReadinessPanel.tsx`** — at `/owner/incident-readiness`
+
+**4 sections:**
+
+| Section | Content |
+|---------|---------|
+| **System Health** | DB latency, edge function status, last health check result, active locks count |
+| **Backup Status** | Latest backup per type, restore test results, backup freshness indicators (green/amber/red) |
+| **Security Checklist** | Latest checklist run with pass/fail/warning breakdown, "Run Now" button, history |
+| **Incident & Recovery** | Deployment history, stable release indicator, rollback guidance, unresolved security alerts from `api_security_events` and `suspicious_admin_alerts` |
+
+**Key features:**
+- "Create Snapshot" button — calls `create-config-snapshot`
+- "Run Security Check" button — calls `run-security-checklist`
+- "Test Restore" button — loads a snapshot and validates its structure, marks `restore_tested = true`
+- Deployment timeline showing stable/unstable releases
+- Rollback guidance panel with impacted modules list
+
+#### 5. Restore Testing
+
+The "Test Restore" flow:
+1. Select a backup record from `system_backup_records`
+2. Parse `snapshot_data` JSON, validate all expected keys exist
+3. For config snapshots: compare current app_settings against snapshot to show drift
+4. For AI tool versions: verify referenced tool IDs still exist
+5. Mark record as `restore_tested = true` with timestamp and result
+6. This is a **read-only validation** — no actual data overwrite
+
+#### 6. Route Registration
+
+Add to `OwnerRoutes.tsx`:
+```tsx
+<Route path="incident-readiness" element={<IncidentReadinessPanel />} />
+```
+
+### Files Summary
+
+| File | Change |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| **Migration** | Create `system_backup_records`, `security_checklist_runs`, `deployment_records` with owner-only RLS |
+| **New**: `supabase/functions/run-security-checklist/index.ts` | Automated security health checks |
+| **New**: `supabase/functions/create-config-snapshot/index.ts` | Config/template/permission snapshots |
+| **New**: `src/pages/owner/IncidentReadinessPanel.tsx` | Unified incident readiness dashboard |
+| **New**: `src/hooks/useIncidentReadiness.ts` | Data fetching for backup records, checklist runs, deployments |
+| **Update**: `src/routes/OwnerRoutes.tsx` | Add route |
+
+### Implementation Order
+1. Database migration (3 tables)
+2. `create-config-snapshot` edge function
+3. `run-security-checklist` edge function
+4. `useIncidentReadiness` hook
+5. `IncidentReadinessPanel` dashboard
+6. Route registration
+
