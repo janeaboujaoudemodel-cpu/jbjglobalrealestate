@@ -5,7 +5,7 @@ import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer'
 import { useNavigate } from 'react-router-dom';
 import {
   Paperclip, Stamp, Signature, FileText, CreditCard,
-  Image, Mail, PenTool, X, Download, Eye
+  Image, Mail, PenTool, X, Download, Eye, Shield, Badge as BadgeIcon
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
