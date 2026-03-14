@@ -3,9 +3,10 @@
  * Uses the Official Standard Template for bilingual stamps.
  * Uses corporate standard blue ink (#1B3A8C) as default.
  * Default bilingual: Arabic top / English bottom.
+ * Supports click-to-edit: clicking SVG elements triggers onElementClick callback.
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useEffect, useCallback } from 'react';
 import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType, type CenterContentMode, type CenterIconType } from '@/lib/stampOfficialTemplate';
 
 type StampType = 'ROUND' | 'OVAL' | 'RECTANGLE' | 'SQUARE';
@@ -28,24 +29,29 @@ export interface LiveStampPreviewProps {
   monogramText?: string;
   uploadedLogoUrl?: string;
   languageMode: 'EN' | 'AR' | 'BILINGUAL';
-  /** Whether to reverse language positions (Arabic top, English bottom) — DEFAULT TRUE */
   languageReversed?: boolean;
-  /** Whether to show license number */
   showLicenseNumber?: boolean;
-  /** Whether to show location */
   showLocation?: boolean;
-  /** Separator style for arc dividers */
   separatorStyle?: SeparatorStyle;
-  /** Size of the SVG canvas in px */
   size?: number;
-  /** Ink color override */
   inkColor?: string;
-  /** Arabic city text */
   arabicCity?: string;
-  /** Center content mode */
   centerMode?: CenterContentMode;
-  /** Center icon type (when centerMode = 'icon') */
   centerIcon?: CenterIconType;
+  /** Arabic arc spread (0.4 – 0.95) */
+  arabicArcSpread?: number;
+  /** Arabic letter spacing override in px */
+  arabicLetterSpacing?: number;
+  /** Arabic font family override */
+  arabicFont?: string;
+  /** Arabic font weight override */
+  arabicFontWeight?: string;
+  /** Circle gap as % of radius */
+  circleGap?: number;
+  /** Center content scale factor */
+  centerContentSize?: number;
+  /** Click-to-edit callback: element id clicked */
+  onElementClick?: (elementId: string) => void;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
@@ -57,12 +63,10 @@ const FONT_FAMILIES: Record<TypographyStyle, string> = {
   ARABIC_MODERN: '"Arabic Typesetting", "Noto Naskh Arabic", serif',
 };
 
-/** Stroke width per theme */
 const THEME_STROKE: Record<StyleTheme, number> = {
   CLASSIC: 1.8, MODERN: 1.2, MINIMAL: 0.8, LUXURY: 2.5, BOLD: 3.2, VINTAGE: 1.6,
 };
 
-/** Whether a theme includes a secondary inner ring */
 const THEME_RING: Record<StyleTheme, boolean> = {
   CLASSIC: true, MODERN: false, MINIMAL: false, LUXURY: true, BOLD: false, VINTAGE: true,
 };
@@ -123,12 +127,35 @@ export function LiveStampPreview({
   arabicCity = '',
   centerMode,
   centerIcon,
+  arabicArcSpread,
+  arabicLetterSpacing,
+  arabicFont,
+  arabicFontWeight,
+  circleGap,
+  centerContentSize,
+  onElementClick,
 }: LiveStampPreviewProps) {
   const displayName = companyName || 'Your Company Name';
   const fontFamily = FONT_FAMILIES[typographyStyle];
   const sw = THEME_STROKE[styleTheme];
   const hasRing = THEME_RING[styleTheme];
   const ink = inkColor || OFFICIAL_INK_BLUE;
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Attach click handlers to data-stamp-element nodes
+  useEffect(() => {
+    if (!onElementClick || !containerRef.current) return;
+    const handler = (e: MouseEvent) => {
+      const target = (e.target as Element)?.closest?.('[data-stamp-element]');
+      if (target) {
+        const elementId = target.getAttribute('data-stamp-element') || '';
+        onElementClick(elementId);
+      }
+    };
+    const el = containerRef.current;
+    el.addEventListener('click', handler);
+    return () => el.removeEventListener('click', handler);
+  }, [onElementClick]);
 
   const svg = useMemo(() => {
     const S = size;
@@ -145,7 +172,6 @@ export function LiveStampPreview({
       const mono = monogramText || deriveMonogram(displayName);
       const locationEn = showLocation ? [city, country].filter(Boolean).join(', ') || 'Dubai, UAE' : '';
       
-      // Build Arabic city text
       const ARABIC_CITY_MAP: Record<string, string> = {
         'dubai': 'دبي، الإمارات', 'abu dhabi': 'أبوظبي، الإمارات',
         'sharjah': 'الشارقة، الإمارات', 'ajman': 'عجمان، الإمارات',
@@ -153,6 +179,11 @@ export function LiveStampPreview({
         'umm al quwain': 'أم القيوين، الإمارات',
       };
       const locAr = arabicCity || (city ? ARABIC_CITY_MAP[city.toLowerCase()] || `${city}، الإمارات` : 'دبي، الإمارات');
+
+      // Convert slider values to config params
+      const arcSpreadVal = arabicArcSpread != null ? (arabicArcSpread / 100) * 1.1 : undefined;
+      const circleGapVal = circleGap != null ? circleGap : undefined;
+      const centerScaleVal = centerContentSize != null ? centerContentSize / 50 : undefined;
 
       return generateOfficialStampSVG({
         companyNameEn: displayName,
@@ -174,6 +205,12 @@ export function LiveStampPreview({
         borderStyle: borderStyle as BorderStyleType,
         centerMode: centerMode || (iconStyle === 'UPLOADED_LOGO' ? 'logo' : iconStyle === 'MONOGRAM' ? 'monogram' : undefined),
         centerIcon,
+        arabicArcSpread: arcSpreadVal,
+        arabicLetterSpacing,
+        arabicFont,
+        arabicFontWeight,
+        circleGap: circleGapVal,
+        centerContentScale: centerScaleVal,
       });
     }
 
@@ -338,12 +375,14 @@ export function LiveStampPreview({
     stampType, styleTheme, borderStyle, typographyStyle, density,
     iconStyle, monogramText, uploadedLogoUrl, languageMode, languageReversed,
     showLicenseNumber, showLocation, separatorStyle, fontFamily, sw, hasRing, size, ink, arabicCity,
-    centerMode, centerIcon,
+    centerMode, centerIcon, arabicArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight,
+    circleGap, centerContentSize,
   ]);
 
   return (
     <div
-      className="flex items-center justify-center"
+      ref={containerRef}
+      className={`flex items-center justify-center ${onElementClick ? 'cursor-pointer' : ''}`}
       style={{ width: size, height: size }}
       dangerouslySetInnerHTML={{ __html: svg }}
     />

@@ -379,6 +379,20 @@ export default function StampProjectWizard() {
     img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
   }, [form.company_name]);
 
+  const handleElementClick = useCallback((elementId: string) => {
+    if (elementId.includes('top-arc')) {
+      setActiveTab('company');
+      setTimeout(() => document.querySelector<HTMLInputElement>('[dir="rtl"]')?.focus(), 100);
+    } else if (elementId.includes('bottom-arc')) {
+      setActiveTab('company');
+      setTimeout(() => document.querySelector<HTMLInputElement>('[placeholder*="Acme"]')?.focus(), 100);
+    } else if (elementId.includes('center') || elementId.includes('registration')) {
+      setActiveTab('logo');
+    } else if (elementId.includes('separator')) {
+      setActiveTab('style');
+    }
+  }, []);
+
   const previewProps = {
     companyName: form.company_name, arabicCompanyName: form.arabic_company_name,
     city: form.city_optional, country: form.country_optional,
@@ -389,6 +403,13 @@ export default function StampProjectWizard() {
     languageReversed: form.language_reversed, showLicenseNumber: form.show_license_number,
     showLocation: form.show_location, separatorStyle: form.separator_style,
     inkColor: form.ink_color, arabicCity: form.arabic_city,
+    arabicArcSpread: form.arabic_arc_spread,
+    arabicLetterSpacing: form.arabic_letter_spacing,
+    arabicFont: form.arabic_font,
+    arabicFontWeight: form.arabic_font_weight,
+    circleGap: form.circle_gap,
+    centerContentSize: form.center_content_size,
+    onElementClick: handleElementClick,
   };
 
   return (
@@ -445,21 +466,7 @@ export default function StampProjectWizard() {
             <TabsContent value="company" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-3">
-                  {/* Preset Library */}
-                  <StampPresetLibrary
-                    onSelectPreset={handlePresetSelect}
-                    selectedPresetId={form.selected_preset ? undefined : undefined}
-                  />
-                  {form.selected_preset && (
-                    <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)]">
-                      <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border-[hsl(var(--gold)/0.3)] text-[8px]">
-                        Based on: {form.selected_preset}
-                      </Badge>
-                      <button onClick={() => set('selected_preset', '')} className="text-[8px] text-[hsl(var(--muted-foreground))] hover:text-destructive ml-auto">
-                        <X size={10} />
-                      </button>
-                    </div>
-                  )}
+                  {/* Smart Auto-Fill from Trade License — primary entry */}
 
                   {/* Save as Custom Template */}
                   {savePresetOpen ? (
@@ -745,18 +752,30 @@ export default function StampProjectWizard() {
                     </div>
                   </div>
 
-                  {/* Government Style Mode */}
-                  <div className="border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.04)] rounded-xl p-3 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Landmark size={12} className="text-[hsl(var(--gold))]" />
-                        <span className="text-[11px] font-semibold">Government Style Mode</span>
-                      </div>
-                      <Switch checked={form.government_mode} onCheckedChange={v => set('government_mode', v)} />
+                  {/* Color Palette Swatches */}
+                  <div>
+                    <Label className="text-[11px] font-medium mb-1.5 block">Quick Colors</Label>
+                    <div className="flex gap-1.5 flex-wrap">
+                      {[
+                        { color: '#1B3A8C', label: 'Navy' },
+                        { color: '#000000', label: 'Black' },
+                        { color: '#8B0000', label: 'Red' },
+                        { color: '#0B5345', label: 'Green' },
+                        { color: '#4A235A', label: 'Purple' },
+                        { color: '#1C2833', label: 'Charcoal' },
+                      ].map(swatch => (
+                        <button key={swatch.color} type="button"
+                          onClick={() => set('ink_color', swatch.color)}
+                          className={`flex flex-col items-center gap-0.5 p-1.5 rounded-lg border-2 transition-all ${
+                            form.ink_color === swatch.color
+                              ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]'
+                              : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                          }`}>
+                          <div className="w-6 h-6 rounded-full border border-[hsl(var(--border))]" style={{ backgroundColor: swatch.color }} />
+                          <span className="text-[8px] font-medium">{swatch.label}</span>
+                        </button>
+                      ))}
                     </div>
-                    <p className="text-[8px] text-[hsl(var(--muted-foreground))]">
-                      Strict official format: 8px outer ring, no decoration, centered bold serif, navy/black only
-                    </p>
                   </div>
 
                   {/* Arabic Font Controls */}
@@ -960,7 +979,12 @@ export default function StampProjectWizard() {
               <LiveStampPreview {...previewProps} size={380} />
             </div>
             <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center max-w-[300px]">
-              {form.company_name || <span className="italic">Enter company name to see live preview</span>}
+              {form.company_name ? (
+                <>
+                  {form.company_name}
+                  <span className="block text-[9px] mt-0.5 opacity-70">Click any element to edit</span>
+                </>
+              ) : <span className="italic">Enter company name to see live preview</span>}
             </p>
           </div>
         </div>

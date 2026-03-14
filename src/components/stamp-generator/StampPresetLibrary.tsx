@@ -88,11 +88,11 @@ const BUILT_IN_PRESETS: StampPreset[] = [
     },
   },
   {
-    id: 'government',
-    name: 'Government Official',
+    id: 'premium-official',
+    name: 'Premium Official',
     description: 'Strict official format — thick outer ring, minimal decoration, centered layout',
     icon: <Landmark size={16} />,
-    tags: ['Government', 'Official'],
+    tags: ['Premium', 'Official'],
     config: {
       style_theme: 'BOLD', border_style: 'RING', typography_style: 'SERIF',
       density: 5, stamp_type: 'ROUND', separator_style: 'line',
