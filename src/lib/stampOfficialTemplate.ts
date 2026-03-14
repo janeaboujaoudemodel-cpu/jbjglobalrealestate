@@ -297,27 +297,42 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   let separatorContent = '';
 
   if (mode === 'BILINGUAL') {
-    const topText = config.companyNameAr;
-    const bottomText = config.companyNameEn.toUpperCase();
-    const topSafe = safeArcFontSize(topText, clampedTextArcR, true, 17, arabicSpread);
-    const bottomSafe = safeArcFontSize(bottomText, clampedTextArcR, false, 15, englishSpread);
-    const topLS = config.arabicLetterSpacing ?? topSafe.letterSpacing;
-    const topFW = config.arabicFontWeight === 'normal' ? '600' : '800';
+    // Respect arabicOnTop: when true (default), Arabic on top arc, English on bottom
+    // When false, English on top arc, Arabic on bottom
+    const arText = config.companyNameAr || 'اسم الشركة';
+    const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
+    const arSafe = safeArcFontSize(arText, clampedTextArcR, true, 17, arabicSpread);
+    const enSafe = safeArcFontSize(enText, clampedTextArcR, false, 15, englishSpread, 5);
+    const arLS = config.arabicLetterSpacing ?? arSafe.letterSpacing;
+    const arFW = config.arabicFontWeight === 'normal' ? '600' : '800';
 
-    topArcContent = renderTopArcTextPath(
-      topText || 'اسم الشركة', cx, cy, clampedTextArcR, topSafe.fontSize, arFont, ink,
-      topLS, true, 'top-arc', topFW
-    );
-    bottomArcContent = renderBottomArcTextPath(
-      bottomText || 'COMPANY NAME', cx, cy, clampedTextArcR, bottomSafe.fontSize, enFont, ink,
-      bottomSafe.letterSpacing, false, 'bottom-arc'
-    );
+    if (config.arabicOnTop !== false) {
+      // Arabic top, English bottom (default)
+      topArcContent = renderTopArcTextPath(
+        arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
+        arLS, true, 'top-arc', arFW
+      );
+      bottomArcContent = renderBottomArcTextPath(
+        enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
+        enSafe.letterSpacing, false, 'bottom-arc'
+      );
+    } else {
+      // English top, Arabic bottom
+      topArcContent = renderTopArcTextPath(
+        enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
+        enSafe.letterSpacing, false, 'top-arc'
+      );
+      bottomArcContent = renderBottomArcTextPath(
+        arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
+        arLS, true, 'bottom-arc', arFW
+      );
+    }
     separatorContent = renderSeparators(cx, cy, clampedTextArcR, config.separatorStyle, ink);
 
   } else if (mode === 'EN') {
     // English only — company name on top arc, location on bottom arc (all English)
     const topText = config.companyNameEn.toUpperCase() || 'COMPANY NAME';
-    const topSafe = safeArcFontSize(topText, clampedTextArcR, false, 15, englishSpread);
+    const topSafe = safeArcFontSize(topText, clampedTextArcR, false, 15, englishSpread, 5);
     topArcContent = renderTopArcTextPath(
       topText, cx, cy, clampedTextArcR, topSafe.fontSize, enFont, ink,
       topSafe.letterSpacing, false, 'top-arc'
@@ -325,7 +340,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     // Location on bottom arc
     if (config.showLocation) {
       const locEn = config.locationTextEn || 'Dubai, UAE';
-      const botSafe = safeArcFontSize(locEn.toUpperCase(), clampedTextArcR, false, 12, englishSpread);
+      const botSafe = safeArcFontSize(locEn.toUpperCase(), clampedTextArcR, false, 12, englishSpread, 5);
       bottomArcContent = renderBottomArcTextPath(
         locEn.toUpperCase(), cx, cy, clampedTextArcR, botSafe.fontSize, enFont, ink,
         botSafe.letterSpacing, false, 'bottom-arc', '600'
