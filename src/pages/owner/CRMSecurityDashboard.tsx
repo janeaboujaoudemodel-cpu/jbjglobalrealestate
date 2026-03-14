@@ -18,7 +18,7 @@ interface SecurityEvent {
   id: string;
   user_id: string;
   event_type: string;
-  details: Record<string, unknown>;
+  details: any;
   user_agent: string | null;
   created_at: string;
 }

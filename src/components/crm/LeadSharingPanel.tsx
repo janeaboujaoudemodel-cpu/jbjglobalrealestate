@@ -54,10 +54,10 @@ export default function LeadSharingPanel({ leadId, isOwner }: LeadSharingPanelPr
 
   const fetchMembers = async () => {
     const { data } = await supabase
-      .from("crm_team_members")
+      .from("crm_team_members" as any)
       .select("user_id, display_name")
       .eq("is_active", true);
-    if (data) setMembers(data);
+    if (data) setMembers(data as any[]);
   };
 
   const getExpiryDate = (val: string): string | null => {

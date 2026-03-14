@@ -75,12 +75,12 @@ export function useCRMSessionSecurity(): UseCRMSessionSecurityReturn {
 
 async function logSecurityEventDirect(userId: string, eventType: string, details: Record<string, unknown>) {
   try {
-    await supabase.from("crm_security_events").insert({
+    await supabase.from("crm_security_events").insert([{
       user_id: userId,
       event_type: eventType,
-      details,
+      details: details as any,
       user_agent: navigator.userAgent,
-    });
+    }]);
   } catch {
     console.error("Failed to log security event");
   }
