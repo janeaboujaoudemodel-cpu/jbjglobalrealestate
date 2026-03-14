@@ -285,6 +285,7 @@ const EmailClient = () => {
           account: currentSender.account,
           useResend: sendViaResend,
           alsoNotifyChat,
+          chatRecipientId: recipientDetection.userId || recipientDetection.teamMemberId || undefined,
         },
       });
 
