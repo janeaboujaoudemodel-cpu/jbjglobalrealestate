@@ -43,12 +43,12 @@ export default function CRMReAuthModal({ open, onOpenChange, actionLabel, onSucc
     }
 
     // Log successful re-auth
-    await supabase.from("crm_security_events").insert({
+    await supabase.from("crm_security_events").insert([{
       user_id: user.id,
       event_type: "reauth_success",
-      details: { action: actionLabel },
+      details: { action: actionLabel } as any,
       user_agent: navigator.userAgent,
-    });
+    }]);
 
     setPassword("");
     setLoading(false);
