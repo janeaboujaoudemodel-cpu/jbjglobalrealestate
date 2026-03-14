@@ -744,11 +744,106 @@ export default function StampProjectWizard() {
                       </Button>
                     </div>
                   </div>
+
+                  {/* Government Style Mode */}
+                  <div className="border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.04)] rounded-xl p-3 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Landmark size={12} className="text-[hsl(var(--gold))]" />
+                        <span className="text-[11px] font-semibold">Government Style Mode</span>
+                      </div>
+                      <Switch checked={form.government_mode} onCheckedChange={v => set('government_mode', v)} />
+                    </div>
+                    <p className="text-[8px] text-[hsl(var(--muted-foreground))]">
+                      Strict official format: 8px outer ring, no decoration, centered bold serif, navy/black only
+                    </p>
+                  </div>
+
+                  {/* Arabic Font Controls */}
+                  {(form.language_mode === 'AR' || form.language_mode === 'BILINGUAL') && (
+                    <div className="border border-[hsl(var(--border))] rounded-xl p-3 space-y-2.5">
+                      <p className="text-[11px] font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
+                        <Type size={11} className="text-[hsl(var(--gold))]" /> Arabic Font Controls
+                      </p>
+                      <div>
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1 block">Font Family</label>
+                        <select value={form.arabic_font} onChange={e => set('arabic_font', e.target.value)}
+                          className="w-full h-8 rounded-lg border-2 border-[hsl(var(--border))] bg-white text-xs px-2 focus:outline-none focus:border-[hsl(var(--gold)/0.5)]">
+                          <option value="Noto Naskh Arabic">Noto Naskh Arabic</option>
+                          <option value="Amiri">Amiri</option>
+                          <option value="Cairo">Cairo</option>
+                          <option value="Tajawal">Tajawal</option>
+                          <option value="Scheherazade New">Scheherazade</option>
+                        </select>
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between mb-0.5">
+                          <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Letter Spacing</label>
+                          <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.arabic_letter_spacing}px</span>
+                        </div>
+                        <input type="range" min={0} max={6} step={0.5} value={form.arabic_letter_spacing}
+                          onChange={e => set('arabic_letter_spacing', parseFloat(e.target.value))}
+                          className="w-full h-2 accent-[hsl(var(--gold))]" />
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between mb-0.5">
+                          <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Spread</label>
+                          <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.arabic_arc_spread}%</span>
+                        </div>
+                        <input type="range" min={20} max={80} step={1} value={form.arabic_arc_spread}
+                          onChange={e => set('arabic_arc_spread', parseInt(e.target.value))}
+                          className="w-full h-2 accent-[hsl(var(--gold))]" />
+                      </div>
+                      <div className="flex gap-2">
+                        <OptionButton selected={form.arabic_font_weight === 'normal'} onClick={() => set('arabic_font_weight', 'normal')} className="flex-1 text-[10px]">Normal</OptionButton>
+                        <OptionButton selected={form.arabic_font_weight === 'bold'} onClick={() => set('arabic_font_weight', 'bold')} className="flex-1 text-[10px]">Bold</OptionButton>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Spacing & Layout Controls */}
+                  <div className="border border-[hsl(var(--border))] rounded-xl p-3 space-y-2.5">
+                    <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Spacing & Layout</p>
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Text Spacing</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.arc_text_spacing}px</span>
+                      </div>
+                      <input type="range" min={1} max={6} step={0.5} value={form.arc_text_spacing}
+                        onChange={e => set('arc_text_spacing', parseFloat(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Ring Gap</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.circle_gap}%</span>
+                      </div>
+                      <input type="range" min={8} max={25} step={1} value={form.circle_gap}
+                        onChange={e => set('circle_gap', parseInt(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Separator Distance</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.separator_distance}%</span>
+                      </div>
+                      <input type="range" min={30} max={80} step={1} value={form.separator_distance}
+                        onChange={e => set('separator_distance', parseInt(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Center Content Size</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.center_content_size}%</span>
+                      </div>
+                      <input type="range" min={20} max={80} step={1} value={form.center_content_size}
+                        onChange={e => set('center_content_size', parseInt(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                    </div>
+                  </div>
                 </div>
               </ScrollArea>
             </TabsContent>
-
-            {/* ── Logo Tab ── */}
             <TabsContent value="logo" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-4">
