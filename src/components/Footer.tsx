@@ -278,7 +278,7 @@ const Footer = () => {
   const investorHubLinks = [
     { label: "Investor Hub", href: "/investor/portfolio-views" },
     { label: "Investor Services", href: "/services/investment-advisory" },
-    { label: "Join Investor List", href: "/investor/join" },
+    { label: "Join Investor List", href: "/investors/join" },
     { label: t('footer.investorEducation') || "Investor Education", href: "/investor-education" },
     { label: t('footer.investorFaqs') || "Investor FAQs", href: "/investor-faq" },
     { label: t('footer.investorTools') || "Investor Tools", href: "/ai-hub" },
