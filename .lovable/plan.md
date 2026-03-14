@@ -1,72 +1,86 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: Developer Portal — Deep Audit + Fixes (Round 2)
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Issues Found
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+**1. "Jane Abu Jaude Holding" appearing as developer name**
+- Not hardcoded — the user likely sees the owner's name auto-filled from `developersList` or their `repProfile`. The real issue: the developer selection uses a plain `<Input>` with `<datalist>` (lines 971-981), which is a basic HTML autocomplete with no logos, no search, no proper dropdown. The user wants a rich searchable dropdown with developer logos.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+**2. "Access our CRM pipeline" in Usage Rights text**
+- Line 29: `USAGE_RIGHTS_TEXT` includes "Access our CRM pipeline for your submitted projects" — user says this is misleading. Developers don't access CRM. Remove this bullet.
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+**3. Developer company field — "locked, contact support to change"**
+- Line 315: Says "Contact support to change it after registration." User wants developers to be able to edit it anytime, but editing triggers a re-approval cycle with new document uploads.
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+**4. Language multi-select missing flags**
+- `LanguageMultiSelect` has no flags — just text buttons. User wants flags next to each language like the nationality dropdown.
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+**5. Registration validation too loose**
+- `handleSubmit` (line 118) only requires `full_name`, `email`, `phone`. User says ALL fields are mandatory: nationality, gender, years_in_real_estate, languages, date_of_join.
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+**6. No role switching (developer ↔ broker) in profile**
+- User wants developers to be able to switch to broker role (no approval needed) or broker to developer (requires re-approval). Currently no mechanism exists.
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+**7. Broker profile requirements missing**
+- When switching to broker: needs company name, personal number, personal email, nationality, languages, years in real estate, date of joining company. No company number for brokers (only personal).
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+---
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+### Implementation Plan
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+#### Fix 1: Replace developer selector with rich searchable dropdown
+- Replace `<Input>` + `<datalist>` with a custom searchable dropdown component
+- Use `useDevelopers()` hook to fetch all developers with `logo_url`, `name`, `slug`
+- Show developer logos next to names in the dropdown
+- Include search/filter input inside the dropdown
+- Apply in both the registration gate AND owner Quick Upload mode
+- Pass selected developer as `developerName` prop to `SalesRepRegistration`
 
-### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+#### Fix 2: Remove "CRM pipeline" bullet from Usage Rights
+- Remove line "Access our CRM pipeline for your submitted projects" from `USAGE_RIGHTS_TEXT`
+- Replace with "Track submission status and receive updates on your projects"
+
+#### Fix 3: Allow developer_name change with re-approval
+- In profile edit, make `developer_name` editable (remove disabled)
+- Add warning: "Changing your developer will require re-approval and new verification documents"
+- When developer_name changes on save, automatically set `status = 'pending_review'` and flag for re-verification
+- Use the same rich developer dropdown in the edit form
+
+#### Fix 4: Add flags to LanguageMultiSelect
+- Add a `LANGUAGE_FLAGS` mapping (language name → country flag emoji or ISO flag)
+- Display flag next to each language button and selected tag
+- Languages without a clear flag get a globe icon
+
+#### Fix 5: Make ALL registration fields mandatory
+- Update `handleSubmit` validation to require: `nationality`, `gender`, `years_in_real_estate`, `languages` (at least 1), `date_of_join`
+- Add `*` indicators to all field labels
+- Disable submit button until all mandatory fields are filled
+
+#### Fix 6: Add role switching in Profile tab
+- Add a "Switch Role" section in the Profile tab
+- Options: "Developer Representative" (current) or "Broker"
+- Developer → Broker: instant switch, no approval. Update profile type, show broker-specific fields
+- Broker → Developer: triggers registration flow with approval required. Must select developer, upload documents
+- Show current role prominently
+
+#### Fix 7: Broker profile fields
+- When user selects broker role: show company name (text input), personal number, personal email, nationality, languages, years in RE, date of joining company
+- No company number field for brokers
+- On submission/listing: show reminder "If your company or role has changed, please update your profile before submitting"
+
+### Files to Modify
+
+| File | Changes |
+|------|---------|
+| `src/pages/DeveloperPortal.tsx` | Replace datalist with rich dropdown, profile edit developer change, role switching, mandatory validation |
+| `src/components/developer-portal/SalesRepRegistration.tsx` | Update USAGE_RIGHTS_TEXT, mandatory field validation, rich developer dropdown |
+| `src/components/ui/language-multi-select.tsx` | Add flags to all languages |
+| **New**: `src/components/developer-portal/DeveloperSelectDropdown.tsx` | Searchable dropdown with logos |
+
+### Implementation Order
+1. Create `DeveloperSelectDropdown` component (reusable)
+2. Update `LanguageMultiSelect` with flags
+3. Update `SalesRepRegistration` — remove CRM text, mandatory fields
+4. Update `DeveloperPortal` — integrate new dropdown, profile editing, role switching
+
