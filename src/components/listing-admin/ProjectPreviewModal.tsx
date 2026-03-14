@@ -12,10 +12,11 @@ interface ProjectPreviewModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onEdit: (project: UnifiedProject) => void;
+  onOpenDetail?: (project: UnifiedProject) => void;
   onSendToSarah?: (project: UnifiedProject) => void;
 }
 
-export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onSendToSarah }: ProjectPreviewModalProps) {
+export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpenDetail, onSendToSarah }: ProjectPreviewModalProps) {
   const navigate = useNavigate();
   const { data: lastEdit } = useLatestEditLog("project", project?.id);
 
@@ -132,10 +133,19 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onSen
 
           {/* Actions */}
           <div className="flex flex-wrap gap-3 pt-2 border-t border-gold/20">
+            {onOpenDetail && (
+              <Button
+                variant="primary"
+                onClick={() => { onOpenChange(false); onOpenDetail(project); }}
+                className="flex-1 whitespace-nowrap"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Open Full Details
+              </Button>
+            )}
             <Button
-              variant="primary"
+              variant="secondary"
               onClick={() => { onOpenChange(false); navigate(`/project/${project.slug}`); }}
-              className="flex-1 whitespace-nowrap"
             >
               <ExternalLink className="w-4 h-4 mr-2" />
               View Listing

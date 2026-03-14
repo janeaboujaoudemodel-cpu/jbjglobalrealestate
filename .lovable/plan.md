@@ -1,71 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Project Hub System
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Current State
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-The Listing Admin (`ListingAdmin.tsx`, 1451 lines) serves as the project management center with 4 views: Chat (generate listing), Projects (grid with filters/pagination), Data Ops (sync/enrichment tabs), and Editor (create/edit form). Clicking a project card opens `ProjectPreviewModal` — a lightweight dialog showing hero image, price, bedrooms, handover, and location with "View Listing" and "Edit" buttons. It does NOT show full project details like description, amenities, developer info, gallery, source data, or enrichment history.
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-### What Needs to Change
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-#### 1. Replace ProjectPreviewModal with Full Project Detail View (Task 5 — Priority Fix)
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-Replace the modal-only behavior with a new `ProjectDetailAdmin.tsx` component that renders inline (in the `editor` view area) when a project is clicked. This full detail view will show:
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-- **Header**: Project name, developer, status badges, source badge (Reelly/Provident), URL link
-- **Gallery**: All images in a scrollable grid (not just hero)
-- **Data fields**: Description, location, emirate, price range, bedrooms, handover, payment plan, service charge, amenities, floor plans, construction status, sale status
-- **Developer info**: Name, linked developer page
-- **Documents**: List of attached documents
-- **Enrichment history**: Audit log entries from `admin_edit_log` + enrichment suggestions from `listing_enrichment_suggestions`
-- **Actions**: Edit, Delete, View Public Listing, Hide Brochure toggle
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-The existing editor form will be accessible via an "Edit" button within this detail view.
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-#### 2. Add "Project Hub" as Primary Navigation Tab (Task 1)
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-Rename the "Projects" nav button to "Project Hub" and make it the default landing view. Add a toolbar row inside the hub with action buttons: Create Project, Generate Listing, Bulk Operations dropdown (publish/unpublish selected).
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-#### 3. Project Source & Enrichment Status in Grid Cards (Task 2)
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-Add to each project card in the grid:
-- Source badge (Reelly API / Provident / Manual)
-- Enrichment indicator (green dot = enriched, yellow = partial, red = needs data)
-- Last update date
-- Count of pending/missing fields
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-Query the `import_source` field from projects table and compute enrichment coverage inline.
-
-#### 4. Project Status System (Task 4)
-
-Add a status filter row with badges: Enriched, Pending, Needs Work, Approved, Published. Compute status from existing fields:
-- **Published**: `is_published = true`
-- **Enriched**: Has description + amenities + images + handover_date
-- **Pending**: `status = 'pending'`
-- **Needs Work**: Published but missing key fields (description empty OR no images)
-- **Approved**: Has been through approval queue
-
-Display status badge on each card. Do NOT mark a project as "Needs Work" if it has all essential fields populated.
-
-#### 5. Enrichment History per Project (Task 3)
-
-In the full project detail view, add an "Enrichment Log" tab that queries:
-- `admin_edit_log` entries for this project (existing table)
-- `listing_enrichment_suggestions` for this project (existing table — has before/after data)
-
-Display as a timeline: field name, old value → new value, timestamp, source.
-
-### Files Summary
-
-| File | Change |
+### Files Changed
+| File | Action |
 |------|--------|
-| New: `src/components/listing-admin/ProjectDetailAdmin.tsx` | Full project detail view with all data fields, gallery, enrichment log, actions |
-| `src/pages/ListingAdmin.tsx` | Rename "Projects" to "Project Hub", add status filters, add source/enrichment badges to cards, wire ProjectDetailAdmin as new view mode, add bulk operations |
-| `src/components/listing-admin/ProjectPreviewModal.tsx` | Keep as optional quick-preview but add "Open Full Details" button |
-
-### Implementation Order
-
-1. Create `ProjectDetailAdmin.tsx` — full detail view with all project data, enrichment log, gallery, actions
-2. Update `ListingAdmin.tsx` — rename to "Project Hub", add source badges + enrichment status to grid cards, add status filter row, wire detail view
-3. Update `ProjectPreviewModal.tsx` — add "Open Full Details" action
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

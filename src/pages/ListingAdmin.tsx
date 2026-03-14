@@ -56,6 +56,7 @@ import { EnrichmentCenter } from "@/components/listing-admin/EnrichmentCenter";
 import { ProvidentPortalHub } from "@/components/listing-admin/ProvidentPortalHub";
 import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
 import { ProjectPreviewModal } from "@/components/listing-admin/ProjectPreviewModal";
+import { ProjectDetailAdmin } from "@/components/listing-admin/ProjectDetailAdmin";
 import { ProjectMediaManager } from "@/components/listing-admin/ProjectMediaManager";
 import { SafeImage } from "@/components/SafeImage";
 import type { UnifiedProject } from "@/types/unifiedProject";
@@ -135,9 +136,12 @@ const ListingAdmin = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [showChat, setShowChat] = useState(false);
   
-  // View state - 'chat', 'projects', or 'editor'
-  // UNIFIED: Now using 'data-ops' as the single entry for all sync/extraction views
-  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-ops'>('data-ops');
+  // View state
+  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-ops' | 'project-detail'>('data-ops');
+  // Full project detail view
+  const [detailProject, setDetailProject] = useState<UnifiedProject | null>(null);
+  // Status filter for Project Hub
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   
   // Controlled sub-tab state for Data Ops tabs - defaults to Provident enrichment
   const [dataOpsTab, setDataOpsTab] = useState<string>("provident-hub");
@@ -158,7 +162,7 @@ const ListingAdmin = () => {
       'data-sources': 'data-ops',
     };
     const mappedView = legacyToNew[view || ''] || view;
-    const allowed = new Set(["chat", "projects", "editor", "data-ops"]);
+    const allowed = new Set(["chat", "projects", "editor", "data-ops", "project-detail"]);
     
     if (mappedView && allowed.has(mappedView) && mappedView !== activeView) {
       setActiveView(mappedView as any);
@@ -715,10 +719,10 @@ const ListingAdmin = () => {
               </Button>
               <Button
                 onClick={() => { setActiveView('projects'); setShowChat(false); setIsEditing(false); setIsCreating(false); }}
-                variant={activeView === 'projects' ? 'primary' : 'secondary'}
+                variant={activeView === 'projects' || activeView === 'project-detail' ? 'primary' : 'secondary'}
               >
                 <FolderOpen className="w-4 h-4 mr-2" />
-                {t('listingAdmin.projects')} ({totalCount ?? 0})
+                Project Hub ({totalCount ?? 0})
               </Button>
               {/* UNIFIED: Single Data Ops button replaces 3 separate buttons */}
               <Button
@@ -844,25 +848,32 @@ const ListingAdmin = () => {
           </div>
         )}
 
-        {/* Projects View - Grid */}
+        {/* Project Hub View - Grid */}
         {activeView === 'projects' && (
           <div className="container mx-auto px-4 py-6 space-y-4">
-            {/* Horizontal filter row — replaces vertical sidebar */}
+            {/* Status filter + Published/Drafts */}
             <div className="flex flex-wrap items-center gap-2">
-              <Button
-                variant={projectsTab === "published" ? "primary" : "secondary"}
-                size="sm"
-                onClick={() => { setProjectsTab("published"); setProjectsPage(0); }}
-              >
+              <Button variant={projectsTab === "published" ? "primary" : "secondary"} size="sm" onClick={() => { setProjectsTab("published"); setProjectsPage(0); }}>
                 Published ({totalCount ?? 0})
               </Button>
-              <Button
-                variant={projectsTab === "drafts" ? "primary" : "secondary"}
-                size="sm"
-                onClick={() => { setProjectsTab("drafts"); setProjectsPage(0); }}
-              >
+              <Button variant={projectsTab === "drafts" ? "primary" : "secondary"} size="sm" onClick={() => { setProjectsTab("drafts"); setProjectsPage(0); }}>
                 Drafts ({(allProjectsCount ?? 0) - (totalCount ?? 0)})
               </Button>
+
+              <div className="h-6 w-px bg-gold/30 mx-1" />
+
+              {/* Status filter badges */}
+              {["all", "enriched", "needs-work", "pending"].map(s => (
+                <Button
+                  key={s}
+                  variant={statusFilter === s ? "primary" : "outline"}
+                  size="sm"
+                  className="text-xs h-7"
+                  onClick={() => setStatusFilter(s)}
+                >
+                  {s === "all" ? "All" : s === "enriched" ? "✓ Enriched" : s === "needs-work" ? "⚠ Needs Work" : "◌ Pending"}
+                </Button>
+              ))}
 
               <div className="h-6 w-px bg-gold/30 mx-1" />
 
@@ -883,29 +894,60 @@ const ListingAdmin = () => {
             {/* Project Grid — no sidebar, full width */}
             <div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {filteredProjects?.map((project) => (
+                  {filteredProjects?.filter(project => {
+                    if (statusFilter === "all") return true;
+                    const hasDesc = !!project.description && project.description.length > 20;
+                    const hasImages = (project.images?.length ?? 0) >= 3;
+                    const hasAmenities = Array.isArray(project.amenities) && project.amenities.length > 0;
+                    const hasHandover = !!project.handover_date;
+                    const isEnriched = hasDesc && hasImages && hasAmenities && hasHandover;
+                    if (statusFilter === "enriched") return isEnriched;
+                    if (statusFilter === "needs-work") return project.is_published && !isEnriched;
+                    if (statusFilter === "pending") return (project as any).status === "pending";
+                    return true;
+                  }).map((project) => {
+                    // Compute source + enrichment inline
+                    const src = (project as any).import_source || project.source || "manual";
+                    const srcLabel = src?.includes("provident") ? "PROVIDENT" : src?.includes("reelly") ? "REELLY" : "MANUAL";
+                    const srcColor = src?.includes("provident") ? "bg-violet-100 text-violet-700 border-violet-200" : src?.includes("reelly") ? "bg-sky-100 text-sky-700 border-sky-200" : "bg-zinc-100 text-zinc-600 border-zinc-200";
+                    const hasDesc = !!project.description && project.description.length > 20;
+                    const hasImages = (project.images?.length ?? 0) >= 3;
+                    const hasAmenities = Array.isArray(project.amenities) && project.amenities.length > 0;
+                    const hasHandover = !!project.handover_date;
+                    const filledCount = [hasDesc, hasImages, hasAmenities, hasHandover, !!project.price_from, !!project.location].filter(Boolean).length;
+                    const enrichDot = filledCount >= 6 ? "bg-emerald-500" : filledCount >= 3 ? "bg-amber-500" : "bg-red-400";
+
+                    return (
                     <Card
                       key={project.id}
                       className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 cursor-pointer transition-all hover:shadow-lg hover:border-gold overflow-hidden ${
                         selectedProject?.id === project.id ? "border-gold ring-2 ring-gold/20" : ""
                       }`}
-                      onClick={() => { setPreviewProject(project); setShowPreviewModal(true); }}
+                      onClick={() => { setDetailProject(project); setActiveView('project-detail'); }}
                     >
                       {/* Cover Image */}
-                      <div className="aspect-[16/10] overflow-hidden bg-muted">
+                      <div className="aspect-[16/10] overflow-hidden bg-muted relative">
                         <SafeImage
                           src={project.cover_image_url || project.images?.[0]?.image_url}
                           alt={project.name}
                           className="w-full h-full object-cover"
                           fallbackSrc="/placeholder.svg"
                         />
+                        {/* Source badge overlay */}
+                        <div className="absolute top-2 left-2">
+                          <Badge className={`${srcColor} text-[9px] font-bold border`}>{srcLabel}</Badge>
+                        </div>
+                        {/* Enrichment dot */}
+                        <div className="absolute top-2 right-2">
+                          <div className={`w-3 h-3 rounded-full ${enrichDot} ring-2 ring-white`} title={`${filledCount}/6 fields`} />
+                        </div>
                       </div>
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
-                            <h3 className="text-black font-medium truncate">{project.name}</h3>
-                            <p className="text-zinc-500 text-sm truncate">{project.developer?.name || (project as any).developer_name || "No Developer"}</p>
-                            {project.emirate && <p className="text-zinc-400 text-xs">{project.emirate}</p>}
+                            <h3 className="text-foreground font-medium truncate">{project.name}</h3>
+                            <p className="text-muted-foreground text-sm truncate">{project.developer?.name || (project as any).developer_name || "No Developer"}</p>
+                            {project.emirate && <p className="text-muted-foreground/70 text-xs">{project.emirate}</p>}
                             {project.price_from && (
                               <p className="text-gold font-bold text-sm mt-1">
                                 From AED {(project.price_from / 1000000).toFixed(1)}M
@@ -946,7 +988,8 @@ const ListingAdmin = () => {
                         </div>
                       </CardContent>
                     </Card>
-                  ))}
+                    );
+                  })}
                   {filteredProjects?.length === 0 && (
                     <div className="col-span-full text-center py-16 text-zinc-500">
                       <FolderOpen className="w-16 h-16 mx-auto mb-4 opacity-50" />
@@ -982,12 +1025,27 @@ const ListingAdmin = () => {
           </div>
         )}
 
+        {/* Project Detail View */}
+        {activeView === 'project-detail' && detailProject && (
+          <ProjectDetailAdmin
+            project={detailProject}
+            onBack={() => { setDetailProject(null); setActiveView('projects'); }}
+            onEdit={(p) => handleEditProjectWithView(p)}
+            onDelete={(p) => {
+              setSelectedProject(p);
+              handleDeleteProject();
+              setActiveView('projects');
+            }}
+          />
+        )}
+
         {/* Preview Modal - outside conditional */}
         <ProjectPreviewModal
           project={previewProject}
           open={showPreviewModal}
           onOpenChange={setShowPreviewModal}
           onEdit={(p) => handleEditProjectWithView(p)}
+          onOpenDetail={(p) => { setShowPreviewModal(false); setDetailProject(p); setActiveView('project-detail'); }}
           onSendToSarah={(p) => {
             setShowPreviewModal(false);
             setActiveView('chat');
