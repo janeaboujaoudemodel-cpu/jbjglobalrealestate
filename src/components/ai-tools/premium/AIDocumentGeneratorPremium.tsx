@@ -211,10 +211,33 @@ const TONES = [
 
 const AIDocumentGeneratorPremium = () => {
   const { invokeTool, loading, response } = useAITool();
+  const { user } = useAuth();
   const [documentType, setDocumentType] = useState("listing");
   const [tone, setTone] = useState("professional");
   const [typeFields, setTypeFields] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState<string | null>(null);
+  const [brandAssetsOpen, setBrandAssetsOpen] = useState(false);
+  const [brandAssets, setBrandAssets] = useState<any[]>([]);
+  const [loadingAssets, setLoadingAssets] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (!brandAssetsOpen || !user || brandAssets.length > 0) return;
+    setLoadingAssets(true);
+    Promise.all([
+      supabase.from("brand_assets").select("*").eq("user_id", user.id).in("asset_type", ["stamp", "logo", "signature"]).order("created_at", { ascending: false }),
+      supabase.from("design_assets").select("*").eq("user_id", user.id).in("asset_type", ["logo", "signature", "stamp"]).order("created_at", { ascending: false }),
+    ]).then(([brandRes, designRes]) => {
+      const seen = new Set<string>();
+      const merged: any[] = [];
+      for (const item of [...(brandRes.data || []).map((b: any) => ({ ...b, _source: 'brand' })), ...(designRes.data || []).map((d: any) => ({ ...d, _source: 'design' }))]) {
+        const key = `${item.asset_type}:${item.name}`;
+        if (!seen.has(key)) { seen.add(key); merged.push(item); }
+      }
+      setBrandAssets(merged);
+      setLoadingAssets(false);
+    });
+  }, [brandAssetsOpen, user]);
 
   const config = DOCUMENT_TYPE_CONFIGS[documentType];
 
