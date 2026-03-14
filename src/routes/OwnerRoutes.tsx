@@ -49,6 +49,7 @@ const ModeHub = lazy(() => import("@/pages/ModeHub"));
 const FoundersNotesPanel = lazy(() => import("@/components/founders-assistant/FoundersNotesPanel"));
 const BrandAssetsDashboard = lazy(() => import("@/pages/owner/BrandAssetsDashboard"));
 const CRMSecurityDashboard = lazy(() => import("@/pages/owner/CRMSecurityDashboard"));
+const AIToolAnalyticsDashboard = lazy(() => import("@/pages/owner/AIToolAnalyticsDashboard"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
