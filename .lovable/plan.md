@@ -1,134 +1,107 @@
+## CRM System Upgrade — Implementation Status
 
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-## Session 22 — Global Email / Chat Rule Engine + Affected Places Audit
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-### Current State: All Communication Points
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-After auditing the entire codebase, here are **all places that send email, chat, or notifications**:
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-| # | Module / File | Edge Function | Channel | Cross-Channel Logic? |
-|---|---------------|---------------|---------|---------------------|
-| 1 | **EmailClient.tsx** (Email Hub) | `send-owner-email` | Email-first | ✅ `alsoNotifyChat` + `useCrossChannelDetection` |
-| 2 | **TeamChat.tsx** (JBJ Workspace) | `send-owner-email` | Chat-first | ✅ `alsoSendByEmail` toggle |
-| 3 | **EmployeeChatHub.tsx** | `send-owner-email` | Chat-first | ✅ `alsoSendByEmail` toggle |
-| 4 | **Contact.tsx** (Contact form) | `send-inquiry-email` | Email-only | ❌ Public form — no cross-channel needed |
-| 5 | **ConsultationRequestForm.tsx** | `send-inquiry-email` | Email-only | ❌ Public form — no cross-channel needed |
-| 6 | **InquiryFormModal.tsx** | `send-inquiry-email` | Email-only | ❌ Public form — no cross-channel needed |
-| 7 | **AIChatWidget.tsx** (Escalation) | `send-inquiry-email` | Email-only | ❌ Public escalation — no cross-channel needed |
-| 8 | **AIPersonalShopper.tsx** | `send-inquiry-email` | Email-only | ❌ Public — no cross-channel needed |
-| 9 | **MeetingBookingModal.tsx** | `send-inquiry-email` | Email-only | ❌ Public booking — no cross-channel needed |
-| 10 | **Auth.tsx** (Welcome email) | `send-welcome-email` | Email-only | ❌ System email — no cross-channel needed |
-| 11 | **ReferralOnboarding.tsx** | `send-welcome-email` | Email-only | ❌ System email — no cross-channel needed |
-| 12 | **CVCenter.tsx** (HR message) | `send-admin-message` | Email-only | ⚠️ **Missing**: Sends to candidate email but no chat-notify option for internal HR team |
-| 13 | **SmartEmailComposer.tsx** (CRM) | `ai-email-composer` | Email-only | ⚠️ **Missing**: Composes email for CRM leads, no cross-channel option |
-| 14 | **CampaignEditor.tsx** (Marketing) | `ai-email-composer` / `ai-whatsapp-composer` | Bulk email/WhatsApp | ❌ Bulk marketing — own delivery logic, out of scope per Session 19 |
-| 15 | **BrokerSubscriptionsDashboard.tsx** | `send-security-alert` | Email-only (security) | ❌ Security alerts — system-only, no cross-channel needed |
-| 16 | **AICalendar.tsx** (Event reminders) | None (toast only) | Toast-only | ⚠️ **Missing**: Says "Email reminders will be sent" but no actual send logic |
-| 17 | **useAICommunication.ts** (AI Brokers) | `broker-chat` / `ai-email-composer` | WhatsApp/Email | ❌ CRM lead outreach — specialized, out of scope |
-| 18 | **WhatsAppIntegrationPanel.tsx** | `broker-chat` | WhatsApp | ❌ CRM lead outreach — specialized |
-| 19 | **FoundersVideoMeetPanel.tsx** | None (mailto/wa link) | External links | ❌ Opens native email/WhatsApp client |
-| 20 | **EmailHubStatusPanel.tsx** | `send-owner-email` (check_status) | Diagnostic | ❌ Not a send — status check only |
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-### Assessment
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-**Already compliant (3):** EmailClient (#1), TeamChat (#2), EmployeeChatHub (#3) — these were wired in Sessions 19-20.
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**Not applicable (12):** Items #4-11, #14-15, #18-19 — public forms, system emails, security alerts, marketing bulk, CRM outreach. These have their own delivery contexts and correctly don't use cross-channel logic per the Session 19 spec.
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-**Need updating (3):**
-- **#12 CVCenter.tsx** — Owner sends HR messages to candidates via `send-admin-message`. Should add an "Also notify in Team Chat" option when the recipient is an internal employee.
-- **#13 SmartEmailComposer.tsx** — CRM email composer. Should add "Also notify in Team Chat" when lead matches an internal user (rare but possible for internal referrals).
-- **#16 AICalendar.tsx** — Claims email reminders but has no actual send logic. Should wire to `send-owner-email` for attendee notifications.
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-### Implementation Plan
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-#### 1. Create a shared `CrossChannelToggle` component
-**File:** `src/components/shared/CrossChannelToggle.tsx` (NEW)
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-A reusable UI component that encapsulates the cross-channel toggle pattern used across modules:
-- Props: `recipientEmail`, `channel` ('email-first' | 'chat-first'), `onToggle`, `checked`
-- Internally uses `useCrossChannelDetection` to show/hide the toggle
-- For email-first: shows "Also notify in Team Chat" (only when registered user detected)
-- For chat-first: shows "Also send by email" (always visible since chat = internal)
-- Renders the detection state (loading spinner, "Internal User" badge, "External recipient" label)
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-This replaces the inline toggle code duplicated across EmailClient, TeamChat, and EmployeeChatHub.
-
-#### 2. Create `useCrossChannelSend` utility hook
-**File:** `src/hooks/useCrossChannelSend.ts` (NEW)
-
-A reusable hook that handles the dual-send logic:
-- `sendWithCrossChannel({ primaryChannel, recipientEmail, subject, body, alsoSendSecondary, attachments? })`
-- For email-first + alsoNotifyChat: sends email via `send-owner-email`, then inserts chat notification
-- For chat-first + alsoSendByEmail: sends chat message, then sends email via `send-owner-email`
-- Handles error isolation (secondary channel failure doesn't block primary)
-- Centralizes all cross-channel send logic in one place
-
-#### 3. Refactor EmailClient, TeamChat, EmployeeChatHub to use shared components
-- Replace inline toggle markup with `<CrossChannelToggle />`
-- Replace inline cross-channel send logic with `useCrossChannelSend`
-- No behavior change — pure refactor for consistency
-
-#### 4. Add cross-channel option to CVCenter.tsx (HR messaging)
-- Import `CrossChannelToggle` with `channel="email-first"`
-- When recipient email matches an internal team member, show "Also notify in Team Chat"
-- Wire send button to use `useCrossChannelSend`
-
-#### 5. Add cross-channel option to SmartEmailComposer.tsx (CRM)
-- Import `CrossChannelToggle` with `channel="email-first"`
-- Show toggle when lead email matches a registered user
-- Wire the `onSend` callback to include cross-channel logic
-
-#### 6. Wire AICalendar.tsx event reminders to actually send email
-- When `emailReminder` is true and attendees are specified, call `send-owner-email` for each attendee
-- Add cross-channel: if attendee is a registered user, also optionally post a chat notification about the event
-
-### Files to Create/Modify
-
+### Files Changed
 | File | Action |
 |------|--------|
-| `src/components/shared/CrossChannelToggle.tsx` | NEW — Reusable toggle with detection |
-| `src/hooks/useCrossChannelSend.ts` | NEW — Reusable dual-send hook |
-| `src/pages/EmailClient.tsx` | REFACTOR — Use shared toggle + send hook |
-| `src/pages/TeamChat.tsx` | REFACTOR — Use shared toggle + send hook |
-| `src/components/employee-chat/EmployeeChatHub.tsx` | REFACTOR — Use shared toggle + send hook |
-| `src/components/crm/CVCenter.tsx` | UPDATE — Add cross-channel toggle to HR messaging |
-| `src/components/crm/SmartEmailComposer.tsx` | UPDATE — Add cross-channel toggle |
-| `src/pages/AICalendar.tsx` | UPDATE — Wire email reminder send + cross-channel |
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
 
-### Global Consistency Report (Post-Implementation)
+## Multi-Portal System + Developer Portal — Audit & Fixes (March 2026)
 
-```text
-┌─────────────────────────────────────────────────────────────────┐
-│                   COMMUNICATION RULE ENGINE                      │
-├──────────────────────┬──────────────┬────────────┬──────────────┤
-│  Module              │  Primary     │  Secondary │  Detection   │
-├──────────────────────┼──────────────┼────────────┼──────────────┤
-│  Email Hub           │  Email       │  Chat (if  │  YES         │
-│                      │              │  internal) │              │
-│  Team Chat           │  Chat        │  Email     │  N/A (all    │
-│                      │              │  (toggle)  │  internal)   │
-│  Employee Chat       │  Chat        │  Email     │  N/A (all    │
-│                      │              │  (toggle)  │  internal)   │
-│  CRM SmartEmail      │  Email       │  Chat (if  │  YES         │
-│                      │              │  internal) │              │
-│  HR CV Center        │  Email       │  Chat (if  │  YES         │
-│                      │              │  internal) │              │
-│  Calendar Reminders  │  Email       │  Chat (if  │  YES         │
-│                      │              │  internal) │              │
-├──────────────────────┼──────────────┼────────────┼──────────────┤
-│  Public Forms        │  Email-only  │  None      │  N/A         │
-│  Welcome Emails      │  Email-only  │  None      │  N/A         │
-│  Security Alerts     │  Email-only  │  None      │  N/A         │
-│  Marketing Bulk      │  Own logic   │  Own logic │  N/A         │
-│  CRM AI Brokers      │  Own logic   │  Own logic │  N/A         │
-└──────────────────────┴──────────────┴────────────┴──────────────┘
-```
+### ✅ ALL TASKS COMPLETED
 
-### What Will NOT Be Implemented (Transparency)
+| # | Task | Status |
+|---|------|--------|
+| 1 | Fix "Register as Rep" label → "Register as Developer or Sales" | ✅ DONE |
+| 2 | Rename Developer Portal tab → "Update Profile" | ✅ DONE |
+| 3 | Investor Portal rebuild (7 tabs, premium styling) | ✅ DONE |
+| 4 | Broker Portal enhancement (tabbed structure) | ✅ DONE |
+| 5 | ApprovalTimeline shared component | ✅ DONE |
+| 6 | Event Management Hub | ✅ DONE |
+| 7 | useEventManagement hook | ✅ DONE |
+| 8 | events + event_invitations tables | ✅ DONE |
+| 9 | Role options include "Other" with custom field | ✅ DONE |
+| 10 | Owner/CEO/Founder requires ID + passport + trade license + RERA | ✅ DONE |
+| 11 | Registration gate blocks portal access until registered | ✅ DONE |
+| 12 | Owner auto-approve toggle for developers | ✅ DONE |
+| 13 | Owner restrict access for developers | ✅ DONE |
+| 14 | Nationality with flags dropdown | ✅ DONE |
+| 15 | Phone with country code + flag | ✅ DONE |
+| 16 | Language multi-select | ✅ DONE |
+| A | Homepage CTA cards: 4x2 grid (8 cards, 2 rows of 4) | ✅ DONE |
+| B | Remove "Interest Registration" terminology → "Launch Interests" | ✅ DONE |
+| C | Owner in developer mode sees developer view only | ✅ DONE (was already correct) |
+| D | On-Leave self-service feature for developers | ✅ DONE (toggle + date pickers in profile) |
+| E | Secondary contact fields (Company/Personal Email+Phone) | ✅ DONE |
+| F | Icon styling: champagne-gold gradient | ✅ DONE (already correct) |
 
-- **Marketing Hub bulk campaigns** — Uses its own batch delivery system with different requirements (audience targeting, batching). Not part of owner's direct communication rule engine.
-- **CRM AI Broker communications** — Uses `broker-chat` and WhatsApp API. Specialized CRM outreach to external leads, not subject to internal cross-channel rules.
-- **Security alerts** — System-generated to owner only via `send-security-alert`. No chat dual-send needed.
-- **Public-facing forms** — Contact, Consultation, Inquiry, AI Chat escalation. These notify the admin team; no cross-channel toggle is appropriate for anonymous visitors.
-
+### Files Changed (This Batch)
+| File | Changes |
+|------|---------|
+| `src/components/home/DeveloperPortalCTA.tsx` | 8 cards in 4x2 grid, renamed labels, added "Update Your Profile" card |
+| `src/pages/DeveloperPortal.tsx` | Renamed all "Interest Registration" → "Launch Interests" (8 occurrences) |
+| `src/components/developer-portal/SalesRepRegistration.tsx` | Renamed title to "Register as Developer or Sales" |

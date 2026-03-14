@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useCrossChannelDetection } from "@/hooks/useCrossChannelDetection";
 
 interface CalendarEvent {
   id: string;
@@ -196,9 +197,37 @@ const AICalendar = () => {
       setEvents(prev => [...prev, newEvent]);
       toast.success("Event created!");
       
-      // Send email notification if enabled
+      // Send email notification if enabled and attendees exist
       if (eventForm.emailReminder && eventForm.attendees) {
-        toast.info("Email reminders will be sent to attendees");
+        const attendeeList = eventForm.attendees.split(',').map(a => a.trim()).filter(Boolean);
+        if (attendeeList.length > 0) {
+          let sentCount = 0;
+          for (const attendee of attendeeList) {
+            // Only send to emails or construct from names
+            const email = attendee.includes('@') ? attendee : `${attendee.toLowerCase().replace(/\s+/g, '-')}@jbj.ae`;
+            try {
+              await supabase.functions.invoke("send-owner-email", {
+                body: {
+                  to: email,
+                  subject: `Calendar Reminder: ${eventForm.title}`,
+                  body: `You have an upcoming event:\n\nTitle: ${eventForm.title}\nDate: ${eventForm.date}\nTime: ${eventForm.time}\nDuration: ${eventForm.duration} minutes\nLocation: ${eventForm.location || 'TBD'}\n\n${eventForm.description || ''}\n\nThis is an automated reminder from JBJ Calendar.`,
+                  senderId: "amanda",
+                  senderName: "Amanda Clarke",
+                  senderEmail: "amanda@jbj.ae",
+                  senderTitle: "Executive Assistant",
+                  account: "company",
+                  useResend: true,
+                },
+              });
+              sentCount++;
+            } catch (err) {
+              console.error(`Failed to email reminder to ${email}:`, err);
+            }
+          }
+          if (sentCount > 0) {
+            toast.success(`Email reminders sent to ${sentCount} attendee${sentCount > 1 ? 's' : ''}`);
+          }
+        }
       }
     }
 

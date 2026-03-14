@@ -18,6 +18,8 @@ import {
   ArrowUpDown, MapPin,
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CrossChannelToggle } from '@/components/shared/CrossChannelToggle';
+import { useCrossChannelSend } from '@/hooks/useCrossChannelSend';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
@@ -79,6 +81,8 @@ interface CVCenterProps {
 }
 
 const CVCenter = ({ userId }: CVCenterProps) => {
+  const { sendSecondaryEmail } = useCrossChannelSend();
+  const [alsoNotifyChat, setAlsoNotifyChat] = useState(false);
   const [cvEntries, setCvEntries] = useState<CVEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeStatusTab, setActiveStatusTab] = useState('all');
@@ -1512,6 +1516,14 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                 Feedback links are appended automatically to the sent email.
               </p>
 
+              {/* Cross-channel toggle — shared component */}
+              <CrossChannelToggle
+                recipientEmail={selectedCV?.email || ''}
+                channel="email-first"
+                checked={alsoNotifyChat}
+                onToggle={setAlsoNotifyChat}
+              />
+
               <div className="flex gap-2">
                 <Button
                   className="flex-1 bg-gold hover:bg-gold/90 text-black font-bold"
@@ -1537,6 +1549,19 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                       if (error) throw error;
 
                       toast.success(`Email approved and sent to ${selectedCV.full_name}`);
+
+                      // Cross-channel: also notify in chat if toggled on
+                      if (alsoNotifyChat && selectedCV.email) {
+                        sendSecondaryEmail({
+                          primaryChannel: "email",
+                          recipientEmail: selectedCV.email,
+                          subject: adminMessageSubject.trim(),
+                          body: adminMessageBody.trim(),
+                          alsoSendSecondary: true,
+                          recipientName: selectedCV.full_name,
+                        });
+                      }
+                      setAlsoNotifyChat(false);
                       setContactOpen(false);
                       resetContactComposer();
                     } catch (err: any) {

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { CrossChannelToggle } from "@/components/shared/CrossChannelToggle";
 
 interface Lead {
   id: string;
@@ -46,6 +47,7 @@ const SmartEmailComposer = ({ lead, onSend }: SmartEmailComposerProps) => {
   const [template, setTemplate] = useState("");
   const [customPrompt, setCustomPrompt] = useState("");
   const [loading, setLoading] = useState(false);
+  const [alsoNotifyChat, setAlsoNotifyChat] = useState(false);
 
   const generateEmail = async () => {
     setLoading(true);
@@ -195,6 +197,16 @@ const SmartEmailComposer = ({ lead, onSend }: SmartEmailComposerProps) => {
                 Send Email
               </Button>
             </div>
+
+            {/* Cross-channel toggle — shared component */}
+            {lead.email_lower && (
+              <CrossChannelToggle
+                recipientEmail={lead.email_lower}
+                channel="email-first"
+                checked={alsoNotifyChat}
+                onToggle={setAlsoNotifyChat}
+              />
+            )}
           </>
         )}
       </CardContent>

@@ -26,6 +26,8 @@ import {
   Pin
 } from 'lucide-react';
 import { DocumentAttachmentPicker, AttachmentChip, ChatAttachmentRenderer, type DocumentAttachment } from '@/components/shared/DocumentAttachmentPicker';
+import { CrossChannelToggle } from '@/components/shared/CrossChannelToggle';
+import { useCrossChannelSend } from '@/hooks/useCrossChannelSend';
 import { toast } from 'sonner';
 import { allTeamMembers, TeamMember } from '@/config/team-members';
 import { useEmployeeChat } from '@/hooks/useEmployeeChat';
@@ -41,6 +43,7 @@ interface EmployeeChatHubProps {
 
 const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
   const { t } = useLanguage();
+  const { sendSecondaryEmail } = useCrossChannelSend();
   const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [messageInput, setMessageInput] = useState('');
@@ -103,25 +106,14 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
       // Cross-channel: also send by email if toggle is ON
       if (alsoSendByEmail && selectedEmployeeData) {
         const recipientEmail = `${selectedEmployee}@jbj.ae`;
-        try {
-          await supabase.functions.invoke("send-owner-email", {
-            body: {
-              to: recipientEmail,
-              subject: `Chat message regarding ${selectedEmployeeData.name}`,
-              body: msgContent,
-              senderId: "owner",
-              senderName: "Jane Bou Jaoude",
-              senderEmail: "ceo@jbj.ae",
-              senderTitle: "Founder & CEO",
-              account: "company",
-              useResend: true,
-              alsoSendByEmail: true,
-            },
-          });
-          toast.success(`Also emailed to ${selectedEmployeeData.name}`);
-        } catch (err) {
-          console.error("Cross-channel email error:", err);
-        }
+        sendSecondaryEmail({
+          primaryChannel: "chat",
+          recipientEmail,
+          subject: `Chat message regarding ${selectedEmployeeData.name}`,
+          body: msgContent,
+          alsoSendSecondary: true,
+          recipientName: selectedEmployeeData.name,
+        });
       }
     }
   };
@@ -486,15 +478,14 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                 <p className="text-[10px] text-black/30 px-1">
                   Press Enter to send · AI-powered responses · Encrypted
                 </p>
-                <div className="flex items-center gap-1.5">
-                  <Mail className="w-3 h-3 text-black/25" />
-                  <span className="text-[10px] text-black/30">Also email</span>
-                  <Switch
-                    checked={alsoSendByEmail}
-                    onCheckedChange={setAlsoSendByEmail}
-                    className="h-4 w-7 data-[state=checked]:bg-[#C9A84C]"
-                  />
-                </div>
+                {/* Cross-channel toggle — shared component */}
+                <CrossChannelToggle
+                  recipientEmail=""
+                  channel="chat-first"
+                  checked={alsoSendByEmail}
+                  onToggle={setAlsoSendByEmail}
+                  compact
+                />
               </div>
             </div>
           </>
