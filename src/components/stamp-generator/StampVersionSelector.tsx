@@ -39,6 +39,7 @@ export function StampVersionSelector({
   inkMode,
   onSelectVersion,
   onDuplicate,
+  onSaveBoth,
   onUploadNew,
   onClose,
 }: StampVersionSelectorProps) {
