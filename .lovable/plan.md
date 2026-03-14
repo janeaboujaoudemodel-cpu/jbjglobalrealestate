@@ -1,107 +1,77 @@
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+## Session 10 — Arc Text Engine Fixes (Arabic + English) + AI Model Stability
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+### Root Cause Analysis
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+After reviewing both `stampOfficialTemplate.ts` (501 lines) and `stampTemplates.ts` (969 lines), the arc text issues stem from these specific problems:
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+**1. Arabic text doesn't fill the arc**
+- `ARC_SPREAD_LIMIT = 0.72` in `stampOfficialTemplate.ts` line 88 artificially caps text to 72% of the semicircle
+- `fitFontSize()` uses conservative `charW` estimates (0.50 for Arabic) that shrink text unnecessarily
+- Arabic `letterSpacing` is set to `3` (line 299) which is too tight for full arc distribution
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+**2. English bottom arc reverses characters incorrectly**
+- `renderBottomArcTextPath()` (line 160-178) reverses the entire string character-by-character: `text.split('').reverse().join('')`
+- This breaks multi-byte characters and produces unreadable text
+- The correct approach: use a bottom arc path that sweeps left-to-right through the bottom half, so text naturally reads left-to-right without reversal
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+**3. Template inconsistencies (T1–T13)**
+- Templates T6, T9 in `stampTemplates.ts` place English on top and Arabic on bottom — violating the mandated structure (Arabic top, English bottom)
+- Templates T1–T5, T7–T8, T10–T11 don't use arc text at all for company names — they use centered `wrapText()` or ring text in filled bands
+- No consistent enforcement of the Arabic-top/English-bottom rule across AI-generated concepts
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+**4. Letter collision in AI models**
+- `autoFontSize()` in `stampTemplates.ts` doesn't account for arc curvature — only scales based on character count for flat text
+- No dynamic `letterSpacing` adjustment based on text length vs available arc length
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+### Implementation Plan
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+#### Fix 1: Improve Arabic Arc Distribution (`stampOfficialTemplate.ts`)
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+- Increase `ARC_SPREAD_LIMIT` from `0.72` to `0.88` — allows text to use ~88% of the semicircle
+- Make `letterSpacing` dynamic based on text length vs arc length: compute `availableArc - (textLength * charWidth)` and distribute remaining space as letter-spacing
+- Add a new helper `computeArcLetterSpacing(text, fontSize, arcRadius, spreadLimit, charWidth)` that returns optimal spacing
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+#### Fix 2: Fix English Bottom Arc Reading Direction (`stampOfficialTemplate.ts`)
 
-### Files Changed
-| File | Action |
-|------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+Replace `renderBottomArcTextPath()` entirely. Instead of reversing the string on a right-to-left path:
+- Use a path that sweeps from **left to right through the bottom**: `M (cx-r) cy A r r 0 0 0 (cx+r) cy` (sweep=0, large-arc=0 = bottom semicircle, left to right)
+- Place text on this path with `dominant-baseline="hanging"` or a `dy` offset to push text below the path (outside the circle)
+- No string reversal needed — text reads naturally left-to-right
 
-## Multi-Portal System + Developer Portal — Audit & Fixes (March 2026)
+#### Fix 3: Enforce Language Structure in All Templates (`stampTemplates.ts`)
 
-### ✅ ALL TASKS COMPLETED
+For bilingual templates (T6, T9, T12, T13):
+- **Top arc = Arabic company name** (always)
+- **Bottom arc = English company name** (always)
+- Swap T6 and T9 which currently have English on top
 
-| # | Task | Status |
-|---|------|--------|
-| 1 | Fix "Register as Rep" label → "Register as Developer or Sales" | ✅ DONE |
-| 2 | Rename Developer Portal tab → "Update Profile" | ✅ DONE |
-| 3 | Investor Portal rebuild (7 tabs, premium styling) | ✅ DONE |
-| 4 | Broker Portal enhancement (tabbed structure) | ✅ DONE |
-| 5 | ApprovalTimeline shared component | ✅ DONE |
-| 6 | Event Management Hub | ✅ DONE |
-| 7 | useEventManagement hook | ✅ DONE |
-| 8 | events + event_invitations tables | ✅ DONE |
-| 9 | Role options include "Other" with custom field | ✅ DONE |
-| 10 | Owner/CEO/Founder requires ID + passport + trade license + RERA | ✅ DONE |
-| 11 | Registration gate blocks portal access until registered | ✅ DONE |
-| 12 | Owner auto-approve toggle for developers | ✅ DONE |
-| 13 | Owner restrict access for developers | ✅ DONE |
-| 14 | Nationality with flags dropdown | ✅ DONE |
-| 15 | Phone with country code + flag | ✅ DONE |
-| 16 | Language multi-select | ✅ DONE |
-| A | Homepage CTA cards: 4x2 grid (8 cards, 2 rows of 4) | ✅ DONE |
-| B | Remove "Interest Registration" terminology → "Launch Interests" | ✅ DONE |
-| C | Owner in developer mode sees developer view only | ✅ DONE (was already correct) |
-| D | On-Leave self-service feature for developers | ✅ DONE (toggle + date pickers in profile) |
-| E | Secondary contact fields (Company/Personal Email+Phone) | ✅ DONE |
-| F | Icon styling: champagne-gold gradient | ✅ DONE (already correct) |
+For location arcs (inner ring):
+- **Upper inner arc = English location**
+- **Lower inner arc = Arabic location**
+- Already correct in `stampOfficialTemplate.ts` but needs enforcement in template variants
 
-### Files Changed (This Batch)
+#### Fix 4: Dynamic Anti-Collision Spacing
+
+Create a shared `safeArcFontSize(text, maxRadius, isArabic)` function that:
+1. Computes available arc length from radius and spread limit
+2. Estimates text width using character count × average glyph width (different for Arabic vs Latin)
+3. Returns `{ fontSize, letterSpacing }` that guarantees no overlap
+4. Minimum letter-spacing floor: `0.5px` for Arabic, `1px` for English
+
+Apply this function in both `stampOfficialTemplate.ts` and all arc-text templates in `stampTemplates.ts`.
+
+#### Fix 5: Export Consistency
+
+The `StampSVGRenderer.tsx` already uses `dangerouslySetInnerHTML` with the raw SVG — what renders in preview is what exports. No additional changes needed for export fidelity as long as the SVG source is correct.
+
+### Files to Modify
+
 | File | Changes |
 |------|---------|
-| `src/components/home/DeveloperPortalCTA.tsx` | 8 cards in 4x2 grid, renamed labels, added "Update Your Profile" card |
-| `src/pages/DeveloperPortal.tsx` | Renamed all "Interest Registration" → "Launch Interests" (8 occurrences) |
-| `src/components/developer-portal/SalesRepRegistration.tsx` | Renamed title to "Register as Developer or Sales" |
+| `src/lib/stampOfficialTemplate.ts` | Replace `renderBottomArcTextPath` with correct left-to-right bottom path; increase `ARC_SPREAD_LIMIT`; add dynamic spacing helper; adjust Arabic letter-spacing |
+| `src/lib/stampTemplates.ts` | Swap Arabic/English arc positions in T6 and T9; replace `bottomArcText` helper with fixed version; apply `safeArcFontSize` to all arc text; ensure all bilingual templates follow Arabic-top/English-bottom rule |
+
+No new files. No database changes.
+
