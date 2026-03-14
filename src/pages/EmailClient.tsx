@@ -30,6 +30,7 @@ import { supabase } from "@/integrations/supabase/client";
 import EmailSettingsPanel from "@/components/email/EmailSettingsPanel";
 import EmailAssistantPanel from "@/components/email/EmailAssistantPanel";
 import EmailProductivityPanel from "@/components/email/EmailProductivityPanel";
+import { useCrossChannelDetection } from "@/hooks/useCrossChannelDetection";
 
 // ─── Sender Identities — mapped to real JBJ team personas ───
 interface SenderIdentity {
@@ -158,6 +159,9 @@ const EmailClient = () => {
   const [analysisCache] = useState<Map<string, { needs_reply: boolean; priority: string; action_items: string[] }>>(new Map());
   const emailsPerPage = 20;
 
+  // Cross-channel: detect if recipient is a registered platform user
+  const recipientDetection = useCrossChannelDetection(newEmail.to);
+
   const folders = [
     { id: "inbox" as const, label: "Inbox", icon: Inbox, count: emails.filter(e => e.folder === "inbox" && !e.read).length },
     { id: "sent" as const, label: "Sent", icon: Send, count: 0 },
@@ -281,6 +285,7 @@ const EmailClient = () => {
           account: currentSender.account,
           useResend: sendViaResend,
           alsoNotifyChat,
+          chatRecipientId: recipientDetection.userId || recipientDetection.teamMemberId || undefined,
         },
       });
 
@@ -462,15 +467,30 @@ const EmailClient = () => {
                   </div>
                 </div>
 
-                {/* Also notify in chat toggle */}
-                <div className="flex items-center justify-between bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg px-3 py-2">
-                  <div className="flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-[#C9A84C]" />
-                    <span className="text-sm text-black">Also notify in Team Chat</span>
-                    <span className="text-[10px] text-black/40">(if internal user)</span>
+                {/* Also notify in chat toggle — only shown for registered users */}
+                {recipientDetection.isLoading ? (
+                  <div className="flex items-center gap-2 bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg px-3 py-2">
+                    <MessageSquare className="w-4 h-4 text-black/30" />
+                    <span className="text-sm text-black/40">Checking recipient...</span>
+                    <RefreshCw className="w-3 h-3 text-black/30 animate-spin ml-auto" />
                   </div>
-                  <Switch checked={alsoNotifyChat} onCheckedChange={setAlsoNotifyChat} />
-                </div>
+                ) : recipientDetection.isRegistered ? (
+                  <div className="flex items-center justify-between bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg px-3 py-2">
+                    <div className="flex items-center gap-2">
+                      <MessageSquare className="w-4 h-4 text-[#C9A84C]" />
+                      <span className="text-sm text-black">Also notify in Team Chat</span>
+                      <Badge className="bg-green-100 text-green-700 border-green-300 text-[10px] px-1.5 h-4">
+                        Internal User{recipientDetection.displayName ? ` · ${recipientDetection.displayName}` : ''}
+                      </Badge>
+                    </div>
+                    <Switch checked={alsoNotifyChat} onCheckedChange={setAlsoNotifyChat} />
+                  </div>
+                ) : newEmail.to.includes('@') ? (
+                  <div className="flex items-center gap-2 bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2">
+                    <Mail className="w-4 h-4 text-zinc-400" />
+                    <span className="text-xs text-zinc-500">External recipient — email only</span>
+                  </div>
+                ) : null}
               </div>
             </DialogContent>
           </Dialog>

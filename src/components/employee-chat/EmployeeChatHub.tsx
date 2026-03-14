@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import { 
   Send, 
   Search, 
@@ -18,13 +19,15 @@ import {
   MoreVertical,
   Paperclip,
   Smile,
-  ArrowLeft
+  ArrowLeft,
+  Mail
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { allTeamMembers, TeamMember } from '@/config/team-members';
 import { useEmployeeChat } from '@/hooks/useEmployeeChat';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { supabase } from '@/integrations/supabase/client';
 
 interface EmployeeChatHubProps {
   className?: string;
@@ -37,6 +40,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
   const [messageInput, setMessageInput] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
   const [showSidebar, setShowSidebar] = useState(true);
+  const [alsoSendByEmail, setAlsoSendByEmail] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const { 
@@ -79,10 +83,35 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
     }
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (messageInput.trim() && selectedEmployee) {
+      const msgContent = messageInput;
       sendMessage(messageInput);
       setMessageInput('');
+
+      // Cross-channel: also send by email if toggle is ON
+      if (alsoSendByEmail && selectedEmployeeData) {
+        const recipientEmail = `${selectedEmployee}@jbj.ae`;
+        try {
+          await supabase.functions.invoke("send-owner-email", {
+            body: {
+              to: recipientEmail,
+              subject: `Chat message regarding ${selectedEmployeeData.name}`,
+              body: msgContent,
+              senderId: "owner",
+              senderName: "Jane Bou Jaoude",
+              senderEmail: "ceo@jbj.ae",
+              senderTitle: "Founder & CEO",
+              account: "company",
+              useResend: true,
+              alsoSendByEmail: true,
+            },
+          });
+          toast.success(`Also emailed to ${selectedEmployeeData.name}`);
+        } catch (err) {
+          console.error("Cross-channel email error:", err);
+        }
+      }
     }
   };
 
@@ -421,9 +450,20 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                   )}
                 </Button>
               </div>
-              <p className="text-[10px] text-black/30 mt-1.5 px-1">
-                Press Enter to send · AI-powered responses · Encrypted
-              </p>
+              <div className="flex items-center justify-between mt-1.5 px-1">
+                <p className="text-[10px] text-black/30 px-1">
+                  Press Enter to send · AI-powered responses · Encrypted
+                </p>
+                <div className="flex items-center gap-1.5">
+                  <Mail className="w-3 h-3 text-black/25" />
+                  <span className="text-[10px] text-black/30">Also email</span>
+                  <Switch
+                    checked={alsoSendByEmail}
+                    onCheckedChange={setAlsoSendByEmail}
+                    className="h-4 w-7 data-[state=checked]:bg-[#C9A84C]"
+                  />
+                </div>
+              </div>
             </div>
           </>
         ) : (

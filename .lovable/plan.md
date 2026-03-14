@@ -1,88 +1,107 @@
+## CRM System Upgrade — Implementation Status
 
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-## Session 19 — Email Hub + Chat Hub + Cross-Channel Logic
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-### Current State
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-| Location | Chat Toggle | Email Toggle | User Detection |
-|----------|------------|-------------|----------------|
-| **TeamChat.tsx** (JBJ Workspace) | ON by default (primary) | `alsoSendByEmail` toggle exists, OFF by default | Comment says "all recipients are registered" — no actual detection |
-| **EmailClient.tsx** (Email Hub) | `alsoNotifyChat` toggle exists, OFF by default | ON by default (primary) | Shows "(if internal user)" label — no actual detection logic |
-| **EmployeeChatHub.tsx** (Employee Chat) | ON by default (primary) | **NO toggle at all** | No detection |
-| **Edge function** (`send-owner-email`) | Cross-notify code exists but requires `chatRecipientId` which is **never sent** from frontend | Primary | No user lookup |
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-**Root problems:**
-1. The Email Hub chat-notify toggle is cosmetic — `alsoNotifyChat` is sent to the edge function but `chatRecipientId` is never populated, so the cross-notification never fires
-2. No user detection logic exists — the system never checks if a recipient email belongs to a registered platform user
-3. Employee Chat Hub has no "also email" toggle at all
-4. The `alsoSendByEmail` in TeamChat is cosmetic — `sendMessage()` never reads it or triggers any email action
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-### Implementation Plan
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-#### 1. Create shared cross-channel utility hook: `useCrossChannelDetection`
-**File:** `src/hooks/useCrossChannelDetection.ts`
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-A reusable hook that:
-- Takes a recipient email/identifier
-- Queries `auth.users` (via a new edge function action) or `crm_users_profile` / `profiles` to check if that email belongs to a registered user
-- Returns `{ isRegistered: boolean, userId: string | null, displayName: string | null }`
-- Used by both Email Hub and Chat Hub
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-#### 2. Create edge function action: `check-recipient` in `send-owner-email`
-Add a new action to the existing edge function:
-- **`action: "check_recipient"`** — Takes `{ email: string }`, queries profiles/CRM tables, returns whether the user is registered and their internal ID
-- This avoids exposing auth tables to the client
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-#### 3. Update Email Hub (`EmailClient.tsx`)
-- Import and use `useCrossChannelDetection` on the `newEmail.to` field
-- When recipient IS registered: show the "Also notify in Team Chat" toggle (as it exists now) — pass the detected `userId` as `chatRecipientId` to the edge function
-- When recipient is NOT registered: **hide** the chat toggle entirely, show a subtle "External recipient — email only" label
-- Email remains ON by default (primary channel)
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-#### 4. Update Team Chat (`TeamChat.tsx`)
-- The `alsoSendByEmail` toggle already exists and is OFF by default — correct behavior per spec
-- Wire `sendMessage()` to actually call `send-owner-email` when `alsoSendByEmail` is true, using the DM recipient's team email from their team member config
-- Chat remains ON by default (primary channel)
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-#### 5. Update Employee Chat Hub (`EmployeeChatHub.tsx`)
-- Add "Also email" toggle below the message input (matching TeamChat pattern)
-- OFF by default
-- When toggled ON and message sent, trigger `send-owner-email` to the employee's email from their team member config
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-#### 6. Update edge function cross-notification
-- Fix the cross-notify block in `send-owner-email` to work without `chatRecipientId` when `alsoNotifyChat` is true — look up the recipient by email in the user profiles
-- When `alsoNotifyChat` is true, insert a notification into `employee_chat_messages` with the matched user ID
-
-### Files to Create/Modify
-
-| File | Change |
+### Files Changed
+| File | Action |
 |------|--------|
-| `src/hooks/useCrossChannelDetection.ts` | NEW — shared user detection hook |
-| `src/pages/EmailClient.tsx` | Wire detection to chat toggle visibility, pass `chatRecipientId` |
-| `src/pages/TeamChat.tsx` | Wire `alsoSendByEmail` to actually send email via edge function |
-| `src/components/employee-chat/EmployeeChatHub.tsx` | Add "Also email" toggle + wire to edge function |
-| `supabase/functions/send-owner-email/index.ts` | Add `check_recipient` action, fix cross-notify to look up user by email |
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
 
-### Cross-Channel Rules Summary
+## Multi-Portal System + Developer Portal — Audit & Fixes (March 2026)
 
-```text
-┌─────────────────────────────────────────────────┐
-│              COMMUNICATION RULES                 │
-├─────────────────────┬───────────────────────────┤
-│  CONTEXT            │  BEHAVIOR                 │
-├─────────────────────┼───────────────────────────┤
-│  Chat Hub           │  Chat: ON (default)       │
-│  (TeamChat /        │  Email: OFF (toggle)      │
-│   EmployeeChat)     │  All users are internal   │
-│                     │  → always show email opt  │
-├─────────────────────┼───────────────────────────┤
-│  Email Hub          │  Email: ON (default)      │
-│  (EmailClient)      │  Chat: conditional        │
-│                     │  → registered? show chat  │
-│                     │  → external? email only   │
-└─────────────────────┴───────────────────────────┘
-```
+### ✅ ALL TASKS COMPLETED
 
-### What Will NOT Be Implemented (Transparency)
-- Marketing Hub bulk notifications, CRM lead assignments, meeting booking emails, and other specialized notification points are out of scope — they have their own delivery logic and are not part of the owner's direct communication workflow.
+| # | Task | Status |
+|---|------|--------|
+| 1 | Fix "Register as Rep" label → "Register as Developer or Sales" | ✅ DONE |
+| 2 | Rename Developer Portal tab → "Update Profile" | ✅ DONE |
+| 3 | Investor Portal rebuild (7 tabs, premium styling) | ✅ DONE |
+| 4 | Broker Portal enhancement (tabbed structure) | ✅ DONE |
+| 5 | ApprovalTimeline shared component | ✅ DONE |
+| 6 | Event Management Hub | ✅ DONE |
+| 7 | useEventManagement hook | ✅ DONE |
+| 8 | events + event_invitations tables | ✅ DONE |
+| 9 | Role options include "Other" with custom field | ✅ DONE |
+| 10 | Owner/CEO/Founder requires ID + passport + trade license + RERA | ✅ DONE |
+| 11 | Registration gate blocks portal access until registered | ✅ DONE |
+| 12 | Owner auto-approve toggle for developers | ✅ DONE |
+| 13 | Owner restrict access for developers | ✅ DONE |
+| 14 | Nationality with flags dropdown | ✅ DONE |
+| 15 | Phone with country code + flag | ✅ DONE |
+| 16 | Language multi-select | ✅ DONE |
+| A | Homepage CTA cards: 4x2 grid (8 cards, 2 rows of 4) | ✅ DONE |
+| B | Remove "Interest Registration" terminology → "Launch Interests" | ✅ DONE |
+| C | Owner in developer mode sees developer view only | ✅ DONE (was already correct) |
+| D | On-Leave self-service feature for developers | ✅ DONE (toggle + date pickers in profile) |
+| E | Secondary contact fields (Company/Personal Email+Phone) | ✅ DONE |
+| F | Icon styling: champagne-gold gradient | ✅ DONE (already correct) |
 
+### Files Changed (This Batch)
+| File | Changes |
+|------|---------|
+| `src/components/home/DeveloperPortalCTA.tsx` | 8 cards in 4x2 grid, renamed labels, added "Update Your Profile" card |
+| `src/pages/DeveloperPortal.tsx` | Renamed all "Interest Registration" → "Launch Interests" (8 occurrences) |
+| `src/components/developer-portal/SalesRepRegistration.tsx` | Renamed title to "Register as Developer or Sales" |

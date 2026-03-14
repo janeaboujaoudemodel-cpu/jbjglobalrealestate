@@ -78,6 +78,58 @@ serve(async (req: Request) => {
     const body = await req.json();
     const action = body.action;
 
+    // ─── ACTION: check_recipient ───
+    if (action === "check_recipient") {
+      const email = body.email?.trim()?.toLowerCase();
+      if (!email) {
+        return jsonResponse({ isRegistered: false, userId: null, displayName: null });
+      }
+
+      // Check crm_users_profile
+      const { data: crmProfile } = await serviceClient
+        .from("crm_users_profile")
+        .select("user_id, display_name, crm_role")
+        .ilike("email", email)
+        .maybeSingle();
+
+      if (crmProfile) {
+        return jsonResponse({
+          isRegistered: true,
+          userId: crmProfile.user_id,
+          displayName: crmProfile.display_name,
+          teamMemberId: null,
+        });
+      }
+
+      // Check profiles table
+      const { data: profile } = await serviceClient
+        .from("profiles")
+        .select("id, display_name, email")
+        .ilike("email", email)
+        .maybeSingle();
+
+      if (profile) {
+        return jsonResponse({
+          isRegistered: true,
+          userId: profile.id,
+          displayName: profile.display_name,
+          teamMemberId: null,
+        });
+      }
+
+      // Check if it's a @jbj.ae domain (internal team email)
+      if (email.endsWith("@jbj.ae")) {
+        return jsonResponse({
+          isRegistered: true,
+          userId: null,
+          displayName: email.split("@")[0],
+          teamMemberId: email.split("@")[0],
+        });
+      }
+
+      return jsonResponse({ isRegistered: false, userId: null, displayName: null });
+    }
+
     // ─── ACTION: check_status ───
     if (action === "check_status") {
       const { data: settings } = await serviceClient
@@ -336,15 +388,37 @@ serve(async (req: Request) => {
       });
     }
 
-    // Cross-notification
-    if (emailBody.alsoNotifyChat && emailBody.chatRecipientId) {
+    // Cross-notification: notify in chat when alsoNotifyChat is true
+    if (emailBody.alsoNotifyChat) {
+      // Look up recipient by email to find their chat user ID
+      let chatRecipientId = emailBody.chatRecipientId || null;
+      
+      if (!chatRecipientId) {
+        // Try to find by email in profiles
+        const { data: recipientProfile } = await serviceClient
+          .from("profiles")
+          .select("id")
+          .ilike("email", emailBody.to.toLowerCase())
+          .maybeSingle();
+        
+        if (recipientProfile) {
+          chatRecipientId = recipientProfile.id;
+        }
+      }
+
+      // Insert chat notification regardless (visible in email-notifications channel)
       await serviceClient.from("employee_chat_messages").insert({
-        channel_id: "email-notifications",
-        sender_id: user.id,
-        sender_name: emailBody.senderName,
-        content: `📧 Email sent to ${emailBody.to}: "${emailBody.subject}"`,
-        metadata: { type: "email_notification", thread_id: threadId },
+        sender_id: 'current-user',
+        sender_type: 'user',
+        recipient_id: chatRecipientId || 'email-notifications',
+        message: `📧 Email sent to ${emailBody.to}: "${emailBody.subject}"`,
       });
+    }
+
+    // Cross-notification: send email when alsoSendByEmail is true (from chat context)
+    if (body.alsoSendByEmail && body.chatRecipientEmail) {
+      // This is handled by the calling function — the email was already sent above
+      console.log("[Cross-channel] Email also sent to:", body.chatRecipientEmail);
     }
 
     return jsonResponse({
