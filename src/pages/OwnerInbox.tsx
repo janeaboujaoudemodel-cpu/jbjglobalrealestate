@@ -12,14 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageSquare,
@@ -29,7 +21,6 @@ import {
   Globe,
   Mic,
   Search,
-  Filter,
   Bell,
   Clock,
   CheckCircle,
@@ -38,9 +29,7 @@ import {
   LinkIcon,
   Plus,
   RefreshCw,
-  ChevronRight,
   Sparkles,
-  Volume2,
 } from "lucide-react";
 import useOwnerInbox, { 
   CommThread, 
@@ -61,6 +50,17 @@ const channelIcons: Record<string, React.ReactNode> = {
   voice: <Mic className="h-4 w-4 text-purple-500" />,
 };
 
+const channelTabs: { value: ChannelType | 'all'; label: string; icon: React.ReactNode }[] = [
+  { value: 'all', label: 'All', icon: <MessageSquare className="h-4 w-4" /> },
+  { value: 'whatsapp', label: 'WhatsApp', icon: <MessageSquare className="h-4 w-4 text-green-500" /> },
+  { value: 'email_gmail', label: 'Gmail', icon: <Mail className="h-4 w-4 text-red-500" /> },
+  { value: 'email_hostinger', label: 'Hostinger', icon: <Mail className="h-4 w-4 text-blue-500" /> },
+  { value: 'instagram', label: 'Instagram', icon: <Instagram className="h-4 w-4 text-pink-500" /> },
+  { value: 'facebook', label: 'Facebook', icon: <Facebook className="h-4 w-4 text-blue-600" /> },
+  { value: 'website_chat', label: 'Website', icon: <Globe className="h-4 w-4 text-gold" /> },
+  { value: 'voice', label: 'Voice', icon: <Mic className="h-4 w-4 text-purple-500" /> },
+];
+
 const statusConfig: Record<ThreadStatus, { label: string; color: string; icon: React.ReactNode }> = {
   new: { label: "New", color: "bg-blue-500/10 text-blue-500 border-blue-500/30", icon: <Bell className="h-3 w-3" /> },
   needs_reply: { label: "Needs Reply", color: "bg-red-500/10 text-red-500 border-red-500/30", icon: <AlertTriangle className="h-3 w-3" /> },
@@ -69,8 +69,11 @@ const statusConfig: Record<ThreadStatus, { label: string; color: string; icon: R
   closed: { label: "Closed", color: "bg-green-500/10 text-green-500 border-green-500/30", icon: <CheckCircle className="h-3 w-3" /> },
 };
 
+type ActiveStatFilter = 'none' | 'unread' | 'needs_reply' | 'new' | 'follow_up_due';
+
 export default function OwnerInbox() {
   const navigate = useNavigate();
+  const [activeStatFilter, setActiveStatFilter] = useState<ActiveStatFilter>('none');
   const [filters, setFilters] = useState<InboxFilters>({
     status: 'all',
     channel: 'all',
@@ -91,6 +94,15 @@ export default function OwnerInbox() {
     isUpdating,
   } = useOwnerInbox(filters);
 
+  // Compute per-channel unread counts
+  const channelUnreadCounts: Record<string, number> = {};
+  for (const t of threads) {
+    if (t.unread_count > 0) {
+      channelUnreadCounts[t.channel_type] = (channelUnreadCounts[t.channel_type] || 0) + t.unread_count;
+    }
+  }
+  const totalUnreadAll = Object.values(channelUnreadCounts).reduce((a, b) => a + b, 0);
+
   // Select first unread thread on load
   useEffect(() => {
     if (threads.length > 0 && !selectedThread) {
@@ -106,6 +118,34 @@ export default function OwnerInbox() {
     if (thread.unread_count > 0) {
       markAsRead(thread.id);
     }
+  };
+
+  const handleStatCardClick = (filter: ActiveStatFilter) => {
+    if (activeStatFilter === filter) {
+      // Toggle off
+      setActiveStatFilter('none');
+      setFilters(prev => ({ ...prev, status: 'all', unreadOnly: false }));
+    } else {
+      setActiveStatFilter(filter);
+      switch (filter) {
+        case 'unread':
+          setFilters(prev => ({ ...prev, status: 'all', unreadOnly: true }));
+          break;
+        case 'needs_reply':
+          setFilters(prev => ({ ...prev, status: 'needs_reply', unreadOnly: false }));
+          break;
+        case 'new':
+          setFilters(prev => ({ ...prev, status: 'new', unreadOnly: false }));
+          break;
+        case 'follow_up_due':
+          setFilters(prev => ({ ...prev, status: 'follow_up_due', unreadOnly: false }));
+          break;
+      }
+    }
+  };
+
+  const handleChannelTabClick = (channel: ChannelType | 'all') => {
+    setFilters(prev => ({ ...prev, channel }));
   };
 
   return (
@@ -152,16 +192,45 @@ export default function OwnerInbox() {
             </div>
           </motion.div>
 
-          {/* Stats Cards */}
+          {/* Stats Cards with Active 3D States */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
-            <StatsCard label="Total" value={stats.total} icon={<MessageSquare className="h-4 w-4" />} />
-            <StatsCard label="Unread" value={stats.unread} icon={<Bell className="h-4 w-4" />} variant="warning" />
-            <StatsCard label="Needs Reply" value={stats.needsReply} icon={<AlertTriangle className="h-4 w-4" />} variant="danger" />
-            <StatsCard label="New" value={stats.new} icon={<Sparkles className="h-4 w-4" />} variant="info" />
-            <StatsCard label="Follow-up Due" value={stats.followUpDue} icon={<Clock className="h-4 w-4" />} variant="orange" />
+            <StatsCard label="Total" value={stats.total} icon={<MessageSquare className="h-4 w-4" />} isActive={false} onClick={() => {}} />
+            <StatsCard label="Unread" value={stats.unread} icon={<Bell className="h-4 w-4" />} variant="warning" isActive={activeStatFilter === 'unread'} onClick={() => handleStatCardClick('unread')} />
+            <StatsCard label="Needs Reply" value={stats.needsReply} icon={<AlertTriangle className="h-4 w-4" />} variant="danger" isActive={activeStatFilter === 'needs_reply'} onClick={() => handleStatCardClick('needs_reply')} />
+            <StatsCard label="New" value={stats.new} icon={<Sparkles className="h-4 w-4" />} variant="info" isActive={activeStatFilter === 'new'} onClick={() => handleStatCardClick('new')} />
+            <StatsCard label="Follow-up Due" value={stats.followUpDue} icon={<Clock className="h-4 w-4" />} variant="orange" isActive={activeStatFilter === 'follow_up_due'} onClick={() => handleStatCardClick('follow_up_due')} />
           </div>
 
-          {/* Filters */}
+          {/* Channel Tabs - Header Bar with Badges */}
+          <div className="flex items-center gap-1 mb-4 overflow-x-auto pb-1 border-b-2 border-gold/10">
+            {channelTabs.map((tab) => {
+              const isActive = filters.channel === tab.value;
+              const unreadCount = tab.value === 'all' ? totalUnreadAll : (channelUnreadCounts[tab.value] || 0);
+              return (
+                <button
+                  key={tab.value}
+                  onClick={() => handleChannelTabClick(tab.value)}
+                  className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-200 border-b-2 -mb-[2px] rounded-t-lg ${
+                    isActive
+                      ? 'border-gold bg-gold/10 text-foreground font-bold shadow-sm'
+                      : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                  }`}
+                >
+                  {tab.icon}
+                  <span>{tab.label}</span>
+                  {unreadCount > 0 && (
+                    <span className={`ml-1 min-w-[20px] h-5 px-1.5 rounded-full text-xs font-bold flex items-center justify-center ${
+                      isActive ? 'bg-gold text-black' : 'bg-muted text-muted-foreground'
+                    }`}>
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Search & Status Filters */}
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="relative flex-1 min-w-[200px] max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
@@ -172,55 +241,10 @@ export default function OwnerInbox() {
                 className="pl-10 border-gold/30"
               />
             </div>
-            
-            <Select 
-              value={filters.status || 'all'} 
-              onValueChange={(v) => setFilters(prev => ({ ...prev, status: v as ThreadStatus | 'all' }))}
-            >
-              <SelectTrigger className="w-[140px] border-gold/30">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="new">New</SelectItem>
-                <SelectItem value="needs_reply">Needs Reply</SelectItem>
-                <SelectItem value="waiting">Waiting</SelectItem>
-                <SelectItem value="follow_up_due">Follow-up Due</SelectItem>
-                <SelectItem value="closed">Closed</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select 
-              value={filters.channel || 'all'} 
-              onValueChange={(v) => setFilters(prev => ({ ...prev, channel: v as ChannelType | 'all' }))}
-            >
-              <SelectTrigger className="w-[160px] border-gold/30">
-                <SelectValue placeholder="Channel" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Channels</SelectItem>
-                <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                <SelectItem value="email_gmail">Gmail</SelectItem>
-                <SelectItem value="email_hostinger">Hostinger</SelectItem>
-                <SelectItem value="instagram">Instagram</SelectItem>
-                <SelectItem value="facebook">Facebook</SelectItem>
-                <SelectItem value="website_chat">Website</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Button
-              variant={filters.unreadOnly ? "default" : "outline"}
-              size="sm"
-              onClick={() => setFilters(prev => ({ ...prev, unreadOnly: !prev.unreadOnly }))}
-              className={filters.unreadOnly ? "bg-gold text-black" : "border-gold/30"}
-            >
-              <Bell className="h-4 w-4 mr-1" />
-              Unread
-            </Button>
           </div>
 
           {/* Main Content - Split View */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" style={{ height: 'calc(100vh - 340px)', minHeight: '400px' }}>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" style={{ height: 'calc(100vh - 420px)', minHeight: '400px' }}>
             {/* Thread List */}
             <div className="lg:col-span-1 min-h-0 overflow-hidden">
               <Card className="border border-gold/20 bg-white/90 backdrop-blur-sm h-full overflow-hidden shadow-sm">
@@ -284,24 +308,36 @@ export default function OwnerInbox() {
   );
 }
 
-// Stats Card Component
+// Stats Card Component with Active 3D State
 function StatsCard({ 
   label, 
   value, 
   icon, 
-  variant = 'default' 
+  variant = 'default',
+  isActive,
+  onClick,
 }: { 
   label: string; 
   value: number; 
   icon: React.ReactNode;
   variant?: 'default' | 'warning' | 'danger' | 'info' | 'orange';
+  isActive: boolean;
+  onClick: () => void;
 }) {
-  const variants = {
+  const baseVariants = {
     default: "border-gold/30 bg-white",
     warning: "border-yellow-500/30 bg-yellow-50",
     danger: "border-red-500/30 bg-red-50",
     info: "border-blue-500/30 bg-blue-50",
     orange: "border-orange-500/30 bg-orange-50",
+  };
+
+  const activeVariants = {
+    default: "border-gold bg-gold/15 shadow-[0_4px_16px_rgba(200,167,102,0.4)] scale-[1.03]",
+    warning: "border-yellow-500 bg-yellow-100 shadow-[0_4px_16px_rgba(234,179,8,0.4)] scale-[1.03]",
+    danger: "border-red-500 bg-red-100 shadow-[0_4px_16px_rgba(239,68,68,0.4)] scale-[1.03]",
+    info: "border-blue-500 bg-blue-100 shadow-[0_4px_16px_rgba(59,130,246,0.4)] scale-[1.03]",
+    orange: "border-orange-500 bg-orange-100 shadow-[0_4px_16px_rgba(249,115,22,0.4)] scale-[1.03]",
   };
 
   const iconColors = {
@@ -312,8 +348,15 @@ function StatsCard({
     orange: "text-orange-600",
   };
 
+  const isClickable = variant !== 'default';
+
   return (
-    <Card className={`${variants[variant]} border`}>
+    <Card 
+      className={`${isActive ? activeVariants[variant] : baseVariants[variant]} border-2 transition-all duration-300 ${
+        isClickable ? 'cursor-pointer hover:scale-[1.02]' : ''
+      }`}
+      onClick={isClickable ? onClick : undefined}
+    >
       <CardContent className="p-3">
         <div className="flex items-center justify-between">
           <div>
