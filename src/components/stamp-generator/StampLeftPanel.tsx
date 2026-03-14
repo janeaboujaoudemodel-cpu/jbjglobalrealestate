@@ -14,7 +14,7 @@ import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import {
   RotateCw, Award, Upload, Wand2, Loader2, Palette, Type,
-  CircleDot, Stamp, Layers, PenTool, Sparkles, Landmark
+  CircleDot, Stamp, Layers, PenTool, Sparkles
 } from 'lucide-react';
 
 // 5 mandatory standard export colors
