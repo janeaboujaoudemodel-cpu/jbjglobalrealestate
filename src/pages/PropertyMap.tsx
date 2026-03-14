@@ -176,7 +176,7 @@ const PropertyMap = () => {
   return (
     <div className="min-h-screen bg-background relative">
       {/* Fixed horizontal filter bar below utility bar */}
-      <div className="fixed top-[48px] left-0 lg:left-[200px] right-0 z-[9990] bg-background/95 backdrop-blur-md border-b border-gold/20">
+      <div className="fixed top-[48px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9990] bg-background/95 backdrop-blur-md border-b border-gold/20">
         <div className="flex items-center gap-2 px-3 py-1.5">
           <Badge variant="secondary" className="gap-1 shrink-0">
             <MapPin className="h-3 w-3" />
