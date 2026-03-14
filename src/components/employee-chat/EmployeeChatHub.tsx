@@ -388,20 +388,23 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                             {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </p>
                         </div>
-                        {/* Copy Button */}
-                        <button
-                          onClick={async () => {
-                            await navigator.clipboard.writeText(msg.message);
-                            toast.success(t('chat.messageCopied') || 'Message copied');
-                          }}
-                          className={cn(
-                            "flex items-center gap-1 mt-0.5 text-[10px] text-black/30 hover:text-[#C9A84C] transition-colors opacity-0 group-hover:opacity-100",
-                            isUser ? "mr-1" : "ml-1"
-                          )}
-                        >
-                          <Copy className="w-3 h-3" />
-                          <span>Copy</span>
-                        </button>
+                        {/* Copy Button + Quick Actions */}
+                        <div className="flex items-center gap-1 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={async () => {
+                              await navigator.clipboard.writeText(msg.message);
+                              toast.success(t('chat.messageCopied') || 'Message copied');
+                            }}
+                            className={cn(
+                              "text-[10px] text-black/30 hover:text-[#C9A84C] flex items-center gap-0.5 px-1.5 py-0.5 rounded hover:bg-[#C9A84C]/5",
+                              isUser ? "mr-1" : "ml-1"
+                            )}
+                          >
+                            <Copy className="w-3 h-3" /> Copy
+                          </button>
+                          <QuickCalendarWidget compact source="chat" prefillTitle={msg.message.substring(0, 60)} />
+                          <QuickNoteWidget compact source="chat" prefillTitle="Chat note" prefillContent={`${isUser ? 'You' : selectedEmployeeData.name}: ${msg.message}`} />
+                        </div>
                       </div>
                     </div>
                   );
