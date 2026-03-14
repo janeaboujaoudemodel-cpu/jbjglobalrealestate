@@ -273,10 +273,11 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const textArcR = Math.min(rawTextArcR, outerR - SAFE_ZONE);
   const clampedTextArcR = Math.max(textArcR, middleR + SAFE_ZONE);
 
-  // Location text arc radius
-  const rawLocTextR = (middleR + innerR) / 2;
-  const locationTextR = Math.min(rawLocTextR, middleR - SAFE_ZONE);
-  const clampedLocTextR = Math.max(locationTextR, innerR + SAFE_ZONE);
+  // Location text arc radius — true midpoint between middle and inner rings
+  const clampedLocTextR = Math.max(
+    Math.min((middleR + innerR) / 2, middleR - SAFE_ZONE),
+    innerR + SAFE_ZONE
+  );
 
   // Arabic arc spread
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
