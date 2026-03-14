@@ -105,5 +105,6 @@ export const OwnerRoutes = () => (
     <Route path="notes" element={<FoundersNotesPanel />} />
     <Route path="brand-assets" element={<BrandAssetsDashboard />} />
     <Route path="crm-security" element={<CRMSecurityDashboard />} />
+    <Route path="ai-tools-analytics" element={<AIToolAnalyticsDashboard />} />
   </Route>
 );
