@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAIToolTracking } from "@/hooks/useAIToolTracking";
 
 export interface AIToolResponse {
   success: boolean;
