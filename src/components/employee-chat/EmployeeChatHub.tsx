@@ -20,8 +20,10 @@ import {
   Paperclip,
   Smile,
   ArrowLeft,
-  Mail
+  Mail,
+  FileText
 } from 'lucide-react';
+import { DocumentAttachmentPicker, AttachmentChip, ChatAttachmentRenderer, type DocumentAttachment } from '@/components/shared/DocumentAttachmentPicker';
 import { toast } from 'sonner';
 import { allTeamMembers, TeamMember } from '@/config/team-members';
 import { useEmployeeChat } from '@/hooks/useEmployeeChat';
@@ -41,6 +43,8 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
   const [showSidebar, setShowSidebar] = useState(true);
   const [alsoSendByEmail, setAlsoSendByEmail] = useState(false);
+  const [showAttachPicker, setShowAttachPicker] = useState(false);
+  const [pendingAttachments, setPendingAttachments] = useState<DocumentAttachment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const { 
@@ -86,8 +90,11 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
   const handleSendMessage = async () => {
     if (messageInput.trim() && selectedEmployee) {
       const msgContent = messageInput;
+      // Include attachments metadata with message
+      const attachmentMeta = pendingAttachments.length > 0 ? pendingAttachments : undefined;
       sendMessage(messageInput);
       setMessageInput('');
+      setPendingAttachments([]);
 
       // Cross-channel: also send by email if toggle is ON
       if (alsoSendByEmail && selectedEmployeeData) {
@@ -422,7 +429,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
             {/* Message Input */}
             <div className="p-3 sm:p-4 border-t border-[#C9A84C]/10 bg-white/80 backdrop-blur-sm">
               <div className="flex items-end gap-2">
-                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0 hover:bg-[#C9A84C]/10 hidden sm:flex">
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0 hover:bg-[#C9A84C]/10 hidden sm:flex" onClick={() => setShowAttachPicker(true)}>
                   <Paperclip className="h-4 w-4 text-black/40" />
                 </Button>
                 <div className="flex-1 relative">
@@ -450,6 +457,24 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                   )}
                 </Button>
               </div>
+              {/* Pending attachments */}
+              {pendingAttachments.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 mt-1.5 px-1">
+                  {pendingAttachments.map(att => (
+                    <AttachmentChip key={att.id} attachment={att} onRemove={() => setPendingAttachments(prev => prev.filter(a => a.id !== att.id))} />
+                  ))}
+                </div>
+              )}
+
+              {/* Attachment Picker Modal */}
+              {showAttachPicker && (
+                <DocumentAttachmentPicker
+                  context="chat"
+                  onAttach={(att) => setPendingAttachments(prev => [...prev, att])}
+                  onClose={() => setShowAttachPicker(false)}
+                />
+              )}
+
               <div className="flex items-center justify-between mt-1.5 px-1">
                 <p className="text-[10px] text-black/30 px-1">
                   Press Enter to send · AI-powered responses · Encrypted

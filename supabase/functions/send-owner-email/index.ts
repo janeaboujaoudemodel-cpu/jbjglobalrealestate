@@ -35,6 +35,11 @@ interface SendEmailRequest {
   useResend: boolean;
   alsoNotifyChat?: boolean;
   chatRecipientId?: string;
+  attachments?: Array<{
+    filename: string;
+    content: string; // base64 data URI or URL
+    type?: string;   // MIME type
+  }>;
 }
 
 /**
@@ -302,13 +307,32 @@ serve(async (req: Request) => {
     }
 
     if (apiKey) {
-      const resendPayload = {
+      // Process attachments for Resend API
+      const resendAttachments: Array<{ filename: string; content: string }> = [];
+      if (emailBody.attachments && emailBody.attachments.length > 0) {
+        for (const att of emailBody.attachments) {
+          // Extract base64 content from data URI
+          const match = att.content.match(/^data:[^;]+;base64,(.+)$/);
+          if (match) {
+            resendAttachments.push({
+              filename: att.filename,
+              content: match[1], // raw base64
+            });
+          }
+        }
+      }
+
+      const resendPayload: Record<string, unknown> = {
         from: `${emailBody.senderName} <${emailBody.senderEmail}>`,
         to: [emailBody.to],
         subject: emailBody.subject,
         html: fullHtml,
         reply_to: emailBody.senderEmail,
       };
+
+      if (resendAttachments.length > 0) {
+        resendPayload.attachments = resendAttachments;
+      }
 
       const resendRes = await fetch("https://api.resend.com/emails", {
         method: "POST",

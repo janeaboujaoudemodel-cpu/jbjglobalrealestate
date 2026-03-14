@@ -1,117 +1,107 @@
+## CRM System Upgrade — Implementation Status
 
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-## Session 20 — Document / Signature / Stamp / Letterhead / Business Card Integration into Email + Chat
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-### Current State
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-| Feature | Email Hub | Team Chat | Employee Chat |
-|---------|-----------|-----------|---------------|
-| **Attach file** | "Attach" button exists — **cosmetic**, no file upload logic | "+" and Paperclip buttons exist — **cosmetic** | Paperclip button — **cosmetic** |
-| **Stamp** | "Stamp" button exists — **cosmetic**, no BrandAssetPicker wired | No stamp option | No stamp option |
-| **Signature / Letterhead** | Signature block in Approve & Send modal — **text only**, no image/brand asset | None | None |
-| **Send document** | Can navigate to `/e-signature/create` from Document Studio | None | None |
-| **BrandAssetPicker** | Not imported | Not imported | Not imported |
-| **E-Sign integration** | Not available from compose | None | None |
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-**Root problems:**
-1. All "Attach", "Stamp", and "Paperclip" buttons are cosmetic — zero upload/insert logic
-2. No document attachment workflow in chat (Team or Employee)
-3. BrandAssetPicker exists and works (tested in stamp generator) but is not wired into email or chat
-4. No way to insert letterhead, signature image, business card, or stamp into email body
-5. No way to share documents, contracts, or forms via chat messages
-6. E-Signature flow is only accessible from Document Studio, not from email compose
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
----
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-### Implementation Plan
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-#### 1. Create shared `DocumentAttachmentPicker` component
-**File:** `src/components/shared/DocumentAttachmentPicker.tsx`
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-A modal/dropdown that consolidates all insertable document types:
-- **Attach File** — native file upload (images, PDFs, docs)
-- **Stamp** — opens BrandAssetPicker filtered to `stamp`
-- **Signature** — opens BrandAssetPicker filtered to `signature`
-- **Letterhead** — opens BrandAssetPicker filtered to `letterhead`
-- **Business Card** — opens BrandAssetPicker filtered to `business_card`
-- **Logo** — opens BrandAssetPicker filtered to `logo`
-- **Email Signature** — opens BrandAssetPicker filtered to `email_signature`
-- **Send for E-Signature** — navigates to `/e-signature/create` with prefilled content
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-Returns selected assets as attachments (SVG/image URL + name + type) that the parent component can render inline or as attachment chips.
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-#### 2. Wire into Email Hub compose dialog (`EmailClient.tsx`)
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-Replace the cosmetic "Attach" and "Stamp" buttons with functional ones:
-- **Attach** → opens file picker, stores selected files in state, shows attachment chips below body
-- **Stamp** → opens DocumentAttachmentPicker filtered to stamps, inserts selected stamp SVG as inline image or attachment
-- Add **Letterhead** button → inserts letterhead asset as email header image
-- Add **Signature** button → inserts signature brand asset into signature block area
-- Add **E-Sign** button → navigates to `/e-signature/create` with current email body prefilled as document
-- In the Approve & Send modal, render any attached stamps/letterheads/signatures visually
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-Update the `send-owner-email` edge function payload to include `attachments[]` array (name, url/base64, type).
-
-#### 3. Wire into Team Chat (`TeamChat.tsx`)
-
-Replace the cosmetic "+" and Paperclip buttons:
-- **"+"** → opens DocumentAttachmentPicker (full menu: attach file, stamp, signature, contract, form, etc.)
-- **Paperclip** → opens native file picker for quick file attach
-- When an attachment is selected, show it as a preview chip above the message input
-- On send, include the attachment in the message payload (rendered inline in the chat message bubble)
-- Respect Session 19 cross-channel rules: if "Also email" is ON, include attachments in the email too
-
-#### 4. Wire into Employee Chat (`EmployeeChatHub.tsx`)
-
-Same pattern as Team Chat:
-- Wire Paperclip button to open DocumentAttachmentPicker
-- Show attachment preview before send
-- Include in message display
-
-#### 5. Chat message rendering for attachments
-
-Update message rendering in both TeamChat and EmployeeChatHub to handle attachment data:
-- If message has an attached stamp/logo SVG → render inline with `StampSVGRenderer`
-- If message has an attached image → render as thumbnail
-- If message has a PDF/document → render as a download card
-- If message has a business card → render as a mini preview card
-
-#### 6. Email signature block enhancement (`EmailClient.tsx` Approve & Send)
-
-Enhance the signature block in the preview modal:
-- If a signature brand asset exists for the current persona → render it as an image below the text signature
-- If a stamp brand asset is attached → render it in the signature area
-- If a letterhead brand asset exists → render it as the email header
-- Query `brand_assets` for the owner's default stamp/signature on mount
-
-#### 7. Update `send-owner-email` edge function
-
-Add support for `attachments` in the email payload:
-- Accept `attachments: Array<{ filename: string; content: string; type: string }>` in the request body
-- Pass to Resend API's `attachments` parameter for file attachments
-- For inline images (stamps, signatures), embed as base64 inline content or CID-referenced images
-
----
-
-### Files to Create/Modify
-
+### Files Changed
 | File | Action |
 |------|--------|
-| `src/components/shared/DocumentAttachmentPicker.tsx` | NEW — unified picker for all document/brand asset types |
-| `src/pages/EmailClient.tsx` | Wire Attach/Stamp/Signature/Letterhead/E-Sign buttons, attachments state, preview rendering |
-| `src/pages/TeamChat.tsx` | Wire "+" and Paperclip to DocumentAttachmentPicker, attachment rendering in messages |
-| `src/components/employee-chat/EmployeeChatHub.tsx` | Wire Paperclip to picker, attachment rendering |
-| `supabase/functions/send-owner-email/index.ts` | Add `attachments` support in Resend API call |
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
 
-### Cross-Channel Compliance (Session 19)
+## Multi-Portal System + Developer Portal — Audit & Fixes (March 2026)
 
-When sending with attachments:
-- **Chat first, email toggle ON** → attachments included in both chat message and email
-- **Email first, chat toggle ON** → email attachments sent, chat notification includes a reference to the attached items
-- The DocumentAttachmentPicker is channel-agnostic — same component works in both contexts
+### ✅ ALL TASKS COMPLETED
 
-### What Will NOT Be Implemented (Transparency)
+| # | Task | Status |
+|---|------|--------|
+| 1 | Fix "Register as Rep" label → "Register as Developer or Sales" | ✅ DONE |
+| 2 | Rename Developer Portal tab → "Update Profile" | ✅ DONE |
+| 3 | Investor Portal rebuild (7 tabs, premium styling) | ✅ DONE |
+| 4 | Broker Portal enhancement (tabbed structure) | ✅ DONE |
+| 5 | ApprovalTimeline shared component | ✅ DONE |
+| 6 | Event Management Hub | ✅ DONE |
+| 7 | useEventManagement hook | ✅ DONE |
+| 8 | events + event_invitations tables | ✅ DONE |
+| 9 | Role options include "Other" with custom field | ✅ DONE |
+| 10 | Owner/CEO/Founder requires ID + passport + trade license + RERA | ✅ DONE |
+| 11 | Registration gate blocks portal access until registered | ✅ DONE |
+| 12 | Owner auto-approve toggle for developers | ✅ DONE |
+| 13 | Owner restrict access for developers | ✅ DONE |
+| 14 | Nationality with flags dropdown | ✅ DONE |
+| 15 | Phone with country code + flag | ✅ DONE |
+| 16 | Language multi-select | ✅ DONE |
+| A | Homepage CTA cards: 4x2 grid (8 cards, 2 rows of 4) | ✅ DONE |
+| B | Remove "Interest Registration" terminology → "Launch Interests" | ✅ DONE |
+| C | Owner in developer mode sees developer view only | ✅ DONE (was already correct) |
+| D | On-Leave self-service feature for developers | ✅ DONE (toggle + date pickers in profile) |
+| E | Secondary contact fields (Company/Personal Email+Phone) | ✅ DONE |
+| F | Icon styling: champagne-gold gradient | ✅ DONE (already correct) |
 
-- **Supabase Storage file uploads**: Actual file upload to cloud storage for large files (PDFs, docs) would require Supabase Storage bucket setup. This session will support brand asset insertion (from existing `brand_assets` table) and base64 inline images. Large file upload infrastructure can be added in a future session.
-- **Contract/form builder creation**: The integration enables *sending* existing documents — it does not create new contract templates or form builders. Those tools already exist at their respective routes.
-
+### Files Changed (This Batch)
+| File | Changes |
+|------|---------|
+| `src/components/home/DeveloperPortalCTA.tsx` | 8 cards in 4x2 grid, renamed labels, added "Update Your Profile" card |
+| `src/pages/DeveloperPortal.tsx` | Renamed all "Interest Registration" → "Launch Interests" (8 occurrences) |
+| `src/components/developer-portal/SalesRepRegistration.tsx` | Renamed title to "Register as Developer or Sales" |

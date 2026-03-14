@@ -13,8 +13,9 @@ import {
   Users, Search, Bell, Phone, Video, MoreVertical, MessageSquare,
   ArrowLeft, Menu, Building2, Lock, BellOff, Archive, Copy,
   X, Check, Eye, ChevronDown, ChevronRight, Sparkles, Star,
-  Mail
+  Mail, FileText
 } from "lucide-react";
+import { DocumentAttachmentPicker, AttachmentChip, ChatAttachmentRenderer, type DocumentAttachment } from "@/components/shared/DocumentAttachmentPicker";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -130,6 +131,8 @@ const TeamChat = () => {
   const [isInCall, setIsInCall] = useState(false);
   const [isInVideo, setIsInVideo] = useState(false);
   const [alsoSendByEmail, setAlsoSendByEmail] = useState(false);
+  const [showAttachPicker, setShowAttachPicker] = useState(false);
+  const [pendingAttachments, setPendingAttachments] = useState<DocumentAttachment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -148,7 +151,12 @@ const TeamChat = () => {
       channelId: activeChannel,
       isDM: activeChannelData?.type === "dm",
     };
+    // Include attachments in the message if any
+    if (pendingAttachments.length > 0) {
+      (message as any).attachments = pendingAttachments;
+    }
     setMessages(prev => [...prev, message]);
+    setPendingAttachments([]);
     if (settings.ownerCopyEnabled && activeChannelData?.type === "dm") {
       console.log("[Owner Copy]", { ...message, ownerCopy: true });
     }
@@ -528,6 +536,10 @@ const TeamChat = () => {
                       )}
                     </div>
                     <p className="text-black/70 text-sm leading-relaxed mt-0.5">{message.content}</p>
+                    {/* Render attachments */}
+                    {(message as any).attachments?.map((att: DocumentAttachment) => (
+                      <ChatAttachmentRenderer key={att.id} attachment={att} />
+                    ))}
                   </div>
                 </div>
               );
@@ -539,7 +551,7 @@ const TeamChat = () => {
         {/* Message Input */}
         <div className="p-3 sm:p-4 border-t border-[#C9A84C]/15 bg-white/80 backdrop-blur-sm">
           <div className="flex items-center gap-2 bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-xl px-3 py-1.5 focus-within:border-[#C9A84C]/40 focus-within:ring-2 focus-within:ring-[#C9A84C]/10 transition-all">
-            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#C9A84C]/10">
+            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#C9A84C]/10" onClick={() => setShowAttachPicker(true)}>
               <Plus className="w-4 h-4 text-black/40" />
             </Button>
             <Input
@@ -552,7 +564,7 @@ const TeamChat = () => {
             <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#C9A84C]/10 hidden sm:flex">
               <Smile className="w-4 h-4 text-black/40" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#C9A84C]/10 hidden sm:flex">
+            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#C9A84C]/10 hidden sm:flex" onClick={() => setShowAttachPicker(true)}>
               <Paperclip className="w-4 h-4 text-black/40" />
             </Button>
             <Button
@@ -564,6 +576,14 @@ const TeamChat = () => {
               <Send className="w-4 h-4" />
             </Button>
           </div>
+          {/* Pending attachment chips */}
+          {pendingAttachments.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-1.5 px-1">
+              {pendingAttachments.map(att => (
+                <AttachmentChip key={att.id} attachment={att} onRemove={() => setPendingAttachments(prev => prev.filter(a => a.id !== att.id))} />
+              ))}
+            </div>
+          )}
           <div className="flex items-center justify-between mt-1.5 px-1">
             <p className="text-[10px] text-black/25">Press Enter to send · Secured by JBJ Global</p>
             {/* Since chat is internal, all recipients are registered users → offer email notify */}
@@ -578,6 +598,15 @@ const TeamChat = () => {
             </div>
           </div>
         </div>
+
+        {/* Attachment Picker Modal */}
+        {showAttachPicker && (
+          <DocumentAttachmentPicker
+            context="chat"
+            onAttach={(att) => setPendingAttachments(prev => [...prev, att])}
+            onClose={() => setShowAttachPicker(false)}
+          />
+        )}
       </div>
 
       {/* ─── Members Sidebar (real employees by department) ─── */}

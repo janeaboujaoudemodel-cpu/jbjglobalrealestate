@@ -31,6 +31,7 @@ import EmailSettingsPanel from "@/components/email/EmailSettingsPanel";
 import EmailAssistantPanel from "@/components/email/EmailAssistantPanel";
 import EmailProductivityPanel from "@/components/email/EmailProductivityPanel";
 import { useCrossChannelDetection } from "@/hooks/useCrossChannelDetection";
+import { DocumentAttachmentPicker, AttachmentChip, type DocumentAttachment } from "@/components/shared/DocumentAttachmentPicker";
 
 // ─── Sender Identities — mapped to real JBJ team personas ───
 interface SenderIdentity {
@@ -157,6 +158,8 @@ const EmailClient = () => {
   const [showProductivity, setShowProductivity] = useState(false);
   const [isDraftingWithAI, setIsDraftingWithAI] = useState(false);
   const [analysisCache] = useState<Map<string, { needs_reply: boolean; priority: string; action_items: string[] }>>(new Map());
+  const [attachments, setAttachments] = useState<DocumentAttachment[]>([]);
+  const [showAttachPicker, setShowAttachPicker] = useState(false);
   const emailsPerPage = 20;
 
   // Cross-channel: detect if recipient is a registered platform user
@@ -306,6 +309,7 @@ const EmailClient = () => {
       setNewEmail({ to: "", subject: "", body: "" });
       setComposeOpen(false);
       setAlsoNotifyChat(false);
+      setAttachments([]);
 
       const method = data?.sendMethod === "resend" ? "via Resend API" : "normally";
       toast.success(`Email sent ${method}`);
@@ -416,12 +420,25 @@ const EmailClient = () => {
                   <p className="text-[10px] text-black/40">{currentSender.title} · {currentSender.email}</p>
                 </div>
 
+                {/* Attachment chips */}
+                {attachments.length > 0 && (
+                  <div className="flex flex-wrap gap-2 bg-[#FDFBF7] border border-[#C9A84C]/15 rounded-lg p-2.5">
+                    {attachments.map(att => (
+                      <AttachmentChip
+                        key={att.id}
+                        attachment={att}
+                        onRemove={() => setAttachments(prev => prev.filter(a => a.id !== att.id))}
+                      />
+                    ))}
+                  </div>
+                )}
+
                 <div className="flex justify-between">
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="sm" className="text-black/60 hover:bg-[#C9A84C]/10">
+                    <Button variant="ghost" size="sm" className="text-black/60 hover:bg-[#C9A84C]/10" onClick={() => setShowAttachPicker(true)}>
                       <Paperclip className="w-4 h-4 mr-1" /> Attach
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-[#C9A84C] hover:bg-[#C9A84C]/10">
+                    <Button variant="ghost" size="sm" className="text-[#C9A84C] hover:bg-[#C9A84C]/10" onClick={() => setShowAttachPicker(true)}>
                       <Stamp className="w-4 h-4 mr-1" /> Stamp
                     </Button>
                     <Button
@@ -466,6 +483,15 @@ const EmailClient = () => {
                     </Button>
                   </div>
                 </div>
+
+                {/* Document Attachment Picker Modal */}
+                {showAttachPicker && (
+                  <DocumentAttachmentPicker
+                    context="email"
+                    onAttach={(att) => setAttachments(prev => [...prev, att])}
+                    onClose={() => setShowAttachPicker(false)}
+                  />
+                )}
 
                 {/* Also notify in chat toggle — only shown for registered users */}
                 {recipientDetection.isLoading ? (
@@ -534,6 +560,27 @@ const EmailClient = () => {
                     <div className="whitespace-pre-wrap text-black leading-relaxed min-h-[120px]">
                       {newEmail.body}
                     </div>
+                    {/* Attached assets preview in Approve & Send */}
+                    {attachments.length > 0 && (
+                      <div className="mt-4 pt-3 border-t border-[#C9A84C]/10">
+                        <p className="text-xs text-black/40 mb-2 uppercase tracking-wider font-medium">Attachments</p>
+                        <div className="flex flex-wrap gap-3">
+                          {attachments.map(att => {
+                            const isImage = att.mimeType?.startsWith('image/') || ['stamp', 'signature', 'logo', 'letterhead', 'business_card', 'email_signature'].includes(att.type);
+                            return (
+                              <div key={att.id} className="flex items-center gap-2 bg-[#FDFBF7] border border-[#C9A84C]/15 rounded-lg px-3 py-2">
+                                {isImage && att.content ? (
+                                  <img src={att.content} alt={att.name} className="w-8 h-8 object-contain rounded" />
+                                ) : (
+                                  <FileText className="w-5 h-5 text-[#C9A84C]" />
+                                )}
+                                <span className="text-xs text-black font-medium">{att.name}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   {/* Dynamic Signature Block per Persona */}
                   <div className="px-6 py-4 bg-[#FDFBF7] border-t border-[#C9A84C]/15">
