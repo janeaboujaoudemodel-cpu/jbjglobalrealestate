@@ -1,107 +1,124 @@
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+## Session 20 Completion — Document Tool Integration into Communication Workflows
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+### Problem Summary
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+The attachment framework exists (picker, chips, renderers, edge function support) but has critical gaps:
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+1. **Attachments never sent via email** — `sendEmail()` in `EmailClient.tsx` (line 312) does NOT pass the `attachments` array to `send-owner-email`
+2. **No "Send via Email" or "Send via Chat"** actions on generated documents (ExclusiveDocuments, DocumentStudio)
+3. **No document-type-aware rendering** — stamps/signatures/letterheads all render the same as generic images
+4. **E-Signature shortcut is navigation-only** — no return flow back to email/chat
+5. **Persona consistency not enforced** — attaching a stamp doesn't check sender persona alignment
+6. **Business card / signature not communication-ready** — only picker categories, no preview or inline insertion
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+### Implementation Plan
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+#### 1. Fix Critical Bug: Wire attachments into email send
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+**File:** `src/pages/EmailClient.tsx` — `sendEmail()` function
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+Add `attachments` to the edge function payload, mapping `DocumentAttachment[]` to the format the edge function expects:
+```
+attachments: attachments.map(att => ({
+  filename: att.name,
+  content: att.content,
+  type: att.mimeType,
+}))
+```
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+Also set `hasAttachment: true` on the sent email record when attachments exist.
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+#### 2. Add "Send via Email" and "Send via Chat" to ExclusiveDocuments
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+**File:** `src/pages/owner/ExclusiveDocuments.tsx`
 
-### Files Changed
+After document generation, add two buttons alongside the existing "Send for E-Signature":
+- **"Send by Email"** — Opens EmailClient compose dialog (via navigation with state) with the document body pre-filled and document attached as a file
+- **"Send to Team Chat"** — Posts the document content to Team Chat via navigation with state
+
+Implementation: Navigate to `/owner/email-client` or `/team-chat` with `location.state` containing `{ prefillBody, prefillSubject, prefillAttachment }`. The receiving pages will check for this state on mount.
+
+#### 3. Add document-type-aware rendering in `ChatAttachmentRenderer` and `AttachmentChip`
+
+**File:** `src/components/shared/DocumentAttachmentPicker.tsx`
+
+Enhance rendering per asset type:
+- **Stamp**: Render with `StampSVGRenderer` (already available) in both chip and chat bubble, with a gold border and "Official Stamp" badge
+- **Signature**: Render with handwriting-style styling, translucent background
+- **Letterhead**: Show as a document card with company header colors
+- **Business Card**: Render as a mini card layout with rounded corners and shadow
+- **Logo**: Render with centered layout and brand badge
+- **Email Signature**: Render as formatted signature block
+
+#### 4. Add "Send to Email/Chat" actions from DocumentStudio
+
+**File:** `src/pages/DocumentStudio.tsx`
+
+Add "Send by Email" and "Send to Chat" buttons next to the existing "Send for E-Signature" button, using the same `navigate()` with state pattern.
+
+#### 5. Receive prefilled state in EmailClient and TeamChat
+
+**File:** `src/pages/EmailClient.tsx`
+
+On mount, check `location.state` for `prefillBody`, `prefillSubject`, `prefillAttachment`. If present:
+- Auto-open compose dialog
+- Fill subject/body
+- Add attachment to `attachments[]` state
+
+**File:** `src/pages/TeamChat.tsx`
+
+On mount, check `location.state` for `prefillMessage`, `prefillAttachment`. If present:
+- Set `newMessage` to the content
+- Add attachment to `pendingAttachments[]`
+
+#### 6. Enforce persona consistency for stamp/signature/letterhead
+
+**File:** `src/pages/EmailClient.tsx`
+
+When a stamp or signature brand asset is attached, show a small info badge in the compose area: "Stamp attached — sending as [Current Sender Persona]". This confirms the persona context. If the user switches personas after attaching, the stamp/signature remains (they are company-wide assets, not persona-specific).
+
+#### 7. E-Signature flow clarification and return path
+
+**Current state:** The "Send for E-Signature" button in `DocumentAttachmentPicker` navigates to `/e-signature/create`. This is a **navigation shortcut only**. The E-Signature flow is a separate multi-step wizard (upload PDF → add fields → send to recipients). The completed signed document does not auto-return to the email/chat compose.
+
+**Enhancement:** Add a "Send Completed Document" button on the E-Signature envelope detail page (`EnvelopeDetail.tsx`) that navigates to EmailClient with the signed document attached. This creates the return path.
+
+#### 8. Cross-channel dual sending for document attachments
+
+Already implemented: When "Also notify in Team Chat" is ON in EmailClient, the email (with attachments) sends via `send-owner-email` and a chat notification is created. When "Also send by email" is ON in TeamChat, the `useCrossChannelSend` hook fires the email. The attachment data flows through the same edge function payload.
+
+**Gap to fix:** The `useCrossChannelSend` hook currently does NOT include attachment data in its secondary email call. Add `attachments` parameter to `CrossChannelSendOptions` and pass it through.
+
+### Files to Create/Modify
+
 | File | Action |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| `src/pages/EmailClient.tsx` | FIX attachments in sendEmail(), add prefill state reception |
+| `src/pages/TeamChat.tsx` | Add prefill state reception for documents |
+| `src/components/shared/DocumentAttachmentPicker.tsx` | Enhanced per-type rendering |
+| `src/pages/owner/ExclusiveDocuments.tsx` | Add "Send by Email" / "Send to Chat" buttons |
+| `src/pages/DocumentStudio.tsx` | Add "Send by Email" / "Send to Chat" buttons |
+| `src/pages/e-signature/EnvelopeDetail.tsx` | Add "Send Completed Document" return path |
+| `src/hooks/useCrossChannelSend.ts` | Add attachments support to secondary send |
 
-## Multi-Portal System + Developer Portal — Audit & Fixes (March 2026)
+### Exact Behavior Per Asset Type (Post-Implementation)
 
-### ✅ ALL TASKS COMPLETED
+| Asset Type | Selection | Preview | Send (Email) | Send (Chat) | Rendering |
+|------------|-----------|---------|--------------|-------------|-----------|
+| **Stamp** | BrandAssetPicker filtered | SVG thumbnail in chip | Base64 attachment via Resend | Inline SVG in bubble | Gold-bordered stamp badge |
+| **Signature** | BrandAssetPicker filtered | SVG thumbnail in chip | Base64 attachment via Resend | Inline image in bubble | Handwriting-style card |
+| **Letterhead** | BrandAssetPicker filtered | Document preview chip | Base64 attachment via Resend | Document card in bubble | Company-branded card |
+| **Business Card** | BrandAssetPicker filtered | Mini card preview chip | Base64 attachment via Resend | Card layout in bubble | Rounded shadow card |
+| **Logo** | BrandAssetPicker filtered | Logo thumbnail chip | Base64 attachment via Resend | Centered image in bubble | Brand badge |
+| **Email Signature** | BrandAssetPicker filtered | Signature block chip | Embedded in email footer | Formatted block in bubble | Signature block |
+| **Contract/Form** | File upload or ExclusiveDocuments | PDF/text preview chip | Base64 attachment via Resend | Document card in bubble | Download card |
+| **E-Signature Doc** | Navigation shortcut → return path | N/A (separate flow) | Attached after completion | Attached after completion | PDF download card |
 
-| # | Task | Status |
-|---|------|--------|
-| 1 | Fix "Register as Rep" label → "Register as Developer or Sales" | ✅ DONE |
-| 2 | Rename Developer Portal tab → "Update Profile" | ✅ DONE |
-| 3 | Investor Portal rebuild (7 tabs, premium styling) | ✅ DONE |
-| 4 | Broker Portal enhancement (tabbed structure) | ✅ DONE |
-| 5 | ApprovalTimeline shared component | ✅ DONE |
-| 6 | Event Management Hub | ✅ DONE |
-| 7 | useEventManagement hook | ✅ DONE |
-| 8 | events + event_invitations tables | ✅ DONE |
-| 9 | Role options include "Other" with custom field | ✅ DONE |
-| 10 | Owner/CEO/Founder requires ID + passport + trade license + RERA | ✅ DONE |
-| 11 | Registration gate blocks portal access until registered | ✅ DONE |
-| 12 | Owner auto-approve toggle for developers | ✅ DONE |
-| 13 | Owner restrict access for developers | ✅ DONE |
-| 14 | Nationality with flags dropdown | ✅ DONE |
-| 15 | Phone with country code + flag | ✅ DONE |
-| 16 | Language multi-select | ✅ DONE |
-| A | Homepage CTA cards: 4x2 grid (8 cards, 2 rows of 4) | ✅ DONE |
-| B | Remove "Interest Registration" terminology → "Launch Interests" | ✅ DONE |
-| C | Owner in developer mode sees developer view only | ✅ DONE (was already correct) |
-| D | On-Leave self-service feature for developers | ✅ DONE (toggle + date pickers in profile) |
-| E | Secondary contact fields (Company/Personal Email+Phone) | ✅ DONE |
-| F | Icon styling: champagne-gold gradient | ✅ DONE (already correct) |
+### Transparency: What Is and Is Not Full Integration
 
-### Files Changed (This Batch)
-| File | Changes |
-|------|---------|
-| `src/components/home/DeveloperPortalCTA.tsx` | 8 cards in 4x2 grid, renamed labels, added "Update Your Profile" card |
-| `src/pages/DeveloperPortal.tsx` | Renamed all "Interest Registration" → "Launch Interests" (8 occurrences) |
-| `src/components/developer-portal/SalesRepRegistration.tsx` | Renamed title to "Register as Developer or Sales" |
+- **Contracts/Forms/Warning Letters**: These are generated in ExclusiveDocuments as text. They can be **sent** via email or chat using the new "Send by Email"/"Send to Chat" buttons. They are NOT embedded as structured form objects — they are text documents attached as content.
+- **E-Signature**: The shortcut navigates to the E-Signature wizard. A new return path button is added. This is a **linked flow**, not a single-screen integration.
+- **Brand Assets**: Stamps, signatures, letterheads, business cards, logos are fetched from `brand_assets` table and attached as base64 images. They render with type-specific styling.
+
