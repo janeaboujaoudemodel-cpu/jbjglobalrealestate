@@ -107,6 +107,75 @@ export function ProvidentPortalHub() {
 
   useEffect(() => { fetchStats(); }, []);
 
+  // === AUTO-PUBLISH COMPLETE PROJECTS ===
+  const checkAutoPublishCount = async () => {
+    try {
+      // Count unpublished projects with complete core data
+      const { count } = await supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true })
+        .eq("is_published", false)
+        .not("description", "is", null)
+        .not("developer_name", "is", null)
+        .not("handover_date", "is", null);
+      setAutoPublishCount(count ?? 0);
+    } catch { /* non-critical */ }
+  };
+
+  const handleAutoPublish = async () => {
+    if (!confirm(`Auto-publish ${autoPublishCount} complete projects?\n\nThis will set is_published=true for all projects with description, developer, and handover date.`)) return;
+    setIsAutoPublishing(true);
+    try {
+      const { data, error } = await supabase
+        .from("projects")
+        .update({ is_published: true, updated_at: new Date().toISOString() })
+        .eq("is_published", false)
+        .not("description", "is", null)
+        .not("developer_name", "is", null)
+        .not("handover_date", "is", null)
+        .select("id");
+      if (error) throw error;
+      toast.success(`Auto-published ${data?.length ?? 0} projects!`);
+      fetchStats();
+      checkAutoPublishCount();
+    } catch (err: any) {
+      toast.error("Auto-publish failed: " + err.message);
+    } finally {
+      setIsAutoPublishing(false);
+    }
+  };
+
+  // === DATA INTEGRITY CHECK ===
+  const handleIntegrityCheck = async () => {
+    setIsCheckingIntegrity(true);
+    try {
+      // Ghost entries: no images AND no description
+      const { count: ghostCount } = await supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true })
+        .is("description", null)
+        .eq("is_published", true);
+
+      // Duplicate slugs
+      const { data: allSlugs } = await supabase
+        .from("projects")
+        .select("slug")
+        .limit(5000);
+      const slugCounts: Record<string, number> = {};
+      (allSlugs || []).forEach(p => { slugCounts[p.slug] = (slugCounts[p.slug] || 0) + 1; });
+      const duplicateCount = Object.values(slugCounts).filter(c => c > 1).length;
+
+      setIntegrityResult({ ghosts: ghostCount ?? 0, duplicates: duplicateCount });
+      toast.info(`Integrity check: ${ghostCount ?? 0} ghost entries, ${duplicateCount} duplicate slugs`);
+    } catch (err: any) {
+      toast.error("Integrity check failed: " + err.message);
+    } finally {
+      setIsCheckingIntegrity(false);
+    }
+  };
+
+  useEffect(() => { checkAutoPublishCount(); }, []);
+
   // Provident Firecrawl extraction
   const handleProvidentExtract = async () => {
     if (!confirm("🔍 PROVIDENT EXTRACTION\n\nThis uses Firecrawl to scrape Provident project pages for images, PDFs, brochures, and floor plans.\n\nThis uses Firecrawl credits. Continue?")) return;
