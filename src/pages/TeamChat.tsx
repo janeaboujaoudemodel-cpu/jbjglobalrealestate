@@ -520,11 +520,29 @@ const TeamChat = () => {
         {/* Messages */}
         <ScrollArea className="flex-1 px-3 sm:px-5 py-4">
           <div className="space-y-1">
+            {/* Pinned Messages Banner */}
+            {pinnedMessages.size > 0 && (
+              <div className="bg-[#C9A84C]/5 border border-[#C9A84C]/15 rounded-lg px-3 py-2 mb-3">
+                <p className="text-[10px] font-semibold text-[#C9A84C] uppercase tracking-wider flex items-center gap-1 mb-1">
+                  <Pin className="w-3 h-3" /> Pinned ({pinnedMessages.size})
+                </p>
+                {channelMessages.filter(m => pinnedMessages.has(m.id)).map(m => (
+                  <p key={m.id} className="text-xs text-black/60 truncate">
+                    <span className="font-medium text-black/80">{m.userName}:</span> {m.content}
+                  </p>
+                ))}
+              </div>
+            )}
+
             {channelMessages.map((message) => {
               const isOwn = message.userId === currentUser.id;
               const memberData = chatMembers.find(m => m.id === message.userId);
+              const isPinned = pinnedMessages.has(message.id);
               return (
-                <div key={message.id} className="group flex gap-3 hover:bg-[#C9A84C]/[0.03] rounded-lg p-2.5 -mx-2 transition-colors">
+                <div key={message.id} className={cn(
+                  "group flex gap-3 hover:bg-[#C9A84C]/[0.03] rounded-lg p-2.5 -mx-2 transition-colors",
+                  isPinned && "border-l-2 border-l-[#C9A84C]/40"
+                )}>
                   <Avatar className="h-9 w-9 mt-0.5 shrink-0 border border-[#C9A84C]/15">
                     {memberData?.avatar && <AvatarImage src={memberData.avatar} />}
                     <AvatarFallback className={cn(
@@ -542,6 +560,7 @@ const TeamChat = () => {
                       <span className="text-[11px] text-black/35">
                         {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
+                      {isPinned && <Pin className="w-2.5 h-2.5 text-[#C9A84C]" />}
                       {message.ownerCopy && (
                         <Badge className="bg-[#C9A84C]/10 text-[#C9A84C] text-[9px] border-[#C9A84C]/20 h-4">
                           <Copy className="w-2.5 h-2.5 mr-0.5" /> Owner Copy
@@ -553,6 +572,23 @@ const TeamChat = () => {
                     {(message as any).attachments?.map((att: DocumentAttachment) => (
                       <ChatAttachmentRenderer key={att.id} attachment={att} />
                     ))}
+                    {/* Hover action bar */}
+                    <div className="flex items-center gap-1 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={() => togglePin(message.id)}
+                        className="text-[10px] text-black/30 hover:text-[#C9A84C] flex items-center gap-0.5 px-1.5 py-0.5 rounded hover:bg-[#C9A84C]/5"
+                      >
+                        <Pin className="w-3 h-3" /> {isPinned ? "Unpin" : "Pin"}
+                      </button>
+                      <button
+                        onClick={async () => { await navigator.clipboard.writeText(message.content); toast.success("Copied"); }}
+                        className="text-[10px] text-black/30 hover:text-[#C9A84C] flex items-center gap-0.5 px-1.5 py-0.5 rounded hover:bg-[#C9A84C]/5"
+                      >
+                        <Copy className="w-3 h-3" /> Copy
+                      </button>
+                      <QuickCalendarWidget compact source="chat" prefillTitle={message.content.substring(0, 60)} />
+                      <QuickNoteWidget compact source="chat" prefillTitle={`Chat note`} prefillContent={`${message.userName}: ${message.content}`} />
+                    </div>
                   </div>
                 </div>
               );
