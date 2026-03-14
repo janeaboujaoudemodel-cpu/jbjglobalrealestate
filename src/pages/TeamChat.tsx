@@ -135,7 +135,7 @@ const TeamChat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!newMessage.trim()) return;
     const activeChannelData = channels.find(c => c.id === activeChannel);
     const message: Message = {
@@ -151,6 +151,35 @@ const TeamChat = () => {
     if (settings.ownerCopyEnabled && activeChannelData?.type === "dm") {
       console.log("[Owner Copy]", { ...message, ownerCopy: true });
     }
+
+    // Cross-channel: also send by email if toggle is ON and this is a DM
+    if (alsoSendByEmail && activeChannelData?.type === "dm" && activeChannelData.dmUserId) {
+      const recipientMember = chatMembers.find(m => m.id === activeChannelData.dmUserId);
+      if (recipientMember) {
+        const recipientEmail = `${recipientMember.id}@jbj.ae`;
+        try {
+          await supabase.functions.invoke("send-owner-email", {
+            body: {
+              to: recipientEmail,
+              subject: `Chat message from ${currentUser.name}`,
+              body: newMessage,
+              senderId: "owner",
+              senderName: currentUser.name,
+              senderEmail: "ceo@jbj.ae",
+              senderTitle: currentUser.role,
+              account: "company",
+              useResend: true,
+              alsoSendByEmail: true,
+              chatRecipientEmail: recipientEmail,
+            },
+          });
+          toast.success(`Also emailed to ${recipientMember.name}`);
+        } catch (err) {
+          console.error("Cross-channel email error:", err);
+        }
+      }
+    }
+
     setNewMessage("");
   };
 
