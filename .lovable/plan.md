@@ -1,107 +1,145 @@
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+## Session 18 — Email Assistant + Summary + Draft Reply + Send As Persona
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+### Current State
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+**What EXISTS:**
+- `EmailClient.tsx` (706 lines) — Has a hardcoded "Amanda AI Panel" (lines 630-678) that shows static placeholder summaries (EN + AR) and a static suggested reply for every email — same text regardless of email content
+- `SENDER_IDENTITIES` array (lines 43-52) — 8 sender identities with generic department names (e.g., "Marketing Team") instead of mapping to actual AI personas from `team-members.ts`
+- Approve & Send modal (lines 358-420) — exists with signature block, but sender persona mapping is incomplete
+- `ai-email-composer` edge function — exists but only generates CRM lead emails, NOT email summaries/replies
+- `_shared/ai-utils.ts` — has `callLovableAI` helper using Lovable AI Gateway with `LOVABLE_API_KEY` (confirmed available)
+- No edge function for email analysis/summary exists
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+**What's BROKEN / MISSING:**
+1. EN/AR summaries are **hardcoded static text** — not AI-generated from actual email content
+2. Suggested reply is **hardcoded** — same text for every email
+3. "Use as Reply" and "Edit Draft" buttons do **nothing** (no click handlers)
+4. "Draft with Amanda" button does **nothing**
+5. No reply compose flow — clicking Reply/Reply All/Forward does nothing useful
+6. SENDER_IDENTITIES uses generic names ("Marketing Team") instead of real team personas ("Victoria Sterling, Marketing Director")
+7. No pending emails / alerts / tasks / reply-needed queue section
+8. No email productivity dashboard in backend
+9. Signature block doesn't dynamically change per persona properly
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+### Implementation Plan
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+#### 1. Create `ai-email-assistant` Edge Function
+**File:** `supabase/functions/ai-email-assistant/index.ts`
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+Three actions:
+- **`summarize`** — Takes email subject + body, returns JSON with `{ summary_en, summary_ar, suggested_reply, priority, action_items[] }`
+- **`draft_reply`** — Takes email content + optional user instructions, returns a full reply draft
+- **`refine_reply`** — Takes draft + edit instructions, returns refined version
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+Uses `callLovableAI` from shared utils with `google/gemini-3-flash-preview`. System prompt instructs bilingual output and persona-aware drafting.
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+Register in `supabase/config.toml` with `verify_jwt = false`.
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+#### 2. Update SENDER_IDENTITIES to Map to Real Team Personas
+**File:** `src/pages/EmailClient.tsx`
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+Replace generic department names with actual highest-ranking team member per department from `team-members.ts`:
 
-### Files Changed
+| Current | Updated |
+|---------|---------|
+| `HR Department` | `Sarah Mitchell` (HR Manager from team config) |
+| `Admin Team` | `Michael Sterling` (Admin Director) |
+| `Front Desk` | `Emily Chen` (Front Desk Coordinator) |
+| `Help Desk` | `Natalia Petrova` (Customer Success) |
+| `Marketing Team` | `Victoria Sterling` (Marketing Director — highest in marketingTeam) |
+
+Amanda Clarke and Jane Bou Jaoude stay as-is. Personal stays as-is.
+
+Each identity gets a `teamMemberId` field linking to the `team-members.ts` config for consistency.
+
+#### 3. Build AI-Powered Email Analysis Panel
+**File:** `src/components/email/EmailAssistantPanel.tsx` (NEW)
+
+Replaces the static Amanda panel in EmailClient. When an email is selected:
+1. Calls `ai-email-assistant` with `action: "summarize"` 
+2. Shows loading skeleton while AI generates
+3. Renders EN summary card + AR summary card (RTL)
+4. Shows suggested reply with "Use as Reply" (opens reply compose with text pre-filled) and "Edit Draft" (opens inline editor)
+5. Shows action items extracted by AI (tasks, follow-ups, calendar items)
+6. Caches results per email ID to avoid re-calling on re-select
+
+#### 4. Build Reply Compose Flow
+**File:** `src/pages/EmailClient.tsx`
+
+Wire Reply/Reply All/Forward buttons:
+- Opens compose dialog pre-filled with quoted original email
+- "Send As" selector prominently shown (same SENDER_IDENTITIES but with real names)
+- "Draft with Amanda" button calls `ai-email-assistant` with `action: "draft_reply"` and populates the body
+- Flow: Draft → Select "Send As" persona → "Preview & Send" → Approve & Send modal with correct signature
+
+#### 5. Dynamic Signature Block Per Persona
+**File:** `src/pages/EmailClient.tsx` (Approve & Send modal)
+
+Signature logic mapped per sender identity:
+- **Amanda Clarke** → "Executive Assistant to the Founder & CEO, Jane Bou Jaoude"
+- **Victoria Sterling** → "Marketing Director, JBJ Global Real Estate"
+- **Sarah Mitchell** → "HR Manager, JBJ Global Real Estate"
+- Generic pattern: `{name}\n{role}\nJBJ Global Real Estate\n{email}`
+
+#### 6. Email Productivity Panel
+**File:** `src/components/email/EmailProductivityPanel.tsx` (NEW)
+
+Shows in a collapsible section or sidebar tab:
+- **Pending Emails** — unread inbox count
+- **Needs Reply** — emails with AI-detected action items requiring response
+- **Tasks** — action items extracted from recent emails
+- **Follow-up Alerts** — emails flagged for follow-up
+- **Reply Queue** — prioritized list of emails needing owner attention
+
+Data sourced from the AI analysis results (cached in component state per session). For persistence across sessions, store analysis results in `owner_comm_messages` metadata or a new lightweight table.
+
+#### 7. Database — Email Analysis Cache Table
+```sql
+CREATE TABLE IF NOT EXISTS public.email_analysis_cache (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email_id text NOT NULL,
+  summary_en text,
+  summary_ar text,
+  suggested_reply text,
+  priority text DEFAULT 'normal',
+  action_items jsonb DEFAULT '[]',
+  needs_reply boolean DEFAULT false,
+  created_at timestamptz DEFAULT now(),
+  UNIQUE(email_id)
+);
+
+ALTER TABLE public.email_analysis_cache ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Owner read/write" ON public.email_analysis_cache
+  FOR ALL TO authenticated
+  USING (public.has_role(auth.uid(), 'admin'))
+  WITH CHECK (public.has_role(auth.uid(), 'admin'));
+```
+
+### Files to Create/Modify
+
 | File | Action |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| `supabase/functions/ai-email-assistant/index.ts` | NEW — AI summarize/draft/refine |
+| `supabase/config.toml` | Add `[functions.ai-email-assistant]` |
+| `src/components/email/EmailAssistantPanel.tsx` | NEW — AI-powered analysis panel |
+| `src/components/email/EmailProductivityPanel.tsx` | NEW — pending/alerts/tasks panel |
+| `src/pages/EmailClient.tsx` | Update SENDER_IDENTITIES with real personas, wire reply flow, integrate AI panel, dynamic signatures |
+| Database migration | Create `email_analysis_cache` table |
 
-## Multi-Portal System + Developer Portal — Audit & Fixes (March 2026)
+### Persona Mapping Proof (Task 5 compliance)
 
-### ✅ ALL TASKS COMPLETED
+| Sender ID | Email Name | Team Config ID | Team Config Name | Role |
+|-----------|-----------|----------------|------------------|------|
+| owner | Jane Bou Jaoude | jane-bou-jaoude | Jane Bou Jaoude | Founder & CEO |
+| amanda | Amanda Clarke | amanda-clarke | Amanda Clarke | Executive Assistant to CEO |
+| hr | Sarah Mitchell | sarah-mitchell | Sarah Mitchell | Listing & HR Admin |
+| marketing | Victoria Sterling | victoria-sterling | Victoria Sterling | Marketing Director |
+| frontdesk | Emily Chen | — (from JBJ_AI_AGENTS) | Emily Chen | Front Desk Coordinator |
+| helpdesk | Natalia Petrova | natalia-petrova | Natalia Petrova | Customer Success |
+| admin | Michael Sterling | — (from JBJ_AI_AGENTS) | Michael Sterling | Administrative Director |
 
-| # | Task | Status |
-|---|------|--------|
-| 1 | Fix "Register as Rep" label → "Register as Developer or Sales" | ✅ DONE |
-| 2 | Rename Developer Portal tab → "Update Profile" | ✅ DONE |
-| 3 | Investor Portal rebuild (7 tabs, premium styling) | ✅ DONE |
-| 4 | Broker Portal enhancement (tabbed structure) | ✅ DONE |
-| 5 | ApprovalTimeline shared component | ✅ DONE |
-| 6 | Event Management Hub | ✅ DONE |
-| 7 | useEventManagement hook | ✅ DONE |
-| 8 | events + event_invitations tables | ✅ DONE |
-| 9 | Role options include "Other" with custom field | ✅ DONE |
-| 10 | Owner/CEO/Founder requires ID + passport + trade license + RERA | ✅ DONE |
-| 11 | Registration gate blocks portal access until registered | ✅ DONE |
-| 12 | Owner auto-approve toggle for developers | ✅ DONE |
-| 13 | Owner restrict access for developers | ✅ DONE |
-| 14 | Nationality with flags dropdown | ✅ DONE |
-| 15 | Phone with country code + flag | ✅ DONE |
-| 16 | Language multi-select | ✅ DONE |
-| A | Homepage CTA cards: 4x2 grid (8 cards, 2 rows of 4) | ✅ DONE |
-| B | Remove "Interest Registration" terminology → "Launch Interests" | ✅ DONE |
-| C | Owner in developer mode sees developer view only | ✅ DONE (was already correct) |
-| D | On-Leave self-service feature for developers | ✅ DONE (toggle + date pickers in profile) |
-| E | Secondary contact fields (Company/Personal Email+Phone) | ✅ DONE |
-| F | Icon styling: champagne-gold gradient | ✅ DONE (already correct) |
+All names are real personas already in the JBJ system — no invented names.
 
-### Files Changed (This Batch)
-| File | Changes |
-|------|---------|
-| `src/components/home/DeveloperPortalCTA.tsx` | 8 cards in 4x2 grid, renamed labels, added "Update Your Profile" card |
-| `src/pages/DeveloperPortal.tsx` | Renamed all "Interest Registration" → "Launch Interests" (8 occurrences) |
-| `src/components/developer-portal/SalesRepRegistration.tsx` | Renamed title to "Register as Developer or Sales" |
