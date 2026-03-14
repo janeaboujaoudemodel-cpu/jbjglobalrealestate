@@ -53,6 +53,25 @@ function autoFontSize(text: string, base: number, maxChars = 20): number {
   return Math.round(base * 0.58);
 }
 
+/**
+ * Compute safe arc font size and letter-spacing to prevent character collisions.
+ */
+function safeArcParams(text: string, arcR: number, baseFontSize: number, isArabic: boolean): { fontSize: number; letterSpacing: number } {
+  const charW = isArabic ? 0.50 : 0.54;
+  const minSpacing = isArabic ? 0.5 : 1;
+  const spreadLimit = 0.88;
+  const arcLen = arcR * Math.PI * spreadLimit;
+  // Fit font size
+  const est = text.length * baseFontSize * charW;
+  const fontSize = est <= arcLen ? baseFontSize : Math.max(6.5, arcLen / (text.length * charW));
+  // Distribute remaining space
+  const gaps = text.length - 1;
+  if (gaps <= 0) return { fontSize, letterSpacing: minSpacing };
+  const textWidth = text.length * fontSize * charW;
+  const spacing = Math.max(minSpacing, Math.min((arcLen - textWidth) / gaps, 10));
+  return { fontSize, letterSpacing: spacing };
+}
+
 function wrapText(text: string, x: number, y: number, font: string, size: number, color: string, letterSpacing = 1.2): string {
   // Truncate very long text to prevent overflow
   const maxLen = 48;
