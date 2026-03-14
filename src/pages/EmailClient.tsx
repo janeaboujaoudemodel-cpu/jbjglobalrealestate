@@ -31,6 +31,7 @@ import EmailSettingsPanel from "@/components/email/EmailSettingsPanel";
 import EmailAssistantPanel from "@/components/email/EmailAssistantPanel";
 import EmailProductivityPanel from "@/components/email/EmailProductivityPanel";
 import { useCrossChannelDetection } from "@/hooks/useCrossChannelDetection";
+import { DocumentAttachmentPicker, AttachmentChip, type DocumentAttachment } from "@/components/shared/DocumentAttachmentPicker";
 
 // ─── Sender Identities — mapped to real JBJ team personas ───
 interface SenderIdentity {
