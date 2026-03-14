@@ -26,7 +26,7 @@ const USAGE_RIGHTS_TEXT = `By registering on the ${COMPANY_FULL_NAME} Developer 
 • Upload marketing materials, brochures, and project documents
 • Track your project listing status in real-time
 • Manage launch events and developer invitations
-• Access our CRM pipeline for your submitted projects
+• Track your submission status and receive updates on your projects
 
 This portal is provided exclusively for authorized representatives of real estate developers. Your account and all uploaded content remain subject to review and approval by ${COMPANY_FULL_NAME}. We reserve the right to revoke access at any time if the terms are violated.`;
 
@@ -125,6 +125,26 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
     }
     if (isOtherRole && !form.custom_role_title.trim()) {
       toast.error('Please provide your role title');
+      return;
+    }
+    if (!form.nationality) {
+      toast.error('Please select your nationality');
+      return;
+    }
+    if (!form.gender) {
+      toast.error('Please select your gender');
+      return;
+    }
+    if (!form.years_in_real_estate) {
+      toast.error('Please enter your years of experience in real estate');
+      return;
+    }
+    if (form.languages.length === 0) {
+      toast.error('Please select at least one language you speak');
+      return;
+    }
+    if (!form.date_of_join) {
+      toast.error('Please enter your date of joining the company');
       return;
     }
     if (isOwnerRole) {
@@ -312,7 +332,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
               />
               <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             </div>
-            <p className="text-[10px] text-muted-foreground">This is locked to the developer you selected. Contact support to change it after registration.</p>
+            <p className="text-[10px] text-muted-foreground">This is locked to the developer you selected. You can change it later from your profile — changes require re-approval.</p>
           </div>
 
           {/* Your Role / Position */}
@@ -403,14 +423,14 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           {/* Nationality & Gender */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Nationality</Label>
+              <Label>Nationality *</Label>
               <NationalitySelect
                 value={form.nationality}
                 onChange={(v) => setForm(f => ({ ...f, nationality: v }))}
               />
             </div>
             <div className="space-y-2">
-              <Label>Gender</Label>
+              <Label>Gender *</Label>
               <Select value={form.gender} onValueChange={(v) => setForm(f => ({ ...f, gender: v }))}>
                 <SelectTrigger className="border-gold/20">
                   <SelectValue placeholder="Select gender" />
@@ -427,12 +447,12 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           {/* Years & Date of Joining */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Years in Real Estate</Label>
+              <Label>Years in Real Estate *</Label>
               <Input type="number" min="0" max="50" value={form.years_in_real_estate} onChange={(e) => setForm(f => ({ ...f, years_in_real_estate: e.target.value }))} placeholder="e.g. 5" />
             </div>
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5">
-                Date of Joining Company
+                Date of Joining Company *
                 {developerName && <span className="text-[10px] text-muted-foreground font-normal">at {developerName}</span>}
               </Label>
               <Input type="date" value={form.date_of_join} onChange={(e) => setForm(f => ({ ...f, date_of_join: e.target.value }))} />
@@ -441,7 +461,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
 
           {/* Languages */}
           <div className="space-y-2">
-            <Label>Languages Spoken</Label>
+            <Label>Languages Spoken *</Label>
             <LanguageMultiSelect value={form.languages} onChange={(v) => setForm(f => ({ ...f, languages: v }))} />
           </div>
 

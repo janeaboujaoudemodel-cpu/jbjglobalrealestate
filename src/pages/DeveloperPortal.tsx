@@ -26,6 +26,7 @@ import {
   Rocket, Search, EyeOff, Settings, MapPin, Lock, ShieldCheck, ShieldOff, ToggleLeft, ToggleRight,
 } from "lucide-react";
 import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistration";
+import { DeveloperSelectDropdown } from "@/components/developer-portal/DeveloperSelectDropdown";
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
 import DeveloperMessageForm from "@/components/developer-portal/DeveloperMessageForm";
 import ExistingProjectsReview from "@/components/developer-portal/ExistingProjectsReview";
@@ -104,18 +105,7 @@ const DeveloperPortal = () => {
     || user?.email?.split('@')[0]
     || 'Developer';
 
-  // Fetch developer names for autocomplete (owner mode)
-  const { data: developersList } = useQuery({
-    queryKey: ["developers-list-autocomplete"],
-    queryFn: async () => {
-      const { data } = await (supabase as any)
-        .from('developers')
-        .select('id, name')
-        .order('name');
-      return data || [];
-    },
-    enabled: isOwner,
-  });
+  // Developer list is now handled by DeveloperSelectDropdown component
 
   // Check if user has a registered rep profile
   const { data: repProfile, isLoading: loadingRep, refetch: refetchRep } = useQuery({
@@ -175,6 +165,7 @@ const DeveloperPortal = () => {
     setSavingProfile(true);
     try {
       const changedFields: string[] = [];
+      const developerChanged = editForm.developer_name !== (repProfile.developer_name || '');
       if (editForm.full_name !== repProfile.full_name) changedFields.push('full_name');
       if (editForm.email !== repProfile.email) changedFields.push('email');
       if (editForm.phone !== ((repProfile as any).phone || '')) changedFields.push('phone');
@@ -184,20 +175,29 @@ const DeveloperPortal = () => {
       if (editForm.personal_phone !== ((repProfile as any).personal_phone || '')) changedFields.push('personal_phone');
       if (editForm.company_phone !== ((repProfile as any).company_phone || '')) changedFields.push('company_phone');
       if (JSON.stringify(editForm.languages) !== JSON.stringify((repProfile as any).languages || [])) changedFields.push('languages');
+      if (developerChanged) changedFields.push('developer_name');
+
+      const updatePayload: any = {
+        full_name: editForm.full_name,
+        position: editForm.position || null,
+        email: editForm.email,
+        phone: editForm.phone || null,
+        nationality: editForm.nationality || null,
+        personal_email: editForm.personal_email || null,
+        personal_phone: editForm.personal_phone || null,
+        company_phone: editForm.company_phone || null,
+        languages: editForm.languages.length > 0 ? editForm.languages : null,
+      };
+
+      // If developer changed, update name and reset to pending_review
+      if (developerChanged) {
+        updatePayload.developer_name = editForm.developer_name;
+        updatePayload.status = 'pending_review';
+      }
 
       const { error } = await supabase
         .from('developer_representatives')
-        .update({
-          full_name: editForm.full_name,
-          position: editForm.position || null,
-          email: editForm.email,
-          phone: editForm.phone || null,
-          nationality: editForm.nationality || null,
-          personal_email: editForm.personal_email || null,
-          personal_phone: editForm.personal_phone || null,
-          company_phone: editForm.company_phone || null,
-          languages: editForm.languages.length > 0 ? editForm.languages : null,
-        } as any)
+        .update(updatePayload)
         .eq('id', repProfile.id);
       if (error) throw error;
 
@@ -214,7 +214,11 @@ const DeveloperPortal = () => {
         } catch {}
       }
 
-      toast.success('Profile updated successfully');
+      if (developerChanged) {
+        toast.success('Developer changed — your profile is now pending re-approval.');
+      } else {
+        toast.success('Profile updated successfully');
+      }
       setEditingProfile(false);
       refetchRep();
     } catch (err: any) {
@@ -968,17 +972,11 @@ const DeveloperPortal = () => {
               <CardContent className="p-4">
                 <div className="space-y-1">
                   <Label className="text-xs text-muted-foreground">Developer / Company You Represent *</Label>
-                  <Input
+                  <DeveloperSelectDropdown
                     value={devName}
-                    onChange={(e) => setDevName(e.target.value)}
-                    placeholder="Start typing developer name (e.g. Emaar, DAMAC, Sobha)..."
-                    list="developer-autocomplete"
+                    onChange={setDevName}
+                    placeholder="Select your developer (e.g. Emaar, DAMAC, Sobha)..."
                   />
-                  <datalist id="developer-autocomplete">
-                    {developersList?.map((d: any) => (
-                      <option key={d.id} value={d.name} />
-                    ))}
-                  </datalist>
                   <p className="text-[10px] text-muted-foreground">Select your developer first, then complete the registration below.</p>
                 </div>
               </CardContent>
@@ -1009,20 +1007,12 @@ const DeveloperPortal = () => {
                 <CardContent className="p-4">
                   <div className="space-y-1">
                     <Label className="text-xs text-muted-foreground">Developer / Company Name *</Label>
-                    <div className="relative">
-                      <Input
-                        value={devName}
-                        onChange={(e) => setDevName(e.target.value)}
-                        placeholder="Start typing developer name..."
-                        list="developer-autocomplete"
-                      />
-                      <datalist id="developer-autocomplete">
-                        {developersList?.map((d: any) => (
-                          <option key={d.id} value={d.name} />
-                        ))}
-                      </datalist>
-                    </div>
-                    <p className="text-[10px] text-muted-foreground">Email auto-set to your owner account. Just enter the developer name and upload.</p>
+                    <DeveloperSelectDropdown
+                      value={devName}
+                      onChange={setDevName}
+                      placeholder="Select developer name..."
+                    />
+                    <p className="text-[10px] text-muted-foreground">Email auto-set to your owner account. Just select the developer and upload.</p>
                   </div>
                 </CardContent>
               </Card>
@@ -1476,10 +1466,17 @@ const DeveloperPortal = () => {
                           <div className="space-y-2">
                             <Label className="flex items-center gap-1.5">
                               Developer / Company
-                              <Lock className="w-3 h-3 text-muted-foreground" />
+                              <AlertCircle className="w-3 h-3 text-amber-500" />
                             </Label>
-                            <Input value={editForm.developer_name} disabled className="bg-muted/50 cursor-not-allowed" />
-                            <p className="text-[10px] text-muted-foreground">Locked after registration. Contact support to change.</p>
+                            <DeveloperSelectDropdown
+                              value={editForm.developer_name}
+                              onChange={(v) => setEditForm(f => ({ ...f, developer_name: v }))}
+                              placeholder="Select developer..."
+                            />
+                            {editForm.developer_name !== (repProfile?.developer_name || '') && (
+                              <p className="text-[10px] text-amber-600 font-medium">⚠ Changing your developer will require re-approval and new verification documents.</p>
+                            )}
+                            <p className="text-[10px] text-muted-foreground">You can change your developer — this will trigger a re-approval process.</p>
                           </div>
                           <div className="space-y-2">
                             <Label>Nationality</Label>

@@ -1,23 +1,94 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X, Plus } from 'lucide-react';
+import { X, Plus, Globe } from 'lucide-react';
 
-// Comprehensive language list
-const LANGUAGES = [
-  'English', 'Arabic', 'Hindi', 'Urdu', 'Bengali', 'Punjabi', 'Tamil', 'Telugu', 'Malayalam', 'Kannada', 'Marathi', 'Gujarati',
-  'Tagalog', 'Cebuano', 'Ilocano',
-  'French', 'German', 'Spanish', 'Portuguese', 'Italian', 'Dutch', 'Polish', 'Romanian', 'Greek', 'Swedish', 'Norwegian', 'Danish', 'Finnish',
-  'Russian', 'Ukrainian', 'Belarusian',
-  'Chinese (Mandarin)', 'Chinese (Cantonese)', 'Japanese', 'Korean', 'Vietnamese', 'Thai', 'Indonesian', 'Malay', 'Burmese', 'Khmer',
-  'Turkish', 'Persian (Farsi)', 'Kurdish', 'Pashto', 'Dari',
-  'Hebrew', 'Amharic', 'Swahili', 'Somali', 'Hausa', 'Yoruba', 'Igbo', 'Zulu', 'Afrikaans',
-  'Nepali', 'Sinhala',
-  'Serbian', 'Croatian', 'Bosnian', 'Slovenian', 'Czech', 'Slovak', 'Hungarian', 'Bulgarian', 'Macedonian', 'Albanian',
-  'Armenian', 'Georgian', 'Azerbaijani', 'Kazakh', 'Uzbek',
-  'Mongolian', 'Tibetan',
-  'Sign Language (ASL)', 'Sign Language (BSL)', 'Sign Language (Arabic)',
-];
+// Language → flag emoji mapping
+const LANGUAGE_FLAGS: Record<string, string> = {
+  'English': '🇬🇧',
+  'Arabic': '🇸🇦',
+  'Hindi': '🇮🇳',
+  'Urdu': '🇵🇰',
+  'Bengali': '🇧🇩',
+  'Punjabi': '🇮🇳',
+  'Tamil': '🇮🇳',
+  'Telugu': '🇮🇳',
+  'Malayalam': '🇮🇳',
+  'Kannada': '🇮🇳',
+  'Marathi': '🇮🇳',
+  'Gujarati': '🇮🇳',
+  'Tagalog': '🇵🇭',
+  'Cebuano': '🇵🇭',
+  'Ilocano': '🇵🇭',
+  'French': '🇫🇷',
+  'German': '🇩🇪',
+  'Spanish': '🇪🇸',
+  'Portuguese': '🇵🇹',
+  'Italian': '🇮🇹',
+  'Dutch': '🇳🇱',
+  'Polish': '🇵🇱',
+  'Romanian': '🇷🇴',
+  'Greek': '🇬🇷',
+  'Swedish': '🇸🇪',
+  'Norwegian': '🇳🇴',
+  'Danish': '🇩🇰',
+  'Finnish': '🇫🇮',
+  'Russian': '🇷🇺',
+  'Ukrainian': '🇺🇦',
+  'Belarusian': '🇧🇾',
+  'Chinese (Mandarin)': '🇨🇳',
+  'Chinese (Cantonese)': '🇭🇰',
+  'Japanese': '🇯🇵',
+  'Korean': '🇰🇷',
+  'Vietnamese': '🇻🇳',
+  'Thai': '🇹🇭',
+  'Indonesian': '🇮🇩',
+  'Malay': '🇲🇾',
+  'Burmese': '🇲🇲',
+  'Khmer': '🇰🇭',
+  'Turkish': '🇹🇷',
+  'Persian (Farsi)': '🇮🇷',
+  'Kurdish': '🇮🇶',
+  'Pashto': '🇦🇫',
+  'Dari': '🇦🇫',
+  'Hebrew': '🇮🇱',
+  'Amharic': '🇪🇹',
+  'Swahili': '🇰🇪',
+  'Somali': '🇸🇴',
+  'Hausa': '🇳🇬',
+  'Yoruba': '🇳🇬',
+  'Igbo': '🇳🇬',
+  'Zulu': '🇿🇦',
+  'Afrikaans': '🇿🇦',
+  'Nepali': '🇳🇵',
+  'Sinhala': '🇱🇰',
+  'Serbian': '🇷🇸',
+  'Croatian': '🇭🇷',
+  'Bosnian': '🇧🇦',
+  'Slovenian': '🇸🇮',
+  'Czech': '🇨🇿',
+  'Slovak': '🇸🇰',
+  'Hungarian': '🇭🇺',
+  'Bulgarian': '🇧🇬',
+  'Macedonian': '🇲🇰',
+  'Albanian': '🇦🇱',
+  'Armenian': '🇦🇲',
+  'Georgian': '🇬🇪',
+  'Azerbaijani': '🇦🇿',
+  'Kazakh': '🇰🇿',
+  'Uzbek': '🇺🇿',
+  'Mongolian': '🇲🇳',
+  'Tibetan': '🇨🇳',
+  'Sign Language (ASL)': '🤟',
+  'Sign Language (BSL)': '🤟',
+  'Sign Language (Arabic)': '🤟',
+};
+
+const LANGUAGES = Object.keys(LANGUAGE_FLAGS);
+
+const getFlag = (lang: string): string => {
+  return LANGUAGE_FLAGS[lang] || '';
+};
 
 interface LanguageMultiSelectProps {
   value: string[];
@@ -54,9 +125,6 @@ export const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
     lang.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Get custom languages (ones not in the default list)
-  const customLanguages = value.filter(v => !LANGUAGES.includes(v));
-
   return (
     <div className={`space-y-3 ${className}`}>
       {/* Search */}
@@ -73,8 +141,10 @@ export const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
           {value.map(lang => (
             <span 
               key={lang}
-              className="inline-flex items-center gap-1 px-2 py-1 bg-gold text-black text-sm rounded-md"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-gold text-black text-sm rounded-md"
             >
+              <span className="text-base leading-none">{getFlag(lang)}</span>
+              {!getFlag(lang) && <Globe className="w-3.5 h-3.5" />}
               {lang}
               <button
                 type="button"
@@ -103,6 +173,8 @@ export const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
                 : 'text-black hover:bg-gold/10 hover:border-gold'
             }`}
           >
+            <span className="mr-1.5 text-base leading-none">{getFlag(lang)}</span>
+            {!getFlag(lang) && <Globe className="w-3.5 h-3.5 mr-1" />}
             {lang}
           </Button>
         ))}
