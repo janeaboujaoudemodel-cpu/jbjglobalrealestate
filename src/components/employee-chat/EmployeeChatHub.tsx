@@ -429,7 +429,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
             {/* Message Input */}
             <div className="p-3 sm:p-4 border-t border-[#C9A84C]/10 bg-white/80 backdrop-blur-sm">
               <div className="flex items-end gap-2">
-                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0 hover:bg-[#C9A84C]/10 hidden sm:flex">
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0 hover:bg-[#C9A84C]/10 hidden sm:flex" onClick={() => setShowAttachPicker(true)}>
                   <Paperclip className="h-4 w-4 text-black/40" />
                 </Button>
                 <div className="flex-1 relative">
