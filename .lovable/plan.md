@@ -18,9 +18,18 @@
 | 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
 | 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
 | 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11-16 | Multi-Portal System | ✅ CLOSED | Yes |
-| — | Email Hub | ✅ CLOSED | Yes |
-| — | Identity & Security | ✅ CLOSED | Yes |
+| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
+| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
+| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
+| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
+| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
+| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
+| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
+| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
+| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
+| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
+| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
+| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
 
 ---
 
@@ -52,6 +61,29 @@
 - `/owner/team-chat` → TeamChat
 - `/team-chat` → TeamChat
 - `/employee-chat` → EmployeeChatPage
+
+**Developer Portal**
+- `/developer-portal` → DeveloperPortal
+
+**Investor Hub**
+- `/investor-hub` → InvestorHub
+
+**Broker Hub**
+- `/broker-hub` → BrokerHub
+- `/broker-portal` → BrokerPortal
+- `/broker-dashboard` → BrokerDashboard
+
+**Security & Audit**
+- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
+- `/owner/global-audit` → GlobalAuditDashboard
+- `/owner/incident-readiness` → IncidentReadinessPanel
+- `/owner/encryption-audit` → EncryptionAuditDashboard
+- `/owner/api-security` → APISecurityDashboard
+- `/owner/crm-security` → CRMSecurityDashboard
+
+**Owner Moderation**
+- `/owner/developer-moderation` → DeveloperModerationQueue
+- `/owner/events` → EventManagementHub
 
 ---
 
