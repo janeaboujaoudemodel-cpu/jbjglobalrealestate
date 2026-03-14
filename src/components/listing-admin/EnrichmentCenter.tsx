@@ -522,7 +522,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
           Project Enrichment & Extraction
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
-          Enrich all projects from external sources — images, documents, floor plans, amenities,
+          Enrich all projects from data sources — images, documents, floor plans, amenities,
           payment plans, unit types, and more. Runs in background — safe to navigate away.
         </p>
       </div>
