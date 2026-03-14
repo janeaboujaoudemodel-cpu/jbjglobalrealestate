@@ -149,6 +149,17 @@ interface FormState {
   business_type: string;
   separator_style: SeparatorStyle;
   ink_color: string;
+  // New fields
+  government_mode: boolean;
+  arabic_font: string;
+  arabic_letter_spacing: number;
+  arabic_arc_spread: number;
+  arabic_font_weight: string;
+  arc_text_spacing: number;
+  circle_gap: number;
+  separator_distance: number;
+  center_content_size: number;
+  selected_preset: string;
 }
 
 export default function StampProjectWizard() {
