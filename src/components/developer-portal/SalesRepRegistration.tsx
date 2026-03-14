@@ -430,7 +430,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
               />
             </div>
             <div className="space-y-2">
-              <Label>Gender</Label>
+              <Label>Gender *</Label>
               <Select value={form.gender} onValueChange={(v) => setForm(f => ({ ...f, gender: v }))}>
                 <SelectTrigger className="border-gold/20">
                   <SelectValue placeholder="Select gender" />
