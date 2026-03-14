@@ -203,6 +203,15 @@ const PACK_COLORS = [
   { label: 'Bronze', hex: '#8B4513' },
 ];
 
+// 5 mandatory standard export colors — always present in export
+const STANDARD_EXPORT_COLORS = [
+  { label: 'White',      hex: '#ffffff' },
+  { label: 'Black',      hex: '#0d0d0d' },
+  { label: 'Navy Ink',   hex: '#1B3A8C' },
+  { label: 'Brand Gold', hex: '#C8A766' },
+  { label: 'Dark Gold',  hex: '#B8860B' },
+];
+
 const PRESET_COLORS = [
   { label: 'Navy', hex: '#1a2744' },
   { label: 'Gold', hex: '#B8860B' },

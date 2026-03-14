@@ -453,8 +453,13 @@ export default function StampGeneratorPage() {
 
     const newOverrides: Record<string, string> = { ...svgOverrides };
     [...favoriteConcepts, ...concepts].forEach(c => {
-      const base = svgOverrides[c.id] || c.svgSource;
-      newOverrides[c.id] = injectCenterArt(base, localIconStyle, localMonogramText, localLogoUrl);
+      let base = svgOverrides[c.id] || c.svgSource;
+      base = injectCenterArt(base, localIconStyle, localMonogramText, localLogoUrl);
+      // Apply per-letter monogram colors if applicable
+      if (localIconStyle === 'MONOGRAM' && localMonogramText) {
+        base = applyMonogramColors(base, localMonogramText, monogramLetterColors, primaryColor);
+      }
+      newOverrides[c.id] = base;
     });
     setSvgOverrides(newOverrides);
     toast.success('Logo applied to all stamps');
