@@ -135,7 +135,18 @@ const TeamChat = () => {
   const [alsoSendByEmail, setAlsoSendByEmail] = useState(false);
   const [showAttachPicker, setShowAttachPicker] = useState(false);
   const [pendingAttachments, setPendingAttachments] = useState<DocumentAttachment[]>([]);
+  const [pinnedMessages, setPinnedMessages] = useState<Set<string>>(new Set());
+  const [showProductivityPanel, setShowProductivityPanel] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const togglePin = (msgId: string) => {
+    setPinnedMessages(prev => {
+      const next = new Set(prev);
+      if (next.has(msgId)) { next.delete(msgId); toast.success("Message unpinned"); }
+      else { next.add(msgId); toast.success("Message pinned"); }
+      return next;
+    });
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
