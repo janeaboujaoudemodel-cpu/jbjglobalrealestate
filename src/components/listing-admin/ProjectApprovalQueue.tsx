@@ -331,6 +331,25 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     fetchInventoryStats();
   }, [jobId, showAll, statusFilter, sourceFilter]);
 
+  // Fetch distinct developer names for filter dropdown
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from("pending_project_imports")
+          .select("developer_name")
+          .eq("status", "pending")
+          .not("developer_name", "is", null)
+          .not("developer_name", "ilike", "unknown");
+        if (data) {
+          const names = [...new Set(data.map(d => d.developer_name).filter(Boolean))] as string[];
+          names.sort((a, b) => a.localeCompare(b));
+          setDistinctDevelopers(names);
+        }
+      } catch { /* non-critical */ }
+    })();
+  }, [imports.length]);
+
   // Fetch developer slugs when imports change
   useEffect(() => {
     if (imports.length > 0) fetchDeveloperSlugs(imports);
