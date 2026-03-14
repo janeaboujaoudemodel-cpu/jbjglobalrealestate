@@ -979,7 +979,12 @@ export default function StampProjectWizard() {
               <LiveStampPreview {...previewProps} size={380} />
             </div>
             <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center max-w-[300px]">
-              {form.company_name || <span className="italic">Enter company name to see live preview</span>}
+              {form.company_name ? (
+                <>
+                  {form.company_name}
+                  <span className="block text-[9px] mt-0.5 opacity-70">Click any element to edit</span>
+                </>
+              ) : <span className="italic">Enter company name to see live preview</span>}
             </p>
           </div>
         </div>
