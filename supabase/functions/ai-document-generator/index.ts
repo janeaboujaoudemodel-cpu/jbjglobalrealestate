@@ -293,7 +293,9 @@ serve(async (req) => {
       return errorResponse(corsHeaders, "Please provide document details", 400);
     }
 
-    const promptConfig = TYPE_PROMPTS[docType] || FALLBACK_PROMPT;
+    const promptConfig = docType === "contract-prompt" || docType === "hr-letter" || docType === "legal-document" || docType === "rera-form"
+      ? CONTRACT_PROMPT
+      : (TYPE_PROMPTS[docType] || FALLBACK_PROMPT);
 
     const systemPrompt = `${promptConfig.systemRole}
 
