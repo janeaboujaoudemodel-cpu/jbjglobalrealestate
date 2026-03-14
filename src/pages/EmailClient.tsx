@@ -474,10 +474,16 @@ const EmailClient = () => {
                   className="min-h-[200px]"
                 />
 
-                {/* Signature info */}
+                {/* Signature info + persona consistency badge */}
                 <div className="bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg p-3">
                   <p className="text-xs text-black/60 mb-1">Sending as: <strong className="text-black">{currentSender.name}</strong></p>
                   <p className="text-[10px] text-black/40">{currentSender.title} · {currentSender.email}</p>
+                  {attachments.some(a => ['stamp', 'signature', 'letterhead'].includes(a.type)) && (
+                    <p className="text-[10px] text-[#C9A84C] mt-1.5 font-medium flex items-center gap-1">
+                      <Shield className="w-3 h-3" />
+                      Brand assets attached — sending as {currentSender.name}
+                    </p>
+                  )}
                 </div>
 
                 {/* Attachment chips */}

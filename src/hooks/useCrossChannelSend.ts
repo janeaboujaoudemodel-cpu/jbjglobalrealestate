@@ -55,6 +55,7 @@ export function useCrossChannelSend() {
               useResend: true,
               alsoSendByEmail: true,
               chatRecipientEmail: opts.recipientEmail,
+              attachments: opts.attachments || [],
             },
           });
           toast.success(`Also emailed to ${opts.recipientName || opts.recipientEmail}`);

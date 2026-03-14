@@ -353,7 +353,46 @@ const ExclusiveDocuments = () => {
                 </CardContent>
               </Card>
 
-              <div className="flex gap-3 justify-end">
+              <div className="flex gap-3 justify-end flex-wrap">
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/owner/email-client", {
+                    state: {
+                      prefillSubject: generatedSubject || selectedTemplate?.label || "Document",
+                      prefillBody: generatedDocument,
+                      prefillAttachment: {
+                        id: crypto.randomUUID(),
+                        name: `${generatedSubject || selectedTemplate?.label || "Document"}.txt`,
+                        type: 'file' as const,
+                        content: `data:text/plain;base64,${btoa(unescape(encodeURIComponent(generatedDocument!)))}`,
+                        mimeType: 'text/plain',
+                      },
+                    },
+                  })}
+                  className="border-gold/40 text-black hover:bg-gold/10"
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  Send by Email
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/team-chat", {
+                    state: {
+                      prefillMessage: `📄 ${generatedSubject || "Document"}\n\n${generatedDocument!.substring(0, 500)}${generatedDocument!.length > 500 ? '...' : ''}`,
+                      prefillAttachment: {
+                        id: crypto.randomUUID(),
+                        name: `${generatedSubject || selectedTemplate?.label || "Document"}.txt`,
+                        type: 'file' as const,
+                        content: `data:text/plain;base64,${btoa(unescape(encodeURIComponent(generatedDocument!)))}`,
+                        mimeType: 'text/plain',
+                      },
+                    },
+                  })}
+                  className="border-gold/40 text-black hover:bg-gold/10"
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Send to Chat
+                </Button>
                 <Button
                   onClick={handleSendForSignature}
                   className="bg-gold hover:bg-gold/90 text-black font-semibold"

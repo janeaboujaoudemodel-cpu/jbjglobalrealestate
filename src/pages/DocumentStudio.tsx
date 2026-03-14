@@ -117,7 +117,7 @@ const DocumentStudio = () => {
               <AIDocumentGeneratorPremium />
 
               {generatedContent && (
-                <div className="flex gap-3 justify-end">
+                <div className="flex gap-3 justify-end flex-wrap">
                   <Button
                     variant="outline"
                     onClick={() => {
@@ -128,6 +128,45 @@ const DocumentStudio = () => {
                   >
                     <Copy className="w-4 h-4 mr-2" />
                     Copy
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate("/owner/email-client", {
+                      state: {
+                        prefillSubject: "AI Generated Document",
+                        prefillBody: generatedContent,
+                        prefillAttachment: {
+                          id: crypto.randomUUID(),
+                          name: "AI-Document.txt",
+                          type: 'file' as const,
+                          content: `data:text/plain;base64,${btoa(unescape(encodeURIComponent(generatedContent!)))}`,
+                          mimeType: 'text/plain',
+                        },
+                      },
+                    })}
+                    className="border-gold/40 text-black hover:bg-gold/10"
+                  >
+                    <Mail className="w-4 h-4 mr-2" />
+                    Send by Email
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => navigate("/team-chat", {
+                      state: {
+                        prefillMessage: `📄 Document\n\n${generatedContent!.substring(0, 500)}${generatedContent!.length > 500 ? '...' : ''}`,
+                        prefillAttachment: {
+                          id: crypto.randomUUID(),
+                          name: "AI-Document.txt",
+                          type: 'file' as const,
+                          content: `data:text/plain;base64,${btoa(unescape(encodeURIComponent(generatedContent!)))}`,
+                          mimeType: 'text/plain',
+                        },
+                      },
+                    })}
+                    className="border-gold/40 text-black hover:bg-gold/10"
+                  >
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Send to Chat
                   </Button>
                   <Button
                     onClick={handleSendForSignature}
