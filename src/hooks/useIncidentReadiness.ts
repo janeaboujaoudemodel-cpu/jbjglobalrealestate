@@ -99,11 +99,11 @@ export function useRunSecurityChecklist() {
   });
 }
 
+/** Expanded restore test — validates all 12 snapshot categories */
 export function useTestRestore() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (backupId: string) => {
-      // Load the backup record
       const { data: record, error } = await supabase
         .from("system_backup_records")
         .select("*")
@@ -111,15 +111,29 @@ export function useTestRestore() {
         .single();
       if (error || !record) throw new Error("Backup not found");
 
-      // Validate snapshot structure
       const snapshot = record.snapshot_data as Record<string, unknown> | null;
       if (!snapshot) throw new Error("No snapshot data");
 
-      const requiredKeys = ["app_settings", "user_roles"];
+      const requiredKeys = [
+        "app_settings",
+        "user_roles",
+        "ai_tool_versions",
+        "feature_flags",
+        "broker_email_templates",
+        "marketing_templates",
+        "executive_response_templates",
+        "owner_comm_templates",
+        "design_templates",
+        "marketing_config",
+        "points_config",
+        "activity_points_config",
+      ];
       const missingKeys = requiredKeys.filter(k => !(k in snapshot));
-      const result = missingKeys.length === 0 ? "pass" : `Missing keys: ${missingKeys.join(", ")}`;
+      const presentKeys = requiredKeys.filter(k => k in snapshot);
+      const result = missingKeys.length === 0
+        ? `pass — all ${requiredKeys.length} categories validated`
+        : `Missing keys: ${missingKeys.join(", ")}`;
 
-      // Mark as tested
       await supabase
         .from("system_backup_records")
         .update({
@@ -129,16 +143,137 @@ export function useTestRestore() {
         })
         .eq("id", backupId);
 
-      return { result, missingKeys };
+      return { result, missingKeys, presentKeys, totalChecked: requiredKeys.length };
     },
     onSuccess: (data) => {
       if (data.missingKeys.length === 0) {
-        toast.success("Restore test passed — snapshot is valid");
+        toast.success(`Restore test passed — all ${data.totalChecked} categories validated`);
       } else {
-        toast.warning("Restore test completed with warnings");
+        toast.warning(`Restore test: ${data.missingKeys.length} missing categories`);
       }
       qc.invalidateQueries({ queryKey: ["system-backup-records"] });
     },
     onError: (err: Error) => toast.error("Restore test failed: " + err.message),
+  });
+}
+
+/** Register a new deployment record */
+export function useCreateDeployment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (params: {
+      version_label: string;
+      impacted_modules: string[];
+      notes?: string;
+    }) => {
+      const { data, error } = await supabase
+        .from("deployment_records")
+        .insert({
+          version_label: params.version_label,
+          impacted_modules: params.impacted_modules,
+          notes: params.notes || null,
+          is_stable: false,
+          rolled_back: false,
+          rollback_available: true,
+          security_sign_off: false,
+        })
+        .select("id, version_label, deployed_at")
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      toast.success(`Deployment ${data.version_label} registered`);
+      qc.invalidateQueries({ queryKey: ["deployment-records"] });
+    },
+    onError: (err: Error) => toast.error("Failed to register deployment: " + err.message),
+  });
+}
+
+/** Mark a deployment as stable (only if last gate run passed) */
+export function useMarkStable() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (deploymentId: string) => {
+      // First verify last gate run passed
+      const { data: gateRuns } = await supabase
+        .from("deployment_gate_runs")
+        .select("gate_status")
+        .order("created_at", { ascending: false })
+        .limit(1);
+      
+      if (!gateRuns?.length || gateRuns[0].gate_status !== "pass") {
+        throw new Error("Cannot mark stable — last deployment gate did not pass");
+      }
+
+      // Unmark any previously stable deployment
+      await supabase
+        .from("deployment_records")
+        .update({ is_stable: false })
+        .eq("is_stable", true);
+
+      // Mark this one as stable with security sign-off
+      const { error } = await supabase
+        .from("deployment_records")
+        .update({
+          is_stable: true,
+          security_sign_off: true,
+        })
+        .eq("id", deploymentId);
+      if (error) throw error;
+
+      return { deploymentId };
+    },
+    onSuccess: () => {
+      toast.success("Deployment marked as stable baseline");
+      qc.invalidateQueries({ queryKey: ["deployment-records"] });
+    },
+    onError: (err: Error) => toast.error(err.message),
+  });
+}
+
+/** Rollback a deployment — marks it rolled back and restores previous stable */
+export function useRollbackDeployment() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (deploymentId: string) => {
+      // Mark current as rolled back
+      const { error } = await supabase
+        .from("deployment_records")
+        .update({
+          rolled_back: true,
+          rolled_back_at: new Date().toISOString(),
+          is_stable: false,
+        })
+        .eq("id", deploymentId);
+      if (error) throw error;
+
+      // Find and restore previous stable (the one before this)
+      const { data: prevStable } = await supabase
+        .from("deployment_records")
+        .select("id, version_label")
+        .eq("rolled_back", false)
+        .neq("id", deploymentId)
+        .order("deployed_at", { ascending: false })
+        .limit(1);
+
+      if (prevStable?.length) {
+        await supabase
+          .from("deployment_records")
+          .update({ is_stable: true })
+          .eq("id", prevStable[0].id);
+        return { rolledBackId: deploymentId, restoredTo: prevStable[0].version_label };
+      }
+      return { rolledBackId: deploymentId, restoredTo: null };
+    },
+    onSuccess: (data) => {
+      if (data.restoredTo) {
+        toast.success(`Rolled back — restored to ${data.restoredTo}`);
+      } else {
+        toast.success("Rolled back — no previous stable version found");
+      }
+      qc.invalidateQueries({ queryKey: ["deployment-records"] });
+    },
+    onError: (err: Error) => toast.error("Rollback failed: " + err.message),
   });
 }

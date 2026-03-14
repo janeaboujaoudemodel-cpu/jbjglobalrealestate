@@ -4,14 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
 import {
   Shield, Database, RefreshCw, CheckCircle2, XCircle, AlertTriangle,
   Archive, Clock, Activity, Download, FileCheck, Rocket, Lock,
-  FileSpreadsheet, Eye,
+  FileSpreadsheet, Eye, Plus, Star, RotateCcw,
 } from "lucide-react";
 import {
   useBackupRecords, useChecklistRuns, useDeploymentRecords,
   useSecurityAlerts, useCreateSnapshot, useRunSecurityChecklist, useTestRestore,
+  useCreateDeployment, useMarkStable, useRollbackDeployment,
 } from "@/hooks/useIncidentReadiness";
 import { useGateHistory, useRunDeploymentGate, type GateCheck } from "@/hooks/useDeploymentGate";
 import { supabase } from "@/integrations/supabase/client";
@@ -46,8 +48,16 @@ export default function IncidentReadinessPanel() {
   const testRestore = useTestRestore();
   const gateHistory = useGateHistory();
   const runGate = useRunDeploymentGate();
+  const createDeployment = useCreateDeployment();
+  const markStable = useMarkStable();
+  const rollbackDeployment = useRollbackDeployment();
+
   const [expandedCheck, setExpandedCheck] = useState<string | null>(null);
   const [expandedGateRun, setExpandedGateRun] = useState<string | null>(null);
+  const [showDeployForm, setShowDeployForm] = useState(false);
+  const [deployVersion, setDeployVersion] = useState("");
+  const [deployModules, setDeployModules] = useState("");
+  const [deployNotes, setDeployNotes] = useState("");
 
   // DLP Export Audit
   const [exportEvents, setExportEvents] = useState<any[]>([]);
@@ -77,9 +87,26 @@ export default function IncidentReadinessPanel() {
   const latestChecklist = checklists.data?.[0];
   const latestStable = deployments.data?.find(d => d.is_stable);
   const lastGateRun = gateHistory.data?.[0];
+  const latestBackup = backups.data?.[0];
 
   const piiExportsToday = exportEvents.filter(e => e.contains_pii && new Date(e.created_at).toDateString() === new Date().toDateString()).length;
   const totalExportsToday = exportEvents.filter(e => new Date(e.created_at).toDateString() === new Date().toDateString()).length;
+
+  const handleCreateDeployment = () => {
+    if (!deployVersion.trim()) return;
+    createDeployment.mutate({
+      version_label: deployVersion.trim(),
+      impacted_modules: deployModules.split(",").map(s => s.trim()).filter(Boolean),
+      notes: deployNotes.trim() || undefined,
+    }, {
+      onSuccess: () => {
+        setShowDeployForm(false);
+        setDeployVersion("");
+        setDeployModules("");
+        setDeployNotes("");
+      }
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -114,6 +141,78 @@ export default function IncidentReadinessPanel() {
           </Button>
         </div>
       </div>
+
+      {/* ===== CURRENT STABLE BASELINE CARD ===== */}
+      <Card className="border-2 border-emerald-500/40 bg-emerald-500/5">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Star className="w-5 h-5 text-emerald-500" />
+            Current Stable Baseline
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {deployments.isLoading ? (
+            <Skeleton className="h-16 w-full" />
+          ) : latestStable ? (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <p className="text-xs text-muted-foreground">Version</p>
+                  <p className="text-sm font-semibold text-foreground">{latestStable.version_label}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Deployed</p>
+                  <p className="text-sm text-foreground">{new Date(latestStable.deployed_at).toLocaleString()}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Security Sign-Off</p>
+                  <p className="text-sm text-foreground flex items-center gap-1">
+                    {latestStable.security_sign_off
+                      ? <><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Yes</>
+                      : <><XCircle className="w-4 h-4 text-red-500" /> No</>}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Gate Status</p>
+                  <p className="text-sm text-foreground capitalize flex items-center gap-1">
+                    {lastGateRun?.gate_status === "pass"
+                      ? <><CheckCircle2 className="w-4 h-4 text-emerald-500" /> Passed</>
+                      : <><AlertTriangle className="w-4 h-4 text-amber-500" /> {lastGateRun?.gate_status ?? "Not Run"}</>}
+                  </p>
+                </div>
+              </div>
+              {latestStable.impacted_modules?.length > 0 && (
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Impacted Modules</p>
+                  <div className="flex flex-wrap gap-1">
+                    {latestStable.impacted_modules.map((m: string) => (
+                      <Badge key={m} variant="secondary" className="text-xs">{m}</Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {latestBackup && (
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Latest Snapshot</p>
+                  <p className="text-sm text-foreground">
+                    {timeAgo(latestBackup.created_at)} · {latestBackup.size_bytes ? `${Math.round(latestBackup.size_bytes / 1024)}KB` : "—"}
+                    {latestBackup.restore_tested && (
+                      <Badge variant="secondary" className="ml-2 text-xs">
+                        <FileCheck className="w-3 h-3 mr-1" /> Restore Tested
+                      </Badge>
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <p className="text-muted-foreground text-sm">No stable baseline set yet.</p>
+              <p className="text-xs text-muted-foreground mt-1">Register a deployment and mark it stable after passing the gate check.</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -211,7 +310,6 @@ export default function IncidentReadinessPanel() {
                 </Badge>
               </div>
               
-              {/* Blocked reasons */}
               {runGate.data.blocked_reasons.length > 0 && (
                 <div className="mb-3 space-y-1">
                   {runGate.data.blocked_reasons.map((reason, i) => (
@@ -223,7 +321,6 @@ export default function IncidentReadinessPanel() {
                 </div>
               )}
 
-              {/* Individual checks */}
               <div className="space-y-1.5">
                 {runGate.data.checks.map((check: GateCheck, i: number) => (
                   <div key={i} className="flex items-center justify-between p-2 rounded border border-border/30 text-sm">
@@ -346,6 +443,7 @@ export default function IncidentReadinessPanel() {
                       <p className="text-sm font-medium text-foreground">{b.backup_type} snapshot</p>
                       <p className="text-xs text-muted-foreground">
                         {timeAgo(b.created_at)} · {b.size_bytes ? `${Math.round(b.size_bytes / 1024)}KB` : "—"}
+                        {b.notes && ` · ${b.notes.substring(0, 80)}`}
                       </p>
                     </div>
                   </div>
@@ -353,7 +451,7 @@ export default function IncidentReadinessPanel() {
                     {b.restore_tested ? (
                       <Badge variant="secondary" className="text-xs">
                         <FileCheck className="w-3 h-3 mr-1" />
-                        Tested
+                        {b.restore_test_result?.startsWith("pass") ? "✓ Validated" : "⚠ Partial"}
                       </Badge>
                     ) : (
                       <Button
@@ -398,24 +496,81 @@ export default function IncidentReadinessPanel() {
         </Card>
       )}
 
-      {/* Deployment Timeline */}
+      {/* Deployment & Rollback History */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <RefreshCw className="w-5 h-5" />
-            Deployment & Rollback History
-          </CardTitle>
-          <CardDescription>
-            {latestStable
-              ? `Current stable: ${latestStable.version_label}`
-              : "No stable release marked yet"}
-          </CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <RefreshCw className="w-5 h-5" />
+                Deployment & Rollback History
+              </CardTitle>
+              <CardDescription>
+                {latestStable
+                  ? `Current stable: ${latestStable.version_label}`
+                  : "No stable release marked yet"}
+              </CardDescription>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setShowDeployForm(!showDeployForm)}
+            >
+              <Plus className="w-4 h-4 mr-1" />
+              Register Deployment
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
+          {/* Register Deployment Form */}
+          {showDeployForm && (
+            <div className="mb-4 p-4 rounded-lg border-2 border-primary/30 bg-primary/5 space-y-3">
+              <p className="text-sm font-semibold text-foreground">Register New Deployment</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs text-muted-foreground">Version Label *</label>
+                  <Input
+                    placeholder="e.g. v4.2.1-security-layer-4j"
+                    value={deployVersion}
+                    onChange={(e) => setDeployVersion(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground">Impacted Modules (comma-separated)</label>
+                  <Input
+                    placeholder="e.g. auth, CRM, AI tools, templates"
+                    value={deployModules}
+                    onChange={(e) => setDeployModules(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground">Notes</label>
+                <Input
+                  placeholder="Optional deployment notes"
+                  value={deployNotes}
+                  onChange={(e) => setDeployNotes(e.target.value)}
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  onClick={handleCreateDeployment}
+                  disabled={!deployVersion.trim() || createDeployment.isPending}
+                >
+                  {createDeployment.isPending ? "Registering…" : "Register"}
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => setShowDeployForm(false)}>
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
+
           {deployments.isLoading ? (
             <div className="space-y-2">{[1,2].map(i => <Skeleton key={i} className="h-12 w-full" />)}</div>
           ) : !deployments.data?.length ? (
-            <p className="text-muted-foreground text-sm">No deployment records yet.</p>
+            <p className="text-muted-foreground text-sm">No deployment records yet. Register a deployment to start.</p>
           ) : (
             <div className="space-y-2">
               {deployments.data.map((d) => (
@@ -445,6 +600,37 @@ export default function IncidentReadinessPanel() {
                         {d.impacted_modules?.length ? ` · ${d.impacted_modules.join(", ")}` : ""}
                       </p>
                     </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {/* Mark Stable button — only if not already stable and not rolled back */}
+                    {!d.is_stable && !d.rolled_back && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => markStable.mutate(d.id)}
+                        disabled={markStable.isPending}
+                        title="Mark as stable (requires gate pass)"
+                      >
+                        <Star className="w-3 h-3 mr-1" />
+                        Mark Stable
+                      </Button>
+                    )}
+                    {/* Rollback button — only if stable or not yet rolled back */}
+                    {!d.rolled_back && d.is_stable && (
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => {
+                          if (confirm(`Rollback ${d.version_label}? This will restore the previous stable version.`)) {
+                            rollbackDeployment.mutate(d.id);
+                          }
+                        }}
+                        disabled={rollbackDeployment.isPending}
+                      >
+                        <RotateCcw className="w-3 h-3 mr-1" />
+                        Rollback
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -482,7 +668,6 @@ export default function IncidentReadinessPanel() {
           </div>
         </CardHeader>
         <CardContent>
-          {/* Summary cards */}
           <div className="grid grid-cols-3 gap-3 mb-4">
             <div className="rounded-lg border border-border p-3 text-center">
               <p className="text-2xl font-bold text-foreground">{totalExportsToday}</p>
