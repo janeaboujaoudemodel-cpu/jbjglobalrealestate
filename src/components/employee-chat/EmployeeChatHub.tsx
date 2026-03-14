@@ -43,6 +43,7 @@ interface EmployeeChatHubProps {
 
 const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
   const { t } = useLanguage();
+  const { sendSecondaryEmail } = useCrossChannelSend();
   const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [messageInput, setMessageInput] = useState('');
