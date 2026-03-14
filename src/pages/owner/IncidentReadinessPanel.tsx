@@ -74,6 +74,13 @@ export default function IncidentReadinessPanel() {
     fetchExports();
   }, [exportFilter]);
 
+  const latestChecklist = checklists.data?.[0];
+  const latestStable = deployments.data?.find(d => d.is_stable);
+  const lastGateRun = gateHistory.data?.[0];
+
+  const piiExportsToday = exportEvents.filter(e => e.contains_pii && new Date(e.created_at).toDateString() === new Date().toDateString()).length;
+  const totalExportsToday = exportEvents.filter(e => new Date(e.created_at).toDateString() === new Date().toDateString()).length;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
