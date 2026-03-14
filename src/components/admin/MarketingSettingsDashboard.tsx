@@ -39,7 +39,7 @@ interface MarketingConfig {
   trustpilotUrl: string;
 }
 
-const STORAGE_KEY = 'jj_marketing_config';
+// Config is now stored in marketing_config DB table (owner-only RLS)
 
 const defaultConfig: MarketingConfig = {
   ga4MeasurementId: '',
