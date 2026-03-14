@@ -225,7 +225,11 @@ const DeveloperPortal = () => {
         } catch {}
       }
 
-      toast.success('Profile updated successfully');
+      if (developerChanged) {
+        toast.success('Developer changed — your profile is now pending re-approval.');
+      } else {
+        toast.success('Profile updated successfully');
+      }
       setEditingProfile(false);
       refetchRep();
     } catch (err: any) {
