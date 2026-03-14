@@ -11,6 +11,7 @@ const PdfFromPhotos = lazy(() => import("@/pages/toolkit/PdfFromPhotos"));
 const ImageResize = lazy(() => import("@/pages/toolkit/ImageResize"));
 const VoiceStudio = lazy(() => import("@/pages/toolkit/VoiceStudio"));
 const VoiceStudioPro = lazy(() => import("@/pages/toolkit/VoiceStudioPro"));
+const VirtualStagingPage = lazy(() => import("@/pages/toolkit/VirtualStagingPage"));
 const AIVideoStudioPage = lazy(() => import("@/pages/toolkit/AIVideoStudioPage"));
 const StampGeneratorLanding = lazy(() => import("@/pages/toolkit/StampGeneratorPage"));
 const ScanSignToolkitPage = lazy(() => import("@/pages/toolkit/ScanSignPage"));
