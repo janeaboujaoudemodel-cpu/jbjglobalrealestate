@@ -1779,7 +1779,7 @@ const DeveloperPortal = () => {
               </Card>
             </TabsContent>
 
-            {/* OWNER: MANAGE — Launches, Events, Developer Reps, Interest Registrations */}
+            {/* OWNER: MANAGE — Launches, Events, Developer Reps, Launch Interests */}
             {isOwner && ownerSkipMode && (
               <TabsContent value="manage" className="mt-6 space-y-6">
                 {/* Launches & Events Management */}
