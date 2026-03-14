@@ -564,7 +564,7 @@ const TeamChat = () => {
             <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#C9A84C]/10 hidden sm:flex">
               <Smile className="w-4 h-4 text-black/40" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#C9A84C]/10 hidden sm:flex">
+            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#C9A84C]/10 hidden sm:flex" onClick={() => setShowAttachPicker(true)}>
               <Paperclip className="w-4 h-4 text-black/40" />
             </Button>
             <Button
