@@ -89,9 +89,9 @@ export default function LeadSharingPanel({ leadId, isOwner }: LeadSharingPanelPr
       await supabase.from("crm_security_events").insert([{
         user_id: user.id,
         event_type: "lead_share",
-        details: { lead_id: leadId, shared_with: selectedUser, expiry },
+        details: { lead_id: leadId, shared_with: selectedUser, expiry } as any,
         user_agent: navigator.userAgent,
-      });
+      }]);
       toast.success("Lead shared successfully");
       setSelectedUser("");
       fetchShares();
