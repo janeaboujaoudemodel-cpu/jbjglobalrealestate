@@ -173,14 +173,14 @@ export default function AISocialMediaPage() {
               <div>
                 <Label className="text-zinc-300">Content Type</Label>
                 <Select value={contentType} onValueChange={setContentType}>
-                  <SelectTrigger className="bg-zinc-800 border-pink-500/30 text-white">
+                  <SelectTriggerDark className="border-pink-500/30 hover:border-pink-500/50">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-pink-500/30">
                     {contentTypes.map(type => (
-                      <SelectItem key={type.value} value={type.value}>{type.label}</SelectItem>
+                      <SelectItemDark key={type.value} value={type.value}>{type.label}</SelectItemDark>
                     ))}
-                  </SelectContent>
+                  </SelectContentDark>
                 </Select>
               </div>
               <div>
