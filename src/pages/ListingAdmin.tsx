@@ -894,29 +894,60 @@ const ListingAdmin = () => {
             {/* Project Grid — no sidebar, full width */}
             <div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {filteredProjects?.map((project) => (
+                  {filteredProjects?.filter(project => {
+                    if (statusFilter === "all") return true;
+                    const hasDesc = !!project.description && project.description.length > 20;
+                    const hasImages = (project.images?.length ?? 0) >= 3;
+                    const hasAmenities = Array.isArray(project.amenities) && project.amenities.length > 0;
+                    const hasHandover = !!project.handover_date;
+                    const isEnriched = hasDesc && hasImages && hasAmenities && hasHandover;
+                    if (statusFilter === "enriched") return isEnriched;
+                    if (statusFilter === "needs-work") return project.is_published && !isEnriched;
+                    if (statusFilter === "pending") return (project as any).status === "pending";
+                    return true;
+                  }).map((project) => {
+                    // Compute source + enrichment inline
+                    const src = (project as any).import_source || project.source || "manual";
+                    const srcLabel = src?.includes("provident") ? "PROVIDENT" : src?.includes("reelly") ? "REELLY" : "MANUAL";
+                    const srcColor = src?.includes("provident") ? "bg-violet-100 text-violet-700 border-violet-200" : src?.includes("reelly") ? "bg-sky-100 text-sky-700 border-sky-200" : "bg-zinc-100 text-zinc-600 border-zinc-200";
+                    const hasDesc = !!project.description && project.description.length > 20;
+                    const hasImages = (project.images?.length ?? 0) >= 3;
+                    const hasAmenities = Array.isArray(project.amenities) && project.amenities.length > 0;
+                    const hasHandover = !!project.handover_date;
+                    const filledCount = [hasDesc, hasImages, hasAmenities, hasHandover, !!project.price_from, !!project.location].filter(Boolean).length;
+                    const enrichDot = filledCount >= 6 ? "bg-emerald-500" : filledCount >= 3 ? "bg-amber-500" : "bg-red-400";
+
+                    return (
                     <Card
                       key={project.id}
                       className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 cursor-pointer transition-all hover:shadow-lg hover:border-gold overflow-hidden ${
                         selectedProject?.id === project.id ? "border-gold ring-2 ring-gold/20" : ""
                       }`}
-                      onClick={() => { setPreviewProject(project); setShowPreviewModal(true); }}
+                      onClick={() => { setDetailProject(project); setActiveView('project-detail'); }}
                     >
                       {/* Cover Image */}
-                      <div className="aspect-[16/10] overflow-hidden bg-muted">
+                      <div className="aspect-[16/10] overflow-hidden bg-muted relative">
                         <SafeImage
                           src={project.cover_image_url || project.images?.[0]?.image_url}
                           alt={project.name}
                           className="w-full h-full object-cover"
                           fallbackSrc="/placeholder.svg"
                         />
+                        {/* Source badge overlay */}
+                        <div className="absolute top-2 left-2">
+                          <Badge className={`${srcColor} text-[9px] font-bold border`}>{srcLabel}</Badge>
+                        </div>
+                        {/* Enrichment dot */}
+                        <div className="absolute top-2 right-2">
+                          <div className={`w-3 h-3 rounded-full ${enrichDot} ring-2 ring-white`} title={`${filledCount}/6 fields`} />
+                        </div>
                       </div>
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
-                            <h3 className="text-black font-medium truncate">{project.name}</h3>
-                            <p className="text-zinc-500 text-sm truncate">{project.developer?.name || (project as any).developer_name || "No Developer"}</p>
-                            {project.emirate && <p className="text-zinc-400 text-xs">{project.emirate}</p>}
+                            <h3 className="text-foreground font-medium truncate">{project.name}</h3>
+                            <p className="text-muted-foreground text-sm truncate">{project.developer?.name || (project as any).developer_name || "No Developer"}</p>
+                            {project.emirate && <p className="text-muted-foreground/70 text-xs">{project.emirate}</p>}
                             {project.price_from && (
                               <p className="text-gold font-bold text-sm mt-1">
                                 From AED {(project.price_from / 1000000).toFixed(1)}M
@@ -957,7 +988,8 @@ const ListingAdmin = () => {
                         </div>
                       </CardContent>
                     </Card>
-                  ))}
+                    );
+                  })}
                   {filteredProjects?.length === 0 && (
                     <div className="col-span-full text-center py-16 text-zinc-500">
                       <FolderOpen className="w-16 h-16 mx-auto mb-4 opacity-50" />
