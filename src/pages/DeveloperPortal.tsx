@@ -1099,7 +1099,7 @@ const DeveloperPortal = () => {
                   </div>
 
                   <div className="flex gap-3">
-                    <Button onClick={handleSubmitProject} disabled={submittingProject}
+                    <Button onClick={handleSubmitProject} disabled={submittingProject || duplicateBlocking}
                       className="flex-1 bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold h-12">
                       {submittingProject ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : <><Send className="w-4 h-4 mr-2" /> Submit Project</>}
                     </Button>
@@ -1107,10 +1107,10 @@ const DeveloperPortal = () => {
 
                   {sessionProjects.length > 0 && (
                     <div className="flex gap-3 pt-2">
-                      <Button variant="outline" onClick={() => { setCurrentProject(emptyProject()); }} className="flex-1 border-gold/30">
+                      <Button variant="outline" onClick={() => { setCurrentProject(emptyProject()); setDuplicateBlocking(false); }} className="flex-1 border-gold/30">
                         <Plus className="w-4 h-4 mr-2" /> Add Another Project
                       </Button>
-                      <Button variant="outline" onClick={() => { setSessionProjects([]); setActiveTab("projects"); }} className="flex-1 border-gold/30">
+                      <Button variant="outline" onClick={() => setEndSessionOpen(true)} className="flex-1 border-gold/30">
                         <CheckCircle className="w-4 h-4 mr-2" /> End Session
                       </Button>
                     </div>
