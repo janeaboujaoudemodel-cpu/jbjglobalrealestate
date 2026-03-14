@@ -461,7 +461,6 @@ export default function StampExportPage() {
       const arabicCity = project?.arabic_city_optional;
       if (arabicName && tintedSvg.includes('textPath')) {
         try {
-          // Arabic-top variant: swap top/bottom text arcs
           const arabicTopSvg = swapBilingualArcs(tintedSvg);
           const biFolder = zip.folder('bilingual_arabic_top')!;
           biFolder.file(`${companySlug}_stamp_arabic_top.svg`, arabicTopSvg);
@@ -472,6 +471,21 @@ export default function StampExportPage() {
           fileCount += 3;
         } catch (err) {
           console.warn('Bilingual variant generation failed:', err);
+        }
+      }
+
+      // ── Standard Export Colors — add 5 mandatory color sub-folders ──
+      const standardColorsFolder = zip.folder('standard_colors')!;
+      for (const { label, hex } of STANDARD_EXPORT_COLORS) {
+        try {
+          const colorFolder = standardColorsFolder.folder(label.toLowerCase().replace(/\s+/g, '_'))!;
+          const coloredSvg = tintSvgFull(design.svg_source, hex);
+          colorFolder.file(`${companySlug}_${label.toLowerCase().replace(/\s+/g, '_')}.svg`, coloredSvg);
+          const pngBlob = await svgToPng(coloredSvg, 1024, true);
+          colorFolder.file(`${companySlug}_${label.toLowerCase().replace(/\s+/g, '_')}_1024px.png`, pngBlob);
+          fileCount += 2;
+        } catch (err) {
+          console.warn(`Standard color ${label} failed:`, err);
         }
       }
 
