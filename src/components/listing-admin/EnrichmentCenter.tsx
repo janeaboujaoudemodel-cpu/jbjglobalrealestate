@@ -289,8 +289,6 @@ const ReellyEnrichmentPanel = () => {
 };
 
 // ========== PROVIDENT ENRICHMENT PANEL ==========
-import { useNavigate as useEnrichNavigate } from "react-router-dom";
-
 const ProvidentEnrichmentPanel = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [batchCount, setBatchCount] = useState(0);
