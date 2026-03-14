@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { checkWebhookReplay, logSecurityEvent, cleanupWebhookReplayLog } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -9,7 +10,6 @@ const corsHeaders = {
 
 // Map inbound recipient addresses to service channels
 const ADDRESS_TO_SERVICE: Record<string, string> = {
-  // notify.jbj.ae subdomain (primary inbound)
   "hr@notify.jbj.ae": "hr",
   "inquiries@notify.jbj.ae": "inquiries",
   "partnerships@notify.jbj.ae": "partnerships",
@@ -17,7 +17,6 @@ const ADDRESS_TO_SERVICE: Record<string, string> = {
   "support@notify.jbj.ae": "support",
   "careers@notify.jbj.ae": "hr",
   "contact@notify.jbj.ae": "general",
-  // Legacy fallbacks (jbj.ae direct — transition period)
   "hr@jbj.ae": "hr",
   "inquiries@jbj.ae": "inquiries",
   "partnerships@jbj.ae": "partnerships",
@@ -43,10 +42,62 @@ serve(async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
-  );
+  const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+  const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const supabaseClient = createClient(supabaseUrl, supabaseServiceKey);
+
+  // ── Webhook Signature Verification ──
+  const svixId = req.headers.get("svix-id");
+  const svixTimestamp = req.headers.get("svix-timestamp");
+  const svixSignature = req.headers.get("svix-signature");
+  const webhookSecret = Deno.env.get("RESEND_WEBHOOK_SECRET");
+
+  // If webhook secret is configured, enforce signature validation
+  if (webhookSecret) {
+    if (!svixId || !svixTimestamp || !svixSignature) {
+      await logSecurityEvent(supabaseClient, {
+        event_type: 'webhook_invalid',
+        function_name: 'resend-inbound-email-webhook',
+        client_ip: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown",
+        severity: 'high',
+        details: { reason: 'missing_svix_headers' },
+      });
+      return new Response(JSON.stringify({ error: "Missing webhook signature" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Timestamp freshness check (reject if >5 min old)
+    const timestampSeconds = parseInt(svixTimestamp, 10);
+    const now = Math.floor(Date.now() / 1000);
+    if (Math.abs(now - timestampSeconds) > 300) {
+      await logSecurityEvent(supabaseClient, {
+        event_type: 'webhook_invalid',
+        function_name: 'resend-inbound-email-webhook',
+        client_ip: req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown",
+        severity: 'high',
+        details: { reason: 'timestamp_expired', age_seconds: Math.abs(now - timestampSeconds) },
+      });
+      return new Response(JSON.stringify({ error: "Webhook timestamp expired" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Replay protection via svix-id
+    const isReplay = await checkWebhookReplay(supabaseClient, 'resend', svixId);
+    if (isReplay) {
+      console.log(`[Resend Webhook] Replay blocked: ${svixId}`);
+      return new Response(JSON.stringify({ success: true, replay: true }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+  }
+
+  // Periodic cleanup of old replay entries
+  cleanupWebhookReplayLog(supabaseClient);
 
   let payload: Record<string, unknown> = {};
 
@@ -196,7 +247,6 @@ serve(async (req: Request): Promise<Response> => {
     const errMsg = error instanceof Error ? error.message : "Unknown error";
     console.error("Error in resend-inbound-email-webhook:", errMsg);
 
-    // --- Dead-letter logging ---
     try {
       await supabaseClient.from("inbound_email_dead_letters").insert({
         sender_email: (payload.from || payload.sender || "unknown") as string,

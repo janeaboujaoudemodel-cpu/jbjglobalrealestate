@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { checkWebhookReplay, logSecurityEvent, cleanupWebhookReplayLog } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,17 +13,10 @@ interface WhatsAppMessage {
   to: string;
   timestamp: string;
   type: string;
-  text?: {
-    body: string;
-  };
-  image?: {
-    id: string;
-    caption?: string;
-  };
-  document?: {
-    id: string;
-    filename: string;
-  };
+  id: string;
+  text?: { body: string };
+  image?: { id: string; caption?: string };
+  document?: { id: string; filename: string };
 }
 
 interface WhatsAppWebhookPayload {
@@ -54,7 +48,6 @@ interface WhatsAppWebhookPayload {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -70,46 +63,48 @@ const handler = async (req: Request): Promise<Response> => {
 
     if (mode === "subscribe" && token === verifyToken) {
       console.log("WhatsApp webhook verified successfully");
-      return new Response(challenge, {
-        status: 200,
-        headers: { ...corsHeaders },
-      });
+      return new Response(challenge, { status: 200, headers: { ...corsHeaders } });
     } else {
       console.error("WhatsApp webhook verification failed");
-      return new Response("Verification failed", {
-        status: 403,
-        headers: { ...corsHeaders },
-      });
+      return new Response("Verification failed", { status: 403, headers: { ...corsHeaders } });
     }
   }
 
   // Handle incoming messages (POST request)
   if (req.method === "POST") {
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
     try {
       const payload: WhatsAppWebhookPayload = await req.json();
       
       console.log("Received WhatsApp webhook:", JSON.stringify(payload, null, 2));
 
-      // Create Supabase client
-      const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-      const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-      const supabase = createClient(supabaseUrl, supabaseServiceKey);
+      // Periodic cleanup
+      cleanupWebhookReplayLog(supabase);
 
-      // Process incoming messages
       for (const entry of payload.entry || []) {
         for (const change of entry.changes || []) {
           const value = change.value;
           
-          // Process messages
           if (value.messages && value.contacts) {
             for (const message of value.messages) {
+              // Message deduplication via message ID
+              if (message.id) {
+                const isReplay = await checkWebhookReplay(supabase, 'whatsapp', message.id);
+                if (isReplay) {
+                  console.log(`[WhatsApp] Duplicate message skipped: ${message.id}`);
+                  continue;
+                }
+              }
+
               const contact = value.contacts.find(c => c.wa_id === message.from);
               const senderName = contact?.profile?.name || "Unknown";
               const senderPhone = message.from;
               const messageText = message.text?.body || "[Media message]";
               const messageType = message.type;
 
-              // Store the message in owner_inbox_threads
               const { error: insertError } = await supabase
                 .from("owner_inbox_threads")
                 .insert({
@@ -123,6 +118,7 @@ const handler = async (req: Request): Promise<Response> => {
                   is_archived: false,
                   metadata: {
                     wa_id: message.from,
+                    wa_message_id: message.id,
                     message_type: messageType,
                     phone_number_id: value.metadata?.phone_number_id,
                     timestamp: message.timestamp,
@@ -137,11 +133,9 @@ const handler = async (req: Request): Promise<Response> => {
             }
           }
 
-          // Process delivery/read statuses
           if (value.statuses) {
             for (const status of value.statuses) {
               console.log(`Message ${status.id} status: ${status.status}`);
-              // Could update message delivery status in database here
             }
           }
         }
@@ -149,27 +143,18 @@ const handler = async (req: Request): Promise<Response> => {
 
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          ...corsHeaders,
-        },
+        headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     } catch (error: any) {
       console.error("Error processing WhatsApp webhook:", error);
       return new Response(
         JSON.stringify({ error: error.message }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
+        { status: 500, headers: { "Content-Type": "application/json", ...corsHeaders } }
       );
     }
   }
 
-  return new Response("Method not allowed", {
-    status: 405,
-    headers: { ...corsHeaders },
-  });
+  return new Response("Method not allowed", { status: 405, headers: { ...corsHeaders } });
 };
 
 serve(handler);
