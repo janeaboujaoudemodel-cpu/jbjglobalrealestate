@@ -31,6 +31,9 @@ import DeveloperMessageForm from "@/components/developer-portal/DeveloperMessage
 import ExistingProjectsReview from "@/components/developer-portal/ExistingProjectsReview";
 import { ProjectDuplicateInspector } from "@/components/listing-admin/ProjectDuplicateInspector";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
+import { validateFiles } from "@/utils/developerFileValidation";
+import { sanitizeSubmissionData, detectProtectedFieldAttempts } from "@/config/developerFieldProtection";
+import { useDeveloperActivityLog } from "@/hooks/useDeveloperActivityLog";
 
 interface UploadedFile {
   name: string;
