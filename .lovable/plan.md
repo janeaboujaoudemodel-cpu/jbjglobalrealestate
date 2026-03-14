@@ -1,72 +1,67 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: Color Palette System, Monogram Letter Color Editing & Export Color Options
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Current State
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+**Generator page** (`StampGeneratorPage.tsx`): Has a 3-stop color system (primary/secondary/accent), 8 palette presets, 11 quick color swatches, a "My Colors" section (up to 5 custom saved colors in localStorage), and a "Reset to Standard (Ink Blue)" button. Default primary is `#1B3A8C`.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+**Export page** (`StampExportPage.tsx`): Has its own 3-stop color system, 9 `PACK_COLORS`, a "Quick Download in Color" section (click any color → instant PNG), and a "Multi-Color Pack" ZIP feature (up to 5 colors). Missing: the 5 mandatory standard export colors (white, black, navy, primary brand, gold) are not enforced as always-present.
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+**Monogram coloring**: The `injectCenterArt` function injects monogram text with `fill="currentColor"`. No per-letter color control exists.
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+### What Needs to Change
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+#### 1. 5-Color Palette System (Tasks 1, 2, 3)
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+The generator already has 5 custom color slots + presets + reset button. Refinements needed:
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+- **Add "Standard Export Colors" section** — a locked row of 5 always-visible swatches: White (`#ffffff`), Black (`#0d0d0d`), Navy Ink (`#1B3A8C`), Brand Primary (from project/palette context), Gold (`#B8860B`). These cannot be removed.
+- **Saveable palettes to database** — currently custom colors are in localStorage only. Add save/load to `user_color_palettes` table (already exists) so palettes persist across devices.
+- **Reset to Standard** — already exists but only resets the 3 color stops. Enhance to also clear any per-letter monogram colors back to default.
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+**Files**: `StampGeneratorPage.tsx` (add standard colors row, palette save/load), `StampExportPage.tsx` (add standard colors section)
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+#### 2. Monogram Letter-by-Letter Color Editing (Task 4)
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+Create a new component `MonogramColorEditor` that:
+- Parses the monogram text (up to 3 characters)
+- Displays each letter as a large clickable swatch
+- On click, opens a color picker for that specific letter
+- Stores per-letter colors in state: `monogramLetterColors: Record<number, string>`
+- Updates `injectCenterArt` to apply individual `fill` colors per `<tspan>` instead of a single `fill="currentColor"`
+- Also supports coloring the divider/accent line in the center
 
-### Files Changed
-| File | Action |
+**Files**: New `src/components/stamp-generator/MonogramColorEditor.tsx`, modify `injectCenterArt` in `StampGeneratorPage.tsx`, wire into the "Art" tab
+
+#### 3. Export Color Options (Tasks 5, 6)
+
+Update `StampExportPage.tsx`:
+- Add a **"Standard Export Colors"** section at the top of the export panel showing 5 mandatory colors with one-click download for each
+- The `generateBundle` function should automatically include all 5 standard colors as sub-folders in the ZIP when the user downloads
+- Custom user colors (from the generator's palette) should also appear alongside
+- Ensure the "Multi-Color Pack" pre-selects the 5 standard colors by default
+
+**Files**: `StampExportPage.tsx` (add standard colors, enhance ZIP generation)
+
+#### 4. Preview Always Opens in Navy Ink (Task 5)
+
+The generator default `primaryColor` is already `#1B3A8C` (navy ink). The export page defaults to `#1a2744` (dark navy). Align the export page default to `#1B3A8C` to match the standard.
+
+### Files Summary
+
+| File | Change |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| `StampGeneratorPage.tsx` | Add "Standard Export Colors" locked row, palette save to DB, per-letter monogram color state, wire MonogramColorEditor into Art tab |
+| `StampExportPage.tsx` | Add standard colors section, pre-select 5 mandatory colors in ZIP, align default to `#1B3A8C` |
+| New: `MonogramColorEditor.tsx` | Letter-by-letter color picker for monogram center content |
+| `injectCenterArt` function | Support per-letter `fill` via `<tspan>` elements |
+
+### Implementation Order
+
+1. MonogramColorEditor component + injectCenterArt update
+2. Standard Export Colors in generator (locked 5-color row)
+3. Standard Export Colors in export page + enhanced ZIP
+4. Palette save/load to database
+5. Align navy ink defaults
+
