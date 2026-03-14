@@ -318,24 +318,22 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const topFont = ARABIC_FONT;
   const bottomFont = enFont;
 
-  // Arc lengths — ARC_SPREAD_LIMIT for better text clearance from separators
-  const arcLen = clampedTextArcR * Math.PI;
-  const safeArc = arcLen * ARC_SPREAD_LIMIT;
+  // Dynamic font size and letter-spacing — fills arc evenly, prevents collisions
   const topBaseFontSize = topIsArabic ? 17 : 15;
   const bottomBaseFontSize = bottomIsArabic ? 17 : 15;
-  const topFontSize = fitFontSize(topText, topBaseFontSize, safeArc, topIsArabic ? 0.50 : 0.54);
-  const bottomFontSize = fitFontSize(bottomText, bottomBaseFontSize, safeArc, bottomIsArabic ? 0.50 : 0.54);
+  const topSafe = safeArcFontSize(topText, clampedTextArcR, topIsArabic, topBaseFontSize);
+  const bottomSafe = safeArcFontSize(bottomText, clampedTextArcR, bottomIsArabic, bottomBaseFontSize);
 
   const topArcContent = renderTopArcTextPath(
     topText || (topIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
-    cx, cy, clampedTextArcR, topFontSize, topFont, priColor,
-    topIsArabic ? 3 : 2.5, topIsArabic, 'top-arc'
+    cx, cy, clampedTextArcR, topSafe.fontSize, topFont, priColor,
+    topSafe.letterSpacing, topIsArabic, 'top-arc'
   );
 
   const bottomArcContent = renderBottomArcTextPath(
     bottomText || (bottomIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
-    cx, cy, clampedTextArcR, bottomFontSize, bottomFont, priColor,
-    bottomIsArabic ? 1 : 4, bottomIsArabic, 'bottom-arc'
+    cx, cy, clampedTextArcR, bottomSafe.fontSize, bottomFont, priColor,
+    bottomSafe.letterSpacing, bottomIsArabic, 'bottom-arc'
   );
 
   // ── Location text — BOTH Arabic and English as arcs ──
