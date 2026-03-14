@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FilePlus, Loader2, Copy, Check, Sparkles, FileText,
-  Mail, MessageSquare, Share2, Newspaper, Building2, Users, Hash, Instagram, Linkedin
+  Mail, MessageSquare, Share2, Newspaper, Building2, Users, Hash, Instagram, Linkedin,
+  Package, ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
