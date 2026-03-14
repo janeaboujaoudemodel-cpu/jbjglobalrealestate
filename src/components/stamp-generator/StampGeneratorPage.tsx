@@ -36,88 +36,32 @@ import ShortlistBadgeButton from '@/components/ShortlistBadgeButton';
 import { MonogramColorEditor, applyMonogramColors, DEFAULT_MONOGRAM_COLORS } from './MonogramColorEditor';
 import type { MonogramLetterColors } from './MonogramColorEditor';
 
-// 5 mandatory standard export colors — always visible, cannot be removed
-const STANDARD_EXPORT_COLORS = [
-  { label: 'White',        hex: '#ffffff' },
-  { label: 'Black',        hex: '#0d0d0d' },
-  { label: 'Navy Ink',     hex: '#1B3A8C' },
-  { label: 'Brand Gold',   hex: '#C8A766' },
-  { label: 'Dark Gold',    hex: '#B8860B' },
-];
+// New premium components
+import { StampLeftPanel } from './StampLeftPanel';
+import { StampRightPanel } from './StampRightPanel';
+import { StampCanvasControls, CanvasGridOverlay } from './StampCanvasControls';
+import { StampProjectHeader } from './StampProjectHeader';
+
+type ColorStop = 'primary' | 'secondary' | 'accent';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
 }
 
-type ColorStop = 'primary' | 'secondary' | 'accent';
-
-const CONCEPTS_PER_PAGE = 6;
-
-// Full 3-stop palette presets
-const PALETTE_PRESETS = [
-  { label: 'Ink Blue (Standard)',primary: '#1B3A8C', secondary: '#1a2d6e', accent: '#1B3A8C' },
-  { label: 'JBJ Gold',      primary: '#B8860B', secondary: '#2a3a5c', accent: '#856404' },
-  { label: 'Royal Navy',    primary: '#1a2744', secondary: '#2a3a5c', accent: '#B8860B' },
-  { label: 'Obsidian',      primary: '#0d0d0d', secondary: '#333333', accent: '#B8860B' },
-  { label: 'Crimson',       primary: '#8B0000', secondary: '#5a0000', accent: '#B8860B' },
-  { label: 'Forest',        primary: '#1B4332', secondary: '#2d6a4f', accent: '#B8860B' },
-  { label: 'Deep Purple',   primary: '#4B0082', secondary: '#6a0dad', accent: '#C8A87A' },
-  { label: 'Monochrome',    primary: '#0d0d0d', secondary: '#333333', accent: '#ffffff' },
-];
-
-const PRESET_PALETTE = [
-  { label: 'Ink Blue',  hex: '#1B3A8C' },
-  { label: 'Gold',    hex: '#B8860B' },
-  { label: 'Gold Dark', hex: '#856404' },
-  { label: 'Navy',    hex: '#1a2744' },
-  { label: 'Black',   hex: '#0d0d0d' },
-  { label: 'White',   hex: '#ffffff' },
-  { label: 'Red',     hex: '#8B0000' },
-  { label: 'Purple',  hex: '#4B0082' },
-  { label: 'Forest',  hex: '#1B4332' },
-  { label: 'Copper',  hex: '#7C4A00' },
-  { label: 'Teal',    hex: '#0D5C63' },
-];
-
-const STAMP_FONTS = [
-  { label: 'Trajan (Elegant)',       value: 'Georgia, "Times New Roman", serif',                      preview: 'Aa' },
-  { label: 'Garamond (Classic)',     value: '"Garamond", "Palatino Linotype", serif',                 preview: 'Aa' },
-  { label: 'Baskerville (Literary)', value: '"Baskerville", "Book Antiqua", serif',                   preview: 'Aa' },
-  { label: 'Caslon (Antiquarian)',   value: '"Book Antiqua", "Palatino", Georgia, serif',             preview: 'Aa' },
-  { label: 'Modern Sans',            value: '"Arial", "Helvetica Neue", sans-serif',                  preview: 'Aa' },
-  { label: 'Futura (Geometric)',     value: '"Century Gothic", "Trebuchet MS", sans-serif',           preview: 'Aa' },
-  { label: 'Gill Sans (Humanist)',   value: '"Gill Sans", "Gill Sans MT", "Optima", sans-serif',      preview: 'Aa' },
-  { label: 'Verdana (Screen)',       value: '"Verdana", "Tahoma", sans-serif',                        preview: 'Aa' },
-  { label: 'Courier (Monospace)',    value: '"Courier New", "Courier", monospace',                    preview: 'Aa' },
-  { label: 'Impact (Display)',       value: '"Impact", "Franklin Gothic Bold", sans-serif',           preview: 'Aa' },
-  { label: 'Rockwell (Slab)',        value: '"Rockwell", "Courier New", serif',                       preview: 'Aa' },
-  { label: 'Optima (Soft Elegant)',  value: '"Optima", "Segoe UI", sans-serif',                       preview: 'Aa' },
-  { label: 'Lucida (Calligraphy)',   value: '"Lucida Calligraphy", "Palatino", serif',                preview: 'Aa' },
-  { label: 'Cinzel (Imperial)',      value: '"Palatino Linotype", "Palatino", serif',                 preview: 'Aa' },
-];
-
 /** Inject logo/monogram into an existing SVG source string */
 function injectCenterArt(svgSource: string, iconStyle: string, monogramText: string, logoUrl: string): string {
-  // Remove existing center content (image or monogram text with dominant-baseline="central")
   let svg = svgSource;
-  // Remove <image> inside center-clip
   svg = svg.replace(/<defs><clipPath id="center-clip">[\s\S]*?<\/clipPath><\/defs>/gi, '');
   svg = svg.replace(/<image[^>]*clip-path="url\(#center-clip\)"[^>]*\/>/gi, '');
-  // Remove monogram text (dominant-baseline="central" text near center)
   svg = svg.replace(/<text[^>]*dominant-baseline="central"[^>]*>[^<]*<\/text>/gi, '');
-
   if (iconStyle === 'NONE') return svg;
-
-  // Find viewBox to get center coordinates
   const vbMatch = svg.match(/viewBox="0 0 (\d+) (\d+)"/);
   const S = vbMatch ? parseInt(vbMatch[1]) : 320;
   const cx = S / 2;
   const cy = S / 2;
   const centerR = S * 0.14;
-
   const insertBefore = '</svg>';
-
   if (iconStyle === 'UPLOADED_LOGO' && logoUrl) {
     const imgSize = centerR * 1.6;
     const logoSvg = `
@@ -152,7 +96,6 @@ export default function StampGeneratorPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [savedDesignId, setSavedDesignId] = useState<string | null>(null);
   const [blocked, setBlocked] = useState(false);
-  const [conceptPage, setConceptPage] = useState(0);
 
   // Three-color system — persisted
   const [primaryColor, setPrimaryColorRaw] = useState(() => ssGet(ssKey('primaryColor'), '#1B3A8C'));
@@ -167,7 +110,7 @@ export default function StampGeneratorPage() {
   const setAccentColor = (v: string | undefined) => { setAccentColorRaw(v); ssSave(ssKey('accentColor'), v ?? null); };
 
   // Font family — persisted
-  const [fontFamily, setFontFamilyRaw] = useState<string>(() => ssGet(ssKey('fontFamily'), STAMP_FONTS[0].value));
+  const [fontFamily, setFontFamilyRaw] = useState<string>(() => ssGet(ssKey('fontFamily'), 'Georgia, "Times New Roman", serif'));
   const setFontFamily = (v: string) => { setFontFamilyRaw(v); ssSave(ssKey('fontFamily'), v); };
 
   // Typography controls — persisted
@@ -184,9 +127,6 @@ export default function StampGeneratorPage() {
     setManualFontSizeRaw(prev => { const next = typeof v === 'function' ? v(prev) : v; ssSave(ssKey('fontSize'), next); return next; });
   };
 
-  // Left panel tab
-  const [leftTab, setLeftTab] = useState<'color' | 'fonts' | 'text' | 'centerart' | 'logo' | 'mystamp'>('color');
-
   // My Stamp tab state
   const [uploadedStampUrl, setUploadedStampUrl] = useState<string>('');
   const [uploadedSignatureUrl, setUploadedSignatureUrl] = useState<string>('');
@@ -195,15 +135,14 @@ export default function StampGeneratorPage() {
   const [signatureLocked, setSignatureLocked] = useState(false);
   const [refinePrompt, setRefinePrompt] = useState('');
   const [refiningImage, setRefiningImage] = useState(false);
-  const [showWelcomeBanner, setShowWelcomeBanner] = useState(true);
 
-  // Center Art controls — logo persisted in localStorage
+  // Center Art controls
   const [localIconStyle, setLocalIconStyle] = useState<'NONE' | 'MONOGRAM' | 'UPLOADED_LOGO'>('MONOGRAM');
   const [localMonogramText, setLocalMonogramText] = useState<string>('');
   const [localLogoUrl, setLocalLogoUrlRaw] = useState<string>('');
   const setLocalLogoUrl = (v: string) => { setLocalLogoUrlRaw(v); if (projectId) { try { if (v) localStorage.setItem(`stamp-logo-${projectId}`, v); else localStorage.removeItem(`stamp-logo-${projectId}`); } catch {} } };
 
-  // Custom user color palette — up to 5 saved colors
+  // Custom user color palette
   const [customPalette, setCustomPaletteRaw] = useState<string[]>(() => { try { const v = localStorage.getItem('stamp-custom-palette'); return v ? JSON.parse(v) : []; } catch { return []; } });
   const setCustomPalette = (v: string[]) => { setCustomPaletteRaw(v); try { localStorage.setItem('stamp-custom-palette', JSON.stringify(v)); } catch {} };
   const addCustomColor = (hex: string) => { if (customPalette.length >= 5) { toast.error('Max 5 custom colors'); return; } if (customPalette.includes(hex)) return; setCustomPalette([...customPalette, hex]); toast.success('Color saved'); };
@@ -238,18 +177,26 @@ export default function StampGeneratorPage() {
   const svgHistory = useStampHistory<Record<string, string>>({});
 
   // Variations panel
-  const [showVariations, setShowVariations] = useState(false);
   const [variations, setVariations] = useState<StampDesignConcept[]>([]);
   const [variationsLoading, setVariationsLoading] = useState(false);
 
   // Recently deleted
   const [deletedStamps, setDeletedStamps] = useState<DeletedStamp[]>([]);
 
-  // Version selector
-  const [showVersionSelector, setShowVersionSelector] = useState(false);
-
   // Brand asset save
   const saveBrandAsset = useSaveBrandAsset();
+
+  // Canvas controls
+  const [zoom, setZoom] = useState(100);
+  const [showGrid, setShowGrid] = useState(false);
+  const [bgMode, setBgMode] = useState<'white' | 'checker'>('white');
+
+  // Project save state
+  const [saving, setSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
+  // Preview update feedback
+  const [previewPulse, setPreviewPulse] = useState(false);
 
   const handleSvgUndoStudio = useCallback(() => {
     const prev = svgHistory.undo();
@@ -260,6 +207,17 @@ export default function StampGeneratorPage() {
     const next = svgHistory.redo();
     if (next) setSvgOverrides(next);
   }, [svgHistory]);
+
+  // Trigger pulse on color/font changes
+  const triggerPulse = useCallback(() => {
+    setPreviewPulse(true);
+    setTimeout(() => setPreviewPulse(false), 300);
+  }, []);
+
+  // Wrap color setters with pulse
+  const setPrimaryColorWithPulse = useCallback((v: string) => { setPrimaryColor(v); triggerPulse(); }, [triggerPulse]);
+  const setSecondaryColorWithPulse = useCallback((v: string | undefined) => { setSecondaryColor(v); triggerPulse(); }, [triggerPulse]);
+  const setAccentColorWithPulse = useCallback((v: string | undefined) => { setAccentColor(v); triggerPulse(); }, [triggerPulse]);
 
   useEffect(() => {
     if (!user || !projectId) return;
@@ -279,15 +237,11 @@ export default function StampGeneratorPage() {
       .single();
     if (error || !data) { toast.error('Project not found'); navigate('/toolkit/stamp-generator'); return; }
     setProject(data);
-
     setLocalIconStyle((data.icon_style as any) || 'MONOGRAM');
     setLocalMonogramText(data.monogram_text || data.company_name?.slice(0, 2)?.toUpperCase() || '');
-    // Restore logo from localStorage or project data
     const savedLogo = projectId ? localStorage.getItem(`stamp-logo-${projectId}`) : null;
     setLocalLogoUrlRaw(savedLogo || (data as any).uploaded_logo_url || '');
-
     const isFresh = new URLSearchParams(location.search).get('fresh') === '1';
-
     const { data: existing } = await supabase
       .from('stamp_designs')
       .select('id, svg_source, template_key, is_favorite')
@@ -295,7 +249,6 @@ export default function StampGeneratorPage() {
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(20);
-
     if (!isFresh && existing && existing.length > 0) {
       const toDesign = (d: any): StampDesignConcept => ({
         id: d.id,
@@ -320,16 +273,12 @@ export default function StampGeneratorPage() {
     setGenerating(true);
     setBlocked(false);
     setSvgOverrides({});
-    setConceptPage(0);
-
-    const latestProject = project ? { ...project, ...p } : p;
-
     try {
       if (session?.access_token) {
         const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-          body: JSON.stringify({ action: 'generate', project: latestProject, projectId }),
+          body: JSON.stringify({ action: 'generate', project: { ...project, ...p }, projectId }),
         });
         if (res.ok) {
           const json = await res.json();
@@ -344,12 +293,9 @@ export default function StampGeneratorPage() {
               .limit(11);
             if (saved && saved.length > 0) {
               setConcepts(saved.map((d: any) => ({
-                id: d.id,
-                templateKey: d.template_key || 'classic-double',
+                id: d.id, templateKey: d.template_key || 'classic-double',
                 label: (d.template_key || 'classic-double').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
-                tags: [],
-                svgSource: d.svg_source || '',
-                isFavorite: false,
+                tags: [], svgSource: d.svg_source || '', isFavorite: false,
               })));
               setGenerating(false);
               return;
@@ -358,14 +304,10 @@ export default function StampGeneratorPage() {
         }
       }
     } catch (_) {}
-
-    const clientConcepts = generateStampConcepts(latestProject);
+    const clientConcepts = generateStampConcepts(project ? { ...project, ...p } : p);
     if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); return; }
     setConcepts(clientConcepts);
-    // Auto-select the Standard Model (first concept) on first load
-    if (clientConcepts.length > 0 && !selectedId) {
-      setSelectedId(clientConcepts[0].id);
-    }
+    if (clientConcepts.length > 0 && !selectedId) setSelectedId(clientConcepts[0].id);
     setGenerating(false);
   }, [project, session, projectId]);
 
@@ -374,25 +316,21 @@ export default function StampGeneratorPage() {
     const newFav = !concept.isFavorite;
     const isDbId = concept.id.length === 36;
     let dbId = isDbId ? concept.id : null;
-
     if (!isDbId) {
       const { data } = await supabase.from('stamp_designs').insert({
-        project_id: projectId, user_id: user!.id,
-        design_version: 1, template_key: concept.templateKey,
-        svg_source: svgOverrides[concept.id] || concept.svgSource,
-        style_snapshot_json: project, is_favorite: true,
+        project_id: projectId, user_id: user!.id, design_version: 1, template_key: concept.templateKey,
+        svg_source: svgOverrides[concept.id] || concept.svgSource, style_snapshot_json: project, is_favorite: true,
       }).select('id').single();
       if (data) dbId = data.id;
     } else {
       await supabase.from('stamp_designs').update({ is_favorite: newFav }).eq('id', concept.id);
     }
-
     if (dbId) {
       const updated = { ...concept, id: dbId, isFavorite: newFav };
       if (newFav) {
         setFavoriteConcepts(prev => [updated, ...prev.filter(f => f.id !== dbId)]);
         setConcepts(prev => prev.map(c => c.id === concept.id ? { ...c, id: dbId!, isFavorite: true } : c));
-        toast.success('Added to favorites ♥');
+        toast.success('Added to favorites');
       } else {
         setFavoriteConcepts(prev => prev.filter(f => f.id !== dbId));
         setConcepts(prev => prev.map(c => c.id === dbId ? { ...c, isFavorite: false } : c));
@@ -404,8 +342,7 @@ export default function StampGeneratorPage() {
 
   function handleSelectConcept(concept: StampDesignConcept) {
     setSelectedId(concept.id);
-    // Only update the live preview — don't open the modal
-    toast.success('Design selected — click "Edit & Export" or expand preview to view on documents', { duration: 3000 });
+    toast.success('Design selected', { duration: 2000 });
   }
 
   function handleOpenPreview(concept: StampDesignConcept) {
@@ -424,7 +361,6 @@ export default function StampGeneratorPage() {
     const svgToSave = svgOverrides[concept.id] || concept.svgSource;
     const isDbId = concept.id.length === 36;
     let designId: string = concept.id;
-
     if (isDbId) {
       setSavedDesignId(concept.id);
       if (svgOverrides[concept.id]) {
@@ -446,16 +382,13 @@ export default function StampGeneratorPage() {
     navigate(`/toolkit/stamp-generator/${projectId}/export/${designId}`);
   }
 
-  /** Apply logo/monogram to all existing concepts without regenerating */
   function applyLogoToAllConcepts() {
     const updated = { ...project, icon_style: localIconStyle, monogram_text: localMonogramText || null, uploaded_logo_url: localLogoUrl || null };
     setProject(updated);
-
     const newOverrides: Record<string, string> = { ...svgOverrides };
     [...favoriteConcepts, ...concepts].forEach(c => {
       let base = svgOverrides[c.id] || c.svgSource;
       base = injectCenterArt(base, localIconStyle, localMonogramText, localLogoUrl);
-      // Apply per-letter monogram colors if applicable
       if (localIconStyle === 'MONOGRAM' && localMonogramText) {
         base = applyMonogramColors(base, localMonogramText, monogramLetterColors, primaryColor);
       }
@@ -473,10 +406,8 @@ export default function StampGeneratorPage() {
     setChatInput('');
     setChatLoading(true);
     setRefinedPreview(null);
-
     const conceptToRefine = concepts.find(c => c.id === selectedId) || concepts[0];
     const svgForRefine = (conceptToRefine && svgOverrides[conceptToRefine.id]) || conceptToRefine?.svgSource || '';
-
     try {
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
         method: 'POST',
@@ -487,11 +418,8 @@ export default function StampGeneratorPage() {
         const json = await res.json();
         if (json.svgSource) {
           const newConcept: StampDesignConcept = {
-            id: json.id || crypto.randomUUID(),
-            templateKey: 'ai-refined',
-            label: 'AI Refined Design',
-            tags: ['ai', 'refined', 'custom'],
-            svgSource: json.svgSource,
+            id: json.id || crypto.randomUUID(), templateKey: 'ai-refined',
+            label: 'AI Refined Design', tags: ['ai', 'refined', 'custom'], svgSource: json.svgSource,
           };
           setRefinedPreview(newConcept);
           setChatMessages(prev => [...prev, { role: 'assistant', content: `Preview ready — choose to Replace or Save as New below.` }]);
@@ -520,11 +448,9 @@ export default function StampGeneratorPage() {
     }
   }
 
-  // ─── Variations ─────────────────────────────────────────────
   async function generateVariations() {
     if (!project || !session?.access_token) return;
     setVariationsLoading(true);
-    setShowVariations(true);
     try {
       const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
         method: 'POST',
@@ -539,7 +465,6 @@ export default function StampGeneratorPage() {
     setVariationsLoading(false);
   }
 
-  // ─── Soft Delete ────────────────────────────────────────────
   async function softDeleteConcept(conceptId: string) {
     const isDbId = conceptId.length === 36;
     if (isDbId) {
@@ -576,7 +501,6 @@ export default function StampGeneratorPage() {
     setDeletedStamps(prev => prev.filter(d => d.id !== item.id));
   }
 
-  // ─── Brand Asset Save ──────────────────────────────────────
   async function saveCurrentAsBrandAsset() {
     const concept = allConcepts.find(c => c.id === selectedId) || allConcepts[0];
     if (!concept) return;
@@ -584,14 +508,13 @@ export default function StampGeneratorPage() {
     await saveBrandAsset({ assetType: 'stamp', name: concept.label || project?.company_name || 'Stamp', svgContent: svg, sourceId: concept.id });
   }
 
-  // ─── Duplicate Concept ─────────────────────────────────────
   function duplicateConcept(concept: StampDesignConcept) {
     const dup: StampDesignConcept = { ...concept, id: crypto.randomUUID(), label: `${concept.label} (copy)` };
     setConcepts(prev => [dup, ...prev]);
     toast.success('Concept duplicated');
   }
 
-  // ─── Load deleted stamps ───────────────────────────────────
+  // Load deleted stamps
   useEffect(() => {
     if (!user || !projectId) return;
     supabase.from('stamp_designs').select('id, svg_source, template_key, deleted_at').eq('project_id', projectId).not('deleted_at', 'is', null).order('deleted_at', { ascending: false }).limit(20)
@@ -620,35 +543,50 @@ export default function StampGeneratorPage() {
     return () => { window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseup', onUp); };
   }, [aiDragging, aiDragStart]);
 
+  // AI Refine handler for left panel
+  const handleRefineWithAI = useCallback(async () => {
+    if (!refinePrompt.trim()) { toast.error('Enter a prompt'); return; }
+    setRefiningImage(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token}` },
+        body: JSON.stringify({ action: 'refine-image', imageBase64: uploadedStampUrl, prompt: refinePrompt, projectId }),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.imageUrl) { setUploadedStampUrl(json.imageUrl); toast.success('Stamp refined by AI!'); setRefinePrompt(''); }
+        else toast.error(json.error || 'Refinement failed');
+      } else if (res.status === 429) toast.error('Rate limit exceeded.');
+      else if (res.status === 402) toast.error('Credits exhausted.');
+      else toast.error('Refinement failed');
+    } catch { toast.error('Connection error'); }
+    setRefiningImage(false);
+  }, [refinePrompt, uploadedStampUrl, session, projectId]);
+
   const activeColor = activeStop === 'primary' ? primaryColor : activeStop === 'secondary' ? (secondaryColor || '#2a3a5c') : (accentColor || '#B8860B');
   function setActiveColor(hex: string) {
-    if (activeStop === 'primary') setPrimaryColor(hex);
-    else if (activeStop === 'secondary') setSecondaryColor(hex);
-    else setAccentColor(hex);
+    if (activeStop === 'primary') setPrimaryColorWithPulse(hex);
+    else if (activeStop === 'secondary') setSecondaryColorWithPulse(hex);
+    else setAccentColorWithPulse(hex);
   }
 
   const allConcepts = [...favoriteConcepts, ...concepts.filter(c => !favoriteConcepts.some(f => f.id === c.id))];
   const selectedConcept = allConcepts.find(c => c.id === selectedId);
   const selectedSvg = selectedConcept ? (svgOverrides[selectedConcept.id] || selectedConcept.svgSource) : null;
 
-  // Pagination
-  const totalPages = Math.ceil(concepts.length / CONCEPTS_PER_PAGE);
-  const pagedConcepts = concepts.slice(conceptPage * CONCEPTS_PER_PAGE, (conceptPage + 1) * CONCEPTS_PER_PAGE);
-
   function handleSvgTextChange(conceptId: string, newSvg: string) {
     setSvgOverrides(prev => ({ ...prev, [conceptId]: newSvg }));
   }
 
-  const stopDefs: { key: ColorStop; label: string; color: string }[] = [
-    { key: 'primary',   label: 'Primary',   color: primaryColor },
-    { key: 'secondary', label: 'Secondary', color: secondaryColor || '#2a3a5c' },
-    { key: 'accent',    label: 'Accent',    color: accentColor || '#B8860B' },
-  ];
+  // Computed stamp size based on zoom
+  const baseStampSize = 320;
+  const stampSize = Math.round(baseStampSize * (zoom / 100));
 
   if (!project) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin text-[hsl(var(--gold))]" size={32}/>
+        <Loader2 className="animate-spin text-[hsl(var(--gold))]" size={32} />
       </div>
     );
   }
@@ -677,766 +615,247 @@ export default function StampGeneratorPage() {
         />
       )}
 
-      {/* Header — flush under top bar */}
-      <div className="flex-shrink-0 border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm z-10">
-        <div className="px-4 py-2 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => navigate('/toolkit/stamp-generator/projects')} className="gap-1 h-7 text-xs">
-              <ArrowLeft size={12}/> Projects
-            </Button>
-            <div className="w-px h-4 bg-[hsl(var(--border))]"/>
-            <Stamp size={14} className="text-[hsl(var(--gold))]"/>
-            <span className="font-medium text-xs text-[hsl(var(--foreground))]">{project.company_name}</span>
-            {project.language_mode !== 'EN' && (
-              <Badge variant="secondary" className="text-[9px]">{project.language_mode}</Badge>
-            )}
-          </div>
-          <div className="flex items-center gap-1.5">
-            <button onClick={handleSvgUndoStudio} disabled={!svgHistory.canUndo}
-              className="w-6 h-6 rounded-md border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors disabled:opacity-30"
-              title="Undo"><Undo2 size={11}/></button>
-            <button onClick={handleSvgRedoStudio} disabled={!svgHistory.canRedo}
-              className="w-6 h-6 rounded-md border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] transition-colors disabled:opacity-30"
-              title="Redo"><Redo2 size={11}/></button>
-            <div className="w-px h-3.5 bg-[hsl(var(--border))]"/>
-            <Button variant="outline" size="sm" onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/gallery`)} className="gap-1 text-[10px] h-7">
-              <Layers size={10}/> Gallery
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => setChatOpen(v => !v)} className="gap-1 text-[10px] h-7">
-              <MessageSquare size={10}/> Smart Designer
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => generateConcepts()} disabled={generating} className="gap-1 text-[10px] h-7">
-              <RefreshCw size={10} className={generating ? 'animate-spin' : ''}/>
-              {generating ? 'Generating…' : 'Regenerate'}
-            </Button>
-            <Button variant="outline" size="sm" onClick={generateVariations} disabled={variationsLoading} className="gap-1 text-[10px] h-7 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))]">
-              <Sparkles size={10}/> AI Variations
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => setShowVersionSelector(true)} className="gap-1 text-[10px] h-7">
-              <Clock size={10}/> Previous
-            </Button>
-            <Button variant="outline" size="sm" onClick={saveCurrentAsBrandAsset} disabled={!selectedId} className="gap-1 text-[10px] h-7">
-              <Package size={10}/> Save Asset
-            </Button>
-            {selectedId && (
-              <Button size="sm" className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1 text-[10px] h-7"
-                onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}>
-                <Download size={10}/> Export Pack <ChevronRight size={10}/>
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
+      {/* ── Header ── */}
+      <StampProjectHeader
+        projectName={project.company_name || 'Untitled'}
+        languageMode={project.language_mode}
+        canUndo={svgHistory.canUndo}
+        canRedo={svgHistory.canRedo}
+        onUndo={handleSvgUndoStudio}
+        onRedo={handleSvgRedoStudio}
+        onBack={() => navigate('/toolkit/stamp-generator/projects')}
+        onGallery={() => navigate(`/toolkit/stamp-generator/${projectId}/gallery`)}
+        onToggleChat={() => setChatOpen(v => !v)}
+        onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}
+        onSaveAsset={saveCurrentAsBrandAsset}
+        selectedId={selectedId}
+        saving={saving}
+        lastSaved={lastSaved}
+      />
 
-      {/* ── 3-Column Studio Body ─────────────────────────────────── */}
+      {/* ── 3-Column Studio Body ── */}
       <div className="flex-1 flex gap-0 overflow-hidden">
 
-        {/* ── Left Panel: Style Controls (always visible, 200px) ──── */}
-        <div className="w-[240px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white/80 flex flex-col overflow-hidden">
-          {/* Tab switcher */}
-          <div className="flex-shrink-0 p-2">
-            <div className="flex bg-[hsl(var(--muted))] rounded-lg p-0.5 gap-0.5 flex-wrap">
-              {([
-                { key: 'color' as const, icon: Palette, label: 'Colors' },
-                { key: 'fonts' as const, icon: Layers, label: 'Fonts' },
-                { key: 'text' as const, icon: Type, label: 'Text' },
-                { key: 'centerart' as const, icon: Stamp, label: 'Art' },
-                { key: 'logo' as const, icon: Upload, label: 'Logo' },
-                { key: 'mystamp' as const, icon: Sparkles, label: 'My Stamp' },
-              ]).map(t => (
-                <button key={t.key} onClick={() => setLeftTab(t.key)}
-                  className={`flex-1 flex items-center justify-center gap-0.5 py-1 rounded-md text-[9px] font-medium transition-all ${leftTab === t.key ? 'bg-white shadow-sm text-[hsl(var(--foreground))]' : 'text-[hsl(var(--muted-foreground))]'}`}>
-                  <t.icon size={9}/> {t.label}
-                </button>
-              ))}
+        {/* ── LEFT PANEL: Collapsible Tool Controls ── */}
+        <StampLeftPanel
+          primaryColor={primaryColor}
+          secondaryColor={secondaryColor}
+          accentColor={accentColor}
+          activeStop={activeStop}
+          activeColor={activeColor}
+          inkMode={inkMode}
+          customPalette={customPalette}
+          onSetPrimaryColor={setPrimaryColorWithPulse}
+          onSetSecondaryColor={setSecondaryColorWithPulse}
+          onSetAccentColor={setAccentColorWithPulse}
+          onSetActiveStop={setActiveStop}
+          onSetActiveColor={setActiveColor}
+          onSetInkMode={setInkMode}
+          onAddCustomColor={addCustomColor}
+          onRemoveCustomColor={removeCustomColor}
+          onResetColors={() => { setPrimaryColor('#1B3A8C'); setSecondaryColor('#1a2d6e'); setAccentColor('#1B3A8C'); setMonogramLetterColors(DEFAULT_MONOGRAM_COLORS); toast.success('Colors reset'); triggerPulse(); }}
+          fontFamily={fontFamily}
+          fontBold={fontBold}
+          fontItalic={fontItalic}
+          manualFontSize={manualFontSize}
+          onSetFontFamily={(v) => { setFontFamily(v); triggerPulse(); }}
+          onSetFontBold={(v) => { setFontBold(v); triggerPulse(); }}
+          onSetFontItalic={(v) => { setFontItalic(v); triggerPulse(); }}
+          onSetManualFontSize={(v) => { setManualFontSize(v); triggerPulse(); }}
+          selectedSvg={selectedSvg}
+          selectedConceptId={selectedId}
+          onSvgTextChange={handleSvgTextChange}
+          localIconStyle={localIconStyle}
+          localMonogramText={localMonogramText}
+          localLogoUrl={localLogoUrl}
+          monogramLetterColors={monogramLetterColors}
+          companyName={project.company_name}
+          onSetLocalIconStyle={setLocalIconStyle}
+          onSetLocalMonogramText={setLocalMonogramText}
+          onSetLocalLogoUrl={setLocalLogoUrl}
+          onSetMonogramLetterColors={setMonogramLetterColors}
+          onApplyLogoToAll={applyLogoToAllConcepts}
+          uploadedStampUrl={uploadedStampUrl}
+          uploadedSignatureUrl={uploadedSignatureUrl}
+          signatureX={signatureX}
+          signatureY={signatureY}
+          signatureLocked={signatureLocked}
+          refinePrompt={refinePrompt}
+          refiningImage={refiningImage}
+          onSetUploadedStampUrl={setUploadedStampUrl}
+          onSetUploadedSignatureUrl={setUploadedSignatureUrl}
+          onSetSignatureX={setSignatureX}
+          onSetSignatureY={setSignatureY}
+          onSetSignatureLocked={setSignatureLocked}
+          onSetRefinePrompt={setRefinePrompt}
+          onRefineWithAI={handleRefineWithAI}
+          hasSelectedSvg={!!selectedSvg}
+        />
+
+        {/* ── CENTER: Premium Canvas Preview ── */}
+        <div className="flex-1 min-w-[300px] flex flex-col overflow-hidden relative">
+          <div className="flex-1 flex items-center justify-center overflow-auto relative"
+            style={{
+              background: bgMode === 'checker'
+                ? 'repeating-conic-gradient(hsl(var(--muted)) 0% 25%, white 0% 50%) 0 0 / 20px 20px'
+                : 'radial-gradient(circle at center, hsl(var(--pearl-1)) 0%, white 70%)'
+            }}>
+
+            {/* Grid overlay */}
+            {showGrid && <CanvasGridOverlay size={stampSize + 80} />}
+
+            {/* Stamp preview with pulse feedback */}
+            <div className={`relative transition-all duration-200 ${previewPulse ? 'ring-2 ring-[hsl(var(--gold)/0.4)] rounded-full' : ''}`}
+              style={{ filter: `drop-shadow(0 8px 24px hsl(0 0% 0% / 0.12))` }}>
+              {generating ? (
+                <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]" style={{ width: stampSize, height: stampSize, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Loader2 size={28} className="animate-spin text-[hsl(var(--gold))]" />
+                  <p className="text-[10px] font-medium">Generating…</p>
+                </div>
+              ) : uploadedStampUrl ? (
+                <div className="relative">
+                  <img src={uploadedStampUrl} alt="Uploaded stamp" style={{ maxWidth: stampSize, maxHeight: stampSize }} className="object-contain" />
+                  {uploadedSignatureUrl && (
+                    <img src={uploadedSignatureUrl} alt="Signature" className="absolute h-10 object-contain pointer-events-none opacity-80"
+                      style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }} />
+                  )}
+                </div>
+              ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
+                <div className="relative">
+                  <StampInteractivePreview
+                    svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
+                    tintColor={primaryColor}
+                    secondaryColor={secondaryColor}
+                    accentColor={accentColor}
+                    fontFamily={fontFamily}
+                    fontWeight={fontBold ? 'bold' : 'normal'}
+                    fontStyle={fontItalic ? 'italic' : 'normal'}
+                    fontSize={manualFontSize}
+                    inkMode={inkMode}
+                    size={stampSize}
+                    onSvgChange={(newSvg) => {
+                      const id = selectedId || allConcepts[0]?.id;
+                      if (id) {
+                        const newOverrides = { ...svgOverrides, [id]: newSvg };
+                        setSvgOverrides(newOverrides);
+                        svgHistory.push(newOverrides);
+                      }
+                    }}
+                    onSeparatorChange={(style) => {
+                      if (project) {
+                        const updated = { ...project, separator_style: style };
+                        setProject(updated);
+                        generateConcepts(updated);
+                      }
+                    }}
+                    onCenterModeChange={(mode, options) => {
+                      if (mode === 'logo') setLocalIconStyle('UPLOADED_LOGO');
+                      else if (mode === 'monogram' || mode === 'initials') setLocalIconStyle('MONOGRAM');
+                      else if (mode === 'none') setLocalIconStyle('NONE');
+                      const id = selectedId || allConcepts[0]?.id;
+                      if (id) {
+                        const base = svgOverrides[id] || allConcepts.find(c => c.id === id)?.svgSource || '';
+                        const newSvg = injectCenterArt(base,
+                          mode === 'logo' ? 'UPLOADED_LOGO' : mode === 'none' ? 'NONE' : 'MONOGRAM',
+                          localMonogramText, localLogoUrl);
+                        setSvgOverrides(prev => ({ ...prev, [id]: newSvg }));
+                      }
+                    }}
+                    currentSeparatorStyle={project?.separator_style}
+                    currentCenterMode={localIconStyle === 'UPLOADED_LOGO' ? 'logo' : localIconStyle === 'NONE' ? 'none' : 'monogram'}
+                  />
+                  {uploadedSignatureUrl && (
+                    <img src={uploadedSignatureUrl} alt="Signature" className="absolute h-10 object-contain pointer-events-none opacity-80"
+                      style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }} />
+                  )}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]" style={{ width: stampSize, height: stampSize, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Stamp size={32} className="opacity-20" />
+                  <p className="text-[10px] text-center">Select a design to preview</p>
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2 space-y-3">
-
-            {/* ── Colors tab ── */}
-            {leftTab === 'color' && (
-              <>
-                {/* Reset to Standard button */}
-                <button onClick={() => { setPrimaryColor('#1B3A8C'); setSecondaryColor('#1a2d6e'); setAccentColor('#1B3A8C'); setMonogramLetterColors(DEFAULT_MONOGRAM_COLORS); toast.success('Colors reset to Corporate Official Blue'); }}
-                  className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[10px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all">
-                  <RotateCw size={10}/> Reset to Standard (Ink Blue)
-                </button>
-
-                {/* Standard Export Colors — locked, always visible */}
-                <div className="border border-[hsl(var(--gold)/0.2)] rounded-lg p-2 bg-[hsl(var(--gold)/0.03)]">
-                  <p className="text-[8px] font-semibold text-[hsl(var(--gold-dark))] uppercase mb-1.5 flex items-center gap-1">
-                    <Award size={8}/> Standard Export Colors
-                  </p>
-                  <div className="flex gap-1.5">
-                    {STANDARD_EXPORT_COLORS.map(c => (
-                      <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
-                        className={`flex flex-col items-center gap-0.5 transition-all hover:scale-110 ${activeColor === c.hex ? 'scale-110' : ''}`}>
-                        <div className={`w-6 h-6 rounded-full border-2 shadow-sm ${activeColor === c.hex ? 'border-[hsl(var(--gold))]' : c.hex === '#ffffff' ? 'border-[hsl(var(--border))]' : 'border-white'}`}
-                          style={{ backgroundColor: c.hex }}/>
-                        <span className="text-[6px] text-[hsl(var(--muted-foreground))] leading-tight">{c.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex gap-1">
-                  {stopDefs.map(s => (
-                    <button key={s.key} onClick={() => setActiveStop(s.key)} title={s.label}
-                      className={`flex-1 flex flex-col items-center gap-1 p-1.5 rounded-lg border-2 transition-all ${activeStop === s.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))]'}`}>
-                      <div className="w-5 h-5 rounded-full border border-white shadow-sm" style={{ backgroundColor: s.color }}/>
-                      <span className="text-[8px] text-[hsl(var(--muted-foreground))]">{s.label}</span>
-                    </button>
-                  ))}
-                </div>
-                <StampColorWheel color={activeColor} onChange={setActiveColor} label="" size={120}/>
-                <div className="border-t border-[hsl(var(--border))] pt-2">
-                  <p className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Quick Colors</p>
-                  <div className="flex flex-wrap gap-1">
-                    {PRESET_PALETTE.map(c => (
-                      <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
-                        className={`w-6 h-6 rounded-full border-2 transition-all hover:scale-110 ${activeColor === c.hex ? 'border-[hsl(var(--gold))] scale-110' : 'border-white shadow-sm'}`}
-                        style={{ backgroundColor: c.hex }}/>
-                    ))}
-                  </div>
-                </div>
-                <div className="border-t border-[hsl(var(--border))] pt-2">
-                  <p className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Palettes</p>
-                  <div className="space-y-1">
-                    {PALETTE_PRESETS.map(p => (
-                      <button key={p.label}
-                        onClick={() => { setPrimaryColor(p.primary); setSecondaryColor(p.secondary); setAccentColor(p.accent); }}
-                        className="w-full flex items-center gap-1.5 px-2 py-1 rounded-md border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] transition-all text-left">
-                        <div className="flex gap-0.5 flex-shrink-0">
-                          <div className="w-3 h-3 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.primary }}/>
-                          <div className="w-3 h-3 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.secondary }}/>
-                          <div className="w-3 h-3 rounded-full border border-white/60 shadow-sm" style={{ backgroundColor: p.accent }}/>
-                        </div>
-                        <span className="text-[9px] font-medium text-[hsl(var(--foreground))] truncate">{p.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <button onClick={() => setInkMode(!inkMode)}
-                  className={`w-full flex items-center gap-2 px-2 py-2 rounded-lg border-2 transition-all ${inkMode ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))]'}`}>
-                  <div className={`w-4 h-4 rounded text-[8px] font-bold flex items-center justify-center ${inkMode ? 'bg-[hsl(var(--gold))] text-white' : 'bg-[hsl(var(--muted))]'}`}>
-                    {inkMode ? '✓' : ''}
-                  </div>
-                  <div className="text-left">
-                    <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Ink Impression</p>
-                    <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Rubber stamp texture</p>
-                  </div>
-                </button>
-                {/* Custom Color Palette */}
-                <div className="border-t border-[hsl(var(--border))] pt-2">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <p className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase">My Colors</p>
-                    <button onClick={() => addCustomColor(activeColor)}
-                      className="text-[8px] px-1.5 py-0.5 rounded border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)]">
-                      + Save
-                    </button>
-                  </div>
-                  {customPalette.length > 0 ? (
-                    <div className="flex flex-wrap gap-1">
-                      {customPalette.map(hex => (
-                        <div key={hex} className="relative group/swatch">
-                          <button onClick={() => setActiveColor(hex)}
-                            className={`w-6 h-6 rounded-full border-2 transition-all hover:scale-110 ${activeColor === hex ? 'border-[hsl(var(--gold))] scale-110' : 'border-white shadow-sm'}`}
-                            style={{ backgroundColor: hex }}/>
-                          <button onClick={() => removeCustomColor(hex)}
-                            className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-destructive text-white text-[7px] flex items-center justify-center opacity-0 group-hover/swatch:opacity-100 transition-opacity">×</button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Click "+ Save" to store current color (up to 5)</p>
-                  )}
-                </div>
-              </>
-            )}
-
-            {/* ── Fonts tab ── */}
-            {leftTab === 'fonts' && (
-              <div className="space-y-3">
-                <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Typography</p>
-                <div className="flex gap-1.5">
-                  <button onClick={() => setFontBold(v => !v)}
-                    className={`flex-1 py-1.5 rounded-lg border-2 text-xs font-bold transition-all ${fontBold ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)]' : 'border-[hsl(var(--border))]'}`}>B</button>
-                  <button onClick={() => setFontItalic(v => !v)}
-                    className={`flex-1 py-1.5 rounded-lg border-2 text-xs italic transition-all ${fontItalic ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)]' : 'border-[hsl(var(--border))]'}`}>I</button>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Size</p>
-                    <button onClick={() => setManualFontSize(null)}
-                      className={`text-[8px] px-1 py-0.5 rounded border transition-all ${manualFontSize === null ? 'border-[hsl(var(--gold))] text-[hsl(var(--gold-dark))]' : 'border-[hsl(var(--border))]'}`}>Auto</button>
-                  </div>
-                  <input type="range" min={6} max={24} step={0.5} value={manualFontSize ?? 10}
-                    onChange={e => setManualFontSize(parseFloat(e.target.value))} className="w-full accent-[hsl(var(--gold))]"/>
-                  {manualFontSize !== null && <p className="text-[9px] font-bold text-[hsl(var(--foreground))] mt-0.5">{manualFontSize}pt</p>}
-                </div>
-                <div className="border-t border-[hsl(var(--border))] pt-2">
-                  <p className="text-[9px] text-[hsl(var(--muted-foreground))] mb-1.5">Font Family</p>
-                  <div className="space-y-1">
-                    {STAMP_FONTS.map(f => (
-                      <button key={f.value} onClick={() => setFontFamily(f.value)}
-                        className={`w-full text-left p-2 rounded-lg border-2 transition-all ${fontFamily === f.value ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))]'}`}>
-                        <div className="flex items-center justify-between">
-                          <p className="text-[10px] font-medium text-[hsl(var(--foreground))]">{f.label.split(' (')[0]}</p>
-                          <span className="text-sm opacity-60" style={{ fontFamily: f.value }}>Aa</span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* ── Text tab ── */}
-            {leftTab === 'text' && (
-              <>
-                {selectedSvg && selectedConcept ? (
-                  <StampTextEditor svgSource={selectedSvg} onSvgChange={(newSvg) => handleSvgTextChange(selectedConcept.id, newSvg)}/>
-                ) : (
-                  <div className="text-center py-6 space-y-2">
-                    <Type size={20} className="text-[hsl(var(--muted-foreground))] mx-auto"/>
-                    <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit text</p>
-                  </div>
-                )}
-              </>
-            )}
-
-            {/* ── Center Art tab ── */}
-            {leftTab === 'centerart' && (
-              <div className="space-y-3">
-                <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Center Artwork</p>
-                <div className="space-y-1">
-                  {([
-                    { val: 'MONOGRAM' as const, label: 'Monogram' },
-                    { val: 'UPLOADED_LOGO' as const, label: 'Upload Logo' },
-                    { val: 'NONE' as const, label: 'No Art' },
-                  ]).map(opt => (
-                    <button key={opt.val} onClick={() => setLocalIconStyle(opt.val)}
-                      className={`w-full py-1.5 px-2 rounded-lg border-2 text-[10px] text-left transition-all ${localIconStyle === opt.val ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))]'}`}>
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-                {localIconStyle === 'MONOGRAM' && (
-                  <>
-                    <input type="text" maxLength={3} value={localMonogramText}
-                      onChange={e => setLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
-                      placeholder={project?.company_name?.slice(0, 2) || 'AB'}
-                      className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]"/>
-                    <MonogramColorEditor
-                      monogramText={localMonogramText || project?.company_name?.slice(0, 2) || ''}
-                      colors={monogramLetterColors}
-                      onChange={setMonogramLetterColors}
-                      defaultColor={primaryColor}
-                    />
-                  </>
-                )}
-                {localIconStyle === 'UPLOADED_LOGO' && (
-                  <label className="flex flex-col items-center gap-1 p-3 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))]">
-                    <Upload size={16} className="text-[hsl(var(--gold))]"/>
-                    <span className="text-[9px] text-[hsl(var(--muted-foreground))]">{localLogoUrl ? 'Change' : 'Upload'}</span>
-                    <input type="file" accept="image/*" className="hidden"
-                      onChange={e => { const f = e.target.files?.[0]; if (!f) return; const r = new FileReader(); r.onload = () => setLocalLogoUrl(r.result as string); r.readAsDataURL(f); }}/>
-                  </label>
-                )}
-                <button onClick={applyLogoToAllConcepts}
-                  className="w-full py-2 rounded-lg bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-[10px] font-semibold flex items-center justify-center gap-1 hover:opacity-90">
-                  <Wand2 size={10}/> Apply to Stamps
-                </button>
-              </div>
-            )}
-
-            {/* ── Logo tab ── */}
-            {leftTab === 'logo' && (
-              <div className="space-y-3">
-                <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Logo / Monogram</p>
-                <div className="space-y-1">
-                  {([
-                    { val: 'UPLOADED_LOGO' as const, label: 'Upload Logo' },
-                    { val: 'MONOGRAM' as const, label: '✦ Monogram' },
-                    { val: 'NONE' as const, label: '⊘ None' },
-                  ]).map(opt => (
-                    <button key={opt.val} onClick={() => setLocalIconStyle(opt.val)}
-                      className={`w-full py-1.5 px-2 rounded-lg border-2 text-[10px] text-left transition-all ${localIconStyle === opt.val ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))]'}`}>
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-                {localIconStyle === 'UPLOADED_LOGO' && (
-                  <div>
-                    <label className="flex flex-col items-center gap-1 p-3 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))]">
-                      <Upload size={16} className="text-[hsl(var(--gold))]"/>
-                      <span className="text-[9px] text-[hsl(var(--muted-foreground))]">{localLogoUrl ? 'Change' : 'Upload'}</span>
-                      <input type="file" accept="image/*" className="hidden"
-                        onChange={e => { const f = e.target.files?.[0]; if (!f) return; const r = new FileReader(); r.onload = () => setLocalLogoUrl(r.result as string); r.readAsDataURL(f); }}/>
-                    </label>
-                    {localLogoUrl && (
-                      <div className="mt-1.5 flex items-center gap-2">
-                        <img src={localLogoUrl} alt="Logo" className="w-10 h-10 rounded object-contain border border-[hsl(var(--border))]"/>
-                        <button onClick={() => setLocalLogoUrl('')} className="text-[9px] text-destructive underline">Remove</button>
-                      </div>
-                    )}
-                  </div>
-                )}
-                {localIconStyle === 'MONOGRAM' && (
-                  <>
-                    <input type="text" maxLength={3} value={localMonogramText}
-                      onChange={e => setLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
-                      placeholder={project?.company_name?.slice(0, 2) || 'AB'}
-                      className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]"/>
-                    <MonogramColorEditor
-                      monogramText={localMonogramText || project?.company_name?.slice(0, 2) || ''}
-                      colors={monogramLetterColors}
-                      onChange={setMonogramLetterColors}
-                      defaultColor={primaryColor}
-                    />
-                  </>
-                )}
-                <button onClick={applyLogoToAllConcepts}
-                  className="w-full py-2 rounded-lg bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-[10px] font-semibold flex items-center justify-center gap-1 hover:opacity-90">
-                  <Wand2 size={10}/> Apply Logo to Stamps
-                </button>
-              </div>
-            )}
-
-            {/* ── My Stamp tab ── */}
-            {leftTab === 'mystamp' && (
-              <div className="space-y-3">
-                {/* Upload Own Stamp */}
-                <div className="space-y-1.5">
-                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Upload Your Stamp</p>
-                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Upload your existing stamp image (PNG/JPG/SVG)</p>
-                  <label className="flex flex-col items-center gap-1.5 p-3 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))] transition-all">
-                    <Upload size={16} className="text-[hsl(var(--gold))]"/>
-                    <span className="text-[9px] text-[hsl(var(--muted-foreground))]">{uploadedStampUrl ? 'Change Stamp' : 'Upload Stamp Image'}</span>
-                    <input type="file" accept="image/*,.svg" className="hidden"
-                      onChange={e => { const f = e.target.files?.[0]; if (!f) return; const r = new FileReader(); r.onload = () => { setUploadedStampUrl(r.result as string); toast.success('Stamp uploaded'); }; r.readAsDataURL(f); }}/>
-                  </label>
-                  {uploadedStampUrl && (
-                    <div className="flex items-center gap-2">
-                      <img src={uploadedStampUrl} alt="Uploaded stamp" className="w-12 h-12 rounded object-contain border border-[hsl(var(--border))]"/>
-                      <button onClick={() => setUploadedStampUrl('')} className="text-[9px] text-destructive underline">Remove</button>
-                    </div>
-                  )}
-                </div>
-
-                <div className="border-t border-[hsl(var(--border))]"/>
-
-                {/* AI Refine */}
-                <div className="space-y-1.5">
-                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">✨ AI Refine Stamp</p>
-                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Describe how you want to modify your stamp</p>
-                  <textarea value={refinePrompt} onChange={e => setRefinePrompt(e.target.value)}
-                    placeholder="e.g. Make the border thicker, change text to uppercase..."
-                    className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-[10px] text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))] min-h-[50px] resize-none"/>
-                  <Button size="sm" disabled={refiningImage || (!uploadedStampUrl && !selectedSvg)}
-                    className="w-full h-7 text-[10px] bg-gradient-to-r from-violet-600 to-purple-700 text-white gap-1"
-                    onClick={async () => {
-                      if (!refinePrompt.trim()) { toast.error('Enter a prompt'); return; }
-                      setRefiningImage(true);
-                      try {
-                        const imageToRefine = uploadedStampUrl || '';
-                        const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token}` },
-                          body: JSON.stringify({ action: 'refine-image', imageBase64: imageToRefine, prompt: refinePrompt, projectId }),
-                        });
-                        if (res.ok) {
-                          const json = await res.json();
-                          if (json.imageUrl) {
-                            setUploadedStampUrl(json.imageUrl);
-                            toast.success('Stamp refined by AI!');
-                            setRefinePrompt('');
-                          } else {
-                            toast.error(json.error || 'Refinement failed');
-                          }
-                        } else if (res.status === 429) {
-                          toast.error('Rate limit exceeded. Try again shortly.');
-                        } else if (res.status === 402) {
-                          toast.error('Credits exhausted. Please add funds.');
-                        } else {
-                          toast.error('Refinement failed');
-                        }
-                      } catch { toast.error('Connection error'); }
-                      setRefiningImage(false);
-                    }}>
-                    {refiningImage ? <><Loader2 size={10} className="animate-spin"/> Refining…</> : <><Wand2 size={10}/> Refine with AI</>}
+          {/* Canvas bottom toolbar: Edit & Export + Zoom Controls */}
+          <div className="flex-shrink-0 border-t border-[hsl(var(--border))] bg-white/90 backdrop-blur-sm px-3 py-2 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              {(selectedSvg || allConcepts[0]) && !generating && (
+                <>
+                  <Button size="sm"
+                    className="h-7 text-[10px] bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1"
+                    onClick={() => { const c = selectedConcept || allConcepts[0]; if (c) { setSelectedId(c.id); setPreviewConcept(c); } }}>
+                    <Wand2 size={9} /> Edit & Export
                   </Button>
-                </div>
-
-                <div className="border-t border-[hsl(var(--border))]"/>
-
-                {/* Signature Overlay */}
-                <div className="space-y-1.5">
-                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Signature Overlay</p>
-                  <label className="flex flex-col items-center gap-1 p-2 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))] transition-all">
-                    <Upload size={14} className="text-[hsl(var(--gold))]"/>
-                    <span className="text-[8px] text-[hsl(var(--muted-foreground))]">{uploadedSignatureUrl ? 'Change' : 'Upload Signature'}</span>
-                    <input type="file" accept="image/*" className="hidden"
-                      onChange={e => { const f = e.target.files?.[0]; if (!f) return; const r = new FileReader(); r.onload = () => { setUploadedSignatureUrl(r.result as string); toast.success('Signature uploaded'); }; r.readAsDataURL(f); }}/>
-                  </label>
-                  {uploadedSignatureUrl && (
+                  {selectedId && (
                     <>
-                      <div className="flex items-center gap-2">
-                        <img src={uploadedSignatureUrl} alt="Signature" className="h-8 object-contain border border-[hsl(var(--border))] rounded"/>
-                        <button onClick={() => setUploadedSignatureUrl('')} className="text-[9px] text-destructive underline">Remove</button>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <label className="text-[8px] text-[hsl(var(--muted-foreground))]">Position X</label>
-                          <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{signatureX}%</span>
-                        </div>
-                        <input type="range" min={0} max={100} value={signatureX} disabled={signatureLocked}
-                          onChange={e => setSignatureX(parseInt(e.target.value))} className="w-full accent-[hsl(var(--gold))]"/>
-                        <div className="flex items-center justify-between">
-                          <label className="text-[8px] text-[hsl(var(--muted-foreground))]">Position Y</label>
-                          <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{signatureY}%</span>
-                        </div>
-                        <input type="range" min={0} max={100} value={signatureY} disabled={signatureLocked}
-                          onChange={e => setSignatureY(parseInt(e.target.value))} className="w-full accent-[hsl(var(--gold))]"/>
-                      </div>
-                      <button onClick={() => setSignatureLocked(v => !v)}
-                        className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-lg border-2 transition-all text-[9px] ${signatureLocked ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))]'}`}>
-                        <div className={`w-3.5 h-3.5 rounded text-[7px] font-bold flex items-center justify-center ${signatureLocked ? 'bg-[hsl(var(--gold))] text-white' : 'bg-[hsl(var(--muted))]'}`}>
-                          {signatureLocked ? '🔒' : ''}
-                        </div>
-                        {signatureLocked ? 'Locked — Unlock to move' : 'Lock position'}
-                      </button>
+                      <Button size="sm" variant="outline" className="h-7 px-2 text-[10px] border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] gap-1"
+                        onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}>
+                        <Download size={9} />
+                      </Button>
+                      <DesignFavoriteButton itemType="stamp" itemId={selectedId}
+                        itemName={(selectedConcept || allConcepts[0])?.label || "Stamp"}
+                        thumbnailSvg={(selectedSvg || allConcepts[0]?.svgSource || '').slice(0, 50000)} size="sm" />
                     </>
                   )}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* ── Center: Live Preview (dominant, flex-1) ─────── */}
-        <div className="flex-1 min-w-[300px] border-r border-[hsl(var(--border))] bg-white/60 flex flex-col overflow-y-auto">
-          {/* Preview */}
-          <div className="flex-shrink-0 p-3">
-            <div className="bg-white rounded-xl border-2 border-[hsl(var(--gold)/0.25)] shadow-lg overflow-hidden">
-              <div className="px-3 py-2 bg-gradient-to-r from-[hsl(var(--pearl-1))] to-white border-b border-[hsl(var(--border))] flex items-center justify-between">
-                <div className="flex items-center gap-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))]"/>
-                  <span className="text-[9px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-widest">Live Preview</span>
-                </div>
-                {selectedId && (
-                  <Badge className="text-[8px] px-1 py-0 bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">
-                    <Check size={7} className="mr-0.5"/> Selected
-                  </Badge>
-                )}
-              </div>
-              {/* Welcome Banner */}
-              {showWelcomeBanner && !generating && (selectedSvg || allConcepts[0]?.svgSource) && (
-                <div className="mx-3 mt-2 mb-0 flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--champagne-1))] border border-[hsl(var(--gold)/0.2)]">
-                  <Sparkles size={12} className="text-[hsl(var(--gold))] flex-shrink-0"/>
-                  <p className="text-[9px] text-[hsl(var(--foreground))] flex-1">Your official stamp is ready — customize colors, text, upload your own, or refine with AI.</p>
-                  <button onClick={() => setShowWelcomeBanner(false)} className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"><X size={10}/></button>
-                </div>
-              )}
-              <div className="relative flex items-center justify-center py-6 px-3 min-h-[320px] bg-[radial-gradient(circle_at_center,_hsl(var(--pearl-1))_0%,_white_70%)]">
-                {generating ? (
-                  <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]">
-                    <Loader2 size={28} className="animate-spin text-[hsl(var(--gold))]"/>
-                    <p className="text-[10px] font-medium">Generating…</p>
-                  </div>
-                ) : uploadedStampUrl ? (
-                  <div className="relative">
-                    <img src={uploadedStampUrl} alt="Uploaded stamp" className="max-w-[320px] max-h-[320px] object-contain"/>
-                    {uploadedSignatureUrl && (
-                      <img src={uploadedSignatureUrl} alt="Signature" className="absolute h-10 object-contain pointer-events-none opacity-80"
-                        style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }}/>
-                    )}
-                  </div>
-                ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
-                  <div className="relative">
-                    <StampInteractivePreview
-                      svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
-                      tintColor={primaryColor}
-                      secondaryColor={secondaryColor}
-                      accentColor={accentColor}
-                      fontFamily={fontFamily}
-                      fontWeight={fontBold ? 'bold' : 'normal'}
-                      fontStyle={fontItalic ? 'italic' : 'normal'}
-                      fontSize={manualFontSize}
-                      inkMode={inkMode}
-                      size={320}
-                      onSvgChange={(newSvg) => {
-                        const id = selectedId || allConcepts[0]?.id;
-                        if (id) {
-                          const newOverrides = { ...svgOverrides, [id]: newSvg };
-                          setSvgOverrides(newOverrides);
-                          svgHistory.push(newOverrides);
-                        }
-                      }}
-                      onSeparatorChange={(style) => {
-                        // Regenerate with new separator style
-                        if (project) {
-                          const updated = { ...project, separator_style: style };
-                          setProject(updated);
-                          generateConcepts(updated);
-                        }
-                      }}
-                      onCenterModeChange={(mode, options) => {
-                        if (options?.icon) {
-                          // Just change icon
-                        }
-                        if (mode === 'logo') setLocalIconStyle('UPLOADED_LOGO');
-                        else if (mode === 'monogram' || mode === 'initials') setLocalIconStyle('MONOGRAM');
-                        else if (mode === 'none') setLocalIconStyle('NONE');
-                        // Apply to current stamp
-                        const id = selectedId || allConcepts[0]?.id;
-                        if (id) {
-                          const base = svgOverrides[id] || allConcepts.find(c => c.id === id)?.svgSource || '';
-                          const newSvg = injectCenterArt(base, 
-                            mode === 'logo' ? 'UPLOADED_LOGO' : mode === 'none' ? 'NONE' : 'MONOGRAM',
-                            localMonogramText, localLogoUrl);
-                          setSvgOverrides(prev => ({ ...prev, [id]: newSvg }));
-                        }
-                      }}
-                      currentSeparatorStyle={project?.separator_style}
-                      currentCenterMode={
-                        localIconStyle === 'UPLOADED_LOGO' ? 'logo' : localIconStyle === 'NONE' ? 'none' : 'monogram'
-                      }
-                    />
-                    {uploadedSignatureUrl && (
-                      <img src={uploadedSignatureUrl} alt="Signature" className="absolute h-10 object-contain pointer-events-none opacity-80"
-                        style={{ left: `${signatureX}%`, top: `${signatureY}%`, transform: 'translate(-50%, -50%)' }}/>
-                    )}
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]">
-                    <Stamp size={32} className="opacity-20"/>
-                    <p className="text-[10px] text-center">Select a design to preview</p>
-                  </div>
-                )}
-              </div>
-              {(selectedSvg || allConcepts[0]) && !generating && (
-                <div className="border-t border-[hsl(var(--border))] px-3 py-2 flex items-center gap-1.5">
-                  <Button size="sm"
-                    className="flex-1 h-7 text-[10px] bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1"
-                    onClick={() => { const c = selectedConcept || allConcepts[0]; if (c) { setSelectedId(c.id); setPreviewConcept(c); } }}>
-                    <Wand2 size={9}/> Edit & Export
-                  </Button>
-                  {selectedId && (
-                    <Button size="sm" variant="outline"
-                      className="h-7 px-2 text-[10px] border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] gap-1"
-                      onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}>
-                      <Download size={9}/>
-                    </Button>
-                  )}
-                  {selectedId && (
-                    <DesignFavoriteButton
-                      itemType="stamp"
-                      itemId={selectedId}
-                      itemName={(selectedConcept || allConcepts[0])?.label || "Stamp"}
-                      thumbnailSvg={(selectedSvg || allConcepts[0]?.svgSource || '').slice(0, 50000)}
-                      size="sm"
-                    />
-                  )}
-                </div>
+                </>
               )}
             </div>
-          </div>
 
-          {/* Trade License Re-scan (collapsed by default since data already captured in wizard) */}
-          <div className="flex-shrink-0 px-3 pb-3">
-            {!licenseOpen ? (
-              <button onClick={() => setLicenseOpen(true)}
-                className="w-full flex items-center gap-1.5 py-1.5 text-[10px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] transition-colors">
-                <Upload size={10} className="text-[hsl(var(--gold))]"/>
-                <span>Re-scan Trade License</span>
-              </button>
-            ) : (
-              <div className="bg-white rounded-xl border border-[hsl(var(--border))] overflow-hidden">
-                <button onClick={() => setLicenseOpen(false)}
-                  className="w-full flex items-center justify-between px-3 py-2 hover:bg-[hsl(var(--pearl-1))] transition-colors">
-                  <div className="flex items-center gap-1.5">
-                    <Upload size={11} className="text-[hsl(var(--gold))]"/>
-                    <span className="text-[10px] font-medium text-[hsl(var(--foreground))]">Re-scan Trade License</span>
-                  </div>
-                  <X size={11} className="text-[hsl(var(--muted-foreground))]"/>
-                </button>
-                <div className="px-3 pt-2 pb-3 border-t border-[hsl(var(--border))]">
-                  <StampLicenseUploader
-                    onExtracted={(data) => {
-                      const updatedProject = {
-                        ...project,
-                        ...(data.company_name && { company_name: data.company_name }),
-                        ...(data.arabic_company_name && { arabic_company_name: data.arabic_company_name }),
-                        ...(data.registration_number && { registration_number: data.registration_number }),
-                        ...(data.city && { city_optional: data.city }),
-                      };
-                      setProject(updatedProject);
-                      setLicenseOpen(false);
-                      toast.info('License loaded — regenerating…', { duration: 2500 });
-                      setTimeout(() => generateConcepts(updatedProject), 300);
-                    }}
-                  />
-                </div>
-              </div>
-            )}
+            {/* Zoom controls */}
+            <StampCanvasControls
+              zoom={zoom}
+              showGrid={showGrid}
+              bgMode={bgMode}
+              onZoomChange={setZoom}
+              onToggleGrid={() => setShowGrid(v => !v)}
+              onToggleBg={() => setBgMode(v => v === 'white' ? 'checker' : 'white')}
+            />
           </div>
-
-          {/* Blocked warning */}
-          {blocked && (
-            <div className="px-3 pb-3">
-              <div className="flex items-center gap-2 p-2 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive">
-                <AlertTriangle size={14}/>
-                <div>
-                  <p className="font-semibold text-[10px]">Generation Blocked</p>
-                  <p className="text-[9px]">Government seals cannot be generated.</p>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* ── Right: Concepts Grid (narrower, scrollable) ────── */}
-        <div className="w-[340px] xl:w-[400px] flex-shrink-0 min-w-0 flex flex-col overflow-hidden relative">
-          {/* Variations overlay */}
-          {showVariations && (
-            <StampVariationsPanel
-              variations={variations}
-              loading={variationsLoading}
-              tintColor={primaryColor}
-              secondaryColor={secondaryColor}
-              accentColor={accentColor}
-              fontFamily={fontFamily}
-              inkMode={inkMode}
-              onSelectVariation={(v) => {
-                const newConcept: StampDesignConcept = { ...v, id: crypto.randomUUID() };
-                setConcepts(prev => [newConcept, ...prev]);
-                setSelectedId(newConcept.id);
-                setSvgOverrides(prev => ({ ...prev, [newConcept.id]: v.svgSource }));
-                setShowVariations(false);
-                toast.success('Variation applied as new concept');
-              }}
-              onDeleteVariation={(id) => setVariations(prev => prev.filter(v => v.id !== id))}
-              onDuplicateVariation={(v) => setVariations(prev => [...prev, { ...v, id: crypto.randomUUID(), label: `${v.label} (copy)` }])}
-              onClose={() => setShowVariations(false)}
-              onGenerate={generateVariations}
-            />
-          )}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-
-            {/* Favorites */}
-            {favoriteConcepts.length > 0 && (
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Heart size={12} className="text-rose-500 fill-rose-500"/>
-                  <h2 className="font-semibold text-[hsl(var(--foreground))] text-xs">Favorites ({favoriteConcepts.length})</h2>
-                </div>
-                <div className="grid grid-cols-2 xl:grid-cols-3 gap-2">
-                  {favoriteConcepts.map(c => (
-                    <ConceptCard key={c.id} concept={c} svgOverride={svgOverrides[c.id]}
-                      selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
-                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize} inkMode={inkMode}
-                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText} onPreview={handleOpenPreview}
-                      onDelete={softDeleteConcept ? (c) => softDeleteConcept(c.id) : undefined} onDuplicate={duplicateConcept}/>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Loading */}
-            {generating && (
-              <div className="grid grid-cols-2 xl:grid-cols-3 gap-2">
-                {[1,2,3,4,5,6].map(i => (
-                  <div key={i} className="h-52 rounded-xl bg-[hsl(var(--muted))] animate-pulse"/>
-                ))}
-              </div>
-            )}
-
-            {/* Concepts grid — paginated */}
-            {!generating && !blocked && concepts.length > 0 && (
-              <>
-                <div className="flex items-center justify-between">
-                  <h2 className="font-semibold text-[hsl(var(--foreground))] text-xs">
-                    {concepts.length} Concepts
-                    <span className="ml-1.5 text-[10px] font-normal text-[hsl(var(--muted-foreground))]">— click to select</span>
-                  </h2>
-                  {totalPages > 1 && (
-                    <div className="flex items-center gap-1.5">
-                      <button onClick={() => setConceptPage(p => Math.max(0, p - 1))} disabled={conceptPage === 0}
-                        className="w-6 h-6 rounded-md border border-[hsl(var(--border))] flex items-center justify-center disabled:opacity-30 hover:bg-[hsl(var(--gold)/0.06)]">
-                        <ChevronLeft size={12}/>
-                      </button>
-                      <span className="text-[10px] text-[hsl(var(--muted-foreground))] font-medium">{conceptPage + 1}/{totalPages}</span>
-                      <button onClick={() => setConceptPage(p => Math.min(totalPages - 1, p + 1))} disabled={conceptPage >= totalPages - 1}
-                        className="w-6 h-6 rounded-md border border-[hsl(var(--border))] flex items-center justify-center disabled:opacity-30 hover:bg-[hsl(var(--gold)/0.06)]">
-                        <ChevronRight size={12}/>
-                      </button>
-                    </div>
-                  )}
-                </div>
-                <div className="grid grid-cols-2 xl:grid-cols-3 gap-2">
-                  {pagedConcepts.map(concept => (
-                    <ConceptCard key={concept.id} concept={concept} svgOverride={svgOverrides[concept.id]}
-                      selectedId={selectedId} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily}
-                      fontBold={fontBold} fontItalic={fontItalic} manualFontSize={manualFontSize} inkMode={inkMode}
-                      togglingFav={togglingFav} onSelect={handleSelectConcept} onToggleFav={toggleFavorite} onEditText={handleEditText} onPreview={handleOpenPreview}
-                      onDelete={(c) => softDeleteConcept(c.id)} onDuplicate={duplicateConcept}/>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {/* Empty state */}
-            {!generating && !blocked && concepts.length === 0 && favoriteConcepts.length === 0 && (
-              <div className="text-center py-16 space-y-3">
-                <Wand2 size={32} className="text-[hsl(var(--gold))] mx-auto"/>
-                <p className="text-[hsl(var(--muted-foreground))] text-sm">Click "Regenerate" to create stamp concepts</p>
-                <Button onClick={() => generateConcepts()} className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white">
-                  <Wand2 size={14} className="mr-2"/> Generate Concepts
-                </Button>
-              </div>
-            )}
-
-            {/* Export CTA */}
-            {/* Recently Deleted */}
-            <StampRecentlyDeleted
-              items={deletedStamps}
-              tintColor={primaryColor}
-              secondaryColor={secondaryColor}
-              accentColor={accentColor}
-              fontFamily={fontFamily}
-              inkMode={inkMode}
-              onRecover={recoverDeletedStamp}
-              onPermanentDelete={permanentDeleteStamp}
-              onAdaptAndSave={adaptAndSaveAsAsset}
-            />
-
-            {/* Export CTA */}
-            {selectedId && !generating && (
-              <div className="bg-gradient-to-r from-[hsl(var(--gold)/0.08)] to-[hsl(var(--champagne-1))] rounded-xl border border-[hsl(var(--gold)/0.2)] p-4 flex items-center justify-between flex-wrap gap-3">
-                <div>
-                  <p className="font-semibold text-[hsl(var(--foreground))] text-sm">Ready to export!</p>
-                  <p className="text-xs text-[hsl(var(--muted-foreground))] mt-0.5">SVG, PNG, JPG, PDF + brand pack</p>
-                </div>
-                <Button className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1.5 text-xs"
-                  onClick={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}>
-                  <Download size={13}/> Export Pack
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* Version Selector Modal */}
-      {showVersionSelector && projectId && (
-        <StampVersionSelector
-          projectId={projectId}
+        {/* ── RIGHT PANEL: Tabbed Library ── */}
+        <StampRightPanel
+          concepts={concepts}
+          favoriteConcepts={favoriteConcepts}
+          generating={generating}
+          blocked={blocked}
+          selectedId={selectedId}
+          svgOverrides={svgOverrides}
           tintColor={primaryColor}
           secondaryColor={secondaryColor}
           accentColor={accentColor}
           fontFamily={fontFamily}
+          fontBold={fontBold}
+          fontItalic={fontItalic}
+          manualFontSize={manualFontSize}
           inkMode={inkMode}
+          togglingFav={togglingFav}
+          variations={variations}
+          variationsLoading={variationsLoading}
+          deletedStamps={deletedStamps}
+          onSelect={handleSelectConcept}
+          onToggleFav={toggleFavorite}
+          onEditText={handleEditText}
+          onPreview={handleOpenPreview}
+          onDelete={(c) => softDeleteConcept(c.id)}
+          onDuplicate={duplicateConcept}
+          onGenerate={() => generateConcepts()}
+          onGenerateVariations={generateVariations}
+          onSelectVariation={(v) => {
+            const newConcept: StampDesignConcept = { ...v, id: crypto.randomUUID() };
+            setConcepts(prev => [newConcept, ...prev]);
+            setSelectedId(newConcept.id);
+            setSvgOverrides(prev => ({ ...prev, [newConcept.id]: v.svgSource }));
+            toast.success('Variation applied');
+          }}
+          onDeleteVariation={(id) => setVariations(prev => prev.filter(v => v.id !== id))}
+          onDuplicateVariation={(v) => setVariations(prev => [...prev, { ...v, id: crypto.randomUUID(), label: `${v.label} (copy)` }])}
+          onRecoverDeleted={recoverDeletedStamp}
+          onPermanentDelete={permanentDeleteStamp}
+          onAdaptAndSave={adaptAndSaveAsAsset}
+          projectId={projectId}
           onSelectVersion={(v) => {
             const newConcept: StampDesignConcept = {
               id: v.id, templateKey: v.template_key,
@@ -1445,17 +864,16 @@ export default function StampGeneratorPage() {
             };
             setConcepts(prev => [newConcept, ...prev.filter(c => c.id !== v.id)]);
             setSelectedId(v.id);
-            setShowVersionSelector(false);
           }}
-          onSaveBoth={(v) => {
+          onSaveBothVersions={(v) => {
             const newConcept: StampDesignConcept = {
               id: crypto.randomUUID(), templateKey: v.template_key,
               label: `${v.template_key.replace(/-/g, ' ')} (restored)`, tags: [], svgSource: v.svg_source,
             };
             setConcepts(prev => [newConcept, ...prev]);
-            toast.success('Both versions saved — current kept + previous added');
+            toast.success('Both versions saved');
           }}
-          onDuplicate={(v) => {
+          onDuplicateVersion={(v) => {
             const dup: StampDesignConcept = {
               id: crypto.randomUUID(), templateKey: v.template_key,
               label: `${v.template_key.replace(/-/g, ' ')} (restored)`, tags: [], svgSource: v.svg_source,
@@ -1463,10 +881,12 @@ export default function StampGeneratorPage() {
             setConcepts(prev => [dup, ...prev]);
             toast.success('Version duplicated');
           }}
-          onUploadNew={() => { setShowVersionSelector(false); setLeftTab('mystamp'); }}
-          onClose={() => setShowVersionSelector(false)}
+          onUploadNew={() => {}}
+          savedDesignId={savedDesignId}
+          onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}
         />
-      )}
+      </div>
+
       {/* AI Designer Floating Panel */}
       {chatOpen && (
         <div className="fixed z-[10050] flex flex-col bg-white rounded-2xl shadow-2xl border border-[hsl(var(--border))] overflow-hidden"
@@ -1475,7 +895,7 @@ export default function StampGeneratorPage() {
           <div className="flex items-center justify-between px-3 py-2.5 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] cursor-grab active:cursor-grabbing select-none flex-shrink-0"
             onMouseDown={onAiPanelDragStart}>
             <div className="flex items-center gap-1.5">
-              <Sparkles size={13} className="text-white"/>
+              <Sparkles size={13} className="text-white" />
               <span className="font-bold text-xs text-white">Smart Designer</span>
             </div>
             <div className="flex items-center gap-1">
@@ -1485,7 +905,7 @@ export default function StampGeneratorPage() {
               </button>
               <button onClick={() => setChatOpen(false)}
                 className="w-6 h-6 rounded-full bg-white flex items-center justify-center hover:bg-white/90">
-                <X size={12} className="text-[hsl(var(--gold-dark))]"/>
+                <X size={12} className="text-[hsl(var(--gold-dark))]" />
               </button>
             </div>
           </div>
@@ -1516,20 +936,20 @@ export default function StampGeneratorPage() {
                 {chatLoading && (
                   <div className="flex justify-start">
                     <div className="bg-[hsl(var(--pearl-1))] border border-[hsl(var(--border))] px-2.5 py-1.5 rounded-lg text-[10px] text-[hsl(var(--muted-foreground))]">
-                      <Loader2 size={10} className="animate-spin inline mr-1"/>Designing…
+                      <Loader2 size={10} className="animate-spin inline mr-1" />Designing…
                     </div>
                   </div>
                 )}
-                <div ref={chatEndRef}/>
+                <div ref={chatEndRef} />
               </div>
               {refinedPreview && (
                 <div className="flex-shrink-0 border-t border-[hsl(var(--border))] px-3 py-2 space-y-2 bg-[hsl(var(--pearl-1))]">
                   <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Refined preview:</p>
                   <div className="flex items-center justify-center bg-white rounded-lg border border-[hsl(var(--border))] py-2">
-                    <StampSVGRenderer svgSource={refinedPreview.svgSource} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} size={110}/>
+                    <StampSVGRenderer svgSource={refinedPreview.svgSource} tintColor={primaryColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} size={110} />
                   </div>
                   <div className="flex gap-1.5">
-                    <Button size="sm" className="flex-1 h-7 text-[10px] bg-[hsl(var(--gold))] text-white" onClick={() => { if (!selectedId) { toast.info('Select a stamp concept first, then click Replace'); return; } applyRefinement('replace'); }} >
+                    <Button size="sm" className="flex-1 h-7 text-[10px] bg-[hsl(var(--gold))] text-white" onClick={() => { if (!selectedId) { toast.info('Select a stamp first'); return; } applyRefinement('replace'); }}>
                       Replace Selected
                     </Button>
                     <Button size="sm" variant="outline" className="flex-1 h-7 text-[10px] border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))]" onClick={() => applyRefinement('new')}>
@@ -1543,9 +963,9 @@ export default function StampGeneratorPage() {
                   <input value={chatInput} onChange={e => setChatInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendChatMessage()}
                     placeholder="Describe changes…"
-                    className="flex-1 h-8 px-2.5 text-[10px] border-2 border-[hsl(var(--border))] rounded-lg focus:outline-none focus:border-[hsl(var(--gold))] bg-white text-[hsl(var(--foreground))]"/>
+                    className="flex-1 h-8 px-2.5 text-[10px] border-2 border-[hsl(var(--border))] rounded-lg focus:outline-none focus:border-[hsl(var(--gold))] bg-white text-[hsl(var(--foreground))]" />
                   <Button size="sm" className="h-8 px-2.5 bg-[hsl(var(--gold))] text-white" onClick={() => sendChatMessage()} disabled={chatLoading}>
-                    <Send size={10}/>
+                    <Send size={10} />
                   </Button>
                 </div>
               </div>
@@ -1553,103 +973,6 @@ export default function StampGeneratorPage() {
           )}
         </div>
       )}
-    </div>
-  );
-}
-
-// ─── Concept Card ────────────────────────────────────────────────
-function ConceptCard({
-  concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav, onSelect, onToggleFav, onEditText, onPreview, onDelete, onDuplicate
-}: {
-  concept: StampDesignConcept;
-  svgOverride?: string;
-  selectedId: string | null;
-  tintColor: string;
-  secondaryColor?: string;
-  accentColor?: string;
-  fontFamily?: string;
-  fontBold?: boolean;
-  fontItalic?: boolean;
-  manualFontSize?: number | null;
-  inkMode?: boolean;
-  togglingFav: string | null;
-  onSelect: (c: StampDesignConcept) => void;
-  onToggleFav: (c: StampDesignConcept) => void;
-  onEditText: (c: StampDesignConcept) => void;
-  onPreview?: (c: StampDesignConcept) => void;
-  onDelete?: (c: StampDesignConcept) => void;
-  onDuplicate?: (c: StampDesignConcept) => void;
-}) {
-  const isSelected = selectedId === concept.id;
-  const isFav = concept.isFavorite;
-  const displaySvg = svgOverride || concept.svgSource;
-  const isRectShape = displaySvg.includes('<rect') && !displaySvg.match(/<circle[^>]*r="(9|10|11)/);
-
-  return (
-    <div
-      className={`group bg-card/80 rounded-xl border-2 transition-all shadow-sm hover:shadow-md cursor-pointer ${isSelected ? 'border-gold shadow-[0_0_0_3px_hsl(var(--gold)/0.15)]' : 'border-gold/30 hover:border-gold/50'}`}
-      onClick={() => onSelect(concept)}
-    >
-      <div className={`relative p-3 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-xl ${isRectShape ? 'min-h-[100px]' : 'min-h-[140px]'}`}>
-        {isSelected && (
-          <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center z-10">
-            <Check size={10} className="text-white"/>
-          </div>
-        )}
-        <button onClick={e => { e.stopPropagation(); onToggleFav(concept); }} disabled={togglingFav === concept.id}
-          className={`absolute top-1.5 left-1.5 z-10 w-6 h-6 rounded-full flex items-center justify-center transition-all ${isFav ? 'bg-rose-50 border border-rose-200 text-rose-500' : 'bg-white/80 border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100'}`}>
-          {togglingFav === concept.id ? <Loader2 size={9} className="animate-spin"/> : <Heart size={9} className={isFav ? 'fill-rose-500' : ''}/>}
-        </button>
-        {/* Delete + Duplicate buttons */}
-        <div className="absolute bottom-1.5 right-1.5 z-10 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-          {onDuplicate && (
-            <button onClick={e => { e.stopPropagation(); onDuplicate(concept); }}
-              className="w-5 h-5 rounded bg-white/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]"
-              title="Duplicate">
-              <Copy size={8} className="text-[hsl(var(--muted-foreground))]"/>
-            </button>
-          )}
-          {onDelete && (
-            <button onClick={e => { e.stopPropagation(); onDelete(concept); }}
-              className="w-5 h-5 rounded bg-white/90 border border-destructive/30 flex items-center justify-center hover:bg-destructive/10"
-              title="Delete">
-              <Trash2 size={8} className="text-destructive/70"/>
-            </button>
-          )}
-        </div>
-        <StampSVGRenderer svgSource={displaySvg} tintColor={tintColor} secondaryColor={secondaryColor} accentColor={accentColor} fontFamily={fontFamily} fontWeight={fontBold ? 'bold' : 'normal'} fontStyle={fontItalic ? 'italic' : 'normal'} fontSize={manualFontSize} inkMode={inkMode} size={isRectShape ? 160 : 130}/>
-      </div>
-      <div className="p-2 space-y-1.5">
-        <p className="font-medium text-[11px] text-[hsl(var(--foreground))] truncate">
-          {concept.templateKey === 'owner-official-standard' && (
-            <span className="inline-block mr-1 px-1 py-0 text-[7px] font-bold bg-[hsl(var(--gold))] text-white rounded uppercase">Standard</span>
-          )}
-          {concept.label}
-        </p>
-        {/* Shortlist badge */}
-        <div className="flex items-center gap-1">
-          <ShortlistBadgeButton projectId={concept.id} size="sm" showBadgeIndicator={true} />
-        </div>
-        <div className="flex gap-1">
-          <Button size="sm"
-            className={`flex-1 h-6 text-[9px] gap-0.5 ${isSelected ? 'bg-[hsl(var(--gold))] text-white' : 'bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90'}`}
-            onClick={e => { e.stopPropagation(); onSelect(concept); }}>
-            {isSelected ? <><Check size={8}/> Selected</> : 'Select'}
-          </Button>
-          <Button size="sm" variant="outline"
-            className="h-6 text-[9px] gap-0.5 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] px-2"
-            onClick={e => { e.stopPropagation(); onEditText(concept); }}>
-            <Type size={8}/> Edit
-          </Button>
-        </div>
-        {isSelected && onPreview && (
-          <Button size="sm" variant="outline"
-            className="w-full h-6 text-[9px] gap-0.5 border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))]"
-            onClick={e => { e.stopPropagation(); onPreview(concept); }}>
-            <Layers size={8}/> Preview on Documents
-          </Button>
-        )}
-      </div>
     </div>
   );
 }
