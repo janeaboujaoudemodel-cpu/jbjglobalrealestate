@@ -2,6 +2,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCallback } from "react";
 import type { Database } from "@/integrations/supabase/types";
+import { logGlobalAudit } from "@/hooks/useGlobalAudit";
 
 type AuditActionType = Database['public']['Enums']['audit_action_type'] extends never 
   ? 'create' | 'read' | 'update' | 'delete' | 'login' | 'logout' | 'export' | 'import' | 'approve' | 'reject' | 'block' | 'unblock'
