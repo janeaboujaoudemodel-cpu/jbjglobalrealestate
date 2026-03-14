@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import {
   Play, Pause, RefreshCw, Loader2, Database, Image,
-  FileText, Layers, CheckCircle2, AlertCircle, Zap, Globe, CloudOff, Eye
+  FileText, Layers, CheckCircle2, AlertCircle, Zap, Globe, CloudOff, Eye, Info
 } from "lucide-react";
 import { EnrichmentAuditPanel } from "./EnrichmentAuditPanel";
 
