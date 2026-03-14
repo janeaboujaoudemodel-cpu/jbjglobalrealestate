@@ -364,8 +364,18 @@ export default function StampGeneratorPage() {
   }
 
   function handleSelectConcept(concept: StampDesignConcept) {
+    // Swap: previous standard moves into concepts list, clicked becomes new standard
+    if (standardConcept && standardConcept.id !== concept.id) {
+      // Ensure old standard is in concepts list
+      setConcepts(prev => {
+        const exists = prev.some(c => c.id === standardConcept.id);
+        const filtered = prev.filter(c => c.id !== concept.id);
+        return exists ? filtered : [standardConcept, ...filtered];
+      });
+    }
+    setStandardConcept(concept);
     setSelectedId(concept.id);
-    toast.success('Design selected', { duration: 2000 });
+    toast.success('Design applied as Standard', { duration: 2000 });
   }
 
   function handleOpenPreview(concept: StampDesignConcept) {
