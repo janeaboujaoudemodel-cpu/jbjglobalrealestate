@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { getCorsHeaders, handleCorsPreflightWithValidation } from "../_shared/auth-utils.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 /**
  * Secure Contact Gating Submission
