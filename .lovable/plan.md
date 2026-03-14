@@ -1,107 +1,76 @@
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+## Session 9 — AI Generation Engine + Standard Preview Protection
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+### Analysis of Current Issues
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+After reviewing `StampGeneratorPage.tsx` (978 lines) and `StampRightPanel.tsx` (445 lines), the core problems are:
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+1. **No "Standard Model" concept** — There's no persistent T0 reference. `selectedId` picks any concept, and `generateConcepts()` calls `setConcepts(clientConcepts)` which replaces the entire list, losing the current preview.
+2. **Generation replaces preview** — `generateConcepts()` sets `generating=true` which shows a spinner in the center canvas, hiding the current design. Line 710-714: the center shows `<Loader2>` when `generating` is true.
+3. **No standard pinned in right panel** — The concepts grid treats all designs equally. No pinned "Standard" card at position 0.
+4. **Selection swap logic missing** — When clicking a generated design, it just sets `selectedId`. There's no mechanism to preserve the previous preview as the new "Standard" reference.
+5. **Navy ink not enforced** — Generated concepts use whatever `primaryColor` is set to, but there's no enforcement that new generations start at `#1B3A8C`.
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+### Implementation Plan
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+#### 1. Introduce `standardConcept` state
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+Add a dedicated `standardConcept: StampDesignConcept | null` state that holds the T0 (first generated) design. This is the "working design" and is **never cleared** by generation.
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+- On first load / initial generation, set `standardConcept = concepts[0]` (the owner-official-standard T0)
+- `selectedId` defaults to `standardConcept.id`
+- The center preview always shows `standardConcept` unless the user explicitly selects a different concept
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+#### 2. Fix generation to not replace preview
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+Modify `generateConcepts()`:
+- Set a separate `generatingInPanel` flag instead of `generating` for the right panel skeleton loaders
+- **Do not** show spinner in center canvas during regeneration — keep showing the current `standardConcept`
+- Append new concepts to the list rather than replacing
+- After generation completes, the standard remains in the center; new designs appear in the right panel
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+#### 3. Pin Standard in right panel
 
-### Files Changed
-| File | Action |
+Modify `StampRightPanel` Concepts tab:
+- Always render the standard concept as the **first card** with a "Standard" badge and distinct gold border
+- The standard card is not deletable
+- Remaining concepts follow in the paginated grid
+
+Add a new prop `standardConcept` to `StampRightPanel`.
+
+#### 4. Selection swap logic
+
+When user clicks a generated design card ("Apply" / click):
+- The clicked design becomes the new center preview (`selectedId = clicked.id`)
+- The **previous** `standardConcept` moves into the concepts list (if not already there)
+- The clicked design becomes the new `standardConcept`
+- Toast: "Design applied as Standard"
+
+This ensures the user never loses their previous working design.
+
+#### 5. Download always exports Standard by default
+
+The export button and `confirmSelectAndExport` use `standardConcept` as the default:
+- If no explicit selection override, export `standardConcept`
+- If user explicitly selected a different concept in the right panel, export that one
+
+#### 6. Navy ink enforcement on generation
+
+In `generateConcepts()` and `generateVariations()`:
+- All generated SVGs use `#1B3A8C` as the base color token
+- The user's current `primaryColor` is applied via the renderer, not baked into generated SVGs
+
+#### 7. Full editability of applied designs
+
+Already works — once a design is selected via `setSelectedId`, the `StampInteractivePreview` renders it with all editing capabilities. No changes needed here, just verify the swap logic passes the correct SVG.
+
+### Files to Modify
+
+| File | Change |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| `StampGeneratorPage.tsx` | Add `standardConcept` state, split `generating` into center vs panel flags, implement swap logic, enforce navy ink on generation, fix export default |
+| `StampRightPanel.tsx` | Add `standardConcept` prop, render pinned Standard card first with badge, prevent deletion of standard |
 
-## Multi-Portal System + Developer Portal — Audit & Fixes (March 2026)
+No new files. No database changes.
 
-### ✅ ALL TASKS COMPLETED
-
-| # | Task | Status |
-|---|------|--------|
-| 1 | Fix "Register as Rep" label → "Register as Developer or Sales" | ✅ DONE |
-| 2 | Rename Developer Portal tab → "Update Profile" | ✅ DONE |
-| 3 | Investor Portal rebuild (7 tabs, premium styling) | ✅ DONE |
-| 4 | Broker Portal enhancement (tabbed structure) | ✅ DONE |
-| 5 | ApprovalTimeline shared component | ✅ DONE |
-| 6 | Event Management Hub | ✅ DONE |
-| 7 | useEventManagement hook | ✅ DONE |
-| 8 | events + event_invitations tables | ✅ DONE |
-| 9 | Role options include "Other" with custom field | ✅ DONE |
-| 10 | Owner/CEO/Founder requires ID + passport + trade license + RERA | ✅ DONE |
-| 11 | Registration gate blocks portal access until registered | ✅ DONE |
-| 12 | Owner auto-approve toggle for developers | ✅ DONE |
-| 13 | Owner restrict access for developers | ✅ DONE |
-| 14 | Nationality with flags dropdown | ✅ DONE |
-| 15 | Phone with country code + flag | ✅ DONE |
-| 16 | Language multi-select | ✅ DONE |
-| A | Homepage CTA cards: 4x2 grid (8 cards, 2 rows of 4) | ✅ DONE |
-| B | Remove "Interest Registration" terminology → "Launch Interests" | ✅ DONE |
-| C | Owner in developer mode sees developer view only | ✅ DONE (was already correct) |
-| D | On-Leave self-service feature for developers | ✅ DONE (toggle + date pickers in profile) |
-| E | Secondary contact fields (Company/Personal Email+Phone) | ✅ DONE |
-| F | Icon styling: champagne-gold gradient | ✅ DONE (already correct) |
-
-### Files Changed (This Batch)
-| File | Changes |
-|------|---------|
-| `src/components/home/DeveloperPortalCTA.tsx` | 8 cards in 4x2 grid, renamed labels, added "Update Your Profile" card |
-| `src/pages/DeveloperPortal.tsx` | Renamed all "Interest Registration" → "Launch Interests" (8 occurrences) |
-| `src/components/developer-portal/SalesRepRegistration.tsx` | Renamed title to "Register as Developer or Sales" |
