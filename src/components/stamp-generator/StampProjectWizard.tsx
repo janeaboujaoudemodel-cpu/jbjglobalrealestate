@@ -215,17 +215,59 @@ export default function StampProjectWizard() {
   const handleRedo = useCallback(() => { const next = history.redo(); if (next) setForm(next); }, [history]);
 
   const handleReset = useCallback(() => {
-    const initial: FormState = {
-      project_name: 'My Stamp Project', company_name: '', arabic_company_name: '', trade_name_optional: '',
-      registration_number_optional: '', address_optional: '', phone_optional: '', email_optional: '',
-      website_optional: '', city_optional: 'Dubai', country_optional: 'UAE', arabic_city: '',
-      language_mode: 'BILINGUAL', stamp_type: 'ROUND', style_theme: 'CLASSIC', border_style: 'DOUBLE',
-      typography_style: 'SERIF', density: 3, icon_style: 'MONOGRAM', monogram_text: '', uploaded_logo_url: '',
-      language_reversed: true, show_license_number: false, show_location: true, business_type: '',
-      separator_style: 'dot', ink_color: OFFICIAL_INK_BLUE,
-    };
-    setForm(initial); history.reset(initial); toast.success('Form reset to defaults');
+    setForm(defaultForm); history.reset(defaultForm); toast.success('Form reset to defaults');
   }, [history]);
+
+  const handlePresetSelect = useCallback((config: PresetConfig, presetNameStr: string) => {
+    setForm(f => {
+      const next = {
+        ...f,
+        style_theme: config.style_theme as StyleTheme,
+        border_style: config.border_style as BorderStyle,
+        typography_style: config.typography_style as TypographyStyle,
+        density: config.density,
+        stamp_type: config.stamp_type as StampType,
+        separator_style: config.separator_style as SeparatorStyle,
+        icon_style: config.icon_style as IconStyle,
+        language_mode: config.language_mode as LanguageMode,
+        show_license_number: config.show_license_number,
+        show_location: config.show_location,
+        government_mode: config.government_mode || false,
+        selected_preset: presetNameStr,
+        ...(config.arabic_font ? { arabic_font: config.arabic_font } : {}),
+        ...(config.arc_text_spacing ? { arc_text_spacing: config.arc_text_spacing } : {}),
+        ...(config.circle_gap ? { circle_gap: config.circle_gap } : {}),
+        ...(config.center_content_size ? { center_content_size: config.center_content_size } : {}),
+      };
+      history.push(next);
+      return next;
+    });
+    toast.success(`Applied "${presetNameStr}" preset`);
+  }, [history]);
+
+  const handleSaveCustomPreset = useCallback(() => {
+    if (!presetName.trim()) { toast.error('Enter a name'); return; }
+    const config: PresetConfig = {
+      style_theme: form.style_theme,
+      border_style: form.border_style,
+      typography_style: form.typography_style,
+      density: form.density,
+      stamp_type: form.stamp_type,
+      separator_style: form.separator_style,
+      icon_style: form.icon_style,
+      language_mode: form.language_mode,
+      show_license_number: form.show_license_number,
+      show_location: form.show_location,
+      government_mode: form.government_mode,
+      arabic_font: form.arabic_font,
+      arc_text_spacing: form.arc_text_spacing,
+      circle_gap: form.circle_gap,
+      center_content_size: form.center_content_size,
+    };
+    saveCustomPreset(presetName.trim(), config);
+    setPresetName('');
+    setSavePresetOpen(false);
+  }, [form, presetName]);
 
   const handleSaveDraft = useCallback(() => {
     try {
