@@ -23,7 +23,7 @@ import {
   CheckCircle, X, Plus, FolderOpen, ExternalLink, AlertCircle,
   ClipboardList, Send, Eye, Info, UserCheck, Briefcase, MessageSquare,
   FileSignature, ListTodo, Crown, SkipForward, Star, Users,
-  Rocket, Search, EyeOff, Settings,
+  Rocket, Search, EyeOff, Settings, MapPin, Lock, ShieldCheck, ShieldOff, ToggleLeft, ToggleRight,
 } from "lucide-react";
 import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistration";
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
@@ -34,6 +34,10 @@ import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, A
 import { validateFiles } from "@/utils/developerFileValidation";
 import { sanitizeSubmissionData, detectProtectedFieldAttempts } from "@/config/developerFieldProtection";
 import { useDeveloperActivityLog } from "@/hooks/useDeveloperActivityLog";
+import { NationalitySelect } from "@/components/developer-portal/NationalitySelect";
+import { PhoneInputWithCountry } from "@/components/ui/phone-input-with-country";
+import { LanguageMultiSelect } from "@/components/ui/language-multi-select";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface UploadedFile {
   name: string;
@@ -136,11 +140,12 @@ const DeveloperPortal = () => {
     }
   }, [repProfile, isOwner, ownerSkipMode]);
 
-  // Profile editing
+  // Profile editing - enhanced with all fields
   const [editingProfile, setEditingProfile] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
   const [editForm, setEditForm] = useState({
     full_name: '', position: '', email: '', phone: '', developer_name: '', nationality: '',
+    personal_email: '', personal_phone: '', company_phone: '', languages: [] as string[],
   });
 
   const handleStartEditProfile = () => {
@@ -152,6 +157,10 @@ const DeveloperPortal = () => {
         phone: (repProfile as any).phone || '',
         developer_name: repProfile.developer_name || '',
         nationality: (repProfile as any).nationality || '',
+        personal_email: (repProfile as any).personal_email || '',
+        personal_phone: (repProfile as any).personal_phone || '',
+        company_phone: (repProfile as any).company_phone || '',
+        languages: (repProfile as any).languages || [],
       });
       setEditingProfile(true);
     }
@@ -171,7 +180,10 @@ const DeveloperPortal = () => {
       if (editForm.phone !== ((repProfile as any).phone || '')) changedFields.push('phone');
       if (editForm.position !== ((repProfile as any).position || '')) changedFields.push('position');
       if (editForm.nationality !== ((repProfile as any).nationality || '')) changedFields.push('nationality');
-      // developer_name is LOCKED — never update it
+      if (editForm.personal_email !== ((repProfile as any).personal_email || '')) changedFields.push('personal_email');
+      if (editForm.personal_phone !== ((repProfile as any).personal_phone || '')) changedFields.push('personal_phone');
+      if (editForm.company_phone !== ((repProfile as any).company_phone || '')) changedFields.push('company_phone');
+      if (JSON.stringify(editForm.languages) !== JSON.stringify((repProfile as any).languages || [])) changedFields.push('languages');
 
       const { error } = await supabase
         .from('developer_representatives')
@@ -180,8 +192,11 @@ const DeveloperPortal = () => {
           position: editForm.position || null,
           email: editForm.email,
           phone: editForm.phone || null,
-          // developer_name is LOCKED after registration — not updatable
           nationality: editForm.nationality || null,
+          personal_email: editForm.personal_email || null,
+          personal_phone: editForm.personal_phone || null,
+          company_phone: editForm.company_phone || null,
+          languages: editForm.languages.length > 0 ? editForm.languages : null,
         } as any)
         .eq('id', repProfile.id);
       if (error) throw error;
@@ -239,6 +254,8 @@ const DeveloperPortal = () => {
   // Owner manage tab
   const [manageSearch, setManageSearch] = useState("");
   const [manageDateFilter, setManageDateFilter] = useState("");
+  const [interestExpanded, setInterestExpanded] = useState(false);
+  const [devMgmtExpanded, setDevMgmtExpanded] = useState(false);
 
   // Fetch developer's submitted projects
   const { data: myProjects, isLoading: loadingProjects } = useQuery({
@@ -359,6 +376,19 @@ const DeveloperPortal = () => {
     enabled: isOwner,
   });
 
+  // Owner: fetch ALL developer representatives for management
+  const { data: allReps, refetch: refetchAllReps } = useQuery({
+    queryKey: ["all-dev-reps"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('developer_representatives')
+        .select('*')
+        .order('created_at', { ascending: false });
+      return data || [];
+    },
+    enabled: isOwner,
+  });
+
   // Generic file upload handler with validation
   const handleGenericFileUpload = async (
     files: FileList | null,
@@ -374,7 +404,6 @@ const DeveloperPortal = () => {
       Array.from(files), sessionFileNames, sessionUploadedBytes
     );
 
-    // Log and toast rejected files
     for (const { file, result } of rejected) {
       toast.error(`${file.name}: ${result.rejectionReason}`);
       logFileValidation(file.name, file.type, file.size, false, result.rejectionReason, result.sanitizedName);
@@ -469,8 +498,6 @@ const DeveloperPortal = () => {
       toast.error("Please upload at least one file");
       return;
     }
-
-    // Enforce duplicate blocking
     if (duplicateBlocking) {
       toast.error("A project with this name already exists. Please use the 'Update Existing' flow instead.");
       logActivity({
@@ -484,10 +511,8 @@ const DeveloperPortal = () => {
       });
       return;
     }
-
     setSubmittingProject(true);
     try {
-      // Sanitize submission data to strip protected fields
       const submissionData = sanitizeSubmissionData({
         developer_name: effectiveDevName,
         developer_email: effectiveDevEmail,
@@ -497,11 +522,8 @@ const DeveloperPortal = () => {
         launch_date: currentProject.launch_date || null,
         uploaded_files: currentProject.files,
       });
-
       const { error } = await supabase.from("developer_launch_uploads").insert(submissionData as any);
       if (error) throw error;
-
-      // Log activity
       logActivity({
         activityType: 'upload',
         entityType: 'project',
@@ -510,7 +532,6 @@ const DeveloperPortal = () => {
         developerName: effectiveDevName,
         developerEmail: effectiveDevEmail,
       });
-
       try {
         await supabase.from("admin_tasks").insert({
           user_id: OWNER_ID,
@@ -521,7 +542,6 @@ const DeveloperPortal = () => {
           status: 'pending',
         } as any);
       } catch {}
-
       setSessionProjects(prev => [...prev, currentProject.project_name]);
       toast.success(`"${currentProject.project_name}" submitted successfully!`);
       setCurrentProject(emptyProject());
@@ -563,8 +583,6 @@ const DeveloperPortal = () => {
         event_files: eventFiles.length > 0 ? eventFiles : [],
       });
       if (error) throw error;
-
-      // Auto-create owner task for event attendance
       try {
         await supabase.from("admin_tasks").insert({
           user_id: OWNER_ID,
@@ -576,7 +594,6 @@ const DeveloperPortal = () => {
           due_date: eventForm.event_date ? new Date(eventForm.event_date).toISOString() : null,
         } as any);
       } catch {}
-
       logActivity({
         activityType: 'upload',
         entityType: 'event',
@@ -618,8 +635,6 @@ const DeveloperPortal = () => {
         event_files: launchFiles.length > 0 ? launchFiles : [],
       });
       if (error) throw error;
-
-      // Auto-create owner task for launch preparation
       try {
         await supabase.from("admin_tasks").insert({
           user_id: OWNER_ID,
@@ -631,7 +646,6 @@ const DeveloperPortal = () => {
           due_date: launchForm.launch_date ? new Date(launchForm.launch_date).toISOString() : null,
         } as any);
       } catch {}
-
       logActivity({
         activityType: 'upload',
         entityType: 'launch',
@@ -678,6 +692,33 @@ const DeveloperPortal = () => {
     } catch { toast.error('Failed to assign'); }
   };
 
+  // Owner: toggle auto-approve for a rep
+  const handleToggleAutoApprove = async (repId: string, currentValue: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('developer_representatives')
+        .update({ auto_approve_uploads: !currentValue } as any)
+        .eq('id', repId);
+      if (error) throw error;
+      toast.success(!currentValue ? 'Auto-approve enabled' : 'Reverted to manual approval');
+      refetchAllReps();
+    } catch { toast.error('Failed to update'); }
+  };
+
+  // Owner: restrict/unrestrict a rep
+  const handleToggleRestrict = async (repId: string, currentStatus: string) => {
+    const newStatus = currentStatus === 'restricted' ? 'approved' : 'restricted';
+    try {
+      const { error } = await supabase
+        .from('developer_representatives')
+        .update({ status: newStatus } as any)
+        .eq('id', repId);
+      if (error) throw error;
+      toast.success(newStatus === 'restricted' ? 'Access restricted' : 'Access restored');
+      refetchAllReps();
+    } catch { toast.error('Failed to update'); }
+  };
+
   const handleRegisterInterest = async () => {
     if (!user || !selectedEvent) return;
     setSubmittingInterest(true);
@@ -696,7 +737,6 @@ const DeveloperPortal = () => {
           notes: interestNotes || null,
         });
       if (error) throw error;
-
       try {
         await supabase.from("admin_tasks").insert({
           user_id: OWNER_ID,
@@ -707,7 +747,6 @@ const DeveloperPortal = () => {
           status: 'pending',
         } as any);
       } catch {}
-
       toast.success(`Interest registered for "${selectedEvent.event_title}"!`);
       setInterestModalOpen(false);
       setInterestType("general");
@@ -729,6 +768,7 @@ const DeveloperPortal = () => {
       under_review: "bg-amber-500/20 text-amber-700",
       approved: "bg-emerald-500/20 text-emerald-700",
       rejected: "bg-red-500/20 text-red-700",
+      restricted: "bg-red-500/20 text-red-700",
     };
     return <Badge className={config[status] || "bg-muted text-muted-foreground"}>{status?.replace(/_/g, " ") || "Pending"}</Badge>;
   };
@@ -773,7 +813,6 @@ const DeveloperPortal = () => {
       const q = manageSearch.toLowerCase();
       const matchTitle = s.event_title?.toLowerCase().includes(q);
       const matchDev = s.developer_name?.toLowerCase().includes(q);
-      // Match day of week
       let matchDay = false;
       if (s.event_date) {
         const dayName = format(new Date(s.event_date), 'EEEE').toLowerCase();
@@ -787,6 +826,9 @@ const DeveloperPortal = () => {
     }
     return true;
   });
+
+  // REGISTRATION GATE: Owner in Developer View (ownerSkipMode=false) should see the same gate as a developer
+  const shouldShowRegistrationGate = !hasRepProfile && (!isOwner || isDeveloperMode || (isOwner && !ownerSkipMode)) && !loadingRep;
 
   // File upload drop zone component
   const FileUploadZone = ({
@@ -858,15 +900,13 @@ const DeveloperPortal = () => {
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjE1LDE1MCwwLjA1KSIvPjwvc3ZnPg==')] opacity-50" />
           <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
             <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 text-sm">
-              {isOwner && !isDeveloperMode ? 'Owner Access' : isDeveloperMode ? 'Developer Portal' : 'For Real Estate Developers & Sales Teams'}
+              Developer Portal
             </Badge>
             <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#F5EBD7]">
-              {isOwner && !isDeveloperMode ? `Welcome back, Jane` : `Developer Portal`}
+              Developer Portal
             </h1>
             <p className="text-lg md:text-xl text-[#D4B896]">
-              {isOwner && !isDeveloperMode
-                ? 'Quick upload, manage launches, and review submissions.'
-                : 'Submit projects, request briefings, upload documents, and manage launches — all in one place.'}
+              Submit projects, request briefings, upload documents, and manage launches — all in one place.
             </p>
           </div>
         </div>
@@ -920,8 +960,8 @@ const DeveloperPortal = () => {
           </div>
         )}
 
-        {/* Registration Gate — unregistered users (including owner in developer mode) see ONLY the registration form */}
-        {!hasRepProfile && (!isOwner || isDeveloperMode) && !loadingRep ? (
+        {/* Registration Gate — unregistered users AND owner in Developer View see ONLY the registration form */}
+        {shouldShowRegistrationGate ? (
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             {/* Developer name selection before registration */}
             <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
@@ -946,7 +986,7 @@ const DeveloperPortal = () => {
             <SalesRepRegistration developerName={devName} onRegistered={() => { refetchRep(); }} />
           </div>
         ) : (
-          /* Registered users / Owner — show full portal */
+          /* Registered users / Owner in Quick Upload — show full portal */
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             {hasRepProfile && !isOwner ? (
               /* Profile summary bar */
@@ -986,68 +1026,48 @@ const DeveloperPortal = () => {
                   </div>
                 </CardContent>
               </Card>
-            ) : (
-              <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
-                <CardContent className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <Label className="text-xs text-muted-foreground">Developer / Company Name *</Label>
-                      <Input value={devName} onChange={(e) => setDevName(e.target.value)} placeholder="e.g. Emaar Properties" />
-                    </div>
-                    <div className="space-y-1">
-                      <Label className="text-xs text-muted-foreground">Email Address *</Label>
-                      <Input type="email" value={devEmail} onChange={(e) => setDevEmail(e.target.value)} placeholder="contact@developer.com" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+            ) : null}
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <div className="w-full overflow-x-auto pb-1">
-              <TabsList className="inline-flex w-auto bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border-2 border-gold/30 rounded-xl h-14 gap-0.5 px-1.5 py-1.5">
-                <TabsTrigger value="projects" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+              <TabsList className="inline-flex w-auto bg-gradient-to-r from-[hsl(40,40%,90%)] via-[hsl(38,35%,85%)] to-[hsl(36,30%,80%)] border-2 border-gold/30 rounded-xl h-14 gap-0.5 px-1.5 py-1.5">
+                <TabsTrigger value="projects" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
                   <FolderOpen className="w-3.5 h-3.5 mr-1 hidden md:block" /> Projects
                 </TabsTrigger>
-                <TabsTrigger value="submit" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                <TabsTrigger value="submit" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
                   <Plus className="w-3.5 h-3.5 mr-1 hidden md:block" /> New Project
                 </TabsTrigger>
-                <TabsTrigger value="events" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                <TabsTrigger value="events" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
                   <Calendar className="w-3.5 h-3.5 mr-1 hidden md:block" /> Events
                 </TabsTrigger>
-                <TabsTrigger value="launches" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                <TabsTrigger value="launches" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
                   <Rocket className="w-3.5 h-3.5 mr-1 hidden md:block" /> Launches
                 </TabsTrigger>
-                <TabsTrigger value="register" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                  <UserCheck className="w-3.5 h-3.5 mr-1 hidden md:block" /> Register
+                <TabsTrigger value="register" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                  <UserCheck className="w-3.5 h-3.5 mr-1 hidden md:block" /> Profile
                 </TabsTrigger>
-                <TabsTrigger value="agreements" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                <TabsTrigger value="agreements" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
                   <FileSignature className="w-3.5 h-3.5 mr-1 hidden md:block" /> Agreements
                 </TabsTrigger>
-                <TabsTrigger value="tasks" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                <TabsTrigger value="tasks" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
                   <ListTodo className="w-3.5 h-3.5 mr-1 hidden md:block" /> Tasks
                 </TabsTrigger>
                 {showRepTabs && (
                   <>
-                    <TabsTrigger value="briefing" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                    <TabsTrigger value="briefing" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
                       <Briefcase className="w-3.5 h-3.5 mr-1 hidden md:block" /> Briefing
                     </TabsTrigger>
-                    <TabsTrigger value="messages" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                    <TabsTrigger value="messages" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
                       <MessageSquare className="w-3.5 h-3.5 mr-1 hidden md:block" /> Messages
                     </TabsTrigger>
                   </>
                 )}
-                {isOwner && (
-                  <>
-                    <TabsTrigger value="interest" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                      <Users className="w-3.5 h-3.5 mr-1 hidden md:block" /> Interest
-                    </TabsTrigger>
-                    <TabsTrigger value="manage" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
-                      <Settings className="w-3.5 h-3.5 mr-1 hidden md:block" /> Manage
-                    </TabsTrigger>
-                  </>
+                {isOwner && ownerSkipMode && (
+                  <TabsTrigger value="manage" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
+                    <Settings className="w-3.5 h-3.5 mr-1 hidden md:block" /> Manage
+                  </TabsTrigger>
                 )}
-                <TabsTrigger value="listings" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-white data-[state=active]:shadow-md rounded-lg">
+                <TabsTrigger value="listings" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
                   <Eye className="w-3.5 h-3.5 mr-1 hidden md:block" /> Listings
                 </TabsTrigger>
               </TabsList>
@@ -1096,7 +1116,6 @@ const DeveloperPortal = () => {
 
             {/* SUBMIT NEW PROJECT TAB */}
             <TabsContent value="submit" className="mt-6 space-y-6">
-              {/* Existing published projects for this developer */}
               {devName && <ExistingProjectsReview developerName={devName} />}
               
               {sessionProjects.length > 0 && (
@@ -1117,7 +1136,6 @@ const DeveloperPortal = () => {
                   </p>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {/* Approval banner */}
                   <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 flex items-center gap-2 text-sm text-blue-800">
                     <Info className="w-4 h-4 flex-shrink-0" />
                     All submissions require admin approval before going live.
@@ -1172,15 +1190,20 @@ const DeveloperPortal = () => {
                         e.preventDefault();
                         setMainDragOver(false);
                         if (e.dataTransfer.files.length > 0) {
-                          handleFileUpload({ target: { files: e.dataTransfer.files } } as React.ChangeEvent<HTMLInputElement>);
+                          const syntheticEvent = { target: { files: e.dataTransfer.files } } as React.ChangeEvent<HTMLInputElement>;
+                          handleFileUpload(syntheticEvent);
                         }
                       }}
                     >
                       <Upload className="w-10 h-10 mx-auto text-gold/60 mb-3" />
-                      <p className="text-sm font-medium text-foreground">{mainDragOver ? 'Drop files here' : 'Click to upload or drag & drop'}</p>
-                      <p className="text-xs text-muted-foreground mt-1">PDFs, images, brochures, renders, videos (up to 100MB each)</p>
+                      <p className="text-sm font-medium text-foreground">
+                        {mainDragOver ? 'Drop files here' : 'Click to upload or drag & drop files'}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Photos, renders, brochures, fact sheets, floor plans — any format
+                      </p>
                       <input ref={fileInputRef} type="file" className="hidden" multiple
-                        accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.mp4,.mov,.avi,.heic,.mp3,.wav"
+                        accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.pptx,.mp4,.mov,.avi,.heic"
                         onChange={handleFileUpload} />
                     </div>
                     {uploadingFiles && (
@@ -1254,7 +1277,6 @@ const DeveloperPortal = () => {
                       <Textarea value={eventForm.event_description} onChange={(e) => setEventForm(p => ({ ...p, event_description: e.target.value }))} placeholder="Event details, dress code, RSVP info..." rows={4} />
                     </div>
 
-                    {/* File upload for events */}
                     <FileUploadZone
                       files={eventFiles}
                       setFiles={setEventFiles}
@@ -1272,9 +1294,8 @@ const DeveloperPortal = () => {
               </Card>
             </TabsContent>
 
-            {/* LAUNCHES TAB — New Project Launch Announcements */}
+            {/* LAUNCHES TAB */}
             <TabsContent value="launches" className="mt-6 space-y-6">
-              {/* Submit Launch Form */}
               <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
@@ -1303,7 +1324,6 @@ const DeveloperPortal = () => {
                       <Textarea value={launchForm.launch_description} onChange={(e) => setLaunchForm(p => ({ ...p, launch_description: e.target.value }))} placeholder="Unit types, price range, key selling points, commission structure..." rows={4} />
                     </div>
 
-                    {/* File upload for launches */}
                     <FileUploadZone
                       files={launchFiles}
                       setFiles={setLaunchFiles}
@@ -1320,7 +1340,7 @@ const DeveloperPortal = () => {
                 </CardContent>
               </Card>
 
-              {/* Upcoming Launches & Events — Register Interest */}
+              {/* Upcoming Launches & Events */}
               <Card className="border-2 border-gold/30">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-foreground">
@@ -1351,7 +1371,9 @@ const DeveloperPortal = () => {
                                   </p>
                                 )}
                                 {event.event_location && (
-                                  <p className="text-xs text-muted-foreground">📍 {event.event_location}</p>
+                                  <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                    <MapPin className="w-3 h-3" /> {event.event_location}
+                                  </p>
                                 )}
                                 {event.event_description && (
                                   <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{event.event_description}</p>
@@ -1415,11 +1437,11 @@ const DeveloperPortal = () => {
               )}
             </TabsContent>
 
-            {/* REGISTER TAB */}
+            {/* REGISTER / PROFILE TAB */}
             <TabsContent value="register" className="mt-6">
               {loadingRep ? (
                 <div className="py-8 text-center"><Loader2 className="w-6 h-6 animate-spin mx-auto text-gold" /></div>
-              ) : hasRepProfile && !(isOwner && !ownerSkipMode) ? (
+              ) : hasRepProfile ? (
                 <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
@@ -1444,17 +1466,57 @@ const DeveloperPortal = () => {
                             <Input type="email" value={editForm.email} onChange={(e) => setEditForm(f => ({ ...f, email: e.target.value }))} />
                           </div>
                           <div className="space-y-2">
-                            <Label>Phone</Label>
-                            <Input type="tel" value={editForm.phone} onChange={(e) => setEditForm(f => ({ ...f, phone: e.target.value }))} />
+                            <Label>Company Phone</Label>
+                            <PhoneInputWithCountry
+                              value={editForm.phone}
+                              onChange={(v) => setEditForm(f => ({ ...f, phone: v }))}
+                              placeholder="50 123 4567"
+                            />
                           </div>
                           <div className="space-y-2">
-                            <Label>Developer / Company</Label>
-                            <Input value={editForm.developer_name} onChange={(e) => setEditForm(f => ({ ...f, developer_name: e.target.value }))} />
+                            <Label className="flex items-center gap-1.5">
+                              Developer / Company
+                              <Lock className="w-3 h-3 text-muted-foreground" />
+                            </Label>
+                            <Input value={editForm.developer_name} disabled className="bg-muted/50 cursor-not-allowed" />
+                            <p className="text-[10px] text-muted-foreground">Locked after registration. Contact support to change.</p>
                           </div>
                           <div className="space-y-2">
                             <Label>Nationality</Label>
-                            <Input value={editForm.nationality} onChange={(e) => setEditForm(f => ({ ...f, nationality: e.target.value }))} />
+                            <NationalitySelect
+                              value={editForm.nationality}
+                              onChange={(v) => setEditForm(f => ({ ...f, nationality: v }))}
+                            />
                           </div>
+                        </div>
+                        {/* Personal contact fields */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label className="flex items-center gap-1.5">
+                              Personal Email <Lock className="w-3 h-3 text-muted-foreground" />
+                            </Label>
+                            <Input type="email" value={editForm.personal_email} onChange={(e) => setEditForm(f => ({ ...f, personal_email: e.target.value }))} placeholder="john.personal@gmail.com" />
+                            <p className="text-[10px] text-muted-foreground">Restricted. Backup contact only.</p>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="flex items-center gap-1.5">
+                              Personal Phone <Lock className="w-3 h-3 text-muted-foreground" />
+                            </Label>
+                            <PhoneInputWithCountry
+                              value={editForm.personal_phone}
+                              onChange={(v) => setEditForm(f => ({ ...f, personal_phone: v }))}
+                              placeholder="55 987 6543"
+                            />
+                            <p className="text-[10px] text-muted-foreground">Restricted. Backup contact only.</p>
+                          </div>
+                        </div>
+                        {/* Languages */}
+                        <div className="space-y-2">
+                          <Label>Languages Spoken</Label>
+                          <LanguageMultiSelect
+                            value={editForm.languages}
+                            onChange={(v) => setEditForm(f => ({ ...f, languages: v }))}
+                          />
                         </div>
                         <div className="flex gap-3">
                           <Button onClick={handleSaveProfile} disabled={savingProfile}
@@ -1485,18 +1547,16 @@ const DeveloperPortal = () => {
                           </div>
                           <div>
                             <p className="text-xs text-muted-foreground">Phone</p>
-                            <p className="font-semibold text-foreground">{repProfile?.phone || '—'}</p>
+                            <p className="font-semibold text-foreground">{(repProfile as any)?.phone || '—'}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-muted-foreground">Status</p>
-                            {statusBadge(repProfile?.status || 'pending_review')}
+                            <p className="text-xs text-muted-foreground">Nationality</p>
+                            <p className="font-semibold text-foreground">{(repProfile as any)?.nationality || '—'}</p>
                           </div>
-                          {repProfile?.position && (
-                            <div>
-                              <p className="text-xs text-muted-foreground">Position</p>
-                              <p className="font-semibold text-foreground">{repProfile.position}</p>
-                            </div>
-                          )}
+                          <div>
+                            <p className="text-xs text-muted-foreground">Languages</p>
+                            <p className="font-semibold text-foreground">{(repProfile as any)?.languages?.join(', ') || '—'}</p>
+                          </div>
                           <div>
                             <p className="text-xs text-muted-foreground">Auto-Approve Uploads</p>
                             <Badge className={repProfile?.auto_approve_uploads ? 'bg-emerald-500/20 text-emerald-700' : 'bg-muted text-muted-foreground'}>
@@ -1576,64 +1636,6 @@ const DeveloperPortal = () => {
                         )}
                       </div>
                     )}
-                  </CardContent>
-                </Card>
-              ) : isDeveloperMode || (isOwner && !ownerSkipMode) ? (
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-foreground">
-                      <Building2 className="w-5 h-5 text-gold" />
-                      Welcome, {displayName}
-                    </CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      Here's how to get the most out of the Developer Portal.
-                    </p>
-                  </CardHeader>
-                  <CardContent className="space-y-5">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
-                        <div className="flex items-center gap-2 mb-2">
-                          <FolderOpen className="w-5 h-5 text-gold" />
-                          <h4 className="font-bold text-foreground text-sm">Submit Projects</h4>
-                        </div>
-                        <p className="text-xs text-muted-foreground">Upload brochures, renders, and fact sheets. Our system auto-generates listings.</p>
-                      </div>
-                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Calendar className="w-5 h-5 text-gold" />
-                          <h4 className="font-bold text-foreground text-sm">Event Invitations</h4>
-                        </div>
-                        <p className="text-xs text-muted-foreground">Invite our brokers to launches, open days, and exclusive previews.</p>
-                      </div>
-                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Briefcase className="w-5 h-5 text-gold" />
-                          <h4 className="font-bold text-foreground text-sm">Request Briefings</h4>
-                        </div>
-                        <p className="text-xs text-muted-foreground">Once registered, schedule project briefings with our broker team.</p>
-                      </div>
-                      <div className="bg-white/60 rounded-xl p-4 border border-gold/20">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Eye className="w-5 h-5 text-gold" />
-                          <h4 className="font-bold text-foreground text-sm">Track Listings</h4>
-                        </div>
-                        <p className="text-xs text-muted-foreground">Monitor your approved projects on our platform and report corrections.</p>
-                      </div>
-                    </div>
-
-                    <div className="bg-gold/10 border-2 border-gold/30 rounded-xl p-4">
-                      <p className="text-sm font-semibold text-foreground mb-1">📋 Register Your Sales Team</p>
-                      <p className="text-xs text-muted-foreground mb-3">
-                        To unlock briefing requests and direct messaging, register yourself or your sales representatives below.
-                      </p>
-                      <SalesRepRegistration
-                        developerName={devName || 'Your Company'}
-                        onRegistered={() => {
-                          refetchRep();
-                          toast.info('Your registration is now under review.');
-                        }}
-                      />
-                    </div>
                   </CardContent>
                 </Card>
               ) : (
@@ -1780,57 +1782,10 @@ const DeveloperPortal = () => {
               </Card>
             </TabsContent>
 
-            {/* OWNER: ALL INTEREST REGISTRATIONS */}
-            {isOwner && (
-              <TabsContent value="interest" className="mt-6">
-                <Card className="border-2 border-gold/30">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-foreground">
-                      <Users className="w-5 h-5 text-gold" /> All Interest Registrations
-                    </CardTitle>
-                    <p className="text-sm text-muted-foreground">Everyone who expressed interest in upcoming launches.</p>
-                  </CardHeader>
-                  <CardContent>
-                    {allInterests && allInterests.length > 0 ? (
-                      <ScrollArea className="h-[500px]">
-                        <div className="space-y-3">
-                          {allInterests.map((i: any) => (
-                            <div key={i.id} className="p-4 rounded-xl border border-gold/20 bg-card">
-                              <div className="flex items-start justify-between gap-3">
-                                <div>
-                                  <h4 className="font-semibold text-foreground text-sm">{i.event_title}</h4>
-                                  <p className="text-xs text-gold">{i.developer_name}</p>
-                                  <p className="text-xs text-muted-foreground mt-1">
-                                    {i.user_name} · {i.user_email}
-                                    {i.user_phone && ` · ${i.user_phone}`}
-                                  </p>
-                                  {i.notes && <p className="text-xs text-muted-foreground mt-1 italic">"{i.notes}"</p>}
-                                  <p className="text-[10px] text-muted-foreground mt-1">{format(new Date(i.created_at), "MMM d, yyyy 'at' h:mm a")}</p>
-                                </div>
-                                <Badge className={
-                                  i.interest_type === 'eoi' ? 'bg-emerald-500/20 text-emerald-700' :
-                                  i.interest_type === 'private_tour' ? 'bg-blue-500/20 text-blue-700' :
-                                  'bg-gold/20 text-gold'
-                                }>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </ScrollArea>
-                    ) : (
-                      <div className="py-12 text-center text-muted-foreground">
-                        <Users className="w-10 h-10 mx-auto mb-3 opacity-40" />
-                        <p>No interest registrations yet</p>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            )}
-
-            {/* OWNER: MANAGE LAUNCHES & EVENTS */}
-            {isOwner && (
-              <TabsContent value="manage" className="mt-6">
+            {/* OWNER: MANAGE — Launches, Events, Developer Reps, Interest Registrations */}
+            {isOwner && ownerSkipMode && (
+              <TabsContent value="manage" className="mt-6 space-y-6">
+                {/* Launches & Events Management */}
                 <Card className="border-2 border-gold/30">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
@@ -1839,7 +1794,6 @@ const DeveloperPortal = () => {
                     <p className="text-sm text-muted-foreground">Search, filter, hide/show, and assign brokers to submissions.</p>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {/* Search & Filter */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div className="relative">
                         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -1864,9 +1818,8 @@ const DeveloperPortal = () => {
                       </Button>
                     )}
 
-                    {/* Submissions list */}
                     {filteredSubmissions.length > 0 ? (
-                      <ScrollArea className="h-[500px]">
+                      <ScrollArea className="h-[400px]">
                         <div className="space-y-3">
                           {filteredSubmissions.map((s: any) => (
                             <div key={s.id} className={`p-4 rounded-xl border bg-card ${s.is_hidden ? 'opacity-50 border-muted' : 'border-gold/20'}`}>
@@ -1885,7 +1838,11 @@ const DeveloperPortal = () => {
                                       {format(new Date(s.event_date), "EEEE, MMM d, yyyy 'at' h:mm a")}
                                     </p>
                                   )}
-                                  {s.event_location && <p className="text-xs text-muted-foreground">📍 {s.event_location}</p>}
+                                  {s.event_location && (
+                                    <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                      <MapPin className="w-3 h-3" /> {s.event_location}
+                                    </p>
+                                  )}
                                   {s.event_description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{s.event_description}</p>}
                                   {s.event_files && (s.event_files as any[]).length > 0 && (
                                     <div className="flex flex-wrap gap-1 mt-2">
@@ -1925,6 +1882,133 @@ const DeveloperPortal = () => {
                     )}
                   </CardContent>
                 </Card>
+
+                {/* Developer Representative Management */}
+                <Card className="border-2 border-gold/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-foreground">
+                      <Users className="w-5 h-5 text-gold" /> Manage Registered Developers
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground">Toggle auto-approve, restrict access, or review developer representatives.</p>
+                  </CardHeader>
+                  <CardContent>
+                    {allReps && allReps.length > 0 ? (
+                      <ScrollArea className="h-[400px]">
+                        <div className="space-y-3">
+                          {allReps.map((rep: any) => (
+                            <div key={rep.id} className="p-4 rounded-xl border border-gold/20 bg-card">
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-semibold text-foreground text-sm">{rep.full_name}</h4>
+                                  <p className="text-xs text-gold font-medium">{rep.developer_name}</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {rep.email} · {rep.role?.replace(/_/g, ' ')}
+                                  </p>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    {statusBadge(rep.status || 'pending_review')}
+                                    {rep.auto_approve_uploads && (
+                                      <Badge className="bg-emerald-500/20 text-emerald-700 text-[10px]">Auto-Approve</Badge>
+                                    )}
+                                    {rep.is_on_leave && (
+                                      <Badge className="bg-amber-500/20 text-amber-700 text-[10px]">On Leave</Badge>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="flex flex-col gap-2 shrink-0">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="border-gold/30 text-xs"
+                                    onClick={() => handleToggleAutoApprove(rep.id, !!rep.auto_approve_uploads)}
+                                  >
+                                    {rep.auto_approve_uploads
+                                      ? <><ToggleRight className="w-3.5 h-3.5 mr-1 text-emerald-600" /> Auto-Approve On</>
+                                      : <><ToggleLeft className="w-3.5 h-3.5 mr-1" /> Auto-Approve Off</>
+                                    }
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className={rep.status === 'restricted'
+                                      ? "border-emerald-300 text-emerald-700 text-xs"
+                                      : "border-red-300 text-red-700 text-xs"
+                                    }
+                                    onClick={() => handleToggleRestrict(rep.id, rep.status)}
+                                  >
+                                    {rep.status === 'restricted'
+                                      ? <><ShieldCheck className="w-3.5 h-3.5 mr-1" /> Restore Access</>
+                                      : <><ShieldOff className="w-3.5 h-3.5 mr-1" /> Restrict Access</>
+                                    }
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </ScrollArea>
+                    ) : (
+                      <div className="py-8 text-center text-muted-foreground">
+                        <Users className="w-10 h-10 mx-auto mb-3 opacity-40" />
+                        <p>No registered developer representatives yet</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Interest Registrations — collapsible */}
+                <Collapsible open={interestExpanded} onOpenChange={setInterestExpanded}>
+                  <Card className="border-2 border-gold/30">
+                    <CollapsibleTrigger asChild>
+                      <CardHeader className="cursor-pointer hover:bg-gold/5 transition-colors rounded-t-xl">
+                        <CardTitle className="flex items-center justify-between text-foreground">
+                          <span className="flex items-center gap-2">
+                            <Star className="w-5 h-5 text-gold" /> Launch Interest Registrations
+                            {allInterests && allInterests.length > 0 && (
+                              <Badge className="bg-gold/20 text-gold ml-2">{allInterests.length}</Badge>
+                            )}
+                          </span>
+                          <span className="text-xs text-muted-foreground">{interestExpanded ? 'Collapse' : 'Expand'}</span>
+                        </CardTitle>
+                      </CardHeader>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <CardContent>
+                        {allInterests && allInterests.length > 0 ? (
+                          <ScrollArea className="h-[300px]">
+                            <div className="space-y-3">
+                              {allInterests.map((i: any) => (
+                                <div key={i.id} className="p-4 rounded-xl border border-gold/20 bg-card">
+                                  <div className="flex items-start justify-between gap-3">
+                                    <div>
+                                      <h4 className="font-semibold text-foreground text-sm">{i.event_title}</h4>
+                                      <p className="text-xs text-gold">{i.developer_name}</p>
+                                      <p className="text-xs text-muted-foreground mt-1">
+                                        {i.user_name} · {i.user_email}
+                                        {i.user_phone && ` · ${i.user_phone}`}
+                                      </p>
+                                      {i.notes && <p className="text-xs text-muted-foreground mt-1 italic">"{i.notes}"</p>}
+                                      <p className="text-[10px] text-muted-foreground mt-1">{format(new Date(i.created_at), "MMM d, yyyy 'at' h:mm a")}</p>
+                                    </div>
+                                    <Badge className={
+                                      i.interest_type === 'eoi' ? 'bg-emerald-500/20 text-emerald-700' :
+                                      i.interest_type === 'private_tour' ? 'bg-blue-500/20 text-blue-700' :
+                                      'bg-gold/20 text-gold'
+                                    }>{i.interest_type === 'eoi' ? 'EOI' : i.interest_type === 'private_tour' ? 'Private Tour' : 'General'}</Badge>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </ScrollArea>
+                        ) : (
+                          <div className="py-8 text-center text-muted-foreground">
+                            <Star className="w-10 h-10 mx-auto mb-3 opacity-40" />
+                            <p>No interest registrations yet</p>
+                          </div>
+                        )}
+                      </CardContent>
+                    </CollapsibleContent>
+                  </Card>
+                </Collapsible>
               </TabsContent>
             )}
 

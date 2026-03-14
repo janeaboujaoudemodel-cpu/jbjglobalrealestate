@@ -17,7 +17,7 @@ import { NationalitySelect } from '@/components/developer-portal/NationalitySele
 // LOCKED: Full company name — never abbreviate
 const COMPANY_FULL_NAME = 'JBJ GLOBAL REAL ESTATE';
 
-const IMPORTANT_NOTICE_TEXT = `All information you upload must be accurate and verifiable. Uploading misleading, false, or fraudulent information will result in a permanent ban from the platform. ${COMPANY_FULL_NAME} reserves the right to verify your identity with your employer at any time.`;
+const IMPORTANT_NOTICE_TEXT = `All information you upload must be accurate and verifiable. Uploading misleading, false, or fraudulent information will result in a permanent ban from the platform. ${COMPANY_FULL_NAME} reserves the right to verify with the employer about his identity or about the project's information details.`;
 
 const USAGE_RIGHTS_TEXT = `By registering on the ${COMPANY_FULL_NAME} Developer Portal, you gain access to:
 
