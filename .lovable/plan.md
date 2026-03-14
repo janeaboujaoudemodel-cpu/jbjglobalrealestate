@@ -1,107 +1,85 @@
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+## Session 7 — Download System / Export Formats / Print-Ready Output
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+### Current State
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+The `StampExportPage.tsx` (953 lines) already has a comprehensive export system:
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+**Already implemented:**
+- Formats: SVG, PNG, JPG, WEBP, PDF ✅
+- Sizes: 512, 1024, 2048px ✅
+- DPI options: 72, 150, 300, 600 ✅
+- Transparent background toggle ✅
+- Multi-color ZIP pack (up to 5 colors) ✅
+- 5 standard export colors with instant download ✅
+- Three-color system (primary/secondary/accent) ✅
+- Letterhead & business card preview contexts ✅
+- Bilingual variant export ✅
+- PDF via pdf-lib ✅
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+**Missing (to implement):**
+1. **4096px size option** — not in the size toggles
+2. **Custom resolution input** — no free-form px input
+3. **Black background preview** and **paper texture preview** — only white/transparent exist
+4. **Emboss/rubber stamp export** — no monochrome vector-outline mode
+5. **Print-ready with margins** — current PDF is borderless, no bleed/margin
+6. **Export preview panel** — no preview of the selected format/resolution/background before download
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+### Implementation Plan
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+#### 1. Add missing size options + custom resolution
+Add `4096` to the size toggle chips. Add a custom resolution input field below the sizes row that accepts any value 128–8192px.
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+#### 2. Background mode selector (4 options)
+Replace the single transparent checkbox with a radio group:
+- **White** — white fill behind stamp
+- **Transparent** — alpha channel (PNG/WEBP only)
+- **Black** — black fill (for dark-theme previews)
+- **Paper** — subtle paper texture overlay (cream/off-white with noise)
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+The main preview updates to show the selected background. JPG always forces white (noted in UI).
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+#### 3. Emboss / Rubber Stamp export mode
+Add a new section: **"Manufacturer Export"** with two sub-modes:
+- **Rubber Stamp** — converts to solid black (#000), removes all color, keeps fills solid. Exports as SVG + high-res PNG.
+- **Emboss** — converts to single-color vector outlines only (stroke, no fill). Exports as SVG optimized for CNC/laser.
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+Implementation: A `convertToEmboss(svg)` function that:
+1. Replaces all `fill="..."` with `fill="none"` 
+2. Adds/replaces `stroke="#000000"` and preserves stroke-width
+3. Removes any gradient/filter elements
 
-### Files Changed
+A `convertToRubberStamp(svg)` function that:
+1. Replaces all colored fills with `#000000`
+2. Replaces all strokes with `#000000`
+3. Strips filters/gradients
+
+Both produce clean SVG files downloadable individually or included in the bundle ZIP under a `manufacturer/` folder.
+
+#### 4. Print-ready PDF with margins
+Enhance `svgToPdf()`:
+- Add 12mm margin around the stamp on the PDF page
+- Embed a crop-mark guide at corners
+- Set PDF metadata (title, author, creation date)
+- Label: "Print-Ready PDF (300 DPI, margins included)"
+
+#### 5. Export preview panel
+Add a preview card above the download buttons that shows:
+- The stamp rendered at the **first selected size** with the **selected background mode**
+- Labels showing: format list, resolution, background, color
+- Updates live as options change
+
+This replaces the current static "Live Preview" with a context-aware export preview.
+
+#### 6. Bundle ZIP enhancements
+When emboss/rubber modes are enabled, include `manufacturer/emboss/` and `manufacturer/rubber_stamp/` folders in the ZIP with SVG + PNG files.
+
+### Files to Modify
+
 | File | Action |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| `src/components/stamp-generator/StampExportPage.tsx` | Add 4096px, custom resolution, background modes, emboss/rubber export, print-ready PDF margins, export preview panel |
 
-## Multi-Portal System + Developer Portal — Audit & Fixes (March 2026)
+No new files needed — all changes are within the existing export page. No database or edge function changes required.
 
-### ✅ ALL TASKS COMPLETED
-
-| # | Task | Status |
-|---|------|--------|
-| 1 | Fix "Register as Rep" label → "Register as Developer or Sales" | ✅ DONE |
-| 2 | Rename Developer Portal tab → "Update Profile" | ✅ DONE |
-| 3 | Investor Portal rebuild (7 tabs, premium styling) | ✅ DONE |
-| 4 | Broker Portal enhancement (tabbed structure) | ✅ DONE |
-| 5 | ApprovalTimeline shared component | ✅ DONE |
-| 6 | Event Management Hub | ✅ DONE |
-| 7 | useEventManagement hook | ✅ DONE |
-| 8 | events + event_invitations tables | ✅ DONE |
-| 9 | Role options include "Other" with custom field | ✅ DONE |
-| 10 | Owner/CEO/Founder requires ID + passport + trade license + RERA | ✅ DONE |
-| 11 | Registration gate blocks portal access until registered | ✅ DONE |
-| 12 | Owner auto-approve toggle for developers | ✅ DONE |
-| 13 | Owner restrict access for developers | ✅ DONE |
-| 14 | Nationality with flags dropdown | ✅ DONE |
-| 15 | Phone with country code + flag | ✅ DONE |
-| 16 | Language multi-select | ✅ DONE |
-| A | Homepage CTA cards: 4x2 grid (8 cards, 2 rows of 4) | ✅ DONE |
-| B | Remove "Interest Registration" terminology → "Launch Interests" | ✅ DONE |
-| C | Owner in developer mode sees developer view only | ✅ DONE (was already correct) |
-| D | On-Leave self-service feature for developers | ✅ DONE (toggle + date pickers in profile) |
-| E | Secondary contact fields (Company/Personal Email+Phone) | ✅ DONE |
-| F | Icon styling: champagne-gold gradient | ✅ DONE (already correct) |
-
-### Files Changed (This Batch)
-| File | Changes |
-|------|---------|
-| `src/components/home/DeveloperPortalCTA.tsx` | 8 cards in 4x2 grid, renamed labels, added "Update Your Profile" card |
-| `src/pages/DeveloperPortal.tsx` | Renamed all "Interest Registration" → "Launch Interests" (8 occurrences) |
-| `src/components/developer-portal/SalesRepRegistration.tsx` | Renamed title to "Register as Developer or Sales" |
