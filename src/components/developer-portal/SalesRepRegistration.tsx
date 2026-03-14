@@ -332,7 +332,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
               />
               <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             </div>
-            <p className="text-[10px] text-muted-foreground">This is locked to the developer you selected. Contact support to change it after registration.</p>
+            <p className="text-[10px] text-muted-foreground">This is locked to the developer you selected. You can change it later from your profile — changes require re-approval.</p>
           </div>
 
           {/* Your Role / Position */}
