@@ -103,5 +103,6 @@ export const OwnerRoutes = () => (
     <Route path="mode-hub" element={<ModeHub />} />
     <Route path="notes" element={<FoundersNotesPanel />} />
     <Route path="brand-assets" element={<BrandAssetsDashboard />} />
+    <Route path="crm-security" element={<CRMSecurityDashboard />} />
   </Route>
 );

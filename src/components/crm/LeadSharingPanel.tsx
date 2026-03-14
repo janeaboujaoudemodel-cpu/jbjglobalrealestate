@@ -77,16 +77,16 @@ export default function LeadSharingPanel({ leadId, isOwner }: LeadSharingPanelPr
     if (!selectedUser || !user) return;
     setLoading(true);
 
-    const { error } = await supabase.from("crm_lead_shares").insert({
+    const { error } = await supabase.from("crm_lead_shares").insert([{
       lead_id: leadId,
       shared_by: user.id,
       shared_with: selectedUser,
       permission_level: "view",
       expires_at: getExpiryDate(expiry),
-    });
+    }]);
 
     if (!error) {
-      await supabase.from("crm_security_events").insert({
+      await supabase.from("crm_security_events").insert([{
         user_id: user.id,
         event_type: "lead_share",
         details: { lead_id: leadId, shared_with: selectedUser, expiry },
