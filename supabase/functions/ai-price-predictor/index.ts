@@ -294,7 +294,7 @@ IMPORTANT:
       functionName: "ai-price-predictor",
       userId,
       clientIp,
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-3-flash-preview",
       success: true,
       responseTimeMs: processingTimeMs,
     });
