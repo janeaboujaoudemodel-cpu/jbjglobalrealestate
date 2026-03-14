@@ -632,6 +632,14 @@ const DeveloperPortal = () => {
         } as any);
       } catch {}
 
+      logActivity({
+        activityType: 'upload',
+        entityType: 'launch',
+        entityName: launchForm.launch_title,
+        details: { fileCount: launchFiles.length },
+        developerName: effectiveDevName,
+        developerEmail: effectiveDevEmail,
+      });
       toast.success("Launch announcement submitted!");
       setLaunchForm({ launch_title: "", launch_date: "", launch_location: "", launch_description: "" });
       setLaunchFiles([]);
