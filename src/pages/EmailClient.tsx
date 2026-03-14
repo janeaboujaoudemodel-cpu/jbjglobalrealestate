@@ -767,9 +767,27 @@ const EmailClient = () => {
             <Checkbox checked={selectedIds.size > 0 && selectedIds.size === paginatedEmails.length} onCheckedChange={toggleSelectAll} className="border-[#C9A84C]/30" />
             {selectedIds.size > 0 && (
               <>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={markSelectedRead}><MailOpen className="w-3.5 h-3.5 text-black/60" /></Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToArchive(Array.from(selectedIds))}><Archive className="w-3.5 h-3.5 text-black/60" /></Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToTrash(Array.from(selectedIds))}><Trash2 className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={markSelectedRead} title="Mark read"><MailOpen className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToArchive(Array.from(selectedIds))} title="Archive"><Archive className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToTrash(Array.from(selectedIds))} title="Trash"><Trash2 className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" title="Star selected" onClick={() => {
+                  setEmails(emails.map(e => selectedIds.has(e.id) ? { ...e, starred: true } : e));
+                  toast.success(`${selectedIds.size} email(s) starred`);
+                }}><Star className="w-3.5 h-3.5 text-[#C9A84C]" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" title="AI Analyze selected" onClick={async () => {
+                  const toAnalyze = emails.filter(e => selectedIds.has(e.id) && !analysisCacheRef.current.has(e.id)).slice(0, 5);
+                  if (toAnalyze.length === 0) { toast.info("Already analyzed"); return; }
+                  toast.info(`Analyzing ${toAnalyze.length}...`);
+                  for (const email of toAnalyze) {
+                    try {
+                      const { data, error } = await supabase.functions.invoke("ai-email-assistant", {
+                        body: { action: "summarize", emailId: email.id, subject: email.subject, body: email.body },
+                      });
+                      if (!error && data) handleAnalysisComplete(email.id, { needs_reply: data.needs_reply, priority: data.priority, action_items: data.action_items });
+                    } catch { /* skip */ }
+                  }
+                  toast.success("Analysis complete");
+                }}><Sparkles className="w-3.5 h-3.5 text-[#C9A84C]" /></Button>
                 <span className="text-[10px] text-black/40">{selectedIds.size} selected</span>
               </>
             )}
