@@ -2,6 +2,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCallback } from "react";
 import type { Database } from "@/integrations/supabase/types";
+import { logGlobalAudit } from "@/hooks/useGlobalAudit";
 
 type AuditActionType = Database['public']['Enums']['audit_action_type'] extends never 
   ? 'create' | 'read' | 'update' | 'delete' | 'login' | 'logout' | 'export' | 'import' | 'approve' | 'reject' | 'block' | 'unblock'
@@ -55,6 +56,17 @@ export function useAuditLog() {
         console.error("Failed to log audit action:", error);
         return { success: false, error: error.message };
       }
+
+      // Dual-write to global audit (fire-and-forget, trigger also does this but ensures frontend-originated events are captured)
+      logGlobalAudit({
+        action: actionType,
+        entityType: resourceType,
+        entityId: resourceId,
+        module: resourceType,
+        description,
+        metadata: details as Record<string, unknown>,
+        criticality: ["delete", "block", "unblock"].includes(actionType) ? "high" : "medium",
+      }).catch(() => {});
 
       return { success: true };
     } catch (err) {

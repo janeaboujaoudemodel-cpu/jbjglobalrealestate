@@ -51,6 +51,7 @@ const BrandAssetsDashboard = lazy(() => import("@/pages/owner/BrandAssetsDashboa
 const CRMSecurityDashboard = lazy(() => import("@/pages/owner/CRMSecurityDashboard"));
 const AIToolAnalyticsDashboard = lazy(() => import("@/pages/owner/AIToolAnalyticsDashboard"));
 const EncryptionAuditDashboard = lazy(() => import("@/pages/owner/EncryptionAuditDashboard"));
+const GlobalAuditDashboard = lazy(() => import("@/pages/owner/GlobalAuditDashboard"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -108,5 +109,6 @@ export const OwnerRoutes = () => (
     <Route path="crm-security" element={<CRMSecurityDashboard />} />
     <Route path="ai-tools-analytics" element={<AIToolAnalyticsDashboard />} />
     <Route path="encryption-audit" element={<EncryptionAuditDashboard />} />
+    <Route path="global-audit" element={<GlobalAuditDashboard />} />
   </Route>
 );
