@@ -81,6 +81,8 @@ interface CVCenterProps {
 }
 
 const CVCenter = ({ userId }: CVCenterProps) => {
+  const { sendSecondaryEmail } = useCrossChannelSend();
+  const [alsoNotifyChat, setAlsoNotifyChat] = useState(false);
   const [cvEntries, setCvEntries] = useState<CVEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeStatusTab, setActiveStatusTab] = useState('all');
