@@ -236,7 +236,7 @@ const Footer = () => {
     { label: "Property Map", href: "/map" },
     { label: "Property Evaluator", href: "/property-evaluator" },
     { label: "Rental Index", href: "/rental-index" },
-    { label: "Property Measurement", href: "/calculator/measurement" },
+    { label: "Property Measurement", href: "/property-measurement" },
   ];
 
   // Sell
