@@ -782,17 +782,14 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const logoUrl  = hasLogo ? (project as any).uploaded_logo_url : null;
     const logoSize = 64;  // diameter of center artwork
 
-    // ── Top arc: English company name curves OVER the top ──
-    // SVG arc from left (cx-arcR, cy) → counterclockwise over top → right (cx+arcR, cy)
-    // large-arc=1, sweep=1 → upper semicircle, text reads left to right on top
+    // ── Top arc: Arabic company name curves OVER the top (STRICT: Arabic always on top) ──
     const topArcId   = 't12top';
     const topArcPath = `M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}`;
 
-    // ── Bottom arc: Arabic company name curves UNDER the bottom ──
-    // Start from right (cx+arcR, cy) → clockwise under bottom → left (cx-arcR, cy)
-    // large-arc=0, sweep=0 → lower semicircle, text reads right-to-left naturally
+    // ── Bottom arc: English company name curves UNDER the bottom ──
+    // Left→Right through bottom semicircle — text reads naturally, no reversal
     const botArcId   = 't12bot';
-    const botArcPath = `M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}`;
+    const botArcPath = `M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx + arcR} ${cy}`;
 
     // Center artwork: logo image or filled monogram disc
     const centerArt = logoUrl
@@ -834,14 +831,18 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
         fill="${SECONDARY}" letter-spacing="2">${regNo}</text>` : ''}
     `;
 
+    // Safe arc font sizes
+    const t12ArParams = safeArcParams(displayArabic, arcR, 11, true);
+    const t12EnParams = safeArcParams(name, arcR, 10, false);
+
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <clipPath id="t12clip">
           <circle cx="${cx}" cy="${cy}" r="${logoSize / 2}"/>
         </clipPath>
-        <!-- English top arc path -->
+        <!-- Arabic top arc path -->
         <path id="${topArcId}" d="${topArcPath}"/>
-        <!-- Arabic bottom arc path -->
+        <!-- English bottom arc path -->
         <path id="${botArcId}" d="${botArcPath}"/>
       </defs>
 
@@ -858,14 +859,14 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
         return `<polygon points="${ox},${oy - 3.5} ${ox + 3},${oy} ${ox},${oy + 3.5} ${ox - 3},${oy}" fill="${ACCENT}"/>`;
       }).join('\n      ')}
 
-      <!-- ── English: curved OVER the TOP ── -->
-      <text font-family="${font}" font-size="${enFontSize}" fill="${PRIMARY}" letter-spacing="2" font-weight="700">
-        <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${name}</textPath>
+      <!-- ── Arabic: curved OVER the TOP (STRICT: Arabic always on top) ── -->
+      <text font-family="${arabicFont}" font-size="${t12ArParams.fontSize}" fill="${PRIMARY}" letter-spacing="${t12ArParams.letterSpacing}" font-weight="600">
+        <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
       </text>
 
-      <!-- ── Arabic: curved UNDER the BOTTOM (path goes right→left so RTL text reads naturally) ── -->
-      <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${PRIMARY}" letter-spacing="1.5" font-weight="600">
-        <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
+      <!-- ── English: curved UNDER the BOTTOM (left-to-right readable) ── -->
+      <text font-family="${font}" font-size="${t12EnParams.fontSize}" fill="${PRIMARY}" letter-spacing="${t12EnParams.letterSpacing}" font-weight="700" dominant-baseline="hanging">
+        <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${name}</textPath>
       </text>
 
       <!-- ── Thin horizontal rules flanking artwork ── -->
