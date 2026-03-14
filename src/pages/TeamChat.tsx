@@ -576,6 +576,14 @@ const TeamChat = () => {
               <Send className="w-4 h-4" />
             </Button>
           </div>
+          {/* Pending attachment chips */}
+          {pendingAttachments.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-1.5 px-1">
+              {pendingAttachments.map(att => (
+                <AttachmentChip key={att.id} attachment={att} onRemove={() => setPendingAttachments(prev => prev.filter(a => a.id !== att.id))} />
+              ))}
+            </div>
+          )}
           <div className="flex items-center justify-between mt-1.5 px-1">
             <p className="text-[10px] text-black/25">Press Enter to send · Secured by JBJ Global</p>
             {/* Since chat is internal, all recipients are registered users → offer email notify */}
