@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from "react";
+import { useState, useCallback, lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,33 +22,76 @@ import {
   RefreshCw, Mail, Building2, User, Sparkles, CheckCheck,
   MailOpen, ChevronLeft, ChevronRight, Shield, UserCircle,
   Headphones, Phone, Megaphone, Stamp, Signature, Zap, MessageSquare,
-  Calendar, Settings
+  Calendar, Settings, BarChart3
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import EmailSettingsPanel from "@/components/email/EmailSettingsPanel";
+import EmailAssistantPanel from "@/components/email/EmailAssistantPanel";
+import EmailProductivityPanel from "@/components/email/EmailProductivityPanel";
 
-// ─── Sender Identities ───
+// ─── Sender Identities — mapped to real JBJ team personas ───
 interface SenderIdentity {
   id: string;
   label: string;
   name: string;
   email: string;
   title: string;
+  signature: string;
   icon: React.ReactNode;
   account: "company" | "personal";
 }
 
 const SENDER_IDENTITIES: SenderIdentity[] = [
-  { id: "owner", label: "Owner — Jane Bou Jaoude", name: "Jane Bou Jaoude", email: "ceo@jbj.ae", title: "Founder & CEO", icon: <Shield className="w-3 h-3" />, account: "company" },
-  { id: "amanda", label: "Amanda Clarke — Assistant", name: "Amanda Clarke", email: "amanda@jbj.ae", title: "Executive Assistant to CEO", icon: <Sparkles className="w-3 h-3" />, account: "company" },
-  { id: "hr", label: "HR Team", name: "HR Department", email: "hr@jbj.ae", title: "Human Resources", icon: <UserCircle className="w-3 h-3" />, account: "company" },
-  { id: "admin", label: "Admin", name: "Admin Team", email: "admin@jbj.ae", title: "Administration", icon: <Building2 className="w-3 h-3" />, account: "company" },
-  { id: "frontdesk", label: "Front Desk", name: "Front Desk", email: "frontdesk@jbj.ae", title: "Reception", icon: <Phone className="w-3 h-3" />, account: "company" },
-  { id: "helpdesk", label: "Help Desk", name: "Help Desk", email: "support@jbj.ae", title: "IT Support", icon: <Headphones className="w-3 h-3" />, account: "company" },
-  { id: "marketing", label: "Marketing Department", name: "Marketing Team", email: "marketing@jbj.ae", title: "Marketing & Communications", icon: <Megaphone className="w-3 h-3" />, account: "company" },
-  { id: "personal", label: "Personal Email", name: "Jane Bou Jaoude", email: "jane@personal.com", title: "Personal", icon: <User className="w-3 h-3" />, account: "personal" },
+  {
+    id: "owner", label: "Owner — Jane Bou Jaoude", name: "Jane Bou Jaoude",
+    email: "ceo@jbj.ae", title: "Founder & CEO",
+    signature: "Jane Bou Jaoude\nFounder & CEO\nJBJ Global Real Estate\nceo@jbj.ae",
+    icon: <Shield className="w-3 h-3" />, account: "company",
+  },
+  {
+    id: "amanda", label: "Amanda Clarke — Executive Assistant", name: "Amanda Clarke",
+    email: "amanda@jbj.ae", title: "Executive Assistant to the Founder & CEO, Jane Bou Jaoude",
+    signature: "Amanda Clarke\nExecutive Assistant to the Founder & CEO, Jane Bou Jaoude\nJBJ Global Real Estate\namanda@jbj.ae",
+    icon: <Sparkles className="w-3 h-3" />, account: "company",
+  },
+  {
+    id: "hr", label: "Sarah Mitchell — HR", name: "Sarah Mitchell",
+    email: "hr@jbj.ae", title: "Listing & HR Admin",
+    signature: "Sarah Mitchell\nListing & HR Admin\nJBJ Global Real Estate\nhr@jbj.ae",
+    icon: <UserCircle className="w-3 h-3" />, account: "company",
+  },
+  {
+    id: "admin", label: "Michael Sterling — Admin", name: "Michael Sterling",
+    email: "admin@jbj.ae", title: "Administrative Director",
+    signature: "Michael Sterling\nAdministrative Director\nJBJ Global Real Estate\nadmin@jbj.ae",
+    icon: <Building2 className="w-3 h-3" />, account: "company",
+  },
+  {
+    id: "frontdesk", label: "Emily Chen — Front Desk", name: "Emily Chen",
+    email: "frontdesk@jbj.ae", title: "Front Desk Coordinator",
+    signature: "Emily Chen\nFront Desk Coordinator\nJBJ Global Real Estate\nfrontdesk@jbj.ae",
+    icon: <Phone className="w-3 h-3" />, account: "company",
+  },
+  {
+    id: "helpdesk", label: "Natalia Petrova — Customer Success", name: "Natalia Petrova",
+    email: "support@jbj.ae", title: "Customer Success Manager",
+    signature: "Natalia Petrova\nCustomer Success Manager\nJBJ Global Real Estate\nsupport@jbj.ae",
+    icon: <Headphones className="w-3 h-3" />, account: "company",
+  },
+  {
+    id: "marketing", label: "Victoria Sterling — Marketing", name: "Victoria Sterling",
+    email: "marketing@jbj.ae", title: "Marketing Director",
+    signature: "Victoria Sterling\nMarketing Director\nJBJ Global Real Estate\nmarketing@jbj.ae",
+    icon: <Megaphone className="w-3 h-3" />, account: "company",
+  },
+  {
+    id: "personal", label: "Personal Email", name: "Jane Bou Jaoude",
+    email: "jane@personal.com", title: "Personal",
+    signature: "Jane Bou Jaoude",
+    icon: <User className="w-3 h-3" />, account: "personal",
+  },
 ];
 
 interface Email {
@@ -102,7 +145,7 @@ const EmailClient = () => {
   const [activeAccount, setActiveAccount] = useState<"all" | "personal" | "company">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [composeOpen, setComposeOpen] = useState(false);
-  const [composeSender, setComposeSender] = useState("owner");
+  const [composeSender, setComposeSender] = useState("amanda");
   const [sendViaResend, setSendViaResend] = useState(true);
   const [newEmail, setNewEmail] = useState({ to: "", subject: "", body: "" });
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -110,6 +153,9 @@ const EmailClient = () => {
   const [approvePreviewOpen, setApprovePreviewOpen] = useState(false);
   const [alsoNotifyChat, setAlsoNotifyChat] = useState(false);
   const [showEmailSettings, setShowEmailSettings] = useState(false);
+  const [showProductivity, setShowProductivity] = useState(false);
+  const [isDraftingWithAI, setIsDraftingWithAI] = useState(false);
+  const [analysisCache] = useState<Map<string, { needs_reply: boolean; priority: string; action_items: string[] }>>(new Map());
   const emailsPerPage = 20;
 
   const folders = [
@@ -141,7 +187,7 @@ const EmailClient = () => {
 
   const markAsRead = (id: string) => setEmails(emails.map(e => e.id === id ? { ...e, read: true } : e));
   const toggleStar = (id: string) => setEmails(emails.map(e => e.id === id ? { ...e, starred: !e.starred } : e));
-  
+
   const moveToTrash = (ids: string[]) => {
     setEmails(emails.map(e => ids.includes(e.id) ? { ...e, folder: "trash" } : e));
     setSelectedEmail(null); setSelectedIds(new Set());
@@ -172,6 +218,48 @@ const EmailClient = () => {
 
   const currentSender = SENDER_IDENTITIES.find(s => s.id === composeSender) || SENDER_IDENTITIES[0];
 
+  // ─── Reply Flow ───
+  const openReply = useCallback((type: "reply" | "replyAll" | "forward", prefillBody?: string) => {
+    if (!selectedEmail) return;
+    const replySubject = type === "forward"
+      ? `Fwd: ${selectedEmail.subject}`
+      : selectedEmail.subject.startsWith("Re:") ? selectedEmail.subject : `Re: ${selectedEmail.subject}`;
+
+    const quotedBody = `\n\n--- Original Message ---\nFrom: ${selectedEmail.from} <${selectedEmail.fromEmail}>\nDate: ${new Date(selectedEmail.date).toLocaleString()}\nSubject: ${selectedEmail.subject}\n\n${selectedEmail.body}`;
+
+    setNewEmail({
+      to: type === "forward" ? "" : selectedEmail.fromEmail,
+      subject: replySubject,
+      body: prefillBody ? prefillBody + quotedBody : quotedBody,
+    });
+    setComposeOpen(true);
+  }, [selectedEmail]);
+
+  // ─── Draft with Amanda AI ───
+  const draftWithAmanda = useCallback(async () => {
+    if (!selectedEmail) return;
+    setIsDraftingWithAI(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("ai-email-assistant", {
+        body: {
+          action: "draft_reply",
+          subject: selectedEmail.subject,
+          body: selectedEmail.body,
+          senderName: currentSender.name,
+          senderTitle: currentSender.title,
+        },
+      });
+      if (error) throw error;
+      openReply("reply", data.draft);
+      toast.success("AI draft generated");
+    } catch (err: any) {
+      console.error("AI draft error:", err);
+      toast.error(err.message || "Failed to generate draft");
+    } finally {
+      setIsDraftingWithAI(false);
+    }
+  }, [selectedEmail, currentSender, openReply]);
+
   const [isSending, setIsSending] = useState(false);
 
   const sendEmail = async () => {
@@ -181,7 +269,6 @@ const EmailClient = () => {
     }
     setIsSending(true);
     try {
-      // Call backend edge function
       const { data, error } = await supabase.functions.invoke("send-owner-email", {
         body: {
           to: newEmail.to,
@@ -199,7 +286,6 @@ const EmailClient = () => {
 
       if (error) throw error;
 
-      // Add to local state for immediate UI feedback
       const email: Email = {
         id: Date.now().toString(),
         from: currentSender.name,
@@ -237,6 +323,9 @@ const EmailClient = () => {
 
   const unreadCount = emails.filter(e => e.folder === "inbox" && !e.read).length;
 
+  // Parse the signature into lines for the preview
+  const signatureLines = currentSender.signature.split("\n");
+
   return (
     <div className="h-[calc(100vh-11rem)] bg-background text-foreground flex rounded-xl border-2 border-[#C9A84C]/20 overflow-hidden shadow-sm">
       {/* Sidebar */}
@@ -258,21 +347,21 @@ const EmailClient = () => {
                 </DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
-                {/* Sender Identity Selector */}
+                {/* Send As — Sender Identity Selector */}
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-black/60 whitespace-nowrap w-12">From:</span>
+                  <span className="text-sm text-black/60 whitespace-nowrap w-16 font-medium">Send As:</span>
                   <Select value={composeSender} onValueChange={setComposeSender}>
                     <SelectTrigger className="flex-1 border-[#C9A84C]/30 bg-[#FDFBF7]">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-white border-[#C9A84C]/30">
-                      <div className="px-2 py-1.5 text-[10px] font-semibold text-black/40 uppercase tracking-wider">Company Email</div>
+                      <div className="px-2 py-1.5 text-[10px] font-semibold text-black/40 uppercase tracking-wider">Company Email (@jbj.ae)</div>
                       {SENDER_IDENTITIES.filter(s => s.account === 'company').map(s => (
                         <SelectItem key={s.id} value={s.id}>
                           <span className="flex items-center gap-2">
                             {s.icon}
-                            <span className="text-black">{s.label}</span>
-                            <span className="text-black/40 text-xs">({s.email})</span>
+                            <span className="text-black">{s.name}</span>
+                            <span className="text-black/40 text-xs">— {s.title}</span>
                           </span>
                         </SelectItem>
                       ))}
@@ -322,7 +411,7 @@ const EmailClient = () => {
                   <p className="text-[10px] text-black/40">{currentSender.title} · {currentSender.email}</p>
                 </div>
 
-                  <div className="flex justify-between">
+                <div className="flex justify-between">
                   <div className="flex gap-2">
                     <Button variant="ghost" size="sm" className="text-black/60 hover:bg-[#C9A84C]/10">
                       <Paperclip className="w-4 h-4 mr-1" /> Attach
@@ -330,8 +419,39 @@ const EmailClient = () => {
                     <Button variant="ghost" size="sm" className="text-[#C9A84C] hover:bg-[#C9A84C]/10">
                       <Stamp className="w-4 h-4 mr-1" /> Stamp
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-[#C9A84C] hover:bg-[#C9A84C]/10">
-                      <Sparkles className="w-4 h-4 mr-1" /> Draft with Amanda
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-[#C9A84C] hover:bg-[#C9A84C]/10"
+                      disabled={isDraftingWithAI}
+                      onClick={async () => {
+                        if (!newEmail.subject && !newEmail.body) {
+                          toast.error("Add a subject or some context first");
+                          return;
+                        }
+                        setIsDraftingWithAI(true);
+                        try {
+                          const { data, error } = await supabase.functions.invoke("ai-email-assistant", {
+                            body: {
+                              action: "draft_reply",
+                              subject: newEmail.subject,
+                              body: newEmail.body || "New email — please draft a professional message.",
+                              senderName: currentSender.name,
+                              senderTitle: currentSender.title,
+                            },
+                          });
+                          if (error) throw error;
+                          setNewEmail(prev => ({ ...prev, body: data.draft }));
+                          toast.success("AI draft ready");
+                        } catch (err: any) {
+                          toast.error(err.message || "AI draft failed");
+                        } finally {
+                          setIsDraftingWithAI(false);
+                        }
+                      }}
+                    >
+                      {isDraftingWithAI ? <RefreshCw className="w-4 h-4 mr-1 animate-spin" /> : <Sparkles className="w-4 h-4 mr-1" />}
+                      Draft with Amanda
                     </Button>
                   </div>
                   <div className="flex gap-2">
@@ -342,7 +462,7 @@ const EmailClient = () => {
                   </div>
                 </div>
 
-                {/* Also notify in chat toggle — show if recipient might be internal */}
+                {/* Also notify in chat toggle */}
                 <div className="flex items-center justify-between bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg px-3 py-2">
                   <div className="flex items-center gap-2">
                     <MessageSquare className="w-4 h-4 text-[#C9A84C]" />
@@ -355,7 +475,7 @@ const EmailClient = () => {
             </DialogContent>
           </Dialog>
 
-          {/* ── Approve & Send Confirmation Modal ── */}
+          {/* ── Approve & Send — Final Preview Modal ── */}
           <Dialog open={approvePreviewOpen} onOpenChange={setApprovePreviewOpen}>
             <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-3xl max-h-[85vh] overflow-y-auto">
               <DialogHeader>
@@ -365,13 +485,16 @@ const EmailClient = () => {
                 </DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
-                {/* Send Method Badge */}
-                <div className="flex items-center gap-3">
+                {/* Send Method + Sender Identity */}
+                <div className="flex items-center gap-3 flex-wrap">
                   <Badge className={cn(
                     "text-xs px-2 py-0.5",
                     sendViaResend ? "bg-emerald-100 text-emerald-700 border-emerald-300" : "bg-zinc-100 text-zinc-600 border-zinc-300"
                   )}>
                     {sendViaResend ? "⚡ Resend API" : "📤 Normal Send"}
+                  </Badge>
+                  <Badge className="bg-[#C9A84C]/15 text-[#C9A84C] border-[#C9A84C]/30 text-xs px-2 py-0.5">
+                    {currentSender.icon} Sending as {currentSender.name}
                   </Badge>
                   {alsoNotifyChat && (
                     <Badge className="bg-blue-100 text-blue-700 border-blue-300 text-xs px-2 py-0.5">
@@ -392,15 +515,18 @@ const EmailClient = () => {
                       {newEmail.body}
                     </div>
                   </div>
-                  {/* Signature Block */}
+                  {/* Dynamic Signature Block per Persona */}
                   <div className="px-6 py-4 bg-[#FDFBF7] border-t border-[#C9A84C]/15">
-                    <p className="text-sm text-black/70">Best regards,</p>
-                    <p className="text-sm font-semibold text-black mt-1">{currentSender.name}</p>
-                    <p className="text-xs text-black/50">{currentSender.title}</p>
-                    {currentSender.id !== "personal" && (
-                      <p className="text-xs text-black/50">JBJ Global Real Estate</p>
-                    )}
-                    <p className="text-xs text-[#C9A84C] mt-0.5">{currentSender.email}</p>
+                    <p className="text-sm text-black/70 mb-2">Best regards,</p>
+                    {signatureLines.map((line, i) => (
+                      <p key={i} className={cn(
+                        "text-sm",
+                        i === 0 ? "font-semibold text-black" : "text-black/50 text-xs",
+                        line.includes("@") && "text-[#C9A84C] mt-0.5"
+                      )}>
+                        {line}
+                      </p>
+                    ))}
                   </div>
                 </div>
 
@@ -482,8 +608,16 @@ const EmailClient = () => {
           ))}
         </div>
 
-        {/* Settings Button */}
-        <div className="p-2 border-t border-[#C9A84C]/15">
+        {/* Bottom Buttons */}
+        <div className="p-2 border-t border-[#C9A84C]/15 space-y-1">
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-sm text-black/60 hover:bg-[#C9A84C]/10 hover:text-black"
+            onClick={() => setShowProductivity(!showProductivity)}
+          >
+            <BarChart3 className="w-4 h-4 mr-2" />
+            Productivity
+          </Button>
           <Button
             variant="ghost"
             className="w-full justify-start text-sm text-black/60 hover:bg-[#C9A84C]/10 hover:text-black"
@@ -507,6 +641,20 @@ const EmailClient = () => {
           <EmailSettingsPanel />
         </DialogContent>
       </Dialog>
+
+      {/* Productivity Panel (collapsible) */}
+      {showProductivity && (
+        <div className="w-64 border-r border-[#C9A84C]/15 bg-[#FDFBF7] overflow-y-auto">
+          <EmailProductivityPanel
+            emails={emails}
+            analysisCache={analysisCache}
+            onSelectEmail={(id) => {
+              const email = emails.find(e => e.id === id);
+              if (email) { setSelectedEmail(email); markAsRead(email.id); }
+            }}
+          />
+        </div>
+      )}
 
       {/* Email List */}
       <div className="w-[340px] border-r border-[#C9A84C]/15 flex flex-col bg-[#FDFBF7]">
@@ -621,71 +769,45 @@ const EmailClient = () => {
               </div>
             </div>
 
-            {/* Email Body */}
+            {/* Email Body + AI Panel */}
             <ScrollArea className="flex-1 p-6">
               <div className="whitespace-pre-wrap text-black leading-relaxed max-w-3xl">
                 {selectedEmail.body}
               </div>
 
-              {/* Amanda AI Panel — Bilingual Summaries & Actions */}
-              <div className="mt-8 p-4 rounded-xl border-2 border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
-                <div className="flex items-center gap-2 mb-3">
-                  <Sparkles className="w-4 h-4 text-[#C9A84C]" />
-                  <span className="text-sm font-semibold text-black">Amanda Clarke — Executive Assistant</span>
-                  <Badge className="bg-[#C9A84C]/15 text-[#C9A84C] border-[#C9A84C]/30 text-[9px]">Auto</Badge>
-                </div>
-                
-                {/* Summary EN/AR */}
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3">
-                    <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1">Summary (EN)</p>
-                    <p className="text-xs text-black/70 leading-relaxed">Sender requesting a meeting to discuss partnership terms. Mentions Q2 schedule and availability on two dates. Requires confirmation.</p>
-                  </div>
-                  <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3" dir="rtl">
-                    <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1 text-right">ملخص (AR)</p>
-                    <p className="text-xs text-black/70 leading-relaxed text-right">المرسل يطلب اجتماعاً لمناقشة شروط الشراكة. يذكر جدول الربع الثاني وتوفره في تاريخين. يتطلب تأكيداً.</p>
-                  </div>
-                </div>
-
-                {/* Suggested Reply */}
-                <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3 mb-3">
-                  <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1">Suggested Reply</p>
-                  <p className="text-xs text-black/70 leading-relaxed">"Thank you for reaching out. I've reviewed the details and would be happy to schedule a meeting. Please confirm the preferred date so I can block the time."</p>
-                  <div className="flex gap-2 mt-2">
-                    <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/30 text-[#C9A84C]">
-                      <Reply className="w-3 h-3 mr-1" /> Use as Reply
-                    </Button>
-                    <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/30 text-black/60">
-                      Edit Draft
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Quick Actions */}
-                <div className="flex flex-wrap gap-2">
-                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
-                    <CheckCheck className="w-3 h-3 mr-1" /> Create Task
-                  </Button>
-                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
-                    <Calendar className="w-3 h-3 mr-1" /> Add to Calendar
-                  </Button>
-                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
-                    <Star className="w-3 h-3 mr-1" /> Set Reminder
-                  </Button>
-                  <Button variant="outline" size="sm" className="h-7 text-[10px] border-[#C9A84C]/20 text-black/60 hover:bg-[#C9A84C]/10">
-                    <Tag className="w-3 h-3 mr-1" /> Needs Reply
-                  </Button>
-                </div>
-              </div>
+              {/* AI Assistant Panel — replaces hardcoded panel */}
+              <EmailAssistantPanel
+                emailId={selectedEmail.id}
+                emailSubject={selectedEmail.subject}
+                emailBody={selectedEmail.body}
+                onUseAsReply={(text) => openReply("reply", text)}
+                onEditDraft={(text) => {
+                  setNewEmail({ to: selectedEmail.fromEmail, subject: `Re: ${selectedEmail.subject}`, body: text });
+                  setComposeOpen(true);
+                }}
+              />
             </ScrollArea>
 
-            {/* Actions */}
+            {/* Actions — Reply / Reply All / Forward / Draft with Amanda */}
             <div className="p-4 border-t border-[#C9A84C]/15 flex gap-2">
-              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10"><Reply className="w-4 h-4 mr-1.5" /> Reply</Button>
-              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10"><ReplyAll className="w-4 h-4 mr-1.5" /> Reply All</Button>
-              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10"><Forward className="w-4 h-4 mr-1.5" /> Forward</Button>
-              <Button variant="outline" size="sm" className="ml-auto border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C]/10">
-                <Sparkles className="w-4 h-4 mr-1.5" /> Draft with Amanda
+              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10" onClick={() => openReply("reply")}>
+                <Reply className="w-4 h-4 mr-1.5" /> Reply
+              </Button>
+              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10" onClick={() => openReply("replyAll")}>
+                <ReplyAll className="w-4 h-4 mr-1.5" /> Reply All
+              </Button>
+              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10" onClick={() => openReply("forward")}>
+                <Forward className="w-4 h-4 mr-1.5" /> Forward
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="ml-auto border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C]/10"
+                disabled={isDraftingWithAI}
+                onClick={draftWithAmanda}
+              >
+                {isDraftingWithAI ? <RefreshCw className="w-4 h-4 mr-1.5 animate-spin" /> : <Sparkles className="w-4 h-4 mr-1.5" />}
+                Draft with Amanda
               </Button>
             </div>
           </>
