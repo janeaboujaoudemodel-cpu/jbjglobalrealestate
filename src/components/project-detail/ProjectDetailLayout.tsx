@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import PremiumHorizontalScrollHint from "@/components/ui/PremiumHorizontalScrollHint";
+
 import { Link } from "react-router-dom";
 import {
   Download,
