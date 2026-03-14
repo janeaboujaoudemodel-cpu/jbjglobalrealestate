@@ -605,8 +605,10 @@ export default function StampGeneratorPage() {
   }
 
   const allConcepts = [...favoriteConcepts, ...concepts.filter(c => !favoriteConcepts.some(f => f.id === c.id))];
-  const selectedConcept = allConcepts.find(c => c.id === selectedId);
-  const selectedSvg = selectedConcept ? (svgOverrides[selectedConcept.id] || selectedConcept.svgSource) : null;
+  // Standard always drives the center preview
+  const activeStandard = standardConcept || allConcepts[0] || null;
+  const selectedConcept = activeStandard;
+  const selectedSvg = activeStandard ? (svgOverrides[activeStandard.id] || activeStandard.svgSource) : null;
 
   function handleSvgTextChange(conceptId: string, newSvg: string) {
     setSvgOverrides(prev => ({ ...prev, [conceptId]: newSvg }));
