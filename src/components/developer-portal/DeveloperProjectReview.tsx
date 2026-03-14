@@ -382,6 +382,12 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
                 </Button>
               </div>
 
+              {/* Read-only AI fields notice */}
+              <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50 border border-border text-xs text-muted-foreground">
+                <ShieldCheck className="h-4 w-4 flex-shrink-0 text-gold" />
+                <span>AI analysis results, project scoring, and document descriptions are managed by JBJ and cannot be edited here.</span>
+              </div>
+
               {/* Editable fields */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">

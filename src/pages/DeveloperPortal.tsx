@@ -1811,6 +1811,71 @@ const DeveloperPortal = () => {
         )}
       </div>
 
+      {/* End Session Summary Dialog */}
+      <AlertDialog open={endSessionOpen} onOpenChange={setEndSessionOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <ClipboardList className="w-5 h-5 text-gold" /> Session Summary
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-3 text-sm">
+                <div className="grid grid-cols-2 gap-2 p-3 rounded-lg bg-muted/50 border border-border">
+                  <div><span className="text-muted-foreground">Projects Submitted:</span> <strong className="text-foreground">{sessionProjects.length}</strong></div>
+                  <div><span className="text-muted-foreground">Session Started:</span> <strong className="text-foreground">{format(new Date(sessionStartTime), "h:mm a")}</strong></div>
+                </div>
+                {sessionProjects.length > 0 && (
+                  <div className="space-y-1">
+                    <p className="font-medium text-foreground">Uploaded Projects:</p>
+                    <ul className="list-disc list-inside text-muted-foreground">
+                      {sessionProjects.map((name, i) => <li key={i}>{name}</li>)}
+                    </ul>
+                  </div>
+                )}
+                <p className="text-muted-foreground">A confirmation will be sent to <strong className="text-foreground">{devEmail}</strong>.</p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Continue Working</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={endingSession}
+              onClick={async (e) => {
+                e.preventDefault();
+                setEndingSession(true);
+                try {
+                  if (user) {
+                    await (supabase as any).from("developer_session_logs").insert({
+                      user_id: user.id,
+                      developer_name: devName,
+                      developer_email: devEmail,
+                      session_start: sessionStartTime,
+                      session_end: new Date().toISOString(),
+                      projects_submitted: sessionProjects,
+                      files_uploaded_count: sessionProjects.length,
+                      summary: { projects: sessionProjects, ended_by: "user" },
+                    });
+                  }
+                  toast.success("Session ended. Confirmation will be sent.");
+                  setSessionProjects([]);
+                  setCurrentProject(emptyProject());
+                  setDuplicateBlocking(false);
+                  setEndSessionOpen(false);
+                  setActiveTab("projects");
+                } catch {
+                  toast.error("Failed to log session.");
+                } finally {
+                  setEndingSession(false);
+                }
+              }}
+              className="bg-gold text-black hover:bg-gold/90"
+            >
+              {endingSession ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Ending...</> : "Confirm End Session"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* Register Interest Modal */}
       <Dialog open={interestModalOpen} onOpenChange={setInterestModalOpen}>
         <DialogContent className="sm:max-w-md">
