@@ -6452,6 +6452,48 @@ export type Database = {
           },
         ]
       }
+      developer_activity_log: {
+        Row: {
+          activity_type: string
+          created_at: string
+          details: Json | null
+          developer_email: string | null
+          developer_name: string | null
+          entity_id: string | null
+          entity_name: string | null
+          entity_type: string | null
+          id: string
+          risk_flags: string[] | null
+          user_id: string
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string
+          details?: Json | null
+          developer_email?: string | null
+          developer_name?: string | null
+          entity_id?: string | null
+          entity_name?: string | null
+          entity_type?: string | null
+          id?: string
+          risk_flags?: string[] | null
+          user_id: string
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string
+          details?: Json | null
+          developer_email?: string | null
+          developer_name?: string | null
+          entity_id?: string | null
+          entity_name?: string | null
+          entity_type?: string | null
+          id?: string
+          risk_flags?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       developer_ai_cache: {
         Row: {
           analysis_text: string
@@ -6470,6 +6512,45 @@ export type Database = {
           developer_slug?: string
           generated_at?: string
           id?: string
+        }
+        Relationships: []
+      }
+      developer_file_validations: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_size_bytes: number | null
+          file_type: string | null
+          id: string
+          is_valid: boolean
+          rejection_reason: string | null
+          sanitized_name: string | null
+          upload_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_size_bytes?: number | null
+          file_type?: string | null
+          id?: string
+          is_valid?: boolean
+          rejection_reason?: string | null
+          sanitized_name?: string | null
+          upload_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_size_bytes?: number | null
+          file_type?: string | null
+          id?: string
+          is_valid?: boolean
+          rejection_reason?: string | null
+          sanitized_name?: string | null
+          upload_id?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

@@ -31,6 +31,9 @@ import DeveloperMessageForm from "@/components/developer-portal/DeveloperMessage
 import ExistingProjectsReview from "@/components/developer-portal/ExistingProjectsReview";
 import { ProjectDuplicateInspector } from "@/components/listing-admin/ProjectDuplicateInspector";
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
+import { validateFiles } from "@/utils/developerFileValidation";
+import { sanitizeSubmissionData, detectProtectedFieldAttempts } from "@/config/developerFieldProtection";
+import { useDeveloperActivityLog } from "@/hooks/useDeveloperActivityLog";
 
 interface UploadedFile {
   name: string;
@@ -57,6 +60,9 @@ const DeveloperPortal = () => {
   const { user, isOwner } = useAuth();
   const { isDeveloperMode } = useUserModeContext();
   const queryClient = useQueryClient();
+  const { logActivity, logFileValidation } = useDeveloperActivityLog();
+  const [sessionUploadedBytes, setSessionUploadedBytes] = useState(0);
+  const [sessionFileNames, setSessionFileNames] = useState<string[]>([]);
   const initialTab = searchParams.get("tab") || "projects";
   const [activeTab, setActiveTab] = useState(initialTab);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -353,7 +359,7 @@ const DeveloperPortal = () => {
     enabled: isOwner,
   });
 
-  // Generic file upload handler
+  // Generic file upload handler with validation
   const handleGenericFileUpload = async (
     files: FileList | null,
     prefix: string,
@@ -363,14 +369,37 @@ const DeveloperPortal = () => {
   ) => {
     if (!files || files.length === 0) return;
     setUploading(true);
+
+    const { valid, rejected } = validateFiles(
+      Array.from(files), sessionFileNames, sessionUploadedBytes
+    );
+
+    // Log and toast rejected files
+    for (const { file, result } of rejected) {
+      toast.error(`${file.name}: ${result.rejectionReason}`);
+      logFileValidation(file.name, file.type, file.size, false, result.rejectionReason, result.sanitizedName);
+      logActivity({
+        activityType: 'file_rejected',
+        entityType: 'file',
+        entityName: file.name,
+        details: { reason: result.rejectionReason, size: file.size },
+        riskFlags: result.riskFlags,
+        developerName: devName,
+        developerEmail: devEmail,
+      });
+    }
+
     const uploaded: UploadedFile[] = [];
-    for (const file of Array.from(files)) {
+    for (const { file, result } of valid) {
       try {
-        const path = `developer-events/${prefix}/${Date.now()}-${file.name}`;
+        const path = `developer-events/${prefix}/${Date.now()}-${result.sanitizedName}`;
         const { error } = await supabase.storage.from("documents").upload(path, file);
         if (error) { toast.error(`Failed to upload ${file.name}`); continue; }
         const { data: urlData } = supabase.storage.from("documents").getPublicUrl(path);
-        uploaded.push({ name: file.name, url: urlData.publicUrl, type: file.type });
+        uploaded.push({ name: result.sanitizedName, url: urlData.publicUrl, type: file.type });
+        logFileValidation(file.name, file.type, file.size, true, null, result.sanitizedName);
+        setSessionUploadedBytes(prev => prev + file.size);
+        setSessionFileNames(prev => [...prev, result.sanitizedName]);
       } catch { toast.error(`Error uploading file`); }
     }
     setFiles(prev => [...prev, ...uploaded]);
@@ -382,15 +411,37 @@ const DeveloperPortal = () => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
     setUploadingFiles(true);
+
+    const { valid, rejected } = validateFiles(
+      Array.from(files), sessionFileNames, sessionUploadedBytes
+    );
+
+    for (const { file, result } of rejected) {
+      toast.error(`${file.name}: ${result.rejectionReason}`);
+      logFileValidation(file.name, file.type, file.size, false, result.rejectionReason, result.sanitizedName);
+      logActivity({
+        activityType: 'file_rejected',
+        entityType: 'file',
+        entityName: file.name,
+        details: { reason: result.rejectionReason, size: file.size, project: currentProject.project_name },
+        riskFlags: result.riskFlags,
+        developerName: devName,
+        developerEmail: devEmail,
+      });
+    }
+
     const uploaded: UploadedFile[] = [];
-    for (const file of Array.from(files)) {
+    for (const { file, result } of valid) {
       try {
         const safeName = currentProject.project_name?.replace(/[^a-zA-Z0-9-_]/g, '-') || 'project';
-        const path = `developer-uploads/${safeName}/${Date.now()}-${file.name}`;
+        const path = `developer-uploads/${safeName}/${Date.now()}-${result.sanitizedName}`;
         const { error } = await supabase.storage.from("documents").upload(path, file);
         if (error) { toast.error(`Failed to upload ${file.name}`); continue; }
         const { data: urlData } = supabase.storage.from("documents").getPublicUrl(path);
-        uploaded.push({ name: file.name, url: urlData.publicUrl, type: file.type });
+        uploaded.push({ name: result.sanitizedName, url: urlData.publicUrl, type: file.type });
+        logFileValidation(file.name, file.type, file.size, true, null, result.sanitizedName);
+        setSessionUploadedBytes(prev => prev + file.size);
+        setSessionFileNames(prev => [...prev, result.sanitizedName]);
       } catch { toast.error(`Error uploading file`); }
     }
     setCurrentProject(prev => ({ ...prev, files: [...prev.files, ...uploaded] }));
@@ -418,9 +469,26 @@ const DeveloperPortal = () => {
       toast.error("Please upload at least one file");
       return;
     }
+
+    // Enforce duplicate blocking
+    if (duplicateBlocking) {
+      toast.error("A project with this name already exists. Please use the 'Update Existing' flow instead.");
+      logActivity({
+        activityType: 'duplicate_attempt',
+        entityType: 'project',
+        entityName: currentProject.project_name,
+        details: { blocked: true },
+        riskFlags: ['duplicate_blocked'],
+        developerName: effectiveDevName,
+        developerEmail: effectiveDevEmail,
+      });
+      return;
+    }
+
     setSubmittingProject(true);
     try {
-      const { error } = await supabase.from("developer_launch_uploads").insert({
+      // Sanitize submission data to strip protected fields
+      const submissionData = sanitizeSubmissionData({
         developer_name: effectiveDevName,
         developer_email: effectiveDevEmail,
         project_name: currentProject.project_name,
@@ -428,8 +496,20 @@ const DeveloperPortal = () => {
         location: currentProject.location || null,
         launch_date: currentProject.launch_date || null,
         uploaded_files: currentProject.files,
-      } as any);
+      });
+
+      const { error } = await supabase.from("developer_launch_uploads").insert(submissionData as any);
       if (error) throw error;
+
+      // Log activity
+      logActivity({
+        activityType: 'upload',
+        entityType: 'project',
+        entityName: currentProject.project_name,
+        details: { fileCount: currentProject.files.length },
+        developerName: effectiveDevName,
+        developerEmail: effectiveDevEmail,
+      });
 
       try {
         await supabase.from("admin_tasks").insert({
@@ -448,6 +528,15 @@ const DeveloperPortal = () => {
       queryClient.invalidateQueries({ queryKey: ["dev-portal-projects"] });
     } catch (err: any) {
       toast.error(err.message || "Failed to submit project");
+      logActivity({
+        activityType: 'failed_upload',
+        entityType: 'project',
+        entityName: currentProject.project_name,
+        details: { error: err.message },
+        riskFlags: ['submission_error'],
+        developerName: effectiveDevName,
+        developerEmail: effectiveDevEmail,
+      });
     } finally {
       setSubmittingProject(false);
     }
@@ -488,6 +577,14 @@ const DeveloperPortal = () => {
         } as any);
       } catch {}
 
+      logActivity({
+        activityType: 'upload',
+        entityType: 'event',
+        entityName: eventForm.event_title,
+        details: { fileCount: eventFiles.length },
+        developerName: effectiveDevName,
+        developerEmail: effectiveDevEmail,
+      });
       toast.success("Event invitation submitted!");
       setEventForm({ event_title: "", event_date: "", event_location: "", event_description: "" });
       setEventFiles([]);
@@ -535,6 +632,14 @@ const DeveloperPortal = () => {
         } as any);
       } catch {}
 
+      logActivity({
+        activityType: 'upload',
+        entityType: 'launch',
+        entityName: launchForm.launch_title,
+        details: { fileCount: launchFiles.length },
+        developerName: effectiveDevName,
+        developerEmail: effectiveDevEmail,
+      });
       toast.success("Launch announcement submitted!");
       setLaunchForm({ launch_title: "", launch_date: "", launch_location: "", launch_description: "" });
       setLaunchFiles([]);
