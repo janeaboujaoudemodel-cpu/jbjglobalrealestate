@@ -14,12 +14,13 @@ import { toast } from 'sonner';
 import {
   Stamp, Building2, Palette, Image, Check, Type, Upload, X, Globe, FileText,
   RotateCcw, MapPin, Undo2, Redo2, RotateCw, Save, Circle, Star, Minus, Hash,
-  Wand2, Download, Printer, FileDown, ChevronDown,
+  Wand2, Download, Printer, FileDown, ChevronDown, Landmark, BookmarkPlus,
 } from 'lucide-react';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
 import { useStampHistory } from '@/hooks/useStampHistory';
 import { OFFICIAL_INK_BLUE, ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
+import { StampPresetLibrary, saveCustomPreset, type PresetConfig } from '@/components/stamp-generator/StampPresetLibrary';
 
 // UAE phone normalization
 function normalizePhone(raw: string): string {
