@@ -158,6 +158,8 @@ const EmailClient = () => {
   const [showProductivity, setShowProductivity] = useState(false);
   const [isDraftingWithAI, setIsDraftingWithAI] = useState(false);
   const [analysisCache] = useState<Map<string, { needs_reply: boolean; priority: string; action_items: string[] }>>(new Map());
+  const [attachments, setAttachments] = useState<DocumentAttachment[]>([]);
+  const [showAttachPicker, setShowAttachPicker] = useState(false);
   const emailsPerPage = 20;
 
   // Cross-channel: detect if recipient is a registered platform user
