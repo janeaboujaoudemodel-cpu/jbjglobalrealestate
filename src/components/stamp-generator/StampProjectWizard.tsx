@@ -828,7 +828,7 @@ export default function StampProjectWizard() {
                           <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Spread</label>
                           <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.arabic_arc_spread}%</span>
                         </div>
-                        <input type="range" min={20} max={80} step={1} value={form.arabic_arc_spread}
+                        <input type="range" min={20} max={100} step={1} value={form.arabic_arc_spread}
                           onChange={e => set('arabic_arc_spread', parseInt(e.target.value))}
                           className="w-full h-2 accent-[hsl(var(--gold))]" />
                       </div>
