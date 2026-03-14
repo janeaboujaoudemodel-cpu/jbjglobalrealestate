@@ -1959,7 +1959,7 @@ const DeveloperPortal = () => {
                       <CardHeader className="cursor-pointer hover:bg-gold/5 transition-colors rounded-t-xl">
                         <CardTitle className="flex items-center justify-between text-foreground">
                           <span className="flex items-center gap-2">
-                            <Star className="w-5 h-5 text-gold" /> Launch Interest Registrations
+                            <Star className="w-5 h-5 text-gold" /> Launch Interests
                             {allInterests && allInterests.length > 0 && (
                               <Badge className="bg-gold/20 text-gold ml-2">{allInterests.length}</Badge>
                             )}
