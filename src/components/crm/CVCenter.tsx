@@ -18,6 +18,8 @@ import {
   ArrowUpDown, MapPin,
 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { CrossChannelToggle } from '@/components/shared/CrossChannelToggle';
+import { useCrossChannelSend } from '@/hooks/useCrossChannelSend';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
