@@ -558,3 +558,6 @@ verify_jwt = false
 
 [functions.record-login-event]
 verify_jwt = false
+
+[functions.rls-hardening-proof]
+verify_jwt = false

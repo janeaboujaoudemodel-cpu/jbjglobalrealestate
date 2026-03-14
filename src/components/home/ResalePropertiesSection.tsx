@@ -11,9 +11,8 @@ const ResalePropertiesSection = () => {
     queryKey: ["resale-listings-homepage"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("resale_listings")
+        .from("resale_listings_public")
         .select("*")
-        .eq("status", "active")
         .order("created_at", { ascending: false })
         .limit(6);
       if (error) throw error;
