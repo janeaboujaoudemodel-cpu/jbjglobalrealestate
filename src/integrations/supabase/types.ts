@@ -10106,6 +10106,84 @@ export type Database = {
         }
         Relationships: []
       }
+      global_audit_events: {
+        Row: {
+          action: string
+          approval_state: string | null
+          approved_by: string | null
+          changed_fields: string[] | null
+          created_at: string
+          criticality: string | null
+          description: string | null
+          entity_id: string | null
+          entity_name: string | null
+          entity_type: string | null
+          id: string
+          metadata: Json | null
+          module: string | null
+          new_values: Json | null
+          old_values: Json | null
+          reviewed_by: string | null
+          route: string | null
+          source_id: string | null
+          source_table: string | null
+          submitted_by: string | null
+          user_email: string | null
+          user_id: string | null
+          user_role: string | null
+        }
+        Insert: {
+          action: string
+          approval_state?: string | null
+          approved_by?: string | null
+          changed_fields?: string[] | null
+          created_at?: string
+          criticality?: string | null
+          description?: string | null
+          entity_id?: string | null
+          entity_name?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+          module?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          reviewed_by?: string | null
+          route?: string | null
+          source_id?: string | null
+          source_table?: string | null
+          submitted_by?: string | null
+          user_email?: string | null
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Update: {
+          action?: string
+          approval_state?: string | null
+          approved_by?: string | null
+          changed_fields?: string[] | null
+          created_at?: string
+          criticality?: string | null
+          description?: string | null
+          entity_id?: string | null
+          entity_name?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+          module?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          reviewed_by?: string | null
+          route?: string | null
+          source_id?: string | null
+          source_table?: string | null
+          submitted_by?: string | null
+          user_email?: string | null
+          user_id?: string | null
+          user_role?: string | null
+        }
+        Relationships: []
+      }
       gmail_tokens: {
         Row: {
           access_token: string
@@ -21034,6 +21112,48 @@ export type Database = {
         }
         Relationships: []
       }
+      suspicious_admin_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          created_at: string
+          description: string
+          details: Json | null
+          id: string
+          severity: string
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          created_at?: string
+          description: string
+          details?: Json | null
+          id?: string
+          severity?: string
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string
+          description?: string
+          details?: Json | null
+          id?: string
+          severity?: string
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       sync_job_pages: {
         Row: {
           created_at: string | null
@@ -25662,6 +25782,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      check_suspicious_patterns: { Args: never; Returns: number }
       check_verification_rate_limit: {
         Args: {
           p_identifier: string
