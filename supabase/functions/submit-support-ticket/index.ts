@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { emailShell, sharedSections, progressSteps, ticketSummaryCard, ticketSummaryCardAr, arabicDivider, userGreetingRow } from "../_shared/email-html.ts";
+import { enforceRateLimit } from "../_shared/rate-limit-middleware.ts";
 
 // Standard Resend API endpoint (Tokyo region is DNS verification location only, API is global)
 const RESEND_API_URL = "https://api.resend.com/emails";
