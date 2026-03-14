@@ -1504,9 +1504,71 @@ const DeveloperPortal = () => {
                             </Badge>
                           </div>
                         </div>
-                        <Button variant="outline" onClick={handleStartEditProfile} className="border-gold/30">
-                          Edit Profile
-                        </Button>
+                        <div className="flex gap-3 items-center">
+                          <Button variant="outline" onClick={handleStartEditProfile} className="border-gold/30">
+                            Edit Profile
+                          </Button>
+                        </div>
+
+                        {/* On-Leave Toggle */}
+                        <div className="p-4 rounded-xl border border-gold/20 bg-card space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm font-semibold text-foreground">On Leave Status</p>
+                              <p className="text-xs text-muted-foreground">Mark yourself as on leave so the team knows your availability.</p>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant={(repProfile as any)?.is_on_leave ? "default" : "outline"}
+                              className={(repProfile as any)?.is_on_leave ? "bg-amber-500 text-white hover:bg-amber-600" : "border-gold/30"}
+                              onClick={async () => {
+                                const newVal = !(repProfile as any)?.is_on_leave;
+                                try {
+                                  await supabase.from('developer_representatives')
+                                    .update({ is_on_leave: newVal, leave_start_date: newVal ? new Date().toISOString().split('T')[0] : null, leave_end_date: null } as any)
+                                    .eq('id', repProfile!.id);
+                                  toast.success(newVal ? 'Marked as on leave' : 'Welcome back! Leave status cleared.');
+                                  refetchRep();
+                                } catch { toast.error('Failed to update leave status'); }
+                              }}
+                            >
+                              {(repProfile as any)?.is_on_leave ? 'On Leave' : 'Mark as On Leave'}
+                            </Button>
+                          </div>
+                          {(repProfile as any)?.is_on_leave && (
+                            <div className="grid grid-cols-2 gap-3">
+                              <div className="space-y-1">
+                                <Label className="text-xs">Leave Start</Label>
+                                <Input
+                                  type="date"
+                                  defaultValue={(repProfile as any)?.leave_start_date || ''}
+                                  onChange={async (e) => {
+                                    try {
+                                      await supabase.from('developer_representatives')
+                                        .update({ leave_start_date: e.target.value } as any)
+                                        .eq('id', repProfile!.id);
+                                    } catch {}
+                                  }}
+                                />
+                              </div>
+                              <div className="space-y-1">
+                                <Label className="text-xs">Expected Return</Label>
+                                <Input
+                                  type="date"
+                                  defaultValue={(repProfile as any)?.leave_end_date || ''}
+                                  onChange={async (e) => {
+                                    try {
+                                      await supabase.from('developer_representatives')
+                                        .update({ leave_end_date: e.target.value } as any)
+                                        .eq('id', repProfile!.id);
+                                    } catch {}
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
                         {!isRepApproved && (
                           <div className="bg-gold/10 border border-gold/30 rounded-xl p-3 text-sm text-stone-700">
                             Your registration is under review. Once approved, you'll be able to request briefings and send messages directly.
