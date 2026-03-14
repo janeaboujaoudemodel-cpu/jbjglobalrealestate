@@ -1025,12 +1025,27 @@ const ListingAdmin = () => {
           </div>
         )}
 
+        {/* Project Detail View */}
+        {activeView === 'project-detail' && detailProject && (
+          <ProjectDetailAdmin
+            project={detailProject}
+            onBack={() => { setDetailProject(null); setActiveView('projects'); }}
+            onEdit={(p) => handleEditProjectWithView(p)}
+            onDelete={(p) => {
+              setSelectedProject(p);
+              handleDeleteProject();
+              setActiveView('projects');
+            }}
+          />
+        )}
+
         {/* Preview Modal - outside conditional */}
         <ProjectPreviewModal
           project={previewProject}
           open={showPreviewModal}
           onOpenChange={setShowPreviewModal}
           onEdit={(p) => handleEditProjectWithView(p)}
+          onOpenDetail={(p) => { setShowPreviewModal(false); setDetailProject(p); setActiveView('project-detail'); }}
           onSendToSarah={(p) => {
             setShowPreviewModal(false);
             setActiveView('chat');
