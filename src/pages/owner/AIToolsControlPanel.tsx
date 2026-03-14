@@ -260,7 +260,7 @@ export default function AIToolsControlPanel() {
     // Open tool in new tab
     window.open(toolUrl, "_blank");
     // Create test log
-    const { error } = await supabase.from("ai_tool_test_logs").insert({
+    const { error } = await (supabase.from("ai_tool_test_logs") as any).insert({
       tool_id: toolId,
       version_id: latestVersion?.id ?? null,
       tool_url: toolUrl,
