@@ -239,7 +239,7 @@ Deno.serve(async (req) => {
       blocked_reasons: blockedReasons,
     });
 
-    return jsonResponse({
+    return jsonResponse(200, {
       gate_status: gateStatus,
       checks,
       blocked_reasons: blockedReasons,
