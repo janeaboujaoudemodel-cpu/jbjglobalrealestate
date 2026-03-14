@@ -1,72 +1,127 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: Owner Global Audit System & Admin Change History
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Current State
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+The platform already has **7 separate audit tables** scattered across modules:
+- `audit_logs` — General admin actions (CRUD, login, export, block)
+- `crm_audit_logs` — CRM-specific changes with old/new values
+- `admin_edit_log` — Project/developer field-level edits with changed_fields
+- `project_audit_logs` — Project status changes
+- `compliance_audit_logs` — Compliance checks
+- `executive_audit_logs` — Executive action tracking
+- `hr_audit_logs` — HR admin actions
+- `payout_audit_logs` — Payout operations
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+There's also an existing `AuditLogDashboard` component that only reads from `audit_logs`. The Owner Audit Page (`OwnerAuditPage.tsx`) is a route/AI-tools inventory — not an actual change history audit.
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+**What's missing:** A unified view across all audit sources, before/after diff visualization, suspicious activity detection, and immutable audit hardening.
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+### Approach
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+Rather than creating yet another audit table, build a **unified Global Audit Dashboard** that aggregates all existing audit tables into one owner-only view with diff, filtering, alerts, and immutability controls.
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+### Database Migration
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+**1. Create `global_audit_events` table** — Unified audit sink for cross-platform change tracking:
+```sql
+id (uuid PK), source_table (text), source_id (uuid/text),
+user_id (uuid), user_email (text), user_role (text),
+action (text), entity_type (text), entity_id (text), entity_name (text),
+module (text), -- e.g. 'crm', 'listing-admin', 'hr', 'ai-tools'
+route (text), -- e.g. '/owner/crm'
+old_values (jsonb), new_values (jsonb),
+changed_fields (text[]),
+criticality (text: 'low'|'medium'|'high'|'critical'),
+approval_state (text: null|'pending'|'approved'|'rejected'),
+submitted_by (uuid), reviewed_by (uuid), approved_by (uuid),
+description (text),
+metadata (jsonb),
+created_at (timestamptz default now())
+```
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+**2. RLS — Immutable design (Task 6):**
+- Owner-only SELECT (via `has_role(auth.uid(), 'owner')`)
+- Authenticated INSERT (own user_id only)
+- **No UPDATE policy** — records cannot be modified after creation
+- **No DELETE policy** — records cannot be deleted by any role
+- Only service_role can INSERT (for triggers/edge functions)
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+**3. Create DB trigger function `fn_global_audit_sink()`:**
+- Attach AFTER INSERT triggers on `audit_logs`, `crm_audit_logs`, `admin_edit_log`, `project_audit_logs` to auto-copy new entries into `global_audit_events` with normalized fields.
+- Maps source-specific columns to the unified schema.
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+**4. Create `suspicious_admin_alerts` table (Task 4):**
+```sql
+id (uuid PK), alert_type (text), severity (text),
+user_id (uuid), user_email (text),
+description (text), details (jsonb),
+acknowledged (bool default false), acknowledged_by (uuid),
+created_at (timestamptz)
+```
+Owner-only SELECT. No UPDATE/DELETE for non-owners.
 
-### Files Changed
-| File | Action |
+**5. Create DB function `check_suspicious_patterns()`:**
+- Called by a periodic trigger or on-demand from dashboard
+- Detects: repeated permission changes (>5 in 1hr), publish/revert cycles (>3 in 1hr), mass edits (>20 in 10min), unusual exports (>5/day), odd hours (outside 6AM-11PM UAE), multiple deletions (>10 in 1hr), repeated failures (>10 in 30min)
+- Inserts flagged events into `suspicious_admin_alerts`
+
+### Frontend
+
+**New: `src/pages/owner/GlobalAuditDashboard.tsx`** — Owner-only page at `/owner/global-audit`
+
+**Layout — 4 tabs:**
+
+| Tab | Content |
+|-----|---------|
+| **Change History** | Unified log from `global_audit_events`. Each row expandable to show before/after JSON diff. Columns: timestamp, user, module, action, entity, criticality badge, approval state. (Tasks 1, 2) |
+| **Filters & Search** | Filter by: module (CRM/Listing/HR/AI/Payout), user, date range, entity type, action type, criticality, role. Full-text search on description. (Task 3) |
+| **Suspicious Activity** | Cards showing flagged alerts from `suspicious_admin_alerts`. Each shows: alert type, user, timestamp, pattern details, acknowledge button. Stats: total alerts, unacknowledged, by severity. (Task 4) |
+| **Approval Trail** | Filtered view of events with approval_state != null. Shows: submitter, reviewer, approver, what changed, final result. (Task 5) |
+
+**New: `src/components/audit/AuditDiffViewer.tsx`**
+- Side-by-side JSON diff component
+- Highlights added (green), removed (red), changed (amber) fields
+- Used in expanded rows of the Change History tab
+
+**New: `src/hooks/useGlobalAudit.ts`**
+- `logGlobalAudit(params)` — Insert into `global_audit_events` from frontend actions
+- `useAuditFilters()` — Manages filter state, pagination, date ranges
+- `useSuspiciousAlerts()` — Fetches and manages alert acknowledgment
+
+### Integration Points
+
+Update these files to also log to `global_audit_events`:
+- `src/pages/CRM.tsx` — Export actions
+- `src/components/listing-admin/ChangeRequestsQueue.tsx` — Approval actions
+- `src/hooks/useAdminEditLog.ts` — Add dual-write to global audit on every `logAdminEdit`
+- `src/hooks/useAuditLog.ts` — Add dual-write on every `logAction`
+
+### Route Registration
+
+Add to `src/routes/OwnerRoutes.tsx`:
+```tsx
+<Route path="global-audit" element={<GlobalAuditDashboard />} />
+```
+
+### Files Summary
+
+| File | Change |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| **Migration** | Create `global_audit_events` (immutable RLS), `suspicious_admin_alerts`, trigger function to sync from existing audit tables, suspicious pattern detection function |
+| **New**: `src/pages/owner/GlobalAuditDashboard.tsx` | Unified audit dashboard (4 tabs) |
+| **New**: `src/components/audit/AuditDiffViewer.tsx` | Before/after JSON diff component |
+| **New**: `src/hooks/useGlobalAudit.ts` | Global audit logging + filter hooks |
+| **Update**: `src/hooks/useAdminEditLog.ts` | Dual-write to global audit |
+| **Update**: `src/hooks/useAuditLog.ts` | Dual-write to global audit |
+| **Update**: `src/routes/OwnerRoutes.tsx` | Add route |
+
+### Implementation Order
+1. Database migration (tables, triggers, RLS, suspicious detection function)
+2. `useGlobalAudit` hook
+3. `AuditDiffViewer` component
+4. `GlobalAuditDashboard` page (all 4 tabs)
+5. Dual-write integration in existing audit hooks
+6. Route registration
+
