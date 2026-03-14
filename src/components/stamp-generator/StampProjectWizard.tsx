@@ -429,6 +429,12 @@ export default function StampProjectWizard() {
     circleGap: form.circle_gap,
     centerContentSize: form.center_content_size,
     onElementClick: handleElementClick,
+    monogramLetterColors: form.monogram_colors.allLetters
+      ? undefined  // allLetters means user set uniform color, let template handle
+      : Object.keys(form.monogram_colors.letters).length > 0
+        ? form.monogram_colors.letters
+        : undefined,
+    monogramDividerColor: form.monogram_colors.divider || undefined,
   };
 
   return (
