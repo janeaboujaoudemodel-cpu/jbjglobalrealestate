@@ -131,6 +131,8 @@ const TeamChat = () => {
   const [isInCall, setIsInCall] = useState(false);
   const [isInVideo, setIsInVideo] = useState(false);
   const [alsoSendByEmail, setAlsoSendByEmail] = useState(false);
+  const [showAttachPicker, setShowAttachPicker] = useState(false);
+  const [pendingAttachments, setPendingAttachments] = useState<DocumentAttachment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
