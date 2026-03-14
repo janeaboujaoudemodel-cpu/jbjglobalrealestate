@@ -6099,6 +6099,45 @@ export type Database = {
         }
         Relationships: []
       }
+      deployment_records: {
+        Row: {
+          created_by: string | null
+          deployed_at: string
+          id: string
+          impacted_modules: string[] | null
+          is_stable: boolean
+          notes: string | null
+          rollback_available: boolean
+          rolled_back: boolean
+          rolled_back_at: string | null
+          version_label: string
+        }
+        Insert: {
+          created_by?: string | null
+          deployed_at?: string
+          id?: string
+          impacted_modules?: string[] | null
+          is_stable?: boolean
+          notes?: string | null
+          rollback_available?: boolean
+          rolled_back?: boolean
+          rolled_back_at?: string | null
+          version_label: string
+        }
+        Update: {
+          created_by?: string | null
+          deployed_at?: string
+          id?: string
+          impacted_modules?: string[] | null
+          is_stable?: boolean
+          notes?: string | null
+          rollback_available?: boolean
+          rolled_back?: boolean
+          rolled_back_at?: string | null
+          version_label?: string
+        }
+        Relationships: []
+      }
       design_assets: {
         Row: {
           asset_type: string
@@ -19613,6 +19652,39 @@ export type Database = {
         }
         Relationships: []
       }
+      security_checklist_runs: {
+        Row: {
+          checks: Json
+          created_at: string
+          failed_count: number
+          id: string
+          overall_status: string
+          passed_count: number
+          run_type: string
+          warning_count: number
+        }
+        Insert: {
+          checks?: Json
+          created_at?: string
+          failed_count?: number
+          id?: string
+          overall_status?: string
+          passed_count?: number
+          run_type?: string
+          warning_count?: number
+        }
+        Update: {
+          checks?: Json
+          created_at?: string
+          failed_count?: number
+          id?: string
+          overall_status?: string
+          passed_count?: number
+          run_type?: string
+          warning_count?: number
+        }
+        Relationships: []
+      }
       security_events: {
         Row: {
           action_taken: string | null
@@ -21402,6 +21474,54 @@ export type Database = {
           total_pages?: number
           total_records?: number | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      system_backup_records: {
+        Row: {
+          backup_type: string
+          created_at: string
+          created_by: string | null
+          file_path: string | null
+          id: string
+          notes: string | null
+          restore_test_result: string | null
+          restore_tested: boolean
+          restore_tested_at: string | null
+          size_bytes: number | null
+          snapshot_data: Json | null
+          source_module: string | null
+          status: string
+        }
+        Insert: {
+          backup_type: string
+          created_at?: string
+          created_by?: string | null
+          file_path?: string | null
+          id?: string
+          notes?: string | null
+          restore_test_result?: string | null
+          restore_tested?: boolean
+          restore_tested_at?: string | null
+          size_bytes?: number | null
+          snapshot_data?: Json | null
+          source_module?: string | null
+          status?: string
+        }
+        Update: {
+          backup_type?: string
+          created_at?: string
+          created_by?: string | null
+          file_path?: string | null
+          id?: string
+          notes?: string | null
+          restore_test_result?: string | null
+          restore_tested?: boolean
+          restore_tested_at?: string | null
+          size_bytes?: number | null
+          snapshot_data?: Json | null
+          source_module?: string | null
+          status?: string
         }
         Relationships: []
       }
