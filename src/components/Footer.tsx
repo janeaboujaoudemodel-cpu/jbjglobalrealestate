@@ -324,8 +324,8 @@ const Footer = () => {
     { label: "Company Profile", href: "/company-profile" },
     { label: "Philanthropy", href: "/philanthropy" },
     { label: "Reviews", href: "/reviews" },
-    { label: "Our Brokers", href: "/our-brokers" },
-    { label: "Partner Governance", href: "/partner-governance" },
+    { label: "Our Brokers", href: "/brokers" },
+    { label: "Partner Governance", href: "/governance/partners" },
   ];
 
   // Career Links
