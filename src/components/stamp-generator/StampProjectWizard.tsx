@@ -921,6 +921,14 @@ export default function StampProjectWizard() {
                         placeholder={form.company_name.slice(0, 2) || 'JJ'} maxLength={3} className="uppercase h-8 text-sm"/>
                       <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">Leave blank for auto initials</p>
                     </div>
+                    <div className="mt-3 border border-[hsl(var(--border))] rounded-xl p-3">
+                      <MonogramColorEditor
+                        monogramText={form.monogram_text || form.company_name.slice(0, 3)}
+                        colors={form.monogram_colors}
+                        onChange={(colors) => set('monogram_colors', colors)}
+                        defaultColor={form.ink_color}
+                      />
+                    </div>
                   )}
 
                   {form.icon_style === 'UPLOADED_LOGO' && (
