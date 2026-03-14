@@ -24,7 +24,8 @@ const DeveloperPortalCTA = () => {
     { label: "Check Listings", desc: "View live listings", icon: ListChecks, href: "/developer-portal?tab=listings" },
     { label: "Request Briefing", desc: "Schedule a project briefing", icon: Briefcase, href: "/developer-portal?tab=briefing" },
     { label: "Agreements", desc: "Sign & review documents", icon: FileSignature, href: "/developer-portal?tab=agreements" },
-    { label: "Register as Developer / Representative", desc: "Join our network", icon: UserCheck, href: "/developer-portal?tab=register" },
+    { label: "Register as Developer or Sales", desc: "Join our network", icon: UserCheck, href: "/developer-portal?tab=register" },
+    { label: "Update Your Profile", desc: "Edit your info & settings", icon: UserCog, href: "/developer-portal?tab=register" },
   ];
 
   // Owner actions — only when NOT in developer mode
