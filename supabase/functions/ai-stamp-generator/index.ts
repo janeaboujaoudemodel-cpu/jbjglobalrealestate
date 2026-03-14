@@ -651,23 +651,36 @@ CRITICAL RULES:
 
     // ── VARIATIONS action — generate style alternatives ─────────────────
     if (action === "variations") {
-      const { variationType } = body;
       const baseProject = { ...project };
+      const baseLayout = baseProject.layout_json || {};
       const variationConfigs: { key: string; label: string; overrides: Record<string, any> }[] = [];
 
-      // Generate diverse variations
-      const separatorStyles = ['●', '✦', '★', '◆', '▪', '⬥', '✧', '❖', '⊕', '▲', '◎'];
-      const borderStyles = ['SINGLE', 'DOUBLE', 'RING', 'DOTTED', 'ROPE'];
-      const iconStyles = ['MONOGRAM', 'NONE'];
-
-      // Style variations
+      // ── Separator Variations (4) ──
       variationConfigs.push(
-        { key: 'luxury-ring', label: 'Luxury Triple Ring', overrides: { border_style: 'RING' } },
-        { key: 'modern-minimal', label: 'Modern Minimal', overrides: { border_style: 'SINGLE' } },
-        { key: 'vintage-ornate', label: 'Vintage Ornate', overrides: { border_style: 'DOUBLE', layout_json: { ...baseProject.layout_json, dividerStyle: 'ornate' } } },
-        { key: 'classic-double', label: 'Classic Professional', overrides: { border_style: 'DOUBLE' } },
-        { key: 'geometric-modern', label: 'Geometric Modern', overrides: { border_style: 'SINGLE' } },
-        { key: 'bold-rectangle', label: 'Corporate Rectangle', overrides: {} },
+        { key: 'sep-star', label: 'Star Separators', overrides: { layout_json: { ...baseLayout, separatorSymbol: '★' } } },
+        { key: 'sep-diamond', label: 'Diamond Separators', overrides: { layout_json: { ...baseLayout, separatorSymbol: '◆' } } },
+        { key: 'sep-ornate', label: 'Ornate Divider', overrides: { layout_json: { ...baseLayout, dividerStyle: 'ornate', separatorSymbol: '✧' } } },
+        { key: 'sep-minimal', label: 'Line Divider', overrides: { layout_json: { ...baseLayout, dividerStyle: 'line', separatorSymbol: '▪' } } },
+      );
+
+      // ── Color Scheme Variations (4) ──
+      variationConfigs.push(
+        { key: 'color-navy', label: 'Navy Official', overrides: { primary_color: '#1B3A8C', secondary_color: '#2a4a9c', accent_color: '#8b6914' } },
+        { key: 'color-charcoal', label: 'Charcoal Executive', overrides: { primary_color: '#2C2C2C', secondary_color: '#444444', accent_color: '#999999' } },
+        { key: 'color-burgundy', label: 'Burgundy Legal', overrides: { primary_color: '#6B1D2A', secondary_color: '#8A2B3B', accent_color: '#C9A84C' } },
+        { key: 'color-forest', label: 'Forest Corporate', overrides: { primary_color: '#1B4332', secondary_color: '#2D6A4F', accent_color: '#B7A24E' } },
+      );
+
+      // ── Ring / Border Variations (2) ──
+      variationConfigs.push(
+        { key: 'ring-luxury', label: 'Luxury Triple Ring', overrides: { border_style: 'RING' } },
+        { key: 'ring-rope', label: 'Rope Border Classic', overrides: { border_style: 'ROPE' } },
+      );
+
+      // ── Monogram Placement Variations (2) ──
+      variationConfigs.push(
+        { key: 'mono-large', label: 'Large Monogram Center', overrides: { layout_json: { ...baseLayout, monogramSize: 'large' } } },
+        { key: 'mono-none', label: 'No Monogram — Text Only', overrides: { monogram_text: '', layout_json: { ...baseLayout, showMonogram: false } } },
       );
 
       const concepts = variationConfigs.map(vc => {

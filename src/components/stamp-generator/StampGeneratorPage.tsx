@@ -537,7 +537,7 @@ export default function StampGeneratorPage() {
   }
 
   async function recoverDeletedStamp(id: string) {
-    await supabase.from('stamp_designs').update({ deleted_at: null } as any).eq('id', id);
+    await supabase.from('stamp_designs').update({ deleted_at: null }).eq('id', id);
     const item = deletedStamps.find(d => d.id === id);
     if (item) {
       setConcepts(prev => [...prev, { id: item.id, templateKey: item.template_key, label: item.label, tags: [], svgSource: item.svg_source }]);
