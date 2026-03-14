@@ -270,7 +270,7 @@ const Footer = () => {
     { label: "Broker Certification", href: "/services/broker-certification" },
     { label: "Complaint Procedures", href: "/services/complaint-procedures" },
     { label: "Testimonials", href: "/reviews" },
-    { label: "Referral Partner", href: "/services/referral-partner" },
+    { label: "Referral Partner", href: "/referral-partner" },
     { label: "Signature Collection", href: "/services/signature-collection" },
   ];
 
