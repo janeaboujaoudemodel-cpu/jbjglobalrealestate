@@ -96,7 +96,8 @@ function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 
 
 function computeArcLetterSpacing(
   text: string, fontSize: number, arcRadius: number,
-  spreadLimit: number, avgCharWidth: number, minSpacing: number
+  spreadLimit: number, avgCharWidth: number, minSpacing: number,
+  maxSpacing = 12
 ): number {
   if (!text || text.length <= 1) return minSpacing;
   const availableArc = arcRadius * Math.PI * spreadLimit;
@@ -105,18 +106,21 @@ function computeArcLetterSpacing(
   if (gaps <= 0) return minSpacing;
   const extraSpace = availableArc - textWidth;
   const spacing = extraSpace / gaps;
-  return Math.max(minSpacing, Math.min(spacing, 12));
+  return Math.max(minSpacing, Math.min(spacing, maxSpacing));
 }
 
 function safeArcFontSize(
   text: string, maxRadius: number, isArabic: boolean,
-  baseFontSize: number, spreadLimit = ARC_SPREAD_LIMIT
+  baseFontSize: number, spreadLimit = ARC_SPREAD_LIMIT,
+  maxLetterSpacing?: number
 ): { fontSize: number; letterSpacing: number } {
   const charW = 0.54;
   const minSpacing = isArabic ? 0.5 : 1;
+  // Cap English letter spacing to prevent over-spaced unreadable text
+  const maxSp = maxLetterSpacing ?? (isArabic ? 12 : 6);
   const arcLen = maxRadius * Math.PI * spreadLimit;
   const fontSize = fitFontSize(text, baseFontSize, arcLen, charW);
-  const letterSpacing = computeArcLetterSpacing(text, fontSize, maxRadius, spreadLimit, charW, minSpacing);
+  const letterSpacing = computeArcLetterSpacing(text, fontSize, maxRadius, spreadLimit, charW, minSpacing, maxSp);
   return { fontSize, letterSpacing };
 }
 
