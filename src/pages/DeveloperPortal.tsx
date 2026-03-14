@@ -577,6 +577,14 @@ const DeveloperPortal = () => {
         } as any);
       } catch {}
 
+      logActivity({
+        activityType: 'upload',
+        entityType: 'event',
+        entityName: eventForm.event_title,
+        details: { fileCount: eventFiles.length },
+        developerName: effectiveDevName,
+        developerEmail: effectiveDevEmail,
+      });
       toast.success("Event invitation submitted!");
       setEventForm({ event_title: "", event_date: "", event_location: "", event_description: "" });
       setEventFiles([]);
