@@ -106,6 +106,8 @@ export function LiveStampPreview({
   circleGap,
   centerContentSize,
   onElementClick,
+  monogramLetterColors,
+  monogramDividerColor,
   selectedElement,
 }: LiveStampPreviewProps & { selectedElement?: string | null }) {
   const displayName = companyName || 'Your Company Name';
