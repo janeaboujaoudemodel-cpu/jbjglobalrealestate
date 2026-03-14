@@ -126,16 +126,55 @@ export function StampRightPanel(props: StampRightPanelProps) {
 
         {/* Concepts Tab */}
         <TabsContent value="concepts" className="flex-1 overflow-y-auto p-3 mt-0 space-y-3">
+          {/* Pinned Standard Model Card */}
+          {props.standardConcept && (
+            <div className="mb-2">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <Shield size={10} className="text-[hsl(var(--gold))]" />
+                <span className="text-[9px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Standard Model</span>
+              </div>
+              <div
+                className="bg-card/80 rounded-xl border-2 border-[hsl(var(--gold))] shadow-[0_0_0_3px_hsl(var(--gold)/0.15)] cursor-pointer transition-all hover:shadow-md"
+                onClick={() => props.onSelect(props.standardConcept!)}
+              >
+                <div className="relative p-2 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-xl min-h-[100px]">
+                  <Badge className="absolute top-1.5 left-1.5 z-10 text-[7px] px-1.5 py-0 bg-[hsl(var(--gold))] text-white border-0">
+                    Standard
+                  </Badge>
+                  <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center z-10">
+                    <Check size={8} className="text-white" />
+                  </div>
+                  <StampSVGRenderer
+                    svgSource={props.svgOverrides[props.standardConcept.id] || props.standardConcept.svgSource}
+                    tintColor={props.tintColor}
+                    secondaryColor={props.secondaryColor}
+                    accentColor={props.accentColor}
+                    fontFamily={props.fontFamily}
+                    fontWeight={props.fontBold ? 'bold' : 'normal'}
+                    fontStyle={props.fontItalic ? 'italic' : 'normal'}
+                    fontSize={props.manualFontSize}
+                    inkMode={props.inkMode}
+                    size={90}
+                  />
+                </div>
+                <div className="p-1.5">
+                  <p className="text-[8px] font-medium text-[hsl(var(--foreground))] truncate">{props.standardConcept.label}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Generated Concepts */}
           {props.generating ? (
             <div className="grid grid-cols-2 xl:grid-cols-3 gap-2">
               {[1, 2, 3, 4, 5, 6].map(i => (
                 <div key={i} className="h-44 rounded-xl bg-[hsl(var(--muted))] animate-pulse" />
               ))}
             </div>
-          ) : props.concepts.length > 0 ? (
+          ) : nonStandardConcepts.length > 0 ? (
             <>
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-[hsl(var(--muted-foreground))]">{props.concepts.length} concepts — click to select</span>
+                <span className="text-[10px] text-[hsl(var(--muted-foreground))]">{nonStandardConcepts.length} generated — click to apply</span>
                 {totalPages > 1 && (
                   <div className="flex items-center gap-1">
                     <button onClick={() => setConceptPage(p => Math.max(0, p - 1))} disabled={conceptPage === 0}
@@ -162,7 +201,7 @@ export function StampRightPanel(props: StampRightPanelProps) {
                 ))}
               </div>
             </>
-          ) : (
+          ) : !props.standardConcept ? (
             <div className="text-center py-12 space-y-3">
               <Wand2 size={28} className="text-[hsl(var(--gold))] mx-auto opacity-40" />
               <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Click "Regenerate" to create stamp concepts</p>
@@ -171,7 +210,7 @@ export function StampRightPanel(props: StampRightPanelProps) {
                 <Wand2 size={10} className="mr-1" /> Generate Concepts
               </Button>
             </div>
-          )}
+          ) : null}
 
           {/* Export CTA */}
           {props.selectedId && !props.generating && (

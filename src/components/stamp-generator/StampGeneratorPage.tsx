@@ -854,9 +854,9 @@ export default function StampGeneratorPage() {
         <StampRightPanel
           concepts={concepts}
           favoriteConcepts={favoriteConcepts}
-          generating={generating}
+          generating={generatingInPanel}
           blocked={blocked}
-          selectedId={selectedId}
+          selectedId={activeStandard?.id || selectedId}
           svgOverrides={svgOverrides}
           tintColor={primaryColor}
           secondaryColor={secondaryColor}
@@ -870,20 +870,20 @@ export default function StampGeneratorPage() {
           variations={variations}
           variationsLoading={variationsLoading}
           deletedStamps={deletedStamps}
+          standardConcept={standardConcept}
           onSelect={handleSelectConcept}
           onToggleFav={toggleFavorite}
           onEditText={handleEditText}
           onPreview={handleOpenPreview}
-          onDelete={(c) => softDeleteConcept(c.id)}
+          onDelete={(c) => { if (standardConcept?.id === c.id) return; softDeleteConcept(c.id); }}
           onDuplicate={duplicateConcept}
           onGenerate={() => generateConcepts()}
           onGenerateVariations={generateVariations}
           onSelectVariation={(v) => {
             const newConcept: StampDesignConcept = { ...v, id: crypto.randomUUID() };
             setConcepts(prev => [newConcept, ...prev]);
-            setSelectedId(newConcept.id);
+            handleSelectConcept(newConcept);
             setSvgOverrides(prev => ({ ...prev, [newConcept.id]: v.svgSource }));
-            toast.success('Variation applied');
           }}
           onDeleteVariation={(id) => setVariations(prev => prev.filter(v => v.id !== id))}
           onDuplicateVariation={(v) => setVariations(prev => [...prev, { ...v, id: crypto.randomUUID(), label: `${v.label} (copy)` }])}
@@ -898,7 +898,7 @@ export default function StampGeneratorPage() {
               tags: [], svgSource: v.svg_source,
             };
             setConcepts(prev => [newConcept, ...prev.filter(c => c.id !== v.id)]);
-            setSelectedId(v.id);
+            handleSelectConcept(newConcept);
           }}
           onSaveBothVersions={(v) => {
             const newConcept: StampDesignConcept = {
@@ -918,7 +918,7 @@ export default function StampGeneratorPage() {
           }}
           onUploadNew={() => {}}
           savedDesignId={savedDesignId}
-          onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}
+          onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || activeStandard?.id || selectedId}`)}
         />
       </div>
 
