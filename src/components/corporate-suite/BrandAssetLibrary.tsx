@@ -84,8 +84,8 @@ export function BrandAssetLibrary({
       if (designError) throw designError;
 
       // Also query brand_assets for stamps/logos saved from stamp generator
-      const brandTypeMap: Record<string, string> = { stamp: "stamp", logo: "logo", monogram: "stamp" };
-      const brandTypes = assetTypes.filter(t => t in brandTypeMap);
+      const validBrandTypes = ["stamp", "logo", "signature", "business_card", "letterhead", "email_signature"] as const;
+      const brandTypes = assetTypes.filter(t => (validBrandTypes as readonly string[]).includes(t));
       let brandAssets: BrandAsset[] = [];
 
       if (brandTypes.length > 0) {
@@ -93,7 +93,7 @@ export function BrandAssetLibrary({
           .from("brand_assets")
           .select("*")
           .eq("user_id", user.id)
-          .in("asset_type", brandTypes)
+          .in("asset_type", brandTypes as unknown as string[])
           .order("created_at", { ascending: false });
 
         if (brandData) {
