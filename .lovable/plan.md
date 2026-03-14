@@ -1,4 +1,3 @@
-
 ## CRM System Upgrade — Implementation Status
 
 ### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
@@ -70,3 +69,39 @@
 | `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
 | `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
 | `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+
+## Multi-Portal System + Developer Portal — Audit & Fixes (March 2026)
+
+### ✅ ALL TASKS COMPLETED
+
+| # | Task | Status |
+|---|------|--------|
+| 1 | Fix "Register as Rep" label → "Register as Developer or Sales" | ✅ DONE |
+| 2 | Rename Developer Portal tab → "Update Profile" | ✅ DONE |
+| 3 | Investor Portal rebuild (7 tabs, premium styling) | ✅ DONE |
+| 4 | Broker Portal enhancement (tabbed structure) | ✅ DONE |
+| 5 | ApprovalTimeline shared component | ✅ DONE |
+| 6 | Event Management Hub | ✅ DONE |
+| 7 | useEventManagement hook | ✅ DONE |
+| 8 | events + event_invitations tables | ✅ DONE |
+| 9 | Role options include "Other" with custom field | ✅ DONE |
+| 10 | Owner/CEO/Founder requires ID + passport + trade license + RERA | ✅ DONE |
+| 11 | Registration gate blocks portal access until registered | ✅ DONE |
+| 12 | Owner auto-approve toggle for developers | ✅ DONE |
+| 13 | Owner restrict access for developers | ✅ DONE |
+| 14 | Nationality with flags dropdown | ✅ DONE |
+| 15 | Phone with country code + flag | ✅ DONE |
+| 16 | Language multi-select | ✅ DONE |
+| A | Homepage CTA cards: 4x2 grid (8 cards, 2 rows of 4) | ✅ DONE |
+| B | Remove "Interest Registration" terminology → "Launch Interests" | ✅ DONE |
+| C | Owner in developer mode sees developer view only | ✅ DONE (was already correct) |
+| D | On-Leave self-service feature for developers | ✅ DONE (toggle + date pickers in profile) |
+| E | Secondary contact fields (Company/Personal Email+Phone) | ✅ DONE |
+| F | Icon styling: champagne-gold gradient | ✅ DONE (already correct) |
+
+### Files Changed (This Batch)
+| File | Changes |
+|------|---------|
+| `src/components/home/DeveloperPortalCTA.tsx` | 8 cards in 4x2 grid, renamed labels, added "Update Your Profile" card |
+| `src/pages/DeveloperPortal.tsx` | Renamed all "Interest Registration" → "Launch Interests" (8 occurrences) |
+| `src/components/developer-portal/SalesRepRegistration.tsx` | Renamed title to "Register as Developer or Sales" |
