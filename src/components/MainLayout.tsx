@@ -240,17 +240,18 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </Suspense>
       )}
       {/* Mobile: horizontal header | Desktop: vertical sidebar */}
-      <div className="xl:hidden">
+      {/* Stamp generator routes get desktop frame at lg (1024px), others at xl (1280px) */}
+      <div className={isToolkitGeneratorRoute ? "lg:hidden" : "xl:hidden"}>
         <GlobalHeader forceSolid={needsHeaderSpacing} />
       </div>
       {!isBackOfficeRoute && (
         <>
-          <div className="hidden xl:block fixed left-0 top-0 h-screen z-[9997]">
+          <div className={`${isToolkitGeneratorRoute ? "hidden lg:block" : "hidden xl:block"} fixed left-0 top-0 h-screen z-[9997]`}>
             <Suspense fallback={null}>
               <GlobalVerticalNav />
             </Suspense>
           </div>
-          <div className="hidden xl:block">
+          <div className={isToolkitGeneratorRoute ? "hidden lg:block" : "hidden xl:block"}>
             <Suspense fallback={null}>
               <HorizontalUtilityBar />
             </Suspense>
