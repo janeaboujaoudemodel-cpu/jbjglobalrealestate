@@ -61,7 +61,7 @@ const ALL_TOOLS: ToolDef[] = [
   { id: "ai-description-writer", title: "JBJ AI Description Writer", description: "Write property descriptions.", link: "/ai-description-writer", category: "marketing" },
   // Design
   { id: "interior-design", title: "JBJ AI Interior Design", description: "Visualize spaces with AI designs.", link: "/interior-design-ai", category: "design" },
-  { id: "ai-video-studio", title: "JBJ Creative Video Suite", description: "Professional video editor.", link: "/toolkit/ai-video-studio", category: "design" },
+  { id: "ai-video-studio", title: "JBJ Creative Video Suite", description: "Professional video editor.", link: "/toolkit/video-suite", category: "design" },
   { id: "video-resize-pack", title: "JBJ Video Resize + Smart Reframe", description: "Resize videos for any platform.", link: "/toolkit/video-resize-pack", category: "design" },
   { id: "voice-studio", title: "JBJ Voice Studio", description: "AI voice generation.", link: "/toolkit/voice-studio", category: "design" },
   { id: "pdf-from-photos", title: "JBJ Photo → PDF Generator", description: "Convert photos to PDFs.", link: "/toolkit/pdf-from-photos", category: "design" },

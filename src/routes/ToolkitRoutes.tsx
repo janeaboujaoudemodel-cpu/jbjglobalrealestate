@@ -108,6 +108,7 @@ export const ToolkitRoutes = () => (
     <Route path="/toolkit/captions-translate" element={<L><CaptionsTranslate /></L>} />
     <Route path="/toolkit/background-ai" element={<L><BackgroundAI /></L>} />
     <Route path="/toolkit/beauty-filters" element={<L><BeautyFilters /></L>} />
+    <Route path="/virtual-staging-ai" element={<L><VirtualStagingPage /></L>} />
 
     {/* Business Suite Routes */}
     <Route path="/business-suite/all" element={<L><AllToolsSuite /></L>} />
