@@ -1,107 +1,164 @@
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+## Session 21 — Email + Chat Productivity Workspace Upgrade
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+### Current State Assessment
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+| Area | Current State |
+|------|--------------|
+| **Email UI** | 895-line monolith in `EmailClient.tsx`. Sidebar (56px folders + labels), 340px email list, flex-1 reading pane. Champagne gold theme consistent. |
+| **Productivity Panel** | `EmailProductivityPanel.tsx` — 120 lines, shows stats (unread/needs reply/urgent/starred), reply queue, action items. Opens as 264px sidebar. Analysis cache is always empty (never populated from AI responses). |
+| **AI Assistant** | `EmailAssistantPanel.tsx` — calls `ai-email-assistant` edge function for bilingual summary + suggested reply. Works per-email but doesn't feed results back to the productivity panel's `analysisCache`. |
+| **Calendar/Notes** | Exist as standalone pages (`/ai-calendar`, `AINoteCenter`). Zero integration with email or chat. |
+| **Team Chat** | 761-line `TeamChat.tsx`. Channels + DMs, Amanda pinned, message input with attachments. No calendar/notes/automation features. |
+| **Employee Chat** | 510-line `EmployeeChatHub.tsx`. AI-powered responses. No productivity features. |
+| **Bulk options** | Email: select-all, bulk archive/trash/mark-read. No bulk AI analysis, bulk forward, or bulk label. Chat: none. |
+| **Automation** | Zero. No auto-replies, auto-categorization, scheduled send, or follow-up reminders. |
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+### Key Problems to Fix
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+1. **Analysis cache never populated** — `EmailAssistantPanel` calls AI but doesn't write results back to the parent's `analysisCache` Map, so `EmailProductivityPanel` always shows zeros
+2. **No calendar integration** — Can't create calendar events from emails or chats
+3. **No notes integration** — Can't save email content or chat excerpts as notes
+4. **No automation** — No scheduled sends, auto-replies, or follow-up reminders
+5. **Limited bulk options** — No bulk AI summarize, bulk label, or bulk forward
+6. **Chat has no productivity features** — No quick notes, calendar shortcuts, or message pinning
+7. **Signature/stamp not shown in productivity context** — Only in compose flow
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+---
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+### Implementation Plan
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+#### 1. Fix Analysis Cache Pipeline (Critical Bug)
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+**File:** `src/pages/EmailClient.tsx`
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+- Change `analysisCache` from `useState` to `useRef` + state trigger so it persists across renders
+- Add `onAnalysisComplete` callback prop to `EmailAssistantPanel` that writes results into the shared cache
+- When AI analysis returns, update the cache and trigger productivity panel re-render
+- This single fix makes the entire productivity panel functional (unread, needs reply, urgent, tasks all populate correctly)
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+**File:** `src/components/email/EmailAssistantPanel.tsx`
 
-### Files Changed
+- Add `onAnalysisComplete?: (emailId: string, analysis: EmailAnalysis) => void` prop
+- Call it after successful AI analysis
+
+#### 2. Upgrade Email Productivity Panel
+
+**File:** `src/components/email/EmailProductivityPanel.tsx`
+
+Expand from 120 lines to a comprehensive productivity dashboard:
+
+- **Stats row** — Keep existing 4 stats, add "Scheduled" count
+- **Quick Actions section** — "Bulk Analyze Inbox" button (runs AI on all unread), "Schedule Follow-ups" button
+- **Calendar Mini-Widget** — Shows today's date + upcoming meetings count + "Add Event" quick button that opens `/ai-calendar` with prefilled data
+- **Quick Notes Widget** — Inline note input that saves to the `owner_notes` table with source tag "email-hub"
+- **Follow-up Reminders** — List of emails flagged for follow-up with due dates
+- **Automation Toggles** — Auto-categorize incoming emails (on/off), Auto-suggest replies (on/off)
+
+#### 3. Add Calendar Integration to Email + Chat
+
+**File:** `src/components/shared/QuickCalendarWidget.tsx` (NEW)
+
+A compact reusable widget:
+- Shows today's date and day
+- "Quick Event" button → opens a mini form (title, date, time) that saves to `/ai-calendar` state or navigates with query params
+- "From Email" mode: pre-fills event title from email subject, extracts dates from email body
+- "From Chat" mode: pre-fills from chat message content
+
+**Integration points:**
+- `EmailClient.tsx` — Add "Add to Calendar" button in email action bar (next to Reply/Forward)
+- `TeamChat.tsx` — Add calendar icon in message hover actions
+- `EmailProductivityPanel.tsx` — Embed the mini calendar widget
+
+#### 4. Add Notes Integration to Email + Chat
+
+**File:** `src/components/shared/QuickNoteWidget.tsx` (NEW)
+
+A compact reusable note-taking widget:
+- Small textarea with "Save Note" button
+- Tags input (auto-tags with "email" or "chat" source)
+- Saves to `owner_notes` table via Supabase
+- "From Email" mode: pre-fills with email subject + summary
+- "From Chat" mode: captures selected message text
+
+**Integration points:**
+- `EmailClient.tsx` — "Save as Note" button in email view action bar
+- `TeamChat.tsx` — "Pin to Notes" in message hover menu
+- `EmailProductivityPanel.tsx` — Embed quick note widget
+
+#### 5. Enhance Bulk Operations
+
+**File:** `src/pages/EmailClient.tsx`
+
+Add to the bulk toolbar (visible when emails are selected):
+- **Bulk AI Analyze** — Run AI summarize on all selected emails, populate cache
+- **Bulk Label** — Apply label to all selected
+- **Bulk Forward** — Forward all selected to a recipient
+- **Bulk Star/Unstar** — Toggle stars on selection
+
+**File:** `src/pages/TeamChat.tsx`
+
+- Add message selection mode (long-press or checkbox)
+- Bulk delete messages, bulk forward to email, bulk pin
+
+#### 6. Add Automation Section
+
+**File:** `src/components/email/EmailAutomationPanel.tsx` (NEW)
+
+Embedded in the productivity sidebar:
+- **Scheduled Send** — When composing, add "Schedule Send" option with date/time picker. Store in local state and show countdown in productivity panel.
+- **Follow-up Reminders** — "Remind me" button on emails → stores reminder date, shows in productivity panel when due
+- **Auto-Reply Templates** — Quick templates (out of office, acknowledgment, forwarding notice) that can be set as auto-responses
+- **Smart Labels** — Toggle to auto-label incoming emails based on AI analysis (properties, meetings, personal, urgent)
+
+#### 7. Upgrade Team Chat with Productivity Features
+
+**File:** `src/pages/TeamChat.tsx`
+
+Add to the right members sidebar or as a new tab:
+- **Pinned Messages** — Pin important messages for the channel
+- **Quick Notes** — Inline note capture from chat
+- **Calendar Quick-Add** — Create events from chat context
+- **Message Search Results** — Enhanced search with date filters
+
+#### 8. Premium UI Polish
+
+**Files:** `EmailClient.tsx`, `TeamChat.tsx`, `EmployeeChatHub.tsx`
+
+- Add subtle hover animations on email rows (scale-[1.002] translateX)
+- Improve loading states with shimmer skeletons instead of spinners
+- Add keyboard shortcuts indicator (R for reply, E for archive, etc.) in a small tooltip
+- Refined typography: slightly larger email subject (text-[15px] vs text-sm), better line-height
+- Add a unified header bar that shows "Communication Hub" with tab switching between Email / Team Chat / Employee Chat (optional, depending on routing)
+
+#### 9. Signature/Stamp Quick Access in Productivity
+
+**File:** `src/components/email/EmailProductivityPanel.tsx`
+
+Add a "Brand Assets" quick-access row:
+- Shows small thumbnails of the owner's stamp, signature, and letterhead from `brand_assets`
+- One-click to copy/insert into current compose
+- Links to respective tools for editing
+
+---
+
+### Files to Create/Modify
+
 | File | Action |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| `src/components/shared/QuickCalendarWidget.tsx` | NEW — Compact calendar event creator |
+| `src/components/shared/QuickNoteWidget.tsx` | NEW — Inline note capture widget |
+| `src/components/email/EmailAutomationPanel.tsx` | NEW — Automation toggles + scheduled send + reminders |
+| `src/components/email/EmailProductivityPanel.tsx` | UPGRADE — Calendar/notes/automation/brand assets integration |
+| `src/components/email/EmailAssistantPanel.tsx` | FIX — Add analysis callback to populate cache |
+| `src/pages/EmailClient.tsx` | UPGRADE — Wire cache, calendar/notes buttons, bulk operations, UI polish |
+| `src/pages/TeamChat.tsx` | UPGRADE — Pinned messages, calendar/notes integration, productivity features |
+| `src/components/employee-chat/EmployeeChatHub.tsx` | UPGRADE — Quick note/calendar access |
 
-## Multi-Portal System + Developer Portal — Audit & Fixes (March 2026)
+### What Will NOT Be Implemented (Transparency)
 
-### ✅ ALL TASKS COMPLETED
+- **Actual SMTP/IMAP integration** — Email data remains demo/simulated. This session upgrades the workspace UI and AI intelligence, not the email transport layer.
+- **Real calendar sync** — Calendar widget creates quick events but does not sync with Google Calendar or Outlook. That requires a separate connector integration.
+- **Persistent scheduled sends** — Scheduled sends will work within the session (timer-based). Cross-session persistence would require a database table and a cron-based edge function, which can be added in a future session.
 
-| # | Task | Status |
-|---|------|--------|
-| 1 | Fix "Register as Rep" label → "Register as Developer or Sales" | ✅ DONE |
-| 2 | Rename Developer Portal tab → "Update Profile" | ✅ DONE |
-| 3 | Investor Portal rebuild (7 tabs, premium styling) | ✅ DONE |
-| 4 | Broker Portal enhancement (tabbed structure) | ✅ DONE |
-| 5 | ApprovalTimeline shared component | ✅ DONE |
-| 6 | Event Management Hub | ✅ DONE |
-| 7 | useEventManagement hook | ✅ DONE |
-| 8 | events + event_invitations tables | ✅ DONE |
-| 9 | Role options include "Other" with custom field | ✅ DONE |
-| 10 | Owner/CEO/Founder requires ID + passport + trade license + RERA | ✅ DONE |
-| 11 | Registration gate blocks portal access until registered | ✅ DONE |
-| 12 | Owner auto-approve toggle for developers | ✅ DONE |
-| 13 | Owner restrict access for developers | ✅ DONE |
-| 14 | Nationality with flags dropdown | ✅ DONE |
-| 15 | Phone with country code + flag | ✅ DONE |
-| 16 | Language multi-select | ✅ DONE |
-| A | Homepage CTA cards: 4x2 grid (8 cards, 2 rows of 4) | ✅ DONE |
-| B | Remove "Interest Registration" terminology → "Launch Interests" | ✅ DONE |
-| C | Owner in developer mode sees developer view only | ✅ DONE (was already correct) |
-| D | On-Leave self-service feature for developers | ✅ DONE (toggle + date pickers in profile) |
-| E | Secondary contact fields (Company/Personal Email+Phone) | ✅ DONE |
-| F | Icon styling: champagne-gold gradient | ✅ DONE (already correct) |
-
-### Files Changed (This Batch)
-| File | Changes |
-|------|---------|
-| `src/components/home/DeveloperPortalCTA.tsx` | 8 cards in 4x2 grid, renamed labels, added "Update Your Profile" card |
-| `src/pages/DeveloperPortal.tsx` | Renamed all "Interest Registration" → "Launch Interests" (8 occurrences) |
-| `src/components/developer-portal/SalesRepRegistration.tsx` | Renamed title to "Register as Developer or Sales" |
