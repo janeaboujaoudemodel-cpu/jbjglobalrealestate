@@ -14,12 +14,13 @@ import { toast } from 'sonner';
 import {
   Stamp, Building2, Palette, Image, Check, Type, Upload, X, Globe, FileText,
   RotateCcw, MapPin, Undo2, Redo2, RotateCw, Save, Circle, Star, Minus, Hash,
-  Wand2, Download, Printer, FileDown, ChevronDown,
+  Wand2, Download, Printer, FileDown, ChevronDown, Landmark, BookmarkPlus,
 } from 'lucide-react';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
 import { useStampHistory } from '@/hooks/useStampHistory';
 import { OFFICIAL_INK_BLUE, ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
+import { StampPresetLibrary, saveCustomPreset, type PresetConfig } from '@/components/stamp-generator/StampPresetLibrary';
 
 // UAE phone normalization
 function normalizePhone(raw: string): string {
@@ -148,6 +149,17 @@ interface FormState {
   business_type: string;
   separator_style: SeparatorStyle;
   ink_color: string;
+  // New fields
+  government_mode: boolean;
+  arabic_font: string;
+  arabic_letter_spacing: number;
+  arabic_arc_spread: number;
+  arabic_font_weight: string;
+  arc_text_spacing: number;
+  circle_gap: number;
+  separator_distance: number;
+  center_content_size: number;
+  selected_preset: string;
 }
 
 export default function StampProjectWizard() {
@@ -161,23 +173,31 @@ export default function StampProjectWizard() {
   const [draftTime, setDraftTime] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('company');
   const [licenseOpen, setLicenseOpen] = useState(false);
+  const [savePresetOpen, setSavePresetOpen] = useState(false);
+  const [presetName, setPresetName] = useState('');
+
+  const defaultForm: FormState = {
+    project_name: 'My Stamp Project', company_name: '', arabic_company_name: '', trade_name_optional: '',
+    registration_number_optional: '', address_optional: '', phone_optional: '', email_optional: '',
+    website_optional: '', city_optional: 'Dubai', country_optional: 'UAE', arabic_city: '',
+    language_mode: 'BILINGUAL' as LanguageMode, stamp_type: 'ROUND' as StampType,
+    style_theme: 'CLASSIC' as StyleTheme, border_style: 'DOUBLE' as BorderStyle,
+    typography_style: 'SERIF' as TypographyStyle, density: 3, icon_style: 'MONOGRAM' as IconStyle,
+    monogram_text: '', uploaded_logo_url: '', language_reversed: true,
+    show_license_number: false, show_location: true, business_type: '',
+    separator_style: 'dot' as SeparatorStyle, ink_color: OFFICIAL_INK_BLUE,
+    government_mode: false, arabic_font: 'Noto Naskh Arabic',
+    arabic_letter_spacing: 2, arabic_arc_spread: 50, arabic_font_weight: 'bold',
+    arc_text_spacing: 2, circle_gap: 13, separator_distance: 50, center_content_size: 50,
+    selected_preset: '',
+  };
 
   const [form, setForm] = useState<FormState>(() => {
     try {
       const saved = localStorage.getItem('stamp-wizard-form');
-      if (saved) return JSON.parse(saved);
+      if (saved) return { ...defaultForm, ...JSON.parse(saved) };
     } catch { /* ignore */ }
-    return {
-      project_name: 'My Stamp Project', company_name: '', arabic_company_name: '', trade_name_optional: '',
-      registration_number_optional: '', address_optional: '', phone_optional: '', email_optional: '',
-      website_optional: '', city_optional: 'Dubai', country_optional: 'UAE', arabic_city: '',
-      language_mode: 'BILINGUAL' as LanguageMode, stamp_type: 'ROUND' as StampType,
-      style_theme: 'CLASSIC' as StyleTheme, border_style: 'DOUBLE' as BorderStyle,
-      typography_style: 'SERIF' as TypographyStyle, density: 3, icon_style: 'MONOGRAM' as IconStyle,
-      monogram_text: '', uploaded_logo_url: '', language_reversed: true,
-      show_license_number: false, show_location: true, business_type: '',
-      separator_style: 'dot' as SeparatorStyle, ink_color: OFFICIAL_INK_BLUE,
-    };
+    return defaultForm;
   });
 
   const history = useStampHistory<FormState>(form);
@@ -195,17 +215,59 @@ export default function StampProjectWizard() {
   const handleRedo = useCallback(() => { const next = history.redo(); if (next) setForm(next); }, [history]);
 
   const handleReset = useCallback(() => {
-    const initial: FormState = {
-      project_name: 'My Stamp Project', company_name: '', arabic_company_name: '', trade_name_optional: '',
-      registration_number_optional: '', address_optional: '', phone_optional: '', email_optional: '',
-      website_optional: '', city_optional: 'Dubai', country_optional: 'UAE', arabic_city: '',
-      language_mode: 'BILINGUAL', stamp_type: 'ROUND', style_theme: 'CLASSIC', border_style: 'DOUBLE',
-      typography_style: 'SERIF', density: 3, icon_style: 'MONOGRAM', monogram_text: '', uploaded_logo_url: '',
-      language_reversed: true, show_license_number: false, show_location: true, business_type: '',
-      separator_style: 'dot', ink_color: OFFICIAL_INK_BLUE,
-    };
-    setForm(initial); history.reset(initial); toast.success('Form reset to defaults');
+    setForm(defaultForm); history.reset(defaultForm); toast.success('Form reset to defaults');
   }, [history]);
+
+  const handlePresetSelect = useCallback((config: PresetConfig, presetNameStr: string) => {
+    setForm(f => {
+      const next = {
+        ...f,
+        style_theme: config.style_theme as StyleTheme,
+        border_style: config.border_style as BorderStyle,
+        typography_style: config.typography_style as TypographyStyle,
+        density: config.density,
+        stamp_type: config.stamp_type as StampType,
+        separator_style: config.separator_style as SeparatorStyle,
+        icon_style: config.icon_style as IconStyle,
+        language_mode: config.language_mode as LanguageMode,
+        show_license_number: config.show_license_number,
+        show_location: config.show_location,
+        government_mode: config.government_mode || false,
+        selected_preset: presetNameStr,
+        ...(config.arabic_font ? { arabic_font: config.arabic_font } : {}),
+        ...(config.arc_text_spacing ? { arc_text_spacing: config.arc_text_spacing } : {}),
+        ...(config.circle_gap ? { circle_gap: config.circle_gap } : {}),
+        ...(config.center_content_size ? { center_content_size: config.center_content_size } : {}),
+      };
+      history.push(next);
+      return next;
+    });
+    toast.success(`Applied "${presetNameStr}" preset`);
+  }, [history]);
+
+  const handleSaveCustomPreset = useCallback(() => {
+    if (!presetName.trim()) { toast.error('Enter a name'); return; }
+    const config: PresetConfig = {
+      style_theme: form.style_theme,
+      border_style: form.border_style,
+      typography_style: form.typography_style,
+      density: form.density,
+      stamp_type: form.stamp_type,
+      separator_style: form.separator_style,
+      icon_style: form.icon_style,
+      language_mode: form.language_mode,
+      show_license_number: form.show_license_number,
+      show_location: form.show_location,
+      government_mode: form.government_mode,
+      arabic_font: form.arabic_font,
+      arc_text_spacing: form.arc_text_spacing,
+      circle_gap: form.circle_gap,
+      center_content_size: form.center_content_size,
+    };
+    saveCustomPreset(presetName.trim(), config);
+    setPresetName('');
+    setSavePresetOpen(false);
+  }, [form, presetName]);
 
   const handleSaveDraft = useCallback(() => {
     try {
@@ -236,7 +298,14 @@ export default function StampProjectWizard() {
           uploaded_logo_url: form.uploaded_logo_url || null, language_reversed: form.language_reversed,
           show_license_number: form.show_license_number, show_location: form.show_location,
           business_type: form.business_type || null,
-          layout_json: { separator_style: form.separator_style, ink_color: form.ink_color },
+          layout_json: {
+            separator_style: form.separator_style, ink_color: form.ink_color,
+            government_mode: form.government_mode, arabic_font: form.arabic_font,
+            arabic_letter_spacing: form.arabic_letter_spacing, arabic_arc_spread: form.arabic_arc_spread,
+            arabic_font_weight: form.arabic_font_weight, arc_text_spacing: form.arc_text_spacing,
+            circle_gap: form.circle_gap, separator_distance: form.separator_distance,
+            center_content_size: form.center_content_size, selected_preset: form.selected_preset,
+          },
         })
         .select().single();
       if (error) throw error;
@@ -376,6 +445,38 @@ export default function StampProjectWizard() {
             <TabsContent value="company" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-3">
+                  {/* Preset Library */}
+                  <StampPresetLibrary
+                    onSelectPreset={handlePresetSelect}
+                    selectedPresetId={form.selected_preset ? undefined : undefined}
+                  />
+                  {form.selected_preset && (
+                    <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)]">
+                      <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border-[hsl(var(--gold)/0.3)] text-[8px]">
+                        Based on: {form.selected_preset}
+                      </Badge>
+                      <button onClick={() => set('selected_preset', '')} className="text-[8px] text-[hsl(var(--muted-foreground))] hover:text-destructive ml-auto">
+                        <X size={10} />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Save as Custom Template */}
+                  {savePresetOpen ? (
+                    <div className="flex gap-1.5 items-center">
+                      <Input value={presetName} onChange={e => setPresetName(e.target.value)} placeholder="Preset name" className="h-7 text-xs flex-1" />
+                      <Button size="sm" onClick={handleSaveCustomPreset} className="h-7 text-[10px] px-2 bg-[hsl(var(--gold))] text-white hover:opacity-90">Save</Button>
+                      <Button variant="ghost" size="sm" onClick={() => setSavePresetOpen(false)} className="h-7 text-[10px] px-1.5"><X size={10} /></Button>
+                    </div>
+                  ) : (
+                    <button onClick={() => setSavePresetOpen(true)}
+                      className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg border border-dashed border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[10px] font-medium hover:bg-[hsl(var(--gold)/0.04)]">
+                      <BookmarkPlus size={10} /> Save Current as Custom Preset
+                    </button>
+                  )}
+
+                  <div className="border-t border-[hsl(var(--border))]" />
+
                   {/* Language Mode — FIRST */}
                   <div>
                     <Label className="text-[11px] font-medium mb-1.5 block">Language Mode <span className="text-destructive">*</span></Label>
@@ -643,11 +744,106 @@ export default function StampProjectWizard() {
                       </Button>
                     </div>
                   </div>
+
+                  {/* Government Style Mode */}
+                  <div className="border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.04)] rounded-xl p-3 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Landmark size={12} className="text-[hsl(var(--gold))]" />
+                        <span className="text-[11px] font-semibold">Government Style Mode</span>
+                      </div>
+                      <Switch checked={form.government_mode} onCheckedChange={v => set('government_mode', v)} />
+                    </div>
+                    <p className="text-[8px] text-[hsl(var(--muted-foreground))]">
+                      Strict official format: 8px outer ring, no decoration, centered bold serif, navy/black only
+                    </p>
+                  </div>
+
+                  {/* Arabic Font Controls */}
+                  {(form.language_mode === 'AR' || form.language_mode === 'BILINGUAL') && (
+                    <div className="border border-[hsl(var(--border))] rounded-xl p-3 space-y-2.5">
+                      <p className="text-[11px] font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
+                        <Type size={11} className="text-[hsl(var(--gold))]" /> Arabic Font Controls
+                      </p>
+                      <div>
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1 block">Font Family</label>
+                        <select value={form.arabic_font} onChange={e => set('arabic_font', e.target.value)}
+                          className="w-full h-8 rounded-lg border-2 border-[hsl(var(--border))] bg-white text-xs px-2 focus:outline-none focus:border-[hsl(var(--gold)/0.5)]">
+                          <option value="Noto Naskh Arabic">Noto Naskh Arabic</option>
+                          <option value="Amiri">Amiri</option>
+                          <option value="Cairo">Cairo</option>
+                          <option value="Tajawal">Tajawal</option>
+                          <option value="Scheherazade New">Scheherazade</option>
+                        </select>
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between mb-0.5">
+                          <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Letter Spacing</label>
+                          <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.arabic_letter_spacing}px</span>
+                        </div>
+                        <input type="range" min={0} max={6} step={0.5} value={form.arabic_letter_spacing}
+                          onChange={e => set('arabic_letter_spacing', parseFloat(e.target.value))}
+                          className="w-full h-2 accent-[hsl(var(--gold))]" />
+                      </div>
+                      <div>
+                        <div className="flex items-center justify-between mb-0.5">
+                          <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Spread</label>
+                          <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.arabic_arc_spread}%</span>
+                        </div>
+                        <input type="range" min={20} max={80} step={1} value={form.arabic_arc_spread}
+                          onChange={e => set('arabic_arc_spread', parseInt(e.target.value))}
+                          className="w-full h-2 accent-[hsl(var(--gold))]" />
+                      </div>
+                      <div className="flex gap-2">
+                        <OptionButton selected={form.arabic_font_weight === 'normal'} onClick={() => set('arabic_font_weight', 'normal')} className="flex-1 text-[10px]">Normal</OptionButton>
+                        <OptionButton selected={form.arabic_font_weight === 'bold'} onClick={() => set('arabic_font_weight', 'bold')} className="flex-1 text-[10px]">Bold</OptionButton>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Spacing & Layout Controls */}
+                  <div className="border border-[hsl(var(--border))] rounded-xl p-3 space-y-2.5">
+                    <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Spacing & Layout</p>
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Text Spacing</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.arc_text_spacing}px</span>
+                      </div>
+                      <input type="range" min={1} max={6} step={0.5} value={form.arc_text_spacing}
+                        onChange={e => set('arc_text_spacing', parseFloat(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Ring Gap</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.circle_gap}%</span>
+                      </div>
+                      <input type="range" min={8} max={25} step={1} value={form.circle_gap}
+                        onChange={e => set('circle_gap', parseInt(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Separator Distance</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.separator_distance}%</span>
+                      </div>
+                      <input type="range" min={30} max={80} step={1} value={form.separator_distance}
+                        onChange={e => set('separator_distance', parseInt(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Center Content Size</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.center_content_size}%</span>
+                      </div>
+                      <input type="range" min={20} max={80} step={1} value={form.center_content_size}
+                        onChange={e => set('center_content_size', parseInt(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                    </div>
+                  </div>
                 </div>
               </ScrollArea>
             </TabsContent>
-
-            {/* ── Logo Tab ── */}
             <TabsContent value="logo" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-4">

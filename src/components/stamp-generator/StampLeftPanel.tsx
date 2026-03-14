@@ -294,7 +294,39 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
             </AccordionContent>
           </AccordionItem>
 
-          {/* ─── 6. Colors ─── */}
+          {/* ─── 5b. Arabic Font Controls ─── */}
+          <AccordionItem value="arabic-fonts" className="border-b border-[hsl(var(--border)/0.5)]">
+            <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
+              <span className="flex items-center gap-1.5">
+                <Type size={12} className="text-[hsl(var(--gold))]" />
+                Arabic Typography
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="pb-3 space-y-2.5">
+              <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
+                Arabic font settings are configured in the Style tab of the project wizard. Use the wizard to select Arabic font family, letter spacing, arc spread, and weight.
+              </p>
+              <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
+                Supported fonts: Noto Naskh Arabic, Amiri, Cairo, Tajawal, Scheherazade
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* ─── 5c. Spacing & Layout ─── */}
+          <AccordionItem value="spacing" className="border-b border-[hsl(var(--border)/0.5)]">
+            <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
+              <span className="flex items-center gap-1.5">
+                <Layers size={12} className="text-[hsl(var(--gold))]" />
+                Spacing & Layout
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="pb-3 space-y-2">
+              <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
+                Fine-tune arc text spacing, ring gaps, separator distance, and center content size via the Style tab in the wizard. Changes apply to all generated concepts.
+              </p>
+            </AccordionContent>
+          </AccordionItem>
+
           <AccordionItem value="colors" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
