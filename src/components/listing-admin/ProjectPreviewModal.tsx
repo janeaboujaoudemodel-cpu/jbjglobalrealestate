@@ -12,10 +12,11 @@ interface ProjectPreviewModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onEdit: (project: UnifiedProject) => void;
+  onOpenDetail?: (project: UnifiedProject) => void;
   onSendToSarah?: (project: UnifiedProject) => void;
 }
 
-export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onSendToSarah }: ProjectPreviewModalProps) {
+export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpenDetail, onSendToSarah }: ProjectPreviewModalProps) {
   const navigate = useNavigate();
   const { data: lastEdit } = useLatestEditLog("project", project?.id);
 
