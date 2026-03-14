@@ -304,10 +304,32 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     }
   };
 
+  // Fetch developer slugs for loaded imports
+  const fetchDeveloperSlugs = async (items: PendingImport[]) => {
+    const devIds = [...new Set(items.map(i => i.developer_id).filter(Boolean))] as string[];
+    if (devIds.length === 0) return;
+    try {
+      const { data } = await supabase
+        .from("developers")
+        .select("id, slug")
+        .in("id", devIds);
+      if (data) {
+        const map: Record<string, string> = {};
+        data.forEach(d => { if (d.slug) map[d.id] = d.slug; });
+        setDeveloperSlugs(prev => ({ ...prev, ...map }));
+      }
+    } catch { /* non-critical */ }
+  };
+
   useEffect(() => {
     fetchPendingImports();
     fetchInventoryStats();
   }, [jobId, showAll, statusFilter, sourceFilter]);
+
+  // Fetch developer slugs when imports change
+  useEffect(() => {
+    if (imports.length > 0) fetchDeveloperSlugs(imports);
+  }, [imports]);
 
   // Debounce ref for realtime subscription
   const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
