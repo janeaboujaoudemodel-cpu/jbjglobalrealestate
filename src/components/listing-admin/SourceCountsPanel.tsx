@@ -12,18 +12,18 @@ interface SourceCountsPanelProps {
   activeSource?: string;
 }
 
-type SourceSelection = "none" | "source-a" | "source-b";
+type SourceSelection = "none" | "provident" | "reelly";
 
 export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource }: SourceCountsPanelProps) {
   const { liveCounts, refreshCounts } = useSyncJobs();
   const navigate = useNavigate();
   // Default to Provident Portal (left card) selected
-  const [selectedSource, setSelectedSource] = useState<SourceSelection>("source-b");
+  const [selectedSource, setSelectedSource] = useState<SourceSelection>("provident");
 
   const handleSourceSelect = (source: SourceSelection) => {
     setSelectedSource(source);
-    if (source === "source-b") onSourceChange?.("provident");
-    else if (source === "source-a") onSourceChange?.("reelly");
+    if (source === "provident") onSourceChange?.("provident");
+    else if (source === "reelly") onSourceChange?.("reelly");
   };
 
   const handleViewProjects = (status: 'pending' | 'approved', source: string) => {
