@@ -404,6 +404,15 @@ const ProvidentEnrichmentPanel = () => {
 
   return (
     <div className="space-y-4">
+      {/* Completeness checklist definition */}
+      <div className="flex items-start gap-2 p-3 rounded-lg border border-blue-200 bg-blue-50/50">
+        <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+        <div className="text-xs text-blue-800">
+          <span className="font-semibold">Completeness Checklist:</span> Description (50+ chars), Images (3+), Amenities, Handover Date, Developer Name, Floor Plans.
+          Projects missing any of these are counted as "Missing Data".
+        </div>
+      </div>
+
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         <Card className="bg-card border border-gold/20">
           <CardContent className="p-4 text-center">
@@ -412,18 +421,26 @@ const ProvidentEnrichmentPanel = () => {
             <p className="text-2xl font-bold text-foreground">{gapStats?.total?.toLocaleString() ?? "—"}</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border border-gold/20">
+        <Card
+          className="bg-card border border-gold/20 cursor-pointer hover:border-amber-400 hover:shadow-md transition-all"
+          onClick={() => navigate('/owner/listing-admin?view=projects&statusFilter=needs-work')}
+        >
           <CardContent className="p-4 text-center">
             <AlertCircle className="w-5 h-5 text-amber-600 mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">Missing Data</p>
             <p className="text-2xl font-bold text-amber-600">{gapStats?.gaps?.toLocaleString() ?? "—"}</p>
+            <p className="text-[10px] text-amber-500 mt-1">Click to view →</p>
           </CardContent>
         </Card>
-        <Card className="bg-card border border-gold/20">
+        <Card
+          className="bg-card border border-gold/20 cursor-pointer hover:border-emerald-400 hover:shadow-md transition-all"
+          onClick={() => navigate('/owner/listing-admin?view=projects&statusFilter=enriched')}
+        >
           <CardContent className="p-4 text-center">
             <CheckCircle2 className="w-5 h-5 text-emerald-600 mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">Complete</p>
             <p className="text-2xl font-bold text-emerald-600">{gapStats ? (gapStats.total - gapStats.gaps).toLocaleString() : "—"}</p>
+            <p className="text-[10px] text-emerald-500 mt-1">Click to view →</p>
           </CardContent>
         </Card>
       </div>
