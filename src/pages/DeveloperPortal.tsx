@@ -858,21 +858,21 @@ const DeveloperPortal = () => {
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjE1LDE1MCwwLjA1KSIvPjwvc3ZnPg==')] opacity-50" />
           <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
             <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 text-sm">
-              {isOwner ? 'Owner Access' : isDeveloperMode ? 'Developer Tools' : 'For Real Estate Developers & Sales Teams'}
+              {isOwner && !isDeveloperMode ? 'Owner Access' : isDeveloperMode ? 'Developer Portal' : 'For Real Estate Developers & Sales Teams'}
             </Badge>
             <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#F5EBD7]">
-              {isOwner ? `Welcome back, Jane` : `Here's your portal, ${displayName}`}
+              {isOwner && !isDeveloperMode ? `Welcome back, Jane` : `Developer Portal`}
             </h1>
             <p className="text-lg md:text-xl text-[#D4B896]">
-              {isOwner
-                ? 'Upload projects, manage launches, and review interest registrations — all from here.'
+              {isOwner && !isDeveloperMode
+                ? 'Quick upload, manage launches, and review submissions.'
                 : 'Submit projects, request briefings, upload documents, and manage launches — all in one place.'}
             </p>
           </div>
         </div>
 
         {/* Owner Mode Banner */}
-        {isOwner && (
+        {isOwner && !isDeveloperMode && (
           <div className="container mx-auto px-4 py-4 max-w-4xl">
             <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-gold/10 to-gold/5 border-2 border-gold/30">
               <div className="flex items-center gap-3">
@@ -920,8 +920,8 @@ const DeveloperPortal = () => {
           </div>
         )}
 
-        {/* Registration Gate — unregistered non-owner users see ONLY the registration form */}
-        {!hasRepProfile && !isOwner && !loadingRep ? (
+        {/* Registration Gate — unregistered users (including owner in developer mode) see ONLY the registration form */}
+        {!hasRepProfile && (!isOwner || isDeveloperMode) && !loadingRep ? (
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             {/* Developer name selection before registration */}
             <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
@@ -1504,9 +1504,71 @@ const DeveloperPortal = () => {
                             </Badge>
                           </div>
                         </div>
-                        <Button variant="outline" onClick={handleStartEditProfile} className="border-gold/30">
-                          Edit Profile
-                        </Button>
+                        <div className="flex gap-3 items-center">
+                          <Button variant="outline" onClick={handleStartEditProfile} className="border-gold/30">
+                            Edit Profile
+                          </Button>
+                        </div>
+
+                        {/* On-Leave Toggle */}
+                        <div className="p-4 rounded-xl border border-gold/20 bg-card space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm font-semibold text-foreground">On Leave Status</p>
+                              <p className="text-xs text-muted-foreground">Mark yourself as on leave so the team knows your availability.</p>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant={(repProfile as any)?.is_on_leave ? "default" : "outline"}
+                              className={(repProfile as any)?.is_on_leave ? "bg-amber-500 text-white hover:bg-amber-600" : "border-gold/30"}
+                              onClick={async () => {
+                                const newVal = !(repProfile as any)?.is_on_leave;
+                                try {
+                                  await supabase.from('developer_representatives')
+                                    .update({ is_on_leave: newVal, leave_start_date: newVal ? new Date().toISOString().split('T')[0] : null, leave_end_date: null } as any)
+                                    .eq('id', repProfile!.id);
+                                  toast.success(newVal ? 'Marked as on leave' : 'Welcome back! Leave status cleared.');
+                                  refetchRep();
+                                } catch { toast.error('Failed to update leave status'); }
+                              }}
+                            >
+                              {(repProfile as any)?.is_on_leave ? 'On Leave' : 'Mark as On Leave'}
+                            </Button>
+                          </div>
+                          {(repProfile as any)?.is_on_leave && (
+                            <div className="grid grid-cols-2 gap-3">
+                              <div className="space-y-1">
+                                <Label className="text-xs">Leave Start</Label>
+                                <Input
+                                  type="date"
+                                  defaultValue={(repProfile as any)?.leave_start_date || ''}
+                                  onChange={async (e) => {
+                                    try {
+                                      await supabase.from('developer_representatives')
+                                        .update({ leave_start_date: e.target.value } as any)
+                                        .eq('id', repProfile!.id);
+                                    } catch {}
+                                  }}
+                                />
+                              </div>
+                              <div className="space-y-1">
+                                <Label className="text-xs">Expected Return</Label>
+                                <Input
+                                  type="date"
+                                  defaultValue={(repProfile as any)?.leave_end_date || ''}
+                                  onChange={async (e) => {
+                                    try {
+                                      await supabase.from('developer_representatives')
+                                        .update({ leave_end_date: e.target.value } as any)
+                                        .eq('id', repProfile!.id);
+                                    } catch {}
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
                         {!isRepApproved && (
                           <div className="bg-gold/10 border border-gold/30 rounded-xl p-3 text-sm text-stone-700">
                             Your registration is under review. Once approved, you'll be able to request briefings and send messages directly.

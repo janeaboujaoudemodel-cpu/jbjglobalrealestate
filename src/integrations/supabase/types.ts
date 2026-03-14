@@ -6794,24 +6794,34 @@ export type Database = {
         Row: {
           activity_score: number | null
           auto_approve_uploads: boolean | null
+          company_phone: string | null
           created_at: string | null
+          custom_role_title: string | null
           date_of_join: string | null
           developer_name: string
           email: string
           full_name: string
           gender: string | null
           id: string
+          is_on_leave: boolean | null
           languages: string[] | null
           last_active_at: string | null
+          leave_end_date: string | null
+          leave_start_date: string | null
           nationality: string | null
+          passport_document_url: string | null
+          personal_email: string | null
+          personal_phone: string | null
           phone: string | null
           position: string | null
           projects_handled: string[] | null
+          rera_document_url: string | null
           response_time_avg_hours: number | null
           role: string
           status: string
           total_briefings_hosted: number | null
           total_updates_submitted: number | null
+          trade_license_url: string | null
           updated_at: string | null
           user_id: string | null
           whatsapp_group_number: string | null
@@ -6820,24 +6830,34 @@ export type Database = {
         Insert: {
           activity_score?: number | null
           auto_approve_uploads?: boolean | null
+          company_phone?: string | null
           created_at?: string | null
+          custom_role_title?: string | null
           date_of_join?: string | null
           developer_name: string
           email: string
           full_name: string
           gender?: string | null
           id?: string
+          is_on_leave?: boolean | null
           languages?: string[] | null
           last_active_at?: string | null
+          leave_end_date?: string | null
+          leave_start_date?: string | null
           nationality?: string | null
+          passport_document_url?: string | null
+          personal_email?: string | null
+          personal_phone?: string | null
           phone?: string | null
           position?: string | null
           projects_handled?: string[] | null
+          rera_document_url?: string | null
           response_time_avg_hours?: number | null
           role?: string
           status?: string
           total_briefings_hosted?: number | null
           total_updates_submitted?: number | null
+          trade_license_url?: string | null
           updated_at?: string | null
           user_id?: string | null
           whatsapp_group_number?: string | null
@@ -6846,24 +6866,34 @@ export type Database = {
         Update: {
           activity_score?: number | null
           auto_approve_uploads?: boolean | null
+          company_phone?: string | null
           created_at?: string | null
+          custom_role_title?: string | null
           date_of_join?: string | null
           developer_name?: string
           email?: string
           full_name?: string
           gender?: string | null
           id?: string
+          is_on_leave?: boolean | null
           languages?: string[] | null
           last_active_at?: string | null
+          leave_end_date?: string | null
+          leave_start_date?: string | null
           nationality?: string | null
+          passport_document_url?: string | null
+          personal_email?: string | null
+          personal_phone?: string | null
           phone?: string | null
           position?: string | null
           projects_handled?: string[] | null
+          rera_document_url?: string | null
           response_time_avg_hours?: number | null
           role?: string
           status?: string
           total_briefings_hosted?: number | null
           total_updates_submitted?: number | null
+          trade_license_url?: string | null
           updated_at?: string | null
           user_id?: string | null
           whatsapp_group_number?: string | null

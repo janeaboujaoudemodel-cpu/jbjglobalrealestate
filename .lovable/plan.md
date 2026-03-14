@@ -1,102 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Developer Portal Overhaul — Registration Gate, Enhanced Registration, and Homepage CTA Fix
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Problem Summary
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-1. **Homepage CTA shows "Command Center"** when owner is in developer mode — should show developer view
-2. **No registration gate on direct navigation** — clicking CTA links goes straight to tabs without requiring registration
-3. **"Interest Registrations" concept is confusing** — remove it from owner CTA; rename to meaningful labels
-4. **Registration form is incomplete** — missing: "Other" role with custom text, document uploads for Owner/CEO, nationality dropdown with flags, phone with country codes, secondary contacts, on-leave feature
-5. **Icon styling** — gold gradient feels flat; switch to champagne-gold/premium tones
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
----
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-### Changes
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-#### 1. Fix Homepage `DeveloperPortalCTA.tsx`
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-- **When owner + developer mode**: Show developer actions (not owner command center). Title: "Developer Portal" not "Command Center"
-- **When owner + NOT developer mode**: Show a small owner shortcut row (Quick Upload, Manage Developers, Review Launches — no "Interest Registrations")
-- Remove "Interest Registrations" and "Listing Admin" from CTA entirely
-- Replace owner actions with: "Quick Upload", "Manage Launches", "Review Submissions", "Manage Developers"
-- Change icon container gradient from `from-gold to-[#C4A87A]` to champagne-gold: `from-[#D4B896] to-[#C9A87C]` with a subtle border glow
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-#### 2. Enhance Registration Form (`SalesRepRegistration.tsx`)
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-**Role selection:**
-- Add `{ value: 'other', label: 'Other', description: 'Please specify your role' }` to ROLE_OPTIONS
-- When "Other" selected, show mandatory text input: "Please provide your role"
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**Document uploads for Owner/CEO/Founder:**
-- When role is `owner_ceo`, require: ID upload, Passport upload, Trade License upload, RERA document upload (4 separate file inputs)
-- Block submission until all 4 are uploaded for that role
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-**Nationality with flags:**
-- Replace plain text `Input` with a `Select` dropdown using a comprehensive nationality list with flag emojis (reuse pattern from `PhoneInputWithCountry`)
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-**Phone with country codes:**
-- Replace plain `Input` for phone with `PhoneInputWithCountry` component (already exists)
-- Add secondary phone field (also with country code)
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-**Contact fields restructure:**
-- Company Email (required), Personal Email (optional)
-- Company Phone (required, with country code), Personal Phone (optional, with country code)
-- Mark personal fields as "restricted" with a lock icon and tooltip
-
-**Languages:**
-- Already uses `LanguageMultiSelect` — keep as-is, it supports add/remove
-
-**On-Leave feature:**
-- Add to the profile edit view (not registration): "Mark as On Leave" toggle
-- When toggled on, show date pickers for "Leave Start" and "Expected Return"
-- Save to `developer_representatives` table (new columns: `is_on_leave`, `leave_start_date`, `leave_end_date`)
-
-#### 3. Enforce Registration Gate in Portal
-
-Currently the gate exists at line 924: `!hasRepProfile && !isOwner && !loadingRep` shows only registration. This is correct for non-owners.
-
-**Change**: When owner is in developer mode (`isDeveloperMode && isOwner`), treat them like a developer — show the full developer flow including registration gate if they don't have a rep profile. Add a small "Switch to Owner View" link.
-
-**All CTA links from homepage** already navigate to `/developer-portal?tab=X`. The portal already gates non-registered users. No additional gate needed — the existing gate at line 924 handles it.
-
-#### 4. Database Migration
-
-Add columns to `developer_representatives`:
-```sql
-ALTER TABLE developer_representatives 
-  ADD COLUMN IF NOT EXISTS is_on_leave boolean DEFAULT false,
-  ADD COLUMN IF NOT EXISTS leave_start_date date,
-  ADD COLUMN IF NOT EXISTS leave_end_date date,
-  ADD COLUMN IF NOT EXISTS personal_phone text,
-  ADD COLUMN IF NOT EXISTS company_phone text,
-  ADD COLUMN IF NOT EXISTS custom_role_title text,
-  ADD COLUMN IF NOT EXISTS passport_document_url text,
-  ADD COLUMN IF NOT EXISTS trade_license_url text,
-  ADD COLUMN IF NOT EXISTS rera_document_url text;
-```
-
-#### 5. Owner Management Enhancements
-
-The existing "Manage" tab and auto-approve toggle on rep profiles already exist. Add to the manage tab:
-- "Restrict Access" button per developer (sets `status = 'restricted'`)
-- "Revert to Manual Approval" button (sets `auto_approve_uploads = false`)
-
----
-
-### Files Summary
-
-| File | Change |
+### Files Changed
+| File | Action |
 |------|--------|
-| `src/components/home/DeveloperPortalCTA.tsx` | Show developer view when in dev mode; remove "Interest Registrations"; champagne-gold styling |
-| `src/components/developer-portal/SalesRepRegistration.tsx` | Add "Other" role + custom text, Owner/CEO doc uploads (4 files), nationality dropdown with flags, phone with country codes, secondary contacts |
-| `src/pages/DeveloperPortal.tsx` | Owner in dev mode sees developer flow; profile edit adds on-leave toggle; manage tab gets restrict/revert buttons |
-| **Migration** | Add columns to `developer_representatives` |
-
-### Implementation Order
-1. Database migration (new columns)
-2. Homepage CTA fix + styling
-3. Registration form enhancements
-4. On-leave feature in profile edit
-5. Owner management restrict/revert controls
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
