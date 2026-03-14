@@ -33,6 +33,17 @@ import { StampRecentlyDeleted, DeletedStamp } from './StampRecentlyDeleted';
 import { StampVersionSelector } from './StampVersionSelector';
 import { useSaveBrandAsset } from '@/components/brand-assets/BrandAssetPicker';
 import ShortlistBadgeButton from '@/components/ShortlistBadgeButton';
+import { MonogramColorEditor, applyMonogramColors, DEFAULT_MONOGRAM_COLORS } from './MonogramColorEditor';
+import type { MonogramLetterColors } from './MonogramColorEditor';
+
+// 5 mandatory standard export colors — always visible, cannot be removed
+const STANDARD_EXPORT_COLORS = [
+  { label: 'White',        hex: '#ffffff' },
+  { label: 'Black',        hex: '#0d0d0d' },
+  { label: 'Navy Ink',     hex: '#1B3A8C' },
+  { label: 'Brand Gold',   hex: '#C8A766' },
+  { label: 'Dark Gold',    hex: '#B8860B' },
+];
 
 interface ChatMessage {
   role: 'user' | 'assistant';
