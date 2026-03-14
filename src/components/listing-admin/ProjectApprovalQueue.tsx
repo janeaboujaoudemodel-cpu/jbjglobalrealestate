@@ -98,6 +98,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [bulkTotal, setBulkTotal] = useState(0);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [incompleteCount, setIncompleteCount] = useState(0);
+  const [developerSlugs, setDeveloperSlugs] = useState<Record<string, string>>({});
   // Filter: "all" | "complete" | "needs_work"
   const [statusFilter, setStatusFilter] = useState<"all" | "complete" | "needs_work">("all");
   // Source filter: "all" | "reelly" | "manual" | "provident"
@@ -303,10 +304,32 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     }
   };
 
+  // Fetch developer slugs for loaded imports
+  const fetchDeveloperSlugs = async (items: PendingImport[]) => {
+    const devIds = [...new Set(items.map(i => i.developer_id).filter(Boolean))] as string[];
+    if (devIds.length === 0) return;
+    try {
+      const { data } = await supabase
+        .from("developers")
+        .select("id, slug")
+        .in("id", devIds);
+      if (data) {
+        const map: Record<string, string> = {};
+        data.forEach(d => { if (d.slug) map[d.id] = d.slug; });
+        setDeveloperSlugs(prev => ({ ...prev, ...map }));
+      }
+    } catch { /* non-critical */ }
+  };
+
   useEffect(() => {
     fetchPendingImports();
     fetchInventoryStats();
   }, [jobId, showAll, statusFilter, sourceFilter]);
+
+  // Fetch developer slugs when imports change
+  useEffect(() => {
+    if (imports.length > 0) fetchDeveloperSlugs(imports);
+  }, [imports]);
 
   // Debounce ref for realtime subscription
   const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -1208,7 +1231,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               )}
             </div>
           ) : (
-            <div className="p-6 rounded-xl border border-border bg-muted/10 shadow-sm">
+            <div className="px-2 sm:px-4 md:px-6 py-6 rounded-xl border border-border bg-muted/10 shadow-sm">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {imports.map((item) => (
                   <div key={item.id} className="relative">
@@ -1226,6 +1249,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                       item={{
                         ...item,
                         slug: item.slug,
+                        developer_slug: item.developer_id ? developerSlugs[item.developer_id] || null : null,
                         review_notes: !item.description || item.images.length === 0 || item.developer_name?.toLowerCase() === 'unknown' ? 'INCOMPLETE' : null
                       }}
                       formatPrice={formatPrice}

@@ -87,6 +87,9 @@ const TRUSTED_IMAGE_DOMAINS = [
   "uploads.mangopulse",
   "cdn.sanity.io",
   "images.unsplash.com",
+  "reelly-backend.s3.amazonaws.com",
+  "ggfx-providentestate.s3.eu-west-2.amazonaws.com",
+  "ggfx-providentestate.s3",
 ];
 
 const SAFE_IMAGE_SIZE = "464x312";

@@ -27,6 +27,7 @@ type PendingImportCardItem = {
   slug?: string | null;
   developer_name: string | null;
   developer_id?: string | null;
+  developer_slug?: string | null;
   location: string | null;
   description: string | null;
   price_from: number | null;
@@ -307,6 +308,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
             alt={activeImage.alt || item.name}
             className="w-full h-full object-cover"
             fallbackSrc="/placeholder.svg"
+            referrerPolicy="no-referrer"
           />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-muted/50">
@@ -385,7 +387,7 @@ export function PendingImportCard({ item, formatPrice, onReview, onRepaired, onA
         <div className="h-5 mb-2">
           {item.developer_name && (
             <Link 
-              to={`/developer/${encodeURIComponent(item.developer_name.toLowerCase().replace(/\s+/g, '-'))}`}
+              to={`/developer/${item.developer_slug || encodeURIComponent(item.developer_name.toLowerCase().replace(/\s+/g, '-'))}`}
               onClick={(e) => e.stopPropagation()}
               className="text-sm text-gold truncate hover:underline inline-block"
             >
