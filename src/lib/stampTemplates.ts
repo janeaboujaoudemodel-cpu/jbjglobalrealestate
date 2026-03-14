@@ -408,7 +408,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   }
 
   // ────────────────────────────────────────────────────────────────
-  // T6: Bilingual Official — English top arc, Arabic bottom arc (matching T12 pattern)
+  // T6: Bilingual Official — Arabic top arc, English bottom arc (STRICT: Arabic always on top)
   // Generates TWO variants: with and without license number
   // ────────────────────────────────────────────────────────────────
   if (isBilingual) {
@@ -418,8 +418,8 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const arcR = R - 17; // safe zone for text arcs
     const displayArabic = arabicName || name;
     const displayArabicCity = arabicCity || city;
-    const enFontSize = autoFontSize(name, 10, 24);
-    const arFontSize = autoFontSize(displayArabic, 11, 18);
+    const arParams = safeArcParams(displayArabic, arcR, 11, true);
+    const enParams = safeArcParams(name, arcR, 10, false);
 
     // Generate bilingual with arc text (with regNo)
     function buildT6Svg(showRegNo: boolean) {
@@ -429,18 +429,18 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <path id="t6top${showRegNo ? 'r' : ''}" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}"/>
-          <path id="t6bot${showRegNo ? 'r' : ''}" d="M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}"/>
+          <path id="t6bot${showRegNo ? 'r' : ''}" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx + arcR} ${cy}"/>
         </defs>
         <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
         <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
         <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${SECONDARY}" stroke-width="0.9"/>
-        <!-- English top arc -->
-        <text font-family="${font}" font-size="${enFontSize}" fill="${PRIMARY}" letter-spacing="2" font-weight="700">
-          <textPath href="#t6top${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${name}</textPath>
+        <!-- Arabic top arc (STRICT: Arabic always on top) -->
+        <text font-family="${arabicFont}" font-size="${arParams.fontSize}" fill="${PRIMARY}" letter-spacing="${arParams.letterSpacing}" font-weight="600">
+          <textPath href="#t6top${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
         </text>
-        <!-- Arabic bottom arc -->
-        <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${PRIMARY}" letter-spacing="1.5" font-weight="600">
-          <textPath href="#t6bot${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
+        <!-- English bottom arc (left-to-right readable) -->
+        <text font-family="${font}" font-size="${enParams.fontSize}" fill="${PRIMARY}" letter-spacing="${enParams.letterSpacing}" font-weight="700" dominant-baseline="hanging">
+          <textPath href="#t6bot${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${name}</textPath>
         </text>
         <!-- Center divider with ornament -->
         ${divider(cx, cy - 2, ACCENT, 26)}
