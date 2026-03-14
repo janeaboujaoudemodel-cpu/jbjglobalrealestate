@@ -136,9 +136,12 @@ const ListingAdmin = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [showChat, setShowChat] = useState(false);
   
-  // View state - 'chat', 'projects', or 'editor'
-  // UNIFIED: Now using 'data-ops' as the single entry for all sync/extraction views
-  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-ops'>('data-ops');
+  // View state
+  const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-ops' | 'project-detail'>('data-ops');
+  // Full project detail view
+  const [detailProject, setDetailProject] = useState<UnifiedProject | null>(null);
+  // Status filter for Project Hub
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   
   // Controlled sub-tab state for Data Ops tabs - defaults to Provident enrichment
   const [dataOpsTab, setDataOpsTab] = useState<string>("provident-hub");
