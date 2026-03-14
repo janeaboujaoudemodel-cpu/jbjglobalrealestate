@@ -108,7 +108,7 @@ export function useEventManagement() {
       .order("created_at", { ascending: false });
 
     if (error) return [];
-    return (data || []) as EventInvitation[];
+    return (data || []) as unknown as EventInvitation[];
   };
 
   return { events, loading, createEvent, updateEvent, deleteEvent, sendInvitations, fetchInvitations, refetch: fetchEvents };
