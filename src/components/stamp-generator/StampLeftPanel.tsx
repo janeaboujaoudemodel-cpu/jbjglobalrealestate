@@ -135,6 +135,27 @@ interface StampLeftPanelProps {
   onSetRefinePrompt: (v: string) => void;
   onRefineWithAI: () => void;
   hasSelectedSvg: boolean;
+  // Arabic font controls
+  arabicFont: string;
+  arabicLetterSpacing: number;
+  arabicArcSpread: number;
+  arabicFontWeight: string;
+  onSetArabicFont: (v: string) => void;
+  onSetArabicLetterSpacing: (v: number) => void;
+  onSetArabicArcSpread: (v: number) => void;
+  onSetArabicFontWeight: (v: string) => void;
+  // Spacing & Layout controls
+  arcTextSpacing: number;
+  circleGap: number;
+  separatorDistance: number;
+  centerContentSize: number;
+  onSetArcTextSpacing: (v: number) => void;
+  onSetCircleGap: (v: number) => void;
+  onSetSeparatorDistance: (v: number) => void;
+  onSetCenterContentSize: (v: number) => void;
+  // Government Mode
+  governmentMode: boolean;
+  onSetGovernmentMode: (v: boolean) => void;
 }
 
 export function StampLeftPanel(props: StampLeftPanelProps) {
