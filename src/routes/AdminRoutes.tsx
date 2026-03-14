@@ -149,6 +149,7 @@ export const AdminRoutes = () => (
 
     {/* ── Exclusive Documents ── */}
     <Route path="/owner/exclusive-documents" element={<OwnerGuard><ExclusiveDocuments /></OwnerGuard>} />
+    <Route path="/owner/ai-tools-control" element={<OwnerGuard><AIToolsControlPanel /></OwnerGuard>} />
 
     {/* ── E-Signature ── */}
     <Route path="/e-signature" element={<OwnerGuard><ESignatureDashboard /></OwnerGuard>} />
