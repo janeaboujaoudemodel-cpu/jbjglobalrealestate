@@ -56,6 +56,7 @@ import { EnrichmentCenter } from "@/components/listing-admin/EnrichmentCenter";
 import { ProvidentPortalHub } from "@/components/listing-admin/ProvidentPortalHub";
 import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
 import { ProjectPreviewModal } from "@/components/listing-admin/ProjectPreviewModal";
+import { ProjectDetailAdmin } from "@/components/listing-admin/ProjectDetailAdmin";
 import { ProjectMediaManager } from "@/components/listing-admin/ProjectMediaManager";
 import { SafeImage } from "@/components/SafeImage";
 import type { UnifiedProject } from "@/types/unifiedProject";
