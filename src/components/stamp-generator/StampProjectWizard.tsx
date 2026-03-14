@@ -187,7 +187,7 @@ export default function StampProjectWizard() {
     show_license_number: false, show_location: true, business_type: '',
     separator_style: 'dot' as SeparatorStyle, ink_color: OFFICIAL_INK_BLUE,
     government_mode: false, arabic_font: 'Noto Naskh Arabic',
-    arabic_letter_spacing: 2, arabic_arc_spread: 80, arabic_font_weight: 'bold',
+    arabic_letter_spacing: 2, arabic_arc_spread: 88, arabic_font_weight: 'bold',
     arc_text_spacing: 2, circle_gap: 13, separator_distance: 50, center_content_size: 50,
     selected_preset: '',
   };
