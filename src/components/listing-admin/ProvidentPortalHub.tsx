@@ -26,6 +26,13 @@ export function ProvidentPortalHub() {
   const [enrichmentStats, setEnrichmentStats] = useState<EnrichmentStats>({ total: 0, fullyEnriched: 0, partiallyEnriched: 0, unenriched: 0 });
   const [scrapeTimestamps, setScrapeTimestamps] = useState<string[]>([]);
 
+  // Auto-publish state
+  const [autoPublishCount, setAutoPublishCount] = useState<number | null>(null);
+  const [isAutoPublishing, setIsAutoPublishing] = useState(false);
+  // Data integrity state
+  const [integrityResult, setIntegrityResult] = useState<{ ghosts: number; duplicates: number } | null>(null);
+  const [isCheckingIntegrity, setIsCheckingIntegrity] = useState(false);
+
   // Provident extraction state
   const [isProvidentExtracting, setIsProvidentExtracting] = useState(false);
   const [providentResult, setProvidentResult] = useState<{
