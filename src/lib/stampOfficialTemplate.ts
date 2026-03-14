@@ -392,13 +392,17 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   // ─── Center content ───
   const centerContent = renderCenterContent(config, cx, cy, innerR, enFont, ink);
 
-  // ─── Registration number ───
+  // ─── Registration number — circular arc inside inner ring ───
   const centerMode = config.centerMode || (config.showLogo ? 'logo' : config.showMonogram ? 'monogram' : 'none');
   let regContent = '';
   if (config.showRegistration && config.registrationNumber && centerMode !== 'license') {
-    const regY = cy + innerR * 0.55;
-    regContent = `<text data-stamp-element="registration" x="${cx}" y="${regY}" text-anchor="middle" font-family="${enFont}" 
-      font-size="6.5" fill="${ink}" letter-spacing="0.8" opacity="0.7">${config.registrationNumber}</text>`;
+    // Render as circular arc at bottom of inner ring
+    const regArcR = innerR * 0.75;
+    const regSafe = safeArcFontSize(config.registrationNumber, regArcR, false, 7, 0.85, 3);
+    regContent = renderBottomArcTextPath(
+      config.registrationNumber, cx, cy, regArcR, regSafe.fontSize, enFont, ink,
+      regSafe.letterSpacing, false, 'registration', '500'
+    );
   }
 
   // ─── Border rings ───
@@ -420,7 +424,12 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     ? `<circle cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.4}"/>`
     : middleRingEl;
 
-  const innerRingEl = `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="${innerSW}"/>`;
+  // Dynamic ring system: if location is disabled, hide inner ring (location ring) 
+  // and let center content fill the space between middle ring and center
+  const showInnerRing = config.showLocation && mode === 'BILINGUAL';
+  const innerRingEl = showInnerRing
+    ? `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="${innerSW}"/>`
+    : '';
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
     ${outerRingEl}${decorativeRingEl}${middleRingFinal}${innerRingEl}
