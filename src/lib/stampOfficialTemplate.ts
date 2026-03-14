@@ -607,29 +607,28 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
       return '';
     case 'monogram':
       if (mono) {
-        const GOLD = '#B8860B';
         const baseSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
         const scaledSize = baseSize * centerScale;
         const upper = mono.toUpperCase();
         const userLetterColors = config.monogramLetterColors;
         const userDividerColor = config.monogramDividerColor;
-        // Per-letter coloring: user overrides > locked brand rule (index 0,2 = ink, index 1 = gold)
+        // POLICY: Default ALL letters to ink color (no forced gold for normal users)
+        // Owner-specific JBJ branding is applied at the wizard/UI level, not here
         const tspans = upper.split('').map((ch, i) => {
-          let fill: string;
-          if (userLetterColors && userLetterColors[i] !== undefined) {
-            fill = userLetterColors[i];
-          } else {
-            fill = (i === 1 && upper.length >= 2) ? GOLD : ink;
-          }
+          const fill = (userLetterColors && userLetterColors[i] !== undefined)
+            ? userLetterColors[i]
+            : ink;  // All letters default to ink color
           return `<tspan fill="${fill}">${ch}</tspan>`;
         }).join('');
-        const divColor = userDividerColor ?? GOLD;
-        // Gold divider lines flanking the middle letter
+        // Divider defaults to ink unless user explicitly overrides
+        const divColor = userDividerColor ?? ink;
+        // Tighter monogram letter spacing (was 2, now 1)
+        const monoLetterSpacing = upper.length >= 3 ? 1 : 2;
         const divW = scaledSize * 0.6;
         const divY = cy + scaledSize * 0.45;
         const divider = upper.length >= 2 ? `<line x1="${cx - divW}" y1="${divY}" x2="${cx + divW}" y2="${divY}" stroke="${divColor}" stroke-width="1.2" opacity="0.8"/>` : '';
         return `<text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
-          font-family="${enFont}" font-size="${scaledSize}" font-weight="700" letter-spacing="2">${tspans}</text>${divider}`;
+          font-family="${enFont}" font-size="${scaledSize}" font-weight="700" letter-spacing="${monoLetterSpacing}">${tspans}</text>${divider}`;
       }
       return '';
     case 'initials': {
@@ -651,7 +650,6 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
       }
       return '';
     default:
-      // Fallback legacy
       if (config.showLogo && config.logoUrl) {
         const imgSize = innerR * 1.5 * centerScale;
         return `<defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${innerR - 2}"/></clipPath></defs>
