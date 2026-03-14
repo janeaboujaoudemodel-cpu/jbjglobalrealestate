@@ -294,7 +294,7 @@ export default function AIToolsControlPanel() {
   };
 
   const restoreVersion = async (toolId: string, version: ToolVersion) => {
-    const { error } = await supabase.from("ai_tool_versions").insert({
+    const { error } = await (supabase.from("ai_tool_versions") as any).insert({
       tool_id: toolId,
       version_number: getNextVersion(toolId),
       status: "published",
