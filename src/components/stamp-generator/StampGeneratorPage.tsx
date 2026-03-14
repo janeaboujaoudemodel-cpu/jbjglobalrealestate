@@ -93,7 +93,10 @@ export default function StampGeneratorPage() {
   const [concepts, setConcepts] = useState<StampDesignConcept[]>([]);
   const [favoriteConcepts, setFavoriteConcepts] = useState<StampDesignConcept[]>([]);
   const [generating, setGenerating] = useState(false);
+  const [generatingInPanel, setGeneratingInPanel] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  // Standard Model — the pinned working design that is never lost during generation
+  const [standardConcept, setStandardConcept] = useState<StampDesignConcept | null>(null);
   const [savedDesignId, setSavedDesignId] = useState<string | null>(null);
   const [blocked, setBlocked] = useState(false);
 
@@ -262,6 +265,12 @@ export default function StampGeneratorPage() {
       const regular = existing.filter((d: any) => !d.is_favorite).slice(0, 11).map(toDesign);
       setFavoriteConcepts(favs);
       setConcepts(regular);
+      // Set standard from first design (T0)
+      const firstDesign = regular[0] || favs[0];
+      if (firstDesign && !standardConcept) {
+        setStandardConcept(firstDesign);
+        setSelectedId(firstDesign.id);
+      }
     } else {
       generateConcepts(data);
     }
@@ -270,9 +279,12 @@ export default function StampGeneratorPage() {
   const generateConcepts = useCallback(async (proj?: any) => {
     const p = proj || project;
     if (!p) return;
-    setGenerating(true);
+    // Only show center spinner on very first generation (no standard yet)
+    const isFirstGen = !standardConcept;
+    if (isFirstGen) setGenerating(true);
+    setGeneratingInPanel(true);
     setBlocked(false);
-    setSvgOverrides({});
+    // Don't clear svgOverrides — preserve standard edits
     try {
       if (session?.access_token) {
         const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
@@ -282,7 +294,7 @@ export default function StampGeneratorPage() {
         });
         if (res.ok) {
           const json = await res.json();
-          if (json.blocked) { setBlocked(true); setGenerating(false); return; }
+          if (json.blocked) { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); return; }
           if (json.concepts?.length) {
             const { data: saved } = await supabase
               .from('stamp_designs')
@@ -292,12 +304,18 @@ export default function StampGeneratorPage() {
               .order('created_at', { ascending: false })
               .limit(11);
             if (saved && saved.length > 0) {
-              setConcepts(saved.map((d: any) => ({
+              const newConcepts = saved.map((d: any) => ({
                 id: d.id, templateKey: d.template_key || 'classic-double',
                 label: (d.template_key || 'classic-double').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
-                tags: [], svgSource: d.svg_source || '', isFavorite: false,
-              })));
+                tags: [] as string[], svgSource: d.svg_source || '', isFavorite: false,
+              }));
+              setConcepts(newConcepts);
+              if (!standardConcept && newConcepts[0]) {
+                setStandardConcept(newConcepts[0]);
+                setSelectedId(newConcepts[0].id);
+              }
               setGenerating(false);
+              setGeneratingInPanel(false);
               return;
             }
           }
@@ -305,11 +323,16 @@ export default function StampGeneratorPage() {
       }
     } catch (_) {}
     const clientConcepts = generateStampConcepts(project ? { ...project, ...p } : p);
-    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); return; }
+    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); return; }
     setConcepts(clientConcepts);
-    if (clientConcepts.length > 0 && !selectedId) setSelectedId(clientConcepts[0].id);
+    // Set standard on first generation
+    if (!standardConcept && clientConcepts.length > 0) {
+      setStandardConcept(clientConcepts[0]);
+      setSelectedId(clientConcepts[0].id);
+    }
     setGenerating(false);
-  }, [project, session, projectId]);
+    setGeneratingInPanel(false);
+  }, [project, session, projectId, standardConcept]);
 
   async function toggleFavorite(concept: StampDesignConcept) {
     setTogglingFav(concept.id);
@@ -341,8 +364,18 @@ export default function StampGeneratorPage() {
   }
 
   function handleSelectConcept(concept: StampDesignConcept) {
+    // Swap: previous standard moves into concepts list, clicked becomes new standard
+    if (standardConcept && standardConcept.id !== concept.id) {
+      // Ensure old standard is in concepts list
+      setConcepts(prev => {
+        const exists = prev.some(c => c.id === standardConcept.id);
+        const filtered = prev.filter(c => c.id !== concept.id);
+        return exists ? filtered : [standardConcept, ...filtered];
+      });
+    }
+    setStandardConcept(concept);
     setSelectedId(concept.id);
-    toast.success('Design selected', { duration: 2000 });
+    toast.success('Design applied as Standard', { duration: 2000 });
   }
 
   function handleOpenPreview(concept: StampDesignConcept) {
@@ -572,8 +605,10 @@ export default function StampGeneratorPage() {
   }
 
   const allConcepts = [...favoriteConcepts, ...concepts.filter(c => !favoriteConcepts.some(f => f.id === c.id))];
-  const selectedConcept = allConcepts.find(c => c.id === selectedId);
-  const selectedSvg = selectedConcept ? (svgOverrides[selectedConcept.id] || selectedConcept.svgSource) : null;
+  // Standard always drives the center preview
+  const activeStandard = standardConcept || allConcepts[0] || null;
+  const selectedConcept = activeStandard;
+  const selectedSvg = activeStandard ? (svgOverrides[activeStandard.id] || activeStandard.svgSource) : null;
 
   function handleSvgTextChange(conceptId: string, newSvg: string) {
     setSvgOverrides(prev => ({ ...prev, [conceptId]: newSvg }));
@@ -707,7 +742,7 @@ export default function StampGeneratorPage() {
             {/* Stamp preview with pulse feedback */}
             <div className={`relative transition-all duration-200 ${previewPulse ? 'ring-2 ring-[hsl(var(--gold)/0.4)] rounded-full' : ''}`}
               style={{ filter: `drop-shadow(0 8px 24px hsl(0 0% 0% / 0.12))` }}>
-              {generating ? (
+              {generating && !activeStandard ? (
                 <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]" style={{ width: stampSize, height: stampSize, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Loader2 size={28} className="animate-spin text-[hsl(var(--gold))]" />
                   <p className="text-[10px] font-medium">Generating…</p>
@@ -819,9 +854,9 @@ export default function StampGeneratorPage() {
         <StampRightPanel
           concepts={concepts}
           favoriteConcepts={favoriteConcepts}
-          generating={generating}
+          generating={generatingInPanel}
           blocked={blocked}
-          selectedId={selectedId}
+          selectedId={activeStandard?.id || selectedId}
           svgOverrides={svgOverrides}
           tintColor={primaryColor}
           secondaryColor={secondaryColor}
@@ -835,20 +870,20 @@ export default function StampGeneratorPage() {
           variations={variations}
           variationsLoading={variationsLoading}
           deletedStamps={deletedStamps}
+          standardConcept={standardConcept}
           onSelect={handleSelectConcept}
           onToggleFav={toggleFavorite}
           onEditText={handleEditText}
           onPreview={handleOpenPreview}
-          onDelete={(c) => softDeleteConcept(c.id)}
+          onDelete={(c) => { if (standardConcept?.id === c.id) return; softDeleteConcept(c.id); }}
           onDuplicate={duplicateConcept}
           onGenerate={() => generateConcepts()}
           onGenerateVariations={generateVariations}
           onSelectVariation={(v) => {
             const newConcept: StampDesignConcept = { ...v, id: crypto.randomUUID() };
             setConcepts(prev => [newConcept, ...prev]);
-            setSelectedId(newConcept.id);
+            handleSelectConcept(newConcept);
             setSvgOverrides(prev => ({ ...prev, [newConcept.id]: v.svgSource }));
-            toast.success('Variation applied');
           }}
           onDeleteVariation={(id) => setVariations(prev => prev.filter(v => v.id !== id))}
           onDuplicateVariation={(v) => setVariations(prev => [...prev, { ...v, id: crypto.randomUUID(), label: `${v.label} (copy)` }])}
@@ -863,7 +898,7 @@ export default function StampGeneratorPage() {
               tags: [], svgSource: v.svg_source,
             };
             setConcepts(prev => [newConcept, ...prev.filter(c => c.id !== v.id)]);
-            setSelectedId(v.id);
+            handleSelectConcept(newConcept);
           }}
           onSaveBothVersions={(v) => {
             const newConcept: StampDesignConcept = {
@@ -883,7 +918,7 @@ export default function StampGeneratorPage() {
           }}
           onUploadNew={() => {}}
           savedDesignId={savedDesignId}
-          onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}
+          onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || activeStandard?.id || selectedId}`)}
         />
       </div>
 
