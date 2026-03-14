@@ -22,6 +22,10 @@ import { useAITool } from "../AIToolsProvider";
 import { toast } from "sonner";
 import AIToolPremiumLayout from "../AIToolPremiumLayout";
 import AIToolGuide from "../AIToolGuide";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { StampSVGRenderer } from "@/components/stamp-generator/StampSVGRenderer";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 // ─── Per-Type Field Configurations ────────────────────────────────────────────
 
