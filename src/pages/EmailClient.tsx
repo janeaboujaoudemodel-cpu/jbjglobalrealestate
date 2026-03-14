@@ -420,12 +420,25 @@ const EmailClient = () => {
                   <p className="text-[10px] text-black/40">{currentSender.title} · {currentSender.email}</p>
                 </div>
 
+                {/* Attachment chips */}
+                {attachments.length > 0 && (
+                  <div className="flex flex-wrap gap-2 bg-[#FDFBF7] border border-[#C9A84C]/15 rounded-lg p-2.5">
+                    {attachments.map(att => (
+                      <AttachmentChip
+                        key={att.id}
+                        attachment={att}
+                        onRemove={() => setAttachments(prev => prev.filter(a => a.id !== att.id))}
+                      />
+                    ))}
+                  </div>
+                )}
+
                 <div className="flex justify-between">
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="sm" className="text-black/60 hover:bg-[#C9A84C]/10">
+                    <Button variant="ghost" size="sm" className="text-black/60 hover:bg-[#C9A84C]/10" onClick={() => setShowAttachPicker(true)}>
                       <Paperclip className="w-4 h-4 mr-1" /> Attach
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-[#C9A84C] hover:bg-[#C9A84C]/10">
+                    <Button variant="ghost" size="sm" className="text-[#C9A84C] hover:bg-[#C9A84C]/10" onClick={() => setShowAttachPicker(true)}>
                       <Stamp className="w-4 h-4 mr-1" /> Stamp
                     </Button>
                     <Button
