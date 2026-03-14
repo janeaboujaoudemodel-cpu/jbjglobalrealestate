@@ -176,6 +176,7 @@ const DeveloperPortal = () => {
     setSavingProfile(true);
     try {
       const changedFields: string[] = [];
+      const developerChanged = editForm.developer_name !== (repProfile.developer_name || '');
       if (editForm.full_name !== repProfile.full_name) changedFields.push('full_name');
       if (editForm.email !== repProfile.email) changedFields.push('email');
       if (editForm.phone !== ((repProfile as any).phone || '')) changedFields.push('phone');
@@ -185,20 +186,29 @@ const DeveloperPortal = () => {
       if (editForm.personal_phone !== ((repProfile as any).personal_phone || '')) changedFields.push('personal_phone');
       if (editForm.company_phone !== ((repProfile as any).company_phone || '')) changedFields.push('company_phone');
       if (JSON.stringify(editForm.languages) !== JSON.stringify((repProfile as any).languages || [])) changedFields.push('languages');
+      if (developerChanged) changedFields.push('developer_name');
+
+      const updatePayload: any = {
+        full_name: editForm.full_name,
+        position: editForm.position || null,
+        email: editForm.email,
+        phone: editForm.phone || null,
+        nationality: editForm.nationality || null,
+        personal_email: editForm.personal_email || null,
+        personal_phone: editForm.personal_phone || null,
+        company_phone: editForm.company_phone || null,
+        languages: editForm.languages.length > 0 ? editForm.languages : null,
+      };
+
+      // If developer changed, update name and reset to pending_review
+      if (developerChanged) {
+        updatePayload.developer_name = editForm.developer_name;
+        updatePayload.status = 'pending_review';
+      }
 
       const { error } = await supabase
         .from('developer_representatives')
-        .update({
-          full_name: editForm.full_name,
-          position: editForm.position || null,
-          email: editForm.email,
-          phone: editForm.phone || null,
-          nationality: editForm.nationality || null,
-          personal_email: editForm.personal_email || null,
-          personal_phone: editForm.personal_phone || null,
-          company_phone: editForm.company_phone || null,
-          languages: editForm.languages.length > 0 ? editForm.languages : null,
-        } as any)
+        .update(updatePayload)
         .eq('id', repProfile.id);
       if (error) throw error;
 
