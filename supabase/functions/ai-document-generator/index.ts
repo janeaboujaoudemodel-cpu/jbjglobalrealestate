@@ -191,6 +191,31 @@ You summarise the search clearly and make a clear recommendation.`,
   },
 };
 
+// Contract/legal prompt config for owner-only free-form generation
+const CONTRACT_PROMPT: TypePromptConfig = {
+  systemRole: `You are a professional legal document writer for JBJ Global Real Estate, Dubai. 
+You generate contracts, HR letters, NDAs, offer letters, RERA forms, and other corporate documents. 
+Your documents are formal, legally structured, and follow UAE labor and real estate law standards. 
+Always include appropriate sections: parties involved, terms, obligations, effective dates, and signature blocks.`,
+  outputInstructions: `Generate a complete, professional document with:
+1. DOCUMENT HEADER: Document type, date, reference number
+2. PARTIES: Full names, designations, and identification details
+3. RECITALS / BACKGROUND: Brief context (2-3 sentences)
+4. TERMS AND CONDITIONS: Numbered clauses covering all relevant terms
+5. OBLIGATIONS: Clear responsibilities of each party
+6. COMPENSATION / FINANCIAL TERMS: If applicable
+7. DURATION AND TERMINATION: Effective dates and exit clauses
+8. CONFIDENTIALITY: If applicable
+9. GOVERNING LAW: UAE law reference
+10. SIGNATURE BLOCKS: Spaces for all parties to sign with name, title, date
+Include a disclaimer that this is a template and should be reviewed by legal counsel.`,
+  outputShape: `{
+  "document": "Full document content with all sections",
+  "subject": "Document title/reference",
+  "keyTerms": ["Term 1", "Term 2", "Term 3"]
+}`,
+};
+
 // ─── Fallback for unknown types ───────────────────────────────────────────────
 
 const FALLBACK_PROMPT: TypePromptConfig = {
