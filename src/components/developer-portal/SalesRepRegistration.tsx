@@ -389,7 +389,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5">
                 Personal Phone <span className="text-muted-foreground text-xs">(optional)</span>
-                <Lock className="w-3 h-3 text-muted-foreground" title="Restricted — visible only to admins" />
+                <Lock className="w-3 h-3 text-muted-foreground" />
               </Label>
               <PhoneInputWithCountry
                 value={form.personal_phone}
