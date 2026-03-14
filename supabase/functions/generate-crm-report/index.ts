@@ -47,13 +47,7 @@ Deno.serve(async (req) => {
     }, corsHeaders, userData.user.id);
     if (rateLimited) return rateLimited;
 
-    // Dummy block to keep the original auth error response
-    if (false) {
-      return new Response(JSON.stringify({ error: "Invalid token" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    // Check CRM role
 
     // Check CRM role
     const { data: profile } = await supabase
