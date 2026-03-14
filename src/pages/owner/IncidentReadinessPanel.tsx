@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Shield, Database, RefreshCw, CheckCircle2, XCircle, AlertTriangle,
   Archive, Clock, Activity, Download, FileCheck, Rocket, Lock,
+  FileSpreadsheet, Eye,
 } from "lucide-react";
 import {
   useBackupRecords, useChecklistRuns, useDeploymentRecords,
   useSecurityAlerts, useCreateSnapshot, useRunSecurityChecklist, useTestRestore,
 } from "@/hooks/useIncidentReadiness";
 import { useGateHistory, useRunDeploymentGate, type GateCheck } from "@/hooks/useDeploymentGate";
+import { supabase } from "@/integrations/supabase/client";
 
 const statusIcon = (s: string) => {
   if (s === "pass" || s === "healthy" || s === "completed" || s === "verified") return <CheckCircle2 className="w-4 h-4 text-emerald-500" />;
