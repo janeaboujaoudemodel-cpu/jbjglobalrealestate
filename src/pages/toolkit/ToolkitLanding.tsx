@@ -275,7 +275,7 @@ export default function ToolkitLanding() {
           </p>
           
           <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/toolkit/ai-video-studio">
+            <Link to="/toolkit/video-suite">
               <Button variant="primary" size="lg" className="gap-2">
                 <Play className="h-5 w-5" />
                 Open AI Video Studio
