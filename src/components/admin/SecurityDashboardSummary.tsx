@@ -455,6 +455,15 @@ export const SecurityDashboardSummary = () => {
       }, 250);
       
       toast.success("PDF report opened - use Print dialog to save");
+
+      logExportEvent({
+        exportType: "security_report",
+        exportFormat: "pdf",
+        recordCount: blockedIPs.length + securityEvents.length,
+        containsPii: false,
+        fieldsExported: ["ip_address", "function_name", "severity"],
+        requiredStepUp: true,
+      });
     } else {
       toast.error("Popup blocked. Please allow popups for this site.");
     }
