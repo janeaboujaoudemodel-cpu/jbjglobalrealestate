@@ -536,6 +536,10 @@ const TeamChat = () => {
                       )}
                     </div>
                     <p className="text-black/70 text-sm leading-relaxed mt-0.5">{message.content}</p>
+                    {/* Render attachments */}
+                    {(message as any).attachments?.map((att: DocumentAttachment) => (
+                      <ChatAttachmentRenderer key={att.id} attachment={att} />
+                    ))}
                   </div>
                 </div>
               );
