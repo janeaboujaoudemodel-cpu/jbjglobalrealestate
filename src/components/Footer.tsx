@@ -400,7 +400,7 @@ const Footer = () => {
   const productivityLinks = [
     { href: "/spreadsheet", label: "Spreadsheet" },
     { href: "/documents", label: "Document Designer" },
-    { href: "/toolkit/corporate-suite/qr-generator", label: "QR Generator" },
+    { href: "/qr-generator", label: "QR Generator" },
     { href: "/video-meeting", label: "Video Meeting" },
     { href: "/presentations", label: "Presentations" },
     { href: "/e-signature", label: "E-Signature" },
