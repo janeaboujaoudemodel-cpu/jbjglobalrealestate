@@ -151,7 +151,12 @@ const TeamChat = () => {
       channelId: activeChannel,
       isDM: activeChannelData?.type === "dm",
     };
+    // Include attachments in the message if any
+    if (pendingAttachments.length > 0) {
+      (message as any).attachments = pendingAttachments;
+    }
     setMessages(prev => [...prev, message]);
+    setPendingAttachments([]);
     if (settings.ownerCopyEnabled && activeChannelData?.type === "dm") {
       console.log("[Owner Copy]", { ...message, ownerCopy: true });
     }
