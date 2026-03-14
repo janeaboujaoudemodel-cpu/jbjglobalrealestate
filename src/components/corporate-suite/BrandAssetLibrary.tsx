@@ -93,7 +93,7 @@ export function BrandAssetLibrary({
           .from("brand_assets")
           .select("*")
           .eq("user_id", user.id)
-          .in("asset_type", brandTypes as unknown as string[])
+          .in("asset_type", brandTypes as any)
           .order("created_at", { ascending: false });
 
         if (brandData) {
