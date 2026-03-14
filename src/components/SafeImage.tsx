@@ -51,13 +51,20 @@ export const SafeImage = React.forwardRef<HTMLImageElement, SafeImageProps>(
     const resolvedSrc = typeof props.src === "string" ? resolveAppAssetUrl(props.src) : props.src;
     const resolvedFallback = resolveAppAssetUrl(fallbackSrc);
 
+    // If loading is explicitly set to "eager", respect it (for hero/first gallery images)
+    const loadingAttr = props.loading ?? "lazy";
+    // Add fetchpriority="high" for eager-loaded images
+    const fetchPriority = loadingAttr === "eager" ? "high" : undefined;
+
     return (
       <img
         ref={ref}
         {...props}
         src={resolvedSrc}
-        loading={props.loading ?? "lazy"}
+        loading={loadingAttr}
         decoding={props.decoding ?? "async"}
+        // @ts-ignore - fetchpriority is a valid HTML attribute
+        fetchpriority={fetchPriority}
         referrerPolicy="strict-origin-when-cross-origin"
         onLoad={(e) => {
           // Detect broken images that load as 0x0

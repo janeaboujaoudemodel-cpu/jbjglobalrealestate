@@ -10,12 +10,13 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Check, X, Clock, RefreshCw, Building2, MapPin, Calendar, 
   DollarSign, Bed, Ruler, FileText,
   ChevronLeft, ChevronRight, Merge, Plus, CheckSquare,
-  Upload, Globe, Building, Timer, Eye
+  Upload, Globe, Building, Timer, Eye, Search
 } from "lucide-react";
 import { format } from "date-fns";
 import type { Json } from "@/integrations/supabase/types";
@@ -103,6 +104,10 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [statusFilter, setStatusFilter] = useState<"all" | "complete" | "needs_work">("all");
   // Source filter: "all" | "reelly" | "manual" | "provident"
   const [sourceFilter, setSourceFilter] = useState<"all" | "reelly" | "manual" | "provident">("all");
+  // Search & developer filter
+  const [searchQuery, setSearchQuery] = useState("");
+  const [developerFilter, setDeveloperFilter] = useState("all");
+  const [distinctDevelopers, setDistinctDevelopers] = useState<string[]>([]);
   // Confirmation dialog state
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [confirmDialogMode, setConfirmDialogMode] = useState<"all" | "selected">("all");
@@ -325,6 +330,25 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
     fetchPendingImports();
     fetchInventoryStats();
   }, [jobId, showAll, statusFilter, sourceFilter]);
+
+  // Fetch distinct developer names for filter dropdown
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await supabase
+          .from("pending_project_imports")
+          .select("developer_name")
+          .eq("status", "pending")
+          .not("developer_name", "is", null)
+          .not("developer_name", "ilike", "unknown");
+        if (data) {
+          const names = [...new Set(data.map(d => d.developer_name).filter(Boolean))] as string[];
+          names.sort((a, b) => a.localeCompare(b));
+          setDistinctDevelopers(names);
+        }
+      } catch { /* non-critical */ }
+    })();
+  }, [imports.length]);
 
   // Fetch developer slugs when imports change
   useEffect(() => {
@@ -1110,6 +1134,32 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           {/* New Project Detector */}
           <NewProjectDetector />
 
+          {/* Search & Developer Filter */}
+          <div className="flex flex-wrap items-center gap-3 mb-4">
+            <div className="relative flex-1 min-w-[200px] max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by project name or developer..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <Select value={developerFilter} onValueChange={setDeveloperFilter}>
+              <SelectTrigger className="w-[220px] h-9 text-sm bg-background border-gold/30">
+                <SelectValue placeholder="All Developers" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Developers</SelectItem>
+                {distinctDevelopers.map(dev => (
+                  <SelectItem key={dev} value={dev}>
+                    <span className="flex items-center gap-2"><Building2 className="h-3.5 w-3.5 text-muted-foreground" /> {dev}</span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Source filter dropdown */}
           <div className="flex items-center gap-3 p-2 bg-muted/50 border border-border rounded-lg mb-4">
             <span className="text-sm font-medium text-foreground">Source:</span>
@@ -1233,7 +1283,20 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           ) : (
             <div className="px-2 sm:px-4 md:px-6 py-6 rounded-xl border border-border bg-muted/10 shadow-sm">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {imports.map((item) => (
+                {imports
+                  .filter((item) => {
+                    // Client-side search filter
+                    if (searchQuery.trim()) {
+                      const q = searchQuery.trim().toLowerCase();
+                      const nameMatch = item.name.toLowerCase().includes(q);
+                      const devMatch = item.developer_name?.toLowerCase().includes(q);
+                      if (!nameMatch && !devMatch) return false;
+                    }
+                    // Developer dropdown filter
+                    if (developerFilter !== "all" && item.developer_name !== developerFilter) return false;
+                    return true;
+                  })
+                  .map((item) => (
                   <div key={item.id} className="relative">
                     {/* Selection checkbox */}
                     <div className="absolute top-2 left-2 z-20">

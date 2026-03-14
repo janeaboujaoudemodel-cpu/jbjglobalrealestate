@@ -144,7 +144,7 @@ export function useOwnerInbox(filters: InboxFilters = {}) {
     staleTime: 30000,
   });
 
-  // Fetch channels
+  // Fetch channels (include inactive to show all historical data)
   const { data: channels = [] } = useQuery({
     queryKey: ['owner-comm-channels'],
     queryFn: async () => {
@@ -152,12 +152,12 @@ export function useOwnerInbox(filters: InboxFilters = {}) {
       const { data, error } = await supabase
         .from('owner_comm_channels')
         .select('*')
-        .eq('is_active', true)
         .order('display_name');
       if (error) throw error;
       return data as CommChannel[];
     },
     enabled: !!user?.id,
+    staleTime: 60000,
   });
 
   // Update thread status

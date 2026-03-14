@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import {
   Database, RefreshCw, Zap, Download, CloudDownload,
   CheckCircle, Clock, AlertTriangle, TrendingUp,
-  FileText, Image, Building2, Calendar
+  FileText, Image, Building2, Calendar, ShieldCheck, Trash2, Upload
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 
@@ -25,6 +25,13 @@ export function ProvidentPortalHub() {
   const [stats, setStats] = useState({ total: 0, published: 0, drafts: 0, pending: 0 });
   const [enrichmentStats, setEnrichmentStats] = useState<EnrichmentStats>({ total: 0, fullyEnriched: 0, partiallyEnriched: 0, unenriched: 0 });
   const [scrapeTimestamps, setScrapeTimestamps] = useState<string[]>([]);
+
+  // Auto-publish state
+  const [autoPublishCount, setAutoPublishCount] = useState<number | null>(null);
+  const [isAutoPublishing, setIsAutoPublishing] = useState(false);
+  // Data integrity state
+  const [integrityResult, setIntegrityResult] = useState<{ ghosts: number; duplicates: number } | null>(null);
+  const [isCheckingIntegrity, setIsCheckingIntegrity] = useState(false);
 
   // Provident extraction state
   const [isProvidentExtracting, setIsProvidentExtracting] = useState(false);
@@ -99,6 +106,75 @@ export function ProvidentPortalHub() {
   };
 
   useEffect(() => { fetchStats(); }, []);
+
+  // === AUTO-PUBLISH COMPLETE PROJECTS ===
+  const checkAutoPublishCount = async () => {
+    try {
+      // Count unpublished projects with complete core data
+      const { count } = await supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true })
+        .eq("is_published", false)
+        .not("description", "is", null)
+        .not("developer_name", "is", null)
+        .not("handover_date", "is", null);
+      setAutoPublishCount(count ?? 0);
+    } catch { /* non-critical */ }
+  };
+
+  const handleAutoPublish = async () => {
+    if (!confirm(`Auto-publish ${autoPublishCount} complete projects?\n\nThis will set is_published=true for all projects with description, developer, and handover date.`)) return;
+    setIsAutoPublishing(true);
+    try {
+      const { data, error } = await supabase
+        .from("projects")
+        .update({ is_published: true, updated_at: new Date().toISOString() })
+        .eq("is_published", false)
+        .not("description", "is", null)
+        .not("developer_name", "is", null)
+        .not("handover_date", "is", null)
+        .select("id");
+      if (error) throw error;
+      toast.success(`Auto-published ${data?.length ?? 0} projects!`);
+      fetchStats();
+      checkAutoPublishCount();
+    } catch (err: any) {
+      toast.error("Auto-publish failed: " + err.message);
+    } finally {
+      setIsAutoPublishing(false);
+    }
+  };
+
+  // === DATA INTEGRITY CHECK ===
+  const handleIntegrityCheck = async () => {
+    setIsCheckingIntegrity(true);
+    try {
+      // Ghost entries: no images AND no description
+      const { count: ghostCount } = await supabase
+        .from("projects")
+        .select("id", { count: "exact", head: true })
+        .is("description", null)
+        .eq("is_published", true);
+
+      // Duplicate slugs
+      const { data: allSlugs } = await supabase
+        .from("projects")
+        .select("slug")
+        .limit(5000);
+      const slugCounts: Record<string, number> = {};
+      (allSlugs || []).forEach(p => { slugCounts[p.slug] = (slugCounts[p.slug] || 0) + 1; });
+      const duplicateCount = Object.values(slugCounts).filter(c => c > 1).length;
+
+      setIntegrityResult({ ghosts: ghostCount ?? 0, duplicates: duplicateCount });
+      toast.info(`Integrity check: ${ghostCount ?? 0} ghost entries, ${duplicateCount} duplicate slugs`);
+    } catch (err: any) {
+      toast.error("Integrity check failed: " + err.message);
+    } finally {
+      setIsCheckingIntegrity(false);
+    }
+  };
+
+  useEffect(() => { checkAutoPublishCount(); }, []);
 
   // Provident Firecrawl extraction
   const handleProvidentExtract = async () => {
@@ -284,6 +360,49 @@ export function ProvidentPortalHub() {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Auto-Publish & Data Integrity */}
+      <Card className="border-gold/20">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-gold" />
+            Data Quality & Auto-Publish
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Button
+              onClick={handleAutoPublish}
+              disabled={isAutoPublishing || (autoPublishCount ?? 0) === 0}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              {isAutoPublishing ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <Upload className="h-4 w-4 mr-2" />}
+              Auto-Publish Complete ({autoPublishCount ?? '…'})
+            </Button>
+            <Button
+              onClick={handleIntegrityCheck}
+              disabled={isCheckingIntegrity}
+              variant="outline"
+              className="border-gold/30"
+            >
+              {isCheckingIntegrity ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
+              Data Integrity Check
+            </Button>
+          </div>
+          {integrityResult && (
+            <div className="grid grid-cols-2 gap-3">
+              <div className={`rounded-lg p-3 text-center border ${integrityResult.ghosts > 0 ? 'bg-red-50 border-red-200' : 'bg-emerald-50 border-emerald-200'}`}>
+                <p className={`text-xl font-bold ${integrityResult.ghosts > 0 ? 'text-red-700' : 'text-emerald-700'}`}>{integrityResult.ghosts}</p>
+                <p className="text-xs text-muted-foreground">Ghost Entries (no description)</p>
+              </div>
+              <div className={`rounded-lg p-3 text-center border ${integrityResult.duplicates > 0 ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'}`}>
+                <p className={`text-xl font-bold ${integrityResult.duplicates > 0 ? 'text-amber-700' : 'text-emerald-700'}`}>{integrityResult.duplicates}</p>
+                <p className="text-xs text-muted-foreground">Duplicate Slugs</p>
+              </div>
             </div>
           )}
         </CardContent>
