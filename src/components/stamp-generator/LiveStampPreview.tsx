@@ -194,6 +194,8 @@ export function LiveStampPreview({
       arabicFontWeight,
       circleGap: circleGapVal,
       centerContentScale: centerScaleVal,
+      monogramLetterColors,
+      monogramDividerColor,
       // NEW: pass language mode and shape directly
       languageMode: languageMode as LanguageMode,
       shape: stampType as StampShape,
