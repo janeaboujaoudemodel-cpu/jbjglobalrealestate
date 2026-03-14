@@ -161,6 +161,7 @@ interface FormState {
   separator_distance: number;
   center_content_size: number;
   selected_preset: string;
+  monogram_colors: MonogramLetterColors;
 }
 
 export default function StampProjectWizard() {
