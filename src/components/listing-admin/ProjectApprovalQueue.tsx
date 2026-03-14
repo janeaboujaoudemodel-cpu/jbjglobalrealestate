@@ -1283,7 +1283,20 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
           ) : (
             <div className="px-2 sm:px-4 md:px-6 py-6 rounded-xl border border-border bg-muted/10 shadow-sm">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {imports.map((item) => (
+                {imports
+                  .filter((item) => {
+                    // Client-side search filter
+                    if (searchQuery.trim()) {
+                      const q = searchQuery.trim().toLowerCase();
+                      const nameMatch = item.name.toLowerCase().includes(q);
+                      const devMatch = item.developer_name?.toLowerCase().includes(q);
+                      if (!nameMatch && !devMatch) return false;
+                    }
+                    // Developer dropdown filter
+                    if (developerFilter !== "all" && item.developer_name !== developerFilter) return false;
+                    return true;
+                  })
+                  .map((item) => (
                   <div key={item.id} className="relative">
                     {/* Selection checkbox */}
                     <div className="absolute top-2 left-2 z-20">
