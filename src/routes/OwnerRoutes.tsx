@@ -52,6 +52,7 @@ const CRMSecurityDashboard = lazy(() => import("@/pages/owner/CRMSecurityDashboa
 const AIToolAnalyticsDashboard = lazy(() => import("@/pages/owner/AIToolAnalyticsDashboard"));
 const EncryptionAuditDashboard = lazy(() => import("@/pages/owner/EncryptionAuditDashboard"));
 const GlobalAuditDashboard = lazy(() => import("@/pages/owner/GlobalAuditDashboard"));
+const DeveloperModerationQueue = lazy(() => import("@/pages/owner/DeveloperModerationQueue"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
