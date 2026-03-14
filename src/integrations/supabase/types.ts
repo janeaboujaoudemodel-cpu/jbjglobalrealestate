@@ -7855,6 +7855,42 @@ export type Database = {
         }
         Relationships: []
       }
+      email_analysis_cache: {
+        Row: {
+          action_items: Json | null
+          created_at: string | null
+          email_id: string
+          id: string
+          needs_reply: boolean | null
+          priority: string | null
+          suggested_reply: string | null
+          summary_ar: string | null
+          summary_en: string | null
+        }
+        Insert: {
+          action_items?: Json | null
+          created_at?: string | null
+          email_id: string
+          id?: string
+          needs_reply?: boolean | null
+          priority?: string | null
+          suggested_reply?: string | null
+          summary_ar?: string | null
+          summary_en?: string | null
+        }
+        Update: {
+          action_items?: Json | null
+          created_at?: string | null
+          email_id?: string
+          id?: string
+          needs_reply?: boolean | null
+          priority?: string | null
+          suggested_reply?: string | null
+          summary_ar?: string | null
+          summary_en?: string | null
+        }
+        Relationships: []
+      }
       email_hub_settings: {
         Row: {
           created_at: string | null

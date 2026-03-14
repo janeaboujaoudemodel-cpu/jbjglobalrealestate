@@ -570,3 +570,6 @@ verify_jwt = false
 
 [functions.send-owner-email]
 verify_jwt = false
+
+[functions.ai-email-assistant]
+verify_jwt = false
