@@ -1,94 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: AI Tool Analytics & Owner Audit Intelligence
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Overview
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-Create a new `ai_tool_usage_events` table to track every tool invocation, then build a comprehensive analytics dashboard at `/owner/ai-tools-analytics` with usage metrics, performance rankings, per-user analysis, health scores, audit intelligence, and fix recommendations.
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-### Database Migration
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-**New table: `ai_tool_usage_events`**
-```
-id (uuid PK), tool_id (text), user_id (uuid), user_role (text),
-started_at (timestamptz), completed_at (timestamptz),
-duration_ms (int), status (text: success/failure/abandoned),
-error_message (text), response_time_ms (int),
-created_at (timestamptz default now())
-```
-RLS: Authenticated users can INSERT their own rows; Owner-only SELECT for analytics.
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-**New table: `ai_tool_health_scores`** — Cached daily health scores per tool:
-```
-id (uuid PK), tool_id (text), score_date (date),
-health_score (numeric), uptime_pct (numeric),
-error_rate (numeric), completion_rate (numeric),
-avg_response_ms (int), complaint_count (int),
-created_at (timestamptz)
-```
-RLS: Owner-only SELECT/INSERT.
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-### Frontend: Tracking Hook
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-**New: `src/hooks/useAIToolTracking.ts`**
-- `trackToolStart(toolId)` → inserts row, returns event ID
-- `trackToolComplete(eventId, status, responseTimeMs)` → updates row
-- Integrated into `useAITool` (AIToolsProvider.tsx) so every `invokeTool` call auto-tracks
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-### Frontend: Analytics Dashboard
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-**New: `src/pages/owner/AIToolAnalyticsDashboard.tsx`** — Owner-only page at `/owner/ai-tools-analytics`
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-**Layout — 5 tabs:**
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-| Tab | Content (Tasks covered) |
-|-----|------------------------|
-| **Overview** | KPI cards (total uses, unique users, avg response time, failure rate), top 10 tools chart, daily usage sparkline (Task 1, 2) |
-| **Tool Rankings** | Sortable table: most used, fastest, slowest, most failed, least used, most improved, needs review. Each row shows tool name, category, usage count, avg response ms, failure %, health score badge (Task 2, 6) |
-| **User Analysis** | Per-tool expandable rows showing user name, email, role, usage count, last used, success/fail ratio (Task 3) |
-| **Audit Intelligence** | Flagged tools: repeated failures, traffic spikes (>3x avg), abuse patterns (single user >50 calls/day), low engagement (<5 uses/month). Auto-generated improvement recommendations (Task 4, 5) |
-| **Change Impact** | Before/after comparison for tools with version changes: usage delta, failure delta, engagement delta pulled from `ai_tool_versions` + `ai_tool_usage_events` (Task 7) |
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-**Health Score (Task 6):**
-Calculated client-side from usage data:
-- `score = (completionRate * 0.3) + (uptimePct * 0.25) + ((1 - errorRate) * 0.25) + (speedScore * 0.1) + ((1 - complaintRate) * 0.1)`
-- Displayed as color-coded badge: green (80-100), amber (50-79), red (<50)
-
-**Fix Recommendation Engine (Task 5):**
-Deterministic rules applied to analytics data:
-- Error rate >15% → "Review error handling and prompt logic"
-- Avg response >8s → "Optimize model routing or reduce payload"
-- Usage <5/month → "Consider deprecation or UX improvement"
-- Abandonment >40% → "Simplify input requirements"
-- Failure spike after version change → "Revert to previous version"
-
-### Route Registration
-
-Add to `src/routes/OwnerRoutes.tsx`:
-```tsx
-<Route path="ai-tools-analytics" element={<AIToolAnalyticsDashboard />} />
-```
-
-### Integration with Existing `useAITool`
-
-Update `src/components/ai-tools/AIToolsProvider.tsx` `invokeTool` to call tracking:
-- Before invoke: `trackToolStart(functionName)`
-- After success/error: `trackToolComplete(eventId, status, responseTimeMs)`
-
-### Files Summary
-
-| File | Change |
+### Files Changed
+| File | Action |
 |------|--------|
-| **Migration** | Create `ai_tool_usage_events` and `ai_tool_health_scores` tables with owner-only RLS |
-| **New**: `src/hooks/useAIToolTracking.ts` | Usage event tracking hook |
-| **New**: `src/pages/owner/AIToolAnalyticsDashboard.tsx` | Full analytics dashboard with 5 tabs |
-| **Update**: `src/components/ai-tools/AIToolsProvider.tsx` | Auto-track every tool invocation |
-| **Update**: `src/routes/OwnerRoutes.tsx` | Add analytics route |
-
-### Implementation Order
-1. Database migration
-2. `useAIToolTracking` hook
-3. Update `AIToolsProvider` with auto-tracking
-4. Build `AIToolAnalyticsDashboard` (all 5 tabs)
-5. Register route
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

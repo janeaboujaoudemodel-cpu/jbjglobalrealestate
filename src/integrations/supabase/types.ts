@@ -570,6 +570,51 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_tool_health_scores: {
+        Row: {
+          avg_response_ms: number | null
+          complaint_count: number | null
+          completion_rate: number | null
+          created_at: string | null
+          error_rate: number | null
+          health_score: number | null
+          id: string
+          score_date: string
+          tool_id: string
+          total_uses: number | null
+          unique_users: number | null
+          uptime_pct: number | null
+        }
+        Insert: {
+          avg_response_ms?: number | null
+          complaint_count?: number | null
+          completion_rate?: number | null
+          created_at?: string | null
+          error_rate?: number | null
+          health_score?: number | null
+          id?: string
+          score_date?: string
+          tool_id: string
+          total_uses?: number | null
+          unique_users?: number | null
+          uptime_pct?: number | null
+        }
+        Update: {
+          avg_response_ms?: number | null
+          complaint_count?: number | null
+          completion_rate?: number | null
+          created_at?: string | null
+          error_rate?: number | null
+          health_score?: number | null
+          id?: string
+          score_date?: string
+          tool_id?: string
+          total_uses?: number | null
+          unique_users?: number | null
+          uptime_pct?: number | null
+        }
+        Relationships: []
+      }
       ai_tool_projects: {
         Row: {
           created_at: string
@@ -646,6 +691,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ai_tool_usage_events: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          duration_ms: number | null
+          error_message: string | null
+          id: string
+          response_time_ms: number | null
+          started_at: string | null
+          status: string | null
+          tool_id: string
+          user_id: string
+          user_role: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          response_time_ms?: number | null
+          started_at?: string | null
+          status?: string | null
+          tool_id: string
+          user_id: string
+          user_role?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          duration_ms?: number | null
+          error_message?: string | null
+          id?: string
+          response_time_ms?: number | null
+          started_at?: string | null
+          status?: string | null
+          tool_id?: string
+          user_id?: string
+          user_role?: string | null
+        }
+        Relationships: []
       }
       ai_tool_versions: {
         Row: {

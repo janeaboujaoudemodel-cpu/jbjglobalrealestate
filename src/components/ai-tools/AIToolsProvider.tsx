@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAIToolTracking } from "@/hooks/useAIToolTracking";
 
 export interface AIToolResponse {
   success: boolean;
@@ -13,11 +14,15 @@ export const useAITool = () => {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
+  const { trackToolStart, trackToolComplete } = useAIToolTracking();
 
   const invokeTool = async (functionName: string, payload: any) => {
     setLoading(true);
     setError(null);
     setResponse(null);
+
+    const startTime = Date.now();
+    const eventId = await trackToolStart(functionName);
 
     try {
       const { data, error: fnError } = await supabase.functions.invoke(functionName, {
@@ -32,12 +37,16 @@ export const useAITool = () => {
         throw new Error(data.error);
       }
 
+      const elapsed = Date.now() - startTime;
+      await trackToolComplete(eventId, "success", elapsed);
+
       setResponse(data);
       return { success: true, data };
     } catch (err: any) {
       const errorMessage = err.message || "An error occurred";
+      const elapsed = Date.now() - startTime;
+      await trackToolComplete(eventId, "failure", elapsed, errorMessage);
       
-      // Handle rate limits and payment errors
       if (errorMessage.includes("429") || errorMessage.includes("Rate limit")) {
         toast.error("Rate limit exceeded. Please try again in a moment.");
       } else if (errorMessage.includes("402") || errorMessage.includes("Payment")) {
