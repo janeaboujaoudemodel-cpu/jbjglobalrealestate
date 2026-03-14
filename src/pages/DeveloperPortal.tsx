@@ -359,7 +359,7 @@ const DeveloperPortal = () => {
     enabled: isOwner,
   });
 
-  // Generic file upload handler
+  // Generic file upload handler with validation
   const handleGenericFileUpload = async (
     files: FileList | null,
     prefix: string,
@@ -369,14 +369,37 @@ const DeveloperPortal = () => {
   ) => {
     if (!files || files.length === 0) return;
     setUploading(true);
+
+    const { valid, rejected } = validateFiles(
+      Array.from(files), sessionFileNames, sessionUploadedBytes
+    );
+
+    // Log and toast rejected files
+    for (const { file, result } of rejected) {
+      toast.error(`${file.name}: ${result.rejectionReason}`);
+      logFileValidation(file.name, file.type, file.size, false, result.rejectionReason, result.sanitizedName);
+      logActivity({
+        activityType: 'file_rejected',
+        entityType: 'file',
+        entityName: file.name,
+        details: { reason: result.rejectionReason, size: file.size },
+        riskFlags: result.riskFlags,
+        developerName: devName,
+        developerEmail: devEmail,
+      });
+    }
+
     const uploaded: UploadedFile[] = [];
-    for (const file of Array.from(files)) {
+    for (const { file, result } of valid) {
       try {
-        const path = `developer-events/${prefix}/${Date.now()}-${file.name}`;
+        const path = `developer-events/${prefix}/${Date.now()}-${result.sanitizedName}`;
         const { error } = await supabase.storage.from("documents").upload(path, file);
         if (error) { toast.error(`Failed to upload ${file.name}`); continue; }
         const { data: urlData } = supabase.storage.from("documents").getPublicUrl(path);
-        uploaded.push({ name: file.name, url: urlData.publicUrl, type: file.type });
+        uploaded.push({ name: result.sanitizedName, url: urlData.publicUrl, type: file.type });
+        logFileValidation(file.name, file.type, file.size, true, null, result.sanitizedName);
+        setSessionUploadedBytes(prev => prev + file.size);
+        setSessionFileNames(prev => [...prev, result.sanitizedName]);
       } catch { toast.error(`Error uploading file`); }
     }
     setFiles(prev => [...prev, ...uploaded]);
@@ -388,15 +411,37 @@ const DeveloperPortal = () => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
     setUploadingFiles(true);
+
+    const { valid, rejected } = validateFiles(
+      Array.from(files), sessionFileNames, sessionUploadedBytes
+    );
+
+    for (const { file, result } of rejected) {
+      toast.error(`${file.name}: ${result.rejectionReason}`);
+      logFileValidation(file.name, file.type, file.size, false, result.rejectionReason, result.sanitizedName);
+      logActivity({
+        activityType: 'file_rejected',
+        entityType: 'file',
+        entityName: file.name,
+        details: { reason: result.rejectionReason, size: file.size, project: currentProject.project_name },
+        riskFlags: result.riskFlags,
+        developerName: devName,
+        developerEmail: devEmail,
+      });
+    }
+
     const uploaded: UploadedFile[] = [];
-    for (const file of Array.from(files)) {
+    for (const { file, result } of valid) {
       try {
         const safeName = currentProject.project_name?.replace(/[^a-zA-Z0-9-_]/g, '-') || 'project';
-        const path = `developer-uploads/${safeName}/${Date.now()}-${file.name}`;
+        const path = `developer-uploads/${safeName}/${Date.now()}-${result.sanitizedName}`;
         const { error } = await supabase.storage.from("documents").upload(path, file);
         if (error) { toast.error(`Failed to upload ${file.name}`); continue; }
         const { data: urlData } = supabase.storage.from("documents").getPublicUrl(path);
-        uploaded.push({ name: file.name, url: urlData.publicUrl, type: file.type });
+        uploaded.push({ name: result.sanitizedName, url: urlData.publicUrl, type: file.type });
+        logFileValidation(file.name, file.type, file.size, true, null, result.sanitizedName);
+        setSessionUploadedBytes(prev => prev + file.size);
+        setSessionFileNames(prev => [...prev, result.sanitizedName]);
       } catch { toast.error(`Error uploading file`); }
     }
     setCurrentProject(prev => ({ ...prev, files: [...prev.files, ...uploaded] }));
