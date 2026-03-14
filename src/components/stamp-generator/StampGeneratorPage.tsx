@@ -209,6 +209,9 @@ export default function StampGeneratorPage() {
   const addCustomColor = (hex: string) => { if (customPalette.length >= 5) { toast.error('Max 5 custom colors'); return; } if (customPalette.includes(hex)) return; setCustomPalette([...customPalette, hex]); toast.success('Color saved'); };
   const removeCustomColor = (hex: string) => { setCustomPalette(customPalette.filter(c => c !== hex)); };
 
+  // Monogram per-letter color state
+  const [monogramLetterColors, setMonogramLetterColors] = useState<MonogramLetterColors>(DEFAULT_MONOGRAM_COLORS);
+
   // Preview modal
   const [previewConcept, setPreviewConcept] = useState<StampDesignConcept | null>(null);
   const [openWithEditor, setOpenWithEditor] = useState(false);
