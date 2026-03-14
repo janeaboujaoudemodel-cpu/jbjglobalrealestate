@@ -373,7 +373,7 @@ const Footer = () => {
   // Creative Toolkit
   const creativeToolkitLinks = [
     { href: "/ai-hub", label: "AI Tools Hub" },
-    { href: "/toolkit/ai-video-studio", label: "AI Video Studio" },
+    { href: "/toolkit/video-suite", label: "Video Suite" },
     { href: "/toolkit/video-resize-pack", label: "Video Resize Pack" },
     { href: "/toolkit/voice-studio", label: "Voice Studio" },
     { href: "/toolkit/pdf-from-photos", label: "Photo to PDF" },
