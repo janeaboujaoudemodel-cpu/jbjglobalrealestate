@@ -82,7 +82,7 @@ const DeveloperPortal = () => {
   const [devName, setDevName] = useState("");
   const [devEmail, setDevEmail] = useState("");
 
-  // Interest registration modal
+  // Launch interest modal
   const [interestModalOpen, setInterestModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [interestType, setInterestType] = useState("general");
