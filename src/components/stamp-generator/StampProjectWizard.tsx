@@ -915,20 +915,22 @@ export default function StampProjectWizard() {
                   </div>
 
                   {form.icon_style === 'MONOGRAM' && (
-                    <div>
-                      <Label className="text-[11px] font-medium mb-1 block">Monogram Text (1–3 letters)</Label>
-                      <Input value={form.monogram_text} onChange={e => set('monogram_text', e.target.value.slice(0, 3))}
-                        placeholder={form.company_name.slice(0, 2) || 'JJ'} maxLength={3} className="uppercase h-8 text-sm"/>
-                      <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">Leave blank for auto initials</p>
-                    </div>
-                    <div className="mt-3 border border-[hsl(var(--border))] rounded-xl p-3">
-                      <MonogramColorEditor
-                        monogramText={form.monogram_text || form.company_name.slice(0, 3)}
-                        colors={form.monogram_colors}
-                        onChange={(colors) => set('monogram_colors', colors)}
-                        defaultColor={form.ink_color}
-                      />
-                    </div>
+                    <>
+                      <div>
+                        <Label className="text-[11px] font-medium mb-1 block">Monogram Text (1–3 letters)</Label>
+                        <Input value={form.monogram_text} onChange={e => set('monogram_text', e.target.value.slice(0, 3))}
+                          placeholder={form.company_name.slice(0, 2) || 'JJ'} maxLength={3} className="uppercase h-8 text-sm"/>
+                        <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-0.5">Leave blank for auto initials</p>
+                      </div>
+                      <div className="border border-[hsl(var(--border))] rounded-xl p-3">
+                        <MonogramColorEditor
+                          monogramText={form.monogram_text || form.company_name.slice(0, 3)}
+                          colors={form.monogram_colors}
+                          onChange={(colors) => set('monogram_colors', colors)}
+                          defaultColor={form.ink_color}
+                        />
+                      </div>
+                    </>
                   )}
 
                   {form.icon_style === 'UPLOADED_LOGO' && (
