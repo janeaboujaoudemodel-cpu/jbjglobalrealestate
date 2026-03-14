@@ -23,7 +23,7 @@ Deno.serve(async (req) => {
     if (!authHeader) return jsonResponse(401, { error: "Unauthorized" });
     const token = authHeader.replace("Bearer ", "");
     const { data: { user }, error: authErr } = await sb.auth.getUser(token);
-    if (authErr || !user) return jsonResponse({ error: "Unauthorized" }, 401);
+    if (authErr || !user) return jsonResponse(401, { error: "Unauthorized" });
     const { data: roleCheck } = await sb.rpc("has_role", { _user_id: user.id, _role: "admin" });
     if (!roleCheck) return jsonResponse({ error: "Forbidden" }, 403);
 
