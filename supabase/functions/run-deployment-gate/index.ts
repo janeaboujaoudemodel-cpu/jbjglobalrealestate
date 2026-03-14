@@ -250,6 +250,6 @@ Deno.serve(async (req) => {
     });
   } catch (err) {
     console.error("Deployment gate error:", err);
-    return jsonResponse({ error: "Internal error" }, 500);
+    return jsonResponse(500, { error: "Internal error" });
   }
 });
