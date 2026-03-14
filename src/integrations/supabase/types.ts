@@ -5307,6 +5307,7 @@ export type Database = {
           detection_keywords: string[] | null
           duplicate_hash: string | null
           duplicate_of_id: string | null
+          email_encrypted: string | null
           email_lower: string | null
           email_normalized: string | null
           flag_reasons: string[] | null
@@ -5325,10 +5326,12 @@ export type Database = {
           lead_source_type: string | null
           nationality: string | null
           notes: string | null
+          notes_encrypted: string | null
           owner_type: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id: string | null
           partner_service_type: string | null
           phone_e164: string | null
+          phone_encrypted: string | null
           phone_normalized: string | null
           phone_raw: string | null
           pipeline_stage: string | null
@@ -5372,6 +5375,7 @@ export type Database = {
           detection_keywords?: string[] | null
           duplicate_hash?: string | null
           duplicate_of_id?: string | null
+          email_encrypted?: string | null
           email_lower?: string | null
           email_normalized?: string | null
           flag_reasons?: string[] | null
@@ -5390,10 +5394,12 @@ export type Database = {
           lead_source_type?: string | null
           nationality?: string | null
           notes?: string | null
+          notes_encrypted?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id?: string | null
           partner_service_type?: string | null
           phone_e164?: string | null
+          phone_encrypted?: string | null
           phone_normalized?: string | null
           phone_raw?: string | null
           pipeline_stage?: string | null
@@ -5437,6 +5443,7 @@ export type Database = {
           detection_keywords?: string[] | null
           duplicate_hash?: string | null
           duplicate_of_id?: string | null
+          email_encrypted?: string | null
           email_lower?: string | null
           email_normalized?: string | null
           flag_reasons?: string[] | null
@@ -5455,10 +5462,12 @@ export type Database = {
           lead_source_type?: string | null
           nationality?: string | null
           notes?: string | null
+          notes_encrypted?: string | null
           owner_type?: Database["public"]["Enums"]["crm_lead_owner_type"]
           owner_user_id?: string | null
           partner_service_type?: string | null
           phone_e164?: string | null
+          phone_encrypted?: string | null
           phone_normalized?: string | null
           phone_raw?: string | null
           pipeline_stage?: string | null
@@ -8513,6 +8522,81 @@ export type Database = {
           last_active_at?: string | null
           status?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      encryption_audit_log: {
+        Row: {
+          action: string
+          created_at: string
+          data_class: string
+          details: Json | null
+          id: string
+          record_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          data_class: string
+          details?: Json | null
+          id?: string
+          record_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          data_class?: string
+          details?: Json | null
+          id?: string
+          record_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      encryption_status: {
+        Row: {
+          bucket_is_private: boolean | null
+          data_class: string
+          encryption_algorithm: string | null
+          field_name: string | null
+          id: string
+          is_encrypted: boolean | null
+          last_key_rotation: string | null
+          notes: string | null
+          risk_level: string | null
+          storage_bucket: string | null
+          table_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          bucket_is_private?: boolean | null
+          data_class: string
+          encryption_algorithm?: string | null
+          field_name?: string | null
+          id?: string
+          is_encrypted?: boolean | null
+          last_key_rotation?: string | null
+          notes?: string | null
+          risk_level?: string | null
+          storage_bucket?: string | null
+          table_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bucket_is_private?: boolean | null
+          data_class?: string
+          encryption_algorithm?: string | null
+          field_name?: string | null
+          id?: string
+          is_encrypted?: boolean | null
+          last_key_rotation?: string | null
+          notes?: string | null
+          risk_level?: string | null
+          storage_bucket?: string | null
+          table_name?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
