@@ -220,7 +220,7 @@ export default function AIToolsControlPanel() {
   };
 
   const applyFix = async (toolId: string, rec: Recommendation) => {
-    const { error } = await supabase.from("ai_tool_versions").insert({
+    const { error } = await (supabase.from("ai_tool_versions") as any).insert({
       tool_id: toolId,
       version_number: getNextVersion(toolId),
       status: "applied",
