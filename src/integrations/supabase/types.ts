@@ -6525,6 +6525,45 @@ export type Database = {
           },
         ]
       }
+      developer_session_logs: {
+        Row: {
+          created_at: string
+          developer_email: string
+          developer_name: string
+          files_uploaded_count: number | null
+          id: string
+          projects_submitted: string[] | null
+          session_end: string
+          session_start: string
+          summary: Json | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          developer_email: string
+          developer_name: string
+          files_uploaded_count?: number | null
+          id?: string
+          projects_submitted?: string[] | null
+          session_end?: string
+          session_start?: string
+          summary?: Json | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          developer_email?: string
+          developer_name?: string
+          files_uploaded_count?: number | null
+          id?: string
+          projects_submitted?: string[] | null
+          session_end?: string
+          session_start?: string
+          summary?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       developer_submissions: {
         Row: {
           assigned_broker_id: string | null
