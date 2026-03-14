@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FilePlus, Loader2, Copy, Check, Sparkles, FileText,
-  Mail, MessageSquare, Share2, Newspaper, Building2, Users, Hash, Instagram, Linkedin
+  Mail, MessageSquare, Share2, Newspaper, Building2, Users, Hash, Instagram, Linkedin,
+  Package, ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +22,10 @@ import { useAITool } from "../AIToolsProvider";
 import { toast } from "sonner";
 import AIToolPremiumLayout from "../AIToolPremiumLayout";
 import AIToolGuide from "../AIToolGuide";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { StampSVGRenderer } from "@/components/stamp-generator/StampSVGRenderer";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 // ─── Per-Type Field Configurations ────────────────────────────────────────────
 
@@ -206,10 +211,33 @@ const TONES = [
 
 const AIDocumentGeneratorPremium = () => {
   const { invokeTool, loading, response } = useAITool();
+  const { user } = useAuth();
   const [documentType, setDocumentType] = useState("listing");
   const [tone, setTone] = useState("professional");
   const [typeFields, setTypeFields] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState<string | null>(null);
+  const [brandAssetsOpen, setBrandAssetsOpen] = useState(false);
+  const [brandAssets, setBrandAssets] = useState<any[]>([]);
+  const [loadingAssets, setLoadingAssets] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (!brandAssetsOpen || !user || brandAssets.length > 0) return;
+    setLoadingAssets(true);
+    Promise.all([
+      supabase.from("brand_assets").select("*").eq("user_id", user.id).in("asset_type", ["stamp", "logo", "signature"]).order("created_at", { ascending: false }),
+      supabase.from("design_assets").select("*").eq("user_id", user.id).in("asset_type", ["logo", "signature", "stamp"]).order("created_at", { ascending: false }),
+    ]).then(([brandRes, designRes]) => {
+      const seen = new Set<string>();
+      const merged: any[] = [];
+      for (const item of [...(brandRes.data || []).map((b: any) => ({ ...b, _source: 'brand' })), ...(designRes.data || []).map((d: any) => ({ ...d, _source: 'design' }))]) {
+        const key = `${item.asset_type}:${item.name}`;
+        if (!seen.has(key)) { seen.add(key); merged.push(item); }
+      }
+      setBrandAssets(merged);
+      setLoadingAssets(false);
+    });
+  }, [brandAssetsOpen, user]);
 
   const config = DOCUMENT_TYPE_CONFIGS[documentType];
 
@@ -671,7 +699,59 @@ const AIDocumentGeneratorPremium = () => {
           </CardContent>
         </Card>
 
-        {/* ── Results Section ── */}
+        {/* ── Brand Assets Section ── */}
+        <Collapsible open={brandAssetsOpen} onOpenChange={setBrandAssetsOpen}>
+          <CollapsibleTrigger asChild>
+            <button className="w-full flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 border border-zinc-700 hover:border-lime-500/30 transition-all">
+              <div className="flex items-center gap-2 text-zinc-300">
+                <Package className="h-4 w-4 text-lime-400" />
+                <span className="text-sm font-medium">Brand Assets</span>
+                {selectedAsset && (
+                  <Badge className="bg-lime-500/20 text-lime-400 text-[10px]">1 selected</Badge>
+                )}
+              </div>
+              <ChevronDown className={`h-4 w-4 text-zinc-500 transition-transform ${brandAssetsOpen ? 'rotate-180' : ''}`} />
+            </button>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="pt-3">
+            <div className="rounded-lg bg-zinc-800/30 border border-zinc-700/50 p-4 space-y-3">
+              <p className="text-xs text-zinc-500">Select a saved logo, stamp, or signature to include in your document.</p>
+              {loadingAssets ? (
+                <div className="flex justify-center py-6">
+                  <Loader2 size={18} className="animate-spin text-zinc-500" />
+                </div>
+              ) : brandAssets.length === 0 ? (
+                <p className="text-xs text-zinc-600 text-center py-4">No brand assets saved yet.</p>
+              ) : (
+                <div className="grid grid-cols-4 gap-2">
+                  {brandAssets.slice(0, 8).map((asset: any) => (
+                    <button
+                      key={asset.id}
+                      onClick={() => setSelectedAsset(selectedAsset?.id === asset.id ? null : asset)}
+                      className={`rounded-lg border-2 p-2 transition-all ${
+                        selectedAsset?.id === asset.id
+                          ? 'border-lime-500 bg-lime-500/10'
+                          : 'border-zinc-700 hover:border-zinc-600'
+                      }`}
+                    >
+                      <div className="aspect-square flex items-center justify-center bg-white rounded mb-1">
+                        {asset.svg_content ? (
+                          <StampSVGRenderer svgSource={asset.svg_content} tintColor="#1B3A8C" size={40} />
+                        ) : asset.file_url || asset.thumbnail_url ? (
+                          <img src={asset.file_url || asset.thumbnail_url} alt={asset.name} className="max-h-[40px] object-contain" />
+                        ) : (
+                          <Package size={16} className="text-zinc-400" />
+                        )}
+                      </div>
+                      <p className="text-[8px] text-zinc-400 truncate">{asset.name}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
         <AnimatePresence mode="wait">
           {response ? (
             renderOutput()

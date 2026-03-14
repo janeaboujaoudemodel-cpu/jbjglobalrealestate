@@ -47,6 +47,7 @@ const PropertyMap = lazy(() => import("@/pages/PropertyMap"));
 const ListingAdmin = lazy(() => import("@/pages/ListingAdmin"));
 const ModeHub = lazy(() => import("@/pages/ModeHub"));
 const FoundersNotesPanel = lazy(() => import("@/components/founders-assistant/FoundersNotesPanel"));
+const BrandAssetsDashboard = lazy(() => import("@/pages/owner/BrandAssetsDashboard"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -100,5 +101,6 @@ export const OwnerRoutes = () => (
     <Route path="listing-admin/preview/:id" element={<ListingAdminGuard><Suspense fallback={<PageLoader />}>{React.createElement(React.lazy(() => import("@/pages/listing-admin/PendingImportPreview")))}</Suspense></ListingAdminGuard>} />
     <Route path="mode-hub" element={<ModeHub />} />
     <Route path="notes" element={<FoundersNotesPanel />} />
+    <Route path="brand-assets" element={<BrandAssetsDashboard />} />
   </Route>
 );

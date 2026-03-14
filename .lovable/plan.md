@@ -1,75 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Unify Brand Asset Systems & Cross-Tool Integration
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Problem
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-There are **two separate, disconnected brand asset systems**:
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-1. **`BrandAssetLibrary`** — uses the `design_assets` table + `brand-assets` storage bucket. Already integrated into: Business Card, CV/Resume, Cover Letter, Company Profile.
-2. **`BrandAssetPicker`** — uses the `brand_assets` table. Only used by the Stamp Generator.
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-These don't talk to each other. A stamp saved via `useSaveBrandAsset` (→ `brand_assets` table) never appears in the `BrandAssetLibrary` that other tools use (→ `design_assets` table). There is also no dedicated Brand Assets dashboard page.
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-Additionally, several tools have **no brand asset integration at all**: AI Document Generator, InlineStampGenerator, and the Letterhead/Email Signature flows.
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-### Solution
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-#### 1. Bridge the Two Tables
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-Update `BrandAssetLibrary` to query **both** `design_assets` AND `brand_assets` tables, merging results into a unified list. This way stamps saved from the generator automatically appear in every tool that uses `BrandAssetLibrary`.
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-Update `useSaveBrandAsset` to **also insert into `design_assets`** when the asset has an SVG (converting to a data URI for `file_url`), ensuring bidirectional visibility.
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-**File**: `src/components/corporate-suite/BrandAssetLibrary.tsx` (add secondary query to `brand_assets`), `src/components/brand-assets/BrandAssetPicker.tsx` (dual-insert in `useSaveBrandAsset`)
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-#### 2. Brand Assets Dashboard Page
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-Create `/owner/brand-assets` — a full-page dashboard showing all saved brand assets grouped by type (stamps, logos, business cards, signatures, letterheads, email signatures). Actions per asset: Use in Tool, Duplicate, Delete.
-
-**Files**: New `src/pages/owner/BrandAssetsDashboard.tsx`, add route in `AdminRoutes.tsx`, add nav link in `GlobalVerticalNav.tsx`
-
-#### 3. Add Brand Asset Picker to Missing Tools
-
-- **AI Document Generator** (`AIDocumentGeneratorPremium.tsx`): Add a "Brand Assets" collapsible section for logo/stamp/signature insertion into generated documents.
-- **InlineStampGenerator** (`InlineStampGenerator.tsx`): Add a "Select from Brand Library" tab so users can pick a previously saved stamp instead of generating a new one.
-
-**Files**: `AIDocumentGeneratorPremium.tsx`, `InlineStampGenerator.tsx`
-
-#### 4. "Save as Brand Asset" Actions Across Tools
-
-Ensure every tool that produces a visual output has a "Save as Brand Asset" button. Currently only the stamp generator has this. Add to:
-- Logo Creator (already saves to `design_assets` — add `brand_assets` dual-insert)
-- InlineStampGenerator (add save action after generation)
-
-**Files**: `LogoCreator.tsx` (add `brand_assets` insert alongside existing `design_assets` insert)
-
-#### 5. Duplicate / Save Both / Select Previous in BrandAssetLibrary
-
-Add to the `BrandAssetLibrary` grid:
-- **Duplicate** button (clone asset with "Copy of" prefix)
-- **"Use Previous"** indicator showing version count per asset type
-
-**File**: `BrandAssetLibrary.tsx`
-
-### Files Summary
-
-| File | Change |
+### Files Changed
+| File | Action |
 |------|--------|
-| `BrandAssetLibrary.tsx` | Query both `design_assets` + `brand_assets`, add Duplicate action |
-| `BrandAssetPicker.tsx` | `useSaveBrandAsset` dual-inserts into both tables |
-| `LogoCreator.tsx` | Add `brand_assets` insert alongside `design_assets` |
-| `InlineStampGenerator.tsx` | Add "Select from Library" tab using `BrandAssetLibrary` |
-| `AIDocumentGeneratorPremium.tsx` | Add Brand Assets collapsible for logo/stamp/signature |
-| New: `BrandAssetsDashboard.tsx` | Full-page brand assets dashboard at `/owner/brand-assets` |
-| `AdminRoutes.tsx` | Add `/owner/brand-assets` route |
-| `GlobalVerticalNav.tsx` | Add "Brand Assets" nav link |
-
-### Implementation Order
-
-1. Bridge tables in `BrandAssetLibrary` + `useSaveBrandAsset`
-2. Create Brand Assets Dashboard page + route
-3. Add brand asset picker to AI Document Generator
-4. Add "Select from Library" to InlineStampGenerator
-5. Add dual-insert to LogoCreator
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
