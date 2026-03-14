@@ -53,6 +53,25 @@ function autoFontSize(text: string, base: number, maxChars = 20): number {
   return Math.round(base * 0.58);
 }
 
+/**
+ * Compute safe arc font size and letter-spacing to prevent character collisions.
+ */
+function safeArcParams(text: string, arcR: number, baseFontSize: number, isArabic: boolean): { fontSize: number; letterSpacing: number } {
+  const charW = isArabic ? 0.50 : 0.54;
+  const minSpacing = isArabic ? 0.5 : 1;
+  const spreadLimit = 0.88;
+  const arcLen = arcR * Math.PI * spreadLimit;
+  // Fit font size
+  const est = text.length * baseFontSize * charW;
+  const fontSize = est <= arcLen ? baseFontSize : Math.max(6.5, arcLen / (text.length * charW));
+  // Distribute remaining space
+  const gaps = text.length - 1;
+  if (gaps <= 0) return { fontSize, letterSpacing: minSpacing };
+  const textWidth = text.length * fontSize * charW;
+  const spacing = Math.max(minSpacing, Math.min((arcLen - textWidth) / gaps, 10));
+  return { fontSize, letterSpacing: spacing };
+}
+
 function wrapText(text: string, x: number, y: number, font: string, size: number, color: string, letterSpacing = 1.2): string {
   // Truncate very long text to prevent overflow
   const maxLen = 48;
@@ -389,7 +408,7 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   }
 
   // ────────────────────────────────────────────────────────────────
-  // T6: Bilingual Official — English top arc, Arabic bottom arc (matching T12 pattern)
+  // T6: Bilingual Official — Arabic top arc, English bottom arc (STRICT: Arabic always on top)
   // Generates TWO variants: with and without license number
   // ────────────────────────────────────────────────────────────────
   if (isBilingual) {
@@ -399,8 +418,8 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const arcR = R - 17; // safe zone for text arcs
     const displayArabic = arabicName || name;
     const displayArabicCity = arabicCity || city;
-    const enFontSize = autoFontSize(name, 10, 24);
-    const arFontSize = autoFontSize(displayArabic, 11, 18);
+    const arParams = safeArcParams(displayArabic, arcR, 11, true);
+    const enParams = safeArcParams(name, arcR, 10, false);
 
     // Generate bilingual with arc text (with regNo)
     function buildT6Svg(showRegNo: boolean) {
@@ -410,18 +429,18 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <path id="t6top${showRegNo ? 'r' : ''}" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}"/>
-          <path id="t6bot${showRegNo ? 'r' : ''}" d="M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}"/>
+          <path id="t6bot${showRegNo ? 'r' : ''}" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx + arcR} ${cy}"/>
         </defs>
         <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
         <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
         <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${SECONDARY}" stroke-width="0.9"/>
-        <!-- English top arc -->
-        <text font-family="${font}" font-size="${enFontSize}" fill="${PRIMARY}" letter-spacing="2" font-weight="700">
-          <textPath href="#t6top${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${name}</textPath>
+        <!-- Arabic top arc (STRICT: Arabic always on top) -->
+        <text font-family="${arabicFont}" font-size="${arParams.fontSize}" fill="${PRIMARY}" letter-spacing="${arParams.letterSpacing}" font-weight="600">
+          <textPath href="#t6top${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
         </text>
-        <!-- Arabic bottom arc -->
-        <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${PRIMARY}" letter-spacing="1.5" font-weight="600">
-          <textPath href="#t6bot${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
+        <!-- English bottom arc (left-to-right readable) -->
+        <text font-family="${font}" font-size="${enParams.fontSize}" fill="${PRIMARY}" letter-spacing="${enParams.letterSpacing}" font-weight="700" dominant-baseline="hanging">
+          <textPath href="#t6bot${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${name}</textPath>
         </text>
         <!-- Center divider with ornament -->
         ${divider(cx, cy - 2, ACCENT, 26)}
@@ -600,20 +619,20 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <path id="t9top${showRegNo ? 'r' : ''}" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}"/>
-          <path id="t9bot${showRegNo ? 'r' : ''}" d="M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}"/>
+          <path id="t9bot${showRegNo ? 'r' : ''}" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx + arcR} ${cy}"/>
         </defs>
         <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
         <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
         <circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="${SECONDARY}" stroke-width="1.2"/>
         <text x="${cx}" y="${cy - r2 + 6}" text-anchor="middle" font-family="${font}" font-size="8" fill="${ACCENT}">✦</text>
         <text x="${cx}" y="${cy + r2 - 1}" text-anchor="middle" font-family="${font}" font-size="8" fill="${ACCENT}">✦</text>
-        <!-- English top arc -->
-        <text font-family="${font}" font-size="${enFontSize}" fill="${PRIMARY}" letter-spacing="1.8" font-weight="700">
-          <textPath href="#t9top${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${name}</textPath>
-        </text>
-        <!-- Arabic bottom arc -->
+        <!-- Arabic top arc (STRICT: Arabic always on top) -->
         <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${PRIMARY}" letter-spacing="1.2" font-weight="600">
-          <textPath href="#t9bot${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${arabicName}</textPath>
+          <textPath href="#t9top${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${arabicName}</textPath>
+        </text>
+        <!-- English bottom arc (left-to-right readable) -->
+        <text font-family="${font}" font-size="${enFontSize}" fill="${PRIMARY}" letter-spacing="1.8" font-weight="700" dominant-baseline="hanging">
+          <textPath href="#t9bot${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${name}</textPath>
         </text>
         ${divider(cx, cy + 2, ACCENT, 28)}
         <text x="${cx}" y="${cy + 18}" text-anchor="middle" dominant-baseline="middle"
@@ -763,17 +782,14 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const logoUrl  = hasLogo ? (project as any).uploaded_logo_url : null;
     const logoSize = 64;  // diameter of center artwork
 
-    // ── Top arc: English company name curves OVER the top ──
-    // SVG arc from left (cx-arcR, cy) → counterclockwise over top → right (cx+arcR, cy)
-    // large-arc=1, sweep=1 → upper semicircle, text reads left to right on top
+    // ── Top arc: Arabic company name curves OVER the top (STRICT: Arabic always on top) ──
     const topArcId   = 't12top';
     const topArcPath = `M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}`;
 
-    // ── Bottom arc: Arabic company name curves UNDER the bottom ──
-    // Start from right (cx+arcR, cy) → clockwise under bottom → left (cx-arcR, cy)
-    // large-arc=0, sweep=0 → lower semicircle, text reads right-to-left naturally
+    // ── Bottom arc: English company name curves UNDER the bottom ──
+    // Left→Right through bottom semicircle — text reads naturally, no reversal
     const botArcId   = 't12bot';
-    const botArcPath = `M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}`;
+    const botArcPath = `M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx + arcR} ${cy}`;
 
     // Center artwork: logo image or filled monogram disc
     const centerArt = logoUrl
@@ -815,14 +831,18 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
         fill="${SECONDARY}" letter-spacing="2">${regNo}</text>` : ''}
     `;
 
+    // Safe arc font sizes
+    const t12ArParams = safeArcParams(displayArabic, arcR, 11, true);
+    const t12EnParams = safeArcParams(name, arcR, 10, false);
+
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <clipPath id="t12clip">
           <circle cx="${cx}" cy="${cy}" r="${logoSize / 2}"/>
         </clipPath>
-        <!-- English top arc path -->
+        <!-- Arabic top arc path -->
         <path id="${topArcId}" d="${topArcPath}"/>
-        <!-- Arabic bottom arc path -->
+        <!-- English bottom arc path -->
         <path id="${botArcId}" d="${botArcPath}"/>
       </defs>
 
@@ -839,14 +859,14 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
         return `<polygon points="${ox},${oy - 3.5} ${ox + 3},${oy} ${ox},${oy + 3.5} ${ox - 3},${oy}" fill="${ACCENT}"/>`;
       }).join('\n      ')}
 
-      <!-- ── English: curved OVER the TOP ── -->
-      <text font-family="${font}" font-size="${enFontSize}" fill="${PRIMARY}" letter-spacing="2" font-weight="700">
-        <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${name}</textPath>
+      <!-- ── Arabic: curved OVER the TOP (STRICT: Arabic always on top) ── -->
+      <text font-family="${arabicFont}" font-size="${t12ArParams.fontSize}" fill="${PRIMARY}" letter-spacing="${t12ArParams.letterSpacing}" font-weight="600">
+        <textPath href="#${topArcId}" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
       </text>
 
-      <!-- ── Arabic: curved UNDER the BOTTOM (path goes right→left so RTL text reads naturally) ── -->
-      <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${PRIMARY}" letter-spacing="1.5" font-weight="600">
-        <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
+      <!-- ── English: curved UNDER the BOTTOM (left-to-right readable) ── -->
+      <text font-family="${font}" font-size="${t12EnParams.fontSize}" fill="${PRIMARY}" letter-spacing="${t12EnParams.letterSpacing}" font-weight="700" dominant-baseline="hanging">
+        <textPath href="#${botArcId}" startOffset="50%" text-anchor="middle">${name}</textPath>
       </text>
 
       <!-- ── Thin horizontal rules flanking artwork ── -->
@@ -888,18 +908,18 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
     const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <path id="t13top" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}"/>
-        <path id="t13bot" d="M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}"/>
+        <path id="t13bot" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx + arcR} ${cy}"/>
       </defs>
       <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
       <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${SECONDARY}" stroke-width="1.2"/>
-      <!-- Company name arcs -->
+      <!-- Company name arcs (STRICT: Arabic top, English bottom) -->
       ${isBilingual ? `
-        <text font-family="${font}" font-size="${enFontSize}" fill="#ffffff" letter-spacing="2" font-weight="700">
-          <textPath href="#t13top" startOffset="50%" text-anchor="middle">${name}</textPath>
-        </text>
         <text font-family="${arabicFont}" font-size="${arFontSize}" fill="#ffffff" letter-spacing="1.5" font-weight="600">
-          <textPath href="#t13bot" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
+          <textPath href="#t13top" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
+        </text>
+        <text font-family="${font}" font-size="${enFontSize}" fill="#ffffff" letter-spacing="2" font-weight="700" dominant-baseline="hanging">
+          <textPath href="#t13bot" startOffset="50%" text-anchor="middle">${name}</textPath>
         </text>
       ` : `
         ${ringText('t13ring', cx, cy, R - 6, `●  ${name}  ●  ${city}  ●`, font, 8, '#ffffff', '50%', 1.6)}

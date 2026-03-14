@@ -85,7 +85,7 @@ const DECORATIVE_STROKE = 0.5; // thin decorative ring just inside outer ring
 
 // ── Safe zone ──
 const SAFE_ZONE = 5;          // minimum px between text and ring strokes
-const ARC_SPREAD_LIMIT = 0.72; // max fraction of semicircle for text
+const ARC_SPREAD_LIMIT = 0.88; // max fraction of semicircle for text — increased for full arc distribution
 
 function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6): number {
   if (!text) return baseSize;
@@ -93,6 +93,40 @@ function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 
   if (est <= maxArcLen) return baseSize;
   const fitted = maxArcLen / (text.length * charW);
   return Math.max(6.5, fitted);
+}
+
+/**
+ * Compute dynamic letter-spacing so arc text fills the available arc segment evenly.
+ * Returns spacing in px that distributes remaining arc space across character gaps.
+ */
+function computeArcLetterSpacing(
+  text: string, fontSize: number, arcRadius: number,
+  spreadLimit: number, avgCharWidth: number, minSpacing: number
+): number {
+  if (!text || text.length <= 1) return minSpacing;
+  const availableArc = arcRadius * Math.PI * spreadLimit;
+  const textWidth = text.length * fontSize * avgCharWidth;
+  const gaps = text.length - 1;
+  if (gaps <= 0) return minSpacing;
+  const extraSpace = availableArc - textWidth;
+  const spacing = extraSpace / gaps;
+  return Math.max(minSpacing, Math.min(spacing, 12)); // cap at 12px
+}
+
+/**
+ * Compute safe font size and letter-spacing for arc text to prevent collisions.
+ * Returns { fontSize, letterSpacing } that guarantees no character overlap.
+ */
+function safeArcFontSize(
+  text: string, maxRadius: number, isArabic: boolean,
+  baseFontSize: number, spreadLimit = ARC_SPREAD_LIMIT
+): { fontSize: number; letterSpacing: number } {
+  const charW = isArabic ? 0.50 : 0.54;
+  const minSpacing = isArabic ? 0.5 : 1;
+  const arcLen = maxRadius * Math.PI * spreadLimit;
+  const fontSize = fitFontSize(text, baseFontSize, arcLen, charW);
+  const letterSpacing = computeArcLetterSpacing(text, fontSize, maxRadius, spreadLimit, charW, minSpacing);
+  return { fontSize, letterSpacing };
 }
 
 /** Get separator glyph character for the given style */
@@ -155,7 +189,8 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
 
 /**
  * Bottom arc text using SVG textPath — text follows the BOTTOM half of a circle.
- * Path sweeps from right to left through the bottom, text reads left-to-right.
+ * Path sweeps LEFT→RIGHT through the bottom semicircle (counterclockwise).
+ * Text reads naturally left-to-right — NO character reversal needed.
  */
 function renderBottomArcTextPath(
   text: string, cx: number, cy: number, r: number,
@@ -163,16 +198,14 @@ function renderBottomArcTextPath(
   isArabic: boolean, pathId: string, fontWeight = '800'
 ): string {
   if (!text) return '';
-  // Bottom arc path: from (cx+r, cy) sweeping clockwise through bottom to (cx-r, cy)
-  const arcPath = `M ${cx + r} ${cy} A ${r} ${r} 0 1 1 ${cx - r} ${cy}`;
-  // Reverse text so characters appear in correct reading order on the reversed path
-  const reversed = text.split('').reverse().join('');
-  const displayText = isArabic ? text : reversed;
+  // Bottom arc path: left (cx-r, cy) → counterclockwise through bottom → right (cx+r, cy)
+  // large-arc=0, sweep=0 → takes the shorter (bottom) arc counterclockwise
+  const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx + r} ${cy}`;
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
     <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
-      letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
-      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${displayText}</textPath>
+      letter-spacing="${letterSpacing}" font-weight="${fontWeight}" dominant-baseline="hanging">
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${text}</textPath>
     </text>
   `;
 }
@@ -285,24 +318,22 @@ export function generateOfficialStampSVG(config: OfficialStampConfig): string {
   const topFont = ARABIC_FONT;
   const bottomFont = enFont;
 
-  // Arc lengths — ARC_SPREAD_LIMIT for better text clearance from separators
-  const arcLen = clampedTextArcR * Math.PI;
-  const safeArc = arcLen * ARC_SPREAD_LIMIT;
+  // Dynamic font size and letter-spacing — fills arc evenly, prevents collisions
   const topBaseFontSize = topIsArabic ? 17 : 15;
   const bottomBaseFontSize = bottomIsArabic ? 17 : 15;
-  const topFontSize = fitFontSize(topText, topBaseFontSize, safeArc, topIsArabic ? 0.50 : 0.54);
-  const bottomFontSize = fitFontSize(bottomText, bottomBaseFontSize, safeArc, bottomIsArabic ? 0.50 : 0.54);
+  const topSafe = safeArcFontSize(topText, clampedTextArcR, topIsArabic, topBaseFontSize);
+  const bottomSafe = safeArcFontSize(bottomText, clampedTextArcR, bottomIsArabic, bottomBaseFontSize);
 
   const topArcContent = renderTopArcTextPath(
     topText || (topIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
-    cx, cy, clampedTextArcR, topFontSize, topFont, priColor,
-    topIsArabic ? 3 : 2.5, topIsArabic, 'top-arc'
+    cx, cy, clampedTextArcR, topSafe.fontSize, topFont, priColor,
+    topSafe.letterSpacing, topIsArabic, 'top-arc'
   );
 
   const bottomArcContent = renderBottomArcTextPath(
     bottomText || (bottomIsArabic ? 'اسم الشركة' : 'COMPANY NAME'),
-    cx, cy, clampedTextArcR, bottomFontSize, bottomFont, priColor,
-    bottomIsArabic ? 1 : 4, bottomIsArabic, 'bottom-arc'
+    cx, cy, clampedTextArcR, bottomSafe.fontSize, bottomFont, priColor,
+    bottomSafe.letterSpacing, bottomIsArabic, 'bottom-arc'
   );
 
   // ── Location text — BOTH Arabic and English as arcs ──
