@@ -30,6 +30,7 @@ import { supabase } from "@/integrations/supabase/client";
 import EmailSettingsPanel from "@/components/email/EmailSettingsPanel";
 import EmailAssistantPanel from "@/components/email/EmailAssistantPanel";
 import EmailProductivityPanel from "@/components/email/EmailProductivityPanel";
+import { useCrossChannelDetection } from "@/hooks/useCrossChannelDetection";
 
 // ─── Sender Identities — mapped to real JBJ team personas ───
 interface SenderIdentity {
