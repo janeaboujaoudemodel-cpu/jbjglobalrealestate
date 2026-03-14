@@ -49,9 +49,30 @@ export default function IncidentReadinessPanel() {
   const [expandedCheck, setExpandedCheck] = useState<string | null>(null);
   const [expandedGateRun, setExpandedGateRun] = useState<string | null>(null);
 
-  const latestChecklist = checklists.data?.[0];
-  const latestStable = deployments.data?.find(d => d.is_stable);
-  const lastGateRun = gateHistory.data?.[0];
+  // DLP Export Audit
+  const [exportEvents, setExportEvents] = useState<any[]>([]);
+  const [exportLoading, setExportLoading] = useState(true);
+  const [exportFilter, setExportFilter] = useState<string>("all");
+
+  useEffect(() => {
+    const fetchExports = async () => {
+      setExportLoading(true);
+      let query = supabase
+        .from("dlp_export_events" as any)
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (exportFilter !== "all") {
+        query = query.eq("export_type", exportFilter);
+      }
+
+      const { data } = await query;
+      setExportEvents((data as any[]) || []);
+      setExportLoading(false);
+    };
+    fetchExports();
+  }, [exportFilter]);
 
   return (
     <div className="space-y-6">
