@@ -140,7 +140,7 @@ const ListingAdmin = () => {
   const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-ops'>('data-ops');
   
   // Controlled sub-tab state for Data Ops tabs - defaults to Provident enrichment
-  const [dataOpsTab, setDataOpsTab] = useState<string>("enrichment");
+  const [dataOpsTab, setDataOpsTab] = useState<string>("provident-hub");
   // Active source selection from SourceCountsPanel (provident or reelly)
   const [activeSource, setActiveSource] = useState<string>("provident");
 
