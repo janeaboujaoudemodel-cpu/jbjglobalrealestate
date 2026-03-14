@@ -21,6 +21,7 @@ import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview'
 import { useStampHistory } from '@/hooks/useStampHistory';
 import { OFFICIAL_INK_BLUE, ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
 import { StampPresetLibrary, saveCustomPreset, type PresetConfig } from '@/components/stamp-generator/StampPresetLibrary';
+import { MonogramColorEditor, DEFAULT_MONOGRAM_COLORS, type MonogramLetterColors } from '@/components/stamp-generator/MonogramColorEditor';
 
 // UAE phone normalization
 function normalizePhone(raw: string): string {
