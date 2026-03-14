@@ -1,83 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Listing Admin Source Naming Fix, Provident Portal Hub & Enrichment Dashboard
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Current State
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-**Source naming issues found in 6 files:**
-- `SourceCountsPanel.tsx`: Uses `source-a`/`source-b` internal types, but labels are already "Provident Portal" and "Reelly Portal" — the internal type names need cleanup
-- `ProvidentSyncButton.tsx`: Shows "External Source Sync" (line 234)
-- `PendingUpdatesQueue.tsx`: Falls back to "External Source" (line 483)
-- `EnrichmentCenter.tsx`: Shows "External Source Enrichment" (lines 525, 562), "External API Enrichment" (line 552)
-- `ExtractionJobsPanel.tsx`: Shows source names from `external_data_sources` DB table — these may need DB-level name updates
-- `AdminDevelopers.tsx`: Shows "External Source Sync" header (line 383)
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-**Provident extraction tools** currently live inside `ReellyImportPanel.tsx` (lines 1211-1255) — nested deep in the Reelly flow. Task 6 requires moving these into a dedicated Provident Portal Hub.
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-**No dedicated Provident Portal Hub exists.** When clicking the Provident source card, it just filters the existing tabs. No centralized dashboard for scrape stats, timestamps, enrichment status.
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
 
-### Implementation Plan
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
 
-#### 1. Fix All Source Naming (Task 1, 5)
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
 
-Rename across all files:
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
 
-| File | Current | New |
-|------|---------|-----|
-| `SourceCountsPanel.tsx` | `source-a`/`source-b` type + "Reelly Portal" | `provident`/`reelly` type + "PROVIDENT PORTAL" / "REELLY API" |
-| `ProvidentSyncButton.tsx` | "External Source Sync" | "Provident Source Sync" |
-| `PendingUpdatesQueue.tsx` | "External Source" fallback | "Source" fallback |
-| `EnrichmentCenter.tsx` | "External Source Enrichment", "External API Enrichment", "external sources" | "Provident Enrichment", "Reelly API Enrichment", "data sources" |
-| `ExtractionJobsPanel.tsx` | Reads from DB `external_data_sources.name` — add display name mapping |
-| `AdminDevelopers.tsx` | "External Source Sync" | "Provident Source Sync" |
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
 
-#### 2. Create Provident Portal Hub Component (Tasks 4, 6)
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
 
-New file: `src/components/listing-admin/ProvidentPortalHub.tsx`
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
 
-This component displays when the Provident source is selected and shows:
-- **Stats cards**: Total projects scraped, newly discovered, enriched, pending, updated
-- **Scrape timestamps**: Last scrape time + previous scrape runs (from `extraction_job_logs` where source = provident)
-- **Provident Firecrawl Extraction tools** (relocated from `ReellyImportPanel.tsx` lines 1211-1255): Extract Single + Full Extraction buttons with progress
-- **Enrichment status per-project**: Enriched fields count, pending enrichment, before/after indicators
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
 
-#### 3. Provident Enrichment Status Dashboard (Task 3)
-
-Add to `ProvidentPortalHub.tsx`:
-- Query projects table for enrichment field coverage (amenities, floor_plan_types, documents count, gallery count, description length, handover_date presence, developer_name presence)
-- Display per-project enrichment scorecard: enriched fields vs pending
-- Show aggregate stats: X projects fully enriched, Y partially, Z unenriched
-- Before/after comparison links (already partially in `EnrichmentAuditPanel`)
-
-#### 4. Integrate Provident Portal Hub into Data Ops (Tasks 4, 5, 6)
-
-Modify `ListingAdmin.tsx`:
-- When `activeSource === "provident"`, show the new `ProvidentPortalHub` as a prominent section above or as a new tab
-- Remove the Provident Firecrawl Extraction section from `ReellyImportPanel.tsx`
-- Source selector already has Provident on LEFT and Reelly on RIGHT — confirmed correct
-
-#### 5. Source-Level Data Enrichment (Task 2)
-
-The enrichment edge functions already exist (`provident-enrich-project`, `reelly-auto-enrich`). The Provident Portal Hub will surface their controls more prominently. No new edge functions needed — just better UI organization.
-
-### Files Summary
-
-| File | Change |
+### Files Changed
+| File | Action |
 |------|--------|
-| New: `ProvidentPortalHub.tsx` | Provident Portal Hub with stats, scrape timestamps, extraction tools, enrichment dashboard |
-| `SourceCountsPanel.tsx` | Replace `source-a`/`source-b` with `provident`/`reelly`, rename labels to "PROVIDENT PORTAL" / "REELLY API" |
-| `EnrichmentCenter.tsx` | Replace all "External Source/API" labels with proper names |
-| `PendingUpdatesQueue.tsx` | Replace "External Source" fallback |
-| `ProvidentSyncButton.tsx` | Rename "External Source Sync" |
-| `AdminDevelopers.tsx` | Rename "External Source Sync" header |
-| `ExtractionJobsPanel.tsx` | Add display name mapping for sources |
-| `ReellyImportPanel.tsx` | Remove Provident Firecrawl Extraction section (moved to ProvidentPortalHub) |
-| `ListingAdmin.tsx` | Add ProvidentPortalHub as a new Data Ops tab when Provident is active source |
-
-### Implementation Order
-
-1. Fix source naming across all 6 files
-2. Create ProvidentPortalHub component with stats + extraction tools + enrichment dashboard
-3. Remove Provident extraction from ReellyImportPanel
-4. Wire ProvidentPortalHub into ListingAdmin Data Ops tabs
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |

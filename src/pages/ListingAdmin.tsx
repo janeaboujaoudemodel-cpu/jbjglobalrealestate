@@ -53,6 +53,7 @@ import { ReellyImportPanel } from "@/components/listing-admin/ReellyImportPanel"
 import { SourceCountsPanel } from "@/components/listing-admin/SourceCountsPanel";
 // EmergencyMirrorPanel removed — Mirror tab dropped per user request
 import { EnrichmentCenter } from "@/components/listing-admin/EnrichmentCenter";
+import { ProvidentPortalHub } from "@/components/listing-admin/ProvidentPortalHub";
 import { RefreshCw, Globe, Check, AlertTriangle, Zap } from "lucide-react";
 import { ProjectPreviewModal } from "@/components/listing-admin/ProjectPreviewModal";
 import { ProjectMediaManager } from "@/components/listing-admin/ProjectMediaManager";
@@ -139,7 +140,7 @@ const ListingAdmin = () => {
   const [activeView, setActiveView] = useState<'chat' | 'projects' | 'editor' | 'data-ops'>('data-ops');
   
   // Controlled sub-tab state for Data Ops tabs - defaults to Provident enrichment
-  const [dataOpsTab, setDataOpsTab] = useState<string>("enrichment");
+  const [dataOpsTab, setDataOpsTab] = useState<string>("provident-hub");
   // Active source selection from SourceCountsPanel (provident or reelly)
   const [activeSource, setActiveSource] = useState<string>("provident");
 
@@ -168,7 +169,7 @@ const ListingAdmin = () => {
     }
     
     // Handle syncTab URL param for Data Ops sub-tabs
-    if (syncTab && ['reelly', 'approvals', 'external', 'enrichment', 'dev-visibility'].includes(syncTab)) {
+    if (syncTab && ['reelly', 'approvals', 'external', 'enrichment', 'dev-visibility', 'provident-hub'].includes(syncTab)) {
       setDataOpsTab(syncTab);
     }
     // Handle source param
@@ -766,6 +767,15 @@ const ListingAdmin = () => {
             
             <Tabs value={dataOpsTab} onValueChange={setDataOpsTab} className="space-y-6">
               <TabsList className="w-full flex flex-nowrap overflow-x-auto scrollbar-hide bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border border-gold/30 p-1 rounded-lg" style={{ overscrollBehaviorX: 'contain' }}>
+                {activeSource === "provident" && (
+                  <TabsTrigger 
+                    value="provident-hub"
+                    className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+                  >
+                    <Database className="w-3.5 h-3.5 mr-1.5" />
+                    Provident Portal
+                  </TabsTrigger>
+                )}
                 <TabsTrigger 
                   value="enrichment"
                   className="flex-shrink-0 text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
@@ -805,6 +815,11 @@ const ListingAdmin = () => {
                 </TabsTrigger>
               </TabsList>
               
+              {activeSource === "provident" && (
+                <TabsContent value="provident-hub" className="mt-0">
+                  <ProvidentPortalHub />
+                </TabsContent>
+              )}
               <TabsContent value="enrichment" className="mt-0">
                 <EnrichmentCenter activeSource={activeSource} />
               </TabsContent>

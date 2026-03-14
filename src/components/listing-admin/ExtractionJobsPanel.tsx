@@ -162,7 +162,7 @@ export function ExtractionJobsPanel() {
       {/* Data Sources */}
       <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg text-foreground">External Data Sources</CardTitle>
+          <CardTitle className="text-lg text-foreground">Data Sources</CardTitle>
           <Button variant="outline" size="sm" onClick={fetchData} className="border-gold/30 hover:bg-gold/10">
             <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
@@ -183,7 +183,7 @@ export function ExtractionJobsPanel() {
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">{source.name}</span>
+                      <span className="font-medium">{source.name.replace(/external\s*/i, "").replace(/source\s*a/i, "Reelly API").replace(/source\s*b/i, "Provident") || source.name}</span>
                       <Badge variant={source.is_active ? "default" : "secondary"}>
                         {source.is_active ? "Active" : "Inactive"}
                       </Badge>

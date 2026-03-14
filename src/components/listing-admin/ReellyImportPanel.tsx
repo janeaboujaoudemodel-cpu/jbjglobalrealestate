@@ -1208,51 +1208,7 @@ export function ReellyImportPanel() {
               </Alert>
             )}
 
-            {/* ── Provident Firecrawl Extraction (inside test flow) ── */}
-            <div className="border-t border-emerald-200 pt-4 mt-4">
-              <h4 className="font-semibold text-emerald-800 mb-2 flex items-center gap-2 text-sm">
-                <CloudDownload className="w-4 h-4" /> Provident Firecrawl Extraction
-              </h4>
-              <p className="text-xs text-emerald-600 mb-3">After confirming single-project enrichment works, use these to extract from Provident pages.</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                <Button onClick={() => handleProvidentExtract()} disabled={isProvidentExtracting || isFullProvidentRunning} className="bg-emerald-600 hover:bg-emerald-700">
-                  {isProvidentExtracting ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Extracting...</> : <><Zap className="h-4 w-4 mr-2" />Extract Single (1)</>}
-                </Button>
-                <Button onClick={handleFullProvidentExtract} disabled={isProvidentExtracting || isFullProvidentRunning} variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100">
-                  {isFullProvidentRunning ? <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Running Full...</> : <><Download className="h-4 w-4 mr-2" />Full Extraction (All)</>}
-                </Button>
-              </div>
-
-              {isFullProvidentRunning && (
-                <div className="bg-white/80 rounded-xl p-4 border border-emerald-200 mb-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <RefreshCw className="h-5 w-5 text-emerald-600 animate-spin" />
-                      <span className="font-medium text-sm">Running full extraction...</span>
-                    </div>
-                    <Button variant="outline" size="sm" className="border-red-300 text-red-600" onClick={() => setFullProvidentStopRequested(true)}>Stop</Button>
-                  </div>
-                  <div className="grid grid-cols-4 gap-3 mt-3">
-                    <div className="text-center"><p className="text-xl font-bold text-emerald-700">{fullProvidentProgress.processed}</p><p className="text-xs text-zinc-500">Processed</p></div>
-                    <div className="text-center"><p className="text-xl font-bold text-blue-600">{fullProvidentProgress.docs}</p><p className="text-xs text-zinc-500">Docs</p></div>
-                    <div className="text-center"><p className="text-xl font-bold text-emerald-600">{fullProvidentProgress.images}</p><p className="text-xs text-zinc-500">Images</p></div>
-                    <div className="text-center"><p className="text-xl font-bold text-red-600">{fullProvidentProgress.errors}</p><p className="text-xs text-zinc-500">Errors</p></div>
-                  </div>
-                </div>
-              )}
-
-              {providentResult && !isFullProvidentRunning && (
-                <div className="bg-white/80 rounded-xl p-4 border border-emerald-200 mb-4">
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                    <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{providentResult.processed || 0}</p><p className="text-xs text-zinc-500">Processed</p></div>
-                    <div className="bg-blue-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-blue-700">{providentResult.total_pdfs_found || 0}</p><p className="text-xs text-zinc-500">PDFs Found</p></div>
-                    <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{providentResult.total_images_found || providentResult.total_images_inserted || 0}</p><p className="text-xs text-zinc-500">Images</p></div>
-                    <div className="bg-cyan-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-cyan-700">{providentResult.total_docs_inserted || 0}</p><p className="text-xs text-zinc-500">Docs Inserted</p></div>
-                    <div className={`rounded-lg p-3 text-center ${(providentResult.errors || 0) > 0 ? 'bg-red-50' : 'bg-zinc-50'}`}><p className={`text-xl font-bold ${(providentResult.errors || 0) > 0 ? 'text-red-600' : 'text-zinc-400'}`}>{providentResult.errors || 0}</p><p className="text-xs text-zinc-500">Errors</p></div>
-                  </div>
-                </div>
-              )}
-            </div>
+            {/* Provident Firecrawl Extraction moved to Provident Portal Hub */}
 
             {/* ── Page-Data Enrichment (Free) ── */}
             <div className="border-t border-emerald-200 pt-4 mt-4">

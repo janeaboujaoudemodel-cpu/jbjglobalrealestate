@@ -181,7 +181,7 @@ export const ProvidentSyncButton = () => {
 
      let runningTotals = { created: 0, updated: 0, images: 0 };
 
-    toast.info("Starting external source sync...");
+    toast.info("Starting Provident source sync...");
 
     for (let page = 1; page <= totalPages; page++) {
       setCurrentPage(page);
@@ -231,7 +231,7 @@ export const ProvidentSyncButton = () => {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
           <RefreshCw className="w-5 h-5 text-gold" />
-          External Source Sync
+          Provident Source Sync
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">

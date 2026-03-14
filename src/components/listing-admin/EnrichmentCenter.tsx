@@ -522,7 +522,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
           Project Enrichment & Extraction
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
-          Enrich all projects from external sources — images, documents, floor plans, amenities,
+          Enrich all projects from data sources — images, documents, floor plans, amenities,
           payment plans, unit types, and more. Runs in background — safe to navigate away.
         </p>
       </div>
@@ -549,7 +549,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
               className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
             >
               <Globe className="w-4 h-4 mr-2" />
-              External API Enrichment
+              Reelly API Enrichment
             </TabsTrigger>
           )}
         </TabsList>
@@ -559,7 +559,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
             <CardHeader className="pb-3">
               <CardTitle className="text-foreground text-base flex items-center gap-2">
                 <Database className="w-5 h-5 text-gold" />
-                External Source Enrichment
+                Provident Enrichment
               </CardTitle>
               <p className="text-muted-foreground text-sm">
                 Synchronizes published projects with external page-data to fill gaps in amenities, payment plans,
@@ -595,7 +595,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
               <CardHeader className="pb-3">
                 <CardTitle className="text-foreground text-base flex items-center gap-2">
                   <Globe className="w-5 h-5 text-gold" />
-                  External API Auto-Enrichment (Background)
+                  Reelly API Auto-Enrichment (Background)
                 </CardTitle>
                 <p className="text-muted-foreground text-sm">
                   Runs entirely on the server — processes all projects even if you close this page.
