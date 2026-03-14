@@ -447,7 +447,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           {/* Years & Date of Joining */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Years in Real Estate</Label>
+              <Label>Years in Real Estate *</Label>
               <Input type="number" min="0" max="50" value={form.years_in_real_estate} onChange={(e) => setForm(f => ({ ...f, years_in_real_estate: e.target.value }))} placeholder="e.g. 5" />
             </div>
             <div className="space-y-2">
