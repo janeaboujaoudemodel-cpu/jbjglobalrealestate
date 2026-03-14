@@ -464,6 +464,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                   />
                 </div>
               </div>
+            </div>
           </>
         ) : (
           <div className="flex-1 flex items-center justify-center text-black/40">
