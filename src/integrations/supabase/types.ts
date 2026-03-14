@@ -25610,6 +25610,69 @@ export type Database = {
         }
         Relationships: []
       }
+      resale_listings_public: {
+        Row: {
+          area_name: string | null
+          asking_price: number | null
+          bedrooms: number | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          developer_name: string | null
+          emirate: string | null
+          handover_status: string | null
+          id: string | null
+          images: string[] | null
+          location: string | null
+          project_name: string | null
+          property_type: string | null
+          size_sqft: number | null
+          status: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          area_name?: string | null
+          asking_price?: number | null
+          bedrooms?: number | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          developer_name?: string | null
+          emirate?: string | null
+          handover_status?: string | null
+          id?: string | null
+          images?: string[] | null
+          location?: string | null
+          project_name?: string | null
+          property_type?: string | null
+          size_sqft?: number | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          area_name?: string | null
+          asking_price?: number | null
+          bedrooms?: number | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          developer_name?: string | null
+          emirate?: string | null
+          handover_status?: string | null
+          id?: string | null
+          images?: string[] | null
+          location?: string | null
+          project_name?: string | null
+          property_type?: string | null
+          size_sqft?: number | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       seller_listings_secure: {
         Row: {
           admin_approved_at: string | null
