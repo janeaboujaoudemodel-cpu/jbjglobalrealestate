@@ -27,6 +27,7 @@ type PendingImportCardItem = {
   slug?: string | null;
   developer_name: string | null;
   developer_id?: string | null;
+  developer_slug?: string | null;
   location: string | null;
   description: string | null;
   price_from: number | null;
