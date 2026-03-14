@@ -279,8 +279,16 @@ export default function StampProjectWizard() {
   }, [form]);
 
   async function handleCreate() {
-    if (!form.company_name.trim()) { toast.error('Company name is required'); return; }
-    if (!user?.id) { toast.error('Please sign in first'); return; }
+    if (!form.company_name.trim()) { 
+      toast.error('Please enter a company name first');
+      setActiveTab('company');
+      setTimeout(() => document.querySelector<HTMLInputElement>('[placeholder*="Acme"]')?.focus(), 100);
+      return; 
+    }
+    if (!user?.id) { 
+      toast.info('Please sign in to generate AI concepts. Your design will be saved.');
+      return; 
+    }
     setSaving(true);
     try {
       const { data, error } = await supabase
@@ -413,7 +421,7 @@ export default function StampProjectWizard() {
   };
 
   return (
-    <div className="h-[calc(100vh-52px)] flex flex-col bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] overflow-hidden">
+    <div className="h-[calc(100dvh-52px)] flex flex-col bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] overflow-hidden">
       {/* ── Top toolbar ── */}
       <div className="flex-shrink-0 border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-md px-4 py-2 flex items-center gap-3">
         <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center">
@@ -443,7 +451,7 @@ export default function StampProjectWizard() {
           <Button variant="outline" size="sm" onClick={handleSaveDraft} className="gap-1 text-xs h-7 px-2.5">
             <Save size={11}/> Save Draft
           </Button>
-          <Button size="sm" onClick={handleCreate} disabled={saving || !form.company_name.trim()}
+          <Button size="sm" onClick={handleCreate} disabled={saving}
             className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1 text-xs h-7 px-3">
             <Wand2 size={11}/> {saving ? 'Creating...' : 'Generate Concepts'}
           </Button>
@@ -752,17 +760,20 @@ export default function StampProjectWizard() {
                     </div>
                   </div>
 
-                  {/* Color Palette Swatches */}
+                  {/* Color Palette */}
                   <div>
-                    <Label className="text-[11px] font-medium mb-1.5 block">Quick Colors</Label>
+                    <Label className="text-[11px] font-medium mb-1.5 block">Color Palette</Label>
                     <div className="flex gap-1.5 flex-wrap">
                       {[
-                        { color: '#1B3A8C', label: 'Navy' },
+                        { color: '#1B3A8C', label: 'Ink Standard (Navy)' },
                         { color: '#000000', label: 'Black' },
-                        { color: '#8B0000', label: 'Red' },
-                        { color: '#0B5345', label: 'Green' },
-                        { color: '#4A235A', label: 'Purple' },
+                        { color: '#8B0000', label: 'Dark Red' },
+                        { color: '#0B5345', label: 'Forest Green' },
+                        { color: '#4A235A', label: 'Royal Purple' },
                         { color: '#1C2833', label: 'Charcoal' },
+                        { color: '#1A5276', label: 'Ocean Blue' },
+                        { color: '#7D6608', label: 'Gold' },
+                        { color: '#6C3483', label: 'Plum' },
                       ].map(swatch => (
                         <button key={swatch.color} type="button"
                           onClick={() => set('ink_color', swatch.color)}
@@ -772,7 +783,7 @@ export default function StampProjectWizard() {
                               : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
                           }`}>
                           <div className="w-6 h-6 rounded-full border border-[hsl(var(--border))]" style={{ backgroundColor: swatch.color }} />
-                          <span className="text-[8px] font-medium">{swatch.label}</span>
+                          <span className="text-[7px] font-medium text-center leading-tight max-w-[48px]">{swatch.label}</span>
                         </button>
                       ))}
                     </div>
@@ -942,6 +953,31 @@ export default function StampProjectWizard() {
                     <Button variant="outline" size="sm" onClick={() => handleExportPNG(1024)} className="w-full gap-2 text-xs h-9 justify-start">
                       <FileDown size={13}/> Download PNG <span className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))]">1024px HD</span>
                     </Button>
+                    <Button variant="outline" size="sm" onClick={() => {
+                      const el = document.querySelector('#stamp-preview-container svg');
+                      if (!el) { toast.error('No stamp to export'); return; }
+                      const svgData = new XMLSerializer().serializeToString(el);
+                      const canvas = document.createElement('canvas');
+                      canvas.width = 1024; canvas.height = 1024;
+                      const ctx = canvas.getContext('2d');
+                      if (!ctx) return;
+                      const img = new window.Image();
+                      img.onload = () => {
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillRect(0, 0, 1024, 1024);
+                        ctx.drawImage(img, 0, 0, 1024, 1024);
+                        const dataUrl = canvas.toDataURL('image/png');
+                        const pdfW = window.open('', '_blank');
+                        if (pdfW) {
+                          pdfW.document.write(`<html><head><title>${form.company_name || 'Stamp'} - PDF</title><style>@page{margin:0}body{margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#fff}img{max-width:80%;max-height:80%}</style></head><body><img src="${dataUrl}"/><script>setTimeout(()=>{window.print()},500)<\/script></body></html>`);
+                          pdfW.document.close();
+                        }
+                      };
+                      img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                      toast.success('PDF print dialog opening...');
+                    }} className="w-full gap-2 text-xs h-9 justify-start">
+                      <FileDown size={13}/> Download PDF <span className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))]">Print</span>
+                    </Button>
                     <Button variant="outline" size="sm" onClick={() => window.print()} className="w-full gap-2 text-xs h-9 justify-start">
                       <Printer size={13}/> Print Preview
                     </Button>
@@ -952,7 +988,7 @@ export default function StampProjectWizard() {
                     <p className="text-[9px] text-[hsl(var(--muted-foreground))] mb-2">
                       Create multiple stamp variations with AI for more options.
                     </p>
-                    <Button size="sm" onClick={handleCreate} disabled={saving || !form.company_name.trim()}
+                    <Button size="sm" onClick={handleCreate} disabled={saving}
                       className="w-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-1.5 text-xs h-9">
                       <Wand2 size={13}/> {saving ? 'Creating...' : 'Generate Concepts'}
                     </Button>
