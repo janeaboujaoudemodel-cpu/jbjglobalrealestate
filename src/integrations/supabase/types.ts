@@ -6099,10 +6099,52 @@ export type Database = {
         }
         Relationships: []
       }
+      deployment_gate_runs: {
+        Row: {
+          blocked_reasons: string[] | null
+          checks: Json
+          created_at: string
+          deployment_record_id: string | null
+          gate_status: string
+          id: string
+          notes: string | null
+          triggered_by: string | null
+        }
+        Insert: {
+          blocked_reasons?: string[] | null
+          checks?: Json
+          created_at?: string
+          deployment_record_id?: string | null
+          gate_status?: string
+          id?: string
+          notes?: string | null
+          triggered_by?: string | null
+        }
+        Update: {
+          blocked_reasons?: string[] | null
+          checks?: Json
+          created_at?: string
+          deployment_record_id?: string | null
+          gate_status?: string
+          id?: string
+          notes?: string | null
+          triggered_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deployment_gate_runs_deployment_record_id_fkey"
+            columns: ["deployment_record_id"]
+            isOneToOne: false
+            referencedRelation: "deployment_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deployment_records: {
         Row: {
           created_by: string | null
           deployed_at: string
+          gate_run_id: string | null
           id: string
           impacted_modules: string[] | null
           is_stable: boolean
@@ -6110,11 +6152,14 @@ export type Database = {
           rollback_available: boolean
           rolled_back: boolean
           rolled_back_at: string | null
+          security_sign_off: boolean | null
+          test_evidence: Json | null
           version_label: string
         }
         Insert: {
           created_by?: string | null
           deployed_at?: string
+          gate_run_id?: string | null
           id?: string
           impacted_modules?: string[] | null
           is_stable?: boolean
@@ -6122,11 +6167,14 @@ export type Database = {
           rollback_available?: boolean
           rolled_back?: boolean
           rolled_back_at?: string | null
+          security_sign_off?: boolean | null
+          test_evidence?: Json | null
           version_label: string
         }
         Update: {
           created_by?: string | null
           deployed_at?: string
+          gate_run_id?: string | null
           id?: string
           impacted_modules?: string[] | null
           is_stable?: boolean
@@ -6134,9 +6182,19 @@ export type Database = {
           rollback_available?: boolean
           rolled_back?: boolean
           rolled_back_at?: string | null
+          security_sign_off?: boolean | null
+          test_evidence?: Json | null
           version_label?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "deployment_records_gate_run_id_fkey"
+            columns: ["gate_run_id"]
+            isOneToOne: false
+            referencedRelation: "deployment_gate_runs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       design_assets: {
         Row: {

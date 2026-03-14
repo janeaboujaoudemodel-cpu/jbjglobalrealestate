@@ -564,3 +564,6 @@ verify_jwt = false
 
 [functions.waf-health-check]
 verify_jwt = false
+
+[functions.run-deployment-gate]
+verify_jwt = false

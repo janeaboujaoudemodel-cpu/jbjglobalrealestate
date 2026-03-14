@@ -5,12 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Shield, Database, RefreshCw, CheckCircle2, XCircle, AlertTriangle,
-  Archive, Clock, Activity, Download, FileCheck,
+  Archive, Clock, Activity, Download, FileCheck, Rocket, Lock,
 } from "lucide-react";
 import {
   useBackupRecords, useChecklistRuns, useDeploymentRecords,
   useSecurityAlerts, useCreateSnapshot, useRunSecurityChecklist, useTestRestore,
 } from "@/hooks/useIncidentReadiness";
+import { useGateHistory, useRunDeploymentGate, type GateCheck } from "@/hooks/useDeploymentGate";
 
 const statusIcon = (s: string) => {
   if (s === "pass" || s === "healthy" || s === "completed" || s === "verified") return <CheckCircle2 className="w-4 h-4 text-emerald-500" />;
@@ -40,10 +41,14 @@ export default function IncidentReadinessPanel() {
   const createSnapshot = useCreateSnapshot();
   const runChecklist = useRunSecurityChecklist();
   const testRestore = useTestRestore();
+  const gateHistory = useGateHistory();
+  const runGate = useRunDeploymentGate();
   const [expandedCheck, setExpandedCheck] = useState<string | null>(null);
+  const [expandedGateRun, setExpandedGateRun] = useState<string | null>(null);
 
   const latestChecklist = checklists.data?.[0];
   const latestStable = deployments.data?.find(d => d.is_stable);
+  const lastGateRun = gateHistory.data?.[0];
 
   return (
     <div className="space-y-6">
@@ -54,7 +59,7 @@ export default function IncidentReadinessPanel() {
             Incident Readiness
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Backup status, security health, and recovery readiness
+            Backup status, security health, deployment gates, and recovery readiness
           </p>
         </div>
         <div className="flex gap-2">
@@ -119,17 +124,128 @@ export default function IncidentReadinessPanel() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <Download className="w-8 h-8 text-emerald-500" />
+              {lastGateRun?.gate_status === "pass"
+                ? <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+                : <Lock className="w-8 h-8 text-red-500" />}
               <div>
-                <p className="text-sm text-muted-foreground">Stable Release</p>
-                <p className="text-lg font-bold text-foreground truncate">
-                  {latestStable?.version_label ?? "None set"}
+                <p className="text-sm text-muted-foreground">Deploy Gate</p>
+                <p className="text-lg font-bold text-foreground capitalize">
+                  {lastGateRun?.gate_status ?? "Not Run"}
                 </p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Deployment Gate */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Rocket className="w-5 h-5" />
+                Pre-Publish Deployment Gate
+              </CardTitle>
+              <CardDescription>
+                {lastGateRun
+                  ? `Last run: ${timeAgo(lastGateRun.created_at)} · Status: ${lastGateRun.gate_status.toUpperCase()}`
+                  : "No gate checks run yet — run before marking a release as stable"}
+              </CardDescription>
+            </div>
+            <Button
+              size="sm"
+              onClick={() => runGate.mutate()}
+              disabled={runGate.isPending}
+              className={lastGateRun?.gate_status === "pass" ? "bg-emerald-600 hover:bg-emerald-700 text-white" : "bg-destructive text-destructive-foreground"}
+            >
+              <Shield className="w-4 h-4 mr-1" />
+              {runGate.isPending ? "Running Gate…" : "Run Pre-Publish Gate"}
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {/* Latest gate result */}
+          {runGate.data && (
+            <div className={`mb-4 p-4 rounded-lg border-2 ${runGate.data.gate_status === "pass" ? "border-emerald-500/50 bg-emerald-500/5" : "border-destructive/50 bg-destructive/5"}`}>
+              <div className="flex items-center gap-2 mb-3">
+                {runGate.data.gate_status === "pass"
+                  ? <CheckCircle2 className="w-5 h-5 text-emerald-500" />
+                  : <XCircle className="w-5 h-5 text-red-500" />}
+                <span className="font-semibold text-foreground">
+                  {runGate.data.gate_status === "pass" ? "Gate PASSED — Safe to deploy" : "Gate FAILED — Do NOT deploy"}
+                </span>
+                <Badge variant="secondary" className="ml-auto">
+                  {runGate.data.passed}/{runGate.data.total_checks} passed
+                </Badge>
+              </div>
+              
+              {/* Blocked reasons */}
+              {runGate.data.blocked_reasons.length > 0 && (
+                <div className="mb-3 space-y-1">
+                  {runGate.data.blocked_reasons.map((reason, i) => (
+                    <div key={i} className="flex items-center gap-2 text-sm text-red-500">
+                      <XCircle className="w-3 h-3 shrink-0" />
+                      <span>{reason}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Individual checks */}
+              <div className="space-y-1.5">
+                {runGate.data.checks.map((check: GateCheck, i: number) => (
+                  <div key={i} className="flex items-center justify-between p-2 rounded border border-border/30 text-sm">
+                    <div className="flex items-center gap-2">
+                      {statusIcon(check.status)}
+                      <span className="text-foreground">{check.name}</span>
+                    </div>
+                    <span className="text-xs text-muted-foreground max-w-xs truncate">{check.details}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Gate history */}
+          {gateHistory.isLoading ? (
+            <Skeleton className="h-20 w-full" />
+          ) : gateHistory.data && gateHistory.data.length > 0 && (
+            <div>
+              <p className="text-xs text-muted-foreground mb-2 font-medium uppercase tracking-wider">Gate History</p>
+              <div className="space-y-1.5">
+                {gateHistory.data.map((run) => (
+                  <div key={run.id}>
+                    <div
+                      className="flex items-center justify-between p-2.5 rounded-lg border border-border/50 hover:bg-muted/30 cursor-pointer"
+                      onClick={() => setExpandedGateRun(expandedGateRun === run.id ? null : run.id)}
+                    >
+                      <div className="flex items-center gap-2">
+                        {statusIcon(run.gate_status)}
+                        <span className="text-sm text-foreground font-medium capitalize">{run.gate_status}</span>
+                        <span className="text-xs text-muted-foreground">{timeAgo(run.created_at)}</span>
+                      </div>
+                      {run.blocked_reasons.length > 0 && (
+                        <Badge variant="destructive" className="text-xs">{run.blocked_reasons.length} blocker(s)</Badge>
+                      )}
+                    </div>
+                    {expandedGateRun === run.id && (
+                      <div className="ml-6 mt-1 space-y-1 pb-2">
+                        {(run.checks as GateCheck[]).map((c, i) => (
+                          <div key={i} className="flex items-center gap-2 text-xs text-muted-foreground">
+                            {statusIcon(c.status)}
+                            <span>{c.name}: {c.details}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Security Checklist */}
       <Card>
@@ -286,6 +402,12 @@ export default function IncidentReadinessPanel() {
                         {d.version_label}
                         {d.is_stable && <Badge variant="secondary" className="ml-2 text-xs">Stable</Badge>}
                         {d.rolled_back && <Badge variant="destructive" className="ml-2 text-xs">Rolled Back</Badge>}
+                        {d.security_sign_off && (
+                          <Badge variant="secondary" className="ml-2 text-xs">
+                            <Shield className="w-3 h-3 mr-0.5" />
+                            Signed Off
+                          </Badge>
+                        )}
                       </p>
                       <p className="text-xs text-muted-foreground">
                         {timeAgo(d.deployed_at)}
