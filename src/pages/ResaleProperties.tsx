@@ -110,9 +110,8 @@ const ResaleProperties = () => {
     queryKey: ["resale-developers"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("resale_listings")
-        .select("developer_name")
-        .eq("status", "active");
+        .from("resale_listings_public")
+        .select("developer_name");
       if (error) throw error;
       const names = [...new Set((data || []).map((d: any) => d.developer_name).filter(Boolean))].sort();
       return names as string[];
