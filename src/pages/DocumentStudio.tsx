@@ -14,6 +14,8 @@ import {
   Sparkles,
   Copy,
   PenTool,
+  Mail,
+  MessageSquare,
 } from "lucide-react";
 import { toast } from "sonner";
 
