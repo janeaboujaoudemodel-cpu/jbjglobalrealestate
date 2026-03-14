@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
   try {
     // Verify caller is owner/admin
     const authHeader = req.headers.get("authorization");
-    if (!authHeader) return jsonResponse({ error: "Unauthorized" }, 401);
+    if (!authHeader) return jsonResponse(401, { error: "Unauthorized" });
     const token = authHeader.replace("Bearer ", "");
     const { data: { user }, error: authErr } = await sb.auth.getUser(token);
     if (authErr || !user) return jsonResponse({ error: "Unauthorized" }, 401);
