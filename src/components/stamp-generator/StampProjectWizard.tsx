@@ -752,18 +752,30 @@ export default function StampProjectWizard() {
                     </div>
                   </div>
 
-                  {/* Government Style Mode */}
-                  <div className="border border-[hsl(var(--gold)/0.3)] bg-[hsl(var(--gold)/0.04)] rounded-xl p-3 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Landmark size={12} className="text-[hsl(var(--gold))]" />
-                        <span className="text-[11px] font-semibold">Government Style Mode</span>
-                      </div>
-                      <Switch checked={form.government_mode} onCheckedChange={v => set('government_mode', v)} />
+                  {/* Color Palette Swatches */}
+                  <div>
+                    <Label className="text-[11px] font-medium mb-1.5 block">Quick Colors</Label>
+                    <div className="flex gap-1.5 flex-wrap">
+                      {[
+                        { color: '#1B3A8C', label: 'Navy' },
+                        { color: '#000000', label: 'Black' },
+                        { color: '#8B0000', label: 'Red' },
+                        { color: '#0B5345', label: 'Green' },
+                        { color: '#4A235A', label: 'Purple' },
+                        { color: '#1C2833', label: 'Charcoal' },
+                      ].map(swatch => (
+                        <button key={swatch.color} type="button"
+                          onClick={() => set('ink_color', swatch.color)}
+                          className={`flex flex-col items-center gap-0.5 p-1.5 rounded-lg border-2 transition-all ${
+                            form.ink_color === swatch.color
+                              ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]'
+                              : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]'
+                          }`}>
+                          <div className="w-6 h-6 rounded-full border border-[hsl(var(--border))]" style={{ backgroundColor: swatch.color }} />
+                          <span className="text-[8px] font-medium">{swatch.label}</span>
+                        </button>
+                      ))}
                     </div>
-                    <p className="text-[8px] text-[hsl(var(--muted-foreground))]">
-                      Strict official format: 8px outer ring, no decoration, centered bold serif, navy/black only
-                    </p>
                   </div>
 
                   {/* Arabic Font Controls */}
