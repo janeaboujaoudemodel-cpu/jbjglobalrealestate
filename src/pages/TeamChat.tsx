@@ -551,7 +551,7 @@ const TeamChat = () => {
         {/* Message Input */}
         <div className="p-3 sm:p-4 border-t border-[#C9A84C]/15 bg-white/80 backdrop-blur-sm">
           <div className="flex items-center gap-2 bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-xl px-3 py-1.5 focus-within:border-[#C9A84C]/40 focus-within:ring-2 focus-within:ring-[#C9A84C]/10 transition-all">
-            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#C9A84C]/10">
+            <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 hover:bg-[#C9A84C]/10" onClick={() => setShowAttachPicker(true)}>
               <Plus className="w-4 h-4 text-black/40" />
             </Button>
             <Input
