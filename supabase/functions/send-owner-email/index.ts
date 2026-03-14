@@ -35,6 +35,11 @@ interface SendEmailRequest {
   useResend: boolean;
   alsoNotifyChat?: boolean;
   chatRecipientId?: string;
+  attachments?: Array<{
+    filename: string;
+    content: string; // base64 data URI or URL
+    type?: string;   // MIME type
+  }>;
 }
 
 /**
