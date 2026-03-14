@@ -1060,7 +1060,7 @@ export const AI_TOOLS_INVENTORY_VERIFIED: AIToolEntry[] = [
   },
   {
     name: 'AI Video Tour Script',
-    route: '/ai-video-tour-script',
+    route: '/toolkit/video-suite',
     navPath: 'AI Hub > Creative, Creative Suite',
     visibility: 'Public',
     status: 'working',

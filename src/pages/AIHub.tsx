@@ -410,7 +410,7 @@ const aiReportTools = [
 const aiCommTools = [
   { id: "ai-meeting-summarizer", title: "JBJ AI Meeting Summarizer", description: "Summarize meetings and extract action items automatically.", icon: ClipboardList, link: "/ai-meeting-summarizer", category: "productivity" as ToolCategory },
   { id: "ai-translation-hub", title: "JBJ AI Translation Hub", description: "Translate communications to any language instantly.", icon: Globe, link: "/ai-translation-hub", category: "productivity" as ToolCategory },
-  { id: "ai-video-tour-script", title: "JBJ AI Video Tour Script", description: "Generate professional video tour scripts for properties.", icon: Video, link: "/ai-video-tour-script", category: "productivity" as ToolCategory },
+  { id: "ai-video-tour-script", title: "JBJ AI Video Tour Script", description: "Generate professional video tour scripts for properties.", icon: Video, link: "/toolkit/video-suite", category: "productivity" as ToolCategory },
   { id: "ai-email-generator", title: "JBJ AI Email Generator", description: "Generate professional emails for any occasion.", icon: Mail, link: "/ai-email-generator", category: "productivity" as ToolCategory },
 ];
 

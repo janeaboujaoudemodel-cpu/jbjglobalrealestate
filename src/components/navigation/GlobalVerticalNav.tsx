@@ -640,7 +640,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
       { label: 'Market Report', icon: FileSearch, href: '/ai-market-report' },
       { label: 'Call Summarizer', icon: Phone, href: '/ai-call-summarizer' },
       { label: 'Objection Handler', icon: MessageSquare, href: '/ai-objection-handler' },
-      { label: 'Video Tour Script', icon: Video, href: '/ai-video-tour-script' },
+      { label: 'Video Tour Script', icon: Video, href: '/toolkit/video-suite' },
     ],
   },
   {

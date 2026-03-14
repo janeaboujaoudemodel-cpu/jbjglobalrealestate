@@ -314,7 +314,7 @@ export const aiCommunicationTools: ToolDefinition[] = [
     id: 'ai-video-tour-script',
     name: 'AI Video Tour Script',
     description: 'Generate professional video tour scripts for properties.',
-    href: '/ai-video-tour-script',
+    href: '/toolkit/video-suite',
     icon: VideoIcon,
     category: 'ai-communication',
     status: 'active',

@@ -49,7 +49,7 @@ const ALL_TOOLS: ToolDef[] = [
   { id: "business-card-scanner", title: "JBJ Business Card Scanner", description: "Scan and save business cards.", link: "/business-card-scanner", category: "productivity" },
   { id: "ai-meeting-summarizer", title: "JBJ AI Meeting Summarizer", description: "Summarize meetings automatically.", link: "/ai-meeting-summarizer", category: "productivity" },
   { id: "ai-translation-hub", title: "JBJ AI Translation Hub", description: "Translate communications instantly.", link: "/ai-translation-hub", category: "productivity" },
-  { id: "ai-video-tour-script", title: "JBJ AI Video Tour Script", description: "Generate video tour scripts.", link: "/ai-video-tour-script", category: "productivity" },
+  { id: "ai-video-tour-script", title: "JBJ AI Video Tour Script", description: "Generate video tour scripts.", link: "/toolkit/video-suite", category: "productivity" },
   { id: "ai-email-generator", title: "JBJ AI Email Generator", description: "Generate professional emails.", link: "/ai-email-generator", category: "productivity" },
   // Marketing
   { id: "ai-lead-qualification", title: "JBJ AI Lead Qualification", description: "Score leads with AI.", link: "/ai-lead-qualification", category: "marketing" },
