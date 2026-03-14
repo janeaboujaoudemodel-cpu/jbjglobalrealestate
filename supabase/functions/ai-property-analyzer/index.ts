@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { callLovableAI, sanitizeContactInfo, sanitizeForPrompt } from "../_shared/ai-utils.ts";
+import { enforceWAF } from "../_shared/waf-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -22,6 +23,10 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // WAF Layer
+  const waf = await enforceWAF(req, corsHeaders, "ai", "ai-property-analyzer");
+  if (waf.blocked) return waf.response!;
 
   const startTime = Date.now();
 

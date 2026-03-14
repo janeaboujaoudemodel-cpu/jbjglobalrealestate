@@ -19,6 +19,7 @@ import {
   trackAIUsage,
   errorResponse,
 } from "../_shared/ai-utils.ts";
+import { enforceWAF } from "../_shared/waf-middleware.ts";
 
 interface ClientMatcherRequest {
   clientPreferences: {
@@ -43,6 +44,10 @@ interface ClientMatcherRequest {
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
+
+  // WAF Layer
+  const waf = await enforceWAF(req, corsHeaders, "ai", "ai-client-matcher");
+  if (waf.blocked) return waf.response!;
   
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });

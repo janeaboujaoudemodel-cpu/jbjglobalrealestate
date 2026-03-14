@@ -18,6 +18,7 @@ import {
   errorResponse,
   APPROVED_CONTACT,
 } from "../_shared/ai-utils.ts";
+import { enforceWAF } from "../_shared/waf-middleware.ts";
 
 interface DocumentRequest {
   documentType: string;
