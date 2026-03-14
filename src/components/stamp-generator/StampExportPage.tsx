@@ -260,8 +260,8 @@ export default function StampExportPage() {
   const [project, setProject] = useState<any>(null);
   const [generating, setGenerating] = useState(false);
 
-  // Three-color system
-  const [primaryColor, setPrimaryColor] = useState('#1a2744');
+  // Three-color system — default to Navy Ink standard
+  const [primaryColor, setPrimaryColor] = useState('#1B3A8C');
   const [secondaryColor, setSecondaryColor] = useState<string | undefined>(undefined);
   const [accentColor, setAccentColor] = useState<string | undefined>(undefined);
   const [activeStop, setActiveStop] = useState<ColorStop>('primary');
@@ -273,9 +273,9 @@ export default function StampExportPage() {
     transparent: true,
   });
 
-  // Multi-color pack
+  // Multi-color pack — pre-select all 5 standard export colors
   const [multiColorMode, setMultiColorMode] = useState(false);
-  const [packColors, setPackColors] = useState<{ label: string; hex: string }[]>([PACK_COLORS[0], PACK_COLORS[5]]);
+  const [packColors, setPackColors] = useState<{ label: string; hex: string }[]>([...STANDARD_EXPORT_COLORS]);
   const [generatingZip, setGeneratingZip] = useState(false);
 
   // Per-file export status
