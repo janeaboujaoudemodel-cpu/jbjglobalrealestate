@@ -154,6 +154,30 @@ export default function StampGeneratorPage() {
   // Monogram per-letter color state
   const [monogramLetterColors, setMonogramLetterColors] = useState<MonogramLetterColors>(DEFAULT_MONOGRAM_COLORS);
 
+  // Arabic font controls — persisted
+  const [arabicFont, setArabicFontRaw] = useState(() => ssGet(ssKey('arabicFont'), '"Noto Naskh Arabic", serif'));
+  const setArabicFont = (v: string) => { setArabicFontRaw(v); ssSave(ssKey('arabicFont'), v); };
+  const [arabicLetterSpacing, setArabicLetterSpacingRaw] = useState(() => ssGet(ssKey('arabicLetterSpacing'), 3));
+  const setArabicLetterSpacing = (v: number) => { setArabicLetterSpacingRaw(v); ssSave(ssKey('arabicLetterSpacing'), v); };
+  const [arabicArcSpread, setArabicArcSpreadRaw] = useState(() => ssGet(ssKey('arabicArcSpread'), 0.88));
+  const setArabicArcSpread = (v: number) => { setArabicArcSpreadRaw(v); ssSave(ssKey('arabicArcSpread'), v); };
+  const [arabicFontWeight, setArabicFontWeightRaw] = useState(() => ssGet(ssKey('arabicFontWeight'), 'bold'));
+  const setArabicFontWeight = (v: string) => { setArabicFontWeightRaw(v); ssSave(ssKey('arabicFontWeight'), v); };
+
+  // Spacing & Layout controls — persisted
+  const [arcTextSpacing, setArcTextSpacingRaw] = useState(() => ssGet(ssKey('arcTextSpacing'), 2));
+  const setArcTextSpacing = (v: number) => { setArcTextSpacingRaw(v); ssSave(ssKey('arcTextSpacing'), v); };
+  const [circleGap, setCircleGapRaw] = useState(() => ssGet(ssKey('circleGap'), 13));
+  const setCircleGap = (v: number) => { setCircleGapRaw(v); ssSave(ssKey('circleGap'), v); };
+  const [separatorDistance, setSeparatorDistanceRaw] = useState(() => ssGet(ssKey('separatorDistance'), 8));
+  const setSeparatorDistance = (v: number) => { setSeparatorDistanceRaw(v); ssSave(ssKey('separatorDistance'), v); };
+  const [centerContentSize, setCenterContentSizeRaw] = useState(() => ssGet(ssKey('centerContentSize'), 40));
+  const setCenterContentSize = (v: number) => { setCenterContentSizeRaw(v); ssSave(ssKey('centerContentSize'), v); };
+
+  // Government Mode — persisted
+  const [governmentMode, setGovernmentModeRaw] = useState(() => ssGet(ssKey('governmentMode'), false));
+  const setGovernmentMode = (v: boolean) => { setGovernmentModeRaw(v); ssSave(ssKey('governmentMode'), v); };
+
   // Preview modal
   const [previewConcept, setPreviewConcept] = useState<StampDesignConcept | null>(null);
   const [openWithEditor, setOpenWithEditor] = useState(false);
