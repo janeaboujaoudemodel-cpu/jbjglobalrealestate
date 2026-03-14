@@ -22,6 +22,8 @@ interface CrossChannelSendOptions {
   chatRecipientId?: string;
   /** For chat-first: the recipient member name (for toast) */
   recipientName?: string;
+  /** Attachments to include in the secondary email send */
+  attachments?: Array<{ filename: string; content: string; type?: string }>;
 }
 
 /**
