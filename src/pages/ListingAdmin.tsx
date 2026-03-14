@@ -757,7 +757,7 @@ const ListingAdmin = () => {
         </div>
       </header>
 
-      <main className="min-h-[calc(100vh-220px)] overflow-y-auto pb-12">
+      <main className="min-h-[calc(100vh-220px)] overflow-y-auto pb-12 pt-6">
         {/* Chat View - Full Width Edge to Edge */}
         {activeView === 'chat' && (
           <div className="h-full">

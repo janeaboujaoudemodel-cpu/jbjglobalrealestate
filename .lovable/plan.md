@@ -1,68 +1,72 @@
 
+## CRM System Upgrade — Implementation Status
 
-## Plan: Performance Optimization — Loader Blink, Speed, Card Spacing & Edge Deploy
+### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-### Task 1: Fix Page Loading Blink
+#### Task 1: Full System Audit ✅
+- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
+- Identified 10 weaknesses (documented in plan)
 
-**Root cause:** The `PageLoader` and `InlinePageLoader` render instantly inside `<Suspense fallback>`. On fast networks, lazy chunks load in <200ms, causing a visible flash — black screen with logo appears then vanishes.
+#### Task 2: Leads Security Hardening ✅
+- CSV export no longer includes email/phone PII
+- Audit logging added to exports with user_agent tracking
+- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
 
-**Fix:** Create a `DelayedLoader` wrapper that only renders the loader after a 300ms delay. If the chunk loads faster than 300ms, users see nothing (no blink).
+#### Task 3: Encryption Hardening ✅
+- CSV export stripped of `email_lower` and `phone_e164` fields
+- Export audit logged to both `crm_audit_logs` and `audit_logs`
 
-| File | Change |
+#### Task 4: Lead Lifecycle Upgrade ✅
+- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
+- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
+- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+
+#### Task 5: CRM Structure Upgrade ✅
+- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
+- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
+- KanbanPipeline expanded to show all 17 relevant stages
+
+#### Task 6: Performance Optimization ✅
+- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
+- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
+- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+
+#### Task 7: AI Intelligence Integration ✅
+- New edge function `ai-lead-intelligence` using Lovable AI gateway
+- Supports 3 modes: `score`, `summary`, `next_action`
+- Tool-calling for structured scoring output
+- JWT auth + CRM role validation
+- PII sanitized before sending to AI
+
+#### Task 8: Workflow Automation ✅
+- Created `crm_automation_rules` table with RLS (owner manage, admin view)
+- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+
+#### Task 10: Role & Permission System ✅
+- RLS on automation rules: owner CRUD, admin read-only
+- CSV export restricted to owner_admin/founder roles
+
+#### Task 12: Backend/Database Upgrade ✅
+- 3 new performance indexes
+- Auto-updated_at trigger on crm_leads
+- Duplicate hash computation trigger
+- Rate-limiting security function
+
+#### Task 13: Data Cleanliness ✅
+- `duplicate_hash` with auto-compute trigger prevents future duplicates
+- Partial unique index enforces uniqueness at DB level
+
+### Files Changed
+| File | Action |
 |------|--------|
-| `src/components/PageLoader.tsx` | Add `DelayedLoader` component with 300ms delay using `useState` + `useEffect` |
-| `src/App.tsx` | Wrap Suspense fallbacks with `DelayedLoader` instead of raw `PageLoader`/`InlinePageLoader` |
-
-```tsx
-// DelayedLoader — renders nothing for first 300ms, then shows loader
-function DelayedLoader({ children, delay = 300 }) {
-  const [show, setShow] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setShow(true), delay);
-    return () => clearTimeout(t);
-  }, [delay]);
-  return show ? children : null;
-}
-```
-
-### Task 2: Optimize Frontend Speed
-
-**Current state:** Already has code splitting, stale times, and lazy loading. Key improvement: preload critical route chunks on hover.
-
-| Optimization | Change |
-|------|--------|
-| Route preloading | Add `onMouseEnter` preload triggers to main nav links for Properties, Developers, Areas |
-| QueryClient tuning | Increase `staleTime` to 10min for listing data (currently 5min) |
-| Image loading | Add `loading="lazy"` and `decoding="async"` to non-hero images in BrandedLoader |
-
-Files: `src/components/PageLoader.tsx` (add decoding async), `src/App.tsx` (QueryClient staleTime bump)
-
-### Task 3: Fix Listing Admin Card Spacing
-
-**Issue:** `<main>` content at line 760 starts immediately after the sticky header with no top padding.
-
-**Fix:** Add `pt-6` to the `<main>` element in `ListingAdmin.tsx` (line 760).
-
-| File | Change |
-|------|--------|
-| `src/pages/ListingAdmin.tsx` L760 | Change `<main className="min-h-[calc(100vh-220px)] overflow-y-auto pb-12">` → add `pt-6` |
-
-### Task 4: Deploy Edge Functions
-
-Use the deploy tool to deploy all edge functions. There are 200+ functions — will deploy in bulk.
-
-### Files Summary
-
-| File | Change |
-|------|--------|
-| `src/components/PageLoader.tsx` | Add `DelayedLoader` wrapper, add `decoding="async"` to loader images |
-| `src/App.tsx` | Use `DelayedLoader` in Suspense fallbacks, bump staleTime to 10min |
-| `src/pages/ListingAdmin.tsx` | Add `pt-6` to main content area |
-| Edge functions | Bulk deploy all functions |
-
-### Implementation Order
-1. Fix `PageLoader.tsx` with delayed rendering (Task 1 + 2)
-2. Update `App.tsx` Suspense fallbacks and staleTime (Task 1 + 2)
-3. Add padding to `ListingAdmin.tsx` (Task 3)
-4. Deploy edge functions (Task 4)
-
+| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
+| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
+| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
+| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
+| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
+| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
+| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
+| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
+| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
+| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
