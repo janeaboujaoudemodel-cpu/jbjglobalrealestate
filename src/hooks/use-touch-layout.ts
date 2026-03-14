@@ -35,13 +35,14 @@ export function useIsTouchLayout() {
     if (!mql) return;
 
     const onChange = () => {
-      // Narrow viewport fallback for iPhones that misreport touch points
-      if (window.innerWidth < 1024) {
-        setIsTouch(true);
+      if (window.innerWidth >= 1024) {
+        // Desktop width — only touch layout for true touch-only devices
+        const hasTouchPoints = (navigator.maxTouchPoints ?? 0) > 0;
+        setIsTouch(mql!.matches && hasTouchPoints);
         return;
       }
-      const hasTouchPoints = (navigator.maxTouchPoints ?? 0) > 0;
-      setIsTouch(mql!.matches && hasTouchPoints);
+      // Below 1024px — always mobile
+      setIsTouch(true);
     };
     onChange();
 
