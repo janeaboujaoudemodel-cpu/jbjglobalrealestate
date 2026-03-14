@@ -88,6 +88,7 @@ export const ToolkitRoutes = () => (
 
     {/* Master Suite Routes */}
     <Route path="/toolkit/video-studio" element={<Navigate to="/toolkit/video-suite" replace />} />
+    <Route path="/toolkit/ai-video-suite" element={<Navigate to="/toolkit/video-suite" replace />} />
     <Route path="/toolkit/video-suite" element={<L><VideoSuite /></L>} />
     <Route path="/toolkit/voice-suite" element={<L><VoiceSuite /></L>} />
     <Route path="/toolkit/photo-suite" element={<L><PhotoSuite /></L>} />
