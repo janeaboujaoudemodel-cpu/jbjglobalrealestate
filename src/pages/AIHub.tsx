@@ -391,6 +391,7 @@ const mediaAndCreativeTools = [
   { id: "background-ai", title: "JBJ AI Background Remover", description: "Remove or replace backgrounds from photos instantly using AI.", icon: Wand2, link: "/toolkit/background-ai", category: "design" as ToolCategory },
   { id: "beauty-filters", title: "JBJ Beauty Filters", description: "Apply professional beauty enhancements and filters to photos.", icon: Sparkles, link: "/toolkit/beauty-filters", category: "design" as ToolCategory },
   { id: "virtual-staging-ai", title: "JBJ AI Virtual Staging", description: "Virtually stage empty properties with AI-generated furniture.", icon: Building2, link: "/virtual-staging-ai", category: "design" as ToolCategory },
+  { id: "creative-suite", title: "JBJ Creative Suite", description: "Full-featured creative studio for video projects, marketing packs, and property presentations.", icon: Sparkles, link: "/studio", category: "design" as ToolCategory },
 ];
 
 const aiSalesTools = [

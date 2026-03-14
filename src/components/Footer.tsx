@@ -828,7 +828,7 @@ const Footer = () => {
                   { href: "/toolkit/voice-studio-pro", label: "Voice Studio Pro" },
                   { href: "/e-signature", label: "JBJ E-Sign" },
                   { href: "/toolkit/scan-sign", label: "Scan & Sign" },
-                ]} viewAllHref="/toolkit" viewAllLabel="View All Creative Tools →" />
+                ]} viewAllHref="/ai-hub" viewAllLabel="View All Creative Tools →" />
               </div>
             </div>
 
