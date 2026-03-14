@@ -25,6 +25,7 @@ interface StampVersionSelectorProps {
   inkMode?: boolean;
   onSelectVersion: (version: VersionItem) => void;
   onDuplicate: (version: VersionItem) => void;
+  onSaveBoth?: (version: VersionItem) => void;
   onUploadNew: () => void;
   onClose: () => void;
 }
