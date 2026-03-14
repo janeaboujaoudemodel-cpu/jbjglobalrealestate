@@ -892,8 +892,8 @@ const EmailClient = () => {
               />
             </ScrollArea>
 
-            {/* Actions — Reply / Reply All / Forward / Draft with Amanda */}
-            <div className="p-4 border-t border-[#C9A84C]/15 flex gap-2">
+            {/* Actions — Reply / Reply All / Forward / Calendar / Notes / Draft with Amanda */}
+            <div className="p-4 border-t border-[#C9A84C]/15 flex flex-wrap gap-2">
               <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10" onClick={() => openReply("reply")}>
                 <Reply className="w-4 h-4 mr-1.5" /> Reply
               </Button>
@@ -903,6 +903,8 @@ const EmailClient = () => {
               <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10" onClick={() => openReply("forward")}>
                 <Forward className="w-4 h-4 mr-1.5" /> Forward
               </Button>
+              <QuickCalendarWidget compact source="email" prefillTitle={selectedEmail.subject} />
+              <QuickNoteWidget compact source="email" prefillTitle={selectedEmail.subject} prefillContent={selectedEmail.body.substring(0, 200)} />
               <Button
                 variant="outline"
                 size="sm"
