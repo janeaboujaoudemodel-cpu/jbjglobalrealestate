@@ -288,7 +288,7 @@ export default function InvestorDashboard() {
 
           {/* ── DOCUMENTS ── */}
           <TabsContent value="documents">
-            <InvestorDocumentVault />
+            <InvestorDocumentVault userId={user?.id || ""} />
           </TabsContent>
 
           {/* ── UPDATE PROFILE ── */}

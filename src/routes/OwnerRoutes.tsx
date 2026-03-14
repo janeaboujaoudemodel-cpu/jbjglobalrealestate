@@ -56,6 +56,7 @@ const DeveloperModerationQueue = lazy(() => import("@/pages/owner/DeveloperModer
 const APISecurityDashboard = lazy(() => import("@/pages/owner/APISecurityDashboard"));
 const IncidentReadinessPanel = lazy(() => import("@/pages/owner/IncidentReadinessPanel"));
 const ZeroTrustAuditPanel = lazy(() => import("@/pages/owner/ZeroTrustAuditPanel"));
+const EventManagementHub = lazy(() => import("@/pages/owner/EventManagementHub"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
