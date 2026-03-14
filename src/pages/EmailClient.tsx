@@ -159,6 +159,9 @@ const EmailClient = () => {
   const [analysisCache] = useState<Map<string, { needs_reply: boolean; priority: string; action_items: string[] }>>(new Map());
   const emailsPerPage = 20;
 
+  // Cross-channel: detect if recipient is a registered platform user
+  const recipientDetection = useCrossChannelDetection(newEmail.to);
+
   const folders = [
     { id: "inbox" as const, label: "Inbox", icon: Inbox, count: emails.filter(e => e.folder === "inbox" && !e.read).length },
     { id: "sent" as const, label: "Sent", icon: Send, count: 0 },
