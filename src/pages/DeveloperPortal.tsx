@@ -920,8 +920,8 @@ const DeveloperPortal = () => {
           </div>
         )}
 
-        {/* Registration Gate — unregistered non-owner users see ONLY the registration form */}
-        {!hasRepProfile && !isOwner && !loadingRep ? (
+        {/* Registration Gate — unregistered users (including owner in developer mode) see ONLY the registration form */}
+        {!hasRepProfile && (!isOwner || isDeveloperMode) && !loadingRep ? (
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             {/* Developer name selection before registration */}
             <Card className="border-2 border-gold/30 bg-gradient-to-r from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)] mb-6">
