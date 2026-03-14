@@ -1021,7 +1021,7 @@ export default function StampProjectWizard() {
               id="stamp-preview-container"
               className="bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.15)] shadow-[0_8px_40px_hsl(var(--gold)/0.06)] p-8"
             >
-              <LiveStampPreview {...previewProps} size={380} />
+              <LiveStampPreview {...previewProps} size={380} selectedElement={selectedElement} />
             </div>
             <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center max-w-[300px]">
               {form.company_name ? (

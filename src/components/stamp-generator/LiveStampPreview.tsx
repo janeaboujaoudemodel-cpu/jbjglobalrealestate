@@ -104,7 +104,8 @@ export function LiveStampPreview({
   circleGap,
   centerContentSize,
   onElementClick,
-}: LiveStampPreviewProps) {
+  selectedElement,
+}: LiveStampPreviewProps & { selectedElement?: string | null }) {
   const displayName = companyName || 'Your Company Name';
   const fontFamily = FONT_FAMILIES[typographyStyle];
   const ink = inkColor || OFFICIAL_INK_BLUE;
@@ -124,6 +125,21 @@ export function LiveStampPreview({
     el.addEventListener('click', handler);
     return () => el.removeEventListener('click', handler);
   }, [onElementClick]);
+
+  // Apply highlight glow to selected element
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const els = containerRef.current.querySelectorAll('[data-stamp-element]');
+    els.forEach(el => {
+      const htmlEl = el as SVGElement;
+      if (selectedElement && el.getAttribute('data-stamp-element') === selectedElement) {
+        htmlEl.style.filter = 'drop-shadow(0 0 4px #B8860B) drop-shadow(0 0 8px rgba(184,134,11,0.4))';
+        htmlEl.style.transition = 'filter 0.2s ease';
+      } else {
+        htmlEl.style.filter = '';
+      }
+    });
+  }, [selectedElement]);
 
   const svg = useMemo(() => {
     const S = size;
