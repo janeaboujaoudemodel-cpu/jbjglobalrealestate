@@ -873,6 +873,50 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
   }
 
   // ────────────────────────────────────────────────────────────────
+  // T13: Company License Stamp — License number prominent in center
+  // ────────────────────────────────────────────────────────────────
+  if (regNo && (project.density >= 4 || (project as any).show_license_number)) {
+    const outerR = R;
+    const bandR = R - 12;
+    const innerR = R - 18;
+    const arcR = R - 17;
+    const displayArabic = arabicName || name;
+    const enFontSize = autoFontSize(name, 10, 24);
+    const arFontSize = autoFontSize(displayArabic, 11, 18);
+    const regFontSize = Math.min(16, Math.max(10, 120 / regNo.length));
+
+    const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <path id="t13top" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}"/>
+        <path id="t13bot" d="M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}"/>
+      </defs>
+      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
+      <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
+      <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${SECONDARY}" stroke-width="1.2"/>
+      <!-- Company name arcs -->
+      ${isBilingual ? `
+        <text font-family="${font}" font-size="${enFontSize}" fill="#ffffff" letter-spacing="2" font-weight="700">
+          <textPath href="#t13top" startOffset="50%" text-anchor="middle">${name}</textPath>
+        </text>
+        <text font-family="${arabicFont}" font-size="${arFontSize}" fill="#ffffff" letter-spacing="1.5" font-weight="600">
+          <textPath href="#t13bot" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
+        </text>
+      ` : `
+        ${ringText('t13ring', cx, cy, R - 6, `●  ${name}  ●  ${city}  ●`, font, 8, '#ffffff', '50%', 1.6)}
+      `}
+      <!-- LICENSED label -->
+      <text x="${cx}" y="${cy - 22}" text-anchor="middle" font-family="${font}" font-size="7" fill="${SECONDARY}" letter-spacing="4" font-weight="700">TRADE LICENSE</text>
+      ${divider(cx, cy - 12, ACCENT, 24)}
+      <!-- License number — PROMINENT -->
+      <text x="${cx}" y="${cy + 4}" text-anchor="middle" dominant-baseline="central" font-family="${font}" font-size="${regFontSize}" fill="${ACCENT}" font-weight="bold" letter-spacing="1.5">${regNo}</text>
+      ${divider(cx, cy + 18, ACCENT, 24)}
+      <!-- Location -->
+      <text x="${cx}" y="${cy + 32}" text-anchor="middle" font-family="${font}" font-size="7" fill="${SECONDARY}" letter-spacing="3">${city}</text>
+    </svg>`;
+    concepts.push({ id: uid(), templateKey: 'license-company', label: 'Company License', tags: ['license', 'trade', 'official', 'registration'], svgSource: svg });
+  }
+
+  // ────────────────────────────────────────────────────────────────
   // T0: Owner Official Standard Model — ALWAYS PINNED FIRST
   // Uses the Official Template with 3-ring tapering hierarchy
   // ────────────────────────────────────────────────────────────────
