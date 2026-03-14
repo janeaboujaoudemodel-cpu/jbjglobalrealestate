@@ -461,7 +461,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
 
           {/* Languages */}
           <div className="space-y-2">
-            <Label>Languages Spoken</Label>
+            <Label>Languages Spoken *</Label>
             <LanguageMultiSelect value={form.languages} onChange={(v) => setForm(f => ({ ...f, languages: v }))} />
           </div>
 
