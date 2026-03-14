@@ -338,7 +338,7 @@ const DeveloperPortal = () => {
     },
   });
 
-  // Fetch user's interest registrations
+  // Fetch user's launch interests
   const { data: myInterests } = useQuery({
     queryKey: ["my-launch-interests", user?.id],
     queryFn: async () => {
