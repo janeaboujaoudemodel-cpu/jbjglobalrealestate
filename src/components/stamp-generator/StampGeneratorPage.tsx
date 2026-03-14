@@ -765,8 +765,6 @@ export default function StampGeneratorPage() {
           onSetCircleGap={setCircleGap}
           onSetSeparatorDistance={setSeparatorDistance}
           onSetCenterContentSize={setCenterContentSize}
-          governmentMode={governmentMode}
-          onSetGovernmentMode={setGovernmentMode}
         />
 
         {/* ── CENTER: Premium Canvas Preview ── */}
