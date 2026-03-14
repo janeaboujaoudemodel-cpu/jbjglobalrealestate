@@ -5,12 +5,13 @@
 import React, { lazy, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
-import { Play, Maximize2, Languages, ArrowLeft, Loader2, Music, Sparkles } from 'lucide-react';
+import { Play, Maximize2, Languages, ArrowLeft, Loader2, FileText, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const AIVideoStudio = lazy(() => import('@/components/ai-video-studio/AIVideoStudio').then(m => ({ default: m.AIVideoStudio })));
 const VideoResizePack = lazy(() => import('@/pages/toolkit/VideoResizePack'));
 const CaptionsTranslate = lazy(() => import('@/pages/toolkit/CaptionsTranslate'));
+const AIVideoTourScriptPremium = lazy(() => import('@/components/ai-tools/premium').then(m => ({ default: m.AIVideoTourScriptPremium })));
 
 const LoadingSpinner = () => (
   <div className="min-h-[50vh] flex items-center justify-center" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 100%)" }}>
@@ -25,6 +26,7 @@ const tabs = [
   { value: "edit", label: "Edit Studio", shortLabel: "Edit", icon: Play },
   { value: "resize", label: "Resize / Reframe", shortLabel: "Resize", icon: Maximize2 },
   { value: "captions", label: "Captions & Translation", shortLabel: "Captions", icon: Languages },
+  { value: "script", label: "Video Tour Script", shortLabel: "Script", icon: FileText },
 ];
 
 export default function VideoSuite() {
@@ -66,7 +68,7 @@ export default function VideoSuite() {
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm mt-1" style={{ color: "rgba(0,0,0,0.45)" }}>
-                  Edit · Resize · Captions & Translation · Sound · Effects
+                  Edit · Resize · Captions & Translation · Script · Effects
                 </p>
               </div>
             </div>
@@ -110,6 +112,11 @@ export default function VideoSuite() {
             <TabsContent value="captions" className="mt-0 overflow-auto">
               <Suspense fallback={<LoadingSpinner />}>
                 <CaptionsTranslate embedded />
+              </Suspense>
+            </TabsContent>
+            <TabsContent value="script" className="mt-0 overflow-auto">
+              <Suspense fallback={<LoadingSpinner />}>
+                <AIVideoTourScriptPremium />
               </Suspense>
             </TabsContent>
           </div>

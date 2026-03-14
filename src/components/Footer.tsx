@@ -236,7 +236,7 @@ const Footer = () => {
     { label: "Property Map", href: "/map" },
     { label: "Property Evaluator", href: "/property-evaluator" },
     { label: "Rental Index", href: "/rental-index" },
-    { label: "Property Measurement", href: "/calculator/measurement" },
+    { label: "Property Measurement", href: "/property-measurement" },
   ];
 
   // Sell
@@ -252,7 +252,7 @@ const Footer = () => {
     { label: "Explore All Services", href: "/services" },
     { label: t('footer.buyerAdvisory') || "Buyer Advisory", href: "/services/buying-advisory" },
     { label: t('footer.sellerAdvisory') || "Seller Advisory", href: "/services/selling-advisory" },
-    { label: t('footer.leasingAdvisory') || "Leasing Advisory", href: "/services/leasing-advisory" },
+    { label: t('footer.leasingAdvisory') || "Rental Advisory", href: "/services/rental-advisory" },
     { label: t('footer.investmentAdvisory') || "Investment Advisory", href: "/services/investment-advisory" },
     { label: "Snagging & Inspection", href: "/services/snagging" },
     { label: "Property Management", href: "/services/property-management" },
@@ -265,12 +265,12 @@ const Footer = () => {
     { label: "Architecture", href: "/services/architecture" },
     { label: "Interior Design", href: "/services/interior-design" },
     { label: "Fit-Out", href: "/services/fit-out" },
-    { label: "Design & Build", href: "/services/design-and-build" },
+    { label: "Design & Build", href: "/services/design-build" },
     { label: "Law Firm", href: "/services/law-firm" },
     { label: "Broker Certification", href: "/services/broker-certification" },
     { label: "Complaint Procedures", href: "/services/complaint-procedures" },
     { label: "Testimonials", href: "/reviews" },
-    { label: "Referral Partner", href: "/services/referral-partner" },
+    { label: "Referral Partner", href: "/referral-partner" },
     { label: "Signature Collection", href: "/services/signature-collection" },
   ];
 
@@ -278,7 +278,7 @@ const Footer = () => {
   const investorHubLinks = [
     { label: "Investor Hub", href: "/investor/portfolio-views" },
     { label: "Investor Services", href: "/services/investment-advisory" },
-    { label: "Join Investor List", href: "/investor/join" },
+    { label: "Join Investor List", href: "/investors/join" },
     { label: t('footer.investorEducation') || "Investor Education", href: "/investor-education" },
     { label: t('footer.investorFaqs') || "Investor FAQs", href: "/investor-faq" },
     { label: t('footer.investorTools') || "Investor Tools", href: "/ai-hub" },
@@ -324,8 +324,8 @@ const Footer = () => {
     { label: "Company Profile", href: "/company-profile" },
     { label: "Philanthropy", href: "/philanthropy" },
     { label: "Reviews", href: "/reviews" },
-    { label: "Our Brokers", href: "/our-brokers" },
-    { label: "Partner Governance", href: "/partner-governance" },
+    { label: "Our Brokers", href: "/brokers" },
+    { label: "Partner Governance", href: "/governance/partners" },
   ];
 
   // Career Links
@@ -338,7 +338,7 @@ const Footer = () => {
   const brokerAcademyLinks = [
     { href: "/broker-toolkit", label: "Broker Portal" },
     { href: "/onboarding", label: "JBJ Academy" },
-    { href: "/academy-graduates", label: "Academy Graduates" },
+    { href: "/academy/graduates", label: "Academy Graduates" },
     { href: "/broker-education", label: "Broker Education" },
     { href: "/broker-resources", label: "Broker Resources" },
     { href: "/listing-portal", label: "Listing Portal" },
@@ -350,11 +350,11 @@ const Footer = () => {
 
   // Partners
   const partnersLinks = [
-    { href: "/services/mortgage", label: "Mortgage" },
-    { href: "/services/law-firm", label: "Legal" },
-    { href: "/services/company-setup", label: "Company Setup" },
-    { href: "/services/visa", label: "Visa Services" },
-    { href: "/partner-governance", label: "Partners Hub" },
+    { href: "/partners/mortgage", label: "Mortgage" },
+    { href: "/partners/legal", label: "Legal" },
+    { href: "/partners/company-setup", label: "Company Setup" },
+    { href: "/partners/visa-services", label: "Visa Services" },
+    { href: "/governance/partners", label: "Partners Hub" },
   ];
 
   // Legal Links
@@ -373,7 +373,7 @@ const Footer = () => {
   // Creative Toolkit
   const creativeToolkitLinks = [
     { href: "/ai-hub", label: "AI Tools Hub" },
-    { href: "/toolkit/ai-video-studio", label: "AI Video Studio" },
+    { href: "/toolkit/video-suite", label: "Video Suite" },
     { href: "/toolkit/video-resize-pack", label: "Video Resize Pack" },
     { href: "/toolkit/voice-studio", label: "Voice Studio" },
     { href: "/toolkit/pdf-from-photos", label: "Photo to PDF" },
@@ -400,7 +400,7 @@ const Footer = () => {
   const productivityLinks = [
     { href: "/spreadsheet", label: "Spreadsheet" },
     { href: "/documents", label: "Document Designer" },
-    { href: "/toolkit/corporate-suite/qr-generator", label: "QR Generator" },
+    { href: "/qr-generator", label: "QR Generator" },
     { href: "/video-meeting", label: "Video Meeting" },
     { href: "/presentations", label: "Presentations" },
     { href: "/e-signature", label: "E-Signature" },
