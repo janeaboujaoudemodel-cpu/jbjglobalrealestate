@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import {
   Building2, MapPin, Calendar, Edit, Check, X, Eye, FileText,
   Image as ImageIcon, Send, Clock, ChevronRight, Link as LinkIcon,
-  RefreshCw
+  RefreshCw, Lock, ShieldCheck
 } from "lucide-react";
 
 interface ProjectForReview {
