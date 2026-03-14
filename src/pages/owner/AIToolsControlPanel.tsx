@@ -174,8 +174,8 @@ export default function AIToolsControlPanel() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     const [vRes, tRes, rRes] = await Promise.all([
-      supabase.from("ai_tool_versions").select("*").order("created_at", { ascending: false }),
-      supabase.from("ai_tool_test_logs").select("*").order("created_at", { ascending: false }),
+      (supabase.from("ai_tool_versions") as any).select("*").order("created_at", { ascending: false }),
+      (supabase.from("ai_tool_test_logs") as any).select("*").order("created_at", { ascending: false }),
       supabase.from("ai_recommendations").select("*").order("created_at", { ascending: false }),
     ]);
     if (vRes.data) setVersions(vRes.data as ToolVersion[]);
