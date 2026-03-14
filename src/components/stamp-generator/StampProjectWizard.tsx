@@ -421,7 +421,7 @@ export default function StampProjectWizard() {
   };
 
   return (
-    <div className="h-[calc(100vh-52px)] flex flex-col bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] overflow-hidden">
+    <div className="h-[calc(100dvh-52px)] flex flex-col bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] overflow-hidden">
       {/* ── Top toolbar ── */}
       <div className="flex-shrink-0 border-b border-[hsl(var(--border))] bg-white/90 backdrop-blur-md px-4 py-2 flex items-center gap-3">
         <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center">
