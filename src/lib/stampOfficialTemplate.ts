@@ -85,7 +85,7 @@ const DECORATIVE_STROKE = 0.5; // thin decorative ring just inside outer ring
 
 // ── Safe zone ──
 const SAFE_ZONE = 5;          // minimum px between text and ring strokes
-const ARC_SPREAD_LIMIT = 0.72; // max fraction of semicircle for text
+const ARC_SPREAD_LIMIT = 0.88; // max fraction of semicircle for text — increased for full arc distribution
 
 function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6): number {
   if (!text) return baseSize;
@@ -93,6 +93,40 @@ function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 
   if (est <= maxArcLen) return baseSize;
   const fitted = maxArcLen / (text.length * charW);
   return Math.max(6.5, fitted);
+}
+
+/**
+ * Compute dynamic letter-spacing so arc text fills the available arc segment evenly.
+ * Returns spacing in px that distributes remaining arc space across character gaps.
+ */
+function computeArcLetterSpacing(
+  text: string, fontSize: number, arcRadius: number,
+  spreadLimit: number, avgCharWidth: number, minSpacing: number
+): number {
+  if (!text || text.length <= 1) return minSpacing;
+  const availableArc = arcRadius * Math.PI * spreadLimit;
+  const textWidth = text.length * fontSize * avgCharWidth;
+  const gaps = text.length - 1;
+  if (gaps <= 0) return minSpacing;
+  const extraSpace = availableArc - textWidth;
+  const spacing = extraSpace / gaps;
+  return Math.max(minSpacing, Math.min(spacing, 12)); // cap at 12px
+}
+
+/**
+ * Compute safe font size and letter-spacing for arc text to prevent collisions.
+ * Returns { fontSize, letterSpacing } that guarantees no character overlap.
+ */
+function safeArcFontSize(
+  text: string, maxRadius: number, isArabic: boolean,
+  baseFontSize: number, spreadLimit = ARC_SPREAD_LIMIT
+): { fontSize: number; letterSpacing: number } {
+  const charW = isArabic ? 0.50 : 0.54;
+  const minSpacing = isArabic ? 0.5 : 1;
+  const arcLen = maxRadius * Math.PI * spreadLimit;
+  const fontSize = fitFontSize(text, baseFontSize, arcLen, charW);
+  const letterSpacing = computeArcLetterSpacing(text, fontSize, maxRadius, spreadLimit, charW, minSpacing);
+  return { fontSize, letterSpacing };
 }
 
 /** Get separator glyph character for the given style */
