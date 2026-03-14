@@ -265,6 +265,12 @@ export default function StampGeneratorPage() {
       const regular = existing.filter((d: any) => !d.is_favorite).slice(0, 11).map(toDesign);
       setFavoriteConcepts(favs);
       setConcepts(regular);
+      // Set standard from first design (T0)
+      const firstDesign = regular[0] || favs[0];
+      if (firstDesign && !standardConcept) {
+        setStandardConcept(firstDesign);
+        setSelectedId(firstDesign.id);
+      }
     } else {
       generateConcepts(data);
     }
