@@ -26,6 +26,8 @@ interface StampRightPanelProps {
   blocked: boolean;
   selectedId: string | null;
   svgOverrides: Record<string, string>;
+  // Standard Model — pinned first card
+  standardConcept: StampDesignConcept | null;
   // Style
   tintColor: string;
   secondaryColor?: string;
