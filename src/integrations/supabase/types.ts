@@ -9391,6 +9391,107 @@ export type Database = {
         }
         Relationships: []
       }
+      event_invitations: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          notes: string | null
+          responded_at: string | null
+          sent_at: string | null
+          status: string
+          user_email: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          notes?: string | null
+          responded_at?: string | null
+          sent_at?: string | null
+          status?: string
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          notes?: string | null
+          responded_at?: string | null
+          sent_at?: string | null
+          status?: string
+          user_email?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_invitations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          cover_image_url: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          event_date: string
+          event_end_date: string | null
+          event_type: string
+          id: string
+          invitation_template: string | null
+          is_public: boolean | null
+          location: string | null
+          max_attendees: number | null
+          status: string
+          target_categories: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cover_image_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          event_date: string
+          event_end_date?: string | null
+          event_type?: string
+          id?: string
+          invitation_template?: string | null
+          is_public?: boolean | null
+          location?: string | null
+          max_attendees?: number | null
+          status?: string
+          target_categories?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cover_image_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          event_date?: string
+          event_end_date?: string | null
+          event_type?: string
+          id?: string
+          invitation_template?: string | null
+          is_public?: boolean | null
+          location?: string | null
+          max_attendees?: number | null
+          status?: string
+          target_categories?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       executive_assistant_settings: {
         Row: {
           assistant_name: string | null

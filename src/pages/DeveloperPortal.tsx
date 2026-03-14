@@ -1034,7 +1034,7 @@ const DeveloperPortal = () => {
                   <Rocket className="w-3.5 h-3.5 mr-1 hidden md:block" /> Launches
                 </TabsTrigger>
                 <TabsTrigger value="register" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
-                  <UserCheck className="w-3.5 h-3.5 mr-1 hidden md:block" /> Profile
+                  <UserCheck className="w-3.5 h-3.5 mr-1 hidden md:block" /> Update Profile
                 </TabsTrigger>
                 <TabsTrigger value="agreements" className="text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-gold/40 rounded-lg">
                   <FileSignature className="w-3.5 h-3.5 mr-1 hidden md:block" /> Agreements

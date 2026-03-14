@@ -291,7 +291,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground text-xl md:text-2xl">
             <UserCheck className="w-6 h-6 text-gold" />
-            Register as Developer Representative
+            Register as Developer / Representative
           </CardTitle>
           <p className="text-sm text-muted-foreground">
             Complete this registration to unlock the full {COMPANY_FULL_NAME} Developer Portal.

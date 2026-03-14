@@ -1,832 +1,545 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import InvestorDocumentVault from "@/components/investor/InvestorDocumentVault";
-import CTABand from "@/components/home/CTABand";
-import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
+import ApprovalTimeline, { JBJ_APPROVAL_STEPS } from "@/components/shared/ApprovalTimeline";
+import { useMyEventInvitations } from "@/hooks/useEventManagement";
+import { toast } from "sonner";
 import {
-  LayoutDashboard,
-  Building2,
-  FileText,
-  TrendingUp,
-  Bell,
-  Settings,
-  User,
-  ChevronDown,
-  LogOut,
-  Eye,
-  Download,
-  Clock,
-  MapPin,
-  BarChart3,
-  Briefcase,
-  FolderOpen,
-  HelpCircle,
-  MessageCircle,
-  AlertCircle,
-  CheckCircle2,
-  Calendar,
-  Shield,
-  Heart,
-  Search,
-  ListChecks,
-  Phone,
-  Mail,
-  BookOpen,
-  Lock,
+  LayoutDashboard, Building2, FileText, TrendingUp, Bell, User, Heart, Search, ListChecks,
+  Calendar, Shield, MessageCircle, BarChart3, Briefcase, Clock, MapPin, Eye, CheckCircle2,
+  Mail, Phone, Globe, Languages, Stamp, ImageIcon, CreditCard, Star, History, StickyNote,
+  FileEdit, ArrowRight
 } from "lucide-react";
 import { format } from "date-fns";
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+const TAB_STYLE = "text-[10px] md:text-xs font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-[hsl(40,45%,88%)] data-[state=active]:to-[hsl(38,40%,83%)] data-[state=active]:shadow-md data-[state=active]:border data-[state=active]:border-[hsl(36,40%,70%)]/40 rounded-lg";
+
+const fadeIn = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
-};
-
-// Types
-interface InvestorProfile {
-  id: string;
-  full_name: string | null;
-  photo_url: string | null;
-  phone_number: string | null;
-}
-
-interface LinkedProperty {
-  id: string;
-  name: string;
-  location: string;
-  emirate: string;
-  type: 'off-plan' | 'ready';
-  status: 'owned' | 'reserved' | 'under_evaluation';
-  image_url: string | null;
-}
-
-interface Report {
-  id: string;
-  name: string;
-  type: 'market' | 'area' | 'project';
-  generated_at: string;
-  file_url: string | null;
-}
-
-interface Document {
-  id: string;
-  name: string;
-  property_name: string | null;
-  uploaded_at: string;
-  file_url: string | null;
-}
-
-interface ActivityItem {
-  id: string;
-  type: 'status_update' | 'admin_action' | 'report_available' | 'notification';
-  message: string;
-  created_at: string;
-}
-
-interface RequestItem {
-  id: string;
-  type: 'consultation' | 'shortlist' | 'list_property' | 'support';
-  label: string;
-  status: 'not_submitted' | 'submitted' | 'in_review';
-}
 
 export default function InvestorDashboard() {
   const navigate = useNavigate();
-  const { user, loading: authLoading, signOut } = useAuth();
-  const [profile, setProfile] = useState<InvestorProfile | null>(null);
+  const [searchParams] = useSearchParams();
+  const { user, loading: authLoading } = useAuth();
+  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "dashboard");
+  const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  
-  // Dashboard data states
-  const [linkedProperties, setLinkedProperties] = useState<LinkedProperty[]>([]);
-  const [reports, setReports] = useState<Report[]>([]);
-  const [documents, setDocuments] = useState<Document[]>([]);
-  const [activities, setActivities] = useState<ActivityItem[]>([]);
-  const [requests, setRequests] = useState<RequestItem[]>([
-    { id: '1', type: 'consultation', label: 'Private Consultation Request', status: 'not_submitted' },
-    { id: '2', type: 'shortlist', label: 'Curated Shortlist Request', status: 'not_submitted' },
-    { id: '3', type: 'list_property', label: 'List Your Property Request', status: 'not_submitted' },
-    { id: '4', type: 'support', label: 'Support Ticket', status: 'not_submitted' },
-  ]);
+  const [favorites, setFavorites] = useState<any[]>([]);
+  const [stats, setStats] = useState({ watchlist: 0, savedSearches: 0, reports: 0, requests: 0 });
+  const [activities, setActivities] = useState<any[]>([]);
+  const { invitations, respondToInvitation } = useMyEventInvitations();
 
-  // KPI stats
-  const [stats, setStats] = useState({
-    watchlistProjects: 0,
-    savedSearches: 0,
-    reportsAvailable: 0,
-    activeRequests: 0,
+  // Profile form state
+  const [profileForm, setProfileForm] = useState({
+    full_name: "", nationality: "", phone_number: "", email: "",
+    languages: "", gender: "", experience_years: "", bio: "",
   });
+  const [savingProfile, setSavingProfile] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/auth?redirect=/investor-dashboard");
-    }
+    if (!authLoading && !user) navigate("/auth?redirect=/investor-dashboard");
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
-    if (user) {
-      fetchDashboardData();
-    }
+    if (user) fetchData();
   }, [user]);
 
-  const fetchDashboardData = async () => {
+  const fetchData = async () => {
     if (!user) return;
     setLoading(true);
-
     try {
-      // Fetch profile
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('id, full_name, phone_number')
-        .eq('id', user.id)
-        .maybeSingle();
-
-      if (profileData) {
-        setProfile({
-          id: profileData.id,
-          full_name: profileData.full_name,
-          phone_number: profileData.phone_number,
-          photo_url: null,
+      const { data: p } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
+      if (p) {
+        setProfile(p);
+        setProfileForm({
+          full_name: p.full_name || "", nationality: (p as any).nationality || "",
+          phone_number: p.phone_number || "", email: user.email || "",
+          languages: "", gender: "", experience_years: "", bio: "",
         });
       }
 
-      // Fetch linked properties (from favorites as watchlist)
-      const { data: favoritesData } = await supabase
-        .from('favorites')
-        .select('id, project_id, created_at')
-        .eq('user_id', user.id)
-        .limit(10);
-
-      if (favoritesData && favoritesData.length > 0) {
-        const projectIds = favoritesData.map(f => f.project_id);
-        const { data: projectsData } = await supabase
-          .from('projects')
-          .select('id, name, location, emirate, status')
-          .in('id', projectIds);
-
-        if (projectsData) {
-          const properties: LinkedProperty[] = projectsData.map(p => ({
-            id: p.id,
-            name: p.name,
-            location: p.location || '',
-            emirate: p.emirate || 'Dubai',
-            type: p.status === 'off-plan' ? 'off-plan' : 'ready',
-            status: 'under_evaluation' as const,
-            image_url: null,
-          }));
-          setLinkedProperties(properties);
-          setStats(prev => ({ 
-            ...prev, 
-            watchlistProjects: properties.length,
-          }));
-        }
+      const { data: favs } = await supabase.from("favorites").select("id, project_id, created_at").eq("user_id", user.id).limit(50);
+      if (favs) {
+        setFavorites(favs);
+        setStats(prev => ({ ...prev, watchlist: favs.length }));
       }
 
-      // Fetch support tickets as activities
-      const { data: ticketData } = await supabase
-        .from('chat_conversations')
-        .select('id, status, created_at, service_type')
-        .eq('user_email', user.email)
-        .order('created_at', { ascending: false })
-        .limit(5);
-
-      if (ticketData) {
-        const activityItems: ActivityItem[] = ticketData.map(t => ({
-          id: t.id,
-          type: 'notification' as const,
-          message: `Support ticket: ${t.service_type || 'General Inquiry'} - ${t.status}`,
-          created_at: t.created_at,
-        }));
-        setActivities(activityItems);
-        
-        // Update active requests count
-        const activeCount = ticketData.filter(t => t.status !== 'closed').length;
-        setStats(prev => ({ ...prev, activeRequests: activeCount }));
+      const { data: tickets } = await supabase
+        .from("chat_conversations").select("id, status, created_at, service_type")
+        .eq("user_email", user.email).order("created_at", { ascending: false }).limit(10);
+      if (tickets) {
+        setActivities(tickets.map((t: any) => ({
+          id: t.id, message: `${t.service_type || "General"} — ${t.status}`, created_at: t.created_at,
+        })));
+        setStats(prev => ({ ...prev, requests: tickets.filter((t: any) => t.status !== "closed").length }));
       }
-
-      setStats(prev => ({ ...prev, reportsAvailable: 0, savedSearches: 0 }));
-
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
+    } catch (e) { console.error(e); }
+    setLoading(false);
   };
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    setSavingProfile(true);
+    const { error } = await supabase.from("profiles").update({
+      full_name: profileForm.full_name,
+      nationality: profileForm.nationality,
+      phone_number: profileForm.phone_number,
+    }).eq("id", user.id);
+    if (error) toast.error("Failed to save profile");
+    else toast.success("Profile updated");
+    setSavingProfile(false);
   };
-
-  const getStatusBadge = (status: LinkedProperty['status']) => {
-    const styles = {
-      owned: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30',
-      reserved: 'bg-amber-500/10 text-amber-600 border-amber-500/30',
-      under_evaluation: 'bg-blue-500/10 text-blue-600 border-blue-500/30',
-    };
-    const labels = {
-      owned: 'Owned',
-      reserved: 'Reserved',
-      under_evaluation: 'Under Evaluation',
-    };
-    return <Badge className={styles[status]}>{labels[status]}</Badge>;
-  };
-
-  const getTypeBadge = (type: 'off-plan' | 'ready') => {
-    return (
-      <Badge variant="outline" className={type === 'off-plan' ? 'border-gold/50 text-gold' : 'border-emerald-500/50 text-emerald-600'}>
-        {type === 'off-plan' ? 'Off-Plan' : 'Ready'}
-      </Badge>
-    );
-  };
-
-  const getRequestStatusBadge = (status: RequestItem['status']) => {
-    const styles = {
-      not_submitted: 'bg-zinc-500/10 text-zinc-500 border-zinc-500/30',
-      submitted: 'bg-blue-500/10 text-blue-600 border-blue-500/30',
-      in_review: 'bg-amber-500/10 text-amber-600 border-amber-500/30',
-    };
-    const labels = {
-      not_submitted: 'Not Submitted',
-      submitted: 'Submitted',
-      in_review: 'In Review',
-    };
-    return <Badge className={styles[status]}>{labels[status]}</Badge>;
-  };
-
-  const whatsappMessage = "Hi JBJ Global Real Estate, I'm an investor and I'd like support with my dashboard.";
 
   if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-gold border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-2 border-[hsl(36,40%,70%)] border-t-transparent rounded-full" />
       </div>
     );
   }
 
+  const displayName = profile?.full_name || user?.email?.split("@")[0] || "Investor";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-      {/* Dashboard Content */}
-      <div className="container mx-auto px-4 py-8">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-          className="space-y-6"
-        >
-          {/* HERO / HEADER BLOCK */}
-          <motion.div variants={fadeInUp}>
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
-              <CardContent className="p-6 md:p-8">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                  <div className="flex flex-col md:flex-row items-center gap-6">
-                    <Avatar className="w-20 h-20 border-2 border-gold/30">
-                      <AvatarImage src={profile?.photo_url || undefined} />
-                      <AvatarFallback className="bg-gold/20 text-gold text-xl">
-                        {profile?.full_name?.charAt(0) || user?.email?.charAt(0)?.toUpperCase() || 'I'}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="text-center md:text-left">
-                      <h1 className="text-2xl md:text-3xl font-semibold text-foreground mb-1">
-                        Investor Dashboard
-                      </h1>
-                      <p className="text-lg font-medium text-foreground mb-1">
-                        Your Portfolio. Your Reports. One Private Workspace.
-                      </p>
-                      <p className="text-muted-foreground text-sm mb-3">
-                        A secure investor workspace for tracking watchlists, accessing market intelligence, and managing your requests with JBJ Global Real Estate.
-                      </p>
-                      <div className="flex items-center gap-2 flex-wrap justify-center md:justify-start">
-                        <Badge className="bg-gold/20 text-gold border-gold/30">
-                          <User className="w-3 h-3 mr-1" />
-                          Investor Account
-                        </Badge>
-                        <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30">
-                          <Shield className="w-3 h-3 mr-1" />
-                          Verified
-                        </Badge>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Profile Dropdown */}
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="secondary" className="gap-2">
-                        <span className="hidden sm:inline truncate max-w-[220px]">{profile?.full_name || user?.email?.split('@')[0]}</span>
-                        <ChevronDown className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem onClick={() => navigate('/my-account')}>
-                        <User className="w-4 h-4 mr-2" />
-                        Profile
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate('/settings')}>
-                        <Settings className="w-4 h-4 mr-2" />
-                        Settings
-                      </DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={handleSignOut} className="text-red-500">
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Logout
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-
-                {/* Hero CTAs */}
-                <div className="mt-6 flex flex-wrap gap-3 justify-center md:justify-start">
-                  <Link to="/contact?type=consultation">
-                    <Button variant="primary">
-                      Request a Private Consultation
-                    </Button>
-                  </Link>
-                  <a href={getWhatsAppUrl(whatsappMessage)} target="_blank" rel="noopener noreferrer">
-                    <Button variant="secondary" className="gap-2">
-                      <MessageCircle className="w-4 h-4" />
-                      Ask JBJ on WhatsApp
-                    </Button>
-                  </a>
-                </div>
-
-                <p className="text-xs text-muted-foreground mt-4 text-center md:text-left">
-                  Information shown here is personalized and may depend on the data you choose to add. Market information is provided for guidance and is subject to change.
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* SECTION 1: Snapshot (KPI Cards Row) */}
-          <motion.div variants={fadeInUp}>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-                <CardContent className="p-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
-                      <Heart className="w-6 h-6 text-blue-500" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-foreground">{stats.watchlistProjects}</p>
-                      <p className="text-xs text-muted-foreground">Watchlist Projects</p>
-                      <p className="text-[10px] text-muted-foreground/70">Projects you saved for comparison.</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-                <CardContent className="p-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center">
-                      <Search className="w-6 h-6 text-emerald-500" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-foreground">{stats.savedSearches}</p>
-                      <p className="text-xs text-muted-foreground">Saved Searches</p>
-                      <p className="text-[10px] text-muted-foreground/70">Filters you saved for quick access.</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-                <CardContent className="p-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center">
-                      <FileText className="w-6 h-6 text-purple-500" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-foreground">{stats.reportsAvailable}</p>
-                      <p className="text-xs text-muted-foreground">Reports Available</p>
-                      <p className="text-[10px] text-muted-foreground/70">Market/area reports you can open anytime.</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-                <CardContent className="p-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-amber-500/10 rounded-xl flex items-center justify-center">
-                      <ListChecks className="w-6 h-6 text-amber-500" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-foreground">{stats.activeRequests}</p>
-                      <p className="text-xs text-muted-foreground">Active Requests</p>
-                      <p className="text-[10px] text-muted-foreground/70">Consultations, shortlist requests, and support tickets.</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,28%,94%)] to-[hsl(36,22%,88%)]">
+      {/* Hero Header */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(36,40%,20%)_0%,transparent_60%)]" />
+        <div className="relative max-w-6xl mx-auto px-4 py-10 md:py-14">
+          <div className="flex items-center gap-5">
+            <Avatar className="w-16 h-16 border-2 border-[hsl(36,40%,70%)]/30">
+              <AvatarImage src={profile?.avatar_url} />
+              <AvatarFallback className="bg-[hsl(36,40%,70%)]/20 text-[hsl(36,40%,70%)] text-xl font-bold">
+                {displayName[0]?.toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-[#F5EBD7] tracking-tight">Investor Portal</h1>
+              <p className="text-[#D4B896]/60 text-sm">Welcome back, {displayName}</p>
             </div>
-          </motion.div>
+          </div>
+        </div>
+      </section>
 
-          {/* SECTION 2: Quick Actions */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-gold" />
-              Quick Actions
-            </h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Link to="/contact?type=shortlist">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group h-full">
-                  <CardContent className="p-5">
-                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
-                      <ListChecks className="w-5 h-5 text-gold" />
-                    </div>
-                    <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors mb-1">Get a Curated Shortlist</h4>
-                    <p className="text-xs text-muted-foreground">Tell us your budget, timeline, and priorities — we'll prepare a curated shortlist with clear comparisons.</p>
-                  </CardContent>
-                </Card>
-              </Link>
+      {/* Tabs */}
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="flex flex-wrap gap-1.5 bg-transparent p-0 mb-6 h-auto">
+            <TabsTrigger value="dashboard" className={TAB_STYLE}>
+              <LayoutDashboard className="w-3.5 h-3.5 mr-1 hidden md:block" /> Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="properties" className={TAB_STYLE}>
+              <Building2 className="w-3.5 h-3.5 mr-1 hidden md:block" /> My Properties
+            </TabsTrigger>
+            <TabsTrigger value="documents" className={TAB_STYLE}>
+              <FileText className="w-3.5 h-3.5 mr-1 hidden md:block" /> Documents
+            </TabsTrigger>
+            <TabsTrigger value="profile" className={TAB_STYLE}>
+              <User className="w-3.5 h-3.5 mr-1 hidden md:block" /> Update Profile
+            </TabsTrigger>
+            <TabsTrigger value="inbox" className={TAB_STYLE}>
+              <Mail className="w-3.5 h-3.5 mr-1 hidden md:block" /> Inbox
+            </TabsTrigger>
+            <TabsTrigger value="alerts" className={TAB_STYLE}>
+              <Bell className="w-3.5 h-3.5 mr-1 hidden md:block" /> Alerts
+            </TabsTrigger>
+            <TabsTrigger value="calendar" className={TAB_STYLE}>
+              <Calendar className="w-3.5 h-3.5 mr-1 hidden md:block" /> Calendar
+            </TabsTrigger>
+          </TabsList>
 
-              <Link to="/compare">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group h-full">
-                  <CardContent className="p-5">
-                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
-                      <BarChart3 className="w-5 h-5 text-gold" />
-                    </div>
-                    <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors mb-1">Compare Projects</h4>
-                    <p className="text-xs text-muted-foreground">Compare price per sqft, payment plan structure, handover timing, and location positioning.</p>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link to="/contact?type=roi">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group h-full">
-                  <CardContent className="p-5">
-                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
-                      <TrendingUp className="w-5 h-5 text-gold" />
-                    </div>
-                    <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors mb-1">Request ROI Snapshot</h4>
-                    <p className="text-xs text-muted-foreground">Receive a structured rental/resale context snapshot based on available official data sources.</p>
-                  </CardContent>
-                </Card>
-              </Link>
-
-              <Link to="/contact?type=advisor">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold transition-colors cursor-pointer group h-full">
-                  <CardContent className="p-5">
-                    <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center mb-3 group-hover:bg-gold/20 transition-colors">
-                      <MessageCircle className="w-5 h-5 text-gold" />
-                    </div>
-                    <h4 className="font-semibold text-foreground group-hover:text-gold transition-colors mb-1">Speak to an Advisor</h4>
-                    <p className="text-xs text-muted-foreground">Book a private consultation for investment strategy and market navigation.</p>
-                  </CardContent>
-                </Card>
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* SECTION 3: Your Watchlist */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-2 flex items-center gap-2">
-              <Heart className="w-5 h-5 text-gold" />
-              Your Watchlist
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Save projects you want to revisit, compare, or discuss with our team.
-            </p>
-            {linkedProperties.length === 0 ? (
-              <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-                <CardContent className="p-8 text-center">
-                  <Heart className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-foreground font-medium mb-2">No projects saved yet.</p>
-                  <p className="text-sm text-muted-foreground mb-6">
-                    Add projects to your watchlist from the Buy Properties portal, then return here to compare and request a shortlist.
-                  </p>
-                  <div className="flex flex-wrap gap-3 justify-center">
-                    <Link to="/properties?transactionType=buy">
-                      <Button variant="primary">
-                        Browse Buy Properties
-                      </Button>
-                    </Link>
-                    <Link to="/contact?type=shortlist">
-                      <Button variant="secondary">
-                        Request a Shortlist
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {linkedProperties.map((property) => (
-                  <Card key={property.id} className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-hidden group hover:border-gold transition-colors">
-                    <div className="aspect-video relative overflow-hidden bg-zinc-100">
-                      {property.image_url ? (
-                        <img 
-                          src={property.image_url} 
-                          alt={property.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Building2 className="w-12 h-12 text-muted-foreground" />
-                        </div>
-                      )}
-                      <div className="absolute top-2 right-2">
-                        {getTypeBadge(property.type)}
-                      </div>
-                    </div>
+          {/* ── DASHBOARD ── */}
+          <TabsContent value="dashboard">
+            <motion.div initial="hidden" animate="visible" variants={fadeIn} className="space-y-6">
+              {/* KPI Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { label: "Watchlist", value: stats.watchlist, icon: Heart, color: "text-rose-500", bg: "bg-rose-500/10" },
+                  { label: "Saved Searches", value: stats.savedSearches, icon: Search, color: "text-blue-500", bg: "bg-blue-500/10" },
+                  { label: "Reports", value: stats.reports, icon: FileText, color: "text-purple-500", bg: "bg-purple-500/10" },
+                  { label: "Active Requests", value: stats.requests, icon: ListChecks, color: "text-amber-500", bg: "bg-amber-500/10" },
+                ].map((kpi) => (
+                  <Card key={kpi.label} className="border-[hsl(36,40%,70%)]/20 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,28%,93%)]">
                     <CardContent className="p-4">
-                      <h4 className="font-semibold text-foreground mb-1 line-clamp-1">{property.name}</h4>
-                      <p className="text-sm text-muted-foreground flex items-center gap-1 mb-3">
-                        <MapPin className="w-3 h-3" />
-                        {property.location}, {property.emirate}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        {getStatusBadge(property.status)}
-                        <div className="flex gap-2">
-                          <Link to={`/project/${property.id}`}>
-                            <Button variant="secondary" size="sm">
-                              <Eye className="w-4 h-4 mr-1" />
-                              Details
-                            </Button>
-                          </Link>
+                      <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${kpi.bg}`}>
+                          <kpi.icon className={`w-5 h-5 ${kpi.color}`} />
+                        </div>
+                        <div>
+                          <p className="text-xl font-bold text-foreground">{kpi.value}</p>
+                          <p className="text-[10px] text-muted-foreground">{kpi.label}</p>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
                 ))}
               </div>
-            )}
-          </motion.div>
 
-          {/* SECTION 4: Portfolio Views */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-2 flex items-center gap-2">
-              <Briefcase className="w-5 h-5 text-gold" />
-              Portfolio Views
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Build a simple view of your holdings and target allocations. You control what you add.
-            </p>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="border border-stone-200 shadow-sm bg-white">
-                <CardContent className="p-5 text-center">
-                  <Building2 className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                  <p className="font-medium text-foreground">Owned Assets</p>
-                  <Badge className="mt-2 bg-zinc-500/10 text-zinc-500 border-zinc-500/30">Coming Soon</Badge>
-                </CardContent>
-              </Card>
-              
-              <Card className="border border-stone-200 shadow-sm bg-white">
-                <CardContent className="p-5 text-center">
-                  <Heart className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                  <p className="font-medium text-foreground">Target Assets (Wishlist)</p>
-                  <p className="text-xs text-muted-foreground mt-1">Add from watchlist</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border border-stone-200 shadow-sm bg-white">
-                <CardContent className="p-5 text-center">
-                  <TrendingUp className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                  <p className="font-medium text-foreground">Rental Performance Notes</p>
-                  <p className="text-xs text-muted-foreground mt-1">Optional</p>
-                </CardContent>
-              </Card>
-              
-              <Card className="border border-stone-200 shadow-sm bg-white">
-                <CardContent className="p-5 text-center">
-                  <Lock className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
-                  <p className="font-medium text-foreground">Document Vault</p>
-                  <p className="text-xs text-muted-foreground mt-1">Private</p>
-                </CardContent>
-              </Card>
-            </div>
-            <p className="text-xs text-muted-foreground mt-3">
-              Portfolio views appear once you add at least one asset or wishlist target. You can start by requesting setup support.
-            </p>
-            <div className="mt-3">
-              <Link to="/contact?type=portfolio">
-                <Button variant="secondary">
-                  Request Portfolio Setup
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* SECTION 5: Report Access */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-2 flex items-center gap-2">
-              <FileText className="w-5 h-5 text-gold" />
-              Report Access
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Open the latest market and area intelligence available to you.
-            </p>
-            <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-              <CardContent className="p-4">
-                <div className="space-y-2">
-                  <Link to="/market-intelligence" className="block">
-                    <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gold/5 transition-colors">
-                      <div className="flex items-center gap-3">
-                        <BarChart3 className="w-5 h-5 text-gold" />
-                        <span className="font-medium text-foreground">Market Overview</span>
-                      </div>
-                      <ChevronDown className="w-4 h-4 text-muted-foreground rotate-[-90deg]" />
-                    </div>
-                  </Link>
-                  <Link to="/market-intelligence/areas" className="block">
-                    <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gold/5 transition-colors">
-                      <div className="flex items-center gap-3">
-                        <MapPin className="w-5 h-5 text-gold" />
-                        <span className="font-medium text-foreground">Area Intelligence</span>
-                      </div>
-                      <ChevronDown className="w-4 h-4 text-muted-foreground rotate-[-90deg]" />
-                    </div>
-                  </Link>
-                  <Link to="/market-intelligence/reports" className="block">
-                    <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gold/5 transition-colors">
-                      <div className="flex items-center gap-3">
-                        <FileText className="w-5 h-5 text-gold" />
-                        <span className="font-medium text-foreground">Market Reports</span>
-                      </div>
-                      <ChevronDown className="w-4 h-4 text-muted-foreground rotate-[-90deg]" />
-                    </div>
-                  </Link>
-                  <Link to="/market-intelligence/methodology" className="block">
-                    <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gold/5 transition-colors">
-                      <div className="flex items-center gap-3">
-                        <BookOpen className="w-5 h-5 text-gold" />
-                        <span className="font-medium text-foreground">Methodology & Sources</span>
-                      </div>
-                      <ChevronDown className="w-4 h-4 text-muted-foreground rotate-[-90deg]" />
-                    </div>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-            <p className="text-xs text-muted-foreground mt-2">
-              Reports are built from aggregated official open-data sources where available, and are provided for informational purposes only.
-            </p>
-          </motion.div>
-
-          {/* SECTION 6: My Documents (Upload & Sync) */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <FolderOpen className="w-5 h-5 text-gold" />
-              My Documents
-            </h3>
-            <InvestorDocumentVault userId={user?.id || ""} />
-          </motion.div>
-
-          {/* SECTION 7: Requests & Support */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-2 flex items-center gap-2">
-              <ListChecks className="w-5 h-5 text-gold" />
-              Requests & Support
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Track your active requests and submissions in one place.
-            </p>
-            <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="text-foreground">Request Type</TableHead>
-                    <TableHead className="text-right text-foreground">Status</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {requests.map((request) => (
-                    <TableRow key={request.id}>
-                      <TableCell className="font-medium text-foreground">{request.label}</TableCell>
-                      <TableCell className="text-right">
-                        {getRequestStatusBadge(request.status)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Card>
-            <p className="text-xs text-muted-foreground mt-2">
-              Once you submit a request, its status will appear here.
-            </p>
-          </motion.div>
-
-          {/* SECTION 8: How This Dashboard Works */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <HelpCircle className="w-5 h-5 text-gold" />
-              How This Dashboard Works
-            </h3>
-            <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-              <CardContent className="p-6">
-                <ul className="space-y-3 text-sm text-foreground">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                    <span>You can explore the platform freely as a visitor.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                    <span>When you submit an investor request (shortlist, consultation, or report access), your dashboard becomes your private workspace.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                    <span>You decide what you add (watchlist, portfolio items, documents).</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                    <span>JBJ may respond to your requests and upload report files or comparisons into your workspace, visible only to you and authorized JBJ administrators.</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* SECTION 9: Compliance & Privacy (Compact) */}
-          <motion.div variants={fadeInUp}>
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Shield className="w-5 h-5 text-gold" />
-              Trust, Privacy & Use of Information
-            </h3>
-            <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-              <CardContent className="p-6">
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                    <span>Information is provided for guidance and is subject to change.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                    <span>Market intelligence and tools are informational and do not guarantee outcomes.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                    <span>Your data is treated as confidential and is accessible only to you and authorized JBJ administrators.</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <Shield className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
-                    <span>If partner services are introduced (legal, mortgage, visa), the client contracts directly with the independent licensed partner.</span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Footer CTA Strip — Edge-to-edge, sharp corners */}
-          <motion.div variants={fadeInUp} className="-mx-4 sm:-mx-6 lg:-mx-8">
-            <div className="bg-gradient-to-r from-[#1a1a1a] via-[#222] to-[#1a1a1a] p-8 md:p-10 border-y border-gold/30">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6 max-w-5xl mx-auto">
-                  <div className="text-center md:text-left">
-                    <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2 justify-center md:justify-start uppercase tracking-wider">
-                      <HelpCircle className="w-5 h-5 text-gold" />
-                      Need Assistance?
-                    </h3>
-                    <p className="text-zinc-400 text-sm max-w-md">
-                      Our investment advisors are here to help with your portfolio, reports, and strategy.
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap gap-3">
-                    <Link to="/contact?type=consultation">
-                      <Button variant="primary">
-                        Request a Private Consultation
-                      </Button>
+              {/* Quick Actions */}
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Briefcase className="w-5 h-5 text-[hsl(36,40%,70%)]" /> Quick Actions
+                </h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {[
+                    { label: "Get Curated Shortlist", href: "/contact?type=shortlist", icon: ListChecks },
+                    { label: "Compare Projects", href: "/compare", icon: BarChart3 },
+                    { label: "Request ROI Snapshot", href: "/contact?type=roi", icon: TrendingUp },
+                    { label: "Speak to Advisor", href: "/contact?type=advisor", icon: MessageCircle },
+                  ].map((a) => (
+                    <Link key={a.label} to={a.href}>
+                      <Card className="border-[hsl(36,40%,70%)]/20 hover:border-[hsl(36,40%,70%)]/50 transition-all cursor-pointer group h-full">
+                        <CardContent className="p-4 flex flex-col items-center gap-2 text-center">
+                          <div className="w-10 h-10 rounded-xl bg-[hsl(36,40%,70%)]/10 flex items-center justify-center group-hover:bg-[hsl(36,40%,70%)]/20 transition-colors">
+                            <a.icon className="w-5 h-5 text-[hsl(36,40%,70%)]" />
+                          </div>
+                          <span className="text-xs font-semibold text-foreground">{a.label}</span>
+                        </CardContent>
+                      </Card>
                     </Link>
-                    <a href={getWhatsAppUrl(whatsappMessage)} target="_blank" rel="noopener noreferrer">
-                      <Button variant="secondary" className="gap-2">
-                        <MessageCircle className="w-4 h-4" />
-                        Ask JBJ on WhatsApp
-                      </Button>
-                    </a>
-                  </div>
+                  ))}
                 </div>
-            </div>
-          </motion.div>
+              </div>
 
-        </motion.div>
+              {/* Recent Activity */}
+              <Card className="border-[hsl(36,40%,70%)]/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Recent Activity
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {activities.length === 0 ? (
+                    <p className="text-sm text-muted-foreground text-center py-6">No recent activity</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {activities.slice(0, 5).map((a: any) => (
+                        <div key={a.id} className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/30">
+                          <span className="text-sm text-foreground">{a.message}</span>
+                          <span className="text-[10px] text-muted-foreground">{format(new Date(a.created_at), "dd MMM yyyy")}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </TabsContent>
+
+          {/* ── MY PROPERTIES ── */}
+          <TabsContent value="properties">
+            <motion.div initial="hidden" animate="visible" variants={fadeIn} className="space-y-4">
+              <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <Heart className="w-5 h-5 text-[hsl(36,40%,70%)]" /> Favorited & Shortlisted Properties
+              </h3>
+              {favorites.length === 0 ? (
+                <Card className="border-[hsl(36,40%,70%)]/20">
+                  <CardContent className="p-8 text-center">
+                    <Heart className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+                    <p className="text-muted-foreground">No saved properties yet</p>
+                    <Link to="/properties"><Button variant="outline" className="mt-4 border-[hsl(36,40%,70%)]/30 text-[hsl(36,40%,70%)]">Browse Properties</Button></Link>
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {favorites.map((f: any) => (
+                    <Card key={f.id} className="border-[hsl(36,40%,70%)]/20">
+                      <CardContent className="p-4 flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-sm text-foreground">Project #{f.project_id?.slice(0, 8)}</p>
+                          <p className="text-[10px] text-muted-foreground">Added {format(new Date(f.created_at), "dd MMM yyyy")}</p>
+                        </div>
+                        <Link to={`/projects/${f.project_id}`}>
+                          <Button size="sm" variant="ghost" className="text-[hsl(36,40%,70%)]"><Eye className="w-4 h-4" /></Button>
+                        </Link>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {/* Browsing History */}
+              <h3 className="text-lg font-semibold text-foreground flex items-center gap-2 pt-4">
+                <History className="w-5 h-5 text-[hsl(36,40%,70%)]" /> Browsing History
+              </h3>
+              <Card className="border-[hsl(36,40%,70%)]/20">
+                <CardContent className="p-6 text-center">
+                  <History className="w-10 h-10 text-muted-foreground/30 mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground">Property viewing history will appear here</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </TabsContent>
+
+          {/* ── DOCUMENTS ── */}
+          <TabsContent value="documents">
+            <InvestorDocumentVault userId={user?.id || ""} />
+          </TabsContent>
+
+          {/* ── UPDATE PROFILE ── */}
+          <TabsContent value="profile">
+            <motion.div initial="hidden" animate="visible" variants={fadeIn} className="space-y-6">
+              <Card className="border-2 border-[hsl(36,40%,70%)]/30 bg-gradient-to-br from-[hsl(40,33%,98%)] to-[hsl(38,30%,93%)]">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <User className="w-5 h-5 text-[hsl(36,40%,70%)]" /> Your Profile
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Full Name</Label>
+                      <Input value={profileForm.full_name} onChange={(e) => setProfileForm(p => ({ ...p, full_name: e.target.value }))} className="border-[hsl(36,40%,70%)]/30" />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Email</Label>
+                      <Input value={profileForm.email} disabled className="border-[hsl(36,40%,70%)]/30 opacity-60" />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Phone Number</Label>
+                      <Input value={profileForm.phone_number} onChange={(e) => setProfileForm(p => ({ ...p, phone_number: e.target.value }))} className="border-[hsl(36,40%,70%)]/30" />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Nationality</Label>
+                      <Input value={profileForm.nationality} onChange={(e) => setProfileForm(p => ({ ...p, nationality: e.target.value }))} className="border-[hsl(36,40%,70%)]/30" />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Gender</Label>
+                      <Select value={profileForm.gender} onValueChange={(v) => setProfileForm(p => ({ ...p, gender: v }))}>
+                        <SelectTrigger className="border-[hsl(36,40%,70%)]/30"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="male">Male</SelectItem>
+                          <SelectItem value="female">Female</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Languages</Label>
+                      <Input value={profileForm.languages} onChange={(e) => setProfileForm(p => ({ ...p, languages: e.target.value }))} placeholder="English, Arabic..." className="border-[hsl(36,40%,70%)]/30" />
+                    </div>
+                    <div>
+                      <Label className="text-xs text-muted-foreground">Years of Investment Experience</Label>
+                      <Input value={profileForm.experience_years} onChange={(e) => setProfileForm(p => ({ ...p, experience_years: e.target.value }))} type="number" className="border-[hsl(36,40%,70%)]/30" />
+                    </div>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-muted-foreground">Bio / Notes</Label>
+                    <Textarea value={profileForm.bio} onChange={(e) => setProfileForm(p => ({ ...p, bio: e.target.value }))} className="border-[hsl(36,40%,70%)]/30" rows={3} />
+                  </div>
+                  <Button onClick={handleSaveProfile} disabled={savingProfile} className="bg-gradient-to-r from-[hsl(36,40%,70%)] to-[hsl(38,35%,60%)] text-[hsl(38,35%,12%)] hover:opacity-90">
+                    {savingProfile ? "Saving..." : "Save Profile"}
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Brand Assets */}
+              <Card className="border-[hsl(36,40%,70%)]/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <ImageIcon className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Brand Assets
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-3 gap-4">
+                    {[
+                      { label: "Stamp", icon: Stamp },
+                      { label: "Logo", icon: ImageIcon },
+                      { label: "Business Card", icon: CreditCard },
+                    ].map((asset) => (
+                      <div key={asset.label} className="text-center p-4 rounded-lg border border-border/30 bg-background/50">
+                        <asset.icon className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+                        <p className="text-xs text-muted-foreground">{asset.label}</p>
+                        <p className="text-[10px] text-muted-foreground/60 mt-1">Not uploaded</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Links */}
+              <div className="grid md:grid-cols-3 gap-3">
+                {[
+                  { label: "Draft Applications", icon: FileEdit, count: 0 },
+                  { label: "AI Tools Used", icon: Star, count: 0 },
+                  { label: "Notes", icon: StickyNote, count: 0 },
+                ].map((item) => (
+                  <Card key={item.label} className="border-[hsl(36,40%,70%)]/20">
+                    <CardContent className="p-4 flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-[hsl(36,40%,70%)]/10 flex items-center justify-center">
+                        <item.icon className="w-5 h-5 text-[hsl(36,40%,70%)]" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">{item.label}</p>
+                        <p className="text-[10px] text-muted-foreground">{item.count} items</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Role Switch */}
+              <Card className="border-[hsl(36,40%,70%)]/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Switch Role
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-3">Want to become a developer or broker? Switch your role below.</p>
+                  <div className="flex gap-3">
+                    <Link to="/broker-portal">
+                      <Button variant="outline" className="border-[hsl(36,40%,70%)]/30 text-[hsl(36,40%,70%)]">Switch to Broker</Button>
+                    </Link>
+                    <Link to="/developer-portal?tab=register">
+                      <Button variant="outline" className="border-[hsl(36,40%,70%)]/30 text-[hsl(36,40%,70%)]">Apply as Developer</Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </TabsContent>
+
+          {/* ── INBOX ── */}
+          <TabsContent value="inbox">
+            <motion.div initial="hidden" animate="visible" variants={fadeIn}>
+              <Card className="border-[hsl(36,40%,70%)]/20">
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Mail className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Messages & Notifications
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {activities.length === 0 ? (
+                    <p className="text-center text-sm text-muted-foreground py-8">No messages yet</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {activities.map((a: any) => (
+                        <div key={a.id} className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/30">
+                          <div className="flex items-center gap-3">
+                            <Mail className="w-4 h-4 text-[hsl(36,40%,70%)]" />
+                            <span className="text-sm text-foreground">{a.message}</span>
+                          </div>
+                          <span className="text-[10px] text-muted-foreground">{format(new Date(a.created_at), "dd MMM yyyy")}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </TabsContent>
+
+          {/* ── ALERTS ── */}
+          <TabsContent value="alerts">
+            <motion.div initial="hidden" animate="visible" variants={fadeIn} className="space-y-4">
+              <Card className="border-[hsl(36,40%,70%)]/20">
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Bell className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Event Invitations & Alerts
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {invitations.length === 0 ? (
+                    <p className="text-center text-sm text-muted-foreground py-8">No alerts or invitations</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {invitations.map((inv) => (
+                        <div key={inv.id} className="p-4 rounded-xl border border-[hsl(36,40%,70%)]/20 bg-background/50">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="font-semibold text-sm text-foreground">{(inv.event as any)?.title || "Event"}</p>
+                              <p className="text-[10px] text-muted-foreground">
+                                {(inv.event as any)?.event_date ? format(new Date((inv.event as any).event_date), "dd MMM yyyy, HH:mm") : ""}
+                              </p>
+                            </div>
+                            <Badge className={inv.status === "accepted" ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/30" : inv.status === "declined" ? "bg-red-500/10 text-red-500 border-red-500/30" : "bg-amber-500/10 text-amber-500 border-amber-500/30"}>
+                              {inv.status}
+                            </Badge>
+                          </div>
+                          {inv.status === "invited" && (
+                            <div className="flex gap-2 mt-3">
+                              <Button size="sm" onClick={() => respondToInvitation(inv.id, "accepted")} className="bg-emerald-600 text-white hover:bg-emerald-700 text-xs">Accept</Button>
+                              <Button size="sm" variant="outline" onClick={() => respondToInvitation(inv.id, "declined")} className="text-xs">Decline</Button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Sample Approval Timeline */}
+              <Card className="border-[hsl(36,40%,70%)]/20">
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Submission Approvals
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground mb-4">Your submissions go through our 3-step approval process:</p>
+                  <ApprovalTimeline steps={JBJ_APPROVAL_STEPS} />
+                </CardContent>
+              </Card>
+            </motion.div>
+          </TabsContent>
+
+          {/* ── CALENDAR ── */}
+          <TabsContent value="calendar">
+            <motion.div initial="hidden" animate="visible" variants={fadeIn}>
+              <Card className="border-[hsl(36,40%,70%)]/20">
+                <CardHeader>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-[hsl(36,40%,70%)]" /> Events & Calendar
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {invitations.length === 0 ? (
+                    <div className="text-center py-8">
+                      <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+                      <p className="text-sm text-muted-foreground">No upcoming events</p>
+                      <p className="text-[10px] text-muted-foreground/60 mt-1">Events from JBJ Global Real Estate will appear here</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {invitations.filter((inv) => (inv.event as any)?.event_date).map((inv) => (
+                        <div key={inv.id} className="flex items-center gap-4 p-4 rounded-xl border border-[hsl(36,40%,70%)]/20 bg-background/50">
+                          <div className="w-14 h-14 rounded-xl bg-[hsl(36,40%,70%)]/10 flex flex-col items-center justify-center">
+                            <span className="text-lg font-bold text-[hsl(36,40%,70%)]">{format(new Date((inv.event as any).event_date), "dd")}</span>
+                            <span className="text-[10px] text-muted-foreground">{format(new Date((inv.event as any).event_date), "MMM")}</span>
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-semibold text-sm text-foreground">{(inv.event as any)?.title}</p>
+                            <p className="text-[10px] text-muted-foreground">{(inv.event as any)?.location || "Location TBA"}</p>
+                          </div>
+                          <Badge className={inv.status === "accepted" ? "bg-emerald-500/10 text-emerald-500" : "bg-amber-500/10 text-amber-500"}>
+                            {inv.status}
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
