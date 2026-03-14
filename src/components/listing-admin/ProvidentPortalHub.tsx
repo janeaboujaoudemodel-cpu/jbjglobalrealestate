@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import {
   Database, RefreshCw, Zap, Download, CloudDownload,
   CheckCircle, Clock, AlertTriangle, TrendingUp,
-  FileText, Image, Building2, Calendar
+  FileText, Image, Building2, Calendar, ShieldCheck, Trash2, Upload
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 
