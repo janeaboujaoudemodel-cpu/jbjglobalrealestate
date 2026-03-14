@@ -66,7 +66,7 @@ export default function InvestorDashboard() {
       if (p) {
         setProfile(p);
         setProfileForm({
-          full_name: p.full_name || "", nationality: p.nationality || "",
+          full_name: p.full_name || "", nationality: (p as any).nationality || "",
           phone_number: p.phone_number || "", email: user.email || "",
           languages: "", gender: "", experience_years: "", bio: "",
         });
