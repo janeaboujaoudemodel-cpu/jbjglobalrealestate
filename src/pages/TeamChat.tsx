@@ -13,9 +13,16 @@ import {
   Users, Search, Bell, Phone, Video, MoreVertical, MessageSquare,
   ArrowLeft, Menu, Building2, Lock, BellOff, Archive, Copy,
   X, Check, Eye, ChevronDown, ChevronRight, Sparkles, Star,
-  Mail, FileText
+  Mail, FileText, Pin, Calendar, BookOpen
 } from "lucide-react";
 import { DocumentAttachmentPicker, AttachmentChip, ChatAttachmentRenderer, type DocumentAttachment } from "@/components/shared/DocumentAttachmentPicker";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { supabase } from "@/integrations/supabase/client";
+import { allTeamMembers, TeamMember } from "@/config/team-members";
+import QuickCalendarWidget from "@/components/shared/QuickCalendarWidget";
+import QuickNoteWidget from "@/components/shared/QuickNoteWidget";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
