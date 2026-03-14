@@ -913,13 +913,13 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
       <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
       <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${SECONDARY}" stroke-width="1.2"/>
-      <!-- Company name arcs -->
+      <!-- Company name arcs (STRICT: Arabic top, English bottom) -->
       ${isBilingual ? `
-        <text font-family="${font}" font-size="${enFontSize}" fill="#ffffff" letter-spacing="2" font-weight="700">
-          <textPath href="#t13top" startOffset="50%" text-anchor="middle">${name}</textPath>
-        </text>
         <text font-family="${arabicFont}" font-size="${arFontSize}" fill="#ffffff" letter-spacing="1.5" font-weight="600">
-          <textPath href="#t13bot" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
+          <textPath href="#t13top" startOffset="50%" text-anchor="middle">${displayArabic}</textPath>
+        </text>
+        <text font-family="${font}" font-size="${enFontSize}" fill="#ffffff" letter-spacing="2" font-weight="700" dominant-baseline="hanging">
+          <textPath href="#t13bot" startOffset="50%" text-anchor="middle">${name}</textPath>
         </text>
       ` : `
         ${ringText('t13ring', cx, cy, R - 6, `●  ${name}  ●  ${city}  ●`, font, 8, '#ffffff', '50%', 1.6)}
