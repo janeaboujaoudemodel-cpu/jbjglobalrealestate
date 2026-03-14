@@ -1477,10 +1477,17 @@ const DeveloperPortal = () => {
                           <div className="space-y-2">
                             <Label className="flex items-center gap-1.5">
                               Developer / Company
-                              <Lock className="w-3 h-3 text-muted-foreground" />
+                              <AlertCircle className="w-3 h-3 text-amber-500" />
                             </Label>
-                            <Input value={editForm.developer_name} disabled className="bg-muted/50 cursor-not-allowed" />
-                            <p className="text-[10px] text-muted-foreground">Locked after registration. Contact support to change.</p>
+                            <DeveloperSelectDropdown
+                              value={editForm.developer_name}
+                              onChange={(v) => setEditForm(f => ({ ...f, developer_name: v }))}
+                              placeholder="Select developer..."
+                            />
+                            {editForm.developer_name !== (repProfile?.developer_name || '') && (
+                              <p className="text-[10px] text-amber-600 font-medium">⚠ Changing your developer will require re-approval and new verification documents.</p>
+                            )}
+                            <p className="text-[10px] text-muted-foreground">You can change your developer — this will trigger a re-approval process.</p>
                           </div>
                           <div className="space-y-2">
                             <Label>Nationality</Label>
