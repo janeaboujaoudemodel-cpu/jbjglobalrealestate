@@ -43,6 +43,8 @@ export interface LiveStampPreviewProps {
   circleGap?: number;
   centerContentSize?: number;
   onElementClick?: (elementId: string) => void;
+  monogramLetterColors?: Record<number, string>;
+  monogramDividerColor?: string;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
