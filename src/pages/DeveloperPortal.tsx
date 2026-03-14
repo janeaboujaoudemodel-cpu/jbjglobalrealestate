@@ -209,6 +209,10 @@ const DeveloperPortal = () => {
   const [mainDragOver, setMainDragOver] = useState(false);
   const [submittingProject, setSubmittingProject] = useState(false);
   const [sessionProjects, setSessionProjects] = useState<string[]>([]);
+  const [duplicateBlocking, setDuplicateBlocking] = useState(false);
+  const [sessionStartTime] = useState(() => new Date().toISOString());
+  const [endSessionOpen, setEndSessionOpen] = useState(false);
+  const [endingSession, setEndingSession] = useState(false);
 
   // Event form
   const [eventForm, setEventForm] = useState({
