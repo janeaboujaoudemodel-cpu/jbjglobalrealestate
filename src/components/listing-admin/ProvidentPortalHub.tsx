@@ -365,6 +365,49 @@ export function ProvidentPortalHub() {
         </CardContent>
       </Card>
 
+      {/* Auto-Publish & Data Integrity */}
+      <Card className="border-gold/20">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-gold" />
+            Data Quality & Auto-Publish
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <Button
+              onClick={handleAutoPublish}
+              disabled={isAutoPublishing || (autoPublishCount ?? 0) === 0}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              {isAutoPublishing ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <Upload className="h-4 w-4 mr-2" />}
+              Auto-Publish Complete ({autoPublishCount ?? '…'})
+            </Button>
+            <Button
+              onClick={handleIntegrityCheck}
+              disabled={isCheckingIntegrity}
+              variant="outline"
+              className="border-gold/30"
+            >
+              {isCheckingIntegrity ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
+              Data Integrity Check
+            </Button>
+          </div>
+          {integrityResult && (
+            <div className="grid grid-cols-2 gap-3">
+              <div className={`rounded-lg p-3 text-center border ${integrityResult.ghosts > 0 ? 'bg-red-50 border-red-200' : 'bg-emerald-50 border-emerald-200'}`}>
+                <p className={`text-xl font-bold ${integrityResult.ghosts > 0 ? 'text-red-700' : 'text-emerald-700'}`}>{integrityResult.ghosts}</p>
+                <p className="text-xs text-muted-foreground">Ghost Entries (no description)</p>
+              </div>
+              <div className={`rounded-lg p-3 text-center border ${integrityResult.duplicates > 0 ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-200'}`}>
+                <p className={`text-xl font-bold ${integrityResult.duplicates > 0 ? 'text-amber-700' : 'text-emerald-700'}`}>{integrityResult.duplicates}</p>
+                <p className="text-xs text-muted-foreground">Duplicate Slugs</p>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Provident Firecrawl Extraction Tools */}
       <Card className="border-gold/20">
         <CardHeader className="pb-3">
