@@ -98,6 +98,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
   const [bulkTotal, setBulkTotal] = useState(0);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [incompleteCount, setIncompleteCount] = useState(0);
+  const [developerSlugs, setDeveloperSlugs] = useState<Record<string, string>>({});
   // Filter: "all" | "complete" | "needs_work"
   const [statusFilter, setStatusFilter] = useState<"all" | "complete" | "needs_work">("all");
   // Source filter: "all" | "reelly" | "manual" | "provident"
