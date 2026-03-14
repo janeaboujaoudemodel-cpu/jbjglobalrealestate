@@ -104,12 +104,12 @@ export default function HorizontalUtilityBar() {
   const pillBtn = "h-8 flex items-center gap-1.5 rounded-lg border border-gold/30 hover:border-gold/50 bg-gold/5 hover:bg-gold/15 transition-all px-2.5 group whitespace-nowrap shrink-0";
   const iconBtn = "h-8 w-8 flex items-center justify-center rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group shrink-0";
   const iconClass = "w-4 h-4 text-gold group-hover:scale-110 transition-transform shrink-0";
-  const labelClass = "text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden lg:inline whitespace-nowrap";
+  const labelClass = "text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
 
   return (
     <>
       <div
-        className="fixed top-0 left-0 right-0 h-[48px] z-[9996] flex items-center gap-1.5 sm:gap-2.5 px-2 sm:px-4 lg:px-5 pr-4 sm:pr-8 lg:pr-10 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] overflow-x-auto overflow-y-hidden scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 left-0 right-0 h-[48px] z-[9996] flex items-center gap-1.5 sm:gap-2.5 px-2 sm:px-4 xl:px-5 pr-4 sm:pr-8 xl:pr-10 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] overflow-x-auto overflow-y-hidden scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
         {/* ── Sidebar Toggle (Arrow only) — FIRST ── */}
         <Tooltip>
