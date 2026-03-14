@@ -34,6 +34,10 @@ export interface OfficialStampConfig {
   logoUrl?: string;
   showMonogram: boolean;
   showLogo: boolean;
+  /** Per-letter monogram color overrides keyed by character index */
+  monogramLetterColors?: Record<number, string>;
+  /** Monogram divider line color override */
+  monogramDividerColor?: string;
   inkColor?: string;
   fontFamily?: string;
   size?: number;
