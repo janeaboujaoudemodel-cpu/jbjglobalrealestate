@@ -108,11 +108,12 @@ export default function LeadSharingPanel({ leadId, isOwner }: LeadSharingPanelPr
       .update({ revoked_at: new Date().toISOString() })
       .eq("id", shareId);
 
-    await supabase.from("crm_security_events").insert({
+    await supabase.from("crm_security_events").insert([{
       user_id: user.id,
       event_type: "lead_share_revoke",
-      details: { lead_id: leadId, share_id: shareId },
+      details: { lead_id: leadId, share_id: shareId } as any,
       user_agent: navigator.userAgent,
+    }]);
     });
 
     toast.success("Access revoked");
