@@ -220,7 +220,6 @@ export function StampRightPanel(props: StampRightPanelProps) {
               onDuplicateVariation={props.onDuplicateVariation}
               onClose={() => setActiveTab('concepts')}
               onGenerate={props.onGenerateVariations}
-              embedded
             />
           ) : (
             <div className="text-center py-12 space-y-3 px-3">

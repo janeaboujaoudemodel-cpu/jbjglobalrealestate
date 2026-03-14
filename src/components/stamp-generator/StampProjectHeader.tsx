@@ -86,7 +86,7 @@ export function StampProjectHeader(props: StampProjectHeaderProps) {
           {/* Save status */}
           {saveLabel && (
             <span className="text-[9px] text-[hsl(var(--muted-foreground))] flex items-center gap-1 flex-shrink-0">
-              {props.saving ? <Loader2 size={9} className="animate-spin" /> : <Check size={9} className="text-emerald-500" />}
+              {props.saving ? <Loader2 size={9} className="animate-spin" /> : <Check size={9} className="text-emerald-600" />}
               {saveLabel}
             </span>
           )}
