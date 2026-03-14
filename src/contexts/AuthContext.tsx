@@ -30,6 +30,10 @@ interface AuthContextType {
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
   updatePassword: (newPassword: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
+  /** Sign out from all sessions (global) */
+  signOutAllSessions: () => Promise<void>;
+  /** Sign out from all other sessions except current */
+  signOutOtherSessions: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
