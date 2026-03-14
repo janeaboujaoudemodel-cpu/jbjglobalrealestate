@@ -1395,6 +1395,14 @@ export default function StampGeneratorPage() {
             setSelectedId(v.id);
             setShowVersionSelector(false);
           }}
+          onSaveBoth={(v) => {
+            const newConcept: StampDesignConcept = {
+              id: crypto.randomUUID(), templateKey: v.template_key,
+              label: `${v.template_key.replace(/-/g, ' ')} (restored)`, tags: [], svgSource: v.svg_source,
+            };
+            setConcepts(prev => [newConcept, ...prev]);
+            toast.success('Both versions saved — current kept + previous added');
+          }}
           onDuplicate={(v) => {
             const dup: StampDesignConcept = {
               id: crypto.randomUUID(), templateKey: v.template_key,
