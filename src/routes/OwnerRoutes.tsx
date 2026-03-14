@@ -54,6 +54,7 @@ const EncryptionAuditDashboard = lazy(() => import("@/pages/owner/EncryptionAudi
 const GlobalAuditDashboard = lazy(() => import("@/pages/owner/GlobalAuditDashboard"));
 const DeveloperModerationQueue = lazy(() => import("@/pages/owner/DeveloperModerationQueue"));
 const APISecurityDashboard = lazy(() => import("@/pages/owner/APISecurityDashboard"));
+const IncidentReadinessPanel = lazy(() => import("@/pages/owner/IncidentReadinessPanel"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
