@@ -44,6 +44,7 @@ const BusinessCardScanner = () => {
   const [consentGiven, setConsentGiven] = useState(false);
   const [encryptionKey, setEncryptionKey] = useState<string | null>(null);
   const [showEncryptedData, setShowEncryptedData] = useState(false);
+  const stepUp = useStepUpAuth();
 
   // Generate or retrieve encryption key on mount
   useEffect(() => {
