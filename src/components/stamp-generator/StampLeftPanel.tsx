@@ -10,10 +10,11 @@ import { MonogramColorEditor, DEFAULT_MONOGRAM_COLORS } from './MonogramColorEdi
 import type { MonogramLetterColors } from './MonogramColorEditor';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
+import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import {
   RotateCw, Award, Upload, Wand2, Loader2, Palette, Type,
-  CircleDot, Stamp, Layers, PenTool, Sparkles
+  CircleDot, Stamp, Layers, PenTool, Sparkles, Landmark
 } from 'lucide-react';
 
 // 5 mandatory standard export colors
