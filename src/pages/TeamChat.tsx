@@ -102,6 +102,7 @@ const generateStatuses = (members: TeamMember[]): Record<string, 'online' | 'awa
 
 const TeamChat = () => {
   const isMobile = useIsMobile();
+  const location = useLocation();
   const { sendSecondaryEmail } = useCrossChannelSend();
   const chatMembers = useMemo(() => getTeamChatMembers(), []);
   const departmentGroups = useMemo(() => groupByDepartment(chatMembers), [chatMembers]);
