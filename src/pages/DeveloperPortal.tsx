@@ -353,7 +353,7 @@ const DeveloperPortal = () => {
     enabled: !!user,
   });
 
-  // Owner: fetch ALL interest registrations
+  // Owner: fetch ALL launch interests
   const { data: allInterests } = useQuery({
     queryKey: ["all-launch-interests"],
     queryFn: async () => {
