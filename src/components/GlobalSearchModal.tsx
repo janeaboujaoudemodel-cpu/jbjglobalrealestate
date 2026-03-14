@@ -421,9 +421,9 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             className="fixed left-1/2 -translate-x-1/2 w-full max-w-3xl z-[10001] px-4 sm:px-6 top-[60px] sm:top-[72px]"
-            style={{ maxHeight: 'calc(100dvh - 2rem)' }}
+            style={{ maxHeight: 'calc(100dvh - 80px)' }}
           >
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 3rem)' }}>
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 96px)' }}>
               {/* Search Input - Larger */}
               <div className="relative border-b border-gold/30 flex-shrink-0">
                 <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-gold" />
