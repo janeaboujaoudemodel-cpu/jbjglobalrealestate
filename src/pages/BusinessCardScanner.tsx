@@ -554,6 +554,14 @@ const BusinessCardScanner = () => {
           </button>
         </div>
       </div>
+
+      <ReAuthModal
+        open={stepUp.modalOpen}
+        onOpenChange={stepUp.onModalOpenChange}
+        onSuccess={stepUp.onModalSuccess}
+        actionLabel={stepUp.modalActionLabel}
+        severity={stepUp.modalSeverity}
+      />
     </div>
   );
 };
