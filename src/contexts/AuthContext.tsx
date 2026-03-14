@@ -376,6 +376,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         resetPassword,
         updatePassword,
         signOut,
+        signOutAllSessions,
+        signOutOtherSessions,
       }}
     >
       {children}
