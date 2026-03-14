@@ -406,8 +406,7 @@ export default function StampProjectWizard() {
       setActiveTab('style');
     }
 
-    // Clear highlight after 2s
-    setTimeout(() => setSelectedElement(null), 2000);
+    // Persistent highlight — clears only when clicking a different element or outside
   }, []);
 
   const previewProps = {
