@@ -1208,7 +1208,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               )}
             </div>
           ) : (
-            <div className="p-6 rounded-xl border border-border bg-muted/10 shadow-sm">
+            <div className="px-2 sm:px-4 md:px-6 py-6 rounded-xl border border-border bg-muted/10 shadow-sm">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {imports.map((item) => (
                   <div key={item.id} className="relative">

@@ -164,15 +164,17 @@ const ListingAdmin = () => {
     const mappedView = legacyToNew[view || ''] || view;
     const allowed = new Set(["chat", "projects", "editor", "data-ops", "project-detail"]);
     
-    if (mappedView && allowed.has(mappedView) && mappedView !== activeView) {
-      setActiveView(mappedView as any);
-      // Reset sub-modes when switching views via URL
-      setIsEditing(false);
-      setIsCreating(false);
-      setShowChat(mappedView === "chat");
+    if (mappedView && allowed.has(mappedView)) {
+      if (mappedView !== activeView) {
+        setActiveView(mappedView as any);
+        // Reset sub-modes when switching views via URL
+        setIsEditing(false);
+        setIsCreating(false);
+        setShowChat(mappedView === "chat");
+      }
     }
     
-    // Handle syncTab URL param for Data Ops sub-tabs
+    // Handle syncTab URL param for Data Ops sub-tabs — always apply
     if (syncTab && ['reelly', 'approvals', 'external', 'enrichment', 'dev-visibility', 'provident-hub'].includes(syncTab)) {
       setDataOpsTab(syncTab);
     }
