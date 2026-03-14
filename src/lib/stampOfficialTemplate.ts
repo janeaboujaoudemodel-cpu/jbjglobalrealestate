@@ -440,10 +440,10 @@ function generateOvalStamp(config: OfficialStampConfig): string {
   const mode = config.languageMode || 'BILINGUAL';
   const themeMult = THEME_STROKE_MULT[config.styleTheme || 'CLASSIC'] || 1;
 
-  const pad = 10;
+  const pad = 14;
   const outerRx = cx - pad;
-  const outerRy = cy - pad - 15; // squished vertically for oval
-  const gap = 8;
+  const outerRy = cy - pad - 15;
+  const gap = 10;
   const innerRx = outerRx - gap;
   const innerRy = outerRy - gap;
   const outerSW = (config.outerBorderWidth ?? OUTER_STROKE) * themeMult;
@@ -454,32 +454,38 @@ function generateOvalStamp(config: OfficialStampConfig): string {
     borders += `<ellipse cx="${cx}" cy="${cy}" rx="${innerRx}" ry="${innerRy}" fill="none" stroke="${ink}" stroke-width="${innerSW * 0.7}"/>`;
   }
 
-  // Use circular arc radius (average of rx/ry) for text arcs in oval
-  const textArcR = (innerRx + innerRy) / 2 - 4;
+  // Safe text arc radius — keep well inside borders
+  const textArcR = Math.min(innerRx, innerRy) - 6;
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
 
   let textContent = '';
   if (mode === 'BILINGUAL') {
-    const topText = config.companyNameAr || 'اسم الشركة';
-    const botText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
-    const topSafe = safeArcFontSize(topText, textArcR, true, 14, arabicSpread);
-    const botSafe = safeArcFontSize(botText, textArcR, false, 12, ARC_SPREAD_LIMIT);
-    textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? topSafe.letterSpacing, true, 'top-arc', config.arabicFontWeight === 'normal' ? '600' : '800');
-    textContent += renderBottomArcTextPath(botText, cx, cy, textArcR, botSafe.fontSize, enFont, ink, botSafe.letterSpacing, false, 'bottom-arc');
+    const arText = config.companyNameAr || 'اسم الشركة';
+    const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
+    const arSafe = safeArcFontSize(arText, textArcR, true, 13, arabicSpread);
+    const enSafe = safeArcFontSize(enText, textArcR, false, 11, ARC_SPREAD_LIMIT, 4);
+    const arFW = config.arabicFontWeight === 'normal' ? '600' : '800';
+    if (config.arabicOnTop !== false) {
+      textContent += renderTopArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'top-arc', arFW);
+      textContent += renderBottomArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'bottom-arc');
+    } else {
+      textContent += renderTopArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'top-arc');
+      textContent += renderBottomArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'bottom-arc', arFW);
+    }
     textContent += renderSeparators(cx, cy, textArcR, config.separatorStyle, ink);
   } else if (mode === 'EN') {
     const topText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
-    const topSafe = safeArcFontSize(topText, textArcR, false, 13, ARC_SPREAD_LIMIT);
+    const topSafe = safeArcFontSize(topText, textArcR, false, 12, ARC_SPREAD_LIMIT, 4);
     textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, enFont, ink, topSafe.letterSpacing, false, 'top-arc');
     if (config.showLocation) {
       const loc = (config.locationTextEn || 'Dubai, UAE').toUpperCase();
-      const locSafe = safeArcFontSize(loc, textArcR, false, 10, ARC_SPREAD_LIMIT);
+      const locSafe = safeArcFontSize(loc, textArcR, false, 10, ARC_SPREAD_LIMIT, 4);
       textContent += renderBottomArcTextPath(loc, cx, cy, textArcR, locSafe.fontSize, enFont, ink, locSafe.letterSpacing, false, 'bottom-arc', '600');
     }
     textContent += renderSeparators(cx, cy, textArcR, config.separatorStyle, ink);
   } else {
     const topText = config.companyNameAr || 'اسم الشركة';
-    const topSafe = safeArcFontSize(topText, textArcR, true, 14, arabicSpread);
+    const topSafe = safeArcFontSize(topText, textArcR, true, 13, arabicSpread);
     textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? topSafe.letterSpacing, true, 'top-arc', config.arabicFontWeight === 'normal' ? '600' : '800');
     if (config.showLocation) {
       const loc = config.locationTextAr || 'دبي، الإمارات';
@@ -490,7 +496,7 @@ function generateOvalStamp(config: OfficialStampConfig): string {
   }
 
   // Center content
-  const smallInnerR = Math.min(innerRx, innerRy) * 0.45;
+  const smallInnerR = Math.min(innerRx, innerRy) * 0.38;
   textContent += renderCenterContent(config, cx, cy, smallInnerR, enFont, ink);
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
