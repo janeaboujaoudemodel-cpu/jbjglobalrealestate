@@ -136,7 +136,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "AI ROI Calculator", href: "/ai-roi-calculator", icon: Calculator },
   { label: "AI Email Generator", href: "/ai-email-generator", icon: Mail },
   { label: "AI Translation Hub", href: "/ai-translation-hub", icon: Languages },
-  { label: "AI Video Tour Script", href: "/ai-video-tour-script", icon: Video },
+  { label: "AI Video Tour Script", href: "/toolkit/video-suite", icon: Video },
   { label: "AI Social Media", href: "/ai-social-media", icon: Share2 },
   { label: "AI Description Writer", href: "/ai-description-writer", icon: PenTool },
   { label: "AI Meeting Summarizer", href: "/ai-meeting-summarizer", icon: Mic },
