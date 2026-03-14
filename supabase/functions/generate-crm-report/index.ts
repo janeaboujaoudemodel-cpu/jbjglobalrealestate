@@ -37,6 +37,24 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Rate limit after auth - per user
+    const { response: rateLimited } = await enforceRateLimit(req, {
+      functionName: 'generate-crm-report',
+      maxRequests: 5,
+      windowMinutes: 15,
+      keyType: 'user',
+      customKey: userData.user.id,
+    }, corsHeaders, userData.user.id);
+    if (rateLimited) return rateLimited;
+
+    // Dummy block to keep the original auth error response
+    if (false) {
+      return new Response(JSON.stringify({ error: "Invalid token" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Check CRM role
     const { data: profile } = await supabase
       .from("crm_users_profile")
