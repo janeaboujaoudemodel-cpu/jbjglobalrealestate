@@ -445,6 +445,38 @@ export default function StampProjectWizard() {
             <TabsContent value="company" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-3">
+                  {/* Preset Library */}
+                  <StampPresetLibrary
+                    onSelectPreset={handlePresetSelect}
+                    selectedPresetId={form.selected_preset ? undefined : undefined}
+                  />
+                  {form.selected_preset && (
+                    <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-[hsl(var(--gold)/0.06)] border border-[hsl(var(--gold)/0.2)]">
+                      <Badge className="bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold-dark))] border-[hsl(var(--gold)/0.3)] text-[8px]">
+                        Based on: {form.selected_preset}
+                      </Badge>
+                      <button onClick={() => set('selected_preset', '')} className="text-[8px] text-[hsl(var(--muted-foreground))] hover:text-destructive ml-auto">
+                        <X size={10} />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Save as Custom Template */}
+                  {savePresetOpen ? (
+                    <div className="flex gap-1.5 items-center">
+                      <Input value={presetName} onChange={e => setPresetName(e.target.value)} placeholder="Preset name" className="h-7 text-xs flex-1" />
+                      <Button size="sm" onClick={handleSaveCustomPreset} className="h-7 text-[10px] px-2 bg-[hsl(var(--gold))] text-white hover:opacity-90">Save</Button>
+                      <Button variant="ghost" size="sm" onClick={() => setSavePresetOpen(false)} className="h-7 text-[10px] px-1.5"><X size={10} /></Button>
+                    </div>
+                  ) : (
+                    <button onClick={() => setSavePresetOpen(true)}
+                      className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg border border-dashed border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[10px] font-medium hover:bg-[hsl(var(--gold)/0.04)]">
+                      <BookmarkPlus size={10} /> Save Current as Custom Preset
+                    </button>
+                  )}
+
+                  <div className="border-t border-[hsl(var(--border))]" />
+
                   {/* Language Mode — FIRST */}
                   <div>
                     <Label className="text-[11px] font-medium mb-1.5 block">Language Mode <span className="text-destructive">*</span></Label>
