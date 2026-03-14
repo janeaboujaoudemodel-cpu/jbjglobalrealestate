@@ -25,6 +25,7 @@ interface StampVersionSelectorProps {
   inkMode?: boolean;
   onSelectVersion: (version: VersionItem) => void;
   onDuplicate: (version: VersionItem) => void;
+  onSaveBoth?: (version: VersionItem) => void;
   onUploadNew: () => void;
   onClose: () => void;
 }
@@ -38,6 +39,7 @@ export function StampVersionSelector({
   inkMode,
   onSelectVersion,
   onDuplicate,
+  onSaveBoth,
   onUploadNew,
   onClose,
 }: StampVersionSelectorProps) {
@@ -116,6 +118,13 @@ export function StampVersionSelector({
                         onClick={() => { onSelectVersion(v); toast.success('Version applied'); }}>
                         <Check size={7} /> Use
                       </Button>
+                      {onSaveBoth && (
+                        <button onClick={(e) => { e.stopPropagation(); onSaveBoth(v); toast.success('Both versions saved'); }}
+                          className="h-5 px-1 rounded border border-[hsl(var(--gold)/0.3)] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] text-[hsl(var(--muted-foreground))] text-[7px] gap-0.5"
+                          title="Keep current + add this version">
+                          <Plus size={7} /> Both
+                        </button>
+                      )}
                       <button onClick={(e) => { e.stopPropagation(); onDuplicate(v); toast.success('Duplicated'); }}
                         className="h-5 w-5 rounded border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)] text-[hsl(var(--muted-foreground))]">
                         <Copy size={7} />

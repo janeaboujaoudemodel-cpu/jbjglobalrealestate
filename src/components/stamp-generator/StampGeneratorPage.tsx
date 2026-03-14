@@ -278,6 +278,7 @@ export default function StampGeneratorPage() {
       .from('stamp_designs')
       .select('id, svg_source, template_key, is_favorite')
       .eq('project_id', projectId)
+      .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(20);
 
@@ -523,7 +524,7 @@ export default function StampGeneratorPage() {
   async function softDeleteConcept(conceptId: string) {
     const isDbId = conceptId.length === 36;
     if (isDbId) {
-      await supabase.from('stamp_designs').update({ deleted_at: new Date().toISOString() } as any).eq('id', conceptId);
+      await supabase.from('stamp_designs').update({ deleted_at: new Date().toISOString() }).eq('id', conceptId);
       const deleted = concepts.find(c => c.id === conceptId) || favoriteConcepts.find(c => c.id === conceptId);
       if (deleted) {
         setDeletedStamps(prev => [...prev, { id: conceptId, svg_source: svgOverrides[conceptId] || deleted.svgSource, template_key: deleted.templateKey, deleted_at: new Date().toISOString(), label: deleted.label }]);
@@ -536,7 +537,7 @@ export default function StampGeneratorPage() {
   }
 
   async function recoverDeletedStamp(id: string) {
-    await supabase.from('stamp_designs').update({ deleted_at: null } as any).eq('id', id);
+    await supabase.from('stamp_designs').update({ deleted_at: null }).eq('id', id);
     const item = deletedStamps.find(d => d.id === id);
     if (item) {
       setConcepts(prev => [...prev, { id: item.id, templateKey: item.template_key, label: item.label, tags: [], svgSource: item.svg_source }]);
@@ -1393,6 +1394,14 @@ export default function StampGeneratorPage() {
             setConcepts(prev => [newConcept, ...prev.filter(c => c.id !== v.id)]);
             setSelectedId(v.id);
             setShowVersionSelector(false);
+          }}
+          onSaveBoth={(v) => {
+            const newConcept: StampDesignConcept = {
+              id: crypto.randomUUID(), templateKey: v.template_key,
+              label: `${v.template_key.replace(/-/g, ' ')} (restored)`, tags: [], svgSource: v.svg_source,
+            };
+            setConcepts(prev => [newConcept, ...prev]);
+            toast.success('Both versions saved — current kept + previous added');
           }}
           onDuplicate={(v) => {
             const dup: StampDesignConcept = {
