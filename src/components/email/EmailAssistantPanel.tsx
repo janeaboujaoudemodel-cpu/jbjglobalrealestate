@@ -22,6 +22,7 @@ interface EmailAssistantPanelProps {
   emailBody: string;
   onUseAsReply: (text: string) => void;
   onEditDraft: (text: string) => void;
+  onAnalysisComplete?: (emailId: string, analysis: { needs_reply: boolean; priority: string; action_items: string[] }) => void;
 }
 
 const PRIORITY_CONFIG: Record<string, { color: string; icon: React.ReactNode; label: string }> = {
@@ -37,6 +38,7 @@ export default function EmailAssistantPanel({
   emailBody,
   onUseAsReply,
   onEditDraft,
+  onAnalysisComplete,
 }: EmailAssistantPanelProps) {
   const [analysis, setAnalysis] = useState<EmailAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
@@ -52,15 +54,23 @@ export default function EmailAssistantPanel({
         body: { action: "summarize", emailId, subject: emailSubject, body: emailBody },
       });
       if (error) throw error;
-      setAnalysis(data as EmailAnalysis);
+      const result = data as EmailAnalysis;
+      setAnalysis(result);
       setLastAnalyzedId(emailId);
+
+      // Feed results back to parent for productivity panel
+      onAnalysisComplete?.(emailId, {
+        needs_reply: result.needs_reply,
+        priority: result.priority,
+        action_items: result.action_items,
+      });
     } catch (err: any) {
       console.error("Email analysis error:", err);
       toast.error("Failed to analyze email");
     } finally {
       setLoading(false);
     }
-  }, [emailId, emailSubject, emailBody, lastAnalyzedId, analysis]);
+  }, [emailId, emailSubject, emailBody, lastAnalyzedId, analysis, onAnalysisComplete]);
 
   useEffect(() => {
     analyze();
