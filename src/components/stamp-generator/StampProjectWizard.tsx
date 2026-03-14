@@ -387,7 +387,13 @@ export default function StampProjectWizard() {
     img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
   }, [form.company_name]);
 
+  const [selectedElement, setSelectedElement] = useState<string | null>(null);
+
   const handleElementClick = useCallback((elementId: string) => {
+    // Highlight the clicked element
+    setSelectedElement(elementId);
+
+    // Navigate to corresponding tab
     if (elementId.includes('top-arc')) {
       setActiveTab('company');
       setTimeout(() => document.querySelector<HTMLInputElement>('[dir="rtl"]')?.focus(), 100);
@@ -399,6 +405,9 @@ export default function StampProjectWizard() {
     } else if (elementId.includes('separator')) {
       setActiveTab('style');
     }
+
+    // Clear highlight after 2s
+    setTimeout(() => setSelectedElement(null), 2000);
   }, []);
 
   const previewProps = {
