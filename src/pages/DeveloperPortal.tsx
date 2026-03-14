@@ -82,7 +82,7 @@ const DeveloperPortal = () => {
   const [devName, setDevName] = useState("");
   const [devEmail, setDevEmail] = useState("");
 
-  // Interest registration modal
+  // Launch interest modal
   const [interestModalOpen, setInterestModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [interestType, setInterestType] = useState("general");
@@ -338,7 +338,7 @@ const DeveloperPortal = () => {
     },
   });
 
-  // Fetch user's interest registrations
+  // Fetch user's launch interests
   const { data: myInterests } = useQuery({
     queryKey: ["my-launch-interests", user?.id],
     queryFn: async () => {
@@ -353,7 +353,7 @@ const DeveloperPortal = () => {
     enabled: !!user,
   });
 
-  // Owner: fetch ALL interest registrations
+  // Owner: fetch ALL launch interests
   const { data: allInterests } = useQuery({
     queryKey: ["all-launch-interests"],
     queryFn: async () => {
@@ -1403,7 +1403,7 @@ const DeveloperPortal = () => {
                 <Card className="border-2 border-gold/30">
                   <CardHeader>
                     <CardTitle className="text-sm flex items-center gap-2 text-foreground">
-                      <CheckCircle className="w-4 h-4 text-gold" /> Your Interest Registrations
+                      <CheckCircle className="w-4 h-4 text-gold" /> Your Launch Interests
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -1779,7 +1779,7 @@ const DeveloperPortal = () => {
               </Card>
             </TabsContent>
 
-            {/* OWNER: MANAGE — Launches, Events, Developer Reps, Interest Registrations */}
+            {/* OWNER: MANAGE — Launches, Events, Developer Reps, Launch Interests */}
             {isOwner && ownerSkipMode && (
               <TabsContent value="manage" className="mt-6 space-y-6">
                 {/* Launches & Events Management */}
@@ -1952,14 +1952,14 @@ const DeveloperPortal = () => {
                   </CardContent>
                 </Card>
 
-                {/* Interest Registrations — collapsible */}
+                {/* Launch Interests — collapsible */}
                 <Collapsible open={interestExpanded} onOpenChange={setInterestExpanded}>
                   <Card className="border-2 border-gold/30">
                     <CollapsibleTrigger asChild>
                       <CardHeader className="cursor-pointer hover:bg-gold/5 transition-colors rounded-t-xl">
                         <CardTitle className="flex items-center justify-between text-foreground">
                           <span className="flex items-center gap-2">
-                            <Star className="w-5 h-5 text-gold" /> Launch Interest Registrations
+                            <Star className="w-5 h-5 text-gold" /> Launch Interests
                             {allInterests && allInterests.length > 0 && (
                               <Badge className="bg-gold/20 text-gold ml-2">{allInterests.length}</Badge>
                             )}
@@ -1999,7 +1999,7 @@ const DeveloperPortal = () => {
                         ) : (
                           <div className="py-8 text-center text-muted-foreground">
                             <Star className="w-10 h-10 mx-auto mb-3 opacity-40" />
-                            <p>No interest registrations yet</p>
+                            <p>No launch interests yet</p>
                           </div>
                         )}
                       </CardContent>
