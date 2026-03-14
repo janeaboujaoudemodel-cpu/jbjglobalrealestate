@@ -1549,6 +1549,19 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                       if (error) throw error;
 
                       toast.success(`Email approved and sent to ${selectedCV.full_name}`);
+
+                      // Cross-channel: also notify in chat if toggled on
+                      if (alsoNotifyChat && selectedCV.email) {
+                        sendSecondaryEmail({
+                          primaryChannel: "email",
+                          recipientEmail: selectedCV.email,
+                          subject: adminMessageSubject.trim(),
+                          body: adminMessageBody.trim(),
+                          alsoSendSecondary: true,
+                          recipientName: selectedCV.full_name,
+                        });
+                      }
+                      setAlsoNotifyChat(false);
                       setContactOpen(false);
                       resetContactComposer();
                     } catch (err: any) {

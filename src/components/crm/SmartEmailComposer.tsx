@@ -197,6 +197,16 @@ const SmartEmailComposer = ({ lead, onSend }: SmartEmailComposerProps) => {
                 Send Email
               </Button>
             </div>
+
+            {/* Cross-channel toggle — shared component */}
+            {lead.email_lower && (
+              <CrossChannelToggle
+                recipientEmail={lead.email_lower}
+                channel="email-first"
+                checked={alsoNotifyChat}
+                onToggle={setAlsoNotifyChat}
+              />
+            )}
           </>
         )}
       </CardContent>
