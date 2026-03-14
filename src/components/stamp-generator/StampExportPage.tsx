@@ -1,21 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from 'sonner';
 import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer';
 import { StampColorWheel } from '@/components/stamp-generator/StampColorWheel';
 import JSZip from 'jszip';
 import {
   Download, ArrowLeft, Stamp, CheckCircle2, Loader2,
-  FileImage, FileText, File, Package, Palette, X, Plus, Image, PenTool
+  FileImage, FileText, File, Package, Palette, X, Plus, Image, PenTool,
+  Eye, Ruler, Printer, CircleDot
 } from 'lucide-react';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-/** Prefix all SVG IDs with a unique token to prevent cross-stamp ID collisions */
 function uniquifyIds(svg: string): string {
   const token = Math.random().toString(36).slice(2, 7);
   return svg
@@ -24,7 +26,6 @@ function uniquifyIds(svg: string): string {
     .replace(/href="#([^"]+)"/g, (_, id) => `href="#${token}_${id}"`);
 }
 
-/** Convert a Blob to a base64 data URL via FileReader */
 function blobToDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -34,121 +35,127 @@ function blobToDataUrl(blob: Blob): Promise<string> {
   });
 }
 
-/** SVG → PNG via base64 data URL — avoids canvas CORS taint caused by Blob URLs */
-async function svgToPng(svgString: string, size: number, transparent: boolean): Promise<Blob> {
-  // 0. De-duplicate IDs to prevent cross-instance collisions
+/** SVG → PNG with configurable background color */
+async function svgToPng(svgString: string, size: number, transparent: boolean, bgColor?: string): Promise<Blob> {
   let svg = uniquifyIds(svgString);
-
-  // 1. Ensure required XML namespaces are present
-  if (!svg.includes('xmlns=')) {
-    svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
-  }
-  if (!svg.includes('xmlns:xlink')) {
-    svg = svg.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
-  }
-
-  // 2. Inject explicit width/height so the browser knows the intrinsic size
+  if (!svg.includes('xmlns=')) svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+  if (!svg.includes('xmlns:xlink')) svg = svg.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
   svg = svg.replace(/<svg([^>]*)>/, (_match, attrs) => {
     let a = attrs;
     if (!/\bwidth=/.test(a)) a += ` width="${size}"`;
     if (!/\bheight=/.test(a)) a += ` height="${size}"`;
     return `<svg${a}>`;
   });
-
-  // 3. Use base64 data URL — same-origin, never taints the canvas
-  //    btoa(unescape(encodeURIComponent())) safely handles Arabic / Unicode characters
   const b64 = btoa(unescape(encodeURIComponent(svg)));
   const dataUrl = `data:image/svg+xml;base64,${b64}`;
-
   return new Promise((resolve, reject) => {
     const img = document.createElement('img') as HTMLImageElement;
-
     img.onload = async () => {
       try {
-        // decode() ensures the image is fully rasterized before we touch the canvas
         await img.decode();
         const canvas = document.createElement('canvas');
         canvas.width = size;
         canvas.height = size;
         const ctx = canvas.getContext('2d')!;
         if (!transparent) {
-          ctx.fillStyle = '#ffffff';
+          ctx.fillStyle = bgColor || '#ffffff';
           ctx.fillRect(0, 0, size, size);
         }
         ctx.drawImage(img, 0, 0, size, size);
         canvas.toBlob(b => {
-          if (b) resolve(b);
-          else reject(new Error('Canvas toBlob returned null'));
+          if (b) resolve(b); else reject(new Error('Canvas toBlob returned null'));
         }, 'image/png');
-      } catch (err) {
-        reject(err);
-      }
+      } catch (err) { reject(err); }
     };
-
-    img.onerror = () => reject(new Error('SVG image failed to load — check SVG validity'));
+    img.onerror = () => reject(new Error('SVG image failed to load'));
     img.src = dataUrl;
   });
 }
 
-/** PNG → JPEG (no transparency) */
 async function pngToJpeg(pngBlob: Blob): Promise<Blob> {
   const dataUrl = await blobToDataUrl(pngBlob);
   return new Promise((resolve, reject) => {
     const img = document.createElement('img');
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
+      canvas.width = img.width; canvas.height = img.height;
       const ctx = canvas.getContext('2d')!;
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0);
-      canvas.toBlob(b => {
-        if (b) resolve(b); else reject(new Error('JPEG toBlob failed'));
-      }, 'image/jpeg', 0.92);
+      canvas.toBlob(b => { if (b) resolve(b); else reject(new Error('JPEG toBlob failed')); }, 'image/jpeg', 0.92);
     };
     img.onerror = () => reject(new Error('JPEG img load failed'));
     img.src = dataUrl;
   });
 }
 
-/** PNG → WEBP */
 async function pngToWebp(pngBlob: Blob, transparent: boolean): Promise<Blob> {
   const dataUrl = await blobToDataUrl(pngBlob);
   return new Promise((resolve, reject) => {
     const img = document.createElement('img');
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
+      canvas.width = img.width; canvas.height = img.height;
       const ctx = canvas.getContext('2d')!;
-      if (!transparent) {
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
+      if (!transparent) { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
       ctx.drawImage(img, 0, 0);
-      canvas.toBlob(b => {
-        if (b) resolve(b); else reject(new Error('WEBP toBlob failed'));
-      }, 'image/webp', 0.92);
+      canvas.toBlob(b => { if (b) resolve(b); else reject(new Error('WEBP toBlob failed')); }, 'image/webp', 0.92);
     };
     img.onerror = () => reject(new Error('WEBP img load failed'));
     img.src = dataUrl;
   });
 }
 
-/** SVG → PDF (uses pdf-lib) */
-async function svgToPdf(svgString: string, transparent: boolean): Promise<Blob> {
+/** SVG → PDF with optional margins and crop marks */
+async function svgToPdf(svgString: string, transparent: boolean, printReady: boolean = false): Promise<Blob> {
   const { PDFDocument, rgb } = await import('pdf-lib');
   const pngBlob = await svgToPng(svgString, 1200, transparent);
   const pngBytes = await pngBlob.arrayBuffer();
   const pdfDoc = await PDFDocument.create();
-  const pointSize = 300;
-  const page = pdfDoc.addPage([pointSize, pointSize]);
-  const pngImage = await pdfDoc.embedPng(pngBytes);
-  if (!transparent) {
-    page.drawRectangle({ x: 0, y: 0, width: pointSize, height: pointSize, color: rgb(1, 1, 1) });
+
+  // Set metadata
+  pdfDoc.setTitle('Stamp Export — JBJ Global Real Estate');
+  pdfDoc.setAuthor('JBJ Smart Stamp Generator');
+  pdfDoc.setCreationDate(new Date());
+
+  if (printReady) {
+    // 12mm margin ≈ 34pt. Stamp area = 300pt, total page = 300 + 2*34 = 368pt
+    const margin = 34;
+    const stampSize = 300;
+    const pageSize = stampSize + margin * 2;
+    const page = pdfDoc.addPage([pageSize, pageSize]);
+    if (!transparent) {
+      page.drawRectangle({ x: 0, y: 0, width: pageSize, height: pageSize, color: rgb(1, 1, 1) });
+    }
+    const pngImage = await pdfDoc.embedPng(pngBytes);
+    page.drawImage(pngImage, { x: margin, y: margin, width: stampSize, height: stampSize });
+
+    // Crop marks (8pt lines at corners)
+    const markLen = 8;
+    const markColor = rgb(0, 0, 0);
+    const lineWidth = 0.5;
+    // Top-left
+    page.drawLine({ start: { x: margin, y: margin + stampSize }, end: { x: margin, y: margin + stampSize + markLen }, thickness: lineWidth, color: markColor });
+    page.drawLine({ start: { x: margin, y: margin + stampSize }, end: { x: margin - markLen, y: margin + stampSize }, thickness: lineWidth, color: markColor });
+    // Top-right
+    page.drawLine({ start: { x: margin + stampSize, y: margin + stampSize }, end: { x: margin + stampSize, y: margin + stampSize + markLen }, thickness: lineWidth, color: markColor });
+    page.drawLine({ start: { x: margin + stampSize, y: margin + stampSize }, end: { x: margin + stampSize + markLen, y: margin + stampSize }, thickness: lineWidth, color: markColor });
+    // Bottom-left
+    page.drawLine({ start: { x: margin, y: margin }, end: { x: margin, y: margin - markLen }, thickness: lineWidth, color: markColor });
+    page.drawLine({ start: { x: margin, y: margin }, end: { x: margin - markLen, y: margin }, thickness: lineWidth, color: markColor });
+    // Bottom-right
+    page.drawLine({ start: { x: margin + stampSize, y: margin }, end: { x: margin + stampSize, y: margin - markLen }, thickness: lineWidth, color: markColor });
+    page.drawLine({ start: { x: margin + stampSize, y: margin }, end: { x: margin + stampSize + markLen, y: margin }, thickness: lineWidth, color: markColor });
+  } else {
+    const pointSize = 300;
+    const page = pdfDoc.addPage([pointSize, pointSize]);
+    const pngImage = await pdfDoc.embedPng(pngBytes);
+    if (!transparent) {
+      page.drawRectangle({ x: 0, y: 0, width: pointSize, height: pointSize, color: rgb(1, 1, 1) });
+    }
+    page.drawImage(pngImage, { x: 0, y: 0, width: pointSize, height: pointSize });
   }
-  page.drawImage(pngImage, { x: 0, y: 0, width: pointSize, height: pointSize });
+
   const bytes = await pdfDoc.save();
   return new Blob([bytes.buffer as ArrayBuffer], { type: 'application/pdf' });
 }
@@ -166,11 +173,40 @@ function tintSvgFull(svgString: string, primary: string, secondary?: string, acc
   return s;
 }
 
+/** Convert SVG to solid black rubber stamp (fills → #000, strokes → #000, strip filters) */
+function convertToRubberStamp(svg: string): string {
+  let s = svg;
+  // Replace all fill colors (except "none") with black
+  s = s.replace(/fill="(?!none)[^"]*"/gi, 'fill="#000000"');
+  // Replace all stroke colors with black
+  s = s.replace(/stroke="(?!none)[^"]*"/gi, 'stroke="#000000"');
+  // Strip filter elements
+  s = s.replace(/<filter[^>]*>[\s\S]*?<\/filter>/gi, '');
+  // Strip linearGradient / radialGradient
+  s = s.replace(/<(linear|radial)Gradient[^>]*>[\s\S]*?<\/(linear|radial)Gradient>/gi, '');
+  // Remove filter references
+  s = s.replace(/\s*filter="[^"]*"/gi, '');
+  return s;
+}
+
+/** Convert SVG to emboss-ready vector outlines (fill → none, stroke → #000, strip filters) */
+function convertToEmboss(svg: string): string {
+  let s = svg;
+  // All fills become none (outline only)
+  s = s.replace(/fill="(?!none)[^"]*"/gi, 'fill="none"');
+  // All strokes become black; add stroke if missing
+  s = s.replace(/stroke="[^"]*"/gi, 'stroke="#000000"');
+  // Strip filters and gradients
+  s = s.replace(/<filter[^>]*>[\s\S]*?<\/filter>/gi, '');
+  s = s.replace(/<(linear|radial)Gradient[^>]*>[\s\S]*?<\/(linear|radial)Gradient>/gi, '');
+  s = s.replace(/\s*filter="[^"]*"/gi, '');
+  return s;
+}
+
 function triggerDownload(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
+  a.href = url; a.download = filename;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
@@ -203,7 +239,6 @@ const PACK_COLORS = [
   { label: 'Bronze', hex: '#8B4513' },
 ];
 
-// 5 mandatory standard export colors — always present in export
 const STANDARD_EXPORT_COLORS = [
   { label: 'White',      hex: '#ffffff' },
   { label: 'Black',      hex: '#0d0d0d' },
@@ -225,10 +260,9 @@ const PRESET_COLORS = [
 ];
 
 type ColorStop = 'primary' | 'secondary' | 'accent';
+type BgMode = 'white' | 'transparent' | 'black' | 'paper';
 
-/** Swap bilingual text arcs: moves bottom textPath content to top and vice versa */
 function swapBilingualArcs(svg: string): string {
-  // Match textPath pairs — first is top arc, second is bottom arc
   const textPathRegex = /<textPath[^>]*>([^<]*)<\/textPath>/gi;
   const matches = [...svg.matchAll(textPathRegex)];
   if (matches.length >= 2) {
@@ -240,6 +274,19 @@ function swapBilingualArcs(svg: string): string {
     return swapped;
   }
   return svg;
+}
+
+/** Background preview classes */
+function getBgStyle(mode: BgMode): React.CSSProperties {
+  switch (mode) {
+    case 'white': return { backgroundColor: '#ffffff' };
+    case 'transparent': return {
+      backgroundImage: 'repeating-conic-gradient(#e5e5e5 0% 25%, #ffffff 0% 50%)',
+      backgroundSize: '16px 16px',
+    };
+    case 'black': return { backgroundColor: '#111111' };
+    case 'paper': return { backgroundColor: '#f5f0e6' };
+  }
 }
 
 // ─── Main component ──────────────────────────────────────────────────────────
@@ -260,25 +307,31 @@ export default function StampExportPage() {
   const [project, setProject] = useState<any>(null);
   const [generating, setGenerating] = useState(false);
 
-  // Three-color system — default to Navy Ink standard
   const [primaryColor, setPrimaryColor] = useState('#1B3A8C');
   const [secondaryColor, setSecondaryColor] = useState<string | undefined>(undefined);
   const [accentColor, setAccentColor] = useState<string | undefined>(undefined);
   const [activeStop, setActiveStop] = useState<ColorStop>('primary');
 
+  const [bgMode, setBgMode] = useState<BgMode>('white');
+  const [customSize, setCustomSize] = useState('');
+  const [rubberStampMode, setRubberStampMode] = useState(false);
+  const [embossMode, setEmbossMode] = useState(false);
+
   const [options, setOptions] = useState<ExportOptions>({
     formats: ['svg', 'png', 'jpg', 'webp', 'pdf'],
     sizes: [512, 1024],
     dpi: [300],
-    transparent: true,
+    transparent: false,
   });
 
-  // Multi-color pack — pre-select all 5 standard export colors
+  // Sync transparent flag from bgMode
+  useEffect(() => {
+    setOptions(o => ({ ...o, transparent: bgMode === 'transparent' }));
+  }, [bgMode]);
+
   const [multiColorMode, setMultiColorMode] = useState(false);
   const [packColors, setPackColors] = useState<{ label: string; hex: string }[]>([...STANDARD_EXPORT_COLORS]);
   const [generatingZip, setGeneratingZip] = useState(false);
-
-  // Per-file export status
   const [fileStatuses, setFileStatuses] = useState<Record<string, 'idle' | 'ok' | 'error'>>({});
 
   useEffect(() => {
@@ -306,16 +359,20 @@ export default function StampExportPage() {
   const tintedSvg = design?.svg_source ? tintSvgFull(design.svg_source, primaryColor, secondaryColor, accentColor) : '';
   const companySlug = (project?.company_name || 'stamp').toLowerCase().replace(/\s+/g, '_');
 
-  function toggleFormat(f: string) {
-    setOptions(o => ({ ...o, formats: o.formats.includes(f) ? o.formats.filter(x => x !== f) : [...o.formats, f] }));
-  }
-  function toggleSize(s: number) {
-    setOptions(o => ({ ...o, sizes: o.sizes.includes(s) ? o.sizes.filter(x => x !== s) : [...o.sizes, s] }));
-  }
-  function toggleDpi(d: number) {
-    setOptions(o => ({ ...o, dpi: o.dpi.includes(d) ? o.dpi.filter(x => x !== d) : [...o.dpi, d] }));
-  }
+  // Compute effective sizes including custom
+  const effectiveSizes = useMemo(() => {
+    const s = [...options.sizes];
+    const cv = parseInt(customSize, 10);
+    if (cv >= 128 && cv <= 8192 && !s.includes(cv)) s.push(cv);
+    return s.sort((a, b) => a - b);
+  }, [options.sizes, customSize]);
 
+  const bgColorForExport = bgMode === 'black' ? '#111111' : bgMode === 'paper' ? '#f5f0e6' : '#ffffff';
+  const isTransparent = bgMode === 'transparent';
+
+  function toggleFormat(f: string) { setOptions(o => ({ ...o, formats: o.formats.includes(f) ? o.formats.filter(x => x !== f) : [...o.formats, f] })); }
+  function toggleSize(s: number) { setOptions(o => ({ ...o, sizes: o.sizes.includes(s) ? o.sizes.filter(x => x !== s) : [...o.sizes, s] })); }
+  function toggleDpi(d: number) { setOptions(o => ({ ...o, dpi: o.dpi.includes(d) ? o.dpi.filter(x => x !== d) : [...o.dpi, d] })); }
   function togglePackColor(c: { label: string; hex: string }) {
     setPackColors(prev => {
       const has = prev.some(p => p.hex === c.hex);
@@ -336,8 +393,8 @@ export default function StampExportPage() {
   async function downloadPNGFile(size: number): Promise<Blob | null> {
     const key = `png_${size}`;
     try {
-      const blob = await svgToPng(tintedSvg, size, options.transparent);
-      triggerDownload(blob, `${companySlug}_stamp_${size}px${options.transparent ? '_transparent' : ''}.png`);
+      const blob = await svgToPng(tintedSvg, size, isTransparent, bgColorForExport);
+      triggerDownload(blob, `${companySlug}_stamp_${size}px${isTransparent ? '_transparent' : ''}.png`);
       setFileStatuses(s => ({ ...s, [key]: 'ok' }));
       return blob;
     } catch (err) {
@@ -350,44 +407,58 @@ export default function StampExportPage() {
   async function downloadJPGFile(size: number) {
     const key = `jpg_${size}`;
     try {
-      const pngBlob = await svgToPng(tintedSvg, size, false);
+      const pngBlob = await svgToPng(tintedSvg, size, false, bgColorForExport);
       const jpgBlob = await pngToJpeg(pngBlob);
       triggerDownload(jpgBlob, `${companySlug}_stamp_${size}px.jpg`);
       setFileStatuses(s => ({ ...s, [key]: 'ok' }));
-      return true;
     } catch (err) {
       console.error(`JPG ${size}px failed:`, err);
       setFileStatuses(s => ({ ...s, [key]: 'error' }));
-      return false;
     }
   }
 
   async function downloadWebpFile(size: number) {
     const key = `webp_${size}`;
     try {
-      const pngBlob = await svgToPng(tintedSvg, size, options.transparent);
-      const webpBlob = await pngToWebp(pngBlob, options.transparent);
-      triggerDownload(webpBlob, `${companySlug}_stamp_${size}px${options.transparent ? '_transparent' : ''}.webp`);
+      const pngBlob = await svgToPng(tintedSvg, size, isTransparent, bgColorForExport);
+      const webpBlob = await pngToWebp(pngBlob, isTransparent);
+      triggerDownload(webpBlob, `${companySlug}_stamp_${size}px${isTransparent ? '_transparent' : ''}.webp`);
       setFileStatuses(s => ({ ...s, [key]: 'ok' }));
-      return true;
     } catch (err) {
       console.error(`WEBP ${size}px failed:`, err);
       setFileStatuses(s => ({ ...s, [key]: 'error' }));
-      return false;
     }
   }
 
   async function downloadPDFFile() {
     const key = 'pdf';
     try {
-      const blob = await svgToPdf(tintedSvg, options.transparent);
+      const blob = await svgToPdf(tintedSvg, isTransparent, true);
       triggerDownload(blob, `${companySlug}_stamp_print_300dpi.pdf`);
       setFileStatuses(s => ({ ...s, [key]: 'ok' }));
-      return true;
     } catch (err) {
       console.error('PDF failed:', err);
       setFileStatuses(s => ({ ...s, [key]: 'error' }));
-      return false;
+    }
+  }
+
+  async function downloadManufacturerFile(mode: 'rubber' | 'emboss') {
+    if (!design?.svg_source) return;
+    const converter = mode === 'rubber' ? convertToRubberStamp : convertToEmboss;
+    const label = mode === 'rubber' ? 'rubber_stamp' : 'emboss';
+    try {
+      toast.info(`Generating ${mode === 'rubber' ? 'rubber stamp' : 'emboss'} files…`);
+      const converted = converter(tintedSvg);
+      // SVG
+      const svgBlob = new Blob([converted], { type: 'image/svg+xml' });
+      triggerDownload(svgBlob, `${companySlug}_${label}.svg`);
+      // High-res PNG
+      const pngBlob = await svgToPng(converted, 2048, true);
+      triggerDownload(pngBlob, `${companySlug}_${label}_2048px.png`);
+      toast.success(`${mode === 'rubber' ? 'Rubber stamp' : 'Emboss'} files downloaded!`);
+    } catch (err) {
+      console.error(`${label} export failed:`, err);
+      toast.error('Manufacturer export failed');
     }
   }
 
@@ -406,11 +477,11 @@ export default function StampExportPage() {
         fileCount++;
       }
 
-      for (const size of options.sizes) {
+      for (const size of effectiveSizes) {
         if (options.formats.includes('png')) {
           try {
-            const blob = await svgToPng(tintedSvg, size, options.transparent);
-            zip.file(`${companySlug}_stamp_${size}px${options.transparent ? '_transparent' : ''}.png`, blob);
+            const blob = await svgToPng(tintedSvg, size, isTransparent, bgColorForExport);
+            zip.file(`${companySlug}_stamp_${size}px${isTransparent ? '_transparent' : ''}.png`, blob);
             setFileStatuses(s => ({ ...s, [`png_${size}`]: 'ok' }));
             fileCount++;
           } catch (err) {
@@ -420,25 +491,23 @@ export default function StampExportPage() {
         }
         if (options.formats.includes('jpg')) {
           try {
-            const pngBlob = await svgToPng(tintedSvg, size, false);
+            const pngBlob = await svgToPng(tintedSvg, size, false, bgColorForExport);
             const jpgBlob = await pngToJpeg(pngBlob);
             zip.file(`${companySlug}_stamp_${size}px.jpg`, jpgBlob);
             setFileStatuses(s => ({ ...s, [`jpg_${size}`]: 'ok' }));
             fileCount++;
           } catch (err) {
-            console.error(`JPG ${size}px failed:`, err);
             setFileStatuses(s => ({ ...s, [`jpg_${size}`]: 'error' }));
           }
         }
         if (options.formats.includes('webp')) {
           try {
-            const pngBlob = await svgToPng(tintedSvg, size, options.transparent);
-            const webpBlob = await pngToWebp(pngBlob, options.transparent);
-            zip.file(`${companySlug}_stamp_${size}px${options.transparent ? '_transparent' : ''}.webp`, webpBlob);
+            const pngBlob = await svgToPng(tintedSvg, size, isTransparent, bgColorForExport);
+            const webpBlob = await pngToWebp(pngBlob, isTransparent);
+            zip.file(`${companySlug}_stamp_${size}px${isTransparent ? '_transparent' : ''}.webp`, webpBlob);
             setFileStatuses(s => ({ ...s, [`webp_${size}`]: 'ok' }));
             fileCount++;
           } catch (err) {
-            console.error(`WEBP ${size}px failed:`, err);
             setFileStatuses(s => ({ ...s, [`webp_${size}`]: 'error' }));
           }
         }
@@ -446,19 +515,17 @@ export default function StampExportPage() {
 
       if (options.formats.includes('pdf')) {
         try {
-          const blob = await svgToPdf(tintedSvg, options.transparent);
+          const blob = await svgToPdf(tintedSvg, isTransparent, true);
           zip.file(`${companySlug}_stamp_print_300dpi.pdf`, blob);
           setFileStatuses(s => ({ ...s, pdf: 'ok' }));
           fileCount++;
         } catch (err) {
-          console.error('PDF failed:', err);
           setFileStatuses(s => ({ ...s, pdf: 'error' }));
         }
       }
 
-      // ── Bilingual variants (English-top + Arabic-top) ──
+      // Bilingual variants
       const arabicName = project?.arabic_company_name;
-      const arabicCity = project?.arabic_city_optional;
       if (arabicName && tintedSvg.includes('textPath')) {
         try {
           const arabicTopSvg = swapBilingualArcs(tintedSvg);
@@ -466,15 +533,13 @@ export default function StampExportPage() {
           biFolder.file(`${companySlug}_stamp_arabic_top.svg`, arabicTopSvg);
           const biPng = await svgToPng(arabicTopSvg, 1024, true);
           biFolder.file(`${companySlug}_stamp_arabic_top_1024px.png`, biPng);
-          const biPdf = await svgToPdf(arabicTopSvg, true);
+          const biPdf = await svgToPdf(arabicTopSvg, true, true);
           biFolder.file(`${companySlug}_stamp_arabic_top_print.pdf`, biPdf);
           fileCount += 3;
-        } catch (err) {
-          console.warn('Bilingual variant generation failed:', err);
-        }
+        } catch (err) { console.warn('Bilingual variant generation failed:', err); }
       }
 
-      // ── Standard Export Colors — add 5 mandatory color sub-folders ──
+      // Standard Export Colors
       const standardColorsFolder = zip.folder('standard_colors')!;
       for (const { label, hex } of STANDARD_EXPORT_COLORS) {
         try {
@@ -484,43 +549,54 @@ export default function StampExportPage() {
           const pngBlob = await svgToPng(coloredSvg, 1024, true);
           colorFolder.file(`${companySlug}_${label.toLowerCase().replace(/\s+/g, '_')}_1024px.png`, pngBlob);
           fileCount += 2;
-        } catch (err) {
-          console.warn(`Standard color ${label} failed:`, err);
+        } catch (err) { console.warn(`Standard color ${label} failed:`, err); }
+      }
+
+      // Manufacturer exports in bundle
+      if (rubberStampMode || embossMode) {
+        const mfgFolder = zip.folder('manufacturer')!;
+        if (rubberStampMode) {
+          const rsFolder = mfgFolder.folder('rubber_stamp')!;
+          const rsSvg = convertToRubberStamp(tintedSvg);
+          rsFolder.file(`${companySlug}_rubber_stamp.svg`, rsSvg);
+          try {
+            const rsPng = await svgToPng(rsSvg, 2048, true);
+            rsFolder.file(`${companySlug}_rubber_stamp_2048px.png`, rsPng);
+            fileCount += 2;
+          } catch { fileCount += 1; }
+        }
+        if (embossMode) {
+          const emFolder = mfgFolder.folder('emboss')!;
+          const emSvg = convertToEmboss(tintedSvg);
+          emFolder.file(`${companySlug}_emboss.svg`, emSvg);
+          try {
+            const emPng = await svgToPng(emSvg, 2048, true);
+            emFolder.file(`${companySlug}_emboss_2048px.png`, emPng);
+            fileCount += 2;
+          } catch { fileCount += 1; }
         }
       }
 
-      // Add README
+      // README
       const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
       zip.file('README.txt',
-        `Brand Kit Export\n` +
-        `Company: ${project?.company_name || ''}\n` +
-        `Exported: ${date}\n` +
-        `Files: ${fileCount}\n\n` +
-        `Contents:\n` +
-        `  • SVG — Vector (scalable to any size)\n` +
-        `  • PNG — Transparent background rasters\n` +
-        `  • JPG — White background rasters\n` +
-        `  • WEBP — Modern web format\n` +
-        `  • PDF — Print-ready at 300 DPI\n` +
-        (arabicName ? `  • bilingual_arabic_top/ — Arabic-on-top variant\n` : '') +
+        `Brand Kit Export\nCompany: ${project?.company_name || ''}\nExported: ${date}\nFiles: ${fileCount}\n\n` +
+        `Contents:\n  • SVG — Vector\n  • PNG — Raster\n  • JPG — White background\n  • WEBP — Modern web format\n  • PDF — Print-ready (300 DPI, margins + crop marks)\n` +
+        (rubberStampMode ? `  • manufacturer/rubber_stamp/ — Solid black for rubber stamp manufacturing\n` : '') +
+        (embossMode ? `  • manufacturer/emboss/ — Vector outlines for emboss/engraving\n` : '') +
         `\nGenerated by JBJ Smart Stamp Generator\n`
       );
 
-      // Generate and download the ZIP
       const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
       triggerDownload(zipBlob, `${companySlug}_brand_kit.zip`);
 
-      // Log export
       await supabase.from('stamp_exports').insert({
         design_id: designId!, user_id: user!.id, includes: options as any, status: 'ready',
       });
 
       const failCount = Object.values(fileStatuses).filter(s => s === 'error').length;
-      if (failCount === 0) {
-        toast.success(`✅ ${fileCount} file${fileCount !== 1 ? 's' : ''} bundled into ZIP!`);
-      } else {
-        toast.warning(`ZIP contains ${fileCount} files. ${failCount} failed.`);
-      }
+      if (failCount === 0) toast.success(`✅ ${fileCount} files bundled into ZIP!`);
+      else toast.warning(`ZIP contains ${fileCount} files. ${failCount} failed.`);
     } catch (err) {
       console.error('Bundle error:', err);
       toast.error('Export error. Try individual downloads.');
@@ -541,9 +617,7 @@ export default function StampExportPage() {
           try {
             const pngBlob = await svgToPng(coloredSvg, size, true);
             folder.file(`stamp_${size}px.png`, pngBlob);
-          } catch (e) {
-            console.error(`PNG ${size}px for ${label} failed:`, e);
-          }
+          } catch (e) { console.error(`PNG ${size}px for ${label} failed:`, e); }
         }
       }
       const blob = await zip.generateAsync({ type: 'blob' });
@@ -598,18 +672,71 @@ export default function StampExportPage() {
           <div className="space-y-4">
             <h2 className="font-semibold text-[hsl(var(--foreground))]">Live Preview</h2>
 
-            {/* Main preview */}
-            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-8 flex items-center justify-center">
-              <StampSVGRenderer
-                svgSource={design.svg_source}
-                size={260}
-                tintColor={primaryColor}
-                secondaryColor={secondaryColor}
-                accentColor={accentColor}
-              />
+            {/* Export Preview Panel — shows stamp with selected background */}
+            <div className="rounded-2xl border-2 border-[hsl(var(--gold)/0.3)] overflow-hidden">
+              <div className="bg-[hsl(var(--gold)/0.05)] px-4 py-2 flex items-center justify-between border-b border-[hsl(var(--gold)/0.15)]">
+                <div className="flex items-center gap-2">
+                  <Eye size={14} className="text-[hsl(var(--gold))]"/>
+                  <span className="text-xs font-semibold text-[hsl(var(--foreground))]">Export Preview</span>
+                </div>
+                <div className="flex gap-1.5">
+                  <Badge variant="outline" className="text-[9px] border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))]">
+                    {options.formats.map(f => f.toUpperCase()).join(' · ')}
+                  </Badge>
+                  <Badge variant="outline" className="text-[9px] border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))]">
+                    {effectiveSizes.map(s => `${s}px`).join(' · ')}
+                  </Badge>
+                  <Badge variant="outline" className="text-[9px] border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))]">
+                    BG: {bgMode}
+                  </Badge>
+                </div>
+              </div>
+              <div className="p-8 flex items-center justify-center" style={getBgStyle(bgMode)}>
+                <div className="drop-shadow-lg">
+                  <StampSVGRenderer
+                    svgSource={design.svg_source}
+                    size={260}
+                    tintColor={primaryColor}
+                    secondaryColor={secondaryColor}
+                    accentColor={accentColor}
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* On document */}
+            {/* Manufacturer previews */}
+            {(rubberStampMode || embossMode) && (
+              <div className="grid grid-cols-2 gap-3">
+                {rubberStampMode && (
+                  <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
+                    <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide flex items-center gap-1">
+                      <Stamp size={10}/> Rubber Stamp
+                    </p>
+                    <div className="flex justify-center">
+                      <StampSVGRenderer svgSource={convertToRubberStamp(design.svg_source)} size={140} tintColor="#000000"/>
+                    </div>
+                    <Button size="sm" variant="outline" className="w-full text-xs gap-1" onClick={() => downloadManufacturerFile('rubber')}>
+                      <Download size={12}/> Download
+                    </Button>
+                  </div>
+                )}
+                {embossMode && (
+                  <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
+                    <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide flex items-center gap-1">
+                      <CircleDot size={10}/> Emboss / Engrave
+                    </p>
+                    <div className="flex justify-center">
+                      <StampSVGRenderer svgSource={convertToEmboss(design.svg_source)} size={140} tintColor="#000000"/>
+                    </div>
+                    <Button size="sm" variant="outline" className="w-full text-xs gap-1" onClick={() => downloadManufacturerFile('emboss')}>
+                      <Download size={12}/> Download
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* On Letterhead */}
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
               <p className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Preview on Letterhead</p>
               <div className="bg-gradient-to-br from-[hsl(var(--pearl-1))] to-white rounded-xl p-5 border border-[hsl(var(--border)/0.5)] relative overflow-hidden">
@@ -639,7 +766,7 @@ export default function StampExportPage() {
               </div>
             </div>
 
-            {/* On business card */}
+            {/* On Business Card */}
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-4 space-y-2">
               <p className="text-xs font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">Preview on Business Card</p>
               <div className="relative bg-gradient-to-br from-[hsl(222,47%,11%)] to-[hsl(222,47%,20%)] rounded-xl p-5 overflow-hidden" style={{ aspectRatio: '1.75 / 1' }}>
@@ -682,74 +809,62 @@ export default function StampExportPage() {
               <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
                 <Palette size={14} className="text-[hsl(var(--gold))]"/> Export Colors
               </p>
-
-              {/* Stop selector */}
               <div className="flex gap-2">
                 {stopLabels.map(stop => (
-                  <button
-                    key={stop.key}
-                    onClick={() => setActiveStop(stop.key)}
+                  <button key={stop.key} onClick={() => setActiveStop(stop.key)}
                     className={`flex-1 flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all ${
-                      activeStop === stop.key
-                        ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]'
-                        : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
-                    }`}
-                  >
+                      activeStop === stop.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                    }`}>
                     <div className="w-8 h-8 rounded-full border-2 border-white shadow-md" style={{ backgroundColor: stop.color }}/>
                     <span className="text-[10px] font-medium text-[hsl(var(--foreground))]">{stop.label}</span>
                   </button>
                 ))}
               </div>
-
-              {/* Color wheel for active stop */}
               <StampColorWheel color={activeColor} onChange={setActiveColor} label="" size={180}/>
-
-              {/* Preset shortcuts */}
               <div>
                 <p className="text-[10px] text-[hsl(var(--muted-foreground))] mb-2">Quick Presets</p>
                 <div className="flex flex-wrap gap-2">
                   {PRESET_COLORS.map(c => (
                     <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
                       className={`w-7 h-7 rounded-full border-2 shadow-sm transition-all hover:scale-110 ${activeColor === c.hex ? 'border-[hsl(var(--gold))] scale-110' : 'border-white'}`}
-                      style={{ backgroundColor: c.hex }}
-                    />
+                      style={{ backgroundColor: c.hex }}/>
                   ))}
+                </div>
+              </div>
+
+              {/* Standard Export Colors */}
+              <div className="bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.25)] p-5 space-y-3">
+                <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
+                  <Palette size={14} className="text-[hsl(var(--gold))]"/> Standard Export Colors
+                </p>
+                <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Click any standard color to instantly download a PNG in that ink.</p>
+                <div className="flex flex-wrap gap-2">
+                  {STANDARD_EXPORT_COLORS.map(c => (
+                    <button key={c.hex} title={`Download in ${c.label}`}
+                      onClick={async () => {
+                        try {
+                          toast.info(`Generating ${c.label}…`);
+                          const colored = tintSvgFull(design.svg_source, c.hex);
+                          const blob = await svgToPng(colored, 1024, true);
+                          triggerDownload(blob, `${companySlug}_stamp_${c.label.toLowerCase().replace(/\s+/g, '_')}_1024px.png`);
+                          toast.success(`${c.label} downloaded!`);
+                        } catch { toast.error('Download failed'); }
+                      }}
+                      className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all hover:border-[hsl(var(--gold))] hover:scale-105 border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.02)] ${c.hex === '#ffffff' ? 'bg-[hsl(var(--muted))]' : ''}`}>
+                      <div className={`w-10 h-10 rounded-full shadow-md ${c.hex === '#ffffff' ? 'border-2 border-[hsl(var(--border))]' : 'border-2 border-white'}`} style={{ backgroundColor: c.hex }}/>
+                      <span className="text-[9px] text-[hsl(var(--foreground))] font-semibold">{c.label}</span>
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => { setPrimaryColor('#1B3A8C'); setSecondaryColor(undefined); setAccentColor(undefined); toast.success('Reset to Navy Ink standard'); }}
+                  className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg border border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))] text-[10px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all">
+                  Reset to Standard (Navy Ink)
+                </button>
+              </div>
             </div>
 
-            {/* Standard Export Colors — mandatory 5 colors */}
-            <div className="bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.25)] p-5 space-y-3">
-              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
-                <Palette size={14} className="text-[hsl(var(--gold))]"/> Standard Export Colors
-              </p>
-              <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Click any standard color to instantly download a PNG in that ink.</p>
-              <div className="flex flex-wrap gap-2">
-                {STANDARD_EXPORT_COLORS.map(c => (
-                  <button key={c.hex} title={`Download in ${c.label}`}
-                    onClick={async () => {
-                      try {
-                        toast.info(`Generating ${c.label}…`);
-                        const colored = tintSvgFull(design.svg_source, c.hex);
-                        const blob = await svgToPng(colored, 1024, true);
-                        triggerDownload(blob, `${companySlug}_stamp_${c.label.toLowerCase().replace(/\s+/g, '_')}_1024px.png`);
-                        toast.success(`${c.label} downloaded!`);
-                      } catch { toast.error('Download failed'); }
-                    }}
-                    className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all hover:border-[hsl(var(--gold))] hover:scale-105 border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.02)] ${c.hex === '#ffffff' ? 'bg-[hsl(var(--muted))]' : ''}`}>
-                    <div className={`w-10 h-10 rounded-full shadow-md ${c.hex === '#ffffff' ? 'border-2 border-[hsl(var(--border))]' : 'border-2 border-white'}`} style={{ backgroundColor: c.hex }}/>
-                    <span className="text-[9px] text-[hsl(var(--foreground))] font-semibold">{c.label}</span>
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={() => { setPrimaryColor('#1B3A8C'); setSecondaryColor(undefined); setAccentColor(undefined); toast.success('Reset to Navy Ink standard'); }}
-                className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg border border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))] text-[10px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all">
-                Reset to Standard (Navy Ink)
-              </button>
-            </div>
-              </div>
-            </div>
-
-            {/* Formats */}
+            {/* Formats + Sizes + DPI + Background */}
             <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4">
               <div>
                 <p className="text-sm font-medium text-[hsl(var(--foreground))] mb-2 flex items-center gap-1.5">
@@ -760,7 +875,7 @@ export default function StampExportPage() {
                     <ToggleChip key={f} label={f.toUpperCase()} active={options.formats.includes(f)} onClick={() => toggleFormat(f)}/>
                   ))}
                 </div>
-                <p className="text-[10px] text-[hsl(var(--muted-foreground))] mt-1.5">SVG is vector (infinite resolution). PDF = print-ready 300 DPI. JPG = no transparency.</p>
+                <p className="text-[10px] text-[hsl(var(--muted-foreground))] mt-1.5">SVG is vector. PDF = print-ready with margins + crop marks. JPG always has white background.</p>
               </div>
 
               <div>
@@ -768,9 +883,23 @@ export default function StampExportPage() {
                   <FileImage size={14} className="text-[hsl(var(--gold))]"/> Sizes (px)
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {[512, 1024, 2048].map(s => (
+                  {[512, 1024, 2048, 4096].map(s => (
                     <ToggleChip key={s} label={`${s}px`} active={options.sizes.includes(s)} onClick={() => toggleSize(s)}/>
                   ))}
+                </div>
+                {/* Custom resolution */}
+                <div className="flex items-center gap-2 mt-2">
+                  <Ruler size={12} className="text-[hsl(var(--muted-foreground))]"/>
+                  <Input
+                    type="number" placeholder="Custom (128–8192)" min={128} max={8192}
+                    value={customSize} onChange={e => setCustomSize(e.target.value)}
+                    className="h-8 w-40 text-xs bg-white border-[hsl(var(--border))]"
+                  />
+                  {customSize && parseInt(customSize) >= 128 && parseInt(customSize) <= 8192 && (
+                    <Badge className="bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] text-[9px] border border-[hsl(var(--gold)/0.3)]">
+                      +{customSize}px
+                    </Badge>
+                  )}
                 </div>
               </div>
 
@@ -785,14 +914,75 @@ export default function StampExportPage() {
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-[hsl(var(--border))] space-y-2">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="checkbox" checked={options.transparent}
-                    onChange={e => setOptions(o => ({ ...o, transparent: e.target.checked }))} className="rounded"/>
-                  <span className="text-sm text-[hsl(var(--foreground))]">Transparent background</span>
-                </label>
-                <p className="text-[10px] text-[hsl(var(--muted-foreground))] pl-6">Applies to PNG and WEBP. JPG always has white background.</p>
+              {/* Background Mode */}
+              <div className="pt-3 border-t border-[hsl(var(--border))] space-y-3">
+                <p className="text-sm font-medium text-[hsl(var(--foreground))] flex items-center gap-1.5">
+                  <Image size={14} className="text-[hsl(var(--gold))]"/> Background
+                </p>
+                <div className="grid grid-cols-4 gap-2">
+                  {([
+                    { value: 'white' as BgMode, label: 'White', style: { backgroundColor: '#ffffff', border: '1px solid hsl(var(--border))' } },
+                    { value: 'transparent' as BgMode, label: 'Transparent', style: { backgroundImage: 'repeating-conic-gradient(#e5e5e5 0% 25%, #fff 0% 50%)', backgroundSize: '8px 8px' } },
+                    { value: 'black' as BgMode, label: 'Black', style: { backgroundColor: '#111111' } },
+                    { value: 'paper' as BgMode, label: 'Paper', style: { backgroundColor: '#f5f0e6' } },
+                  ]).map(bg => (
+                    <button key={bg.value} onClick={() => setBgMode(bg.value)}
+                      className={`flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all ${
+                        bgMode === bg.value ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                      }`}>
+                      <div className="w-8 h-8 rounded-lg" style={bg.style}/>
+                      <span className="text-[9px] font-medium text-[hsl(var(--foreground))]">{bg.label}</span>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                  {bgMode === 'transparent' ? 'Transparent applies to PNG and WEBP only. JPG forces white.' : 
+                   bgMode === 'paper' ? 'Paper texture: cream/off-white background for document previews.' :
+                   bgMode === 'black' ? 'Black background for dark-theme previews.' : 
+                   'Standard white background.'}
+                </p>
               </div>
+            </div>
+
+            {/* Manufacturer Export */}
+            <div className="bg-white rounded-2xl border border-[hsl(var(--border))] p-5 space-y-4">
+              <p className="text-sm font-semibold text-[hsl(var(--foreground))] flex items-center gap-1.5">
+                <Printer size={14} className="text-[hsl(var(--gold))]"/> Manufacturer Export
+              </p>
+              <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                Special export modes for rubber stamp manufacturers, embossing tools, and engraving machines.
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                <button onClick={() => setRubberStampMode(v => !v)}
+                  className={`p-3 rounded-xl border-2 text-left transition-all ${
+                    rubberStampMode ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                  }`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Stamp size={14} className={rubberStampMode ? 'text-[hsl(var(--gold))]' : 'text-[hsl(var(--muted-foreground))]'}/>
+                    <span className="text-xs font-semibold text-[hsl(var(--foreground))]">Rubber Stamp</span>
+                  </div>
+                  <p className="text-[9px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                    Solid black fills, no gradients. SVG + high-res PNG for stamp manufacturing.
+                  </p>
+                </button>
+                <button onClick={() => setEmbossMode(v => !v)}
+                  className={`p-3 rounded-xl border-2 text-left transition-all ${
+                    embossMode ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.05)]' : 'border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.3)]'
+                  }`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <CircleDot size={14} className={embossMode ? 'text-[hsl(var(--gold))]' : 'text-[hsl(var(--muted-foreground))]'}/>
+                    <span className="text-xs font-semibold text-[hsl(var(--foreground))]">Emboss / Engrave</span>
+                  </div>
+                  <p className="text-[9px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                    Vector outlines only (no fills). Optimized for CNC, laser, and embossing machines.
+                  </p>
+                </button>
+              </div>
+              {(rubberStampMode || embossMode) && (
+                <p className="text-[10px] text-[hsl(var(--gold-dark))] bg-[hsl(var(--gold)/0.08)] rounded-lg px-3 py-2">
+                  ✓ Manufacturer files will be included in the ZIP bundle under <code className="font-mono">manufacturer/</code> folder.
+                </p>
+              )}
             </div>
 
             {/* Per-file status */}
@@ -852,9 +1042,7 @@ export default function StampExportPage() {
                     sessionStorage.setItem('esignature_stamp_color', primaryColor);
                     toast.success('Stamp saved! Redirecting to E-Signature…');
                     navigate('/e-signature/create');
-                  } catch {
-                    toast.error('Failed to save stamp');
-                  }
+                  } catch { toast.error('Failed to save stamp'); }
                 }}>
                 <PenTool size={14}/> Use in E-Signature
               </Button>
@@ -892,21 +1080,15 @@ export default function StampExportPage() {
                     })}
                   </div>
 
-                  {/* Custom color picker for pack */}
                   <div className="pt-2 border-t border-[hsl(var(--border))]">
                     <p className="text-[10px] text-[hsl(var(--muted-foreground))] mb-2">Or pick a custom color:</p>
                     <div className="flex items-center gap-2">
-                      <input
-                        type="color"
-                        className="w-8 h-8 rounded-lg border border-[hsl(var(--border))] cursor-pointer"
+                      <input type="color" className="w-8 h-8 rounded-lg border border-[hsl(var(--border))] cursor-pointer"
                         onChange={e => {
                           const hex = e.target.value;
                           const label = `Custom ${hex.slice(1, 4).toUpperCase()}`;
-                          if (!packColors.some(p => p.hex === hex)) {
-                            togglePackColor({ label, hex });
-                          }
-                        }}
-                      />
+                          if (!packColors.some(p => p.hex === hex)) togglePackColor({ label, hex });
+                        }}/>
                       <span className="text-[10px] text-[hsl(var(--muted-foreground))]">Click to add custom color to pack</span>
                     </div>
                   </div>
@@ -925,19 +1107,11 @@ export default function StampExportPage() {
                     </div>
                   )}
 
-                  <Button
-                    className="w-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-2"
-                    onClick={downloadColorZip}
-                    disabled={generatingZip || packColors.length === 0}
-                  >
-                    {generatingZip
-                      ? <><Loader2 size={14} className="animate-spin"/> Building ZIP…</>
-                      : <><Download size={14}/> Download Color Pack ZIP ({packColors.length} colors)</>
-                    }
+                  <Button className="w-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-2"
+                    onClick={downloadColorZip} disabled={generatingZip || packColors.length === 0}>
+                    {generatingZip ? <><Loader2 size={14} className="animate-spin"/> Building ZIP…</> : <><Download size={14}/> Download Color Pack ZIP ({packColors.length} colors)</>}
                   </Button>
-                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">
-                    ZIP includes SVG + 512px + 1024px PNG for each color.
-                  </p>
+                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">ZIP includes SVG + 512px + 1024px PNG for each color.</p>
                 </div>
               )}
             </div>
