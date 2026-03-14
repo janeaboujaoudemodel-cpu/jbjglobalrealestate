@@ -549,7 +549,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
               className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
             >
               <Globe className="w-4 h-4 mr-2" />
-              External API Enrichment
+              Reelly API Enrichment
             </TabsTrigger>
           )}
         </TabsList>
