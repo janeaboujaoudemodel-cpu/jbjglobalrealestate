@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { enforceRateLimit, logSecurityEvent } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -11,6 +12,15 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Rate limit: 3 requests per 15 min per IP
+  const { response: blocked, clientIp, serviceClient } = await enforceRateLimit(req, {
+    functionName: 'reset-password-with-otp',
+    maxRequests: 3,
+    windowMinutes: 15,
+    keyType: 'ip',
+  }, corsHeaders);
+  if (blocked) return blocked;
+
   try {
     const { email, otp_code, new_password } = await req.json();
 
@@ -21,7 +31,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Validate password strength
     if (new_password.length < 6) {
       return new Response(
         JSON.stringify({ error: "Password must be at least 6 characters" }),
@@ -29,7 +38,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Validate OTP format
     if (!/^\d{6}$/.test(otp_code)) {
       return new Response(
         JSON.stringify({ error: "Invalid OTP format" }),
@@ -41,7 +49,6 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Step 1: Verify the OTP is valid and recently verified
     const { data: verification, error: fetchError } = await supabase
       .from("email_verifications")
       .select("*")
@@ -62,13 +69,19 @@ Deno.serve(async (req) => {
     }
 
     if (!verification) {
+      await logSecurityEvent(serviceClient, {
+        event_type: 'auth_failure',
+        function_name: 'reset-password-with-otp',
+        client_ip: clientIp,
+        severity: 'medium',
+        details: { reason: 'invalid_or_expired_otp' },
+      });
       return new Response(
         JSON.stringify({ error: "Invalid or expired OTP. Please request a new code." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Ensure OTP was verified within the last 10 minutes
     const verifiedAt = new Date(verification.verified_at);
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
     if (verifiedAt < tenMinutesAgo) {
@@ -78,7 +91,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Step 2: Find the user by email
     const { data: userList, error: userError } = await supabase.auth.admin.listUsers();
     if (userError) {
       console.error("Error listing users:", userError);
@@ -99,7 +111,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Step 3: Update the password
     const { error: updateError } = await supabase.auth.admin.updateUserById(
       targetUser.id,
       { password: new_password }
@@ -113,7 +124,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Step 4: Invalidate the used OTP
     await supabase
       .from("email_verifications")
       .update({ expires_at: new Date().toISOString() })

@@ -1,5 +1,6 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 import { emailShell, monogramBadge, sharedSections, arabicDivider } from "../_shared/email-html.ts";
+import { enforceRateLimit, logSecurityEvent } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,6 +11,15 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Rate limit: 5 requests per 15 min per IP
+  const { response: blocked, clientIp, serviceClient } = await enforceRateLimit(req, {
+    functionName: 'send-email-otp',
+    maxRequests: 5,
+    windowMinutes: 15,
+    keyType: 'ip',
+  }, corsHeaders);
+  if (blocked) return blocked;
 
   try {
     const { email, full_name } = await req.json();
@@ -61,7 +71,6 @@ Deno.serve(async (req) => {
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // BILINGUAL: EN → Arabic divider → AR → Gold divider → Locked sections
     const bodyContent = `<tr><td class="content-pad" style="padding:32px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
 <tr>

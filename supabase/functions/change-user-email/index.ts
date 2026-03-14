@@ -1,18 +1,17 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { enforceRateLimit, logSecurityEvent } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 Deno.serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    // Get auth token from request
     const authHeader = req.headers.get("authorization");
     if (!authHeader) {
       return new Response(
@@ -20,6 +19,34 @@ Deno.serve(async (req) => {
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    // Get user first for rate limiting by user
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    
+    const supabaseUser = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: userError } = await supabaseUser.auth.getUser();
+    
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Invalid or expired session" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Rate limit: 3 requests per 60 min per user
+    const { response: blocked, clientIp, serviceClient } = await enforceRateLimit(req, {
+      functionName: 'change-user-email',
+      maxRequests: 3,
+      windowMinutes: 60,
+      keyType: 'user',
+      customKey: user.id,
+    }, corsHeaders, user.id);
+    if (blocked) return blocked;
 
     const { new_email } = await req.json();
 
@@ -30,7 +57,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Validate email format
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(new_email)) {
       return new Response(
@@ -39,28 +65,8 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Initialize Supabase clients
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
-    
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
-    const supabaseUser = createClient(supabaseUrl, supabaseAnonKey, {
-      global: { headers: { Authorization: authHeader } }
-    });
 
-    // Get the authenticated user
-    const { data: { user }, error: userError } = await supabaseUser.auth.getUser();
-    
-    if (userError || !user) {
-      console.error("Error getting user:", userError);
-      return new Response(
-        JSON.stringify({ error: "Invalid or expired session" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // Check if new email is same as current
     if (user.email?.toLowerCase() === new_email.toLowerCase()) {
       return new Response(
         JSON.stringify({ error: "New email is the same as current email" }),
@@ -68,7 +74,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Verify that the OTP was verified for the new email within last 10 minutes
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
     const { data: verification, error: verifyError } = await supabaseAdmin
       .from("email_verifications")
@@ -81,7 +86,6 @@ Deno.serve(async (req) => {
       .maybeSingle();
 
     if (verifyError) {
-      console.error("Error checking verification:", verifyError);
       return new Response(
         JSON.stringify({ error: "Failed to verify email ownership" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -95,7 +99,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Check if another user already has this email
     const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers();
     const emailExists = existingUsers?.users?.some(
       (u) => u.email?.toLowerCase() === new_email.toLowerCase() && u.id !== user.id
@@ -108,36 +111,37 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Update the user's email using Admin API
     const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
       user.id,
-      { 
-        email: new_email,
-        email_confirm: true // Mark as confirmed since we verified via OTP
-      }
+      { email: new_email, email_confirm: true }
     );
 
     if (updateError) {
-      console.error("Error updating email:", updateError);
       return new Response(
         JSON.stringify({ error: updateError.message || "Failed to update email" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Clean up used verification record
     await supabaseAdmin
       .from("email_verifications")
       .delete()
       .eq("id", verification.id);
 
+    // Log the sensitive action
+    await logSecurityEvent(serviceClient, {
+      event_type: 'suspicious_pattern',
+      function_name: 'change-user-email',
+      client_ip: clientIp,
+      user_id: user.id,
+      severity: 'low',
+      details: { action: 'email_changed', old_email_prefix: (user.email || '').substring(0, 3) + '***' },
+    });
+
     console.log(`Email changed for user ${user.id}: ${user.email} → ${new_email}`);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        message: "Email changed successfully. Please sign in with your new email." 
-      }),
+      JSON.stringify({ success: true, message: "Email changed successfully. Please sign in with your new email." }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 

@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { enforceRateLimit, logSecurityEvent } from "../_shared/rate-limit-middleware.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -6,10 +7,18 @@ const corsHeaders = {
 };
 
 Deno.serve(async (req) => {
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // Rate limit: 10 requests per 15 min per IP
+  const { response: blocked, clientIp, serviceClient } = await enforceRateLimit(req, {
+    functionName: 'verify-email-otp',
+    maxRequests: 10,
+    windowMinutes: 15,
+    keyType: 'ip',
+  }, corsHeaders);
+  if (blocked) return blocked;
 
   try {
     const { email, otp_code } = await req.json();
@@ -21,7 +30,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Validate OTP format (6 digits)
     if (!/^\d{6}$/.test(otp_code)) {
       return new Response(
         JSON.stringify({ error: "Invalid OTP format" }),
@@ -29,12 +37,10 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Initialize Supabase client
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Find the most recent valid OTP for this email
     const { data: verification, error: fetchError } = await supabase
       .from("email_verifications")
       .select("*")
@@ -60,7 +66,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Check max attempts (5 attempts allowed)
     if (verification.attempts >= 5) {
       return new Response(
         JSON.stringify({ error: "Too many failed attempts. Please request a new code." }),
@@ -68,13 +73,20 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Verify the OTP code
     if (verification.otp_code !== otp_code) {
-      // Increment attempts counter
       await supabase
         .from("email_verifications")
         .update({ attempts: verification.attempts + 1 })
         .eq("id", verification.id);
+
+      // Log auth failure for credential stuffing detection
+      await logSecurityEvent(serviceClient, {
+        event_type: 'auth_failure',
+        function_name: 'verify-email-otp',
+        client_ip: clientIp,
+        severity: 'low',
+        details: { email_prefix: email.substring(0, 3) + '***', attempt: verification.attempts + 1 },
+      });
 
       const remainingAttempts = 4 - verification.attempts;
       return new Response(
@@ -87,7 +99,6 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Mark as verified
     const { error: updateError } = await supabase
       .from("email_verifications")
       .update({ verified_at: new Date().toISOString() })
@@ -104,11 +115,7 @@ Deno.serve(async (req) => {
     console.log(`Email verified: ${email}`);
 
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        verified: true,
-        message: "Email verified successfully" 
-      }),
+      JSON.stringify({ success: true, verified: true, message: "Email verified successfully" }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 
