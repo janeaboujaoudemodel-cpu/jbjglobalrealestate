@@ -373,7 +373,7 @@ Provide your qualification assessment as a JSON object.`;
       functionName: "ai-lead-qualification",
       userId: user.id,
       clientIp,
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-3-flash-preview",
       success: true,
       responseTimeMs: processingTimeMs,
     });
