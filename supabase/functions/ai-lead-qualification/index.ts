@@ -31,6 +31,7 @@ import {
   trackAIUsage,
   errorResponse,
 } from "../_shared/ai-utils.ts";
+import { enforceWAF } from "../_shared/waf-middleware.ts";
 
 interface LeadInfo {
   name?: string;

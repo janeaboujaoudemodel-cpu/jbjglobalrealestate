@@ -300,28 +300,42 @@ async function countRecentViolations(
   return data?.length || 0;
 }
 
+/**
+ * Progressive penalty escalation:
+ * 1st block: 12h, 2nd: 48h, 3rd: 7 days, 4th+: 30 days
+ */
+function getEscalatedBlockHours(blockCount: number): number {
+  if (blockCount <= 1) return 12;
+  if (blockCount === 2) return 48;
+  if (blockCount === 3) return 168; // 7 days
+  return 720; // 30 days
+}
+
 async function autoBlockIP(
   supabaseAdmin: SupabaseClient,
   clientIp: string,
   functionName: string,
   violationCount: number,
-  durationHours: number
+  _durationHours: number // kept for API compat; overridden by escalation
 ): Promise<void> {
   try {
-    const expiresAt = new Date(Date.now() + durationHours * 60 * 60 * 1000);
     const { data: existing } = await supabaseAdmin
       .from("ip_blocklist")
       .select("id, block_count")
       .eq("ip_address", clientIp)
       .maybeSingle();
 
+    const newBlockCount = (existing?.block_count || 0) + 1;
+    const escalatedHours = getEscalatedBlockHours(newBlockCount);
+    const expiresAt = new Date(Date.now() + escalatedHours * 60 * 60 * 1000);
+
     if (existing) {
       await supabaseAdmin
         .from("ip_blocklist")
         .update({
           expires_at: expiresAt.toISOString(),
-          block_count: (existing.block_count || 1) + 1,
-          reason: `Auto-blocked: ${violationCount} rate limit violations on ${functionName}`,
+          block_count: newBlockCount,
+          reason: `Auto-blocked: ${violationCount} violations on ${functionName} (escalation #${newBlockCount})`,
           last_attempt_at: new Date().toISOString(),
         })
         .eq("id", existing.id);
@@ -335,7 +349,7 @@ async function autoBlockIP(
       });
     }
 
-    console.warn(`Auto-blocked IP: ${clientIp.substring(0, 8)}*** for ${durationHours} hours`);
+    console.warn(`Auto-blocked IP: ${clientIp.substring(0, 8)}*** for ${escalatedHours} hours (escalation #${newBlockCount})`);
   } catch (err) {
     console.error("Auto-block error:", err);
   }
