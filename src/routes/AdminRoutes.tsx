@@ -68,6 +68,7 @@ const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
 const LegalComplianceCenter = lazy(() => import("@/pages/admin/LegalComplianceCenter"));
+const AIToolsControlPanel = lazy(() => import("@/pages/owner/AIToolsControlPanel"));
 
 export const AdminRoutes = () => (
   <>
@@ -148,6 +149,7 @@ export const AdminRoutes = () => (
 
     {/* ── Exclusive Documents ── */}
     <Route path="/owner/exclusive-documents" element={<OwnerGuard><ExclusiveDocuments /></OwnerGuard>} />
+    <Route path="/owner/ai-tools-control" element={<OwnerGuard><AIToolsControlPanel /></OwnerGuard>} />
 
     {/* ── E-Signature ── */}
     <Route path="/e-signature" element={<OwnerGuard><ESignatureDashboard /></OwnerGuard>} />
