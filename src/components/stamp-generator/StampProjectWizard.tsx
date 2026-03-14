@@ -279,8 +279,16 @@ export default function StampProjectWizard() {
   }, [form]);
 
   async function handleCreate() {
-    if (!form.company_name.trim()) { toast.error('Company name is required'); return; }
-    if (!user?.id) { toast.error('Please sign in first'); return; }
+    if (!form.company_name.trim()) { 
+      toast.error('Please enter a company name first');
+      setActiveTab('company');
+      setTimeout(() => document.querySelector<HTMLInputElement>('[placeholder*="Acme"]')?.focus(), 100);
+      return; 
+    }
+    if (!user?.id) { 
+      toast.info('Please sign in to generate AI concepts. Your design will be saved.');
+      return; 
+    }
     setSaving(true);
     try {
       const { data, error } = await supabase
