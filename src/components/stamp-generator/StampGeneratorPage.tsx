@@ -742,7 +742,7 @@ export default function StampGeneratorPage() {
             {/* Stamp preview with pulse feedback */}
             <div className={`relative transition-all duration-200 ${previewPulse ? 'ring-2 ring-[hsl(var(--gold)/0.4)] rounded-full' : ''}`}
               style={{ filter: `drop-shadow(0 8px 24px hsl(0 0% 0% / 0.12))` }}>
-              {generating ? (
+              {generating && !activeStandard ? (
                 <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]" style={{ width: stampSize, height: stampSize, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Loader2 size={28} className="animate-spin text-[hsl(var(--gold))]" />
                   <p className="text-[10px] font-medium">Generating…</p>
