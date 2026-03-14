@@ -1,107 +1,124 @@
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+## Session 6 — Premium UI/UX Layout for Stamp Generator
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+### Current State Analysis
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+The stamp generator already has a 3-column layout (Left: 240px controls, Center: flex-1 preview, Right: 340-400px concepts). However, it needs significant upgrades to feel like a professional branding design tool:
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+**What exists:**
+- 3-panel structure with left controls, center preview, right concepts grid
+- Left panel has 6 tabs (Colors, Fonts, Text, Art, Logo, My Stamp)
+- Center has live preview with StampInteractivePreview (click-to-edit)
+- Right has favorites, concepts grid, recently deleted, version selector modal
+- Header with undo/redo, regenerate, variations, export buttons
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+**What's missing for premium experience:**
+- Left panel tabs are flat and cramped — no collapsible sections
+- Center preview has no zoom controls, no grid toggle, no alignment guides
+- Right panel mixes concepts/favorites/deleted in a single scroll — no organized tabs for Variations/History/Favorites
+- No smooth highlight animation when elements change
+- No proper version save/restore UI in the right panel (version selector is a modal)
+- No project save system with name/version/timestamp
+- Performance: no virtualization or lazy rendering for large concept grids
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+### Implementation Plan
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+#### 1. Restructure Left Panel — Collapsible Sections (not tabs)
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+Replace the current 6-tab system with a scrollable panel of **collapsible accordion sections**:
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+1. **Company Name Arcs** — Arabic/English text editing (currently "Text" tab)
+2. **Location Arcs** — Location text controls (part of "Text" tab)  
+3. **Separators** — Separator style controls (currently inside StampInteractivePreview toolbar)
+4. **Center Content** — Monogram/Logo/None selection (currently "Art" + "Logo" tabs merged)
+5. **Circle Structure** — Ring thickness, spacing controls (new)
+6. **Font Controls** — Bold/Italic/Size/Family (currently "Fonts" tab)
+7. **Colors** — Color wheel, palettes, ink mode (currently "Color" tab)
+8. **My Stamp & Signature** — Upload stamp, AI refine, signature overlay (currently "My Stamp" tab)
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+Each section uses Radix `Collapsible` with smooth accordion animation. Multiple sections can be open simultaneously. Sections remember open/closed state in localStorage.
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+Width increased from 240px to 280px for better readability.
 
-### Files Changed
+#### 2. Premium Canvas Preview with Zoom & Grid
+
+Upgrade center panel:
+
+- **Zoom controls**: Slider + buttons (50%–200%) with zoom level display, stored in state
+- **Grid toggle**: Optional alignment grid overlay (subtle crosshair/circles)
+- **Canvas background**: Checkerboard pattern option for transparency preview, or solid white (toggle)
+- **Shadow**: Soft drop shadow behind the stamp on the canvas
+- **Safe margin indicators**: Subtle dotted circle showing the stamp boundary zone
+- **Stamp size**: Scale the `StampInteractivePreview` size based on zoom level
+
+A small floating toolbar at the bottom of the canvas area with: `[Zoom -] [100%] [Zoom +] | [Grid] | [Background]`
+
+#### 3. Restructure Right Panel — Organized Tabs
+
+Replace the single scrollable area with a tabbed panel:
+
+- **Concepts** tab — Current concepts grid with pagination
+- **Favorites** tab — Favorited designs
+- **AI Variations** tab — Generated variations (currently an overlay panel)
+- **History** tab — Version history and recently deleted (inline, not modal)
+
+Each tab shows its count badge. The AI Variations panel becomes embedded in this tab rather than a full overlay. The Version Selector modal content moves into the History tab as an inline list.
+
+Right panel header includes: `[Regenerate] [AI Variations]` action buttons.
+
+#### 4. Premium Interaction Feedback
+
+- When a color/font/text change is made, the center preview flashes a brief `ring-2 ring-gold/40` pulse animation (200ms)
+- Changed SVG elements get a brief golden glow via a CSS transition class
+- Color changes animate with `transition-colors duration-200` on the stamp renderer
+- Add a subtle "updating..." micro-indicator in the preview header during re-renders
+
+#### 5. Design Version Control (Right Panel — History Tab)
+
+In the History tab:
+- **Save Version** button — saves current SVG + settings snapshot to `stamp_designs` with a version label
+- **Version list** — shows saved versions with thumbnail, timestamp, label
+- **Restore** — loads a version back as the active concept
+- **Duplicate** — creates a copy in the concepts list  
+- **Rename** — inline edit of version label
+- **Recently Deleted** section at the bottom of History tab
+
+#### 6. Project Save System
+
+Add to the header area:
+- Project name (editable inline)
+- Auto-save indicator ("Saved 2m ago" / "Saving...")
+- Manual "Save" button that persists current state to `stamp_projects` table
+- Version number display (auto-incremented on save)
+- Last modified timestamp
+
+Auto-save: Debounced 3s auto-save of project state (colors, fonts, selected design, overrides) to the database.
+
+#### 7. Performance Optimizations
+
+- Wrap `StampSVGRenderer` in `React.memo` with deep equality check on svgSource + color props
+- Use `useMemo` for paginated concepts computation
+- Lazy-render concept cards outside viewport using `IntersectionObserver`
+- Debounce color wheel changes at 50ms to prevent re-render storms
+- `useCallback` for all handler functions passed to child components
+
+### Files to Create/Modify
+
 | File | Action |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| `src/components/stamp-generator/StampGeneratorPage.tsx` | Major restructure — collapsible left panel, tabbed right panel, zoom controls, project save, performance |
+| `src/components/stamp-generator/StampCanvasControls.tsx` | NEW — Zoom slider, grid toggle, background toggle floating toolbar |
+| `src/components/stamp-generator/StampRightPanel.tsx` | NEW — Tabbed right panel (Concepts/Favorites/Variations/History) |
+| `src/components/stamp-generator/StampLeftPanel.tsx` | NEW — Collapsible accordion sections for all tool controls |
+| `src/components/stamp-generator/StampProjectHeader.tsx` | NEW — Project name, save status, version display |
 
-## Multi-Portal System + Developer Portal — Audit & Fixes (March 2026)
+### What Will NOT Change
 
-### ✅ ALL TASKS COMPLETED
+- SVG generation logic (`stampTemplates.ts`, `stampOfficialTemplate.ts`) — untouched
+- `StampInteractivePreview` click-to-edit behavior — preserved
+- `StampSVGRenderer` core rendering — preserved (only wrapped in memo)
+- `StampPreviewModal` — preserved
+- Edge functions — no changes
+- Database schema — no changes (uses existing `stamp_projects` and `stamp_designs` tables)
 
-| # | Task | Status |
-|---|------|--------|
-| 1 | Fix "Register as Rep" label → "Register as Developer or Sales" | ✅ DONE |
-| 2 | Rename Developer Portal tab → "Update Profile" | ✅ DONE |
-| 3 | Investor Portal rebuild (7 tabs, premium styling) | ✅ DONE |
-| 4 | Broker Portal enhancement (tabbed structure) | ✅ DONE |
-| 5 | ApprovalTimeline shared component | ✅ DONE |
-| 6 | Event Management Hub | ✅ DONE |
-| 7 | useEventManagement hook | ✅ DONE |
-| 8 | events + event_invitations tables | ✅ DONE |
-| 9 | Role options include "Other" with custom field | ✅ DONE |
-| 10 | Owner/CEO/Founder requires ID + passport + trade license + RERA | ✅ DONE |
-| 11 | Registration gate blocks portal access until registered | ✅ DONE |
-| 12 | Owner auto-approve toggle for developers | ✅ DONE |
-| 13 | Owner restrict access for developers | ✅ DONE |
-| 14 | Nationality with flags dropdown | ✅ DONE |
-| 15 | Phone with country code + flag | ✅ DONE |
-| 16 | Language multi-select | ✅ DONE |
-| A | Homepage CTA cards: 4x2 grid (8 cards, 2 rows of 4) | ✅ DONE |
-| B | Remove "Interest Registration" terminology → "Launch Interests" | ✅ DONE |
-| C | Owner in developer mode sees developer view only | ✅ DONE (was already correct) |
-| D | On-Leave self-service feature for developers | ✅ DONE (toggle + date pickers in profile) |
-| E | Secondary contact fields (Company/Personal Email+Phone) | ✅ DONE |
-| F | Icon styling: champagne-gold gradient | ✅ DONE (already correct) |
-
-### Files Changed (This Batch)
-| File | Changes |
-|------|---------|
-| `src/components/home/DeveloperPortalCTA.tsx` | 8 cards in 4x2 grid, renamed labels, added "Update Your Profile" card |
-| `src/pages/DeveloperPortal.tsx` | Renamed all "Interest Registration" → "Launch Interests" (8 occurrences) |
-| `src/components/developer-portal/SalesRepRegistration.tsx` | Renamed title to "Register as Developer or Sales" |
