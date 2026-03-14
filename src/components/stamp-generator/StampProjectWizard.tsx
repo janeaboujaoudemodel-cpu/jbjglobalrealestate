@@ -187,7 +187,7 @@ export default function StampProjectWizard() {
     show_license_number: false, show_location: true, business_type: '',
     separator_style: 'dot' as SeparatorStyle, ink_color: OFFICIAL_INK_BLUE,
     government_mode: false, arabic_font: 'Noto Naskh Arabic',
-    arabic_letter_spacing: 2, arabic_arc_spread: 50, arabic_font_weight: 'bold',
+    arabic_letter_spacing: 2, arabic_arc_spread: 80, arabic_font_weight: 'bold',
     arc_text_spacing: 2, circle_gap: 13, separator_distance: 50, center_content_size: 50,
     selected_preset: '',
   };
@@ -387,7 +387,13 @@ export default function StampProjectWizard() {
     img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
   }, [form.company_name]);
 
+  const [selectedElement, setSelectedElement] = useState<string | null>(null);
+
   const handleElementClick = useCallback((elementId: string) => {
+    // Highlight the clicked element
+    setSelectedElement(elementId);
+
+    // Navigate to corresponding tab
     if (elementId.includes('top-arc')) {
       setActiveTab('company');
       setTimeout(() => document.querySelector<HTMLInputElement>('[dir="rtl"]')?.focus(), 100);
@@ -399,6 +405,9 @@ export default function StampProjectWizard() {
     } else if (elementId.includes('separator')) {
       setActiveTab('style');
     }
+
+    // Clear highlight after 2s
+    setTimeout(() => setSelectedElement(null), 2000);
   }, []);
 
   const previewProps = {
@@ -1012,7 +1021,7 @@ export default function StampProjectWizard() {
               id="stamp-preview-container"
               className="bg-white rounded-2xl border-2 border-[hsl(var(--gold)/0.15)] shadow-[0_8px_40px_hsl(var(--gold)/0.06)] p-8"
             >
-              <LiveStampPreview {...previewProps} size={380} />
+              <LiveStampPreview {...previewProps} size={380} selectedElement={selectedElement} />
             </div>
             <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center max-w-[300px]">
               {form.company_name ? (
