@@ -88,7 +88,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Property Measurement", href: "/property-measurement", icon: Ruler },
 
   // ── Creative & Tools ──
-  { label: "Royal Tools Hub", href: "/toolkit", icon: Sparkles, section: "TOOLS" },
+  { label: "Royal Tools Hub", href: "/ai-hub", icon: Sparkles, section: "TOOLS" },
   { label: "Corporate Suite", href: "/toolkit/corporate-suite", icon: Building },
   { label: "Real Estate Suite", href: "/toolkit/property-suite", icon: Home },
   { label: "Video Suite", href: "/toolkit/video-suite", icon: Video },

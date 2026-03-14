@@ -24,7 +24,7 @@ const QUICK_SHORTCUTS = [
   { label: "Areas", route: "/areas", icon: Map, color: "bg-purple-500" },
   { label: "Market Report", route: "/market-report", icon: FileText, color: "bg-amber-500" },
   { label: "Mortgage", route: "/mortgage-calculator", icon: Calculator, color: "bg-pink-500" },
-  { label: "AI Tools", route: "/toolkit", icon: Sparkles, color: "bg-indigo-500" },
+  { label: "AI Tools", route: "/ai-hub", icon: Sparkles, color: "bg-indigo-500" },
 ];
 
 // Popular pages - 9 items (3 columns × 3 rows)

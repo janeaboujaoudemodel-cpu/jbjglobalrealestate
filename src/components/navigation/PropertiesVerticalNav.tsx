@@ -19,7 +19,7 @@ const NAV_ITEMS = [
   { label: "Developers", href: "/developers", icon: Building, megaMenu: 'developers' as MegaMenuKey },
   { label: "Projects", href: "/projects", icon: Layers, megaMenu: 'projects' as MegaMenuKey },
   { label: "Areas", href: "/areas", icon: MapPin, megaMenu: 'areas' as MegaMenuKey },
-  { label: "AI Tools", href: "/toolkit", icon: Cpu },
+  { label: "AI Tools", href: "/ai-hub", icon: Cpu },
   { label: "Market Intelligence", href: "/market-intelligence", icon: BarChart3 },
   { label: "Insights", href: "/insights", icon: Lightbulb, megaMenu: 'insights' as MegaMenuKey },
   { label: "Guides", href: "/guides", icon: BookOpen },
