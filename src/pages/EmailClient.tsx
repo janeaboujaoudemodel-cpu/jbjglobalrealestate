@@ -309,6 +309,7 @@ const EmailClient = () => {
       setNewEmail({ to: "", subject: "", body: "" });
       setComposeOpen(false);
       setAlsoNotifyChat(false);
+      setAttachments([]);
 
       const method = data?.sendMethod === "resend" ? "via Resend API" : "normally";
       toast.success(`Email sent ${method}`);
