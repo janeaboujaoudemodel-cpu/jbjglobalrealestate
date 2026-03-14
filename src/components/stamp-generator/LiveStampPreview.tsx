@@ -160,7 +160,8 @@ export function LiveStampPreview({
 
     // Convert slider values to config params
     // arabicArcSpread slider: 20-100 → map to 0.40-0.95 spread (default 80 → 0.88)
-    const arcSpreadVal = arabicArcSpread != null ? 0.40 + (arabicArcSpread - 20) / 80 * 0.55 : undefined;
+    // Map slider 20-100 → 0.30-1.00 so default 88 → ~0.88 (matching English ARC_SPREAD_LIMIT)
+    const arcSpreadVal = arabicArcSpread != null ? 0.30 + (arabicArcSpread - 20) / 80 * 0.70 : undefined;
     const circleGapVal = circleGap != null ? circleGap : undefined;
     const centerScaleVal = centerContentSize != null ? centerContentSize / 50 : undefined;
 
