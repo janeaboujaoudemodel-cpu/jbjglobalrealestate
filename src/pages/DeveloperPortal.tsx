@@ -29,6 +29,8 @@ import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistra
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
 import DeveloperMessageForm from "@/components/developer-portal/DeveloperMessageForm";
 import ExistingProjectsReview from "@/components/developer-portal/ExistingProjectsReview";
+import { ProjectDuplicateInspector } from "@/components/listing-admin/ProjectDuplicateInspector";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 
 interface UploadedFile {
   name: string;
@@ -207,6 +209,10 @@ const DeveloperPortal = () => {
   const [mainDragOver, setMainDragOver] = useState(false);
   const [submittingProject, setSubmittingProject] = useState(false);
   const [sessionProjects, setSessionProjects] = useState<string[]>([]);
+  const [duplicateBlocking, setDuplicateBlocking] = useState(false);
+  const [sessionStartTime] = useState(() => new Date().toISOString());
+  const [endSessionOpen, setEndSessionOpen] = useState(false);
+  const [endingSession, setEndingSession] = useState(false);
 
   // Event form
   const [eventForm, setEventForm] = useState({
@@ -1006,9 +1012,33 @@ const DeveloperPortal = () => {
                   </p>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  {/* Approval banner */}
+                  <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 flex items-center gap-2 text-sm text-blue-800">
+                    <Info className="w-4 h-4 flex-shrink-0" />
+                    All submissions require admin approval before going live.
+                  </div>
+
                   <div className="space-y-2">
                     <Label>Project Name *</Label>
-                    <Input value={currentProject.project_name} onChange={(e) => setCurrentProject(p => ({ ...p, project_name: e.target.value }))} placeholder="The Residences at Marina" />
+                    <Input value={currentProject.project_name} onChange={(e) => { setCurrentProject(p => ({ ...p, project_name: e.target.value })); setDuplicateBlocking(false); }} placeholder="The Residences at Marina" />
+                    {currentProject.project_name.trim().length >= 3 && (
+                      <ProjectDuplicateInspector
+                        projectName={currentProject.project_name}
+                        blocking={true}
+                        onAction={(action, matchId) => {
+                          if (action === "stop") {
+                            setCurrentProject(emptyProject());
+                            setDuplicateBlocking(false);
+                          } else if (action === "merge" && matchId) {
+                            setActiveTab("projects");
+                            toast.info("Redirected to existing projects for review.");
+                          } else if (action === "create_new") {
+                            setDuplicateBlocking(false);
+                          }
+                        }}
+                        className="mt-2"
+                      />
+                    )}
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -1069,7 +1099,7 @@ const DeveloperPortal = () => {
                   </div>
 
                   <div className="flex gap-3">
-                    <Button onClick={handleSubmitProject} disabled={submittingProject}
+                    <Button onClick={handleSubmitProject} disabled={submittingProject || duplicateBlocking}
                       className="flex-1 bg-gradient-to-r from-[hsl(40,50%,92%)] via-[hsl(38,40%,87%)] to-[hsl(36,35%,82%)] border border-gold/40 text-foreground font-bold h-12">
                       {submittingProject ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Submitting...</> : <><Send className="w-4 h-4 mr-2" /> Submit Project</>}
                     </Button>
@@ -1077,10 +1107,10 @@ const DeveloperPortal = () => {
 
                   {sessionProjects.length > 0 && (
                     <div className="flex gap-3 pt-2">
-                      <Button variant="outline" onClick={() => { setCurrentProject(emptyProject()); }} className="flex-1 border-gold/30">
+                      <Button variant="outline" onClick={() => { setCurrentProject(emptyProject()); setDuplicateBlocking(false); }} className="flex-1 border-gold/30">
                         <Plus className="w-4 h-4 mr-2" /> Add Another Project
                       </Button>
-                      <Button variant="outline" onClick={() => { setSessionProjects([]); setActiveTab("projects"); }} className="flex-1 border-gold/30">
+                      <Button variant="outline" onClick={() => setEndSessionOpen(true)} className="flex-1 border-gold/30">
                         <CheckCircle className="w-4 h-4 mr-2" /> End Session
                       </Button>
                     </div>
@@ -1780,6 +1810,71 @@ const DeveloperPortal = () => {
           </div>
         )}
       </div>
+
+      {/* End Session Summary Dialog */}
+      <AlertDialog open={endSessionOpen} onOpenChange={setEndSessionOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <ClipboardList className="w-5 h-5 text-gold" /> Session Summary
+            </AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-3 text-sm">
+                <div className="grid grid-cols-2 gap-2 p-3 rounded-lg bg-muted/50 border border-border">
+                  <div><span className="text-muted-foreground">Projects Submitted:</span> <strong className="text-foreground">{sessionProjects.length}</strong></div>
+                  <div><span className="text-muted-foreground">Session Started:</span> <strong className="text-foreground">{format(new Date(sessionStartTime), "h:mm a")}</strong></div>
+                </div>
+                {sessionProjects.length > 0 && (
+                  <div className="space-y-1">
+                    <p className="font-medium text-foreground">Uploaded Projects:</p>
+                    <ul className="list-disc list-inside text-muted-foreground">
+                      {sessionProjects.map((name, i) => <li key={i}>{name}</li>)}
+                    </ul>
+                  </div>
+                )}
+                <p className="text-muted-foreground">A confirmation will be sent to <strong className="text-foreground">{devEmail}</strong>.</p>
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Continue Working</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={endingSession}
+              onClick={async (e) => {
+                e.preventDefault();
+                setEndingSession(true);
+                try {
+                  if (user) {
+                    await (supabase as any).from("developer_session_logs").insert({
+                      user_id: user.id,
+                      developer_name: devName,
+                      developer_email: devEmail,
+                      session_start: sessionStartTime,
+                      session_end: new Date().toISOString(),
+                      projects_submitted: sessionProjects,
+                      files_uploaded_count: sessionProjects.length,
+                      summary: { projects: sessionProjects, ended_by: "user" },
+                    });
+                  }
+                  toast.success("Session ended. Confirmation will be sent.");
+                  setSessionProjects([]);
+                  setCurrentProject(emptyProject());
+                  setDuplicateBlocking(false);
+                  setEndSessionOpen(false);
+                  setActiveTab("projects");
+                } catch {
+                  toast.error("Failed to log session.");
+                } finally {
+                  setEndingSession(false);
+                }
+              }}
+              className="bg-gold text-black hover:bg-gold/90"
+            >
+              {endingSession ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Ending...</> : "Confirm End Session"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Register Interest Modal */}
       <Dialog open={interestModalOpen} onOpenChange={setInterestModalOpen}>

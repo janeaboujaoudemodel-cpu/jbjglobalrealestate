@@ -13,7 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import {
   Building2, MapPin, Calendar, Edit, Check, X, Eye, FileText,
   Image as ImageIcon, Send, Clock, ChevronRight, Link as LinkIcon,
-  RefreshCw
+  RefreshCw, Lock, ShieldCheck
 } from "lucide-react";
 
 interface ProjectForReview {
@@ -276,6 +276,20 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
                       <p className="text-xs text-muted-foreground line-clamp-2">{project.description}</p>
                     )}
 
+                    {/* Read-only restricted fields */}
+                    <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground pt-1 border-t border-border">
+                      <Lock className="h-2.5 w-2.5" />
+                      <span>AI analysis & scoring managed by JBJ</span>
+                    </div>
+
+                    {/* Pending CR indicator */}
+                    {changeRequests.some(cr => cr.project_id === project.id && cr.status === "pending") && (
+                      <div className="flex items-center gap-1.5 text-[10px] text-amber-700 bg-amber-50 rounded px-2 py-1">
+                        <Clock className="h-2.5 w-2.5" />
+                        Change request pending review
+                      </div>
+                    )}
+
                     {/* Actions */}
                     <div className="flex items-center gap-2 pt-2 border-t border-border">
                       <Button size="sm" variant="outline" className="flex-1 gap-1 text-xs" onClick={() => startEdit(project)}>
@@ -366,6 +380,12 @@ export function DeveloperProjectReview({ developerId }: { developerId: string })
                   {isExtracting ? <RefreshCw className="h-4 w-4 animate-spin" /> : <LinkIcon className="h-4 w-4" />}
                   <span className="ml-1">Extract</span>
                 </Button>
+              </div>
+
+              {/* Read-only AI fields notice */}
+              <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50 border border-border text-xs text-muted-foreground">
+                <ShieldCheck className="h-4 w-4 flex-shrink-0 text-gold" />
+                <span>AI analysis results, project scoring, and document descriptions are managed by JBJ and cannot be edited here.</span>
               </div>
 
               {/* Editable fields */}
