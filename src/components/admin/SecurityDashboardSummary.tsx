@@ -83,7 +83,7 @@ export const SecurityDashboardSummary = () => {
   const [securityEvents, setSecurityEvents] = useState<SecurityEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLive, setIsLive] = useState(true);
-
+  const stepUp = useStepUpAuth();
   const fetchData = async () => {
     try {
       const [blockedData, rateLimitData] = await Promise.all([
