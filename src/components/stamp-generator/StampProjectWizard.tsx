@@ -192,6 +192,7 @@ export default function StampProjectWizard() {
     arabic_letter_spacing: 2, arabic_arc_spread: 88, arabic_font_weight: 'bold',
     arc_text_spacing: 2, circle_gap: 13, separator_distance: 50, center_content_size: 50,
     selected_preset: '',
+    monogram_colors: DEFAULT_MONOGRAM_COLORS,
   };
 
   const [form, setForm] = useState<FormState>(() => {
