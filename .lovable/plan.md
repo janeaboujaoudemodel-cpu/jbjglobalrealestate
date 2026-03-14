@@ -1,72 +1,95 @@
 
-## CRM System Upgrade — Implementation Status
 
-### ✅ COMPLETED — Tasks 1-13 (Phase 1 Batch)
+## Plan: AI Tools Control Panel — Apply / Revert / Test / Publish Workflow
 
-#### Task 1: Full System Audit ✅
-- Reviewed 23 CRM tables, 28+ security functions, 15+ indexes
-- Identified 10 weaknesses (documented in plan)
+### Current State
 
-#### Task 2: Leads Security Hardening ✅
-- CSV export no longer includes email/phone PII
-- Audit logging added to exports with user_agent tracking
-- `check_lead_access_rate()` function created — alerts on >50 lead views in 5 min
+- **AIHub.tsx** has ~60 tools defined as static arrays (`investorTools`, `productivityTools`, etc.) with `id`, `title`, `description`, `icon`, `link`, `category`.
+- **OwnerRecommendations.tsx** has a recommendation system with Apply/Revert per recommendation (stored in `ai_recommendations` table), but it's **not linked to specific tools** and has no Test/Publish workflow.
+- **OwnerFeatureRegistry.tsx** lists features with paths but has no version control.
+- No `ai_tool_versions` or `ai_tool_test_logs` tables exist.
 
-#### Task 3: Encryption Hardening ✅
-- CSV export stripped of `email_lower` and `phone_e164` fields
-- Export audit logged to both `crm_audit_logs` and `audit_logs`
+### Architecture
 
-#### Task 4: Lead Lifecycle Upgrade ✅
-- Added statuses: `assigned`, `archived`, `deleted`, `permanently_erased`
-- `crm_auto_purge_old_deleted()` function — purges leads deleted >90 days
-- Permanent erase button in RecentlyDeletedLeads (owner-only with confirmation dialog)
+Create a new Owner-only page `/owner/ai-tools-control` that:
+1. Lists every tool with its direct URL, status, category, and "Open Tool" link
+2. Shows per-tool recommendations/fixes with inline Apply → Test → Publish workflow
+3. Maintains full version history per tool
+4. Records test logs
 
-#### Task 5: CRM Structure Upgrade ✅
-- `duplicate_hash` column added with auto-compute trigger (md5 of phone+email)
-- Partial unique index on `duplicate_hash WHERE deleted_at IS NULL`
-- KanbanPipeline expanded to show all 17 relevant stages
+### Database (2 new tables)
 
-#### Task 6: Performance Optimization ✅
-- Deleted dead code: `CRMLeadsTable.tsx` (V1), `CRMImportModal.tsx`, `CRMImportModalV2.tsx`
-- Added composite indexes: `idx_crm_leads_deleted_created`, `idx_crm_leads_owner_deleted`
-- `crm_leads_updated_at_trigger` auto-updates `updated_at`
+**`ai_tool_versions`** — Version history per tool:
+- `id` (uuid), `tool_id` (text, matches tool array id), `version_number` (int), `status` (text: draft/applied/tested/published/reverted/error), `changes_description` (text), `before_snapshot` (jsonb), `after_snapshot` (jsonb), `change_reason` (text), `applied_by` (uuid ref auth.users), `tested_at` (timestamptz), `test_result` (text: pass/fail/null), `test_notes` (text), `published_at` (timestamptz), `reverted_at` (timestamptz), `created_at` (timestamptz)
+- RLS: Owner-only read/write (via `has_role` or email check)
 
-#### Task 7: AI Intelligence Integration ✅
-- New edge function `ai-lead-intelligence` using Lovable AI gateway
-- Supports 3 modes: `score`, `summary`, `next_action`
-- Tool-calling for structured scoring output
-- JWT auth + CRM role validation
-- PII sanitized before sending to AI
+**`ai_tool_test_logs`** — Audit trail for tests:
+- `id` (uuid), `tool_id` (text), `version_id` (uuid ref ai_tool_versions), `tool_url` (text), `tester_id` (uuid ref auth.users), `result` (text: pass/fail), `notes` (text), `created_at` (timestamptz)
+- RLS: Owner-only
 
-#### Task 8: Workflow Automation ✅
-- Created `crm_automation_rules` table with RLS (owner manage, admin view)
-- Seeded 8 default rules (welcome email, follow-up, hot lead alert, VIP escalation, etc.)
+### New Page: `src/pages/owner/AIToolsControlPanel.tsx`
 
-#### Task 10: Role & Permission System ✅
-- RLS on automation rules: owner CRUD, admin read-only
-- CSV export restricted to owner_admin/founder roles
+**Layout:**
+- Header with title "AI Tools Control Panel" and stats row (Live / Draft / Pending Test / Error counts)
+- Search + category filter
+- Tool list as expandable cards
 
-#### Task 12: Backend/Database Upgrade ✅
-- 3 new performance indexes
-- Auto-updated_at trigger on crm_leads
-- Duplicate hash computation trigger
-- Rate-limiting security function
+**Per-Tool Card (Task 1 — Direct URL):**
+- Tool name, category badge, status badge (Live/Draft/Applied–Pending Test/Tested–Pending Publish/Published/Reverted/Error/Needs Review)
+- Direct URL displayed as copyable text (with copy button)
+- "Open Tool" button linking to the tool's `link` path
+- Expand chevron for details
 
-#### Task 13: Data Cleanliness ✅
-- `duplicate_hash` with auto-compute trigger prevents future duplicates
-- Partial unique index enforces uniqueness at DB level
+**Expanded Tool View (Tasks 2, 3, 4, 5, 6, 7, 8):**
 
-### Files Changed
-| File | Action |
+Three tabs inside expansion:
+
+**Tab 1: Fixes & Recommendations**
+- Fetches `ai_recommendations` filtered by tool_id (new column needed, or match by tool name)
+- Each fix shows: Before/After, affected section, reason, and inline action buttons:
+  - **Apply** → creates `ai_tool_versions` entry with status `applied`, tool status becomes "Applied – Pending Test"
+  - **Test** → opens tool in new tab + creates `ai_tool_test_logs` entry, prompts for pass/fail + notes
+  - **Save & Publish** → updates version status to `published`, sets `published_at`
+  - **Revert** → creates new version entry with status `reverted`, tool goes back to previous published version
+
+**Tab 2: Version History (Task 5, 6)**
+- Lists all `ai_tool_versions` for this tool, sorted by version_number desc
+- Each row: version #, date, what changed, who changed, status badge, Restore button, View Details toggle
+- Restore action: creates new version entry copying the old snapshot, marks as "published"
+
+**Tab 3: Test Logs (Task 9)**
+- Lists `ai_tool_test_logs` for this tool
+- Columns: version, time, tester, result (pass/fail badge), notes
+
+**Status State Machine (Task 7):**
+```text
+[New Fix] → Apply → "Applied – Pending Test"
+         → Test  → "Tested – Pending Publish"
+         → Save & Publish → "Published" (Live)
+         → Revert → "Reverted" (falls back to previous published)
+```
+
+**Task 10 — Owner Only:**
+- Route wrapped in `OwnerGuard` in AdminRoutes.tsx
+- RLS on both tables restricts to owner email
+
+### Linking Recommendations to Tools
+
+Add `tool_id` column to existing `ai_recommendations` table (nullable text, migration). When generating recommendations from the control panel, auto-tag them with the tool_id. Existing recommendations without tool_id still show in the global hub.
+
+### Files Summary
+
+| File | Change |
 |------|--------|
-| DB Migration | New indexes, triggers, functions, `crm_automation_rules` table |
-| `supabase/functions/ai-lead-intelligence/index.ts` | **Created** — AI scoring edge function |
-| `supabase/config.toml` | Added `ai-lead-intelligence` function config |
-| `src/components/crm/LeadStatusBadge.tsx` | Added 4 lifecycle statuses |
-| `src/pages/CRM.tsx` | Hardened CSV export, removed PII, added audit logging |
-| `src/components/crm/KanbanPipeline.tsx` | Expanded to 17 stages |
-| `src/components/crm/RecentlyDeletedLeads.tsx` | Added permanent erase with owner-only guard |
-| `src/pages/OwnerDashboardOverview.tsx` | Pass isOwner to RecentlyDeletedLeads |
-| `src/components/crm/CRMLeadsTable.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModal.tsx` | **Deleted** (dead V1 code) |
-| `src/components/crm/CRMImportModalV2.tsx` | **Deleted** (dead V2 code) |
+| **New**: `src/pages/owner/AIToolsControlPanel.tsx` | Full control panel (~600 lines) |
+| `src/routes/AdminRoutes.tsx` | Add `/owner/ai-tools-control` route with OwnerGuard |
+| **Migration** | Create `ai_tool_versions`, `ai_tool_test_logs` tables; add `tool_id` to `ai_recommendations` |
+
+### Implementation Order
+1. Database migration (3 changes)
+2. Create `AIToolsControlPanel.tsx` with tool list, URL display, status badges
+3. Add fix/recommendation panel with Apply/Test/Publish/Revert per fix
+4. Add version history tab per tool
+5. Add test logs tab per tool
+6. Register route in AdminRoutes.tsx
+
