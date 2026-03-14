@@ -26,6 +26,8 @@ import {
   Pin
 } from 'lucide-react';
 import { DocumentAttachmentPicker, AttachmentChip, ChatAttachmentRenderer, type DocumentAttachment } from '@/components/shared/DocumentAttachmentPicker';
+import { CrossChannelToggle } from '@/components/shared/CrossChannelToggle';
+import { useCrossChannelSend } from '@/hooks/useCrossChannelSend';
 import { toast } from 'sonner';
 import { allTeamMembers, TeamMember } from '@/config/team-members';
 import { useEmployeeChat } from '@/hooks/useEmployeeChat';
