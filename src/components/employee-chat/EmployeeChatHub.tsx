@@ -40,6 +40,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
   const [messageInput, setMessageInput] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
   const [showSidebar, setShowSidebar] = useState(true);
+  const [alsoSendByEmail, setAlsoSendByEmail] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const { 
