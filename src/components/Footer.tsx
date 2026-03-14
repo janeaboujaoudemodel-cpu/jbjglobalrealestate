@@ -372,7 +372,7 @@ const Footer = () => {
 
   // Creative Toolkit
   const creativeToolkitLinks = [
-    { href: "/toolkit", label: "AI Tools Hub" },
+    { href: "/ai-hub", label: "AI Tools Hub" },
     { href: "/toolkit/ai-video-studio", label: "AI Video Studio" },
     { href: "/toolkit/video-resize-pack", label: "Video Resize Pack" },
     { href: "/toolkit/voice-studio", label: "Voice Studio" },
@@ -828,7 +828,7 @@ const Footer = () => {
                   { href: "/toolkit/voice-studio-pro", label: "Voice Studio Pro" },
                   { href: "/e-signature", label: "JBJ E-Sign" },
                   { href: "/toolkit/scan-sign", label: "Scan & Sign" },
-                ]} viewAllHref="/toolkit" viewAllLabel="View All Creative Tools →" />
+                ]} viewAllHref="/ai-hub" viewAllLabel="View All Creative Tools →" />
               </div>
             </div>
 

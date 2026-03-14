@@ -27,7 +27,7 @@ export function ToolSuiteHeader({
   titleHighlight,
   subtitle,
   icon: Icon,
-  backHref = "/toolkit",
+  backHref = "/ai-hub",
   backText = "Back to Royal Tools Hub",
 }: ToolSuiteHeaderProps) {
   // Split title if titleHighlight is provided

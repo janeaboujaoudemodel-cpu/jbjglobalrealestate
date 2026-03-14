@@ -122,7 +122,7 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
             <h3 className="text-lg font-semibold text-white">JBJ Royal Tools Hub</h3>
           </div>
           <a 
-            href="/toolkit" 
+            href="/ai-hub" 
             onClick={onClose}
             className="text-sm text-gold hover:underline"
           >
@@ -184,7 +184,7 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
               </p>
             </div>
             <a 
-              href="/toolkit"
+              href="/ai-hub"
               onClick={onClose}
               className="px-4 py-2 bg-gold text-black text-sm font-semibold rounded-lg hover:bg-gold/90 transition-colors"
             >

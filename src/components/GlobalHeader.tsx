@@ -476,7 +476,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
   // Mobile menu - Creative Toolkit (complete list)
   const mobileToolkitLinks = [
-    { href: "/toolkit", label: "AI Tools Hub", icon: Sparkles },
+    { href: "/ai-hub", label: "AI Tools Hub", icon: Sparkles },
     // Creative Suite
     { href: "/toolkit/stamp-generator", label: "Stamp Generator", icon: Stamp },
     { href: "/toolkit/ai-video-studio", label: "AI Video Studio", icon: Building2 },
