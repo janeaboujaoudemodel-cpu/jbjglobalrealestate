@@ -9,8 +9,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAgreementSaver } from '@/hooks/useAgreementSaver';
 import { toast } from 'sonner';
-import { UserCheck, Loader2, Building2, Briefcase, Upload, FileText, X, ShieldAlert, Lock, Crown, Users, CheckCircle2, Handshake } from 'lucide-react';
+import { UserCheck, Loader2, Building2, Briefcase, Upload, FileText, X, ShieldAlert, Lock, Crown, Users, CheckCircle2, Handshake, HelpCircle } from 'lucide-react';
 import { LanguageMultiSelect } from '@/components/ui/language-multi-select';
+import { PhoneInputWithCountry } from '@/components/ui/phone-input-with-country';
+import { NationalitySelect } from '@/components/developer-portal/NationalitySelect';
 
 // LOCKED: Full company name — never abbreviate
 const COMPANY_FULL_NAME = 'JBJ GLOBAL REAL ESTATE';
@@ -29,11 +31,14 @@ const USAGE_RIGHTS_TEXT = `By registering on the ${COMPANY_FULL_NAME} Developer 
 This portal is provided exclusively for authorized representatives of real estate developers. Your account and all uploaded content remain subject to review and approval by ${COMPANY_FULL_NAME}. We reserve the right to revoke access at any time if the terms are violated.`;
 
 const ROLE_OPTIONS = [
-  { value: 'owner_ceo', label: 'Owner / CEO', icon: Crown, description: 'Company owner or chief executive' },
+  { value: 'owner_ceo', label: 'Owner / CEO / Founder', icon: Crown, description: 'Company owner, CEO, or founder' },
   { value: 'admin', label: 'Admin / Manager', icon: Building2, description: 'Administrative or management role' },
   { value: 'sales_representative', label: 'Sales Representative', icon: Briefcase, description: 'Sales manager or agent' },
   { value: 'channel_partner', label: 'Channel Partner', icon: Users, description: 'External partner or broker liaison' },
+  { value: 'other', label: 'Other', icon: HelpCircle, description: 'Please specify your role' },
 ];
+
+const OWNER_ROLES = ['owner_ceo'];
 
 interface SalesRepRegistrationProps {
   developerName: string;
@@ -45,14 +50,20 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
   const { saveAgreement } = useAgreementSaver();
   const [submitting, setSubmitting] = useState(false);
   const [uploadingId, setUploadingId] = useState(false);
+  const [uploadingDoc, setUploadingDoc] = useState<string | null>(null);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const idFileRef = useRef<HTMLInputElement>(null);
+  const passportFileRef = useRef<HTMLInputElement>(null);
+  const tradeLicenseFileRef = useRef<HTMLInputElement>(null);
+  const reraFileRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     full_name: '',
     role: 'sales_representative',
+    custom_role_title: '',
     email: user?.email || '',
     personal_email: '',
     phone: '',
+    personal_phone: '',
     date_of_join: '',
     nationality: '',
     gender: '',
@@ -60,39 +71,79 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
     languages: [] as string[],
     verification_document_url: '',
     verification_document_name: '',
+    passport_document_url: '',
+    passport_document_name: '',
+    trade_license_url: '',
+    trade_license_name: '',
+    rera_document_url: '',
+    rera_document_name: '',
   });
 
   const selectedRole = ROLE_OPTIONS.find(r => r.value === form.role);
+  const isOwnerRole = OWNER_ROLES.includes(form.role);
+  const isOtherRole = form.role === 'other';
 
-  const handleIdUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDocUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    docType: string,
+    urlKey: string,
+    nameKey: string,
+    fileRef: React.RefObject<HTMLInputElement>
+  ) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
-    setUploadingId(true);
+    setUploadingDoc(docType);
     try {
       const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-      const path = `rep-verification/${user.id}/${Date.now()}-${safeName}`;
+      const path = `rep-verification/${user.id}/${docType}/${Date.now()}-${safeName}`;
       const { error } = await supabase.storage.from('documents').upload(path, file);
       if (error) throw error;
       const { data: urlData } = supabase.storage.from('documents').getPublicUrl(path);
-      setForm(f => ({ ...f, verification_document_url: urlData.publicUrl, verification_document_name: file.name }));
-      toast.success('Document uploaded');
+      setForm(f => ({ ...f, [urlKey]: urlData.publicUrl, [nameKey]: file.name }));
+      toast.success(`${docType.replace(/_/g, ' ')} uploaded`);
     } catch (err: any) {
-      toast.error('Failed to upload document');
+      toast.error(`Failed to upload ${docType.replace(/_/g, ' ')}`);
     } finally {
-      setUploadingId(false);
-      if (idFileRef.current) idFileRef.current.value = '';
+      setUploadingDoc(null);
+      if (fileRef.current) fileRef.current.value = '';
     }
+  };
+
+  const handleIdUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    await handleDocUpload(e, 'employee_id', 'verification_document_url', 'verification_document_name', idFileRef);
   };
 
   const handleSubmit = async () => {
     if (!user) return;
     if (!form.full_name || !form.email || !form.phone) {
-      toast.error('Please fill in your name, company email, and phone number');
+      toast.error('Please fill in your name, company email, and company phone number');
       return;
     }
     if (!developerName) {
       toast.error('Developer name is required. Please select your developer before registering.');
       return;
+    }
+    if (isOtherRole && !form.custom_role_title.trim()) {
+      toast.error('Please provide your role title');
+      return;
+    }
+    if (isOwnerRole) {
+      if (!form.verification_document_url) {
+        toast.error('Please upload your ID document');
+        return;
+      }
+      if (!form.passport_document_url) {
+        toast.error('Please upload your passport');
+        return;
+      }
+      if (!form.trade_license_url) {
+        toast.error('Please upload your trade license');
+        return;
+      }
+      if (!form.rera_document_url) {
+        toast.error('Please upload your RERA document');
+        return;
+      }
     }
     if (!agreedToTerms) {
       toast.error('You must agree to the Terms & Conditions to register');
@@ -101,7 +152,6 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
 
     setSubmitting(true);
     try {
-      // Save the agreement first
       await saveAgreement({
         agreementType: 'developer_portal_usage',
         agreementVersion: '1.0',
@@ -111,6 +161,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           company_name: COMPANY_FULL_NAME,
           developer_name: developerName,
           role: form.role,
+          custom_role_title: form.custom_role_title || null,
           accepted_at: new Date().toISOString(),
         },
         consentDetails: {
@@ -120,19 +171,28 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
         },
       });
 
+      const effectivePosition = isOtherRole ? form.custom_role_title : (selectedRole?.label || form.role);
+
       const { error } = await supabase.from('developer_representatives').insert({
         user_id: user.id,
         developer_name: developerName,
         role: form.role,
         full_name: form.full_name,
-        position: selectedRole?.label || form.role,
+        position: effectivePosition,
         email: form.email,
         phone: form.phone || null,
+        personal_email: form.personal_email || null,
+        personal_phone: form.personal_phone || null,
+        company_phone: form.phone || null,
         date_of_join: form.date_of_join || null,
         nationality: form.nationality || null,
         gender: form.gender || null,
         years_in_real_estate: form.years_in_real_estate ? parseInt(form.years_in_real_estate) : null,
         languages: form.languages.length > 0 ? form.languages : null,
+        custom_role_title: form.custom_role_title || null,
+        passport_document_url: form.passport_document_url || null,
+        trade_license_url: form.trade_license_url || null,
+        rera_document_url: form.rera_document_url || null,
       } as any);
       if (error) throw error;
       toast.success('Registration submitted! You will receive a confirmation email once reviewed.');
@@ -142,6 +202,67 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const DocUploadField = ({
+    label,
+    description,
+    urlKey,
+    nameKey,
+    fileRef,
+    docType,
+    required = false,
+  }: {
+    label: string;
+    description: string;
+    urlKey: string;
+    nameKey: string;
+    fileRef: React.RefObject<HTMLInputElement>;
+    docType: string;
+    required?: boolean;
+  }) => {
+    const url = (form as any)[urlKey];
+    const name = (form as any)[nameKey];
+    const isUploading = uploadingDoc === docType;
+    return (
+      <div className="space-y-2">
+        <Label>{label} {required && <span className="text-destructive">*</span>}</Label>
+        <p className="text-xs text-muted-foreground">{description}</p>
+        {url ? (
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-card border border-gold/20">
+            <FileText className="w-4 h-4 text-gold shrink-0" />
+            <span className="text-sm text-foreground truncate flex-1">{name}</span>
+            <button type="button" onClick={() => setForm(f => ({ ...f, [urlKey]: '', [nameKey]: '' }))} className="text-muted-foreground hover:text-destructive">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ) : (
+          <div
+            className="border-2 border-dashed border-gold/40 rounded-xl p-4 text-center hover:border-gold/70 transition-colors cursor-pointer bg-card/50"
+            onClick={() => fileRef.current?.click()}
+          >
+            {isUploading ? (
+              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin" /> Uploading...
+              </div>
+            ) : (
+              <>
+                <Upload className="w-5 h-5 mx-auto text-gold/60 mb-1" />
+                <p className="text-xs font-medium text-foreground">Click to upload</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">JPG, PNG, or PDF</p>
+              </>
+            )}
+            <input
+              ref={fileRef}
+              type="file"
+              className="hidden"
+              accept=".jpg,.jpeg,.png,.pdf,.webp"
+              onChange={(e) => handleDocUpload(e, docType, urlKey, nameKey, fileRef)}
+            />
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -162,7 +283,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           <div className="bg-red-50 border-2 border-red-300 rounded-xl p-4 flex gap-3">
             <ShieldAlert className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
             <div className="text-xs text-red-800">
-              <p className="font-bold mb-1">⚠️ Important Notice — {COMPANY_FULL_NAME}</p>
+              <p className="font-bold mb-1">Important Notice — {COMPANY_FULL_NAME}</p>
               <p>{IMPORTANT_NOTICE_TEXT}</p>
             </div>
           </div>
@@ -171,7 +292,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-4 flex gap-3">
             <Handshake className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <div className="text-xs text-emerald-800">
-              <p className="font-bold mb-1">📋 Usage Rights & Benefits — {COMPANY_FULL_NAME}</p>
+              <p className="font-bold mb-1">Usage Rights & Benefits — {COMPANY_FULL_NAME}</p>
               <p className="whitespace-pre-line">{USAGE_RIGHTS_TEXT}</p>
             </div>
           </div>
@@ -197,7 +318,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           {/* Your Role / Position */}
           <div className="space-y-2">
             <Label>Your Role / Position *</Label>
-            <Select value={form.role} onValueChange={(v) => setForm(f => ({ ...f, role: v }))}>
+            <Select value={form.role} onValueChange={(v) => setForm(f => ({ ...f, role: v, custom_role_title: '' }))}>
               <SelectTrigger className="border-gold/20 h-12">
                 <SelectValue />
               </SelectTrigger>
@@ -220,6 +341,19 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
             </Select>
           </div>
 
+          {/* Custom Role Title (when Other is selected) */}
+          {isOtherRole && (
+            <div className="space-y-2">
+              <Label>Please Provide Your Role *</Label>
+              <Input
+                value={form.custom_role_title}
+                onChange={(e) => setForm(f => ({ ...f, custom_role_title: e.target.value }))}
+                placeholder="e.g. Marketing Director, PR Manager, Legal Advisor"
+                className="border-gold/30"
+              />
+            </div>
+          )}
+
           {/* Full Name */}
           <div className="space-y-2">
             <Label>Full Name *</Label>
@@ -233,25 +367,48 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
               <Input type="email" value={form.email} onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))} placeholder="john@damac.com" />
             </div>
             <div className="space-y-2">
-              <Label>Personal Email <span className="text-muted-foreground text-xs">(optional)</span></Label>
+              <Label className="flex items-center gap-1.5">
+                Personal Email <span className="text-muted-foreground text-xs">(optional)</span>
+                <Lock className="w-3 h-3 text-muted-foreground" title="Restricted — visible only to admins" />
+              </Label>
               <Input type="email" value={form.personal_email} onChange={(e) => setForm(f => ({ ...f, personal_email: e.target.value }))} placeholder="john.personal@gmail.com" />
+              <p className="text-[10px] text-muted-foreground">Restricted. Used as a backup contact only.</p>
             </div>
           </div>
 
-          {/* Phone & Nationality */}
+          {/* Phone Numbers */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Phone Number *</Label>
-              <Input type="tel" value={form.phone} onChange={(e) => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="+971 50 123 4567" />
+              <Label>Company Phone *</Label>
+              <PhoneInputWithCountry
+                value={form.phone}
+                onChange={(v) => setForm(f => ({ ...f, phone: v }))}
+                placeholder="50 123 4567"
+              />
             </div>
+            <div className="space-y-2">
+              <Label className="flex items-center gap-1.5">
+                Personal Phone <span className="text-muted-foreground text-xs">(optional)</span>
+                <Lock className="w-3 h-3 text-muted-foreground" title="Restricted — visible only to admins" />
+              </Label>
+              <PhoneInputWithCountry
+                value={form.personal_phone}
+                onChange={(v) => setForm(f => ({ ...f, personal_phone: v }))}
+                placeholder="55 987 6543"
+              />
+              <p className="text-[10px] text-muted-foreground">Restricted. Used as a backup contact only.</p>
+            </div>
+          </div>
+
+          {/* Nationality & Gender */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Nationality</Label>
-              <Input value={form.nationality} onChange={(e) => setForm(f => ({ ...f, nationality: e.target.value }))} placeholder="e.g. Indian, British, Lebanese" />
+              <NationalitySelect
+                value={form.nationality}
+                onChange={(v) => setForm(f => ({ ...f, nationality: v }))}
+              />
             </div>
-          </div>
-
-          {/* Gender & Years */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Gender</Label>
               <Select value={form.gender} onValueChange={(v) => setForm(f => ({ ...f, gender: v }))}>
@@ -265,14 +422,14 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          {/* Years & Date of Joining */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Years in Real Estate</Label>
               <Input type="number" min="0" max="50" value={form.years_in_real_estate} onChange={(e) => setForm(f => ({ ...f, years_in_real_estate: e.target.value }))} placeholder="e.g. 5" />
             </div>
-          </div>
-
-          {/* Date of Joining & Languages */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="flex items-center gap-1.5">
                 Date of Joining Company
@@ -280,44 +437,63 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
               </Label>
               <Input type="date" value={form.date_of_join} onChange={(e) => setForm(f => ({ ...f, date_of_join: e.target.value }))} />
             </div>
-            <div className="space-y-2">
-              <Label>Languages Spoken</Label>
-              <LanguageMultiSelect value={form.languages} onChange={(v) => setForm(f => ({ ...f, languages: v }))} />
-            </div>
+          </div>
+
+          {/* Languages */}
+          <div className="space-y-2">
+            <Label>Languages Spoken</Label>
+            <LanguageMultiSelect value={form.languages} onChange={(v) => setForm(f => ({ ...f, languages: v }))} />
           </div>
 
           {/* ID / Employee Card Upload */}
-          <div className="space-y-2">
-            <Label>ID / Employee Card <span className="text-muted-foreground text-xs">(proof of employment)</span></Label>
-            <p className="text-xs text-muted-foreground">Upload your employee ID card, business card, or company badge to verify your association.</p>
-            {form.verification_document_url ? (
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-card border border-gold/20">
-                <FileText className="w-4 h-4 text-gold shrink-0" />
-                <span className="text-sm text-foreground truncate flex-1">{form.verification_document_name}</span>
-                <button type="button" onClick={() => setForm(f => ({ ...f, verification_document_url: '', verification_document_name: '' }))} className="text-muted-foreground hover:text-destructive">
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <div
-                className="border-2 border-dashed border-gold/40 rounded-xl p-6 text-center hover:border-gold/70 transition-colors cursor-pointer bg-card/50"
-                onClick={() => idFileRef.current?.click()}
-              >
-                {uploadingId ? (
-                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                    <Loader2 className="w-4 h-4 animate-spin" /> Uploading...
-                  </div>
-                ) : (
-                  <>
-                    <Upload className="w-6 h-6 mx-auto text-gold/60 mb-2" />
-                    <p className="text-xs font-medium text-foreground">Click to upload ID or employee card</p>
-                    <p className="text-[10px] text-muted-foreground mt-1">JPG, PNG, or PDF</p>
-                  </>
-                )}
-                <input ref={idFileRef} type="file" className="hidden" accept=".jpg,.jpeg,.png,.pdf,.webp" onChange={handleIdUpload} />
-              </div>
-            )}
-          </div>
+          <DocUploadField
+            label={isOwnerRole ? "ID Document" : "ID / Employee Card"}
+            description={isOwnerRole ? "Upload your government-issued ID (Emirates ID, national ID, etc.)" : "Upload your employee ID card, business card, or company badge to verify your association."}
+            urlKey="verification_document_url"
+            nameKey="verification_document_name"
+            fileRef={idFileRef}
+            docType="employee_id"
+            required={isOwnerRole}
+          />
+
+          {/* Owner/CEO mandatory documents */}
+          {isOwnerRole && (
+            <div className="space-y-4 p-4 rounded-xl border-2 border-gold/30 bg-gold/5">
+              <p className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <Crown className="w-4 h-4 text-gold" />
+                Owner / CEO Verification Documents
+              </p>
+              <p className="text-xs text-muted-foreground">As a company owner or CEO, the following documents are mandatory for verification.</p>
+              
+              <DocUploadField
+                label="Passport"
+                description="Upload a clear copy of your passport"
+                urlKey="passport_document_url"
+                nameKey="passport_document_name"
+                fileRef={passportFileRef}
+                docType="passport"
+                required
+              />
+              <DocUploadField
+                label="Trade License"
+                description="Upload your company trade license"
+                urlKey="trade_license_url"
+                nameKey="trade_license_name"
+                fileRef={tradeLicenseFileRef}
+                docType="trade_license"
+                required
+              />
+              <DocUploadField
+                label="RERA Document"
+                description="Upload your RERA registration or broker card"
+                urlKey="rera_document_url"
+                nameKey="rera_document_name"
+                fileRef={reraFileRef}
+                docType="rera_document"
+                required
+              />
+            </div>
+          )}
 
           {/* Application Process Notice */}
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">
