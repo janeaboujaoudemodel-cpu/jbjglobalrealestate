@@ -886,6 +886,7 @@ const EmailClient = () => {
                   setNewEmail({ to: selectedEmail.fromEmail, subject: `Re: ${selectedEmail.subject}`, body: text });
                   setComposeOpen(true);
                 }}
+                onAnalysisComplete={handleAnalysisComplete}
               />
             </ScrollArea>
 
