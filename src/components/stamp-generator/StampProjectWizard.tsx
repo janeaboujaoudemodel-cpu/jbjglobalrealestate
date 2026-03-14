@@ -298,7 +298,14 @@ export default function StampProjectWizard() {
           uploaded_logo_url: form.uploaded_logo_url || null, language_reversed: form.language_reversed,
           show_license_number: form.show_license_number, show_location: form.show_location,
           business_type: form.business_type || null,
-          layout_json: { separator_style: form.separator_style, ink_color: form.ink_color },
+          layout_json: {
+            separator_style: form.separator_style, ink_color: form.ink_color,
+            government_mode: form.government_mode, arabic_font: form.arabic_font,
+            arabic_letter_spacing: form.arabic_letter_spacing, arabic_arc_spread: form.arabic_arc_spread,
+            arabic_font_weight: form.arabic_font_weight, arc_text_spacing: form.arc_text_spacing,
+            circle_gap: form.circle_gap, separator_distance: form.separator_distance,
+            center_content_size: form.center_content_size, selected_preset: form.selected_preset,
+          },
         })
         .select().single();
       if (error) throw error;
