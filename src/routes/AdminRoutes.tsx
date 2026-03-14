@@ -145,6 +145,9 @@ export const AdminRoutes = () => (
     <Route path="/mindmap" element={<OwnerGuard><MindMap /></OwnerGuard>} />
     <Route path="/form-builder" element={<OwnerGuard><FormBuilder /></OwnerGuard>} />
 
+    {/* ── Exclusive Documents ── */}
+    <Route path="/owner/exclusive-documents" element={<OwnerGuard><ExclusiveDocuments /></OwnerGuard>} />
+
     {/* ── E-Signature ── */}
     <Route path="/e-signature" element={<OwnerGuard><ESignatureDashboard /></OwnerGuard>} />
     <Route path="/e-signature/create" element={<OwnerGuard><CreateEnvelope /></OwnerGuard>} />
