@@ -67,6 +67,7 @@ const channelTypes = [
 
 export default function OwnerCommSettings() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState('channels');
   const [addChannelType, setAddChannelType] = useState<string | null>(null);
@@ -83,6 +84,7 @@ export default function OwnerCommSettings() {
       return data;
     },
     enabled: !!user?.id,
+    staleTime: 60000,
   });
 
   // Fetch settings
