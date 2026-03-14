@@ -214,6 +214,58 @@ export default function StampProjectWizard() {
     setForm(f => { const next = { ...f, [key]: val }; history.push(next); return next; });
   };
 
+  // Logo-guard: detect JBJ brand usage and apply policy
+  const checkLogoGuard = useCallback(async (monogramText: string, companyName: string) => {
+    if (!user?.id) return;
+    const text = `${monogramText} ${companyName}`.toUpperCase();
+    if (!text.includes('JBJ')) return; // Quick local check before calling backend
+    
+    try {
+      const { data: result, error } = await supabase.functions.invoke('logo-guard', {
+        body: { monogramText, companyName },
+      });
+      
+      if (error && error.message?.includes('403')) {
+        // Blocked non-owner
+        toast.error('This monogram is reserved for JBJ Global Real Estate. Please request unlock from support.', {
+          action: { label: 'Support', onClick: () => navigate('/ticket-hub') },
+          duration: 8000,
+        });
+        // Reset monogram
+        setForm(f => ({ ...f, monogram_text: '', monogram_colors: DEFAULT_MONOGRAM_COLORS }));
+        return;
+      }
+      
+      if (result?.policy === 'owner_auto_style') {
+        // Auto-apply JBJ brand rule for owner
+        const jbjColors: MonogramLetterColors = {
+          letters: { 1: '#B8860B' }, // B in gold, J letters inherit ink
+          divider: '#B8860B',
+          allLetters: null,
+        };
+        setForm(f => ({ ...f, monogram_colors: jbjColors }));
+        toast.success('JBJ brand rule applied — J letters in ink, B and dividers in gold');
+      } else if (result?.policy === 'blocked_non_owner') {
+        toast.error(result.message || 'This monogram is reserved.', {
+          action: { label: 'Support', onClick: () => navigate('/ticket-hub') },
+          duration: 8000,
+        });
+        setForm(f => ({ ...f, monogram_text: '', monogram_colors: DEFAULT_MONOGRAM_COLORS }));
+      }
+    } catch {
+      // Silent fail — don't block usage on network errors
+    }
+  }, [user?.id, navigate]);
+
+  // Trigger logo-guard check when monogram text changes
+  useEffect(() => {
+    const mono = form.monogram_text.toUpperCase();
+    if (mono.includes('JBJ') || form.company_name.toUpperCase().includes('JBJ')) {
+      const timer = setTimeout(() => checkLogoGuard(form.monogram_text, form.company_name), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [form.monogram_text, form.company_name, checkLogoGuard]);
+
   const handleUndo = useCallback(() => { const prev = history.undo(); if (prev) setForm(prev); }, [history]);
   const handleRedo = useCallback(() => { const next = history.redo(); if (next) setForm(next); }, [history]);
 
@@ -412,6 +464,22 @@ export default function StampProjectWizard() {
     // Persistent highlight — clears only when clicking a different element or outside
   }, []);
 
+  // Build monogram color overrides for the template
+  // Normal users: all letters = ink (template default), unless they customize
+  // When allLetters is set, pass per-letter overrides for all 3 letters
+  const buildMonogramColors = (): Record<number, string> | undefined => {
+    if (form.monogram_colors.allLetters) {
+      const mono = (form.monogram_text || form.company_name.slice(0, 3)).toUpperCase();
+      const colors: Record<number, string> = {};
+      for (let i = 0; i < mono.length; i++) colors[i] = form.monogram_colors.allLetters;
+      return colors;
+    }
+    if (Object.keys(form.monogram_colors.letters).length > 0) {
+      return form.monogram_colors.letters;
+    }
+    return undefined; // Template defaults all to ink
+  };
+
   const previewProps = {
     companyName: form.company_name, arabicCompanyName: form.arabic_company_name,
     city: form.city_optional, country: form.country_optional,
@@ -429,11 +497,7 @@ export default function StampProjectWizard() {
     circleGap: form.circle_gap,
     centerContentSize: form.center_content_size,
     onElementClick: handleElementClick,
-    monogramLetterColors: form.monogram_colors.allLetters
-      ? undefined  // allLetters means user set uniform color, let template handle
-      : Object.keys(form.monogram_colors.letters).length > 0
-        ? form.monogram_colors.letters
-        : undefined,
+    monogramLetterColors: buildMonogramColors(),
     monogramDividerColor: form.monogram_colors.divider || undefined,
   };
 

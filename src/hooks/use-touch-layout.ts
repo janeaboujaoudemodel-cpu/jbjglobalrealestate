@@ -8,15 +8,21 @@ import * as React from "react";
 export function useIsTouchLayout() {
   const [isTouch, setIsTouch] = React.useState(() => {
     if (typeof window === "undefined") return false;
-    // Fallback: treat narrow viewports as touch regardless of pointer/touchPoints
-    if (window.innerWidth < 1024) return true;
-    try {
-      const mql = window.matchMedia("(hover: none), (pointer: coarse)");
-      const hasTouchPoints = (navigator.maxTouchPoints ?? 0) > 0;
-      return mql.matches && hasTouchPoints;
-    } catch {
-      return false;
+    // Standard professional behavior: desktop layout at 1024px+ (matches lg breakpoint)
+    // Touch devices (phones/tablets) keep mobile layout regardless of width
+    if (window.innerWidth >= 1024) {
+      // At desktop widths, only use touch layout if device is truly touch-only
+      try {
+        const mql = window.matchMedia("(hover: none) and (pointer: coarse)");
+        const hasTouchPoints = (navigator.maxTouchPoints ?? 0) > 0;
+        // Desktop with mouse = NOT touch layout, even in narrow iframe
+        return mql.matches && hasTouchPoints;
+      } catch {
+        return false;
+      }
     }
+    // Below 1024px, always use touch/mobile layout
+    return true;
   });
 
   React.useEffect(() => {
@@ -29,13 +35,14 @@ export function useIsTouchLayout() {
     if (!mql) return;
 
     const onChange = () => {
-      // Narrow viewport fallback for iPhones that misreport touch points
-      if (window.innerWidth < 1024) {
-        setIsTouch(true);
+      if (window.innerWidth >= 1024) {
+        // Desktop width — only touch layout for true touch-only devices
+        const hasTouchPoints = (navigator.maxTouchPoints ?? 0) > 0;
+        setIsTouch(mql!.matches && hasTouchPoints);
         return;
       }
-      const hasTouchPoints = (navigator.maxTouchPoints ?? 0) > 0;
-      setIsTouch(mql!.matches && hasTouchPoints);
+      // Below 1024px — always mobile
+      setIsTouch(true);
     };
     onChange();
 

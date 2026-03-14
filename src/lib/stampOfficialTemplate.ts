@@ -96,7 +96,8 @@ function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 
 
 function computeArcLetterSpacing(
   text: string, fontSize: number, arcRadius: number,
-  spreadLimit: number, avgCharWidth: number, minSpacing: number
+  spreadLimit: number, avgCharWidth: number, minSpacing: number,
+  maxSpacing = 12
 ): number {
   if (!text || text.length <= 1) return minSpacing;
   const availableArc = arcRadius * Math.PI * spreadLimit;
@@ -105,18 +106,21 @@ function computeArcLetterSpacing(
   if (gaps <= 0) return minSpacing;
   const extraSpace = availableArc - textWidth;
   const spacing = extraSpace / gaps;
-  return Math.max(minSpacing, Math.min(spacing, 12));
+  return Math.max(minSpacing, Math.min(spacing, maxSpacing));
 }
 
 function safeArcFontSize(
   text: string, maxRadius: number, isArabic: boolean,
-  baseFontSize: number, spreadLimit = ARC_SPREAD_LIMIT
+  baseFontSize: number, spreadLimit = ARC_SPREAD_LIMIT,
+  maxLetterSpacing?: number
 ): { fontSize: number; letterSpacing: number } {
   const charW = 0.54;
   const minSpacing = isArabic ? 0.5 : 1;
+  // Cap English letter spacing to prevent over-spaced unreadable text
+  const maxSp = maxLetterSpacing ?? (isArabic ? 12 : 6);
   const arcLen = maxRadius * Math.PI * spreadLimit;
   const fontSize = fitFontSize(text, baseFontSize, arcLen, charW);
-  const letterSpacing = computeArcLetterSpacing(text, fontSize, maxRadius, spreadLimit, charW, minSpacing);
+  const letterSpacing = computeArcLetterSpacing(text, fontSize, maxRadius, spreadLimit, charW, minSpacing, maxSp);
   return { fontSize, letterSpacing };
 }
 
@@ -293,27 +297,42 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   let separatorContent = '';
 
   if (mode === 'BILINGUAL') {
-    const topText = config.companyNameAr;
-    const bottomText = config.companyNameEn.toUpperCase();
-    const topSafe = safeArcFontSize(topText, clampedTextArcR, true, 17, arabicSpread);
-    const bottomSafe = safeArcFontSize(bottomText, clampedTextArcR, false, 15, englishSpread);
-    const topLS = config.arabicLetterSpacing ?? topSafe.letterSpacing;
-    const topFW = config.arabicFontWeight === 'normal' ? '600' : '800';
+    // Respect arabicOnTop: when true (default), Arabic on top arc, English on bottom
+    // When false, English on top arc, Arabic on bottom
+    const arText = config.companyNameAr || 'اسم الشركة';
+    const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
+    const arSafe = safeArcFontSize(arText, clampedTextArcR, true, 17, arabicSpread);
+    const enSafe = safeArcFontSize(enText, clampedTextArcR, false, 15, englishSpread, 5);
+    const arLS = config.arabicLetterSpacing ?? arSafe.letterSpacing;
+    const arFW = config.arabicFontWeight === 'normal' ? '600' : '800';
 
-    topArcContent = renderTopArcTextPath(
-      topText || 'اسم الشركة', cx, cy, clampedTextArcR, topSafe.fontSize, arFont, ink,
-      topLS, true, 'top-arc', topFW
-    );
-    bottomArcContent = renderBottomArcTextPath(
-      bottomText || 'COMPANY NAME', cx, cy, clampedTextArcR, bottomSafe.fontSize, enFont, ink,
-      bottomSafe.letterSpacing, false, 'bottom-arc'
-    );
+    if (config.arabicOnTop !== false) {
+      // Arabic top, English bottom (default)
+      topArcContent = renderTopArcTextPath(
+        arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
+        arLS, true, 'top-arc', arFW
+      );
+      bottomArcContent = renderBottomArcTextPath(
+        enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
+        enSafe.letterSpacing, false, 'bottom-arc'
+      );
+    } else {
+      // English top, Arabic bottom
+      topArcContent = renderTopArcTextPath(
+        enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
+        enSafe.letterSpacing, false, 'top-arc'
+      );
+      bottomArcContent = renderBottomArcTextPath(
+        arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
+        arLS, true, 'bottom-arc', arFW
+      );
+    }
     separatorContent = renderSeparators(cx, cy, clampedTextArcR, config.separatorStyle, ink);
 
   } else if (mode === 'EN') {
     // English only — company name on top arc, location on bottom arc (all English)
     const topText = config.companyNameEn.toUpperCase() || 'COMPANY NAME';
-    const topSafe = safeArcFontSize(topText, clampedTextArcR, false, 15, englishSpread);
+    const topSafe = safeArcFontSize(topText, clampedTextArcR, false, 15, englishSpread, 5);
     topArcContent = renderTopArcTextPath(
       topText, cx, cy, clampedTextArcR, topSafe.fontSize, enFont, ink,
       topSafe.letterSpacing, false, 'top-arc'
@@ -321,7 +340,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     // Location on bottom arc
     if (config.showLocation) {
       const locEn = config.locationTextEn || 'Dubai, UAE';
-      const botSafe = safeArcFontSize(locEn.toUpperCase(), clampedTextArcR, false, 12, englishSpread);
+      const botSafe = safeArcFontSize(locEn.toUpperCase(), clampedTextArcR, false, 12, englishSpread, 5);
       bottomArcContent = renderBottomArcTextPath(
         locEn.toUpperCase(), cx, cy, clampedTextArcR, botSafe.fontSize, enFont, ink,
         botSafe.letterSpacing, false, 'bottom-arc', '600'
@@ -373,13 +392,17 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   // ─── Center content ───
   const centerContent = renderCenterContent(config, cx, cy, innerR, enFont, ink);
 
-  // ─── Registration number ───
+  // ─── Registration number — circular arc inside inner ring ───
   const centerMode = config.centerMode || (config.showLogo ? 'logo' : config.showMonogram ? 'monogram' : 'none');
   let regContent = '';
   if (config.showRegistration && config.registrationNumber && centerMode !== 'license') {
-    const regY = cy + innerR * 0.55;
-    regContent = `<text data-stamp-element="registration" x="${cx}" y="${regY}" text-anchor="middle" font-family="${enFont}" 
-      font-size="6.5" fill="${ink}" letter-spacing="0.8" opacity="0.7">${config.registrationNumber}</text>`;
+    // Render as circular arc at bottom of inner ring
+    const regArcR = innerR * 0.75;
+    const regSafe = safeArcFontSize(config.registrationNumber, regArcR, false, 7, 0.85, 3);
+    regContent = renderBottomArcTextPath(
+      config.registrationNumber, cx, cy, regArcR, regSafe.fontSize, enFont, ink,
+      regSafe.letterSpacing, false, 'registration', '500'
+    );
   }
 
   // ─── Border rings ───
@@ -401,7 +424,12 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     ? `<circle cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.4}"/>`
     : middleRingEl;
 
-  const innerRingEl = `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="${innerSW}"/>`;
+  // Dynamic ring system: if location is disabled, hide inner ring (location ring) 
+  // and let center content fill the space between middle ring and center
+  const showInnerRing = config.showLocation && mode === 'BILINGUAL';
+  const innerRingEl = showInnerRing
+    ? `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="${innerSW}"/>`
+    : '';
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
     ${outerRingEl}${decorativeRingEl}${middleRingFinal}${innerRingEl}
@@ -421,10 +449,10 @@ function generateOvalStamp(config: OfficialStampConfig): string {
   const mode = config.languageMode || 'BILINGUAL';
   const themeMult = THEME_STROKE_MULT[config.styleTheme || 'CLASSIC'] || 1;
 
-  const pad = 10;
+  const pad = 14;
   const outerRx = cx - pad;
-  const outerRy = cy - pad - 15; // squished vertically for oval
-  const gap = 8;
+  const outerRy = cy - pad - 15;
+  const gap = 10;
   const innerRx = outerRx - gap;
   const innerRy = outerRy - gap;
   const outerSW = (config.outerBorderWidth ?? OUTER_STROKE) * themeMult;
@@ -435,32 +463,38 @@ function generateOvalStamp(config: OfficialStampConfig): string {
     borders += `<ellipse cx="${cx}" cy="${cy}" rx="${innerRx}" ry="${innerRy}" fill="none" stroke="${ink}" stroke-width="${innerSW * 0.7}"/>`;
   }
 
-  // Use circular arc radius (average of rx/ry) for text arcs in oval
-  const textArcR = (innerRx + innerRy) / 2 - 4;
+  // Safe text arc radius — keep well inside borders
+  const textArcR = Math.min(innerRx, innerRy) - 6;
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
 
   let textContent = '';
   if (mode === 'BILINGUAL') {
-    const topText = config.companyNameAr || 'اسم الشركة';
-    const botText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
-    const topSafe = safeArcFontSize(topText, textArcR, true, 14, arabicSpread);
-    const botSafe = safeArcFontSize(botText, textArcR, false, 12, ARC_SPREAD_LIMIT);
-    textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? topSafe.letterSpacing, true, 'top-arc', config.arabicFontWeight === 'normal' ? '600' : '800');
-    textContent += renderBottomArcTextPath(botText, cx, cy, textArcR, botSafe.fontSize, enFont, ink, botSafe.letterSpacing, false, 'bottom-arc');
+    const arText = config.companyNameAr || 'اسم الشركة';
+    const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
+    const arSafe = safeArcFontSize(arText, textArcR, true, 13, arabicSpread);
+    const enSafe = safeArcFontSize(enText, textArcR, false, 11, ARC_SPREAD_LIMIT, 4);
+    const arFW = config.arabicFontWeight === 'normal' ? '600' : '800';
+    if (config.arabicOnTop !== false) {
+      textContent += renderTopArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'top-arc', arFW);
+      textContent += renderBottomArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'bottom-arc');
+    } else {
+      textContent += renderTopArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'top-arc');
+      textContent += renderBottomArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'bottom-arc', arFW);
+    }
     textContent += renderSeparators(cx, cy, textArcR, config.separatorStyle, ink);
   } else if (mode === 'EN') {
     const topText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
-    const topSafe = safeArcFontSize(topText, textArcR, false, 13, ARC_SPREAD_LIMIT);
+    const topSafe = safeArcFontSize(topText, textArcR, false, 12, ARC_SPREAD_LIMIT, 4);
     textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, enFont, ink, topSafe.letterSpacing, false, 'top-arc');
     if (config.showLocation) {
       const loc = (config.locationTextEn || 'Dubai, UAE').toUpperCase();
-      const locSafe = safeArcFontSize(loc, textArcR, false, 10, ARC_SPREAD_LIMIT);
+      const locSafe = safeArcFontSize(loc, textArcR, false, 10, ARC_SPREAD_LIMIT, 4);
       textContent += renderBottomArcTextPath(loc, cx, cy, textArcR, locSafe.fontSize, enFont, ink, locSafe.letterSpacing, false, 'bottom-arc', '600');
     }
     textContent += renderSeparators(cx, cy, textArcR, config.separatorStyle, ink);
   } else {
     const topText = config.companyNameAr || 'اسم الشركة';
-    const topSafe = safeArcFontSize(topText, textArcR, true, 14, arabicSpread);
+    const topSafe = safeArcFontSize(topText, textArcR, true, 13, arabicSpread);
     textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? topSafe.letterSpacing, true, 'top-arc', config.arabicFontWeight === 'normal' ? '600' : '800');
     if (config.showLocation) {
       const loc = config.locationTextAr || 'دبي، الإمارات';
@@ -471,7 +505,7 @@ function generateOvalStamp(config: OfficialStampConfig): string {
   }
 
   // Center content
-  const smallInnerR = Math.min(innerRx, innerRy) * 0.45;
+  const smallInnerR = Math.min(innerRx, innerRy) * 0.38;
   textContent += renderCenterContent(config, cx, cy, smallInnerR, enFont, ink);
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
@@ -490,7 +524,7 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
   const ink = config.inkColor || INK_BLUE;
   const mode = config.languageMode || 'BILINGUAL';
   const themeMult = THEME_STROKE_MULT[config.styleTheme || 'CLASSIC'] || 1;
-  const pad = 10;
+  const pad = 14;
 
   const w = isSquare ? S - pad * 2 : S - pad * 2;
   const h = isSquare ? S - pad * 2 : (S - pad * 2) * 0.6;
@@ -502,33 +536,39 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
 
   let borders = renderOuterRect(x0, y0, w, h, rr, ink, bs, outerSW);
   if (bs === 'DOUBLE' || bs === 'RING' || bs === 'CUSTOM') {
-    const gap = 6;
+    const gap = 8;
     borders += `<rect x="${x0 + gap}" y="${y0 + gap}" width="${w - gap * 2}" height="${h - gap * 2}" rx="${Math.max(2, rr - 3)}" fill="none" stroke="${ink}" stroke-width="${innerSW * 0.7}"/>`;
   }
 
-  const availW = w - 30;
+  // Safe content area — keep well inside borders
+  const safeW = w - 40;
   const lineH = isSquare ? 16 : 14;
   const lines: { text: string; font: string; size: number; weight: string; opacity?: number }[] = [];
 
   if (mode === 'BILINGUAL') {
     const arText = config.companyNameAr || 'اسم الشركة';
     const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
-    lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 14, availW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
-    lines.push({ text: enText, font: enFont, size: Math.max(7, fitFontSize(enText, 12, availW, 0.55)), weight: '700' });
+    if (config.arabicOnTop !== false) {
+      lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
+      lines.push({ text: enText, font: enFont, size: Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), weight: '700' });
+    } else {
+      lines.push({ text: enText, font: enFont, size: Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), weight: '700' });
+      lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
+    }
     if (config.showLocation) {
       const loc = (config.locationTextEn || 'Dubai, UAE').toUpperCase();
       lines.push({ text: loc, font: enFont, size: 8, weight: '400', opacity: 0.7 });
     }
   } else if (mode === 'EN') {
     const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
-    lines.push({ text: enText, font: enFont, size: Math.max(8, fitFontSize(enText, 14, availW, 0.55)), weight: '700' });
+    lines.push({ text: enText, font: enFont, size: Math.max(8, fitFontSize(enText, 13, safeW, 0.55)), weight: '700' });
     if (config.showLocation) {
       const loc = (config.locationTextEn || 'Dubai, UAE').toUpperCase();
       lines.push({ text: loc, font: enFont, size: 9, weight: '400', opacity: 0.7 });
     }
   } else {
     const arText = config.companyNameAr || config.companyNameEn || 'اسم الشركة';
-    lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 14, availW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
+    lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
     if (config.showLocation) {
       const loc = config.locationTextAr || 'دبي، الإمارات';
       lines.push({ text: loc, font: arFont, size: 9, weight: '400', opacity: 0.7 });
@@ -547,11 +587,11 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
   const centerMode = config.centerMode || (config.showLogo ? 'logo' : config.showMonogram ? 'monogram' : 'none');
   let centerEl = '';
   if (centerMode === 'monogram' && mono) {
-    const monoSize = mono.length === 1 ? 18 : mono.length === 2 ? 14 : 11;
+    const monoSize = mono.length === 1 ? 16 : mono.length === 2 ? 12 : 10;
     centerEl = `<text data-stamp-element="center" x="${cx}" y="${startY - lineH}" font-family="${enFont}" font-size="${monoSize}" fill="${ink}" text-anchor="middle" dominant-baseline="central" font-weight="700" opacity="0.85">${mono.toUpperCase()}</text>`;
-    centerEl += `<line x1="${cx - 20}" y1="${startY - lineH / 2 + 2}" x2="${cx + 20}" y2="${startY - lineH / 2 + 2}" stroke="${ink}" stroke-width="0.6" opacity="0.5"/>`;
+    centerEl += `<line x1="${cx - 18}" y1="${startY - lineH / 2 + 2}" x2="${cx + 18}" y2="${startY - lineH / 2 + 2}" stroke="${ink}" stroke-width="0.6" opacity="0.5"/>`;
   } else if (centerMode === 'logo' && config.logoUrl) {
-    const imgSize = 28;
+    const imgSize = 24;
     centerEl = `<image data-stamp-element="center" href="${config.logoUrl}" x="${cx - imgSize / 2}" y="${startY - lineH - imgSize / 2}" width="${imgSize}" height="${imgSize}" preserveAspectRatio="xMidYMid meet"/>`;
   }
 
@@ -560,7 +600,7 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
     const y = startY + i * lineH;
     textContent += `<text data-stamp-element="${i === 0 ? 'top-arc' : i === 1 ? 'bottom-arc' : 'loc-' + i}" x="${cx}" y="${y}" font-family="${ln.font}" font-size="${ln.size}" fill="${ink}" text-anchor="middle" dominant-baseline="central" font-weight="${ln.weight}"${ln.opacity ? ` opacity="${ln.opacity}"` : ''}>${ln.text}</text>`;
     if (i === 0 && lines.length > 1) {
-      const sep = availW * 0.4;
+      const sep = safeW * 0.35;
       textContent += `<line x1="${cx - sep}" y1="${y + lineH * 0.4}" x2="${cx + sep}" y2="${y + lineH * 0.4}" stroke="${ink}" stroke-width="0.6" opacity="0.45"/>`;
     }
   });
@@ -588,29 +628,28 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
       return '';
     case 'monogram':
       if (mono) {
-        const GOLD = '#B8860B';
         const baseSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
         const scaledSize = baseSize * centerScale;
         const upper = mono.toUpperCase();
         const userLetterColors = config.monogramLetterColors;
         const userDividerColor = config.monogramDividerColor;
-        // Per-letter coloring: user overrides > locked brand rule (index 0,2 = ink, index 1 = gold)
+        // POLICY: Default ALL letters to ink color (no forced gold for normal users)
+        // Owner-specific JBJ branding is applied at the wizard/UI level, not here
         const tspans = upper.split('').map((ch, i) => {
-          let fill: string;
-          if (userLetterColors && userLetterColors[i] !== undefined) {
-            fill = userLetterColors[i];
-          } else {
-            fill = (i === 1 && upper.length >= 2) ? GOLD : ink;
-          }
+          const fill = (userLetterColors && userLetterColors[i] !== undefined)
+            ? userLetterColors[i]
+            : ink;  // All letters default to ink color
           return `<tspan fill="${fill}">${ch}</tspan>`;
         }).join('');
-        const divColor = userDividerColor ?? GOLD;
-        // Gold divider lines flanking the middle letter
+        // Divider defaults to ink unless user explicitly overrides
+        const divColor = userDividerColor ?? ink;
+        // Tighter monogram letter spacing (was 2, now 1)
+        const monoLetterSpacing = upper.length >= 3 ? 1 : 2;
         const divW = scaledSize * 0.6;
         const divY = cy + scaledSize * 0.45;
         const divider = upper.length >= 2 ? `<line x1="${cx - divW}" y1="${divY}" x2="${cx + divW}" y2="${divY}" stroke="${divColor}" stroke-width="1.2" opacity="0.8"/>` : '';
         return `<text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
-          font-family="${enFont}" font-size="${scaledSize}" font-weight="700" letter-spacing="2">${tspans}</text>${divider}`;
+          font-family="${enFont}" font-size="${scaledSize}" font-weight="700" letter-spacing="${monoLetterSpacing}">${tspans}</text>${divider}`;
       }
       return '';
     case 'initials': {
@@ -632,7 +671,6 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
       }
       return '';
     default:
-      // Fallback legacy
       if (config.showLogo && config.logoUrl) {
         const imgSize = innerR * 1.5 * centerScale;
         return `<defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${innerR - 2}"/></clipPath></defs>
