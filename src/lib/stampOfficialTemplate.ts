@@ -189,7 +189,8 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
 
 /**
  * Bottom arc text using SVG textPath — text follows the BOTTOM half of a circle.
- * Path sweeps from right to left through the bottom, text reads left-to-right.
+ * Path sweeps LEFT→RIGHT through the bottom semicircle (counterclockwise).
+ * Text reads naturally left-to-right — NO character reversal needed.
  */
 function renderBottomArcTextPath(
   text: string, cx: number, cy: number, r: number,
@@ -197,16 +198,14 @@ function renderBottomArcTextPath(
   isArabic: boolean, pathId: string, fontWeight = '800'
 ): string {
   if (!text) return '';
-  // Bottom arc path: from (cx+r, cy) sweeping clockwise through bottom to (cx-r, cy)
-  const arcPath = `M ${cx + r} ${cy} A ${r} ${r} 0 1 1 ${cx - r} ${cy}`;
-  // Reverse text so characters appear in correct reading order on the reversed path
-  const reversed = text.split('').reverse().join('');
-  const displayText = isArabic ? text : reversed;
+  // Bottom arc path: left (cx-r, cy) → counterclockwise through bottom → right (cx+r, cy)
+  // large-arc=0, sweep=0 → takes the shorter (bottom) arc counterclockwise
+  const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx + r} ${cy}`;
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
     <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
-      letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
-      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${displayText}</textPath>
+      letter-spacing="${letterSpacing}" font-weight="${fontWeight}" dominant-baseline="hanging">
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${text}</textPath>
     </text>
   `;
 }
