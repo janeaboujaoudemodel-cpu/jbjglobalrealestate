@@ -117,5 +117,6 @@ export const OwnerRoutes = () => (
     <Route path="developer-moderation" element={<DeveloperModerationQueue />} />
     <Route path="api-security" element={<APISecurityDashboard />} />
     <Route path="incident-readiness" element={<IncidentReadinessPanel />} />
+    <Route path="zero-trust-audit" element={<ZeroTrustAuditPanel />} />
   </Route>
 );
