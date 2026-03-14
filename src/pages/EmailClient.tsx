@@ -322,6 +322,12 @@ const EmailClient = () => {
           useResend: sendViaResend,
           alsoNotifyChat,
           chatRecipientId: recipientDetection.userId || recipientDetection.teamMemberId || undefined,
+          // Wire attachments to edge function
+          attachments: attachments.map(att => ({
+            filename: att.name,
+            content: att.content,
+            type: att.mimeType || 'application/octet-stream',
+          })),
         },
       });
 
@@ -335,7 +341,7 @@ const EmailClient = () => {
         subject: newEmail.subject,
         body: newEmail.body,
         date: new Date().toISOString(),
-        read: true, starred: false, folder: "sent", labels: [], hasAttachment: false,
+        read: true, starred: false, folder: "sent", labels: [], hasAttachment: attachments.length > 0,
         account: currentSender.account,
       };
       setEmails([...emails, email]);
