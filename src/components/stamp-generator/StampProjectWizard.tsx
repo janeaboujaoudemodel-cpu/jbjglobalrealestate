@@ -412,6 +412,22 @@ export default function StampProjectWizard() {
     // Persistent highlight — clears only when clicking a different element or outside
   }, []);
 
+  // Build monogram color overrides for the template
+  // Normal users: all letters = ink (template default), unless they customize
+  // When allLetters is set, pass per-letter overrides for all 3 letters
+  const buildMonogramColors = (): Record<number, string> | undefined => {
+    if (form.monogram_colors.allLetters) {
+      const mono = (form.monogram_text || form.company_name.slice(0, 3)).toUpperCase();
+      const colors: Record<number, string> = {};
+      for (let i = 0; i < mono.length; i++) colors[i] = form.monogram_colors.allLetters;
+      return colors;
+    }
+    if (Object.keys(form.monogram_colors.letters).length > 0) {
+      return form.monogram_colors.letters;
+    }
+    return undefined; // Template defaults all to ink
+  };
+
   const previewProps = {
     companyName: form.company_name, arabicCompanyName: form.arabic_company_name,
     city: form.city_optional, country: form.country_optional,
@@ -429,11 +445,7 @@ export default function StampProjectWizard() {
     circleGap: form.circle_gap,
     centerContentSize: form.center_content_size,
     onElementClick: handleElementClick,
-    monogramLetterColors: form.monogram_colors.allLetters
-      ? undefined  // allLetters means user set uniform color, let template handle
-      : Object.keys(form.monogram_colors.letters).length > 0
-        ? form.monogram_colors.letters
-        : undefined,
+    monogramLetterColors: buildMonogramColors(),
     monogramDividerColor: form.monogram_colors.divider || undefined,
   };
 

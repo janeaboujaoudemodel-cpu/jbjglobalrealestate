@@ -116,11 +116,13 @@ export function LiveStampPreview({
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Attach click handlers to data-stamp-element nodes
+  // Stop propagation so parent outside-click handler doesn't clear selection
   useEffect(() => {
     if (!onElementClick || !containerRef.current) return;
     const handler = (e: MouseEvent) => {
       const target = (e.target as Element)?.closest?.('[data-stamp-element]');
       if (target) {
+        e.stopPropagation();
         const elementId = target.getAttribute('data-stamp-element') || '';
         onElementClick(elementId);
       }

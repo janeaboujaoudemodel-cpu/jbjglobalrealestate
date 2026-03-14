@@ -515,7 +515,7 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
   const ink = config.inkColor || INK_BLUE;
   const mode = config.languageMode || 'BILINGUAL';
   const themeMult = THEME_STROKE_MULT[config.styleTheme || 'CLASSIC'] || 1;
-  const pad = 10;
+  const pad = 14;
 
   const w = isSquare ? S - pad * 2 : S - pad * 2;
   const h = isSquare ? S - pad * 2 : (S - pad * 2) * 0.6;
@@ -527,33 +527,39 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
 
   let borders = renderOuterRect(x0, y0, w, h, rr, ink, bs, outerSW);
   if (bs === 'DOUBLE' || bs === 'RING' || bs === 'CUSTOM') {
-    const gap = 6;
+    const gap = 8;
     borders += `<rect x="${x0 + gap}" y="${y0 + gap}" width="${w - gap * 2}" height="${h - gap * 2}" rx="${Math.max(2, rr - 3)}" fill="none" stroke="${ink}" stroke-width="${innerSW * 0.7}"/>`;
   }
 
-  const availW = w - 30;
+  // Safe content area — keep well inside borders
+  const safeW = w - 40;
   const lineH = isSquare ? 16 : 14;
   const lines: { text: string; font: string; size: number; weight: string; opacity?: number }[] = [];
 
   if (mode === 'BILINGUAL') {
     const arText = config.companyNameAr || 'اسم الشركة';
     const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
-    lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 14, availW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
-    lines.push({ text: enText, font: enFont, size: Math.max(7, fitFontSize(enText, 12, availW, 0.55)), weight: '700' });
+    if (config.arabicOnTop !== false) {
+      lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
+      lines.push({ text: enText, font: enFont, size: Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), weight: '700' });
+    } else {
+      lines.push({ text: enText, font: enFont, size: Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), weight: '700' });
+      lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
+    }
     if (config.showLocation) {
       const loc = (config.locationTextEn || 'Dubai, UAE').toUpperCase();
       lines.push({ text: loc, font: enFont, size: 8, weight: '400', opacity: 0.7 });
     }
   } else if (mode === 'EN') {
     const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
-    lines.push({ text: enText, font: enFont, size: Math.max(8, fitFontSize(enText, 14, availW, 0.55)), weight: '700' });
+    lines.push({ text: enText, font: enFont, size: Math.max(8, fitFontSize(enText, 13, safeW, 0.55)), weight: '700' });
     if (config.showLocation) {
       const loc = (config.locationTextEn || 'Dubai, UAE').toUpperCase();
       lines.push({ text: loc, font: enFont, size: 9, weight: '400', opacity: 0.7 });
     }
   } else {
     const arText = config.companyNameAr || config.companyNameEn || 'اسم الشركة';
-    lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 14, availW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
+    lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
     if (config.showLocation) {
       const loc = config.locationTextAr || 'دبي، الإمارات';
       lines.push({ text: loc, font: arFont, size: 9, weight: '400', opacity: 0.7 });
@@ -572,11 +578,11 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
   const centerMode = config.centerMode || (config.showLogo ? 'logo' : config.showMonogram ? 'monogram' : 'none');
   let centerEl = '';
   if (centerMode === 'monogram' && mono) {
-    const monoSize = mono.length === 1 ? 18 : mono.length === 2 ? 14 : 11;
+    const monoSize = mono.length === 1 ? 16 : mono.length === 2 ? 12 : 10;
     centerEl = `<text data-stamp-element="center" x="${cx}" y="${startY - lineH}" font-family="${enFont}" font-size="${monoSize}" fill="${ink}" text-anchor="middle" dominant-baseline="central" font-weight="700" opacity="0.85">${mono.toUpperCase()}</text>`;
-    centerEl += `<line x1="${cx - 20}" y1="${startY - lineH / 2 + 2}" x2="${cx + 20}" y2="${startY - lineH / 2 + 2}" stroke="${ink}" stroke-width="0.6" opacity="0.5"/>`;
+    centerEl += `<line x1="${cx - 18}" y1="${startY - lineH / 2 + 2}" x2="${cx + 18}" y2="${startY - lineH / 2 + 2}" stroke="${ink}" stroke-width="0.6" opacity="0.5"/>`;
   } else if (centerMode === 'logo' && config.logoUrl) {
-    const imgSize = 28;
+    const imgSize = 24;
     centerEl = `<image data-stamp-element="center" href="${config.logoUrl}" x="${cx - imgSize / 2}" y="${startY - lineH - imgSize / 2}" width="${imgSize}" height="${imgSize}" preserveAspectRatio="xMidYMid meet"/>`;
   }
 
@@ -585,7 +591,7 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
     const y = startY + i * lineH;
     textContent += `<text data-stamp-element="${i === 0 ? 'top-arc' : i === 1 ? 'bottom-arc' : 'loc-' + i}" x="${cx}" y="${y}" font-family="${ln.font}" font-size="${ln.size}" fill="${ink}" text-anchor="middle" dominant-baseline="central" font-weight="${ln.weight}"${ln.opacity ? ` opacity="${ln.opacity}"` : ''}>${ln.text}</text>`;
     if (i === 0 && lines.length > 1) {
-      const sep = availW * 0.4;
+      const sep = safeW * 0.35;
       textContent += `<line x1="${cx - sep}" y1="${y + lineH * 0.4}" x2="${cx + sep}" y2="${y + lineH * 0.4}" stroke="${ink}" stroke-width="0.6" opacity="0.45"/>`;
     }
   });
