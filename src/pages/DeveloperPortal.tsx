@@ -1004,20 +1004,12 @@ const DeveloperPortal = () => {
                 <CardContent className="p-4">
                   <div className="space-y-1">
                     <Label className="text-xs text-muted-foreground">Developer / Company Name *</Label>
-                    <div className="relative">
-                      <Input
-                        value={devName}
-                        onChange={(e) => setDevName(e.target.value)}
-                        placeholder="Start typing developer name..."
-                        list="developer-autocomplete"
-                      />
-                      <datalist id="developer-autocomplete">
-                        {developersList?.map((d: any) => (
-                          <option key={d.id} value={d.name} />
-                        ))}
-                      </datalist>
-                    </div>
-                    <p className="text-[10px] text-muted-foreground">Email auto-set to your owner account. Just enter the developer name and upload.</p>
+                    <DeveloperSelectDropdown
+                      value={devName}
+                      onChange={setDevName}
+                      placeholder="Select developer name..."
+                    />
+                    <p className="text-[10px] text-muted-foreground">Email auto-set to your owner account. Just select the developer and upload.</p>
                   </div>
                 </CardContent>
               </Card>
