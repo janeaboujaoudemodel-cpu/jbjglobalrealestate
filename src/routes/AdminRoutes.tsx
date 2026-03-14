@@ -68,6 +68,7 @@ const Automations = lazy(() => import("@/pages/Automations"));
 const AlertsDemo = lazy(() => import("@/pages/AlertsDemo"));
 const ExclusiveDocuments = lazy(() => import("@/pages/owner/ExclusiveDocuments"));
 const LegalComplianceCenter = lazy(() => import("@/pages/admin/LegalComplianceCenter"));
+const AIToolsControlPanel = lazy(() => import("@/pages/owner/AIToolsControlPanel"));
 
 export const AdminRoutes = () => (
   <>
