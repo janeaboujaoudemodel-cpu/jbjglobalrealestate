@@ -1,90 +1,84 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
+Goal: stabilize the stamp wizard to premium behavior, apply owner-only JBJ logo intelligence, and make editing controls truly interactive and persistent.
 
----
+1) Locked product decisions (based on your message)
+- Navigation standard: use professional desktop behavior at 1024px+ with desktop pointer detection; keep touch devices in mobile layout. For stamp generator pages, enforce desktop frame from 1024px to prevent mixed header states.
+- Monogram color policy:
+  - Normal users: default all monogram letters = ink color (no forced gold), with optional per-letter customization.
+  - Owner + detected JBJ logo/monogram: auto-apply JBJ rule (J letters = ink blue, B + dividers preserved in gold).
+  - Non-owner uploading detected JBJ logo: block upload, show “Request unlock from support” action linking to `/ticket-hub`, and auto-log an owner-visible support/security ticket with uploader details.
 
-### Session Status
+2) Root causes found
+- `arabicOnTop/language_reversed` is passed but not applied in template logic (language order toggle appears broken).
+- Click highlight clears immediately because parent container click clears selection after element click bubble.
+- No double-click editing path in wizard preview.
+- Arc/spacing controls exist in UI but are not wired into rendering (`arc_text_spacing`, `separator_distance`).
+- Current monogram fallback in template still forces middle letter gold globally.
+- Registration is rendered as straight center text, not circular text.
+- Non-round shape renderers use weak constraints (especially oval arc geometry), causing border collisions.
+- Generated concept engine uses separate SVG builder rules, so output quality diverges from live template.
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+3) Implementation plan (files)
+A) `src/lib/stampOfficialTemplate.ts`
+- Apply `arabicOnTop` in bilingual mode (swap top/bottom arc assignment).
+- Add explicit controls for:
+  - English letter spacing cap (reduce over-spacing for readability),
+  - English word-gap multiplier (increase gaps between legal suffix words like ESTATE / LLC / SOC),
+  - Monogram letter spacing (tighten J-B-J spacing).
+- Make center content policy-aware:
+  - Default monogram = all ink color unless owner-JBJ override applies.
+  - Respect user per-letter overrides.
+- Convert trade license rendering to circular arc text (round/oval) instead of straight baseline when enabled.
+- Dynamic ring system:
+  - If location disabled/deleted, remove location ring layer and recenter monogram in remaining rings.
+- Rebuild oval/rectangle/square text-safe zones so text never touches/outflows borders.
 
----
+B) `src/components/stamp-generator/LiveStampPreview.tsx`
+- Stop event propagation for in-stamp clicks so selection does not get cleared by outer container.
+- Add double-click handler callback support (element-level).
+- Pass through new spacing/layout controls and owner/JBJ policy flags to template generator.
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+C) `src/components/stamp-generator/StampProjectWizard.tsx`
+- Keep selection persistent until explicit outside click or selecting another element.
+- Add true on-canvas editing controls (nudge, arc width, vertical offset, spacing) by integrating the existing interactive overlay behavior used in studio.
+- Wire sliders to real renderer inputs (`arc_text_spacing`, `separator_distance`, monogram letter spacing).
+- Fix tab-jump behavior: clicking style controls should not be force-switched back to company unexpectedly.
+- Monogram defaults:
+  - Initialize normal users to all-ink.
+  - Keep per-letter editor available.
+- Owner/JBJ upload flow:
+  - On logo upload, run backend logo-guard analysis.
+  - Apply owner-only auto-rule when match is JBJ.
+  - Block non-owner JBJ attempts with support CTA.
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+D) `src/components/stamp-generator/MonogramColorEditor.tsx`
+- Reset should return to “all letters ink” baseline for normal users.
+- Keep owner auto-rule as a conditional preset, not global default.
 
----
+E) Navigation shell (`src/components/MainLayout.tsx`, optionally `use-touch-layout`)
+- Enforce desktop L-frame at 1024px+ for stamp routes with touch-aware fallback to avoid mixed header states.
 
-### Route Map
+F) Backend function(s)
+- Add a logo-guard backend endpoint:
+  - Analyze uploaded logo/monogram for JBJ match (vision/text detection),
+  - Return policy decision (`allow`, `owner_auto_style`, `blocked_non_owner`),
+  - On blocked case, create a support/security ticket record for owner review (uploader id/email/time/file fingerprint).
+- Keep ownership validation server-side using existing owner verification logic.
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+G) Generation/export parity
+- Update concept generation path to use the same official template constraints as live editor (or same geometry helpers) so generated models never overflow borders.
+- Ensure export outputs preserve the same center color policy and spacing rules as preview.
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
-
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
+4) Validation checklist (with deep screenshots per task before marking done)
+- Screenshot set at 1178px and 1024px: desktop frame consistency.
+- Bilingual round stamp: Arabic/English arcs match edge-to-edge and remain readable.
+- Language order toggle: visibly swaps top/bottom arcs.
+- Click + double-click: highlight persists, toolbar appears, drag/nudge controls work.
+- Show License Number: circular arc rendering confirmed.
+- Location off: location ring disappears, center recenters correctly.
+- Monogram behavior:
+  - Normal user default all ink + editable colors.
+  - Owner JBJ upload auto-styles correctly.
+  - Non-owner JBJ upload blocked with `/ticket-hub` unlock path and owner-visible incident log.
+- Oval/rectangle/square: no border touching/overflow.
+- Generated concepts and exports match live layout constraints.
