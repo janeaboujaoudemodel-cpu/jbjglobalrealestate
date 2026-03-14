@@ -753,10 +753,27 @@ export default function StampGeneratorPage() {
             {leftTab === 'color' && (
               <>
                 {/* Reset to Standard button */}
-                <button onClick={() => { setPrimaryColor('#1B3A8C'); setSecondaryColor('#1a2d6e'); setAccentColor('#1B3A8C'); toast.success('Colors reset to Corporate Official Blue'); }}
+                <button onClick={() => { setPrimaryColor('#1B3A8C'); setSecondaryColor('#1a2d6e'); setAccentColor('#1B3A8C'); setMonogramLetterColors(DEFAULT_MONOGRAM_COLORS); toast.success('Colors reset to Corporate Official Blue'); }}
                   className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[10px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all">
                   <RotateCw size={10}/> Reset to Standard (Ink Blue)
                 </button>
+
+                {/* Standard Export Colors — locked, always visible */}
+                <div className="border border-[hsl(var(--gold)/0.2)] rounded-lg p-2 bg-[hsl(var(--gold)/0.03)]">
+                  <p className="text-[8px] font-semibold text-[hsl(var(--gold-dark))] uppercase mb-1.5 flex items-center gap-1">
+                    <Award size={8}/> Standard Export Colors
+                  </p>
+                  <div className="flex gap-1.5">
+                    {STANDARD_EXPORT_COLORS.map(c => (
+                      <button key={c.hex} onClick={() => setActiveColor(c.hex)} title={c.label}
+                        className={`flex flex-col items-center gap-0.5 transition-all hover:scale-110 ${activeColor === c.hex ? 'scale-110' : ''}`}>
+                        <div className={`w-6 h-6 rounded-full border-2 shadow-sm ${activeColor === c.hex ? 'border-[hsl(var(--gold))]' : c.hex === '#ffffff' ? 'border-[hsl(var(--border))]' : 'border-white'}`}
+                          style={{ backgroundColor: c.hex }}/>
+                        <span className="text-[6px] text-[hsl(var(--muted-foreground))] leading-tight">{c.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <div className="flex gap-1">
                   {stopDefs.map(s => (
                     <button key={s.key} onClick={() => setActiveStop(s.key)} title={s.label}
