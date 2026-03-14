@@ -37,17 +37,17 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
         {/* Source Portal (Primary — left side) */}
         <Card
           className={`cursor-pointer transition-all border-2 ${
-            selectedSource === "source-b"
+            selectedSource === "provident"
               ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-lg"
               : "border-border hover:border-gold/40 bg-card"
           }`}
-          onClick={() => handleSourceSelect(selectedSource === "source-b" ? "none" : "source-b")}
+          onClick={() => handleSourceSelect(selectedSource === "provident" ? "none" : "provident")}
         >
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-sm text-foreground">
               <Database className="w-4 h-4 text-gold" />
-              Provident Portal
-              {selectedSource === "source-b" && (
+              PROVIDENT PORTAL
+              {selectedSource === "provident" && (
                 <Badge variant="outline" className="ml-auto bg-gold/10 text-gold border-gold/40 text-[10px]">
                   Active
                 </Badge>
