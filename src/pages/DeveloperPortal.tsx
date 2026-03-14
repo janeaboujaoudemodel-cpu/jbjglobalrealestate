@@ -29,6 +29,8 @@ import SalesRepRegistration from "@/components/developer-portal/SalesRepRegistra
 import BriefingRequestForm from "@/components/developer-portal/BriefingRequestForm";
 import DeveloperMessageForm from "@/components/developer-portal/DeveloperMessageForm";
 import ExistingProjectsReview from "@/components/developer-portal/ExistingProjectsReview";
+import { ProjectDuplicateInspector } from "@/components/listing-admin/ProjectDuplicateInspector";
+import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogAction, AlertDialogCancel } from "@/components/ui/alert-dialog";
 
 interface UploadedFile {
   name: string;
