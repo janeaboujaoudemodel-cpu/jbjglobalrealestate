@@ -222,7 +222,7 @@ IMPORTANT:
         functionName: "ai-price-predictor",
         userId,
         clientIp,
-        model: "google/gemini-2.5-flash",
+        model: "google/gemini-3-flash-preview",
         success: false,
         errorType: aiError instanceof Error ? aiError.message : "AI error",
         responseTimeMs: processingTimeMs,
