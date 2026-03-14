@@ -858,14 +858,14 @@ const DeveloperPortal = () => {
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSgyNTUsMjE1LDE1MCwwLjA1KSIvPjwvc3ZnPg==')] opacity-50" />
           <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
             <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 text-sm">
-              {isOwner ? 'Owner Access' : isDeveloperMode ? 'Developer Tools' : 'For Real Estate Developers & Sales Teams'}
+              {isOwner && !isDeveloperMode ? 'Owner Access' : isDeveloperMode ? 'Developer Portal' : 'For Real Estate Developers & Sales Teams'}
             </Badge>
             <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#F5EBD7]">
-              {isOwner ? `Welcome back, Jane` : `Here's your portal, ${displayName}`}
+              {isOwner && !isDeveloperMode ? `Welcome back, Jane` : `Developer Portal`}
             </h1>
             <p className="text-lg md:text-xl text-[#D4B896]">
-              {isOwner
-                ? 'Upload projects, manage launches, and review interest registrations — all from here.'
+              {isOwner && !isDeveloperMode
+                ? 'Quick upload, manage launches, and review submissions.'
                 : 'Submit projects, request briefings, upload documents, and manage launches — all in one place.'}
             </p>
           </div>
