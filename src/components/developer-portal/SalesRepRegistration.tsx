@@ -423,7 +423,7 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
           {/* Nationality & Gender */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label>Nationality</Label>
+              <Label>Nationality *</Label>
               <NationalitySelect
                 value={form.nationality}
                 onChange={(v) => setForm(f => ({ ...f, nationality: v }))}
