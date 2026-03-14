@@ -291,6 +291,7 @@ const ReellyEnrichmentPanel = () => {
 
 // ========== PROVIDENT ENRICHMENT PANEL ==========
 const ProvidentEnrichmentPanel = () => {
+  const navigate = useNavigate();
   const [isRunning, setIsRunning] = useState(false);
   const [batchCount, setBatchCount] = useState(0);
   const [totalProcessed, setTotalProcessed] = useState(0);
