@@ -354,7 +354,7 @@ const Footer = () => {
     { href: "/partners/legal", label: "Legal" },
     { href: "/partners/company-setup", label: "Company Setup" },
     { href: "/partners/visa-services", label: "Visa Services" },
-    { href: "/partner-governance", label: "Partners Hub" },
+    { href: "/governance/partners", label: "Partners Hub" },
   ];
 
   // Legal Links
