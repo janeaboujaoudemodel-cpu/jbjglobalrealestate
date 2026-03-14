@@ -210,7 +210,7 @@ Deno.serve(async (req) => {
 
     if (saveErr) console.error("Failed to save checklist run:", saveErr.message);
 
-    return jsonResponse({
+    return jsonResponse(200, {
       overall_status: overall,
       passed_count: passed,
       failed_count: failed,
