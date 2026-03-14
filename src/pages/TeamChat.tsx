@@ -494,6 +494,9 @@ const TeamChat = () => {
             <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10" onClick={() => setShowMembers(!showMembers)}>
               <Users className="w-4 h-4 text-black/50" />
             </Button>
+            <Button variant="ghost" size="icon" className={cn("h-8 w-8 hidden sm:flex", showProductivityPanel ? "bg-[#C9A84C]/15" : "hover:bg-[#C9A84C]/10")} onClick={() => setShowProductivityPanel(!showProductivityPanel)}>
+              <BookOpen className="w-4 h-4 text-black/50" />
+            </Button>
             <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10 hidden sm:flex" onClick={() => setShowSettings(true)}>
               <Settings className="w-4 h-4 text-black/50" />
             </Button>
