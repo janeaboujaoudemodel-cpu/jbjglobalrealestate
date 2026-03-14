@@ -1952,7 +1952,7 @@ const DeveloperPortal = () => {
                   </CardContent>
                 </Card>
 
-                {/* Interest Registrations — collapsible */}
+                {/* Launch Interests — collapsible */}
                 <Collapsible open={interestExpanded} onOpenChange={setInterestExpanded}>
                   <Card className="border-2 border-gold/30">
                     <CollapsibleTrigger asChild>
