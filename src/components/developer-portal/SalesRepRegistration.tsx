@@ -127,6 +127,26 @@ const SalesRepRegistration = ({ developerName, onRegistered }: SalesRepRegistrat
       toast.error('Please provide your role title');
       return;
     }
+    if (!form.nationality) {
+      toast.error('Please select your nationality');
+      return;
+    }
+    if (!form.gender) {
+      toast.error('Please select your gender');
+      return;
+    }
+    if (!form.years_in_real_estate) {
+      toast.error('Please enter your years of experience in real estate');
+      return;
+    }
+    if (form.languages.length === 0) {
+      toast.error('Please select at least one language you speak');
+      return;
+    }
+    if (!form.date_of_join) {
+      toast.error('Please enter your date of joining the company');
+      return;
+    }
     if (isOwnerRole) {
       if (!form.verification_document_url) {
         toast.error('Please upload your ID document');
