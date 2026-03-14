@@ -284,7 +284,7 @@ export default function AIToolsControlPanel() {
   const publishVersion = async (toolId: string) => {
     const latestVersion = versions.find(v => v.tool_id === toolId && (v.status === "tested" || v.status === "applied"));
     if (!latestVersion) { toast.error("No version ready to publish"); return; }
-    const { error } = await supabase.from("ai_tool_versions").update({
+    const { error } = await (supabase.from("ai_tool_versions") as any).update({
       status: "published",
       published_at: new Date().toISOString(),
     }).eq("id", latestVersion.id);
