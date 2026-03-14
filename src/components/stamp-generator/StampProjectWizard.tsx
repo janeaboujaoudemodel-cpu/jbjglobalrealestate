@@ -379,6 +379,20 @@ export default function StampProjectWizard() {
     img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
   }, [form.company_name]);
 
+  const handleElementClick = useCallback((elementId: string) => {
+    if (elementId.includes('top-arc')) {
+      setActiveTab('company');
+      setTimeout(() => document.querySelector<HTMLInputElement>('[dir="rtl"]')?.focus(), 100);
+    } else if (elementId.includes('bottom-arc')) {
+      setActiveTab('company');
+      setTimeout(() => document.querySelector<HTMLInputElement>('[placeholder*="Acme"]')?.focus(), 100);
+    } else if (elementId.includes('center') || elementId.includes('registration')) {
+      setActiveTab('logo');
+    } else if (elementId.includes('separator')) {
+      setActiveTab('style');
+    }
+  }, []);
+
   const previewProps = {
     companyName: form.company_name, arabicCompanyName: form.arabic_company_name,
     city: form.city_optional, country: form.country_optional,
@@ -389,6 +403,13 @@ export default function StampProjectWizard() {
     languageReversed: form.language_reversed, showLicenseNumber: form.show_license_number,
     showLocation: form.show_location, separatorStyle: form.separator_style,
     inkColor: form.ink_color, arabicCity: form.arabic_city,
+    arabicArcSpread: form.arabic_arc_spread,
+    arabicLetterSpacing: form.arabic_letter_spacing,
+    arabicFont: form.arabic_font,
+    arabicFontWeight: form.arabic_font_weight,
+    circleGap: form.circle_gap,
+    centerContentSize: form.center_content_size,
+    onElementClick: handleElementClick,
   };
 
   return (
