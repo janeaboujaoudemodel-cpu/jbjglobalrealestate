@@ -848,25 +848,32 @@ const ListingAdmin = () => {
           </div>
         )}
 
-        {/* Projects View - Grid */}
+        {/* Project Hub View - Grid */}
         {activeView === 'projects' && (
           <div className="container mx-auto px-4 py-6 space-y-4">
-            {/* Horizontal filter row — replaces vertical sidebar */}
+            {/* Status filter + Published/Drafts */}
             <div className="flex flex-wrap items-center gap-2">
-              <Button
-                variant={projectsTab === "published" ? "primary" : "secondary"}
-                size="sm"
-                onClick={() => { setProjectsTab("published"); setProjectsPage(0); }}
-              >
+              <Button variant={projectsTab === "published" ? "primary" : "secondary"} size="sm" onClick={() => { setProjectsTab("published"); setProjectsPage(0); }}>
                 Published ({totalCount ?? 0})
               </Button>
-              <Button
-                variant={projectsTab === "drafts" ? "primary" : "secondary"}
-                size="sm"
-                onClick={() => { setProjectsTab("drafts"); setProjectsPage(0); }}
-              >
+              <Button variant={projectsTab === "drafts" ? "primary" : "secondary"} size="sm" onClick={() => { setProjectsTab("drafts"); setProjectsPage(0); }}>
                 Drafts ({(allProjectsCount ?? 0) - (totalCount ?? 0)})
               </Button>
+
+              <div className="h-6 w-px bg-gold/30 mx-1" />
+
+              {/* Status filter badges */}
+              {["all", "enriched", "needs-work", "pending"].map(s => (
+                <Button
+                  key={s}
+                  variant={statusFilter === s ? "primary" : "outline"}
+                  size="sm"
+                  className="text-xs h-7"
+                  onClick={() => setStatusFilter(s)}
+                >
+                  {s === "all" ? "All" : s === "enriched" ? "✓ Enriched" : s === "needs-work" ? "⚠ Needs Work" : "◌ Pending"}
+                </Button>
+              ))}
 
               <div className="h-6 w-px bg-gold/30 mx-1" />
 
