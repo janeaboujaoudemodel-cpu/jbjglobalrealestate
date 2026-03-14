@@ -271,7 +271,7 @@ export default function AIToolsControlPanel() {
     if (error) { toast.error("Failed to log test"); return; }
     // Update version status to tested
     if (latestVersion) {
-      await supabase.from("ai_tool_versions").update({
+      await (supabase.from("ai_tool_versions") as any).update({
         status: "tested",
         tested_at: new Date().toISOString(),
         test_result: "pass",
