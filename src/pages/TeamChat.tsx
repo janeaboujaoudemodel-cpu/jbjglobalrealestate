@@ -203,6 +203,9 @@ const TeamChat = () => {
           senderName: currentUser.name,
           senderTitle: currentUser.role,
           recipientName: recipientMember.name,
+          attachments: pendingAttachments.length > 0
+            ? pendingAttachments.map(a => ({ filename: a.name, content: a.content, type: a.mimeType }))
+            : undefined,
         });
       }
     }
