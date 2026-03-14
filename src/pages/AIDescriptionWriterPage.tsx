@@ -135,17 +135,17 @@ export default function AIDescriptionWriterPage() {
               <div>
                 <Label className="text-zinc-300">Property Type</Label>
                 <Select value={propertyType} onValueChange={setPropertyType}>
-                  <SelectTrigger className="bg-zinc-800 border-lime-500/30 text-white">
+                  <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50">
                     <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="apartment">Apartment</SelectItem>
-                    <SelectItem value="villa">Villa</SelectItem>
-                    <SelectItem value="townhouse">Townhouse</SelectItem>
-                    <SelectItem value="penthouse">Penthouse</SelectItem>
-                    <SelectItem value="studio">Studio</SelectItem>
-                    <SelectItem value="duplex">Duplex</SelectItem>
-                  </SelectContent>
+                  </SelectTriggerDark>
+                  <SelectContentDark className="border-lime-500/30">
+                    <SelectItemDark value="apartment">Apartment</SelectItemDark>
+                    <SelectItemDark value="villa">Villa</SelectItemDark>
+                    <SelectItemDark value="townhouse">Townhouse</SelectItemDark>
+                    <SelectItemDark value="penthouse">Penthouse</SelectItemDark>
+                    <SelectItemDark value="studio">Studio</SelectItemDark>
+                    <SelectItemDark value="duplex">Duplex</SelectItemDark>
+                  </SelectContentDark>
                 </Select>
               </div>
               <div>
