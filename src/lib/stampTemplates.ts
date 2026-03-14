@@ -619,20 +619,20 @@ export function generateStampConcepts(project: StampProject): StampDesignConcept
       return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <path id="t9top${showRegNo ? 'r' : ''}" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 1 1 ${cx + arcR} ${cy}"/>
-          <path id="t9bot${showRegNo ? 'r' : ''}" d="M ${cx + arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx - arcR} ${cy}"/>
+          <path id="t9bot${showRegNo ? 'r' : ''}" d="M ${cx - arcR} ${cy} A ${arcR} ${arcR} 0 0 0 ${cx + arcR} ${cy}"/>
         </defs>
         <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="${PRIMARY}"/>
         <circle cx="${cx}" cy="${cy}" r="${bandR}" fill="#ffffff"/>
         <circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="${SECONDARY}" stroke-width="1.2"/>
         <text x="${cx}" y="${cy - r2 + 6}" text-anchor="middle" font-family="${font}" font-size="8" fill="${ACCENT}">✦</text>
         <text x="${cx}" y="${cy + r2 - 1}" text-anchor="middle" font-family="${font}" font-size="8" fill="${ACCENT}">✦</text>
-        <!-- English top arc -->
-        <text font-family="${font}" font-size="${enFontSize}" fill="${PRIMARY}" letter-spacing="1.8" font-weight="700">
-          <textPath href="#t9top${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${name}</textPath>
-        </text>
-        <!-- Arabic bottom arc -->
+        <!-- Arabic top arc (STRICT: Arabic always on top) -->
         <text font-family="${arabicFont}" font-size="${arFontSize}" fill="${PRIMARY}" letter-spacing="1.2" font-weight="600">
-          <textPath href="#t9bot${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${arabicName}</textPath>
+          <textPath href="#t9top${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${arabicName}</textPath>
+        </text>
+        <!-- English bottom arc (left-to-right readable) -->
+        <text font-family="${font}" font-size="${enFontSize}" fill="${PRIMARY}" letter-spacing="1.8" font-weight="700" dominant-baseline="hanging">
+          <textPath href="#t9bot${showRegNo ? 'r' : ''}" startOffset="50%" text-anchor="middle">${name}</textPath>
         </text>
         ${divider(cx, cy + 2, ACCENT, 28)}
         <text x="${cx}" y="${cy + 18}" text-anchor="middle" dominant-baseline="middle"
