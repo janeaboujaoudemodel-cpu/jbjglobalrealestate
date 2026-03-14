@@ -142,7 +142,7 @@ export function useMyEventInvitations() {
           const eventMap = new Map((eventsData as any[] || []).map((e: any) => [e.id, e]));
           setInvitations((data as any[]).map((inv: any) => ({ ...inv, event: eventMap.get(inv.event_id) })));
         } else {
-          setInvitations(data as any);
+          setInvitations(data as unknown as EventInvitation[]);
         }
       }
       setLoading(false);
