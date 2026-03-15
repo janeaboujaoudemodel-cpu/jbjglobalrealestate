@@ -262,6 +262,7 @@ export function StampInteractivePreview({
       setSelected(null);
       setSelectedLetterIdx(null);
       setEditingText(null);
+      if (onElementSelect) onElementSelect(null);
     }
   };
 
