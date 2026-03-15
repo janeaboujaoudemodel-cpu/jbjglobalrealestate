@@ -4,6 +4,7 @@
  * Plus: Colors, English/Arabic Controls, Sync, My Stamp.
  */
 import React, { useState, useCallback, useEffect } from 'react';
+import type { SelectedElement, SelectedElementType } from './StampInteractivePreview';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { StampColorWheel } from './StampColorWheel';
