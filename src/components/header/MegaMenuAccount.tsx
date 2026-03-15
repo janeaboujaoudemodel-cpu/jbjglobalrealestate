@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks, AlertCircle } from 'lucide-react';
+import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks, AlertCircle, Building2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage, SUPPORTED_LANGUAGES } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -40,7 +40,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   const { user, isOwner, ownerLoading, signOut } = useAuth();
   const { t, language, setLanguage } = useLanguage();
   const { tierProgress, isCombinedMode, investorTierProgress, brokerTierProgress } = useTierProgress();
-  const { mode } = useUserModeContext();
+  const { mode, isDeveloperMode } = useUserModeContext();
   const { data: alertCounts } = useUserAlerts();
 
   // Currency & unit state synced with localStorage
@@ -238,6 +238,13 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
 
   // Filter admin links based on actual access - consolidated shortcuts
   const adminLinks = useMemo(() => {
+    // In developer mode, show Developer Center shortcut instead of owner tools
+    if (isDeveloperMode) {
+      return [
+        { href: '/developer-hub', label: 'Developer Center', icon: Building2, requiresOwner: false },
+      ];
+    }
+
     const ownerLinks = [
       { href: '/owner', label: 'Command Center', icon: Shield, requiresOwner: true },
       { href: '/owner/crm', label: 'CRM Dashboard', icon: Users, requiresOwner: true },
@@ -261,7 +268,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       if ((link as any).requiresAdmin) return isOwner || hasCRMAccess;
       return false;
     });
-  }, [isOwner, hasCRMAccess, hasListingAdminAccess, t]);
+  }, [isOwner, hasCRMAccess, hasListingAdminAccess, isDeveloperMode, t]);
 
   // Get mode label for display
   const getModeLabel = () => {

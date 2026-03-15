@@ -39,7 +39,7 @@ const DeveloperPortalCTA = () => {
   // When owner is in developer mode, show developer view
   const actions = isDeveloperMode ? developerActions : (isOwner ? ownerActions : developerActions);
   const title = isDeveloperMode
-    ? `Developer Portal`
+    ? `Developer Center`
     : (isOwner ? `Welcome back, ${displayName}` : `Good to see you, ${displayName}`);
   const subtitle = isDeveloperMode
     ? 'Submit projects, request briefings, and manage your developer tools.'

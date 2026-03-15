@@ -214,14 +214,19 @@ export function filterShortcutGroups(groups: ShortcutGroup[], opts: {
   isOwner: boolean;
   isBroker: boolean;
   isInvestor: boolean;
+  isDeveloperMode?: boolean;
 }): ShortcutGroup[] {
   return groups.filter((group) => {
+    // In developer mode, hide owner-only groups
+    if (opts.isDeveloperMode && group.visibility.includes('owner') && !group.visibility.includes('authenticated')) {
+      return false;
+    }
     // Public groups are always visible
     if (group.visibility.includes('public')) return true;
     // Auth-only groups need authentication
     if (group.visibility.includes('authenticated') && opts.isAuthenticated) return true;
-    // Owner-only
-    if (group.visibility.includes('owner') && opts.isOwner) return true;
+    // Owner-only — hide in developer mode
+    if (group.visibility.includes('owner') && opts.isOwner && !opts.isDeveloperMode) return true;
     // Broker-only
     if (group.visibility.includes('broker') && (opts.isBroker || opts.isOwner)) return true;
     // Investor-only
@@ -236,6 +241,10 @@ export function filterShortcutGroups(groups: ShortcutGroup[], opts: {
     // For investor dashboards, customize
     if (group.label === "Dashboards" && opts.isInvestor && !opts.isOwner) {
       items = items.filter(i => i.label !== 'JBJ Analytics');
+    }
+    // In developer mode, hide Listing Admin from listings group
+    if (opts.isDeveloperMode && group.label === "Listings") {
+      items = items.filter(i => i.label !== 'Listing Admin');
     }
     return { ...group, items };
   }).filter(g => g.items.length > 0);

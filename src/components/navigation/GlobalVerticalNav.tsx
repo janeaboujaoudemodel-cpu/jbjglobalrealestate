@@ -29,6 +29,7 @@ import { useDevelopers } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
@@ -288,7 +289,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Productivity Suite", href: "/business-suite/productivity", icon: Cog },
 
   // ── Admin & Owner (shown conditionally) ──
-  { label: "Owner Command Center", href: "/owner", icon: Crown, section: "ADMIN & OWNER" },
+  { label: "Command Center", href: "/owner", icon: Crown, section: "ADMIN & OWNER" },
   { label: "Admin Panel", href: "/admin", icon: Lock },
   { label: "Admin CRM", href: "/admin/crm", icon: Users },
   { label: "Admin Inquiries", href: "/admin/inquiries", icon: MailOpen },
@@ -594,6 +595,7 @@ export default function GlobalVerticalNav() {
   const location = useLocation();
   const { session } = useAuth();
   const { role, isBroker, isInvestor, isOwner } = useUserRole();
+  const { isDeveloperMode } = useUserModeContext();
   const [activeMegaMenu, setActiveMegaMenu] = useState<MegaMenuKey | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -877,6 +879,7 @@ export default function GlobalVerticalNav() {
                   isOwner,
                   isBroker,
                   isInvestor,
+                  isDeveloperMode,
                 }).map((group) => (
                   <div key={group.label} className={`border-l-4 ${group.colorBorder} rounded-lg ${group.colorBg} p-2`}>
                     <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
@@ -1132,7 +1135,7 @@ export default function GlobalVerticalNav() {
         <div className="py-2 px-2 space-y-0.5">
           {SECTION_KEYS.map((sectionKey, sectionIdx) => {
             // Role-based visibility
-            if (sectionKey === 'ADMIN & OWNER' && !isOwner) return null;
+            if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
             if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
             if (sectionKey === 'INVESTOR' && !isInvestor && !isOwner) return null;
             const items = sectionGroups[sectionKey];
