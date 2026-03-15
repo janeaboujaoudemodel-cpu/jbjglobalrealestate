@@ -339,7 +339,13 @@ export default function StampProjectsDashboard() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 {projects.map(project => (
                   <div key={project.id}
-                    className={`bg-white rounded-2xl border shadow-sm hover:shadow-md transition-all group relative ${selectedIds.has(project.id) ? 'border-[hsl(var(--gold))] ring-2 ring-[hsl(var(--gold)/0.2)]' : 'border-[hsl(var(--border))]'}`}>
+                    onClick={(e) => {
+                      // Allow clicks on buttons/checkboxes to work normally
+                      const target = e.target as HTMLElement;
+                      if (target.closest('button') || target.closest('[role="checkbox"]') || target.closest('input')) return;
+                      navigate(`/toolkit/stamp-generator/${project.id}/generate`);
+                    }}
+                    className={`bg-white rounded-2xl border shadow-sm hover:shadow-md transition-all group relative cursor-pointer ${selectedIds.has(project.id) ? 'border-[hsl(var(--gold))] ring-2 ring-[hsl(var(--gold)/0.2)]' : 'border-[hsl(var(--border))]'}`}>
                     <div className="absolute top-2 left-2 z-10">
                       <Checkbox checked={selectedIds.has(project.id)} onCheckedChange={() => toggleSelect(project.id)}
                         className="border-[hsl(var(--gold)/0.5)] data-[state=checked]:bg-[hsl(var(--gold))] data-[state=checked]:border-[hsl(var(--gold))]"/>

@@ -288,8 +288,11 @@ export default function StampGeneratorPage() {
       const regular = existing.filter((d: any) => !d.is_favorite).slice(0, 11).map(toDesign);
       setFavoriteConcepts(favs);
       setConcepts(regular);
-      // Set standard from first design (T0)
-      const firstDesign = regular[0] || favs[0];
+      // Set standard from first design (T0) or persisted selected_design_id
+      const selectedDesignId = (data as any).selected_design_id;
+      const allDesigns = [...favs, ...regular];
+      const matchedDesign = selectedDesignId ? allDesigns.find(d => d.id === selectedDesignId) : null;
+      const firstDesign = matchedDesign || regular[0] || favs[0];
       if (firstDesign && !standardConcept) {
         setStandardConcept(firstDesign);
         setSelectedId(firstDesign.id);
