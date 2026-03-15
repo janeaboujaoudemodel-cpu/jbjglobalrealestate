@@ -171,7 +171,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
   } = props;
 
   return (
-    <div className="space-y-4">
+    <div className="lg:overflow-y-auto lg:max-h-full lg:pr-1 space-y-4 scrollbar-thin scrollbar-thumb-[hsl(var(--border))] scrollbar-track-transparent">
       {/* Per-Side Color System */}
       <Collapsible open={colorOpen} onOpenChange={setColorOpen}>
         <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">

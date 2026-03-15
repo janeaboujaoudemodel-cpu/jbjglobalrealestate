@@ -152,7 +152,7 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="lg:sticky lg:top-[108px] lg:self-start space-y-5">
       <div className="flex items-center justify-between">
         <Label className="text-[10px] font-bold uppercase tracking-[0.15em] text-[hsl(var(--muted-foreground))] flex items-center gap-1.5">
           <Eye size={11} /> Live Preview

@@ -43,7 +43,7 @@ export default function BusinessCardDesigner() {
       )}
 
       {/* ── Main Content ───────────────────────────────────────── */}
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-4 grid grid-cols-1 lg:grid-cols-[320px_1fr_320px] gap-5">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 grid grid-cols-1 lg:grid-cols-[300px_1fr_300px] gap-4 lg:h-[calc(100vh-48px-60px)]">
 
         {/* ── Left panel ──────────────────────────────────────── */}
         <BusinessCardLeftPanel
