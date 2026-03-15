@@ -126,6 +126,52 @@ const BrandPaletteHub = () => {
     return (r * 299 + g * 587 + b * 114) / 1000 > 128;
   };
 
+  const downloadBlob = useCallback((blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
+  const exportJSON = useCallback(() => {
+    const json = JSON.stringify(draft, null, 2);
+    downloadBlob(new Blob([json], { type: 'application/json' }), 'brand-palette.json');
+    toast.success('Palette exported as JSON');
+  }, [draft, downloadBlob]);
+
+  const exportCSS = useCallback(() => {
+    const css = `:root {\n${PALETTE_KEYS.map(({ key }) => `  --brand-${key}: ${draft[key]};`).join('\n')}\n}`;
+    downloadBlob(new Blob([css], { type: 'text/css' }), 'brand-palette.css');
+    toast.success('Palette exported as CSS');
+  }, [draft, downloadBlob]);
+
+  const exportPNG = useCallback(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 500;
+    canvas.height = 100;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const w = 100;
+    PALETTE_KEYS.forEach(({ key, label }, i) => {
+      ctx.fillStyle = draft[key];
+      ctx.fillRect(i * w, 0, w, 100);
+      ctx.fillStyle = isLightColor(draft[key]) ? '#000' : '#fff';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(label, i * w + w / 2, 55);
+      ctx.font = '10px monospace';
+      ctx.fillText(draft[key], i * w + w / 2, 72);
+    });
+    canvas.toBlob((blob) => {
+      if (blob) {
+        downloadBlob(blob, 'brand-palette-swatch.png');
+        toast.success('Palette exported as PNG swatch');
+      }
+    });
+  }, [draft, downloadBlob]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
       {/* Header */}
