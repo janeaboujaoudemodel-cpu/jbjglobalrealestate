@@ -54,6 +54,15 @@ const ownerActions: QuickAction[] = [
   { label: "Employee Hub", description: "Team & HR", icon: MapPin, href: "/employee-hub", color: "text-indigo-400" },
 ];
 
+const developerModeActions: QuickAction[] = [
+  { label: "Developer Center", description: "Your developer hub", icon: Building2, href: "/developer-hub", color: "text-blue-400" },
+  { label: "Submit Project", description: "Upload brochures & renders", icon: Plus, href: "/developer-portal?tab=submit", color: "text-emerald-400" },
+  { label: "My Projects", description: "Track submission status", icon: FolderOpen, href: "/developer-portal?tab=projects", color: "text-purple-400" },
+  { label: "Request Briefing", description: "Schedule a project briefing", icon: Calendar, href: "/developer-portal?tab=briefing", color: "text-amber-400" },
+  { label: "Events", description: "Invite us to launches", icon: Sparkles, href: "/developer-portal?tab=events", color: "text-cyan-400" },
+  { label: "Agreements", description: "Sign & review documents", icon: FileCheck, href: "/developer-portal?tab=agreements", color: "text-primary" },
+];
+
 const defaultActions: QuickAction[] = [
   { label: "Browse Properties", description: "Explore listings", icon: Home, href: "/properties", color: "text-blue-400" },
   { label: "Area Guides", description: "Explore neighborhoods", icon: MapPin, href: "/areas", color: "text-emerald-400" },
