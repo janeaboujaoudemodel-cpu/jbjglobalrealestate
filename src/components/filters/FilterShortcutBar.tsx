@@ -461,7 +461,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </button>
           </PopoverTrigger>
           <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
-            <h4 className="text-sm font-bold text-black mb-3">Project handover by</h4>
+            <h4 className="text-sm font-bold text-black mb-3">{t('filter.handoverTitle')}</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">From</label>
