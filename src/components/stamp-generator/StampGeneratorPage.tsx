@@ -191,7 +191,7 @@ export default function StampGeneratorPage() {
       setSvgOverrides(prev => ({ ...prev, [id]: colored }));
       triggerPulse();
     }
-  }, [monogramLetterColors, localMonogramText, localIconStyle, primaryColor]);
+  }, [monogramLetterColors, localMonogramText, localIconStyle, primaryColor, project]);
 
 
   // Preview modal

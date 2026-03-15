@@ -415,9 +415,9 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Separator Distance</p>
-                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.separatorDistance}px</span>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.separatorDistance}%</span>
                 </div>
-                <Slider min={0} max={20} step={1} value={[props.separatorDistance]}
+                <Slider min={0} max={100} step={1} value={[props.separatorDistance]}
                   onValueChange={([v]) => props.onSetSeparatorDistance(v)} />
               </div>
               {/* Center Content Size */}
