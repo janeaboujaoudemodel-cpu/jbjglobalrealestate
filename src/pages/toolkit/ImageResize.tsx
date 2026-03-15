@@ -105,8 +105,9 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
   const [collageLayout, setCollageLayout] = useState<"horizontal" | "vertical" | "grid">("horizontal");
   const [collageBgColor, setCollageBgColor] = useState("#ffffff");
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
+  // Smart Crop AI
+  const [smartCropLoading, setSmartCropLoading] = useState(false);
+  const [smartCropSubject, setSmartCropSubject] = useState<string | null>(null);
   const thumbnailStripRef = useRef<HTMLDivElement>(null);
 
   const activeImage = useMemo(() => images.find(i => i.id === activeImageId) ?? images[0] ?? null, [images, activeImageId]);
