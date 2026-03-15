@@ -148,10 +148,14 @@ interface StampLeftPanelProps {
   arabicLetterSpacing: number;
   arabicArcSpread: number;
   arabicFontWeight: string;
+  arabicFontSize?: number | null;
+  arabicFontItalic?: boolean;
   onSetArabicFont: (v: string) => void;
   onSetArabicLetterSpacing: (v: number) => void;
   onSetArabicArcSpread: (v: number) => void;
   onSetArabicFontWeight: (v: string) => void;
+  onSetArabicFontSize?: (v: number | null) => void;
+  onSetArabicFontItalic?: (v: boolean) => void;
   // Spacing & Layout controls
   arcTextSpacing: number;
   circleGap: number;
