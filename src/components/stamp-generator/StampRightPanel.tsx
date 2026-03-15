@@ -293,6 +293,34 @@ export function StampRightPanel(props: StampRightPanelProps) {
 
         {/* Library Tab — Custom Presets + Drafts */}
         <TabsContent value="library" className="flex-1 overflow-y-auto p-3 mt-0 space-y-4">
+          {/* Save Current as Preset */}
+          {props.standardConcept && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full h-8 text-[10px] gap-1.5 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)]"
+              onClick={() => {
+                const svg = props.svgOverrides[props.standardConcept!.id] || props.standardConcept!.svgSource;
+                try {
+                  const saved = localStorage.getItem('stamp-custom-presets');
+                  const existing = saved ? JSON.parse(saved) : [];
+                  const preset = {
+                    id: crypto.randomUUID(),
+                    name: props.standardConcept!.label || 'Custom Preset',
+                    description: `Saved ${new Date().toLocaleDateString()}`,
+                    svgSource: svg,
+                    templateKey: props.standardConcept!.templateKey,
+                    savedAt: new Date().toISOString(),
+                  };
+                  existing.unshift(preset);
+                  localStorage.setItem('stamp-custom-presets', JSON.stringify(existing));
+                  toast.success('Saved current design as preset');
+                } catch { toast.error('Failed to save preset'); }
+              }}
+            >
+              <Save size={10} /> Save Current as Preset
+            </Button>
+          )}
           <StampLibraryPanel onApplyPreset={props.onSelect} />
         </TabsContent>
 
