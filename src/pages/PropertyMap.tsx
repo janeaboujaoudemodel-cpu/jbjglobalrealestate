@@ -12,42 +12,27 @@ import { SafeImage } from "@/components/SafeImage";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import FilterShortcutBar, { ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
 import "leaflet/dist/leaflet.css";
 
-// ── Tile layers ──
-type MapViewType = "satellite" | "street" | "terrain";
-
-const MAP_TILES: Record<MapViewType, { url: string; attribution: string }> = {
-  satellite: {
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    attribution: "Tiles &copy; Esri",
-  },
-  street: {
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution: "&copy; OpenStreetMap",
-  },
-  terrain: {
-    url: "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png",
-    attribution: "Stamen Design",
-  },
-};
-
-function DynamicTileLayer({ mapView }: { mapView: MapViewType }) {
+function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; language: string }) {
   const map = useMap();
   const layerRef = useRef<L.TileLayer | null>(null);
 
   useEffect(() => {
     if (layerRef.current) map.removeLayer(layerRef.current);
-    const { url, attribution } = MAP_TILES[mapView];
+    const tiles = getMapTiles(language);
+    const { url, attribution } = tiles[mapView];
     layerRef.current = L.tileLayer(url, { attribution, maxZoom: 19 });
     layerRef.current.addTo(map);
     return () => { if (layerRef.current) map.removeLayer(layerRef.current); };
-  }, [mapView, map]);
+  }, [mapView, language, map]);
 
   return null;
 }
 
-function MapViewToggle({ mapView, onViewChange }: { mapView: MapViewType; onViewChange: (v: MapViewType) => void }) {
+function MapViewToggle({ mapView, onViewChange, t }: { mapView: MapViewType; onViewChange: (v: MapViewType) => void; t: (key: string) => string }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
       <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-gold/40 shadow-lg p-1 flex flex-col gap-1">
@@ -59,7 +44,7 @@ function MapViewToggle({ mapView, onViewChange }: { mapView: MapViewType; onView
               mapView === view ? "bg-gold text-foreground" : "hover:bg-gold/20 text-muted-foreground"
             }`}
           >
-            {view.charAt(0).toUpperCase() + view.slice(1)}
+            {t(`map.${view}`)}
           </button>
         ))}
       </div>
@@ -121,19 +106,20 @@ const createCustomIcon = (price: number | null) => {
   });
 };
 
-const formatPrice = (price: number | null) => {
-  if (!price) return "Price on request";
-  if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
-  return `AED ${(price / 1000).toFixed(0)}K`;
-};
-
 // ── Main component ──
 const PropertyMap = () => {
+  const { t, language } = useLanguage();
   const { data: allProjects = [], isLoading } = useProjectsListing();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [showList, setShowList] = useState(false);
   const [mapView, setMapView] = useState<MapViewType>("satellite");
   const [filters, setFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+
+  const formatPrice = (price: number | null) => {
+    if (!price) return t('map.priceOnRequest');
+    if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
+    return `AED ${(price / 1000).toFixed(0)}K`;
+  };
 
   // Apply filters
   const filteredProjects = useMemo(() => {
@@ -167,7 +153,7 @@ const PropertyMap = () => {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-          <p className="text-muted-foreground">Loading properties...</p>
+          <p className="text-muted-foreground">{t('map.loadingProperties')}</p>
         </div>
       </div>
     );
@@ -180,7 +166,7 @@ const PropertyMap = () => {
         <div className="flex items-center gap-2 px-3 py-1.5">
           <Badge variant="secondary" className="gap-1 shrink-0">
             <MapPin className="h-3 w-3" />
-            {filteredProjects.length} Properties
+            {filteredProjects.length} {t('map.properties')}
           </Badge>
           <Button
             variant={showList ? "default" : "outline"}
@@ -189,7 +175,7 @@ const PropertyMap = () => {
             className="gap-1.5 shrink-0 h-7 text-xs"
           >
             <List className="h-3.5 w-3.5" />
-            List
+            {t('map.list')}
           </Button>
         </div>
         <FilterShortcutBar
@@ -216,8 +202,8 @@ const PropertyMap = () => {
           className="z-0"
           attributionControl={false}
         >
-          <DynamicTileLayer mapView={mapView} />
-          <MapViewToggle mapView={mapView} onViewChange={setMapView} />
+          <DynamicTileLayer mapView={mapView} language={language} />
+          <MapViewToggle mapView={mapView} onViewChange={setMapView} t={t} />
           <MapNavigationControls latitude={center[0]} longitude={center[1]} />
           <ScrollWheelZoomGuard />
           <FitBounds coords={coordsList} />
@@ -253,7 +239,7 @@ const PropertyMap = () => {
                       </span>
                       <Link to={`/project/${project.slug}`}>
                         <Button size="sm" variant="outline" className="h-7 text-xs">
-                          View <ChevronRight className="h-3 w-3 ml-1" />
+                          {t('map.view')} <ChevronRight className="h-3 w-3 ml-1" />
                         </Button>
                       </Link>
                     </div>
@@ -269,7 +255,7 @@ const PropertyMap = () => {
       {showList && (
         <div className="absolute top-[140px] right-0 bottom-0 w-full sm:w-96 bg-background/95 backdrop-blur-sm border-l z-[999] overflow-hidden flex flex-col">
           <div className="p-4 border-b flex items-center justify-between">
-            <h2 className="font-semibold">{filteredProjects.length} Properties</h2>
+            <h2 className="font-semibold">{filteredProjects.length} {t('map.properties')}</h2>
             <Button variant="ghost" size="sm" onClick={() => setShowList(false)}>
               <X className="h-4 w-4" />
             </Button>
@@ -347,7 +333,7 @@ const PropertyMap = () => {
               <div className="p-4">
                 <h3 className="font-semibold text-lg mb-1">{selectedProject.name}</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  by {selectedProject.developer_name} • {selectedProject.area_name || selectedProject.location}
+                  {t('map.by')} {selectedProject.developer_name} • {selectedProject.area_name || selectedProject.location}
                 </p>
 
                 <div className="grid grid-cols-3 gap-3 mb-4">
@@ -373,14 +359,14 @@ const PropertyMap = () => {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-muted-foreground">Starting from</p>
+                    <p className="text-xs text-muted-foreground">{t('map.startingFrom')}</p>
                     <p className="text-xl font-bold text-primary">
                       {formatPrice(selectedProject.price_from)}
                     </p>
                   </div>
                   <Link to={`/project/${selectedProject.slug}`}>
                     <Button className="gap-2">
-                      View Details
+                      {t('map.viewDetails')}
                       <ExternalLink className="h-4 w-4" />
                     </Button>
                   </Link>

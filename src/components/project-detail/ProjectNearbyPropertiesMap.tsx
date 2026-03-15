@@ -4,6 +4,8 @@ import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { getMapTiles } from "@/constants/mapTiles";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -68,6 +70,9 @@ export default function ProjectNearbyPropertiesMap({
   areaName,
   className = "",
 }: ProjectNearbyPropertiesMapProps) {
+  const { t, language } = useLanguage();
+  const tiles = getMapTiles(language);
+
   const { data: nearbyProjects } = useQuery({
     queryKey: ["nearby-projects-map", currentProjectId, areaName],
     queryFn: async () => {
@@ -100,12 +105,6 @@ export default function ProjectNearbyPropertiesMap({
 
   if (markers.length === 0) return null;
 
-  // Compute bounds to fit all markers + current project
-  const allPoints: [number, number][] = [
-    [latitude, longitude],
-    ...markers.map((m) => [m.latitude!, m.longitude!] as [number, number]),
-  ];
-
   return (
     <div className={`rounded-2xl overflow-hidden ${className}`} style={{ height: 380, border: '2px solid hsl(42 45% 59% / 0.5)', boxShadow: '0 4px 16px rgba(200,167,102,0.15)' }}>
       <style>{`
@@ -122,8 +121,8 @@ export default function ProjectNearbyPropertiesMap({
         attributionControl={false}
       >
         <TileLayer
-          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-          attribution="Tiles &copy; Esri"
+          url={tiles.satellite.url}
+          attribution={tiles.satellite.attribution}
           maxZoom={19}
         />
         <MapNavigationControls latitude={latitude} longitude={longitude} />
@@ -132,7 +131,7 @@ export default function ProjectNearbyPropertiesMap({
         <Marker position={[latitude, longitude]} icon={RedIcon}>
           <Popup>
             <div className="text-sm font-bold">{currentProjectName}</div>
-            <div className="text-xs text-muted-foreground">This project</div>
+            <div className="text-xs text-muted-foreground">{t('map.thisProject')}</div>
           </Popup>
         </Marker>
 

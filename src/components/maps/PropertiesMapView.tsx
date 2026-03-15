@@ -3,6 +3,8 @@ import { MapContainer, Marker, Popup, useMap } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
 import { MapErrorBoundary } from "@/components/MapErrorBoundary";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import type { UnifiedProject } from "@/types/unifiedProject";
@@ -43,39 +45,23 @@ function createGoldMarkerIcon(highlighted = false) {
 const defaultIcon = createGoldMarkerIcon(false);
 const highlightedIcon = createGoldMarkerIcon(true);
 
-type MapViewType = "satellite" | "street" | "terrain";
-
-const MAP_TILES: Record<MapViewType, { url: string; attribution: string }> = {
-  satellite: {
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    attribution: "Tiles &copy; Esri",
-  },
-  street: {
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution: '&copy; OpenStreetMap',
-  },
-  terrain: {
-    url: "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png",
-    attribution: 'Stamen Design',
-  },
-};
-
-function DynamicTileLayer({ mapView }: { mapView: MapViewType }) {
+function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; language: string }) {
   const map = useMap();
   const layerRef = useRef<L.TileLayer | null>(null);
 
   useEffect(() => {
     if (layerRef.current) map.removeLayer(layerRef.current);
-    const { url, attribution } = MAP_TILES[mapView];
+    const tiles = getMapTiles(language);
+    const { url, attribution } = tiles[mapView];
     layerRef.current = L.tileLayer(url, { attribution, maxZoom: 19 });
     layerRef.current.addTo(map);
     return () => { if (layerRef.current) map.removeLayer(layerRef.current); };
-  }, [mapView, map]);
+  }, [mapView, language, map]);
 
   return null;
 }
 
-function MapViewToggle({ mapView, onViewChange }: { mapView: MapViewType; onViewChange: (v: MapViewType) => void }) {
+function MapViewToggle({ mapView, onViewChange, t }: { mapView: MapViewType; onViewChange: (v: MapViewType) => void; t: (key: string) => string }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
       <div className="bg-card/95 backdrop-blur-sm rounded-lg border border-gold/40 shadow-lg p-1 flex flex-col gap-1">
@@ -87,7 +73,7 @@ function MapViewToggle({ mapView, onViewChange }: { mapView: MapViewType; onView
               mapView === view ? "bg-gold text-foreground" : "hover:bg-gold/20 text-muted-foreground"
             }`}
           >
-            {view.charAt(0).toUpperCase() + view.slice(1)}
+            {t(`map.${view}`)}
           </button>
         ))}
       </div>
@@ -113,6 +99,7 @@ interface PropertiesMapViewProps {
 }
 
 export default function PropertiesMapView({ projects, hoveredProjectId, onProjectHover, onProjectClick }: PropertiesMapViewProps) {
+  const { t, language } = useLanguage();
   const [mapView, setMapView] = useState<MapViewType>("satellite");
 
   const projectsWithCoords = useMemo(
@@ -148,8 +135,8 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
           zoomControl={false}
           attributionControl={false}
         >
-          <DynamicTileLayer mapView={mapView} />
-          <MapViewToggle mapView={mapView} onViewChange={setMapView} />
+          <DynamicTileLayer mapView={mapView} language={language} />
+          <MapViewToggle mapView={mapView} onViewChange={setMapView} t={t} />
           <MapNavigationControls latitude={center[0]} longitude={center[1]} />
           <FitBounds projects={projectsWithCoords} />
 
@@ -177,14 +164,14 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
                       {project.name}
                     </Link>
                     {project.developer_name && (
-                      <p className="text-[11px] text-zinc-500">by {project.developer_name}</p>
+                      <p className="text-[11px] text-zinc-500">{t('map.by')} {project.developer_name}</p>
                     )}
                     {project.price_from ? (
                       <p className="text-xs font-semibold text-amber-700 mt-1">
-                        From AED {Math.round(Number(project.price_from)).toLocaleString()}
+                        {t('map.from')} AED {Math.round(Number(project.price_from)).toLocaleString()}
                       </p>
                     ) : (
-                      <p className="text-xs font-semibold text-amber-700 mt-1">Price on request</p>
+                      <p className="text-xs font-semibold text-amber-700 mt-1">{t('map.priceOnRequest')}</p>
                     )}
                     <div className="flex items-center gap-2 mt-1 text-[11px] text-zinc-500">
                       {(project.bedrooms_min != null || project.bedrooms_max != null) && (
@@ -199,7 +186,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
                     </div>
                     {project.handover_date && (
                       <p className="text-[11px] text-orange-500 mt-0.5">
-                        Handover: {project.handover_date}
+                        {t('map.handover')}: {project.handover_date}
                       </p>
                     )}
                   </div>

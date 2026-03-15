@@ -5,6 +5,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Link } from "react-router-dom";
 import { Map as MapIcon, Maximize } from "lucide-react";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
@@ -18,24 +20,7 @@ const defaultIcon = L.icon({
   popupAnchor: [1, -34],
 });
 
-type MapViewType = "satellite" | "street" | "terrain";
-
-const MAP_TILES: Record<MapViewType, { url: string; attribution: string }> = {
-  satellite: {
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    attribution: "Tiles &copy; Esri",
-  },
-  street: {
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  },
-  terrain: {
-    url: "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png",
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>',
-  },
-};
-
-function DynamicTileLayer({ mapView }: { mapView: MapViewType }) {
+function DynamicTileLayer({ mapView, language }: { mapView: MapViewType; language: string }) {
   const map = useMap();
   const layerRef = useRef<L.TileLayer | null>(null);
 
@@ -43,7 +28,8 @@ function DynamicTileLayer({ mapView }: { mapView: MapViewType }) {
     if (layerRef.current) {
       map.removeLayer(layerRef.current);
     }
-    const { url, attribution } = MAP_TILES[mapView];
+    const tiles = getMapTiles(language);
+    const { url, attribution } = tiles[mapView];
     layerRef.current = L.tileLayer(url, { attribution, maxZoom: 19 });
     layerRef.current.addTo(map);
 
@@ -52,7 +38,7 @@ function DynamicTileLayer({ mapView }: { mapView: MapViewType }) {
         map.removeLayer(layerRef.current);
       }
     };
-  }, [mapView, map]);
+  }, [mapView, language, map]);
 
   return null;
 }
@@ -72,10 +58,12 @@ function MapViewToggle({
   mapView,
   onViewChange,
   externalUrl,
+  t,
 }: {
   mapView: MapViewType;
   onViewChange: (view: MapViewType) => void;
   externalUrl: string;
+  t: (key: string) => string;
 }) {
   return (
     <div className="absolute top-4 left-4 z-[1000] flex flex-col gap-2">
@@ -90,7 +78,7 @@ function MapViewToggle({
                 : "hover:bg-gold/20 text-muted-foreground"
             }`}
           >
-            {view.charAt(0).toUpperCase() + view.slice(1)}
+            {t(`map.${view}`)}
           </button>
         ))}
       </div>
@@ -99,7 +87,7 @@ function MapViewToggle({
         target="_blank"
         rel="noopener noreferrer"
         className="w-11 h-11 flex items-center justify-center rounded-lg bg-card/95 backdrop-blur-sm border border-gold/40 shadow-lg hover:bg-gold/20 active:bg-gold/30 transition-all"
-        aria-label="Open in Google Maps"
+        aria-label={t('map.openInGoogleMaps')}
       >
         <Maximize className="w-5 h-5 text-foreground" />
       </a>
@@ -114,6 +102,7 @@ interface AreaMapSectionProps {
 }
 
 export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionProps) => {
+  const { t, language } = useLanguage();
   const [mapView, setMapView] = useState<MapViewType>("satellite");
   const [mapInteractive, setMapInteractive] = useState(false);
 
@@ -157,7 +146,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
         <div className="flex items-center gap-3 mb-8">
           <MapIcon className="w-6 h-6 text-gold" />
           <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Map of {areaName}
+            {t('map.mapOf')} {areaName}
           </h2>
         </div>
 
@@ -169,7 +158,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
               onClick={() => setMapInteractive(true)}
             >
               <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-gold/30 text-sm font-medium text-black/70">
-                Click to enable map interaction
+                {t('map.clickToEnable')}
               </div>
             </div>
           )}
@@ -183,12 +172,13 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
             zoomControl={false}
             attributionControl={false}
           >
-            <DynamicTileLayer mapView={mapView} />
+            <DynamicTileLayer mapView={mapView} language={language} />
             <EnableMapInteraction enabled={mapInteractive} />
             <MapViewToggle
               mapView={mapView}
               onViewChange={setMapView}
               externalUrl={externalMapsUrl}
+              t={t}
             />
             <MapNavigationControls latitude={center[0]} longitude={center[1]} />
             {projectsWithCoords.map((project: any) => (
@@ -215,16 +205,16 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
                         </Link>
                       </div>
                       {project.developer_name && (
-                        <p className="text-[11px] text-zinc-500">by {project.developer_name}</p>
+                        <p className="text-[11px] text-zinc-500">{t('map.by')} {project.developer_name}</p>
                       )}
                       {project.price_from && (
                         <p className="text-xs font-semibold text-amber-700 mt-1">
-                          From AED {Math.round(Number(project.price_from)).toLocaleString()}
+                          {t('map.from')} AED {Math.round(Number(project.price_from)).toLocaleString()}
                         </p>
                       )}
                       {project.handover_date && (
                         <p className="text-[11px] text-orange-500 mt-0.5">
-                          Handover: {project.handover_date}
+                          {t('map.handover')}: {project.handover_date}
                         </p>
                       )}
                     </div>
