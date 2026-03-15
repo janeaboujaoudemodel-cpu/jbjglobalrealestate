@@ -552,14 +552,18 @@ serve(async (req) => {
       const businessType = project?.business_type || '';
       const styleSuggestion = BUSINESS_STYLE_MAP[businessType];
 
-      // Protect standard model from deletion
+      // Protect standard model from deletion — clear FK reference first
       const selectedDesignId = body.selectedDesignId;
       if (projectId) {
+        // Clear selected_design_id to prevent FK constraint violation
+        await supabase.from("stamp_projects").update({ selected_design_id: null }).eq("id", projectId);
+        
         let deleteQuery = supabase.from("stamp_designs").delete().eq("project_id", projectId).eq("is_favorite", false);
         if (selectedDesignId) {
           deleteQuery = deleteQuery.neq("id", selectedDesignId);
         }
-        await deleteQuery;
+        const { error: delErr } = await deleteQuery;
+        if (delErr) console.error("Delete designs error:", delErr.message);
       }
 
       // Order presets: put business-type-recommended styles first
