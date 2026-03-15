@@ -416,7 +416,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </button>
           </PopoverTrigger>
           <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
-            <h4 className="text-sm font-bold text-black mb-3">Projects payment plan</h4>
+            <h4 className="text-sm font-bold text-black mb-3">{t('filter.paymentsTitle')}</h4>
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-2">
