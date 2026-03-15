@@ -89,6 +89,7 @@ const ARABIC_FONTS = [
 type ColorStop = 'primary' | 'secondary' | 'accent';
 
 interface StampLeftPanelProps {
+  selectedElement?: SelectedElement | null;
   primaryColor: string;
   secondaryColor?: string;
   accentColor?: string;
