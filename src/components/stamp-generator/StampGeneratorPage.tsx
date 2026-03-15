@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer';
 import { StampInteractivePreview } from '@/components/stamp-generator/StampInteractivePreview';
+import type { SelectedElement } from '@/components/stamp-generator/StampInteractivePreview';
 import DesignFavoriteButton from '@/components/toolkit/DesignFavoriteButton';
 import { StampColorWheel } from '@/components/stamp-generator/StampColorWheel';
 import { StampTextEditor } from '@/components/stamp-generator/StampTextEditor';
