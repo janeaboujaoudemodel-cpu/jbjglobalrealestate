@@ -40,7 +40,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
   const { user, isOwner, ownerLoading, signOut } = useAuth();
   const { t, language, setLanguage } = useLanguage();
   const { tierProgress, isCombinedMode, investorTierProgress, brokerTierProgress } = useTierProgress();
-  const { mode } = useUserModeContext();
+  const { mode, isDeveloperMode } = useUserModeContext();
   const { data: alertCounts } = useUserAlerts();
 
   // Currency & unit state synced with localStorage
