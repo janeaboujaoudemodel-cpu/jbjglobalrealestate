@@ -375,7 +375,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
         config.arabicLetterSpacing ?? botSafe.letterSpacing, true, 'bottom-arc', '600'
       );
     }
-    separatorContent = renderSeparators(cx, cy, clampedTextArcR, config.separatorStyle, ink);
+    separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
   }
 
   // ─── Location text (inner ring zone) — only for BILINGUAL ───
