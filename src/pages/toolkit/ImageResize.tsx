@@ -110,8 +110,58 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
   const [smartCropSubject, setSmartCropSubject] = useState<string | null>(null);
   const thumbnailStripRef = useRef<HTMLDivElement>(null);
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
+  const thumbnailStripRef = useRef<HTMLDivElement>(null);
+
   const activeImage = useMemo(() => images.find(i => i.id === activeImageId) ?? images[0] ?? null, [images, activeImageId]);
   const activePreset = useMemo(() => SIZE_PRESETS.find(p => p.id === activePreviewPreset), [activePreviewPreset]);
+
+  // ─── AI Smart Crop ──────────────────────────────────────
+  const handleSmartCrop = useCallback(async () => {
+    if (!activeImage) return;
+    setSmartCropLoading(true);
+    setSmartCropSubject(null);
+    try {
+      // Convert image to base64 for AI analysis (downscale for speed)
+      const img = new window.Image();
+      img.crossOrigin = "anonymous";
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = reject;
+        img.src = activeImage.preview;
+      });
+      const maxDim = 512;
+      const scale = Math.min(maxDim / img.width, maxDim / img.height, 1);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const base64 = canvas.toDataURL("image/jpeg", 0.7);
+
+      const { data, error } = await supabase.functions.invoke("smart-crop-detect", {
+        body: { imageBase64: base64 },
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      const x = data.x ?? 50;
+      const y = data.y ?? 50;
+      setImages(prev => prev.map(i =>
+        i.id === activeImage.id ? { ...i, cropPosition: { x, y } } : i
+      ));
+      setSmartCropSubject(data.subject || null);
+      setFitMode("crop");
+      sonnerToast.success(`Smart crop: focused on ${data.subject || "main subject"}`);
+    } catch (err: any) {
+      console.error("Smart crop error:", err);
+      sonnerToast.error(err?.message || "Smart crop failed");
+    } finally {
+      setSmartCropLoading(false);
+    }
+  }, [activeImage]);
 
   // ─── Import from Business Card Designer ─────────────────
   useEffect(() => {
