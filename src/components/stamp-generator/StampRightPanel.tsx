@@ -1,5 +1,5 @@
 /**
- * StampRightPanel — Tabbed right panel: Concepts, Favorites, AI Variations, History, Library.
+ * StampRightPanel — Tabbed right panel: Standard, Concepts, Favorites, AI Variations, Library, History.
  */
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -16,12 +16,28 @@ import type { StampDesignConcept } from '@/lib/stampTemplates';
 import {
   Heart, Loader2, Check, ChevronLeft, ChevronRight, Wand2,
   Sparkles, Clock, RefreshCw, Copy, Trash2, Download, Shield,
-  BookOpen, Save, FolderOpen, RotateCw, Pencil, X, Package
+  BookOpen, Save, FolderOpen, RotateCw, Pencil, X, Package,
+  GitCompare, Library as LibraryIcon, Star, Archive
 } from 'lucide-react';
 import DesignFavoriteButton from '@/components/toolkit/DesignFavoriteButton';
 import { toast } from 'sonner';
 
 const CONCEPTS_PER_PAGE = 6;
+
+/** Relative time helper */
+function relativeTime(dateStr: string): string {
+  const now = Date.now();
+  const then = new Date(dateStr).getTime();
+  const diff = now - then;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 7) return `${days}d ago`;
+  return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+}
 
 interface StampRightPanelProps {
   // Concepts
@@ -74,14 +90,18 @@ interface StampRightPanelProps {
   // Export
   savedDesignId?: string | null;
   onExport: () => void;
-  // New props for Session 7
+  // New props
   isOwner?: boolean;
   onSwitchToLibrary?: (fn: () => void) => void;
+  // Compare mode
+  onCompare?: (concept: StampDesignConcept) => void;
+  // Save to library
+  onSaveToLibrary?: (concept: StampDesignConcept) => void;
 }
 
 export function StampRightPanel(props: StampRightPanelProps) {
   const [conceptPage, setConceptPage] = useState(0);
-  const [activeTab, setActiveTab] = useState('concepts');
+  const [activeTab, setActiveTab] = useState('standard');
 
   // Expose a way to switch to library tab from parent
   useEffect(() => {
@@ -122,37 +142,108 @@ export function StampRightPanel(props: StampRightPanelProps) {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
         <TabsList className="flex-shrink-0 mx-2 mt-2 bg-[hsl(var(--muted))] h-8">
-          <TabsTrigger value="concepts" className="text-[9px] px-1.5 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
+          <TabsTrigger value="standard" className="text-[9px] px-1 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
+            <Shield size={8} className="mr-0.5" /> Standard
+          </TabsTrigger>
+          <TabsTrigger value="concepts" className="text-[9px] px-1 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
             Concepts
-            {props.concepts.length > 0 && <Badge variant="secondary" className="ml-1 text-[7px] px-1 py-0 h-3.5">{props.concepts.length}</Badge>}
+            {props.concepts.length > 0 && <Badge variant="secondary" className="ml-0.5 text-[7px] px-1 py-0 h-3.5">{props.concepts.length}</Badge>}
           </TabsTrigger>
-          <TabsTrigger value="favorites" className="text-[9px] px-1.5 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
-            Favorites
-            {props.favoriteConcepts.length > 0 && <Badge variant="secondary" className="ml-1 text-[7px] px-1 py-0 h-3.5">{props.favoriteConcepts.length}</Badge>}
+          <TabsTrigger value="favorites" className="text-[9px] px-1 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
+            <Heart size={8} className="mr-0.5" />
+            {props.favoriteConcepts.length > 0 && <Badge variant="secondary" className="ml-0.5 text-[7px] px-1 py-0 h-3.5">{props.favoriteConcepts.length}</Badge>}
           </TabsTrigger>
-          <TabsTrigger value="variations" className="text-[9px] px-1.5 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
-            Variations
-            {props.variations.length > 0 && <Badge variant="secondary" className="ml-1 text-[7px] px-1 py-0 h-3.5">{props.variations.length}</Badge>}
+          <TabsTrigger value="variations" className="text-[9px] px-1 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
+            Vars
+            {props.variations.length > 0 && <Badge variant="secondary" className="ml-0.5 text-[7px] px-1 py-0 h-3.5">{props.variations.length}</Badge>}
           </TabsTrigger>
-          <TabsTrigger value="library" className="text-[9px] px-1.5 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
-            <BookOpen size={9} className="mr-0.5" /> Library
+          <TabsTrigger value="library" className="text-[9px] px-1 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
+            <BookOpen size={8} className="mr-0.5" />
           </TabsTrigger>
-          <TabsTrigger value="history" className="text-[9px] px-1.5 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
-            History
+          <TabsTrigger value="history" className="text-[9px] px-1 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
+            <Clock size={8} className="mr-0.5" />
           </TabsTrigger>
         </TabsList>
 
-        {/* Concepts Tab */}
+        {/* ── Standard Tab ── */}
+        <TabsContent value="standard" className="flex-1 overflow-y-auto p-3 mt-0 space-y-3">
+          {props.standardConcept ? (
+            <div className="space-y-3">
+              <div className="flex items-center gap-1.5">
+                <Shield size={12} className="text-[hsl(var(--gold))]" />
+                <span className="text-[10px] font-bold text-[hsl(var(--foreground))] uppercase tracking-wider">Locked Reference Design</span>
+              </div>
+              <p className="text-[9px] text-[hsl(var(--muted-foreground))] leading-relaxed">
+                This is your protected base design. It will never be overwritten by AI generation.
+              </p>
+              {/* Large standard render */}
+              <div className="bg-[hsl(var(--pearl-1))] rounded-xl border-2 border-[hsl(var(--gold))] shadow-[0_0_0_4px_hsl(var(--gold)/0.12)] p-4 flex items-center justify-center cursor-pointer hover:shadow-md transition-all"
+                onClick={() => props.onSelect(props.standardConcept!)}>
+                <StampSVGRenderer
+                  svgSource={props.svgOverrides[props.standardConcept.id] || props.standardConcept.svgSource}
+                  tintColor={props.tintColor}
+                  secondaryColor={props.secondaryColor}
+                  accentColor={props.accentColor}
+                  fontFamily={props.fontFamily}
+                  fontWeight={props.fontBold ? 'bold' : 'normal'}
+                  fontStyle={props.fontItalic ? 'italic' : 'normal'}
+                  fontSize={props.manualFontSize}
+                  inkMode={props.inkMode}
+                  size={160}
+                />
+              </div>
+              <div className="space-y-1">
+                <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">{props.standardConcept.label}</p>
+                <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Template: {props.standardConcept.templateKey}</p>
+              </div>
+              {/* Actions */}
+              <div className="grid grid-cols-2 gap-1.5">
+                <Button size="sm" variant="outline" className="h-7 text-[9px] gap-1"
+                  onClick={() => props.onPreview(props.standardConcept!)}>
+                  <Pencil size={8} /> Edit
+                </Button>
+                <Button size="sm" variant="outline" className="h-7 text-[9px] gap-1"
+                  onClick={props.onExport}>
+                  <Download size={8} /> Export
+                </Button>
+                <Button size="sm" variant="outline" className="h-7 text-[9px] gap-1"
+                  onClick={() => props.onDuplicate(props.standardConcept!)}>
+                  <Copy size={8} /> Duplicate
+                </Button>
+                {props.onCompare && (
+                  <Button size="sm" variant="outline" className="h-7 text-[9px] gap-1"
+                    onClick={() => props.onCompare!(props.standardConcept!)}>
+                    <GitCompare size={8} /> Compare
+                  </Button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-12 space-y-3">
+              <Shield size={28} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30" />
+              <p className="text-[11px] font-medium text-[hsl(var(--foreground))]">No Standard Model Yet</p>
+              <p className="text-[9px] text-[hsl(var(--muted-foreground))] max-w-[200px] mx-auto">
+                Generate concepts or use "Lock as Standard" on your active preview to create your reference design.
+              </p>
+              <Button size="sm" onClick={props.onGenerate}
+                className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-[10px]">
+                <Wand2 size={10} className="mr-1" /> Generate Concepts
+              </Button>
+            </div>
+          )}
+        </TabsContent>
+
+        {/* ── Concepts Tab ── */}
         <TabsContent value="concepts" className="flex-1 overflow-y-auto p-3 mt-0 space-y-3">
           {/* Generating indicator */}
           {props.generating && props.standardConcept && (
             <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[hsl(var(--gold)/0.08)] border border-[hsl(var(--gold)/0.2)]">
               <Loader2 size={12} className="animate-spin text-[hsl(var(--gold))]" />
-              <span className="text-[10px] font-medium text-[hsl(var(--gold-dark))]">Generating 8 concepts…</span>
+              <span className="text-[10px] font-medium text-[hsl(var(--gold-dark))]">Generating concepts…</span>
             </div>
           )}
 
-          {/* Pinned Standard Model Card */}
+          {/* Pinned Standard Model mini-card in Concepts for quick reference */}
           {props.standardConcept && (
             <div className="mb-2">
               <div className="flex items-center gap-1.5 mb-1.5">
@@ -223,7 +314,7 @@ export function StampRightPanel(props: StampRightPanelProps) {
                     fontItalic={props.fontItalic} manualFontSize={props.manualFontSize} inkMode={props.inkMode}
                     togglingFav={props.togglingFav} onSelect={props.onSelect} onToggleFav={props.onToggleFav}
                     onEditText={props.onEditText} onPreview={props.onPreview} onDelete={props.onDelete}
-                    onDuplicate={props.onDuplicate} />
+                    onDuplicate={props.onDuplicate} onCompare={props.onCompare} onSaveToLibrary={props.onSaveToLibrary} />
                 ))}
               </div>
             </>
@@ -253,29 +344,37 @@ export function StampRightPanel(props: StampRightPanelProps) {
           )}
         </TabsContent>
 
-        {/* Favorites Tab */}
+        {/* ── Favorites Tab ── */}
         <TabsContent value="favorites" className="flex-1 overflow-y-auto p-3 mt-0 space-y-3">
           {props.favoriteConcepts.length > 0 ? (
-            <div className="grid grid-cols-2 xl:grid-cols-3 gap-2">
-              {props.favoriteConcepts.map(c => (
-                <ConceptCard key={c.id} concept={c} svgOverride={props.svgOverrides[c.id]}
-                  selectedId={props.selectedId} tintColor={props.tintColor} secondaryColor={props.secondaryColor}
-                  accentColor={props.accentColor} fontFamily={props.fontFamily} fontBold={props.fontBold}
-                  fontItalic={props.fontItalic} manualFontSize={props.manualFontSize} inkMode={props.inkMode}
-                  togglingFav={props.togglingFav} onSelect={props.onSelect} onToggleFav={props.onToggleFav}
-                  onEditText={props.onEditText} onPreview={props.onPreview} onDelete={props.onDelete}
-                  onDuplicate={props.onDuplicate} />
-              ))}
-            </div>
+            <>
+              <div className="flex items-center gap-1.5 mb-1">
+                <Heart size={10} className="text-rose-500" />
+                <span className="text-[10px] font-semibold text-[hsl(var(--foreground))]">{props.favoriteConcepts.length} Favorites</span>
+              </div>
+              <div className="grid grid-cols-2 xl:grid-cols-3 gap-2">
+                {props.favoriteConcepts.map(c => (
+                  <ConceptCard key={c.id} concept={c} svgOverride={props.svgOverrides[c.id]}
+                    selectedId={props.selectedId} tintColor={props.tintColor} secondaryColor={props.secondaryColor}
+                    accentColor={props.accentColor} fontFamily={props.fontFamily} fontBold={props.fontBold}
+                    fontItalic={props.fontItalic} manualFontSize={props.manualFontSize} inkMode={props.inkMode}
+                    togglingFav={props.togglingFav} onSelect={props.onSelect} onToggleFav={props.onToggleFav}
+                    onEditText={props.onEditText} onPreview={props.onPreview} onDelete={props.onDelete}
+                    onDuplicate={props.onDuplicate} onCompare={props.onCompare} onSaveToLibrary={props.onSaveToLibrary}
+                    cardStyle="favorite" />
+                ))}
+              </div>
+            </>
           ) : (
             <div className="text-center py-12 space-y-2">
               <Heart size={24} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30" />
-              <p className="text-[10px] text-[hsl(var(--muted-foreground))]">No favorites yet — click the heart on any concept</p>
+              <p className="text-[11px] font-medium text-[hsl(var(--foreground))]">No Favorites Yet</p>
+              <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Click the heart on any concept to save it here</p>
             </div>
           )}
         </TabsContent>
 
-        {/* Variations Tab */}
+        {/* ── Variations Tab ── */}
         <TabsContent value="variations" className="flex-1 overflow-y-auto mt-0">
           {props.variations.length > 0 || props.variationsLoading ? (
             <StampVariationsPanel
@@ -295,7 +394,8 @@ export function StampRightPanel(props: StampRightPanelProps) {
           ) : (
             <div className="text-center py-12 space-y-3 px-3">
               <Sparkles size={24} className="text-[hsl(var(--gold))] mx-auto opacity-40" />
-              <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Generate AI variations of your current design</p>
+              <p className="text-[11px] font-medium text-[hsl(var(--foreground))]">No Variations Yet</p>
+              <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Generate AI variations of your current design</p>
               <Button size="sm" onClick={props.onGenerateVariations}
                 className="bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-[10px]">
                 <Sparkles size={10} className="mr-1" /> Generate Variations
@@ -304,7 +404,7 @@ export function StampRightPanel(props: StampRightPanelProps) {
           )}
         </TabsContent>
 
-        {/* Library Tab — DB-backed: Projects, Presets, Brand Assets */}
+        {/* ── Library Tab ── */}
         <TabsContent value="library" className="flex-1 overflow-y-auto p-3 mt-0 space-y-4">
           <StampLibraryPanel
             onApplyPreset={props.onSelect}
@@ -314,9 +414,8 @@ export function StampRightPanel(props: StampRightPanelProps) {
           />
         </TabsContent>
 
-        {/* History Tab */}
+        {/* ── History Tab ── */}
         <TabsContent value="history" className="flex-1 overflow-y-auto p-3 mt-0 space-y-4">
-          {/* Version History inline */}
           {props.projectId && (
             <HistoryList
               projectId={props.projectId}
@@ -329,6 +428,8 @@ export function StampRightPanel(props: StampRightPanelProps) {
               onSaveBoth={props.onSaveBothVersions}
               onDuplicate={props.onDuplicateVersion}
               onUploadNew={props.onUploadNew}
+              onCompare={props.onCompare}
+              onSaveToLibrary={props.onSaveToLibrary}
             />
           )}
 
@@ -472,7 +573,7 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
         )}
       </div>
 
-      {/* Style Presets (Owner-managed, all can view) */}
+      {/* Style Presets */}
       <div>
         <div className="flex items-center gap-1.5 mb-2">
           <Save size={11} className="text-[hsl(var(--gold))]" />
@@ -550,7 +651,7 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
   );
 }
 
-/** Inline version history for the History tab (replaces the modal StampVersionSelector) */
+/** Enhanced inline version history for the History tab */
 function HistoryList(props: {
   projectId: string;
   tintColor: string;
@@ -562,7 +663,10 @@ function HistoryList(props: {
   onSaveBoth: (v: any) => void;
   onDuplicate: (v: any) => void;
   onUploadNew: () => void;
+  onCompare?: (concept: StampDesignConcept) => void;
+  onSaveToLibrary?: (concept: StampDesignConcept) => void;
 }) {
+  const { user } = useAuth();
   const [versions, setVersions] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -572,7 +676,6 @@ function HistoryList(props: {
 
   async function loadVersions() {
     setLoading(true);
-    const { supabase } = await import('@/integrations/supabase/client');
     const { data } = await supabase
       .from('stamp_designs')
       .select('id, svg_source, template_key, created_at, is_favorite')
@@ -582,6 +685,45 @@ function HistoryList(props: {
       .limit(50);
     if (data) setVersions(data);
     setLoading(false);
+  }
+
+  function detectSource(templateKey: string): { label: string; color: string } {
+    if (templateKey?.includes('restored')) return { label: 'Restored', color: 'bg-blue-100 text-blue-700 border-blue-200' };
+    if (templateKey?.includes('generated') || templateKey?.includes('ai-')) return { label: 'Generated', color: 'bg-purple-100 text-purple-700 border-purple-200' };
+    return { label: 'Manual', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' };
+  }
+
+  async function handleToggleFavorite(v: any) {
+    const newVal = !v.is_favorite;
+    await supabase.from('stamp_designs').update({ is_favorite: newVal }).eq('id', v.id);
+    setVersions(prev => prev.map(ver => ver.id === v.id ? { ...ver, is_favorite: newVal } : ver));
+    toast.success(newVal ? 'Added to favorites' : 'Removed from favorites');
+  }
+
+  async function handleSaveToLibrary(v: any) {
+    if (!user?.id) return;
+    try {
+      const { error } = await supabase.from('brand_assets').insert({
+        user_id: user.id,
+        asset_type: 'stamp' as any,
+        name: (v.template_key || 'Stamp').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
+        svg_content: v.svg_source?.slice(0, 100000),
+      });
+      if (error) throw error;
+      toast.success('Saved to Brand Assets library');
+    } catch (err: any) {
+      toast.error(err?.message || 'Failed to save');
+    }
+  }
+
+  function versionToConcept(v: any): StampDesignConcept {
+    return {
+      id: v.id,
+      templateKey: v.template_key || 'history',
+      label: (v.template_key || 'History').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
+      tags: [],
+      svgSource: v.svg_source,
+    };
   }
 
   if (loading) {
@@ -595,8 +737,9 @@ function HistoryList(props: {
   if (versions.length === 0) {
     return (
       <div className="text-center py-8 space-y-2">
-        <Clock size={20} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30" />
-        <p className="text-[10px] text-[hsl(var(--muted-foreground))]">No version history yet</p>
+        <Clock size={24} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30" />
+        <p className="text-[11px] font-medium text-[hsl(var(--foreground))]">No Version History Yet</p>
+        <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Your design versions will appear here as you save and edit.</p>
       </div>
     );
   }
@@ -610,39 +753,72 @@ function HistoryList(props: {
           <Badge variant="secondary" className="text-[7px] px-1 py-0 h-3.5">{versions.length}</Badge>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-2">
-        {versions.slice(0, 12).map(v => (
-          <div key={v.id} className="group bg-card/80 rounded-lg border border-[hsl(var(--gold)/0.2)] hover:border-[hsl(var(--gold)/0.5)] transition-all">
-            <div className="relative p-1.5 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-lg min-h-[70px]">
-              <StampSVGRenderer svgSource={v.svg_source} tintColor={props.tintColor} secondaryColor={props.secondaryColor}
-                accentColor={props.accentColor} fontFamily={props.fontFamily} inkMode={props.inkMode} size={60} />
-            </div>
-            <div className="p-1 space-y-0.5">
-              <p className="text-[7px] text-[hsl(var(--muted-foreground))]">
-                {new Date(v.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-              </p>
-              <div className="flex gap-0.5">
-                <button onClick={() => props.onSelectVersion(v)}
-                  className="flex-1 h-5 text-[7px] rounded bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white flex items-center justify-center gap-0.5 hover:opacity-90">
-                  <Check size={7} /> Use
-                </button>
-                <button onClick={() => props.onDuplicate(v)}
-                  className="h-5 w-5 rounded border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)]">
-                  <Copy size={7} />
-                </button>
+      <div className="grid grid-cols-2 gap-2">
+        {versions.slice(0, 20).map(v => {
+          const source = detectSource(v.template_key);
+          return (
+            <div key={v.id} className="group bg-card/80 rounded-lg border border-dashed border-[hsl(var(--muted-foreground)/0.3)] hover:border-[hsl(var(--gold)/0.5)] transition-all">
+              <div className="relative p-1.5 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-lg min-h-[70px]">
+                {/* Source badge */}
+                <Badge className={`absolute bottom-1 left-1 z-10 text-[6px] px-1 py-0 border ${source.color}`}>
+                  {source.label}
+                </Badge>
+                {/* Favorite indicator */}
+                {v.is_favorite && (
+                  <Heart size={8} className="absolute top-1 right-1 z-10 fill-rose-500 text-rose-500" />
+                )}
+                <StampSVGRenderer svgSource={v.svg_source} tintColor={props.tintColor} secondaryColor={props.secondaryColor}
+                  accentColor={props.accentColor} fontFamily={props.fontFamily} inkMode={props.inkMode} size={60} />
+              </div>
+              <div className="p-1 space-y-0.5">
+                <Badge className="text-[6px] px-1 py-0 bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))]">
+                  Historical
+                </Badge>
+                <p className="text-[7px] text-[hsl(var(--muted-foreground))]">
+                  {relativeTime(v.created_at)}
+                </p>
+                <div className="flex flex-wrap gap-0.5">
+                  <button onClick={() => props.onSelectVersion(v)}
+                    className="flex-1 h-5 text-[7px] rounded bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white flex items-center justify-center gap-0.5 hover:opacity-90"
+                    title="Restore this version">
+                    <RotateCw size={7} /> Restore
+                  </button>
+                  <button onClick={() => props.onDuplicate(v)}
+                    className="h-5 w-5 rounded border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)]"
+                    title="Duplicate">
+                    <Copy size={7} />
+                  </button>
+                  {props.onCompare && (
+                    <button onClick={() => props.onCompare!(versionToConcept(v))}
+                      className="h-5 w-5 rounded border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)]"
+                      title="Compare">
+                      <GitCompare size={7} />
+                    </button>
+                  )}
+                  <button onClick={() => handleToggleFavorite(v)}
+                    className="h-5 w-5 rounded border border-[hsl(var(--border))] flex items-center justify-center hover:bg-rose-50"
+                    title={v.is_favorite ? 'Unfavorite' : 'Favorite'}>
+                    <Heart size={7} className={v.is_favorite ? 'fill-rose-500 text-rose-500' : ''} />
+                  </button>
+                  <button onClick={() => handleSaveToLibrary(v)}
+                    className="h-5 w-5 rounded border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.06)]"
+                    title="Save to Library">
+                    <Archive size={7} />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
 }
 
-/** Compact concept card for the right panel grid */
+/** Compact concept card with visual hierarchy */
 function ConceptCard({
   concept, svgOverride, selectedId, tintColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, manualFontSize, inkMode, togglingFav,
-  onSelect, onToggleFav, onEditText, onPreview, onDelete, onDuplicate
+  onSelect, onToggleFav, onEditText, onPreview, onDelete, onDuplicate, onCompare, onSaveToLibrary, cardStyle
 }: {
   concept: StampDesignConcept;
   svgOverride?: string;
@@ -662,28 +838,53 @@ function ConceptCard({
   onPreview?: (c: StampDesignConcept) => void;
   onDelete?: (c: StampDesignConcept) => void;
   onDuplicate?: (c: StampDesignConcept) => void;
+  onCompare?: (c: StampDesignConcept) => void;
+  onSaveToLibrary?: (c: StampDesignConcept) => void;
+  cardStyle?: 'favorite' | 'generated';
 }) {
   const isSelected = selectedId === concept.id;
   const isFav = concept.isFavorite;
   const displaySvg = svgOverride || concept.svgSource;
 
+  // Visual hierarchy via border styles
+  const borderClasses = isSelected
+    ? 'border-blue-500 shadow-[0_0_0_3px_hsl(210_100%_50%/0.15)]'
+    : cardStyle === 'favorite'
+    ? 'border-rose-300 hover:border-rose-400'
+    : 'border-[hsl(var(--gold)/0.2)] hover:border-[hsl(var(--gold)/0.5)]';
+
   return (
     <div
-      className={`group bg-card/80 rounded-xl border-2 transition-all shadow-sm hover:shadow-md cursor-pointer ${isSelected ? 'border-[hsl(var(--gold))] shadow-[0_0_0_3px_hsl(var(--gold)/0.15)]' : 'border-[hsl(var(--gold)/0.2)] hover:border-[hsl(var(--gold)/0.5)]'}`}
+      className={`group bg-card/80 rounded-xl border-2 transition-all shadow-sm hover:shadow-md cursor-pointer ${borderClasses}`}
       onClick={() => onSelect(concept)}
     >
       <div className="relative p-2 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-xl min-h-[100px]">
         {isSelected && (
-          <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[hsl(var(--gold))] flex items-center justify-center z-10">
+          <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center z-10">
             <Check size={8} className="text-white" />
           </div>
         )}
+        {/* Favorite heart button — top-left */}
         <button onClick={e => { e.stopPropagation(); onToggleFav(concept); }} disabled={togglingFav === concept.id}
           className={`absolute top-1 left-1 z-10 w-5 h-5 rounded-full flex items-center justify-center transition-all ${isFav ? 'bg-rose-50 border border-rose-200 text-rose-500' : 'bg-white/80 border border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100'}`}>
           {togglingFav === concept.id ? <Loader2 size={8} className="animate-spin" /> : <Heart size={8} className={isFav ? 'fill-rose-500' : ''} />}
         </button>
-        {/* Delete + Duplicate */}
+        {/* Delete + Duplicate + Compare — bottom-right */}
         <div className="absolute bottom-1 right-1 z-10 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+          {onCompare && (
+            <button onClick={e => { e.stopPropagation(); onCompare(concept); }}
+              className="w-5 h-5 rounded bg-white/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]"
+              title="Compare">
+              <GitCompare size={8} />
+            </button>
+          )}
+          {onSaveToLibrary && (
+            <button onClick={e => { e.stopPropagation(); onSaveToLibrary(concept); }}
+              className="w-5 h-5 rounded bg-white/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]"
+              title="Save to Library">
+              <Archive size={8} />
+            </button>
+          )}
           {onDuplicate && (
             <button onClick={e => { e.stopPropagation(); onDuplicate(concept); }}
               className="w-5 h-5 rounded bg-white/90 border border-[hsl(var(--border))] flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]">
@@ -697,9 +898,15 @@ function ConceptCard({
             </button>
           )}
         </div>
-        {/* Generated Concept label */}
-        <Badge className="absolute top-1 left-1 z-10 text-[6px] px-1 py-0 bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))]">
-          {isSelected ? 'Applied' : 'Generated'}
+        {/* Status badge — bottom-left (moved from top-left to avoid overlap with heart) */}
+        <Badge className={`absolute bottom-1 left-1 z-10 text-[6px] px-1 py-0 border ${
+          isSelected
+            ? 'bg-blue-100 text-blue-700 border-blue-200'
+            : cardStyle === 'favorite'
+            ? 'bg-rose-100 text-rose-700 border-rose-200'
+            : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border-[hsl(var(--border))]'
+        }`}>
+          {isSelected ? 'Applied' : cardStyle === 'favorite' ? 'Favorite' : 'Generated'}
         </Badge>
         <StampSVGRenderer
           svgSource={displaySvg}

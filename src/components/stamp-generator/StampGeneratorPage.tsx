@@ -100,12 +100,13 @@ export default function StampGeneratorPage() {
   const [concepts, setConcepts] = useState<StampDesignConcept[]>([]);
   const [favoriteConcepts, setFavoriteConcepts] = useState<StampDesignConcept[]>([]);
   const [generating, setGenerating] = useState(false);
-  // generatingInPanel removed — unified into single `generating` boolean
   const [selectedId, setSelectedId] = useState<string | null>(null);
   // Standard Model — the pinned working design that is never lost during generation
   const [standardConcept, setStandardConcept] = useState<StampDesignConcept | null>(null);
   const [savedDesignId, setSavedDesignId] = useState<string | null>(null);
   const [blocked, setBlocked] = useState(false);
+  // Compare mode — side-by-side preview
+  const [compareDesign, setCompareDesign] = useState<StampDesignConcept | null>(null);
 
   // Three-color system — persisted
   const [primaryColor, setPrimaryColorRaw] = useState(() => ssGet(ssKey('primaryColor'), '#1B3A8C'));
@@ -1025,7 +1026,16 @@ export default function StampGeneratorPage() {
 
         {/* ── CENTER: Premium Canvas Preview ── */}
         <div className="flex-1 min-w-[300px] flex flex-col overflow-hidden relative">
-          <div className="flex-1 flex items-center justify-center overflow-auto relative"
+          {/* Compare mode close bar */}
+          {compareDesign && (
+            <div className="flex-shrink-0 px-3 py-1.5 bg-blue-50 border-b border-blue-200 flex items-center justify-between">
+              <span className="text-[10px] font-semibold text-blue-700">Compare Mode — Side by Side</span>
+              <Button size="sm" variant="ghost" className="h-6 text-[9px] text-blue-700 hover:bg-blue-100" onClick={() => setCompareDesign(null)}>
+                <X size={9} className="mr-1" /> Close Compare
+              </Button>
+            </div>
+          )}
+          <div className={`flex-1 flex items-center justify-center overflow-auto relative ${compareDesign ? 'gap-4' : ''}`}
             style={{
               background: bgMode === 'checker'
                 ? 'repeating-conic-gradient(hsl(var(--muted)) 0% 25%, white 0% 50%) 0 0 / 20px 20px'
@@ -1033,10 +1043,10 @@ export default function StampGeneratorPage() {
             }}>
 
             {/* Grid overlay */}
-            {showGrid && <CanvasGridOverlay size={stampSize + 80} />}
+            {showGrid && !compareDesign && <CanvasGridOverlay size={stampSize + 80} />}
 
             {/* Preview status label */}
-            {activeStandard && (
+            {activeStandard && !compareDesign && (
               <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
                 <Badge className="text-[7px] px-1.5 py-0 bg-[hsl(var(--gold)/0.12)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">
                   {standardConcept?.id === activeStandard.id ? 'Standard Model' : 'Active Preview'}
@@ -1128,6 +1138,29 @@ export default function StampGeneratorPage() {
                 <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]" style={{ width: stampSize, height: stampSize, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Stamp size={32} className="opacity-20" />
                   <p className="text-[10px] text-center">Select a design to preview</p>
+                </div>
+              )}
+
+              {/* Compare design — right side */}
+              {compareDesign && (
+                <div className="flex flex-col items-center gap-2">
+                  <Badge className="text-[7px] px-1.5 py-0 bg-blue-100 text-blue-700 border border-blue-200">
+                    Comparing: {compareDesign.label}
+                  </Badge>
+                  <div className="relative" style={{ filter: `drop-shadow(0 8px 24px hsl(0 0% 0% / 0.12))` }}>
+                    <StampSVGRenderer
+                      svgSource={svgOverrides[compareDesign.id] || compareDesign.svgSource}
+                      tintColor={primaryColor}
+                      secondaryColor={secondaryColor}
+                      accentColor={accentColor}
+                      fontFamily={fontFamily}
+                      fontWeight={fontBold ? 'bold' : 'normal'}
+                      fontStyle={fontItalic ? 'italic' : 'normal'}
+                      fontSize={manualFontSize}
+                      inkMode={inkMode}
+                      size={compareDesign ? Math.round(stampSize * 0.85) : stampSize}
+                    />
+                  </div>
                 </div>
               )}
             </div>
@@ -1250,6 +1283,22 @@ export default function StampGeneratorPage() {
           onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || activeStandard?.id || selectedId}`)}
           isOwner={isOwner}
           onSwitchToLibrary={(fn) => setLibraryTabRef(() => fn)}
+          onCompare={(concept) => setCompareDesign(concept)}
+          onSaveToLibrary={async (concept) => {
+            if (!user?.id) return;
+            try {
+              const { error } = await supabase.from('brand_assets').insert({
+                user_id: user.id,
+                asset_type: 'stamp' as any,
+                name: concept.label || 'Stamp Design',
+                svg_content: (svgOverrides[concept.id] || concept.svgSource)?.slice(0, 100000),
+              });
+              if (error) throw error;
+              toast.success('Saved to Brand Assets library');
+            } catch (err: any) {
+              toast.error(err?.message || 'Failed to save');
+            }
+          }}
         />
       </div>
 
