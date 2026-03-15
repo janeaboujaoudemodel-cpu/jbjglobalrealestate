@@ -26,6 +26,8 @@ export default function BusinessCardDesigner() {
         onExportHtml={s.handleExportHtml}
         isExportingPng={s.isExportingPng}
         onExportPng={s.handleExportPng}
+        isExportingToResizer={s.isExportingToResizer}
+        onExportToResizer={s.handleExportToResizer}
         onBatchPrint={() => s.setBatchPrintOpen(true)}
         isExporting={s.isExporting}
         onExportPdf={s.handleExport}

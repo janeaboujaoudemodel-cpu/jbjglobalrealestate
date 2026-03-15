@@ -1,7 +1,7 @@
 import React from "react";
 import {
   Download, CreditCard, RefreshCw, Lock, Unlock, RotateCcw,
-  Save, Share2, Image, Printer,
+  Save, Share2, Image, Printer, Maximize,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -19,6 +19,8 @@ interface BusinessCardHeaderProps {
   onExportHtml: () => void;
   isExportingPng: boolean;
   onExportPng: () => void;
+  isExportingToResizer: boolean;
+  onExportToResizer: () => void;
   onBatchPrint: () => void;
   isExporting: boolean;
   onExportPdf: () => void;
@@ -30,6 +32,7 @@ export function BusinessCardHeader({
   isSharing, onShare,
   cardShape, isExportingHtml, onExportHtml,
   isExportingPng, onExportPng,
+  isExportingToResizer, onExportToResizer,
   onBatchPrint,
   isExporting, onExportPdf,
 }: BusinessCardHeaderProps) {
@@ -113,6 +116,17 @@ export function BusinessCardHeader({
           >
             {isExportingPng ? <RefreshCw size={12} className="animate-spin" /> : <Image size={12} />}
             {isExportingPng ? "…" : "PNG"}
+          </Button>
+
+          <Button
+            onClick={onExportToResizer}
+            disabled={isExportingToResizer}
+            variant="outline"
+            className="gap-1.5 h-8 text-xs font-semibold border-teal-500/40 text-teal-700 hover:bg-teal-500/10"
+            title="Send card to Image Resizer for social media sizes"
+          >
+            {isExportingToResizer ? <RefreshCw size={12} className="animate-spin" /> : <Maximize size={12} />}
+            {isExportingToResizer ? "…" : "Resize"}
           </Button>
 
           <Button

@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { EMPTY_LANDING_PAGE, type LandingPageData } from "@/components/corporate-suite/DigitalLandingPageEditor";
@@ -22,6 +23,7 @@ interface CardInfoProfile {
 }
 
 export function useBusinessCardState() {
+  const navigate = useNavigate();
   // Per-side independent templates
   const [frontTemplate, setFrontTemplate] = useState<Template>("modern");
   const [backTemplate, setBackTemplate]   = useState<Template>("bold");
@@ -509,6 +511,33 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     }
   };
 
+  const [isExportingToResizer, setIsExportingToResizer] = useState(false);
+
+  const handleExportToResizer = async () => {
+    if (!cardPreviewRef.current) { toast.error("Preview not ready."); return; }
+    setIsExportingToResizer(true);
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const canvas = await html2canvas(cardPreviewRef.current, {
+        scale: 3, useCORS: true, backgroundColor: null, logging: false,
+      });
+      const dataUrl = canvas.toDataURL("image/png");
+      sessionStorage.setItem("jbj-card-to-resizer", JSON.stringify({
+        dataUrl,
+        name: `business-card-${(data.name || "card").toLowerCase().replace(/\s+/g, "-")}`,
+        width: canvas.width,
+        height: canvas.height,
+      }));
+      toast.success("Card exported! Opening Image Resizer...");
+      navigate("/toolkit/image-resize");
+    } catch (err) {
+      console.error(err);
+      toast.error("Export failed. Please try again.");
+    } finally {
+      setIsExportingToResizer(false);
+    }
+  };
+
   const handleBatchPrint = () => {
     const printWindow = window.open("", "_blank");
     if (!printWindow) { toast.error("Pop-up blocked. Please allow pop-ups."); return; }
@@ -716,7 +745,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     galleryDesigns, setGalleryDesigns, galleryFavorites, setGalleryFavorites, isGeneratingGallery, galleryPage, setGalleryPage, GALLERY_PER_PAGE,
     tradeLicenseOpen, setTradeLicenseOpen,
     loadSavedOpen, setLoadSavedOpen, savedDesigns, isLoadingSaved, isDeletingSaved,
-    cardPreviewRef, isExportingPng,
+    cardPreviewRef, isExportingPng, isExportingToResizer,
     batchPrintOpen, setBatchPrintOpen, batchPrintCount, setBatchPrintCount,
     data, setData,
     bilingualMode, setBilingualMode, bilingualLang, setBilingualLang,
@@ -741,7 +770,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     handleGenerateGallery, toggleGalleryFavorite, applyGalleryDesign,
     handleTradeLicenseExtracted,
     handleLoadSavedDesigns, handleRestoreSaved, handleDeleteSaved,
-    handleExportPng, handleBatchPrint, handleSaveCard,
+    handleExportPng, handleExportToResizer, handleBatchPrint, handleSaveCard,
     handleExport, handleExportHtml, handleShareCard, handleResetLayout,
   };
 }

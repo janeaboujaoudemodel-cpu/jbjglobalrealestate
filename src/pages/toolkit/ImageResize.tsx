@@ -111,6 +111,41 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
   const activeImage = useMemo(() => images.find(i => i.id === activeImageId) ?? images[0] ?? null, [images, activeImageId]);
   const activePreset = useMemo(() => SIZE_PRESETS.find(p => p.id === activePreviewPreset), [activePreviewPreset]);
 
+  // ─── Import from Business Card Designer ─────────────────
+  useEffect(() => {
+    const raw = sessionStorage.getItem("jbj-card-to-resizer");
+    if (!raw) return;
+    sessionStorage.removeItem("jbj-card-to-resizer");
+    try {
+      const { dataUrl, name, width, height } = JSON.parse(raw);
+      if (!dataUrl) return;
+      // Convert data URL to File object
+      fetch(dataUrl)
+        .then(res => res.blob())
+        .then(blob => {
+          const file = new File([blob], `${name || "business-card"}.png`, { type: "image/png" });
+          const preview = URL.createObjectURL(blob);
+          const orientation = width > height ? "landscape" : width < height ? "portrait" : "square" as const;
+          const img: UploadedImage = {
+            id: `img_card_${Date.now()}`, file, name: file.name, preview,
+            width, height, orientation,
+            cropPosition: { x: 50, y: 50 },
+          };
+          setImages(prev => [...prev, img]);
+          setActiveImageId(img.id);
+          // Auto-select business card preset
+          if (!selectedPresets.includes("business_card")) {
+            setSelectedPresets(prev => [...prev, "business_card"]);
+          }
+          setActivePreviewPreset("business_card");
+          setProcessedImages([]);
+          sonnerToast.success("Business card imported! Select sizes and export.");
+        });
+    } catch (e) {
+      console.error("Failed to import card:", e);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // ─── File Handling ───────────────────────────────────────
   const handleFileSelect = useCallback(async (files: FileList | null) => {
     if (!files) return;
