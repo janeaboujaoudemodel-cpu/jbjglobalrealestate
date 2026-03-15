@@ -34,6 +34,7 @@ import { PublicRoutes } from "@/routes/PublicRoutes";
 import { AIToolRoutes } from "@/routes/AIToolRoutes";
 import { AdminRoutes } from "@/routes/AdminRoutes";
 import { ToolkitRoutes } from "@/routes/ToolkitRoutes";
+import { DeveloperHubRoutes } from "@/routes/DeveloperHubRoutes";
 
 // ── QueryClient ──
 const queryClient = new QueryClient({
