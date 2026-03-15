@@ -146,13 +146,17 @@ function safeArcFontSize(
   baseFontSize: number, spreadLimit = ARC_SPREAD_LIMIT,
   maxLetterSpacing?: number
 ): { fontSize: number; letterSpacing: number } {
+  // Use same charW for both languages to achieve visual arc parity
   const charW = 0.54;
-  const minSpacing = isArabic ? 0.5 : 1;
-  // Cap English letter spacing to prevent over-spaced unreadable text
-  const maxSp = maxLetterSpacing ?? (isArabic ? 12 : 6);
-  const arcLen = maxRadius * Math.PI * spreadLimit;
+  // Arabic gets same minimum spacing as English to ensure full arc spread
+  const minSpacing = 1;
+  // Both languages use same max letter spacing for parity
+  const maxSp = maxLetterSpacing ?? 8;
+  // Force Arabic to use the same spread limit as English (full edge-to-edge)
+  const effectiveSpread = spreadLimit;
+  const arcLen = maxRadius * Math.PI * effectiveSpread;
   const fontSize = fitFontSize(text, baseFontSize, arcLen, charW);
-  const letterSpacing = computeArcLetterSpacing(text, fontSize, maxRadius, spreadLimit, charW, minSpacing, maxSp);
+  const letterSpacing = computeArcLetterSpacing(text, fontSize, maxRadius, effectiveSpread, charW, minSpacing, maxSp);
   return { fontSize, letterSpacing };
 }
 
