@@ -281,6 +281,8 @@ const PropertiesReelly = () => {
             onFilterChange={setShortcutFilters}
             isMapMode={isMapMode}
             onMapToggle={handleMapToggle}
+            resultsCount={projects.length}
+            resultsLabel="Properties"
             searchSlot={
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />

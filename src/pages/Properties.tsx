@@ -626,6 +626,8 @@ const Properties = () => {
               onFilterChange={setShortcutFilters}
               isMapMode={isMapMode}
               onMapToggle={setIsMapMode}
+              resultsCount={finalProjects.length}
+              resultsLabel="Properties"
             />
           </div>
 
@@ -1197,6 +1199,8 @@ const Properties = () => {
               onMapToggle={(v) => {
                 setIsMapMode(v);
               }}
+              resultsCount={finalProjects.length}
+              resultsLabel="Properties"
             />
           </div>
         </section>,

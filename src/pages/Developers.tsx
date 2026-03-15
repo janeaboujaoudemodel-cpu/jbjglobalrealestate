@@ -298,6 +298,8 @@ const Developers = () => {
                   else if (f.sortBy) setSortBy('default');
                 }}
                 priorityFilter="developers"
+                resultsCount={filteredDevelopers.length}
+                resultsLabel="Developers"
               />
               
               {/* Tier filter row - unique to developers */}
@@ -366,6 +368,8 @@ const Developers = () => {
                     else if (f.sortBy) setSortBy('default');
                   }}
                   priorityFilter="developers"
+                  resultsCount={filteredDevelopers.length}
+                  resultsLabel="Developers"
                 />
                 
                 {/* Tier filter row */}

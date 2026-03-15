@@ -3,7 +3,7 @@
  * Row 1: Search + Map + Saved + Currency + Filter + Mode Investor (connected bar)
  * Row 2: Filter popovers + Sort pills + Hide Sold (last)
  */
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 
 import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, User, Briefcase, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -79,6 +79,10 @@ interface FilterShortcutBarProps {
   onMapToggle?: (active: boolean) => void;
   searchSlot?: React.ReactNode;
   priorityFilter?: 'developers' | 'areas' | 'emirates' | 'projects';
+  /** Live results count — displayed as a sticky badge at the end of row 2 */
+  resultsCount?: number;
+  /** Label for the results count (default: "Results") */
+  resultsLabel?: string;
 }
 
 const PRICE_PRESETS = [
@@ -153,7 +157,7 @@ const CURRENCY_RATES: Record<string, number> = {
 const SQFT_TO_SQM = 1 / 10.764;
 const SQM_TO_SQFT = 10.764;
 
-const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot, priorityFilter }: FilterShortcutBarProps) => {
+const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapToggle, searchSlot, priorityFilter, resultsCount, resultsLabel }: FilterShortcutBarProps) => {
   const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [prevCurrency, setPrevCurrency] = useState<string>('AED');
@@ -688,6 +692,23 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <X className="w-3.5 h-3.5" />
             {t('filter.reset')}
           </button>
+        )}
+
+        {/* Live Results Count Badge */}
+        {resultsCount !== undefined && (
+          <div className="flex-shrink-0 ml-auto sticky right-0 pl-3">
+            <div
+              key={resultsCount}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold transition-all animate-in fade-in zoom-in-95 duration-300",
+                "bg-gradient-to-r from-gold/20 to-gold/10 border-2 border-gold/50 text-black shadow-sm"
+              )}
+            >
+              <Activity className="w-3.5 h-3.5 text-gold" />
+              <span className="tabular-nums">{resultsCount.toLocaleString()}</span>
+              <span className="text-black/60 font-medium">{resultsLabel || 'Results'}</span>
+            </div>
+          </div>
         )}
 
         </div>
