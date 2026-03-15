@@ -346,6 +346,7 @@ export default function StampGeneratorPage() {
               }
               setGenerating(false);
               setGeneratingInPanel(false);
+              generationLockRef.current = false;
               return;
             }
           }
