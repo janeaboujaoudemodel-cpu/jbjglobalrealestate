@@ -104,14 +104,25 @@ export default function CreateEnvelope() {
   const [documentName, setDocumentName] = useState("");
   const [documentDescription, setDocumentDescription] = useState("");
 
-  // Prefill from navigation state (e.g. from Document Studio / Exclusive Documents)
+  // Stamp handoff from Stamp Generator
+  const [handoffStampSvg, setHandoffStampSvg] = useState<string | null>(null);
+
+  // Prefill from navigation state (e.g. from Document Studio / Exclusive Documents / Stamp Generator)
   useEffect(() => {
-    const state = location.state as { prefillDocument?: string; documentName?: string } | null;
+    const state = location.state as { prefillDocument?: string; documentName?: string; stampSvg?: string } | null;
     if (state?.prefillDocument) {
       setDocumentDescription(state.prefillDocument);
     }
     if (state?.documentName) {
       setDocumentName(state.documentName);
+    }
+    // Stamp handoff: check navigation state first, then sessionStorage
+    const stamp = state?.stampSvg || sessionStorage.getItem('esignature_stamp_svg');
+    if (stamp) {
+      setHandoffStampSvg(stamp);
+      // Clean up sessionStorage after reading
+      sessionStorage.removeItem('esignature_stamp_svg');
+      sessionStorage.removeItem('esignature_stamp_color');
     }
   }, [location.state]);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
