@@ -189,6 +189,9 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 <StampTextEditor
                   svgSource={props.selectedSvg}
                   onSvgChange={(newSvg) => props.onSvgTextChange(props.selectedConceptId!, newSvg)}
+                  onElementSelect={(elementId) => {
+                    // Highlight the element on the preview canvas
+                  }}
                 />
               ) : (
                 <div className="text-center py-4 space-y-1">
