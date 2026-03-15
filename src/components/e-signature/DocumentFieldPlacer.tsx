@@ -57,10 +57,31 @@ export default function DocumentFieldPlacer({
   const [thumbsLoading, setThumbsLoading] = useState(false);
   const pdfJsDocRef = useRef<any>(null);
 
-  // Load user's saved stamp from stamp_designs
+  // Brand asset picker state
+  const [showAssetPicker, setShowAssetPicker] = useState(false);
+
+  // Load stamp: prefer handoff, then brand_assets, then stamp_designs fallback
   useEffect(() => {
+    if (handoffStampSvg) {
+      setSavedStampSvg(handoffStampSvg);
+      return;
+    }
     if (!user?.id) return;
     async function loadStamp() {
+      // Try brand_assets first
+      const { data: brandStamp } = await supabase
+        .from("brand_assets")
+        .select("svg_content")
+        .eq("user_id", user!.id)
+        .eq("asset_type", "stamp")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (brandStamp?.svg_content) {
+        setSavedStampSvg(brandStamp.svg_content);
+        return;
+      }
+      // Fallback to stamp_designs
       const { data } = await supabase
         .from("stamp_designs")
         .select("svg_source")
@@ -72,7 +93,7 @@ export default function DocumentFieldPlacer({
       if (data?.svg_source) setSavedStampSvg(data.svg_source);
     }
     loadStamp();
-  }, [user?.id]);
+  }, [user?.id, handoffStampSvg]);
 
   // Load user's saved signature from ai_tool_projects (favorite signature)
   useEffect(() => {
