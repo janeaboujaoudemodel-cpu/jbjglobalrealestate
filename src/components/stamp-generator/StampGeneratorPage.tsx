@@ -342,16 +342,66 @@ export default function StampGeneratorPage() {
   // Project save state
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [lastSaveType, setLastSaveType] = useState<'draft' | 'design' | 'preset' | null>(null);
 
-  // Explicit save project state to DB
-  const saveProjectState = useCallback(async () => {
-    if (!projectId || !user?.id || saving) return;
+  // ── Auto-save to localStorage (crash recovery) ──
+  const autoSaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (!projectId || !standardConcept) return;
+    if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
+    autoSaveTimerRef.current = setTimeout(() => {
+      try {
+        const payload = {
+          svgOverrides: Object.fromEntries(
+            Object.entries(svgOverrides).slice(0, 5).map(([k, v]) => [k, v.slice(0, 50000)])
+          ),
+          standardConceptId: standardConcept?.id,
+          selectedId,
+          timestamp: Date.now(),
+        };
+        localStorage.setItem(`stamp-autosave-${projectId}`, JSON.stringify(payload));
+      } catch {}
+    }, 30000);
+    return () => { if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current); };
+  }, [projectId, svgOverrides, standardConcept, selectedId]);
+
+  // Check for auto-save recovery on load
+  useEffect(() => {
+    if (!projectId) return;
+    try {
+      const raw = localStorage.getItem(`stamp-autosave-${projectId}`);
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (saved.timestamp && Date.now() - saved.timestamp < 3600000) {
+        // Less than 1 hour old — offer recovery via toast
+        toast('Resume unsaved changes?', {
+          duration: 8000,
+          action: {
+            label: 'Restore',
+            onClick: () => {
+              if (saved.svgOverrides) {
+                setSvgOverrides(prev => ({ ...prev, ...saved.svgOverrides }));
+              }
+              toast.success('Unsaved changes restored');
+              localStorage.removeItem(`stamp-autosave-${projectId}`);
+            },
+          },
+        });
+      } else {
+        localStorage.removeItem(`stamp-autosave-${projectId}`);
+      }
+    } catch {
+      localStorage.removeItem(`stamp-autosave-${projectId}`);
+    }
+  }, [projectId]);
+
+  // Core save logic — shared by saveDraft and saveDesign
+  const persistProjectState = useCallback(async (): Promise<boolean> => {
+    if (!projectId || !user?.id) return false;
     setSaving(true);
     try {
-      // Ensure standard design is persisted to DB first
       let standardDbId = standardConcept?.id || null;
       if (standardConcept && standardDbId && standardDbId.length !== 36) {
-        // Local UUID — insert to DB first
         const { data: inserted } = await supabase.from('stamp_designs').insert({
           project_id: projectId, user_id: user.id, design_version: 1,
           template_key: standardConcept.templateKey,
@@ -360,11 +410,9 @@ export default function StampGeneratorPage() {
         }).select('id').single();
         if (inserted) {
           standardDbId = inserted.id;
-          // Update local state with DB id
           setStandardConcept(prev => prev ? { ...prev, id: inserted.id } : prev);
           setSelectedId(inserted.id);
           setConcepts(prev => prev.map(c => c.id === standardConcept.id ? { ...c, id: inserted.id } : c));
-          // Move svg override to new id
           setSvgOverrides(prev => {
             const next = { ...prev };
             if (next[standardConcept.id]) {
@@ -375,37 +423,70 @@ export default function StampGeneratorPage() {
           });
         }
       }
-      // Save project state
-      const updateData: Record<string, any> = {
-        selected_design_id: standardDbId,
-      };
-      // Persist style overrides
+      const updateData: Record<string, any> = { selected_design_id: standardDbId };
       if (project) {
         updateData.layout_json = {
           ...(project.layout_json || {}),
-          primaryColor,
-          secondaryColor,
-          accentColor,
-          fontFamily,
-          fontBold,
-          fontItalic,
-          inkMode,
-          zoom,
-          localIconStyle,
-          localMonogramText,
-          monogramLetterColors,
+          primaryColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic,
+          inkMode, zoom, localIconStyle, localMonogramText, monogramLetterColors,
           lastSaved: new Date().toISOString(),
         };
       }
       await supabase.from('stamp_projects').update(updateData).eq('id', projectId);
       setLastSaved(new Date());
-      // No longer write misleading localStorage draft — DB is the real draft
-      setShowSaveDialog(true);
+      // Clear auto-save after successful DB save
+      localStorage.removeItem(`stamp-autosave-${projectId}`);
+      setSaving(false);
+      return true;
     } catch (err: any) {
       toast.error('Save failed: ' + (err?.message || 'Unknown error'));
+      setSaving(false);
+      return false;
+    }
+  }, [projectId, user?.id, standardConcept, svgOverrides, project, primaryColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, inkMode, zoom, localIconStyle, localMonogramText, monogramLetterColors]);
+
+  // Save Draft — quiet save, toast only
+  const saveDraft = useCallback(async () => {
+    if (saving) return;
+    const ok = await persistProjectState();
+    if (ok) {
+      setLastSaveType('draft');
+      toast.success('Draft saved', { duration: 2000 });
+    }
+  }, [saving, persistProjectState]);
+
+  // Save Design — full save with dialog
+  const saveDesign = useCallback(async () => {
+    if (saving) return;
+    const ok = await persistProjectState();
+    if (ok) {
+      setLastSaveType('design');
+      setShowSaveDialog(true);
+    }
+  }, [saving, persistProjectState]);
+
+  // Save as Preset — config-only save
+  const saveAsPreset = useCallback(async () => {
+    if (!user?.id || !standardConcept) { toast.error('No design to save as preset'); return; }
+    setSaving(true);
+    try {
+      const svg = svgOverrides[standardConcept.id] || standardConcept.svgSource;
+      const { error } = await supabase.from('stamp_presets' as any).insert({
+        user_id: user.id,
+        name: standardConcept.label || project?.company_name || 'Custom Preset',
+        description: `Saved ${new Date().toLocaleDateString()}`,
+        config_json: { templateKey: standardConcept.templateKey, svgSource: svg },
+        svg_preview: svg?.slice(0, 50000),
+      });
+      if (error) throw error;
+      setLastSaved(new Date());
+      setLastSaveType('preset');
+      toast.success('Preset saved');
+    } catch (err: any) {
+      toast.error(err?.message || 'Failed to save preset');
     }
     setSaving(false);
-  }, [projectId, user?.id, saving, standardConcept, svgOverrides, project, primaryColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, inkMode, zoom, localIconStyle, localMonogramText, monogramLetterColors]);
+  }, [user?.id, standardConcept, svgOverrides, project]);
 
   // Preview update feedback
   const [previewPulse, setPreviewPulse] = useState(false);
