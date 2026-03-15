@@ -11,7 +11,7 @@ import { StampColorWheel } from './StampColorWheel';
 import { StampTextEditor } from './StampTextEditor';
 import { MonogramColorEditor, DEFAULT_MONOGRAM_COLORS } from './MonogramColorEditor';
 import type { MonogramLetterColors } from './MonogramColorEditor';
-import { ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle } from '@/lib/stampOfficialTemplate';
+import { ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type LanguageMode } from '@/lib/stampOfficialTemplate';
 import { removeWhiteBackground } from '@/lib/removeWhiteBackground';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
