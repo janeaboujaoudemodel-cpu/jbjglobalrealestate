@@ -673,7 +673,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-red-300/50 text-red-600/80 hover:border-red-400"
           )}
         >
-          Hide Sold
+          {t('filter.hideSold')}
         </button>
 
         {/* Reset All */}
