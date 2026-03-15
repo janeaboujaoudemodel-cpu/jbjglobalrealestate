@@ -740,8 +740,8 @@ export default function StampGeneratorPage() {
     } else {
       const { data } = await supabase.from('stamp_designs').insert({
         project_id: projectId, user_id: user!.id, design_version: 1,
-        template_key: concept.templateKey, svg_source: svgToSave, style_snapshot_json: project,
-      }).select('id').single();
+        template_key: concept.templateKey, svg_source: svgToSave, style_snapshot_json: project, source: 'manual',
+      } as any).select('id').single();
       if (data) {
         designId = data.id;
         setSavedDesignId(data.id);
