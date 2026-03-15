@@ -30,8 +30,62 @@ import { VoiceClonePanel } from './features/VoiceClonePanel';
 import { BatchPhotoVideoPanel } from './features/BatchPhotoVideoPanel';
 import { useVideoStudioProject } from './hooks/useVideoStudioProject';
 import { useMediaLibrary } from './hooks/useMediaLibrary';
-import { MediaAsset, StockAsset, Clip, ExportPreset, RenderJob } from './types';
+import { MediaAsset, StockAsset, Clip, ExportPreset, RenderJob, Keyframe } from './types';
 import { toast } from 'sonner';
+
+// Ken Burns keyframe generator — produces start/end keyframes for scale/position
+function getKenBurnsKeyframes(animation: string, duration: number): Keyframe[] {
+  const id = () => crypto.randomUUID();
+  const ease = 'easeInOut' as const;
+  const kf: Keyframe[] = [];
+  switch (animation) {
+    case 'zoom-in-center':
+      kf.push({ id: id(), time: 0, property: 'scaleX', value: 1, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleX', value: 1.25, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'scaleY', value: 1, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleY', value: 1.25, easing: ease });
+      break;
+    case 'zoom-out-center':
+      kf.push({ id: id(), time: 0, property: 'scaleX', value: 1.25, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleX', value: 1, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'scaleY', value: 1.25, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleY', value: 1, easing: ease });
+      break;
+    case 'pan-left':
+      kf.push({ id: id(), time: 0, property: 'x', value: 50, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'x', value: -50, easing: ease });
+      break;
+    case 'pan-right':
+      kf.push({ id: id(), time: 0, property: 'x', value: -50, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'x', value: 50, easing: ease });
+      break;
+    case 'pan-up':
+      kf.push({ id: id(), time: 0, property: 'y', value: 30, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'y', value: -30, easing: ease });
+      break;
+    case 'pan-down':
+      kf.push({ id: id(), time: 0, property: 'y', value: -30, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'y', value: 30, easing: ease });
+      break;
+    case 'zoom-pan-tl':
+      kf.push({ id: id(), time: 0, property: 'scaleX', value: 1, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleX', value: 1.3, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'x', value: 0, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'x', value: -40, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'y', value: 0, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'y', value: -40, easing: ease });
+      break;
+    case 'zoom-pan-br':
+      kf.push({ id: id(), time: 0, property: 'scaleX', value: 1, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleX', value: 1.3, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'x', value: 0, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'x', value: 40, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'y', value: 0, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'y', value: 40, easing: ease });
+      break;
+  }
+  return kf;
+}
 
 
 
