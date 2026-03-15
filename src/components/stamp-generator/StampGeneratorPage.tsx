@@ -169,7 +169,7 @@ export default function StampGeneratorPage() {
   const setArcTextSpacing = (v: number) => { setArcTextSpacingRaw(v); ssSave(ssKey('arcTextSpacing'), v); };
   const [circleGap, setCircleGapRaw] = useState(() => ssGet(ssKey('circleGap'), 13));
   const setCircleGap = (v: number) => { setCircleGapRaw(v); ssSave(ssKey('circleGap'), v); };
-  const [separatorDistance, setSeparatorDistanceRaw] = useState(() => ssGet(ssKey('separatorDistance'), 8));
+  const [separatorDistance, setSeparatorDistanceRaw] = useState(() => ssGet(ssKey('separatorDistance'), 50));
   const setSeparatorDistance = (v: number) => { setSeparatorDistanceRaw(v); ssSave(ssKey('separatorDistance'), v); };
   const [centerContentSize, setCenterContentSizeRaw] = useState(() => ssGet(ssKey('centerContentSize'), 40));
   const setCenterContentSize = (v: number) => { setCenterContentSizeRaw(v); ssSave(ssKey('centerContentSize'), v); };

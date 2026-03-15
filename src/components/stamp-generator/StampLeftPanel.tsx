@@ -1,6 +1,7 @@
 /**
  * StampLeftPanel — Collapsible accordion sections replacing the old 6-tab system.
  * Each section can be independently expanded/collapsed.
+ * Context-aware: when monogram/center is focused, color changes target monogram instead of borders.
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
@@ -8,6 +9,7 @@ import { StampColorWheel } from './StampColorWheel';
 import { StampTextEditor } from './StampTextEditor';
 import { MonogramColorEditor, DEFAULT_MONOGRAM_COLORS } from './MonogramColorEditor';
 import type { MonogramLetterColors } from './MonogramColorEditor';
+import { ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle } from '@/lib/stampOfficialTemplate';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -16,6 +18,12 @@ import {
   RotateCw, Award, Upload, Wand2, Loader2, Palette, Type,
   CircleDot, Stamp, Layers, PenTool, Sparkles
 } from 'lucide-react';
+
+const SEPARATOR_GLYPHS: Record<SeparatorStyle, string> = {
+  'dot': '●', 'star': '★', 'square': '■', 'diamond': '◆',
+  'line': '—', 'double-line': '═', 'triangle': '▲', 'cross': '✦',
+  'floral': '❀', 'ornament': '❖', 'dash': '—', 'circle': '◉', 'none': '⊘',
+};
 
 // 5 mandatory standard export colors
 const STANDARD_EXPORT_COLORS = [
