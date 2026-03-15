@@ -33,8 +33,9 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     const speed = 0.4;
     // Card width (200px) + gap (16px) = 216px per card
     const singleSetWidth = items.length * 216;
-    // Start from full right — initial position at container's parent width
-    let pos = -(el.parentElement?.clientWidth || window.innerWidth);
+    // Start from full right — negative pos means translateX will be positive (shifted right)
+    // We want the strip to start fully off-screen to the right
+    let pos = -(el.parentElement?.clientWidth ?? window.innerWidth);
 
     const tick = () => {
       pos += speed;

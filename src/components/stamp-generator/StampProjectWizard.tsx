@@ -504,11 +504,11 @@ export default function StampProjectWizard() {
   };
 
   return (
-    <div className="h-[calc(100dvh-52px)] flex flex-col bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] overflow-hidden mt-1">
+    <div className="h-[calc(100dvh-52px)] flex flex-col bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] overflow-hidden">
       {/* ── Top toolbar — professional header with premium spacing ── */}
-      <div className="flex-shrink-0 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-md px-5 py-3 flex items-center gap-3 shadow-sm">
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-sm">
-          <Stamp size={15} className="text-white"/>
+      <div className="flex-shrink-0 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-md px-5 py-3.5 flex items-center gap-3 shadow-sm">
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-sm">
+          <Stamp size={16} className="text-white"/>
         </div>
         <h1 className="font-semibold text-[hsl(var(--foreground))] text-sm tracking-tight">Stamp Studio</h1>
         {isOwner && (

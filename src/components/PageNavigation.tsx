@@ -111,7 +111,7 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
       className={cn(
         "fixed bottom-36 z-[10049] flex flex-col gap-2",
         "pointer-events-auto",
-        isRTL ? "left-4" : "right-6"
+        isRTL ? "left-4" : "right-6 md:right-8"
       )}
       style={{ 
         transform, 
