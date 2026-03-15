@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   type Template, type CardShape, type QrPosition, type CardData,
   type BilingualMode, type AiDesignData, type FieldPos, type FieldConfigMap,
+  type SigLayout,
   getShapeStyle, DEFAULT_FIELD_POSITIONS, SNAP_THRESHOLD,
   buildQrUrl, QR_POSITION_STYLE, getDefaultFieldConfigs,
 } from "./businessCardTypes";
