@@ -72,7 +72,7 @@ const DeveloperCompanyRegistration = () => {
         emirate: existing.emirate || "",
         rera_number: existing.rera_number || "",
         year_established: existing.year_established?.toString() || "",
-        key_contacts: (existing.key_contacts as KeyContact[]) || [{ name: "", position: "", email: "", phone: "" }],
+        key_contacts: (existing.key_contacts as unknown as KeyContact[]) || [{ name: "", position: "", email: "", phone: "" }],
       });
     }
   }, [existing]);
