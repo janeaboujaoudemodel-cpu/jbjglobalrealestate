@@ -324,6 +324,165 @@ export function StampRightPanel(props: StampRightPanelProps) {
   );
 }
 
+/** Library panel: shows saved custom presets + drafts */
+function StampLibraryPanel({ onApplyPreset }: { onApplyPreset: (c: any) => void }) {
+  const [customPresets, setCustomPresets] = useState<any[]>([]);
+  const [drafts, setDrafts] = useState<{ key: string; name: string; savedAt: string; projectId?: string }[]>([]);
+  const [editingName, setEditingName] = useState<string | null>(null);
+  const [nameValue, setNameValue] = useState('');
+
+  useEffect(() => {
+    loadPresets();
+    loadDrafts();
+  }, []);
+
+  function loadPresets() {
+    try {
+      const saved = localStorage.getItem('stamp-custom-presets');
+      setCustomPresets(saved ? JSON.parse(saved) : []);
+    } catch { setCustomPresets([]); }
+  }
+
+  function loadDrafts() {
+    try {
+      const draftList: typeof drafts = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('jbj_draft_stamp-generator_')) {
+          try {
+            const data = JSON.parse(localStorage.getItem(key) || '');
+            draftList.push({ key, name: data.name || 'Untitled Draft', savedAt: data.savedAt || '', projectId: data.projectId });
+          } catch {}
+        }
+      }
+      draftList.sort((a, b) => (b.savedAt || '').localeCompare(a.savedAt || ''));
+      setDrafts(draftList);
+    } catch { setDrafts([]); }
+  }
+
+  function deletePreset(id: string) {
+    try {
+      const saved = localStorage.getItem('stamp-custom-presets');
+      const existing = saved ? JSON.parse(saved) : [];
+      const updated = existing.filter((p: any) => p.id !== id);
+      localStorage.setItem('stamp-custom-presets', JSON.stringify(updated));
+      setCustomPresets(updated);
+      toast.success('Preset removed');
+    } catch {}
+  }
+
+  function deleteDraft(key: string) {
+    try { localStorage.removeItem(key); loadDrafts(); toast.success('Draft removed'); } catch {}
+  }
+
+  function renameDraft(key: string, newName: string) {
+    try {
+      const data = JSON.parse(localStorage.getItem(key) || '{}');
+      data.name = newName;
+      localStorage.setItem(key, JSON.stringify(data));
+      loadDrafts();
+      setEditingName(null);
+      toast.success('Draft renamed');
+    } catch {}
+  }
+
+  function continueDraft(draft: { key: string; projectId?: string }) {
+    if (draft.projectId) {
+      window.location.href = `/toolkit/stamp-generator/${draft.projectId}/generate`;
+    } else {
+      toast.error('Draft has no project link');
+    }
+  }
+
+  const formatDate = (d: string) => {
+    if (!d) return '';
+    try { return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }); } catch { return d; }
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Custom Presets */}
+      <div>
+        <div className="flex items-center gap-1.5 mb-2">
+          <Save size={11} className="text-[hsl(var(--gold))]" />
+          <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Saved Presets</span>
+          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{customPresets.length}</Badge>
+        </div>
+        {customPresets.length > 0 ? (
+          <div className="space-y-1.5">
+            {customPresets.map((preset: any) => (
+              <div key={preset.id} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
+                <div className="w-7 h-7 rounded-lg bg-[hsl(var(--gold)/0.1)] flex items-center justify-center flex-shrink-0">
+                  <Save size={10} className="text-[hsl(var(--gold))]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{preset.name}</p>
+                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{preset.description || 'Custom preset'}</p>
+                </div>
+                <button onClick={() => deletePreset(preset.id)} className="w-5 h-5 rounded flex items-center justify-center hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-opacity" title="Delete">
+                  <Trash2 size={9} className="text-destructive" />
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-4">
+            <Save size={16} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30 mb-1" />
+            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">No saved presets yet. Use "Save Current as Preset" in the left panel.</p>
+          </div>
+        )}
+      </div>
+
+      {/* Drafts */}
+      <div>
+        <div className="flex items-center gap-1.5 mb-2">
+          <FolderOpen size={11} className="text-[hsl(var(--gold))]" />
+          <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Drafts</span>
+          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{drafts.length}</Badge>
+        </div>
+        {drafts.length > 0 ? (
+          <div className="space-y-1.5">
+            {drafts.map(draft => (
+              <div key={draft.key} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
+                <div className="w-7 h-7 rounded-lg bg-[hsl(var(--muted))] flex items-center justify-center flex-shrink-0">
+                  <FolderOpen size={10} className="text-[hsl(var(--muted-foreground))]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  {editingName === draft.key ? (
+                    <input value={nameValue} onChange={e => setNameValue(e.target.value)}
+                      onKeyDown={e => { if (e.key === 'Enter') renameDraft(draft.key, nameValue); if (e.key === 'Escape') setEditingName(null); }}
+                      onBlur={() => renameDraft(draft.key, nameValue)}
+                      autoFocus className="text-[10px] font-semibold border-b border-[hsl(var(--gold))] outline-none bg-transparent w-full" />
+                  ) : (
+                    <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{draft.name}</p>
+                  )}
+                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{formatDate(draft.savedAt)}</p>
+                </div>
+                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={() => continueDraft(draft)} className="w-5 h-5 rounded flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]" title="Continue editing">
+                    <RotateCw size={9} className="text-[hsl(var(--gold-dark))]" />
+                  </button>
+                  <button onClick={() => { setEditingName(draft.key); setNameValue(draft.name); }} className="w-5 h-5 rounded flex items-center justify-center hover:bg-[hsl(var(--muted))]" title="Rename">
+                    <Pencil size={9} className="text-[hsl(var(--muted-foreground))]" />
+                  </button>
+                  <button onClick={() => deleteDraft(draft.key)} className="w-5 h-5 rounded flex items-center justify-center hover:bg-destructive/10" title="Delete">
+                    <Trash2 size={9} className="text-destructive" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-4">
+            <FolderOpen size={16} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30 mb-1" />
+            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">No drafts found. Drafts are auto-saved when you save a project.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /** Inline version history for the History tab (replaces the modal StampVersionSelector) */
 function HistoryList(props: {
   projectId: string;
