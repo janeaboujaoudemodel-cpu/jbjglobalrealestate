@@ -54,6 +54,14 @@ interface BusinessCardRightPanelProps {
   logoSize: number;
   setLogoSize: (v: number) => void;
 
+  // Stamp
+  stampOpen: boolean;
+  setStampOpen: (v: boolean) => void;
+  stampUrl: string;
+  setStampUrl: (v: string) => void;
+  stampSize: number;
+  setStampSize: (v: number) => void;
+
   // Typography
   typographyOpen: boolean;
   setTypographyOpen: (v: boolean) => void;
