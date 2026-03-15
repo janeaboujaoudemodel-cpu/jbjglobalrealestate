@@ -94,7 +94,7 @@ export const topNationalities = [
   { country: "United States", percentage: 2, transactions: 370, flag: "🇺🇸" },
 ];
 
-// ── Average Rental Yields by Area (Sources: Bayut, Property Finder, Property Monitor) ──
+// ── Average Rental Yields by Area (Sources: DLD, RERA, DXB Interact) ──
 export const AREA_RENTAL_YIELDS = [
   { area: "Jumeirah Village Circle", yieldPercent: 8.2, avgRentAED: 65000 },
   { area: "Dubai Marina", yieldPercent: 6.8, avgRentAED: 110000 },
