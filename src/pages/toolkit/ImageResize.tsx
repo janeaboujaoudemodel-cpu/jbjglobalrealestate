@@ -108,7 +108,6 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
   // Smart Crop AI
   const [smartCropLoading, setSmartCropLoading] = useState(false);
   const [smartCropSubject, setSmartCropSubject] = useState<string | null>(null);
-  const thumbnailStripRef = useRef<HTMLDivElement>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
