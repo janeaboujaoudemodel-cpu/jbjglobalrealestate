@@ -1037,6 +1037,7 @@ export default function StampGeneratorPage() {
               ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
                 <div className="relative">
                   <StampInteractivePreview
+                    onElementSelect={setSelectedElement}
                     svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
                     tintColor={primaryColor}
                     secondaryColor={secondaryColor}
