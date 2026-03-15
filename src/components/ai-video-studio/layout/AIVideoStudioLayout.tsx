@@ -89,6 +89,7 @@ function AIVideoStudioLayout({
   beautyPanel, sfxPanel, effectsPanel, transitionsPanel, resizePanel,
   mapPanel, aiEditorPanel, projectsPanel, talkingAgentPanel, historyPanel,
   audioExtractPanel, photoClipPanel, sharePanel,
+  bgRemovePanel, scenePlannerPanel, chartOverlayPanel,
 }, ref) {
   const isMobile = useIsMobile();
   const [activeTool, setActiveTool] = useState<string | null>(null);
