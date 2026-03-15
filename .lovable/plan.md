@@ -1,90 +1,73 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+# Video Suite — Connect Existing AI Infrastructure
 
-### Session Status
+## Current State (Audit Findings)
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+The following edge functions and API keys **already exist** but are **NOT wired** into the Video Studio:
 
----
+| Infrastructure | Edge Function | API Key | Status in Video Studio |
+|---|---|---|---|
+| AI Background Removal | `ai-background-remove` (Gemini 3 Pro Image) | `LOVABLE_API_KEY` | ❌ Not connected — panel uses canvas-only |
+| ElevenLabs TTS | `voice-studio-tts` | `ELEVENLABS_API_KEY` ✅ | ❌ Not connected — uses Web Speech API |
+| ElevenLabs Voice Clone | `voice-studio-clone` | `ELEVENLABS_API_KEY` ✅ | ❌ Not connected |
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+## Plan
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+### 1. Upgrade BackgroundRemoverPanel — Connect to AI Edge Function
 
----
+**File**: `src/components/ai-video-studio/features/BackgroundRemoverPanel.tsx`
 
-### Route Map
+Current: 5 client-side modes (luminance, chroma key, solid color) using canvas `getImageData()`.
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+**Changes**:
+- Add a 6th mode: "AI Remove" — calls `ai-background-remove` with `mode: "remove"` using `supabase.functions.invoke()`
+- Add a 7th mode: "AI Replace" — calls `ai-background-remove` with `mode: "generate"` + user prompt for new background scene
+- Keep existing 5 canvas modes as instant fallbacks
+- Show "AI-powered" badge on the AI modes
+- On AI failure/rate-limit, auto-fallback to client-side canvas removal with toast notification
+- Requires auth (existing edge function checks JWT)
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+### 2. Integrate ElevenLabs TTS into AI Talking Agent Panel
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
+**File**: `src/components/ai-video-studio/features/AITalkingAgentPanel.tsx`
 
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
+Current: Uses Web Speech API (`speechSynthesis.speak()`) for voice playback — robotic browser voices.
 
-**Investor Hub**
-- `/investor-hub` → InvestorHub
+**Changes**:
+- Add toggle: "Browser Voice" vs "Premium Voice (ElevenLabs)"
+- When Premium selected, call `voice-studio-tts` edge function with selected character's matching ElevenLabs voice ID
+- Map existing 8 characters to ElevenLabs voice IDs from `VOICE_OPTIONS` in `types.ts` (Roger→CwhRBWXzGAHq8TQ4Fs17, Sarah→EXAVITQu4vr4xnSDxMaL, etc.)
+- Return audio blob → create `<audio>` element → play + option to add to timeline
+- Download button for generated audio
+- Fallback: if ElevenLabs fails (rate limit, auth), fall back to Web Speech API with toast
 
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
+### 3. Add Voice Clone Panel to Video Studio
 
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
+**File**: `src/components/ai-video-studio/features/VoiceClonePanel.tsx` (new)
 
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
+- Upload voice sample (audio file)
+- Call `voice-studio-clone` edge function with `action: "clone_voice"`
+- Display cloned voice ID + name
+- Generate TTS with cloned voice via `voice-studio-tts` 
+- Add generated audio to timeline
+- List previously cloned voices
 
----
+**Layout integration**: Add `voice-clone` tab to `AIVideoStudioLayout.tsx` with `Mic2` icon.
 
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
+## Files Modified/Created
+
+| File | Action |
+|---|---|
+| `BackgroundRemoverPanel.tsx` | Edit — add AI Remove + AI Replace modes via `ai-background-remove` |
+| `AITalkingAgentPanel.tsx` | Edit — add ElevenLabs TTS option alongside Web Speech |
+| `VoiceClonePanel.tsx` | Create — voice cloning via existing `voice-studio-clone` |
+| `AIVideoStudioLayout.tsx` | Edit — add `voice-clone` tab |
+| `AIVideoStudio.tsx` | Edit — wire `VoiceClonePanel` |
+
+## NOT IMPLEMENTABLE (confirmed)
+
+1. **AI video frame generation** — No video generation model (Runway/Pika/Sora) in Lovable AI roster. NOT IMPLEMENTED.
+2. **Full DaVinci-level editing** — Requires FFmpeg/WASM for real frame-by-frame rendering. NOT IMPLEMENTED.
+3. **Scene-by-scene video generation** — Depends on #1. NOT IMPLEMENTED.
+
