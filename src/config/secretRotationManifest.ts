@@ -136,34 +136,10 @@ export const SECRET_MANIFEST: SecretEntry[] = [
     rotationSteps: 'Managed via Lovable connector settings',
     status: 'connector-managed',
   },
-  // ── FLAGGED FOR REMOVAL ──
-  {
-    name: 'REELLY_EMAIL',
-    scope: 'runtime',
-    purpose: 'Legacy Reelly login email — NOT referenced in any edge function',
-    rotatable: false,
-    rotationSteps: 'N/A — candidate for deletion',
-    status: 'unused',
-    notes: 'No code references found. Safe to delete after confirming with owner.',
-  },
-  {
-    name: 'REELLY_PASSWORD',
-    scope: 'runtime',
-    purpose: 'Legacy Reelly login password — NOT referenced in any edge function',
-    rotatable: false,
-    rotationSteps: 'N/A — candidate for deletion',
-    status: 'unused',
-    notes: 'No code references found. Safe to delete after confirming with owner.',
-  },
-  {
-    name: 'VITE_OWNER_EMAIL',
-    scope: 'runtime',
-    purpose: 'Duplicate of OWNER_EMAIL with VITE_ prefix — was exposed in client bundle',
-    rotatable: false,
-    rotationSteps: 'N/A — should be deleted, use OWNER_EMAIL instead',
-    status: 'duplicate',
-    notes: 'Removed from .env. Runtime secret still exists — delete after confirming no edge functions reference it.',
-  },
+  // ── REMOVED (2026-03-15) ──
+  // REELLY_EMAIL — deleted (unused legacy credential)
+  // REELLY_PASSWORD — deleted (unused legacy credential)
+  // VITE_OWNER_EMAIL — deleted (duplicate, was exposed in client bundle)
 ];
 
 /**

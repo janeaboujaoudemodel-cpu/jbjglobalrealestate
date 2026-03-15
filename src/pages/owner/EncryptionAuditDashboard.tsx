@@ -162,9 +162,14 @@ export default function EncryptionAuditDashboard() {
               </div>
             </div>
             {keyStatus.configured && (
-              <Button onClick={runMigration} disabled={migrating} size="sm" variant="outline" className="border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10">
-                {migrating ? <><RefreshCw className="w-4 h-4 mr-2 animate-spin" /> Encrypting...</> : <><Lock className="w-4 h-4 mr-2" /> Run Data Migration</>}
-              </Button>
+              <div className="flex gap-2">
+                {(["crm_leads", "hr_employees", "resale_listings"] as const).map(t => (
+                  <Button key={t} onClick={() => runMigration(t)} disabled={migrating} size="sm" variant="outline" className="border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 text-xs">
+                    {migrating ? <RefreshCw className="w-3 h-3 mr-1 animate-spin" /> : <Lock className="w-3 h-3 mr-1" />}
+                    {t.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}
+                  </Button>
+                ))}
+              </div>
             )}
           </div>
         </CardContent>
