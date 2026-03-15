@@ -443,7 +443,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     const topFW = config.arabicFontWeight === 'normal' ? '600' : '800';
     topArcContent = renderTopArcTextPath(
       topText, cx, cy, clampedTextArcR, topSafe.fontSize, arFont, ink,
-      topLS, true, 'top-arc', topFW
+      topLS, true, 'top-arc', topFW, config.letterOverrides
     );
     // Arabic location on bottom
     if (config.showLocation) {
@@ -451,7 +451,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
       const botSafe = safeArcFontSize(locAr, clampedTextArcR, true, 13, arabicSpread);
       bottomArcContent = renderBottomArcTextPath(
         locAr, cx, cy, clampedTextArcR, botSafe.fontSize, arFont, ink,
-        config.arabicLetterSpacing ?? botSafe.letterSpacing, true, 'bottom-arc', '600'
+        config.arabicLetterSpacing ?? botSafe.letterSpacing, true, 'bottom-arc', '600', config.letterOverrides
       );
     }
     separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
