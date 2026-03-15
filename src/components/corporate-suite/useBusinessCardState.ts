@@ -48,6 +48,12 @@ export function useBusinessCardState() {
   const [logoSize, setLogoSize] = useState(60);
   const [logoPos, setLogoPos]   = useState({ ...DEFAULT_LOGO_POS });
 
+  // Stamp overlay (independent from logo)
+  const [stampOpen, setStampOpen] = useState(false);
+  const [stampUrl, setStampUrl]   = useState("");
+  const [stampSize, setStampSize] = useState(50);
+  const [stampPos, setStampPos]   = useState({ x: 70, y: 65 });
+
   // Card shape
   const [cardShape, setCardShape] = useState<CardShape>("horizontal");
   const [shapeOpen, setShapeOpen] = useState(true);
