@@ -992,8 +992,10 @@ export default function StampGeneratorPage() {
         onClose={() => setShowSaveDialog(false)}
         projectName={project?.company_name || 'Stamp Project'}
         savedAt={lastSaved}
+        saveType={lastSaveType || 'design'}
         onViewProjects={() => { setShowSaveDialog(false); navigate('/toolkit/stamp-generator/projects'); }}
         onOpenLibrary={() => { setShowSaveDialog(false); libraryTabRef?.(); }}
+        onSaveAsAsset={() => { saveCurrentAsBrandAsset(); }}
       />
 
 
@@ -1009,10 +1011,13 @@ export default function StampGeneratorPage() {
         onToggleChat={() => setChatOpen(v => !v)}
         onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}
         onSaveAsset={saveCurrentAsBrandAsset}
-        onSaveProject={saveProjectState}
+        onSaveProject={saveDesign}
+        onSaveDraft={saveDraft}
+        onSavePreset={isOwner ? saveAsPreset : undefined}
         selectedId={selectedId}
         saving={saving}
         lastSaved={lastSaved}
+        lastSaveType={lastSaveType}
       />
 
       {/* ── 3-Column Studio Body ── */}
