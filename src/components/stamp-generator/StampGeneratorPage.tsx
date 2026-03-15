@@ -335,6 +335,13 @@ export default function StampGeneratorPage() {
   const setSecondaryColorWithPulse = useCallback((v: string | undefined) => { setSecondaryColor(v); triggerPulse(); }, [triggerPulse]);
   const setAccentColorWithPulse = useCallback((v: string | undefined) => { setAccentColor(v); triggerPulse(); }, [triggerPulse]);
 
+  // Remember last stamp route for CTA routing
+  useEffect(() => {
+    if (projectId) {
+      try { localStorage.setItem('stamp_last_route', `/toolkit/stamp-generator/${projectId}/generate`); } catch {}
+    }
+  }, [projectId]);
+
   useEffect(() => {
     if (!user || !projectId) return;
     loadProject();
