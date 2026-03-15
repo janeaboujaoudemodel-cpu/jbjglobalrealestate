@@ -195,7 +195,23 @@ Deno.serve(async (req) => {
       .lt("created_at", thirtyDaysAgo);
 
     // ═══════════════════════════════════════════════════════════════════
-    // 6. ALERT OWNER on critical patterns
+    // 6. LOG SCAN RESULTS
+    // ═══════════════════════════════════════════════════════════════════
+    const cleanupStats = {
+      rate_limits_cleaned: cleanedRateLimits || 0,
+      expired_blocks_cleaned: cleanedBlocks || 0,
+      old_events_cleaned: cleanedEvents || 0,
+    };
+
+    await admin.from("abuse_detection_log").insert({
+      scan_time: now.toISOString(),
+      patterns_detected: detectedPatterns.length,
+      patterns: detectedPatterns,
+      cleanup_stats: cleanupStats,
+    });
+
+    // ═══════════════════════════════════════════════════════════════════
+    // 7. ALERT OWNER on critical patterns
     // ═══════════════════════════════════════════════════════════════════
     const criticalPatterns = detectedPatterns.filter(p => p.severity === "critical");
     if (criticalPatterns.length > 0) {
