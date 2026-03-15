@@ -235,14 +235,23 @@ function convertToEmboss(svg: string): string {
   return s;
 }
 
+let downloadQueue = Promise.resolve();
 function triggerDownload(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  downloadQueue = downloadQueue.then(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      requestAnimationFrame(() => {
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+        resolve();
+      });
+    });
+  }));
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
