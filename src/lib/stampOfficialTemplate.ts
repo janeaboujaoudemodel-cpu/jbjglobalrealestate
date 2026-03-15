@@ -61,6 +61,8 @@ export interface OfficialStampConfig {
   companyArcBandOffset?: number;
   /** Radial offset for location arcs (0-100, 50 = centered between middle+inner rings) */
   locationArcBandOffset?: number;
+  /** Location arc spread (0-1, default 0.98) — independent from company arc spreads */
+  locationArcSpread?: number;
   /** Language mode: EN-only, AR-only, BILINGUAL */
   languageMode?: LanguageMode;
   /** Stamp shape */
