@@ -715,6 +715,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 const CURRENCY_KEY = 'jj_currency';
 
 function ConnectedCurrencyButton() {
+  const { t } = useLanguage();
   const [currency, setCurrencyState] = useState<string>(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem(CURRENCY_KEY) || 'AED';
