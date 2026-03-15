@@ -280,7 +280,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </Suspense>
       )}
       {/* Page navigation arrows — visible only when chat is closed */}
-      <PageNavigation isChatOpen={!effectiveCollapsed} />
+      <PageNavigation isChatOpen={!effectiveCollapsed} isChatMedium={showAttentionPulse && effectiveCollapsed} />
       {!isBackOfficeRoute && (!isHomePage || popupsReady) && (
         <Suspense fallback={null}>
           <AIChatWidget

@@ -110,7 +110,8 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
       }}
       className={cn(
-        "fixed bottom-44 z-[10049] flex flex-col gap-2",
+        "fixed z-[10049] flex flex-col gap-2",
+        isChatMedium ? "bottom-56" : "bottom-36",
         "pointer-events-auto",
         isRTL ? "left-4" : "right-6 md:right-8"
       )}
