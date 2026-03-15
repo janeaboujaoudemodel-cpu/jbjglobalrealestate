@@ -118,12 +118,13 @@ const THEME_STROKE_MULT: Record<string, number> = {
   CLASSIC: 1, MODERN: 0.8, MINIMAL: 0.5, LUXURY: 1.3, BOLD: 1.6, VINTAGE: 0.9,
 };
 
-function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6): number {
+function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6, isArabic = false): number {
   if (!text) return baseSize;
+  const minSize = isArabic ? 8 : 7;
   const est = text.length * baseSize * charW;
   if (est <= maxArcLen) return baseSize;
   const fitted = maxArcLen / (text.length * charW);
-  return Math.max(6.5, fitted);
+  return Math.max(minSize, fitted);
 }
 
 function computeArcLetterSpacing(
