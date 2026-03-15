@@ -30,10 +30,11 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     const el = scrollRef.current;
     if (!el) return;
     let animId: number;
-    let pos = 0;
     const speed = 0.4;
     // Card width (200px) + gap (16px) = 216px per card
     const singleSetWidth = items.length * 216;
+    // Start from full right — initial position at container's parent width
+    let pos = -(el.parentElement?.clientWidth || window.innerWidth);
 
     const tick = () => {
       pos += speed;

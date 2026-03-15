@@ -362,6 +362,7 @@ export default function StampGeneratorPage() {
     }
     setGenerating(false);
     setGeneratingInPanel(false);
+    generationLockRef.current = false;
   }, [project, session, projectId, standardConcept]);
 
   async function toggleFavorite(concept: StampDesignConcept) {
