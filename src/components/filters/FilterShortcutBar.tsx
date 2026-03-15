@@ -5,7 +5,7 @@
  */
 import { useState, useCallback, useEffect, useRef } from "react";
 
-import { ChevronDown, ChevronRight as ChevronRightIcon, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, User, Briefcase, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
+import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, User, Briefcase, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
@@ -262,46 +262,13 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     return first;
   };
 
-  // Scroll indicator refs
-  const row1Ref = useRef<HTMLDivElement>(null);
-  const row2Ref = useRef<HTMLDivElement>(null);
-  const [row1CanScroll, setRow1CanScroll] = useState(false);
-  const [row2CanScroll, setRow2CanScroll] = useState(false);
-
-  useEffect(() => {
-    const checkScroll = () => {
-      if (row1Ref.current) {
-        const el = row1Ref.current;
-        setRow1CanScroll(el.scrollWidth > el.clientWidth && el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
-      }
-      if (row2Ref.current) {
-        const el = row2Ref.current;
-        setRow2CanScroll(el.scrollWidth > el.clientWidth && el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
-      }
-    };
-    checkScroll();
-    const r1 = row1Ref.current;
-    const r2 = row2Ref.current;
-    r1?.addEventListener('scroll', checkScroll, { passive: true });
-    r2?.addEventListener('scroll', checkScroll, { passive: true });
-    window.addEventListener('resize', checkScroll);
-    return () => {
-      r1?.removeEventListener('scroll', checkScroll);
-      r2?.removeEventListener('scroll', checkScroll);
-      window.removeEventListener('resize', checkScroll);
-    };
-  }, []);
-
-  const scrollRow = (ref: React.RefObject<HTMLDivElement | null>) => {
-    ref.current?.scrollBy({ left: 200, behavior: 'smooth' });
-  };
 
   return (
     <>
       <div className="flex flex-col gap-2 w-full">
         {/* Row 1: Connected toolbar - Search + Sort Pills + Map + Saved + Currency + Filter + Mode */}
         <div className="relative">
-          <div ref={row1Ref} className="flex items-center w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+          <div className="flex items-center w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
             <div className="flex items-center w-full min-w-max border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
               {/* Search slot or built-in search */}
               {searchSlot ? (
@@ -368,7 +335,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
         {/* Row 2: Filter popovers + Sort pills */}
         <div className="relative">
-          <div ref={row2Ref} className="flex items-center gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-1 -mb-1 w-full" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+          <div className="flex items-center gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-1 -mb-1 w-full" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
         {/* Price */}
         <Popover>
           <PopoverTrigger asChild>
