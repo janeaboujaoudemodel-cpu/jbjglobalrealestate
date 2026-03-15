@@ -47,7 +47,7 @@ export default function PropertySuite() {
         <div style={{ background: "linear-gradient(180deg, #F5EBD7 0%, #EDE4D3 100%)", borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
             {/* Back link */}
-            <Link to="/toolkit"
+            <Link to="/ai-hub"
               className="inline-flex items-center gap-1.5 text-xs mb-4 transition-colors group"
               style={{ color: "rgba(0,0,0,0.4)" }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "rgba(0,0,0,0.75)"}
