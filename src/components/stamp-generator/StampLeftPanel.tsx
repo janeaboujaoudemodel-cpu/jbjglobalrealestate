@@ -626,6 +626,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </div>
             </AccordionContent>
           </AccordionItem>
+          )
 
           {/* ═══════════════════════════════════════════
               GLOBAL LAYOUT — geometry controls (live-wired)
