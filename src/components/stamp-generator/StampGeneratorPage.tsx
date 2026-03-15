@@ -351,11 +351,12 @@ export default function StampGeneratorPage() {
     if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
     autoSaveTimerRef.current = setTimeout(() => {
       try {
+        // Store only the active standard's SVG to stay within localStorage limits
+        const activeId = standardConcept?.id;
+        const activeSvg = activeId ? (svgOverrides[activeId] || standardConcept?.svgSource || '') : '';
         const payload = {
-          svgOverrides: Object.fromEntries(
-            Object.entries(svgOverrides).slice(0, 5).map(([k, v]) => [k, v.slice(0, 50000)])
-          ),
-          standardConceptId: standardConcept?.id,
+          activeOverride: activeSvg.slice(0, 100000),
+          standardConceptId: activeId,
           selectedId,
           timestamp: Date.now(),
         };
