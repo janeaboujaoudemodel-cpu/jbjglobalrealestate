@@ -980,7 +980,7 @@ function ConnectedModeButton() {
                 "w-8 h-8 rounded-lg flex items-center justify-center border",
                 config.bgColor, config.borderColor
               )}>
-                <Users className={cn("w-4 h-4", config.color)} />
+                {(() => { const Icon = config.icon; return <Icon className={cn("w-4 h-4", config.color)} />; })()}
               </div>
               <div className="flex-1 min-w-0">
                 <p className={cn("text-sm font-medium", config.color)}>{config.label}</p>
