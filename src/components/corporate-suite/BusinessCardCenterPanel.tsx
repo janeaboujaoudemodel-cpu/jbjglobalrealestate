@@ -77,6 +77,9 @@ interface BusinessCardCenterPanelProps {
   bilingualLang: string;
   // Field configs
   fieldConfigs?: FieldConfigMap;
+  // Email signature
+  sigLayout?: SigLayout;
+  sigAccentColor?: string;
 }
 
 export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
