@@ -1445,8 +1445,8 @@ export default function GlobalVerticalNav() {
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-      <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center py-4 gap-2">
-          <Link to="/" className="mb-2">
+      <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center pt-[56px] pb-4 gap-2 overflow-y-auto overflow-x-visible">
+          <Link to="/" className="mb-2 shrink-0">
             <img src={jbjMonogramLightBg} alt="JBJ" className="w-9 h-9 object-contain" />
           </Link>
 
