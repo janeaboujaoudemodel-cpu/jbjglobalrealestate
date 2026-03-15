@@ -17,7 +17,7 @@ import {
   Wand2, Download, Printer, FileDown, ChevronDown, Landmark, BookmarkPlus,
 } from 'lucide-react';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
-import { LiveStampPreview } from '@/components/stamp-generator/LiveStampPreview';
+import { LiveStampPreview, type DragUpdateEvent } from '@/components/stamp-generator/LiveStampPreview';
 import { useStampHistory } from '@/hooks/useStampHistory';
 import { OFFICIAL_INK_BLUE, ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
 import { StampPresetLibrary, saveCustomPreset, type PresetConfig } from '@/components/stamp-generator/StampPresetLibrary';
@@ -653,6 +653,23 @@ export default function StampProjectWizard() {
     // Persistent highlight — clears only when clicking a different element or outside
   }, []);
 
+  // ── Drag-to-reposition handler ──
+  const handleDragUpdate = useCallback((event: DragUpdateEvent) => {
+    const PARAM_MAP: Record<string, keyof FormState> = {
+      companyArcOffset: 'company_arc_offset',
+      locationArcOffset: 'location_arc_offset',
+      separatorDistance: 'separator_distance',
+      centerContentSize: 'center_content_size',
+      circleGap: 'circle_gap',
+      arabicArcSpread: 'arabic_arc_spread',
+      englishArcSpread: 'english_arc_spread',
+    };
+    const formKey = PARAM_MAP[event.param];
+    if (formKey) {
+      setForm(f => ({ ...f, [formKey]: event.value }));
+    }
+  }, []);
+
   // Build monogram color overrides for the template
   // Normal users: all letters = ink (template default), unless they customize
   // When allLetters is set, pass per-letter overrides for all 3 letters
@@ -689,6 +706,7 @@ export default function StampProjectWizard() {
     companyArcBandOffset: form.company_arc_offset,
     locationArcBandOffset: form.location_arc_offset,
     onElementClick: handleElementClick,
+    onDragUpdate: handleDragUpdate,
     monogramLetterColors: buildMonogramColors(),
     monogramDividerColor: form.monogram_colors.divider || undefined,
     arcTextSpacing: form.arc_text_spacing,
