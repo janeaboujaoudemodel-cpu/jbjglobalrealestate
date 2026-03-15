@@ -1,12 +1,13 @@
 /**
  * Video Suite — Premium Champagne-Gold Design with centered header
+ * Upgraded with Beauty Filters, Background Remover, Thumbnail Generator
  */
 
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
-import { Play, Maximize2, Languages, ArrowLeft, Loader2, FileText, Sparkles, Mic, AudioLines, Film } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Play, Maximize2, Languages, Loader2, FileText, Sparkles, Mic, AudioLines, Film, Wand2, Eraser, Image } from 'lucide-react';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 const AIVideoStudio = lazy(() => import('@/components/ai-video-studio/AIVideoStudio').then(m => ({ default: m.AIVideoStudio })));
 const VideoResizePack = lazy(() => import('@/pages/toolkit/VideoResizePack'));
@@ -15,6 +16,9 @@ const AIVideoTourScriptPremium = lazy(() => import('@/components/ai-tools/premiu
 const VoiceoverRecorder = lazy(() => import('@/components/ai-video-studio/features/VoiceoverRecorder').then(m => ({ default: m.VoiceoverRecorder })));
 const AudioExtractorPanel = lazy(() => import('@/components/ai-video-studio/features/AudioExtractorPanel').then(m => ({ default: m.AudioExtractorPanel })));
 const ScenePlannerPanel = lazy(() => import('@/components/ai-video-studio/features/ScenePlannerPanel').then(m => ({ default: m.ScenePlannerPanel })));
+const BeautyFilters = lazy(() => import('@/pages/toolkit/BeautyFilters'));
+const BackgroundAI = lazy(() => import('@/pages/toolkit/BackgroundAI'));
+const ThumbnailGenerator = lazy(() => import('@/components/video-suite/ThumbnailGenerator').then(m => ({ default: m.ThumbnailGenerator })));
 
 const LoadingSpinner = () => (
   <div className="min-h-[50vh] flex items-center justify-center" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 100%)" }}>
@@ -33,30 +37,25 @@ const tabs = [
   { value: "voice", label: "Voice Studio", shortLabel: "Voice", icon: Mic },
   { value: "audio-tools", label: "Audio Tools", shortLabel: "Audio", icon: AudioLines },
   { value: "storyboard", label: "AI Storyboard", shortLabel: "Story", icon: Film },
+  { value: "thumbnail", label: "Thumbnail Generator", shortLabel: "Thumb", icon: Image },
+  { value: "beauty", label: "Beauty Filters", shortLabel: "Beauty", icon: Wand2 },
+  { value: "bg-remove", label: "Background Remover", shortLabel: "BG Remove", icon: Eraser },
 ];
 
 export default function VideoSuite() {
+  const [activeTab, setActiveTab] = useState("edit");
+
   return (
     <>
       <SEOHead
         title="Creative Video Suite | JBJ Creative Tools"
-        description="Professional video editing, resizing, captioning tools for real estate content."
+        description="Professional video editing, resizing, captioning, thumbnail generation and beauty tools for real estate content."
       />
 
       <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EDE4D3 100%)" }}>
         {/* ── Suite Header — centered ── */}
         <div style={{ background: "linear-gradient(180deg, #F5EBD7 0%, #EDE4D3 100%)", borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
-            {/* Back link */}
-            <Link to="/ai-hub"
-              className="inline-flex items-center gap-1.5 text-xs mb-4 transition-colors group"
-              style={{ color: "rgba(0,0,0,0.4)" }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "rgba(0,0,0,0.75)"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(0,0,0,0.4)"}>
-              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-              Back to Royal Tools Hub
-            </Link>
-
             {/* Title row — centered */}
             <div className="flex flex-col items-center text-center gap-3 mb-5">
               <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shrink-0"
@@ -74,7 +73,7 @@ export default function VideoSuite() {
                   </span>
                 </div>
                 <p className="text-xs sm:text-sm mt-1" style={{ color: "rgba(0,0,0,0.45)" }}>
-                  Edit · Resize · Captions & Translation · Script · Effects
+                  Edit · Resize · Captions · Script · Effects · Thumbnails · Beauty · Background
                 </p>
               </div>
             </div>
@@ -82,26 +81,34 @@ export default function VideoSuite() {
         </div>
 
         {/* ── Tabs ── */}
-        <Tabs defaultValue="edit" className="w-full">
-          {/* Tab Bar */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          {/* Tab Bar — horizontally scrollable on all devices */}
           <div style={{ background: "rgba(245,235,215,0.5)", borderBottom: "1px solid rgba(184,148,62,0.15)" }}>
-            <div className="max-w-7xl mx-auto px-2 sm:px-6">
-              <TabsList className="w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 border-0 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-                {tabs.map(({ value, label, shortLabel, icon: Icon }) => (
-                  <TabsTrigger key={value} value={value}
-                    className="relative flex items-center gap-1.5 px-3 sm:px-5 py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-xs sm:text-sm font-medium transition-all outline-none
-                      data-[state=inactive]:text-black/40 data-[state=active]:text-[#B8943E]
-                      after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
-                      data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-[#B8943E]"
-                  >
-                    <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
-                    <span className="sm:hidden">{shortLabel}</span>
-                    <span className="hidden sm:inline">{label}</span>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+            <div className="max-w-7xl mx-auto">
+              <ScrollArea className="w-full">
+                <div className="px-2 sm:px-6">
+                  <TabsList className="w-max min-w-full justify-start rounded-none bg-transparent p-0 h-auto gap-0 border-0">
+                    {tabs.map(({ value, label, shortLabel, icon: Icon }) => (
+                      <TabsTrigger key={value} value={value}
+                        className="relative flex items-center gap-1.5 px-2.5 sm:px-4 md:px-5 py-3 sm:py-3.5 rounded-none border-0 bg-transparent whitespace-nowrap text-[11px] sm:text-xs md:text-sm font-medium transition-all outline-none
+                          data-[state=inactive]:text-black/40 data-[state=active]:text-[#B8943E]
+                          after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:rounded-full after:transition-all
+                          data-[state=inactive]:after:bg-transparent data-[state=active]:after:bg-[#B8943E]"
+                      >
+                        <Icon className="w-3.5 h-3.5 shrink-0" />
+                        <span className="md:hidden">{shortLabel}</span>
+                        <span className="hidden md:inline">{label}</span>
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </div>
+                <ScrollBar orientation="horizontal" className="h-1.5" />
+              </ScrollArea>
             </div>
           </div>
+
+          {/* Neon gradient divider */}
+          <div className="h-[2px]" style={{ background: "linear-gradient(90deg, transparent 0%, rgba(184,148,62,0.5) 30%, rgba(201,168,76,0.7) 50%, rgba(184,148,62,0.5) 70%, transparent 100%)" }} />
 
           {/* Tab Content */}
           <div>
@@ -127,7 +134,7 @@ export default function VideoSuite() {
             </TabsContent>
             <TabsContent value="voice" className="mt-0 overflow-auto">
               <Suspense fallback={<LoadingSpinner />}>
-                <div className="max-w-3xl mx-auto p-6">
+                <div className="max-w-3xl mx-auto p-4 sm:p-6">
                   <VoiceoverRecorder
                     onRecordingComplete={() => {}}
                     onAIVoiceGenerated={() => {}}
@@ -137,16 +144,31 @@ export default function VideoSuite() {
             </TabsContent>
             <TabsContent value="audio-tools" className="mt-0 overflow-auto">
               <Suspense fallback={<LoadingSpinner />}>
-                <div className="max-w-3xl mx-auto p-6">
+                <div className="max-w-3xl mx-auto p-4 sm:p-6">
                   <AudioExtractorPanel />
                 </div>
               </Suspense>
             </TabsContent>
             <TabsContent value="storyboard" className="mt-0 overflow-auto">
               <Suspense fallback={<LoadingSpinner />}>
-                <div className="max-w-3xl mx-auto p-6">
+                <div className="max-w-3xl mx-auto p-4 sm:p-6">
                   <ScenePlannerPanel />
                 </div>
+              </Suspense>
+            </TabsContent>
+            <TabsContent value="thumbnail" className="mt-0 overflow-auto">
+              <Suspense fallback={<LoadingSpinner />}>
+                <ThumbnailGenerator />
+              </Suspense>
+            </TabsContent>
+            <TabsContent value="beauty" className="mt-0 overflow-auto">
+              <Suspense fallback={<LoadingSpinner />}>
+                <BeautyFilters embedded />
+              </Suspense>
+            </TabsContent>
+            <TabsContent value="bg-remove" className="mt-0 overflow-auto">
+              <Suspense fallback={<LoadingSpinner />}>
+                <BackgroundAI embedded />
               </Suspense>
             </TabsContent>
           </div>
