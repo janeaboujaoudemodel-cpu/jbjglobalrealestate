@@ -380,11 +380,11 @@ export default function StampProjectWizard() {
             center_content_size: form.center_content_size, selected_preset: form.selected_preset,
             company_arc_offset: form.company_arc_offset,
             location_arc_offset: form.location_arc_offset,
-            monogram_colors: form.monogram_colors,
+            monogram_colors: form.monogram_colors as any,
             outer_border_color: form.outer_border_color,
             middle_border_color: form.middle_border_color,
             inner_border_color: form.inner_border_color,
-          },
+          } as any,
         })
         .select().single();
       if (error) throw error;
