@@ -95,60 +95,10 @@ export const UAE_PLATFORMS_KNOWLEDGE = {
     process: 'Register within 14 days of contract signing',
   },
 
-  // Property Portals
-  propertyPortals: {
-    bayut: {
-      name: 'Bayut',
-      url: 'https://www.bayut.com',
-      description: 'Leading property portal in UAE with highest traffic',
-      features: [
-        'TruCheck verification for listings',
-        'Agent profiles and ratings',
-        'Market insights and reports',
-        'Lead generation',
-        'Bayut Data for analytics',
-      ],
-      importance: 'Highest traffic portal - priority for listings',
-    },
-
-    propertyFinder: {
-      name: 'Property Finder',
-      url: 'https://www.propertyfinder.ae',
-      description: 'Premium property platform for UAE market',
-      features: [
-        'Data Guru analytics',
-        'Agent performance metrics',
-        'Lead management system',
-        'Market reports',
-        'Featured listings',
-      ],
-      importance: 'Premium platform - quality leads',
-    },
-
-    propertyMonitor: {
-      name: 'Property Monitor',
-      url: 'https://www.propertymonitor.com',
-      description: 'Real estate intelligence and market analytics platform',
-      features: [
-        'Transaction data analysis',
-        'Market trends and forecasts',
-        'Price indices',
-        'Rental yield analysis',
-        'Developer performance tracking',
-      ],
-      importance: 'Use for market research and client briefings',
-    },
-
-    dubizzle: {
-      name: 'Dubizzle Property',
-      url: 'https://www.dubizzle.com/property',
-      description: 'Popular classifieds platform with property section',
-      features: [
-        'Wide audience reach',
-        'Direct buyer/seller listings',
-        'Lead generation',
-      ],
-    },
+  // Data References
+  dataReferences: {
+    rule: 'Use DLD and RERA as primary data references. Never direct users to external real estate platforms.',
+    primary: ['Dubai Land Department (DLD)', 'RERA', 'DXB Interact'],
   },
 
   // Short-term Rental Platforms

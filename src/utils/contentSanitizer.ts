@@ -10,9 +10,16 @@ const BLOCKED_DOMAINS = [
   'reelly.io',
   'reelly.com',
   'reelly.ai',
+  'bayut.com',
+  'propertyfinder.ae',
+  'dubizzle.com',
+  'propertymonitor.ae',
+  'propertymonitor.com',
+  'knightfrank.ae',
+  'knightfrank.com',
 ];
 
-const BLOCKED_NAMES_REGEX = /\b(Provident\s*Estate|Provident|Reelly)\b/gi;
+const BLOCKED_NAMES_REGEX = /\b(Provident\s*Estate|Provident|Reelly|Bayut|Property\s*Finder|Dubizzle|Property\s*Monitor|Knight\s*Frank)\b/gi;
 
 const ATTRIBUTION_REGEX = /\b(source\s*:|extracted\s+from|via\s+|reference\s+link\s*:|data\s+from\s*:)\s*/gi;
 

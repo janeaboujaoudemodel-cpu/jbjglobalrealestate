@@ -94,7 +94,7 @@ export const topNationalities = [
   { country: "United States", percentage: 2, transactions: 370, flag: "🇺🇸" },
 ];
 
-// ── Average Rental Yields by Area (Sources: Bayut, Property Finder, Property Monitor) ──
+// ── Average Rental Yields by Area (Sources: DLD, RERA, DXB Interact) ──
 export const AREA_RENTAL_YIELDS = [
   { area: "Jumeirah Village Circle", yieldPercent: 8.2, avgRentAED: 65000 },
   { area: "Dubai Marina", yieldPercent: 6.8, avgRentAED: 110000 },
@@ -108,7 +108,7 @@ export const AREA_RENTAL_YIELDS = [
   { area: "Arabian Ranches", yieldPercent: 5.5, avgRentAED: 180000 },
 ];
 
-// ── Price Per Sqft Trends (Sources: DXB Interact, Property Monitor, Knight Frank) ──
+// ── Price Per Sqft Trends (Sources: DLD, RERA, DXB Interact) ──
 export const PRICE_PER_SQFT_TRENDS = [
   { area: "Downtown Dubai", priceSqft: 2850, yoyChange: "+8.5%" },
   { area: "Palm Jumeirah", priceSqft: 3200, yoyChange: "+12.3%" },

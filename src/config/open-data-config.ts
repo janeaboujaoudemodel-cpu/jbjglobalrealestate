@@ -65,56 +65,6 @@ export const OPEN_DATA_SOURCES: OpenDataSource[] = [
     url: 'https://www.rera.gov.ae',
   },
   {
-    id: 'property_monitor',
-    name: 'Property Monitor',
-    provider: 'Cavendish Maxwell',
-    description: 'Market analytics, price indices, and valuation data',
-    updateFrequency: 'monthly',
-    lastUpdated: '2026-02-28',
-    dataTypes: ['price_index', 'valuations', 'market_reports'],
-    url: 'https://www.propertymonitor.ae',
-  },
-  {
-    id: 'knight_frank',
-    name: 'Knight Frank',
-    provider: 'Knight Frank LLP',
-    description: 'Global wealth report, prime residential indices, and HNWI data',
-    updateFrequency: 'quarterly',
-    lastUpdated: '2026-01-15',
-    dataTypes: ['wealth_report', 'prime_index', 'luxury_market'],
-    url: 'https://www.knightfrank.ae',
-  },
-  {
-    id: 'bayut',
-    name: 'Bayut',
-    provider: 'Dubizzle Group',
-    description: 'Listing data, price trends, rental yields, and area guides',
-    updateFrequency: 'daily',
-    lastUpdated: '2026-03-10',
-    dataTypes: ['listings', 'rental_yields', 'price_trends', 'area_guides'],
-    url: 'https://www.bayut.com',
-  },
-  {
-    id: 'property_finder',
-    name: 'Property Finder',
-    provider: 'Property Finder Group',
-    description: 'Market trends, area analytics, and demand indicators',
-    updateFrequency: 'daily',
-    lastUpdated: '2026-03-10',
-    dataTypes: ['listings', 'demand_index', 'price_trends'],
-    url: 'https://www.propertyfinder.ae',
-  },
-  {
-    id: 'dubizzle',
-    name: 'Dubizzle',
-    provider: 'Dubizzle Group',
-    description: 'Secondary market listings and resale price indicators',
-    updateFrequency: 'daily',
-    lastUpdated: '2026-03-10',
-    dataTypes: ['resale_listings', 'secondary_prices'],
-    url: 'https://www.dubizzle.com',
-  },
-  {
     id: 'airbnb_holiday',
     name: 'Short-Term Rental Data',
     provider: 'Airbnb / Bayut Holiday Homes / DTCM',
@@ -157,7 +107,7 @@ export interface AreaMarketSnapshot {
   highlights: string[];
 }
 
-// ── Area Market Data (Sources: DLD, Property Monitor, Knight Frank, Bayut) ──
+// ── Area Market Data (Sources: DLD, RERA, DXB Interact) ──
 
 export const DUBAI_AREAS_MARKET_DATA: AreaMarketSnapshot[] = [
   {

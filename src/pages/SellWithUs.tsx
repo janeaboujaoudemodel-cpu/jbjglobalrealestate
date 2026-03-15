@@ -320,7 +320,7 @@ const SellWithUs = () => {
                     <Button onClick={handleQuickValuation} disabled={isValuating} className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-6 rounded-xl">
                       {isValuating ? <><Sparkles className="w-4 h-4 mr-2 animate-pulse" />Analyzing...</> : <><Search className="w-4 h-4 mr-2" />Get Instant Valuation</>}
                     </Button>
-                    <p className="text-xs text-zinc-500 text-center">Sources: DLD Public Records · RERA · Property Monitor</p>
+                    <p className="text-xs text-zinc-500 text-center">Sources: DLD Public Records · RERA · JBJ Analysis Framework</p>
                   </div>
                 ) : (
                   <div className="text-center space-y-5">

@@ -419,7 +419,7 @@ function getPage7TransactionDashboard(liveYtd: any, downloadDate: string): strin
       <p style="font-size: 11px; color: #8A8278; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px;">Gift Transactions 2026 YTD</p>
       <p style="font-family: 'Playfair Display', serif; font-size: 40px; color: #A8925A; margin: 0;">${liveYtd.gifts.toLocaleString()}</p>
     </div>
-    <p style="font-size: 11px; color: #8A8278; text-align: center; margin-top: 10px;">Sources: Dubai Land Department (DLD) · DXB Interact · Property Finder · Bayut</p>
+    <p style="font-size: 11px; color: #8A8278; text-align: center; margin-top: 10px;">Sources: Dubai Land Department (DLD) · DXB Interact</p>
     <span class="page-number">7</span>
   </div>`;
 }
@@ -450,7 +450,7 @@ function getPage8TopAreas(liveTopAreas: any[]): string {
         ${liveTopAreas.map((a: any, i: number) => `<tr><td style="color: #A8925A; font-weight: 700;">${i + 1}</td><td style="font-weight: ${i < 3 ? 600 : 400}; color: #1A1814;">${a.area}</td><td style="color: #A8925A; font-weight: 700;">${a.transactions.toLocaleString()}</td><td><span style="color: #059669; font-size: 12px; font-weight: 600;">${a.change}</span></td></tr>`).join('')}
       </table>
     </div>
-    <p style="font-size: 11px; color: #8A8278; text-align: center;">Sources: Dubai Land Department (DLD) · DXB Interact · Bayut</p>
+    <p style="font-size: 11px; color: #8A8278; text-align: center;">Sources: Dubai Land Department (DLD) · DXB Interact</p>
     <span class="page-number">8</span>
   </div>`;
 }

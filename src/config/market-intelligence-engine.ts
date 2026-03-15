@@ -2,8 +2,8 @@
 
 // Data source types
 export type MarketDataSourceType = 
-  | 'dld' | 'dsc' | 'uae_central_bank' | 'property_finder' | 'bayut'
-  | 'knight_frank' | 'jll' | 'imf' | 'world_bank' | 'news_feed' | 'custom';
+  | 'dld' | 'dsc' | 'uae_central_bank' | 'dxb_interact'
+  | 'jll' | 'imf' | 'world_bank' | 'news_feed' | 'custom';
 
 export type MarketTrendDirection = 'rising' | 'falling' | 'stable' | 'volatile';
 
@@ -187,23 +187,11 @@ export const DATA_SOURCES_CONFIG: Record<MarketDataSourceType, {
     frequency: 'Weekly',
     reliability: 0.99,
   },
-  property_finder: {
-    name: 'Property Finder',
-    description: 'Listing trends, demand analysis, price indexes',
+  dxb_interact: {
+    name: 'DXB Interact',
+    description: 'Government property transaction analytics',
     frequency: 'Daily',
-    reliability: 0.92,
-  },
-  bayut: {
-    name: 'Bayut',
-    description: 'Market reports, area analytics, rental yields',
-    frequency: 'Daily',
-    reliability: 0.91,
-  },
-  knight_frank: {
-    name: 'Knight Frank',
-    description: 'Premium market analysis, investor reports',
-    frequency: 'Quarterly',
-    reliability: 0.95,
+    reliability: 0.98,
   },
   jll: {
     name: 'JLL',

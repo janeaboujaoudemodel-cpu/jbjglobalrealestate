@@ -447,8 +447,7 @@ const RentalIndex = () => {
                 <TrendingUp className="w-6 h-6 text-emerald-400 mb-4" />
                 <h3 className="text-white font-semibold mb-2">Data Sources</h3>
                 <p className="text-zinc-400 text-sm leading-relaxed">
-                  Estimates are based on aggregated market data. For official records, please refer to Dubai Land Department (DLD), 
-                  RERA, and authorized real estate platforms.
+                  Estimates are based on aggregated market data. For official records, please refer to Dubai Land Department (DLD) and RERA.
                 </p>
               </div>
             </motion.div>

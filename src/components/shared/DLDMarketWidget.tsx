@@ -68,7 +68,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
         )}
 
         <p className="text-[9px] text-zinc-600 leading-relaxed">
-          Sources: DLD, RERA, DXB Interact, Property Monitor, Knight Frank, Bayut, Property Finder. For informational purposes only.{" "}
+          Sources: DLD, RERA, DXB Interact. For informational purposes only.{" "}
           <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
         </p>
       </div>
@@ -191,7 +191,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Disclaimer */}
           <p className="text-[10px] text-black/40 text-center mt-6">
-            Sources: Dubai Land Department (DLD), RERA, DXB Interact, Property Monitor, Knight Frank, Bayut, Property Finder. YTD 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
+            Sources: Dubai Land Department (DLD), RERA, DXB Interact. YTD 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
             <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
           </p>
         </div>
