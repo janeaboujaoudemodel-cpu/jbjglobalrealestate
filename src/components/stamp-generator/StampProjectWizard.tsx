@@ -1097,7 +1097,12 @@ export default function StampProjectWizard() {
         </div>
 
         {/* Center: Fixed preview area — takes remaining space */}
-        <div className="flex-1 flex items-center justify-center min-h-0 p-6 bg-[hsl(var(--pearl-1)/0.3)]" onClick={() => setSelectedElement(null)}>
+        <div className="flex-1 flex items-center justify-center min-h-0 p-6 bg-[hsl(var(--pearl-1)/0.3)]"
+          onClick={(e) => {
+            // Only clear selection on genuine outside clicks, not bubbled element clicks
+            if ((e.target as HTMLElement).closest('[data-stamp-element]')) return;
+            setSelectedElement(null);
+          }}>
           <div className="flex flex-col items-center gap-4">
             <div
               id="stamp-preview-container"
