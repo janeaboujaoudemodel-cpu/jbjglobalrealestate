@@ -1,17 +1,22 @@
 import { useRef, useState, useEffect } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, RefreshCw, AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { loadPdfJs } from "./documentFieldTypes";
 
 interface PdfPageCanvasProps {
   pdfDoc: any;
   pageNumber: number;
   pdfUrl: string;
+  /** Called when this component independently loads a PDF doc (when pdfDoc prop is null) */
+  onDocLoaded?: (doc: any) => void;
 }
 
-export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl }: PdfPageCanvasProps) {
+export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl, onDocLoaded }: PdfPageCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [rendering, setRendering] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
+  const [canvasCssSize, setCanvasCssSize] = useState<{ w: number; h: number } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -23,13 +28,21 @@ export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl }: PdfPageCan
         if (!doc) {
           const lib = await loadPdfJs();
           doc = await lib.getDocument(pdfUrl).promise;
+          if (!cancelled && onDocLoaded) onDocLoaded(doc);
         }
         const page = await doc.getPage(pageNumber);
-        const viewport = page.getViewport({ scale: 1.5 });
+        // HiDPI: render at device pixel ratio for crisp text/graphics
+        const dpr = Math.max(window.devicePixelRatio || 1, 1.5);
+        const viewport = page.getViewport({ scale: dpr });
         const canvas = canvasRef.current;
         if (!canvas || cancelled) return;
         canvas.width = viewport.width;
         canvas.height = viewport.height;
+        // CSS size = viewport at scale 1 (logical pixels)
+        const cssViewport = page.getViewport({ scale: 1 });
+        canvas.style.width = `${cssViewport.width}px`;
+        canvas.style.height = `${cssViewport.height}px`;
+        setCanvasCssSize({ w: cssViewport.width, h: cssViewport.height });
         const ctx = canvas.getContext("2d")!;
         await page.render({ canvasContext: ctx, viewport }).promise;
       } catch (err) {
@@ -41,27 +54,41 @@ export default function PdfPageCanvas({ pdfDoc, pageNumber, pdfUrl }: PdfPageCan
     }
     render();
     return () => { cancelled = true; };
-  }, [pdfDoc, pageNumber, pdfUrl]);
+  }, [pdfDoc, pageNumber, pdfUrl, retryKey, onDocLoaded]);
 
   if (failed) {
     return (
-      <iframe
-        src={`${pdfUrl}#page=${pageNumber}&toolbar=0&navpanes=0`}
-        className="w-full border-0"
-        style={{ height: "1200px", pointerEvents: "none" }}
-        title={`Document Preview — Page ${pageNumber}`}
-      />
+      <div className="w-full flex flex-col items-center justify-center gap-3 py-12 bg-muted/30 rounded-lg border border-dashed border-muted-foreground/30"
+           style={{ minHeight: "400px" }}>
+        <AlertTriangle className="w-8 h-8 text-destructive" />
+        <p className="text-sm text-muted-foreground">Failed to render this page</p>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setRetryKey((k) => k + 1)}
+          className="gap-1.5"
+        >
+          <RefreshCw className="w-3.5 h-3.5" />
+          Retry
+        </Button>
+      </div>
     );
   }
 
   return (
-    <div className="w-full flex justify-center" style={{ minHeight: "800px" }}>
+    <div
+      className="relative flex justify-center"
+      style={{
+        width: canvasCssSize ? `${canvasCssSize.w}px` : "100%",
+        minHeight: canvasCssSize ? `${canvasCssSize.h}px` : "600px",
+      }}
+    >
       {rendering && (
-        <div className="absolute inset-0 flex items-center justify-center bg-muted/20 z-10">
+        <div className="absolute inset-0 flex items-center justify-center bg-muted/20 z-10 rounded-lg">
           <Loader2 className="w-8 h-8 animate-spin text-[hsl(var(--gold))]" />
         </div>
       )}
-      <canvas ref={canvasRef} className="w-full h-auto" style={{ pointerEvents: "none" }} />
+      <canvas ref={canvasRef} style={{ pointerEvents: "none", display: "block" }} />
     </div>
   );
 }

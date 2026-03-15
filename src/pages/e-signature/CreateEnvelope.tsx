@@ -451,13 +451,20 @@ export default function CreateEnvelope() {
       // Save contacts after successful submission
       persistContacts(recipients);
 
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.access_token) {
+        toast.error("Session expired — please log in again");
+        setIsSubmitting(false);
+        return;
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/esign-send-for-signature`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+            Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({ envelope_id: envelope.id }),
         }

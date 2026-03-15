@@ -1,4 +1,5 @@
 import { CheckSquare, Pencil, Stamp } from "lucide-react";
+import DOMPurify from "dompurify";
 import type { SignatureField, Recipient } from "./documentFieldTypes";
 import { fieldTypes, getInitials, recipientColorStyles } from "./documentFieldTypes";
 
@@ -10,6 +11,41 @@ interface FieldContentRendererProps {
   savedSignatureUrl: string | null;
   onUpdateValue: (fieldId: string, value: string) => void;
   onOpenDraw: (fieldId: string) => void;
+}
+
+/** Sanitize stamp SVG and scale via viewBox instead of fragile regex */
+function sanitizeAndScaleStamp(svg: string, width: number, height: number): string {
+  // Extract existing viewBox or width/height to preserve aspect ratio
+  let sanitized = DOMPurify.sanitize(svg, {
+    USE_PROFILES: { svg: true, svgFilters: true },
+    ADD_TAGS: ['image', 'filter', 'feTurbulence', 'feColorMatrix', 'feComponentTransfer',
+      'feFuncA', 'feComposite', 'feGaussianBlur', 'feMorphology'],
+    ADD_ATTR: ['clip-path', 'dominant-baseline', 'unicode-bidi', 'direction',
+      'letter-spacing', 'text-anchor', 'font-weight', 'font-size', 'font-family', 'font-style',
+      'href', 'xlink:href', 'preserveAspectRatio', 'textLength', 'lengthAdjust',
+      'filter', 'flood-color', 'flood-opacity', 'stdDeviation', 'baseFrequency',
+      'numOctaves', 'seed', 'type', 'values', 'operator', 'radius', 'in', 'in2', 'result',
+      'tableValues', 'x', 'y', 'width', 'height', 'opacity', 'data-stamp-element', 'viewBox'],
+    ADD_DATA_URI_TAGS: ['image'],
+    ADD_URI_SAFE_ATTR: ['href', 'xlink:href'],
+    FORCE_BODY: false,
+  });
+
+  // Ensure the SVG has a viewBox for proper scaling
+  if (!sanitized.includes('viewBox')) {
+    const wMatch = sanitized.match(/width="([^"]+)"/);
+    const hMatch = sanitized.match(/height="([^"]+)"/);
+    const origW = wMatch ? parseFloat(wMatch[1]) : 240;
+    const origH = hMatch ? parseFloat(hMatch[1]) : 240;
+    sanitized = sanitized.replace(/<svg/, `<svg viewBox="0 0 ${origW} ${origH}"`);
+  }
+
+  // Replace width/height to fit the container
+  sanitized = sanitized
+    .replace(/width="[^"]*"/, `width="${width - 4}"`)
+    .replace(/height="[^"]*"/, `height="${height - 4}"`);
+
+  return sanitized;
 }
 
 export default function FieldContentRenderer({
@@ -27,9 +63,7 @@ export default function FieldContentRenderer({
           <div
             className="w-full h-full flex items-center justify-center opacity-85"
             dangerouslySetInnerHTML={{
-              __html: savedStampSvg
-                .replace(/width="[^"]*"/, `width="${field.width - 4}"`)
-                .replace(/height="[^"]*"/, `height="${field.height - 4}"`),
+              __html: sanitizeAndScaleStamp(savedStampSvg, field.width, field.height),
             }}
           />
         ) : (

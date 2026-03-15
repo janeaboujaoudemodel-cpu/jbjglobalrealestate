@@ -2,7 +2,7 @@
  * DocumentPreviewSummary — Read-only visual preview of the document with placed fields.
  * Used in Step 4 (Review & Send) of CreateEnvelope.
  */
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Eye } from "lucide-react";
@@ -30,8 +30,7 @@ export default function DocumentPreviewSummary({
 }: DocumentPreviewSummaryProps) {
   const [previewPage, setPreviewPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const pdfDocRef = useRef<any>(null);
-  
+  const [pdfDoc, setPdfDoc] = useState<any>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -40,7 +39,7 @@ export default function DocumentPreviewSummary({
         const lib = await loadPdfJs();
         const doc = await lib.getDocument(pdfUrl).promise;
         if (!cancelled) {
-          pdfDocRef.current = doc;
+          setPdfDoc(doc);
           setTotalPages(doc.numPages);
           const pageCounts: Record<number, number> = {};
           fields.forEach((f) => {
@@ -60,6 +59,12 @@ export default function DocumentPreviewSummary({
       cancelled = true;
     };
   }, [pdfUrl, fields]);
+
+  /** If PdfPageCanvas loads the doc independently, cache it here */
+  const handleDocLoaded = useCallback((doc: any) => {
+    setPdfDoc(doc);
+    setTotalPages(doc.numPages);
+  }, []);
 
   const pageFields = fields.filter((f) => f.pageNumber === previewPage);
 
@@ -99,10 +104,10 @@ export default function DocumentPreviewSummary({
         )}
 
         {/* Scaled-down preview with field overlays INSIDE the scaled container */}
-        <div
-          className="relative border rounded-lg overflow-auto bg-white"
-          style={{ maxHeight: "500px" }}
-        >
+        <div className="relative border rounded-lg bg-white" style={{ maxHeight: "500px", overflow: "auto" }}>
+          {/* Scroll fade indicator */}
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/80 to-transparent z-20 rounded-b-lg" />
+
           <div
             className="relative"
             style={{
@@ -113,9 +118,10 @@ export default function DocumentPreviewSummary({
             }}
           >
             <PdfPageCanvas
-              pdfDoc={pdfDocRef.current}
+              pdfDoc={pdfDoc}
               pageNumber={previewPage}
               pdfUrl={pdfUrl}
+              onDocLoaded={handleDocLoaded}
             />
 
             {/* Field overlays — inside scaled container so they align with PDF */}
