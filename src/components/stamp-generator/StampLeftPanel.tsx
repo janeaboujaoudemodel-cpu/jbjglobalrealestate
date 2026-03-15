@@ -2,7 +2,7 @@
  * StampLeftPanel — Collapsible accordion sections replacing the old 6-tab system.
  * Each section can be independently expanded/collapsed.
  */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { StampColorWheel } from './StampColorWheel';
 import { StampTextEditor } from './StampTextEditor';
