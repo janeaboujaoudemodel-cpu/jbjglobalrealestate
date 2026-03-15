@@ -184,19 +184,17 @@ export default function APISecurityDashboard() {
       return;
     }
 
-    const payload: Record<string, unknown> = {
+    const expiresAt = newBlockPermanent
+      ? undefined
+      : new Date(Date.now() + parseInt(newBlockDuration) * 60 * 60 * 1000).toISOString();
+
+    const { error } = await supabase.from("ip_blocklist").insert({
       ip_address: newBlockIP.trim(),
       reason: newBlockReason || "Manually blocked by owner",
       is_permanent: newBlockPermanent,
       block_count: 1,
-    };
-
-    if (!newBlockPermanent) {
-      const hours = parseInt(newBlockDuration);
-      payload.expires_at = new Date(Date.now() + hours * 60 * 60 * 1000).toISOString();
-    }
-
-    const { error } = await supabase.from("ip_blocklist").insert(payload);
+      ...(expiresAt ? { expires_at: expiresAt } : {}),
+    });
     if (error) {
       toast({ title: "Error", description: "Failed to block IP", variant: "destructive" });
     } else {
