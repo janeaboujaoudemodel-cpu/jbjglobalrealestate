@@ -5,9 +5,10 @@ import { LanguageContext } from "@/contexts/LanguageContext";
 
 interface PageNavigationProps {
   isChatOpen?: boolean;
+  isChatMedium?: boolean;
 }
 
-const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChatOpen = false }, ref) => {
+const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChatOpen = false, isChatMedium = false }, ref) => {
   const languageContext = useContext(LanguageContext);
   const isRTL = languageContext?.isRTL ?? false;
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -109,7 +110,8 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
         else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
       }}
       className={cn(
-        "fixed bottom-44 z-[10049] flex flex-col gap-2",
+        "fixed z-[10049] flex flex-col gap-2",
+        isChatMedium ? "bottom-56" : "bottom-36",
         "pointer-events-auto",
         isRTL ? "left-4" : "right-6 md:right-8"
       )}
