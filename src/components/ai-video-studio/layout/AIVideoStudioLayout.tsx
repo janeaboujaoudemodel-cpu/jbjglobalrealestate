@@ -80,6 +80,7 @@ const TOOL_TABS = [
   { id: 'bg-remove',      label: 'BG Remove',   icon: Eraser        },
   { id: 'scene-plan',     label: 'Storyboard',  icon: Film          },
   { id: 'chart-overlay',  label: 'Charts',      icon: BarChart3     },
+  { id: 'voice-clone',   label: 'Voice Clone', icon: Mic2          },
   { id: 'share',          label: 'Share',        icon: Share2        },
 ];
 
