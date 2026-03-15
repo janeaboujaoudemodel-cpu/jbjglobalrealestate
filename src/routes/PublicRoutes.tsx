@@ -117,7 +117,7 @@ const Cookies = lazy(() => import("@/pages/Cookies"));
 const Disclaimers = lazy(() => import("@/pages/Disclaimers"));
 const TrustAndAuditCenter = lazy(() => import("@/pages/TrustAndAuditCenter"));
 const TrustAndCompliance = lazy(() => import("@/pages/TrustAndCompliance"));
-const RiskDisclosure = lazy(() => import("@/pages/RiskDisclosure"));
+
 const AmlKycPolicy = lazy(() => import("@/pages/AmlKycPolicy"));
 const Accessibility = lazy(() => import("@/pages/Accessibility"));
 const IntellectualProperty = lazy(() => import("@/pages/IntellectualProperty"));
