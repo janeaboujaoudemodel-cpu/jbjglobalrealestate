@@ -500,6 +500,7 @@ export function LiveStampPreview({
       middleBorderColor,
       innerBorderColor,
       locationArcSpread: locationArcSpread ?? undefined,
+      letterOverrides,
     });
   }, [
     displayName, arabicCompanyName, city, country, registrationNumber,
