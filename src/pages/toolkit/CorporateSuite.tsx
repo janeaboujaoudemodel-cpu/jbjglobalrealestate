@@ -264,7 +264,7 @@ export default function CorporateSuite() {
                   <p className="text-xs font-semibold mt-0.5 mb-3" style={{ color: "#B8943E" }}>
                     {tool.subtitle}
                   </p>
-                  <p className="text-xs leading-relaxed flex-1" style={{ color: "rgba(0,0,0,0.5)" }}>
+                  <p className="text-xs leading-relaxed flex-1 min-h-[48px]" style={{ color: "rgba(0,0,0,0.5)" }}>
                     {tool.description}
                   </p>
 
