@@ -138,6 +138,10 @@ export function StampInteractivePreview({
       x: Math.max(0, Math.min(zone.rect.x + zone.rect.width / 2, size - 120)),
       y: Math.max(0, zone.rect.y - 8),
     });
+    // Auto-switch to monogram edit when center is clicked
+    if (zone.type === 'center' && onCenterClick) {
+      onCenterClick();
+    }
   };
 
   const handleClickOutside = (e: React.MouseEvent) => {
