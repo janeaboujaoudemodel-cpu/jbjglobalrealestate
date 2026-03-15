@@ -282,6 +282,22 @@ export default function StampGeneratorPage() {
     project?.border_style, project?.separator_style, project?.typography_style,
   ]);
 
+  // Typography style sync — map project.typography_style → fontFamily state
+  useEffect(() => {
+    if (!project?.typography_style) return;
+    const FONT_MAP: Record<string, string> = {
+      SERIF: 'Georgia, "Times New Roman", serif',
+      SANS: 'Arial, Helvetica, sans-serif',
+      MONOSPACE: '"Courier New", monospace',
+      CALLIGRAPHY: '"Palatino Linotype", "Book Antiqua", serif',
+      GOTHIC: '"Copperplate Gothic", Copperplate, "Small Caps", serif',
+    };
+    const mapped = FONT_MAP[project.typography_style];
+    if (mapped && mapped !== fontFamily) {
+      setFontFamily(mapped);
+    }
+  }, [project?.typography_style]);
+
   // Live-apply monogram colors whenever they change
   useEffect(() => {
     if (localIconStyle !== 'MONOGRAM') return;
