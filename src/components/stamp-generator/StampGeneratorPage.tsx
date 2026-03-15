@@ -793,6 +793,7 @@ export default function StampGeneratorPage() {
         onToggleChat={() => setChatOpen(v => !v)}
         onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || selectedId}`)}
         onSaveAsset={saveCurrentAsBrandAsset}
+        onSaveProject={saveProjectState}
         selectedId={selectedId}
         saving={saving}
         lastSaved={lastSaved}
