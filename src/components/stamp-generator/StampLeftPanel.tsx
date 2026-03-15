@@ -324,8 +324,38 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 Separators
               </span>
             </AccordionTrigger>
-            <AccordionContent className="pb-3">
-              <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Click separator elements directly on the stamp preview to change their style. Available styles appear in the floating toolbar.</p>
+            <AccordionContent className="pb-3 space-y-2.5">
+              {/* Separator Style Grid */}
+              <div>
+                <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Style</p>
+                <div className="grid grid-cols-4 gap-1">
+                  {ALL_SEPARATOR_STYLES.map(style => (
+                    <button key={style} onClick={() => {
+                      // Dispatch event so parent can update separator style
+                      window.dispatchEvent(new CustomEvent('stamp-separator-style-change', { detail: style }));
+                    }}
+                      className="flex flex-col items-center gap-0.5 px-1 py-1.5 rounded-lg border-2 text-xs transition-all border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]">
+                      <span className="text-sm">{SEPARATOR_GLYPHS[style]}</span>
+                      <span className="text-[7px] text-[hsl(var(--muted-foreground))]">{separatorLabel(style)}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Separator Distance */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Position</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.separatorDistance}%</span>
+                </div>
+                <Slider min={0} max={100} step={1} value={[props.separatorDistance]}
+                  onValueChange={([v]) => props.onSetSeparatorDistance(v)} />
+                <p className="text-[7px] text-[hsl(var(--muted-foreground))] mt-0.5">50% = centered between rings</p>
+              </div>
+              {/* Separator Color — uses the active color */}
+              <div>
+                <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1">Color</p>
+                <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Separator color follows the Primary ink color. Change it in the Colors section.</p>
+              </div>
             </AccordionContent>
           </AccordionItem>
 
