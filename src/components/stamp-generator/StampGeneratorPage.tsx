@@ -174,7 +174,21 @@ export default function StampGeneratorPage() {
   const [centerContentSize, setCenterContentSizeRaw] = useState(() => ssGet(ssKey('centerContentSize'), 40));
   const setCenterContentSize = (v: number) => { setCenterContentSizeRaw(v); ssSave(ssKey('centerContentSize'), v); };
 
-
+  // Live-apply monogram colors whenever they change
+  useEffect(() => {
+    if (localIconStyle !== 'MONOGRAM' || !localMonogramText) return;
+    const hasCustomColors = Object.keys(monogramLetterColors.letters).length > 0 || monogramLetterColors.allLetters || monogramLetterColors.divider;
+    if (!hasCustomColors) return;
+    const id = selectedId || concepts[0]?.id;
+    if (!id) return;
+    const baseSvg = svgOverrides[id] || concepts.find(c => c.id === id)?.svgSource || favoriteConcepts.find(c => c.id === id)?.svgSource || standardConcept?.svgSource || '';
+    if (!baseSvg) return;
+    const colored = applyMonogramColors(baseSvg, localMonogramText, monogramLetterColors, primaryColor);
+    if (colored !== baseSvg) {
+      setSvgOverrides(prev => ({ ...prev, [id]: colored }));
+      triggerPulse();
+    }
+  }, [monogramLetterColors, localMonogramText, localIconStyle, primaryColor]);
 
 
   // Preview modal
