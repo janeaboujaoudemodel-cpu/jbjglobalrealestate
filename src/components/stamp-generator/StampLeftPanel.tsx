@@ -165,17 +165,22 @@ interface StampLeftPanelProps {
 
 export function StampLeftPanel(props: StampLeftPanelProps) {
   const [openSections, setOpenSections] = useState<string[]>(['colors', 'text']);
+  // Track which element is focused — when center is focused, color changes target monogram
+  const [focusedElement, setFocusedElement] = useState<'center' | 'separator' | 'text' | null>(null);
 
   // Listen for panel open events from canvas element clicks
   useEffect(() => {
     const openCenter = () => {
       setOpenSections(prev => prev.includes('center') ? prev : [...prev, 'center']);
+      setFocusedElement('center');
     };
     const openSeparator = () => {
       setOpenSections(prev => prev.includes('separators') ? prev : [...prev, 'separators']);
+      setFocusedElement('separator');
     };
     const openText = () => {
       setOpenSections(prev => prev.includes('text') ? prev : [...prev, 'text']);
+      setFocusedElement('text');
     };
     window.addEventListener('stamp-open-center-panel', openCenter);
     window.addEventListener('stamp-open-separator-panel', openSeparator);
@@ -186,6 +191,20 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
       window.removeEventListener('stamp-open-text-panel', openText);
     };
   }, []);
+
+  // Context-aware color handler: when monogram is focused, route color to monogram
+  const handleColorChange = useCallback((hex: string) => {
+    if (focusedElement === 'center' && props.localIconStyle === 'MONOGRAM') {
+      // Apply to all monogram letters
+      props.onSetMonogramLetterColors({
+        ...props.monogramLetterColors,
+        allLetters: hex,
+      });
+      toast.success('Monogram color updated');
+    } else {
+      props.onSetActiveColor(hex);
+    }
+  }, [focusedElement, props.localIconStyle, props.monogramLetterColors, props.onSetMonogramLetterColors, props.onSetActiveColor]);
 
   const stopDefs: { key: ColorStop; label: string; color: string }[] = [
     { key: 'primary', label: 'Primary', color: props.primaryColor },
