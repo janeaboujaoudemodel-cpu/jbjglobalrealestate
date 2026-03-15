@@ -1225,6 +1225,8 @@ export default function StampGeneratorPage() {
           onUploadNew={() => {}}
           savedDesignId={savedDesignId}
           onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || activeStandard?.id || selectedId}`)}
+          isOwner={isOwner}
+          onSwitchToLibrary={(fn) => setLibraryTabRef(() => fn)}
         />
       </div>
 
