@@ -195,7 +195,7 @@ function renderBottomArcTextPath(
 function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number, innerR: number, enFont: string, ink: string): string {
   const centerMode = config.centerMode || (config.showLogo ? 'logo' : config.showMonogram ? 'monogram' : 'none');
   const mono = config.monogramText || '';
-  const centerScale = config.centerContentScale ?? 1;
+  const centerScale = config.centerContentScale != null ? config.centerContentScale / 50 : 1;
 
   switch (centerMode) {
     case 'logo':
@@ -338,9 +338,12 @@ function generateOfficialStampSVG(config: OfficialStampConfig): string {
     ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${ink}" stroke-width="${DECORATIVE_STROKE * themeMult}" opacity="0.5"/>`
     : '';
 
-  const middleRingEl = bs === 'RING'
-    ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.4}"/>`
-    : `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW}"/>`;
+  // Middle ring — HIDDEN for SINGLE border style
+  const middleRingEl = bs === 'SINGLE' ? '' : (
+    bs === 'RING'
+      ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.4}"/>`
+      : `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW}"/>`
+  );
 
   const showInnerRing = config.showLocation && mode === 'BILINGUAL';
   const innerRingEl = showInnerRing

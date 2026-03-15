@@ -64,10 +64,10 @@ function injectCenterArt(svgSource: string, iconStyle: string, monogramText: str
   const S = vbMatch ? parseInt(vbMatch[1]) : 320;
   const cx = S / 2;
   const cy = S / 2;
-  const centerR = S * 0.14;
+  const centerR = S * 0.18;
   const insertBefore = '</svg>';
   if (iconStyle === 'UPLOADED_LOGO' && logoUrl) {
-    const imgSize = centerR * 1.6;
+    const imgSize = centerR * 2.2;
     const logoSvg = `
       <defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${centerR - 1}"/></clipPath></defs>
       <image href="${logoUrl}" x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" width="${imgSize}" height="${imgSize}" 
@@ -278,6 +278,7 @@ export default function StampGeneratorPage() {
     fontFamily, fontBold, manualFontSize, companyArcOffset, locationArcOffset,
     locationArcSpread, centerContentSize, localIconStyle, localMonogramText,
     localLogoUrl, primaryColor, languageMode,
+    project?.border_style, project?.separator_style, project?.typography_style,
   ]);
 
   // Live-apply monogram colors whenever they change
@@ -964,7 +965,7 @@ export default function StampGeneratorPage() {
   }
 
   return (
-    <div className="h-[calc(100vh-52px)] flex flex-col bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] mt-0">
+    <div className="h-[calc(100vh-48px)] flex flex-col bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] mt-[48px] overflow-hidden">
 
       {/* Preview Modal */}
       {previewConcept && (
@@ -1204,7 +1205,6 @@ export default function StampGeneratorPage() {
                       if (project) {
                         const updated = { ...project, separator_style: style };
                         setProject(updated);
-                        generateConcepts(updated);
                       }
                     }}
                     onCenterModeChange={(mode, options) => {

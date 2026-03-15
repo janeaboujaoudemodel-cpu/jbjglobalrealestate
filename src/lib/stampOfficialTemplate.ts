@@ -476,11 +476,12 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${outerInk}" stroke-width="${DECORATIVE_STROKE * themeMult}" opacity="0.5"/>`
     : '';
 
-  const middleRingEl = `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${middleInk}" stroke-width="${middleSW}"/>`;
-  // RING style: thicker middle ring
-  const middleRingFinal = bs === 'RING'
-    ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${middleInk}" stroke-width="${middleSW * 1.4}"/>`
-    : middleRingEl;
+  // Middle ring — HIDDEN for SINGLE border style
+  const middleRingFinal = bs === 'SINGLE' ? '' : (
+    bs === 'RING'
+      ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${middleInk}" stroke-width="${middleSW * 1.4}"/>`
+      : `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${middleInk}" stroke-width="${middleSW}"/>`
+  );
 
   // Dynamic ring system: if location is disabled, hide inner ring (location ring) 
   // and let center content fill the space between middle ring and center
@@ -672,7 +673,7 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
 function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number, innerR: number, enFont: string, ink: string): string {
   const centerMode = config.centerMode || (config.showLogo ? 'logo' : config.showMonogram ? 'monogram' : 'none');
   const mono = config.monogramText || '';
-  const centerScale = config.centerContentScale ?? 1;
+  const centerScale = config.centerContentScale != null ? config.centerContentScale / 50 : 1;
 
   switch (centerMode) {
     case 'logo':
