@@ -402,7 +402,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               onClick={() => {}}
               className="w-full h-9 bg-gradient-to-r from-gold to-gold-dark text-black font-bold text-xs rounded-lg hover:brightness-110"
             >
-              Apply filter
+              {t('filter.applyFilter')}
             </Button>
           </PopoverContent>
         </Popover>
