@@ -13,7 +13,7 @@ import JSZip from 'jszip';
 import {
   Download, ArrowLeft, Stamp, CheckCircle2, Loader2,
   FileImage, FileText, File, Package, Palette, X, Plus, Image, PenTool,
-  Eye, Ruler, Printer, CircleDot
+  Eye, Ruler, Printer, CircleDot, Save
 } from 'lucide-react';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
