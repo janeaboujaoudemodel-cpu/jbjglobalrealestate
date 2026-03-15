@@ -425,17 +425,28 @@ export default function StampProjectWizard() {
     let svgData = new XMLSerializer().serializeToString(el);
     if (!svgData.includes('xmlns=')) svgData = svgData.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
     if (!svgData.includes('xmlns:xlink')) svgData = svgData.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+    // Strip React useId()-scoped IDs that break standalone SVG files
+    svgData = svgData.replace(/\bid="[^"]*:[^"]*"/g, '');
+    svgData = svgData.replace(/url\(#[^)]*:[^)]*\)/g, 'url(#)');
+    svgData = svgData.replace(/href="#[^"]*:[^"]*"/g, 'href="#"');
+    // Strip data-* attributes (not valid SVG namespace)
+    svgData = svgData.replace(/\s+data-[a-z-]+="[^"]*"/gi, '');
     return svgData;
   }, []);
 
   const triggerDownload = useCallback((blob: Blob, filename: string) => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    requestAnimationFrame(() => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      requestAnimationFrame(() => {
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      });
+    });
   }, []);
 
   const svgToCanvas = useCallback(async (svgData: string, size: number, whiteBg: boolean): Promise<HTMLCanvasElement> => {
@@ -460,8 +471,11 @@ export default function StampProjectWizard() {
   const handleExportSVG = useCallback(() => {
     const svgData = getPreviewSvg();
     if (!svgData) return;
-    const blob = new Blob([svgData], { type: 'image/svg+xml' });
-    triggerDownload(blob, `${form.company_name || 'stamp'}.svg`);
+    // Add XML declaration for standalone file validity
+    const withDecl = svgData.startsWith('<?xml') ? svgData : `<?xml version="1.0" encoding="UTF-8"?>\n${svgData}`;
+    const slug = (form.company_name || 'stamp').toLowerCase().replace(/[^a-z0-9]+/g, '_');
+    const blob = new Blob([withDecl], { type: 'image/svg+xml;charset=utf-8' });
+    triggerDownload(blob, `${slug}_stamp.svg`);
     toast.success('SVG downloaded');
   }, [form.company_name, getPreviewSvg, triggerDownload]);
 
@@ -530,8 +544,25 @@ export default function StampProjectWizard() {
   }, [form.company_name, getPreviewSvg, svgToCanvas, triggerDownload]);
 
   const handlePrintPreview = useCallback(() => {
-    window.print();
-  }, []);
+    const svgData = getPreviewSvg();
+    if (!svgData) return;
+    const printWindow = window.open('', '_blank', 'width=800,height=800');
+    if (printWindow) {
+      printWindow.document.write(`<!DOCTYPE html><html><head>
+        <title>Print Stamp — ${form.company_name || 'Stamp'}</title>
+        <style>
+          @page { size: 100mm 100mm; margin: 10mm; }
+          html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: white; }
+          body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+          svg { width: 80mm; height: 80mm; max-width: 100%; }
+        </style>
+      </head><body>${svgData}</body></html>`);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.onafterprint = () => printWindow.close();
+      setTimeout(() => printWindow.print(), 600);
+    }
+  }, [form.company_name, getPreviewSvg]);
 
   const [bulkExporting, setBulkExporting] = useState(false);
   const handleBulkExport = useCallback(async () => {

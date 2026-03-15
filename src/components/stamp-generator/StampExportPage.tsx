@@ -26,6 +26,34 @@ function uniquifyIds(svg: string): string {
     .replace(/href="#([^"]+)"/g, (_, id) => `href="#${token}_${id}"`);
 }
 
+/** Sanitize SVG for standalone file export — ensures valid XML, strips React artifacts */
+function sanitizeSvgForExport(svg: string, size?: number): string {
+  let s = svg;
+  // 1. Ensure xmlns declarations
+  if (!s.includes('xmlns="http://www.w3.org/2000/svg"'))
+    s = s.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+  if (!s.includes('xmlns:xlink') && s.includes('xlink:'))
+    s = s.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+  // 2. Strip data-* attributes (not valid SVG namespace — causes XML parse errors)
+  s = s.replace(/\s+data-[a-z-]+="[^"]*"/gi, '');
+  // 3. Strip React useId()-scoped IDs (e.g. :r1a:)
+  s = s.replace(/\bid="[^"]*:[^"]*"/g, '');
+  s = s.replace(/url\(#[^)]*:[^)]*\)/g, 'url(#)');
+  s = s.replace(/href="#[^"]*:[^"]*"/g, 'href="#"');
+  // 4. Ensure viewBox exists
+  if (!/viewBox=/.test(s)) {
+    const sz = size || 200;
+    s = s.replace('<svg', `<svg viewBox="0 0 ${sz} ${sz}"`);
+  }
+  // 5. Ensure width/height for standalone rendering
+  if (!/\bwidth="/.test(s)) s = s.replace('<svg', '<svg width="100%"');
+  if (!/\bheight="/.test(s)) s = s.replace('<svg', '<svg height="100%"');
+  // 6. Add XML declaration for file validity
+  if (!s.startsWith('<?xml'))
+    s = '<?xml version="1.0" encoding="UTF-8"?>\n' + s;
+  return s;
+}
+
 function blobToDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -37,20 +65,24 @@ function blobToDataUrl(blob: Blob): Promise<string> {
 
 /** SVG → PNG with configurable background color */
 async function svgToPng(svgString: string, size: number, transparent: boolean, bgColor?: string): Promise<Blob> {
-  let svg = uniquifyIds(svgString);
-  if (!svg.includes('xmlns=')) svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
-  if (!svg.includes('xmlns:xlink')) svg = svg.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+  // Sanitize first, then uniquify IDs for this render
+  let svg = sanitizeSvgForExport(svgString, size);
+  // Remove XML declaration for data URL embedding (browsers choke on it in data URIs)
+  svg = svg.replace(/<\?xml[^?]*\?>\s*/, '');
+  svg = uniquifyIds(svg);
+  // Force explicit width/height for canvas rendering
   svg = svg.replace(/<svg([^>]*)>/, (_match, attrs) => {
-    let a = attrs;
-    if (!/\bwidth=/.test(a)) a += ` width="${size}"`;
-    if (!/\bheight=/.test(a)) a += ` height="${size}"`;
+    let a = attrs.replace(/\bwidth="[^"]*"/g, '').replace(/\bheight="[^"]*"/g, '');
+    a += ` width="${size}" height="${size}"`;
     return `<svg${a}>`;
   });
   const b64 = btoa(unescape(encodeURIComponent(svg)));
   const dataUrl = `data:image/svg+xml;base64,${b64}`;
   return new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('SVG image load timed out (10s)')), 10000);
     const img = document.createElement('img') as HTMLImageElement;
     img.onload = async () => {
+      clearTimeout(timeout);
       try {
         await img.decode();
         const canvas = document.createElement('canvas');
@@ -67,7 +99,7 @@ async function svgToPng(svgString: string, size: number, transparent: boolean, b
         }, 'image/png');
       } catch (err) { reject(err); }
     };
-    img.onerror = () => reject(new Error('SVG image failed to load'));
+    img.onerror = () => { clearTimeout(timeout); reject(new Error('SVG image failed to load — check SVG validity')); };
     img.src = dataUrl;
   });
 }
@@ -203,14 +235,23 @@ function convertToEmboss(svg: string): string {
   return s;
 }
 
+let downloadQueue = Promise.resolve();
 function triggerDownload(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  downloadQueue = downloadQueue.then(() => new Promise<void>(resolve => {
+    requestAnimationFrame(() => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      requestAnimationFrame(() => {
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+        resolve();
+      });
+    });
+  }));
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -384,7 +425,8 @@ export default function StampExportPage() {
 
   async function downloadSVG() {
     if (!tintedSvg) return;
-    const blob = new Blob([tintedSvg], { type: 'image/svg+xml' });
+    const clean = sanitizeSvgForExport(tintedSvg);
+    const blob = new Blob([clean], { type: 'image/svg+xml;charset=utf-8' });
     triggerDownload(blob, `${companySlug}_stamp.svg`);
     setFileStatuses(s => ({ ...s, svg: 'ok' }));
     toast.success('SVG downloaded!');
@@ -450,7 +492,7 @@ export default function StampExportPage() {
       toast.info(`Generating ${mode === 'rubber' ? 'rubber stamp' : 'emboss'} files…`);
       const converted = converter(tintedSvg);
       // SVG
-      const svgBlob = new Blob([converted], { type: 'image/svg+xml' });
+      const svgBlob = new Blob([sanitizeSvgForExport(converted)], { type: 'image/svg+xml;charset=utf-8' });
       triggerDownload(svgBlob, `${companySlug}_${label}.svg`);
       // High-res PNG
       const pngBlob = await svgToPng(converted, 2048, true);
@@ -472,7 +514,7 @@ export default function StampExportPage() {
       let fileCount = 0;
 
       if (options.formats.includes('svg')) {
-        zip.file(`${companySlug}_stamp.svg`, tintedSvg);
+        zip.file(`${companySlug}_stamp.svg`, sanitizeSvgForExport(tintedSvg));
         setFileStatuses(s => ({ ...s, svg: 'ok' }));
         fileCount++;
       }
@@ -1095,16 +1137,23 @@ export default function StampExportPage() {
                 </Button>
                 <Button variant="outline" className="gap-1.5 text-xs border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))]" onClick={() => {
                   if (!tintedSvg) return;
-                  // Open print dialog
                   const printWindow = window.open('', '_blank', 'width=800,height=800');
                   if (printWindow) {
-                    printWindow.document.write(`
-                      <!DOCTYPE html><html><head><title>Print Stamp</title>
-                      <style>@media print { body { margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; } } body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: white; }</style>
-                      </head><body>${tintedSvg}</body></html>`);
+                    const cleanSvg = sanitizeSvgForExport(tintedSvg, 200);
+                    const htmlSvg = cleanSvg.replace(/<\?xml[^?]*\?>\s*/, '');
+                    printWindow.document.write(`<!DOCTYPE html><html><head>
+                      <title>Print Stamp — ${project?.company_name || 'Stamp'}</title>
+                      <style>
+                        @page { size: 100mm 100mm; margin: 10mm; }
+                        html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: white; }
+                        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+                        svg { width: 80mm; height: 80mm; max-width: 100%; }
+                      </style>
+                    </head><body>${htmlSvg}</body></html>`);
                     printWindow.document.close();
                     printWindow.focus();
-                    setTimeout(() => printWindow.print(), 500);
+                    printWindow.onafterprint = () => printWindow.close();
+                    setTimeout(() => printWindow.print(), 600);
                   }
                 }}>
                   <Printer size={12}/> Print
