@@ -130,6 +130,77 @@ const BrandPaletteHub = () => {
     return (r * 299 + g * 587 + b * 114) / 1000 > 128;
   };
 
+  // --- Color Harmony Helpers ---
+  const hexToHsl = (hex: string): [number, number, number] => {
+    let r = parseInt(hex.slice(1, 3), 16) / 255;
+    let g = parseInt(hex.slice(3, 5), 16) / 255;
+    let b = parseInt(hex.slice(5, 7), 16) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h = 0, s = 0, l = (max + min) / 2;
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+      else if (max === g) h = ((b - r) / d + 2) / 6;
+      else h = ((r - g) / d + 4) / 6;
+    }
+    return [Math.round(h * 360), Math.round(s * 100), Math.round(l * 100)];
+  };
+
+  const hslToHex = (h: number, s: number, l: number): string => {
+    h = ((h % 360) + 360) % 360;
+    const sN = s / 100, lN = l / 100;
+    const a = sN * Math.min(lN, 1 - lN);
+    const f = (n: number) => {
+      const k = (n + h / 30) % 12;
+      const color = lN - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * color).toString(16).padStart(2, '0');
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  };
+
+  const harmonySchemes = useMemo(() => {
+    const [h, s, l] = hexToHsl(draft.primary);
+    const lightBg = hslToHex(h, Math.min(s, 20), 97);
+    const darkText = hslToHex(h, Math.min(s, 15), 12);
+
+    return [
+      {
+        name: 'Complementary',
+        desc: 'Opposite on the color wheel — high contrast',
+        palette: {
+          primary: draft.primary,
+          secondary: hslToHex((h + 180) % 360, Math.max(s - 10, 20), Math.min(l + 5, 45)),
+          accent: hslToHex((h + 210) % 360, Math.min(s + 10, 80), 55),
+          background: lightBg,
+          text: darkText,
+        } as BrandPalette,
+      },
+      {
+        name: 'Analogous',
+        desc: 'Adjacent hues — harmonious & warm',
+        palette: {
+          primary: draft.primary,
+          secondary: hslToHex((h + 30) % 360, s, Math.min(l + 5, 45)),
+          accent: hslToHex((h - 30 + 360) % 360, Math.min(s + 15, 85), 55),
+          background: lightBg,
+          text: darkText,
+        } as BrandPalette,
+      },
+      {
+        name: 'Triadic',
+        desc: 'Three evenly spaced — vibrant & balanced',
+        palette: {
+          primary: draft.primary,
+          secondary: hslToHex((h + 120) % 360, Math.max(s - 10, 25), Math.min(l + 5, 45)),
+          accent: hslToHex((h + 240) % 360, Math.min(s + 5, 75), 55),
+          background: lightBg,
+          text: darkText,
+        } as BrandPalette,
+      },
+    ];
+  }, [draft.primary]);
+
   const downloadBlob = useCallback((blob: Blob, filename: string) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
