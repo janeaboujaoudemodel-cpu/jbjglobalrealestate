@@ -878,6 +878,7 @@ export default function GlobalVerticalNav() {
                   isOwner,
                   isBroker,
                   isInvestor,
+                  isDeveloperMode,
                 }).map((group) => (
                   <div key={group.label} className={`border-l-4 ${group.colorBorder} rounded-lg ${group.colorBg} p-2`}>
                     <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
