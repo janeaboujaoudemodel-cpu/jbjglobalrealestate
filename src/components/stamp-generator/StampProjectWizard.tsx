@@ -499,6 +499,8 @@ export default function StampProjectWizard() {
     onElementClick: handleElementClick,
     monogramLetterColors: buildMonogramColors(),
     monogramDividerColor: form.monogram_colors.divider || undefined,
+    arcTextSpacing: form.arc_text_spacing,
+    separatorDistance: form.separator_distance,
   };
 
   return (
