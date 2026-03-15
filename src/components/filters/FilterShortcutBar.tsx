@@ -686,7 +686,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             )}
           >
             <X className="w-3.5 h-3.5" />
-            Reset
+            {t('filter.reset')}
           </button>
         )}
 
