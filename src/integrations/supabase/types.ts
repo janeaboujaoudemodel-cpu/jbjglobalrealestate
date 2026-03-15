@@ -19908,6 +19908,7 @@ export type Database = {
           currency: string | null
           description: string | null
           developer_name: string | null
+          email_encrypted: string | null
           emirate: string | null
           handover_status: string | null
           id: string
@@ -19917,7 +19918,9 @@ export type Database = {
           investor_phone: string | null
           investor_user_id: string | null
           location: string | null
+          name_encrypted: string | null
           original_purchase_price: number | null
+          phone_encrypted: string | null
           project_name: string | null
           property_type: string | null
           size_sqft: number | null
@@ -19933,6 +19936,7 @@ export type Database = {
           currency?: string | null
           description?: string | null
           developer_name?: string | null
+          email_encrypted?: string | null
           emirate?: string | null
           handover_status?: string | null
           id?: string
@@ -19942,7 +19946,9 @@ export type Database = {
           investor_phone?: string | null
           investor_user_id?: string | null
           location?: string | null
+          name_encrypted?: string | null
           original_purchase_price?: number | null
+          phone_encrypted?: string | null
           project_name?: string | null
           property_type?: string | null
           size_sqft?: number | null
@@ -19958,6 +19964,7 @@ export type Database = {
           currency?: string | null
           description?: string | null
           developer_name?: string | null
+          email_encrypted?: string | null
           emirate?: string | null
           handover_status?: string | null
           id?: string
@@ -19967,7 +19974,9 @@ export type Database = {
           investor_phone?: string | null
           investor_user_id?: string | null
           location?: string | null
+          name_encrypted?: string | null
           original_purchase_price?: number | null
+          phone_encrypted?: string | null
           project_name?: string | null
           property_type?: string | null
           size_sqft?: number | null
