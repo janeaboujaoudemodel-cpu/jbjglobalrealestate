@@ -285,6 +285,10 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const textArcR = Math.min(rawTextArcR, outerR - SAFE_ZONE);
   const clampedTextArcR = Math.max(textArcR, middleR + SAFE_ZONE);
 
+  // Separator distance: default centered on text arc; configurable via separatorDistancePct (0-100)
+  const sepPct = config.separatorDistancePct ?? 50;
+  const separatorR = middleR + SAFE_ZONE + (clampedTextArcR - middleR - SAFE_ZONE) * (sepPct / 50);
+
   // Location text arc radius — true midpoint between middle and inner rings
   const clampedLocTextR = Math.max(
     Math.min((middleR + innerR) / 2, middleR - SAFE_ZONE),
@@ -295,43 +299,43 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
   const englishSpread = ARC_SPREAD_LIMIT;
 
+  // Arc text spacing override — applies to English letter-spacing
+  const arcTextSpacingOverride = config.arcTextSpacing;
+
   // ─── Text arcs based on language mode ───
   let topArcContent = '';
   let bottomArcContent = '';
   let separatorContent = '';
 
   if (mode === 'BILINGUAL') {
-    // Respect arabicOnTop: when true (default), Arabic on top arc, English on bottom
-    // When false, English on top arc, Arabic on bottom
     const arText = config.companyNameAr || 'اسم الشركة';
     const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
     const arSafe = safeArcFontSize(arText, clampedTextArcR, true, 17, arabicSpread);
     const enSafe = safeArcFontSize(enText, clampedTextArcR, false, 15, englishSpread, 5);
     const arLS = config.arabicLetterSpacing ?? arSafe.letterSpacing;
+    const enLS = arcTextSpacingOverride ?? enSafe.letterSpacing;
     const arFW = config.arabicFontWeight === 'normal' ? '600' : '800';
 
     if (config.arabicOnTop !== false) {
-      // Arabic top, English bottom (default)
       topArcContent = renderTopArcTextPath(
         arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
         arLS, true, 'top-arc', arFW
       );
       bottomArcContent = renderBottomArcTextPath(
         enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
-        enSafe.letterSpacing, false, 'bottom-arc'
+        enLS, false, 'bottom-arc'
       );
     } else {
-      // English top, Arabic bottom
       topArcContent = renderTopArcTextPath(
         enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
-        enSafe.letterSpacing, false, 'top-arc'
+        enLS, false, 'top-arc'
       );
       bottomArcContent = renderBottomArcTextPath(
         arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
         arLS, true, 'bottom-arc', arFW
       );
     }
-    separatorContent = renderSeparators(cx, cy, clampedTextArcR, config.separatorStyle, ink);
+    separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
 
   } else if (mode === 'EN') {
     // English only — company name on top arc, location on bottom arc (all English)
