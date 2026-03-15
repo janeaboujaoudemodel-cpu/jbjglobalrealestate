@@ -1152,6 +1152,12 @@ export default function StampProjectWizard() {
                     Export the live stamp preview directly. Enter company details first for best results.
                   </p>
 
+                  {/* Bulk Download All */}
+                  <Button size="sm" onClick={handleBulkExport} disabled={bulkExporting}
+                    className="w-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-2 text-xs h-9">
+                    <Download size={13}/> {bulkExporting ? 'Downloading…' : 'Download All Types'}
+                  </Button>
+
                   <div className="space-y-2">
                     <Button variant="outline" size="sm" onClick={handleExportSVG} className="w-full gap-2 text-xs h-9 justify-start">
                       <FileDown size={13}/> Download SVG <span className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))]">Vector</span>
@@ -1162,32 +1168,16 @@ export default function StampProjectWizard() {
                     <Button variant="outline" size="sm" onClick={() => handleExportPNG(1024)} className="w-full gap-2 text-xs h-9 justify-start">
                       <FileDown size={13}/> Download PNG <span className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))]">1024px HD</span>
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => {
-                      const el = document.querySelector('#stamp-preview-container svg');
-                      if (!el) { toast.error('No stamp to export'); return; }
-                      const svgData = new XMLSerializer().serializeToString(el);
-                      const canvas = document.createElement('canvas');
-                      canvas.width = 1024; canvas.height = 1024;
-                      const ctx = canvas.getContext('2d');
-                      if (!ctx) return;
-                      const img = new window.Image();
-                      img.onload = () => {
-                        ctx.fillStyle = '#ffffff';
-                        ctx.fillRect(0, 0, 1024, 1024);
-                        ctx.drawImage(img, 0, 0, 1024, 1024);
-                        const dataUrl = canvas.toDataURL('image/png');
-                        const pdfW = window.open('', '_blank');
-                        if (pdfW) {
-                          pdfW.document.write(`<html><head><title>${form.company_name || 'Stamp'} - PDF</title><style>@page{margin:0}body{margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#fff}img{max-width:80%;max-height:80%}</style></head><body><img src="${dataUrl}"/><script>setTimeout(()=>{window.print()},500)<\/script></body></html>`);
-                          pdfW.document.close();
-                        }
-                      };
-                      img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
-                      toast.success('PDF print dialog opening...');
-                    }} className="w-full gap-2 text-xs h-9 justify-start">
-                      <FileDown size={13}/> Download PDF <span className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))]">Print</span>
+                    <Button variant="outline" size="sm" onClick={() => handleExportJPG(1024)} className="w-full gap-2 text-xs h-9 justify-start">
+                      <FileDown size={13}/> Download JPG <span className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))]">1024px White</span>
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => window.print()} className="w-full gap-2 text-xs h-9 justify-start">
+                    <Button variant="outline" size="sm" onClick={() => handleExportWEBP(1024)} className="w-full gap-2 text-xs h-9 justify-start">
+                      <FileDown size={13}/> Download WEBP <span className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))]">1024px</span>
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={handleExportPDF} className="w-full gap-2 text-xs h-9 justify-start">
+                      <FileDown size={13}/> Download PDF <span className="ml-auto text-[9px] text-[hsl(var(--muted-foreground))]">Print-ready</span>
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={handlePrintPreview} className="w-full gap-2 text-xs h-9 justify-start">
                       <Printer size={13}/> Print Preview
                     </Button>
                   </div>
