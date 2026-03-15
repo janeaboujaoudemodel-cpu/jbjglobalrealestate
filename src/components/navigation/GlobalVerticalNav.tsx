@@ -746,7 +746,7 @@ export default function GlobalVerticalNav() {
 
   const navigate = useNavigate();
 
-  // Accordion toggle — only one section open at a time (instant open/close)
+  // Accordion toggle — only one section open at a time (instant open/close, no forced scroll)
   const toggleSection = (section: SectionKey, e?: React.MouseEvent) => {
     e?.stopPropagation();
     const opening = openSection !== section;
@@ -757,17 +757,7 @@ export default function GlobalVerticalNav() {
       if (firstMega?.megaMenu) {
         setActiveMegaMenu(firstMega.megaMenu);
       }
-      // Only scroll into view if the section is completely off-screen
-      requestAnimationFrame(() => {
-        const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          const isOffScreen = rect.top < 0 || rect.bottom > window.innerHeight;
-          if (isOffScreen) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-        }
-      });
+      // Do NOT auto-scroll — keep the nav stable so content doesn't jump
     } else {
       // When closing, also close any active mega menu from that section
       setActiveMegaMenu(null);
