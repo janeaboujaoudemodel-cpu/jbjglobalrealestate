@@ -109,6 +109,7 @@ export function LiveStampPreview({
   centerMode,
   centerIcon,
   arabicArcSpread,
+  englishArcSpread,
   arabicLetterSpacing,
   arabicFont,
   arabicFontWeight,
@@ -121,6 +122,11 @@ export function LiveStampPreview({
   arcTextSpacing,
   separatorDistance,
   selectedElement,
+  companyArcBandOffset,
+  locationArcBandOffset,
+  outerBorderColor,
+  middleBorderColor,
+  innerBorderColor,
 }: LiveStampPreviewProps & { selectedElement?: string | null }) {
   const displayName = companyName || 'Your Company Name';
   const fontFamily = FONT_FAMILIES[typographyStyle];
