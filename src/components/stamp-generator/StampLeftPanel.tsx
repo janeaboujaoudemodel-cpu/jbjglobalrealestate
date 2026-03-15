@@ -505,8 +505,9 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
           </AccordionItem>
 
           {/* ═══════════════════════════════════════════
-              2. 🇬🇧 English Controls
+              2. 🇬🇧 English Controls — hidden in AR-only mode
              ═══════════════════════════════════════════ */}
+          {props.languageMode !== 'AR' && (
           <AccordionItem value="english-controls" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
