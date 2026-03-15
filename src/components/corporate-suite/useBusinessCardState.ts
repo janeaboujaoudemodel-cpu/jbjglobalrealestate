@@ -735,6 +735,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     logoUrl, setLogoUrl, logoSize, setLogoSize, logoPos, setLogoPos,
     stampOpen, setStampOpen, stampUrl, setStampUrl, stampSize, setStampSize, stampPos, setStampPos,
     cardShape, setCardShape, shapeOpen, setShapeOpen, nfcGuideOpen, setNfcGuideOpen,
+    sigLayout, setSigLayout, sigAccentColor, setSigAccentColor,
     editLayout, setEditLayout, fieldPositions,
     fieldConfigs, setFieldConfigs, selectedField, setSelectedField, updateFieldConfig,
     qrOpen, setQrOpen, qrEnabled, setQrEnabled,
