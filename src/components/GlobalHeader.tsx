@@ -214,7 +214,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       headerViewportRef.current?.clientWidth ?? window.innerWidth;
 
     const recompute = () => {
-      setIsDesktopWidth(getViewportWidth() >= 1024);
+      setIsDesktopWidth(getViewportWidth() >= 768);
     };
 
     recompute();
