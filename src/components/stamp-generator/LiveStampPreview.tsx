@@ -251,7 +251,7 @@ export function LiveStampPreview({
     showLicenseNumber, showLocation, separatorStyle, fontFamily, size, ink, arabicCity,
     centerMode, centerIcon, arabicArcSpread, englishArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight,
     circleGap, centerContentSize, arcTextSpacing, separatorDistance,
-    companyArcBandOffset, locationArcBandOffset, outerBorderColor, middleBorderColor, innerBorderColor,
+    companyArcBandOffset, locationArcBandOffset, outerBorderColor, middleBorderColor, innerBorderColor, locationArcSpread,
   ]);
 
   return (
