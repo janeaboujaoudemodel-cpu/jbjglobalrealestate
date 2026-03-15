@@ -12,6 +12,7 @@ import {
   type Recipient,
   fieldTypes,
   recipientColorStyles,
+  loadPdfJs,
 } from "./documentFieldTypes";
 
 interface DocumentPreviewSummaryProps {
