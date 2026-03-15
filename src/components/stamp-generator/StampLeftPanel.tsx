@@ -170,6 +170,8 @@ interface StampLeftPanelProps {
   onSetCompanyArcOffset: (v: number) => void;
   onSetLocationArcOffset: (v: number) => void;
   onSetLocationArcSpread: (v: number) => void;
+  languageMode?: LanguageMode;
+  onSetLanguageMode?: (v: LanguageMode) => void;
 }
 
 /* ─── Collapsible tree node helper ─── */
