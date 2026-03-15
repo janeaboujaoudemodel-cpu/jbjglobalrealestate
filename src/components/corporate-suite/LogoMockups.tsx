@@ -19,7 +19,7 @@ interface Props {
 type CardLayout = "horizontal" | "vertical" | "centered" | "minimal";
 type LetterheadLayout = "logo-left" | "logo-center" | "logo-right";
 
-export default function LogoMockups({ logo, colors, name, font }: Props) {
+export default function LogoMockups({ logo, colors, name, font, stampUrl }: Props) {
   const [cardLayout, setCardLayout] = useState<CardLayout>("horizontal");
   const [letterLayout, setLetterLayout] = useState<LetterheadLayout>("logo-left");
 
