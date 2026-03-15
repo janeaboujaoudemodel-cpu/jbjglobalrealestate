@@ -425,6 +425,12 @@ export default function StampProjectWizard() {
     let svgData = new XMLSerializer().serializeToString(el);
     if (!svgData.includes('xmlns=')) svgData = svgData.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
     if (!svgData.includes('xmlns:xlink')) svgData = svgData.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+    // Strip React useId()-scoped IDs that break standalone SVG files
+    svgData = svgData.replace(/\bid="[^"]*:[^"]*"/g, '');
+    svgData = svgData.replace(/url\(#[^)]*:[^)]*\)/g, 'url(#)');
+    svgData = svgData.replace(/href="#[^"]*:[^"]*"/g, 'href="#"');
+    // Strip data-* attributes (not valid SVG namespace)
+    svgData = svgData.replace(/\s+data-[a-z-]+="[^"]*"/gi, '');
     return svgData;
   }, []);
 
