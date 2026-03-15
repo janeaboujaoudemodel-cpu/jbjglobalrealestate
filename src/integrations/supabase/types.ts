@@ -20720,6 +20720,7 @@ export type Database = {
           is_favorite: boolean | null
           preview_png_url: string | null
           project_id: string
+          source: string | null
           style_snapshot_json: Json | null
           svg_source: string | null
           svg_url: string | null
@@ -20735,6 +20736,7 @@ export type Database = {
           is_favorite?: boolean | null
           preview_png_url?: string | null
           project_id: string
+          source?: string | null
           style_snapshot_json?: Json | null
           svg_source?: string | null
           svg_url?: string | null
@@ -20750,6 +20752,7 @@ export type Database = {
           is_favorite?: boolean | null
           preview_png_url?: string | null
           project_id?: string
+          source?: string | null
           style_snapshot_json?: Json | null
           svg_source?: string | null
           svg_url?: string | null

@@ -1,0 +1,1 @@
+ALTER TABLE public.stamp_designs ADD COLUMN IF NOT EXISTS source TEXT DEFAULT 'manual';
