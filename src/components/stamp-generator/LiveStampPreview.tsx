@@ -2,15 +2,31 @@
  * LiveStampPreview — real-time SVG stamp preview inside the wizard.
  * Routes ALL shapes and language modes through the Official Standard Template.
  * Supports click-to-edit via data-stamp-element attributes.
+ * Supports drag-to-reposition for arc text, separators, center content, and borders.
  */
 
-import React, { useMemo, useRef, useEffect } from 'react';
+import React, { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType, type CenterContentMode, type CenterIconType, type LanguageMode, type StampShape } from '@/lib/stampOfficialTemplate';
 
 type StampType = 'ROUND' | 'OVAL' | 'RECTANGLE' | 'SQUARE';
 type StyleTheme = 'CLASSIC' | 'MODERN' | 'MINIMAL' | 'LUXURY' | 'BOLD' | 'VINTAGE';
 type BorderStyle = 'SINGLE' | 'DOUBLE' | 'RING' | 'DOTTED' | 'ROPE' | 'CUSTOM';
 type TypographyStyle = 'SERIF' | 'SANS' | 'MONOSPACE' | 'CALLIGRAPHY' | 'GOTHIC' | 'ARABIC_MODERN';
+
+/** Parameter that can be adjusted via drag */
+export type DragParam =
+  | 'companyArcOffset'
+  | 'locationArcOffset'
+  | 'separatorDistance'
+  | 'centerContentSize'
+  | 'circleGap'
+  | 'arabicArcSpread'
+  | 'englishArcSpread';
+
+export interface DragUpdateEvent {
+  param: DragParam;
+  value: number; // 0-100 integer
+}
 
 export interface LiveStampPreviewProps {
   companyName: string;
@@ -47,6 +63,7 @@ export interface LiveStampPreviewProps {
   locationArcBandOffset?: number;
   onElementClick?: (elementId: string) => void;
   onDoubleClick?: (elementId: string) => void;
+  onDragUpdate?: (event: DragUpdateEvent) => void;
   monogramLetterColors?: Record<number, string>;
   monogramDividerColor?: string;
   arcTextSpacing?: number;
@@ -85,6 +102,74 @@ function deriveMonogram(name: string): string {
   return source.slice(0, 3).map(w => w[0]).join('').toUpperCase();
 }
 
+/**
+ * Maps a data-stamp-element id to the drag parameter it controls
+ * and the drag axis/direction behavior.
+ */
+interface DragMapping {
+  param: DragParam;
+  /** 'radial' = dragging toward/away from center changes value.
+   *  'horizontal' = left/right drag for arc spread.
+   *  'scale' = distance from center for sizing. */
+  mode: 'radial' | 'horizontal' | 'scale';
+  /** Current value (0-100) at drag start */
+  startValue: number;
+  /** Sensitivity multiplier — how many % per pixel of drag */
+  sensitivity: number;
+}
+
+function getElementDragMapping(
+  elementId: string,
+  props: LiveStampPreviewProps
+): DragMapping | null {
+  // Company name arcs — radial drag changes company arc band offset
+  if (elementId === 'top-arc' || elementId === 'bottom-arc') {
+    return {
+      param: 'companyArcOffset',
+      mode: 'radial',
+      startValue: props.companyArcBandOffset ?? 50,
+      sensitivity: 0.5,
+    };
+  }
+  // Location arcs — radial drag changes location arc band offset
+  if (elementId === 'loc-top' || elementId === 'loc-bottom') {
+    return {
+      param: 'locationArcOffset',
+      mode: 'radial',
+      startValue: props.locationArcBandOffset ?? 50,
+      sensitivity: 0.5,
+    };
+  }
+  // Separators — radial drag changes separator distance
+  if (elementId.startsWith('separator')) {
+    return {
+      param: 'separatorDistance',
+      mode: 'radial',
+      startValue: props.separatorDistance ?? 50,
+      sensitivity: 0.5,
+    };
+  }
+  // Center content (monogram/logo) — scale drag changes center content size
+  if (elementId === 'center' || elementId === 'registration') {
+    return {
+      param: 'centerContentSize',
+      mode: 'scale',
+      startValue: props.centerContentSize ?? 50,
+      sensitivity: 0.4,
+    };
+  }
+  // Border rings — radial drag changes circle gap
+  if (elementId.startsWith('border-')) {
+    return {
+      param: 'circleGap',
+      mode: 'radial',
+      startValue: props.circleGap ?? 13,
+      sensitivity: 0.3,
+    };
+  }
+  return null;
+}
+
 export function LiveStampPreview({
   companyName,
   arabicCompanyName = '',
@@ -118,6 +203,7 @@ export function LiveStampPreview({
   centerContentSize,
   onElementClick,
   onDoubleClick,
+  onDragUpdate,
   monogramLetterColors,
   monogramDividerColor,
   arcTextSpacing,
@@ -135,8 +221,33 @@ export function LiveStampPreview({
   const ink = inkColor || OFFICIAL_INK_BLUE;
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Attach click handlers to data-stamp-element nodes
-  // Stop propagation so parent outside-click handler doesn't clear selection
+  // ── Drag state ──
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragCursor, setDragCursor] = useState<string>('');
+  const dragRef = useRef<{
+    mapping: DragMapping;
+    startX: number;
+    startY: number;
+    centerX: number;
+    centerY: number;
+    elementId: string;
+  } | null>(null);
+
+  // Collect all current props for drag mapping lookup
+  const currentProps: LiveStampPreviewProps = {
+    companyName, arabicCompanyName, city, country, registrationNumber,
+    stampType, styleTheme, borderStyle, typographyStyle, density, iconStyle,
+    monogramText, uploadedLogoUrl, languageMode, languageReversed,
+    showLicenseNumber, showLocation, separatorStyle, size, inkColor,
+    arabicCity, centerMode, centerIcon, arabicArcSpread, englishArcSpread,
+    arabicLetterSpacing, arabicFont, arabicFontWeight, circleGap,
+    centerContentSize, companyArcBandOffset, locationArcBandOffset,
+    monogramLetterColors, monogramDividerColor, arcTextSpacing,
+    separatorDistance, outerBorderColor, middleBorderColor, innerBorderColor,
+    locationArcSpread,
+  };
+
+  // ── Click & double-click handlers ──
   useEffect(() => {
     if (!containerRef.current) return;
     const el = containerRef.current;
@@ -164,7 +275,7 @@ export function LiveStampPreview({
     };
   }, [onElementClick, onDoubleClick]);
 
-  // Apply highlight glow to selected element
+  // ── Highlight selected element ──
   useEffect(() => {
     if (!containerRef.current) return;
     const els = containerRef.current.querySelectorAll('[data-stamp-element]');
@@ -179,6 +290,133 @@ export function LiveStampPreview({
     });
   }, [selectedElement]);
 
+  // ── Hover cursor for draggable elements ──
+  useEffect(() => {
+    if (!containerRef.current || !onDragUpdate) return;
+    const el = containerRef.current;
+    const moveHandler = (e: MouseEvent) => {
+      if (isDragging) return;
+      const target = (e.target as Element)?.closest?.('[data-stamp-element]');
+      if (target) {
+        const elementId = target.getAttribute('data-stamp-element') || '';
+        const mapping = getElementDragMapping(elementId, currentProps);
+        if (mapping) {
+          setDragCursor(mapping.mode === 'scale' ? 'nwse-resize' : 'grab');
+          return;
+        }
+      }
+      setDragCursor('');
+    };
+    el.addEventListener('mousemove', moveHandler);
+    return () => el.removeEventListener('mousemove', moveHandler);
+  }, [onDragUpdate, isDragging, currentProps]);
+
+  // ── Drag start (mouse) ──
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    if (!onDragUpdate) return;
+    const target = (e.target as Element)?.closest?.('[data-stamp-element]');
+    if (!target) return;
+    const elementId = target.getAttribute('data-stamp-element') || '';
+    const mapping = getElementDragMapping(elementId, currentProps);
+    if (!mapping) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const rect = containerRef.current!.getBoundingClientRect();
+    dragRef.current = {
+      mapping,
+      startX: e.clientX,
+      startY: e.clientY,
+      centerX: rect.left + rect.width / 2,
+      centerY: rect.top + rect.height / 2,
+      elementId,
+    };
+    setIsDragging(true);
+    setDragCursor('grabbing');
+  }, [onDragUpdate, currentProps]);
+
+  // ── Drag start (touch) ──
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (!onDragUpdate || e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    const target = (touch.target as Element)?.closest?.('[data-stamp-element]');
+    if (!target) return;
+    const elementId = target.getAttribute('data-stamp-element') || '';
+    const mapping = getElementDragMapping(elementId, currentProps);
+    if (!mapping) return;
+
+    const rect = containerRef.current!.getBoundingClientRect();
+    dragRef.current = {
+      mapping,
+      startX: touch.clientX,
+      startY: touch.clientY,
+      centerX: rect.left + rect.width / 2,
+      centerY: rect.top + rect.height / 2,
+      elementId,
+    };
+    setIsDragging(true);
+  }, [onDragUpdate, currentProps]);
+
+  // ── Drag move + end (window-level) ──
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const computeNewValue = (clientX: number, clientY: number) => {
+      const drag = dragRef.current;
+      if (!drag) return;
+
+      const { mapping, startX, startY, centerX, centerY } = drag;
+      let delta: number;
+
+      if (mapping.mode === 'radial') {
+        // Radial: measure how much the cursor moved toward/away from center
+        const startDist = Math.sqrt((startX - centerX) ** 2 + (startY - centerY) ** 2);
+        const currentDist = Math.sqrt((clientX - centerX) ** 2 + (clientY - centerY) ** 2);
+        delta = (currentDist - startDist) * mapping.sensitivity;
+      } else if (mapping.mode === 'horizontal') {
+        delta = (clientX - startX) * mapping.sensitivity;
+      } else {
+        // scale: distance from center
+        const startDist = Math.sqrt((startX - centerX) ** 2 + (startY - centerY) ** 2);
+        const currentDist = Math.sqrt((clientX - centerX) ** 2 + (clientY - centerY) ** 2);
+        delta = (currentDist - startDist) * mapping.sensitivity;
+      }
+
+      const newValue = Math.round(Math.max(0, Math.min(100, mapping.startValue + delta)));
+      onDragUpdate?.({ param: mapping.param, value: newValue });
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      e.preventDefault();
+      computeNewValue(e.clientX, e.clientY);
+    };
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return;
+      computeNewValue(e.touches[0].clientX, e.touches[0].clientY);
+    };
+    const handleEnd = () => {
+      dragRef.current = null;
+      setIsDragging(false);
+      setDragCursor('');
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleEnd);
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleEnd);
+    window.addEventListener('touchcancel', handleEnd);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleEnd);
+      window.removeEventListener('touchcancel', handleEnd);
+    };
+  }, [isDragging, onDragUpdate]);
+
+  // ── SVG generation ──
   const svg = useMemo(() => {
     const S = size;
     const mono = monogramText || deriveMonogram(displayName);
@@ -256,8 +494,15 @@ export function LiveStampPreview({
   return (
     <div
       ref={containerRef}
-      className={`flex items-center justify-center ${onElementClick ? 'cursor-pointer' : ''}`}
-      style={{ width: size, height: size }}
+      className={`flex items-center justify-center select-none ${onElementClick || onDragUpdate ? 'cursor-pointer' : ''}`}
+      style={{
+        width: size,
+        height: size,
+        cursor: isDragging ? 'grabbing' : dragCursor || undefined,
+        touchAction: onDragUpdate ? 'none' : undefined,
+      }}
+      onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
       dangerouslySetInnerHTML={{ __html: svg }}
     />
   );
