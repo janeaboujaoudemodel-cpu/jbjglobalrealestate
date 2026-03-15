@@ -321,7 +321,7 @@ export const PublicRoutes = () => (
     <Route path="/disclaimers" element={<Disclaimers />} />
     <Route path="/trust-and-audit-center" element={<TrustAndAuditCenter />} />
     <Route path="/trust-compliance" element={<TrustAndCompliance />} />
-    <Route path="/risk-disclosure" element={<RiskDisclosure />} />
+    
     <Route path="/aml-kyc" element={<AmlKycPolicy />} />
     <Route path="/accessibility" element={<Accessibility />} />
     <Route path="/intellectual-property" element={<IntellectualProperty />} />

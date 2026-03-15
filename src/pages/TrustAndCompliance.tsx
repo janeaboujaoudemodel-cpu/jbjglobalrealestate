@@ -153,8 +153,6 @@ const TrustAndCompliance = () => {
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
                 <span className="text-zinc-600">|</span>
                 <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
-                <span className="text-zinc-600">|</span>
-                <Link to="/risk-disclosure" className="text-[#C8A766] hover:underline">Risk Disclosure</Link>
               </div>
             </div>
           </main>
