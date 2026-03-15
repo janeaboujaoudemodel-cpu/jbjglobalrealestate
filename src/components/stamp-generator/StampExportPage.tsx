@@ -514,7 +514,7 @@ export default function StampExportPage() {
       let fileCount = 0;
 
       if (options.formats.includes('svg')) {
-        zip.file(`${companySlug}_stamp.svg`, tintedSvg);
+        zip.file(`${companySlug}_stamp.svg`, sanitizeSvgForExport(tintedSvg));
         setFileStatuses(s => ({ ...s, svg: 'ok' }));
         fileCount++;
       }
