@@ -3,10 +3,12 @@
  * Routes ALL shapes and language modes through the Official Standard Template.
  * Supports click-to-edit via data-stamp-element attributes.
  * Supports drag-to-reposition for arc text, separators, center content, and borders.
+ * Supports letter-level click for per-character editing.
  */
 
 import React, { useMemo, useRef, useEffect, useState, useCallback } from 'react';
-import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType, type CenterContentMode, type CenterIconType, type LanguageMode, type StampShape } from '@/lib/stampOfficialTemplate';
+import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType, type CenterContentMode, type CenterIconType, type LanguageMode, type StampShape, type LetterOverride } from '@/lib/stampOfficialTemplate';
+import type { LetterSelection } from '@/components/stamp-generator/StampLetterEditor';
 
 type StampType = 'ROUND' | 'OVAL' | 'RECTANGLE' | 'SQUARE';
 type StyleTheme = 'CLASSIC' | 'MODERN' | 'MINIMAL' | 'LUXURY' | 'BOLD' | 'VINTAGE';
