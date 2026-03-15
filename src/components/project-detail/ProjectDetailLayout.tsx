@@ -400,7 +400,13 @@ export default function ProjectDetailLayout({
   const whatsappMessage = `Hi, I'm interested in ${project.name}${project.location ? ` at ${project.location}` : ""}. Please share more details.`;
 
   const scrollToRef = (ref: React.RefObject<HTMLDivElement>) => {
-    ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!ref.current) return;
+    // Use offset-aware scrolling to avoid content hiding under sticky headers
+    const headerOffset = 160; // 48px utility bar + 48px filter bar + 64px breathing room
+    const elementTop = ref.current.getBoundingClientRect().top + window.scrollY;
+    const targetTop = Math.max(0, elementTop - headerOffset);
+    const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    window.scrollTo({ top: targetTop, behavior: prefersReduced ? "auto" : "smooth" });
   };
 
   const scrollToInquiry = () => scrollToRef(inquiryRef);

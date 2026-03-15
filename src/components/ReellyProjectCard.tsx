@@ -140,16 +140,16 @@ const ReellyProjectCard = ({
           "hover:-translate-y-1"
         }
       >
-       {/* Favorite Button */}
+       {/* Favorite Button - always visible for reliable touch/click interaction */}
        {showFavorite && (
-         <div className="absolute top-3 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+         <div className="absolute top-3 right-3 z-20 transition-opacity opacity-80 group-hover:opacity-100">
            <FavoriteButton projectId={String(project.id)} size="sm" />
          </div>
        )}
  
-       {/* Badge Button */}
+       {/* Badge Button - always visible for reliable touch/click interaction */}
        {showBadgeButton && (
-         <div className="absolute top-12 right-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+         <div className="absolute top-12 right-3 z-20 transition-opacity opacity-80 group-hover:opacity-100">
            <ShortlistBadgeButton projectId={String(project.id)} size="sm" showBadgeIndicator={true} />
          </div>
        )}

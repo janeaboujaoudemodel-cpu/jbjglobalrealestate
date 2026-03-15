@@ -559,158 +559,9 @@ const MEGA_MENU_TITLES: Record<MegaMenuKey, string> = {
 };
 
 /* ─── COLOR-CODED SHORTCUT GROUPS ─── */
-interface ShortcutGroup {
-  label: string;
-  colorBorder: string;
-  colorText: string;
-  colorBg: string;
-  items: Array<{ label: string; href: string; icon: any }>;
-}
+// Now imported from canonical config
+import { SHORTCUT_GROUPS as CANONICAL_SHORTCUT_GROUPS, filterShortcutGroups } from "@/config/shortcutsConfig";
 
-const SHORTCUT_GROUPS: ShortcutGroup[] = [
-  {
-    label: "My Tasks",
-    colorBorder: "border-l-emerald-500",
-    colorText: "text-emerald-700",
-    colorBg: "bg-emerald-50",
-    items: [
-      { label: 'My Tasks', icon: ListChecks, href: '/my-dashboard#tasks' },
-      { label: 'Notifications', icon: Bell, href: '/my-dashboard#notifications' },
-      { label: 'Alerts', icon: Zap, href: '/my-dashboard#alerts' },
-      { label: 'Calendar', icon: CalendarClock, href: '/ai-calendar' },
-      { label: 'Books', icon: BookMarked, href: '/education-hub' },
-      { label: 'Favorites', icon: Heart, href: '/favorites' },
-      { label: 'Shortlisted', icon: Star, href: '/favorites?tab=shortlist' },
-      { label: 'Activity Log', icon: Eye, href: '/my-dashboard#activity' },
-    ],
-  },
-  {
-    label: "CRM",
-    colorBorder: "border-l-blue-500",
-    colorText: "text-blue-700",
-    colorBg: "bg-blue-50",
-    items: [
-      { label: 'CRM Dashboard', icon: Users, href: '/crm' },
-      { label: 'Leads Inbox', icon: Mail, href: '/owner/crm/leads' },
-      { label: 'CRM Tasks', icon: ListChecks, href: '/owner/crm/tasks' },
-      { label: 'CRM Calendar', icon: CalendarClock, href: '/owner/crm/calendar' },
-      { label: 'CRM Notes', icon: NotebookPen, href: '/owner/crm/notes' },
-      { label: 'CRM Reminders', icon: BellRing, href: '/owner/crm/reminders' },
-      { label: 'Employees', icon: Users, href: '/owner/crm/employees' },
-      { label: 'Customer Happiness', icon: SmilePlus, href: '/admin?tab=customer-happiness' },
-    ],
-  },
-  {
-    label: "Owner Command Center",
-    colorBorder: "border-l-[#C9A84C]",
-    colorText: "text-[#C9A84C]",
-    colorBg: "bg-gold/5",
-    items: [
-      { label: 'Owner Dashboard', icon: Shield, href: '/owner' },
-      { label: 'Admin Panel', icon: Lock, href: '/admin' },
-      { label: 'Inbox Inquiries', icon: Mail, href: '/owner/inbox' },
-      { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
-      { label: 'Team Chat', icon: MessagesSquare, href: '/owner/team-chat' },
-      { label: 'Studio', icon: Palette, href: '/owner/studio' },
-      { label: 'Documents', icon: FileText, href: '/owner/documents' },
-      { label: 'Agenda', icon: CalendarClock, href: '/owner/agenda' },
-      { label: 'Marketing Hub', icon: Megaphone, href: '/owner/marketing-hub' },
-      { label: 'Automations', icon: Workflow, href: '/owner/automations' },
-      { label: 'Kanban Board', icon: Layers, href: '/owner/kanban' },
-      { label: 'Email Client', icon: MailOpen, href: '/owner/email-client' },
-    ],
-  },
-  {
-    label: "AI & Tools",
-    colorBorder: "border-l-purple-500",
-    colorText: "text-purple-700",
-    colorBg: "bg-purple-50",
-    items: [
-      { label: 'AI Tools Hub', icon: Sparkles, href: '/ai-hub' },
-      { label: 'AI Calendar & Notes', icon: CalendarClock, href: '/ai-calendar' },
-      { label: 'My Assistant', icon: Bot, href: '/founder-assistant' },
-      { label: 'AI History', icon: Bot, href: '/my-ai-history' },
-      { label: 'AI Home Finder', icon: Home, href: '/quiz' },
-      { label: 'Description Writer', icon: Pen, href: '/ai-description-writer' },
-      { label: 'Email Generator', icon: Mail, href: '/ai-email-generator' },
-      { label: 'Property Analyzer', icon: BarChart3, href: '/ai-property-analyzer' },
-      { label: 'ROI Calculator', icon: Calculator, href: '/ai-roi-calculator' },
-      { label: 'Social Media', icon: Share2, href: '/ai-social-media' },
-      { label: 'Translation Hub', icon: Languages, href: '/ai-translation-hub' },
-      { label: 'Market Report', icon: FileSearch, href: '/ai-market-report' },
-      { label: 'Call Summarizer', icon: Phone, href: '/ai-call-summarizer' },
-      { label: 'Objection Handler', icon: MessageSquare, href: '/ai-objection-handler' },
-      { label: 'Video Tour Script', icon: Video, href: '/toolkit/video-suite' },
-    ],
-  },
-  {
-    label: "Dashboards",
-    colorBorder: "border-l-rose-500",
-    colorText: "text-rose-700",
-    colorBg: "bg-rose-50",
-    items: [
-      { label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' },
-      { label: 'Broker Dashboard', icon: BriefcaseIcon, href: '/broker-dashboard' },
-      { label: 'Investor Hub', icon: TrendingUp, href: '/investor-hub' },
-      { label: 'JBJ Analytics', icon: BarChart3, href: '/owner/analytics' },
-    ],
-  },
-  {
-    label: "Listings",
-    colorBorder: "border-l-sky-500",
-    colorText: "text-sky-700",
-    colorBg: "bg-sky-50",
-    items: [
-      { label: 'Submit Listing', icon: FilePlus, href: '/listing-portal' },
-      { label: 'My Listings', icon: ClipboardCheck, href: '/listing-portal/my-listings' },
-      { label: 'Listing Admin', icon: FolderOpen, href: '/listing-admin' },
-      { label: 'Property Evaluator', icon: Calculator, href: '/property-evaluator' },
-      { label: 'Rental Index', icon: DollarSign, href: '/rental-index' },
-    ],
-  },
-  {
-    label: "Productivity",
-    colorBorder: "border-l-cyan-500",
-    colorText: "text-cyan-700",
-    colorBg: "bg-cyan-50",
-    items: [
-      { label: 'Spreadsheet', icon: Database, href: '/toolkit/spreadsheet' },
-      { label: 'Presentations', icon: Presentation, href: '/toolkit/presentations' },
-      { label: 'QR Generator', icon: QrCode, href: '/toolkit/qr-generator' },
-      { label: 'Documents', icon: FileText, href: '/toolkit/documents' },
-      { label: 'Meeting Center', icon: Monitor, href: '/toolkit/meeting-center' },
-      { label: 'Whiteboard', icon: PenTool, href: '/toolkit/whiteboard' },
-    ],
-  },
-  {
-    label: "Creative & Marketing",
-    colorBorder: "border-l-amber-500",
-    colorText: "text-amber-700",
-    colorBg: "bg-amber-50",
-    items: [
-      { label: 'Video Builder', icon: Video, href: '/toolkit/video-builder' },
-      { label: 'Business Card', icon: CreditCard, href: '/toolkit/business-card' },
-      { label: 'Logo Maker', icon: Palette, href: '/toolkit/logo-maker' },
-      { label: 'Stamp Generator', icon: Stamp, href: '/toolkit/stamp-generator' },
-      { label: 'Image Resize', icon: Image, href: '/toolkit/image-resize' },
-      { label: 'Brochure Generator', icon: FileText, href: '/toolkit/brochure-generator' },
-    ],
-  },
-  {
-    label: "Account",
-    colorBorder: "border-l-zinc-400",
-    colorText: "text-zinc-600",
-    colorBg: "bg-zinc-50",
-    items: [
-      { label: 'My Profile', icon: User, href: '/profile' },
-      { label: 'Settings', icon: Settings, href: '/profile' },
-      { label: 'Favorites', icon: Heart, href: '/favorites' },
-      { label: 'Shortlist', icon: Star, href: '/favorites?tab=shortlist' },
-      { label: 'Compare', icon: Layers, href: '/compare' },
-      { label: 'Support Tickets', icon: Ticket, href: '/my-tickets' },
-    ],
-  },
-];
 
 /* ─── SECTION KEYS ─── */
 const SECTION_KEYS = ["PROPERTIES", "TOOLS", "AI TOOLS", "INSIGHTS", "GUIDES", "SERVICES", "PARTNERS", "BROKER & ACADEMY", "INVESTOR", "COMPANY", "LEGAL", "PRODUCTIVITY", "MY ACCOUNT", "BUSINESS SUITES", "ADMIN & OWNER"] as const;
@@ -852,25 +703,14 @@ export default function GlobalVerticalNav() {
     if (openSection === 'MY ACCOUNT') {
       setOpenSection(null);
     }
-    // Auto-expand the section containing the active route
-    for (const [section, items] of Object.entries(sectionGroups)) {
-      if (items.some(item => isRouteActive(item.href))) {
-        setOpenSection(section as SectionKey);
-        // Only scroll into view if completely off-screen
-        requestAnimationFrame(() => {
-          const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
-          if (el) {
-            const rect = el.getBoundingClientRect();
-            const isOffScreen = rect.top < 0 || rect.bottom > window.innerHeight;
-            if (isOffScreen) {
-              el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-          }
-        });
-        break;
-      }
-    }
-  }, [location.pathname, closeMegaMenu]);
+     // Auto-expand the section containing the active route
+     for (const [section, items] of Object.entries(sectionGroups)) {
+       if (items.some(item => isRouteActive(item.href))) {
+         setOpenSection(section as SectionKey);
+         break;
+       }
+     }
+   }, [location.pathname, closeMegaMenu]);
 
   const isRouteActive = (href: string) => {
     if (href === "#") return false;
@@ -906,7 +746,7 @@ export default function GlobalVerticalNav() {
 
   const navigate = useNavigate();
 
-  // Accordion toggle — only one section open at a time (instant open/close)
+  // Accordion toggle — only one section open at a time (instant open/close, no forced scroll)
   const toggleSection = (section: SectionKey, e?: React.MouseEvent) => {
     e?.stopPropagation();
     const opening = openSection !== section;
@@ -917,17 +757,7 @@ export default function GlobalVerticalNav() {
       if (firstMega?.megaMenu) {
         setActiveMegaMenu(firstMega.megaMenu);
       }
-      // Only scroll into view if the section is completely off-screen
-      requestAnimationFrame(() => {
-        const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          const isOffScreen = rect.top < 0 || rect.bottom > window.innerHeight;
-          if (isOffScreen) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-        }
-      });
+      // Do NOT auto-scroll — keep the nav stable so content doesn't jump
     } else {
       // When closing, also close any active mega menu from that section
       setActiveMegaMenu(null);
@@ -1042,30 +872,12 @@ export default function GlobalVerticalNav() {
                 </button>
               </div>
               <div className="overflow-y-auto jj-scrollbar-gold p-3 pb-6 space-y-3">
-                {SHORTCUT_GROUPS.filter((group) => {
-                  // Role-based filtering
-                  if (isInvestor) {
-                    // Hide broker/owner groups for investors
-                    if (group.label === "CRM" || group.label === "Owner Command Center") return false;
-                  }
-                  if (!isBroker && !isOwner) {
-                    if (group.label === "CRM" || group.label === "Owner Command Center") return false;
-                  }
-                  return true;
-                }).map((group) => {
-                  // Filter items within groups based on role
-                  const filteredItems = group.items.filter((item) => {
-                    if (isInvestor && item.label === "Broker Dashboard") return false;
-                    if (!isBroker && item.label === "Broker Dashboard") return false;
-                    return true;
-                  });
-                  // Add investor dashboard for investors in Dashboards group
-                  const finalItems = group.label === "Dashboards" && isInvestor
-                    ? [{ label: 'My Dashboard', icon: LayoutDashboard, href: '/my-dashboard' }, { label: 'Investor Hub', icon: TrendingUp, href: '/investor-hub' }]
-                    : filteredItems;
-                  if (finalItems.length === 0) return null;
-                  return { ...group, items: finalItems };
-                }).filter(Boolean).map((group) => (
+                {filterShortcutGroups(CANONICAL_SHORTCUT_GROUPS, {
+                  isAuthenticated: !!session,
+                  isOwner,
+                  isBroker,
+                  isInvestor,
+                }).map((group) => (
                   <div key={group.label} className={`border-l-4 ${group.colorBorder} rounded-lg ${group.colorBg} p-2`}>
                     <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
                       {group.label}

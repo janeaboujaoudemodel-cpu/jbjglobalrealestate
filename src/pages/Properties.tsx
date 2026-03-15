@@ -1135,13 +1135,12 @@ const Properties = () => {
         </div>
       </section>
 
-      {/* Fixed filter bar on scroll — simplified to avoid duplication with HorizontalUtilityBar */}
+      {/* Fixed filter bar on scroll — 2-row: search row + FilterShortcutBar, no duplicated controls */}
       {isFilterFixed && createPortal(
-        <section className="fixed top-[48px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9995] backdrop-blur-md bg-gradient-to-r from-[#FDFBF7]/95 via-[#F5F0E6]/95 to-[#EDE4D3]/95 py-2 md:py-3 border-b border-gold/30 shadow-lg" style={{ WebkitOverflowScrolling: 'touch' }}>
-          <div className="container mx-auto px-3 sm:px-4">
-            {/* Single compact search + filter row */}
+        <section className="fixed top-[48px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9995] backdrop-blur-xl bg-gradient-to-r from-[#FDFBF7]/95 via-[#F5F0E6]/95 to-[#EDE4D3]/95 border-b border-gold/30 shadow-lg" style={{ WebkitOverflowScrolling: 'touch' }}>
+          {/* Row 1: Compact search + transaction type + search button */}
+          <div className="container mx-auto px-3 sm:px-4 py-2">
             <div className="flex items-center gap-2">
-              {/* Compact search */}
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
                 <Input
@@ -1156,7 +1155,6 @@ const Properties = () => {
                   className="h-10 pl-10 pr-4 bg-white/80 border border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-sm shadow-sm w-full"
                 />
               </div>
-              {/* Transaction type pills */}
               <div className="flex items-center gap-1">
                 {[
                   { value: 'buy', label: 'Buy' },
@@ -1181,7 +1179,6 @@ const Properties = () => {
                   </Button>
                 ))}
               </div>
-              {/* Search button */}
               <button 
                 onClick={handleSearch}
                 className="h-9 px-4 rounded-lg text-xs font-bold bg-gradient-to-r from-[#F5F0E6] to-[#C8A766] text-black hover:brightness-110 transition-all shadow-sm shrink-0"
@@ -1189,6 +1186,18 @@ const Properties = () => {
                 SEARCH
               </button>
             </div>
+          </div>
+          {/* Row 2: FilterShortcutBar — no duplicate Mode/Currency/Favorites (those live in utility bar) */}
+          <div className="container mx-auto px-3 sm:px-4 pb-2">
+            <FilterShortcutBar
+              variant="light"
+              filters={shortcutFilters}
+              onFilterChange={setShortcutFilters}
+              isMapMode={isMapMode}
+              onMapToggle={(v) => {
+                setIsMapMode(v);
+              }}
+            />
           </div>
         </section>,
         document.body

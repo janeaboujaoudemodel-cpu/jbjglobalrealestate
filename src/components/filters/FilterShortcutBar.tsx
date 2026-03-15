@@ -906,44 +906,90 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
 function ConnectedModeButton() {
   const { mode, setMode } = useUserModeContext();
   const [modeOpen, setModeOpen] = useState(false);
-  const modeLabel = mode === 'broker' ? 'Broker' : mode === 'investor_broker' ? 'Both' : mode === 'developer' ? 'Developer' : 'Investor';
 
-  const MODE_OPTIONS: { value: typeof mode; label: string; color: string; activeBg: string; activeBorder: string }[] = [
-    { value: 'investor', label: 'Investor', color: 'text-emerald-600', activeBg: 'bg-emerald-500/15', activeBorder: 'border-emerald-500/40' },
-    { value: 'broker', label: 'Broker', color: 'text-blue-600', activeBg: 'bg-blue-500/15', activeBorder: 'border-blue-500/40' },
-    { value: 'investor_broker', label: 'Both', color: 'text-purple-600', activeBg: 'bg-purple-500/15', activeBorder: 'border-purple-500/40' },
-  ];
+  const MODE_CONFIG: Record<string, { label: string; icon: typeof Users; color: string; bgColor: string; borderColor: string; description: string }> = {
+    investor: {
+      label: 'Mode: Investor',
+      icon: Users,
+      color: 'text-emerald-500',
+      bgColor: 'bg-emerald-500/10 border-emerald-500/30',
+      borderColor: 'border-emerald-500/40',
+      description: 'Browse properties, access ROI tools, upload listings, explore guides & market insights'
+    },
+    broker: {
+      label: 'Mode: Broker',
+      icon: Users,
+      color: 'text-blue-500',
+      bgColor: 'bg-blue-500/10 border-blue-500/30',
+      borderColor: 'border-blue-500/40',
+      description: 'CRM dashboard, education hub, sell properties, upload listings, coordinate with clients & close deals'
+    },
+    investor_broker: {
+      label: 'Mode: Investor + Broker',
+      icon: Users,
+      color: 'text-purple-500',
+      bgColor: 'bg-purple-500/10 border-purple-500/30',
+      borderColor: 'border-purple-500/40',
+      description: 'Full access to investor tools, broker dashboard, CRM, listings, guides & market intelligence'
+    },
+    developer: {
+      label: 'Mode: Developer',
+      icon: Users,
+      color: 'text-amber-500',
+      bgColor: 'bg-amber-500/10 border-amber-500/30',
+      borderColor: 'border-amber-500/40',
+      description: 'Submit projects, upload terraces & documents, manage launches, marketing materials & event calendar'
+    }
+  };
 
-  const activeOpt = MODE_OPTIONS.find(o => o.value === mode) || MODE_OPTIONS[0];
+  const currentConfig = MODE_CONFIG[mode] || MODE_CONFIG.investor;
 
   return (
     <Popover open={modeOpen} onOpenChange={setModeOpen}>
       <PopoverTrigger asChild>
-        <button className={cn("flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 max-w-fit", activeOpt.activeBg, activeOpt.color, "hover:brightness-95")} title="Switch your viewing mode">
+        <button className={cn("flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 max-w-fit", currentConfig.bgColor, currentConfig.color, "hover:brightness-95")} title="Switch your viewing mode">
           <Users className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Mode: {modeLabel}</span>
+          <span className="hidden sm:inline">{currentConfig.label}</span>
+          <ChevronDown className={cn("w-3 h-3 transition-transform", modeOpen && "rotate-180")} />
         </button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[10200] shadow-xl"
+        className="w-72 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 z-[10200] shadow-xl rounded-xl"
         side="bottom"
         align="end"
         sideOffset={6}
       >
-        {MODE_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => { setMode(opt.value); setModeOpen(false); }}
-            className={cn(
-              "w-full text-center px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors",
-              mode === opt.value
-                ? cn(opt.activeBg, opt.color, "border", opt.activeBorder)
-                : "text-black/80 hover:bg-white/60"
-            )}
-          >
-            {opt.label}
-          </button>
-        ))}
+        <div className="px-3 py-2.5 mb-2 rounded-lg bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#D4C4A8] border border-gold/40">
+          <p className="text-sm font-bold text-black/80">Select your mode</p>
+          <p className="text-xs text-black/50 mt-0.5">Choose how you want to use the platform</p>
+        </div>
+        {Object.entries(MODE_CONFIG).map(([modeKey, config]) => {
+          const isActive = mode === modeKey;
+          return (
+            <button
+              key={modeKey}
+              onClick={() => { setMode(modeKey as any); setModeOpen(false); }}
+              className={cn(
+                "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 text-left",
+                isActive
+                  ? cn(config.bgColor, config.borderColor, "border")
+                  : "hover:bg-zinc-50"
+              )}
+            >
+              <div className={cn(
+                "w-8 h-8 rounded-lg flex items-center justify-center border",
+                config.bgColor, config.borderColor
+              )}>
+                <Users className={cn("w-4 h-4", config.color)} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className={cn("text-sm font-medium", config.color)}>{config.label}</p>
+                <p className="text-xs text-zinc-500 line-clamp-2">{config.description}</p>
+              </div>
+              {isActive && <Check className={cn("w-4 h-4 shrink-0", config.color)} />}
+            </button>
+          );
+        })}
       </PopoverContent>
     </Popover>
   );
