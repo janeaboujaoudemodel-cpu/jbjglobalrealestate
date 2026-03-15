@@ -32,6 +32,7 @@ export function BusinessCardHeader({
   isSharing, onShare,
   cardShape, isExportingHtml, onExportHtml,
   isExportingPng, onExportPng,
+  isExportingToResizer, onExportToResizer,
   onBatchPrint,
   isExporting, onExportPdf,
 }: BusinessCardHeaderProps) {
