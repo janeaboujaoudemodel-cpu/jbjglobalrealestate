@@ -4,6 +4,7 @@
  * Plus: Colors, English/Arabic Controls, Sync, My Stamp.
  */
 import React, { useState, useCallback, useEffect } from 'react';
+import type { SelectedElement, SelectedElementType } from './StampInteractivePreview';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { StampColorWheel } from './StampColorWheel';
@@ -88,6 +89,7 @@ const ARABIC_FONTS = [
 type ColorStop = 'primary' | 'secondary' | 'accent';
 
 interface StampLeftPanelProps {
+  selectedElement?: SelectedElement | null;
   primaryColor: string;
   secondaryColor?: string;
   accentColor?: string;
@@ -197,40 +199,26 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
   const [focusedElement, setFocusedElement] = useState<'center' | 'separator' | 'text' | null>(null);
   const [removingBg, setRemovingBg] = useState(false);
 
+  // Auto-open correct sidebar section when an element is selected on the canvas
   useEffect(() => {
-    const openCenter = () => {
-      setOpenSections(prev => prev.includes('element-hierarchy') ? prev : [...prev, 'element-hierarchy']);
-      setFocusedElement('center');
-    };
-    const openSeparator = () => {
+    if (!props.selectedElement) return;
+    const t = props.selectedElement.type;
+    if (t === 'arabic-company' || t === 'arabic-location') {
+      setOpenSections(prev => prev.includes('arabic-controls') ? prev : [...prev, 'arabic-controls']);
+      setFocusedElement('text');
+    } else if (t === 'english-company' || t === 'english-location') {
+      setOpenSections(prev => prev.includes('english-controls') ? prev : [...prev, 'english-controls']);
+      setFocusedElement('text');
+    } else if (t === 'separator-left' || t === 'separator-right') {
       setOpenSections(prev => prev.includes('element-hierarchy') ? prev : [...prev, 'element-hierarchy']);
       setFocusedElement('separator');
-    };
-    const openText = () => {
+    } else if (t === 'monogram' || t === 'logo' || t === 'registration') {
       setOpenSections(prev => prev.includes('element-hierarchy') ? prev : [...prev, 'element-hierarchy']);
-      setFocusedElement('text');
-    };
-    const openArabic = () => {
-      setOpenSections(['arabic-controls']);
-      setFocusedElement('text');
-    };
-    const openEnglish = () => {
-      setOpenSections(['english-controls']);
-      setFocusedElement('text');
-    };
-    window.addEventListener('stamp-open-center-panel', openCenter);
-    window.addEventListener('stamp-open-separator-panel', openSeparator);
-    window.addEventListener('stamp-open-text-panel', openText);
-    window.addEventListener('stamp-focus-arabic', openArabic);
-    window.addEventListener('stamp-focus-english', openEnglish);
-    return () => {
-      window.removeEventListener('stamp-open-center-panel', openCenter);
-      window.removeEventListener('stamp-open-separator-panel', openSeparator);
-      window.removeEventListener('stamp-open-text-panel', openText);
-      window.removeEventListener('stamp-focus-arabic', openArabic);
-      window.removeEventListener('stamp-focus-english', openEnglish);
-    };
-  }, []);
+      setFocusedElement('center');
+    } else if (t === 'outer-ring' || t === 'middle-ring' || t === 'inner-ring') {
+      setOpenSections(prev => prev.includes('global-layout') ? prev : [...prev, 'global-layout']);
+    }
+  }, [props.selectedElement]);
 
   const handleColorChange = useCallback((hex: string) => {
     if (focusedElement === 'center' && props.localIconStyle === 'MONOGRAM') {
@@ -611,7 +599,69 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
           </AccordionItem>
 
           {/* ═══════════════════════════════════════════
-              4. 🔗 Both / Sync Controls
+              GLOBAL LAYOUT — geometry controls (live-wired)
+             ═══════════════════════════════════════════ */}
+          <AccordionItem value="global-layout" className="border-b border-[hsl(var(--border)/0.5)]">
+            <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
+              <span className="flex items-center gap-1.5">
+                <Layers size={12} className="text-[hsl(var(--gold))]" />
+                Global Layout
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="pb-3 space-y-2.5">
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Ring Gap</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.circleGap}%</span>
+                </div>
+                <Slider min={5} max={25} step={1} value={[props.circleGap]}
+                  onValueChange={([v]) => props.onSetCircleGap(v)} />
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Separator Distance</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.separatorDistance}%</span>
+                </div>
+                <Slider min={0} max={100} step={1} value={[props.separatorDistance]}
+                  onValueChange={([v]) => props.onSetSeparatorDistance(v)} />
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Location Arc Spread</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{Math.round(props.locationArcSpread * 100)}%</span>
+                </div>
+                <Slider min={50} max={100} step={1} value={[Math.round(props.locationArcSpread * 100)]}
+                  onValueChange={([v]) => props.onSetLocationArcSpread(v / 100)} />
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Center Content Size</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.centerContentSize}%</span>
+                </div>
+                <Slider min={20} max={60} step={1} value={[props.centerContentSize]}
+                  onValueChange={([v]) => props.onSetCenterContentSize(v)} />
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Company Arc Position</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.companyArcOffset}</span>
+                </div>
+                <Slider min={-20} max={20} step={1} value={[props.companyArcOffset]}
+                  onValueChange={([v]) => props.onSetCompanyArcOffset(v)} />
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Location Arc Position</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.locationArcOffset}</span>
+                </div>
+                <Slider min={-20} max={20} step={1} value={[props.locationArcOffset]}
+                  onValueChange={([v]) => props.onSetLocationArcOffset(v)} />
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* ═══════════════════════════════════════════
+              4. 🔗 Both / Sync Controls (typography only)
              ═══════════════════════════════════════════ */}
           <AccordionItem value="both-controls" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
@@ -679,42 +729,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   >
                     EN ← Match AR
                   </button>
-                </div>
-              </div>
-              <div className="border-t border-[hsl(var(--border))] pt-2 space-y-2.5">
-                <p className="text-[8px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1">Layout</p>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Ring Gap</p>
-                    <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.circleGap}%</span>
-                  </div>
-                  <Slider min={5} max={25} step={1} value={[props.circleGap]}
-                    onValueChange={([v]) => props.onSetCircleGap(v)} />
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Separator Distance</p>
-                    <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.separatorDistance}%</span>
-                  </div>
-                  <Slider min={0} max={100} step={1} value={[props.separatorDistance]}
-                    onValueChange={([v]) => props.onSetSeparatorDistance(v)} />
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Location Arc Spread</p>
-                    <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{Math.round(props.locationArcSpread * 100)}%</span>
-                  </div>
-                  <Slider min={50} max={100} step={1} value={[Math.round(props.locationArcSpread * 100)]}
-                    onValueChange={([v]) => props.onSetLocationArcSpread(v / 100)} />
-                  <p className="text-[7px] text-[hsl(var(--muted-foreground))] mt-0.5">Controls both EN & AR location arcs</p>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Center Content Size</p>
-                    <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.centerContentSize}%</span>
-                  </div>
-                  <Slider min={20} max={60} step={1} value={[props.centerContentSize]}
-                    onValueChange={([v]) => props.onSetCenterContentSize(v)} />
                 </div>
               </div>
             </AccordionContent>

@@ -69,33 +69,10 @@ export function StampSVGRenderer({
     tinted = tinted.replace(/#8b6914/gi, secondaryColor);
   }
 
-  // Apply font-family override — replaces all font-family attributes in the SVG
-  if (fontFamily) {
-    tinted = tinted.replace(/font-family="[^"]*"/gi, `font-family="${fontFamily}"`);
-    tinted = tinted.replace(/font-family:\s*[^;'"]+/gi, `font-family:${fontFamily}`);
-  }
-
-  // Apply font-weight override — only force when explicitly set to bold;
-  // passing 'normal' would clobber template weights, so skip it.
-  if (fontWeight === 'bold') {
-    tinted = tinted.replace(/font-weight="[^"]*"/gi, `font-weight="${fontWeight}"`);
-    tinted = tinted.replace(/font-weight:\s*[^;'"]+/gi, `font-weight:${fontWeight}`);
-  }
-
-  // Apply font-style override — only force when explicitly set to italic.
-  if (fontStyle === 'italic') {
-    tinted = tinted.replace(/font-style="[^"]*"/gi, `font-style="${fontStyle}"`);
-    tinted = tinted.replace(/font-style:\s*[^;'"]+/gi, `font-style:${fontStyle}`);
-  }
-
-  // Apply font-size override — skip tiny values (< 4px) to preserve decorative elements
-  if (fontSize != null) {
-    tinted = tinted.replace(/font-size="(\d+(?:\.\d+)?)"/gi, (_, px) => {
-      const orig = parseFloat(px);
-      if (orig < 4) return `font-size="${px}"`;
-      return `font-size="${fontSize}"`;
-    });
-  }
+  // Font-family, font-weight, font-style, and font-size are NO LONGER applied
+  // via global regex here. This caused English controls to cross-contaminate Arabic.
+  // The live re-render pipeline in StampGeneratorPage now bakes per-language fonts
+  // directly into the SVG via generateOfficialStampSVG().
 
   // Inject ink texture filter if inkMode is enabled
   if (inkMode) {

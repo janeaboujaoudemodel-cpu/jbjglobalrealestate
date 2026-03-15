@@ -62,6 +62,35 @@ function getLanguageFromElement(id: string): 'arabic' | 'english' | null {
   return null;
 }
 
+/** Element selection type for contextual sidebar wiring */
+export type SelectedElementType =
+  | 'arabic-company' | 'english-company' | 'arabic-location' | 'english-location'
+  | 'monogram' | 'logo' | 'separator-left' | 'separator-right'
+  | 'outer-ring' | 'middle-ring' | 'inner-ring' | 'registration';
+
+export interface SelectedElement {
+  id: string;
+  type: SelectedElementType;
+}
+
+/** Map stamp element IDs to SelectedElementType */
+function mapElementToType(id: string): SelectedElementType | null {
+  switch (id) {
+    case 'top-arc': return 'arabic-company';
+    case 'bottom-arc': return 'english-company';
+    case 'loc-top': return 'arabic-location';
+    case 'loc-bottom': return 'english-location';
+    case 'center': return 'monogram';
+    case 'separator-left': case 'loc-separator-left': return 'separator-left';
+    case 'separator-right': case 'loc-separator-right': return 'separator-right';
+    case 'border-outer': return 'outer-ring';
+    case 'border-middle': return 'middle-ring';
+    case 'border-inner': return 'inner-ring';
+    case 'registration': return 'registration';
+    default: return null;
+  }
+}
+
 interface Props {
   svgSource: string;
   tintColor: string;
@@ -77,6 +106,7 @@ interface Props {
   onSeparatorChange?: (style: SeparatorStyle) => void;
   onCenterModeChange?: (mode: CenterContentMode, options?: { monogramText?: string; icon?: CenterIconType }) => void;
   onCenterClick?: () => void;
+  onElementSelect?: (element: SelectedElement | null) => void;
   currentSeparatorStyle?: SeparatorStyle;
   currentCenterMode?: CenterContentMode;
 }
@@ -96,6 +126,7 @@ export function StampInteractivePreview({
   onSeparatorChange,
   onCenterModeChange,
   onCenterClick,
+  onElementSelect,
   currentSeparatorStyle,
   currentCenterMode,
 }: Props) {
@@ -159,6 +190,14 @@ export function StampInteractivePreview({
     return Math.min(text.length - 1, Math.floor(pct * text.length));
   }, [getElementText]);
 
+  // Emit element selection via prop callback
+  const emitSelection = useCallback((elementId: string) => {
+    const type = mapElementToType(elementId);
+    if (type && onElementSelect) {
+      onElementSelect({ id: elementId, type });
+    }
+  }, [onElementSelect]);
+
   // Single click: select letter
   const handleZoneClick = (zone: HitZone, e: React.MouseEvent) => {
     const meta = ELEMENT_LABELS[zone.id];
@@ -169,7 +208,6 @@ export function StampInteractivePreview({
       const containerRect = containerRef.current?.getBoundingClientRect();
       const clickX = containerRect ? e.clientX - containerRect.x : 0;
       const letterIdx = estimateLetterIndex(zone, clickX);
-      const text = getElementText(zone.id);
 
       setSelected(zone.id);
       setSelectedLetterIdx(letterIdx);
@@ -179,8 +217,7 @@ export function StampInteractivePreview({
         x: Math.max(0, Math.min(zone.rect.x + zone.rect.width / 2, size - 120)),
         y: Math.max(0, zone.rect.y - 8),
       });
-
-      // Don't dispatch panel events on single click (letter mode)
+      emitSelection(zone.id);
     } else {
       // Non-text elements: standard selection
       setSelected(zone.id);
@@ -191,11 +228,9 @@ export function StampInteractivePreview({
         x: Math.max(0, Math.min(zone.rect.x + zone.rect.width / 2, size - 120)),
         y: Math.max(0, zone.rect.y - 8),
       });
+      emitSelection(zone.id);
       if (meta.type === 'center') {
         if (onCenterClick) onCenterClick();
-        window.dispatchEvent(new CustomEvent('stamp-open-center-panel'));
-      } else if (meta.type === 'separator') {
-        window.dispatchEvent(new CustomEvent('stamp-open-separator-panel'));
       }
     }
   };
@@ -214,17 +249,10 @@ export function StampInteractivePreview({
       y: Math.max(0, zone.rect.y - 8),
     });
 
-    // Dispatch language-specific event
-    const lang = getLanguageFromElement(zone.id);
-    if (lang === 'arabic') {
-      window.dispatchEvent(new CustomEvent('stamp-focus-arabic'));
-    } else if (lang === 'english') {
-      window.dispatchEvent(new CustomEvent('stamp-focus-english'));
-    } else if (meta.type === 'center') {
+    // Emit element selection via prop callback (replaces window events)
+    emitSelection(zone.id);
+    if (meta.type === 'center') {
       if (onCenterClick) onCenterClick();
-      window.dispatchEvent(new CustomEvent('stamp-open-center-panel'));
-    } else if (meta.type === 'separator') {
-      window.dispatchEvent(new CustomEvent('stamp-open-separator-panel'));
     }
   };
 
@@ -234,6 +262,7 @@ export function StampInteractivePreview({
       setSelected(null);
       setSelectedLetterIdx(null);
       setEditingText(null);
+      if (onElementSelect) onElementSelect(null);
     }
   };
 

@@ -14,12 +14,14 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { StampSVGRenderer } from '@/components/stamp-generator/StampSVGRenderer';
 import { StampInteractivePreview } from '@/components/stamp-generator/StampInteractivePreview';
+import type { SelectedElement } from '@/components/stamp-generator/StampInteractivePreview';
 import DesignFavoriteButton from '@/components/toolkit/DesignFavoriteButton';
 import { StampColorWheel } from '@/components/stamp-generator/StampColorWheel';
 import { StampTextEditor } from '@/components/stamp-generator/StampTextEditor';
 import { StampPreviewModal } from '@/components/stamp-generator/StampPreviewModal';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { generateStampConcepts, StampDesignConcept } from '@/lib/stampTemplates';
+import { generateOfficialStampSVG, type OfficialStampConfig } from '@/lib/stampOfficialTemplate';
 import {
   Wand2, Loader2, Check, RefreshCw, Download, Stamp,
   ArrowLeft, ChevronRight, AlertTriangle, Heart, MessageSquare,
@@ -191,10 +193,83 @@ export default function StampGeneratorPage() {
   const [locationArcSpread, setLocationArcSpreadRaw] = useState(() => ssGet(ssKey('locationArcSpread'), 0.98));
   const setLocationArcSpread = (v: number) => { setLocationArcSpreadRaw(v); ssSave(ssKey('locationArcSpread'), v); };
 
+  // Element selection state — drives contextual sidebar panel opening
+  const [selectedElement, setSelectedElement] = useState<SelectedElement | null>(null);
+
+  // ═══════════════════════════════════════════════════════════════════
+  // LIVE SVG RE-RENDER PIPELINE
+  // When any layout/typography control changes, regenerate the SVG
+  // via generateOfficialStampSVG() so sliders are live-wired.
+  // ═══════════════════════════════════════════════════════════════════
+  const liveRenderRef = useRef(false);
+  useEffect(() => {
+    if (!project || !standardConcept) return;
+    if (!liveRenderRef.current) { liveRenderRef.current = true; return; }
+    const isOfficial = !standardConcept.templateKey || standardConcept.templateKey === 'owner-official-standard';
+    if (!isOfficial) return;
+
+    const name = project.company_name || '';
+    const arabicName = project.arabic_company_name || '';
+    const locationEn = [project.city_optional, project.country_optional].filter(Boolean).join(', ') || 'Dubai, UAE';
+    const ARABIC_CITY_MAP: Record<string, string> = {
+      'dubai': 'دبي، الإمارات', 'abu dhabi': 'أبوظبي، الإمارات',
+      'sharjah': 'الشارقة، الإمارات', 'ajman': 'عجمان، الإمارات',
+      'ras al khaimah': 'رأس الخيمة، الإمارات', 'fujairah': 'الفجيرة، الإمارات',
+      'umm al quwain': 'أم القيوين، الإمارات',
+    };
+    const cityKey = (project.city_optional || '').toLowerCase();
+    const locAr = project.arabic_city || ARABIC_CITY_MAP[cityKey] || 'دبي، الإمارات';
+    const mono = (localMonogramText || name.slice(0, 2)).toUpperCase().slice(0, 3);
+    const regNo = project.registration_number || '';
+
+    const config: OfficialStampConfig = {
+      companyNameEn: name,
+      companyNameAr: arabicName || name,
+      arabicOnTop: true,
+      locationTextEn: locationEn,
+      locationTextAr: locAr,
+      showLocation: true,
+      separatorStyle: project.separator_style || 'star',
+      monogramText: mono,
+      showMonogram: localIconStyle === 'MONOGRAM',
+      showLogo: localIconStyle === 'UPLOADED_LOGO' && !!localLogoUrl,
+      logoUrl: localLogoUrl || undefined,
+      size: 320,
+      registrationNumber: regNo || undefined,
+      showRegistration: !!regNo && (project.density ?? 3) >= 3,
+      borderStyle: (project.border_style as any) || 'DOUBLE',
+      centerMode: localIconStyle === 'UPLOADED_LOGO' ? 'logo' : localIconStyle === 'NONE' ? 'none' : 'monogram',
+      circleGap,
+      separatorDistancePct: separatorDistance,
+      arabicArcSpread,
+      englishArcSpread,
+      arabicLetterSpacing,
+      arabicFont,
+      arabicFontWeight,
+      companyArcBandOffset: companyArcOffset,
+      locationArcBandOffset: locationArcOffset,
+      locationArcSpread,
+      centerContentScale: centerContentSize,
+      arcTextSpacing,
+      fontFamily,
+      inkColor: primaryColor,
+    };
+
+    const newSvg = generateOfficialStampSVG(config);
+    setSvgOverrides(prev => ({ ...prev, [standardConcept.id]: newSvg }));
+    triggerPulse();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    circleGap, separatorDistance, arcTextSpacing, englishArcSpread,
+    arabicArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight, arabicFontSize,
+    fontFamily, fontBold, manualFontSize, companyArcOffset, locationArcOffset,
+    locationArcSpread, centerContentSize, localIconStyle, localMonogramText,
+    localLogoUrl, primaryColor,
+  ]);
+
   // Live-apply monogram colors whenever they change
   useEffect(() => {
     if (localIconStyle !== 'MONOGRAM') return;
-    // Use derived initials as fallback when no explicit monogram text is set
     const effectiveMonogram = localMonogramText || (project?.company_name ? project.company_name.trim().split(/\s+/).filter((w: string) => w.length > 0).slice(0, 3).map((w: string) => w[0]).join('').toUpperCase() : '');
     if (!effectiveMonogram) return;
     const hasCustomColors = Object.keys(monogramLetterColors.letters).length > 0 || monogramLetterColors.allLetters || monogramLetterColors.divider;
@@ -849,6 +924,7 @@ export default function StampGeneratorPage() {
 
         {/* ── LEFT PANEL: Collapsible Tool Controls ── */}
         <StampLeftPanel
+          selectedElement={selectedElement}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           accentColor={accentColor}
@@ -962,6 +1038,7 @@ export default function StampGeneratorPage() {
               ) : (selectedSvg || allConcepts[0]?.svgSource) ? (
                 <div className="relative">
                   <StampInteractivePreview
+                    onElementSelect={setSelectedElement}
                     svgSource={selectedSvg || (svgOverrides[allConcepts[0]?.id] || allConcepts[0]?.svgSource) || ''}
                     tintColor={primaryColor}
                     secondaryColor={secondaryColor}
@@ -1007,8 +1084,7 @@ export default function StampGeneratorPage() {
                         const initials = project.company_name.split(/\s+/).map((w: string) => w[0]).join('').toUpperCase().slice(0, 3);
                         setLocalMonogramText(initials);
                       }
-                      // Dispatch event to open the center section in left panel
-                      window.dispatchEvent(new CustomEvent('stamp-open-center-panel'));
+                      // Selection handled by onElementSelect prop
                     }}
                     currentSeparatorStyle={project?.separator_style}
                     currentCenterMode={localIconStyle === 'UPLOADED_LOGO' ? 'logo' : localIconStyle === 'NONE' ? 'none' : 'monogram'}
