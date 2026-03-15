@@ -43,6 +43,8 @@ import { StampLeftPanel } from './StampLeftPanel';
 import { StampRightPanel } from './StampRightPanel';
 import { StampCanvasControls, CanvasGridOverlay } from './StampCanvasControls';
 import { StampProjectHeader } from './StampProjectHeader';
+import { StampSaveDialog } from './StampSaveDialog';
+import { useOwnerVerification } from '@/hooks/useOwnerVerification';
 
 type ColorStop = 'primary' | 'secondary' | 'accent';
 
@@ -86,8 +88,11 @@ function injectCenterArt(svgSource: string, iconStyle: string, monogramText: str
 export default function StampGeneratorPage() {
   const { projectId } = useParams<{ projectId: string }>();
   const { user, session } = useAuth();
+  const { isOwner } = useOwnerVerification();
   const navigate = useNavigate();
   const location = useLocation();
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [libraryTabRef, setLibraryTabRef] = useState<(() => void) | null>(null);
 
   const [project, setProject] = useState<any>(null);
   const ssKey = (k: string) => `stamp-gen-${projectId}-${k}`;
@@ -393,17 +398,8 @@ export default function StampGeneratorPage() {
       }
       await supabase.from('stamp_projects').update(updateData).eq('id', projectId);
       setLastSaved(new Date());
-      // Also save draft to localStorage with standard key
-      try {
-        const draftKey = `jbj_draft_stamp-generator_${projectId}`;
-        localStorage.setItem(draftKey, JSON.stringify({
-          name: project?.company_name || 'Stamp Project',
-          savedAt: new Date().toISOString(),
-          standardDesignId: standardDbId,
-          projectId,
-        }));
-      } catch {}
-      toast.success('Project saved');
+      // No longer write misleading localStorage draft — DB is the real draft
+      setShowSaveDialog(true);
     } catch (err: any) {
       toast.error('Save failed: ' + (err?.message || 'Unknown error'));
     }
@@ -908,7 +904,17 @@ export default function StampGeneratorPage() {
         />
       )}
 
-      {/* ── Header ── */}
+      {/* Post-Save Dialog */}
+      <StampSaveDialog
+        open={showSaveDialog}
+        onClose={() => setShowSaveDialog(false)}
+        projectName={project?.company_name || 'Stamp Project'}
+        savedAt={lastSaved}
+        onViewProjects={() => { setShowSaveDialog(false); navigate('/toolkit/stamp-generator/projects'); }}
+        onOpenLibrary={() => { setShowSaveDialog(false); libraryTabRef?.(); }}
+      />
+
+
       <StampProjectHeader
         projectName={project.company_name || 'Untitled'}
         languageMode={project.language_mode}
@@ -1219,6 +1225,8 @@ export default function StampGeneratorPage() {
           onUploadNew={() => {}}
           savedDesignId={savedDesignId}
           onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || activeStandard?.id || selectedId}`)}
+          isOwner={isOwner}
+          onSwitchToLibrary={(fn) => setLibraryTabRef(() => fn)}
         />
       </div>
 

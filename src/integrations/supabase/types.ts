@@ -20804,6 +20804,39 @@ export type Database = {
           },
         ]
       }
+      stamp_presets: {
+        Row: {
+          config_json: Json
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          svg_preview: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          config_json?: Json
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          svg_preview?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          config_json?: Json
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          svg_preview?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       stamp_projects: {
         Row: {
           address_optional: string | null

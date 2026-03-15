@@ -1,7 +1,10 @@
 /**
  * StampRightPanel — Tabbed right panel: Concepts, Favorites, AI Variations, History, Library.
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { StampSVGRenderer } from './StampSVGRenderer';
 import { StampVariationsPanel } from './StampVariationsPanel';
@@ -13,7 +16,7 @@ import type { StampDesignConcept } from '@/lib/stampTemplates';
 import {
   Heart, Loader2, Check, ChevronLeft, ChevronRight, Wand2,
   Sparkles, Clock, RefreshCw, Copy, Trash2, Download, Shield,
-  BookOpen, Save, FolderOpen, RotateCw, Pencil, X
+  BookOpen, Save, FolderOpen, RotateCw, Pencil, X, Package
 } from 'lucide-react';
 import DesignFavoriteButton from '@/components/toolkit/DesignFavoriteButton';
 import { toast } from 'sonner';
@@ -71,11 +74,21 @@ interface StampRightPanelProps {
   // Export
   savedDesignId?: string | null;
   onExport: () => void;
+  // New props for Session 7
+  isOwner?: boolean;
+  onSwitchToLibrary?: (fn: () => void) => void;
 }
 
 export function StampRightPanel(props: StampRightPanelProps) {
   const [conceptPage, setConceptPage] = useState(0);
   const [activeTab, setActiveTab] = useState('concepts');
+
+  // Expose a way to switch to library tab from parent
+  useEffect(() => {
+    if (props.onSwitchToLibrary) {
+      props.onSwitchToLibrary(() => setActiveTab('library'));
+    }
+  }, [props.onSwitchToLibrary]);
 
   // Build concepts list: standard first (excluded from regular list), then the rest
   const nonStandardConcepts = props.standardConcept
@@ -291,37 +304,14 @@ export function StampRightPanel(props: StampRightPanelProps) {
           )}
         </TabsContent>
 
-        {/* Library Tab — Custom Presets + Drafts */}
+        {/* Library Tab — DB-backed: Projects, Presets, Brand Assets */}
         <TabsContent value="library" className="flex-1 overflow-y-auto p-3 mt-0 space-y-4">
-          {/* Save Current as Preset */}
-          {props.standardConcept && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full h-8 text-[10px] gap-1.5 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)]"
-              onClick={() => {
-                const svg = props.svgOverrides[props.standardConcept!.id] || props.standardConcept!.svgSource;
-                try {
-                  const saved = localStorage.getItem('stamp-custom-presets');
-                  const existing = saved ? JSON.parse(saved) : [];
-                  const preset = {
-                    id: crypto.randomUUID(),
-                    name: props.standardConcept!.label || 'Custom Preset',
-                    description: `Saved ${new Date().toLocaleDateString()}`,
-                    svgSource: svg,
-                    templateKey: props.standardConcept!.templateKey,
-                    savedAt: new Date().toISOString(),
-                  };
-                  existing.unshift(preset);
-                  localStorage.setItem('stamp-custom-presets', JSON.stringify(existing));
-                  toast.success('Saved current design as preset');
-                } catch { toast.error('Failed to save preset'); }
-              }}
-            >
-              <Save size={10} /> Save Current as Preset
-            </Button>
-          )}
-          <StampLibraryPanel onApplyPreset={props.onSelect} />
+          <StampLibraryPanel
+            onApplyPreset={props.onSelect}
+            isOwner={props.isOwner}
+            standardConcept={props.standardConcept}
+            svgOverrides={props.svgOverrides}
+          />
         </TabsContent>
 
         {/* History Tab */}
@@ -360,158 +350,199 @@ export function StampRightPanel(props: StampRightPanelProps) {
   );
 }
 
-/** Library panel: shows saved custom presets + drafts */
-function StampLibraryPanel({ onApplyPreset }: { onApplyPreset: (c: any) => void }) {
-  const [customPresets, setCustomPresets] = useState<any[]>([]);
-  const [drafts, setDrafts] = useState<{ key: string; name: string; savedAt: string; projectId?: string }[]>([]);
-  const [editingName, setEditingName] = useState<string | null>(null);
-  const [nameValue, setNameValue] = useState('');
+/** Library panel: DB-backed — My Projects, Style Presets (owner-only create), Brand Assets */
+function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrides }: {
+  onApplyPreset: (c: any) => void;
+  isOwner?: boolean;
+  standardConcept?: any;
+  svgOverrides?: Record<string, string>;
+}) {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [projects, setProjects] = useState<any[]>([]);
+  const [presets, setPresets] = useState<any[]>([]);
+  const [assets, setAssets] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [savingPreset, setSavingPreset] = useState(false);
 
-  useEffect(() => {
-    loadPresets();
-    loadDrafts();
-  }, []);
+  const loadData = useCallback(async () => {
+    if (!user?.id) return;
+    setLoading(true);
+    const [projRes, presetRes, assetRes] = await Promise.all([
+      supabase.from('stamp_projects').select('id, company_name, updated_at, selected_design_id')
+        .eq('user_id', user.id).is('deleted_at', null).order('updated_at', { ascending: false }).limit(20),
+      supabase.from('stamp_presets' as any).select('id, name, description, config_json, svg_preview, created_at')
+        .order('created_at', { ascending: false }).limit(50),
+      supabase.from('brand_assets').select('id, name, svg_content, thumbnail_url, created_at')
+        .eq('user_id', user.id).eq('asset_type', 'stamp').order('created_at', { ascending: false }).limit(20),
+    ]);
+    setProjects(projRes.data || []);
+    setPresets(presetRes.data || []);
+    setAssets(assetRes.data || []);
+    setLoading(false);
+  }, [user?.id]);
 
-  function loadPresets() {
+  useEffect(() => { loadData(); }, [loadData]);
+
+  const handleSavePreset = async () => {
+    if (!user?.id || !standardConcept) return;
+    setSavingPreset(true);
     try {
-      const saved = localStorage.getItem('stamp-custom-presets');
-      setCustomPresets(saved ? JSON.parse(saved) : []);
-    } catch { setCustomPresets([]); }
-  }
-
-  function loadDrafts() {
-    try {
-      const draftList: typeof drafts = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('jbj_draft_stamp-generator_')) {
-          try {
-            const data = JSON.parse(localStorage.getItem(key) || '');
-            draftList.push({ key, name: data.name || 'Untitled Draft', savedAt: data.savedAt || '', projectId: data.projectId });
-          } catch {}
-        }
-      }
-      draftList.sort((a, b) => (b.savedAt || '').localeCompare(a.savedAt || ''));
-      setDrafts(draftList);
-    } catch { setDrafts([]); }
-  }
-
-  function deletePreset(id: string) {
-    try {
-      const saved = localStorage.getItem('stamp-custom-presets');
-      const existing = saved ? JSON.parse(saved) : [];
-      const updated = existing.filter((p: any) => p.id !== id);
-      localStorage.setItem('stamp-custom-presets', JSON.stringify(updated));
-      setCustomPresets(updated);
-      toast.success('Preset removed');
-    } catch {}
-  }
-
-  function deleteDraft(key: string) {
-    try { localStorage.removeItem(key); loadDrafts(); toast.success('Draft removed'); } catch {}
-  }
-
-  function renameDraft(key: string, newName: string) {
-    try {
-      const data = JSON.parse(localStorage.getItem(key) || '{}');
-      data.name = newName;
-      localStorage.setItem(key, JSON.stringify(data));
-      loadDrafts();
-      setEditingName(null);
-      toast.success('Draft renamed');
-    } catch {}
-  }
-
-  function continueDraft(draft: { key: string; projectId?: string }) {
-    if (draft.projectId) {
-      window.location.href = `/toolkit/stamp-generator/${draft.projectId}/generate`;
-    } else {
-      toast.error('Draft has no project link');
+      const svg = svgOverrides?.[standardConcept.id] || standardConcept.svgSource;
+      const { error } = await supabase.from('stamp_presets' as any).insert({
+        user_id: user.id,
+        name: standardConcept.label || 'Custom Preset',
+        description: `Saved ${new Date().toLocaleDateString()}`,
+        config_json: { templateKey: standardConcept.templateKey, svgSource: svg },
+        svg_preview: svg?.slice(0, 50000),
+      });
+      if (error) throw error;
+      toast.success('Preset saved');
+      loadData();
+    } catch (err: any) {
+      toast.error(err?.message || 'Failed to save preset');
     }
-  }
+    setSavingPreset(false);
+  };
+
+  const handleDeletePreset = async (id: string) => {
+    await supabase.from('stamp_presets' as any).delete().eq('id', id);
+    toast.success('Preset removed');
+    loadData();
+  };
 
   const formatDate = (d: string) => {
     if (!d) return '';
     try { return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }); } catch { return d; }
   };
 
-  return (
-    <div className="space-y-4">
-      {/* Custom Presets */}
-      <div>
-        <div className="flex items-center gap-1.5 mb-2">
-          <Save size={11} className="text-[hsl(var(--gold))]" />
-          <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Saved Presets</span>
-          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{customPresets.length}</Badge>
-        </div>
-        {customPresets.length > 0 ? (
-          <div className="space-y-1.5">
-            {customPresets.map((preset: any) => (
-              <div key={preset.id} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
-                <div className="w-7 h-7 rounded-lg bg-[hsl(var(--gold)/0.1)] flex items-center justify-center flex-shrink-0">
-                  <Save size={10} className="text-[hsl(var(--gold))]" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{preset.name}</p>
-                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{preset.description || 'Custom preset'}</p>
-                </div>
-                <button onClick={() => deletePreset(preset.id)} className="w-5 h-5 rounded flex items-center justify-center hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-opacity" title="Delete">
-                  <Trash2 size={9} className="text-destructive" />
-                </button>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-4">
-            <Save size={16} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30 mb-1" />
-            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">No saved presets yet. Use "Save Current as Preset" in the left panel.</p>
-          </div>
-        )}
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-8">
+        <Loader2 size={18} className="animate-spin text-[hsl(var(--gold))]" />
       </div>
+    );
+  }
 
-      {/* Drafts */}
+  return (
+    <div className="space-y-5">
+      {/* Save as Preset (Owner Only) */}
+      {isOwner && standardConcept && (
+        <Button variant="outline" size="sm" disabled={savingPreset}
+          className="w-full h-8 text-[10px] gap-1.5 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)]"
+          onClick={handleSavePreset}>
+          {savingPreset ? <Loader2 size={10} className="animate-spin" /> : <Save size={10} />}
+          Save Current as Preset
+        </Button>
+      )}
+
+      {/* My Projects */}
       <div>
         <div className="flex items-center gap-1.5 mb-2">
           <FolderOpen size={11} className="text-[hsl(var(--gold))]" />
-          <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Drafts</span>
-          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{drafts.length}</Badge>
+          <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">My Projects</span>
+          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{projects.length}</Badge>
         </div>
-        {drafts.length > 0 ? (
+        {projects.length > 0 ? (
           <div className="space-y-1.5">
-            {drafts.map(draft => (
-              <div key={draft.key} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
+            {projects.slice(0, 8).map((proj: any) => (
+              <button key={proj.id} onClick={() => navigate(`/toolkit/stamp-generator/${proj.id}/generate`)}
+                className="w-full flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all text-left group">
                 <div className="w-7 h-7 rounded-lg bg-[hsl(var(--muted))] flex items-center justify-center flex-shrink-0">
                   <FolderOpen size={10} className="text-[hsl(var(--muted-foreground))]" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  {editingName === draft.key ? (
-                    <input value={nameValue} onChange={e => setNameValue(e.target.value)}
-                      onKeyDown={e => { if (e.key === 'Enter') renameDraft(draft.key, nameValue); if (e.key === 'Escape') setEditingName(null); }}
-                      onBlur={() => renameDraft(draft.key, nameValue)}
-                      autoFocus className="text-[10px] font-semibold border-b border-[hsl(var(--gold))] outline-none bg-transparent w-full" />
-                  ) : (
-                    <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{draft.name}</p>
-                  )}
-                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{formatDate(draft.savedAt)}</p>
+                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{proj.company_name || 'Untitled'}</p>
+                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{formatDate(proj.updated_at)}</p>
                 </div>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => continueDraft(draft)} className="w-5 h-5 rounded flex items-center justify-center hover:bg-[hsl(var(--gold)/0.1)]" title="Continue editing">
-                    <RotateCw size={9} className="text-[hsl(var(--gold-dark))]" />
-                  </button>
-                  <button onClick={() => { setEditingName(draft.key); setNameValue(draft.name); }} className="w-5 h-5 rounded flex items-center justify-center hover:bg-[hsl(var(--muted))]" title="Rename">
-                    <Pencil size={9} className="text-[hsl(var(--muted-foreground))]" />
-                  </button>
-                  <button onClick={() => deleteDraft(draft.key)} className="w-5 h-5 rounded flex items-center justify-center hover:bg-destructive/10" title="Delete">
+                <RotateCw size={9} className="text-[hsl(var(--gold-dark))] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+              </button>
+            ))}
+            {projects.length > 8 && (
+              <Button variant="ghost" size="sm" className="w-full text-[10px] h-7" onClick={() => navigate('/toolkit/stamp-generator/projects')}>
+                View all {projects.length} projects →
+              </Button>
+            )}
+          </div>
+        ) : (
+          <div className="text-center py-3">
+            <FolderOpen size={14} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30 mb-1" />
+            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">No saved projects yet</p>
+          </div>
+        )}
+      </div>
+
+      {/* Style Presets (Owner-managed, all can view) */}
+      <div>
+        <div className="flex items-center gap-1.5 mb-2">
+          <Save size={11} className="text-[hsl(var(--gold))]" />
+          <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Style Presets</span>
+          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{presets.length}</Badge>
+        </div>
+        {presets.length > 0 ? (
+          <div className="space-y-1.5">
+            {presets.map((preset: any) => (
+              <div key={preset.id} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
+                <div className="w-7 h-7 rounded-lg bg-[hsl(var(--gold)/0.1)] flex items-center justify-center flex-shrink-0">
+                  <Save size={10} className="text-[hsl(var(--gold))]" />
+                </div>
+                <button className="flex-1 min-w-0 text-left" onClick={() => {
+                  const cfg = preset.config_json as any;
+                  if (cfg?.svgSource) {
+                    onApplyPreset({ id: preset.id, svgSource: cfg.svgSource, templateKey: cfg.templateKey || 'preset', label: preset.name, tags: [] });
+                  }
+                }}>
+                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{preset.name}</p>
+                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{preset.description || 'Style preset'}</p>
+                </button>
+                {isOwner && (
+                  <button onClick={() => handleDeletePreset(preset.id)}
+                    className="w-5 h-5 rounded flex items-center justify-center hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-opacity" title="Delete">
                     <Trash2 size={9} className="text-destructive" />
                   </button>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-3">
+            <Save size={14} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30 mb-1" />
+            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
+              {isOwner ? 'No presets yet. Save your current design as a preset above.' : 'No presets available yet.'}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Brand Assets */}
+      <div>
+        <div className="flex items-center gap-1.5 mb-2">
+          <Package size={11} className="text-[hsl(var(--gold))]" />
+          <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Brand Assets</span>
+          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{assets.length}</Badge>
+        </div>
+        {assets.length > 0 ? (
+          <div className="space-y-1.5">
+            {assets.map((asset: any) => (
+              <div key={asset.id} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
+                <div className="w-7 h-7 rounded-lg bg-[hsl(var(--muted))] flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  {asset.thumbnail_url ? (
+                    <img src={asset.thumbnail_url} alt="" className="w-full h-full object-contain" />
+                  ) : (
+                    <Package size={10} className="text-[hsl(var(--muted-foreground))]" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{asset.name}</p>
+                  <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{formatDate(asset.created_at)}</p>
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="text-center py-4">
-            <FolderOpen size={16} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30 mb-1" />
-            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">No drafts found. Drafts are auto-saved when you save a project.</p>
+          <div className="text-center py-3">
+            <Package size={14} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30 mb-1" />
+            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">No brand assets yet. Use "Save Asset" to add stamps.</p>
           </div>
         )}
       </div>
