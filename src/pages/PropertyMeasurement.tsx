@@ -634,7 +634,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="!border-teal-500/30 !border bg-zinc-900/50">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white flex items-center gap-2">
