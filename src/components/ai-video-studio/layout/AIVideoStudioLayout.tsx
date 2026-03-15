@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Languages, Mic, Sparkles, Music2, Layers, Maximize2,
   Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type, Clapperboard, UserSquare2, History,
-  AudioLines, ImagePlus, Share2
+  AudioLines, ImagePlus, Share2, Eraser, Film, BarChart3
 } from 'lucide-react';
 
 // ─── Luxury palette tokens ────────────────────────────────────────────────────
