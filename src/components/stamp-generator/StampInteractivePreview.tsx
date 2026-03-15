@@ -85,6 +85,7 @@ export function StampInteractivePreview({
   onSvgChange,
   onSeparatorChange,
   onCenterModeChange,
+  onCenterClick,
   currentSeparatorStyle,
   currentCenterMode,
 }: Props) {
