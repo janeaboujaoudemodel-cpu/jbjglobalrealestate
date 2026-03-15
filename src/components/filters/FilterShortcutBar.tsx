@@ -639,7 +639,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactive)}>
               <Eye className="w-3.5 h-3.5" />
-              Views
+              {t('filter.views')}
               {filters.views.length > 0 && <CountBadge count={filters.views.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
