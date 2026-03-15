@@ -321,10 +321,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <button
                 onClick={() => setAdvancedOpen(true)}
                 className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10"
-                title="Open advanced filters"
+                title={t('filter.filter')}
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
-                Filter
+                {t('filter.filter')}
               </button>
               {/* Mode Investor - compact, no stretch */}
               <ConnectedModeButton />
