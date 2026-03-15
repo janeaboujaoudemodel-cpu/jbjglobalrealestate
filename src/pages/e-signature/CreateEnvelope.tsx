@@ -938,7 +938,9 @@ export default function CreateEnvelope() {
           ) : (
             <Button 
               onClick={handleSubmit} 
-              disabled={isSubmitting}
+              disabled={isSubmitting || !reviewConfirmed}
+              className="bg-gold hover:bg-gold/90"
+            >
               className="bg-gold hover:bg-gold/90"
             >
               {isSubmitting ? (
