@@ -28,9 +28,13 @@ export default function RecommendedProjects({
   const recommendedProjects = useMemo(() => {
     if (!projects || projects.length === 0) return [];
     
-    // Filter out current project and sold/expired
+    // Filter out current project, sold/expired, and incomplete stubs
     const otherProjects = projects.filter((p) => {
       if (p.id === currentProjectId) return false;
+      // Quality gate: require description and developer
+      const desc = (p as any).description;
+      if (!desc || desc.length < 50) return false;
+      if (!(p as any).developer_name && !p.developer?.name) return false;
       // Skip already-viewed projects from recent searches
       if (browsingContext.recentProjectIds.includes(p.id)) return false;
       const status = ((p as any).sale_status || "").toLowerCase();

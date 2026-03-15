@@ -119,8 +119,14 @@ export const ProjectAIAnalyzer = ({
   const sectionRef = useRef<HTMLElement>(null);
   const hasTriggered = useRef(false);
 
+  // Quality gate: prevent AI analysis on empty/stub projects
+  const hasMinimumData = Boolean(
+    projectName && areaName && (developer || priceFrom || handoverDate || (amenities && amenities.length > 0))
+  );
+
   const handleAnalyze = useCallback(async () => {
     if (hasTriggered.current) return;
+    if (!hasMinimumData) return;
     hasTriggered.current = true;
     setIsAnalyzing(true);
     setHasTimedOut(false);
@@ -221,6 +227,24 @@ export const ProjectAIAnalyzer = ({
     const lower = con.toLowerCase();
     return !VAGUE_KEYWORDS.some(kw => lower.includes(kw));
   });
+
+  if (!hasMinimumData) {
+    return (
+      <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center gap-3 mb-4">
+            <Brain className="w-6 h-6 text-gold" />
+            <h2 className="text-2xl font-bold text-black">JBJ AI Project Intelligence</h2>
+          </div>
+          <div className="bg-white/70 border border-gold/20 rounded-xl p-8 text-center">
+            <Shield className="w-10 h-10 text-gold/40 mx-auto mb-3" />
+            <p className="text-zinc-600 font-medium">Insufficient Data for Analysis</p>
+            <p className="text-zinc-400 text-sm mt-1">This project requires a developer, description, or pricing data before AI analysis can be generated.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl">
