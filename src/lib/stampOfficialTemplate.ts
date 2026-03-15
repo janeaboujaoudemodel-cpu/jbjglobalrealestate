@@ -452,25 +452,32 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const middleSW = (config.innerBorderWidth ?? MIDDLE_STROKE) * themeMult;
   const innerSW = INNER_STROKE * themeMult;
 
-  const outerRingEl = renderOuterRing(cx, cy, outerR, ink, bs, outerSW);
+  // Per-border color overrides
+  const outerInk = config.outerBorderColor || ink;
+  const middleInk = config.middleBorderColor || ink;
+  const innerInk = config.innerBorderColor || ink;
+
+  const outerRingEl = `<circle data-stamp-element="border-outer" cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${outerInk}" stroke-width="${outerSW}" ${
+    bs === 'DOTTED' ? 'stroke-dasharray="3,3"' : bs === 'ROPE' ? 'stroke-dasharray="6,4"' : bs === 'CUSTOM' ? 'stroke-dasharray="2,2,6,2"' : ''
+  }/>`;
 
   // Decorative ring — only for DOUBLE, RING, CUSTOM (NOT single)
   const decorativeR = outerR - outerSW / 2 - 2;
   const decorativeRingEl = (bs === 'DOUBLE' || bs === 'RING' || bs === 'CUSTOM')
-    ? `<circle cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${ink}" stroke-width="${DECORATIVE_STROKE * themeMult}" opacity="0.5"/>`
+    ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${outerInk}" stroke-width="${DECORATIVE_STROKE * themeMult}" opacity="0.5"/>`
     : '';
 
-  const middleRingEl = `<circle cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW}"/>`;
+  const middleRingEl = `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${middleInk}" stroke-width="${middleSW}"/>`;
   // RING style: thicker middle ring
   const middleRingFinal = bs === 'RING'
-    ? `<circle cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.4}"/>`
+    ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${middleInk}" stroke-width="${middleSW * 1.4}"/>`
     : middleRingEl;
 
   // Dynamic ring system: if location is disabled, hide inner ring (location ring) 
   // and let center content fill the space between middle ring and center
   const showInnerRing = config.showLocation && mode === 'BILINGUAL';
   const innerRingEl = showInnerRing
-    ? `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="${innerSW}"/>`
+    ? `<circle data-stamp-element="border-inner" cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${innerInk}" stroke-width="${innerSW}"/>`
     : '';
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
