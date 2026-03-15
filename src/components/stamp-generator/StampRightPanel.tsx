@@ -1,7 +1,7 @@
 /**
- * StampRightPanel — Tabbed right panel: Concepts, Favorites, AI Variations, History.
+ * StampRightPanel — Tabbed right panel: Concepts, Favorites, AI Variations, History, Library.
  */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { StampSVGRenderer } from './StampSVGRenderer';
 import { StampVariationsPanel } from './StampVariationsPanel';
@@ -12,9 +12,11 @@ import { Badge } from '@/components/ui/badge';
 import type { StampDesignConcept } from '@/lib/stampTemplates';
 import {
   Heart, Loader2, Check, ChevronLeft, ChevronRight, Wand2,
-  Sparkles, Clock, RefreshCw, Copy, Trash2, Download, Shield
+  Sparkles, Clock, RefreshCw, Copy, Trash2, Download, Shield,
+  BookOpen, Save, FolderOpen, RotateCw, Pencil, X
 } from 'lucide-react';
 import DesignFavoriteButton from '@/components/toolkit/DesignFavoriteButton';
+import { toast } from 'sonner';
 
 const CONCEPTS_PER_PAGE = 6;
 
