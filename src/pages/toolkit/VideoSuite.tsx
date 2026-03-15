@@ -5,13 +5,15 @@
 import React, { lazy, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
-import { Play, Maximize2, Languages, ArrowLeft, Loader2, FileText, Sparkles } from 'lucide-react';
+import { Play, Maximize2, Languages, ArrowLeft, Loader2, FileText, Sparkles, Mic, AudioLines } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const AIVideoStudio = lazy(() => import('@/components/ai-video-studio/AIVideoStudio').then(m => ({ default: m.AIVideoStudio })));
 const VideoResizePack = lazy(() => import('@/pages/toolkit/VideoResizePack'));
 const CaptionsTranslate = lazy(() => import('@/pages/toolkit/CaptionsTranslate'));
 const AIVideoTourScriptPremium = lazy(() => import('@/components/ai-tools/premium').then(m => ({ default: m.AIVideoTourScriptPremium })));
+const VoiceoverRecorder = lazy(() => import('@/components/ai-video-studio/features/VoiceoverRecorder').then(m => ({ default: m.VoiceoverRecorder })));
+const AudioExtractorPanel = lazy(() => import('@/components/ai-video-studio/features/AudioExtractorPanel').then(m => ({ default: m.AudioExtractorPanel })));
 
 const LoadingSpinner = () => (
   <div className="min-h-[50vh] flex items-center justify-center" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 100%)" }}>
