@@ -1283,6 +1283,22 @@ export default function StampGeneratorPage() {
           onExport={() => navigate(`/toolkit/stamp-generator/${projectId}/export/${savedDesignId || activeStandard?.id || selectedId}`)}
           isOwner={isOwner}
           onSwitchToLibrary={(fn) => setLibraryTabRef(() => fn)}
+          onCompare={(concept) => setCompareDesign(concept)}
+          onSaveToLibrary={async (concept) => {
+            if (!user?.id) return;
+            try {
+              const { error } = await supabase.from('brand_assets').insert({
+                user_id: user.id,
+                asset_type: 'stamp' as any,
+                name: concept.label || 'Stamp Design',
+                svg_content: (svgOverrides[concept.id] || concept.svgSource)?.slice(0, 100000),
+              });
+              if (error) throw error;
+              toast.success('Saved to Brand Assets library');
+            } catch (err: any) {
+              toast.error(err?.message || 'Failed to save');
+            }
+          }}
         />
       </div>
 
