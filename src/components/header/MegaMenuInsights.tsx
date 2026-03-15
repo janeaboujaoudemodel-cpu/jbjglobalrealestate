@@ -114,7 +114,7 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
     { label: 'AML & KYC Policy', href: '/aml-kyc', icon: Shield },
     { label: 'Accessibility', href: '/accessibility', icon: FileText },
     { label: 'Intellectual Property', href: '/intellectual-property', icon: Shield },
-    { label: 'Risk Disclosure', href: '/risk-disclosure', icon: FileText },
+    
     { label: 'Trust & Audit', href: '/trust-and-audit-center', icon: Shield },
   ];
 

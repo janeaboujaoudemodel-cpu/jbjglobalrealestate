@@ -117,7 +117,7 @@ const Cookies = lazy(() => import("@/pages/Cookies"));
 const Disclaimers = lazy(() => import("@/pages/Disclaimers"));
 const TrustAndAuditCenter = lazy(() => import("@/pages/TrustAndAuditCenter"));
 const TrustAndCompliance = lazy(() => import("@/pages/TrustAndCompliance"));
-const RiskDisclosure = lazy(() => import("@/pages/RiskDisclosure"));
+
 const AmlKycPolicy = lazy(() => import("@/pages/AmlKycPolicy"));
 const Accessibility = lazy(() => import("@/pages/Accessibility"));
 const IntellectualProperty = lazy(() => import("@/pages/IntellectualProperty"));
@@ -321,7 +321,7 @@ export const PublicRoutes = () => (
     <Route path="/disclaimers" element={<Disclaimers />} />
     <Route path="/trust-and-audit-center" element={<TrustAndAuditCenter />} />
     <Route path="/trust-compliance" element={<TrustAndCompliance />} />
-    <Route path="/risk-disclosure" element={<RiskDisclosure />} />
+    
     <Route path="/aml-kyc" element={<AmlKycPolicy />} />
     <Route path="/accessibility" element={<Accessibility />} />
     <Route path="/intellectual-property" element={<IntellectualProperty />} />

@@ -255,7 +255,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Accessibility", href: "/accessibility", icon: Accessibility },
   { label: "Trust Center", href: "/trust-and-audit-center", icon: ShieldCheck },
   { label: "Trust & Compliance", href: "/trust-compliance", icon: ShieldCheck },
-  { label: "Risk Disclosure", href: "/risk-disclosure", icon: FileText },
+  
 
   // ── Productivity ──
   { label: "Spreadsheet", href: "/spreadsheet", icon: BarChart3, section: "PRODUCTIVITY", megaMenu: 'productivity' },
