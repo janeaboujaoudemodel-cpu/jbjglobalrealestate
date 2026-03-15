@@ -59,14 +59,14 @@ export function StampSVGRenderer({
   if (secondaryColor) {
     tinted = tinted.replace(/#2a3a5c/gi, secondaryColor);
   }
-  // Accent: monogram disc & center art (dedicated hex token)
+  // Accent: monogram disc & center art (dedicated hex token only)
+  // IMPORTANT: Do NOT recolor all dominant-baseline="central" elements — that catches
+  // separators, registration numbers, and other non-monogram text.
+  // Monogram colors are applied separately via applyMonogramColors().
   if (accentColor) {
     tinted = tinted.replace(/#8b6914/gi, accentColor);
-    // Fallback: also tint dominant-baseline="central" fills
-    tinted = tinted.replace(/(dominant-baseline="central"[^>]*fill=")[^"]+(")/g, `$1${accentColor}$2`);
   } else if (secondaryColor) {
     tinted = tinted.replace(/#8b6914/gi, secondaryColor);
-    tinted = tinted.replace(/(dominant-baseline="central"[^>]*fill=")[^"]+(")/g, `$1${secondaryColor}$2`);
   }
 
   // Apply font-family override — replaces all font-family attributes in the SVG

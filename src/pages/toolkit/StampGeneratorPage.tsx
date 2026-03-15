@@ -41,8 +41,24 @@ export default function StampGeneratorLanding() {
   const { user } = useAuth();
 
   function handleCTA() {
-    if (user) navigate('/toolkit/stamp-generator/projects');
-    else navigate('/auth?redirect=/toolkit/stamp-generator/projects');
+    if (!user) {
+      navigate('/auth?redirect=/toolkit/stamp-generator/new');
+      return;
+    }
+    // Remember last stamp screen — go there if available
+    const lastRoute = localStorage.getItem('stamp_last_route');
+    if (lastRoute && lastRoute !== '/toolkit/stamp-generator') {
+      // Check if there's an active draft session
+      const hasDraft = localStorage.getItem('stamp-wizard-form');
+      if (hasDraft && lastRoute.includes('/new')) {
+        // Show resume options via query param
+        navigate(lastRoute + (lastRoute.includes('?') ? '&' : '?') + 'resume=1');
+      } else {
+        navigate(lastRoute);
+      }
+    } else {
+      navigate('/toolkit/stamp-generator/new');
+    }
   }
 
   return (

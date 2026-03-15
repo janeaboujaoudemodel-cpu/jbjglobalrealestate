@@ -289,11 +289,11 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const textArcR = Math.min(rawTextArcR, outerR - SAFE_ZONE);
   const clampedTextArcR = Math.max(textArcR, middleR + SAFE_ZONE);
 
-  // Separator distance: default centered on text arc; configurable via separatorDistancePct (0-100)
-  // Clamp to valid range to prevent separators escaping the ring band
+  // Separator distance: configurable via separatorDistancePct (0-100, default 50 = centered)
+  // 0 = closest to middle ring, 100 = closest to outer ring (edge-to-edge)
   const sepPct = Math.max(0, Math.min(100, config.separatorDistancePct ?? 50));
-  const sepMin = middleR + SAFE_ZONE;
-  const sepMax = clampedTextArcR;
+  const sepMin = middleR + 2; // allow touching the ring edge
+  const sepMax = outerR - 2; // allow touching the outer ring edge
   const separatorR = sepMin + (sepMax - sepMin) * (sepPct / 100);
 
   // Location text arc radius — true midpoint between middle and inner rings
@@ -392,8 +392,8 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   if (config.showLocation && mode === 'BILINGUAL') {
     const locEn = config.locationTextEn || 'Dubai, UAE';
     const locAr = config.locationTextAr || 'دبي، الإمارات';
-    const locEnSafe = safeArcFontSize(locEn.toUpperCase(), clampedLocTextR, false, 12, ARC_SPREAD_LIMIT);
-    const locArSafe = safeArcFontSize(locAr, clampedLocTextR, true, 12, ARC_SPREAD_LIMIT);
+    const locEnSafe = safeArcFontSize(locEn.toUpperCase(), clampedLocTextR, false, 12, englishSpread);
+    const locArSafe = safeArcFontSize(locAr, clampedLocTextR, true, 12, englishSpread);
 
     locationContent = renderTopArcTextPath(
       locAr, cx, cy, clampedLocTextR, locArSafe.fontSize, arFont, ink, locArSafe.letterSpacing, true, 'loc-top', '600'

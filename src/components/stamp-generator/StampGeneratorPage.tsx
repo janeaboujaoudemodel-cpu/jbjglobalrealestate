@@ -176,19 +176,22 @@ export default function StampGeneratorPage() {
 
   // Live-apply monogram colors whenever they change
   useEffect(() => {
-    if (localIconStyle !== 'MONOGRAM' || !localMonogramText) return;
+    if (localIconStyle !== 'MONOGRAM') return;
+    // Use derived initials as fallback when no explicit monogram text is set
+    const effectiveMonogram = localMonogramText || (project?.company_name ? project.company_name.trim().split(/\s+/).filter((w: string) => w.length > 0).slice(0, 3).map((w: string) => w[0]).join('').toUpperCase() : '');
+    if (!effectiveMonogram) return;
     const hasCustomColors = Object.keys(monogramLetterColors.letters).length > 0 || monogramLetterColors.allLetters || monogramLetterColors.divider;
     if (!hasCustomColors) return;
     const id = selectedId || concepts[0]?.id;
     if (!id) return;
     const baseSvg = svgOverrides[id] || concepts.find(c => c.id === id)?.svgSource || favoriteConcepts.find(c => c.id === id)?.svgSource || standardConcept?.svgSource || '';
     if (!baseSvg) return;
-    const colored = applyMonogramColors(baseSvg, localMonogramText, monogramLetterColors, primaryColor);
+    const colored = applyMonogramColors(baseSvg, effectiveMonogram, monogramLetterColors, primaryColor);
     if (colored !== baseSvg) {
       setSvgOverrides(prev => ({ ...prev, [id]: colored }));
       triggerPulse();
     }
-  }, [monogramLetterColors, localMonogramText, localIconStyle, primaryColor]);
+  }, [monogramLetterColors, localMonogramText, localIconStyle, primaryColor, project]);
 
 
   // Preview modal
@@ -331,6 +334,13 @@ export default function StampGeneratorPage() {
   const setPrimaryColorWithPulse = useCallback((v: string) => { setPrimaryColor(v); triggerPulse(); }, [triggerPulse]);
   const setSecondaryColorWithPulse = useCallback((v: string | undefined) => { setSecondaryColor(v); triggerPulse(); }, [triggerPulse]);
   const setAccentColorWithPulse = useCallback((v: string | undefined) => { setAccentColor(v); triggerPulse(); }, [triggerPulse]);
+
+  // Remember last stamp route for CTA routing
+  useEffect(() => {
+    if (projectId) {
+      try { localStorage.setItem('stamp_last_route', `/toolkit/stamp-generator/${projectId}/generate`); } catch {}
+    }
+  }, [projectId]);
 
   useEffect(() => {
     if (!user || !projectId) return;
