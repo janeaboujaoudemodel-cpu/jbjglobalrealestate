@@ -423,7 +423,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     const enLSonly = arcTextSpacingOverride ?? topSafe.letterSpacing;
     topArcContent = renderTopArcTextPath(
       topText, cx, cy, clampedTextArcR, topSafe.fontSize, enFont, ink,
-      enLSonly, false, 'top-arc'
+      enLSonly, false, 'top-arc', '800', config.letterOverrides
     );
     if (config.showLocation) {
       const locEn = config.locationTextEn || 'Dubai, UAE';
