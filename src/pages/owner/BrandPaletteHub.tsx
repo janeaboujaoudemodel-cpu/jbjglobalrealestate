@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Palette, Save, RotateCcw, Eye, EyeOff, Sparkles, Check, Trash2, Clock, CircleDot } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Palette, Save, RotateCcw, Eye, EyeOff, Sparkles, Check, Trash2, Clock, CircleDot, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,6 +8,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
+import { BrandMonogram } from '@/components/BrandMonogram';
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 
 const PALETTE_KEYS: { key: keyof BrandPalette; label: string; description: string; example: string }[] = [
   { key: 'primary', label: 'Primary', description: 'Main brand color — buttons, links, headers', example: 'Buttons & active elements' },
@@ -122,6 +126,52 @@ const BrandPaletteHub = () => {
     return (r * 299 + g * 587 + b * 114) / 1000 > 128;
   };
 
+  const downloadBlob = useCallback((blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
+  const exportJSON = useCallback(() => {
+    const json = JSON.stringify(draft, null, 2);
+    downloadBlob(new Blob([json], { type: 'application/json' }), 'brand-palette.json');
+    toast.success('Palette exported as JSON');
+  }, [draft, downloadBlob]);
+
+  const exportCSS = useCallback(() => {
+    const css = `:root {\n${PALETTE_KEYS.map(({ key }) => `  --brand-${key}: ${draft[key]};`).join('\n')}\n}`;
+    downloadBlob(new Blob([css], { type: 'text/css' }), 'brand-palette.css');
+    toast.success('Palette exported as CSS');
+  }, [draft, downloadBlob]);
+
+  const exportPNG = useCallback(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 500;
+    canvas.height = 100;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const w = 100;
+    PALETTE_KEYS.forEach(({ key, label }, i) => {
+      ctx.fillStyle = draft[key];
+      ctx.fillRect(i * w, 0, w, 100);
+      ctx.fillStyle = isLightColor(draft[key]) ? '#000' : '#fff';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(label, i * w + w / 2, 55);
+      ctx.font = '10px monospace';
+      ctx.fillText(draft[key], i * w + w / 2, 72);
+    });
+    canvas.toBlob((blob) => {
+      if (blob) {
+        downloadBlob(blob, 'brand-palette-swatch.png');
+        toast.success('Palette exported as PNG swatch');
+      }
+    });
+  }, [draft, downloadBlob]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)]">
       {/* Header */}
@@ -156,6 +206,19 @@ const BrandPaletteHub = () => {
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Revert
               </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="border-gold/40 text-muted-foreground">
+                    <Download className="w-4 h-4 mr-2" />
+                    Export
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={exportJSON}>Export as JSON</DropdownMenuItem>
+                  <DropdownMenuItem onClick={exportCSS}>Export as CSS Variables</DropdownMenuItem>
+                  <DropdownMenuItem onClick={exportPNG}>Export as PNG Swatch</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Button
                 onClick={handleSave}
                 disabled={!hasChanges || isSaving}
@@ -372,6 +435,31 @@ const BrandPaletteHub = () => {
                   </span>
                 </div>
               )}
+            </div>
+
+            {/* Monogram Preview */}
+            <div className="bg-card/80 border border-gold/20 rounded-2xl p-5">
+              <h3 className="font-bold text-foreground mb-4 text-sm flex items-center gap-2">
+                <Palette className="w-4 h-4 text-gold" />
+                Monogram Preview
+              </h3>
+              <div className="flex flex-col items-center gap-4">
+                <div
+                  className="w-full rounded-xl p-6 flex items-center justify-center border border-gold/20"
+                  style={{ backgroundColor: draft.secondary }}
+                >
+                  <BrandMonogram variant="dark" size="lg" showWordmark />
+                </div>
+                <div
+                  className="w-full rounded-xl p-6 flex items-center justify-center border border-gold/20"
+                  style={{ backgroundColor: draft.background }}
+                >
+                  <BrandMonogram variant="light" size="lg" showWordmark />
+                </div>
+              </div>
+              <p className="text-[10px] text-muted-foreground mt-3 text-center">
+                Preview how the monogram looks on dark &amp; light backgrounds
+              </p>
             </div>
 
             {/* Saved Palettes History */}
