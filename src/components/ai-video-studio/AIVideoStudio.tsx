@@ -26,6 +26,7 @@ import { SharePanel } from './features/SharePanel';
 import { BackgroundRemoverPanel } from './features/BackgroundRemoverPanel';
 import { ScenePlannerPanel } from './features/ScenePlannerPanel';
 import { ChartOverlayPanel } from './features/ChartOverlayPanel';
+import { VoiceClonePanel } from './features/VoiceClonePanel';
 import { useVideoStudioProject } from './hooks/useVideoStudioProject';
 import { useMediaLibrary } from './hooks/useMediaLibrary';
 import { MediaAsset, StockAsset, Clip, ExportPreset, RenderJob } from './types';
@@ -969,6 +970,23 @@ export function AIVideoStudio() {
               source: { url: imageUrl, thumbnailUrl: imageUrl, inPoint: 0, outPoint: duration, originalDuration: duration },
               transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
               keyframes: [], effects: [],
+            });
+          }}
+        />
+      }
+      voiceClonePanel={
+        <VoiceClonePanel
+          onAddToTimeline={(audioUrl, duration, name) => {
+            const audioTrack = project.tracks.find(t => t.type === 'audio');
+            if (!audioTrack) { toast.error('No audio track found'); return; }
+            const lastEnd = audioTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+            addClip(audioTrack.id, {
+              trackId: audioTrack.id, type: 'audio', name,
+              startTime: lastEnd, duration,
+              source: { url: audioUrl, inPoint: 0, outPoint: duration, originalDuration: duration },
+              transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+              keyframes: [], effects: [],
+              audio: { volume: 1, fadeIn: 0.5, fadeOut: 1, muted: false, normalized: true, noiseReduction: false },
             });
           }}
         />

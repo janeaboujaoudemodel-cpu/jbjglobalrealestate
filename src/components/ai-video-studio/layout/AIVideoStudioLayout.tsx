@@ -2,7 +2,7 @@ import React, { ReactNode, useState, useImperativeHandle, forwardRef } from 'rea
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
-  Languages, Mic, Sparkles, Music2, Layers, Maximize2,
+  Languages, Mic, Mic2, Sparkles, Music2, Layers, Maximize2,
   Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type, Clapperboard, UserSquare2, History,
   AudioLines, ImagePlus, Share2, Eraser, Film, BarChart3
 } from 'lucide-react';
@@ -56,6 +56,7 @@ interface AIVideoStudioLayoutProps {
   bgRemovePanel?: ReactNode;
   scenePlannerPanel?: ReactNode;
   chartOverlayPanel?: ReactNode;
+  voiceClonePanel?: ReactNode;
 }
 
 const TOOL_TABS = [
@@ -79,6 +80,7 @@ const TOOL_TABS = [
   { id: 'bg-remove',      label: 'BG Remove',   icon: Eraser        },
   { id: 'scene-plan',     label: 'Storyboard',  icon: Film          },
   { id: 'chart-overlay',  label: 'Charts',      icon: BarChart3     },
+  { id: 'voice-clone',   label: 'Voice Clone', icon: Mic2          },
   { id: 'share',          label: 'Share',        icon: Share2        },
 ];
 
@@ -89,7 +91,7 @@ function AIVideoStudioLayout({
   beautyPanel, sfxPanel, effectsPanel, transitionsPanel, resizePanel,
   mapPanel, aiEditorPanel, projectsPanel, talkingAgentPanel, historyPanel,
   audioExtractPanel, photoClipPanel, sharePanel,
-  bgRemovePanel, scenePlannerPanel, chartOverlayPanel,
+  bgRemovePanel, scenePlannerPanel, chartOverlayPanel, voiceClonePanel,
 }, ref) {
   const isMobile = useIsMobile();
   const [activeTool, setActiveTool] = useState<string | null>(null);
@@ -117,6 +119,7 @@ function AIVideoStudioLayout({
     projects: projectsPanel, 'talking-agent': talkingAgentPanel, history: historyPanel,
     'audio-extract': audioExtractPanel, 'photo-clip': photoClipPanel, share: sharePanel,
     'bg-remove': bgRemovePanel, 'scene-plan': scenePlannerPanel, 'chart-overlay': chartOverlayPanel,
+    'voice-clone': voiceClonePanel,
   };
 
   const handleToolClick = (toolId: string) => {
