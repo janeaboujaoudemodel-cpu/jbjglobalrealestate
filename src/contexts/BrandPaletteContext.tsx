@@ -282,6 +282,7 @@ export const BrandPaletteProvider: React.FC<{ children: React.ReactNode }> = ({ 
       saveUserPalette,
       deleteUserPalette,
       activateUserPalette,
+      renameUserPalette,
       revertToDefault,
       loadUserPalettes,
     }}>
