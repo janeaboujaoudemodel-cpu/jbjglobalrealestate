@@ -185,9 +185,9 @@ export default function StampGeneratorPage() {
   // English arc spread & arc band offsets — persisted
   const [englishArcSpread, setEnglishArcSpreadRaw] = useState(() => ssGet(ssKey('englishArcSpread'), 0.98));
   const setEnglishArcSpread = (v: number) => { setEnglishArcSpreadRaw(v); ssSave(ssKey('englishArcSpread'), v); };
-  const [companyArcOffset, setCompanyArcOffsetRaw] = useState(() => ssGet(ssKey('companyArcOffset'), 0));
+  const [companyArcOffset, setCompanyArcOffsetRaw] = useState(() => ssGet(ssKey('companyArcOffset'), 50));
   const setCompanyArcOffset = (v: number) => { setCompanyArcOffsetRaw(v); ssSave(ssKey('companyArcOffset'), v); };
-  const [locationArcOffset, setLocationArcOffsetRaw] = useState(() => ssGet(ssKey('locationArcOffset'), 0));
+  const [locationArcOffset, setLocationArcOffsetRaw] = useState(() => ssGet(ssKey('locationArcOffset'), 50));
   const setLocationArcOffset = (v: number) => { setLocationArcOffsetRaw(v); ssSave(ssKey('locationArcOffset'), v); };
   // Location arc spread — independent from company arcs
   const [locationArcSpread, setLocationArcSpreadRaw] = useState(() => ssGet(ssKey('locationArcSpread'), 0.98));
