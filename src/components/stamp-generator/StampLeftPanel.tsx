@@ -367,38 +367,18 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
             </AccordionContent>
           </AccordionItem>
 
-          {/* ─── 5. Font Controls ─── */}
-          <AccordionItem value="fonts" className="border-b border-[hsl(var(--border)/0.5)]">
+          {/* ─── 5. English Typography ─── */}
+          <AccordionItem value="english-fonts" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
                 <Type size={12} className="text-[hsl(var(--gold))]" />
-                Font Controls
+                English Typography
               </span>
             </AccordionTrigger>
             <AccordionContent className="pb-3 space-y-2.5">
-              <div className="flex gap-1.5">
-                <button onClick={() => props.onSetFontBold(v => !v)}
-                  className={`flex-1 py-1.5 rounded-lg border-2 text-xs font-bold transition-all ${props.fontBold ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)]' : 'border-[hsl(var(--border))]'}`}>B</button>
-                <button onClick={() => props.onSetFontItalic(v => !v)}
-                  className={`flex-1 py-1.5 rounded-lg border-2 text-xs italic transition-all ${props.fontItalic ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)]' : 'border-[hsl(var(--border))]'}`}>I</button>
-              </div>
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Size</p>
-                  <button onClick={() => props.onSetManualFontSize(null)}
-                    className={`text-[8px] px-1 py-0.5 rounded border transition-all ${props.manualFontSize === null ? 'border-[hsl(var(--gold))] text-[hsl(var(--gold-dark))]' : 'border-[hsl(var(--border))]'}`}>Auto</button>
-                </div>
-                <Slider
-                  min={6} max={24} step={0.5}
-                  value={[props.manualFontSize ?? 10]}
-                  onValueChange={([v]) => props.onSetManualFontSize(v)}
-                  className="w-full"
-                />
-                {props.manualFontSize !== null && <p className="text-[9px] font-bold text-[hsl(var(--foreground))] mt-0.5">{props.manualFontSize}pt</p>}
-              </div>
-              <div className="border-t border-[hsl(var(--border))] pt-2">
-                <p className="text-[9px] text-[hsl(var(--muted-foreground))] mb-1.5">Font Family</p>
-                <div className="space-y-1 max-h-[200px] overflow-y-auto">
+                <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Font Family</p>
+                <div className="space-y-1 max-h-[140px] overflow-y-auto">
                   {STAMP_FONTS.map(f => (
                     <button key={f.value} onClick={() => props.onSetFontFamily(f.value)}
                       className={`w-full text-left p-2 rounded-lg border-2 transition-all ${props.fontFamily === f.value ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))]'}`}>
@@ -407,10 +387,52 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   ))}
                 </div>
               </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Font Size</p>
+                  <button onClick={() => props.onSetManualFontSize(null)}
+                    className={`text-[8px] px-1 py-0.5 rounded border transition-all ${props.manualFontSize === null ? 'border-[hsl(var(--gold))] text-[hsl(var(--gold-dark))]' : 'border-[hsl(var(--border))]'}`}>Auto</button>
+                </div>
+                <Slider min={6} max={24} step={0.5} value={[props.manualFontSize ?? 10]}
+                  onValueChange={([v]) => props.onSetManualFontSize(v)} />
+                {props.manualFontSize !== null && <p className="text-[9px] font-bold text-[hsl(var(--foreground))] mt-0.5">{props.manualFontSize}pt</p>}
+              </div>
+              <div className="flex gap-1.5">
+                <button onClick={() => props.onSetFontBold(v => !v)}
+                  className={`flex-1 py-1.5 rounded-lg border-2 text-xs font-bold transition-all ${props.fontBold ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)]' : 'border-[hsl(var(--border))]'}`}>B</button>
+                <button onClick={() => props.onSetFontItalic(v => !v)}
+                  className={`flex-1 py-1.5 rounded-lg border-2 text-xs italic transition-all ${props.fontItalic ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)]' : 'border-[hsl(var(--border))]'}`}>I</button>
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Letter Spacing</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.arcTextSpacing}px</span>
+                </div>
+                <Slider min={0} max={10} step={0.5} value={[props.arcTextSpacing]}
+                  onValueChange={([v]) => props.onSetArcTextSpacing(v)} />
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Spread</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{Math.round(props.englishArcSpread * 100)}%</span>
+                </div>
+                <Slider min={50} max={100} step={1} value={[Math.round(props.englishArcSpread * 100)]}
+                  onValueChange={([v]) => props.onSetEnglishArcSpread(v / 100)} />
+              </div>
+              <button
+                onClick={() => {
+                  props.onSetEnglishArcSpread(props.arabicArcSpread);
+                  props.onSetArcTextSpacing(props.arabicLetterSpacing);
+                  toast.success('English matched to Arabic');
+                }}
+                className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[9px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all"
+              >
+                EN ← Match Arabic Style
+              </button>
             </AccordionContent>
           </AccordionItem>
 
-          {/* ─── 5b. Arabic Font Controls ─── */}
+          {/* ─── 5b. Arabic Typography ─── */}
           <AccordionItem value="arabic-fonts" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
@@ -419,7 +441,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </span>
             </AccordionTrigger>
             <AccordionContent className="pb-3 space-y-2.5">
-              {/* Arabic Font Family */}
               <div>
                 <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Font Family</p>
                 <div className="space-y-1 max-h-[140px] overflow-y-auto">
@@ -431,25 +452,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   ))}
                 </div>
               </div>
-              {/* Arabic Letter Spacing */}
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Letter Spacing</p>
-                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.arabicLetterSpacing}px</span>
-                </div>
-                <Slider min={0} max={12} step={0.5} value={[props.arabicLetterSpacing]}
-                  onValueChange={([v]) => props.onSetArabicLetterSpacing(v)} />
-              </div>
-              {/* Arabic Arc Spread */}
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Spread</p>
-                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{Math.round(props.arabicArcSpread * 100)}%</span>
-                </div>
-                <Slider min={50} max={100} step={1} value={[Math.round(props.arabicArcSpread * 100)]}
-                  onValueChange={([v]) => props.onSetArabicArcSpread(v / 100)} />
-              </div>
-              {/* Arabic Font Weight */}
               <div className="flex gap-1.5">
                 {(['normal', 'bold'] as const).map(w => (
                   <button key={w} onClick={() => props.onSetArabicFontWeight(w)}
@@ -458,6 +460,32 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   </button>
                 ))}
               </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Letter Spacing</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.arabicLetterSpacing}px</span>
+                </div>
+                <Slider min={0} max={12} step={0.5} value={[props.arabicLetterSpacing]}
+                  onValueChange={([v]) => props.onSetArabicLetterSpacing(v)} />
+              </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Spread</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{Math.round(props.arabicArcSpread * 100)}%</span>
+                </div>
+                <Slider min={50} max={100} step={1} value={[Math.round(props.arabicArcSpread * 100)]}
+                  onValueChange={([v]) => props.onSetArabicArcSpread(v / 100)} />
+              </div>
+              <button
+                onClick={() => {
+                  props.onSetArabicArcSpread(props.englishArcSpread);
+                  props.onSetArabicLetterSpacing(props.arcTextSpacing);
+                  toast.success('Arabic matched to English');
+                }}
+                className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[9px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all"
+              >
+                AR ← Match English Style
+              </button>
             </AccordionContent>
           </AccordionItem>
 
@@ -470,16 +498,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </span>
             </AccordionTrigger>
             <AccordionContent className="pb-3 space-y-2.5">
-              {/* Arc Text Spacing */}
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Text Spacing</p>
-                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.arcTextSpacing}px</span>
-                </div>
-                <Slider min={0} max={10} step={0.5} value={[props.arcTextSpacing]}
-                  onValueChange={([v]) => props.onSetArcTextSpacing(v)} />
-              </div>
-              {/* Circle Gap */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Ring Gap</p>
@@ -488,7 +506,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 <Slider min={5} max={25} step={1} value={[props.circleGap]}
                   onValueChange={([v]) => props.onSetCircleGap(v)} />
               </div>
-              {/* Separator Distance */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Separator Distance</p>
@@ -497,37 +514,15 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 <Slider min={0} max={100} step={1} value={[props.separatorDistance]}
                   onValueChange={([v]) => props.onSetSeparatorDistance(v)} />
               </div>
-              {/* English Arc Spread */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">English Arc Spread</p>
-                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{Math.round(props.englishArcSpread * 100)}%</span>
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Location Arc Spread</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{Math.round(props.locationArcSpread * 100)}%</span>
                 </div>
-                <Slider min={50} max={100} step={1} value={[Math.round(props.englishArcSpread * 100)]}
-                  onValueChange={([v]) => props.onSetEnglishArcSpread(v / 100)} />
+                <Slider min={50} max={100} step={1} value={[Math.round(props.locationArcSpread * 100)]}
+                  onValueChange={([v]) => props.onSetLocationArcSpread(v / 100)} />
+                <p className="text-[7px] text-[hsl(var(--muted-foreground))] mt-0.5">Controls both EN & AR location arcs</p>
               </div>
-              {/* Match Style Buttons */}
-              <div className="flex gap-1.5">
-                <button
-                  onClick={() => {
-                    props.onSetEnglishArcSpread(props.arabicArcSpread);
-                  }}
-                  className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[9px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all"
-                  title="Copy Arabic arc spread to English"
-                >
-                  EN ← Match Arabic
-                </button>
-                <button
-                  onClick={() => {
-                    props.onSetArabicArcSpread(props.englishArcSpread);
-                  }}
-                  className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[9px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all"
-                  title="Copy English arc spread to Arabic"
-                >
-                  AR ← Match English
-                </button>
-              </div>
-              {/* Center Content Size */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Center Content Size</p>
