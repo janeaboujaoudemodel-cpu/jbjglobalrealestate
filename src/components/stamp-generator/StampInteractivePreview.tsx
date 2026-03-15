@@ -347,6 +347,29 @@ export function StampInteractivePreview({
                 <ToolBtn icon={<Minimize2 size={10} />} label="Size −" onClick={() => adjustFontSize(selected, -1)} />
                 <ToolBtn icon={<Maximize2 size={10} />} label="Space +" onClick={() => adjustSpacing(selected, 0.5)} />
                 <ToolBtn icon={<LayoutGrid size={10} />} label="Space −" onClick={() => adjustSpacing(selected, -0.5)} />
+                {/* Match Style — copy font-size + letter-spacing from the opposite arc */}
+                {(selected === 'top-arc' || selected === 'bottom-arc') && (
+                  <ToolBtn
+                    icon={<Replace size={10} />}
+                    label={selected === 'top-arc' ? 'Match Bottom' : 'Match Top'}
+                    onClick={() => {
+                      const otherId = selected === 'top-arc' ? 'bottom-arc' : 'top-arc';
+                      const parser = new DOMParser();
+                      const doc = parser.parseFromString(svgSource, 'image/svg+xml');
+                      const source = doc.querySelector(`[data-stamp-element="${otherId}"]`);
+                      const target = doc.querySelector(`[data-stamp-element="${selected}"]`);
+                      if (source && target) {
+                        const srcFS = source.getAttribute('font-size');
+                        const srcLS = source.getAttribute('letter-spacing');
+                        const srcFW = source.getAttribute('font-weight');
+                        if (srcFS) target.setAttribute('font-size', srcFS);
+                        if (srcLS) target.setAttribute('letter-spacing', srcLS);
+                        if (srcFW) target.setAttribute('font-weight', srcFW);
+                        onSvgChange(new XMLSerializer().serializeToString(doc.documentElement));
+                      }
+                    }}
+                  />
+                )}
                 <ToolBtn icon={<Trash2 size={10} />} label="Delete" onClick={() => deleteElement(selected)} danger />
               </>
             )}
