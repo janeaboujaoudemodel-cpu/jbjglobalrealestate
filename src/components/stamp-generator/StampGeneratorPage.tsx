@@ -302,9 +302,13 @@ export default function StampGeneratorPage() {
     }
   }
 
+  const generationLockRef = useRef(false);
+
   const generateConcepts = useCallback(async (proj?: any) => {
     const p = proj || project;
     if (!p) return;
+    if (generationLockRef.current) return;
+    generationLockRef.current = true;
     // Only show center spinner on very first generation (no standard yet)
     const isFirstGen = !standardConcept;
     if (isFirstGen) setGenerating(true);
@@ -320,7 +324,7 @@ export default function StampGeneratorPage() {
         });
         if (res.ok) {
           const json = await res.json();
-          if (json.blocked) { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); return; }
+        if (json.blocked) { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); generationLockRef.current = false; return; }
           if (json.concepts?.length) {
             const { data: saved } = await supabase
               .from('stamp_designs')
@@ -342,6 +346,7 @@ export default function StampGeneratorPage() {
               }
               setGenerating(false);
               setGeneratingInPanel(false);
+              generationLockRef.current = false;
               return;
             }
           }
@@ -349,7 +354,7 @@ export default function StampGeneratorPage() {
       }
     } catch (_) {}
     const clientConcepts = generateStampConcepts(project ? { ...project, ...p } : p);
-    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); return; }
+    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); generationLockRef.current = false; return; }
     setConcepts(clientConcepts);
     // Set standard on first generation
     if (!standardConcept && clientConcepts.length > 0) {
@@ -358,6 +363,7 @@ export default function StampGeneratorPage() {
     }
     setGenerating(false);
     setGeneratingInPanel(false);
+    generationLockRef.current = false;
   }, [project, session, projectId, standardConcept]);
 
   async function toggleFavorite(concept: StampDesignConcept) {
@@ -389,10 +395,9 @@ export default function StampGeneratorPage() {
     setTogglingFav(null);
   }
 
-  function handleSelectConcept(concept: StampDesignConcept) {
+  async function handleSelectConcept(concept: StampDesignConcept) {
     // Swap: previous standard moves into concepts list, clicked becomes new standard
     if (standardConcept && standardConcept.id !== concept.id) {
-      // Ensure old standard is in concepts list
       setConcepts(prev => {
         const exists = prev.some(c => c.id === standardConcept.id);
         const filtered = prev.filter(c => c.id !== concept.id);
@@ -401,6 +406,10 @@ export default function StampGeneratorPage() {
     }
     setStandardConcept(concept);
     setSelectedId(concept.id);
+    // Persist selected_design_id to database immediately
+    if (projectId && concept.id.length === 36) {
+      await supabase.from('stamp_projects').update({ selected_design_id: concept.id }).eq('id', projectId);
+    }
     toast.success('Design applied as Standard', { duration: 2000 });
   }
 

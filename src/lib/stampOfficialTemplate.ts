@@ -63,6 +63,10 @@ export interface OfficialStampConfig {
   styleTheme?: string;
   /** Typography style override */
   typographyStyle?: string;
+  /** Override letter-spacing for company name arcs */
+  arcTextSpacing?: number;
+  /** Shift separator position inward/outward (0-100, default 50 = centered) */
+  separatorDistancePct?: number;
 }
 
 const ARABIC_FONT = '"Noto Naskh Arabic", "Arabic Typesetting", "Traditional Arabic", serif';
@@ -281,6 +285,10 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const textArcR = Math.min(rawTextArcR, outerR - SAFE_ZONE);
   const clampedTextArcR = Math.max(textArcR, middleR + SAFE_ZONE);
 
+  // Separator distance: default centered on text arc; configurable via separatorDistancePct (0-100)
+  const sepPct = config.separatorDistancePct ?? 50;
+  const separatorR = middleR + SAFE_ZONE + (clampedTextArcR - middleR - SAFE_ZONE) * (sepPct / 50);
+
   // Location text arc radius — true midpoint between middle and inner rings
   const clampedLocTextR = Math.max(
     Math.min((middleR + innerR) / 2, middleR - SAFE_ZONE),
@@ -291,53 +299,53 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
   const englishSpread = ARC_SPREAD_LIMIT;
 
+  // Arc text spacing override — applies to English letter-spacing
+  const arcTextSpacingOverride = config.arcTextSpacing;
+
   // ─── Text arcs based on language mode ───
   let topArcContent = '';
   let bottomArcContent = '';
   let separatorContent = '';
 
   if (mode === 'BILINGUAL') {
-    // Respect arabicOnTop: when true (default), Arabic on top arc, English on bottom
-    // When false, English on top arc, Arabic on bottom
     const arText = config.companyNameAr || 'اسم الشركة';
     const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
     const arSafe = safeArcFontSize(arText, clampedTextArcR, true, 17, arabicSpread);
     const enSafe = safeArcFontSize(enText, clampedTextArcR, false, 15, englishSpread, 5);
     const arLS = config.arabicLetterSpacing ?? arSafe.letterSpacing;
+    const enLS = arcTextSpacingOverride ?? enSafe.letterSpacing;
     const arFW = config.arabicFontWeight === 'normal' ? '600' : '800';
 
     if (config.arabicOnTop !== false) {
-      // Arabic top, English bottom (default)
       topArcContent = renderTopArcTextPath(
         arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
         arLS, true, 'top-arc', arFW
       );
       bottomArcContent = renderBottomArcTextPath(
         enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
-        enSafe.letterSpacing, false, 'bottom-arc'
+        enLS, false, 'bottom-arc'
       );
     } else {
-      // English top, Arabic bottom
       topArcContent = renderTopArcTextPath(
         enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
-        enSafe.letterSpacing, false, 'top-arc'
+        enLS, false, 'top-arc'
       );
       bottomArcContent = renderBottomArcTextPath(
         arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
         arLS, true, 'bottom-arc', arFW
       );
     }
-    separatorContent = renderSeparators(cx, cy, clampedTextArcR, config.separatorStyle, ink);
+    separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
 
   } else if (mode === 'EN') {
     // English only — company name on top arc, location on bottom arc (all English)
     const topText = config.companyNameEn.toUpperCase() || 'COMPANY NAME';
     const topSafe = safeArcFontSize(topText, clampedTextArcR, false, 15, englishSpread, 5);
+    const enLSonly = arcTextSpacingOverride ?? topSafe.letterSpacing;
     topArcContent = renderTopArcTextPath(
       topText, cx, cy, clampedTextArcR, topSafe.fontSize, enFont, ink,
-      topSafe.letterSpacing, false, 'top-arc'
+      enLSonly, false, 'top-arc'
     );
-    // Location on bottom arc
     if (config.showLocation) {
       const locEn = config.locationTextEn || 'Dubai, UAE';
       const botSafe = safeArcFontSize(locEn.toUpperCase(), clampedTextArcR, false, 12, englishSpread, 5);
@@ -346,7 +354,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
         botSafe.letterSpacing, false, 'bottom-arc', '600'
       );
     }
-    separatorContent = renderSeparators(cx, cy, clampedTextArcR, config.separatorStyle, ink);
+    separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
 
   } else if (mode === 'AR') {
     // Arabic only — company name on top arc, location on bottom arc (all Arabic)
@@ -367,7 +375,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
         config.arabicLetterSpacing ?? botSafe.letterSpacing, true, 'bottom-arc', '600'
       );
     }
-    separatorContent = renderSeparators(cx, cy, clampedTextArcR, config.separatorStyle, ink);
+    separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
   }
 
   // ─── Location text (inner ring zone) — only for BILINGUAL ───
@@ -464,7 +472,7 @@ function generateOvalStamp(config: OfficialStampConfig): string {
   }
 
   // Safe text arc radius — keep well inside borders
-  const textArcR = Math.min(innerRx, innerRy) - 6;
+  const textArcR = Math.min(innerRx, innerRy) - 12;
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
 
   let textContent = '';
@@ -541,7 +549,7 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
   }
 
   // Safe content area — keep well inside borders
-  const safeW = w - 40;
+  const safeW = w - 56;
   const lineH = isSquare ? 16 : 14;
   const lines: { text: string; font: string; size: number; weight: string; opacity?: number }[] = [];
 
@@ -549,11 +557,11 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
     const arText = config.companyNameAr || 'اسم الشركة';
     const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
     if (config.arabicOnTop !== false) {
-      lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
-      lines.push({ text: enText, font: enFont, size: Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), weight: '700' });
+      lines.push({ text: arText, font: arFont, size: Math.min(Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), safeW / (arText.length * 0.55)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
+      lines.push({ text: enText, font: enFont, size: Math.min(Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), safeW / (enText.length * 0.55)), weight: '700' });
     } else {
-      lines.push({ text: enText, font: enFont, size: Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), weight: '700' });
-      lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
+      lines.push({ text: enText, font: enFont, size: Math.min(Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), safeW / (enText.length * 0.55)), weight: '700' });
+      lines.push({ text: arText, font: arFont, size: Math.min(Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), safeW / (arText.length * 0.55)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
     }
     if (config.showLocation) {
       const loc = (config.locationTextEn || 'Dubai, UAE').toUpperCase();

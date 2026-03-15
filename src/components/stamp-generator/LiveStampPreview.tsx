@@ -43,8 +43,11 @@ export interface LiveStampPreviewProps {
   circleGap?: number;
   centerContentSize?: number;
   onElementClick?: (elementId: string) => void;
+  onDoubleClick?: (elementId: string) => void;
   monogramLetterColors?: Record<number, string>;
   monogramDividerColor?: string;
+  arcTextSpacing?: number;
+  separatorDistance?: number;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
@@ -106,8 +109,11 @@ export function LiveStampPreview({
   circleGap,
   centerContentSize,
   onElementClick,
+  onDoubleClick,
   monogramLetterColors,
   monogramDividerColor,
+  arcTextSpacing,
+  separatorDistance,
   selectedElement,
 }: LiveStampPreviewProps & { selectedElement?: string | null }) {
   const displayName = companyName || 'Your Company Name';
@@ -118,19 +124,31 @@ export function LiveStampPreview({
   // Attach click handlers to data-stamp-element nodes
   // Stop propagation so parent outside-click handler doesn't clear selection
   useEffect(() => {
-    if (!onElementClick || !containerRef.current) return;
-    const handler = (e: MouseEvent) => {
+    if (!containerRef.current) return;
+    const el = containerRef.current;
+    const clickHandler = (e: MouseEvent) => {
       const target = (e.target as Element)?.closest?.('[data-stamp-element]');
       if (target) {
         e.stopPropagation();
         const elementId = target.getAttribute('data-stamp-element') || '';
-        onElementClick(elementId);
+        onElementClick?.(elementId);
       }
     };
-    const el = containerRef.current;
-    el.addEventListener('click', handler);
-    return () => el.removeEventListener('click', handler);
-  }, [onElementClick]);
+    const dblHandler = (e: MouseEvent) => {
+      const target = (e.target as Element)?.closest?.('[data-stamp-element]');
+      if (target) {
+        e.stopPropagation();
+        const elementId = target.getAttribute('data-stamp-element') || '';
+        onDoubleClick?.(elementId);
+      }
+    };
+    el.addEventListener('click', clickHandler);
+    el.addEventListener('dblclick', dblHandler);
+    return () => {
+      el.removeEventListener('click', clickHandler);
+      el.removeEventListener('dblclick', dblHandler);
+    };
+  }, [onElementClick, onDoubleClick]);
 
   // Apply highlight glow to selected element
   useEffect(() => {
@@ -198,11 +216,12 @@ export function LiveStampPreview({
       centerContentScale: centerScaleVal,
       monogramLetterColors,
       monogramDividerColor,
-      // NEW: pass language mode and shape directly
       languageMode: languageMode as LanguageMode,
       shape: stampType as StampShape,
       styleTheme,
       typographyStyle,
+      arcTextSpacing: arcTextSpacing,
+      separatorDistancePct: separatorDistance,
     });
   }, [
     displayName, arabicCompanyName, city, country, registrationNumber,
@@ -210,7 +229,7 @@ export function LiveStampPreview({
     iconStyle, monogramText, uploadedLogoUrl, languageMode, languageReversed,
     showLicenseNumber, showLocation, separatorStyle, fontFamily, size, ink, arabicCity,
     centerMode, centerIcon, arabicArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight,
-    circleGap, centerContentSize,
+    circleGap, centerContentSize, arcTextSpacing, separatorDistance,
   ]);
 
   return (
