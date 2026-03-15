@@ -557,11 +557,11 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
     const arText = config.companyNameAr || 'اسم الشركة';
     const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
     if (config.arabicOnTop !== false) {
-      lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
-      lines.push({ text: enText, font: enFont, size: Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), weight: '700' });
+      lines.push({ text: arText, font: arFont, size: Math.min(Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), safeW / (arText.length * 0.55)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
+      lines.push({ text: enText, font: enFont, size: Math.min(Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), safeW / (enText.length * 0.55)), weight: '700' });
     } else {
-      lines.push({ text: enText, font: enFont, size: Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), weight: '700' });
-      lines.push({ text: arText, font: arFont, size: Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
+      lines.push({ text: enText, font: enFont, size: Math.min(Math.max(7, fitFontSize(enText, 11, safeW, 0.55)), safeW / (enText.length * 0.55)), weight: '700' });
+      lines.push({ text: arText, font: arFont, size: Math.min(Math.max(8, fitFontSize(arText, 13, safeW, 0.5)), safeW / (arText.length * 0.55)), weight: config.arabicFontWeight === 'normal' ? '600' : '800' });
     }
     if (config.showLocation) {
       const loc = (config.locationTextEn || 'Dubai, UAE').toUpperCase();

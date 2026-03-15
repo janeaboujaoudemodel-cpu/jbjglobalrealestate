@@ -124,19 +124,31 @@ export function LiveStampPreview({
   // Attach click handlers to data-stamp-element nodes
   // Stop propagation so parent outside-click handler doesn't clear selection
   useEffect(() => {
-    if (!onElementClick || !containerRef.current) return;
-    const handler = (e: MouseEvent) => {
+    if (!containerRef.current) return;
+    const el = containerRef.current;
+    const clickHandler = (e: MouseEvent) => {
       const target = (e.target as Element)?.closest?.('[data-stamp-element]');
       if (target) {
         e.stopPropagation();
         const elementId = target.getAttribute('data-stamp-element') || '';
-        onElementClick(elementId);
+        onElementClick?.(elementId);
       }
     };
-    const el = containerRef.current;
-    el.addEventListener('click', handler);
-    return () => el.removeEventListener('click', handler);
-  }, [onElementClick]);
+    const dblHandler = (e: MouseEvent) => {
+      const target = (e.target as Element)?.closest?.('[data-stamp-element]');
+      if (target) {
+        e.stopPropagation();
+        const elementId = target.getAttribute('data-stamp-element') || '';
+        onDoubleClick?.(elementId);
+      }
+    };
+    el.addEventListener('click', clickHandler);
+    el.addEventListener('dblclick', dblHandler);
+    return () => {
+      el.removeEventListener('click', clickHandler);
+      el.removeEventListener('dblclick', dblHandler);
+    };
+  }, [onElementClick, onDoubleClick]);
 
   // Apply highlight glow to selected element
   useEffect(() => {
