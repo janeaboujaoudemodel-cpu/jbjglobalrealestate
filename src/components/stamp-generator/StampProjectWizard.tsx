@@ -980,6 +980,16 @@ export default function StampProjectWizard() {
             <TabsContent value="style" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-4">
+                  {/* Letter Editor — shown when a letter is selected on canvas */}
+                  {selectedLetter && (
+                    <StampLetterEditor
+                      selection={selectedLetter}
+                      overrides={form.letter_overrides}
+                      inkColor={form.ink_color}
+                      onUpdate={handleLetterOverrideUpdate}
+                      onClose={() => setSelectedLetter(null)}
+                    />
+                  )}
                   {/* Shape */}
                   <div>
                     <Label className="text-[11px] font-medium mb-1.5 block">Shape</Label>
