@@ -1,90 +1,36 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## Fix Stamp Arc Controls: Complete Arabic Section + Fix Spread Bug
 
-### Session Status
+### Critical Bug Found
+`LiveStampPreview.tsx` has a **broken value mapping** for arc spreads. The state stores values as `0.0-1.0` (e.g. `0.98`), but `LiveStampPreview` applies a formula `0.30 + (value - 20) / 80 * 0.70` meant for a `20-100` range. So `0.98` produces garbage (`~0.13`). This is why arcs never reach edge-to-edge despite showing "98%" in the UI.
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+### Changes
 
----
+**1. `src/components/stamp-generator/LiveStampPreview.tsx`** — Fix the spread mapping
+- Remove the broken `20-100 → 0.30-1.00` formula for `arabicArcSpread`, `englishArcSpread`, and `locationArcSpread`
+- Pass these values directly to the template config (they're already in 0-1 range)
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+**2. `src/components/stamp-generator/StampGeneratorPage.tsx`** — Add `arabicFontSize` state
+- Add `arabicFontSize` state (default `null` = auto, like English)
+- Pass it to `StampLeftPanel` and `LiveStampPreview`
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+**3. `src/lib/stampOfficialTemplate.ts`** — Add `arabicFontSize` override
+- Add `arabicFontSizeOverride` to `OfficialStampConfig`
+- Use it in bilingual and AR-only modes to override `safeArcFontSize` result when set
 
----
+**4. `src/components/stamp-generator/StampLeftPanel.tsx`** — Complete Arabic section
+Add missing controls to Arabic Typography to match English:
+- **Font Size** slider (6-24, step 0.5) with Auto button — currently missing
+- **Italic** toggle — currently missing (Arabic has only Bold/Normal, English has Bold + Italic)
+- Update the "Match" buttons to also sync font size between sections
 
-### Route Map
+**5. `src/components/stamp-generator/LiveStampPreview.tsx`** — Pass `arabicFontSize`
+- Accept and forward `arabicFontSize` to the template config
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+### Result
+- All arc spreads actually work (bug fix — values reach the template correctly)
+- Arabic Typography section has identical controls to English
+- Font size is independently controllable per language
+- Match buttons sync all settings including font size
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
-
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
