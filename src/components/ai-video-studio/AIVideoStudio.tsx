@@ -27,10 +27,65 @@ import { BackgroundRemoverPanel } from './features/BackgroundRemoverPanel';
 import { ScenePlannerPanel } from './features/ScenePlannerPanel';
 import { ChartOverlayPanel } from './features/ChartOverlayPanel';
 import { VoiceClonePanel } from './features/VoiceClonePanel';
+import { BatchPhotoVideoPanel } from './features/BatchPhotoVideoPanel';
 import { useVideoStudioProject } from './hooks/useVideoStudioProject';
 import { useMediaLibrary } from './hooks/useMediaLibrary';
-import { MediaAsset, StockAsset, Clip, ExportPreset, RenderJob } from './types';
+import { MediaAsset, StockAsset, Clip, ExportPreset, RenderJob, Keyframe } from './types';
 import { toast } from 'sonner';
+
+// Ken Burns keyframe generator — produces start/end keyframes for scale/position
+function getKenBurnsKeyframes(animation: string, duration: number): Keyframe[] {
+  const id = () => crypto.randomUUID();
+  const ease = 'easeInOut' as const;
+  const kf: Keyframe[] = [];
+  switch (animation) {
+    case 'zoom-in-center':
+      kf.push({ id: id(), time: 0, property: 'scaleX', value: 1, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleX', value: 1.25, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'scaleY', value: 1, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleY', value: 1.25, easing: ease });
+      break;
+    case 'zoom-out-center':
+      kf.push({ id: id(), time: 0, property: 'scaleX', value: 1.25, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleX', value: 1, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'scaleY', value: 1.25, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleY', value: 1, easing: ease });
+      break;
+    case 'pan-left':
+      kf.push({ id: id(), time: 0, property: 'x', value: 50, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'x', value: -50, easing: ease });
+      break;
+    case 'pan-right':
+      kf.push({ id: id(), time: 0, property: 'x', value: -50, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'x', value: 50, easing: ease });
+      break;
+    case 'pan-up':
+      kf.push({ id: id(), time: 0, property: 'y', value: 30, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'y', value: -30, easing: ease });
+      break;
+    case 'pan-down':
+      kf.push({ id: id(), time: 0, property: 'y', value: -30, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'y', value: 30, easing: ease });
+      break;
+    case 'zoom-pan-tl':
+      kf.push({ id: id(), time: 0, property: 'scaleX', value: 1, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleX', value: 1.3, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'x', value: 0, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'x', value: -40, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'y', value: 0, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'y', value: -40, easing: ease });
+      break;
+    case 'zoom-pan-br':
+      kf.push({ id: id(), time: 0, property: 'scaleX', value: 1, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'scaleX', value: 1.3, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'x', value: 0, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'x', value: 40, easing: ease });
+      kf.push({ id: id(), time: 0, property: 'y', value: 0, easing: ease });
+      kf.push({ id: id(), time: duration, property: 'y', value: 40, easing: ease });
+      break;
+  }
+  return kf;
+}
 
 
 
@@ -987,6 +1042,44 @@ export function AIVideoStudio() {
               transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
               keyframes: [], effects: [],
               audio: { volume: 1, fadeIn: 0.5, fadeOut: 1, muted: false, normalized: true, noiseReduction: false },
+            });
+          }}
+        />
+      }
+      batchPhotoPanel={
+        <BatchPhotoVideoPanel
+          onBuildTimeline={(photos) => {
+            const videoTrack = project.tracks.find(t => t.type === 'video');
+            if (!videoTrack) { toast.error('No video track found'); return; }
+            let cursor = videoTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+
+            photos.forEach((photo, idx) => {
+              // Ken Burns keyframes: start → end transform over clip duration
+              const kbKeyframes = getKenBurnsKeyframes(photo.kenBurns, photo.duration);
+
+              addClip(videoTrack.id, {
+                trackId: videoTrack.id, type: 'image', name: photo.name,
+                startTime: cursor, duration: photo.duration,
+                source: { url: photo.url, thumbnailUrl: photo.url, inPoint: 0, outPoint: photo.duration, originalDuration: photo.duration },
+                transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                keyframes: kbKeyframes,
+                effects: [{ id: crypto.randomUUID(), type: 'overlay', name: 'ken-burns', settings: { animation: photo.kenBurns } }],
+              });
+
+              // Add transition between photos
+              if (idx < photos.length - 1) {
+                const td = 0.8;
+                addClip(videoTrack.id, {
+                  trackId: videoTrack.id, type: 'transition', name: photo.transition,
+                  startTime: cursor + photo.duration - td / 2, duration: td,
+                  source: { url: '', inPoint: 0, outPoint: td, originalDuration: td },
+                  transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                  keyframes: [],
+                  effects: [{ id: crypto.randomUUID(), type: 'transition', name: photo.transition, settings: { transitionId: photo.transition } }],
+                  transition: { transitionId: photo.transition, easing: 'easeInOut' },
+                });
+              }
+              cursor += photo.duration;
             });
           }}
         />

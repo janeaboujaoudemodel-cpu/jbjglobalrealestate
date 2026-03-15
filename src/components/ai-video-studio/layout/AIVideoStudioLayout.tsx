@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Languages, Mic, Mic2, Sparkles, Music2, Layers, Maximize2,
   Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type, Clapperboard, UserSquare2, History,
-  AudioLines, ImagePlus, Share2, Eraser, Film, BarChart3
+  AudioLines, ImagePlus, Share2, Eraser, Film, BarChart3, Images
 } from 'lucide-react';
 
 // ─── Luxury palette tokens ────────────────────────────────────────────────────
@@ -57,6 +57,7 @@ interface AIVideoStudioLayoutProps {
   scenePlannerPanel?: ReactNode;
   chartOverlayPanel?: ReactNode;
   voiceClonePanel?: ReactNode;
+  batchPhotoPanel?: ReactNode;
 }
 
 const TOOL_TABS = [
@@ -81,6 +82,7 @@ const TOOL_TABS = [
   { id: 'scene-plan',     label: 'Storyboard',  icon: Film          },
   { id: 'chart-overlay',  label: 'Charts',      icon: BarChart3     },
   { id: 'voice-clone',   label: 'Voice Clone', icon: Mic2          },
+  { id: 'batch-photo',   label: 'Slideshow',   icon: Images        },
   { id: 'share',          label: 'Share',        icon: Share2        },
 ];
 
@@ -91,7 +93,7 @@ function AIVideoStudioLayout({
   beautyPanel, sfxPanel, effectsPanel, transitionsPanel, resizePanel,
   mapPanel, aiEditorPanel, projectsPanel, talkingAgentPanel, historyPanel,
   audioExtractPanel, photoClipPanel, sharePanel,
-  bgRemovePanel, scenePlannerPanel, chartOverlayPanel, voiceClonePanel,
+  bgRemovePanel, scenePlannerPanel, chartOverlayPanel, voiceClonePanel, batchPhotoPanel,
 }, ref) {
   const isMobile = useIsMobile();
   const [activeTool, setActiveTool] = useState<string | null>(null);
@@ -119,7 +121,7 @@ function AIVideoStudioLayout({
     projects: projectsPanel, 'talking-agent': talkingAgentPanel, history: historyPanel,
     'audio-extract': audioExtractPanel, 'photo-clip': photoClipPanel, share: sharePanel,
     'bg-remove': bgRemovePanel, 'scene-plan': scenePlannerPanel, 'chart-overlay': chartOverlayPanel,
-    'voice-clone': voiceClonePanel,
+    'voice-clone': voiceClonePanel, 'batch-photo': batchPhotoPanel,
   };
 
   const handleToolClick = (toolId: string) => {
