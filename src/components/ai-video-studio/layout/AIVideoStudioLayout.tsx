@@ -119,6 +119,7 @@ function AIVideoStudioLayout({
     projects: projectsPanel, 'talking-agent': talkingAgentPanel, history: historyPanel,
     'audio-extract': audioExtractPanel, 'photo-clip': photoClipPanel, share: sharePanel,
     'bg-remove': bgRemovePanel, 'scene-plan': scenePlannerPanel, 'chart-overlay': chartOverlayPanel,
+    'voice-clone': voiceClonePanel,
   };
 
   const handleToolClick = (toolId: string) => {
