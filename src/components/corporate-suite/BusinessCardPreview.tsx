@@ -643,6 +643,8 @@ export function CardCanvas({
         bilingualDir={bilingualDir}
         secondaryData={secondaryData}
         onInlineEdit={onInlineEdit}
+        sigLayout={sigLayout}
+        sigAccentColor={sigAccentColor}
       />
 
       {/* Logo overlay */}
