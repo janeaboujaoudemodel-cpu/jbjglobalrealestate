@@ -26,24 +26,37 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.5-pro",
         messages: [
           {
             role: "user",
             content: [
               {
                 type: "text",
-                text: `Analyze this image and determine the focal point / main subject position.
-Return ONLY a JSON object with two numbers:
-- "x": horizontal position of the subject as a percentage (0 = left edge, 50 = center, 100 = right edge)
-- "y": vertical position of the subject as a percentage (0 = top edge, 50 = center, 100 = bottom edge)
+                text: `You are an expert image composition analyst for a professional photo cropping tool.
 
-Consider: faces, people, main objects, architecture focal points, text, logos.
-If there are multiple subjects, pick the most visually prominent one.
-If the image has a clear rule-of-thirds composition, respect that.
+Analyze this image in detail and identify:
+1. The PRIMARY focal point — the single most important subject or area of interest
+2. ALL secondary subjects worth preserving when cropping
+3. The overall composition style
+4. A confidence score for your detection
 
-Example response: {"x": 45, "y": 35}
-Return ONLY the JSON, no markdown, no explanation.`,
+Consider these visual elements in priority order:
+- Human faces and eyes (highest priority)
+- People / full body poses
+- Text, logos, branding elements
+- Architectural focal points (vanishing points, key structures)
+- Product placement / hero objects
+- Animals
+- Natural landmarks
+- Rule-of-thirds intersection points
+- Leading lines convergence
+
+For real estate / property images specifically:
+- Identify the hero feature (pool, view, facade, interior highlight)
+- Preserve key selling points (balcony views, kitchen islands, etc.)
+
+Return your analysis using the provided tool.`,
               },
               {
                 type: "image_url",
@@ -56,22 +69,54 @@ Return ONLY the JSON, no markdown, no explanation.`,
           {
             type: "function",
             function: {
-              name: "set_focal_point",
-              description: "Set the detected focal point coordinates as percentages",
+              name: "set_smart_crop",
+              description: "Set the detected focal point and composition analysis for smart cropping",
               parameters: {
                 type: "object",
                 properties: {
-                  x: { type: "number", description: "Horizontal position 0-100 (0=left, 100=right)" },
-                  y: { type: "number", description: "Vertical position 0-100 (0=top, 100=bottom)" },
-                  subject: { type: "string", description: "Brief description of detected subject" },
+                  x: { type: "number", description: "Primary focal point horizontal position 0-100 (0=left, 100=right)" },
+                  y: { type: "number", description: "Primary focal point vertical position 0-100 (0=top, 100=bottom)" },
+                  subject: { type: "string", description: "Brief description of the primary subject (e.g., 'woman's face', 'building facade', 'product bottle')" },
+                  confidence: { type: "number", description: "Detection confidence 0-100" },
+                  composition: {
+                    type: "string",
+                    enum: ["center", "rule-of-thirds", "golden-ratio", "symmetrical", "diagonal", "frame-within-frame", "leading-lines", "scattered"],
+                    description: "Detected composition style"
+                  },
+                  secondary_subjects: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        x: { type: "number" },
+                        y: { type: "number" },
+                        label: { type: "string" },
+                      },
+                      required: ["x", "y", "label"],
+                      additionalProperties: false,
+                    },
+                    description: "Up to 3 secondary subjects worth preserving"
+                  },
+                  safe_zone: {
+                    type: "object",
+                    properties: {
+                      top: { type: "number", description: "Percentage from top that should be preserved (0-50)" },
+                      bottom: { type: "number", description: "Percentage from bottom that should be preserved (0-50)" },
+                      left: { type: "number", description: "Percentage from left that should be preserved (0-50)" },
+                      right: { type: "number", description: "Percentage from right that should be preserved (0-50)" },
+                    },
+                    required: ["top", "bottom", "left", "right"],
+                    additionalProperties: false,
+                    description: "Safe zone margins - the area containing all important content"
+                  },
                 },
-                required: ["x", "y"],
+                required: ["x", "y", "subject", "confidence", "composition"],
                 additionalProperties: false,
               },
             },
           },
         ],
-        tool_choice: { type: "function", function: { name: "set_focal_point" } },
+        tool_choice: { type: "function", function: { name: "set_smart_crop" } },
       }),
     });
 
@@ -92,14 +137,31 @@ Return ONLY the JSON, no markdown, no explanation.`,
     }
 
     const data = await response.json();
-    
+
     // Extract from tool call
     const toolCall = data.choices?.[0]?.message?.tool_calls?.[0];
     if (toolCall?.function?.arguments) {
       const args = JSON.parse(toolCall.function.arguments);
-      const x = Math.max(0, Math.min(100, Math.round(args.x)));
-      const y = Math.max(0, Math.min(100, Math.round(args.y)));
-      return new Response(JSON.stringify({ x, y, subject: args.subject || "detected subject" }), {
+      const result = {
+        x: Math.max(0, Math.min(100, Math.round(args.x ?? 50))),
+        y: Math.max(0, Math.min(100, Math.round(args.y ?? 50))),
+        subject: args.subject || "detected subject",
+        confidence: Math.max(0, Math.min(100, Math.round(args.confidence ?? 70))),
+        composition: args.composition || "center",
+        secondary_subjects: (args.secondary_subjects || []).slice(0, 3).map((s: any) => ({
+          x: Math.max(0, Math.min(100, Math.round(s.x))),
+          y: Math.max(0, Math.min(100, Math.round(s.y))),
+          label: s.label || "subject",
+        })),
+        safe_zone: args.safe_zone ? {
+          top: Math.max(0, Math.min(50, Math.round(args.safe_zone.top ?? 10))),
+          bottom: Math.max(0, Math.min(50, Math.round(args.safe_zone.bottom ?? 10))),
+          left: Math.max(0, Math.min(50, Math.round(args.safe_zone.left ?? 10))),
+          right: Math.max(0, Math.min(50, Math.round(args.safe_zone.right ?? 10))),
+        } : { top: 10, bottom: 10, left: 10, right: 10 },
+      };
+
+      return new Response(JSON.stringify(result), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -112,13 +174,24 @@ Return ONLY the JSON, no markdown, no explanation.`,
         x: Math.max(0, Math.min(100, parseInt(match[1]))),
         y: Math.max(0, Math.min(100, parseInt(match[2]))),
         subject: "detected subject",
+        confidence: 60,
+        composition: "center",
+        secondary_subjects: [],
+        safe_zone: { top: 10, bottom: 10, left: 10, right: 10 },
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     // Default to center
-    return new Response(JSON.stringify({ x: 50, y: 50, subject: "center (fallback)" }), {
+    return new Response(JSON.stringify({
+      x: 50, y: 50,
+      subject: "center (fallback)",
+      confidence: 30,
+      composition: "center",
+      secondary_subjects: [],
+      safe_zone: { top: 10, bottom: 10, left: 10, right: 10 },
+    }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
