@@ -329,9 +329,9 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const locBandMax = middleR - SAFE_ZONE;
   const clampedLocTextR = locBandMin + (locBandMax - locBandMin) * (locBandPct / 100);
 
-  // Arabic arc spread
+  // Arc spreads — independent for Arabic and English
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
-  const englishSpread = ARC_SPREAD_LIMIT;
+  const englishSpread = config.englishArcSpread ?? ARC_SPREAD_LIMIT;
 
   // Arc text spacing override — applies to English letter-spacing
   const arcTextSpacingOverride = config.arcTextSpacing;
