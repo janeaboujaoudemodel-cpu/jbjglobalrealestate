@@ -964,7 +964,7 @@ export default function StampGeneratorPage() {
   }
 
   return (
-    <div className="h-[calc(100vh-52px)] flex flex-col bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] mt-0">
+    <div className="h-[calc(100vh-48px)] flex flex-col bg-gradient-to-br from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] mt-[48px] overflow-hidden">
 
       {/* Preview Modal */}
       {previewConcept && (
