@@ -50,6 +50,9 @@ interface AIVideoStudioLayoutProps {
   projectsPanel?: ReactNode;
   talkingAgentPanel?: ReactNode;
   historyPanel?: ReactNode;
+  audioExtractPanel?: ReactNode;
+  photoClipPanel?: ReactNode;
+  sharePanel?: ReactNode;
 }
 
 const TOOL_TABS = [
