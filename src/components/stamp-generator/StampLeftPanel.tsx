@@ -1,6 +1,7 @@
 /**
  * StampLeftPanel — Collapsible accordion sections replacing the old 6-tab system.
  * Each section can be independently expanded/collapsed.
+ * Context-aware: when monogram/center is focused, color changes target monogram instead of borders.
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
@@ -8,6 +9,7 @@ import { StampColorWheel } from './StampColorWheel';
 import { StampTextEditor } from './StampTextEditor';
 import { MonogramColorEditor, DEFAULT_MONOGRAM_COLORS } from './MonogramColorEditor';
 import type { MonogramLetterColors } from './MonogramColorEditor';
+import { ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle } from '@/lib/stampOfficialTemplate';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
@@ -16,6 +18,12 @@ import {
   RotateCw, Award, Upload, Wand2, Loader2, Palette, Type,
   CircleDot, Stamp, Layers, PenTool, Sparkles
 } from 'lucide-react';
+
+const SEPARATOR_GLYPHS: Record<SeparatorStyle, string> = {
+  'dot': '●', 'star': '★', 'square': '■', 'diamond': '◆',
+  'line': '—', 'double-line': '═', 'triangle': '▲', 'cross': '✦',
+  'floral': '❀', 'ornament': '❖', 'dash': '—', 'circle': '◉', 'none': '⊘',
+};
 
 // 5 mandatory standard export colors
 const STANDARD_EXPORT_COLORS = [
@@ -157,17 +165,22 @@ interface StampLeftPanelProps {
 
 export function StampLeftPanel(props: StampLeftPanelProps) {
   const [openSections, setOpenSections] = useState<string[]>(['colors', 'text']);
+  // Track which element is focused — when center is focused, color changes target monogram
+  const [focusedElement, setFocusedElement] = useState<'center' | 'separator' | 'text' | null>(null);
 
   // Listen for panel open events from canvas element clicks
   useEffect(() => {
     const openCenter = () => {
       setOpenSections(prev => prev.includes('center') ? prev : [...prev, 'center']);
+      setFocusedElement('center');
     };
     const openSeparator = () => {
       setOpenSections(prev => prev.includes('separators') ? prev : [...prev, 'separators']);
+      setFocusedElement('separator');
     };
     const openText = () => {
       setOpenSections(prev => prev.includes('text') ? prev : [...prev, 'text']);
+      setFocusedElement('text');
     };
     window.addEventListener('stamp-open-center-panel', openCenter);
     window.addEventListener('stamp-open-separator-panel', openSeparator);
@@ -178,6 +191,20 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
       window.removeEventListener('stamp-open-text-panel', openText);
     };
   }, []);
+
+  // Context-aware color handler: when monogram is focused, route color to monogram
+  const handleColorChange = useCallback((hex: string) => {
+    if (focusedElement === 'center' && props.localIconStyle === 'MONOGRAM') {
+      // Apply to all monogram letters
+      props.onSetMonogramLetterColors({
+        ...props.monogramLetterColors,
+        allLetters: hex,
+      });
+      toast.success('Monogram color updated');
+    } else {
+      props.onSetActiveColor(hex);
+    }
+  }, [focusedElement, props.localIconStyle, props.monogramLetterColors, props.onSetMonogramLetterColors, props.onSetActiveColor]);
 
   const stopDefs: { key: ColorStop; label: string; color: string }[] = [
     { key: 'primary', label: 'Primary', color: props.primaryColor },
@@ -297,8 +324,38 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 Separators
               </span>
             </AccordionTrigger>
-            <AccordionContent className="pb-3">
-              <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Click separator elements directly on the stamp preview to change their style. Available styles appear in the floating toolbar.</p>
+            <AccordionContent className="pb-3 space-y-2.5">
+              {/* Separator Style Grid */}
+              <div>
+                <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Style</p>
+                <div className="grid grid-cols-4 gap-1">
+                  {ALL_SEPARATOR_STYLES.map(style => (
+                    <button key={style} onClick={() => {
+                      // Dispatch event so parent can update separator style
+                      window.dispatchEvent(new CustomEvent('stamp-separator-style-change', { detail: style }));
+                    }}
+                      className="flex flex-col items-center gap-0.5 px-1 py-1.5 rounded-lg border-2 text-xs transition-all border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]">
+                      <span className="text-sm">{SEPARATOR_GLYPHS[style]}</span>
+                      <span className="text-[7px] text-[hsl(var(--muted-foreground))]">{separatorLabel(style)}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Separator Distance */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Position</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.separatorDistance}%</span>
+                </div>
+                <Slider min={0} max={100} step={1} value={[props.separatorDistance]}
+                  onValueChange={([v]) => props.onSetSeparatorDistance(v)} />
+                <p className="text-[7px] text-[hsl(var(--muted-foreground))] mt-0.5">50% = centered between rings</p>
+              </div>
+              {/* Separator Color — uses the active color */}
+              <div>
+                <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1">Color</p>
+                <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Separator color follows the Primary ink color. Change it in the Colors section.</p>
+              </div>
             </AccordionContent>
           </AccordionItem>
 
@@ -454,6 +511,14 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </span>
             </AccordionTrigger>
             <AccordionContent className="pb-3 space-y-2.5">
+              {/* Context indicator */}
+              {focusedElement === 'center' && props.localIconStyle === 'MONOGRAM' && (
+                <div className="px-2 py-1.5 rounded-lg bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)]">
+                  <p className="text-[9px] font-semibold text-[hsl(var(--gold-dark))]">🎯 Monogram focused — colors apply to monogram letters</p>
+                  <button onClick={() => setFocusedElement(null)} className="text-[8px] text-[hsl(var(--muted-foreground))] underline mt-0.5">Switch to borders</button>
+                </div>
+              )}
+
               <button onClick={props.onResetColors}
                 className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[10px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all">
                 <RotateCw size={10} /> Reset to Standard
@@ -466,7 +531,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 </p>
                 <div className="flex gap-1.5">
                   {STANDARD_EXPORT_COLORS.map(c => (
-                    <button key={c.hex} onClick={() => props.onSetActiveColor(c.hex)} title={c.label}
+                    <button key={c.hex} onClick={() => handleColorChange(c.hex)} title={c.label}
                       className={`flex flex-col items-center gap-0.5 transition-all hover:scale-110 ${props.activeColor === c.hex ? 'scale-110' : ''}`}>
                       <div className={`w-6 h-6 rounded-full border-2 shadow-sm ${props.activeColor === c.hex ? 'border-[hsl(var(--gold))]' : c.hex === '#ffffff' ? 'border-[hsl(var(--border))]' : 'border-white'}`}
                         style={{ backgroundColor: c.hex }} />
@@ -476,25 +541,27 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 </div>
               </div>
 
-              {/* Color stops */}
-              <div className="flex gap-1">
-                {stopDefs.map(s => (
-                  <button key={s.key} onClick={() => props.onSetActiveStop(s.key)} title={s.label}
-                    className={`flex-1 flex flex-col items-center gap-1 p-1.5 rounded-lg border-2 transition-all ${props.activeStop === s.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))]'}`}>
-                    <div className="w-5 h-5 rounded-full border border-white shadow-sm" style={{ backgroundColor: s.color }} />
-                    <span className="text-[8px] text-[hsl(var(--muted-foreground))]">{s.label}</span>
-                  </button>
-                ))}
-              </div>
+              {/* Color stops — only show when NOT targeting monogram */}
+              {focusedElement !== 'center' && (
+                <div className="flex gap-1">
+                  {stopDefs.map(s => (
+                    <button key={s.key} onClick={() => { props.onSetActiveStop(s.key); setFocusedElement(null); }} title={s.label}
+                      className={`flex-1 flex flex-col items-center gap-1 p-1.5 rounded-lg border-2 transition-all ${props.activeStop === s.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))]'}`}>
+                      <div className="w-5 h-5 rounded-full border border-white shadow-sm" style={{ backgroundColor: s.color }} />
+                      <span className="text-[8px] text-[hsl(var(--muted-foreground))]">{s.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
 
-              <StampColorWheel color={props.activeColor} onChange={props.onSetActiveColor} label="" size={120} />
+              <StampColorWheel color={props.activeColor} onChange={handleColorChange} label="" size={120} />
 
               {/* Quick Colors */}
               <div className="border-t border-[hsl(var(--border))] pt-2">
                 <p className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Quick Colors</p>
                 <div className="flex flex-wrap gap-1">
                   {PRESET_PALETTE.map(c => (
-                    <button key={c.hex} onClick={() => props.onSetActiveColor(c.hex)} title={c.label}
+                    <button key={c.hex} onClick={() => handleColorChange(c.hex)} title={c.label}
                       className={`w-6 h-6 rounded-full border-2 transition-all hover:scale-110 ${props.activeColor === c.hex ? 'border-[hsl(var(--gold))] scale-110' : 'border-white shadow-sm'}`}
                       style={{ backgroundColor: c.hex }} />
                   ))}
@@ -545,7 +612,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   <div className="flex flex-wrap gap-1">
                     {props.customPalette.map(hex => (
                       <div key={hex} className="relative group/swatch">
-                        <button onClick={() => props.onSetActiveColor(hex)}
+                        <button onClick={() => handleColorChange(hex)}
                           className={`w-6 h-6 rounded-full border-2 transition-all hover:scale-110 ${props.activeColor === hex ? 'border-[hsl(var(--gold))] scale-110' : 'border-white shadow-sm'}`}
                           style={{ backgroundColor: hex }} />
                         <button onClick={() => props.onRemoveCustomColor(hex)}

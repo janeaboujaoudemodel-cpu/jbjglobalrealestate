@@ -409,7 +409,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     const locEn = config.locationTextEn || 'Dubai, UAE';
     const locAr = config.locationTextAr || 'دبي، الإمارات';
     const locEnSafe = safeArcFontSize(locEn.toUpperCase(), clampedLocTextR, false, 12, englishSpread);
-    const locArSafe = safeArcFontSize(locAr, clampedLocTextR, true, 12, englishSpread);
+    const locArSafe = safeArcFontSize(locAr, clampedLocTextR, true, 12, arabicSpread);
 
     locationContent = renderTopArcTextPath(
       locAr, cx, cy, clampedLocTextR, locArSafe.fontSize, arFont, ink, locArSafe.letterSpacing, true, 'loc-top', '600'

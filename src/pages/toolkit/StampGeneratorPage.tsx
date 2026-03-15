@@ -46,8 +46,9 @@ export default function StampGeneratorLanding() {
       return;
     }
     // Remember last stamp screen — go there if available
+    // IMPORTANT: Never route to /projects from CTA — that's a separate button
     const lastRoute = localStorage.getItem('stamp_last_route');
-    if (lastRoute && lastRoute !== '/toolkit/stamp-generator') {
+    if (lastRoute && lastRoute !== '/toolkit/stamp-generator' && !lastRoute.includes('/projects')) {
       // Check if there's an active draft session
       const hasDraft = localStorage.getItem('stamp-wizard-form');
       if (hasDraft && lastRoute.includes('/new')) {
