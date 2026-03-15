@@ -150,6 +150,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
     useGradient, setUseGradient, gradientEnd, setGradientEnd,
     gradientDirection, setGradientDirection,
     brandAssetOpen, setBrandAssetOpen, logoUrl, setLogoUrl, logoSize, setLogoSize,
+    stampOpen, setStampOpen, stampUrl, setStampUrl, stampSize, setStampSize,
     typographyOpen, setTypographyOpen,
     cardFontFamily, setCardFontFamily, cardFontBold, setCardFontBold,
     cardFontItalic, setCardFontItalic, cardFontSize, setCardFontSize,
