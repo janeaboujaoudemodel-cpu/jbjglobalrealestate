@@ -491,7 +491,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </select>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">To</label>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">{t('filter.to')}</label>
                 <div className="flex gap-1 mb-2">
                   {QUARTERS.map(q => (
                     <button
