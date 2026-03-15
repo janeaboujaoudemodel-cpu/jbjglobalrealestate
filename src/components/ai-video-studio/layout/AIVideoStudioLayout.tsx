@@ -76,7 +76,10 @@ const TOOL_TABS = [
   { id: 'history',        label: 'Ad History',  icon: History       },
   { id: 'audio-extract',  label: 'Extract Audio', icon: AudioLines  },
   { id: 'photo-clip',     label: 'Photo Clip',  icon: ImagePlus     },
-  { id: 'share',           label: 'Share',       icon: Share2        },
+  { id: 'bg-remove',      label: 'BG Remove',   icon: Eraser        },
+  { id: 'scene-plan',     label: 'Storyboard',  icon: Film          },
+  { id: 'chart-overlay',  label: 'Charts',      icon: BarChart3     },
+  { id: 'share',          label: 'Share',        icon: Share2        },
 ];
 
 export const AIVideoStudioLayout = forwardRef<AIVideoStudioLayoutHandle, AIVideoStudioLayoutProps>(
