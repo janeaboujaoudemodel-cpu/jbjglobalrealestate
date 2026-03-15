@@ -943,6 +943,16 @@ export default function StampGeneratorPage() {
                         setSvgOverrides(prev => ({ ...prev, [id]: newSvg }));
                       }
                     }}
+                    onCenterClick={() => {
+                      // Auto-switch to MONOGRAM mode and open left panel center section
+                      setLocalIconStyle('MONOGRAM');
+                      if (!localMonogramText && project?.company_name) {
+                        const initials = project.company_name.split(/\s+/).map((w: string) => w[0]).join('').toUpperCase().slice(0, 3);
+                        setLocalMonogramText(initials);
+                      }
+                      // Dispatch event to open the center section in left panel
+                      window.dispatchEvent(new CustomEvent('stamp-open-center-panel'));
+                    }}
                     currentSeparatorStyle={project?.separator_style}
                     currentCenterMode={localIconStyle === 'UPLOADED_LOGO' ? 'logo' : localIconStyle === 'NONE' ? 'none' : 'monogram'}
                   />
