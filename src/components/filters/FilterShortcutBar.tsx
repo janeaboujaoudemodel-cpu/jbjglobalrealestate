@@ -749,7 +749,7 @@ function ConnectedCurrencyButton() {
       >
         <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
         <div className="px-4 py-3 border-b border-gold/20">
-          <p className="text-xs font-semibold text-black/60 uppercase tracking-wider">Select Currency</p>
+          <p className="text-xs font-semibold text-black/60 uppercase tracking-wider">{t('filter.selectCurrency')}</p>
         </div>
         <div className="p-2 max-h-80 overflow-y-auto">
           {SUPPORTED_CURRENCIES.map((curr) => (
