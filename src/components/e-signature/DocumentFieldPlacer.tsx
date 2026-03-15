@@ -420,6 +420,19 @@ export default function DocumentFieldPlacer({
           <Trash2 className="w-3.5 h-3.5 mr-1" />
           Clear Page
         </Button>
+
+        <div className="w-px h-8 bg-border" />
+
+        {/* Brand Assets */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowAssetPicker(true)}
+          className="h-9 gap-1.5 text-sm font-medium border-[hsl(var(--gold)/.4)] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/.05)]"
+        >
+          <Package className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
+          Brand Assets
+        </Button>
       </div>
 
       {/* Click-mode hint */}
