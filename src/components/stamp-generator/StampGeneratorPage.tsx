@@ -64,10 +64,10 @@ function injectCenterArt(svgSource: string, iconStyle: string, monogramText: str
   const S = vbMatch ? parseInt(vbMatch[1]) : 320;
   const cx = S / 2;
   const cy = S / 2;
-  const centerR = S * 0.14;
+  const centerR = S * 0.18;
   const insertBefore = '</svg>';
   if (iconStyle === 'UPLOADED_LOGO' && logoUrl) {
-    const imgSize = centerR * 1.6;
+    const imgSize = centerR * 2.2;
     const logoSvg = `
       <defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${centerR - 1}"/></clipPath></defs>
       <image href="${logoUrl}" x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" width="${imgSize}" height="${imgSize}" 
