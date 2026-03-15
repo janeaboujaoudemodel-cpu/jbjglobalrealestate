@@ -477,8 +477,33 @@ export default function StampGeneratorPage() {
     setStandardConcept(concept);
     setSelectedId(concept.id);
     // Persist selected_design_id to database immediately
-    if (projectId && concept.id.length === 36) {
-      await supabase.from('stamp_projects').update({ selected_design_id: concept.id }).eq('id', projectId);
+    // If it's a local UUID (not yet in DB), insert first
+    if (projectId) {
+      let dbId = concept.id;
+      if (concept.id.length !== 36 || !concept.id.includes('-')) {
+        // Not a valid DB UUID, treat as local
+      } else {
+        // Check if it exists in stamp_designs
+        const { data: exists } = await supabase.from('stamp_designs').select('id').eq('id', concept.id).maybeSingle();
+        if (!exists) {
+          // Insert to DB first
+          const { data: inserted } = await supabase.from('stamp_designs').insert({
+            project_id: projectId, user_id: user!.id, design_version: 1,
+            template_key: concept.templateKey,
+            svg_source: svgOverrides[concept.id] || concept.svgSource,
+            style_snapshot_json: project,
+          }).select('id').single();
+          if (inserted) {
+            dbId = inserted.id;
+            // Update concept ID in local state
+            concept = { ...concept, id: inserted.id };
+            setStandardConcept(concept);
+            setSelectedId(inserted.id);
+            setConcepts(prev => prev.map(c => c.id === concept.id ? concept : c));
+          }
+        }
+        await supabase.from('stamp_projects').update({ selected_design_id: dbId }).eq('id', projectId);
+      }
     }
     toast.success('Design applied as Standard', { duration: 2000 });
   }
