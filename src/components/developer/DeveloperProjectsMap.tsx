@@ -3,6 +3,8 @@ import L from "leaflet";
 import { Button } from "@/components/ui/button";
 import { Layers, AlertTriangle, RefreshCw } from "lucide-react";
 import { MapNavigationControlsStandalone } from "@/components/maps/MapNavigationControls";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { getMapTiles } from "@/constants/mapTiles";
 import "leaflet/dist/leaflet.css";
 
 interface DeveloperProject {
@@ -22,26 +24,8 @@ interface DeveloperProjectsMapProps {
   projects: DeveloperProject[];
 }
 
-// Format price for popup
-const formatPrice = (price: number | null) => {
-  if (!price) return "Price on request";
-  if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
-  return `AED ${(price / 1000).toFixed(0)}K`;
-};
-
-// Tile layer options
-const TILE_LAYERS = {
-  street: {
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  },
-  satellite: {
-    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    attribution: '&copy; Esri',
-  },
-};
-
 export function DeveloperProjectsMap({ developerId, developerName, projects }: DeveloperProjectsMapProps) {
+  const { t, language } = useLanguage();
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
@@ -50,6 +34,13 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   const [tileLayer, setTileLayer] = useState<'street' | 'satellite'>('satellite');
   const [mapError, setMapError] = useState<string | null>(null);
   const [mapInteractive, setMapInteractive] = useState(false);
+
+  // Format price for popup
+  const formatPrice = useCallback((price: number | null) => {
+    if (!price) return t('map.priceOnRequest');
+    if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
+    return `AED ${(price / 1000).toFixed(0)}K`;
+  }, [t]);
 
   // Filter to projects with coordinates
   const projectsWithCoords = projects.filter(p => p.latitude && p.longitude);
@@ -103,13 +94,13 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
           <div style="display: flex; align-items: center; justify-content: space-between;">
             <span style="font-weight: 700; color: #d4af37; font-size: 14px;">${formatPrice(project.price_from)}</span>
             <a href="/project/${project.slug}" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 12px; text-decoration: none; color: #333;">
-              View →
+              ${t('map.view')} →
             </a>
           </div>
         </div>
       </div>
     `;
-  }, []);
+  }, [formatPrice, t]);
 
   // Initialize map
   useEffect(() => {
@@ -119,12 +110,10 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
     if (mapInstanceRef.current) return;
 
     try {
-      // Calculate center from first project or use Dubai default
       const center: [number, number] = projectsWithCoords[0]
         ? [projectsWithCoords[0].latitude!, projectsWithCoords[0].longitude!]
         : [25.2048, 55.2708];
 
-      // Create map instance
       const map = L.map(mapContainerRef.current, {
         center,
         zoom: 11,
@@ -136,17 +125,15 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
 
       mapInstanceRef.current = map;
 
-      // Add initial tile layer - default satellite for premium view
-      const initialTileLayer = L.tileLayer(TILE_LAYERS.satellite.url, {
+      const tiles = getMapTiles(language);
+      const initialTileLayer = L.tileLayer(tiles.satellite.url, {
         attribution: '',
       });
       initialTileLayer.addTo(map);
       
-      // Hide Leaflet attribution
       map.attributionControl.remove();
       tileLayerRef.current = initialTileLayer;
 
-      // Add markers
       projectsWithCoords.forEach((project) => {
         const marker = L.marker(
           [project.latitude!, project.longitude!],
@@ -162,7 +149,6 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
         markersRef.current.push(marker);
       });
 
-      // Fit bounds
       if (projectsWithCoords.length === 1) {
         map.setView([projectsWithCoords[0].latitude!, projectsWithCoords[0].longitude!], 13);
       } else {
@@ -178,7 +164,6 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       setMapError("Failed to load map. Please try again.");
     }
 
-    // Cleanup
     return () => {
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
@@ -187,31 +172,29 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
         markersRef.current = [];
       }
     };
-  }, [projectsWithCoords, createMarkerIcon, createPopupContent]);
+  }, [projectsWithCoords, createMarkerIcon, createPopupContent, language]);
 
   // Handle tile layer toggle
   useEffect(() => {
     if (!mapInstanceRef.current || !tileLayerRef.current) return;
 
     try {
-      // Remove old tile layer
       tileLayerRef.current.remove();
-
-      // Add new tile layer
-      const newTileLayer = L.tileLayer(TILE_LAYERS[tileLayer].url, {
-        attribution: TILE_LAYERS[tileLayer].attribution,
+      const tiles = getMapTiles(language);
+      const tileConfig = tileLayer === 'satellite' ? tiles.satellite : tiles.street;
+      const newTileLayer = L.tileLayer(tileConfig.url, {
+        attribution: tileConfig.attribution,
       });
       newTileLayer.addTo(mapInstanceRef.current);
       tileLayerRef.current = newTileLayer;
     } catch (err) {
       console.error("Failed to switch tile layer:", err);
     }
-  }, [tileLayer]);
+  }, [tileLayer, language]);
 
   // Handle retry
   const handleRetry = useCallback(() => {
     setMapError(null);
-    // Force re-mount by clearing refs
     if (mapInstanceRef.current) {
       mapInstanceRef.current.remove();
       mapInstanceRef.current = null;
@@ -224,7 +207,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
   if (projectsWithCoords.length === 0) {
     return (
       <div className="rounded-xl border-2 border-gold/30 bg-champagne/20 p-8 text-center">
-        <p className="text-foreground/70">No projects with location data available</p>
+        <p className="text-foreground/70">{t('map.noLocations')}</p>
       </div>
     );
   }
@@ -258,9 +241,9 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
       {/* Map Header */}
       <div className="bg-gradient-to-r from-champagne/80 to-champagne/40 px-4 py-3 flex items-center justify-between border-b border-gold/30">
         <h3 className="text-foreground font-semibold">
-          {developerName} Projects Map
+          {developerName} {t('map.projectsMap')}
           <span className="ml-2 text-sm font-normal text-foreground/70">
-            ({projectsWithCoords.length} locations)
+            ({projectsWithCoords.length} {t('map.locations')})
           </span>
         </h3>
         
@@ -272,7 +255,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
           className="gap-2 border-gold/50 hover:bg-gold/10"
         >
           <Layers className="w-4 h-4" />
-          {tileLayer === 'street' ? 'Satellite' : 'Street'}
+          {tileLayer === 'street' ? t('map.satellite') : t('map.street')}
         </Button>
       </div>
 
@@ -296,7 +279,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
             }}
           >
             <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-gold/30 text-sm font-medium text-black/70">
-              Click to enable map interaction
+              {t('map.clickToEnable')}
             </div>
           </div>
         )}
