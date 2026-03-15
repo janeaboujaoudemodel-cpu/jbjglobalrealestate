@@ -40,6 +40,7 @@ interface BrandPaletteContextType {
   saveUserPalette: (name: string, palette: BrandPalette, setActive?: boolean) => Promise<void>;
   deleteUserPalette: (id: string) => Promise<void>;
   activateUserPalette: (id: string) => Promise<void>;
+  renameUserPalette: (id: string, newName: string) => Promise<void>;
   revertToDefault: () => void;
   loadUserPalettes: () => Promise<void>;
 }
@@ -228,6 +229,11 @@ export const BrandPaletteProvider: React.FC<{ children: React.ReactNode }> = ({ 
     await loadUserPalettes();
   }, [loadUserPalettes]);
 
+  const renameUserPalette = useCallback(async (id: string, newName: string) => {
+    await supabase.from('user_color_palettes').update({ name: newName } as any).eq('id', id);
+    await loadUserPalettes();
+  }, [loadUserPalettes]);
+
   const activateUserPalette = useCallback(async (id: string) => {
     if (!user) return;
     // Deactivate all
@@ -276,6 +282,7 @@ export const BrandPaletteProvider: React.FC<{ children: React.ReactNode }> = ({ 
       saveUserPalette,
       deleteUserPalette,
       activateUserPalette,
+      renameUserPalette,
       revertToDefault,
       loadUserPalettes,
     }}>
