@@ -221,6 +221,76 @@ export default function StampGeneratorPage() {
   const [saving, setSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
+  // Explicit save project state to DB
+  const saveProjectState = useCallback(async () => {
+    if (!projectId || !user?.id || saving) return;
+    setSaving(true);
+    try {
+      // Ensure standard design is persisted to DB first
+      let standardDbId = standardConcept?.id || null;
+      if (standardConcept && standardDbId && standardDbId.length !== 36) {
+        // Local UUID — insert to DB first
+        const { data: inserted } = await supabase.from('stamp_designs').insert({
+          project_id: projectId, user_id: user.id, design_version: 1,
+          template_key: standardConcept.templateKey,
+          svg_source: svgOverrides[standardConcept.id] || standardConcept.svgSource,
+          style_snapshot_json: project,
+        }).select('id').single();
+        if (inserted) {
+          standardDbId = inserted.id;
+          // Update local state with DB id
+          setStandardConcept(prev => prev ? { ...prev, id: inserted.id } : prev);
+          setSelectedId(inserted.id);
+          setConcepts(prev => prev.map(c => c.id === standardConcept.id ? { ...c, id: inserted.id } : c));
+          // Move svg override to new id
+          setSvgOverrides(prev => {
+            const next = { ...prev };
+            if (next[standardConcept.id]) {
+              next[inserted.id] = next[standardConcept.id];
+              delete next[standardConcept.id];
+            }
+            return next;
+          });
+        }
+      }
+      // Save project state
+      const updateData: Record<string, any> = {
+        selected_design_id: standardDbId,
+      };
+      // Persist style overrides
+      if (project) {
+        updateData.layout_json = {
+          ...(project.layout_json || {}),
+          primaryColor,
+          secondaryColor,
+          accentColor,
+          fontFamily,
+          fontBold,
+          fontItalic,
+          inkMode,
+          zoom,
+          lastSaved: new Date().toISOString(),
+        };
+      }
+      await supabase.from('stamp_projects').update(updateData).eq('id', projectId);
+      setLastSaved(new Date());
+      // Also save draft to localStorage with standard key
+      try {
+        const draftKey = `jbj_draft_stamp-generator_${projectId}`;
+        localStorage.setItem(draftKey, JSON.stringify({
+          name: project?.company_name || 'Stamp Project',
+          savedAt: new Date().toISOString(),
+          standardDesignId: standardDbId,
+          projectId,
+        }));
+      } catch {}
+      toast.success('Project saved');
+    } catch (err: any) {
+      toast.error('Save failed: ' + (err?.message || 'Unknown error'));
+    }
+    setSaving(false);
+  }, [projectId, user?.id, saving, standardConcept, svgOverrides, project, primaryColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, inkMode, zoom]);
+
   // Preview update feedback
   const [previewPulse, setPreviewPulse] = useState(false);
 
