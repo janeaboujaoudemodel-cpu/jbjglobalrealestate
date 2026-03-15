@@ -324,7 +324,7 @@ export default function StampGeneratorPage() {
         });
         if (res.ok) {
           const json = await res.json();
-          if (json.blocked) { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); return; }
+        if (json.blocked) { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); generationLockRef.current = false; return; }
           if (json.concepts?.length) {
             const { data: saved } = await supabase
               .from('stamp_designs')
