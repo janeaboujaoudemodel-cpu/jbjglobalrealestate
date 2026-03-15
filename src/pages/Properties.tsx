@@ -1197,6 +1197,8 @@ const Properties = () => {
               onMapToggle={(v) => {
                 setIsMapMode(v);
               }}
+              resultsCount={finalProjects.length}
+              resultsLabel="Properties"
             />
           </div>
         </section>,
