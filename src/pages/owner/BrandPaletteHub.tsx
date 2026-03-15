@@ -8,6 +8,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
+import { BrandMonogram } from '@/components/BrandMonogram';
+import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 
 const PALETTE_KEYS: { key: keyof BrandPalette; label: string; description: string; example: string }[] = [
   { key: 'primary', label: 'Primary', description: 'Main brand color — buttons, links, headers', example: 'Buttons & active elements' },
