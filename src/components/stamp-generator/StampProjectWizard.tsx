@@ -168,6 +168,7 @@ interface FormState {
   outer_border_color: string;
   middle_border_color: string;
   inner_border_color: string;
+  letter_overrides: Record<string, import('@/lib/stampOfficialTemplate').LetterOverride>;
 }
 
 export default function StampProjectWizard() {
