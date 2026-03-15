@@ -262,39 +262,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     return first;
   };
 
-  // Scroll indicator refs
-  const row1Ref = useRef<HTMLDivElement>(null);
-  const row2Ref = useRef<HTMLDivElement>(null);
-  const [row1CanScroll, setRow1CanScroll] = useState(false);
-  const [row2CanScroll, setRow2CanScroll] = useState(false);
-
-  useEffect(() => {
-    const checkScroll = () => {
-      if (row1Ref.current) {
-        const el = row1Ref.current;
-        setRow1CanScroll(el.scrollWidth > el.clientWidth && el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
-      }
-      if (row2Ref.current) {
-        const el = row2Ref.current;
-        setRow2CanScroll(el.scrollWidth > el.clientWidth && el.scrollLeft + el.clientWidth < el.scrollWidth - 10);
-      }
-    };
-    checkScroll();
-    const r1 = row1Ref.current;
-    const r2 = row2Ref.current;
-    r1?.addEventListener('scroll', checkScroll, { passive: true });
-    r2?.addEventListener('scroll', checkScroll, { passive: true });
-    window.addEventListener('resize', checkScroll);
-    return () => {
-      r1?.removeEventListener('scroll', checkScroll);
-      r2?.removeEventListener('scroll', checkScroll);
-      window.removeEventListener('resize', checkScroll);
-    };
-  }, []);
-
-  const scrollRow = (ref: React.RefObject<HTMLDivElement | null>) => {
-    ref.current?.scrollBy({ left: 200, behavior: 'smooth' });
-  };
 
   return (
     <>
