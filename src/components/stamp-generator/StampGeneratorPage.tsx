@@ -27,7 +27,7 @@ import {
   ArrowLeft, ChevronRight, AlertTriangle, Heart, MessageSquare,
   Send, X, Sparkles, Palette, Layers, Type, Upload, ChevronDown,
   Undo2, Redo2, RotateCw, Save, ChevronLeft, Trash2, Copy,
-  Clock, Package, Award
+  Clock, Package, Award, Shield
 } from 'lucide-react';
 import { useStampHistory } from '@/hooks/useStampHistory';
 import { StampVariationsPanel } from './StampVariationsPanel';
