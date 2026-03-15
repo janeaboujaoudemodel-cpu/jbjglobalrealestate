@@ -200,7 +200,7 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
   switch (centerMode) {
     case 'logo':
       if (config.logoUrl) {
-        const imgSize = innerR * 1.5 * centerScale;
+        const imgSize = innerR * 1.8 * centerScale;
         return `<defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${innerR - 2}"/></clipPath></defs>
           <image data-stamp-element="center" href="${config.logoUrl}" 
             x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" width="${imgSize}" height="${imgSize}" 
