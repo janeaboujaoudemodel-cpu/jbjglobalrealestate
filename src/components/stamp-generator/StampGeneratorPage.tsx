@@ -271,7 +271,7 @@ export default function StampGeneratorPage() {
     arabicArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight, arabicFontSize,
     fontFamily, fontBold, manualFontSize, companyArcOffset, locationArcOffset,
     locationArcSpread, centerContentSize, localIconStyle, localMonogramText,
-    localLogoUrl, primaryColor,
+    localLogoUrl, primaryColor, languageMode,
   ]);
 
   // Live-apply monogram colors whenever they change
