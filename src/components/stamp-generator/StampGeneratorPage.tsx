@@ -910,6 +910,12 @@ export default function StampGeneratorPage() {
           onSetCircleGap={setCircleGap}
           onSetSeparatorDistance={setSeparatorDistance}
           onSetCenterContentSize={setCenterContentSize}
+          englishArcSpread={englishArcSpread}
+          companyArcOffset={companyArcOffset}
+          locationArcOffset={locationArcOffset}
+          onSetEnglishArcSpread={setEnglishArcSpread}
+          onSetCompanyArcOffset={setCompanyArcOffset}
+          onSetLocationArcOffset={setLocationArcOffset}
         />
 
         {/* ── CENTER: Premium Canvas Preview ── */}
