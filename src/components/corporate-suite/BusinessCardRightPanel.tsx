@@ -19,7 +19,7 @@ import { DeskMockup, PocketMockup, StationeryMockup, HandMockup } from "./Busine
 import {
   type Template, type TextAlign, type GradientDirection, type FinishEffect,
   type MockupScene, type CardData, type QrPosition, type QrContentType,
-  type AiDesignData, type CardShape,
+  type AiDesignData, type CardShape, type SigLayout,
   COLOR_PRESETS, getShapeStyle,
   buildQrData, buildQrUrl,
 } from "./businessCardTypes";
