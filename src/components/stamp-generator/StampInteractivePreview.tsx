@@ -62,6 +62,35 @@ function getLanguageFromElement(id: string): 'arabic' | 'english' | null {
   return null;
 }
 
+/** Element selection type for contextual sidebar wiring */
+export type SelectedElementType =
+  | 'arabic-company' | 'english-company' | 'arabic-location' | 'english-location'
+  | 'monogram' | 'logo' | 'separator-left' | 'separator-right'
+  | 'outer-ring' | 'middle-ring' | 'inner-ring' | 'registration';
+
+export interface SelectedElement {
+  id: string;
+  type: SelectedElementType;
+}
+
+/** Map stamp element IDs to SelectedElementType */
+function mapElementToType(id: string): SelectedElementType | null {
+  switch (id) {
+    case 'top-arc': return 'arabic-company';
+    case 'bottom-arc': return 'english-company';
+    case 'loc-top': return 'arabic-location';
+    case 'loc-bottom': return 'english-location';
+    case 'center': return 'monogram';
+    case 'separator-left': case 'loc-separator-left': return 'separator-left';
+    case 'separator-right': case 'loc-separator-right': return 'separator-right';
+    case 'border-outer': return 'outer-ring';
+    case 'border-middle': return 'middle-ring';
+    case 'border-inner': return 'inner-ring';
+    case 'registration': return 'registration';
+    default: return null;
+  }
+}
+
 interface Props {
   svgSource: string;
   tintColor: string;
@@ -77,6 +106,7 @@ interface Props {
   onSeparatorChange?: (style: SeparatorStyle) => void;
   onCenterModeChange?: (mode: CenterContentMode, options?: { monogramText?: string; icon?: CenterIconType }) => void;
   onCenterClick?: () => void;
+  onElementSelect?: (element: SelectedElement | null) => void;
   currentSeparatorStyle?: SeparatorStyle;
   currentCenterMode?: CenterContentMode;
 }
