@@ -535,7 +535,7 @@ export default function StampGeneratorPage() {
                 label: (d.template_key || 'classic-official').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
                 tags: [] as string[], svgSource: d.svg_source || '', isFavorite: false,
               }));
-              setConcepts(newConcepts);
+              setConcepts(prev => [...newConcepts, ...prev.filter(c => !newConcepts.some(n => n.id === c.id))]);
               if (!standardConcept && newConcepts[0]) {
                 setStandardConcept(newConcepts[0]);
                 setSelectedId(newConcepts[0].id);
