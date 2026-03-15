@@ -737,6 +737,8 @@ export default function StampProjectWizard() {
     outerBorderColor: form.outer_border_color || undefined,
     middleBorderColor: form.middle_border_color || undefined,
     innerBorderColor: form.inner_border_color || undefined,
+    onLetterClick: handleLetterClick,
+    letterOverrides: Object.keys(form.letter_overrides).length > 0 ? form.letter_overrides : undefined,
   };
 
   return (
