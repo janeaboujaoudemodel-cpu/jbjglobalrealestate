@@ -65,6 +65,8 @@ interface Props {
   onSvgChange: (newSvg: string) => void;
   onSeparatorChange?: (style: SeparatorStyle) => void;
   onCenterModeChange?: (mode: CenterContentMode, options?: { monogramText?: string; icon?: CenterIconType }) => void;
+  /** Called when user clicks the center element — used to auto-switch to monogram edit */
+  onCenterClick?: () => void;
   currentSeparatorStyle?: SeparatorStyle;
   currentCenterMode?: CenterContentMode;
 }
