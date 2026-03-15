@@ -46,6 +46,10 @@ interface BusinessCardCenterPanelProps {
   logoSize: number;
   logoPos: { x: number; y: number };
   setLogoPos: (v: { x: number; y: number }) => void;
+  stampUrl: string;
+  stampSize: number;
+  stampPos: { x: number; y: number };
+  setStampPos: (v: { x: number; y: number }) => void;
   aiDesignData: any;
   cardFontFamily: string;
   cardFontBold: boolean;
