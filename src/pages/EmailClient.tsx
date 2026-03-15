@@ -33,7 +33,7 @@ import EmailAssistantPanel from "@/components/email/EmailAssistantPanel";
 import EmailProductivityPanel from "@/components/email/EmailProductivityPanel";
 import { CrossChannelToggle } from "@/components/shared/CrossChannelToggle";
 import { useCrossChannelDetection } from "@/hooks/useCrossChannelDetection";
-import { DocumentAttachmentPicker, AttachmentChip, type DocumentAttachment } from "@/components/shared/DocumentAttachmentPicker";
+import { DocumentAttachmentPicker, AttachmentChip, processDroppedFiles, type DocumentAttachment } from "@/components/shared/DocumentAttachmentPicker";
 import QuickCalendarWidget from "@/components/shared/QuickCalendarWidget";
 import QuickNoteWidget from "@/components/shared/QuickNoteWidget";
 
