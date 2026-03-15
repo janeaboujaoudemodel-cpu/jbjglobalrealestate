@@ -1477,7 +1477,7 @@ export default function GlobalVerticalNav() {
                     <SectionIcon className="w-4 h-4" />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent side="right" className="text-xs">{sectionKey}</TooltipContent>
+                <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
               </Tooltip>
             );
           })}
