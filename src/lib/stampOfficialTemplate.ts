@@ -63,6 +63,10 @@ export interface OfficialStampConfig {
   styleTheme?: string;
   /** Typography style override */
   typographyStyle?: string;
+  /** Override letter-spacing for company name arcs */
+  arcTextSpacing?: number;
+  /** Shift separator position inward/outward (0-100, default 50 = centered) */
+  separatorDistancePct?: number;
 }
 
 const ARABIC_FONT = '"Noto Naskh Arabic", "Arabic Typesetting", "Traditional Arabic", serif';
