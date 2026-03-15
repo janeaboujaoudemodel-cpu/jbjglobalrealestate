@@ -5,6 +5,7 @@ import { LanguageContext } from "@/contexts/LanguageContext";
 
 interface PageNavigationProps {
   isChatOpen?: boolean;
+  isChatMedium?: boolean;
 }
 
 const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChatOpen = false }, ref) => {
