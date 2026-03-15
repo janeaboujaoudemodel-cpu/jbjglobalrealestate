@@ -88,7 +88,7 @@ export default function LogoMockups({ logo, colors, name, font, stampUrl }: Prop
             </button>
           ))}
         </div>
-        <LetterheadPreview logo={logo} colors={colors} name={companyName} font={font} layout={letterLayout} />
+        <LetterheadPreview logo={logo} colors={colors} name={companyName} font={font} layout={letterLayout} stampUrl={stampUrl} />
         <Button onClick={downloadLetterheadPdf} variant="outline" className="w-full gap-2 text-xs">
           <Download size={12} /> Download Letterhead PDF
         </Button>
