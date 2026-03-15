@@ -881,36 +881,36 @@ function ConnectedModeButton() {
 
   const MODE_CONFIG: Record<string, { label: string; icon: typeof Users; color: string; bgColor: string; borderColor: string; description: string }> = {
     investor: {
-      label: 'Mode: Investor',
+      label: t('filter.modeInvestor'),
       icon: User,
       color: 'text-emerald-500',
       bgColor: 'bg-emerald-500/10 border-emerald-500/30',
       borderColor: 'border-emerald-500/40',
-      description: 'Browse properties, access ROI tools, upload listings, explore guides & market insights'
+      description: t('filter.modeInvestorDesc')
     },
     broker: {
-      label: 'Mode: Broker',
+      label: t('filter.modeBroker'),
       icon: Briefcase,
       color: 'text-blue-500',
       bgColor: 'bg-blue-500/10 border-blue-500/30',
       borderColor: 'border-blue-500/40',
-      description: 'CRM dashboard, education hub, sell properties, upload listings, coordinate with clients & close deals'
+      description: t('filter.modeBrokerDesc')
     },
     investor_broker: {
-      label: 'Mode: Investor + Broker',
+      label: t('filter.modeInvestorBroker'),
       icon: Users,
       color: 'text-purple-500',
       bgColor: 'bg-purple-500/10 border-purple-500/30',
       borderColor: 'border-purple-500/40',
-      description: 'Full access to investor tools, broker dashboard, CRM, listings, guides & market intelligence'
+      description: t('filter.modeInvestorBrokerDesc')
     },
     developer: {
-      label: 'Mode: Developer',
+      label: t('filter.modeDeveloper'),
       icon: Building2,
       color: 'text-amber-500',
       bgColor: 'bg-amber-500/10 border-amber-500/30',
       borderColor: 'border-amber-500/40',
-      description: 'Submit projects, upload terraces & documents, manage launches, marketing materials & event calendar'
+      description: t('filter.modeDeveloperDesc')
     }
   };
 
