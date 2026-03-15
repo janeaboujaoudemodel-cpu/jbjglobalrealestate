@@ -364,7 +364,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
 
   } else if (mode === 'EN') {
     // English only — company name on top arc, location on bottom arc (all English)
-    const topText = config.companyNameEn.toUpperCase() || 'COMPANY NAME';
+    const topText = normalizeEnglishTokenSpacing(config.companyNameEn.toUpperCase() || 'COMPANY NAME');
     const topSafe = safeArcFontSize(topText, clampedTextArcR, false, 15, englishSpread, 5);
     const enLSonly = arcTextSpacingOverride ?? topSafe.letterSpacing;
     topArcContent = renderTopArcTextPath(
