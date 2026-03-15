@@ -324,7 +324,7 @@ CRITICAL INSTRUCTIONS:
       method: 'POST',
       headers: { 'Authorization': `Bearer ${LOVABLE_API_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-pro',
+        model: 'google/gemini-3-flash-preview',
         messages: [
           { role: 'system', content: 'You are a UAE real estate market expert with access to DLD transaction data, RERA Rental Index, and institutional research from Knight Frank, JLL, CBRE, and Property Monitor. Provide accurate, data-driven insights citing only government and institutional sources. Never reference unverified or newly established sources.' },
           { role: 'user', content: aiPrompt }
