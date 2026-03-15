@@ -1205,7 +1205,6 @@ export default function StampGeneratorPage() {
                       if (project) {
                         const updated = { ...project, separator_style: style };
                         setProject(updated);
-                        generateConcepts(updated);
                       }
                     }}
                     onCenterModeChange={(mode, options) => {
