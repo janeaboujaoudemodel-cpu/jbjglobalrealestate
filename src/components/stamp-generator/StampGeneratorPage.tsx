@@ -1068,7 +1068,7 @@ export default function StampGeneratorPage() {
         <StampRightPanel
           concepts={concepts}
           favoriteConcepts={favoriteConcepts}
-          generating={generatingInPanel}
+          generating={generating}
           blocked={blocked}
           selectedId={activeStandard?.id || selectedId}
           svgOverrides={svgOverrides}

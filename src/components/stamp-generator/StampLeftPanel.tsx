@@ -176,7 +176,7 @@ interface StampLeftPanelProps {
 }
 
 export function StampLeftPanel(props: StampLeftPanelProps) {
-  const [openSections, setOpenSections] = useState<string[]>(['colors', 'text']);
+  const [openSections, setOpenSections] = useState<string[]>([]);
   // Track which element is focused — when center is focused, color changes target monogram
   const [focusedElement, setFocusedElement] = useState<'center' | 'separator' | 'text' | null>(null);
 
