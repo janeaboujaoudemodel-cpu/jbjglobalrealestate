@@ -222,6 +222,7 @@ export function LiveStampPreview({
       centerMode: centerMode || (iconStyle === 'UPLOADED_LOGO' ? 'logo' : iconStyle === 'MONOGRAM' ? 'monogram' : undefined),
       centerIcon,
       arabicArcSpread: arcSpreadVal,
+      englishArcSpread: enArcSpreadVal,
       arabicLetterSpacing,
       arabicFont: resolvedArFont,
       arabicFontWeight,
@@ -235,6 +236,11 @@ export function LiveStampPreview({
       typographyStyle,
       arcTextSpacing: arcTextSpacing,
       separatorDistancePct: separatorDistance,
+      companyArcBandOffset,
+      locationArcBandOffset,
+      outerBorderColor,
+      middleBorderColor,
+      innerBorderColor,
     });
   }, [
     displayName, arabicCompanyName, city, country, registrationNumber,
