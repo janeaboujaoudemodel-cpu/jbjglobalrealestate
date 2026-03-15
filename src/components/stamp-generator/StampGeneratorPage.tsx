@@ -159,7 +159,7 @@ export default function StampGeneratorPage() {
   const setArabicFont = (v: string) => { setArabicFontRaw(v); ssSave(ssKey('arabicFont'), v); };
   const [arabicLetterSpacing, setArabicLetterSpacingRaw] = useState(() => ssGet(ssKey('arabicLetterSpacing'), 3));
   const setArabicLetterSpacing = (v: number) => { setArabicLetterSpacingRaw(v); ssSave(ssKey('arabicLetterSpacing'), v); };
-  const [arabicArcSpread, setArabicArcSpreadRaw] = useState(() => ssGet(ssKey('arabicArcSpread'), 0.88));
+  const [arabicArcSpread, setArabicArcSpreadRaw] = useState(() => ssGet(ssKey('arabicArcSpread'), 0.98));
   const setArabicArcSpread = (v: number) => { setArabicArcSpreadRaw(v); ssSave(ssKey('arabicArcSpread'), v); };
   const [arabicFontWeight, setArabicFontWeightRaw] = useState(() => ssGet(ssKey('arabicFontWeight'), 'bold'));
   const setArabicFontWeight = (v: string) => { setArabicFontWeightRaw(v); ssSave(ssKey('arabicFontWeight'), v); };
