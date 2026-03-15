@@ -8,7 +8,7 @@ interface PageNavigationProps {
   isChatMedium?: boolean;
 }
 
-const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChatOpen = false }, ref) => {
+const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChatOpen = false, isChatMedium = false }, ref) => {
   const languageContext = useContext(LanguageContext);
   const isRTL = languageContext?.isRTL ?? false;
   const [showScrollTop, setShowScrollTop] = useState(false);
