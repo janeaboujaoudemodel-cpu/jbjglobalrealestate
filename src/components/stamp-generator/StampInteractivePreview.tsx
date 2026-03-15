@@ -249,17 +249,10 @@ export function StampInteractivePreview({
       y: Math.max(0, zone.rect.y - 8),
     });
 
-    // Dispatch language-specific event
-    const lang = getLanguageFromElement(zone.id);
-    if (lang === 'arabic') {
-      window.dispatchEvent(new CustomEvent('stamp-focus-arabic'));
-    } else if (lang === 'english') {
-      window.dispatchEvent(new CustomEvent('stamp-focus-english'));
-    } else if (meta.type === 'center') {
+    // Emit element selection via prop callback (replaces window events)
+    emitSelection(zone.id);
+    if (meta.type === 'center') {
       if (onCenterClick) onCenterClick();
-      window.dispatchEvent(new CustomEvent('stamp-open-center-panel'));
-    } else if (meta.type === 'separator') {
-      window.dispatchEvent(new CustomEvent('stamp-open-separator-panel'));
     }
   };
 
