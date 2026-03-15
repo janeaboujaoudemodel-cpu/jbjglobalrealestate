@@ -37,17 +37,23 @@ export interface LiveStampPreviewProps {
   centerMode?: CenterContentMode;
   centerIcon?: CenterIconType;
   arabicArcSpread?: number;
+  englishArcSpread?: number;
   arabicLetterSpacing?: number;
   arabicFont?: string;
   arabicFontWeight?: string;
   circleGap?: number;
   centerContentSize?: number;
+  companyArcBandOffset?: number;
+  locationArcBandOffset?: number;
   onElementClick?: (elementId: string) => void;
   onDoubleClick?: (elementId: string) => void;
   monogramLetterColors?: Record<number, string>;
   monogramDividerColor?: string;
   arcTextSpacing?: number;
   separatorDistance?: number;
+  outerBorderColor?: string;
+  middleBorderColor?: string;
+  innerBorderColor?: string;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
