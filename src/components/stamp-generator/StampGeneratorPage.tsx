@@ -650,8 +650,8 @@ export default function StampGeneratorPage() {
     if (!isDbId) {
       const { data } = await supabase.from('stamp_designs').insert({
         project_id: projectId, user_id: user!.id, design_version: 1, template_key: concept.templateKey,
-        svg_source: svgOverrides[concept.id] || concept.svgSource, style_snapshot_json: project, is_favorite: true,
-      }).select('id').single();
+        svg_source: svgOverrides[concept.id] || concept.svgSource, style_snapshot_json: project, is_favorite: true, source: 'manual',
+      } as any).select('id').single();
       if (data) dbId = data.id;
     } else {
       await supabase.from('stamp_designs').update({ is_favorite: newFav }).eq('id', concept.id);
