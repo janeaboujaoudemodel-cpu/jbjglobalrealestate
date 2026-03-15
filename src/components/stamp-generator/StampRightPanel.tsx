@@ -109,19 +109,22 @@ export function StampRightPanel(props: StampRightPanelProps) {
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
         <TabsList className="flex-shrink-0 mx-2 mt-2 bg-[hsl(var(--muted))] h-8">
-          <TabsTrigger value="concepts" className="text-[9px] px-2 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
+          <TabsTrigger value="concepts" className="text-[9px] px-1.5 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
             Concepts
             {props.concepts.length > 0 && <Badge variant="secondary" className="ml-1 text-[7px] px-1 py-0 h-3.5">{props.concepts.length}</Badge>}
           </TabsTrigger>
-          <TabsTrigger value="favorites" className="text-[9px] px-2 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
+          <TabsTrigger value="favorites" className="text-[9px] px-1.5 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
             Favorites
             {props.favoriteConcepts.length > 0 && <Badge variant="secondary" className="ml-1 text-[7px] px-1 py-0 h-3.5">{props.favoriteConcepts.length}</Badge>}
           </TabsTrigger>
-          <TabsTrigger value="variations" className="text-[9px] px-2 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
+          <TabsTrigger value="variations" className="text-[9px] px-1.5 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
             Variations
             {props.variations.length > 0 && <Badge variant="secondary" className="ml-1 text-[7px] px-1 py-0 h-3.5">{props.variations.length}</Badge>}
           </TabsTrigger>
-          <TabsTrigger value="history" className="text-[9px] px-2 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
+          <TabsTrigger value="library" className="text-[9px] px-1.5 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
+            <BookOpen size={9} className="mr-0.5" /> Library
+          </TabsTrigger>
+          <TabsTrigger value="history" className="text-[9px] px-1.5 flex-1 data-[state=active]:text-[hsl(var(--foreground))]">
             History
           </TabsTrigger>
         </TabsList>
