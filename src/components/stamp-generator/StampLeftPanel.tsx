@@ -199,40 +199,26 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
   const [focusedElement, setFocusedElement] = useState<'center' | 'separator' | 'text' | null>(null);
   const [removingBg, setRemovingBg] = useState(false);
 
+  // Auto-open correct sidebar section when an element is selected on the canvas
   useEffect(() => {
-    const openCenter = () => {
-      setOpenSections(prev => prev.includes('element-hierarchy') ? prev : [...prev, 'element-hierarchy']);
-      setFocusedElement('center');
-    };
-    const openSeparator = () => {
+    if (!props.selectedElement) return;
+    const t = props.selectedElement.type;
+    if (t === 'arabic-company' || t === 'arabic-location') {
+      setOpenSections(prev => prev.includes('arabic-controls') ? prev : [...prev, 'arabic-controls']);
+      setFocusedElement('text');
+    } else if (t === 'english-company' || t === 'english-location') {
+      setOpenSections(prev => prev.includes('english-controls') ? prev : [...prev, 'english-controls']);
+      setFocusedElement('text');
+    } else if (t === 'separator-left' || t === 'separator-right') {
       setOpenSections(prev => prev.includes('element-hierarchy') ? prev : [...prev, 'element-hierarchy']);
       setFocusedElement('separator');
-    };
-    const openText = () => {
+    } else if (t === 'monogram' || t === 'logo' || t === 'registration') {
       setOpenSections(prev => prev.includes('element-hierarchy') ? prev : [...prev, 'element-hierarchy']);
-      setFocusedElement('text');
-    };
-    const openArabic = () => {
-      setOpenSections(['arabic-controls']);
-      setFocusedElement('text');
-    };
-    const openEnglish = () => {
-      setOpenSections(['english-controls']);
-      setFocusedElement('text');
-    };
-    window.addEventListener('stamp-open-center-panel', openCenter);
-    window.addEventListener('stamp-open-separator-panel', openSeparator);
-    window.addEventListener('stamp-open-text-panel', openText);
-    window.addEventListener('stamp-focus-arabic', openArabic);
-    window.addEventListener('stamp-focus-english', openEnglish);
-    return () => {
-      window.removeEventListener('stamp-open-center-panel', openCenter);
-      window.removeEventListener('stamp-open-separator-panel', openSeparator);
-      window.removeEventListener('stamp-open-text-panel', openText);
-      window.removeEventListener('stamp-focus-arabic', openArabic);
-      window.removeEventListener('stamp-focus-english', openEnglish);
-    };
-  }, []);
+      setFocusedElement('center');
+    } else if (t === 'outer-ring' || t === 'middle-ring' || t === 'inner-ring') {
+      setOpenSections(prev => prev.includes('global-layout') ? prev : [...prev, 'global-layout']);
+    }
+  }, [props.selectedElement]);
 
   const handleColorChange = useCallback((hex: string) => {
     if (focusedElement === 'center' && props.localIconStyle === 'MONOGRAM') {
