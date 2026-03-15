@@ -1,7 +1,7 @@
 /**
  * StampInteractivePreview — Click-to-edit overlay for stamp SVG preview.
- * Scans rendered SVG for [data-stamp-element] nodes and overlays clickable hit zones.
- * Shows a floating toolbar with element-specific actions on selection.
+ * Single-click selects individual letter; double-click selects full word/arc.
+ * Dispatches language-specific events to auto-open only the relevant sidebar panel.
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { StampSVGRenderer } from './StampSVGRenderer';
@@ -55,6 +55,13 @@ const CENTER_ICONS: { value: CenterIconType; label: string }[] = [
   { value: 'globe', label: '🌐 Globe' },
 ];
 
+/** Determine language from element ID */
+function getLanguageFromElement(id: string): 'arabic' | 'english' | null {
+  if (id === 'top-arc' || id === 'loc-top') return 'arabic';
+  if (id === 'bottom-arc' || id === 'loc-bottom') return 'english';
+  return null;
+}
+
 interface Props {
   svgSource: string;
   tintColor: string;
@@ -69,7 +76,6 @@ interface Props {
   onSvgChange: (newSvg: string) => void;
   onSeparatorChange?: (style: SeparatorStyle) => void;
   onCenterModeChange?: (mode: CenterContentMode, options?: { monogramText?: string; icon?: CenterIconType }) => void;
-  /** Called when user clicks the center element — used to auto-switch to monogram edit */
   onCenterClick?: () => void;
   currentSeparatorStyle?: SeparatorStyle;
   currentCenterMode?: CenterContentMode;
@@ -96,6 +102,8 @@ export function StampInteractivePreview({
   const containerRef = useRef<HTMLDivElement>(null);
   const [hitZones, setHitZones] = useState<HitZone[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
+  const [selectedLetterIdx, setSelectedLetterIdx] = useState<number | null>(null);
+  const [selectionMode, setSelectionMode] = useState<'letter' | 'word'>('word');
   const [editingText, setEditingText] = useState<string | null>(null);
   const [editValue, setEditValue] = useState('');
   const [toolbarPos, setToolbarPos] = useState({ x: 0, y: 0 });
@@ -113,7 +121,6 @@ export function StampInteractivePreview({
       const meta = ELEMENT_LABELS[id];
       if (!meta) return;
       const rect = el.getBoundingClientRect();
-      // For arc text (textPath), the bbox can be tiny — expand hit zone
       const isArc = meta.type === 'arc-text' || meta.type === 'location';
       const padding = isArc ? 12 : 6;
       const adjustedRect = new DOMRect(
@@ -129,27 +136,95 @@ export function StampInteractivePreview({
   }, []);
 
   useEffect(() => {
-    // Scan after render + a small delay for SVG to paint
     const timer = setTimeout(scanElements, 150);
     return () => clearTimeout(timer);
   }, [svgSource, tintColor, secondaryColor, accentColor, fontFamily, fontSize, scanElements]);
 
-  const handleZoneClick = (zone: HitZone) => {
+  // Get text content for an element
+  const getElementText = useCallback((elementId: string): string => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgSource, 'image/svg+xml');
+    const el = doc.querySelector(`[data-stamp-element="${elementId}"]`);
+    if (!el) return '';
+    const tp = el.querySelector('textPath');
+    return tp?.textContent || el.textContent || '';
+  }, [svgSource]);
+
+  // Estimate which letter was clicked based on position within the hit zone
+  const estimateLetterIndex = useCallback((zone: HitZone, clickX: number): number => {
+    const text = getElementText(zone.id);
+    if (!text || text.length <= 1) return 0;
+    const relX = clickX - zone.rect.x;
+    const pct = Math.max(0, Math.min(1, relX / zone.rect.width));
+    return Math.min(text.length - 1, Math.floor(pct * text.length));
+  }, [getElementText]);
+
+  // Single click: select letter
+  const handleZoneClick = (zone: HitZone, e: React.MouseEvent) => {
+    const meta = ELEMENT_LABELS[zone.id];
+    if (!meta) return;
+
+    // For text elements, select individual letter
+    if (meta.type === 'arc-text' || meta.type === 'location') {
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      const clickX = containerRect ? e.clientX - containerRect.x : 0;
+      const letterIdx = estimateLetterIndex(zone, clickX);
+      const text = getElementText(zone.id);
+
+      setSelected(zone.id);
+      setSelectedLetterIdx(letterIdx);
+      setSelectionMode('letter');
+      setEditingText(null);
+      setToolbarPos({
+        x: Math.max(0, Math.min(zone.rect.x + zone.rect.width / 2, size - 120)),
+        y: Math.max(0, zone.rect.y - 8),
+      });
+
+      // Don't dispatch panel events on single click (letter mode)
+    } else {
+      // Non-text elements: standard selection
+      setSelected(zone.id);
+      setSelectedLetterIdx(null);
+      setSelectionMode('word');
+      setEditingText(null);
+      setToolbarPos({
+        x: Math.max(0, Math.min(zone.rect.x + zone.rect.width / 2, size - 120)),
+        y: Math.max(0, zone.rect.y - 8),
+      });
+      if (meta.type === 'center') {
+        if (onCenterClick) onCenterClick();
+        window.dispatchEvent(new CustomEvent('stamp-open-center-panel'));
+      } else if (meta.type === 'separator') {
+        window.dispatchEvent(new CustomEvent('stamp-open-separator-panel'));
+      }
+    }
+  };
+
+  // Double click: select full word/arc and open language-specific panel
+  const handleZoneDoubleClick = (zone: HitZone) => {
+    const meta = ELEMENT_LABELS[zone.id];
+    if (!meta) return;
+
     setSelected(zone.id);
+    setSelectedLetterIdx(null);
+    setSelectionMode('word');
     setEditingText(null);
-    // Position toolbar above the element
     setToolbarPos({
       x: Math.max(0, Math.min(zone.rect.x + zone.rect.width / 2, size - 120)),
       y: Math.max(0, zone.rect.y - 8),
     });
-    // Emit panel-focus events so left panel auto-opens the right accordion section
-    if (zone.type === 'center') {
+
+    // Dispatch language-specific event
+    const lang = getLanguageFromElement(zone.id);
+    if (lang === 'arabic') {
+      window.dispatchEvent(new CustomEvent('stamp-focus-arabic'));
+    } else if (lang === 'english') {
+      window.dispatchEvent(new CustomEvent('stamp-focus-english'));
+    } else if (meta.type === 'center') {
       if (onCenterClick) onCenterClick();
       window.dispatchEvent(new CustomEvent('stamp-open-center-panel'));
-    } else if (zone.type === 'separator') {
+    } else if (meta.type === 'separator') {
       window.dispatchEvent(new CustomEvent('stamp-open-separator-panel'));
-    } else if (zone.type === 'arc-text' || zone.type === 'location') {
-      window.dispatchEvent(new CustomEvent('stamp-open-text-panel', { detail: { elementId: zone.id } }));
     }
   };
 
@@ -157,18 +232,13 @@ export function StampInteractivePreview({
     const target = e.target as HTMLElement;
     if (!target.closest('[data-hit-zone]') && !target.closest('[data-toolbar]')) {
       setSelected(null);
+      setSelectedLetterIdx(null);
       setEditingText(null);
     }
   };
 
-  // Find the text element index for a given data-stamp-element id
   const findTextIndex = useCallback((elementId: string): number => {
     if (!containerRef.current) return -1;
-    const allTextEls = containerRef.current.querySelectorAll('text');
-    const targetEl = containerRef.current.querySelector(`[data-stamp-element="${elementId}"]`);
-    if (!targetEl) return -1;
-    // Find the matching text element among all texts in original SVG order
-    // We need to match by the data attribute in the original SVG
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgSource, 'image/svg+xml');
     const originalTexts = Array.from(doc.querySelectorAll('text'));
@@ -180,7 +250,6 @@ export function StampInteractivePreview({
     return -1;
   }, [svgSource]);
 
-  // Edit text content
   const startTextEdit = (elementId: string) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgSource, 'image/svg+xml');
@@ -202,7 +271,6 @@ export function StampInteractivePreview({
     setEditingText(null);
   };
 
-  // Delete element
   const deleteElement = (elementId: string) => {
     const idx = findTextIndex(elementId);
     if (idx >= 0) {
@@ -212,25 +280,19 @@ export function StampInteractivePreview({
     }
   };
 
-  // Nudge element position
   const nudgeElement = (elementId: string, dx: number, dy: number) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgSource, 'image/svg+xml');
     const el = doc.querySelector(`[data-stamp-element="${elementId}"]`);
     if (!el) return;
-
-    // For text elements with x/y attributes
     const x = parseFloat(el.getAttribute('x') || '0');
     const y = parseFloat(el.getAttribute('y') || '0');
-    // Clamp nudge to safe zone (±15px max from original)
     el.setAttribute('x', String(x + dx));
     el.setAttribute('y', String(y + dy));
-
     const newSvg = new XMLSerializer().serializeToString(doc.documentElement);
     onSvgChange(newSvg);
   };
 
-  // Adjust letter spacing
   const adjustSpacing = (elementId: string, delta: number) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgSource, 'image/svg+xml');
@@ -243,7 +305,6 @@ export function StampInteractivePreview({
     onSvgChange(newSvg);
   };
 
-  // Adjust font size
   const adjustFontSize = (elementId: string, delta: number) => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(svgSource, 'image/svg+xml');
@@ -258,6 +319,8 @@ export function StampInteractivePreview({
 
   const selectedZone = hitZones.find(z => z.id === selected);
   const selectedMeta = selected ? ELEMENT_LABELS[selected] : null;
+  const selectedText = selected ? getElementText(selected) : '';
+  const selectedLang = selected ? getLanguageFromElement(selected) : null;
 
   return (
     <div
@@ -285,10 +348,13 @@ export function StampInteractivePreview({
         <div
           key={zone.id}
           data-hit-zone={zone.id}
-          onClick={(e) => { e.stopPropagation(); handleZoneClick(zone); }}
+          onClick={(e) => { e.stopPropagation(); handleZoneClick(zone, e); }}
+          onDoubleClick={(e) => { e.stopPropagation(); handleZoneDoubleClick(zone); }}
           className={`absolute rounded cursor-pointer transition-all duration-150 ${
             selected === zone.id
-              ? 'ring-2 ring-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.12)]'
+              ? selectionMode === 'letter'
+                ? 'ring-2 ring-amber-400 bg-amber-400/10'
+                : 'ring-2 ring-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.12)]'
               : 'hover:bg-[hsl(var(--gold)/0.06)] hover:ring-1 hover:ring-[hsl(var(--gold)/0.3)]'
           }`}
           style={{
@@ -297,7 +363,7 @@ export function StampInteractivePreview({
             width: zone.rect.width,
             height: zone.rect.height,
           }}
-          title={zone.label}
+          title={`${zone.label} — Click: select letter, Double-click: select all`}
         />
       ))}
 
@@ -314,13 +380,33 @@ export function StampInteractivePreview({
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-[hsl(var(--border))]">
-            <span className="text-[9px] font-bold text-[hsl(var(--foreground))] uppercase tracking-wider truncate">
-              {selectedZone.label}
-            </span>
-            <button onClick={() => setSelected(null)} className="p-0.5 rounded hover:bg-[hsl(var(--muted))]">
+            <div className="flex items-center gap-1.5 min-w-0">
+              {selectedLang === 'arabic' && <span className="text-[9px]">🇦🇪</span>}
+              {selectedLang === 'english' && <span className="text-[9px]">🇬🇧</span>}
+              <span className="text-[9px] font-bold text-[hsl(var(--foreground))] uppercase tracking-wider truncate">
+                {selectionMode === 'letter' && selectedLetterIdx !== null && selectedText
+                  ? `Letter "${selectedText[selectedLetterIdx]}" — ${selectedZone.label}`
+                  : selectedZone.label}
+              </span>
+            </div>
+            <button onClick={() => { setSelected(null); setSelectedLetterIdx(null); }} className="p-0.5 rounded hover:bg-[hsl(var(--muted))]">
               <X size={10} className="text-[hsl(var(--muted-foreground))]" />
             </button>
           </div>
+
+          {/* Selection mode indicator */}
+          {(selectedMeta.type === 'arc-text' || selectedMeta.type === 'location') && (
+            <div className="flex gap-1 mb-2">
+              <button
+                onClick={() => setSelectionMode('letter')}
+                className={`flex-1 text-[8px] py-1 rounded border transition-all ${selectionMode === 'letter' ? 'border-amber-400 bg-amber-50 text-amber-700 font-bold' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}
+              >Letter</button>
+              <button
+                onClick={() => { setSelectionMode('word'); setSelectedLetterIdx(null); }}
+                className={`flex-1 text-[8px] py-1 rounded border transition-all ${selectionMode === 'word' ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] font-bold' : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))]'}`}
+              >Full Arc</button>
+            </div>
+          )}
 
           {/* Inline text edit */}
           {editingText === selected ? (
@@ -347,7 +433,7 @@ export function StampInteractivePreview({
                 <ToolBtn icon={<Minimize2 size={10} />} label="Size −" onClick={() => adjustFontSize(selected, -1)} />
                 <ToolBtn icon={<Maximize2 size={10} />} label="Space +" onClick={() => adjustSpacing(selected, 0.5)} />
                 <ToolBtn icon={<LayoutGrid size={10} />} label="Space −" onClick={() => adjustSpacing(selected, -0.5)} />
-                {/* Match Style — copy font-size + letter-spacing from the opposite arc */}
+                {/* Match Style */}
                 {(selected === 'top-arc' || selected === 'bottom-arc') && (
                   <ToolBtn
                     icon={<Replace size={10} />}
@@ -370,11 +456,22 @@ export function StampInteractivePreview({
                     }}
                   />
                 )}
+                {/* Open language panel shortcut */}
+                {selectedLang && (
+                  <ToolBtn
+                    icon={selectedLang === 'arabic' ? <span className="text-[8px]">🇦🇪</span> : <span className="text-[8px]">🇬🇧</span>}
+                    label={selectedLang === 'arabic' ? 'AR Panel' : 'EN Panel'}
+                    onClick={() => {
+                      if (selectedLang === 'arabic') window.dispatchEvent(new CustomEvent('stamp-focus-arabic'));
+                      else window.dispatchEvent(new CustomEvent('stamp-focus-english'));
+                    }}
+                  />
+                )}
                 <ToolBtn icon={<Trash2 size={10} />} label="Delete" onClick={() => deleteElement(selected)} danger />
               </>
             )}
 
-            {/* Separators — replace, nudge, resize, delete */}
+            {/* Separators */}
             {selectedMeta.type === 'separator' && (
               <>
                 <ToolBtn icon={<Move size={10} />} label="↑" onClick={() => nudgeElement(selected, 0, -1)} />
@@ -387,7 +484,7 @@ export function StampInteractivePreview({
               </>
             )}
 
-            {/* Center content — switch mode */}
+            {/* Center content */}
             {selectedMeta.type === 'center' && (
               <>
                 <ToolBtn icon={<Pencil size={10} />} label="Edit" onClick={() => startTextEdit(selected)} />
@@ -476,7 +573,7 @@ export function StampInteractivePreview({
       {/* Hint text */}
       {!selected && hitZones.length > 0 && (
         <div className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[8px] text-[hsl(var(--muted-foreground))] bg-white/80 px-2 py-0.5 rounded-full backdrop-blur-sm pointer-events-none">
-          Click any element to edit
+          Click letter · Double-click full arc
         </div>
       )}
     </div>
