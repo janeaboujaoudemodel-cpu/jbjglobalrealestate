@@ -176,7 +176,10 @@ export default function StampGeneratorPage() {
 
   // Live-apply monogram colors whenever they change
   useEffect(() => {
-    if (localIconStyle !== 'MONOGRAM' || !localMonogramText) return;
+    if (localIconStyle !== 'MONOGRAM') return;
+    // Use derived initials as fallback when no explicit monogram text is set
+    const effectiveMonogram = localMonogramText || (project?.company_name ? project.company_name.trim().split(/\s+/).filter((w: string) => w.length > 0).slice(0, 3).map((w: string) => w[0]).join('').toUpperCase() : '');
+    if (!effectiveMonogram) return;
     const hasCustomColors = Object.keys(monogramLetterColors.letters).length > 0 || monogramLetterColors.allLetters || monogramLetterColors.divider;
     if (!hasCustomColors) return;
     const id = selectedId || concepts[0]?.id;
