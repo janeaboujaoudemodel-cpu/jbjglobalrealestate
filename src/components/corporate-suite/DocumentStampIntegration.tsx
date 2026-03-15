@@ -1,13 +1,15 @@
 /**
  * DocumentStampIntegration — Generate AI signatures, upload stamps, trade license.
+ * Stamps load from Brand Asset Library (DB) or manual upload.
  */
 import { useState, useRef } from "react";
-import { Stamp, PenTool, Upload, Loader2, X, FileText } from "lucide-react";
+import { Stamp, PenTool, Upload, Loader2, X, FileText, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { BrandAssetPicker } from "@/components/brand-assets/BrandAssetPicker";
 
 export interface StampSignatureData {
   signatureUrl?: string;
@@ -30,19 +32,27 @@ export default function DocumentStampIntegration({ data, onChange }: Props) {
   const [sigName, setSigName] = useState("");
   const [sigStyle, setSigStyle] = useState("elegant");
   const [generating, setGenerating] = useState(false);
+  const [showStampPicker, setShowStampPicker] = useState(false);
   const stampInput = useRef<HTMLInputElement>(null);
   const sigUploadInput = useRef<HTMLInputElement>(null);
   const licenseInput = useRef<HTMLInputElement>(null);
 
-  // Load saved stamp from session storage (from Stamp Generator)
-  const loadSavedStamp = () => {
-    const saved = sessionStorage.getItem("jbj_stamp_preview");
-    if (saved) {
-      onChange({ ...data, stampUrl: saved });
-      toast.success("Stamp loaded from Stamp Generator");
-    } else {
-      toast.info("No saved stamp found. Create one in the Stamp Generator first.");
+  // Load stamp from Brand Asset Library (DB-backed)
+  const handleBrandAssetSelect = (asset: any) => {
+    let url = asset.thumbnail_url || "";
+    if (asset.svg_content) {
+      try {
+        const svgBase64 = btoa(unescape(encodeURIComponent(asset.svg_content)));
+        url = `data:image/svg+xml;base64,${svgBase64}`;
+      } catch {
+        // fallback to thumbnail
+      }
     }
+    if (url) {
+      onChange({ ...data, stampUrl: url });
+      toast.success("Stamp loaded from Brand Library");
+    }
+    setShowStampPicker(false);
   };
 
   // Generate AI signature
@@ -156,15 +166,15 @@ export default function DocumentStampIntegration({ data, onChange }: Props) {
           <Button size="sm" variant="outline" onClick={() => stampInput.current?.click()} className="h-7 text-[10px] gap-1">
             <Upload size={10} /> Upload Stamp
           </Button>
-          <Button size="sm" variant="outline" onClick={loadSavedStamp} className="h-7 text-[10px] gap-1">
-            <Stamp size={10} /> Load Saved
+          <Button size="sm" variant="outline" onClick={() => setShowStampPicker(true)} className="h-7 text-[10px] gap-1">
+            <Package size={10} /> Brand Library
           </Button>
           <input ref={stampInput} type="file" accept="image/*" onChange={handleStampUpload} className="hidden" />
         </div>
 
         {data.stampUrl && (
           <div className="relative inline-block bg-[hsl(var(--muted)/0.3)] p-2 rounded-lg">
-            <img src={data.stampUrl} alt="Stamp" className="h-16 object-contain" />
+            <img src={data.stampUrl} alt="Stamp" className="h-16 object-contain" style={{ mixBlendMode: "multiply" }} />
             <button
               onClick={() => onChange({ ...data, stampUrl: undefined })}
               className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center"
@@ -190,6 +200,15 @@ export default function DocumentStampIntegration({ data, onChange }: Props) {
         <input ref={licenseInput} type="file" accept="image/*,.pdf" onChange={() => toast.info("License uploaded — details will auto-fill header.")} className="hidden" />
         <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Upload to auto-fill company details in document header.</p>
       </div>
+
+      {/* Brand Asset Picker Modal */}
+      {showStampPicker && (
+        <BrandAssetPicker
+          filterType="stamp"
+          onSelect={handleBrandAssetSelect}
+          onClose={() => setShowStampPicker(false)}
+        />
+      )}
     </div>
   );
 }

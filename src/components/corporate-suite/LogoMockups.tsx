@@ -13,12 +13,13 @@ interface Props {
   colors: { primary: string; secondary: string; accent: string };
   name: string;
   font: string;
+  stampUrl?: string;
 }
 
 type CardLayout = "horizontal" | "vertical" | "centered" | "minimal";
 type LetterheadLayout = "logo-left" | "logo-center" | "logo-right";
 
-export default function LogoMockups({ logo, colors, name, font }: Props) {
+export default function LogoMockups({ logo, colors, name, font, stampUrl }: Props) {
   const [cardLayout, setCardLayout] = useState<CardLayout>("horizontal");
   const [letterLayout, setLetterLayout] = useState<LetterheadLayout>("logo-left");
 
@@ -87,7 +88,7 @@ export default function LogoMockups({ logo, colors, name, font }: Props) {
             </button>
           ))}
         </div>
-        <LetterheadPreview logo={logo} colors={colors} name={companyName} font={font} layout={letterLayout} />
+        <LetterheadPreview logo={logo} colors={colors} name={companyName} font={font} layout={letterLayout} stampUrl={stampUrl} />
         <Button onClick={downloadLetterheadPdf} variant="outline" className="w-full gap-2 text-xs">
           <Download size={12} /> Download Letterhead PDF
         </Button>
@@ -162,8 +163,9 @@ function BusinessCardPreview({ logo, colors, name, font, layout }: {
   );
 }
 
-function LetterheadPreview({ logo, colors, name, font, layout }: {
+function LetterheadPreview({ logo, colors, name, font, layout, stampUrl }: {
   logo: LogoData; colors: { primary: string; secondary: string; accent: string }; name: string; font: string; layout: LetterheadLayout;
+  stampUrl?: string;
 }) {
   const logoEl = <LogoPreview svgContent={logo.svgContent} size={36} />;
   const nameEl = (
@@ -190,11 +192,18 @@ function LetterheadPreview({ logo, colors, name, font, layout }: {
         <div className="h-2 rounded bg-gray-100 w-5/6 mt-3" />
         <div className="h-2 rounded bg-gray-100 w-2/3" />
       </div>
-      {/* Footer */}
-      <div className="pt-3 border-t" style={{ borderColor: colors.accent + "40" }}>
-        <p className="text-[8px] text-center" style={{ color: "#9ca3af" }}>
+      {/* Footer with optional stamp */}
+      <div className="pt-3 border-t flex items-center justify-between" style={{ borderColor: colors.accent + "40" }}>
+        <p className="text-[8px] text-center flex-1" style={{ color: "#9ca3af" }}>
           {name} | info@company.com | +1 (555) 000-0000 | 123 Business Ave
         </p>
+        {stampUrl && (
+          <img
+            src={stampUrl}
+            alt="Company Stamp"
+            style={{ height: 24, objectFit: "contain", mixBlendMode: "multiply", opacity: 0.8 }}
+          />
+        )}
       </div>
     </div>
   );

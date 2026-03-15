@@ -46,6 +46,10 @@ interface BusinessCardCenterPanelProps {
   logoSize: number;
   logoPos: { x: number; y: number };
   setLogoPos: (v: { x: number; y: number }) => void;
+  stampUrl: string;
+  stampSize: number;
+  stampPos: { x: number; y: number };
+  setStampPos: (v: { x: number; y: number }) => void;
   aiDesignData: any;
   cardFontFamily: string;
   cardFontBold: boolean;
@@ -85,6 +89,7 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
     fieldPositions, handleFieldMove,
     qrEnabled, qrDataStr, qrSize, effectiveQrColor, qrBgColor, qrPosition, qrSide,
     logoUrl, logoSize, logoPos, setLogoPos,
+    stampUrl, stampSize, stampPos, setStampPos,
     aiDesignData, cardFontFamily, cardFontBold, cardFontItalic, cardFontSize,
     bilingualMode, bilingualDir, secondaryData, setInlineEditField, inlineEditField, setData,
     finishEffect, frontColorIdx, backColorIdx, setFrontTemplate, setBackTemplate,
@@ -119,6 +124,10 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
     logoSize,
     logoPos,
     onLogoMove: setLogoPos,
+    stampUrl,
+    stampSize,
+    stampPos,
+    onStampMove: setStampPos,
     aiDesignData,
     fontFamily: cardFontFamily,
     fontWeight: cardFontBold ? ("bold" as const) : undefined,

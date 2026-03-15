@@ -368,6 +368,7 @@ export function CardCanvas({
   editLayout, fieldPositions, onFieldMove,
   qrEnabled, qrData, qrSize, qrColor, qrBgColor, qrPosition, qrSide,
   logoUrl, logoSize, logoPos, onLogoMove, aiDesignData,
+  stampUrl, stampSize, stampPos, onStampMove,
   fontFamily, fontWeight, fontStyle, nameFontSize,
   bilingualMode, bilingualDir, secondaryData,
   onInlineEdit,
@@ -382,6 +383,8 @@ export function CardCanvas({
   qrSide: "front" | "back" | "both";
   logoUrl: string; logoSize: number; logoPos: { x: number; y: number };
   onLogoMove: (pos: { x: number; y: number }) => void;
+  stampUrl?: string; stampSize?: number; stampPos?: { x: number; y: number };
+  onStampMove?: (pos: { x: number; y: number }) => void;
   aiDesignData: AiDesignData | null;
   fontFamily?: string; fontWeight?: string; fontStyle?: string; nameFontSize?: number | null;
   bilingualMode?: BilingualMode; bilingualDir?: "rtl" | "ltr"; secondaryData?: CardData;
@@ -587,6 +590,30 @@ export function CardCanvas({
             boxShadow: editLayout ? "0 0 0 2px rgba(255,215,0,0.3)" : "none",
             userSelect: "none",
             touchAction: "none",
+          }}
+          draggable={false}
+        />
+      )}
+
+      {/* Stamp overlay — independent layer with ink blend */}
+      {stampUrl && (
+        <img
+          src={stampUrl}
+          alt="stamp"
+          onMouseDown={e => startDrag("logo", e)}
+          style={{
+            position: "absolute",
+            left: `${(stampPos?.x ?? 70)}%`,
+            top: `${(stampPos?.y ?? 65)}%`,
+            width: stampSize ?? 50,
+            height: stampSize ?? 50,
+            objectFit: "contain",
+            mixBlendMode: "multiply",
+            opacity: 0.85,
+            borderRadius: 4,
+            zIndex: 16,
+            pointerEvents: "none",
+            userSelect: "none",
           }}
           draggable={false}
         />

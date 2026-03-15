@@ -54,6 +54,14 @@ interface BusinessCardRightPanelProps {
   logoSize: number;
   setLogoSize: (v: number) => void;
 
+  // Stamp
+  stampOpen: boolean;
+  setStampOpen: (v: boolean) => void;
+  stampUrl: string;
+  setStampUrl: (v: string) => void;
+  stampSize: number;
+  setStampSize: (v: number) => void;
+
   // Typography
   typographyOpen: boolean;
   setTypographyOpen: (v: boolean) => void;
@@ -142,6 +150,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
     useGradient, setUseGradient, gradientEnd, setGradientEnd,
     gradientDirection, setGradientDirection,
     brandAssetOpen, setBrandAssetOpen, logoUrl, setLogoUrl, logoSize, setLogoSize,
+    stampOpen, setStampOpen, stampUrl, setStampUrl, stampSize, setStampSize,
     typographyOpen, setTypographyOpen,
     cardFontFamily, setCardFontFamily, cardFontBold, setCardFontBold,
     cardFontItalic, setCardFontItalic, cardFontSize, setCardFontSize,
@@ -311,6 +320,48 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                   className="mt-2 text-[10px] text-red-500 hover:underline"
                 >
                   Remove logo from card
+                </button>
+              )}
+            </div>
+          </CollapsibleContent>
+        </div>
+      </Collapsible>
+
+      {/* Stamp Overlay */}
+      <Collapsible open={stampOpen} onOpenChange={setStampOpen}>
+        <div className="bg-white rounded-2xl border border-[hsl(var(--border))] shadow-sm overflow-hidden">
+          <CollapsibleTrigger asChild>
+            <button className="w-full flex items-center justify-between p-4 hover:bg-[hsl(var(--muted)/0.5)] transition-colors">
+              <div className="flex items-center gap-2">
+                <Stamp size={13} className="text-[hsl(var(--gold))]" />
+                <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[hsl(var(--muted-foreground))]">Stamp</span>
+                {stampUrl && <span className="w-2 h-2 rounded-full bg-[hsl(var(--gold))]" />}
+              </div>
+              <ChevronDown size={13} className={`text-[hsl(var(--muted-foreground))] transition-transform ${stampOpen ? "rotate-180" : ""}`} />
+            </button>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="px-4 pb-4 border-t border-[hsl(var(--border))]">
+              <p className="text-[10px] text-[hsl(var(--muted-foreground))] py-2">
+                Add a company stamp overlay. Works best on white or light backgrounds.
+              </p>
+              <BrandAssetLibrary
+                assetTypes={["stamp"]}
+                selectedUrl={stampUrl}
+                onSelect={asset => setStampUrl(asset.file_url)}
+                showSizeControl
+                sizeValue={stampSize}
+                onSizeChange={setStampSize}
+                sizeLabel="Stamp Size"
+                sizeMin={20}
+                sizeMax={100}
+              />
+              {stampUrl && (
+                <button
+                  onClick={() => setStampUrl("")}
+                  className="mt-2 text-[10px] text-destructive hover:underline"
+                >
+                  Remove stamp from card
                 </button>
               )}
             </div>
