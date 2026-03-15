@@ -341,11 +341,11 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     // English only — company name on top arc, location on bottom arc (all English)
     const topText = config.companyNameEn.toUpperCase() || 'COMPANY NAME';
     const topSafe = safeArcFontSize(topText, clampedTextArcR, false, 15, englishSpread, 5);
+    const enLSonly = arcTextSpacingOverride ?? topSafe.letterSpacing;
     topArcContent = renderTopArcTextPath(
       topText, cx, cy, clampedTextArcR, topSafe.fontSize, enFont, ink,
-      topSafe.letterSpacing, false, 'top-arc'
+      enLSonly, false, 'top-arc'
     );
-    // Location on bottom arc
     if (config.showLocation) {
       const locEn = config.locationTextEn || 'Dubai, UAE';
       const botSafe = safeArcFontSize(locEn.toUpperCase(), clampedTextArcR, false, 12, englishSpread, 5);
@@ -354,7 +354,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
         botSafe.letterSpacing, false, 'bottom-arc', '600'
       );
     }
-    separatorContent = renderSeparators(cx, cy, clampedTextArcR, config.separatorStyle, ink);
+    separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
 
   } else if (mode === 'AR') {
     // Arabic only — company name on top arc, location on bottom arc (all Arabic)
