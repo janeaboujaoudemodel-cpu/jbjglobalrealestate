@@ -561,7 +561,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactive)}>
-              Bedrooms
+              {t('filter.bedrooms')}
               {filters.bedrooms.length > 0 && <CountBadge count={filters.bedrooms.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
