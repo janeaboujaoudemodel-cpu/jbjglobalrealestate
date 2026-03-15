@@ -793,6 +793,16 @@ export default function CreateEnvelope() {
                   />
                 </div>
 
+                {/* Visual Document Preview */}
+                {pdfUrl && (
+                  <DocumentPreviewSummary
+                    pdfUrl={pdfUrl}
+                    pdfFile={pdfFile}
+                    fields={signatureFields}
+                    recipients={recipients}
+                  />
+                )}
+
                 {/* Summary */}
                 <Card className="bg-muted/50">
                   <CardHeader>
