@@ -1492,7 +1492,7 @@ export default function GlobalVerticalNav() {
                   <Headphones className="w-3.5 h-3.5" />
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right" className="text-xs">Contact Us</TooltipContent>
+              <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
