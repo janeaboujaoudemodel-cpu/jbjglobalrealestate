@@ -65,20 +65,24 @@ function blobToDataUrl(blob: Blob): Promise<string> {
 
 /** SVG → PNG with configurable background color */
 async function svgToPng(svgString: string, size: number, transparent: boolean, bgColor?: string): Promise<Blob> {
-  let svg = uniquifyIds(svgString);
-  if (!svg.includes('xmlns=')) svg = svg.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
-  if (!svg.includes('xmlns:xlink')) svg = svg.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+  // Sanitize first, then uniquify IDs for this render
+  let svg = sanitizeSvgForExport(svgString, size);
+  // Remove XML declaration for data URL embedding (browsers choke on it in data URIs)
+  svg = svg.replace(/<\?xml[^?]*\?>\s*/, '');
+  svg = uniquifyIds(svg);
+  // Force explicit width/height for canvas rendering
   svg = svg.replace(/<svg([^>]*)>/, (_match, attrs) => {
-    let a = attrs;
-    if (!/\bwidth=/.test(a)) a += ` width="${size}"`;
-    if (!/\bheight=/.test(a)) a += ` height="${size}"`;
+    let a = attrs.replace(/\bwidth="[^"]*"/g, '').replace(/\bheight="[^"]*"/g, '');
+    a += ` width="${size}" height="${size}"`;
     return `<svg${a}>`;
   });
   const b64 = btoa(unescape(encodeURIComponent(svg)));
   const dataUrl = `data:image/svg+xml;base64,${b64}`;
   return new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('SVG image load timed out (10s)')), 10000);
     const img = document.createElement('img') as HTMLImageElement;
     img.onload = async () => {
+      clearTimeout(timeout);
       try {
         await img.decode();
         const canvas = document.createElement('canvas');
@@ -95,7 +99,7 @@ async function svgToPng(svgString: string, size: number, transparent: boolean, b
         }, 'image/png');
       } catch (err) { reject(err); }
     };
-    img.onerror = () => reject(new Error('SVG image failed to load'));
+    img.onerror = () => { clearTimeout(timeout); reject(new Error('SVG image failed to load — check SVG validity')); };
     img.src = dataUrl;
   });
 }
