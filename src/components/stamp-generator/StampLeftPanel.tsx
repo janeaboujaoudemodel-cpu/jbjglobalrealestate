@@ -612,7 +612,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   <div className="flex flex-wrap gap-1">
                     {props.customPalette.map(hex => (
                       <div key={hex} className="relative group/swatch">
-                        <button onClick={() => props.onSetActiveColor(hex)}
+                        <button onClick={() => handleColorChange(hex)}
                           className={`w-6 h-6 rounded-full border-2 transition-all hover:scale-110 ${props.activeColor === hex ? 'border-[hsl(var(--gold))] scale-110' : 'border-white shadow-sm'}`}
                           style={{ backgroundColor: hex }} />
                         <button onClick={() => props.onRemoveCustomColor(hex)}
