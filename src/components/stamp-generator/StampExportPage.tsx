@@ -26,6 +26,34 @@ function uniquifyIds(svg: string): string {
     .replace(/href="#([^"]+)"/g, (_, id) => `href="#${token}_${id}"`);
 }
 
+/** Sanitize SVG for standalone file export — ensures valid XML, strips React artifacts */
+function sanitizeSvgForExport(svg: string, size?: number): string {
+  let s = svg;
+  // 1. Ensure xmlns declarations
+  if (!s.includes('xmlns="http://www.w3.org/2000/svg"'))
+    s = s.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+  if (!s.includes('xmlns:xlink') && s.includes('xlink:'))
+    s = s.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+  // 2. Strip data-* attributes (not valid SVG namespace — causes XML parse errors)
+  s = s.replace(/\s+data-[a-z-]+="[^"]*"/gi, '');
+  // 3. Strip React useId()-scoped IDs (e.g. :r1a:)
+  s = s.replace(/\bid="[^"]*:[^"]*"/g, '');
+  s = s.replace(/url\(#[^)]*:[^)]*\)/g, 'url(#)');
+  s = s.replace(/href="#[^"]*:[^"]*"/g, 'href="#"');
+  // 4. Ensure viewBox exists
+  if (!/viewBox=/.test(s)) {
+    const sz = size || 200;
+    s = s.replace('<svg', `<svg viewBox="0 0 ${sz} ${sz}"`);
+  }
+  // 5. Ensure width/height for standalone rendering
+  if (!/\bwidth="/.test(s)) s = s.replace('<svg', '<svg width="100%"');
+  if (!/\bheight="/.test(s)) s = s.replace('<svg', '<svg height="100%"');
+  // 6. Add XML declaration for file validity
+  if (!s.startsWith('<?xml'))
+    s = '<?xml version="1.0" encoding="UTF-8"?>\n' + s;
+  return s;
+}
+
 function blobToDataUrl(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
