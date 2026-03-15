@@ -92,6 +92,9 @@ const App = () => {
               <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
                 {OwnerRoutes()}
               </Route>
+
+              {/* ── Developer Hub (dedicated shell) ── */}
+              {DeveloperHubRoutes()}
               
               {/* ── Main Layout Routes (header + footer shell) ── */}
               <Route element={<MainLayoutWrapper />}>
