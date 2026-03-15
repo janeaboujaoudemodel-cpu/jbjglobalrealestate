@@ -15,8 +15,9 @@ import {
   Loader2, Check, Crop, Square, Plus, Type, Stamp, CalendarDays,
   Palette, Grid3X3, Eraser, LayoutGrid, ChevronLeft, ChevronRight,
   Maximize, ZoomIn, ZoomOut, RotateCcw, FlipHorizontal, FlipVertical,
-  Layers, Scissors, PaintBucket, SlidersHorizontal
+  Layers, Scissors, PaintBucket, SlidersHorizontal, Sparkles, Target
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import JSZip from "jszip";
 
 // ─── Size Presets ───────────────────────────────────────────
@@ -104,12 +105,62 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
   const [collageLayout, setCollageLayout] = useState<"horizontal" | "vertical" | "grid">("horizontal");
   const [collageBgColor, setCollageBgColor] = useState("#ffffff");
 
+  // Smart Crop AI
+  const [smartCropLoading, setSmartCropLoading] = useState(false);
+  const [smartCropSubject, setSmartCropSubject] = useState<string | null>(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const thumbnailStripRef = useRef<HTMLDivElement>(null);
 
   const activeImage = useMemo(() => images.find(i => i.id === activeImageId) ?? images[0] ?? null, [images, activeImageId]);
   const activePreset = useMemo(() => SIZE_PRESETS.find(p => p.id === activePreviewPreset), [activePreviewPreset]);
+
+  // ─── AI Smart Crop ──────────────────────────────────────
+  const handleSmartCrop = useCallback(async () => {
+    if (!activeImage) return;
+    setSmartCropLoading(true);
+    setSmartCropSubject(null);
+    try {
+      // Convert image to base64 for AI analysis (downscale for speed)
+      const img = new window.Image();
+      img.crossOrigin = "anonymous";
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = reject;
+        img.src = activeImage.preview;
+      });
+      const maxDim = 512;
+      const scale = Math.min(maxDim / img.width, maxDim / img.height, 1);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const base64 = canvas.toDataURL("image/jpeg", 0.7);
+
+      const { data, error } = await supabase.functions.invoke("smart-crop-detect", {
+        body: { imageBase64: base64 },
+      });
+
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      const x = data.x ?? 50;
+      const y = data.y ?? 50;
+      setImages(prev => prev.map(i =>
+        i.id === activeImage.id ? { ...i, cropPosition: { x, y } } : i
+      ));
+      setSmartCropSubject(data.subject || null);
+      setFitMode("crop");
+      sonnerToast.success(`Smart crop: focused on ${data.subject || "main subject"}`);
+    } catch (err: any) {
+      console.error("Smart crop error:", err);
+      sonnerToast.error(err?.message || "Smart crop failed");
+    } finally {
+      setSmartCropLoading(false);
+    }
+  }, [activeImage]);
 
   // ─── Import from Business Card Designer ─────────────────
   useEffect(() => {
@@ -784,18 +835,38 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
 
                 {/* Crop position when crop mode active */}
                 {fitMode === "crop" && activeImage && (
-                  <div className="pt-2 border-t border-stone-100 space-y-2">
-                    <p className="text-xs text-muted-foreground font-medium">Crop Focus</p>
+                  <div className="pt-2 border-t border-stone-100 space-y-3">
+                    {/* AI Smart Crop Button */}
+                    <Button
+                      size="sm"
+                      onClick={handleSmartCrop}
+                      disabled={smartCropLoading}
+                      className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium text-xs h-9 shadow-md"
+                    >
+                      {smartCropLoading ? (
+                        <><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> Detecting subject...</>
+                      ) : (
+                        <><Sparkles className="h-3.5 w-3.5 mr-1.5" /> AI Smart Crop</>
+                      )}
+                    </Button>
+                    {smartCropSubject && (
+                      <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-violet-50 border border-violet-200">
+                        <Target className="h-3 w-3 text-violet-600 shrink-0" />
+                        <span className="text-xs text-violet-700 truncate">Focused on: {smartCropSubject}</span>
+                      </div>
+                    )}
+
+                    <p className="text-xs text-muted-foreground font-medium">Manual Crop Focus</p>
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground w-4">X</span>
                         <Slider value={[activeImage.cropPosition.x]} min={0} max={100} step={1}
-                          onValueChange={([v]) => setImages(prev => prev.map(i => i.id === activeImage.id ? { ...i, cropPosition: { ...i.cropPosition, x: v } } : i))} className="flex-1" />
+                          onValueChange={([v]) => { setImages(prev => prev.map(i => i.id === activeImage.id ? { ...i, cropPosition: { ...i.cropPosition, x: v } } : i)); setSmartCropSubject(null); }} className="flex-1" />
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground w-4">Y</span>
                         <Slider value={[activeImage.cropPosition.y]} min={0} max={100} step={1}
-                          onValueChange={([v]) => setImages(prev => prev.map(i => i.id === activeImage.id ? { ...i, cropPosition: { ...i.cropPosition, y: v } } : i))} className="flex-1" />
+                          onValueChange={([v]) => { setImages(prev => prev.map(i => i.id === activeImage.id ? { ...i, cropPosition: { ...i.cropPosition, y: v } } : i)); setSmartCropSubject(null); }} className="flex-1" />
                       </div>
                     </div>
                   </div>
