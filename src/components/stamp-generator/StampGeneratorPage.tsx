@@ -389,10 +389,9 @@ export default function StampGeneratorPage() {
     setTogglingFav(null);
   }
 
-  function handleSelectConcept(concept: StampDesignConcept) {
+  async function handleSelectConcept(concept: StampDesignConcept) {
     // Swap: previous standard moves into concepts list, clicked becomes new standard
     if (standardConcept && standardConcept.id !== concept.id) {
-      // Ensure old standard is in concepts list
       setConcepts(prev => {
         const exists = prev.some(c => c.id === standardConcept.id);
         const filtered = prev.filter(c => c.id !== concept.id);
@@ -401,6 +400,10 @@ export default function StampGeneratorPage() {
     }
     setStandardConcept(concept);
     setSelectedId(concept.id);
+    // Persist selected_design_id to database immediately
+    if (projectId && concept.id.length === 36) {
+      await supabase.from('stamp_projects').update({ selected_design_id: concept.id }).eq('id', projectId);
+    }
     toast.success('Design applied as Standard', { duration: 2000 });
   }
 
