@@ -79,6 +79,16 @@ export interface OfficialStampConfig {
   outerBorderColor?: string;
   middleBorderColor?: string;
   innerBorderColor?: string;
+  /** Per-letter overrides for arc text: keyed by "{arcId}-{charIndex}" */
+  letterOverrides?: Record<string, LetterOverride>;
+}
+
+/** Per-letter style override for arc text characters */
+export interface LetterOverride {
+  color?: string;
+  fontSize?: number;  // absolute px override
+  dx?: number;        // horizontal nudge in px
+  dy?: number;        // vertical nudge in px
 }
 
 const ARABIC_FONT = '"Noto Naskh Arabic", "Arabic Typesetting", "Traditional Arabic", serif';
