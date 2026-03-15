@@ -139,19 +139,27 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
 
         {/* Options */}
         <div className="p-4 space-y-1.5">
-          {/* File upload */}
-          <button
+          {/* Drop zone */}
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#C9A84C]/5 border border-transparent hover:border-[#C9A84C]/20 transition-all text-left"
+            className={cn(
+              "w-full flex flex-col items-center justify-center gap-2 px-4 py-5 rounded-xl border-2 border-dashed cursor-pointer transition-all",
+              isDragOver
+                ? "border-[#C9A84C] bg-[#C9A84C]/10 scale-[1.01]"
+                : "border-[#C9A84C]/25 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5"
+            )}
           >
-            <div className="w-9 h-9 rounded-lg bg-[#C9A84C]/10 flex items-center justify-center shrink-0">
-              <Paperclip className="w-4 h-4 text-[#C9A84C]" />
+            <div className="w-10 h-10 rounded-full bg-[#C9A84C]/10 flex items-center justify-center">
+              <Paperclip className={cn("w-5 h-5 transition-colors", isDragOver ? "text-[#C9A84C]" : "text-[#C9A84C]/60")} />
             </div>
-            <div>
-              <p className="text-sm font-medium text-black">Upload File</p>
-              <p className="text-[11px] text-black/50">Images, PDFs, documents</p>
+            <div className="text-center">
+              <p className="text-sm font-medium text-black">{isDragOver ? 'Drop files here' : 'Upload Files'}</p>
+              <p className="text-[11px] text-black/40">Drag & drop or click to browse</p>
             </div>
-          </button>
+          </div>
 
           <input
             ref={fileInputRef}
