@@ -1056,7 +1056,7 @@ export default function StampProjectWizard() {
                         <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Separator Distance</label>
                         <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.separator_distance}%</span>
                       </div>
-                      <input type="range" min={30} max={80} step={1} value={form.separator_distance}
+                      <input type="range" min={0} max={100} step={1} value={form.separator_distance}
                         onChange={e => set('separator_distance', parseInt(e.target.value))}
                         className="w-full h-2 accent-[hsl(var(--gold))]" />
                     </div>
