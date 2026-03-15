@@ -876,6 +876,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
 
 function ConnectedModeButton() {
   const { mode, setMode } = useUserModeContext();
+  const { t } = useLanguage();
   const [modeOpen, setModeOpen] = useState(false);
 
   const MODE_CONFIG: Record<string, { label: string; icon: typeof Users; color: string; bgColor: string; borderColor: string; description: string }> = {
