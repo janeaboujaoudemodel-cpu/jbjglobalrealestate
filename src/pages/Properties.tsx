@@ -626,6 +626,8 @@ const Properties = () => {
               onFilterChange={setShortcutFilters}
               isMapMode={isMapMode}
               onMapToggle={setIsMapMode}
+              resultsCount={finalProjects.length}
+              resultsLabel="Properties"
             />
           </div>
 
