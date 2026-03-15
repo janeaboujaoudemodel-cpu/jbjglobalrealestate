@@ -40,35 +40,59 @@ const ASSET_OPTIONS: { type: BrandAssetType; label: string; icon: React.ReactNod
   { type: 'email_signature', label: 'Email Signature', icon: <Mail className="w-4 h-4" />, description: 'Insert email signature' },
 ];
 
+export function processDroppedFiles(files: FileList | File[], onAttach: (attachment: DocumentAttachment) => void) {
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUri = reader.result as string;
+      onAttach({
+        id: crypto.randomUUID(),
+        name: file.name,
+        type: 'file',
+        content: dataUri,
+        mimeType: file.type,
+        size: file.size,
+      });
+      toast.success(`Attached: ${file.name}`);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 export function DocumentAttachmentPicker({ context, onAttach, onClose }: DocumentAttachmentPickerProps) {
   const [showBrandPicker, setShowBrandPicker] = useState<BrandAssetType | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
-
-    Array.from(files).forEach(file => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const dataUri = reader.result as string;
-        onAttach({
-          id: crypto.randomUUID(),
-          name: file.name,
-          type: 'file',
-          content: dataUri,
-          mimeType: file.type,
-          size: file.size,
-        });
-        toast.success(`Attached: ${file.name}`);
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // Reset input
+    processDroppedFiles(files, onAttach);
     if (fileInputRef.current) fileInputRef.current.value = '';
     onClose();
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+    if (e.dataTransfer.files.length > 0) {
+      processDroppedFiles(e.dataTransfer.files, onAttach);
+      onClose();
+    }
   };
 
   const handleBrandAssetSelect = (asset: any) => {
