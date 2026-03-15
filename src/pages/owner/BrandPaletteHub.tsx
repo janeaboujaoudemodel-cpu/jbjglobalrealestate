@@ -206,6 +206,19 @@ const BrandPaletteHub = () => {
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Revert
               </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="border-gold/40 text-muted-foreground">
+                    <Download className="w-4 h-4 mr-2" />
+                    Export
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={exportJSON}>Export as JSON</DropdownMenuItem>
+                  <DropdownMenuItem onClick={exportCSS}>Export as CSS Variables</DropdownMenuItem>
+                  <DropdownMenuItem onClick={exportPNG}>Export as PNG Swatch</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <Button
                 onClick={handleSave}
                 disabled={!hasChanges || isSaving}
