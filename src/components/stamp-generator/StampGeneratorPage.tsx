@@ -306,7 +306,7 @@ export default function StampGeneratorPage() {
       toast.error('Save failed: ' + (err?.message || 'Unknown error'));
     }
     setSaving(false);
-  }, [projectId, user?.id, saving, standardConcept, svgOverrides, project, primaryColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, inkMode, zoom]);
+  }, [projectId, user?.id, saving, standardConcept, svgOverrides, project, primaryColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, inkMode, zoom, localIconStyle, localMonogramText, monogramLetterColors]);
 
   // Preview update feedback
   const [previewPulse, setPreviewPulse] = useState(false);
