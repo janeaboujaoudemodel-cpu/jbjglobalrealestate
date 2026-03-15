@@ -1140,6 +1140,29 @@ export default function StampGeneratorPage() {
                   <p className="text-[10px] text-center">Select a design to preview</p>
                 </div>
               )}
+
+              {/* Compare design — right side */}
+              {compareDesign && (
+                <div className="flex flex-col items-center gap-2">
+                  <Badge className="text-[7px] px-1.5 py-0 bg-blue-100 text-blue-700 border border-blue-200">
+                    Comparing: {compareDesign.label}
+                  </Badge>
+                  <div className="relative" style={{ filter: `drop-shadow(0 8px 24px hsl(0 0% 0% / 0.12))` }}>
+                    <StampSVGRenderer
+                      svgSource={svgOverrides[compareDesign.id] || compareDesign.svgSource}
+                      tintColor={primaryColor}
+                      secondaryColor={secondaryColor}
+                      accentColor={accentColor}
+                      fontFamily={fontFamily}
+                      fontWeight={fontBold ? 'bold' : 'normal'}
+                      fontStyle={fontItalic ? 'italic' : 'normal'}
+                      fontSize={manualFontSize}
+                      inkMode={inkMode}
+                      size={compareDesign ? Math.round(stampSize * 0.85) : stampSize}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
