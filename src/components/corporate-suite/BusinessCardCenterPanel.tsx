@@ -142,6 +142,8 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
     secondaryData,
     onInlineEdit: (field: keyof CardData) => setInlineEditField(field),
     fieldConfigs,
+    sigLayout,
+    sigAccentColor,
   };
 
   // Set Front/Back template AND switch active side
