@@ -128,6 +128,7 @@ export function LiveStampPreview({
   outerBorderColor,
   middleBorderColor,
   innerBorderColor,
+  locationArcSpread,
 }: LiveStampPreviewProps & { selectedElement?: string | null }) {
   const displayName = companyName || 'Your Company Name';
   const fontFamily = FONT_FAMILIES[typographyStyle];
