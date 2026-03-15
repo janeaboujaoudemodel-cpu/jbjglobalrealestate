@@ -398,17 +398,8 @@ export default function StampGeneratorPage() {
       }
       await supabase.from('stamp_projects').update(updateData).eq('id', projectId);
       setLastSaved(new Date());
-      // Also save draft to localStorage with standard key
-      try {
-        const draftKey = `jbj_draft_stamp-generator_${projectId}`;
-        localStorage.setItem(draftKey, JSON.stringify({
-          name: project?.company_name || 'Stamp Project',
-          savedAt: new Date().toISOString(),
-          standardDesignId: standardDbId,
-          projectId,
-        }));
-      } catch {}
-      toast.success('Project saved');
+      // No longer write misleading localStorage draft — DB is the real draft
+      setShowSaveDialog(true);
     } catch (err: any) {
       toast.error('Save failed: ' + (err?.message || 'Unknown error'));
     }
