@@ -615,16 +615,22 @@ export default function StampProjectWizard() {
     showLocation: form.show_location, separatorStyle: form.separator_style,
     inkColor: form.ink_color, arabicCity: form.arabic_city,
     arabicArcSpread: form.arabic_arc_spread,
+    englishArcSpread: form.english_arc_spread,
     arabicLetterSpacing: form.arabic_letter_spacing,
     arabicFont: form.arabic_font,
     arabicFontWeight: form.arabic_font_weight,
     circleGap: form.circle_gap,
     centerContentSize: form.center_content_size,
+    companyArcBandOffset: form.company_arc_offset,
+    locationArcBandOffset: form.location_arc_offset,
     onElementClick: handleElementClick,
     monogramLetterColors: buildMonogramColors(),
     monogramDividerColor: form.monogram_colors.divider || undefined,
     arcTextSpacing: form.arc_text_spacing,
     separatorDistance: form.separator_distance,
+    outerBorderColor: form.outer_border_color || undefined,
+    middleBorderColor: form.middle_border_color || undefined,
+    innerBorderColor: form.inner_border_color || undefined,
   };
 
   return (
