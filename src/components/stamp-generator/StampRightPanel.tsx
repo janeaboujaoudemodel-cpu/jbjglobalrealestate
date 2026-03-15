@@ -16,7 +16,7 @@ import type { StampDesignConcept } from '@/lib/stampTemplates';
 import {
   Heart, Loader2, Check, ChevronLeft, ChevronRight, Wand2,
   Sparkles, Clock, RefreshCw, Copy, Trash2, Download, Shield,
-  BookOpen, Save, FolderOpen, RotateCw, Pencil, X
+  BookOpen, Save, FolderOpen, RotateCw, Pencil, X, Package
 } from 'lucide-react';
 import DesignFavoriteButton from '@/components/toolkit/DesignFavoriteButton';
 import { toast } from 'sonner';
