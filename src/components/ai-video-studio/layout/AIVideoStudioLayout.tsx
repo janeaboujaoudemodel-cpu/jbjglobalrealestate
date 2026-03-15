@@ -57,6 +57,7 @@ interface AIVideoStudioLayoutProps {
   scenePlannerPanel?: ReactNode;
   chartOverlayPanel?: ReactNode;
   voiceClonePanel?: ReactNode;
+  batchPhotoPanel?: ReactNode;
 }
 
 const TOOL_TABS = [
