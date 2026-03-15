@@ -1,94 +1,90 @@
+## SESSION CLOSURE — FINAL STATUS (March 2026)
 
+### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
-# Bilingual Arc Engine + Alignment + Spacing Rules — Plan
+---
 
-## Root Causes Found
+### Session Status
 
-1. **`languageMode` missing from live-render config** (line 225-256 of StampGeneratorPage.tsx): The `OfficialStampConfig` built for the re-render pipeline never sets `languageMode`. It always falls back to `'BILINGUAL'`, making EN-only/AR-only mode impossible from the editor.
+| Session | Objective | Status | Production-Ready |
+|---------|-----------|--------|------------------|
+| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
+| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
+| 3 | Encryption Hardening | ✅ CLOSED | Yes |
+| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
+| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
+| 6 | Performance Optimization | ✅ CLOSED | Yes |
+| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
+| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
+| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
+| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
+| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
+| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
+| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
+| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
+| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
+| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
+| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
+| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
+| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
+| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
+| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
+| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
 
-2. **Arabic glyphs clip because `charW = 0.54` is too narrow for Arabic** (line 149 of stampOfficialTemplate.ts): Arabic characters average ~0.65-0.70 character width vs English ~0.54. Using the same value causes Arabic text to overflow arcs, leading to letter disappearance.
+---
 
-3. **Text can touch rings** because arc text radius sits at the band edge: `compBandMin = middleR + SAFE_ZONE` and `compBandMax = outerR - SAFE_ZONE` only control the band offset, but font descenders/ascenders still overlap ring strokes. Need additional per-arc padding based on font size.
+### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
 
-4. **No language mode toggle in the editor** — only set at wizard step, no way to switch in StampLeftPanel.
+1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
+2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
+3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
+4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
 
-5. **Location arcs use same spread limit but different font sizes** (Arabic 12px, English 12px base), creating visual imbalance because Arabic glyphs render wider. Arabic location text appears compressed while English appears spread.
+---
 
-## Implementation
+### Route Map
 
-### 1. Fix Arabic Character Width (`stampOfficialTemplate.ts`)
+**Stamp Generator**
+- `/toolkit/stamp-generator` → Landing
+- `/toolkit/stamp-generator/projects` → Dashboard
+- `/toolkit/stamp-generator/new` → Wizard
+- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
+- `/toolkit/stamp-generator/:projectId/export/:id` → Export
+- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
+- `/toolkit/stamp-generator/history` → History
 
-Change `safeArcFontSize`:
-- Arabic `charW` → `0.68` (instead of shared `0.54`)
-- English `charW` → `0.54` (unchanged)
-- Minimum font size for Arabic → `8` (up from `6.5`) to prevent invisible glyphs
-- Minimum font size for English → `7` (up from `6.5`)
+**Email Hub**
+- `/owner/email-client` → EmailClient
+- `/email-client` → EmailClient
 
-### 2. Add Ring Padding (`stampOfficialTemplate.ts`)
+**Chat Systems**
+- `/owner/team-chat` → TeamChat
+- `/team-chat` → TeamChat
+- `/employee-chat` → EmployeeChatPage
 
-Increase `SAFE_ZONE` from `6` to `10` for company arcs, and add a font-size-aware padding:
+**Developer Portal**
+- `/developer-portal` → DeveloperPortal
 
-```
-const textPadding = fontSize * 0.3;  // 30% of font size as clearance
-const effectiveArcR = clampedTextArcR - textPadding;
-```
+**Investor Hub**
+- `/investor-hub` → InvestorHub
 
-This ensures text never visually touches the outer or middle ring regardless of font size.
+**Broker Hub**
+- `/broker-hub` → BrokerHub
+- `/broker-portal` → BrokerPortal
+- `/broker-dashboard` → BrokerDashboard
 
-### 3. Mirror Arabic/English Arcs (`stampOfficialTemplate.ts`)
+**Security & Audit**
+- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
+- `/owner/global-audit` → GlobalAuditDashboard
+- `/owner/incident-readiness` → IncidentReadinessPanel
+- `/owner/encryption-audit` → EncryptionAuditDashboard
+- `/owner/api-security` → APISecurityDashboard
+- `/owner/crm-security` → CRMSecurityDashboard
 
-For BILINGUAL mode, ensure both arcs use the **same arc radius** but independent font sizing. Currently both use `clampedTextArcR` — this is correct. The visual imbalance comes from Arabic being under-sized due to wrong `charW`. Fixing charW (step 1) will resolve the mirroring issue.
+**Owner Moderation**
+- `/owner/developer-moderation` → DeveloperModerationQueue
+- `/owner/events` → EventManagementHub
 
-For location arcs: apply the same Arabic charW fix. Both `locArSafe` and `locEnSafe` already use `clampedLocTextR` — the fix is automatic once charW is corrected.
+---
 
-### 4. Add Language Mode State + UI Toggle (`StampGeneratorPage.tsx` + `StampLeftPanel.tsx`)
-
-Add `languageMode` as editable state in `StampGeneratorPage`:
-```typescript
-const [languageMode, setLanguageMode] = useState<'EN' | 'AR' | 'BILINGUAL'>(
-  () => ssGet(ssKey('languageMode'), project?.language_mode || 'BILINGUAL')
-);
-```
-
-Pass to live-render config: `languageMode: languageMode`.
-
-Add to `StampLeftPanel` props and render a 3-button toggle (🇬🇧 English Only / 🇦🇪 Arabic Only / 🌐 Bilingual) at the top of the Element Hierarchy section.
-
-### 5. Conditional Control Visibility (`StampLeftPanel.tsx`)
-
-When `languageMode === 'EN'`:
-- Hide Arabic Controls accordion section
-- Hide Arabic arc nodes in hierarchy
-
-When `languageMode === 'AR'`:
-- Hide English Controls accordion section
-- Hide English arc nodes in hierarchy
-
-When `languageMode === 'BILINGUAL'`:
-- Show all controls
-
-### 6. Letter Visibility Protection (`stampOfficialTemplate.ts`)
-
-Add a minimum letter spacing floor in `computeArcLetterSpacing`:
-```typescript
-// Never allow negative spacing — causes letter overlap/disappearance
-const spacing = Math.max(0.5, extraSpace / gaps);
-```
-
-Add SVG `textLength` + `lengthAdjust="spacing"` to arc `<textPath>` elements as a fallback — if computed letter spacing would cause overflow, the browser auto-adjusts spacing to fit within the arc path.
-
-## Files Modified
-
-| File | Changes |
-|------|---------|
-| `src/lib/stampOfficialTemplate.ts` | Fix Arabic charW, increase SAFE_ZONE, add font-size padding, floor letter spacing, add textLength fallback |
-| `src/components/stamp-generator/StampGeneratorPage.tsx` | Add `languageMode` state, pass to live-render config, pass to StampLeftPanel |
-| `src/components/stamp-generator/StampLeftPanel.tsx` | Add language mode toggle UI, conditionally hide/show Arabic/English controls |
-
-## What Will NOT Change
-- StampRightPanel (Design Library)
-- StampInteractivePreview (click-to-edit)
-- Save/Export flow
-- Database schema
-- Color controls
-
+### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS

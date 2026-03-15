@@ -196,6 +196,12 @@ export default function StampGeneratorPage() {
   // Element selection state — drives contextual sidebar panel opening
   const [selectedElement, setSelectedElement] = useState<SelectedElement | null>(null);
 
+  // Language mode — persisted
+  const [languageMode, setLanguageModeRaw] = useState<'EN' | 'AR' | 'BILINGUAL'>(
+    () => ssGet(ssKey('languageMode'), (project?.language_mode as 'EN' | 'AR' | 'BILINGUAL') || 'BILINGUAL')
+  );
+  const setLanguageMode = (v: 'EN' | 'AR' | 'BILINGUAL') => { setLanguageModeRaw(v); ssSave(ssKey('languageMode'), v); };
+
   // ═══════════════════════════════════════════════════════════════════
   // LIVE SVG RE-RENDER PIPELINE
   // When any layout/typography control changes, regenerate the SVG
@@ -253,6 +259,7 @@ export default function StampGeneratorPage() {
       arcTextSpacing,
       fontFamily,
       inkColor: primaryColor,
+      languageMode,
     };
 
     const newSvg = generateOfficialStampSVG(config);
@@ -264,7 +271,7 @@ export default function StampGeneratorPage() {
     arabicArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight, arabicFontSize,
     fontFamily, fontBold, manualFontSize, companyArcOffset, locationArcOffset,
     locationArcSpread, centerContentSize, localIconStyle, localMonogramText,
-    localLogoUrl, primaryColor,
+    localLogoUrl, primaryColor, languageMode,
   ]);
 
   // Live-apply monogram colors whenever they change
@@ -1003,8 +1010,10 @@ export default function StampGeneratorPage() {
           onSetEnglishArcSpread={setEnglishArcSpread}
           onSetCompanyArcOffset={setCompanyArcOffset}
           onSetLocationArcOffset={setLocationArcOffset}
-          locationArcSpread={locationArcSpread}
-          onSetLocationArcSpread={setLocationArcSpread}
+           locationArcSpread={locationArcSpread}
+           onSetLocationArcSpread={setLocationArcSpread}
+           languageMode={languageMode}
+           onSetLanguageMode={setLanguageMode}
         />
 
         {/* ── CENTER: Premium Canvas Preview ── */}

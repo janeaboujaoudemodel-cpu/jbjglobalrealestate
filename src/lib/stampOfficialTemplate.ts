@@ -94,7 +94,7 @@ const MIDDLE_STROKE = 2.5;
 const INNER_STROKE = 1.2;
 const DECORATIVE_STROKE = 0.5;
 
-const SAFE_ZONE = 6;
+const SAFE_ZONE = 10;
 const ARC_SPREAD_LIMIT = 0.98;
 
 /**
@@ -118,12 +118,13 @@ const THEME_STROKE_MULT: Record<string, number> = {
   CLASSIC: 1, MODERN: 0.8, MINIMAL: 0.5, LUXURY: 1.3, BOLD: 1.6, VINTAGE: 0.9,
 };
 
-function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6): number {
+function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6, isArabic = false): number {
   if (!text) return baseSize;
+  const minSize = isArabic ? 8 : 7;
   const est = text.length * baseSize * charW;
   if (est <= maxArcLen) return baseSize;
   const fitted = maxArcLen / (text.length * charW);
-  return Math.max(6.5, fitted);
+  return Math.max(minSize, fitted);
 }
 
 function computeArcLetterSpacing(
@@ -137,7 +138,8 @@ function computeArcLetterSpacing(
   const gaps = text.length - 1;
   if (gaps <= 0) return minSpacing;
   const extraSpace = availableArc - textWidth;
-  const spacing = extraSpace / gaps;
+  // Floor at 0.5 to prevent letter overlap/disappearance
+  const spacing = Math.max(0.5, extraSpace / gaps);
   return Math.max(minSpacing, Math.min(spacing, maxSpacing));
 }
 
@@ -146,17 +148,17 @@ function safeArcFontSize(
   baseFontSize: number, spreadLimit = ARC_SPREAD_LIMIT,
   maxLetterSpacing?: number
 ): { fontSize: number; letterSpacing: number } {
-  // Use same charW for both languages to achieve visual arc parity
-  const charW = 0.54;
-  // Arabic gets same minimum spacing as English to ensure full arc spread
+  // Arabic glyphs are wider on average than Latin characters
+  const charW = isArabic ? 0.68 : 0.54;
   const minSpacing = 1;
-  // Both languages use same max letter spacing for parity
   const maxSp = maxLetterSpacing ?? 8;
-  // Force Arabic to use the same spread limit as English (full edge-to-edge)
   const effectiveSpread = spreadLimit;
-  const arcLen = maxRadius * Math.PI * effectiveSpread;
-  const fontSize = fitFontSize(text, baseFontSize, arcLen, charW);
-  const letterSpacing = computeArcLetterSpacing(text, fontSize, maxRadius, effectiveSpread, charW, minSpacing, maxSp);
+  // Add font-size-aware padding so text never touches the ring
+  const textPadding = baseFontSize * 0.3;
+  const effectiveRadius = maxRadius - textPadding;
+  const arcLen = effectiveRadius * Math.PI * effectiveSpread;
+  const fontSize = fitFontSize(text, baseFontSize, arcLen, charW, isArabic);
+  const letterSpacing = computeArcLetterSpacing(text, fontSize, effectiveRadius, effectiveSpread, charW, minSpacing, maxSp);
   return { fontSize, letterSpacing };
 }
 
@@ -213,7 +215,7 @@ function renderBottomArcTextPath(
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
     <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
       letter-spacing="${letterSpacing}" font-weight="${fontWeight}" dominant-baseline="hanging">
-      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${text}</textPath>
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${text}</textPath>
     </text>
   `;
 }
@@ -229,7 +231,7 @@ function renderTopArcTextPath(
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
     <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
       letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
-      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle">${text}</textPath>
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${text}</textPath>
     </text>
   `;
 }

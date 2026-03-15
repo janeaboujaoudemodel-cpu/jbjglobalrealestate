@@ -11,7 +11,7 @@ import { StampColorWheel } from './StampColorWheel';
 import { StampTextEditor } from './StampTextEditor';
 import { MonogramColorEditor, DEFAULT_MONOGRAM_COLORS } from './MonogramColorEditor';
 import type { MonogramLetterColors } from './MonogramColorEditor';
-import { ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle } from '@/lib/stampOfficialTemplate';
+import { ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type LanguageMode } from '@/lib/stampOfficialTemplate';
 import { removeWhiteBackground } from '@/lib/removeWhiteBackground';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -170,6 +170,8 @@ interface StampLeftPanelProps {
   onSetCompanyArcOffset: (v: number) => void;
   onSetLocationArcOffset: (v: number) => void;
   onSetLocationArcSpread: (v: number) => void;
+  languageMode?: LanguageMode;
+  onSetLanguageMode?: (v: LanguageMode) => void;
 }
 
 /* ─── Collapsible tree node helper ─── */
@@ -283,6 +285,30 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
         <Accordion type="multiple" value={openSections} onValueChange={setOpenSections} className="px-2 py-1">
 
           {/* ═══════════════════════════════════════════
+              LANGUAGE MODE TOGGLE
+             ═══════════════════════════════════════════ */}
+          {props.onSetLanguageMode && (
+            <div className="px-1 py-2 border-b border-[hsl(var(--border)/0.5)]">
+              <p className="text-[8px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1.5 tracking-wider">Language Mode</p>
+              <div className="flex gap-1">
+                {([
+                  { key: 'BILINGUAL' as const, label: '🌐 Bilingual' },
+                  { key: 'AR' as const, label: '🇦🇪 Arabic' },
+                  { key: 'EN' as const, label: '🇬🇧 English' },
+                ]).map(m => (
+                  <button key={m.key} onClick={() => props.onSetLanguageMode!(m.key)}
+                    className={`flex-1 py-1.5 rounded-lg border-2 text-[9px] font-semibold transition-all ${
+                      props.languageMode === m.key
+                        ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]'
+                        : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.3)]'
+                    }`}>
+                    {m.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          {/* ═══════════════════════════════════════════
               1. ELEMENT HIERARCHY — semantic tree
              ═══════════════════════════════════════════ */}
           <AccordionItem value="element-hierarchy" className="border-b border-[hsl(var(--border)/0.5)]">
@@ -299,6 +325,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 label="Company Name"
                 icon={<Building2 size={10} className="text-[hsl(var(--gold-dark))]" />}
               >
+                {props.languageMode !== 'EN' && (
                 <TreeNode label="Arabic Arc" icon={<span className="text-[9px]">🇦🇪</span>}>
                   {hasSvg ? (
                     <StampTextEditor
@@ -308,6 +335,8 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     />
                   ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit</p>}
                 </TreeNode>
+                )}
+                {props.languageMode !== 'AR' && (
                 <TreeNode label="English Arc" icon={<span className="text-[9px]">🇬🇧</span>}>
                   {hasSvg ? (
                     <StampTextEditor
@@ -317,6 +346,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     />
                   ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit</p>}
                 </TreeNode>
+                )}
               </TreeNode>
 
               {/* ── Location ── */}
@@ -324,6 +354,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 label="Location"
                 icon={<MapPin size={10} className="text-[hsl(var(--gold-dark))]" />}
               >
+                {props.languageMode !== 'EN' && (
                 <TreeNode label="Arabic Arc" icon={<span className="text-[9px]">🇦🇪</span>}>
                   {hasSvg ? (
                     <StampTextEditor
@@ -333,6 +364,8 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     />
                   ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit</p>}
                 </TreeNode>
+                )}
+                {props.languageMode !== 'AR' && (
                 <TreeNode label="English Arc" icon={<span className="text-[9px]">🇬🇧</span>}>
                   {hasSvg ? (
                     <StampTextEditor
@@ -342,6 +375,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     />
                   ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit</p>}
                 </TreeNode>
+                )}
               </TreeNode>
 
               {/* ── Center Content ── */}
@@ -479,8 +513,9 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
           </AccordionItem>
 
           {/* ═══════════════════════════════════════════
-              2. 🇬🇧 English Controls
+              2. 🇬🇧 English Controls — hidden in AR-only mode
              ═══════════════════════════════════════════ */}
+          {props.languageMode !== 'AR' && (
           <AccordionItem value="english-controls" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
@@ -535,10 +570,12 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </div>
             </AccordionContent>
           </AccordionItem>
+          )}
 
           {/* ═══════════════════════════════════════════
-              3. 🇦🇪 Arabic Controls
+              3. 🇦🇪 Arabic Controls — hidden in EN-only mode
              ═══════════════════════════════════════════ */}
+          {props.languageMode !== 'EN' && (
           <AccordionItem value="arabic-controls" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
@@ -597,6 +634,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </div>
             </AccordionContent>
           </AccordionItem>
+          )}
 
           {/* ═══════════════════════════════════════════
               GLOBAL LAYOUT — geometry controls (live-wired)
