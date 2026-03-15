@@ -18,6 +18,22 @@ function isBlocked(text: string): boolean {
   return BLOCKED_KEYWORDS.some((kw) => lower.includes(kw));
 }
 
+// ─── Color tokens ────────────────────────────────────────────────
+const C_PRI = "#1a2744";
+const C_SEC = "#2a3a5c";
+const C_ACC = "#8b6914";
+
+const INK_BLUE = '#1B3A8C';
+const ARABIC_FONT = '"Noto Naskh Arabic", "Arabic Typesetting", "Traditional Arabic", serif';
+const ENGLISH_FONT = 'Georgia, "Times New Roman", serif';
+
+const OUTER_R_PCT = 0.46;
+const MIDDLE_STROKE = 2.5;
+const INNER_STROKE = 1.2;
+const DECORATIVE_STROKE = 0.5;
+const SAFE_ZONE = 10;
+const ARC_SPREAD_LIMIT = 0.98;
+
 const fontMap: Record<string, string> = {
   SERIF: 'Georgia, "Times New Roman", serif',
   SANS: 'Arial, Helvetica, sans-serif',
@@ -27,12 +43,452 @@ const fontMap: Record<string, string> = {
   ARABIC_MODERN: '"Arabic Typesetting", "Noto Naskh Arabic", serif',
 };
 
-const arabicFont = '"Noto Naskh Arabic", "Arabic Typesetting", "Traditional Arabic", serif';
+// ─── Official Template Engine (mirrors stampOfficialTemplate.ts) ──────────
 
-// ─── Color tokens ────────────────────────────────────────────────
-const C_PRI = "#1a2744";
-const C_SEC = "#2a3a5c";
-const C_ACC = "#8b6914";
+type SeparatorStyle = 'dot' | 'star' | 'square' | 'diamond' | 'line' | 'double-line' | 'triangle' | 'cross' | 'floral' | 'ornament' | 'dash' | 'circle' | 'none';
+type BorderStyleType = 'SINGLE' | 'DOUBLE' | 'RING' | 'DOTTED' | 'ROPE' | 'CUSTOM';
+type CenterContentMode = 'monogram' | 'initials' | 'logo' | 'icon' | 'license' | 'none';
+
+interface OfficialStampConfig {
+  companyNameEn: string;
+  companyNameAr: string;
+  arabicOnTop: boolean;
+  locationTextEn?: string;
+  locationTextAr?: string;
+  showLocation: boolean;
+  separatorStyle: SeparatorStyle;
+  monogramText?: string;
+  logoUrl?: string;
+  showMonogram: boolean;
+  showLogo: boolean;
+  inkColor?: string;
+  fontFamily?: string;
+  size?: number;
+  registrationNumber?: string;
+  showRegistration?: boolean;
+  borderStyle?: BorderStyleType;
+  outerBorderWidth?: number;
+  innerBorderWidth?: number;
+  centerMode?: CenterContentMode;
+  circleGap?: number;
+  arabicArcSpread?: number;
+  englishArcSpread?: number;
+  arabicLetterSpacing?: number;
+  arabicFont?: string;
+  arabicFontWeight?: string;
+  languageMode?: 'EN' | 'AR' | 'BILINGUAL';
+  styleTheme?: string;
+  separatorDistancePct?: number;
+  centerContentScale?: number;
+}
+
+function normalizeEnglishTokenSpacing(text: string): string {
+  if (!text) return text;
+  let normalized = text.replace(/\b([A-Z]) ([A-Z]) ([A-Z])\b/g, '$1$2$3');
+  normalized = normalized.replace(/\b([A-Z]) ([A-Z])\b/g, '$1$2');
+  normalized = normalized.replace(/(LLC|L\.L\.C\.?)\s*/gi, '$1  ');
+  normalized = normalized.replace(/\s{3,}/g, '  ');
+  return normalized.trim();
+}
+
+const THEME_STROKE_MULT: Record<string, number> = {
+  CLASSIC: 1, MODERN: 0.8, MINIMAL: 0.5, LUXURY: 1.3, BOLD: 1.6, VINTAGE: 0.9,
+};
+
+function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6, isArabic = false): number {
+  if (!text) return baseSize;
+  const minSize = isArabic ? 8 : 7;
+  const est = text.length * baseSize * charW;
+  if (est <= maxArcLen) return baseSize;
+  const fitted = maxArcLen / (text.length * charW);
+  return Math.max(minSize, fitted);
+}
+
+function computeArcLetterSpacing(
+  text: string, fontSize: number, arcRadius: number,
+  spreadLimit: number, avgCharWidth: number, minSpacing: number,
+  maxSpacing = 12
+): number {
+  if (!text || text.length <= 1) return minSpacing;
+  const availableArc = arcRadius * Math.PI * spreadLimit;
+  const textWidth = text.length * fontSize * avgCharWidth;
+  const gaps = text.length - 1;
+  if (gaps <= 0) return minSpacing;
+  const extraSpace = availableArc - textWidth;
+  const spacing = Math.max(0.5, extraSpace / gaps);
+  return Math.max(minSpacing, Math.min(spacing, maxSpacing));
+}
+
+function safeArcFontSize(
+  text: string, maxRadius: number, isArabic: boolean,
+  baseFontSize: number, spreadLimit = ARC_SPREAD_LIMIT,
+  maxLetterSpacing?: number
+): { fontSize: number; letterSpacing: number } {
+  const charW = isArabic ? 0.68 : 0.54;
+  const minSpacing = 1;
+  const maxSp = maxLetterSpacing ?? 8;
+  const textPadding = baseFontSize * 0.3;
+  const effectiveRadius = maxRadius - textPadding;
+  const arcLen = effectiveRadius * Math.PI * spreadLimit;
+  const fontSize = fitFontSize(text, baseFontSize, arcLen, charW, isArabic);
+  const letterSpacing = computeArcLetterSpacing(text, fontSize, effectiveRadius, spreadLimit, charW, minSpacing, maxSp);
+  return { fontSize, letterSpacing };
+}
+
+function separatorGlyph(style: SeparatorStyle): string {
+  switch (style) {
+    case 'dot': return '●'; case 'star': return '★'; case 'square': return '■';
+    case 'diamond': return '◆'; case 'line': return '—'; case 'double-line': return '═';
+    case 'triangle': return '▲'; case 'cross': return '✦'; case 'floral': return '❀';
+    case 'ornament': return '❖'; case 'dash': return '—'; case 'circle': return '◉';
+    case 'none': return '';
+  }
+}
+
+function renderSeparators(cx: number, cy: number, r: number, style: SeparatorStyle, ink: string): string {
+  if (style === 'none') return '';
+  const glyph = separatorGlyph(style);
+  const fontSize = (style === 'line' || style === 'double-line' || style === 'dash') ? 16
+    : (style === 'floral' || style === 'ornament') ? 14 : 13;
+  return `
+    <text data-stamp-element="separator-right" x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+          font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>
+    <text data-stamp-element="separator-left" x="${cx - r}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+          font-size="${fontSize}" fill="${ink}" font-weight="bold">${glyph}</text>
+  `;
+}
+
+function renderTopArcTextPath(
+  text: string, cx: number, cy: number, r: number,
+  fontSize: number, font: string, ink: string, letterSpacing: number,
+  _isArabic: boolean, pathId: string, fontWeight = '800'
+): string {
+  if (!text) return '';
+  const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}`;
+  return `
+    <defs><path id="${pathId}" d="${arcPath}"/></defs>
+    <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
+      letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${text}</textPath>
+    </text>
+  `;
+}
+
+function renderBottomArcTextPath(
+  text: string, cx: number, cy: number, r: number,
+  fontSize: number, font: string, ink: string, letterSpacing: number,
+  _isArabic: boolean, pathId: string, fontWeight = '800'
+): string {
+  if (!text) return '';
+  const verticalNudge = fontSize * 0.15;
+  const adjustedCy = cy - verticalNudge;
+  const arcPath = `M ${cx - r} ${adjustedCy} A ${r} ${r} 0 0 0 ${cx + r} ${adjustedCy}`;
+  return `
+    <defs><path id="${pathId}" d="${arcPath}"/></defs>
+    <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
+      letter-spacing="${letterSpacing}" font-weight="${fontWeight}" dominant-baseline="hanging">
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${text}</textPath>
+    </text>
+  `;
+}
+
+function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number, innerR: number, enFont: string, ink: string): string {
+  const centerMode = config.centerMode || (config.showLogo ? 'logo' : config.showMonogram ? 'monogram' : 'none');
+  const mono = config.monogramText || '';
+  const centerScale = config.centerContentScale ?? 1;
+
+  switch (centerMode) {
+    case 'logo':
+      if (config.logoUrl) {
+        const imgSize = innerR * 1.5 * centerScale;
+        return `<defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${innerR - 2}"/></clipPath></defs>
+          <image data-stamp-element="center" href="${config.logoUrl}" 
+            x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" width="${imgSize}" height="${imgSize}" 
+            clip-path="url(#center-clip)" preserveAspectRatio="xMidYMid meet" image-rendering="optimizeQuality"/>`;
+      }
+      return '';
+    case 'monogram':
+      if (mono) {
+        const baseSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
+        const scaledSize = baseSize * centerScale;
+        const upper = mono.toUpperCase();
+        const monoLetterSpacing = upper.length >= 3 ? 1 : 2;
+        const divW = scaledSize * 0.6;
+        const divY = cy + scaledSize * 0.45;
+        const divider = upper.length >= 2 ? `<line x1="${cx - divW}" y1="${divY}" x2="${cx + divW}" y2="${divY}" stroke="${ink}" stroke-width="1.2" opacity="0.8"/>` : '';
+        return `<text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
+          font-family="${enFont}" font-size="${scaledSize}" fill="${ink}" font-weight="700" letter-spacing="${monoLetterSpacing}">${upper}</text>${divider}`;
+      }
+      return '';
+    default:
+      return '';
+  }
+}
+
+function generateOfficialStampSVG(config: OfficialStampConfig): string {
+  const S = config.size || 320;
+  const cx = S / 2;
+  const cy = S / 2;
+  const enFont = config.fontFamily || ENGLISH_FONT;
+  const arFont = config.arabicFont || ARABIC_FONT;
+  const bs = config.borderStyle || 'DOUBLE';
+  const ink = config.inkColor || INK_BLUE;
+  const mode = config.languageMode || 'BILINGUAL';
+  const themeMult = THEME_STROKE_MULT[config.styleTheme || 'CLASSIC'] || 1;
+
+  const gapPct = config.circleGap != null ? config.circleGap / 100 : 0.13;
+  const outerR = S * OUTER_R_PCT;
+  const middleR = S * (OUTER_R_PCT - gapPct);
+  const innerR = middleR - S * 0.07;
+
+  const compBandMin = middleR + SAFE_ZONE;
+  const compBandMax = outerR - SAFE_ZONE;
+  const clampedTextArcR = compBandMin + (compBandMax - compBandMin) * 0.5;
+
+  const sepPct = Math.max(0, Math.min(100, config.separatorDistancePct ?? 50));
+  const sepMin = middleR + 2;
+  const sepMax = outerR - 2;
+  const separatorR = sepMin + (sepMax - sepMin) * (sepPct / 100);
+
+  const locBandMin = innerR + SAFE_ZONE;
+  const locBandMax = middleR - SAFE_ZONE;
+  const clampedLocTextR = locBandMin + (locBandMax - locBandMin) * 0.5;
+
+  const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
+  const englishSpread = config.englishArcSpread ?? ARC_SPREAD_LIMIT;
+
+  let topArcContent = '';
+  let bottomArcContent = '';
+  let separatorContent = '';
+
+  if (mode === 'BILINGUAL') {
+    const arText = config.companyNameAr || 'اسم الشركة';
+    const enText = normalizeEnglishTokenSpacing((config.companyNameEn || 'COMPANY NAME').toUpperCase());
+    const arSafe = safeArcFontSize(arText, clampedTextArcR, true, 17, arabicSpread);
+    const enSafe = safeArcFontSize(enText, clampedTextArcR, false, 15, englishSpread, 5);
+    const arLS = config.arabicLetterSpacing ?? arSafe.letterSpacing;
+    const enLS = enSafe.letterSpacing;
+    const arFW = config.arabicFontWeight === 'normal' ? '600' : '800';
+
+    if (config.arabicOnTop !== false) {
+      topArcContent = renderTopArcTextPath(arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink, arLS, true, 'top-arc', arFW);
+      bottomArcContent = renderBottomArcTextPath(enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink, enLS, false, 'bottom-arc');
+    } else {
+      topArcContent = renderTopArcTextPath(enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink, enLS, false, 'top-arc');
+      bottomArcContent = renderBottomArcTextPath(arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink, arLS, true, 'bottom-arc', arFW);
+    }
+    separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
+  } else if (mode === 'EN') {
+    const topText = normalizeEnglishTokenSpacing(config.companyNameEn.toUpperCase() || 'COMPANY NAME');
+    const topSafe = safeArcFontSize(topText, clampedTextArcR, false, 15, englishSpread, 5);
+    topArcContent = renderTopArcTextPath(topText, cx, cy, clampedTextArcR, topSafe.fontSize, enFont, ink, topSafe.letterSpacing, false, 'top-arc');
+    if (config.showLocation) {
+      const locEn = config.locationTextEn || 'Dubai, UAE';
+      const botSafe = safeArcFontSize(locEn.toUpperCase(), clampedTextArcR, false, 12, englishSpread, 5);
+      bottomArcContent = renderBottomArcTextPath(locEn.toUpperCase(), cx, cy, clampedTextArcR, botSafe.fontSize, enFont, ink, botSafe.letterSpacing, false, 'bottom-arc', '600');
+    }
+    separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
+  } else if (mode === 'AR') {
+    const topText = config.companyNameAr || config.companyNameEn || 'اسم الشركة';
+    const topSafe = safeArcFontSize(topText, clampedTextArcR, true, 17, arabicSpread);
+    const topLS = config.arabicLetterSpacing ?? topSafe.letterSpacing;
+    const topFW = config.arabicFontWeight === 'normal' ? '600' : '800';
+    topArcContent = renderTopArcTextPath(topText, cx, cy, clampedTextArcR, topSafe.fontSize, arFont, ink, topLS, true, 'top-arc', topFW);
+    if (config.showLocation) {
+      const locAr = config.locationTextAr || 'دبي، الإمارات';
+      const botSafe = safeArcFontSize(locAr, clampedTextArcR, true, 13, arabicSpread);
+      bottomArcContent = renderBottomArcTextPath(locAr, cx, cy, clampedTextArcR, botSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? botSafe.letterSpacing, true, 'bottom-arc', '600');
+    }
+    separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
+  }
+
+  // Location arcs (BILINGUAL only)
+  let locationContent = '';
+  if (config.showLocation && mode === 'BILINGUAL') {
+    const locEn = config.locationTextEn || 'Dubai, UAE';
+    const locAr = config.locationTextAr || 'دبي، الإمارات';
+    const locEnSafe = safeArcFontSize(locEn.toUpperCase(), clampedLocTextR, false, 12, ARC_SPREAD_LIMIT);
+    const locArSafe = safeArcFontSize(locAr, clampedLocTextR, true, 12, ARC_SPREAD_LIMIT);
+    locationContent = renderTopArcTextPath(locAr, cx, cy, clampedLocTextR, locArSafe.fontSize, arFont, ink, locArSafe.letterSpacing, true, 'loc-top', '600');
+    locationContent += renderBottomArcTextPath(locEn.toUpperCase(), cx, cy, clampedLocTextR, locEnSafe.fontSize, enFont, ink, locEnSafe.letterSpacing, false, 'loc-bottom', '600');
+  }
+
+  // Center content
+  const centerContent = renderCenterContent(config, cx, cy, innerR, enFont, ink);
+
+  // Registration
+  let regContent = '';
+  if (config.showRegistration && config.registrationNumber) {
+    const regArcR = innerR * 0.75;
+    const regSafe = safeArcFontSize(config.registrationNumber, regArcR, false, 7, 0.85, 3);
+    regContent = renderBottomArcTextPath(config.registrationNumber, cx, cy, regArcR, regSafe.fontSize, enFont, ink, regSafe.letterSpacing, false, 'registration', '500');
+  }
+
+  // Border rings
+  const outerSW = (config.outerBorderWidth ?? 4) * themeMult;
+  const middleSW = (config.innerBorderWidth ?? MIDDLE_STROKE) * themeMult;
+  const innerSW = INNER_STROKE * themeMult;
+
+  const outerRingEl = `<circle data-stamp-element="border-outer" cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${ink}" stroke-width="${outerSW}" ${
+    bs === 'DOTTED' ? 'stroke-dasharray="3,3"' : bs === 'ROPE' ? 'stroke-dasharray="6,4"' : bs === 'CUSTOM' ? 'stroke-dasharray="2,2,6,2"' : ''
+  }/>`;
+
+  const decorativeR = outerR - outerSW / 2 - 2;
+  const decorativeRingEl = (bs === 'DOUBLE' || bs === 'RING' || bs === 'CUSTOM')
+    ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${ink}" stroke-width="${DECORATIVE_STROKE * themeMult}" opacity="0.5"/>`
+    : '';
+
+  const middleRingEl = bs === 'RING'
+    ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.4}"/>`
+    : `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW}"/>`;
+
+  const showInnerRing = config.showLocation && mode === 'BILINGUAL';
+  const innerRingEl = showInnerRing
+    ? `<circle data-stamp-element="border-inner" cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="${innerSW}"/>`
+    : '';
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">
+    ${outerRingEl}${decorativeRingEl}${middleRingEl}${innerRingEl}
+    ${topArcContent}${bottomArcContent}${separatorContent}${locationContent}${centerContent}${regContent}
+  </svg>`;
+}
+
+// ─── 8 Structured Concept Presets ─────────────────────────────────
+
+interface ConceptPreset {
+  key: string;
+  label: string;
+  tags: string[];
+  overrides: Partial<OfficialStampConfig>;
+}
+
+const CONCEPT_PRESETS: ConceptPreset[] = [
+  {
+    key: 'classic-official',
+    label: 'Classic Official',
+    tags: ['classic', 'professional', 'double'],
+    overrides: { borderStyle: 'DOUBLE', separatorStyle: 'star', circleGap: 13 },
+  },
+  {
+    key: 'luxury-triple-ring',
+    label: 'Luxury Triple Ring',
+    tags: ['luxury', 'premium', 'ring'],
+    overrides: { borderStyle: 'RING', separatorStyle: 'diamond', circleGap: 16, styleTheme: 'LUXURY' },
+  },
+  {
+    key: 'modern-minimal',
+    label: 'Modern Minimal',
+    tags: ['modern', 'clean', 'minimal'],
+    overrides: { borderStyle: 'SINGLE', separatorStyle: 'dot', circleGap: 10, styleTheme: 'MODERN' },
+  },
+  {
+    key: 'vintage-seal',
+    label: 'Vintage Seal',
+    tags: ['vintage', 'classic', 'ornate'],
+    overrides: { borderStyle: 'DOUBLE', separatorStyle: 'ornament', circleGap: 15, styleTheme: 'VINTAGE' },
+  },
+  {
+    key: 'bold-corporate',
+    label: 'Bold Corporate',
+    tags: ['bold', 'corporate', 'strong'],
+    overrides: { borderStyle: 'DOUBLE', separatorStyle: 'square', circleGap: 12, styleTheme: 'BOLD' },
+  },
+  {
+    key: 'elegant-diamond',
+    label: 'Elegant Diamond',
+    tags: ['elegant', 'diamond', 'refined'],
+    overrides: { borderStyle: 'RING', separatorStyle: 'floral', circleGap: 14 },
+  },
+  {
+    key: 'legal-standard',
+    label: 'Legal Standard',
+    tags: ['legal', 'official', 'registration'],
+    overrides: { borderStyle: 'DOUBLE', separatorStyle: 'line', circleGap: 13, showRegistration: true },
+  },
+  {
+    key: 'premium-executive',
+    label: 'Premium Executive',
+    tags: ['premium', 'executive', 'luxury'],
+    overrides: { borderStyle: 'RING', separatorStyle: 'star', circleGap: 18, styleTheme: 'LUXURY' },
+  },
+];
+
+// ─── Variation configs — each changes ONE dimension ──────────────
+
+interface VariationConfig {
+  key: string;
+  label: string;
+  overrides: Partial<OfficialStampConfig>;
+}
+
+function getVariationConfigs(): VariationConfig[] {
+  return [
+    // Separator variations (4)
+    { key: 'var-sep-star', label: 'Star Separators', overrides: { separatorStyle: 'star' } },
+    { key: 'var-sep-diamond', label: 'Diamond Separators', overrides: { separatorStyle: 'diamond' } },
+    { key: 'var-sep-floral', label: 'Floral Separators', overrides: { separatorStyle: 'floral' } },
+    { key: 'var-sep-dot', label: 'Dot Separators', overrides: { separatorStyle: 'dot' } },
+    // Border variations (4)
+    { key: 'var-ring-luxury', label: 'Luxury Ring Border', overrides: { borderStyle: 'RING', styleTheme: 'LUXURY' } },
+    { key: 'var-border-single', label: 'Minimal Single', overrides: { borderStyle: 'SINGLE', styleTheme: 'MINIMAL' } },
+    { key: 'var-border-rope', label: 'Rope Border', overrides: { borderStyle: 'ROPE' } },
+    { key: 'var-border-dotted', label: 'Dotted Border', overrides: { borderStyle: 'DOTTED' } },
+    // Gap variations (2)
+    { key: 'var-gap-wide', label: 'Wide Ring Gap', overrides: { circleGap: 18 } },
+    { key: 'var-gap-tight', label: 'Tight Ring Gap', overrides: { circleGap: 9 } },
+    // Monogram variations (2)
+    { key: 'var-mono-none', label: 'No Monogram', overrides: { centerMode: 'none', showMonogram: false } },
+    { key: 'var-sep-ornament', label: 'Ornament Separators', overrides: { separatorStyle: 'ornament' } },
+  ];
+}
+
+// ─── Build config from project data ───────────────────────────────
+
+function buildConfigFromProject(project: any, overrides: Partial<OfficialStampConfig> = {}): OfficialStampConfig {
+  const name = (project.company_name || 'COMPANY NAME').toUpperCase().trim();
+  const arabicName = (project.arabic_company_name || '').trim();
+  const cityParts = [project.city_optional, project.country_optional].filter(Boolean);
+  const locationEn = (cityParts.join(', ') || 'Dubai, UAE').toUpperCase();
+  const arabicCity = (project.arabic_city || '').trim();
+  const isBilingual = project.language_mode === 'BILINGUAL' || project.language_mode === 'AR';
+  const mono = (project.monogram_text || name.slice(0, 2)).toUpperCase().slice(0, 3);
+  const regNo = project.registration_number_optional || '';
+  const hasMono = project.icon_style === 'MONOGRAM';
+  const hasLogo = project.icon_style === 'UPLOADED_LOGO' && project.uploaded_logo_url;
+  const enFont = fontMap[project.typography_style] || fontMap.SERIF;
+
+  const ARABIC_CITY_MAP: Record<string, string> = {
+    'dubai': 'دبي، الإمارات', 'abu dhabi': 'أبوظبي، الإمارات',
+    'sharjah': 'الشارقة، الإمارات', 'ajman': 'عجمان، الإمارات',
+  };
+  const cityKey = (project.city_optional || '').toLowerCase();
+  const locAr = arabicCity || ARABIC_CITY_MAP[cityKey] || 'دبي، الإمارات';
+
+  return {
+    companyNameEn: name,
+    companyNameAr: arabicName || name,
+    arabicOnTop: true,
+    locationTextEn: locationEn,
+    locationTextAr: locAr,
+    showLocation: project.show_location !== false,
+    separatorStyle: (project.separator_style as SeparatorStyle) || 'star',
+    monogramText: mono,
+    showMonogram: hasMono,
+    showLogo: !!hasLogo,
+    logoUrl: hasLogo ? project.uploaded_logo_url : undefined,
+    inkColor: INK_BLUE,
+    fontFamily: enFont,
+    size: 320,
+    registrationNumber: regNo || undefined,
+    showRegistration: !!regNo && (project.density ?? 3) >= 3,
+    borderStyle: (project.border_style as BorderStyleType) || 'DOUBLE',
+    centerMode: hasLogo ? 'logo' : hasMono ? 'monogram' : 'monogram',
+    circleGap: 13,
+    languageMode: project.language_mode || (isBilingual ? 'BILINGUAL' : 'EN'),
+    styleTheme: project.style_theme || 'CLASSIC',
+    ...overrides,
+  };
+}
 
 /** Business type → recommended style mapping */
 const BUSINESS_STYLE_MAP: Record<string, { theme: string; border: string; density: number }> = {
@@ -49,311 +505,7 @@ const BUSINESS_STYLE_MAP: Record<string, { theme: string; border: string; densit
   'Legal': { theme: 'CLASSIC', border: 'DOUBLE', density: 4 },
 };
 
-function autoFontSize(text: string, base: number, maxChars = 20): number {
-  if (text.length <= maxChars) return base;
-  if (text.length <= maxChars + 8) return Math.round(base * 0.85);
-  return Math.round(base * 0.72);
-}
-
-function fitFontSize(text: string, baseSize: number, maxArcLen: number, charW = 0.6): number {
-  if (!text) return baseSize;
-  const est = text.length * baseSize * charW;
-  if (est <= maxArcLen) return baseSize;
-  const fitted = maxArcLen / (text.length * charW);
-  return Math.max(6.5, fitted);
-}
-
-function wrapText(text: string, x: number, y: number, font: string, size: number, color: string, letterSpacing = 1): string {
-  if (text.length <= 22) {
-    return `<text x="${x}" y="${y}" text-anchor="middle" font-family="${font}" font-size="${size}" font-weight="bold" fill="${color}" letter-spacing="${letterSpacing}">${text}</text>`;
-  }
-  const mid = Math.floor(text.length / 2);
-  let split = text.lastIndexOf(' ', mid);
-  if (split < 5) split = text.indexOf(' ', mid);
-  if (split < 0) split = mid;
-  const line1 = text.slice(0, split).trim();
-  const line2 = text.slice(split).trim();
-  const lineH = size + 2;
-  return `<text text-anchor="middle" font-family="${font}" font-size="${size}" font-weight="bold" fill="${color}" letter-spacing="${letterSpacing}">
-    <tspan x="${x}" dy="-${lineH / 2}">${line1}</tspan>
-    <tspan x="${x}" dy="${lineH}">${line2}</tspan>
-  </text>`;
-}
-
-function topArcText(id: string, cx: number, cy: number, r: number, text: string, font: string, fontSize: number, color: string, isArabic = false): string {
-  const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}`;
-  return `
-    <defs><path id="${id}" d="${arcPath}"/></defs>
-    <text font-family="${font}" font-size="${fontSize}" fill="${color}" letter-spacing="${isArabic ? 1 : 2.5}" font-weight="800">
-      <textPath href="#${id}" startOffset="50%" text-anchor="middle">${text}</textPath>
-    </text>`;
-}
-
-/**
- * Bottom arc text — per-character positioning along BOTTOM of circle.
- * Characters placed at angles centered around 270° (SVG bottom).
- * Rotation = deg + 90 so each character faces outward and reads L-to-R.
- */
-function bottomArcTextChars(cx: number, cy: number, r: number, text: string, font: string, fontSize: number, color: string, isArabic = false): string {
-  if (!text) return '';
-  const chars = text.split('');
-  const n = chars.length;
-  if (n === 0) return '';
-  const spreadDeg = Math.min(150, n * 10);
-  // Center around 270° (bottom of SVG circle)
-  const startDeg = 270 - spreadDeg / 2;
-  const stepDeg = n > 1 ? spreadDeg / (n - 1) : 0;
-  let result = '';
-  for (let i = 0; i < n; i++) {
-    const deg = n === 1 ? 270 : startDeg + i * stepDeg;
-    const rad = (deg * Math.PI) / 180;
-    const x = cx + r * Math.cos(rad);
-    const y = cy + r * Math.sin(rad);
-    // +90 so chars face outward (readable from outside the circle)
-    const rotation = deg + 90;
-    result += `<text x="${x.toFixed(2)}" y="${y.toFixed(2)}" text-anchor="middle" dominant-baseline="central"
-      font-family="${font}" font-size="${fontSize}" fill="${color}" font-weight="800"
-      letter-spacing="${isArabic ? 1 : 2}"
-      transform="rotate(${rotation.toFixed(2)}, ${x.toFixed(2)}, ${y.toFixed(2)})">${chars[i]}</text>\n`;
-  }
-  return result;
-}
-
-function separatorDots(cx: number, cy: number, r: number, color: string): string {
-  return `
-    <text x="${cx + r}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="10" fill="${color}" font-weight="bold">●</text>
-    <text x="${cx - r}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="10" fill="${color}" font-weight="bold">●</text>`;
-}
-
-function divider(cx: number, y: number, color: string, width = 28, style: string = 'diamond'): string {
-  if (style === 'line') {
-    return `<line x1="${cx - width}" y1="${y}" x2="${cx + width}" y2="${y}" stroke="${color}" stroke-width="0.8"/>`;
-  }
-  if (style === 'ornate') {
-    return `
-      <line x1="${cx - width}" y1="${y}" x2="${cx - 6}" y2="${y}" stroke="${color}" stroke-width="0.7"/>
-      <circle cx="${cx}" cy="${y}" r="2.5" fill="${color}" opacity="0.7"/>
-      <line x1="${cx + 6}" y1="${y}" x2="${cx + width}" y2="${y}" stroke="${color}" stroke-width="0.7"/>`;
-  }
-  // diamond (default)
-  return `
-    <line x1="${cx - width}" y1="${y}" x2="${cx - 5}" y2="${y}" stroke="${color}" stroke-width="0.7"/>
-    <polygon points="${cx},${y - 3} ${cx + 4},${y} ${cx},${y + 3} ${cx - 4},${y}" fill="${color}"/>
-    <line x1="${cx + 5}" y1="${y}" x2="${cx + width}" y2="${y}" stroke="${color}" stroke-width="0.7"/>`;
-}
-
-function monogramEl(cx: number, cy: number, text: string, font: string, size: number, color: string): string {
-  return `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-family="${font}" font-size="${size}" font-weight="bold" fill="${color}">${text.toUpperCase().slice(0, 3)}</text>`;
-}
-
-function borderAttrs(borderStyle: string, customOuterW?: number, customInnerW?: number): { dash: string; outerWidth: number; innerRing: boolean; innerDash: string; innerWidth: number } {
-  let base;
-  switch (borderStyle) {
-    case 'SINGLE': base = { dash: 'none', outerWidth: 2.2, innerRing: false, innerDash: 'none', innerWidth: 0 }; break;
-    case 'DOUBLE': base = { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: 'none', innerWidth: 0.8 }; break;
-    case 'RING': base = { dash: 'none', outerWidth: 3.5, innerRing: true, innerDash: 'none', innerWidth: 2 }; break;
-    case 'DOTTED': base = { dash: '2,2', outerWidth: 2, innerRing: false, innerDash: 'none', innerWidth: 0 }; break;
-    case 'ROPE': base = { dash: '5,3', outerWidth: 2.5, innerRing: false, innerDash: 'none', innerWidth: 0 }; break;
-    case 'CUSTOM': base = { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: '2,4', innerWidth: 0.6 }; break;
-    default: base = { dash: 'none', outerWidth: 2.2, innerRing: true, innerDash: 'none', innerWidth: 0.8 };
-  }
-  if (customOuterW != null) base.outerWidth = customOuterW;
-  if (customInnerW != null && base.innerRing) base.innerWidth = customInnerW;
-  return base;
-}
-
-// ─── buildSVG — uses color tokens so StampSVGRenderer tinting works ──────────
-function buildSVG(project: any, templateKey: string): string {
-  const cx = 150, cy = 150;
-  const R = 108;
-  const font = fontMap[project.typography_style] || fontMap.SERIF;
-  const name = (project.company_name || "COMPANY NAME").toUpperCase().trim();
-  const arabicName = (project.arabic_company_name || '').trim();
-  
-  const cityParts = [project.city_optional, project.country_optional].filter(Boolean);
-  const city = (cityParts.join(', ') || "UAE").toUpperCase();
-  const arabicCity = (project.arabic_city || '').trim();
-  
-  const mono = (project.monogram_text || name.slice(0, 2)).toUpperCase().slice(0, 3);
-  const regNo = project.registration_number_optional ? `REG: ${project.registration_number_optional}` : "";
-  const hasMono = project.icon_style === 'MONOGRAM';
-  const hasLogo = project.icon_style === 'UPLOADED_LOGO' && project.uploaded_logo_url;
-  const isBilingual = project.language_mode === 'BILINGUAL' || project.language_mode === 'AR';
-  
-  const layoutJson = project.layout_json || {};
-  const customOuterW = layoutJson.outerBorderWidth;
-  const customInnerW = layoutJson.innerBorderWidth;
-  const dividerStyle = layoutJson.dividerStyle || 'diamond';
-  
-  const ba = borderAttrs(project.border_style || 'DOUBLE', customOuterW, customInnerW);
-  const showLocation = project.show_location !== false;
-  const showReg = project.show_license_number !== false && regNo;
-
-  function bilingualCircularStamp(opts: {
-    outerR: number;
-    innerR: number;
-    extraRings?: string;
-    centerExtra?: string;
-    pathPrefix: string;
-  }): string {
-    const { outerR, innerR, extraRings = '', centerExtra = '', pathPrefix } = opts;
-    const rawTextR = innerR + (outerR - innerR) * 0.5;
-    // Enforce 5px clearance from both rings
-    const effectiveTextR = Math.min(Math.max(rawTextR, innerR + 5), outerR - 5);
-    
-    const arcLen = effectiveTextR * Math.PI;
-    const safeArc = arcLen * 0.58;
-    
-    const topText = isBilingual && arabicName ? arabicName : `✦  ${name}  ✦`;
-    const topIsAr = isBilingual && !!arabicName;
-    const topFont = topIsAr ? arabicFont : font;
-    const topSize = fitFontSize(topText, topIsAr ? 10 : 8.5, safeArc, topIsAr ? 0.48 : 0.54);
-    
-    const bottomText = isBilingual ? name : city;
-    const bottomSize = fitFontSize(bottomText, 8, safeArc, 0.54);
-    
-    const locR = outerR * 0.44;
-    // Location text with 5px clearance from location ring
-    const locTextR = Math.max(locR - 5, locR * 0.75);
-    let locationContent = '';
-    if (showLocation) {
-      const locEn = city;
-      const locAr = arabicCity || city;
-      const locArcLen = locTextR * Math.PI * 0.60;
-      const locEnSize = fitFontSize(locEn, 7, locArcLen, 0.55);
-      const locArSize = fitFontSize(locAr, 8, locArcLen, 0.48);
-      locationContent = `
-        <circle cx="${cx}" cy="${cy}" r="${locR}" fill="none" stroke="${C_SEC}" stroke-width="1.2"/>
-        ${topArcText(`${pathPrefix}-loc`, cx, cy, locTextR, locAr, arabicFont, locArSize, C_SEC, true)}
-        ${bottomArcTextChars(cx, cy, locTextR, locEn, font, locEnSize, C_SEC)}
-      `;
-    }
-
-    const centerR = showLocation ? locR - 6 : outerR * 0.30;
-    
-    let centerContent = '';
-    if (hasLogo && project.uploaded_logo_url) {
-      const imgS = centerR * 1.6;
-      centerContent = `
-        <defs><clipPath id="${pathPrefix}-clip"><circle cx="${cx}" cy="${cy}" r="${centerR - 1}"/></clipPath></defs>
-        <image href="${project.uploaded_logo_url}" x="${cx - imgS/2}" y="${cy - imgS/2}" width="${imgS}" height="${imgS}" 
-          clip-path="url(#${pathPrefix}-clip)" preserveAspectRatio="xMidYMid meet"/>`;
-    } else if (hasMono) {
-      const monoSize = mono.length <= 2 ? centerR * 0.75 : centerR * 0.55;
-      centerContent = monogramEl(cx, cy, mono, font, monoSize, C_ACC);
-    }
-
-    let regContent = '';
-    if (showReg) {
-      const regY = cy + centerR + 4;
-      if (regY < cy + innerR - 4) {
-        regContent = `<text x="${cx}" y="${regY}" text-anchor="middle" font-family="${font}" font-size="6" fill="${C_ACC}" letter-spacing="0.8" opacity="0.8">${regNo}</text>`;
-      }
-    }
-
-    return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${C_PRI}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
-      ${ba.innerRing ? `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${C_PRI}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
-      ${extraRings}
-      ${topArcText(`${pathPrefix}-top`, cx, cy, effectiveTextR, topText, topFont, topSize, C_PRI, topIsAr)}
-      ${bottomArcTextChars(cx, cy, effectiveTextR, bottomText, font, bottomSize, C_PRI)}
-      ${separatorDots(cx, cy, effectiveTextR, C_PRI)}
-      ${locationContent}
-      ${centerContent}
-      ${centerExtra}
-      ${regContent}
-    </svg>`;
-  }
-
-  switch (templateKey) {
-    case "classic-double": {
-      return bilingualCircularStamp({
-        outerR: R, innerR: R - 10, pathPrefix: 'cd',
-        centerExtra: divider(cx, cy + (hasMono ? 16 : 8), C_SEC, 28, dividerStyle),
-      });
-    }
-    case "modern-minimal": {
-      const r = R - 8;
-      return bilingualCircularStamp({
-        outerR: r, innerR: r - 6, pathPrefix: 'mm',
-      });
-    }
-    case "luxury-ring": {
-      const r1 = R, r2 = R - 13, r3 = R - 18;
-      return bilingualCircularStamp({
-        outerR: r1, innerR: r3, pathPrefix: 'lr',
-        extraRings: `<circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="${C_SEC}" stroke-width="0.5"/>`,
-        centerExtra: `${divider(cx, cy + 34, C_SEC, 22, dividerStyle)}<text x="${cx}" y="${cy + 44}" text-anchor="middle" font-family="${font}" font-size="6.5" fill="${C_SEC}" letter-spacing="5">EST.</text>`,
-      });
-    }
-    case "bold-rectangle": {
-      const rw = 190, rh = 100;
-      const x1 = 0, y1 = 0;
-      const rcx = rw / 2, rcy = rh / 2;
-      const nameFontSize = autoFontSize(name, 11, 22);
-      const arSize = autoFontSize(arabicName || name, 10, 18);
-      return `<svg viewBox="0 0 ${rw} ${rh}" xmlns="http://www.w3.org/2000/svg">
-        <rect x="${x1 + 2}" y="${y1 + 2}" width="${rw - 4}" height="${rh - 4}" rx="4" fill="none" stroke="${C_PRI}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
-        ${ba.innerRing ? `<rect x="${x1 + 7}" y="${y1 + 7}" width="${rw - 14}" height="${rh - 14}" rx="2" fill="none" stroke="${C_SEC}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
-        <text x="${rcx}" y="${y1 + 22}" text-anchor="middle" font-family="${font}" font-size="7" fill="${C_SEC}" letter-spacing="3">${city}</text>
-        <line x1="${x1 + 14}" y1="${y1 + 28}" x2="${rw - 14}" y2="${y1 + 28}" stroke="${C_SEC}" stroke-width="0.7"/>
-        ${wrapText(name, rcx, rcy + 2, font, nameFontSize, C_PRI, 2)}
-        ${isBilingual && arabicName ? `<text x="${rcx}" y="${rcy + 18}" text-anchor="middle" font-family="${arabicFont}" font-size="${arSize}" fill="${C_PRI}" direction="rtl" unicode-bidi="bidi-override">${arabicName}</text>` : ''}
-        <line x1="${x1 + 14}" y1="${rh - 28}" x2="${rw - 14}" y2="${rh - 28}" stroke="${C_SEC}" stroke-width="0.7"/>
-        ${showReg ? `<text x="${rcx}" y="${rh - 12}" text-anchor="middle" font-family="${font}" font-size="6" fill="${C_ACC}">${regNo}</text>` : ''}
-      </svg>`;
-    }
-    case "vintage-ornate": {
-      return bilingualCircularStamp({
-        outerR: R, innerR: R - 18, pathPrefix: 'vo',
-        extraRings: `<circle cx="${cx}" cy="${cy}" r="${R - 12}" fill="none" stroke="${C_SEC}" stroke-width="0.6" stroke-dasharray="3,2.5"/>`,
-        centerExtra: divider(cx, cy + (hasMono ? 18 : 14), C_SEC, 24, dividerStyle),
-      });
-    }
-    case "bilingual-official": {
-      return bilingualCircularStamp({
-        outerR: R, innerR: R - 9, pathPrefix: 'bo',
-        centerExtra: `<line x1="${cx - 45}" y1="${cy + 2}" x2="${cx + 45}" y2="${cy + 2}" stroke="${C_SEC}" stroke-width="0.6"/>`,
-      });
-    }
-    case "geometric-modern": {
-      const r = R - 6;
-      const innerGeo = hasMono
-        ? `<rect x="${cx - 30}" y="${cy - 30}" width="60" height="60" fill="none" stroke="${C_SEC}" stroke-width="1" transform="rotate(45, ${cx}, ${cy})"/>`
-        : `<rect x="${cx - 38}" y="${cy - 18}" width="76" height="36" rx="2" fill="none" stroke="${C_SEC}" stroke-width="0.8"/>`;
-      return bilingualCircularStamp({
-        outerR: r, innerR: r - 6, pathPrefix: 'gm',
-        extraRings: innerGeo,
-      });
-    }
-    case "square-premium": {
-      const s = 130;
-      const nameFontSize = autoFontSize(name, 10, 20);
-      const arSize = autoFontSize(arabicName || name, 10, 16);
-      return `<svg viewBox="0 0 ${s} ${s}" xmlns="http://www.w3.org/2000/svg">
-        <rect x="3" y="3" width="${s - 6}" height="${s - 6}" rx="3" fill="none" stroke="${C_PRI}" stroke-width="${ba.outerWidth}" stroke-dasharray="${ba.dash}"/>
-        ${ba.innerRing ? `<rect x="9" y="9" width="${s - 18}" height="${s - 18}" rx="2" fill="none" stroke="${C_SEC}" stroke-width="${ba.innerWidth}" stroke-dasharray="${ba.innerDash}"/>` : ''}
-        ${hasMono ? monogramEl(s/2, s/2 - 16, mono, font, 28, C_ACC) : ''}
-        ${wrapText(name, s/2, s/2 + (hasMono ? 10 : -2), font, nameFontSize, C_PRI, 1.5)}
-        ${isBilingual && arabicName ? `<text x="${s/2}" y="${s/2 + (hasMono ? 24 : 12)}" text-anchor="middle" font-family="${arabicFont}" font-size="${arSize}" fill="${C_PRI}" direction="rtl" unicode-bidi="bidi-override">${arabicName}</text>` : ''}
-        <text x="${s/2}" y="${s - 20}" text-anchor="middle" font-family="${font}" font-size="7" fill="${C_SEC}" letter-spacing="3">${city}</text>
-        ${showReg ? `<text x="${s/2}" y="${s - 11}" text-anchor="middle" font-family="${font}" font-size="5.5" fill="${C_ACC}">${regNo}</text>` : ''}
-      </svg>`;
-    }
-    default:
-      return buildSVG(project, "classic-double");
-  }
-}
-
-const TEMPLATES = [
-  { key: "classic-double", label: "Classic Double Ring", tags: ["classic", "professional"] },
-  { key: "modern-minimal", label: "Modern Minimal", tags: ["modern", "clean"] },
-  { key: "luxury-ring", label: "Luxury Triple Ring", tags: ["luxury", "premium"] },
-  { key: "bold-rectangle", label: "Bold Corporate Rectangle", tags: ["bold", "corporate"] },
-  { key: "vintage-ornate", label: "Vintage Seal", tags: ["vintage", "classic"] },
-  { key: "geometric-modern", label: "Geometric Modern", tags: ["geometric", "modern"] },
-  { key: "square-premium", label: "Square Premium", tags: ["square", "corporate"] },
-];
+// ─── SERVE ────────────────────────────────────────────────────────
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -390,55 +542,47 @@ serve(async (req) => {
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
-    // ── GENERATE action — INSTANT (no AI ordering) ───────────────────────────
+    // ── GENERATE action — uses official template engine ───────────────
     if (action === "generate") {
-      let orderedTemplates = [...TEMPLATES];
-
-      const isBilingual = project?.language_mode === 'BILINGUAL' || project?.language_mode === 'AR';
-      if (isBilingual) {
-        orderedTemplates = [
-          { key: "bilingual-official", label: "Bilingual Official", tags: ["bilingual", "arabic", "official"] },
-          ...orderedTemplates,
-        ];
-      }
-
       const businessType = project?.business_type || '';
       const styleSuggestion = BUSINESS_STYLE_MAP[businessType];
-      
-      if (styleSuggestion) {
-        const matchingBorder = styleSuggestion.border;
-        const borderTemplateMap: Record<string, string[]> = {
-          'RING': ['luxury-ring'],
-          'DOUBLE': ['classic-double', 'vintage-ornate', 'bilingual-official'],
-          'SINGLE': ['modern-minimal', 'geometric-modern'],
-          'ROPE': ['vintage-ornate'],
-        };
-        const preferred = borderTemplateMap[matchingBorder] || [];
-        if (preferred.length > 0) {
-          const first = orderedTemplates.filter(t => preferred.includes(t.key));
-          const rest = orderedTemplates.filter(t => !preferred.includes(t.key));
-          orderedTemplates = [...first, ...rest];
-        }
-      }
 
+      // Protect standard model from deletion
+      const selectedDesignId = body.selectedDesignId;
       if (projectId) {
-        await supabase.from("stamp_designs").delete().eq("project_id", projectId).eq("is_favorite", false);
+        let deleteQuery = supabase.from("stamp_designs").delete().eq("project_id", projectId).eq("is_favorite", false);
+        if (selectedDesignId) {
+          deleteQuery = deleteQuery.neq("id", selectedDesignId);
+        }
+        await deleteQuery;
       }
 
-      const concepts = orderedTemplates.map(t => ({
-        id: crypto.randomUUID(),
-        templateKey: t.key,
-        label: t.label,
-        tags: t.tags,
-        svgSource: buildSVG(project, t.key),
-      }));
+      // Order presets: put business-type-recommended styles first
+      let orderedPresets = [...CONCEPT_PRESETS];
+      if (styleSuggestion) {
+        const matchBorder = styleSuggestion.border;
+        const first = orderedPresets.filter(p => p.overrides.borderStyle === matchBorder);
+        const rest = orderedPresets.filter(p => p.overrides.borderStyle !== matchBorder);
+        orderedPresets = [...first, ...rest];
+      }
+
+      const concepts = orderedPresets.map(preset => {
+        const config = buildConfigFromProject(project, preset.overrides);
+        return {
+          id: crypto.randomUUID(),
+          templateKey: preset.key,
+          label: preset.label,
+          tags: preset.tags,
+          svgSource: generateOfficialStampSVG(config),
+        };
+      });
 
       if (projectId) {
         const inserts = concepts.map(c => ({
           project_id: projectId,
           user_id: userId,
           design_version: 1,
-          ai_prompt: `${project.style_theme} ${project.stamp_type} ${project.border_style}${businessType ? ` [${businessType}]` : ''}`,
+          ai_prompt: `${project.style_theme || 'CLASSIC'} ${project.stamp_type || 'official'} ${project.border_style || 'DOUBLE'}${businessType ? ` [${businessType}]` : ''}`,
           style_snapshot_json: project,
           svg_source: c.svgSource,
           template_key: c.templateKey,
@@ -466,7 +610,8 @@ serve(async (req) => {
         });
       }
 
-      let refinedSvg = currentSvg || buildSVG(project, "classic-double");
+      const baseConfig = buildConfigFromProject(project);
+      let refinedSvg = currentSvg || generateOfficialStampSVG(baseConfig);
       let message = "Design refined based on your instructions.";
 
       if (LOVABLE_API_KEY) {
@@ -484,15 +629,11 @@ Return ONLY the modified SVG code (starting with <svg) with NO explanation. Keep
 
 CRITICAL RULES:
 - Text must NEVER touch or overlap border circles. Maintain minimum 5px clearance between all text and ring strokes.
-- Bottom arc English text must read left-to-right naturally. Use per-character <text> elements at angles centered around 270° (SVG bottom). Rotation for each char = angle + 90.
 - All structural colors must use these hex tokens:
   Primary (borders, company name): #1a2744
   Secondary (inner rings, accents, location): #2a3a5c
   Accent (monogram, registration, dividers): #8b6914
-- Inner circle, location ring, and center elements must use Secondary (#2a3a5c) for strokes and Accent (#8b6914) for fill/text
 - Do not add external images or base64 data
-- Ensure minimum padding of 12px from rectangle borders for text content
-- For circular stamps, the company name band (between outer and inner rings) should be WIDER than the location band
 - Return ONLY the SVG, nothing else`,
                 },
                 {
@@ -618,7 +759,6 @@ CRITICAL RULES:
         const parts = aiJson.choices?.[0]?.message?.content;
         let imageUrl = "";
 
-        // Handle multimodal response — find image part
         if (Array.isArray(parts)) {
           for (const part of parts) {
             if (part.type === "image_url" && part.image_url?.url) {
@@ -627,7 +767,6 @@ CRITICAL RULES:
             }
           }
         } else if (typeof parts === "string") {
-          // Check if it contains a base64 image reference
           const b64Match = parts.match(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/);
           if (b64Match) imageUrl = b64Match[0];
         }
@@ -649,48 +788,18 @@ CRITICAL RULES:
       }
     }
 
-    // ── VARIATIONS action — generate style alternatives ─────────────────
+    // ── VARIATIONS action — systematic single-dimension variations ─────
     if (action === "variations") {
-      const baseProject = { ...project };
-      const baseLayout = baseProject.layout_json || {};
-      const variationConfigs: { key: string; label: string; overrides: Record<string, any> }[] = [];
-
-      // ── Separator Variations (4) ──
-      variationConfigs.push(
-        { key: 'sep-star', label: 'Star Separators', overrides: { layout_json: { ...baseLayout, separatorSymbol: '★' } } },
-        { key: 'sep-diamond', label: 'Diamond Separators', overrides: { layout_json: { ...baseLayout, separatorSymbol: '◆' } } },
-        { key: 'sep-ornate', label: 'Ornate Divider', overrides: { layout_json: { ...baseLayout, dividerStyle: 'ornate', separatorSymbol: '✧' } } },
-        { key: 'sep-minimal', label: 'Line Divider', overrides: { layout_json: { ...baseLayout, dividerStyle: 'line', separatorSymbol: '▪' } } },
-      );
-
-      // ── Color Scheme Variations (4) ──
-      variationConfigs.push(
-        { key: 'color-navy', label: 'Navy Official', overrides: { primary_color: '#1B3A8C', secondary_color: '#2a4a9c', accent_color: '#8b6914' } },
-        { key: 'color-charcoal', label: 'Charcoal Executive', overrides: { primary_color: '#2C2C2C', secondary_color: '#444444', accent_color: '#999999' } },
-        { key: 'color-burgundy', label: 'Burgundy Legal', overrides: { primary_color: '#6B1D2A', secondary_color: '#8A2B3B', accent_color: '#C9A84C' } },
-        { key: 'color-forest', label: 'Forest Corporate', overrides: { primary_color: '#1B4332', secondary_color: '#2D6A4F', accent_color: '#B7A24E' } },
-      );
-
-      // ── Ring / Border Variations (2) ──
-      variationConfigs.push(
-        { key: 'ring-luxury', label: 'Luxury Triple Ring', overrides: { border_style: 'RING' } },
-        { key: 'ring-rope', label: 'Rope Border Classic', overrides: { border_style: 'ROPE' } },
-      );
-
-      // ── Monogram Placement Variations (2) ──
-      variationConfigs.push(
-        { key: 'mono-large', label: 'Large Monogram Center', overrides: { layout_json: { ...baseLayout, monogramSize: 'large' } } },
-        { key: 'mono-none', label: 'No Monogram — Text Only', overrides: { monogram_text: '', layout_json: { ...baseLayout, showMonogram: false } } },
-      );
-
+      const variationConfigs = getVariationConfigs();
+      
       const concepts = variationConfigs.map(vc => {
-        const varProject = { ...baseProject, ...vc.overrides };
+        const config = buildConfigFromProject(project, vc.overrides);
         return {
           id: crypto.randomUUID(),
           templateKey: vc.key,
           label: vc.label,
           tags: ['variation', 'ai'],
-          svgSource: buildSVG(varProject, vc.key),
+          svgSource: generateOfficialStampSVG(config),
         };
       });
 

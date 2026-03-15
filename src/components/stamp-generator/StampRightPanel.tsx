@@ -514,8 +514,6 @@ function HistoryList(props: {
   async function loadVersions() {
     setLoading(true);
     const { supabase } = await import('@/integrations/supabase/client');
-    const { useAuth } = await import('@/contexts/AuthContext');
-    // Direct query — we're inside authenticated context
     const { data } = await supabase
       .from('stamp_designs')
       .select('id, svg_source, template_key, created_at, is_favorite')

@@ -593,6 +593,11 @@ export default function StampGeneratorPage() {
   }
 
   async function handleSelectConcept(concept: StampDesignConcept) {
+    // Block selection during active generation
+    if (generating) {
+      toast('Please wait for generation to finish', { duration: 2000 });
+      return;
+    }
     // Swap: previous standard moves into concepts list, clicked becomes new standard
     if (standardConcept && standardConcept.id !== concept.id) {
       setConcepts(prev => {
@@ -604,16 +609,13 @@ export default function StampGeneratorPage() {
     setStandardConcept(concept);
     setSelectedId(concept.id);
     // Persist selected_design_id to database immediately
-    // If it's a local UUID (not yet in DB), insert first
     if (projectId) {
       let dbId = concept.id;
       if (concept.id.length !== 36 || !concept.id.includes('-')) {
         // Not a valid DB UUID, treat as local
       } else {
-        // Check if it exists in stamp_designs
         const { data: exists } = await supabase.from('stamp_designs').select('id').eq('id', concept.id).maybeSingle();
         if (!exists) {
-          // Insert to DB first
           const { data: inserted } = await supabase.from('stamp_designs').insert({
             project_id: projectId, user_id: user!.id, design_version: 1,
             template_key: concept.templateKey,
@@ -622,7 +624,6 @@ export default function StampGeneratorPage() {
           }).select('id').single();
           if (inserted) {
             dbId = inserted.id;
-            // Update concept ID in local state
             concept = { ...concept, id: inserted.id };
             setStandardConcept(concept);
             setSelectedId(inserted.id);
@@ -632,7 +633,7 @@ export default function StampGeneratorPage() {
         await supabase.from('stamp_projects').update({ selected_design_id: dbId }).eq('id', projectId);
       }
     }
-    toast.success('Design applied as Standard', { duration: 2000 });
+    toast.success('Active design changed', { duration: 2000 });
   }
 
   function handleOpenPreview(concept: StampDesignConcept) {
