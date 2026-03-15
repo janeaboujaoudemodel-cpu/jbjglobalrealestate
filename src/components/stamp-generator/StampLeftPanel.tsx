@@ -285,6 +285,30 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
         <Accordion type="multiple" value={openSections} onValueChange={setOpenSections} className="px-2 py-1">
 
           {/* ═══════════════════════════════════════════
+              LANGUAGE MODE TOGGLE
+             ═══════════════════════════════════════════ */}
+          {props.onSetLanguageMode && (
+            <div className="px-1 py-2 border-b border-[hsl(var(--border)/0.5)]">
+              <p className="text-[8px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1.5 tracking-wider">Language Mode</p>
+              <div className="flex gap-1">
+                {([
+                  { key: 'BILINGUAL' as const, label: '🌐 Bilingual' },
+                  { key: 'AR' as const, label: '🇦🇪 Arabic' },
+                  { key: 'EN' as const, label: '🇬🇧 English' },
+                ]).map(m => (
+                  <button key={m.key} onClick={() => props.onSetLanguageMode!(m.key)}
+                    className={`flex-1 py-1.5 rounded-lg border-2 text-[9px] font-semibold transition-all ${
+                      props.languageMode === m.key
+                        ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))]'
+                        : 'border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold)/0.3)]'
+                    }`}>
+                    {m.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          {/* ═══════════════════════════════════════════
               1. ELEMENT HIERARCHY — semantic tree
              ═══════════════════════════════════════════ */}
           <AccordionItem value="element-hierarchy" className="border-b border-[hsl(var(--border)/0.5)]">
