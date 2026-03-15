@@ -158,6 +158,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [prevCurrency, setPrevCurrency] = useState<string>('AED');
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const isDark = variant === 'dark';
 
   const update = useCallback((partial: Partial<ShortcutFilterState>) => {
