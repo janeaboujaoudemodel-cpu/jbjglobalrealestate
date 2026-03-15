@@ -442,7 +442,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-black/70">Post handover plans only</span>
+                <span className="text-xs text-black/70">{t('filter.postHandoverOnly')}</span>
                 <Switch
                   checked={filters.postHandoverOnly}
                   onCheckedChange={(v) => update({ postHandoverOnly: v })}
