@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   PenTool, Trash2, User, Wand2, Loader2,
-  ChevronLeft, ChevronRight, X, FileText, Pencil,
+  ChevronLeft, ChevronRight, X, FileText, Pencil, Package,
 } from "lucide-react";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -17,6 +17,7 @@ import { PDFDocument } from "pdf-lib";
 import ESignaturePad from "./ESignaturePad";
 import PdfPageCanvas from "./PdfPageCanvas";
 import FieldContentRenderer from "./FieldContentRenderer";
+import { BrandAssetPicker } from "@/components/brand-assets/BrandAssetPicker";
 import {
   type SignatureField, type DocumentFieldPlacerProps,
   fieldTypes, recipientColorStyles, getInitials, getRecipientStyle,
@@ -30,7 +31,8 @@ export default function DocumentFieldPlacer({
   recipients,
   fields,
   onFieldsChange,
-}: DocumentFieldPlacerProps) {
+  handoffStampSvg,
+}: DocumentFieldPlacerProps & { handoffStampSvg?: string | null }) {
   const { user } = useAuth();
   const [selectedRecipient, setSelectedRecipient] = useState<string>(recipients[0]?.id || "");
   const [selectedFieldType, setSelectedFieldType] = useState<SignatureField["type"]>("signature");
@@ -56,10 +58,31 @@ export default function DocumentFieldPlacer({
   const [thumbsLoading, setThumbsLoading] = useState(false);
   const pdfJsDocRef = useRef<any>(null);
 
-  // Load user's saved stamp from stamp_designs
+  // Brand asset picker state
+  const [showAssetPicker, setShowAssetPicker] = useState(false);
+
+  // Load stamp: prefer handoff, then brand_assets, then stamp_designs fallback
   useEffect(() => {
+    if (handoffStampSvg) {
+      setSavedStampSvg(handoffStampSvg);
+      return;
+    }
     if (!user?.id) return;
     async function loadStamp() {
+      // Try brand_assets first
+      const { data: brandStamp } = await supabase
+        .from("brand_assets")
+        .select("svg_content")
+        .eq("user_id", user!.id)
+        .eq("asset_type", "stamp")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (brandStamp?.svg_content) {
+        setSavedStampSvg(brandStamp.svg_content);
+        return;
+      }
+      // Fallback to stamp_designs
       const { data } = await supabase
         .from("stamp_designs")
         .select("svg_source")
@@ -71,7 +94,7 @@ export default function DocumentFieldPlacer({
       if (data?.svg_source) setSavedStampSvg(data.svg_source);
     }
     loadStamp();
-  }, [user?.id]);
+  }, [user?.id, handoffStampSvg]);
 
   // Load user's saved signature from ai_tool_projects (favorite signature)
   useEffect(() => {
@@ -396,6 +419,19 @@ export default function DocumentFieldPlacer({
         >
           <Trash2 className="w-3.5 h-3.5 mr-1" />
           Clear Page
+        </Button>
+
+        <div className="w-px h-8 bg-border" />
+
+        {/* Brand Assets */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowAssetPicker(true)}
+          className="h-9 gap-1.5 text-sm font-medium border-[hsl(var(--gold)/.4)] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/.05)]"
+        >
+          <Package className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
+          Brand Assets
         </Button>
       </div>
 
@@ -726,6 +762,31 @@ export default function DocumentFieldPlacer({
           />
         </DialogContent>
       </Dialog>
+
+      {/* ─── Brand Asset Picker ─── */}
+      {showAssetPicker && (
+        <BrandAssetPicker
+          onSelect={(asset) => {
+            if (asset.asset_type === 'stamp' && asset.svg_content) {
+              setSavedStampSvg(asset.svg_content);
+              toast.success(`Stamp "${asset.name}" loaded — select Stamp field type and click to place`);
+            } else if (asset.asset_type === 'signature') {
+              const url = asset.thumbnail_url || (asset.svg_content
+                ? `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(asset.svg_content)))}`
+                : null);
+              if (url) {
+                setSavedSignatureUrl(url);
+                toast.success(`Signature "${asset.name}" loaded`);
+              }
+            } else if (asset.asset_type === 'logo' && asset.thumbnail_url) {
+              setSavedSignatureUrl(asset.thumbnail_url);
+              toast.success(`Logo "${asset.name}" loaded as overlay`);
+            }
+            setShowAssetPicker(false);
+          }}
+          onClose={() => setShowAssetPicker(false)}
+        />
+      )}
     </div>
   );
 }
