@@ -213,19 +213,19 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
 function renderBottomArcTextPath(
   text: string, cx: number, cy: number, r: number,
   fontSize: number, font: string, ink: string, letterSpacing: number,
-  isArabic: boolean, pathId: string, fontWeight = '800'
+  isArabic: boolean, pathId: string, fontWeight = '800',
+  letterOverrides?: Record<string, LetterOverride>
 ): string {
   if (!text) return '';
-  // Bottom arc: draw from left to right below center, text hangs from path
-  // Use a slight vertical offset to prevent text sinking below the ring
   const verticalNudge = fontSize * 0.15;
   const adjustedCy = cy - verticalNudge;
   const arcPath = `M ${cx - r} ${adjustedCy} A ${r} ${r} 0 0 0 ${cx + r} ${adjustedCy}`;
+  const textContent = renderArcLetters(text, pathId, fontSize, ink, letterOverrides);
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
     <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
       letter-spacing="${letterSpacing}" font-weight="${fontWeight}" dominant-baseline="hanging">
-      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${text}</textPath>
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${textContent}</textPath>
     </text>
   `;
 }
@@ -233,17 +233,44 @@ function renderBottomArcTextPath(
 function renderTopArcTextPath(
   text: string, cx: number, cy: number, r: number,
   fontSize: number, font: string, ink: string, letterSpacing: number,
-  isArabic: boolean, pathId: string, fontWeight = '800'
+  isArabic: boolean, pathId: string, fontWeight = '800',
+  letterOverrides?: Record<string, LetterOverride>
 ): string {
   if (!text) return '';
   const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}`;
+  const textContent = renderArcLetters(text, pathId, fontSize, ink, letterOverrides);
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
     <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
       letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
-      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${text}</textPath>
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${textContent}</textPath>
     </text>
   `;
+}
+
+/** Render arc text as individual tspan elements when letter overrides exist */
+function renderArcLetters(
+  text: string, arcId: string, baseFontSize: number, baseColor: string,
+  overrides?: Record<string, LetterOverride>
+): string {
+  if (!overrides || Object.keys(overrides).length === 0) return text;
+  
+  // Check if any override applies to this arc
+  const hasRelevantOverrides = Object.keys(overrides).some(k => k.startsWith(`${arcId}-`));
+  if (!hasRelevantOverrides) return text;
+
+  return [...text].map((char, i) => {
+    const key = `${arcId}-${i}`;
+    const ov = overrides[key];
+    if (!ov) return `<tspan data-stamp-letter="${key}">${char}</tspan>`;
+    
+    const attrs: string[] = [`data-stamp-letter="${key}"`];
+    if (ov.color) attrs.push(`fill="${ov.color}"`);
+    if (ov.fontSize) attrs.push(`font-size="${ov.fontSize}"`);
+    if (ov.dx) attrs.push(`dx="${ov.dx}"`);
+    if (ov.dy) attrs.push(`dy="${ov.dy}"`);
+    return `<tspan ${attrs.join(' ')}>${char}</tspan>`;
+  }).join('');
 }
 
 function renderOuterRing(cx: number, cy: number, r: number, ink: string, borderStyle: BorderStyleType, sw: number): string {
