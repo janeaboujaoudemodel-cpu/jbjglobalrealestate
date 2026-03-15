@@ -369,7 +369,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">Max Price</label>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">{t('filter.maxPrice')}</label>
                 <div className="relative">
                   <input
                     type="text"
