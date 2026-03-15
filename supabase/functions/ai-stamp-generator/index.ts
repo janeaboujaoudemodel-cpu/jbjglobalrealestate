@@ -193,6 +193,8 @@ function renderBottomArcTextPath(
 }
 
 function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number, innerR: number, enFont: string, ink: string): string {
+  const centerMode = config.centerMode || (config.showLogo ? 'logo' : config.showMonogram ? 'monogram' : 'none');
+  const mono = config.monogramText || '';
   const centerScale = config.centerContentScale != null ? config.centerContentScale / 50 : 1;
 
   switch (centerMode) {
