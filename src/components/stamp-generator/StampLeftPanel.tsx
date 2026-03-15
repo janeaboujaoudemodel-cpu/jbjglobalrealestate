@@ -158,13 +158,25 @@ interface StampLeftPanelProps {
 export function StampLeftPanel(props: StampLeftPanelProps) {
   const [openSections, setOpenSections] = useState<string[]>(['colors', 'text']);
 
-  // Listen for center panel open event from canvas center click
+  // Listen for panel open events from canvas element clicks
   useEffect(() => {
-    const handler = () => {
+    const openCenter = () => {
       setOpenSections(prev => prev.includes('center') ? prev : [...prev, 'center']);
     };
-    window.addEventListener('stamp-open-center-panel', handler);
-    return () => window.removeEventListener('stamp-open-center-panel', handler);
+    const openSeparator = () => {
+      setOpenSections(prev => prev.includes('separators') ? prev : [...prev, 'separators']);
+    };
+    const openText = () => {
+      setOpenSections(prev => prev.includes('text') ? prev : [...prev, 'text']);
+    };
+    window.addEventListener('stamp-open-center-panel', openCenter);
+    window.addEventListener('stamp-open-separator-panel', openSeparator);
+    window.addEventListener('stamp-open-text-panel', openText);
+    return () => {
+      window.removeEventListener('stamp-open-center-panel', openCenter);
+      window.removeEventListener('stamp-open-separator-panel', openSeparator);
+      window.removeEventListener('stamp-open-text-panel', openText);
+    };
   }, []);
 
   const stopDefs: { key: ColorStop; label: string; color: string }[] = [

@@ -138,9 +138,14 @@ export function StampInteractivePreview({
       x: Math.max(0, Math.min(zone.rect.x + zone.rect.width / 2, size - 120)),
       y: Math.max(0, zone.rect.y - 8),
     });
-    // Auto-switch to monogram edit when center is clicked
-    if (zone.type === 'center' && onCenterClick) {
-      onCenterClick();
+    // Emit panel-focus events so left panel auto-opens the right accordion section
+    if (zone.type === 'center') {
+      if (onCenterClick) onCenterClick();
+      window.dispatchEvent(new CustomEvent('stamp-open-center-panel'));
+    } else if (zone.type === 'separator') {
+      window.dispatchEvent(new CustomEvent('stamp-open-separator-panel'));
+    } else if (zone.type === 'arc-text' || zone.type === 'location') {
+      window.dispatchEvent(new CustomEvent('stamp-open-text-panel', { detail: { elementId: zone.id } }));
     }
   };
 
