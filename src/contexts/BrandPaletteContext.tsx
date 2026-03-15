@@ -40,6 +40,7 @@ interface BrandPaletteContextType {
   saveUserPalette: (name: string, palette: BrandPalette, setActive?: boolean) => Promise<void>;
   deleteUserPalette: (id: string) => Promise<void>;
   activateUserPalette: (id: string) => Promise<void>;
+  renameUserPalette: (id: string, newName: string) => Promise<void>;
   revertToDefault: () => void;
   loadUserPalettes: () => Promise<void>;
 }
