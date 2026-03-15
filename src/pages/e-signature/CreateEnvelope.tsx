@@ -7,6 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { 
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { 
   ArrowLeft, 
   ArrowRight, 
@@ -18,7 +23,9 @@ import {
   Plus,
   Trash2,
   Loader2,
-  Clock
+  Clock,
+  CheckCircle2,
+  ShieldCheck
 } from "lucide-react";
 import { toast } from "sonner";
 import DocumentFieldPlacer from "@/components/e-signature/DocumentFieldPlacer";

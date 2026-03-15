@@ -12,8 +12,6 @@ import {
   type Recipient,
   fieldTypes,
   recipientColorStyles,
-  getInitials,
-  loadPdfJs,
 } from "./documentFieldTypes";
 
 interface DocumentPreviewSummaryProps {
@@ -32,6 +30,7 @@ export default function DocumentPreviewSummary({
   const [previewPage, setPreviewPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pdfDocRef = useRef<any>(null);
+  const { loadPdfJs } = require("./documentFieldTypes");
 
   useEffect(() => {
     let cancelled = false;
@@ -42,7 +41,6 @@ export default function DocumentPreviewSummary({
         if (!cancelled) {
           pdfDocRef.current = doc;
           setTotalPages(doc.numPages);
-          // Default to page with most fields
           const pageCounts: Record<number, number> = {};
           fields.forEach((f) => {
             pageCounts[f.pageNumber] = (pageCounts[f.pageNumber] || 0) + 1;
@@ -99,12 +97,13 @@ export default function DocumentPreviewSummary({
           </div>
         )}
 
-        {/* Scaled-down preview with field overlays */}
+        {/* Scaled-down preview with field overlays INSIDE the scaled container */}
         <div
-          className="relative border rounded-lg overflow-hidden bg-white"
-          style={{ maxHeight: "400px", overflow: "hidden" }}
+          className="relative border rounded-lg overflow-auto bg-white"
+          style={{ maxHeight: "500px" }}
         >
           <div
+            className="relative"
             style={{
               transform: "scale(0.5)",
               transformOrigin: "top left",
@@ -117,57 +116,76 @@ export default function DocumentPreviewSummary({
               pageNumber={previewPage}
               pdfUrl={pdfUrl}
             />
-          </div>
 
-          {/* Field overlays at 50% scale */}
-          {pageFields.map((field) => {
-            const rIndex = recipients.findIndex(
-              (r) => r.id === field.recipientId
-            );
-            const style =
-              recipientColorStyles[rIndex % recipientColorStyles.length];
-            const fieldConfig = fieldTypes.find((f) => f.type === field.type);
+            {/* Field overlays — inside scaled container so they align with PDF */}
+            {pageFields.map((field) => {
+              const rIndex = recipients.findIndex(
+                (r) => r.id === field.recipientId
+              );
+              const style =
+                recipientColorStyles[rIndex % recipientColorStyles.length];
+              const fieldConfig = fieldTypes.find((f) => f.type === field.type);
 
-            return (
-              <div
-                key={field.id}
-                className={`absolute rounded border ${style.border} ${style.light}`}
-                style={{
-                  left: `${field.x * 0.5}%`,
-                  top: `${field.y * 0.5}%`,
-                  width: `${field.width * 0.5}px`,
-                  height: `${field.height * 0.5}px`,
-                  opacity: 0.85,
-                }}
-              >
-                <span
-                  className={`text-[7px] font-medium ${style.text} block truncate px-0.5`}
+              return (
+                <div
+                  key={field.id}
+                  className={`absolute rounded border-2 ${style.border} ${style.light}`}
+                  style={{
+                    left: `${field.x}%`,
+                    top: `${field.y}%`,
+                    width: `${field.width}px`,
+                    height: `${field.height}px`,
+                    opacity: 0.9,
+                  }}
                 >
-                  {field.label || fieldConfig?.label}
-                </span>
-              </div>
-            );
-          })}
+                  <span
+                    className={`text-xs font-semibold ${style.text} block truncate px-1 leading-tight mt-0.5`}
+                  >
+                    {field.label || fieldConfig?.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Field summary by recipient */}
-        <div className="mt-3 space-y-1.5">
+        <div className="mt-3 space-y-2">
           {recipients.map((r, i) => {
             const rFields = fields.filter((f) => f.recipientId === r.id);
             if (rFields.length === 0) return null;
             const style =
               recipientColorStyles[i % recipientColorStyles.length];
+            const typeGroups = rFields.reduce<Record<string, number>>((acc, f) => {
+              acc[f.type] = (acc[f.type] || 0) + 1;
+              return acc;
+            }, {});
+            const pages = [...new Set(rFields.map((f) => f.pageNumber))].sort();
+
             return (
-              <div key={r.id} className="flex items-center gap-2 text-xs">
+              <div key={r.id} className="flex items-start gap-2 text-xs">
                 <div
-                  className="w-2 h-2 rounded-full shrink-0"
+                  className="w-2.5 h-2.5 rounded-full shrink-0 mt-0.5"
                   style={{ background: style.hex }}
                 />
-                <span className="font-medium text-foreground">{r.name}</span>
-                <span className="text-muted-foreground">
-                  — {rFields.length} field{rFields.length !== 1 ? "s" : ""}:{" "}
-                  {[...new Set(rFields.map((f) => f.type))].join(", ")}
-                </span>
+                <div className="flex-1 min-w-0">
+                  <span className="font-semibold text-foreground">{r.name}</span>
+                  <span className="text-muted-foreground ml-1">({r.email})</span>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {Object.entries(typeGroups).map(([type, count]) => (
+                      <Badge
+                        key={type}
+                        variant="secondary"
+                        className="text-[10px] px-1.5 py-0"
+                      >
+                        {count}× {type}
+                      </Badge>
+                    ))}
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                      pg {pages.join(", ")}
+                    </Badge>
+                  </div>
+                </div>
               </div>
             );
           })}
