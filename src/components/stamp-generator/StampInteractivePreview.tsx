@@ -33,6 +33,10 @@ const ELEMENT_LABELS: Record<string, { label: string; type: HitZone['type'] }> =
   'loc-separator-right': { label: 'Location Separator Right', type: 'separator' },
   'center': { label: 'Center Content', type: 'center' },
   'registration': { label: 'Registration Number', type: 'registration' },
+  'border-outer': { label: 'Outer Ring', type: 'center' },
+  'border-middle': { label: 'Middle Ring', type: 'center' },
+  'border-inner': { label: 'Inner Ring', type: 'center' },
+  'border-decorative': { label: 'Decorative Ring', type: 'center' },
 };
 
 const CENTER_MODES: { value: CenterContentMode; label: string }[] = [
