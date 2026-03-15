@@ -1,90 +1,95 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+# UI Premium Upgrade — Corporate Suite, Property Suite, Compare, Video Suite
 
-### Session Status
+## Scope Assessment
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+This request covers 4 major areas. I will focus on the **actionable UI/UX fixes** that can be implemented now. Some requests (full video editing suite comparable to DaVinci/Lightroom, AI video generation with scene-by-scene prompts, automatic script generation from website data) are **feature-level projects** that require dedicated sessions — I will note those clearly.
 
 ---
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+## 1. Corporate Premium Suite (`CorporateSuite.tsx`)
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+**Issues identified:**
+- Cards are not uniformly aligned (flex-col layout but descriptions vary in length, pushing CTAs to inconsistent positions)
+- The gold accent `#B8943E` is correct champagne-gold but the star icon uses generic `Sparkles` — needs premium treatment
+- Badge/CTA alignment inconsistent across cards
 
----
-
-### Route Map
-
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
-
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
-
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
+**Fixes:**
+- Enforce `min-h` on description area so all CTAs align at the same bottom position
+- Add `h-full` + `flex flex-col` + `flex-1` on description paragraph to push CTA to bottom consistently
+- Ensure the accent bar, icon, badge, title, description, and CTA are all at consistent vertical positions across all 12 cards
+- Rename to "Corporate Premium Suite" (already done in breadcrumb but verify title)
 
 ---
 
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
+## 2. Property Intelligence Suite (`PropertySuite.tsx`)
+
+**Issues identified:**
+- Header shows gray/black tones — user wants champagne-gold premium header matching PropertyEvaluator style
+- Each tool tab needs its own distinct color (already defined in `tabs` array but icons need colored backgrounds like PropertyEvaluator)
+- Back link says `/toolkit` — should be `/ai-hub` per memory
+
+**Fixes:**
+- Update back link `href` from `/toolkit` to `/ai-hub`
+- Add colored icon backgrounds in tab triggers (rounded icon containers with tool-specific tint)
+- Each tab already has a color assigned: Finder=Purple, Evaluator=Blue, Compare=Red, Rental=Green, Mortgage=Amber — verify these render with colored icon containers in both active and inactive states
+- Ensure header icon container uses champagne gradient (already does — verify border glow)
+
+---
+
+## 3. Compare Page (`Compare.tsx`)
+
+**Issues identified:**
+- Ratings show 5-star system + score bars — user wants scoring out of 10 for Location, Plan, Construction Quality, Amenities, Developer Quality, Handover
+- Score bars exist (`renderScoreBar`) but need more categories
+- Download report exists but doesn't offer merge with favorites/shortlisted
+- No "share report with team" flow beyond WhatsApp/Email
+
+**Fixes:**
+- Add additional score categories: "Construction Quality", "Handover Timeline", "Payment Flexibility" alongside existing Location/Value/Amenities/Investment/Developer
+- Enhance the download flow: Before download, show a modal asking "Include favorites & shortlisted properties?" with checkboxes showing which projects are in favorites vs just compared
+- Add "Save Results" button that persists the comparison to DB (already has `evaluation_requests` table)
+- Enhance the HTML report template to include the score bars (currently only shows stars)
+- The rating cards already show score/10 — ensure all new categories are rendered symmetrically
+
+---
+
+## 4. Video Suite (`VideoSuite.tsx`)
+
+**Issues identified:**
+- Header not centered (already centered in code — verify rendering)
+- Back link points to `/toolkit` — should be `/ai-hub`
+
+**Fixes:**
+- Update back link to `/ai-hub`
+- The extensive feature requests (body/face filters, background remover, photo clips with timing, sound extraction, DaVinci-level editing, AI voice generation from project data, scene-by-scene prompts, location integration in video, chart overlays) are **NOT implementable in this session** — these are multi-sprint features requiring dedicated AI model integration, video processing pipelines, and audio extraction services
+
+**What CAN be fixed now:**
+- Back link correction
+- Ensure tab styling matches the premium champagne standard consistently
+
+---
+
+## Files Modified
+
+| File | Changes |
+|------|---------|
+| `CorporateSuite.tsx` | Fix card alignment (min-h on description, consistent CTA positioning) |
+| `PropertySuite.tsx` | Fix back link to `/ai-hub`, enhance tab icon styling with colored backgrounds |
+| `Compare.tsx` | Add more score categories, pre-download favorites merge modal, enhanced report HTML |
+| `VideoSuite.tsx` | Fix back link to `/ai-hub` |
+
+## NOT IMPLEMENTED (requires dedicated sessions)
+
+1. **Full video editing suite** (DaVinci/Lightroom/Canva level) — requires dedicated multi-session build
+2. **AI video generation from project data** — requires project integration pipeline + AI video model
+3. **Sound extraction from video** — requires audio processing edge function
+4. **AI voiceover with British accent on generated ads** — requires ElevenLabs integration (connector available but needs dedicated session)
+5. **Scene-by-scene prompt control** — requires video AI model with frame-level control
+6. **Background removal from video** — requires ML model integration
+7. **Chart/insight overlays in video** — requires data visualization rendering pipeline
+8. **Cross-tool sharing integration** — requires notification/sharing infrastructure
+
+These are clearly stated as **NOT IMPLEMENTED** per the mandatory instruction rules.
+
