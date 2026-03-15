@@ -549,7 +549,7 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
   }
 
   // Safe content area — keep well inside borders
-  const safeW = w - 40;
+  const safeW = w - 56;
   const lineH = isSquare ? 16 : 14;
   const lines: { text: string; font: string; size: number; weight: string; opacity?: number }[] = [];
 
