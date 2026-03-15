@@ -93,18 +93,19 @@ export default function EncryptionAuditDashboard() {
     }
   };
 
-  const runMigration = async () => {
+  const runMigration = async (target: string = "crm_leads") => {
     setMigrating(true);
     try {
       const { data, error } = await supabase.functions.invoke("crm-data-encrypt", {
-        body: { action: "migrate" },
+        body: { action: "migrate", target },
       });
       if (error) throw error;
       if (data?.key_missing) {
-        toast.error("CRM_ENCRYPTION_KEY not configured yet. Add it in your backend secrets.");
+        toast.error("Encryption key not configured yet. Add it in your backend secrets.");
         return;
       }
-      toast.success(`Encrypted ${data?.migrated || 0} leads. ${data?.remaining === "complete" ? "All done!" : "Run again for more."}`);
+      const label = target.replace(/_/g, " ");
+      toast.success(`Encrypted ${data?.migrated || 0} ${label} records. ${data?.remaining === "complete" ? "All done!" : "Run again for more."}`);
       fetchAll();
     } catch (e: any) {
       toast.error(e.message || "Migration failed");
