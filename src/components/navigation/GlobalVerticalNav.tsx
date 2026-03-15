@@ -1518,7 +1518,7 @@ export default function GlobalVerticalNav() {
                     <User className="w-3.5 h-3.5" />
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="right" className="text-xs">Sign In</TooltipContent>
+                <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign In</TooltipContent>
               </Tooltip>
             )}
           </div>
