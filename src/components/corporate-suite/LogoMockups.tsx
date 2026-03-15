@@ -13,6 +13,7 @@ interface Props {
   colors: { primary: string; secondary: string; accent: string };
   name: string;
   font: string;
+  stampUrl?: string;
 }
 
 type CardLayout = "horizontal" | "vertical" | "centered" | "minimal";
