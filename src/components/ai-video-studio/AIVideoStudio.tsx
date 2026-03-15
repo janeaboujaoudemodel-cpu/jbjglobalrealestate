@@ -992,6 +992,44 @@ export function AIVideoStudio() {
           }}
         />
       }
+      batchPhotoPanel={
+        <BatchPhotoVideoPanel
+          onBuildTimeline={(photos) => {
+            const videoTrack = project.tracks.find(t => t.type === 'video');
+            if (!videoTrack) { toast.error('No video track found'); return; }
+            let cursor = videoTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+
+            photos.forEach((photo, idx) => {
+              // Ken Burns keyframes: start → end transform over clip duration
+              const kbKeyframes = getKenBurnsKeyframes(photo.kenBurns, photo.duration);
+
+              addClip(videoTrack.id, {
+                trackId: videoTrack.id, type: 'image', name: photo.name,
+                startTime: cursor, duration: photo.duration,
+                source: { url: photo.url, thumbnailUrl: photo.url, inPoint: 0, outPoint: photo.duration, originalDuration: photo.duration },
+                transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                keyframes: kbKeyframes,
+                effects: [{ id: crypto.randomUUID(), type: 'overlay', name: 'ken-burns', settings: { animation: photo.kenBurns } }],
+              });
+
+              // Add transition between photos
+              if (idx < photos.length - 1) {
+                const td = 0.8;
+                addClip(videoTrack.id, {
+                  trackId: videoTrack.id, type: 'transition', name: photo.transition,
+                  startTime: cursor + photo.duration - td / 2, duration: td,
+                  source: { url: '', inPoint: 0, outPoint: td, originalDuration: td },
+                  transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                  keyframes: [],
+                  effects: [{ id: crypto.randomUUID(), type: 'transition', name: photo.transition, settings: { transitionId: photo.transition } }],
+                  transition: { transitionId: photo.transition, easing: 'easeInOut' },
+                });
+              }
+              cursor += photo.duration;
+            });
+          }}
+        />
+      }
     />
     </>
   );
