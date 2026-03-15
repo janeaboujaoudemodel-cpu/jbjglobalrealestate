@@ -941,8 +941,6 @@ export default function CreateEnvelope() {
               disabled={isSubmitting || !reviewConfirmed}
               className="bg-gold hover:bg-gold/90"
             >
-              className="bg-gold hover:bg-gold/90"
-            >
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
