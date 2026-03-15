@@ -7,6 +7,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useUserRole, VisitorRole } from "@/hooks/useUserRole";
 import { useOwnerVerification } from "@/hooks/useOwnerVerification";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 
 interface QuickAction {
   label: string;
