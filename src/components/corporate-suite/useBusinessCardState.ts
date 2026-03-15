@@ -538,6 +538,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     }
   };
 
+  const handleBatchPrint = () => {
     const printWindow = window.open("", "_blank");
     if (!printWindow) { toast.error("Pop-up blocked. Please allow pop-ups."); return; }
     const cardHtml = cardPreviewRef.current?.innerHTML || "";
