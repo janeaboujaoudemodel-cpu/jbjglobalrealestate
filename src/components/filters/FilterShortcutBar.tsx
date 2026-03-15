@@ -411,7 +411,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactive)}>
-              Payments
+              {t('filter.payments')}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
