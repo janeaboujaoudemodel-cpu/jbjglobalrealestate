@@ -464,7 +464,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             <h4 className="text-sm font-bold text-black mb-3">{t('filter.handoverTitle')}</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">From</label>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">{t('filter.from')}</label>
                 <div className="flex gap-1 mb-2">
                   {QUARTERS.map(q => (
                     <button
