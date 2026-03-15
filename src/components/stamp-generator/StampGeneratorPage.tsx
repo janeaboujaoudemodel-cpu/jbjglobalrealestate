@@ -1084,8 +1084,7 @@ export default function StampGeneratorPage() {
                         const initials = project.company_name.split(/\s+/).map((w: string) => w[0]).join('').toUpperCase().slice(0, 3);
                         setLocalMonogramText(initials);
                       }
-                      // Dispatch event to open the center section in left panel
-                      window.dispatchEvent(new CustomEvent('stamp-open-center-panel'));
+                      // Selection handled by onElementSelect prop
                     }}
                     currentSeparatorStyle={project?.separator_style}
                     currentCenterMode={localIconStyle === 'UPLOADED_LOGO' ? 'logo' : localIconStyle === 'NONE' ? 'none' : 'monogram'}
