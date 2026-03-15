@@ -737,7 +737,7 @@ function HistoryList(props: {
     setLoading(true);
     const { data } = await supabase
       .from('stamp_designs')
-      .select('id, svg_source, template_key, created_at, is_favorite')
+      .select('id, svg_source, template_key, created_at, is_favorite, source')
       .eq('project_id', props.projectId)
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
