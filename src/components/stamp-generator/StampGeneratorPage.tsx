@@ -67,7 +67,7 @@ function injectCenterArt(svgSource: string, iconStyle: string, monogramText: str
   const centerR = S * 0.18;
   const insertBefore = '</svg>';
   if (iconStyle === 'UPLOADED_LOGO' && logoUrl) {
-    const imgSize = centerR * 2.2;
+    const imgSize = centerR * 2.6;
     const logoSvg = `
       <defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${centerR - 1}"/></clipPath></defs>
       <image href="${logoUrl}" x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" width="${imgSize}" height="${imgSize}" 
@@ -222,7 +222,8 @@ export default function StampGeneratorPage() {
 
     const name = project.company_name || '';
     const arabicName = project.arabic_company_name || '';
-    const locationEn = [project.city_optional, project.country_optional].filter(Boolean).join(', ') || 'Dubai, UAE';
+    const locationEnRaw = [project.city_optional, project.country_optional].filter(Boolean).join(', ') || 'Dubai, UAE';
+    const locationEn = locationEnRaw.replace(/United Arab Emirates/gi, 'UAE');
     const ARABIC_CITY_MAP: Record<string, string> = {
       'dubai': 'دبي، الإمارات', 'abu dhabi': 'أبوظبي، الإمارات',
       'sharjah': 'الشارقة، الإمارات', 'ajman': 'عجمان، الإمارات',
@@ -280,6 +281,22 @@ export default function StampGeneratorPage() {
     localLogoUrl, primaryColor, languageMode,
     project?.border_style, project?.separator_style, project?.typography_style,
   ]);
+
+  // Typography style sync — map project.typography_style → fontFamily state
+  useEffect(() => {
+    if (!project?.typography_style) return;
+    const FONT_MAP: Record<string, string> = {
+      SERIF: 'Georgia, "Times New Roman", serif',
+      SANS: 'Arial, Helvetica, sans-serif',
+      MONOSPACE: '"Courier New", monospace',
+      CALLIGRAPHY: '"Palatino Linotype", "Book Antiqua", serif',
+      GOTHIC: '"Copperplate Gothic", Copperplate, "Small Caps", serif',
+    };
+    const mapped = FONT_MAP[project.typography_style];
+    if (mapped && mapped !== fontFamily) {
+      setFontFamily(mapped);
+    }
+  }, [project?.typography_style]);
 
   // Live-apply monogram colors whenever they change
   useEffect(() => {

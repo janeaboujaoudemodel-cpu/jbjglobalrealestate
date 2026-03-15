@@ -200,7 +200,7 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
   switch (centerMode) {
     case 'logo':
       if (config.logoUrl) {
-        const imgSize = innerR * 1.5 * centerScale;
+        const imgSize = innerR * 1.8 * centerScale;
         return `<defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${innerR - 2}"/></clipPath></defs>
           <image data-stamp-element="center" href="${config.logoUrl}" 
             x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" width="${imgSize}" height="${imgSize}" 
@@ -334,14 +334,15 @@ function generateOfficialStampSVG(config: OfficialStampConfig): string {
   }/>`;
 
   const decorativeR = outerR - outerSW / 2 - 2;
-  const decorativeRingEl = (bs === 'DOUBLE' || bs === 'RING' || bs === 'CUSTOM')
-    ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${ink}" stroke-width="${DECORATIVE_STROKE * themeMult}" opacity="0.5"/>`
+  const decorativeRingEl = (bs === 'RING' || bs === 'CUSTOM')
+    ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${ink}" stroke-width="${(DECORATIVE_STROKE + 0.5) * themeMult}" opacity="0.6"/>`
     : '';
 
   // Middle ring — HIDDEN for SINGLE border style
+  // DOUBLE: outer + middle (distinct widths), RING: full ornate with thicker middle
   const middleRingEl = bs === 'SINGLE' ? '' : (
     bs === 'RING'
-      ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.4}"/>`
+      ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.6}"/>`
       : `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW}"/>`
   );
 
@@ -451,7 +452,8 @@ function buildConfigFromProject(project: any, overrides: Partial<OfficialStampCo
   const name = (project.company_name || 'COMPANY NAME').toUpperCase().trim();
   const arabicName = (project.arabic_company_name || '').trim();
   const cityParts = [project.city_optional, project.country_optional].filter(Boolean);
-  const locationEn = (cityParts.join(', ') || 'Dubai, UAE').toUpperCase();
+  const locationEnRaw = (cityParts.join(', ') || 'Dubai, UAE').toUpperCase();
+  const locationEn = locationEnRaw.replace(/UNITED ARAB EMIRATES/gi, 'UAE');
   const arabicCity = (project.arabic_city || '').trim();
   const isBilingual = project.language_mode === 'BILINGUAL' || project.language_mode === 'AR';
   const mono = (project.monogram_text || name.slice(0, 2)).toUpperCase().slice(0, 3);
@@ -550,14 +552,18 @@ serve(async (req) => {
       const businessType = project?.business_type || '';
       const styleSuggestion = BUSINESS_STYLE_MAP[businessType];
 
-      // Protect standard model from deletion
+      // Protect standard model from deletion — clear FK reference first
       const selectedDesignId = body.selectedDesignId;
       if (projectId) {
+        // Clear selected_design_id to prevent FK constraint violation
+        await supabase.from("stamp_projects").update({ selected_design_id: null }).eq("id", projectId);
+        
         let deleteQuery = supabase.from("stamp_designs").delete().eq("project_id", projectId).eq("is_favorite", false);
         if (selectedDesignId) {
           deleteQuery = deleteQuery.neq("id", selectedDesignId);
         }
-        await deleteQuery;
+        const { error: delErr } = await deleteQuery;
+        if (delErr) console.error("Delete designs error:", delErr.message);
       }
 
       // Order presets: put business-type-recommended styles first

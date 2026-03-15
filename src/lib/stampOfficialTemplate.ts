@@ -470,16 +470,18 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     bs === 'DOTTED' ? 'stroke-dasharray="3,3"' : bs === 'ROPE' ? 'stroke-dasharray="6,4"' : bs === 'CUSTOM' ? 'stroke-dasharray="2,2,6,2"' : ''
   }/>`;
 
-  // Decorative ring — only for DOUBLE, RING, CUSTOM (NOT single)
+  // Decorative ring — ONLY for RING and CUSTOM (not DOUBLE or SINGLE)
   const decorativeR = outerR - outerSW / 2 - 2;
-  const decorativeRingEl = (bs === 'DOUBLE' || bs === 'RING' || bs === 'CUSTOM')
-    ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${outerInk}" stroke-width="${DECORATIVE_STROKE * themeMult}" opacity="0.5"/>`
+  const decorativeRingEl = (bs === 'RING' || bs === 'CUSTOM')
+    ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${outerInk}" stroke-width="${(DECORATIVE_STROKE + 0.5) * themeMult}" opacity="0.6"/>`
     : '';
 
   // Middle ring — HIDDEN for SINGLE border style
+  // DOUBLE: outer (4px) + middle (2px) — two distinct rings
+  // RING: outer (4px) + decorative (1px) + middle (3.5px) + inner (1.2px) — full ornate
   const middleRingFinal = bs === 'SINGLE' ? '' : (
     bs === 'RING'
-      ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${middleInk}" stroke-width="${middleSW * 1.4}"/>`
+      ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${middleInk}" stroke-width="${middleSW * 1.6}"/>`
       : `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${middleInk}" stroke-width="${middleSW}"/>`
   );
 
@@ -678,7 +680,7 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
   switch (centerMode) {
     case 'logo':
       if (config.logoUrl) {
-        const imgSize = innerR * 1.5 * centerScale;
+        const imgSize = innerR * 1.8 * centerScale;
         return `<defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${innerR - 2}"/></clipPath></defs>
           <image data-stamp-element="center" href="${config.logoUrl}" 
             x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" width="${imgSize}" height="${imgSize}" 
