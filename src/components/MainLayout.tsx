@@ -77,12 +77,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     new URLSearchParams(location.search).get("layoutDebug") === "1";
 
   const isToolkitGeneratorRoute =
+    location.pathname === '/toolkit/stamp-generator' ||
     location.pathname.startsWith('/toolkit/stamp-generator/') ||
-    location.pathname.startsWith('/toolkit/') && (
+    (location.pathname.startsWith('/toolkit/') && (
       location.pathname.includes('/generate') ||
       location.pathname.includes('/export') ||
       location.pathname.includes('/new')
-    );
+    ));
 
   const { showTour, setShowTour, completeTour } = useOnboardingTour();
   const [isChatCollapsed, setIsChatCollapsed] = useState(true);
