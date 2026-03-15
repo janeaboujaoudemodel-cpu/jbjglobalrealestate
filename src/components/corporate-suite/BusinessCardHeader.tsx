@@ -129,6 +129,7 @@ export function BusinessCardHeader({
             {isExportingToResizer ? "…" : "Resize"}
           </Button>
 
+          <Button
             onClick={onBatchPrint}
             variant="outline"
             className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
