@@ -5,6 +5,8 @@ import React from "react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export type Template = "modern" | "classic" | "minimal" | "bold" | "creative" | "corporate" | "ai-design";
+export type SigLayout = "divider-left" | "divider-top" | "banner" | "minimal" | "two-column";
+
 export type CardShape = "horizontal" | "vertical" | "square" | "rounded-square" | "wide" | "digital" | "ticket" | "email-signature";
 export type QrPosition = "bottom-right" | "bottom-left" | "top-right" | "top-left" | "center";
 export type QrContentType = "url" | "vcard" | "text" | "email" | "phone";
