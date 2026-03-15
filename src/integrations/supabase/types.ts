@@ -14145,6 +14145,45 @@ export type Database = {
           },
         ]
       }
+      key_rotation_schedule: {
+        Row: {
+          alert_threshold_days: number
+          created_at: string
+          description: string | null
+          id: string
+          key_name: string
+          last_rotated_at: string | null
+          notified_at: string | null
+          rotation_interval_days: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          alert_threshold_days?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          key_name: string
+          last_rotated_at?: string | null
+          notified_at?: string | null
+          rotation_interval_days?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          alert_threshold_days?: number
+          created_at?: string
+          description?: string | null
+          id?: string
+          key_name?: string
+          last_rotated_at?: string | null
+          notified_at?: string | null
+          rotation_interval_days?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       languages: {
         Row: {
           code: string
