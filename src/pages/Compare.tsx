@@ -274,10 +274,15 @@ const Compare = () => {
     .rating-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
     .rating-name { font-size: 18px; font-weight: 600; }
     .rating-stars { color: #A8925A; font-size: 24px; }
-    .rating-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 15px; }
+    .rating-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
     .rating-item { text-align: center; background: #252525; padding: 10px; border-radius: 8px; }
     .rating-item-label { font-size: 11px; color: #888; }
     .rating-item-value { color: #A8925A; margin-top: 5px; }
+    .score-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .score-bar-label { font-size: 11px; color: #888; width: 90px; text-align: right; flex-shrink: 0; }
+    .score-bar-track { flex: 1; height: 6px; background: #333; border-radius: 4px; overflow: hidden; }
+    .score-bar-fill { height: 100%; border-radius: 4px; }
+    .score-bar-value { font-size: 12px; font-weight: 700; width: 24px; text-align: right; }
     .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .pros, .cons { padding: 15px; border-radius: 8px; }
     .pros { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); }
