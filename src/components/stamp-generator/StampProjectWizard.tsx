@@ -1047,6 +1047,16 @@ export default function StampProjectWizard() {
                   {/* Spacing & Layout Controls */}
                   <div className="border border-[hsl(var(--border))] rounded-xl p-3 space-y-2.5">
                     <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Spacing & Layout</p>
+                    {/* English Arc Spread */}
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">English Arc Spread</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.english_arc_spread}%</span>
+                      </div>
+                      <input type="range" min={20} max={100} step={1} value={form.english_arc_spread}
+                        onChange={e => set('english_arc_spread', parseInt(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                    </div>
                     <div>
                       <div className="flex items-center justify-between mb-0.5">
                         <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Text Spacing</label>
@@ -1083,6 +1093,51 @@ export default function StampProjectWizard() {
                         onChange={e => set('center_content_size', parseInt(e.target.value))}
                         className="w-full h-2 accent-[hsl(var(--gold))]" />
                     </div>
+                    {/* Company Name Arc Position (radial) */}
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Company Arc Position</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.company_arc_offset}%</span>
+                      </div>
+                      <input type="range" min={0} max={100} step={1} value={form.company_arc_offset}
+                        onChange={e => set('company_arc_offset', parseInt(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                      <p className="text-[7px] text-[hsl(var(--muted-foreground))]">50% = centered between outer & middle ring</p>
+                    </div>
+                    {/* Location Arc Position */}
+                    {form.show_location && (
+                      <div>
+                        <div className="flex items-center justify-between mb-0.5">
+                          <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Location Arc Position</label>
+                          <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.location_arc_offset}%</span>
+                        </div>
+                        <input type="range" min={0} max={100} step={1} value={form.location_arc_offset}
+                          onChange={e => set('location_arc_offset', parseInt(e.target.value))}
+                          className="w-full h-2 accent-[hsl(var(--gold))]" />
+                        <p className="text-[7px] text-[hsl(var(--muted-foreground))]">50% = centered between middle & inner ring</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Per-Border Color Overrides */}
+                  <div className="border border-[hsl(var(--border))] rounded-xl p-3 space-y-2">
+                    <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Border Colors</p>
+                    <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Leave empty to use ink color</p>
+                    {([
+                      { key: 'outer_border_color' as const, label: 'Outer Ring' },
+                      { key: 'middle_border_color' as const, label: 'Middle Ring' },
+                      { key: 'inner_border_color' as const, label: 'Inner Ring' },
+                    ]).map(ring => (
+                      <div key={ring.key} className="flex items-center gap-2">
+                        <input type="color" value={form[ring.key] || form.ink_color}
+                          onChange={e => set(ring.key, e.target.value)}
+                          className="w-6 h-6 rounded border border-[hsl(var(--border))] cursor-pointer p-0" />
+                        <span className="text-[10px] text-[hsl(var(--foreground))] flex-1">{ring.label}</span>
+                        {form[ring.key] && (
+                          <button onClick={() => set(ring.key, '')} className="text-[8px] text-[hsl(var(--muted-foreground))] underline">Reset</button>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </ScrollArea>
