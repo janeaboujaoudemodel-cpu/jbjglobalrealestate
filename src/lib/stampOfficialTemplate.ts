@@ -79,6 +79,16 @@ export interface OfficialStampConfig {
   outerBorderColor?: string;
   middleBorderColor?: string;
   innerBorderColor?: string;
+  /** Per-letter overrides for arc text: keyed by "{arcId}-{charIndex}" */
+  letterOverrides?: Record<string, LetterOverride>;
+}
+
+/** Per-letter style override for arc text characters */
+export interface LetterOverride {
+  color?: string;
+  fontSize?: number;  // absolute px override
+  dx?: number;        // horizontal nudge in px
+  dy?: number;        // vertical nudge in px
 }
 
 const ARABIC_FONT = '"Noto Naskh Arabic", "Arabic Typesetting", "Traditional Arabic", serif';
@@ -203,19 +213,19 @@ function renderSeparators(cx: number, cy: number, r: number, style: SeparatorSty
 function renderBottomArcTextPath(
   text: string, cx: number, cy: number, r: number,
   fontSize: number, font: string, ink: string, letterSpacing: number,
-  isArabic: boolean, pathId: string, fontWeight = '800'
+  isArabic: boolean, pathId: string, fontWeight = '800',
+  letterOverrides?: Record<string, LetterOverride>
 ): string {
   if (!text) return '';
-  // Bottom arc: draw from left to right below center, text hangs from path
-  // Use a slight vertical offset to prevent text sinking below the ring
   const verticalNudge = fontSize * 0.15;
   const adjustedCy = cy - verticalNudge;
   const arcPath = `M ${cx - r} ${adjustedCy} A ${r} ${r} 0 0 0 ${cx + r} ${adjustedCy}`;
+  const textContent = renderArcLetters(text, pathId, fontSize, ink, letterOverrides);
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
     <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
       letter-spacing="${letterSpacing}" font-weight="${fontWeight}" dominant-baseline="hanging">
-      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${text}</textPath>
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${textContent}</textPath>
     </text>
   `;
 }
@@ -223,17 +233,44 @@ function renderBottomArcTextPath(
 function renderTopArcTextPath(
   text: string, cx: number, cy: number, r: number,
   fontSize: number, font: string, ink: string, letterSpacing: number,
-  isArabic: boolean, pathId: string, fontWeight = '800'
+  isArabic: boolean, pathId: string, fontWeight = '800',
+  letterOverrides?: Record<string, LetterOverride>
 ): string {
   if (!text) return '';
   const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}`;
+  const textContent = renderArcLetters(text, pathId, fontSize, ink, letterOverrides);
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
     <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
       letter-spacing="${letterSpacing}" font-weight="${fontWeight}">
-      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${text}</textPath>
+      <textPath href="#${pathId}" startOffset="50%" text-anchor="middle" textLength="${r * Math.PI * 0.95}" lengthAdjust="spacing">${textContent}</textPath>
     </text>
   `;
+}
+
+/** Render arc text as individual tspan elements when letter overrides exist */
+function renderArcLetters(
+  text: string, arcId: string, baseFontSize: number, baseColor: string,
+  overrides?: Record<string, LetterOverride>
+): string {
+  if (!overrides || Object.keys(overrides).length === 0) return text;
+  
+  // Check if any override applies to this arc
+  const hasRelevantOverrides = Object.keys(overrides).some(k => k.startsWith(`${arcId}-`));
+  if (!hasRelevantOverrides) return text;
+
+  return [...text].map((char, i) => {
+    const key = `${arcId}-${i}`;
+    const ov = overrides[key];
+    if (!ov) return `<tspan data-stamp-letter="${key}">${char}</tspan>`;
+    
+    const attrs: string[] = [`data-stamp-letter="${key}"`];
+    if (ov.color) attrs.push(`fill="${ov.color}"`);
+    if (ov.fontSize) attrs.push(`font-size="${ov.fontSize}"`);
+    if (ov.dx) attrs.push(`dx="${ov.dx}"`);
+    if (ov.dy) attrs.push(`dy="${ov.dy}"`);
+    return `<tspan ${attrs.join(' ')}>${char}</tspan>`;
+  }).join('');
 }
 
 function renderOuterRing(cx: number, cy: number, r: number, ink: string, borderStyle: BorderStyleType, sw: number): string {
@@ -361,20 +398,20 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     if (config.arabicOnTop !== false) {
       topArcContent = renderTopArcTextPath(
         arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
-        arLS, true, 'top-arc', arFW
+        arLS, true, 'top-arc', arFW, config.letterOverrides
       );
       bottomArcContent = renderBottomArcTextPath(
         enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
-        enLS, false, 'bottom-arc'
+        enLS, false, 'bottom-arc', '800', config.letterOverrides
       );
     } else {
       topArcContent = renderTopArcTextPath(
         enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
-        enLS, false, 'top-arc'
+        enLS, false, 'top-arc', '800', config.letterOverrides
       );
       bottomArcContent = renderBottomArcTextPath(
         arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
-        arLS, true, 'bottom-arc', arFW
+        arLS, true, 'bottom-arc', arFW, config.letterOverrides
       );
     }
     separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
@@ -386,14 +423,14 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     const enLSonly = arcTextSpacingOverride ?? topSafe.letterSpacing;
     topArcContent = renderTopArcTextPath(
       topText, cx, cy, clampedTextArcR, topSafe.fontSize, enFont, ink,
-      enLSonly, false, 'top-arc'
+      enLSonly, false, 'top-arc', '800', config.letterOverrides
     );
     if (config.showLocation) {
       const locEn = config.locationTextEn || 'Dubai, UAE';
       const botSafe = safeArcFontSize(locEn.toUpperCase(), clampedTextArcR, false, 12, englishSpread, 5);
       bottomArcContent = renderBottomArcTextPath(
         locEn.toUpperCase(), cx, cy, clampedTextArcR, botSafe.fontSize, enFont, ink,
-        botSafe.letterSpacing, false, 'bottom-arc', '600'
+        botSafe.letterSpacing, false, 'bottom-arc', '600', config.letterOverrides
       );
     }
     separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
@@ -406,7 +443,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     const topFW = config.arabicFontWeight === 'normal' ? '600' : '800';
     topArcContent = renderTopArcTextPath(
       topText, cx, cy, clampedTextArcR, topSafe.fontSize, arFont, ink,
-      topLS, true, 'top-arc', topFW
+      topLS, true, 'top-arc', topFW, config.letterOverrides
     );
     // Arabic location on bottom
     if (config.showLocation) {
@@ -414,7 +451,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
       const botSafe = safeArcFontSize(locAr, clampedTextArcR, true, 13, arabicSpread);
       bottomArcContent = renderBottomArcTextPath(
         locAr, cx, cy, clampedTextArcR, botSafe.fontSize, arFont, ink,
-        config.arabicLetterSpacing ?? botSafe.letterSpacing, true, 'bottom-arc', '600'
+        config.arabicLetterSpacing ?? botSafe.letterSpacing, true, 'bottom-arc', '600', config.letterOverrides
       );
     }
     separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
@@ -430,10 +467,10 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     const locArSafe = safeArcFontSize(locAr, clampedLocTextR, true, 12, locSpread);
 
     locationContent = renderTopArcTextPath(
-      locAr, cx, cy, clampedLocTextR, locArSafe.fontSize, arFont, ink, locArSafe.letterSpacing, true, 'loc-top', '600'
+      locAr, cx, cy, clampedLocTextR, locArSafe.fontSize, arFont, ink, locArSafe.letterSpacing, true, 'loc-top', '600', config.letterOverrides
     );
     locationContent += renderBottomArcTextPath(
-      locEn.toUpperCase(), cx, cy, clampedLocTextR, locEnSafe.fontSize, enFont, ink, locEnSafe.letterSpacing, false, 'loc-bottom', '600'
+      locEn.toUpperCase(), cx, cy, clampedLocTextR, locEnSafe.fontSize, enFont, ink, locEnSafe.letterSpacing, false, 'loc-bottom', '600', config.letterOverrides
     );
     if (config.locationSeparatorStyle && config.locationSeparatorStyle !== 'none') {
       locationContent += renderSeparators(cx, cy, clampedLocTextR, config.locationSeparatorStyle, ink, 'loc-separator');
@@ -536,31 +573,31 @@ function generateOvalStamp(config: OfficialStampConfig): string {
     const enSafe = safeArcFontSize(enText, textArcR, false, 11, ARC_SPREAD_LIMIT, 4);
     const arFW = config.arabicFontWeight === 'normal' ? '600' : '800';
     if (config.arabicOnTop !== false) {
-      textContent += renderTopArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'top-arc', arFW);
-      textContent += renderBottomArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'bottom-arc');
+      textContent += renderTopArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'top-arc', arFW, config.letterOverrides);
+      textContent += renderBottomArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'bottom-arc', '800', config.letterOverrides);
     } else {
-      textContent += renderTopArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'top-arc');
-      textContent += renderBottomArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'bottom-arc', arFW);
+      textContent += renderTopArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'top-arc', '800', config.letterOverrides);
+      textContent += renderBottomArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'bottom-arc', arFW, config.letterOverrides);
     }
     textContent += renderSeparators(cx, cy, textArcR, config.separatorStyle, ink);
   } else if (mode === 'EN') {
     const topText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
     const topSafe = safeArcFontSize(topText, textArcR, false, 12, ARC_SPREAD_LIMIT, 4);
-    textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, enFont, ink, topSafe.letterSpacing, false, 'top-arc');
+    textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, enFont, ink, topSafe.letterSpacing, false, 'top-arc', '800', config.letterOverrides);
     if (config.showLocation) {
       const loc = (config.locationTextEn || 'Dubai, UAE').toUpperCase();
       const locSafe = safeArcFontSize(loc, textArcR, false, 10, ARC_SPREAD_LIMIT, 4);
-      textContent += renderBottomArcTextPath(loc, cx, cy, textArcR, locSafe.fontSize, enFont, ink, locSafe.letterSpacing, false, 'bottom-arc', '600');
+      textContent += renderBottomArcTextPath(loc, cx, cy, textArcR, locSafe.fontSize, enFont, ink, locSafe.letterSpacing, false, 'bottom-arc', '600', config.letterOverrides);
     }
     textContent += renderSeparators(cx, cy, textArcR, config.separatorStyle, ink);
   } else {
     const topText = config.companyNameAr || 'اسم الشركة';
     const topSafe = safeArcFontSize(topText, textArcR, true, 13, arabicSpread);
-    textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? topSafe.letterSpacing, true, 'top-arc', config.arabicFontWeight === 'normal' ? '600' : '800');
+    textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? topSafe.letterSpacing, true, 'top-arc', config.arabicFontWeight === 'normal' ? '600' : '800', config.letterOverrides);
     if (config.showLocation) {
       const loc = config.locationTextAr || 'دبي، الإمارات';
       const locSafe = safeArcFontSize(loc, textArcR, true, 11, arabicSpread);
-      textContent += renderBottomArcTextPath(loc, cx, cy, textArcR, locSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? locSafe.letterSpacing, true, 'bottom-arc', '600');
+      textContent += renderBottomArcTextPath(loc, cx, cy, textArcR, locSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? locSafe.letterSpacing, true, 'bottom-arc', '600', config.letterOverrides);
     }
     textContent += renderSeparators(cx, cy, textArcR, config.separatorStyle, ink);
   }

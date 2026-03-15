@@ -3,10 +3,12 @@
  * Routes ALL shapes and language modes through the Official Standard Template.
  * Supports click-to-edit via data-stamp-element attributes.
  * Supports drag-to-reposition for arc text, separators, center content, and borders.
+ * Supports letter-level click for per-character editing.
  */
 
 import React, { useMemo, useRef, useEffect, useState, useCallback } from 'react';
-import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType, type CenterContentMode, type CenterIconType, type LanguageMode, type StampShape } from '@/lib/stampOfficialTemplate';
+import { generateOfficialStampSVG, OFFICIAL_INK_BLUE, type SeparatorStyle, type BorderStyleType, type CenterContentMode, type CenterIconType, type LanguageMode, type StampShape, type LetterOverride } from '@/lib/stampOfficialTemplate';
+import type { LetterSelection } from '@/components/stamp-generator/StampLetterEditor';
 
 type StampType = 'ROUND' | 'OVAL' | 'RECTANGLE' | 'SQUARE';
 type StyleTheme = 'CLASSIC' | 'MODERN' | 'MINIMAL' | 'LUXURY' | 'BOLD' | 'VINTAGE';
@@ -72,6 +74,8 @@ export interface LiveStampPreviewProps {
   middleBorderColor?: string;
   innerBorderColor?: string;
   locationArcSpread?: number;
+  onLetterClick?: (selection: LetterSelection) => void;
+  letterOverrides?: Record<string, LetterOverride>;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
@@ -215,6 +219,8 @@ export function LiveStampPreview({
   middleBorderColor,
   innerBorderColor,
   locationArcSpread,
+  onLetterClick,
+  letterOverrides,
 }: LiveStampPreviewProps & { selectedElement?: string | null }) {
   const displayName = companyName || 'Your Company Name';
   const fontFamily = FONT_FAMILIES[typographyStyle];
@@ -244,7 +250,7 @@ export function LiveStampPreview({
     centerContentSize, companyArcBandOffset, locationArcBandOffset,
     monogramLetterColors, monogramDividerColor, arcTextSpacing,
     separatorDistance, outerBorderColor, middleBorderColor, innerBorderColor,
-    locationArcSpread,
+    locationArcSpread, onLetterClick, letterOverrides,
   };
 
   // ── Click & double-click handlers ──
@@ -252,6 +258,20 @@ export function LiveStampPreview({
     if (!containerRef.current) return;
     const el = containerRef.current;
     const clickHandler = (e: MouseEvent) => {
+      // Check for letter-level click first
+      const letterTarget = (e.target as Element)?.closest?.('[data-stamp-letter]');
+      if (letterTarget && onLetterClick) {
+        e.stopPropagation();
+        const letterId = letterTarget.getAttribute('data-stamp-letter') || '';
+        const [arcId, indexStr] = letterId.split(/-(\d+)$/);
+        const charIndex = parseInt(indexStr, 10);
+        const char = letterTarget.textContent || '';
+        if (!isNaN(charIndex)) {
+          onLetterClick({ arcId, charIndex, char });
+          return;
+        }
+      }
+      // Fall back to element-level click
       const target = (e.target as Element)?.closest?.('[data-stamp-element]');
       if (target) {
         e.stopPropagation();
@@ -273,7 +293,7 @@ export function LiveStampPreview({
       el.removeEventListener('click', clickHandler);
       el.removeEventListener('dblclick', dblHandler);
     };
-  }, [onElementClick, onDoubleClick]);
+  }, [onElementClick, onDoubleClick, onLetterClick]);
 
   // ── Highlight selected element ──
   useEffect(() => {
@@ -480,6 +500,7 @@ export function LiveStampPreview({
       middleBorderColor,
       innerBorderColor,
       locationArcSpread: locationArcSpread ?? undefined,
+      letterOverrides,
     });
   }, [
     displayName, arabicCompanyName, city, country, registrationNumber,
@@ -488,7 +509,7 @@ export function LiveStampPreview({
     showLicenseNumber, showLocation, separatorStyle, fontFamily, size, ink, arabicCity,
     centerMode, centerIcon, arabicArcSpread, englishArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight,
     circleGap, centerContentSize, arcTextSpacing, separatorDistance,
-    companyArcBandOffset, locationArcBandOffset, outerBorderColor, middleBorderColor, innerBorderColor, locationArcSpread,
+    companyArcBandOffset, locationArcBandOffset, outerBorderColor, middleBorderColor, innerBorderColor, locationArcSpread, letterOverrides,
   ]);
 
   return (

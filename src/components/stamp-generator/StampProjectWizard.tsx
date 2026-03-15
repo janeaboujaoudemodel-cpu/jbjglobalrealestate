@@ -19,9 +19,10 @@ import {
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { LiveStampPreview, type DragUpdateEvent } from '@/components/stamp-generator/LiveStampPreview';
 import { useStampHistory } from '@/hooks/useStampHistory';
-import { OFFICIAL_INK_BLUE, ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type BorderStyleType } from '@/lib/stampOfficialTemplate';
+import { OFFICIAL_INK_BLUE, ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle, type BorderStyleType, type LetterOverride } from '@/lib/stampOfficialTemplate';
 import { StampPresetLibrary, saveCustomPreset, type PresetConfig } from '@/components/stamp-generator/StampPresetLibrary';
 import { MonogramColorEditor, DEFAULT_MONOGRAM_COLORS, type MonogramLetterColors } from '@/components/stamp-generator/MonogramColorEditor';
+import { StampLetterEditor, type LetterSelection } from '@/components/stamp-generator/StampLetterEditor';
 
 // UAE phone normalization
 function normalizePhone(raw: string): string {
@@ -168,6 +169,7 @@ interface FormState {
   outer_border_color: string;
   middle_border_color: string;
   inner_border_color: string;
+  letter_overrides: Record<string, import('@/lib/stampOfficialTemplate').LetterOverride>;
 }
 
 export default function StampProjectWizard() {
@@ -201,6 +203,7 @@ export default function StampProjectWizard() {
     selected_preset: '',
     monogram_colors: DEFAULT_MONOGRAM_COLORS,
     outer_border_color: '', middle_border_color: '', inner_border_color: '',
+    letter_overrides: {},
   };
 
   const [form, setForm] = useState<FormState>(() => {
@@ -632,10 +635,30 @@ export default function StampProjectWizard() {
   }, [form, getPreviewSvg, svgToCanvas, triggerDownload]);
 
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
+  const [selectedLetter, setSelectedLetter] = useState<LetterSelection | null>(null);
+
+  const handleLetterClick = useCallback((selection: LetterSelection) => {
+    setSelectedLetter(selection);
+    setSelectedElement(null); // Clear element selection when letter is selected
+    if (activeTab !== 'style') setActiveTab('style'); // Show letter editor in style tab
+  }, [activeTab]);
+
+  const handleLetterOverrideUpdate = useCallback((key: string, override: LetterOverride | null) => {
+    setForm(f => {
+      const newOverrides = { ...f.letter_overrides };
+      if (override) {
+        newOverrides[key] = override;
+      } else {
+        delete newOverrides[key];
+      }
+      return { ...f, letter_overrides: newOverrides };
+    });
+  }, []);
 
   const handleElementClick = useCallback((elementId: string) => {
     // Highlight the clicked element
     setSelectedElement(elementId);
+    setSelectedLetter(null); // Clear letter selection
 
     // Navigate to corresponding tab only if not already there
     if (elementId.includes('top-arc') || elementId.includes('bottom-arc')) {
@@ -714,6 +737,8 @@ export default function StampProjectWizard() {
     outerBorderColor: form.outer_border_color || undefined,
     middleBorderColor: form.middle_border_color || undefined,
     innerBorderColor: form.inner_border_color || undefined,
+    onLetterClick: handleLetterClick,
+    letterOverrides: Object.keys(form.letter_overrides).length > 0 ? form.letter_overrides : undefined,
   };
 
   return (
@@ -955,6 +980,16 @@ export default function StampProjectWizard() {
             <TabsContent value="style" className="flex-1 min-h-0 m-0">
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-4">
+                  {/* Letter Editor — shown when a letter is selected on canvas */}
+                  {selectedLetter && (
+                    <StampLetterEditor
+                      selection={selectedLetter}
+                      overrides={form.letter_overrides}
+                      inkColor={form.ink_color}
+                      onUpdate={handleLetterOverrideUpdate}
+                      onClose={() => setSelectedLetter(null)}
+                    />
+                  )}
                   {/* Shape */}
                   <div>
                     <Label className="text-[11px] font-medium mb-1.5 block">Shape</Label>
@@ -1361,7 +1396,9 @@ export default function StampProjectWizard() {
           onClick={(e) => {
             // Only clear selection on genuine outside clicks, not bubbled element clicks
             if ((e.target as HTMLElement).closest('[data-stamp-element]')) return;
+            if ((e.target as HTMLElement).closest('[data-stamp-letter]')) return;
             setSelectedElement(null);
+            setSelectedLetter(null);
           }}>
           <div className="flex flex-col items-center gap-4">
             <div
@@ -1374,7 +1411,7 @@ export default function StampProjectWizard() {
               {form.company_name ? (
                 <>
                   {form.company_name}
-                  <span className="block text-[9px] mt-0.5 opacity-70">Click any element to edit</span>
+                  <span className="block text-[9px] mt-0.5 opacity-70">Click any element to edit · Click individual letters for per-character control</span>
                 </>
               ) : <span className="italic">Enter company name to see live preview</span>}
             </p>
