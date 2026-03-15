@@ -395,7 +395,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="bg-zinc-900/50 border border-teal-500/30">
+            <Card className="!border-teal-500/30 !border bg-zinc-900/50">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Building2 className="w-5 h-5 text-teal-400" />
@@ -477,7 +477,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="!border-teal-500/30 !border bg-zinc-900/50">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <Info className="w-5 h-5 text-teal-400" />
@@ -553,7 +553,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="!border-teal-500/30 !border bg-zinc-900/50">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2">
                   <LayoutGrid className="w-5 h-5 text-teal-400" />
@@ -634,7 +634,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="!border-teal-500/30 !border bg-zinc-900/50">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white flex items-center gap-2">
@@ -798,7 +798,7 @@ jbj.ae
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="!border-teal-500/30 !border bg-zinc-900/50">
               <CardHeader className="border-b border-zinc-800">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white flex items-center gap-2">
