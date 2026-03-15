@@ -109,7 +109,7 @@ export default function EncryptionAuditDashboard() {
     ]);
     if (statusRes.data) setStatusRows(statusRes.data as EncryptionStatusRow[]);
     if (auditRes.data) setAuditLogs(auditRes.data as AuditLogRow[]);
-    if (rotationRes.data) setRotationKeys(rotationRes.data as RotationRow[]);
+    if (rotationRes.data) setRotationKeys(rotationRes.data as unknown as RotationRow[]);
     setLoading(false);
 
     try {
