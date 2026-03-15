@@ -82,7 +82,7 @@ const MIDDLE_STROKE = 2.5;
 const INNER_STROKE = 1.2;
 const DECORATIVE_STROKE = 0.5;
 
-const SAFE_ZONE = 5;
+const SAFE_ZONE = 6;
 const ARC_SPREAD_LIMIT = 0.88;
 
 // Theme-based stroke multipliers
@@ -172,7 +172,11 @@ function renderBottomArcTextPath(
   isArabic: boolean, pathId: string, fontWeight = '800'
 ): string {
   if (!text) return '';
-  const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx + r} ${cy}`;
+  // Bottom arc: draw from left to right below center, text hangs from path
+  // Use a slight vertical offset to prevent text sinking below the ring
+  const verticalNudge = fontSize * 0.15;
+  const adjustedCy = cy - verticalNudge;
+  const arcPath = `M ${cx - r} ${adjustedCy} A ${r} ${r} 0 0 0 ${cx + r} ${adjustedCy}`;
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
     <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
@@ -286,12 +290,17 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const clampedTextArcR = Math.max(textArcR, middleR + SAFE_ZONE);
 
   // Separator distance: default centered on text arc; configurable via separatorDistancePct (0-100)
-  const sepPct = config.separatorDistancePct ?? 50;
-  const separatorR = middleR + SAFE_ZONE + (clampedTextArcR - middleR - SAFE_ZONE) * (sepPct / 50);
+  // Clamp to valid range to prevent separators escaping the ring band
+  const sepPct = Math.max(0, Math.min(100, config.separatorDistancePct ?? 50));
+  const sepMin = middleR + SAFE_ZONE;
+  const sepMax = clampedTextArcR;
+  const separatorR = sepMin + (sepMax - sepMin) * (sepPct / 100);
 
   // Location text arc radius — true midpoint between middle and inner rings
+  // Ensure text is vertically centered within the location band
+  const locBandMid = (middleR + innerR) / 2;
   const clampedLocTextR = Math.max(
-    Math.min((middleR + innerR) / 2, middleR - SAFE_ZONE),
+    Math.min(locBandMid, middleR - SAFE_ZONE),
     innerR + SAFE_ZONE
   );
 
@@ -471,8 +480,8 @@ function generateOvalStamp(config: OfficialStampConfig): string {
     borders += `<ellipse cx="${cx}" cy="${cy}" rx="${innerRx}" ry="${innerRy}" fill="none" stroke="${ink}" stroke-width="${innerSW * 0.7}"/>`;
   }
 
-  // Safe text arc radius — keep well inside borders
-  const textArcR = Math.min(innerRx, innerRy) - 12;
+  // Safe text arc radius — keep well inside borders with generous margin
+  const textArcR = Math.min(innerRx, innerRy) - 14;
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
 
   let textContent = '';
@@ -548,9 +557,9 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
     borders += `<rect x="${x0 + gap}" y="${y0 + gap}" width="${w - gap * 2}" height="${h - gap * 2}" rx="${Math.max(2, rr - 3)}" fill="none" stroke="${ink}" stroke-width="${innerSW * 0.7}"/>`;
   }
 
-  // Safe content area — keep well inside borders
-  const safeW = w - 56;
-  const lineH = isSquare ? 16 : 14;
+  // Safe content area — keep well inside borders with extra padding
+  const safeW = w - 60;
+  const lineH = isSquare ? 18 : 15;
   const lines: { text: string; font: string; size: number; weight: string; opacity?: number }[] = [];
 
   if (mode === 'BILINGUAL') {

@@ -23,8 +23,16 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
 // Walking strip that uses translateX transform like book marquee
 function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  // Deduplicate items by id+type to prevent visual duplicates
+  const seen = new Set<string>();
+  const uniqueItems = items.filter(item => {
+    const key = `${item.type}-${item.id}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
   // Duplicate once for seamless loop (original + 1 copy)
-  const duplicated = [...items, ...items];
+  const duplicated = [...uniqueItems, ...uniqueItems];
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -32,15 +40,17 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     let animId: number;
     const speed = 0.4;
     // Card width (200px) + gap (16px) = 216px per card
-    const singleSetWidth = items.length * 216;
-    // Start from full right — negative pos means translateX will be positive (shifted right)
-    // We want the strip to start fully off-screen to the right
-    let pos = -(el.parentElement?.clientWidth ?? window.innerWidth);
+    const singleSetWidth = uniqueItems.length * 216;
+    // Start fully off-screen to the right: position = negative container width
+    // This means translateX(-pos) = translateX(containerWidth) → cards start at full right
+    const containerWidth = el.parentElement?.clientWidth ?? window.innerWidth;
+    let pos = -containerWidth;
 
     const tick = () => {
       pos += speed;
+      // When all cards have scrolled past, reset seamlessly
       if (pos >= singleSetWidth) pos -= singleSetWidth;
-      el.style.transform = `translateX(-${pos}px)`;
+      el.style.transform = `translateX(${-pos}px)`;
       animId = requestAnimationFrame(tick);
     };
     animId = requestAnimationFrame(tick);
@@ -55,13 +65,13 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
       el.removeEventListener('mouseenter', pause);
       el.removeEventListener('mouseleave', resume);
     };
-  }, [items.length]);
+  }, [uniqueItems.length]);
 
   return (
     <div className="overflow-hidden w-full">
       <div ref={scrollRef} className="flex gap-4 will-change-transform py-2" style={{ width: 'max-content' }}>
         {duplicated.map((item, i) => (
-          <RecentCard3D key={`${item.type}-${item.id}-${i}`} item={item} index={i % items.length} patchItem={patchItem} />
+          <RecentCard3D key={`${item.type}-${item.id}-${i}`} item={item} index={i % uniqueItems.length} patchItem={patchItem} />
         ))}
       </div>
     </div>
