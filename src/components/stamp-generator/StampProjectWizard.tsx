@@ -195,10 +195,12 @@ export default function StampProjectWizard() {
     show_license_number: false, show_location: true, business_type: '',
     separator_style: 'dot' as SeparatorStyle, ink_color: OFFICIAL_INK_BLUE,
     government_mode: false, arabic_font: 'Noto Naskh Arabic',
-    arabic_letter_spacing: 2, arabic_arc_spread: 88, arabic_font_weight: 'bold',
+    arabic_letter_spacing: 2, arabic_arc_spread: 88, english_arc_spread: 88, arabic_font_weight: 'bold',
     arc_text_spacing: 2, circle_gap: 13, separator_distance: 50, center_content_size: 50,
+    company_arc_offset: 50, location_arc_offset: 50,
     selected_preset: '',
     monogram_colors: DEFAULT_MONOGRAM_COLORS,
+    outer_border_color: '', middle_border_color: '', inner_border_color: '',
   };
 
   const [form, setForm] = useState<FormState>(() => {
