@@ -93,7 +93,7 @@ const INNER_STROKE = 1.2;
 const DECORATIVE_STROKE = 0.5;
 
 const SAFE_ZONE = 6;
-const ARC_SPREAD_LIMIT = 0.88;
+const ARC_SPREAD_LIMIT = 0.98;
 
 /**
  * Smart English token spacing normalization.

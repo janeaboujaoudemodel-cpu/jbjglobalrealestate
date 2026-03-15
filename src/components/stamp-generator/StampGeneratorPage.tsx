@@ -175,7 +175,7 @@ export default function StampGeneratorPage() {
   const setCenterContentSize = (v: number) => { setCenterContentSizeRaw(v); ssSave(ssKey('centerContentSize'), v); };
 
   // English arc spread & arc band offsets — persisted
-  const [englishArcSpread, setEnglishArcSpreadRaw] = useState(() => ssGet(ssKey('englishArcSpread'), 0.88));
+  const [englishArcSpread, setEnglishArcSpreadRaw] = useState(() => ssGet(ssKey('englishArcSpread'), 0.98));
   const setEnglishArcSpread = (v: number) => { setEnglishArcSpreadRaw(v); ssSave(ssKey('englishArcSpread'), v); };
   const [companyArcOffset, setCompanyArcOffsetRaw] = useState(() => ssGet(ssKey('companyArcOffset'), 0));
   const setCompanyArcOffset = (v: number) => { setCompanyArcOffsetRaw(v); ssSave(ssKey('companyArcOffset'), v); };

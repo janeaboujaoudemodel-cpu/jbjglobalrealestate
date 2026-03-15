@@ -495,6 +495,36 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 <Slider min={0} max={100} step={1} value={[props.separatorDistance]}
                   onValueChange={([v]) => props.onSetSeparatorDistance(v)} />
               </div>
+              {/* English Arc Spread */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">English Arc Spread</p>
+                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{Math.round(props.englishArcSpread * 100)}%</span>
+                </div>
+                <Slider min={50} max={100} step={1} value={[Math.round(props.englishArcSpread * 100)]}
+                  onValueChange={([v]) => props.onSetEnglishArcSpread(v / 100)} />
+              </div>
+              {/* Match Style Buttons */}
+              <div className="flex gap-1.5">
+                <button
+                  onClick={() => {
+                    props.onSetEnglishArcSpread(props.arabicArcSpread);
+                  }}
+                  className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[9px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all"
+                  title="Copy Arabic arc spread to English"
+                >
+                  EN ← Match Arabic
+                </button>
+                <button
+                  onClick={() => {
+                    props.onSetArabicArcSpread(props.englishArcSpread);
+                  }}
+                  className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[9px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all"
+                  title="Copy English arc spread to Arabic"
+                >
+                  AR ← Match English
+                </button>
+              </div>
               {/* Center Content Size */}
               <div>
                 <div className="flex items-center justify-between mb-1">
