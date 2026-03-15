@@ -71,6 +71,9 @@ const TOOL_TABS = [
   { id: 'inspector',      label: 'Inspector',   icon: Settings2     },
   { id: 'projects',       label: 'Projects',    icon: FolderOpen    },
   { id: 'history',        label: 'Ad History',  icon: History       },
+  { id: 'audio-extract',  label: 'Extract Audio', icon: AudioLines  },
+  { id: 'photo-clip',     label: 'Photo Clip',  icon: ImagePlus     },
+  { id: 'share',           label: 'Share',       icon: Share2        },
 ];
 
 export const AIVideoStudioLayout = forwardRef<AIVideoStudioLayoutHandle, AIVideoStudioLayoutProps>(
