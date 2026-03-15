@@ -694,6 +694,23 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </button>
         )}
 
+        {/* Live Results Count Badge */}
+        {resultsCount !== undefined && (
+          <div className="flex-shrink-0 ml-auto sticky right-0 pl-3">
+            <div
+              key={resultsCount}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold transition-all animate-in fade-in zoom-in-95 duration-300",
+                "bg-gradient-to-r from-gold/20 to-gold/10 border-2 border-gold/50 text-black shadow-sm"
+              )}
+            >
+              <Activity className="w-3.5 h-3.5 text-gold" />
+              <span className="tabular-nums">{resultsCount.toLocaleString()}</span>
+              <span className="text-black/60 font-medium">{resultsLabel || 'Results'}</span>
+            </div>
+          </div>
+        )}
+
         </div>
         </div>
       </div>
