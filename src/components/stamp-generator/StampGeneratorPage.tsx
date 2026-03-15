@@ -1035,6 +1035,20 @@ export default function StampGeneratorPage() {
             {/* Grid overlay */}
             {showGrid && <CanvasGridOverlay size={stampSize + 80} />}
 
+            {/* Preview status label */}
+            {activeStandard && (
+              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
+                <Badge className="text-[7px] px-1.5 py-0 bg-[hsl(var(--gold)/0.12)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">
+                  {standardConcept?.id === activeStandard.id ? 'Standard Model' : 'Active Preview'}
+                </Badge>
+                {generating && (
+                  <Badge className="text-[7px] px-1.5 py-0 bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))] animate-pulse">
+                    Generating…
+                  </Badge>
+                )}
+              </div>
+            )}
+
             {/* Stamp preview with pulse feedback */}
             <div className={`relative transition-all duration-200 ${previewPulse ? 'ring-2 ring-[hsl(var(--gold)/0.4)] rounded-full' : ''}`}
               style={{ filter: `drop-shadow(0 8px 24px hsl(0 0% 0% / 0.12))` }}>
