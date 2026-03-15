@@ -758,6 +758,7 @@ export default function CreateEnvelope() {
                 recipients={recipients}
                 fields={signatureFields}
                 onFieldsChange={handleFieldsChange}
+                handoffStampSvg={handoffStampSvg}
               />
             )}
 
