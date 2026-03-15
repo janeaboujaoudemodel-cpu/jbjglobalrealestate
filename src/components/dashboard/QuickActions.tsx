@@ -94,7 +94,8 @@ export function QuickActions() {
   const navigate = useNavigate();
   const { role } = useUserRole();
   const { isOwner: isOwnerVerified } = useOwnerVerification();
-  const actions = getActionsForRole(role, isOwnerVerified);
+  const { isDeveloperMode } = useUserModeContext();
+  const actions = isDeveloperMode ? developerModeActions : getActionsForRole(role, isOwnerVerified);
 
   return (
     <Card className="border border-border bg-[linear-gradient(135deg,hsl(var(--pearl-1)),hsl(var(--pearl-2)),hsl(var(--pearl-3)))]">

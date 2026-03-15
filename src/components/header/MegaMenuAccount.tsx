@@ -238,6 +238,13 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
 
   // Filter admin links based on actual access - consolidated shortcuts
   const adminLinks = useMemo(() => {
+    // In developer mode, show Developer Center shortcut instead of owner tools
+    if (isDeveloperMode) {
+      return [
+        { href: '/developer-hub', label: 'Developer Center', icon: Building2, requiresOwner: false },
+      ];
+    }
+
     const ownerLinks = [
       { href: '/owner', label: 'Command Center', icon: Shield, requiresOwner: true },
       { href: '/owner/crm', label: 'CRM Dashboard', icon: Users, requiresOwner: true },
@@ -261,7 +268,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       if ((link as any).requiresAdmin) return isOwner || hasCRMAccess;
       return false;
     });
-  }, [isOwner, hasCRMAccess, hasListingAdminAccess, t]);
+  }, [isOwner, hasCRMAccess, hasListingAdminAccess, isDeveloperMode, t]);
 
   // Get mode label for display
   const getModeLabel = () => {

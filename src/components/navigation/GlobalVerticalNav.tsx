@@ -288,7 +288,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Productivity Suite", href: "/business-suite/productivity", icon: Cog },
 
   // ── Admin & Owner (shown conditionally) ──
-  { label: "Owner Command Center", href: "/owner", icon: Crown, section: "ADMIN & OWNER" },
+  { label: "Command Center", href: "/owner", icon: Crown, section: "ADMIN & OWNER" },
   { label: "Admin Panel", href: "/admin", icon: Lock },
   { label: "Admin CRM", href: "/admin/crm", icon: Users },
   { label: "Admin Inquiries", href: "/admin/inquiries", icon: MailOpen },
