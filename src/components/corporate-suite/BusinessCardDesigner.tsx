@@ -265,6 +265,10 @@ export default function BusinessCardDesigner() {
           mockupScene={s.mockupScene}
           setMockupScene={s.setMockupScene}
           frontTemplate={s.frontTemplate}
+          sigLayout={s.sigLayout}
+          setSigLayout={s.setSigLayout}
+          sigAccentColor={s.sigAccentColor}
+          setSigAccentColor={s.setSigAccentColor}
         />
       </div>
     </div>
