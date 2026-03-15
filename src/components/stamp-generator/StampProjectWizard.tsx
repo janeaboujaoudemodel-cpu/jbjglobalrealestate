@@ -202,6 +202,7 @@ export default function StampProjectWizard() {
     selected_preset: '',
     monogram_colors: DEFAULT_MONOGRAM_COLORS,
     outer_border_color: '', middle_border_color: '', inner_border_color: '',
+    letter_overrides: {},
   };
 
   const [form, setForm] = useState<FormState>(() => {

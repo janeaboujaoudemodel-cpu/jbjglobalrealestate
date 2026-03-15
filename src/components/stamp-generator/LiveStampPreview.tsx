@@ -252,6 +252,20 @@ export function LiveStampPreview({
     if (!containerRef.current) return;
     const el = containerRef.current;
     const clickHandler = (e: MouseEvent) => {
+      // Check for letter-level click first
+      const letterTarget = (e.target as Element)?.closest?.('[data-stamp-letter]');
+      if (letterTarget && onLetterClick) {
+        e.stopPropagation();
+        const letterId = letterTarget.getAttribute('data-stamp-letter') || '';
+        const [arcId, indexStr] = letterId.split(/-(\d+)$/);
+        const charIndex = parseInt(indexStr, 10);
+        const char = letterTarget.textContent || '';
+        if (!isNaN(charIndex)) {
+          onLetterClick({ arcId, charIndex, char });
+          return;
+        }
+      }
+      // Fall back to element-level click
       const target = (e.target as Element)?.closest?.('[data-stamp-element]');
       if (target) {
         e.stopPropagation();
@@ -273,7 +287,7 @@ export function LiveStampPreview({
       el.removeEventListener('click', clickHandler);
       el.removeEventListener('dblclick', dblHandler);
     };
-  }, [onElementClick, onDoubleClick]);
+  }, [onElementClick, onDoubleClick, onLetterClick]);
 
   // ── Highlight selected element ──
   useEffect(() => {
