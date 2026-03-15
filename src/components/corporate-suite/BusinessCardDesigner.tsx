@@ -160,6 +160,8 @@ export default function BusinessCardDesigner() {
           isExportingHtml={s.isExportingHtml}
           handleExportHtml={s.handleExportHtml}
           fieldConfigs={s.fieldConfigs}
+          sigLayout={s.sigLayout}
+          sigAccentColor={s.sigAccentColor}
         />
 
         {/* ── Right panel: Style Controls ──────────────────────── */}
@@ -263,6 +265,10 @@ export default function BusinessCardDesigner() {
           mockupScene={s.mockupScene}
           setMockupScene={s.setMockupScene}
           frontTemplate={s.frontTemplate}
+          sigLayout={s.sigLayout}
+          setSigLayout={s.setSigLayout}
+          sigAccentColor={s.sigAccentColor}
+          setSigAccentColor={s.setSigAccentColor}
         />
       </div>
     </div>

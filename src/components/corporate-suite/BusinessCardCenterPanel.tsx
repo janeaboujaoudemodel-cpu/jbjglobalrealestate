@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import DigitalLandingPageEditor from "@/components/corporate-suite/DigitalLandingPageEditor";
 import {
   type CardData, type BilingualMode, type Template, type FinishEffect, type CardShape, type QrPosition,
-  type FieldConfigMap,
+  type FieldConfigMap, type SigLayout,
   BILINGUAL_LANGUAGES, TEMPLATES, CARD_SHAPES,
   getFinishOverlayStyle,
 } from "./businessCardTypes";
@@ -77,6 +77,9 @@ interface BusinessCardCenterPanelProps {
   bilingualLang: string;
   // Field configs
   fieldConfigs?: FieldConfigMap;
+  // Email signature
+  sigLayout?: SigLayout;
+  sigAccentColor?: string;
 }
 
 export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
@@ -96,6 +99,7 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
     landingPageData, setLandingPageData, digitalTab, setDigitalTab,
     isExportingHtml, handleExportHtml, bilingualLang,
     fieldConfigs,
+    sigLayout, sigAccentColor,
   } = props;
 
   const canvasProps = {
@@ -138,6 +142,8 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
     secondaryData,
     onInlineEdit: (field: keyof CardData) => setInlineEditField(field),
     fieldConfigs,
+    sigLayout,
+    sigAccentColor,
   };
 
   // Set Front/Back template AND switch active side

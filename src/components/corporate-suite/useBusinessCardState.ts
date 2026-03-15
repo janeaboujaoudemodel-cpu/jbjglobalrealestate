@@ -8,7 +8,7 @@ import {
   type Template, type CardShape, type QrPosition, type QrContentType, type TextAlign,
   type GradientDirection, type FinishEffect, type MockupScene, type CardData,
   type BilingualMode, type BilingualLanguage, type FieldPos, type AiDesignData,
-  type FieldConfigMap,
+  type FieldConfigMap, type SigLayout,
   BILINGUAL_LANGUAGES, COLOR_PRESETS, DEFAULT_FIELD_POSITIONS, DEFAULT_LOGO_POS,
   buildQrData, getDefaultFieldConfigs, saveDraftToStorage, loadDraftFromStorage, clearDraftFromStorage,
 } from "./businessCardTypes";
@@ -58,6 +58,10 @@ export function useBusinessCardState() {
   const [cardShape, setCardShape] = useState<CardShape>("horizontal");
   const [shapeOpen, setShapeOpen] = useState(true);
   const [nfcGuideOpen, setNfcGuideOpen] = useState(false);
+
+  // Email signature specific
+  const [sigLayout, setSigLayout] = useState<SigLayout>("divider-left");
+  const [sigAccentColor, setSigAccentColor] = useState("");
 
   // Drag-to-rearrange
   const [editLayout, setEditLayout] = useState(false);
@@ -731,6 +735,7 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     logoUrl, setLogoUrl, logoSize, setLogoSize, logoPos, setLogoPos,
     stampOpen, setStampOpen, stampUrl, setStampUrl, stampSize, setStampSize, stampPos, setStampPos,
     cardShape, setCardShape, shapeOpen, setShapeOpen, nfcGuideOpen, setNfcGuideOpen,
+    sigLayout, setSigLayout, sigAccentColor, setSigAccentColor,
     editLayout, setEditLayout, fieldPositions,
     fieldConfigs, setFieldConfigs, selectedField, setSelectedField, updateFieldConfig,
     qrOpen, setQrOpen, qrEnabled, setQrEnabled,

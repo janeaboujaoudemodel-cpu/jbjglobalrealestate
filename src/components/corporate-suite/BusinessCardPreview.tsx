@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   type Template, type CardShape, type QrPosition, type CardData,
   type BilingualMode, type AiDesignData, type FieldPos, type FieldConfigMap,
+  type SigLayout,
   getShapeStyle, DEFAULT_FIELD_POSITIONS, SNAP_THRESHOLD,
   buildQrUrl, QR_POSITION_STYLE, getDefaultFieldConfigs,
 } from "./businessCardTypes";
@@ -12,6 +13,7 @@ export function CardFace({
   fontFamily, fontWeight, fontStyle, nameFontSize,
   bilingualMode, bilingualDir, secondaryData,
   onInlineEdit,
+  sigLayout, sigAccentColor,
 }: {
   data: CardData; template: Template; primary: string;
   secondary: string; accent: string; side?: "front" | "back"; scale?: number;
@@ -20,6 +22,7 @@ export function CardFace({
   fontFamily?: string; fontWeight?: string; fontStyle?: string; nameFontSize?: number | null;
   bilingualMode?: BilingualMode; bilingualDir?: "rtl" | "ltr"; secondaryData?: CardData;
   onInlineEdit?: (field: keyof CardData) => void;
+  sigLayout?: SigLayout; sigAccentColor?: string;
 }) {
   const showSecondary = bilingualMode === "dual-side" && side === "back" && secondaryData;
   const displayData = showSecondary ? secondaryData : data;
@@ -60,18 +63,89 @@ export function CardFace({
 
   // ── EMAIL SIGNATURE ─────────────────────────────────────────
   if (cardShape === "email-signature" || shapeStyle?.aspectRatio === "600 / 200") {
-    return (
-      <div style={{ ...baseStyle, background: "#ffffff", border: `2px solid ${primary}`, display: "flex", alignItems: "center", padding: `${14 * scale}px ${20 * scale}px`, gap: 16 * scale }}>
-        <div style={{ borderRight: `3px solid ${primary}`, paddingRight: 16 * scale, minWidth: 120 * scale }}>
-          <p style={{ fontSize: resolvedNameSize * 0.78, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: primary, margin: 0, lineHeight: 1.2 }}>{name}</p>
-          <p style={{ fontSize: 9 * scale, color: "#555", margin: `${3 * scale}px 0 0`, fontWeight: 500 }}>{title}</p>
-          <p style={{ fontSize: 8.5 * scale, color: "#999", margin: `${2 * scale}px 0 0`, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" }}>{company}</p>
+    const linkColor = sigAccentColor || primary;
+    const layout = sigLayout || "divider-left";
+
+    const contactBlock = (
+      <div style={{ display: "flex", flexDirection: "column", gap: 3 * scale, flex: 1 }}>
+        {data.phone   && <p style={{ fontSize: 8.5 * scale, color: "#444", margin: 0 }}>T: {data.phone}</p>}
+        {data.email   && <p style={{ fontSize: 8.5 * scale, color: linkColor, margin: 0 }}>{data.email}</p>}
+        {data.website && <p style={{ fontSize: 8.5 * scale, color: linkColor, margin: 0 }}>{data.website}</p>}
+        {data.address && <p style={{ fontSize: 8 * scale, color: "#888", margin: 0 }}>{data.address}</p>}
+      </div>
+    );
+
+    const nameBlock = (
+      <div>
+        <p style={{ fontSize: resolvedNameSize * 0.78, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: primary, margin: 0, lineHeight: 1.2 }}>{name}</p>
+        <p style={{ fontSize: 9 * scale, color: "#555", margin: `${3 * scale}px 0 0`, fontWeight: 500 }}>{title}</p>
+        <p style={{ fontSize: 8.5 * scale, color: "#999", margin: `${2 * scale}px 0 0`, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" as const }}>{company}</p>
+      </div>
+    );
+
+    if (layout === "divider-left") {
+      return (
+        <div style={{ ...baseStyle, background: "#ffffff", border: `2px solid ${primary}`, display: "flex", alignItems: "center", padding: `${14 * scale}px ${20 * scale}px`, gap: 16 * scale }}>
+          <div style={{ borderRight: `3px solid ${primary}`, paddingRight: 16 * scale, minWidth: 120 * scale }}>
+            {nameBlock}
+          </div>
+          {contactBlock}
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 3 * scale, flex: 1 }}>
-          {data.phone   && <p style={{ fontSize: 8.5 * scale, color: "#444", margin: 0 }}>T: {data.phone}</p>}
-          {data.email   && <p style={{ fontSize: 8.5 * scale, color: primary, margin: 0 }}>{data.email}</p>}
-          {data.website && <p style={{ fontSize: 8.5 * scale, color: primary, margin: 0 }}>{data.website}</p>}
-          {data.address && <p style={{ fontSize: 8 * scale, color: "#888", margin: 0 }}>{data.address}</p>}
+      );
+    }
+
+    if (layout === "divider-top") {
+      return (
+        <div style={{ ...baseStyle, background: "#ffffff", borderTop: `4px solid ${primary}`, border: `1px solid #e5e7eb`, borderTopWidth: 4, borderTopColor: primary, display: "flex", flexDirection: "column", padding: `${14 * scale}px ${20 * scale}px`, gap: 8 * scale, justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            {nameBlock}
+          </div>
+          <div style={{ borderTop: `1px solid #e5e7eb`, paddingTop: 6 * scale, display: "flex", flexWrap: "wrap" as const, gap: `${4 * scale}px ${16 * scale}px` }}>
+            {data.phone   && <p style={{ fontSize: 8.5 * scale, color: "#444", margin: 0 }}>T: {data.phone}</p>}
+            {data.email   && <p style={{ fontSize: 8.5 * scale, color: linkColor, margin: 0 }}>{data.email}</p>}
+            {data.website && <p style={{ fontSize: 8.5 * scale, color: linkColor, margin: 0 }}>{data.website}</p>}
+          </div>
+        </div>
+      );
+    }
+
+    if (layout === "banner") {
+      return (
+        <div style={{ ...baseStyle, background: "#ffffff", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+          <div style={{ background: primary, padding: `${10 * scale}px ${20 * scale}px`, display: "flex", alignItems: "center", gap: 8 * scale }}>
+            <p style={{ fontSize: resolvedNameSize * 0.72, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: "#ffffff", margin: 0, lineHeight: 1.2 }}>{name}</p>
+            <span style={{ fontSize: 8.5 * scale, color: "rgba(255,255,255,0.75)", fontWeight: 500 }}>—</span>
+            <p style={{ fontSize: 9 * scale, color: "rgba(255,255,255,0.85)", margin: 0, fontWeight: 500 }}>{title}</p>
+          </div>
+          <div style={{ padding: `${10 * scale}px ${20 * scale}px`, display: "flex", alignItems: "center", gap: 16 * scale, flex: 1 }}>
+            <p style={{ fontSize: 8.5 * scale, color: "#999", fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" as const, margin: 0 }}>{company}</p>
+            <div style={{ width: 1, height: 20 * scale, background: "#e5e7eb" }} />
+            {contactBlock}
+          </div>
+        </div>
+      );
+    }
+
+    if (layout === "two-column") {
+      return (
+        <div style={{ ...baseStyle, background: "#ffffff", border: `1px solid #e5e7eb`, display: "grid", gridTemplateColumns: "1fr 1fr", padding: `${14 * scale}px ${20 * scale}px`, gap: 16 * scale, alignItems: "center" }}>
+          <div style={{ borderLeft: `3px solid ${primary}`, paddingLeft: 12 * scale }}>
+            {nameBlock}
+          </div>
+          {contactBlock}
+        </div>
+      );
+    }
+
+    // minimal
+    return (
+      <div style={{ ...baseStyle, background: "#ffffff", border: `1px solid #e5e7eb`, display: "flex", flexDirection: "column", padding: `${14 * scale}px ${20 * scale}px`, gap: 6 * scale, justifyContent: "center" }}>
+        <p style={{ fontSize: resolvedNameSize * 0.78, fontWeight: resolvedFontWeight, fontStyle: resolvedFontStyle, color: primary, margin: 0, lineHeight: 1.2 }}>{name} <span style={{ fontSize: 9 * scale, color: "#555", fontWeight: 500 }}>· {title}</span></p>
+        <p style={{ fontSize: 8.5 * scale, color: "#999", margin: 0, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase" as const }}>{company}</p>
+        <div style={{ display: "flex", flexWrap: "wrap" as const, gap: `${3 * scale}px ${14 * scale}px`, marginTop: 2 * scale }}>
+          {data.phone   && <p style={{ fontSize: 8 * scale, color: "#444", margin: 0 }}>{data.phone}</p>}
+          {data.email   && <p style={{ fontSize: 8 * scale, color: linkColor, margin: 0 }}>{data.email}</p>}
+          {data.website && <p style={{ fontSize: 8 * scale, color: linkColor, margin: 0 }}>{data.website}</p>}
         </div>
       </div>
     );
@@ -373,6 +447,7 @@ export function CardCanvas({
   bilingualMode, bilingualDir, secondaryData,
   onInlineEdit,
   fieldConfigs,
+  sigLayout, sigAccentColor,
 }: {
   data: CardData; template: Template; backTemplate: Template; primary: string; secondary: string; accent: string;
   backPrimary: string; backSecondary: string; backAccent: string;
@@ -390,6 +465,7 @@ export function CardCanvas({
   bilingualMode?: BilingualMode; bilingualDir?: "rtl" | "ltr"; secondaryData?: CardData;
   onInlineEdit?: (field: keyof CardData) => void;
   fieldConfigs?: FieldConfigMap;
+  sigLayout?: SigLayout; sigAccentColor?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef<{
@@ -567,6 +643,8 @@ export function CardCanvas({
         bilingualDir={bilingualDir}
         secondaryData={secondaryData}
         onInlineEdit={onInlineEdit}
+        sigLayout={sigLayout}
+        sigAccentColor={sigAccentColor}
       />
 
       {/* Logo overlay */}

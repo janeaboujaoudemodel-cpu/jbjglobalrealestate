@@ -19,7 +19,7 @@ import { DeskMockup, PocketMockup, StationeryMockup, HandMockup } from "./Busine
 import {
   type Template, type TextAlign, type GradientDirection, type FinishEffect,
   type MockupScene, type CardData, type QrPosition, type QrContentType,
-  type AiDesignData, type CardShape,
+  type AiDesignData, type CardShape, type SigLayout,
   COLOR_PRESETS, getShapeStyle,
   buildQrData, buildQrUrl,
 } from "./businessCardTypes";
@@ -139,6 +139,11 @@ interface BusinessCardRightPanelProps {
   mockupScene: MockupScene;
   setMockupScene: (v: MockupScene) => void;
   frontTemplate: Template;
+  // Email signature
+  sigLayout?: SigLayout;
+  setSigLayout?: (v: SigLayout) => void;
+  sigAccentColor?: string;
+  setSigAccentColor?: (v: string) => void;
 }
 
 export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
@@ -168,6 +173,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
     activeTemplate, setActiveTemplate, frontSecondary, frontAccent,
     finishOpen, setFinishOpen, finishEffect, setFinishEffect,
     mockupOpen, setMockupOpen, mockupScene, setMockupScene, frontTemplate,
+    sigLayout, setSigLayout, sigAccentColor, setSigAccentColor,
   } = props;
 
   return (
@@ -281,6 +287,64 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
                     onCustomChange={setBackCustomColor}
                   />
                 </>
+              )}
+
+              {/* Email Signature: Independent Accent Color */}
+              {cardShape === "email-signature" && setSigAccentColor && (
+                <div className="border-t border-[hsl(var(--border))] pt-3">
+                  <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">
+                    Link / Accent Color
+                  </Label>
+                  <p className="text-[9px] text-[hsl(var(--muted-foreground))] mb-2">
+                    Independent color for email, website links. Defaults to border color if not set.
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="color"
+                      value={sigAccentColor || frontPrimary}
+                      onChange={e => setSigAccentColor(e.target.value)}
+                      className="w-9 h-8 rounded-lg border border-[hsl(var(--border))] cursor-pointer p-0.5"
+                      title="Accent color for links"
+                    />
+                    <span className="text-[10px] text-[hsl(var(--muted-foreground))]">
+                      {sigAccentColor ? `Custom: ${sigAccentColor}` : "Same as border"}
+                    </span>
+                    {sigAccentColor && (
+                      <button onClick={() => setSigAccentColor("")} className="text-[9px] underline text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]">Reset</button>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Email Signature: Frame Layout */}
+              {cardShape === "email-signature" && setSigLayout && sigLayout && (
+                <div className="border-t border-[hsl(var(--border))] pt-3">
+                  <Label className="text-[10px] font-bold uppercase tracking-[0.1em] text-[hsl(var(--muted-foreground))] mb-2 block">
+                    Signature Frame Layout
+                  </Label>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {([
+                      { id: "divider-left" as SigLayout, label: "Divider Left", icon: "┃ ━" },
+                      { id: "divider-top" as SigLayout, label: "Top Bar", icon: "━━━" },
+                      { id: "banner" as SigLayout, label: "Banner", icon: "█▀▀" },
+                      { id: "minimal" as SigLayout, label: "Minimal", icon: "─ ─" },
+                      { id: "two-column" as SigLayout, label: "Two Column", icon: "┃ │" },
+                    ]).map(opt => (
+                      <button
+                        key={opt.id}
+                        onClick={() => setSigLayout(opt.id)}
+                        className={`flex flex-col items-center gap-0.5 py-2 px-1 rounded-xl border text-center transition-all ${
+                          sigLayout === opt.id
+                            ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)] shadow-sm"
+                            : "border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]"
+                        }`}
+                      >
+                        <span className="text-[11px] font-mono leading-none" style={{ color: frontPrimary }}>{opt.icon}</span>
+                        <span className={`text-[8px] font-semibold ${sigLayout === opt.id ? "text-[hsl(var(--gold-dark))]" : "text-[hsl(var(--muted-foreground))]"}`}>{opt.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
           </CollapsibleContent>
