@@ -1117,9 +1117,25 @@ export default function StampGeneratorPage() {
           {compareDesign && (
             <div className="flex-shrink-0 px-3 py-1.5 bg-blue-50 border-b border-blue-200 flex items-center justify-between">
               <span className="text-[10px] font-semibold text-blue-700">Compare Mode — Side by Side</span>
-              <Button size="sm" variant="ghost" className="h-6 text-[9px] text-blue-700 hover:bg-blue-100" onClick={() => setCompareDesign(null)}>
-                <X size={9} className="mr-1" /> Close Compare
-              </Button>
+              <div className="flex items-center gap-1.5">
+                <Button size="sm" className="h-6 text-[9px] gap-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90"
+                  onClick={() => {
+                    const concept: StampDesignConcept = compareDesign;
+                    setCompareDesign(null);
+                    // Swap: move current standard to concepts, apply compared design as new standard
+                    if (standardConcept) {
+                      setConcepts(prev => [standardConcept, ...prev.filter(c => c.id !== standardConcept.id && c.id !== concept.id)]);
+                    }
+                    setStandardConcept(concept);
+                    setSelectedId(concept.id);
+                    toast.success('Applied compared design');
+                  }}>
+                  <Check size={9} /> Apply This
+                </Button>
+                <Button size="sm" variant="ghost" className="h-6 text-[9px] text-blue-700 hover:bg-blue-100" onClick={() => setCompareDesign(null)}>
+                  <X size={9} className="mr-1" /> Close
+                </Button>
+              </div>
             </div>
           )}
           <div className={`flex-1 flex items-center justify-center overflow-auto relative ${compareDesign ? 'gap-4' : ''}`}

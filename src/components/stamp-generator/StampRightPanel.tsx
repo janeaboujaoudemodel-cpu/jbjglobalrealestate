@@ -746,9 +746,16 @@ function HistoryList(props: {
     setLoading(false);
   }
 
-  function detectSource(templateKey: string): { label: string; color: string } {
-    if (templateKey?.includes('restored')) return { label: 'Restored', color: 'bg-blue-100 text-blue-700 border-blue-200' };
-    if (templateKey?.includes('generated') || templateKey?.includes('ai-')) return { label: 'Generated', color: 'bg-purple-100 text-purple-700 border-purple-200' };
+  function detectSource(v: any): { label: string; color: string } {
+    // Prefer dedicated source column if available, fall back to heuristic
+    const src = v.source || '';
+    if (src === 'restored') return { label: 'Restored', color: 'bg-blue-100 text-blue-700 border-blue-200' };
+    if (src === 'generated' || src === 'ai') return { label: 'Generated', color: 'bg-purple-100 text-purple-700 border-purple-200' };
+    if (src === 'manual') return { label: 'Manual', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' };
+    // Heuristic fallback for rows without source column
+    const tk = v.template_key || '';
+    if (tk.includes('restored')) return { label: 'Restored', color: 'bg-blue-100 text-blue-700 border-blue-200' };
+    if (tk.includes('generated') || tk.includes('ai-')) return { label: 'Generated', color: 'bg-purple-100 text-purple-700 border-purple-200' };
     return { label: 'Manual', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' };
   }
 
