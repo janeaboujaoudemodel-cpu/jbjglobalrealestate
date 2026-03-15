@@ -131,6 +131,14 @@ export function StampRightPanel(props: StampRightPanelProps) {
 
         {/* Concepts Tab */}
         <TabsContent value="concepts" className="flex-1 overflow-y-auto p-3 mt-0 space-y-3">
+          {/* Generating indicator */}
+          {props.generating && props.standardConcept && (
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[hsl(var(--gold)/0.08)] border border-[hsl(var(--gold)/0.2)]">
+              <Loader2 size={12} className="animate-spin text-[hsl(var(--gold))]" />
+              <span className="text-[10px] font-medium text-[hsl(var(--gold-dark))]">Generating 8 concepts…</span>
+            </div>
+          )}
+
           {/* Pinned Standard Model Card */}
           {props.standardConcept && (
             <div className="mb-2">
