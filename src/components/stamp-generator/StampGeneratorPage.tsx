@@ -21,6 +21,7 @@ import { StampTextEditor } from '@/components/stamp-generator/StampTextEditor';
 import { StampPreviewModal } from '@/components/stamp-generator/StampPreviewModal';
 import { StampLicenseUploader } from '@/components/stamp-generator/StampLicenseUploader';
 import { generateStampConcepts, StampDesignConcept } from '@/lib/stampTemplates';
+import { generateOfficialStampSVG, type OfficialStampConfig } from '@/lib/stampOfficialTemplate';
 import {
   Wand2, Loader2, Check, RefreshCw, Download, Stamp,
   ArrowLeft, ChevronRight, AlertTriangle, Heart, MessageSquare,
