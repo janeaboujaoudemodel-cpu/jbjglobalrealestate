@@ -1,90 +1,29 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+# Fix Navigation Arrow Overlap with Medium Chat Button
 
-### Session Status
+## Problem
+When the chat support is in its "medium" collapsed state (the expanded banner showing "JBJ Support - Available 24/7"), the navigation arrows (`PageNavigation`) at `bottom-44` overlap with or sit too close to the chat button at `bottom-20`. The expanded banner is ~56px tall, meaning its top edge reaches ~136px from bottom, while arrows sit at 176px — only 40px gap which causes visual overlap especially on smaller screens.
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+## Fix
 
----
+**File: `src/components/PageNavigation.tsx`**
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+Instead of always using `bottom-44`, make the arrow position dynamic based on whether the collapsed chat button is in its medium (attention pulse) or minimized (circle) state. Pass a new prop `isChatMedium` from `MainLayout`.
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+- When chat is **open** (full panel): arrows hidden (already works via `isChatOpen`)
+- When chat is **collapsed + medium/attention-pulse**: arrows move to `bottom-56` (~224px) to clear the taller banner
+- When chat is **collapsed + minimized** (small circle): arrows stay at `bottom-36` (~144px), just above the 56px circle at `bottom-20`
+- When chat is **not rendered**: arrows at default `bottom-28`
 
----
+**File: `src/components/MainLayout.tsx`**
 
-### Route Map
+Pass `isChatMedium={showAttentionPulse && effectiveCollapsed}` to `PageNavigation` so it knows which collapsed variant is showing.
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+### Changes
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+| File | Change |
+|------|--------|
+| `src/components/PageNavigation.tsx` | Add `isChatMedium` prop; dynamically set bottom class: `bottom-56` when medium, `bottom-36` when minimized circle |
+| `src/components/MainLayout.tsx` | Pass `isChatMedium` prop to `PageNavigation` |
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
