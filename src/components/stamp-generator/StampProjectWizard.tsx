@@ -435,13 +435,18 @@ export default function StampProjectWizard() {
   }, []);
 
   const triggerDownload = useCallback((blob: Blob, filename: string) => {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    requestAnimationFrame(() => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      requestAnimationFrame(() => {
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      });
+    });
   }, []);
 
   const svgToCanvas = useCallback(async (svgData: string, size: number, whiteBg: boolean): Promise<HTMLCanvasElement> => {

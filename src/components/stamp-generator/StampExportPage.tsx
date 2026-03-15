@@ -492,7 +492,7 @@ export default function StampExportPage() {
       toast.info(`Generating ${mode === 'rubber' ? 'rubber stamp' : 'emboss'} files…`);
       const converted = converter(tintedSvg);
       // SVG
-      const svgBlob = new Blob([converted], { type: 'image/svg+xml' });
+      const svgBlob = new Blob([sanitizeSvgForExport(converted)], { type: 'image/svg+xml;charset=utf-8' });
       triggerDownload(svgBlob, `${companySlug}_${label}.svg`);
       // High-res PNG
       const pngBlob = await svgToPng(converted, 2048, true);
