@@ -283,6 +283,9 @@ export default function StampGeneratorPage() {
           fontItalic,
           inkMode,
           zoom,
+          localIconStyle,
+          localMonogramText,
+          monogramLetterColors,
           lastSaved: new Date().toISOString(),
         };
       }
