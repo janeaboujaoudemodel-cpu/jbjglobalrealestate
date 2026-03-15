@@ -54,6 +54,7 @@ export interface LiveStampPreviewProps {
   outerBorderColor?: string;
   middleBorderColor?: string;
   innerBorderColor?: string;
+  locationArcSpread?: number;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
