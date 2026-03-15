@@ -1184,7 +1184,7 @@ export default function StampExportPage() {
                     sessionStorage.setItem('esignature_stamp_svg', tintedSvg);
                     sessionStorage.setItem('esignature_stamp_color', primaryColor);
                     toast.success('Stamp saved! Redirecting to E-Signature…');
-                    navigate('/e-signature/create');
+                    navigate('/e-signature/create', { state: { stampSvg: tintedSvg, stampColor: primaryColor, source: 'stamp-generator' } });
                   } catch { toast.error('Failed to save stamp'); }
                 }}>
                 <PenTool size={14}/> Use in E-Signature

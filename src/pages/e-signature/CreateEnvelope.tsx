@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import DocumentFieldPlacer from "@/components/e-signature/DocumentFieldPlacer";
+import DocumentPreviewSummary from "@/components/e-signature/DocumentPreviewSummary";
 
 interface Recipient {
   id: string;

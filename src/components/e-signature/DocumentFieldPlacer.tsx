@@ -762,6 +762,31 @@ export default function DocumentFieldPlacer({
           />
         </DialogContent>
       </Dialog>
+
+      {/* ─── Brand Asset Picker ─── */}
+      {showAssetPicker && (
+        <BrandAssetPicker
+          onSelect={(asset) => {
+            if (asset.asset_type === 'stamp' && asset.svg_content) {
+              setSavedStampSvg(asset.svg_content);
+              toast.success(`Stamp "${asset.name}" loaded — select Stamp field type and click to place`);
+            } else if (asset.asset_type === 'signature') {
+              const url = asset.thumbnail_url || (asset.svg_content
+                ? `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(asset.svg_content)))}`
+                : null);
+              if (url) {
+                setSavedSignatureUrl(url);
+                toast.success(`Signature "${asset.name}" loaded`);
+              }
+            } else if (asset.asset_type === 'logo' && asset.thumbnail_url) {
+              setSavedSignatureUrl(asset.thumbnail_url);
+              toast.success(`Logo "${asset.name}" loaded as overlay`);
+            }
+            setShowAssetPicker(false);
+          }}
+          onClose={() => setShowAssetPicker(false)}
+        />
+      )}
     </div>
   );
 }
