@@ -508,18 +508,19 @@ export default function StampGeneratorPage() {
     if (!p) return;
     if (generationLockRef.current) return;
     generationLockRef.current = true;
-    // Only show center spinner when there is NO standard model yet
-    const hasStandard = !!standardConcept;
-    if (!hasStandard) setGenerating(true);
-    // Right panel always shows loading state via `generating`
-    if (hasStandard) setGenerating(true); // drives right panel skeleton cards
+    setGenerating(true);
     setBlocked(false);
     try {
       if (session?.access_token) {
         const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-          body: JSON.stringify({ action: 'generate', project: { ...project, ...p }, projectId }),
+          body: JSON.stringify({
+            action: 'generate',
+            project: { ...project, ...p },
+            projectId,
+            selectedDesignId: standardConcept?.id || null,
+          }),
         });
         if (res.ok) {
           const json = await res.json();
@@ -534,8 +535,8 @@ export default function StampGeneratorPage() {
               .limit(11);
             if (saved && saved.length > 0) {
               const newConcepts = saved.map((d: any) => ({
-                id: d.id, templateKey: d.template_key || 'classic-double',
-                label: (d.template_key || 'classic-double').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
+                id: d.id, templateKey: d.template_key || 'classic-official',
+                label: (d.template_key || 'classic-official').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
                 tags: [] as string[], svgSource: d.svg_source || '', isFavorite: false,
               }));
               setConcepts(newConcepts);
@@ -554,7 +555,6 @@ export default function StampGeneratorPage() {
     const clientConcepts = generateStampConcepts(project ? { ...project, ...p } : p);
     if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); generationLockRef.current = false; return; }
     setConcepts(clientConcepts);
-    // Set standard on first generation — never overwrite existing standard
     if (!standardConcept && clientConcepts.length > 0) {
       setStandardConcept(clientConcepts[0]);
       setSelectedId(clientConcepts[0].id);
