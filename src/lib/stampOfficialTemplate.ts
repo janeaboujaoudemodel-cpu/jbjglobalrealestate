@@ -172,7 +172,11 @@ function renderBottomArcTextPath(
   isArabic: boolean, pathId: string, fontWeight = '800'
 ): string {
   if (!text) return '';
-  const arcPath = `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx + r} ${cy}`;
+  // Bottom arc: draw from left to right below center, text hangs from path
+  // Use a slight vertical offset to prevent text sinking below the ring
+  const verticalNudge = fontSize * 0.15;
+  const adjustedCy = cy - verticalNudge;
+  const arcPath = `M ${cx - r} ${adjustedCy} A ${r} ${r} 0 0 0 ${cx + r} ${adjustedCy}`;
   return `
     <defs><path id="${pathId}" d="${arcPath}"/></defs>
     <text data-stamp-element="${pathId}" font-family="${font}" font-size="${fontSize}" fill="${ink}" 
