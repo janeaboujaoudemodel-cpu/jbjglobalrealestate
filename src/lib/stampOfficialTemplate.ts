@@ -430,7 +430,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
       const botSafe = safeArcFontSize(locEn.toUpperCase(), clampedTextArcR, false, 12, englishSpread, 5);
       bottomArcContent = renderBottomArcTextPath(
         locEn.toUpperCase(), cx, cy, clampedTextArcR, botSafe.fontSize, enFont, ink,
-        botSafe.letterSpacing, false, 'bottom-arc', '600'
+        botSafe.letterSpacing, false, 'bottom-arc', '600', config.letterOverrides
       );
     }
     separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
