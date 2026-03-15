@@ -247,8 +247,9 @@ export function LiveStampPreview({
     stampType, styleTheme, borderStyle, typographyStyle, density,
     iconStyle, monogramText, uploadedLogoUrl, languageMode, languageReversed,
     showLicenseNumber, showLocation, separatorStyle, fontFamily, size, ink, arabicCity,
-    centerMode, centerIcon, arabicArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight,
+    centerMode, centerIcon, arabicArcSpread, englishArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight,
     circleGap, centerContentSize, arcTextSpacing, separatorDistance,
+    companyArcBandOffset, locationArcBandOffset, outerBorderColor, middleBorderColor, innerBorderColor,
   ]);
 
   return (
