@@ -47,7 +47,7 @@ const PRESET_PALETTES: { name: string; palette: BrandPalette }[] = [
 const BrandPaletteHub = () => {
   const {
     palette, setPalettePreview, clearPreview, savePalette, previewPalette,
-    savedPalettes, saveUserPalette, deleteUserPalette, activateUserPalette, revertToDefault,
+    savedPalettes, saveUserPalette, deleteUserPalette, activateUserPalette, renameUserPalette, revertToDefault,
   } = useBrandPalette();
   const { isOwner, user } = useAuth();
   const [draft, setDraft] = useState<BrandPalette>(palette);
