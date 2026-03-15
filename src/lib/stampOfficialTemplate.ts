@@ -467,10 +467,10 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     const locArSafe = safeArcFontSize(locAr, clampedLocTextR, true, 12, locSpread);
 
     locationContent = renderTopArcTextPath(
-      locAr, cx, cy, clampedLocTextR, locArSafe.fontSize, arFont, ink, locArSafe.letterSpacing, true, 'loc-top', '600'
+      locAr, cx, cy, clampedLocTextR, locArSafe.fontSize, arFont, ink, locArSafe.letterSpacing, true, 'loc-top', '600', config.letterOverrides
     );
     locationContent += renderBottomArcTextPath(
-      locEn.toUpperCase(), cx, cy, clampedLocTextR, locEnSafe.fontSize, enFont, ink, locEnSafe.letterSpacing, false, 'loc-bottom', '600'
+      locEn.toUpperCase(), cx, cy, clampedLocTextR, locEnSafe.fontSize, enFont, ink, locEnSafe.letterSpacing, false, 'loc-bottom', '600', config.letterOverrides
     );
     if (config.locationSeparatorStyle && config.locationSeparatorStyle !== 'none') {
       locationContent += renderSeparators(cx, cy, clampedLocTextR, config.locationSeparatorStyle, ink, 'loc-separator');
