@@ -27,6 +27,7 @@ import { BackgroundRemoverPanel } from './features/BackgroundRemoverPanel';
 import { ScenePlannerPanel } from './features/ScenePlannerPanel';
 import { ChartOverlayPanel } from './features/ChartOverlayPanel';
 import { VoiceClonePanel } from './features/VoiceClonePanel';
+import { BatchPhotoVideoPanel } from './features/BatchPhotoVideoPanel';
 import { useVideoStudioProject } from './hooks/useVideoStudioProject';
 import { useMediaLibrary } from './hooks/useMediaLibrary';
 import { MediaAsset, StockAsset, Clip, ExportPreset, RenderJob } from './types';
