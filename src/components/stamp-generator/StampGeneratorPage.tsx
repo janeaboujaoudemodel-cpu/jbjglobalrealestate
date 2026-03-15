@@ -919,6 +919,8 @@ export default function StampGeneratorPage() {
           onSetEnglishArcSpread={setEnglishArcSpread}
           onSetCompanyArcOffset={setCompanyArcOffset}
           onSetLocationArcOffset={setLocationArcOffset}
+          locationArcSpread={locationArcSpread}
+          onSetLocationArcSpread={setLocationArcSpread}
         />
 
         {/* ── CENTER: Premium Canvas Preview ── */}
