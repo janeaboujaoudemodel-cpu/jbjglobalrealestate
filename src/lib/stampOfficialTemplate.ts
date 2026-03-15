@@ -85,6 +85,22 @@ const DECORATIVE_STROKE = 0.5;
 const SAFE_ZONE = 6;
 const ARC_SPREAD_LIMIT = 0.88;
 
+/**
+ * Smart English token spacing normalization.
+ * Tightens initial clusters (J B J), keeps LLC tight, adds gap after LLC before next token.
+ */
+function normalizeEnglishTokenSpacing(text: string): string {
+  if (!text) return text;
+  // Tighten single-letter clusters like "J B J" → "JBJ"
+  let normalized = text.replace(/\b([A-Z]) ([A-Z]) ([A-Z])\b/g, '$1$2$3');
+  normalized = normalized.replace(/\b([A-Z]) ([A-Z])\b/g, '$1$2');
+  // Ensure gap after LLC/L.L.C before next token
+  normalized = normalized.replace(/(LLC|L\.L\.C\.?)\s*/gi, '$1  ');
+  // Clean up triple+ spaces
+  normalized = normalized.replace(/\s{3,}/g, '  ');
+  return normalized.trim();
+}
+
 // Theme-based stroke multipliers
 const THEME_STROKE_MULT: Record<string, number> = {
   CLASSIC: 1, MODERN: 0.8, MINIMAL: 0.5, LUXURY: 1.3, BOLD: 1.6, VINTAGE: 0.9,
