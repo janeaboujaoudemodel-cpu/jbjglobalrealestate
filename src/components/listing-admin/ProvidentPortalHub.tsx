@@ -133,6 +133,8 @@ export function ProvidentPortalHub() {
         .not("description", "is", null)
         .not("developer_name", "is", null)
         .not("handover_date", "is", null)
+        .not("cover_image_url", "is", null)
+        .gte("description", "a".repeat(50))
         .select("id");
       if (error) throw error;
       toast.success(`Auto-published ${data?.length ?? 0} projects!`);

@@ -119,8 +119,14 @@ export const ProjectAIAnalyzer = ({
   const sectionRef = useRef<HTMLElement>(null);
   const hasTriggered = useRef(false);
 
+  // Quality gate: prevent AI analysis on empty/stub projects
+  const hasMinimumData = Boolean(
+    projectName && areaName && (developer || priceFrom || handoverDate || (amenities && amenities.length > 0))
+  );
+
   const handleAnalyze = useCallback(async () => {
     if (hasTriggered.current) return;
+    if (!hasMinimumData) return;
     hasTriggered.current = true;
     setIsAnalyzing(true);
     setHasTimedOut(false);
