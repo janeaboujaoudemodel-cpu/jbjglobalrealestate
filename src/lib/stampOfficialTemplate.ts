@@ -50,11 +50,17 @@ export interface OfficialStampConfig {
   centerMode?: CenterContentMode;
   centerIcon?: CenterIconType;
   arabicArcSpread?: number;
+  /** English arc spread (0-1, default 0.88) — matches separator-to-separator fullness */
+  englishArcSpread?: number;
   arabicLetterSpacing?: number;
   arabicFont?: string;
   arabicFontWeight?: string;
   circleGap?: number;
   centerContentScale?: number;
+  /** Radial offset for company name arcs (0-100, 50 = centered between outer+middle rings) */
+  companyArcBandOffset?: number;
+  /** Radial offset for location arcs (0-100, 50 = centered between middle+inner rings) */
+  locationArcBandOffset?: number;
   /** Language mode: EN-only, AR-only, BILINGUAL */
   languageMode?: LanguageMode;
   /** Stamp shape */
@@ -67,6 +73,10 @@ export interface OfficialStampConfig {
   arcTextSpacing?: number;
   /** Shift separator position inward/outward (0-100, default 50 = centered) */
   separatorDistancePct?: number;
+  /** Per-border color overrides */
+  outerBorderColor?: string;
+  middleBorderColor?: string;
+  innerBorderColor?: string;
 }
 
 const ARABIC_FONT = '"Noto Naskh Arabic", "Arabic Typesetting", "Traditional Arabic", serif';
