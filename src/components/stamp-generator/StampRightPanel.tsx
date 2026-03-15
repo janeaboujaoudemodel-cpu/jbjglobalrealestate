@@ -1,7 +1,10 @@
 /**
  * StampRightPanel — Tabbed right panel: Concepts, Favorites, AI Variations, History, Library.
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { StampSVGRenderer } from './StampSVGRenderer';
 import { StampVariationsPanel } from './StampVariationsPanel';
