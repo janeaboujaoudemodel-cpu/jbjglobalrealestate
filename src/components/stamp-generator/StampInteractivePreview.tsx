@@ -190,6 +190,14 @@ export function StampInteractivePreview({
     return Math.min(text.length - 1, Math.floor(pct * text.length));
   }, [getElementText]);
 
+  // Emit element selection via prop callback
+  const emitSelection = useCallback((elementId: string) => {
+    const type = mapElementToType(elementId);
+    if (type && onElementSelect) {
+      onElementSelect({ id: elementId, type });
+    }
+  }, [onElementSelect]);
+
   // Single click: select letter
   const handleZoneClick = (zone: HitZone, e: React.MouseEvent) => {
     const meta = ELEMENT_LABELS[zone.id];
@@ -200,7 +208,6 @@ export function StampInteractivePreview({
       const containerRect = containerRef.current?.getBoundingClientRect();
       const clickX = containerRect ? e.clientX - containerRect.x : 0;
       const letterIdx = estimateLetterIndex(zone, clickX);
-      const text = getElementText(zone.id);
 
       setSelected(zone.id);
       setSelectedLetterIdx(letterIdx);
@@ -210,8 +217,7 @@ export function StampInteractivePreview({
         x: Math.max(0, Math.min(zone.rect.x + zone.rect.width / 2, size - 120)),
         y: Math.max(0, zone.rect.y - 8),
       });
-
-      // Don't dispatch panel events on single click (letter mode)
+      emitSelection(zone.id);
     } else {
       // Non-text elements: standard selection
       setSelected(zone.id);
@@ -222,11 +228,9 @@ export function StampInteractivePreview({
         x: Math.max(0, Math.min(zone.rect.x + zone.rect.width / 2, size - 120)),
         y: Math.max(0, zone.rect.y - 8),
       });
+      emitSelection(zone.id);
       if (meta.type === 'center') {
         if (onCenterClick) onCenterClick();
-        window.dispatchEvent(new CustomEvent('stamp-open-center-panel'));
-      } else if (meta.type === 'separator') {
-        window.dispatchEvent(new CustomEvent('stamp-open-separator-panel'));
       }
     }
   };
