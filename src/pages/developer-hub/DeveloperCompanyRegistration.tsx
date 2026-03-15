@@ -93,7 +93,7 @@ const DeveloperCompanyRegistration = () => {
         rera_number: form.rera_number || null,
         year_established: form.year_established ? parseInt(form.year_established) : null,
         key_contacts: JSON.parse(JSON.stringify(form.key_contacts)),
-        status,
+        status: status as "draft" | "submitted" | "under_review" | "approved" | "rejected",
         updated_at: new Date().toISOString(),
       };
 
@@ -106,7 +106,7 @@ const DeveloperCompanyRegistration = () => {
       } else {
         const { error } = await supabase
           .from("developer_registrations")
-          .insert(payload);
+          .insert([payload]);
         if (error) throw error;
       }
     },
