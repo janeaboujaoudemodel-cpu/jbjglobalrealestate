@@ -1509,7 +1509,7 @@ export default function GlobalVerticalNav() {
                     <LogOut className="w-3.5 h-3.5" />
                   </button>
                 </TooltipTrigger>
-                <TooltipContent side="right" className="text-xs">Sign Out</TooltipContent>
+                <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
               </Tooltip>
             ) : (
               <Tooltip>
