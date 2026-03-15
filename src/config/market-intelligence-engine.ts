@@ -2,8 +2,8 @@
 
 // Data source types
 export type MarketDataSourceType = 
-  | 'dld' | 'dsc' | 'uae_central_bank' | 'property_finder' | 'bayut'
-  | 'knight_frank' | 'jll' | 'imf' | 'world_bank' | 'news_feed' | 'custom';
+  | 'dld' | 'dsc' | 'uae_central_bank' | 'dxb_interact'
+  | 'jll' | 'imf' | 'world_bank' | 'news_feed' | 'custom';
 
 export type MarketTrendDirection = 'rising' | 'falling' | 'stable' | 'volatile';
 
