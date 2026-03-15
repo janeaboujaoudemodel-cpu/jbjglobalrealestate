@@ -1196,8 +1196,6 @@ const Properties = () => {
               isMapMode={isMapMode}
               onMapToggle={(v) => {
                 setIsMapMode(v);
-                if (v) setSearchParams(prev => { prev.set('view', 'map'); return prev; });
-                else setSearchParams(prev => { prev.delete('view'); return prev; });
               }}
             />
           </div>
