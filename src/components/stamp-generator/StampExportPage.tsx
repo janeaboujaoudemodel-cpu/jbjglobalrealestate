@@ -1081,6 +1081,18 @@ export default function StampExportPage() {
                 }}>
                   <Download size={12}/> PDF (White BG)
                 </Button>
+                <Button variant="outline" className="gap-1.5 text-xs" onClick={async () => {
+                  if (!tintedSvg) return;
+                  try {
+                    toast.info('Generating WEBP…');
+                    const pngBlob = await svgToPng(tintedSvg, 1024, isTransparent, bgColorForExport);
+                    const webpBlob = await pngToWebp(pngBlob, isTransparent);
+                    triggerDownload(webpBlob, `${companySlug}_stamp_1024px${isTransparent ? '_transparent' : ''}.webp`);
+                    toast.success('WEBP downloaded!');
+                  } catch { toast.error('WEBP download failed'); }
+                }}>
+                  <Download size={12}/> WEBP
+                </Button>
                 <Button variant="outline" className="gap-1.5 text-xs border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))]" onClick={() => {
                   if (!tintedSvg) return;
                   // Open print dialog

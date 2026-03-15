@@ -205,9 +205,10 @@ export default function StampProjectWizard() {
 
   const history = useStampHistory<FormState>(form);
 
-  // Persist form
+  // Persist form + remember last route
   useEffect(() => {
     try { localStorage.setItem('stamp-wizard-form', JSON.stringify(form)); } catch {}
+    try { localStorage.setItem('stamp_last_route', '/toolkit/stamp-generator/new'); } catch {}
   }, [form]);
 
   const set = (key: keyof FormState, val: any) => {
