@@ -354,6 +354,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 label="Location"
                 icon={<MapPin size={10} className="text-[hsl(var(--gold-dark))]" />}
               >
+                {props.languageMode !== 'EN' && (
                 <TreeNode label="Arabic Arc" icon={<span className="text-[9px]">🇦🇪</span>}>
                   {hasSvg ? (
                     <StampTextEditor
@@ -363,6 +364,8 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     />
                   ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit</p>}
                 </TreeNode>
+                )}
+                {props.languageMode !== 'AR' && (
                 <TreeNode label="English Arc" icon={<span className="text-[9px]">🇬🇧</span>}>
                   {hasSvg ? (
                     <StampTextEditor
@@ -372,6 +375,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     />
                   ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit</p>}
                 </TreeNode>
+                )}
               </TreeNode>
 
               {/* ── Center Content ── */}
