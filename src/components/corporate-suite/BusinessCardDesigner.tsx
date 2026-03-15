@@ -132,6 +132,10 @@ export default function BusinessCardDesigner() {
           logoSize={s.logoSize}
           logoPos={s.logoPos}
           setLogoPos={s.setLogoPos}
+          stampUrl={s.stampUrl}
+          stampSize={s.stampSize}
+          stampPos={s.stampPos}
+          setStampPos={s.setStampPos}
           aiDesignData={s.aiDesignData}
           cardFontFamily={s.cardFontFamily}
           cardFontBold={s.cardFontBold}
