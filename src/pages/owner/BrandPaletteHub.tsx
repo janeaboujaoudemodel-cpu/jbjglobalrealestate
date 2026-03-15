@@ -240,19 +240,96 @@ const BrandPaletteHub = () => {
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left: Color Pickers */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Palette Name (non-owner) */}
-            {!isOwner && (
-              <div className="bg-card/80 border border-gold/20 rounded-2xl p-4">
-                <Label className="text-foreground font-bold text-sm mb-2 block">Palette Name</Label>
-                <Input
-                  value={paletteName}
-                  onChange={(e) => setPaletteName(e.target.value)}
-                  placeholder="My Custom Theme"
-                  className="bg-background border-gold/20 text-foreground"
-                  maxLength={40}
-                />
+            {/* Palette Manager */}
+            <div className="bg-card/80 border border-gold/20 rounded-2xl p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <FolderOpen className="w-4 h-4 text-gold flex-shrink-0" />
+                  <Label className="text-foreground font-bold text-sm whitespace-nowrap">Active Palette</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="border-gold/30 text-foreground text-sm h-9 min-w-[160px] justify-between">
+                        <span className="truncate">
+                          {savedPalettes.find(sp => sp.is_active)?.name ?? (isOwner ? 'Brand Default' : 'Unsaved')}
+                        </span>
+                        <ChevronDown className="w-3.5 h-3.5 ml-2 text-muted-foreground flex-shrink-0" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-72">
+                      <DropdownMenuLabel className="text-xs text-muted-foreground">
+                        {savedPalettes.length} saved palette{savedPalettes.length !== 1 ? 's' : ''}
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {savedPalettes.map((sp) => (
+                        <DropdownMenuItem
+                          key={sp.id}
+                          className="flex items-center gap-2 py-2.5"
+                          onClick={() => {
+                            activateUserPalette(sp.id);
+                            setDraft(sp.palette);
+                            if (isPreviewing) setPalettePreview(sp.palette);
+                            toast.success(`"${sp.name}" activated`);
+                          }}
+                        >
+                          <div className="flex gap-0.5 flex-shrink-0">
+                            {Object.values(sp.palette).map((c, i) => (
+                              <div key={i} className="w-3.5 h-3.5 rounded-sm border border-gold/20" style={{ backgroundColor: c as string }} />
+                            ))}
+                          </div>
+                          <span className="flex-1 truncate text-xs font-medium">{sp.name}</span>
+                          {sp.is_active && <Check className="w-3.5 h-3.5 text-gold flex-shrink-0" />}
+                        </DropdownMenuItem>
+                      ))}
+                      {savedPalettes.length === 0 && (
+                        <div className="px-2 py-3 text-center text-xs text-muted-foreground italic">No saved palettes yet</div>
+                      )}
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => { setShowSaveNew(true); setNewPaletteName(''); }}>
+                        <Plus className="w-3.5 h-3.5 mr-2" />
+                        <span className="text-xs font-medium">Save Current as New…</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
-            )}
+
+              {/* Save New Palette Inline */}
+              {showSaveNew && (
+                <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} className="mt-3 flex items-center gap-2">
+                  <Input
+                    value={newPaletteName}
+                    onChange={(e) => setNewPaletteName(e.target.value)}
+                    placeholder="Enter palette name…"
+                    className="bg-background border-gold/20 text-foreground text-sm h-9 flex-1"
+                    maxLength={40}
+                    autoFocus
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && newPaletteName.trim()) {
+                        saveUserPalette(newPaletteName.trim(), draft, true);
+                        setShowSaveNew(false);
+                        toast.success(`"${newPaletteName.trim()}" saved`);
+                      }
+                      if (e.key === 'Escape') setShowSaveNew(false);
+                    }}
+                  />
+                  <Button
+                    size="sm"
+                    className="h-9 bg-gold/20 text-foreground border border-gold/30 hover:bg-gold/30"
+                    disabled={!newPaletteName.trim()}
+                    onClick={() => {
+                      saveUserPalette(newPaletteName.trim(), draft, true);
+                      setShowSaveNew(false);
+                      toast.success(`"${newPaletteName.trim()}" saved`);
+                    }}
+                  >
+                    <Save className="w-3.5 h-3.5 mr-1" /> Save
+                  </Button>
+                  <Button size="sm" variant="ghost" className="h-9 text-muted-foreground" onClick={() => setShowSaveNew(false)}>
+                    Cancel
+                  </Button>
+                </motion.div>
+              )}
+            </div>
 
             {/* Color Cards */}
             <div className="grid sm:grid-cols-2 gap-4">
