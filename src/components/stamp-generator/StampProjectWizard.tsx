@@ -448,17 +448,17 @@ export default function StampProjectWizard() {
     // Highlight the clicked element
     setSelectedElement(elementId);
 
-    // Navigate to corresponding tab
-    if (elementId.includes('top-arc')) {
-      setActiveTab('company');
-      setTimeout(() => document.querySelector<HTMLInputElement>('[dir="rtl"]')?.focus(), 100);
-    } else if (elementId.includes('bottom-arc')) {
-      setActiveTab('company');
-      setTimeout(() => document.querySelector<HTMLInputElement>('[placeholder*="Acme"]')?.focus(), 100);
+    // Navigate to corresponding tab only if not already there
+    if (elementId.includes('top-arc') || elementId.includes('bottom-arc')) {
+      if (activeTab !== 'company') setActiveTab('company');
+      setTimeout(() => {
+        if (elementId.includes('top-arc')) document.querySelector<HTMLInputElement>('[dir="rtl"]')?.focus();
+        else document.querySelector<HTMLInputElement>('[placeholder*="Acme"]')?.focus();
+      }, 100);
     } else if (elementId.includes('center') || elementId.includes('registration')) {
-      setActiveTab('logo');
+      if (activeTab !== 'logo') setActiveTab('logo');
     } else if (elementId.includes('separator')) {
-      setActiveTab('style');
+      if (activeTab !== 'style') setActiveTab('style');
     }
 
     // Persistent highlight — clears only when clicking a different element or outside

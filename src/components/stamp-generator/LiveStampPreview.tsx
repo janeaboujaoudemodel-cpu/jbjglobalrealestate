@@ -216,11 +216,12 @@ export function LiveStampPreview({
       centerContentScale: centerScaleVal,
       monogramLetterColors,
       monogramDividerColor,
-      // NEW: pass language mode and shape directly
       languageMode: languageMode as LanguageMode,
       shape: stampType as StampShape,
       styleTheme,
       typographyStyle,
+      arcTextSpacing: arcTextSpacing,
+      separatorDistancePct: separatorDistance,
     });
   }, [
     displayName, arabicCompanyName, city, country, registrationNumber,
@@ -228,7 +229,7 @@ export function LiveStampPreview({
     iconStyle, monogramText, uploadedLogoUrl, languageMode, languageReversed,
     showLicenseNumber, showLocation, separatorStyle, fontFamily, size, ink, arabicCity,
     centerMode, centerIcon, arabicArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight,
-    circleGap, centerContentSize,
+    circleGap, centerContentSize, arcTextSpacing, separatorDistance,
   ]);
 
   return (
