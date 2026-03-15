@@ -573,31 +573,31 @@ function generateOvalStamp(config: OfficialStampConfig): string {
     const enSafe = safeArcFontSize(enText, textArcR, false, 11, ARC_SPREAD_LIMIT, 4);
     const arFW = config.arabicFontWeight === 'normal' ? '600' : '800';
     if (config.arabicOnTop !== false) {
-      textContent += renderTopArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'top-arc', arFW);
-      textContent += renderBottomArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'bottom-arc');
+      textContent += renderTopArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'top-arc', arFW, config.letterOverrides);
+      textContent += renderBottomArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'bottom-arc', '800', config.letterOverrides);
     } else {
-      textContent += renderTopArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'top-arc');
-      textContent += renderBottomArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'bottom-arc', arFW);
+      textContent += renderTopArcTextPath(enText, cx, cy, textArcR, enSafe.fontSize, enFont, ink, enSafe.letterSpacing, false, 'top-arc', '800', config.letterOverrides);
+      textContent += renderBottomArcTextPath(arText, cx, cy, textArcR, arSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? arSafe.letterSpacing, true, 'bottom-arc', arFW, config.letterOverrides);
     }
     textContent += renderSeparators(cx, cy, textArcR, config.separatorStyle, ink);
   } else if (mode === 'EN') {
     const topText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
     const topSafe = safeArcFontSize(topText, textArcR, false, 12, ARC_SPREAD_LIMIT, 4);
-    textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, enFont, ink, topSafe.letterSpacing, false, 'top-arc');
+    textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, enFont, ink, topSafe.letterSpacing, false, 'top-arc', '800', config.letterOverrides);
     if (config.showLocation) {
       const loc = (config.locationTextEn || 'Dubai, UAE').toUpperCase();
       const locSafe = safeArcFontSize(loc, textArcR, false, 10, ARC_SPREAD_LIMIT, 4);
-      textContent += renderBottomArcTextPath(loc, cx, cy, textArcR, locSafe.fontSize, enFont, ink, locSafe.letterSpacing, false, 'bottom-arc', '600');
+      textContent += renderBottomArcTextPath(loc, cx, cy, textArcR, locSafe.fontSize, enFont, ink, locSafe.letterSpacing, false, 'bottom-arc', '600', config.letterOverrides);
     }
     textContent += renderSeparators(cx, cy, textArcR, config.separatorStyle, ink);
   } else {
     const topText = config.companyNameAr || 'اسم الشركة';
     const topSafe = safeArcFontSize(topText, textArcR, true, 13, arabicSpread);
-    textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? topSafe.letterSpacing, true, 'top-arc', config.arabicFontWeight === 'normal' ? '600' : '800');
+    textContent += renderTopArcTextPath(topText, cx, cy, textArcR, topSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? topSafe.letterSpacing, true, 'top-arc', config.arabicFontWeight === 'normal' ? '600' : '800', config.letterOverrides);
     if (config.showLocation) {
       const loc = config.locationTextAr || 'دبي، الإمارات';
       const locSafe = safeArcFontSize(loc, textArcR, true, 11, arabicSpread);
-      textContent += renderBottomArcTextPath(loc, cx, cy, textArcR, locSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? locSafe.letterSpacing, true, 'bottom-arc', '600');
+      textContent += renderBottomArcTextPath(loc, cx, cy, textArcR, locSafe.fontSize, arFont, ink, config.arabicLetterSpacing ?? locSafe.letterSpacing, true, 'bottom-arc', '600', config.letterOverrides);
     }
     textContent += renderSeparators(cx, cy, textArcR, config.separatorStyle, ink);
   }
