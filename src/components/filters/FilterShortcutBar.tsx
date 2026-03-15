@@ -614,7 +614,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactive)}>
-              Construction
+              {t('filter.construction')}
               {filters.constructionStatuses.length > 0 && <CountBadge count={filters.constructionStatuses.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
