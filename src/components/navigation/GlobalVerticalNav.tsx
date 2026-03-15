@@ -1500,7 +1500,7 @@ export default function GlobalVerticalNav() {
                   <Ticket className="w-3.5 h-3.5" />
                 </Link>
               </TooltipTrigger>
-              <TooltipContent side="right" className="text-xs">Create or Follow Up Ticket</TooltipContent>
+              <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Create or Follow Up Ticket</TooltipContent>
             </Tooltip>
             {session ? (
               <Tooltip>
