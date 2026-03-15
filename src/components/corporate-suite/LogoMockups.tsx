@@ -163,8 +163,9 @@ function BusinessCardPreview({ logo, colors, name, font, layout }: {
   );
 }
 
-function LetterheadPreview({ logo, colors, name, font, layout }: {
+function LetterheadPreview({ logo, colors, name, font, layout, stampUrl }: {
   logo: LogoData; colors: { primary: string; secondary: string; accent: string }; name: string; font: string; layout: LetterheadLayout;
+  stampUrl?: string;
 }) {
   const logoEl = <LogoPreview svgContent={logo.svgContent} size={36} />;
   const nameEl = (
