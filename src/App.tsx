@@ -34,6 +34,7 @@ import { PublicRoutes } from "@/routes/PublicRoutes";
 import { AIToolRoutes } from "@/routes/AIToolRoutes";
 import { AdminRoutes } from "@/routes/AdminRoutes";
 import { ToolkitRoutes } from "@/routes/ToolkitRoutes";
+import { DeveloperHubRoutes } from "@/routes/DeveloperHubRoutes";
 
 // ── QueryClient ──
 const queryClient = new QueryClient({
@@ -91,6 +92,9 @@ const App = () => {
               <Route element={<Suspense fallback={<PageLoader />}><Outlet /></Suspense>}>
                 {OwnerRoutes()}
               </Route>
+
+              {/* ── Developer Hub (dedicated shell) ── */}
+              {DeveloperHubRoutes()}
               
               {/* ── Main Layout Routes (header + footer shell) ── */}
               <Route element={<MainLayoutWrapper />}>
