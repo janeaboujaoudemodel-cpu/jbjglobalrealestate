@@ -160,6 +160,8 @@ export default function BusinessCardDesigner() {
           isExportingHtml={s.isExportingHtml}
           handleExportHtml={s.handleExportHtml}
           fieldConfigs={s.fieldConfigs}
+          sigLayout={s.sigLayout}
+          sigAccentColor={s.sigAccentColor}
         />
 
         {/* ── Right panel: Style Controls ──────────────────────── */}
