@@ -278,12 +278,12 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   {searchSlot}
                 </div>
               ) : (
-                <div className="min-w-0 max-w-[220px] border-r border-gold/20 flex items-center px-3" title="Search area, project, keyword">
+                <div className="min-w-0 max-w-[220px] border-r border-gold/20 flex items-center px-3" title={t('filter.searchPlaceholder')}>
                   <input
                     type="text"
                     value={filters.searchQuery}
                     onChange={(e) => update({ searchQuery: e.target.value })}
-                    placeholder="Search area, project, keyword..."
+                    placeholder={t('filter.searchPlaceholder')}
                     className="w-full h-full py-2.5 bg-transparent text-xs text-black placeholder:text-black/40 outline-none"
                   />
                 </div>
