@@ -1,90 +1,81 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+# Session — Standard Preview Lock + Generated Design Sidebar Logic
 
-### Session Status
+## Current State Analysis
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+The architecture is already **80% correct**. The key primitives exist:
+- `standardConcept` state (line 106) pins the working design
+- `StampRightPanel` renders a "Standard Model" card at the top (lines 156-191)
+- `handleSelectConcept` correctly swaps: old standard → concepts list, clicked → new standard (lines 591-633)
+- Center preview is always driven by `activeStandard` (lines 862-865) — never by generated concepts directly
+- `generateConcepts` already preserves `standardConcept` (only sets if `!standardConcept`, lines 539/554)
+- No route changes during generation — right panel is already in-place
 
----
+### Remaining Issues (4 specific bugs)
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+**Bug 1**: `generateConcepts` calls `setConcepts(newConcepts)` (lines 538, 553) which **replaces** all existing concepts. On regenerate, previous generated concepts are wiped.
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+**Bug 2**: `StampVariationsPanel` uses `absolute inset-0 z-20` (line 48) which overlays the **entire right panel**, covering the Standard Model card and creating a "full screen takeover" feel.
 
----
+**Bug 3**: No status labels on center preview or right panel cards to indicate what the user is seeing (Active Preview, Standard Model, Generated Concept, Applied Concept).
 
-### Route Map
+**Bug 4**: No explicit "Lock as Standard" / "Save as Standard Base" action button. The user cannot manually protect their current design before generating.
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+## Implementation Plan
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+### 1. Fix Regenerate to Append, Not Replace (`StampGeneratorPage.tsx`)
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
+In `generateConcepts`:
+- Change `setConcepts(newConcepts)` → `setConcepts(prev => [...newConcepts, ...prev.filter(c => !newConcepts.some(n => n.id === c.id))])`
+- Same for the client fallback path (line 553)
+- This preserves previous generations while adding new ones at the top
 
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
+### 2. Fix StampVariationsPanel Overlay (`StampVariationsPanel.tsx`)
 
-**Investor Hub**
-- `/investor-hub` → InvestorHub
+- Remove `absolute inset-0 z-20 bg-white/95 backdrop-blur-sm` from the root div
+- Replace with normal flow layout (`flex flex-col h-full`) since it's already inside a `TabsContent` container
+- This keeps it contained within its tab without covering the entire panel
 
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
+### 3. Add Preview State Labels
 
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
+**Center preview** (`StampGeneratorPage.tsx`, above the stamp render):
+- Show a small badge: "Active Preview" (always) or "Standard Model" if it matches `standardConcept`
+- Show "Generating..." indicator that does NOT replace the preview
 
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
+**Right panel concept cards** (`StampRightPanel.tsx`):
+- Standard Model card already has a "Standard" badge — keep it
+- Add "Applied" badge on the card matching `selectedId`
+- Add "Generated" label on non-standard concept cards
 
----
+### 4. Add "Lock as Standard" Action
 
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
+**Center preview bottom toolbar** (`StampGeneratorPage.tsx`, line ~1123):
+- Add a "Lock as Standard" button (Shield icon) that:
+  - Calls `setStandardConcept(selectedConcept)` (which is already the active standard, so this is mainly a persistence action)
+  - Saves the current SVG override to DB immediately
+  - Shows toast "Design locked as Standard Base"
+  - This gives the user explicit control before generating
+
+**Right panel header** (`StampRightPanel.tsx`):
+- Add "Set as Standard" option on each concept card's action row (already has Apply button which does this via `onSelect` — just add a label clarification)
+
+### 5. Protect Standard from Deletion (`StampGeneratorPage.tsx`)
+
+Line 1184 already blocks deletion of standard: `if (standardConcept?.id === c.id) return;` — this is correct. No change needed.
+
+## Files Modified
+
+| File | Changes |
+|------|---------|
+| `StampGeneratorPage.tsx` | Append-not-replace in generateConcepts, add preview status label, add Lock as Standard button |
+| `StampVariationsPanel.tsx` | Remove absolute overlay positioning, use normal flow |
+| `StampRightPanel.tsx` | Add Applied/Generated labels on cards |
+
+## What Will NOT Change
+- StampLeftPanel, StampProjectHeader, StampCanvasControls
+- StampInteractivePreview, StampSVGRenderer
+- Route structure
+- Database schema
+- Edge functions
+
