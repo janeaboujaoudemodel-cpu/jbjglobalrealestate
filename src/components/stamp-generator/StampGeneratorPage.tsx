@@ -88,8 +88,11 @@ function injectCenterArt(svgSource: string, iconStyle: string, monogramText: str
 export default function StampGeneratorPage() {
   const { projectId } = useParams<{ projectId: string }>();
   const { user, session } = useAuth();
+  const { isOwner } = useOwnerVerification();
   const navigate = useNavigate();
   const location = useLocation();
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [libraryTabRef, setLibraryTabRef] = useState<(() => void) | null>(null);
 
   const [project, setProject] = useState<any>(null);
   const ssKey = (k: string) => `stamp-gen-${projectId}-${k}`;
