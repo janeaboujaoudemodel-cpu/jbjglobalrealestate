@@ -452,6 +452,16 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   ))}
                 </div>
               </div>
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Font Size</p>
+                  <button onClick={() => props.onSetArabicFontSize?.(null)}
+                    className={`text-[8px] px-1 py-0.5 rounded border transition-all ${props.arabicFontSize === null || props.arabicFontSize === undefined ? 'border-[hsl(var(--gold))] text-[hsl(var(--gold-dark))]' : 'border-[hsl(var(--border))]'}`}>Auto</button>
+                </div>
+                <Slider min={6} max={24} step={0.5} value={[props.arabicFontSize ?? 10]}
+                  onValueChange={([v]) => props.onSetArabicFontSize?.(v)} />
+                {props.arabicFontSize != null && <p className="text-[9px] font-bold text-[hsl(var(--foreground))] mt-0.5">{props.arabicFontSize}pt</p>}
+              </div>
               <div className="flex gap-1.5">
                 {(['normal', 'bold'] as const).map(w => (
                   <button key={w} onClick={() => props.onSetArabicFontWeight(w)}
@@ -459,6 +469,8 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     {w}
                   </button>
                 ))}
+                <button onClick={() => props.onSetArabicFontItalic?.(!props.arabicFontItalic)}
+                  className={`flex-1 py-1.5 rounded-lg border-2 text-[10px] italic transition-all ${props.arabicFontItalic ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.1)]' : 'border-[hsl(var(--border))]'}`}>I</button>
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1">
@@ -480,6 +492,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 onClick={() => {
                   props.onSetArabicArcSpread(props.englishArcSpread);
                   props.onSetArabicLetterSpacing(props.arcTextSpacing);
+                  if (props.onSetArabicFontSize && props.manualFontSize !== undefined) props.onSetArabicFontSize(props.manualFontSize);
                   toast.success('Arabic matched to English');
                 }}
                 className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[9px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all"
