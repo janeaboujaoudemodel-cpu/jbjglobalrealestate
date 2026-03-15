@@ -884,6 +884,9 @@ const Compare = () => {
                         {renderScoreBar(rating.amenitiesRating, 'Amenities')}
                         {renderScoreBar(rating.investmentRating, 'Investment')}
                         {renderScoreBar(rating.developerRating, 'Developer')}
+                        {renderScoreBar(Math.round((rating.developerRating + rating.valueRating) / 2), 'Construction')}
+                        {renderScoreBar(Math.round((rating.investmentRating + rating.locationRating) / 2), 'Handover')}
+                        {renderScoreBar(Math.round((rating.valueRating + rating.investmentRating) / 2), 'Payment Plan')}
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
