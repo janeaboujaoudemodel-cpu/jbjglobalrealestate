@@ -465,14 +465,19 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
   const [assets, setAssets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [savingPreset, setSavingPreset] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showArchived, setShowArchived] = useState(false);
 
   const loadData = useCallback(async () => {
     if (!user?.id) return;
     setLoading(true);
     const [projRes, presetRes, assetRes] = await Promise.all([
-      supabase.from('stamp_projects').select('id, company_name, updated_at, selected_design_id')
-        .eq('user_id', user.id).is('deleted_at', null).order('updated_at', { ascending: false }).limit(20),
+      supabase.from('stamp_projects').select('id, company_name, updated_at, selected_design_id, deleted_at')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false }).limit(30),
+      // Privacy fix: only load user's own presets
       supabase.from('stamp_presets' as any).select('id, name, description, config_json, svg_preview, created_at')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false }).limit(50),
       supabase.from('brand_assets').select('id, name, svg_content, thumbnail_url, created_at')
         .eq('user_id', user.id).eq('asset_type', 'stamp').order('created_at', { ascending: false }).limit(20),
@@ -512,10 +517,30 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
     loadData();
   };
 
+  const handleArchiveProject = async (id: string) => {
+    await supabase.from('stamp_projects').update({ deleted_at: new Date().toISOString() }).eq('id', id);
+    toast.success('Project archived');
+    loadData();
+  };
+
+  const handleRestoreProject = async (id: string) => {
+    await supabase.from('stamp_projects').update({ deleted_at: null }).eq('id', id);
+    toast.success('Project restored');
+    loadData();
+  };
+
   const formatDate = (d: string) => {
     if (!d) return '';
     try { return new Date(d).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }); } catch { return d; }
   };
+
+  // Client-side search filter
+  const q = searchQuery.toLowerCase().trim();
+  const filteredProjects = projects
+    .filter(p => showArchived ? p.deleted_at : !p.deleted_at)
+    .filter(p => !q || (p.company_name || '').toLowerCase().includes(q));
+  const filteredPresets = presets.filter(p => !q || (p.name || '').toLowerCase().includes(q));
+  const filteredAssets = assets.filter(a => !q || (a.name || '').toLowerCase().includes(q));
 
   if (loading) {
     return (
@@ -526,7 +551,23 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
+      {/* Search */}
+      <div className="relative">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          placeholder="Search projects, presets, assets…"
+          className="w-full h-8 pl-3 pr-8 text-[10px] rounded-lg border border-[hsl(var(--border))] bg-white focus:outline-none focus:border-[hsl(var(--gold))] text-[hsl(var(--foreground))] placeholder:text-[hsl(var(--muted-foreground))]"
+        />
+        {searchQuery && (
+          <button onClick={() => setSearchQuery('')} className="absolute right-2 top-1/2 -translate-y-1/2">
+            <X size={10} className="text-[hsl(var(--muted-foreground))]" />
+          </button>
+        )}
+      </div>
+
       {/* Save as Preset (Owner Only) */}
       {isOwner && standardConcept && (
         <Button variant="outline" size="sm" disabled={savingPreset}
@@ -542,33 +583,49 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
         <div className="flex items-center gap-1.5 mb-2">
           <FolderOpen size={11} className="text-[hsl(var(--gold))]" />
           <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">My Projects</span>
-          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{projects.length}</Badge>
+          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{filteredProjects.length}</Badge>
+          <button onClick={() => setShowArchived(v => !v)}
+            className="text-[8px] px-1.5 py-0.5 rounded border border-[hsl(var(--border))] hover:bg-[hsl(var(--gold)/0.06)] text-[hsl(var(--muted-foreground))]">
+            {showArchived ? 'Active' : 'Archived'}
+          </button>
         </div>
-        {projects.length > 0 ? (
+        {filteredProjects.length > 0 ? (
           <div className="space-y-1.5">
-            {projects.slice(0, 8).map((proj: any) => (
-              <button key={proj.id} onClick={() => navigate(`/toolkit/stamp-generator/${proj.id}/generate`)}
-                className="w-full flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all text-left group">
+            {filteredProjects.slice(0, 8).map((proj: any) => (
+              <div key={proj.id} className="w-full flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
                 <div className="w-7 h-7 rounded-lg bg-[hsl(var(--muted))] flex items-center justify-center flex-shrink-0">
                   <FolderOpen size={10} className="text-[hsl(var(--muted-foreground))]" />
                 </div>
-                <div className="flex-1 min-w-0">
+                <button className="flex-1 min-w-0 text-left" onClick={() => navigate(`/toolkit/stamp-generator/${proj.id}/generate`)}>
                   <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{proj.company_name || 'Untitled'}</p>
                   <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{formatDate(proj.updated_at)}</p>
-                </div>
-                <RotateCw size={9} className="text-[hsl(var(--gold-dark))] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
-              </button>
+                </button>
+                <Badge variant="secondary" className="text-[6px] px-1 py-0 h-3 bg-blue-50 text-blue-600 border-blue-200 flex-shrink-0">Draft</Badge>
+                {showArchived ? (
+                  <button onClick={() => handleRestoreProject(proj.id)}
+                    className="w-5 h-5 rounded flex items-center justify-center hover:bg-emerald-50 opacity-0 group-hover:opacity-100 transition-opacity" title="Restore">
+                    <RotateCw size={9} className="text-emerald-600" />
+                  </button>
+                ) : (
+                  <button onClick={() => handleArchiveProject(proj.id)}
+                    className="w-5 h-5 rounded flex items-center justify-center hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-opacity" title="Archive">
+                    <Archive size={9} className="text-[hsl(var(--muted-foreground))]" />
+                  </button>
+                )}
+              </div>
             ))}
-            {projects.length > 8 && (
+            {filteredProjects.length > 8 && (
               <Button variant="ghost" size="sm" className="w-full text-[10px] h-7" onClick={() => navigate('/toolkit/stamp-generator/projects')}>
-                View all {projects.length} projects →
+                View all {filteredProjects.length} projects →
               </Button>
             )}
           </div>
         ) : (
           <div className="text-center py-3">
             <FolderOpen size={14} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-30 mb-1" />
-            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">No saved projects yet</p>
+            <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
+              {showArchived ? 'No archived projects' : 'No saved projects yet'}
+            </p>
           </div>
         )}
       </div>
@@ -578,11 +635,11 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
         <div className="flex items-center gap-1.5 mb-2">
           <Save size={11} className="text-[hsl(var(--gold))]" />
           <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Style Presets</span>
-          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{presets.length}</Badge>
+          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{filteredPresets.length}</Badge>
         </div>
-        {presets.length > 0 ? (
+        {filteredPresets.length > 0 ? (
           <div className="space-y-1.5">
-            {presets.map((preset: any) => (
+            {filteredPresets.map((preset: any) => (
               <div key={preset.id} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
                 <div className="w-7 h-7 rounded-lg bg-[hsl(var(--gold)/0.1)] flex items-center justify-center flex-shrink-0">
                   <Save size={10} className="text-[hsl(var(--gold))]" />
@@ -596,6 +653,7 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
                   <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{preset.name}</p>
                   <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{preset.description || 'Style preset'}</p>
                 </button>
+                <Badge variant="secondary" className="text-[6px] px-1 py-0 h-3 bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border-[hsl(var(--gold)/0.3)] flex-shrink-0">Preset</Badge>
                 {isOwner && (
                   <button onClick={() => handleDeletePreset(preset.id)}
                     className="w-5 h-5 rounded flex items-center justify-center hover:bg-destructive/10 opacity-0 group-hover:opacity-100 transition-opacity" title="Delete">
@@ -620,11 +678,11 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
         <div className="flex items-center gap-1.5 mb-2">
           <Package size={11} className="text-[hsl(var(--gold))]" />
           <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Brand Assets</span>
-          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{assets.length}</Badge>
+          <Badge variant="secondary" className="ml-auto text-[7px] px-1 py-0 h-3.5">{filteredAssets.length}</Badge>
         </div>
-        {assets.length > 0 ? (
+        {filteredAssets.length > 0 ? (
           <div className="space-y-1.5">
-            {assets.map((asset: any) => (
+            {filteredAssets.map((asset: any) => (
               <div key={asset.id} className="flex items-center gap-2 p-2 rounded-lg border border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)] bg-white/80 transition-all group">
                 <div className="w-7 h-7 rounded-lg bg-[hsl(var(--muted))] flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {asset.thumbnail_url ? (
@@ -637,6 +695,7 @@ function StampLibraryPanel({ onApplyPreset, isOwner, standardConcept, svgOverrid
                   <p className="text-[10px] font-semibold text-[hsl(var(--foreground))] truncate">{asset.name}</p>
                   <p className="text-[8px] text-[hsl(var(--muted-foreground))]">{formatDate(asset.created_at)}</p>
                 </div>
+                <Badge variant="secondary" className="text-[6px] px-1 py-0 h-3 bg-emerald-50 text-emerald-600 border-emerald-200 flex-shrink-0">Asset</Badge>
               </div>
             ))}
           </div>

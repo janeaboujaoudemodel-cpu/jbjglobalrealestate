@@ -1,34 +1,39 @@
 /**
- * StampProjectHeader — Premium project header with centered alignment,
- * generous padding, professional spacing, save status, undo/redo, and action buttons.
+ * StampProjectHeader — Premium project header with save dropdown (Draft/Design/Preset),
+ * undo/redo, and action buttons.
  */
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
+  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
+  DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel
+} from '@/components/ui/dropdown-menu';
+import {
   ArrowLeft, Stamp, Undo2, Redo2, MessageSquare, Download,
-  Save, Layers, Package, ChevronRight, Check, Loader2
+  Save, Layers, Package, ChevronRight, Check, Loader2,
+  ChevronDown, FileText, Bookmark, Archive
 } from 'lucide-react';
 
 interface StampProjectHeaderProps {
   projectName: string;
   languageMode?: string;
-  // Undo/redo
   canUndo: boolean;
   canRedo: boolean;
   onUndo: () => void;
   onRedo: () => void;
-  // Navigation
   onBack: () => void;
   onGallery: () => void;
   onToggleChat: () => void;
   onExport: () => void;
   onSaveAsset: () => void;
   onSaveProject?: () => void;
-  // State
+  onSaveDraft?: () => void;
+  onSavePreset?: () => void;
   selectedId: string | null;
   saving: boolean;
   lastSaved: Date | null;
+  lastSaveType?: 'draft' | 'design' | 'preset' | null;
 }
 
 export function StampProjectHeader(props: StampProjectHeaderProps) {
@@ -50,7 +55,7 @@ export function StampProjectHeader(props: StampProjectHeaderProps) {
   const saveLabel = props.saving
     ? 'Saving…'
     : props.lastSaved
-      ? `Saved ${formatTimeAgo(props.lastSaved)}`
+      ? `${props.lastSaveType === 'draft' ? 'Draft' : props.lastSaveType === 'preset' ? 'Preset' : 'Design'} saved ${formatTimeAgo(props.lastSaved)}`
       : '';
 
   return (
@@ -110,13 +115,53 @@ export function StampProjectHeader(props: StampProjectHeaderProps) {
 
           <div className="w-px h-4 bg-[hsl(var(--border))]" />
 
-          {/* Save button */}
-          {props.onSaveProject && (
-            <Button variant="outline" size="sm" onClick={props.onSaveProject} disabled={props.saving}
-              className="gap-1.5 text-[11px] h-8 px-3 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)]">
-              <Save size={11} /> {props.saving ? 'Saving…' : 'Save'}
-            </Button>
-          )}
+          {/* Save dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" disabled={props.saving}
+                className="gap-1.5 text-[11px] h-8 px-3 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] hover:bg-[hsl(var(--gold)/0.06)]">
+                <Save size={11} />
+                {props.saving ? 'Saving…' : 'Save'}
+                <ChevronDown size={9} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-[hsl(var(--muted-foreground))]">
+                Save Options
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {props.onSaveDraft && (
+                <DropdownMenuItem onClick={props.onSaveDraft} className="gap-2 text-[11px]">
+                  <FileText size={12} className="text-blue-500" />
+                  <div className="flex-1">
+                    <span className="font-medium">Save Draft</span>
+                    <span className="block text-[9px] text-[hsl(var(--muted-foreground))]">Quick save — no confirmation</span>
+                  </div>
+                  <Badge variant="secondary" className="text-[7px] px-1 py-0 h-3.5 bg-blue-50 text-blue-600 border-blue-200">Draft</Badge>
+                </DropdownMenuItem>
+              )}
+              {props.onSaveProject && (
+                <DropdownMenuItem onClick={props.onSaveProject} className="gap-2 text-[11px]">
+                  <Save size={12} className="text-emerald-500" />
+                  <div className="flex-1">
+                    <span className="font-medium">Save Design</span>
+                    <span className="block text-[9px] text-[hsl(var(--muted-foreground))]">Finalized stamp design</span>
+                  </div>
+                  <Badge variant="secondary" className="text-[7px] px-1 py-0 h-3.5 bg-emerald-50 text-emerald-600 border-emerald-200">Design</Badge>
+                </DropdownMenuItem>
+              )}
+              {props.onSavePreset && (
+                <DropdownMenuItem onClick={props.onSavePreset} className="gap-2 text-[11px]">
+                  <Bookmark size={12} className="text-[hsl(var(--gold))]" />
+                  <div className="flex-1">
+                    <span className="font-medium">Save as Preset</span>
+                    <span className="block text-[9px] text-[hsl(var(--muted-foreground))]">Reusable config template</span>
+                  </div>
+                  <Badge variant="secondary" className="text-[7px] px-1 py-0 h-3.5 bg-[hsl(var(--gold)/0.1)] text-[hsl(var(--gold-dark))] border-[hsl(var(--gold)/0.3)]">Preset</Badge>
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           <Button variant="outline" size="sm" onClick={props.onGallery} className="gap-1.5 text-[11px] h-8 px-3">
             <Layers size={11} /> Gallery
