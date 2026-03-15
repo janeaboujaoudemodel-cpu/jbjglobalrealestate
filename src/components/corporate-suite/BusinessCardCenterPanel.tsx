@@ -99,6 +99,7 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
     landingPageData, setLandingPageData, digitalTab, setDigitalTab,
     isExportingHtml, handleExportHtml, bilingualLang,
     fieldConfigs,
+    sigLayout, sigAccentColor,
   } = props;
 
   const canvasProps = {
