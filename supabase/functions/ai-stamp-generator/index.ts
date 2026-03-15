@@ -452,7 +452,8 @@ function buildConfigFromProject(project: any, overrides: Partial<OfficialStampCo
   const name = (project.company_name || 'COMPANY NAME').toUpperCase().trim();
   const arabicName = (project.arabic_company_name || '').trim();
   const cityParts = [project.city_optional, project.country_optional].filter(Boolean);
-  const locationEn = (cityParts.join(', ') || 'Dubai, UAE').toUpperCase();
+  const locationEnRaw = (cityParts.join(', ') || 'Dubai, UAE').toUpperCase();
+  const locationEn = locationEnRaw.replace(/UNITED ARAB EMIRATES/gi, 'UAE');
   const arabicCity = (project.arabic_city || '').trim();
   const isBilingual = project.language_mode === 'BILINGUAL' || project.language_mode === 'AR';
   const mono = (project.monogram_text || name.slice(0, 2)).toUpperCase().slice(0, 3);
