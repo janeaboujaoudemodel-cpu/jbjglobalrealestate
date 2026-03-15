@@ -425,7 +425,8 @@ export default function StampExportPage() {
 
   async function downloadSVG() {
     if (!tintedSvg) return;
-    const blob = new Blob([tintedSvg], { type: 'image/svg+xml' });
+    const clean = sanitizeSvgForExport(tintedSvg);
+    const blob = new Blob([clean], { type: 'image/svg+xml;charset=utf-8' });
     triggerDownload(blob, `${companySlug}_stamp.svg`);
     setFileStatuses(s => ({ ...s, svg: 'ok' }));
     toast.success('SVG downloaded!');
