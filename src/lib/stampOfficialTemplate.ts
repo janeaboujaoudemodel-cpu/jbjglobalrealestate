@@ -472,7 +472,7 @@ function generateOvalStamp(config: OfficialStampConfig): string {
   }
 
   // Safe text arc radius — keep well inside borders
-  const textArcR = Math.min(innerRx, innerRy) - 6;
+  const textArcR = Math.min(innerRx, innerRy) - 12;
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
 
   let textContent = '';
