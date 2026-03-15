@@ -550,7 +550,7 @@ export default function StampGeneratorPage() {
     } catch (_) {}
     const clientConcepts = generateStampConcepts(project ? { ...project, ...p } : p);
     if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); generationLockRef.current = false; return; }
-    setConcepts(clientConcepts);
+    setConcepts(prev => [...clientConcepts, ...prev.filter(c => !clientConcepts.some(n => n.id === c.id))]);
     if (!standardConcept && clientConcepts.length > 0) {
       setStandardConcept(clientConcepts[0]);
       setSelectedId(clientConcepts[0].id);
