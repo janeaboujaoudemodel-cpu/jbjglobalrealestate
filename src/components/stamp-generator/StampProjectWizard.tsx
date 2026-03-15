@@ -502,7 +502,7 @@ export default function StampProjectWizard() {
   };
 
   return (
-    <div className="h-[calc(100dvh-52px)] flex flex-col bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] overflow-hidden">
+    <div className="h-[calc(100dvh-52px)] flex flex-col bg-gradient-to-br from-[hsl(var(--pearl-1))] via-white to-[hsl(var(--pearl-2))] overflow-hidden mt-1">
       {/* ── Top toolbar — professional header with premium spacing ── */}
       <div className="flex-shrink-0 border-b border-[hsl(var(--border))] bg-white/95 backdrop-blur-md px-5 py-3 flex items-center gap-3 shadow-sm">
         <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] flex items-center justify-center shadow-sm">
