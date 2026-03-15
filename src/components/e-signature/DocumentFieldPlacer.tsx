@@ -17,6 +17,7 @@ import { PDFDocument } from "pdf-lib";
 import ESignaturePad from "./ESignaturePad";
 import PdfPageCanvas from "./PdfPageCanvas";
 import FieldContentRenderer from "./FieldContentRenderer";
+import { BrandAssetPicker } from "@/components/brand-assets/BrandAssetPicker";
 import {
   type SignatureField, type DocumentFieldPlacerProps,
   fieldTypes, recipientColorStyles, getInitials, getRecipientStyle,
