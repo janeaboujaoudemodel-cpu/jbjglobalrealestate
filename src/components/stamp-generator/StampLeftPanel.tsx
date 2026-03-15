@@ -423,6 +423,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 onClick={() => {
                   props.onSetEnglishArcSpread(props.arabicArcSpread);
                   props.onSetArcTextSpacing(props.arabicLetterSpacing);
+                  if (props.arabicFontSize != null) props.onSetManualFontSize(props.arabicFontSize);
                   toast.success('English matched to Arabic');
                 }}
                 className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg border border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[9px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all"

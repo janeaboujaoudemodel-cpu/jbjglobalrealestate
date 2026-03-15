@@ -242,7 +242,7 @@ export function LiveStampPreview({
       outerBorderColor,
       middleBorderColor,
       innerBorderColor,
-      locationArcSpread: locationArcSpread != null ? 0.30 + (locationArcSpread - 20) / 80 * 0.70 : undefined,
+      locationArcSpread: locationArcSpread ?? undefined,
     });
   }, [
     displayName, arabicCompanyName, city, country, registrationNumber,
