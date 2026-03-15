@@ -432,7 +432,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 />
               </div>
               <div>
-                <label className="text-xs text-black/60 mb-1 block">After handover (%)</label>
+                <label className="text-xs text-black/60 mb-1 block">{t('filter.afterHandover')}</label>
                 <input
                   type="text"
                   value={filters.afterHandover}
