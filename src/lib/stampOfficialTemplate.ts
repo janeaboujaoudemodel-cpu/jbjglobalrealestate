@@ -310,10 +310,11 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const middleR = S * (OUTER_R_PCT - gapPct);
   const innerR = middleR - S * 0.07;
 
-  // Company text arc radius
-  const rawTextArcR = (outerR + middleR) / 2;
-  const textArcR = Math.min(rawTextArcR, outerR - SAFE_ZONE);
-  const clampedTextArcR = Math.max(textArcR, middleR + SAFE_ZONE);
+  // Company text arc radius — controlled by companyArcBandOffset (0-100, default 50 = midpoint)
+  const compBandPct = Math.max(0, Math.min(100, config.companyArcBandOffset ?? 50));
+  const compBandMin = middleR + SAFE_ZONE;
+  const compBandMax = outerR - SAFE_ZONE;
+  const clampedTextArcR = compBandMin + (compBandMax - compBandMin) * (compBandPct / 100);
 
   // Separator distance: configurable via separatorDistancePct (0-100, default 50 = centered)
   // 0 = closest to middle ring, 100 = closest to outer ring (edge-to-edge)
