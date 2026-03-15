@@ -43,6 +43,8 @@ import { StampLeftPanel } from './StampLeftPanel';
 import { StampRightPanel } from './StampRightPanel';
 import { StampCanvasControls, CanvasGridOverlay } from './StampCanvasControls';
 import { StampProjectHeader } from './StampProjectHeader';
+import { StampSaveDialog } from './StampSaveDialog';
+import { useOwnerVerification } from '@/hooks/useOwnerVerification';
 
 type ColorStop = 'primary' | 'secondary' | 'accent';
 
