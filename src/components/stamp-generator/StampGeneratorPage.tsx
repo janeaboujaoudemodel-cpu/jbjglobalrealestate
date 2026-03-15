@@ -93,7 +93,7 @@ export default function StampGeneratorPage() {
   const [concepts, setConcepts] = useState<StampDesignConcept[]>([]);
   const [favoriteConcepts, setFavoriteConcepts] = useState<StampDesignConcept[]>([]);
   const [generating, setGenerating] = useState(false);
-  const [generatingInPanel, setGeneratingInPanel] = useState(false);
+  // generatingInPanel removed — unified into single `generating` boolean
   const [selectedId, setSelectedId] = useState<string | null>(null);
   // Standard Model — the pinned working design that is never lost during generation
   const [standardConcept, setStandardConcept] = useState<StampDesignConcept | null>(null);
@@ -426,12 +426,12 @@ export default function StampGeneratorPage() {
     if (!p) return;
     if (generationLockRef.current) return;
     generationLockRef.current = true;
-    // Only show center spinner on very first generation (no standard yet)
-    const isFirstGen = !standardConcept;
-    if (isFirstGen) setGenerating(true);
-    setGeneratingInPanel(true);
+    // Only show center spinner when there is NO standard model yet
+    const hasStandard = !!standardConcept;
+    if (!hasStandard) setGenerating(true);
+    // Right panel always shows loading state via `generating`
+    if (hasStandard) setGenerating(true); // drives right panel skeleton cards
     setBlocked(false);
-    // Don't clear svgOverrides — preserve standard edits
     try {
       if (session?.access_token) {
         const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
@@ -441,7 +441,7 @@ export default function StampGeneratorPage() {
         });
         if (res.ok) {
           const json = await res.json();
-        if (json.blocked) { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); generationLockRef.current = false; return; }
+          if (json.blocked) { setBlocked(true); setGenerating(false); generationLockRef.current = false; return; }
           if (json.concepts?.length) {
             const { data: saved } = await supabase
               .from('stamp_designs')
@@ -462,7 +462,6 @@ export default function StampGeneratorPage() {
                 setSelectedId(newConcepts[0].id);
               }
               setGenerating(false);
-              setGeneratingInPanel(false);
               generationLockRef.current = false;
               return;
             }
@@ -471,15 +470,14 @@ export default function StampGeneratorPage() {
       }
     } catch (_) {}
     const clientConcepts = generateStampConcepts(project ? { ...project, ...p } : p);
-    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); generationLockRef.current = false; return; }
+    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); generationLockRef.current = false; return; }
     setConcepts(clientConcepts);
-    // Set standard on first generation
+    // Set standard on first generation — never overwrite existing standard
     if (!standardConcept && clientConcepts.length > 0) {
       setStandardConcept(clientConcepts[0]);
       setSelectedId(clientConcepts[0].id);
     }
     setGenerating(false);
-    setGeneratingInPanel(false);
     generationLockRef.current = false;
   }, [project, session, projectId, standardConcept]);
 
@@ -948,10 +946,10 @@ export default function StampGeneratorPage() {
             {/* Stamp preview with pulse feedback */}
             <div className={`relative transition-all duration-200 ${previewPulse ? 'ring-2 ring-[hsl(var(--gold)/0.4)] rounded-full' : ''}`}
               style={{ filter: `drop-shadow(0 8px 24px hsl(0 0% 0% / 0.12))` }}>
-              {generating && !activeStandard ? (
+              {generating && !activeStandard && concepts.length === 0 ? (
                 <div className="flex flex-col items-center gap-2 text-[hsl(var(--muted-foreground))]" style={{ width: stampSize, height: stampSize, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Loader2 size={28} className="animate-spin text-[hsl(var(--gold))]" />
-                  <p className="text-[10px] font-medium">Generating…</p>
+                  <p className="text-[10px] font-medium">Generating your stamp…</p>
                 </div>
               ) : uploadedStampUrl ? (
                 <div className="relative">
@@ -1070,7 +1068,7 @@ export default function StampGeneratorPage() {
         <StampRightPanel
           concepts={concepts}
           favoriteConcepts={favoriteConcepts}
-          generating={generatingInPanel}
+          generating={generating}
           blocked={blocked}
           selectedId={activeStandard?.id || selectedId}
           svgOverrides={svgOverrides}

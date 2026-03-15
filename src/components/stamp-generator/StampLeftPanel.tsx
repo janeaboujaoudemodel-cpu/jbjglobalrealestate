@@ -176,7 +176,7 @@ interface StampLeftPanelProps {
 }
 
 export function StampLeftPanel(props: StampLeftPanelProps) {
-  const [openSections, setOpenSections] = useState<string[]>(['colors', 'text']);
+  const [openSections, setOpenSections] = useState<string[]>([]);
   // Track which element is focused — when center is focused, color changes target monogram
   const [focusedElement, setFocusedElement] = useState<'center' | 'separator' | 'text' | null>(null);
 
@@ -239,9 +239,17 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
   return (
     <div className="w-[280px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white/80 flex flex-col overflow-hidden">
       <div className="flex-shrink-0 px-3 py-2 border-b border-[hsl(var(--border))] bg-gradient-to-r from-[hsl(var(--pearl-1))] to-white">
-        <div className="flex items-center gap-1.5">
-          <Layers size={12} className="text-[hsl(var(--gold))]" />
-          <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Tool Controls</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <Layers size={12} className="text-[hsl(var(--gold))]" />
+            <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Tool Controls</span>
+          </div>
+          <button
+            onClick={() => setOpenSections(prev => prev.length > 0 ? [] : ['colors', 'text', 'center', 'separators', 'arabic-controls', 'english-controls', 'both-controls', 'spacing', 'structure', 'mystamp'])}
+            className="text-[9px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] transition-colors"
+          >
+            {openSections.length > 0 ? 'Collapse All' : 'Expand All'}
+          </button>
         </div>
       </div>
 
