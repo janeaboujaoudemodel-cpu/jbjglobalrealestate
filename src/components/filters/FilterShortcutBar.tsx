@@ -8,6 +8,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, User, Briefcase, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -157,6 +158,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [prevCurrency, setPrevCurrency] = useState<string>('AED');
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const isDark = variant === 'dark';
 
   const update = useCallback((partial: Partial<ShortcutFilterState>) => {
@@ -254,9 +256,9 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
   const getPropertyTypeLabel = () => {
     if (filters.propertyTypes.length === 0) {
-      if (filters.propertyCategory === 'residential') return 'Residential';
-      if (filters.propertyCategory === 'commercial') return 'Commercial';
-      return 'Property Type';
+      if (filters.propertyCategory === 'residential') return t('filter.residential');
+      if (filters.propertyCategory === 'commercial') return t('filter.commercial');
+      return t('filter.propertyType');
     }
     const first = ALL_PROPERTY_TYPES.find(o => o.value === filters.propertyTypes[0])?.label || '';
     return first;
@@ -276,12 +278,12 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   {searchSlot}
                 </div>
               ) : (
-                <div className="min-w-0 max-w-[220px] border-r border-gold/20 flex items-center px-3" title="Search area, project, keyword">
+                <div className="min-w-0 max-w-[220px] border-r border-gold/20 flex items-center px-3" title={t('filter.searchPlaceholder')}>
                   <input
                     type="text"
                     value={filters.searchQuery}
                     onChange={(e) => update({ searchQuery: e.target.value })}
-                    placeholder="Search area, project, keyword..."
+                    placeholder={t('filter.searchPlaceholder')}
                     className="w-full h-full py-2.5 bg-transparent text-xs text-black placeholder:text-black/40 outline-none"
                   />
                 </div>
@@ -300,16 +302,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </button>
               ))}
               {/* Map toggle */}
-              <button
+                <button
                 onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
                 className={cn(
                   "flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20",
                   isMapMode ? "bg-gold/20 text-black" : "text-black/70 hover:bg-gold/10"
                 )}
-                title="Toggle map view"
+                title={t('filter.map')}
               >
                 <Map className="w-3.5 h-3.5" />
-                {isMapMode ? 'List' : 'Map'}
+                {isMapMode ? t('filter.list') : t('filter.map')}
               </button>
               {/* Saved */}
               <ConnectedSavedButton variant={variant} onApplySavedFilter={onFilterChange} />
@@ -319,10 +321,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <button
                 onClick={() => setAdvancedOpen(true)}
                 className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10"
-                title="Open advanced filters"
+                title={t('filter.filter')}
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
-                Filter
+                {t('filter.filter')}
               </button>
               {/* Mode Investor - compact, no stretch */}
               <ConnectedModeButton />
@@ -340,21 +342,21 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.priceMin || filters.priceMax) ? pillActive : pillInactive)}>
-              Price
+              {t('filter.price')}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
           <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
             <Tabs value={filters.priceMode} onValueChange={handlePriceModeChange}>
               <TabsList className="w-full mb-3 bg-white/60">
-                <TabsTrigger value="unit" className="flex-1 text-xs">Per unit</TabsTrigger>
-                <TabsTrigger value="sqft" className="flex-1 text-xs">Per sqft</TabsTrigger>
-                <TabsTrigger value="sqm" className="flex-1 text-xs">Per sqm</TabsTrigger>
+                <TabsTrigger value="unit" className="flex-1 text-xs">{t('filter.perUnit')}</TabsTrigger>
+                <TabsTrigger value="sqft" className="flex-1 text-xs">{t('filter.perSqft')}</TabsTrigger>
+                <TabsTrigger value="sqm" className="flex-1 text-xs">{t('filter.perSqm')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">Min Price</label>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">{t('filter.minPrice')}</label>
                 <div className="relative">
                   <input
                     type="text"
@@ -367,7 +369,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">Max Price</label>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">{t('filter.maxPrice')}</label>
                 <div className="relative">
                   <input
                     type="text"
@@ -400,7 +402,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               onClick={() => {}}
               className="w-full h-9 bg-gradient-to-r from-gold to-gold-dark text-black font-bold text-xs rounded-lg hover:brightness-110"
             >
-              Apply filter
+              {t('filter.applyFilter')}
             </Button>
           </PopoverContent>
         </Popover>
@@ -409,16 +411,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactive)}>
-              Payments
+              {t('filter.payments')}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
           <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
-            <h4 className="text-sm font-bold text-black mb-3">Projects payment plan</h4>
+            <h4 className="text-sm font-bold text-black mb-3">{t('filter.paymentsTitle')}</h4>
             <div className="space-y-4">
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-black/60">Maximum pre-handover</span>
+                  <span className="text-xs text-black/60">{t('filter.maxPreHandover')}</span>
                   <span className="text-xs font-bold text-black bg-white/80 px-2 py-0.5 rounded border border-gold/30">{filters.paymentPlanMax}%</span>
                 </div>
                 <Slider
@@ -430,7 +432,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 />
               </div>
               <div>
-                <label className="text-xs text-black/60 mb-1 block">After handover (%)</label>
+                <label className="text-xs text-black/60 mb-1 block">{t('filter.afterHandover')}</label>
                 <input
                   type="text"
                   value={filters.afterHandover}
@@ -440,7 +442,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 />
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-black/70">Post handover plans only</span>
+                <span className="text-xs text-black/70">{t('filter.postHandoverOnly')}</span>
                 <Switch
                   checked={filters.postHandoverOnly}
                   onCheckedChange={(v) => update({ postHandoverOnly: v })}
@@ -454,15 +456,15 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, pillInactive)}>
-              Handover
+              {t('filter.handover')}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
           <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
-            <h4 className="text-sm font-bold text-black mb-3">Project handover by</h4>
+            <h4 className="text-sm font-bold text-black mb-3">{t('filter.handoverTitle')}</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">From</label>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">{t('filter.from')}</label>
                 <div className="flex gap-1 mb-2">
                   {QUARTERS.map(q => (
                     <button
@@ -489,7 +491,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </select>
               </div>
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">To</label>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-2 block">{t('filter.to')}</label>
                 <div className="flex gap-1 mb-2">
                   {QUARTERS.map(q => (
                     <button
@@ -537,8 +539,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               }}
             >
               <TabsList className="w-full mb-3 bg-white/60">
-                <TabsTrigger value="residential" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F5F0E6] data-[state=active]:to-[#EDE4D3] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">Residential</TabsTrigger>
-                <TabsTrigger value="commercial" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F5F0E6] data-[state=active]:to-[#EDE4D3] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">Commercial</TabsTrigger>
+                <TabsTrigger value="residential" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F5F0E6] data-[state=active]:to-[#EDE4D3] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">{t('filter.residential')}</TabsTrigger>
+                <TabsTrigger value="commercial" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F5F0E6] data-[state=active]:to-[#EDE4D3] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">{t('filter.commercial')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="flex flex-wrap gap-2">
@@ -559,7 +561,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactive)}>
-              Bedrooms
+              {t('filter.bedrooms')}
               {filters.bedrooms.length > 0 && <CountBadge count={filters.bedrooms.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -583,7 +585,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.statuses.length > 0 ? pillActive : pillInactive)}>
-              Status
+              {t('filter.status')}
               {filters.statuses.length > 0 && <CountBadge count={filters.statuses.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -612,7 +614,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactive)}>
-              Construction
+              {t('filter.construction')}
               {filters.constructionStatuses.length > 0 && <CountBadge count={filters.constructionStatuses.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
@@ -637,13 +639,13 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactive)}>
               <Eye className="w-3.5 h-3.5" />
-              Views
+              {t('filter.views')}
               {filters.views.length > 0 && <CountBadge count={filters.views.length} />}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
           <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
-            <h4 className="text-sm font-bold text-black mb-3">Property Views</h4>
+            <h4 className="text-sm font-bold text-black mb-3">{t('filter.propertyViews')}</h4>
             <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto">
               {VIEWS_OPTIONS.map((opt) => (
                 <button
@@ -671,7 +673,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-red-300/50 text-red-600/80 hover:border-red-400"
           )}
         >
-          Hide Sold
+          {t('filter.hideSold')}
         </button>
 
         {/* Reset All */}
@@ -684,7 +686,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             )}
           >
             <X className="w-3.5 h-3.5" />
-            Reset
+            {t('filter.reset')}
           </button>
         )}
 
@@ -713,6 +715,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 const CURRENCY_KEY = 'jj_currency';
 
 function ConnectedCurrencyButton() {
+  const { t } = useLanguage();
   const [currency, setCurrencyState] = useState<string>(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem(CURRENCY_KEY) || 'AED';
@@ -747,7 +750,7 @@ function ConnectedCurrencyButton() {
       >
         <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
         <div className="px-4 py-3 border-b border-gold/20">
-          <p className="text-xs font-semibold text-black/60 uppercase tracking-wider">Select Currency</p>
+          <p className="text-xs font-semibold text-black/60 uppercase tracking-wider">{t('filter.selectCurrency')}</p>
         </div>
         <div className="p-2 max-h-80 overflow-y-auto">
           {SUPPORTED_CURRENCIES.map((curr) => (
@@ -785,6 +788,7 @@ interface SavedFilter {
 }
 
 function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light' | 'dark'; onApplySavedFilter: (filters: ShortcutFilterState) => void }) {
+  const { t } = useLanguage();
   const [savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
   const [savedOpen, setSavedOpen] = useState(false);
   const [confirmDeleteIndex, setConfirmDeleteIndex] = useState<number | null>(null);
@@ -813,7 +817,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
       <PopoverTrigger asChild>
         <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10" title="View saved filters">
           <Heart className="w-3.5 h-3.5 text-black fill-black" />
-          <span className="hidden sm:inline">Saved</span>
+          <span className="hidden sm:inline">{t('filter.saved')}</span>
         </button>
       </PopoverTrigger>
       <PopoverContent
@@ -822,9 +826,9 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
         align="end"
         sideOffset={6}
       >
-        <h4 className="text-sm font-bold text-black mb-2">Saved Filters</h4>
+        <h4 className="text-sm font-bold text-black mb-2">{t('filter.savedFilters')}</h4>
         {savedFilters.length === 0 ? (
-          <p className="text-xs text-black/50 py-4 text-center">No saved filters yet</p>
+          <p className="text-xs text-black/50 py-4 text-center">{t('filter.noSavedFilters')}</p>
         ) : (
           <div className="space-y-1 max-h-60 overflow-y-auto">
             {savedFilters.map((sf, idx) => (
@@ -872,40 +876,41 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
 
 function ConnectedModeButton() {
   const { mode, setMode } = useUserModeContext();
+  const { t } = useLanguage();
   const [modeOpen, setModeOpen] = useState(false);
 
   const MODE_CONFIG: Record<string, { label: string; icon: typeof Users; color: string; bgColor: string; borderColor: string; description: string }> = {
     investor: {
-      label: 'Mode: Investor',
+      label: t('filter.modeInvestor'),
       icon: User,
       color: 'text-emerald-500',
       bgColor: 'bg-emerald-500/10 border-emerald-500/30',
       borderColor: 'border-emerald-500/40',
-      description: 'Browse properties, access ROI tools, upload listings, explore guides & market insights'
+      description: t('filter.modeInvestorDesc')
     },
     broker: {
-      label: 'Mode: Broker',
+      label: t('filter.modeBroker'),
       icon: Briefcase,
       color: 'text-blue-500',
       bgColor: 'bg-blue-500/10 border-blue-500/30',
       borderColor: 'border-blue-500/40',
-      description: 'CRM dashboard, education hub, sell properties, upload listings, coordinate with clients & close deals'
+      description: t('filter.modeBrokerDesc')
     },
     investor_broker: {
-      label: 'Mode: Investor + Broker',
+      label: t('filter.modeInvestorBroker'),
       icon: Users,
       color: 'text-purple-500',
       bgColor: 'bg-purple-500/10 border-purple-500/30',
       borderColor: 'border-purple-500/40',
-      description: 'Full access to investor tools, broker dashboard, CRM, listings, guides & market intelligence'
+      description: t('filter.modeInvestorBrokerDesc')
     },
     developer: {
-      label: 'Mode: Developer',
+      label: t('filter.modeDeveloper'),
       icon: Building2,
       color: 'text-amber-500',
       bgColor: 'bg-amber-500/10 border-amber-500/30',
       borderColor: 'border-amber-500/40',
-      description: 'Submit projects, upload terraces & documents, manage launches, marketing materials & event calendar'
+      description: t('filter.modeDeveloperDesc')
     }
   };
 
@@ -927,8 +932,8 @@ function ConnectedModeButton() {
         sideOffset={6}
       >
         <div className="px-3 py-2.5 mb-2 rounded-lg bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#D4C4A8] border border-gold/40">
-          <p className="text-sm font-bold text-black/80">Select your mode</p>
-          <p className="text-xs text-black/50 mt-0.5">Choose how you want to use the platform</p>
+          <p className="text-sm font-bold text-black/80">{t('filter.selectMode')}</p>
+          <p className="text-xs text-black/50 mt-0.5">{t('filter.modeDesc')}</p>
         </div>
         {Object.entries(MODE_CONFIG).map(([modeKey, config]) => {
           const isActive = mode === modeKey;
