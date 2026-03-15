@@ -6,7 +6,7 @@ import { Table, TableHeader, TableHead, TableBody, TableRow, TableCell } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, ShieldCheck, ShieldAlert, ShieldX, Key, Lock, Unlock, AlertTriangle, CheckCircle2, Clock, Database, HardDrive, Globe, RefreshCw } from "lucide-react";
+import { Shield, ShieldCheck, ShieldAlert, ShieldX, Key, Lock, Unlock, AlertTriangle, CheckCircle2, Clock, Database, HardDrive, Globe, RefreshCw, RotateCcw, Bell } from "lucide-react";
 import { toast } from "sonner";
 
 interface EncryptionStatusRow {
