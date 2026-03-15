@@ -139,6 +139,11 @@ interface BusinessCardRightPanelProps {
   mockupScene: MockupScene;
   setMockupScene: (v: MockupScene) => void;
   frontTemplate: Template;
+  // Email signature
+  sigLayout?: SigLayout;
+  setSigLayout?: (v: SigLayout) => void;
+  sigAccentColor?: string;
+  setSigAccentColor?: (v: string) => void;
 }
 
 export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
