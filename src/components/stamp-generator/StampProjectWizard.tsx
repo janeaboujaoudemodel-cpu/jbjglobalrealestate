@@ -635,10 +635,30 @@ export default function StampProjectWizard() {
   }, [form, getPreviewSvg, svgToCanvas, triggerDownload]);
 
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
+  const [selectedLetter, setSelectedLetter] = useState<LetterSelection | null>(null);
+
+  const handleLetterClick = useCallback((selection: LetterSelection) => {
+    setSelectedLetter(selection);
+    setSelectedElement(null); // Clear element selection when letter is selected
+    if (activeTab !== 'style') setActiveTab('style'); // Show letter editor in style tab
+  }, [activeTab]);
+
+  const handleLetterOverrideUpdate = useCallback((key: string, override: LetterOverride | null) => {
+    setForm(f => {
+      const newOverrides = { ...f.letter_overrides };
+      if (override) {
+        newOverrides[key] = override;
+      } else {
+        delete newOverrides[key];
+      }
+      return { ...f, letter_overrides: newOverrides };
+    });
+  }, []);
 
   const handleElementClick = useCallback((elementId: string) => {
     // Highlight the clicked element
     setSelectedElement(elementId);
+    setSelectedLetter(null); // Clear letter selection
 
     // Navigate to corresponding tab only if not already there
     if (elementId.includes('top-arc') || elementId.includes('bottom-arc')) {
