@@ -229,6 +229,11 @@ export const BrandPaletteProvider: React.FC<{ children: React.ReactNode }> = ({ 
     await loadUserPalettes();
   }, [loadUserPalettes]);
 
+  const renameUserPalette = useCallback(async (id: string, newName: string) => {
+    await supabase.from('user_color_palettes').update({ name: newName } as any).eq('id', id);
+    await loadUserPalettes();
+  }, [loadUserPalettes]);
+
   const activateUserPalette = useCallback(async (id: string) => {
     if (!user) return;
     // Deactivate all
