@@ -174,6 +174,14 @@ export default function StampGeneratorPage() {
   const [centerContentSize, setCenterContentSizeRaw] = useState(() => ssGet(ssKey('centerContentSize'), 40));
   const setCenterContentSize = (v: number) => { setCenterContentSizeRaw(v); ssSave(ssKey('centerContentSize'), v); };
 
+  // English arc spread & arc band offsets — persisted
+  const [englishArcSpread, setEnglishArcSpreadRaw] = useState(() => ssGet(ssKey('englishArcSpread'), 0.88));
+  const setEnglishArcSpread = (v: number) => { setEnglishArcSpreadRaw(v); ssSave(ssKey('englishArcSpread'), v); };
+  const [companyArcOffset, setCompanyArcOffsetRaw] = useState(() => ssGet(ssKey('companyArcOffset'), 0));
+  const setCompanyArcOffset = (v: number) => { setCompanyArcOffsetRaw(v); ssSave(ssKey('companyArcOffset'), v); };
+  const [locationArcOffset, setLocationArcOffsetRaw] = useState(() => ssGet(ssKey('locationArcOffset'), 0));
+  const setLocationArcOffset = (v: number) => { setLocationArcOffsetRaw(v); ssSave(ssKey('locationArcOffset'), v); };
+
   // Live-apply monogram colors whenever they change
   useEffect(() => {
     if (localIconStyle !== 'MONOGRAM') return;
@@ -902,6 +910,12 @@ export default function StampGeneratorPage() {
           onSetCircleGap={setCircleGap}
           onSetSeparatorDistance={setSeparatorDistance}
           onSetCenterContentSize={setCenterContentSize}
+          englishArcSpread={englishArcSpread}
+          companyArcOffset={companyArcOffset}
+          locationArcOffset={locationArcOffset}
+          onSetEnglishArcSpread={setEnglishArcSpread}
+          onSetCompanyArcOffset={setCompanyArcOffset}
+          onSetLocationArcOffset={setLocationArcOffset}
         />
 
         {/* ── CENTER: Premium Canvas Preview ── */}
