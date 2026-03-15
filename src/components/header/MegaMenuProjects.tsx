@@ -1,7 +1,7 @@
 import React from 'react';
 import { Building2, Calendar, Check, Sparkles, Eye } from 'lucide-react';
 import menuProjectsHero from '@/assets/menu-projects-hero.jpg';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSection, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuProjectsProps {
   onClose: () => void;
@@ -18,9 +18,9 @@ const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>
   return (
     <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left: Single, larger rectangular photo with video */}
-          <div className="lg:col-span-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+          {/* Left: Featured photo */}
+          <div className="lg:col-span-6 lg:pr-8">
             <MegaMenuFeaturedCard
               to="/properties"
               onClick={onClose}
@@ -32,25 +32,17 @@ const MegaMenuProjects = React.forwardRef<HTMLDivElement, MegaMenuProjectsProps>
             />
           </div>
 
-          {/* Right: Categories in Premium Card */}
-          <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
-            <MegaMenuCard icon={Building2} title="Project Categories">
+          {/* Right: Section with divider */}
+          <div className="lg:col-span-6 lg:border-l lg:border-gold/20 lg:pl-2 border-t lg:border-t-0 border-gold/20 mt-6 lg:mt-0 pt-6 lg:pt-0">
+            <MegaMenuSection icon={Building2} title="Project Categories">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                 {projectCategories.map((item) => (
-                  <MegaMenuIconLink
-                    key={item.label}
-                    to={item.href}
-                    onClick={onClose}
-                    icon={item.icon}
-                    title={item.label}
-                    compact
-                  />
+                  <MegaMenuIconLink key={item.label} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
                 ))}
               </div>
-            </MegaMenuCard>
+            </MegaMenuSection>
             
-            {/* Full-width CTA Button */}
-            <div className="mt-6">
+            <div className="mt-6 px-2.5">
               <MegaMenuCTAButton
                 to="/properties"
                 onClick={onClose}

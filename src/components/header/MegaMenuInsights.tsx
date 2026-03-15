@@ -9,7 +9,7 @@ import {
 import {
   MegaMenuIconLink,
   MegaMenuShell,
-  MegaMenuCard,
+  MegaMenuSection,
 } from '@/components/header/mega-menu-primitives';
 import { useFounderVisibility } from '@/contexts/FounderVisibilityContext';
 import { useUserModeContext } from '@/contexts/UserModeContext';
@@ -144,113 +144,73 @@ const MegaMenuInsights = React.forwardRef<HTMLDivElement, MegaMenuInsightsProps>
   return (
     <MegaMenuShell ref={ref} noScroll>
         <div className="max-w-[1400px] mx-auto px-3 lg:px-5 py-1.5 lg:py-2">
-          {/* 4 + 4 Grid Layout using shared MegaMenuCard */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1.5">
+          {/* 4 + 4 Grid Layout — connected sections with dividers */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
             {/* Row 1 */}
-            <MegaMenuCard icon={Newspaper} title="News & Updates" compact>
-              {newsLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </MegaMenuCard>
+            <div className="lg:border-r lg:border-gold/20">
+              <MegaMenuSection icon={Newspaper} title="News & Updates">
+                {newsLinks.map((item) => (
+                  <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+                ))}
+              </MegaMenuSection>
+            </div>
             
-            <MegaMenuCard icon={BarChart3} title="Market Intelligence" compact>
-              {intelligenceLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </MegaMenuCard>
+            <div className="lg:border-r lg:border-gold/20 border-t lg:border-t-0 border-gold/20">
+              <MegaMenuSection icon={BarChart3} title="Market Intelligence">
+                {intelligenceLinks.map((item) => (
+                  <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+                ))}
+              </MegaMenuSection>
+            </div>
             
-            <MegaMenuCard icon={BookOpen} title="Guides" compact>
-              {guidesLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </MegaMenuCard>
+            <div className="lg:border-r lg:border-gold/20 border-t lg:border-t-0 border-gold/20">
+              <MegaMenuSection icon={BookOpen} title="Guides">
+                {guidesLinks.map((item) => (
+                  <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+                ))}
+              </MegaMenuSection>
+            </div>
             
-            <MegaMenuCard icon={Briefcase} title="Services" compact>
-              {servicesLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </MegaMenuCard>
+            <div className="border-t lg:border-t-0 border-gold/20">
+              <MegaMenuSection icon={Briefcase} title="Services">
+                {servicesLinks.map((item) => (
+                  <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+                ))}
+              </MegaMenuSection>
+            </div>
             
-            {/* Row 2 */}
-            <MegaMenuCard icon={Sparkles} title="Business Suites" compact>
-              {businessSuitesLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </MegaMenuCard>
+            {/* Row 2 — top border for row separation */}
+            <div className="lg:border-r lg:border-gold/20 border-t border-gold/20">
+              <MegaMenuSection icon={Sparkles} title="Business Suites">
+                {businessSuitesLinks.map((item) => (
+                  <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+                ))}
+              </MegaMenuSection>
+            </div>
             
-            <MegaMenuCard icon={LayoutDashboard} title={getModeTitle()} compact>
-              {modeLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </MegaMenuCard>
+            <div className="lg:border-r lg:border-gold/20 border-t border-gold/20">
+              <MegaMenuSection icon={LayoutDashboard} title={getModeTitle()}>
+                {modeLinks.map((item) => (
+                  <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+                ))}
+              </MegaMenuSection>
+            </div>
             
-            <MegaMenuCard icon={Building2} title="Company" compact>
-              {companyLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </MegaMenuCard>
+            <div className="lg:border-r lg:border-gold/20 border-t border-gold/20">
+              <MegaMenuSection icon={Building2} title="Company">
+                {companyLinks.map((item) => (
+                  <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+                ))}
+              </MegaMenuSection>
+            </div>
             
-            <MegaMenuCard icon={Shield} title="Legal" compact>
-              {legalLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
-              ))}
-            </MegaMenuCard>
+            <div className="border-t border-gold/20">
+              <MegaMenuSection icon={Shield} title="Legal">
+                {legalLinks.map((item) => (
+                  <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+                ))}
+              </MegaMenuSection>
+            </div>
           </div>
         </div>
     </MegaMenuShell>

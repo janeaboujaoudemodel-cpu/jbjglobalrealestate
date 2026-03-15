@@ -339,3 +339,31 @@ export function MegaMenuCard({
     </div>
   );
 }
+
+type MegaMenuSectionProps = {
+  icon: LucideIcon;
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+};
+
+/**
+ * Borderless section for connected mega menu layouts.
+ * No card border, no background, no rounded corners —
+ * content flows seamlessly within the MegaMenuShell.
+ */
+export function MegaMenuSection({
+  icon,
+  title,
+  children,
+  className,
+}: MegaMenuSectionProps) {
+  return (
+    <div className={cn("p-2.5", className)}>
+      <MegaMenuSectionTitle icon={icon} title={title} />
+      <div className="space-y-0">
+        {children}
+      </div>
+    </div>
+  );
+}
