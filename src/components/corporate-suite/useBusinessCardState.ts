@@ -23,6 +23,7 @@ interface CardInfoProfile {
 }
 
 export function useBusinessCardState() {
+  const navigate = useNavigate();
   // Per-side independent templates
   const [frontTemplate, setFrontTemplate] = useState<Template>("modern");
   const [backTemplate, setBackTemplate]   = useState<Template>("bold");
