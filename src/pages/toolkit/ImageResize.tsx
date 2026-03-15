@@ -852,15 +852,33 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
                       className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium text-xs h-9 shadow-md"
                     >
                       {smartCropLoading ? (
-                        <><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> Detecting subject...</>
+                        <><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> Analyzing with AI Pro...</>
                       ) : (
-                        <><Sparkles className="h-3.5 w-3.5 mr-1.5" /> AI Smart Crop</>
+                        <><Sparkles className="h-3.5 w-3.5 mr-1.5" /> AI Smart Crop Pro</>
                       )}
                     </Button>
                     {smartCropSubject && (
-                      <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-violet-50 border border-violet-200">
-                        <Target className="h-3 w-3 text-violet-600 shrink-0" />
-                        <span className="text-xs text-violet-700 truncate">Focused on: {smartCropSubject}</span>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-violet-50 border border-violet-200">
+                          <Target className="h-3 w-3 text-violet-600 shrink-0" />
+                          <span className="text-xs text-violet-700 truncate">Focused on: {smartCropSubject}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {smartCropConfidence !== null && (
+                            <div className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold ${
+                              smartCropConfidence >= 80 ? "bg-emerald-100 text-emerald-700" :
+                              smartCropConfidence >= 50 ? "bg-amber-100 text-amber-700" :
+                              "bg-red-100 text-red-700"
+                            }`}>
+                              <span>{smartCropConfidence}%</span>
+                            </div>
+                          )}
+                          {smartCropComposition && (
+                            <span className="text-[10px] text-muted-foreground capitalize">
+                              {smartCropComposition.replace(/-/g, " ")}
+                            </span>
+                          )}
+                        </div>
                       </div>
                     )}
 
