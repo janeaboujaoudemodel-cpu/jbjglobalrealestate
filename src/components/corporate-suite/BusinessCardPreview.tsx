@@ -13,6 +13,7 @@ export function CardFace({
   fontFamily, fontWeight, fontStyle, nameFontSize,
   bilingualMode, bilingualDir, secondaryData,
   onInlineEdit,
+  sigLayout, sigAccentColor,
 }: {
   data: CardData; template: Template; primary: string;
   secondary: string; accent: string; side?: "front" | "back"; scale?: number;
@@ -21,6 +22,7 @@ export function CardFace({
   fontFamily?: string; fontWeight?: string; fontStyle?: string; nameFontSize?: number | null;
   bilingualMode?: BilingualMode; bilingualDir?: "rtl" | "ltr"; secondaryData?: CardData;
   onInlineEdit?: (field: keyof CardData) => void;
+  sigLayout?: SigLayout; sigAccentColor?: string;
 }) {
   const showSecondary = bilingualMode === "dual-side" && side === "back" && secondaryData;
   const displayData = showSecondary ? secondaryData : data;
