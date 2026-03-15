@@ -193,9 +193,9 @@ export function LiveStampPreview({
     const locAr = arabicCity || (city ? ARABIC_CITY_MAP[city.toLowerCase()] || `${city}، الإمارات` : 'دبي، الإمارات');
 
     // Convert slider values to config params
-    // arabicArcSpread slider: 20-100 → map to 0.30-1.00 spread (default 98 → 0.98 edge-to-edge)
-    const arcSpreadVal = arabicArcSpread != null ? 0.30 + (arabicArcSpread - 20) / 80 * 0.70 : undefined;
-    const enArcSpreadVal = englishArcSpread != null ? 0.30 + (englishArcSpread - 20) / 80 * 0.70 : undefined;
+    // Arc spreads are already stored as 0-1 values (e.g. 0.98) — pass directly
+    const arcSpreadVal = arabicArcSpread ?? undefined;
+    const enArcSpreadVal = englishArcSpread ?? undefined;
     const circleGapVal = circleGap != null ? circleGap : undefined;
     const centerScaleVal = centerContentSize != null ? centerContentSize / 50 : undefined;
 
@@ -242,7 +242,7 @@ export function LiveStampPreview({
       outerBorderColor,
       middleBorderColor,
       innerBorderColor,
-      locationArcSpread: locationArcSpread != null ? 0.30 + (locationArcSpread - 20) / 80 * 0.70 : undefined,
+      locationArcSpread: locationArcSpread ?? undefined,
     });
   }, [
     displayName, arabicCompanyName, city, country, registrationNumber,

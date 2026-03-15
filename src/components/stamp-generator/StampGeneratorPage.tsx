@@ -163,6 +163,12 @@ export default function StampGeneratorPage() {
   const setArabicArcSpread = (v: number) => { setArabicArcSpreadRaw(v); ssSave(ssKey('arabicArcSpread'), v); };
   const [arabicFontWeight, setArabicFontWeightRaw] = useState(() => ssGet(ssKey('arabicFontWeight'), 'bold'));
   const setArabicFontWeight = (v: string) => { setArabicFontWeightRaw(v); ssSave(ssKey('arabicFontWeight'), v); };
+  const [arabicFontSize, setArabicFontSizeRaw] = useState<number | null>(() => ssGet(ssKey('arabicFontSize'), null));
+  const setArabicFontSize = (v: number | null | ((p: number | null) => number | null)) => {
+    setArabicFontSizeRaw(prev => { const next = typeof v === 'function' ? v(prev) : v; ssSave(ssKey('arabicFontSize'), next); return next; });
+  };
+  const [arabicFontItalic, setArabicFontItalicRaw] = useState(() => ssGet(ssKey('arabicFontItalic'), false));
+  const setArabicFontItalic = (v: boolean) => { setArabicFontItalicRaw(v); ssSave(ssKey('arabicFontItalic'), v); };
 
   // Spacing & Layout controls — persisted
   const [arcTextSpacing, setArcTextSpacingRaw] = useState(() => ssGet(ssKey('arcTextSpacing'), 2));
@@ -904,7 +910,11 @@ export default function StampGeneratorPage() {
           onSetArabicFont={setArabicFont}
           onSetArabicLetterSpacing={setArabicLetterSpacing}
           onSetArabicArcSpread={setArabicArcSpread}
-          onSetArabicFontWeight={setArabicFontWeight}
+           onSetArabicFontWeight={setArabicFontWeight}
+           arabicFontSize={arabicFontSize}
+           onSetArabicFontSize={(v) => { setArabicFontSize(v); triggerPulse(); }}
+           arabicFontItalic={arabicFontItalic}
+           onSetArabicFontItalic={(v) => { setArabicFontItalic(v); triggerPulse(); }}
           arcTextSpacing={arcTextSpacing}
           circleGap={circleGap}
           separatorDistance={separatorDistance}
