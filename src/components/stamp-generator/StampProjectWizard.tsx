@@ -155,13 +155,19 @@ interface FormState {
   arabic_font: string;
   arabic_letter_spacing: number;
   arabic_arc_spread: number;
+  english_arc_spread: number;
   arabic_font_weight: string;
   arc_text_spacing: number;
   circle_gap: number;
   separator_distance: number;
   center_content_size: number;
+  company_arc_offset: number;
+  location_arc_offset: number;
   selected_preset: string;
   monogram_colors: MonogramLetterColors;
+  outer_border_color: string;
+  middle_border_color: string;
+  inner_border_color: string;
 }
 
 export default function StampProjectWizard() {
@@ -189,10 +195,12 @@ export default function StampProjectWizard() {
     show_license_number: false, show_location: true, business_type: '',
     separator_style: 'dot' as SeparatorStyle, ink_color: OFFICIAL_INK_BLUE,
     government_mode: false, arabic_font: 'Noto Naskh Arabic',
-    arabic_letter_spacing: 2, arabic_arc_spread: 88, arabic_font_weight: 'bold',
+    arabic_letter_spacing: 2, arabic_arc_spread: 88, english_arc_spread: 88, arabic_font_weight: 'bold',
     arc_text_spacing: 2, circle_gap: 13, separator_distance: 50, center_content_size: 50,
+    company_arc_offset: 50, location_arc_offset: 50,
     selected_preset: '',
     monogram_colors: DEFAULT_MONOGRAM_COLORS,
+    outer_border_color: '', middle_border_color: '', inner_border_color: '',
   };
 
   const [form, setForm] = useState<FormState>(() => {
@@ -530,33 +538,60 @@ export default function StampProjectWizard() {
     const svgData = getPreviewSvg();
     if (!svgData) return;
     setBulkExporting(true);
-    toast.info('Generating all formats…');
+    toast.info('Generating ZIP with all formats…');
     try {
+      const JSZip = (await import('jszip')).default;
+      const zip = new JSZip();
+      const slug = (form.company_name || 'stamp').toLowerCase().replace(/\s+/g, '_');
+
       // SVG
-      const svgBlob = new Blob([svgData], { type: 'image/svg+xml' });
-      triggerDownload(svgBlob, `${form.company_name || 'stamp'}.svg`);
+      zip.file(`${slug}.svg`, svgData);
+
       // PNG transparent 1024
       const canvasT = await svgToCanvas(svgData, 1024, false);
       const pngTBlob: Blob = await new Promise((res, rej) => canvasT.toBlob(b => b ? res(b) : rej(), 'image/png'));
-      triggerDownload(pngTBlob, `${form.company_name || 'stamp'}-1024px-transparent.png`);
+      zip.file(`${slug}-1024px-transparent.png`, pngTBlob);
+
       // PNG white 1024
       const canvasW = await svgToCanvas(svgData, 1024, true);
       const pngWBlob: Blob = await new Promise((res, rej) => canvasW.toBlob(b => b ? res(b) : rej(), 'image/png'));
-      triggerDownload(pngWBlob, `${form.company_name || 'stamp'}-1024px-white.png`);
+      zip.file(`${slug}-1024px-white.png`, pngWBlob);
+
       // JPG
       const canvasJ = await svgToCanvas(svgData, 1024, true);
       const jpgBlob: Blob = await new Promise((res, rej) => canvasJ.toBlob(b => b ? res(b) : rej(), 'image/jpeg', 0.92));
-      triggerDownload(jpgBlob, `${form.company_name || 'stamp'}-1024px.jpg`);
+      zip.file(`${slug}-1024px.jpg`, jpgBlob);
+
       // WEBP
       const canvasWp = await svgToCanvas(svgData, 1024, false);
       const webpBlob: Blob = await new Promise((res, rej) => canvasWp.toBlob(b => b ? res(b) : rej(), 'image/webp', 0.92));
-      triggerDownload(webpBlob, `${form.company_name || 'stamp'}-1024px.webp`);
+      zip.file(`${slug}-1024px.webp`, webpBlob);
+
       // PDF
-      await handleExportPDF();
-      toast.success('All formats downloaded!');
-    } catch (e) { toast.error('Bulk export partially failed'); console.error(e); }
+      const canvasPdf = await svgToCanvas(svgData, 1200, true);
+      const pngDataUrl = canvasPdf.toDataURL('image/png');
+      const { PDFDocument, rgb } = await import('pdf-lib');
+      const pdfDoc = await PDFDocument.create();
+      pdfDoc.setTitle(`${form.company_name || 'Stamp'} - PDF`);
+      const pointSize = 300;
+      const page = pdfDoc.addPage([pointSize, pointSize]);
+      page.drawRectangle({ x: 0, y: 0, width: pointSize, height: pointSize, color: rgb(1, 1, 1) });
+      const response = await fetch(pngDataUrl);
+      const pngBytes = await response.arrayBuffer();
+      const pngImage = await pdfDoc.embedPng(pngBytes);
+      page.drawImage(pngImage, { x: 0, y: 0, width: pointSize, height: pointSize });
+      const pdfBytes = await pdfDoc.save();
+      zip.file(`${slug}-print.pdf`, pdfBytes);
+
+      // Preset JSON
+      zip.file(`${slug}-preset.json`, JSON.stringify(form, null, 2));
+
+      const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+      triggerDownload(zipBlob, `${slug}_stamp_kit.zip`);
+      toast.success('All formats downloaded as ZIP!');
+    } catch (e) { toast.error('ZIP export failed. Try individual downloads.'); console.error(e); }
     setBulkExporting(false);
-  }, [form.company_name, getPreviewSvg, svgToCanvas, triggerDownload, handleExportPDF]);
+  }, [form, getPreviewSvg, svgToCanvas, triggerDownload]);
 
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
 
@@ -607,16 +642,22 @@ export default function StampProjectWizard() {
     showLocation: form.show_location, separatorStyle: form.separator_style,
     inkColor: form.ink_color, arabicCity: form.arabic_city,
     arabicArcSpread: form.arabic_arc_spread,
+    englishArcSpread: form.english_arc_spread,
     arabicLetterSpacing: form.arabic_letter_spacing,
     arabicFont: form.arabic_font,
     arabicFontWeight: form.arabic_font_weight,
     circleGap: form.circle_gap,
     centerContentSize: form.center_content_size,
+    companyArcBandOffset: form.company_arc_offset,
+    locationArcBandOffset: form.location_arc_offset,
     onElementClick: handleElementClick,
     monogramLetterColors: buildMonogramColors(),
     monogramDividerColor: form.monogram_colors.divider || undefined,
     arcTextSpacing: form.arc_text_spacing,
     separatorDistance: form.separator_distance,
+    outerBorderColor: form.outer_border_color || undefined,
+    middleBorderColor: form.middle_border_color || undefined,
+    innerBorderColor: form.inner_border_color || undefined,
   };
 
   return (
@@ -1033,6 +1074,16 @@ export default function StampProjectWizard() {
                   {/* Spacing & Layout Controls */}
                   <div className="border border-[hsl(var(--border))] rounded-xl p-3 space-y-2.5">
                     <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Spacing & Layout</p>
+                    {/* English Arc Spread */}
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">English Arc Spread</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.english_arc_spread}%</span>
+                      </div>
+                      <input type="range" min={20} max={100} step={1} value={form.english_arc_spread}
+                        onChange={e => set('english_arc_spread', parseInt(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                    </div>
                     <div>
                       <div className="flex items-center justify-between mb-0.5">
                         <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Text Spacing</label>
@@ -1069,6 +1120,51 @@ export default function StampProjectWizard() {
                         onChange={e => set('center_content_size', parseInt(e.target.value))}
                         className="w-full h-2 accent-[hsl(var(--gold))]" />
                     </div>
+                    {/* Company Name Arc Position (radial) */}
+                    <div>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Company Arc Position</label>
+                        <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.company_arc_offset}%</span>
+                      </div>
+                      <input type="range" min={0} max={100} step={1} value={form.company_arc_offset}
+                        onChange={e => set('company_arc_offset', parseInt(e.target.value))}
+                        className="w-full h-2 accent-[hsl(var(--gold))]" />
+                      <p className="text-[7px] text-[hsl(var(--muted-foreground))]">50% = centered between outer & middle ring</p>
+                    </div>
+                    {/* Location Arc Position */}
+                    {form.show_location && (
+                      <div>
+                        <div className="flex items-center justify-between mb-0.5">
+                          <label className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Location Arc Position</label>
+                          <span className="text-[9px] font-mono text-[hsl(var(--foreground))]">{form.location_arc_offset}%</span>
+                        </div>
+                        <input type="range" min={0} max={100} step={1} value={form.location_arc_offset}
+                          onChange={e => set('location_arc_offset', parseInt(e.target.value))}
+                          className="w-full h-2 accent-[hsl(var(--gold))]" />
+                        <p className="text-[7px] text-[hsl(var(--muted-foreground))]">50% = centered between middle & inner ring</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Per-Border Color Overrides */}
+                  <div className="border border-[hsl(var(--border))] rounded-xl p-3 space-y-2">
+                    <p className="text-[11px] font-semibold text-[hsl(var(--foreground))]">Border Colors</p>
+                    <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Leave empty to use ink color</p>
+                    {([
+                      { key: 'outer_border_color' as const, label: 'Outer Ring' },
+                      { key: 'middle_border_color' as const, label: 'Middle Ring' },
+                      { key: 'inner_border_color' as const, label: 'Inner Ring' },
+                    ]).map(ring => (
+                      <div key={ring.key} className="flex items-center gap-2">
+                        <input type="color" value={form[ring.key] || form.ink_color}
+                          onChange={e => set(ring.key, e.target.value)}
+                          className="w-6 h-6 rounded border border-[hsl(var(--border))] cursor-pointer p-0" />
+                        <span className="text-[10px] text-[hsl(var(--foreground))] flex-1">{ring.label}</span>
+                        {form[ring.key] && (
+                          <button onClick={() => set(ring.key, '')} className="text-[8px] text-[hsl(var(--muted-foreground))] underline">Reset</button>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </ScrollArea>

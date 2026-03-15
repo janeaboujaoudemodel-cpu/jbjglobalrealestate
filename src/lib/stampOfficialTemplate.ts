@@ -50,11 +50,17 @@ export interface OfficialStampConfig {
   centerMode?: CenterContentMode;
   centerIcon?: CenterIconType;
   arabicArcSpread?: number;
+  /** English arc spread (0-1, default 0.88) — matches separator-to-separator fullness */
+  englishArcSpread?: number;
   arabicLetterSpacing?: number;
   arabicFont?: string;
   arabicFontWeight?: string;
   circleGap?: number;
   centerContentScale?: number;
+  /** Radial offset for company name arcs (0-100, 50 = centered between outer+middle rings) */
+  companyArcBandOffset?: number;
+  /** Radial offset for location arcs (0-100, 50 = centered between middle+inner rings) */
+  locationArcBandOffset?: number;
   /** Language mode: EN-only, AR-only, BILINGUAL */
   languageMode?: LanguageMode;
   /** Stamp shape */
@@ -67,6 +73,10 @@ export interface OfficialStampConfig {
   arcTextSpacing?: number;
   /** Shift separator position inward/outward (0-100, default 50 = centered) */
   separatorDistancePct?: number;
+  /** Per-border color overrides */
+  outerBorderColor?: string;
+  middleBorderColor?: string;
+  innerBorderColor?: string;
 }
 
 const ARABIC_FONT = '"Noto Naskh Arabic", "Arabic Typesetting", "Traditional Arabic", serif';
@@ -300,10 +310,11 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const middleR = S * (OUTER_R_PCT - gapPct);
   const innerR = middleR - S * 0.07;
 
-  // Company text arc radius
-  const rawTextArcR = (outerR + middleR) / 2;
-  const textArcR = Math.min(rawTextArcR, outerR - SAFE_ZONE);
-  const clampedTextArcR = Math.max(textArcR, middleR + SAFE_ZONE);
+  // Company text arc radius — controlled by companyArcBandOffset (0-100, default 50 = midpoint)
+  const compBandPct = Math.max(0, Math.min(100, config.companyArcBandOffset ?? 50));
+  const compBandMin = middleR + SAFE_ZONE;
+  const compBandMax = outerR - SAFE_ZONE;
+  const clampedTextArcR = compBandMin + (compBandMax - compBandMin) * (compBandPct / 100);
 
   // Separator distance: configurable via separatorDistancePct (0-100, default 50 = centered)
   // 0 = closest to middle ring, 100 = closest to outer ring (edge-to-edge)
@@ -312,17 +323,15 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const sepMax = outerR - 2; // allow touching the outer ring edge
   const separatorR = sepMin + (sepMax - sepMin) * (sepPct / 100);
 
-  // Location text arc radius — true midpoint between middle and inner rings
-  // Ensure text is vertically centered within the location band
-  const locBandMid = (middleR + innerR) / 2;
-  const clampedLocTextR = Math.max(
-    Math.min(locBandMid, middleR - SAFE_ZONE),
-    innerR + SAFE_ZONE
-  );
+  // Location text arc radius — controlled by locationArcBandOffset (0-100, default 50 = midpoint)
+  const locBandPct = Math.max(0, Math.min(100, config.locationArcBandOffset ?? 50));
+  const locBandMin = innerR + SAFE_ZONE;
+  const locBandMax = middleR - SAFE_ZONE;
+  const clampedLocTextR = locBandMin + (locBandMax - locBandMin) * (locBandPct / 100);
 
-  // Arabic arc spread
+  // Arc spreads — independent for Arabic and English
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
-  const englishSpread = ARC_SPREAD_LIMIT;
+  const englishSpread = config.englishArcSpread ?? ARC_SPREAD_LIMIT;
 
   // Arc text spacing override — applies to English letter-spacing
   const arcTextSpacingOverride = config.arcTextSpacing;
@@ -443,25 +452,32 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const middleSW = (config.innerBorderWidth ?? MIDDLE_STROKE) * themeMult;
   const innerSW = INNER_STROKE * themeMult;
 
-  const outerRingEl = renderOuterRing(cx, cy, outerR, ink, bs, outerSW);
+  // Per-border color overrides
+  const outerInk = config.outerBorderColor || ink;
+  const middleInk = config.middleBorderColor || ink;
+  const innerInk = config.innerBorderColor || ink;
+
+  const outerRingEl = `<circle data-stamp-element="border-outer" cx="${cx}" cy="${cy}" r="${outerR}" fill="none" stroke="${outerInk}" stroke-width="${outerSW}" ${
+    bs === 'DOTTED' ? 'stroke-dasharray="3,3"' : bs === 'ROPE' ? 'stroke-dasharray="6,4"' : bs === 'CUSTOM' ? 'stroke-dasharray="2,2,6,2"' : ''
+  }/>`;
 
   // Decorative ring — only for DOUBLE, RING, CUSTOM (NOT single)
   const decorativeR = outerR - outerSW / 2 - 2;
   const decorativeRingEl = (bs === 'DOUBLE' || bs === 'RING' || bs === 'CUSTOM')
-    ? `<circle cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${ink}" stroke-width="${DECORATIVE_STROKE * themeMult}" opacity="0.5"/>`
+    ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${outerInk}" stroke-width="${DECORATIVE_STROKE * themeMult}" opacity="0.5"/>`
     : '';
 
-  const middleRingEl = `<circle cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW}"/>`;
+  const middleRingEl = `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${middleInk}" stroke-width="${middleSW}"/>`;
   // RING style: thicker middle ring
   const middleRingFinal = bs === 'RING'
-    ? `<circle cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.4}"/>`
+    ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${middleInk}" stroke-width="${middleSW * 1.4}"/>`
     : middleRingEl;
 
   // Dynamic ring system: if location is disabled, hide inner ring (location ring) 
   // and let center content fill the space between middle ring and center
   const showInnerRing = config.showLocation && mode === 'BILINGUAL';
   const innerRingEl = showInnerRing
-    ? `<circle cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${ink}" stroke-width="${innerSW}"/>`
+    ? `<circle data-stamp-element="border-inner" cx="${cx}" cy="${cy}" r="${innerR}" fill="none" stroke="${innerInk}" stroke-width="${innerSW}"/>`
     : '';
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}">

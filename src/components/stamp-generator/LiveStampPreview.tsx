@@ -37,17 +37,23 @@ export interface LiveStampPreviewProps {
   centerMode?: CenterContentMode;
   centerIcon?: CenterIconType;
   arabicArcSpread?: number;
+  englishArcSpread?: number;
   arabicLetterSpacing?: number;
   arabicFont?: string;
   arabicFontWeight?: string;
   circleGap?: number;
   centerContentSize?: number;
+  companyArcBandOffset?: number;
+  locationArcBandOffset?: number;
   onElementClick?: (elementId: string) => void;
   onDoubleClick?: (elementId: string) => void;
   monogramLetterColors?: Record<number, string>;
   monogramDividerColor?: string;
   arcTextSpacing?: number;
   separatorDistance?: number;
+  outerBorderColor?: string;
+  middleBorderColor?: string;
+  innerBorderColor?: string;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
@@ -103,6 +109,7 @@ export function LiveStampPreview({
   centerMode,
   centerIcon,
   arabicArcSpread,
+  englishArcSpread,
   arabicLetterSpacing,
   arabicFont,
   arabicFontWeight,
@@ -115,6 +122,11 @@ export function LiveStampPreview({
   arcTextSpacing,
   separatorDistance,
   selectedElement,
+  companyArcBandOffset,
+  locationArcBandOffset,
+  outerBorderColor,
+  middleBorderColor,
+  innerBorderColor,
 }: LiveStampPreviewProps & { selectedElement?: string | null }) {
   const displayName = companyName || 'Your Company Name';
   const fontFamily = FONT_FAMILIES[typographyStyle];
@@ -182,6 +194,7 @@ export function LiveStampPreview({
     // arabicArcSpread slider: 20-100 → map to 0.40-0.95 spread (default 80 → 0.88)
     // Map slider 20-100 → 0.30-1.00 so default 88 → ~0.88 (matching English ARC_SPREAD_LIMIT)
     const arcSpreadVal = arabicArcSpread != null ? 0.30 + (arabicArcSpread - 20) / 80 * 0.70 : undefined;
+    const enArcSpreadVal = englishArcSpread != null ? 0.30 + (englishArcSpread - 20) / 80 * 0.70 : undefined;
     const circleGapVal = circleGap != null ? circleGap : undefined;
     const centerScaleVal = centerContentSize != null ? centerContentSize / 50 : undefined;
 
@@ -209,6 +222,7 @@ export function LiveStampPreview({
       centerMode: centerMode || (iconStyle === 'UPLOADED_LOGO' ? 'logo' : iconStyle === 'MONOGRAM' ? 'monogram' : undefined),
       centerIcon,
       arabicArcSpread: arcSpreadVal,
+      englishArcSpread: enArcSpreadVal,
       arabicLetterSpacing,
       arabicFont: resolvedArFont,
       arabicFontWeight,
@@ -222,14 +236,20 @@ export function LiveStampPreview({
       typographyStyle,
       arcTextSpacing: arcTextSpacing,
       separatorDistancePct: separatorDistance,
+      companyArcBandOffset,
+      locationArcBandOffset,
+      outerBorderColor,
+      middleBorderColor,
+      innerBorderColor,
     });
   }, [
     displayName, arabicCompanyName, city, country, registrationNumber,
     stampType, styleTheme, borderStyle, typographyStyle, density,
     iconStyle, monogramText, uploadedLogoUrl, languageMode, languageReversed,
     showLicenseNumber, showLocation, separatorStyle, fontFamily, size, ink, arabicCity,
-    centerMode, centerIcon, arabicArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight,
+    centerMode, centerIcon, arabicArcSpread, englishArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight,
     circleGap, centerContentSize, arcTextSpacing, separatorDistance,
+    companyArcBandOffset, locationArcBandOffset, outerBorderColor, middleBorderColor, innerBorderColor,
   ]);
 
   return (
