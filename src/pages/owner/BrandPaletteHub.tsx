@@ -437,6 +437,31 @@ const BrandPaletteHub = () => {
               )}
             </div>
 
+            {/* Monogram Preview */}
+            <div className="bg-card/80 border border-gold/20 rounded-2xl p-5">
+              <h3 className="font-bold text-foreground mb-4 text-sm flex items-center gap-2">
+                <Palette className="w-4 h-4 text-gold" />
+                Monogram Preview
+              </h3>
+              <div className="flex flex-col items-center gap-4">
+                <div
+                  className="w-full rounded-xl p-6 flex items-center justify-center border border-gold/20"
+                  style={{ backgroundColor: draft.secondary }}
+                >
+                  <BrandMonogram variant="dark" size="lg" showWordmark />
+                </div>
+                <div
+                  className="w-full rounded-xl p-6 flex items-center justify-center border border-gold/20"
+                  style={{ backgroundColor: draft.background }}
+                >
+                  <BrandMonogram variant="light" size="lg" showWordmark />
+                </div>
+              </div>
+              <p className="text-[10px] text-muted-foreground mt-3 text-center">
+                Preview how the monogram looks on dark &amp; light backgrounds
+              </p>
+            </div>
+
             {/* Saved Palettes History */}
             {user && (
               <div className="bg-card/80 border border-gold/20 rounded-2xl p-5">
