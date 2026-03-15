@@ -447,6 +447,7 @@ export function CardCanvas({
   bilingualMode, bilingualDir, secondaryData,
   onInlineEdit,
   fieldConfigs,
+  sigLayout, sigAccentColor,
 }: {
   data: CardData; template: Template; backTemplate: Template; primary: string; secondary: string; accent: string;
   backPrimary: string; backSecondary: string; backAccent: string;
@@ -464,6 +465,7 @@ export function CardCanvas({
   bilingualMode?: BilingualMode; bilingualDir?: "rtl" | "ltr"; secondaryData?: CardData;
   onInlineEdit?: (field: keyof CardData) => void;
   fieldConfigs?: FieldConfigMap;
+  sigLayout?: SigLayout; sigAccentColor?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef<{
