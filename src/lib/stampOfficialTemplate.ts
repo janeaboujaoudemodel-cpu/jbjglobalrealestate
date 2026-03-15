@@ -290,12 +290,17 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const clampedTextArcR = Math.max(textArcR, middleR + SAFE_ZONE);
 
   // Separator distance: default centered on text arc; configurable via separatorDistancePct (0-100)
-  const sepPct = config.separatorDistancePct ?? 50;
-  const separatorR = middleR + SAFE_ZONE + (clampedTextArcR - middleR - SAFE_ZONE) * (sepPct / 50);
+  // Clamp to valid range to prevent separators escaping the ring band
+  const sepPct = Math.max(0, Math.min(100, config.separatorDistancePct ?? 50));
+  const sepMin = middleR + SAFE_ZONE;
+  const sepMax = clampedTextArcR;
+  const separatorR = sepMin + (sepMax - sepMin) * (sepPct / 100);
 
   // Location text arc radius — true midpoint between middle and inner rings
+  // Ensure text is vertically centered within the location band
+  const locBandMid = (middleR + innerR) / 2;
   const clampedLocTextR = Math.max(
-    Math.min((middleR + innerR) / 2, middleR - SAFE_ZONE),
+    Math.min(locBandMid, middleR - SAFE_ZONE),
     innerR + SAFE_ZONE
   );
 
