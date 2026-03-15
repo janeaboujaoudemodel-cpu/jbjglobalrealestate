@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ImageIcon, Sparkles, RefreshCw, Download,
   Loader2, Bookmark, Type, Maximize2, Building2,
-  Palette, Archive, Wand2, LayoutGrid,
+  Palette, Archive, Wand2, LayoutGrid, Heart, FileText, Star, Filter,
 } from "lucide-react";
 import { StudioShell, type StudioSection } from "@/components/ui/StudioShell";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
+import { DocumentExtractorUpload } from "@/components/corporate-suite/DocumentExtractorUpload";
 import {
   INDUSTRIES, STYLES, FONTS,
   type LogoData, type LogoType,
@@ -23,6 +24,8 @@ import {
 import LogoColorPicker from "./LogoColorPicker";
 import LogoExportKit from "./LogoExportKit";
 import LogoMockups from "./LogoMockups";
+
+const HISTORY_LIMIT = 100;
 
 // ─── Main Component ────────────────────────────────────────────────────────────
 export default function LogoCreator() {
@@ -51,6 +54,8 @@ export default function LogoCreator() {
   // State
   const [logo, setLogo] = useState<LogoData | null>(null);
   const [logoHistory, setLogoHistory] = useState<LogoData[]>([]);
+  const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [saving, setSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
@@ -59,6 +64,9 @@ export default function LogoCreator() {
   const [fullscreenOpen, setFullscreenOpen] = useState(false);
   const [fullscreenBg, setFullscreenBg] = useState<"white" | "black" | "brand" | "transparent">("white");
   const [licenseCode, setLicenseCode] = useState<string | null>(null);
+
+  // Trade license
+  const [tradeLicenseOpen, setTradeLicenseOpen] = useState(false);
 
   // Client-side recolor + refont: when colors/font change, apply without AI call
   const displayLogo = logo ? {
@@ -86,7 +94,7 @@ export default function LogoCreator() {
       };
       setLogo(newLogo);
       setGeneratedColors({ ...colors }); // Track colors this logo was generated with
-      setLogoHistory(prev => [newLogo, ...prev].slice(0, 10));
+      setLogoHistory(prev => [newLogo, ...prev].slice(0, HISTORY_LIMIT));
       setJustSaved(false);
       setLicenseCode(null);
       toast.success("Logo generated");
@@ -136,7 +144,7 @@ export default function LogoCreator() {
         const refined: LogoData = { svgContent, name, timestamp: Date.now() };
         setLogo(refined);
         setGeneratedColors({ ...colors });
-        setLogoHistory(prev => [refined, ...prev].slice(0, 10));
+        setLogoHistory(prev => [refined, ...prev].slice(0, HISTORY_LIMIT));
         setRefinePrompt("");
         toast.success("Logo refined");
       }
@@ -145,6 +153,15 @@ export default function LogoCreator() {
     } finally {
       setGenerating(false);
     }
+  };
+
+  const toggleFavorite = (timestamp: number) => {
+    setFavorites(prev => {
+      const next = new Set(prev);
+      if (next.has(timestamp)) next.delete(timestamp);
+      else next.add(timestamp);
+      return next;
+    });
   };
 
   const downloadSVG = () => {
@@ -230,6 +247,21 @@ export default function LogoCreator() {
     }
   };
 
+  // ── Trade License Handler ──────────────────────────────────────────────────
+  const handleTradeLicenseExtracted = (extracted: any) => {
+    if (extracted?.company) setName(extracted.company);
+    if (extracted?.description) setDescription(prev => prev ? prev + " " + extracted.description : extracted.description);
+    if (extracted?.industry) {
+      const match = INDUSTRIES.find(i =>
+        i.label.toLowerCase().includes(extracted.industry.toLowerCase()) ||
+        extracted.industry.toLowerCase().includes(i.id)
+      );
+      if (match) setIndustry(match.id);
+    }
+    toast.success("Trade license data extracted");
+    setTradeLicenseOpen(false);
+  };
+
   const bgForFullscreen = (bg: typeof fullscreenBg) => {
     if (bg === "white") return "#ffffff";
     if (bg === "black") return "#111111";
@@ -261,6 +293,22 @@ export default function LogoCreator() {
           <Textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="e.g. Premium property consultancy..." rows={2} className="flex-1 text-sm resize-none" />
           <VoiceInputButton onTranscript={t => setDescription(prev => prev ? prev + " " + t : t)} size="icon" className="shrink-0 mt-0.5" />
         </div>
+      </div>
+
+      {/* Trade License Upload */}
+      <div className="space-y-1.5 pt-2 border-t border-[hsl(var(--border))]">
+        <label className="text-xs font-medium text-[hsl(var(--muted-foreground))] flex items-center gap-1">
+          <FileText size={12} /> Auto-Fill from Trade License
+        </label>
+        <p className="text-[9px] text-[hsl(var(--muted-foreground))]">
+          Upload your trade license to auto-fill company name, description, and industry.
+        </p>
+        <DocumentExtractorUpload
+          extractionType="company_profile"
+          onExtracted={handleTradeLicenseExtracted}
+          label="Upload Trade License"
+          hint="PDF, image, or scanned document"
+        />
       </div>
 
       {/* Logo Type Selector */}
@@ -303,7 +351,7 @@ export default function LogoCreator() {
               const uploaded: LogoData = { svgContent: text, name: name || 'Uploaded', timestamp: Date.now() };
               setLogo(uploaded);
               setGeneratedColors({ ...colors });
-              setLogoHistory(prev => [uploaded, ...prev].slice(0, 10));
+              setLogoHistory(prev => [uploaded, ...prev].slice(0, HISTORY_LIMIT));
               toast.success("Logo uploaded — use Refine to modify it");
             } else {
               // PNG/JPG: wrap in SVG
@@ -314,7 +362,7 @@ export default function LogoCreator() {
                 const uploaded: LogoData = { svgContent: svgWrapped, name: name || 'Uploaded', timestamp: Date.now() };
                 setLogo(uploaded);
                 setGeneratedColors({ ...colors });
-                setLogoHistory(prev => [uploaded, ...prev].slice(0, 10));
+                setLogoHistory(prev => [uploaded, ...prev].slice(0, HISTORY_LIMIT));
                 toast.success("Logo uploaded — use Refine to modify it");
               };
               reader.readAsDataURL(file);
@@ -401,6 +449,11 @@ export default function LogoCreator() {
     </div>
   );
 
+  // ── History items with favorites filter ──────────────────────────────────
+  const filteredHistory = showFavoritesOnly
+    ? logoHistory.filter(h => favorites.has(h.timestamp))
+    : logoHistory;
+
   const exportPanel = displayLogo ? (
     <div className="space-y-4">
       {/* Background variants */}
@@ -449,22 +502,57 @@ export default function LogoCreator() {
         <RefreshCw size={13} className={generating ? "animate-spin" : ""} /> Regenerate
       </Button>
 
-      {/* History */}
-      {logoHistory.length > 1 && (
+      {/* History Grid with Favorites */}
+      {logoHistory.length > 0 && (
         <div>
-          <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide mb-2">Recent ({logoHistory.length})</p>
-          <div className="flex gap-2 flex-wrap">
-            {logoHistory.map((h, i) => (
-              <button key={h.timestamp} onClick={() => { setLogo(h); setGeneratedColors(generatedColors); }}
-                className={`relative rounded-xl border-2 p-2 transition-all hover:border-[hsl(var(--gold))]/60 ${logo?.timestamp === h.timestamp ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/10" : "border-[hsl(var(--border))]"}`}
-                style={{ width: 64 }}>
-                <div className="flex items-center justify-center" style={{ height: 48 }}>
-                  <LogoPreview svgContent={h.svgContent} size={40} />
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[10px] font-semibold text-[hsl(var(--muted-foreground))] uppercase tracking-wide">
+              History ({logoHistory.length}/{HISTORY_LIMIT})
+              {favorites.size > 0 && <span className="ml-1 text-[hsl(var(--gold))]">· {favorites.size} ★</span>}
+            </p>
+            <button
+              onClick={() => setShowFavoritesOnly(v => !v)}
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-lg text-[9px] font-semibold transition-all border ${
+                showFavoritesOnly
+                  ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/10 text-[hsl(var(--gold))]"
+                  : "border-[hsl(var(--border))] text-[hsl(var(--muted-foreground))] hover:border-[hsl(var(--gold))]/40"
+              }`}
+            >
+              <Star size={9} className={showFavoritesOnly ? "fill-current" : ""} />
+              {showFavoritesOnly ? "All" : "Favorites"}
+            </button>
+          </div>
+          <div className="grid grid-cols-4 gap-1.5 max-h-[320px] overflow-y-auto scrollbar-thin scrollbar-thumb-[hsl(var(--border))] scrollbar-track-transparent pr-0.5">
+            {filteredHistory.map((h, i) => (
+              <button key={h.timestamp}
+                onClick={() => { setLogo(h); setGeneratedColors(generatedColors); }}
+                className={`relative group rounded-xl border-2 p-1.5 transition-all hover:border-[hsl(var(--gold))]/60 ${
+                  logo?.timestamp === h.timestamp ? "border-[hsl(var(--gold))] bg-[hsl(var(--gold))]/10" : "border-[hsl(var(--border))]"
+                }`}
+              >
+                <div className="flex items-center justify-center" style={{ height: 40 }}>
+                  <LogoPreview svgContent={h.svgContent} size={32} />
                 </div>
-                <p className="text-[8px] text-center text-[hsl(var(--muted-foreground))] mt-1">V{logoHistory.length - i}</p>
+                <p className="text-[7px] text-center text-[hsl(var(--muted-foreground))] mt-0.5 truncate">
+                  V{logoHistory.length - logoHistory.indexOf(h)}
+                </p>
+                {/* Favorite heart */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); toggleFavorite(h.timestamp); }}
+                  className={`absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center transition-all ${
+                    favorites.has(h.timestamp)
+                      ? "bg-red-500 text-white shadow-sm"
+                      : "bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] opacity-0 group-hover:opacity-100"
+                  }`}
+                >
+                  <Heart size={9} className={favorites.has(h.timestamp) ? "fill-current" : ""} />
+                </button>
               </button>
             ))}
           </div>
+          {showFavoritesOnly && filteredHistory.length === 0 && (
+            <p className="text-[10px] text-[hsl(var(--muted-foreground))] text-center py-4">No favorites yet — click ♥ on any logo</p>
+          )}
         </div>
       )}
     </div>
