@@ -538,33 +538,60 @@ export default function StampProjectWizard() {
     const svgData = getPreviewSvg();
     if (!svgData) return;
     setBulkExporting(true);
-    toast.info('Generating all formats…');
+    toast.info('Generating ZIP with all formats…');
     try {
+      const JSZip = (await import('jszip')).default;
+      const zip = new JSZip();
+      const slug = (form.company_name || 'stamp').toLowerCase().replace(/\s+/g, '_');
+
       // SVG
-      const svgBlob = new Blob([svgData], { type: 'image/svg+xml' });
-      triggerDownload(svgBlob, `${form.company_name || 'stamp'}.svg`);
+      zip.file(`${slug}.svg`, svgData);
+
       // PNG transparent 1024
       const canvasT = await svgToCanvas(svgData, 1024, false);
       const pngTBlob: Blob = await new Promise((res, rej) => canvasT.toBlob(b => b ? res(b) : rej(), 'image/png'));
-      triggerDownload(pngTBlob, `${form.company_name || 'stamp'}-1024px-transparent.png`);
+      zip.file(`${slug}-1024px-transparent.png`, pngTBlob);
+
       // PNG white 1024
       const canvasW = await svgToCanvas(svgData, 1024, true);
       const pngWBlob: Blob = await new Promise((res, rej) => canvasW.toBlob(b => b ? res(b) : rej(), 'image/png'));
-      triggerDownload(pngWBlob, `${form.company_name || 'stamp'}-1024px-white.png`);
+      zip.file(`${slug}-1024px-white.png`, pngWBlob);
+
       // JPG
       const canvasJ = await svgToCanvas(svgData, 1024, true);
       const jpgBlob: Blob = await new Promise((res, rej) => canvasJ.toBlob(b => b ? res(b) : rej(), 'image/jpeg', 0.92));
-      triggerDownload(jpgBlob, `${form.company_name || 'stamp'}-1024px.jpg`);
+      zip.file(`${slug}-1024px.jpg`, jpgBlob);
+
       // WEBP
       const canvasWp = await svgToCanvas(svgData, 1024, false);
       const webpBlob: Blob = await new Promise((res, rej) => canvasWp.toBlob(b => b ? res(b) : rej(), 'image/webp', 0.92));
-      triggerDownload(webpBlob, `${form.company_name || 'stamp'}-1024px.webp`);
+      zip.file(`${slug}-1024px.webp`, webpBlob);
+
       // PDF
-      await handleExportPDF();
-      toast.success('All formats downloaded!');
-    } catch (e) { toast.error('Bulk export partially failed'); console.error(e); }
+      const canvasPdf = await svgToCanvas(svgData, 1200, true);
+      const pngDataUrl = canvasPdf.toDataURL('image/png');
+      const { PDFDocument, rgb } = await import('pdf-lib');
+      const pdfDoc = await PDFDocument.create();
+      pdfDoc.setTitle(`${form.company_name || 'Stamp'} - PDF`);
+      const pointSize = 300;
+      const page = pdfDoc.addPage([pointSize, pointSize]);
+      page.drawRectangle({ x: 0, y: 0, width: pointSize, height: pointSize, color: rgb(1, 1, 1) });
+      const response = await fetch(pngDataUrl);
+      const pngBytes = await response.arrayBuffer();
+      const pngImage = await pdfDoc.embedPng(pngBytes);
+      page.drawImage(pngImage, { x: 0, y: 0, width: pointSize, height: pointSize });
+      const pdfBytes = await pdfDoc.save();
+      zip.file(`${slug}-print.pdf`, pdfBytes);
+
+      // Preset JSON
+      zip.file(`${slug}-preset.json`, JSON.stringify(form, null, 2));
+
+      const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+      triggerDownload(zipBlob, `${slug}_stamp_kit.zip`);
+      toast.success('All formats downloaded as ZIP!');
+    } catch (e) { toast.error('ZIP export failed. Try individual downloads.'); console.error(e); }
     setBulkExporting(false);
-  }, [form.company_name, getPreviewSvg, svgToCanvas, triggerDownload, handleExportPDF]);
+  }, [form, getPreviewSvg, svgToCanvas, triggerDownload]);
 
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
 
