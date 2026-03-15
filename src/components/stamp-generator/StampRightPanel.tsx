@@ -821,7 +821,7 @@ function HistoryList(props: {
       </div>
       <div className="grid grid-cols-2 gap-2">
         {versions.slice(0, 20).map(v => {
-          const source = detectSource(v.template_key);
+          const source = detectSource(v);
           return (
             <div key={v.id} className="group bg-card/80 rounded-lg border border-dashed border-[hsl(var(--muted-foreground)/0.3)] hover:border-[hsl(var(--gold)/0.5)] transition-all">
               <div className="relative p-1.5 flex items-center justify-center bg-[hsl(var(--pearl-1))] rounded-t-lg min-h-[70px]">
