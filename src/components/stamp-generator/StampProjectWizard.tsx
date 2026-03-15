@@ -539,8 +539,25 @@ export default function StampProjectWizard() {
   }, [form.company_name, getPreviewSvg, svgToCanvas, triggerDownload]);
 
   const handlePrintPreview = useCallback(() => {
-    window.print();
-  }, []);
+    const svgData = getPreviewSvg();
+    if (!svgData) return;
+    const printWindow = window.open('', '_blank', 'width=800,height=800');
+    if (printWindow) {
+      printWindow.document.write(`<!DOCTYPE html><html><head>
+        <title>Print Stamp — ${form.company_name || 'Stamp'}</title>
+        <style>
+          @page { size: 100mm 100mm; margin: 10mm; }
+          html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: white; }
+          body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+          svg { width: 80mm; height: 80mm; max-width: 100%; }
+        </style>
+      </head><body>${svgData}</body></html>`);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.onafterprint = () => printWindow.close();
+      setTimeout(() => printWindow.print(), 600);
+    }
+  }, [form.company_name, getPreviewSvg]);
 
   const [bulkExporting, setBulkExporting] = useState(false);
   const handleBulkExport = useCallback(async () => {

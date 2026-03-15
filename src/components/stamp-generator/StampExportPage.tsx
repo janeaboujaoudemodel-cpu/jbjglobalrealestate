@@ -1137,16 +1137,23 @@ export default function StampExportPage() {
                 </Button>
                 <Button variant="outline" className="gap-1.5 text-xs border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))]" onClick={() => {
                   if (!tintedSvg) return;
-                  // Open print dialog
                   const printWindow = window.open('', '_blank', 'width=800,height=800');
                   if (printWindow) {
-                    printWindow.document.write(`
-                      <!DOCTYPE html><html><head><title>Print Stamp</title>
-                      <style>@media print { body { margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; } } body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: white; }</style>
-                      </head><body>${tintedSvg}</body></html>`);
+                    const cleanSvg = sanitizeSvgForExport(tintedSvg, 200);
+                    const htmlSvg = cleanSvg.replace(/<\?xml[^?]*\?>\s*/, '');
+                    printWindow.document.write(`<!DOCTYPE html><html><head>
+                      <title>Print Stamp — ${project?.company_name || 'Stamp'}</title>
+                      <style>
+                        @page { size: 100mm 100mm; margin: 10mm; }
+                        html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: white; }
+                        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+                        svg { width: 80mm; height: 80mm; max-width: 100%; }
+                      </style>
+                    </head><body>${htmlSvg}</body></html>`);
                     printWindow.document.close();
                     printWindow.focus();
-                    setTimeout(() => printWindow.print(), 500);
+                    printWindow.onafterprint = () => printWindow.close();
+                    setTimeout(() => printWindow.print(), 600);
                   }
                 }}>
                   <Printer size={12}/> Print
