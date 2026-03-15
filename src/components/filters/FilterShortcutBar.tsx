@@ -349,9 +349,9 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
             <Tabs value={filters.priceMode} onValueChange={handlePriceModeChange}>
               <TabsList className="w-full mb-3 bg-white/60">
-                <TabsTrigger value="unit" className="flex-1 text-xs">Per unit</TabsTrigger>
-                <TabsTrigger value="sqft" className="flex-1 text-xs">Per sqft</TabsTrigger>
-                <TabsTrigger value="sqm" className="flex-1 text-xs">Per sqm</TabsTrigger>
+                <TabsTrigger value="unit" className="flex-1 text-xs">{t('filter.perUnit')}</TabsTrigger>
+                <TabsTrigger value="sqft" className="flex-1 text-xs">{t('filter.perSqft')}</TabsTrigger>
+                <TabsTrigger value="sqm" className="flex-1 text-xs">{t('filter.perSqm')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="grid grid-cols-2 gap-3 mb-3">
