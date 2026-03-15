@@ -74,6 +74,8 @@ export interface LiveStampPreviewProps {
   middleBorderColor?: string;
   innerBorderColor?: string;
   locationArcSpread?: number;
+  onLetterClick?: (selection: LetterSelection) => void;
+  letterOverrides?: Record<string, LetterOverride>;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
