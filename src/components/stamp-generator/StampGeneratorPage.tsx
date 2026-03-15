@@ -426,12 +426,12 @@ export default function StampGeneratorPage() {
     if (!p) return;
     if (generationLockRef.current) return;
     generationLockRef.current = true;
-    // Only show center spinner on very first generation (no standard yet)
-    const isFirstGen = !standardConcept;
-    if (isFirstGen) setGenerating(true);
-    setGeneratingInPanel(true);
+    // Only show center spinner when there is NO standard model yet
+    const hasStandard = !!standardConcept;
+    if (!hasStandard) setGenerating(true);
+    // Right panel always shows loading state via `generating`
+    if (hasStandard) setGenerating(true); // drives right panel skeleton cards
     setBlocked(false);
-    // Don't clear svgOverrides — preserve standard edits
     try {
       if (session?.access_token) {
         const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
@@ -441,7 +441,7 @@ export default function StampGeneratorPage() {
         });
         if (res.ok) {
           const json = await res.json();
-        if (json.blocked) { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); generationLockRef.current = false; return; }
+          if (json.blocked) { setBlocked(true); setGenerating(false); generationLockRef.current = false; return; }
           if (json.concepts?.length) {
             const { data: saved } = await supabase
               .from('stamp_designs')
@@ -462,7 +462,6 @@ export default function StampGeneratorPage() {
                 setSelectedId(newConcepts[0].id);
               }
               setGenerating(false);
-              setGeneratingInPanel(false);
               generationLockRef.current = false;
               return;
             }
@@ -471,15 +470,14 @@ export default function StampGeneratorPage() {
       }
     } catch (_) {}
     const clientConcepts = generateStampConcepts(project ? { ...project, ...p } : p);
-    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); generationLockRef.current = false; return; }
+    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); generationLockRef.current = false; return; }
     setConcepts(clientConcepts);
-    // Set standard on first generation
+    // Set standard on first generation — never overwrite existing standard
     if (!standardConcept && clientConcepts.length > 0) {
       setStandardConcept(clientConcepts[0]);
       setSelectedId(clientConcepts[0].id);
     }
     setGenerating(false);
-    setGeneratingInPanel(false);
     generationLockRef.current = false;
   }, [project, session, projectId, standardConcept]);
 
