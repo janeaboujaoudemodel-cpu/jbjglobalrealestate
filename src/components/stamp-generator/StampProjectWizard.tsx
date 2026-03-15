@@ -374,9 +374,16 @@ export default function StampProjectWizard() {
             separator_style: form.separator_style, ink_color: form.ink_color,
             government_mode: form.government_mode, arabic_font: form.arabic_font,
             arabic_letter_spacing: form.arabic_letter_spacing, arabic_arc_spread: form.arabic_arc_spread,
+            english_arc_spread: form.english_arc_spread,
             arabic_font_weight: form.arabic_font_weight, arc_text_spacing: form.arc_text_spacing,
             circle_gap: form.circle_gap, separator_distance: form.separator_distance,
             center_content_size: form.center_content_size, selected_preset: form.selected_preset,
+            company_arc_offset: form.company_arc_offset,
+            location_arc_offset: form.location_arc_offset,
+            monogram_colors: form.monogram_colors,
+            outer_border_color: form.outer_border_color,
+            middle_border_color: form.middle_border_color,
+            inner_border_color: form.inner_border_color,
           },
         })
         .select().single();
