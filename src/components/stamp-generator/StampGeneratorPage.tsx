@@ -407,8 +407,8 @@ export default function StampGeneratorPage() {
           project_id: projectId, user_id: user.id, design_version: 1,
           template_key: standardConcept.templateKey,
           svg_source: svgOverrides[standardConcept.id] || standardConcept.svgSource,
-          style_snapshot_json: project,
-        }).select('id').single();
+          style_snapshot_json: project, source: 'manual',
+        } as any).select('id').single();
         if (inserted) {
           standardDbId = inserted.id;
           setStandardConcept(prev => prev ? { ...prev, id: inserted.id } : prev);
