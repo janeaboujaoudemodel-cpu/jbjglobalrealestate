@@ -781,37 +781,15 @@ export default function GlobalVerticalNav() {
     return ordered.slice(0, 12);
   }, [areas]);
 
-  // ── Auto-reveal on homepage: hidden initially, show after 3s or scroll ──
-  const isHomepage = location.pathname === "/" || location.pathname === "";
-  const [navRevealed, setNavRevealed] = useState(() => {
-    try { return sessionStorage.getItem('jj_nav_revealed') === '1'; } catch { return false; }
-  });
+  // ── Always reveal immediately on all routes ──
+  const [navRevealed, setNavRevealed] = useState(true);
 
   useEffect(() => {
-    if (!isHomepage) {
-      if (!navRevealed) {
-        setNavRevealed(true);
-        try { sessionStorage.setItem('jj_nav_revealed', '1'); } catch {}
-      }
-      return;
-    }
-    if (navRevealed) return;
-    const timer = setTimeout(() => {
+    if (!navRevealed) {
       setNavRevealed(true);
       try { sessionStorage.setItem('jj_nav_revealed', '1'); } catch {}
-    }, 3000);
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setNavRevealed(true);
-        try { sessionStorage.setItem('jj_nav_revealed', '1'); } catch {}
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [isHomepage, navRevealed]);
+    }
+  }, []);
 
   const toggleCollapse = useCallback(() => {
     setCollapsed(prev => {

@@ -164,8 +164,8 @@ export function MonogramColorEditor({ monogramText, colors, onChange, defaultCol
 }
 
 /**
- * Inject per-letter monogram colors into SVG.
- * Replaces single-fill monogram `<text>` with individually colored `<tspan>` elements.
+ * Inject per-letter monogram colors into SVG using DOMParser for robustness.
+ * Handles existing <tspan> elements and works on repeated calls without corruption.
  */
 export function applyMonogramColors(
   svgSource: string,
@@ -173,28 +173,63 @@ export function applyMonogramColors(
   letterColors: MonogramLetterColors,
   defaultColor: string
 ): string {
-  if (!monogramText) return svgSource;
+  if (!monogramText || typeof window === 'undefined') return svgSource;
+
+  const hasCustomColors = Object.keys(letterColors.letters).length > 0 || letterColors.allLetters;
+  if (!hasCustomColors && !letterColors.divider) return svgSource;
 
   const mono = monogramText.toUpperCase().slice(0, 3);
-  
-  // Find monogram text element (dominant-baseline="central" near center)
-  const monoRegex = /<text([^>]*dominant-baseline="central"[^>]*)>[^<]*<\/text>/gi;
-  
-  return svgSource.replace(monoRegex, (match, attrs) => {
-    // Check if this has per-letter colors
-    const hasCustomColors = Object.keys(letterColors.letters).length > 0 || letterColors.allLetters;
-    
-    if (!hasCustomColors) return match;
 
-    // Build tspan elements for each letter
-    const tspans = mono.split('').map((char, i) => {
-      const fill = letterColors.letters[i] || letterColors.allLetters || defaultColor;
-      return `<tspan fill="${fill}">${char}</tspan>`;
-    }).join('');
-
-    // Remove existing fill from attrs since tspans handle it
-    const cleanAttrs = attrs.replace(/\bfill="[^"]*"/gi, '');
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgSource, 'image/svg+xml');
     
-    return `<text${cleanAttrs}>${tspans}</text>`;
-  });
+    // Find monogram text elements (dominant-baseline="central" near center)
+    const textEls = Array.from(doc.querySelectorAll('text[dominant-baseline="central"]'));
+    
+    for (const textEl of textEls) {
+      // Check if this text contains our monogram characters
+      const textContent = textEl.textContent?.trim() || '';
+      const isMonogram = textContent.toUpperCase() === mono || 
+        (textContent.length <= 3 && mono.includes(textContent.toUpperCase()));
+      
+      if (!isMonogram && textContent.length > 3) continue;
+
+      if (hasCustomColors) {
+        // Clear existing children (text nodes and tspans)
+        while (textEl.firstChild) textEl.removeChild(textEl.firstChild);
+        
+        // Remove fill from the parent text element since tspans handle it
+        textEl.removeAttribute('fill');
+        
+        // Create tspan for each letter with individual colors
+        for (let i = 0; i < mono.length; i++) {
+          const tspan = doc.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+          const fill = letterColors.letters[i] || letterColors.allLetters || defaultColor;
+          tspan.setAttribute('fill', fill);
+          tspan.textContent = mono[i];
+          textEl.appendChild(tspan);
+        }
+      }
+    }
+    
+    // Apply divider color to line/rect elements near center (decorative dividers)
+    if (letterColors.divider) {
+      const centerEls = doc.querySelectorAll('[data-stamp-element="center"]');
+      centerEls.forEach(el => {
+        const lines = el.querySelectorAll('line, rect');
+        lines.forEach(line => {
+          if (line.getAttribute('stroke')) line.setAttribute('stroke', letterColors.divider!);
+          if (line.getAttribute('fill') && line.getAttribute('fill') !== 'none') {
+            line.setAttribute('fill', letterColors.divider!);
+          }
+        });
+      });
+    }
+    
+    return new XMLSerializer().serializeToString(doc.documentElement);
+  } catch {
+    // Fallback: return unmodified
+    return svgSource;
+  }
 }

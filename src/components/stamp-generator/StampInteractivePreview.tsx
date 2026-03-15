@@ -65,6 +65,8 @@ interface Props {
   onSvgChange: (newSvg: string) => void;
   onSeparatorChange?: (style: SeparatorStyle) => void;
   onCenterModeChange?: (mode: CenterContentMode, options?: { monogramText?: string; icon?: CenterIconType }) => void;
+  /** Called when user clicks the center element — used to auto-switch to monogram edit */
+  onCenterClick?: () => void;
   currentSeparatorStyle?: SeparatorStyle;
   currentCenterMode?: CenterContentMode;
 }
@@ -83,6 +85,7 @@ export function StampInteractivePreview({
   onSvgChange,
   onSeparatorChange,
   onCenterModeChange,
+  onCenterClick,
   currentSeparatorStyle,
   currentCenterMode,
 }: Props) {
@@ -135,6 +138,10 @@ export function StampInteractivePreview({
       x: Math.max(0, Math.min(zone.rect.x + zone.rect.width / 2, size - 120)),
       y: Math.max(0, zone.rect.y - 8),
     });
+    // Auto-switch to monogram edit when center is clicked
+    if (zone.type === 'center' && onCenterClick) {
+      onCenterClick();
+    }
   };
 
   const handleClickOutside = (e: React.MouseEvent) => {

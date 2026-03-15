@@ -2,7 +2,7 @@
  * StampLeftPanel — Collapsible accordion sections replacing the old 6-tab system.
  * Each section can be independently expanded/collapsed.
  */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { StampColorWheel } from './StampColorWheel';
 import { StampTextEditor } from './StampTextEditor';
@@ -157,6 +157,15 @@ interface StampLeftPanelProps {
 
 export function StampLeftPanel(props: StampLeftPanelProps) {
   const [openSections, setOpenSections] = useState<string[]>(['colors', 'text']);
+
+  // Listen for center panel open event from canvas center click
+  useEffect(() => {
+    const handler = () => {
+      setOpenSections(prev => prev.includes('center') ? prev : [...prev, 'center']);
+    };
+    window.addEventListener('stamp-open-center-panel', handler);
+    return () => window.removeEventListener('stamp-open-center-panel', handler);
+  }, []);
 
   const stopDefs: { key: ColorStop; label: string; color: string }[] = [
     { key: 'primary', label: 'Primary', color: props.primaryColor },

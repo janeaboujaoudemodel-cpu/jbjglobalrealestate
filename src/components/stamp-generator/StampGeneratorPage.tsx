@@ -174,7 +174,21 @@ export default function StampGeneratorPage() {
   const [centerContentSize, setCenterContentSizeRaw] = useState(() => ssGet(ssKey('centerContentSize'), 40));
   const setCenterContentSize = (v: number) => { setCenterContentSizeRaw(v); ssSave(ssKey('centerContentSize'), v); };
 
-
+  // Live-apply monogram colors whenever they change
+  useEffect(() => {
+    if (localIconStyle !== 'MONOGRAM' || !localMonogramText) return;
+    const hasCustomColors = Object.keys(monogramLetterColors.letters).length > 0 || monogramLetterColors.allLetters || monogramLetterColors.divider;
+    if (!hasCustomColors) return;
+    const id = selectedId || concepts[0]?.id;
+    if (!id) return;
+    const baseSvg = svgOverrides[id] || concepts.find(c => c.id === id)?.svgSource || favoriteConcepts.find(c => c.id === id)?.svgSource || standardConcept?.svgSource || '';
+    if (!baseSvg) return;
+    const colored = applyMonogramColors(baseSvg, localMonogramText, monogramLetterColors, primaryColor);
+    if (colored !== baseSvg) {
+      setSvgOverrides(prev => ({ ...prev, [id]: colored }));
+      triggerPulse();
+    }
+  }, [monogramLetterColors, localMonogramText, localIconStyle, primaryColor]);
 
 
   // Preview modal
@@ -269,6 +283,9 @@ export default function StampGeneratorPage() {
           fontItalic,
           inkMode,
           zoom,
+          localIconStyle,
+          localMonogramText,
+          monogramLetterColors,
           lastSaved: new Date().toISOString(),
         };
       }
@@ -289,7 +306,7 @@ export default function StampGeneratorPage() {
       toast.error('Save failed: ' + (err?.message || 'Unknown error'));
     }
     setSaving(false);
-  }, [projectId, user?.id, saving, standardConcept, svgOverrides, project, primaryColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, inkMode, zoom]);
+  }, [projectId, user?.id, saving, standardConcept, svgOverrides, project, primaryColor, secondaryColor, accentColor, fontFamily, fontBold, fontItalic, inkMode, zoom, localIconStyle, localMonogramText, monogramLetterColors]);
 
   // Preview update feedback
   const [previewPulse, setPreviewPulse] = useState(false);
@@ -333,8 +350,11 @@ export default function StampGeneratorPage() {
       .single();
     if (error || !data) { toast.error('Project not found'); navigate('/toolkit/stamp-generator'); return; }
     setProject(data);
-    setLocalIconStyle((data.icon_style as any) || 'MONOGRAM');
-    setLocalMonogramText(data.monogram_text || data.company_name?.slice(0, 2)?.toUpperCase() || '');
+    setLocalIconStyle((data as any).layout_json?.localIconStyle || (data.icon_style as any) || 'MONOGRAM');
+    setLocalMonogramText((data as any).layout_json?.localMonogramText || data.monogram_text || data.company_name?.slice(0, 2)?.toUpperCase() || '');
+    if ((data as any).layout_json?.monogramLetterColors) {
+      setMonogramLetterColors((data as any).layout_json.monogramLetterColors);
+    }
     const savedLogo = projectId ? localStorage.getItem(`stamp-logo-${projectId}`) : null;
     setLocalLogoUrlRaw(savedLogo || (data as any).uploaded_logo_url || '');
     const isFresh = new URLSearchParams(location.search).get('fresh') === '1';
@@ -942,6 +962,16 @@ export default function StampGeneratorPage() {
                           localMonogramText, localLogoUrl);
                         setSvgOverrides(prev => ({ ...prev, [id]: newSvg }));
                       }
+                    }}
+                    onCenterClick={() => {
+                      // Auto-switch to MONOGRAM mode and open left panel center section
+                      setLocalIconStyle('MONOGRAM');
+                      if (!localMonogramText && project?.company_name) {
+                        const initials = project.company_name.split(/\s+/).map((w: string) => w[0]).join('').toUpperCase().slice(0, 3);
+                        setLocalMonogramText(initials);
+                      }
+                      // Dispatch event to open the center section in left panel
+                      window.dispatchEvent(new CustomEvent('stamp-open-center-panel'));
                     }}
                     currentSeparatorStyle={project?.separator_style}
                     currentCenterMode={localIconStyle === 'UPLOADED_LOGO' ? 'logo' : localIconStyle === 'NONE' ? 'none' : 'monogram'}
