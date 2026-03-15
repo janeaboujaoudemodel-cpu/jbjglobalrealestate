@@ -1215,35 +1215,35 @@ export default function GlobalVerticalNav() {
 
       {/* Bottom pinned section — SUPPORT hub + Sign In/Out */}
       <div className="mt-auto flex-shrink-0">
-        <div className="px-3 py-4 border-t border-red-500/20 space-y-1.5 bg-gradient-to-b from-[#EDE4D3]/50 to-[#EDE4D3]">
+        <div className="px-2.5 py-2 border-t border-gold/15 space-y-1 bg-[#FDFBF7]">
           <Link
             to="/contact"
-            className="flex items-center justify-center gap-2 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50 w-full"
+            className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-black/60 hover:text-black transition-colors px-2 py-1.5 rounded-md hover:bg-gold/10 w-full"
           >
-            <Headphones className="w-3.5 h-3.5 text-red-500" />
+            <Headphones className="w-3 h-3 text-gold" />
             Contact Us
           </Link>
           <Link
             to="/ticket-hub"
-            className="flex items-center justify-center gap-2 text-xs font-bold text-red-600 hover:text-red-700 transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50 w-full"
+            className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-black/60 hover:text-black transition-colors px-2 py-1.5 rounded-md hover:bg-gold/10 w-full"
           >
-            <Ticket className="w-3.5 h-3.5 text-red-500" />
-            Create or Follow Up Ticket
+            <Ticket className="w-3 h-3 text-gold" />
+            Support Ticket
           </Link>
           {session ? (
             <button
               onClick={() => { supabase.auth.signOut(); }}
-              className="flex items-center justify-center gap-2 text-xs font-bold text-black/70 hover:text-black transition-colors px-2 py-2.5 rounded-lg border border-red-500/30 hover:border-red-500/50 hover:bg-red-50/50 w-full"
+              className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-black/40 hover:text-black/70 transition-colors px-2 py-1.5 rounded-md hover:bg-black/5 w-full"
             >
-              <LogOut className="w-3.5 h-3.5 text-red-500" />
+              <LogOut className="w-3 h-3 text-black/40" />
               Sign Out
             </button>
           ) : (
             <Link
               to="/auth"
-              className="flex items-center justify-center gap-2 text-xs font-bold text-black/70 hover:text-black transition-colors px-2 py-2.5 rounded-lg border border-gold/30 hover:border-gold/50 hover:bg-gold/10 w-full"
+              className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-black/60 hover:text-black transition-colors px-2 py-1.5 rounded-md hover:bg-gold/10 w-full"
             >
-              <User className="w-3.5 h-3.5" />
+              <User className="w-3 h-3 text-gold" />
               Sign In
             </Link>
           )}
