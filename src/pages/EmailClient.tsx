@@ -468,12 +468,33 @@ const EmailClient = () => {
                   value={newEmail.subject}
                   onChange={(e) => setNewEmail({ ...newEmail, subject: e.target.value })}
                 />
-                <Textarea
-                  placeholder="Write your message..."
-                  value={newEmail.body}
-                  onChange={(e) => setNewEmail({ ...newEmail, body: e.target.value })}
-                  className="min-h-[200px]"
-                />
+                <div
+                  className={cn(
+                    "relative rounded-md transition-all",
+                    isComposeDragOver && "ring-2 ring-[#C9A84C] ring-offset-2 bg-[#C9A84C]/5"
+                  )}
+                  onDragOver={(e) => { e.preventDefault(); setIsComposeDragOver(true); }}
+                  onDragLeave={(e) => { e.preventDefault(); setIsComposeDragOver(false); }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setIsComposeDragOver(false);
+                    if (e.dataTransfer.files.length > 0) {
+                      processDroppedFiles(e.dataTransfer.files, (att) => setAttachments(prev => [...prev, att]));
+                    }
+                  }}
+                >
+                  {isComposeDragOver && (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#C9A84C]/10 rounded-md border-2 border-dashed border-[#C9A84C] pointer-events-none">
+                      <p className="text-sm font-medium text-[#C9A84C]">Drop files to attach</p>
+                    </div>
+                  )}
+                  <Textarea
+                    placeholder="Write your message..."
+                    value={newEmail.body}
+                    onChange={(e) => setNewEmail({ ...newEmail, body: e.target.value })}
+                    className="min-h-[200px]"
+                  />
+                </div>
 
                 {/* Signature info + persona consistency badge */}
                 <div className="bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg p-3">
