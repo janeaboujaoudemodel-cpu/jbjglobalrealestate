@@ -835,18 +835,38 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
 
                 {/* Crop position when crop mode active */}
                 {fitMode === "crop" && activeImage && (
-                  <div className="pt-2 border-t border-stone-100 space-y-2">
-                    <p className="text-xs text-muted-foreground font-medium">Crop Focus</p>
+                  <div className="pt-2 border-t border-stone-100 space-y-3">
+                    {/* AI Smart Crop Button */}
+                    <Button
+                      size="sm"
+                      onClick={handleSmartCrop}
+                      disabled={smartCropLoading}
+                      className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-medium text-xs h-9 shadow-md"
+                    >
+                      {smartCropLoading ? (
+                        <><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> Detecting subject...</>
+                      ) : (
+                        <><Sparkles className="h-3.5 w-3.5 mr-1.5" /> AI Smart Crop</>
+                      )}
+                    </Button>
+                    {smartCropSubject && (
+                      <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-violet-50 border border-violet-200">
+                        <Target className="h-3 w-3 text-violet-600 shrink-0" />
+                        <span className="text-xs text-violet-700 truncate">Focused on: {smartCropSubject}</span>
+                      </div>
+                    )}
+
+                    <p className="text-xs text-muted-foreground font-medium">Manual Crop Focus</p>
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground w-4">X</span>
                         <Slider value={[activeImage.cropPosition.x]} min={0} max={100} step={1}
-                          onValueChange={([v]) => setImages(prev => prev.map(i => i.id === activeImage.id ? { ...i, cropPosition: { ...i.cropPosition, x: v } } : i))} className="flex-1" />
+                          onValueChange={([v]) => { setImages(prev => prev.map(i => i.id === activeImage.id ? { ...i, cropPosition: { ...i.cropPosition, x: v } } : i)); setSmartCropSubject(null); }} className="flex-1" />
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground w-4">Y</span>
                         <Slider value={[activeImage.cropPosition.y]} min={0} max={100} step={1}
-                          onValueChange={([v]) => setImages(prev => prev.map(i => i.id === activeImage.id ? { ...i, cropPosition: { ...i.cropPosition, y: v } } : i))} className="flex-1" />
+                          onValueChange={([v]) => { setImages(prev => prev.map(i => i.id === activeImage.id ? { ...i, cropPosition: { ...i.cropPosition, y: v } } : i)); setSmartCropSubject(null); }} className="flex-1" />
                       </div>
                     </div>
                   </div>
