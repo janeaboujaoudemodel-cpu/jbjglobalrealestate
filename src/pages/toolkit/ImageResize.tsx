@@ -15,8 +15,9 @@ import {
   Loader2, Check, Crop, Square, Plus, Type, Stamp, CalendarDays,
   Palette, Grid3X3, Eraser, LayoutGrid, ChevronLeft, ChevronRight,
   Maximize, ZoomIn, ZoomOut, RotateCcw, FlipHorizontal, FlipVertical,
-  Layers, Scissors, PaintBucket, SlidersHorizontal
+  Layers, Scissors, PaintBucket, SlidersHorizontal, Sparkles, Target
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import JSZip from "jszip";
 
 // ─── Size Presets ───────────────────────────────────────────
