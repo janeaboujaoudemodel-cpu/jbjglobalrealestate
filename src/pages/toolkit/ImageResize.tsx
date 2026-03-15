@@ -123,6 +123,8 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
     if (!activeImage) return;
     setSmartCropLoading(true);
     setSmartCropSubject(null);
+    setSmartCropConfidence(null);
+    setSmartCropComposition(null);
     try {
       // Convert image to base64 for AI analysis (downscale for speed)
       const img = new window.Image();
@@ -132,14 +134,14 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
         img.onerror = reject;
         img.src = activeImage.preview;
       });
-      const maxDim = 512;
+      const maxDim = 768; // higher res for better detection
       const scale = Math.min(maxDim / img.width, maxDim / img.height, 1);
       const canvas = document.createElement("canvas");
       canvas.width = Math.round(img.width * scale);
       canvas.height = Math.round(img.height * scale);
       const ctx = canvas.getContext("2d")!;
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      const base64 = canvas.toDataURL("image/jpeg", 0.7);
+      const base64 = canvas.toDataURL("image/jpeg", 0.8);
 
       const { data, error } = await supabase.functions.invoke("smart-crop-detect", {
         body: { imageBase64: base64 },
@@ -154,8 +156,12 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
         i.id === activeImage.id ? { ...i, cropPosition: { x, y } } : i
       ));
       setSmartCropSubject(data.subject || null);
+      setSmartCropConfidence(data.confidence ?? null);
+      setSmartCropComposition(data.composition ?? null);
       setFitMode("crop");
-      sonnerToast.success(`Smart crop: focused on ${data.subject || "main subject"}`);
+
+      const confidenceLabel = (data.confidence ?? 0) >= 80 ? "High" : (data.confidence ?? 0) >= 50 ? "Medium" : "Low";
+      sonnerToast.success(`Smart crop: ${data.subject || "main subject"} (${confidenceLabel} confidence)`);
     } catch (err: any) {
       console.error("Smart crop error:", err);
       sonnerToast.error(err?.message || "Smart crop failed");
