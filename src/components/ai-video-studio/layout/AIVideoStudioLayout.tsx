@@ -3,7 +3,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Languages, Mic, Sparkles, Music2, Layers, Maximize2,
-  Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type, Clapperboard, UserSquare2, History
+  Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type, Clapperboard, UserSquare2, History,
+  AudioLines, ImagePlus, Share2
 } from 'lucide-react';
 
 // ─── Luxury palette tokens ────────────────────────────────────────────────────
@@ -49,6 +50,9 @@ interface AIVideoStudioLayoutProps {
   projectsPanel?: ReactNode;
   talkingAgentPanel?: ReactNode;
   historyPanel?: ReactNode;
+  audioExtractPanel?: ReactNode;
+  photoClipPanel?: ReactNode;
+  sharePanel?: ReactNode;
 }
 
 const TOOL_TABS = [
@@ -67,6 +71,9 @@ const TOOL_TABS = [
   { id: 'inspector',      label: 'Inspector',   icon: Settings2     },
   { id: 'projects',       label: 'Projects',    icon: FolderOpen    },
   { id: 'history',        label: 'Ad History',  icon: History       },
+  { id: 'audio-extract',  label: 'Extract Audio', icon: AudioLines  },
+  { id: 'photo-clip',     label: 'Photo Clip',  icon: ImagePlus     },
+  { id: 'share',           label: 'Share',       icon: Share2        },
 ];
 
 export const AIVideoStudioLayout = forwardRef<AIVideoStudioLayoutHandle, AIVideoStudioLayoutProps>(
@@ -75,6 +82,7 @@ function AIVideoStudioLayout({
   mediaPanel, inspectorPanel, captionsPanel, textPanel, voicePanel,
   beautyPanel, sfxPanel, effectsPanel, transitionsPanel, resizePanel,
   mapPanel, aiEditorPanel, projectsPanel, talkingAgentPanel, historyPanel,
+  audioExtractPanel, photoClipPanel, sharePanel,
 }, ref) {
   const isMobile = useIsMobile();
   const [activeTool, setActiveTool] = useState<string | null>(null);
@@ -100,6 +108,7 @@ function AIVideoStudioLayout({
     effects: effectsPanel, transitions: transitionsPanel, resize: resizePanel,
     map: mapPanel, 'ai-editor': aiEditorPanel, inspector: inspectorPanel,
     projects: projectsPanel, 'talking-agent': talkingAgentPanel, history: historyPanel,
+    'audio-extract': audioExtractPanel, 'photo-clip': photoClipPanel, share: sharePanel,
   };
 
   const handleToolClick = (toolId: string) => {
