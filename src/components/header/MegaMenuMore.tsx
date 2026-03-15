@@ -8,7 +8,7 @@ import {
 import {
   MegaMenuIconLink,
   MegaMenuShell,
-  MegaMenuCard,
+  MegaMenuSection,
 } from '@/components/header/mega-menu-primitives';
 import { useUserModeContext } from '@/contexts/UserModeContext';
 import { useFounderVisibility } from '@/contexts/FounderVisibilityContext';
@@ -21,7 +21,6 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
   const { isBrokerMode } = useUserModeContext();
   const { isFounderVisible } = useFounderVisibility();
 
-  // Column 1: Services
   const servicesLinks = [
     { label: 'Our Services', href: '/services', icon: Briefcase },
     { label: 'Property Management', href: '/services/property-management', icon: Building2 },
@@ -31,7 +30,6 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Listing Portal', href: '/listing-portal', icon: ClipboardCheck },
   ];
 
-  // Column 2: Business Suites (NEW)
   const businessSuitesLinks = [
     { label: 'All Tools Suite', href: '/business-suite/all', icon: Layers },
     { label: 'Real Estate Suite', href: '/business-suite/real-estate', icon: Building2 },
@@ -42,7 +40,6 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Meeting Center', href: '/meeting-center', icon: Briefcase },
   ];
 
-  // Column 3: Toolkit (PUBLIC)
   const toolkitLinks = [
     { label: 'All Tools', href: '/toolkit', icon: Sparkles },
     { label: 'Creative Suite', href: '/studio', icon: Sparkles },
@@ -53,7 +50,6 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'AI Home Finder', href: '/quiz', icon: Sparkles },
   ];
 
-  // Column 3: Investors
   const investorLinks = [
     { label: 'Investor Dashboard', href: '/investor-dashboard', icon: UserCircle },
     { label: 'Investor Education', href: '/investor-education', icon: GraduationCap },
@@ -63,7 +59,6 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Portfolio Views', href: '/favorites', icon: Heart },
   ];
 
-  // Column 4: Brokers (MODE + ROLE BASED - visible in Broker Mode)
   const brokerLinks = [
     { label: 'Broker Hub', href: '/broker-toolkit', icon: Briefcase },
     { label: 'Broker Dashboard', href: '/broker-dashboard', icon: UserCircle },
@@ -73,7 +68,6 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Resources', href: '/broker-resources', icon: FolderOpen },
   ];
 
-  // Column 5: Company (Founder link is conditional on visibility toggle)
   const companyLinks = [
     { label: 'About JBJ', href: '/about', icon: Building2 },
     ...(isFounderVisible ? [{ label: 'Founder & Leadership', href: '/founder', icon: UserCircle }] : []),
@@ -83,7 +77,6 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Press & Media', href: '/press-kit', icon: FileText },
   ];
 
-  // Legal & Trust (always visible)
   const legalLinks = [
     { label: 'Terms of Service', href: '/terms', icon: FileText },
     { label: 'Privacy Policy', href: '/privacy', icon: Shield },
@@ -95,108 +88,66 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
     { label: 'Trust & Audit Center', href: '/trust-and-audit-center', icon: Shield },
   ];
 
+  const colCount = isBrokerMode ? 6 : 5;
+
   return (
     <MegaMenuShell ref={ref} noScroll>
       <div className="max-w-[1600px] mx-auto px-4 lg:px-8 py-4 lg:py-5">
-        {/* Grid of Premium Cards */}
-        <div className={`grid grid-cols-1 sm:grid-cols-2 ${isBrokerMode ? 'lg:grid-cols-6' : 'lg:grid-cols-5'} gap-4`}>
-          {/* Card 1: Services */}
-          <MegaMenuCard icon={Briefcase} title="Services">
-            {servicesLinks.map((item) => (
-              <MegaMenuIconLink
-                key={item.href}
-                to={item.href}
-                onClick={onClose}
-                icon={item.icon}
-                title={item.label}
-                compact
-              />
-            ))}
-          </MegaMenuCard>
-
-          {/* Card 2: Business Suites */}
-          <MegaMenuCard icon={Layers} title="Business Suites">
-            {businessSuitesLinks.map((item) => (
-              <MegaMenuIconLink
-                key={item.href}
-                to={item.href}
-                onClick={onClose}
-                icon={item.icon}
-                title={item.label}
-                compact
-              />
-            ))}
-          </MegaMenuCard>
-
-          {/* Card 3: Toolkit */}
-          <MegaMenuCard icon={Sparkles} title="AI Tools Hub">
-            {toolkitLinks.map((item) => (
-              <MegaMenuIconLink
-                key={item.href}
-                to={item.href}
-                onClick={onClose}
-                icon={item.icon}
-                title={item.label}
-                compact
-              />
-            ))}
-          </MegaMenuCard>
-
-          {/* Card 4: Investors */}
-          <MegaMenuCard icon={TrendingUp} title="Investors">
-            {investorLinks.map((item) => (
-              <MegaMenuIconLink
-                key={item.href}
-                to={item.href}
-                onClick={onClose}
-                icon={item.icon}
-                title={item.label}
-                compact
-              />
-            ))}
-          </MegaMenuCard>
-
-          {/* Card 5: Brokers - Only visible in Broker Mode */}
-          {isBrokerMode && (
-            <MegaMenuCard icon={Users} title="Brokers">
-              {brokerLinks.map((item) => (
-                <MegaMenuIconLink
-                  key={item.href}
-                  to={item.href}
-                  onClick={onClose}
-                  icon={item.icon}
-                  title={item.label}
-                  compact
-                />
+        {/* Connected grid with dividers instead of card borders */}
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${colCount} gap-0`}>
+          <div className="lg:border-r lg:border-gold/20">
+            <MegaMenuSection icon={Briefcase} title="Services">
+              {servicesLinks.map((item) => (
+                <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
               ))}
-            </MegaMenuCard>
+            </MegaMenuSection>
+          </div>
+
+          <div className="lg:border-r lg:border-gold/20 border-t lg:border-t-0 border-gold/20">
+            <MegaMenuSection icon={Layers} title="Business Suites">
+              {businessSuitesLinks.map((item) => (
+                <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+              ))}
+            </MegaMenuSection>
+          </div>
+
+          <div className="lg:border-r lg:border-gold/20 border-t lg:border-t-0 border-gold/20">
+            <MegaMenuSection icon={Sparkles} title="AI Tools Hub">
+              {toolkitLinks.map((item) => (
+                <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+              ))}
+            </MegaMenuSection>
+          </div>
+
+          <div className={`${isBrokerMode ? 'lg:border-r lg:border-gold/20' : ''} border-t lg:border-t-0 border-gold/20`}>
+            <MegaMenuSection icon={TrendingUp} title="Investors">
+              {investorLinks.map((item) => (
+                <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+              ))}
+            </MegaMenuSection>
+          </div>
+
+          {isBrokerMode && (
+            <div className="lg:border-r lg:border-gold/20 border-t lg:border-t-0 border-gold/20">
+              <MegaMenuSection icon={Users} title="Brokers">
+                {brokerLinks.map((item) => (
+                  <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+                ))}
+              </MegaMenuSection>
+            </div>
           )}
 
-          {/* Card 6 (or 5): Company + Legal */}
-          <MegaMenuCard icon={Building2} title="Company & Legal">
-            {companyLinks.map((item) => (
-              <MegaMenuIconLink
-                key={item.href}
-                to={item.href}
-                onClick={onClose}
-                icon={item.icon}
-                title={item.label}
-                compact
-              />
-            ))}
-            {/* Divider before legal */}
-            <div className="h-px bg-gold/20 my-2" />
-            {legalLinks.slice(0, 3).map((item) => (
-              <MegaMenuIconLink
-                key={item.href}
-                to={item.href}
-                onClick={onClose}
-                icon={item.icon}
-                title={item.label}
-                compact
-              />
-            ))}
-          </MegaMenuCard>
+          <div className="border-t lg:border-t-0 border-gold/20">
+            <MegaMenuSection icon={Building2} title="Company & Legal">
+              {companyLinks.map((item) => (
+                <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+              ))}
+              <div className="h-px bg-gold/20 my-2 mx-2.5" />
+              {legalLinks.slice(0, 3).map((item) => (
+                <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+              ))}
+            </MegaMenuSection>
+          </div>
         </div>
       </div>
     </MegaMenuShell>

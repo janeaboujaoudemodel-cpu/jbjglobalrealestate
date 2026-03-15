@@ -4,7 +4,7 @@ import {
   Wrench, Calendar, ClipboardCheck, Award, Building2, Globe, Eye, TrendingUp
 } from 'lucide-react';
 import servicesHero from '@/assets/property-consultation.png';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSection, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuServicesProps {
   onClose: () => void;
@@ -34,9 +34,9 @@ const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>
   return (
     <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-10 lg:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Left: Featured Photo - vertically centered */}
-          <div className="lg:col-span-6 flex items-center justify-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-stretch">
+          {/* Left: Featured Photo */}
+          <div className="lg:col-span-6 flex items-center justify-center lg:pr-8">
             <MegaMenuFeaturedCard
               to="/services"
               onClick={onClose}
@@ -49,40 +49,27 @@ const MegaMenuServices = React.forwardRef<HTMLDivElement, MegaMenuServicesProps>
             />
           </div>
 
-          {/* Right: Links in Premium Cards */}
-          <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Card 1: Core Services */}
-              <MegaMenuCard icon={Wrench} title="Core Services">
-                {coreServices.map((service) => (
-                  <MegaMenuIconLink
-                    key={service.name}
-                    to={service.href}
-                    onClick={onClose}
-                    icon={service.icon}
-                    title={service.name}
-                    compact
-                  />
-                ))}
-              </MegaMenuCard>
+          {/* Right: Sections with dividers */}
+          <div className="lg:col-span-6 lg:border-l lg:border-gold/20 lg:pl-2 border-t lg:border-t-0 border-gold/20 mt-6 lg:mt-0 pt-6 lg:pt-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-0">
+              <div className="sm:border-r sm:border-gold/20">
+                <MegaMenuSection icon={Wrench} title="Core Services">
+                  {coreServices.map((service) => (
+                    <MegaMenuIconLink key={service.name} to={service.href} onClick={onClose} icon={service.icon} title={service.name} compact />
+                  ))}
+                </MegaMenuSection>
+              </div>
 
-              {/* Card 2: Additional Services */}
-              <MegaMenuCard icon={Globe} title="More Services">
-                {additionalServices.map((service) => (
-                  <MegaMenuIconLink
-                    key={service.name}
-                    to={service.href}
-                    onClick={onClose}
-                    icon={service.icon}
-                    title={service.name}
-                    compact
-                  />
-                ))}
-              </MegaMenuCard>
+              <div className="border-t sm:border-t-0 border-gold/20">
+                <MegaMenuSection icon={Globe} title="More Services">
+                  {additionalServices.map((service) => (
+                    <MegaMenuIconLink key={service.name} to={service.href} onClick={onClose} icon={service.icon} title={service.name} compact />
+                  ))}
+                </MegaMenuSection>
+              </div>
             </div>
             
-            {/* View All CTA */}
-            <div className="mt-4">
+            <div className="mt-4 px-2.5">
               <MegaMenuCTAButton
                 to="/services"
                 onClick={onClose}

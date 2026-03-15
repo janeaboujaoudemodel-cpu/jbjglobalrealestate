@@ -2,23 +2,13 @@ import React from 'react';
 import { Building2, Eye } from 'lucide-react';
 import menuCorporateOffice from '@/assets/menu-corporate-office.jpg';
 import dubaiLandmarksVideo from '@/assets/videos/dubai-landmarks-hero.mp4';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton, MegaMenuSectionDivider } from '@/components/header/mega-menu-primitives';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSection, MegaMenuCTAButton, MegaMenuSectionDivider } from '@/components/header/mega-menu-primitives';
 import { useDevelopers } from '@/hooks/useProjects';
 
-/** Curated famous developers shown first */
 const FEATURED_DEVELOPER_SLUGS = [
-  'emaar',
-  'damac',
-  'nakheel',
-  'meraas',
-  'sobha',
-  'aldar',
-  'omniyat',
-  'select-group',
-  'ellington',
-  'azizi-developments',
-  'dubai-properties',
-  'danube-properties',
+  'emaar', 'damac', 'nakheel', 'meraas', 'sobha', 'aldar',
+  'omniyat', 'select-group', 'ellington', 'azizi-developments',
+  'dubai-properties', 'danube-properties',
 ];
 
 interface MegaMenuDevelopersProps {
@@ -42,9 +32,8 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
   return (
     <MegaMenuShell ref={ref}>
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-6 lg:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Featured card — wider (5 cols), different video than areas */}
-          <div className="lg:col-span-5 flex">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
+          <div className="lg:col-span-5 flex lg:pr-6">
             <MegaMenuFeaturedCard
               to="/developers"
               onClick={onClose}
@@ -58,31 +47,20 @@ const MegaMenuDevelopers = React.forwardRef<HTMLDivElement, MegaMenuDevelopersPr
             />
           </div>
 
-          {/* Developers list — narrower (7 cols), no scroll */}
-          <div className="lg:col-span-7 lg:border-l lg:border-gold/30 lg:pl-8">
-            <MegaMenuCard icon={Building2} title="Top Developers">
+          <div className="lg:col-span-7 lg:border-l lg:border-gold/20 lg:pl-2 border-t lg:border-t-0 border-gold/20 mt-6 lg:mt-0 pt-6 lg:pt-0">
+            <MegaMenuSection icon={Building2} title="Top Developers">
               <div className="grid grid-cols-2 gap-1">
                 {displayDevelopers.map((dev) => (
-                  <MegaMenuIconLink
-                    key={dev.slug}
-                    to={`/developer/${dev.slug}`}
-                    onClick={onClose}
-                    icon={Building2}
-                    title={dev.name}
-                    compact
-                  />
+                  <MegaMenuIconLink key={dev.slug} to={`/developer/${dev.slug}`} onClick={onClose} icon={Building2} title={dev.name} compact />
                 ))}
               </div>
-            </MegaMenuCard>
+            </MegaMenuSection>
             
             <MegaMenuSectionDivider />
 
-            <MegaMenuCTAButton
-              to="/developers"
-              onClick={onClose}
-              icon={Eye}
-              title="View All Developers"
-            />
+            <div className="px-2.5">
+              <MegaMenuCTAButton to="/developers" onClick={onClose} icon={Eye} title="View All Developers" />
+            </div>
           </div>
         </div>
       </div>

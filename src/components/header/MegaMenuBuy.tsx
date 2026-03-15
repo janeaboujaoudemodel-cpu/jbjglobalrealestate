@@ -2,7 +2,7 @@ import React from 'react';
 import { Building2, Home, Castle, Building, Briefcase, Eye, FileText, Calculator, Wrench, Star } from 'lucide-react';
 import menuLuxuryPenthouse from '@/assets/menu-luxury-penthouse.jpg';
 import dubaiBuyingVideo from '@/assets/videos/dubai-buying-hero.mp4';
-import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuCard, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
+import { MegaMenuFeaturedCard, MegaMenuIconLink, MegaMenuShell, MegaMenuSection, MegaMenuCTAButton } from '@/components/header/mega-menu-primitives';
 
 interface MegaMenuBuyProps {
   onClose: () => void;
@@ -27,9 +27,9 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
   return (
     <MegaMenuShell ref={ref}>
       <div className="max-w-[1560px] mx-auto px-8 lg:px-12 py-8 lg:py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
           {/* Left: Featured Photo with Video on Hover */}
-          <div className="lg:col-span-6">
+          <div className="lg:col-span-6 lg:pr-8">
             <MegaMenuFeaturedCard
               to="/properties?transaction=buy"
               onClick={onClose}
@@ -42,40 +42,28 @@ const MegaMenuBuy = React.forwardRef<HTMLDivElement, MegaMenuBuyProps>(({ onClos
             />
           </div>
 
-          {/* Right: Links in Premium Cards */}
-          <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Card 1: Properties by Type */}
-              <MegaMenuCard icon={Building2} title="Properties by Type">
-                {propertyTypes.map((item) => (
-                  <MegaMenuIconLink
-                    key={item.label}
-                    to={item.href}
-                    onClick={onClose}
-                    icon={item.icon}
-                    title={item.label}
-                    compact
-                  />
-                ))}
-              </MegaMenuCard>
+          {/* Right: Sections with dividers, no card borders */}
+          <div className="lg:col-span-6 lg:border-l lg:border-gold/20 lg:pl-2 border-t lg:border-t-0 border-gold/20 mt-6 lg:mt-0 pt-6 lg:pt-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-0">
+              <div className="sm:border-r sm:border-gold/20">
+                <MegaMenuSection icon={Building2} title="Properties by Type">
+                  {propertyTypes.map((item) => (
+                    <MegaMenuIconLink key={item.label} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+                  ))}
+                </MegaMenuSection>
+              </div>
 
-              {/* Card 2: Buyer Resources */}
-              <MegaMenuCard icon={FileText} title="Buyer Resources">
-                {buyerResources.map((item) => (
-                  <MegaMenuIconLink
-                    key={item.label}
-                    to={item.href}
-                    onClick={onClose}
-                    icon={item.icon}
-                    title={item.label}
-                    compact
-                  />
-                ))}
-              </MegaMenuCard>
+              <div className="border-t sm:border-t-0 border-gold/20">
+                <MegaMenuSection icon={FileText} title="Buyer Resources">
+                  {buyerResources.map((item) => (
+                    <MegaMenuIconLink key={item.label} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
+                  ))}
+                </MegaMenuSection>
+              </div>
             </div>
             
             {/* Full-width CTA Button at bottom */}
-            <div className="mt-6">
+            <div className="mt-4 px-2.5">
               <MegaMenuCTAButton
                 to="/properties?transaction=buy"
                 onClick={onClose}
