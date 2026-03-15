@@ -562,10 +562,12 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </div>
             </AccordionContent>
           </AccordionItem>
+          )}
 
           {/* ═══════════════════════════════════════════
-              3. 🇦🇪 Arabic Controls
+              3. 🇦🇪 Arabic Controls — hidden in EN-only mode
              ═══════════════════════════════════════════ */}
+          {props.languageMode !== 'EN' && (
           <AccordionItem value="arabic-controls" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
