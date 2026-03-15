@@ -511,7 +511,33 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     }
   };
 
-  const handleBatchPrint = () => {
+  const [isExportingToResizer, setIsExportingToResizer] = useState(false);
+
+  const handleExportToResizer = async () => {
+    if (!cardPreviewRef.current) { toast.error("Preview not ready."); return; }
+    setIsExportingToResizer(true);
+    try {
+      const html2canvas = (await import("html2canvas")).default;
+      const canvas = await html2canvas(cardPreviewRef.current, {
+        scale: 3, useCORS: true, backgroundColor: null, logging: false,
+      });
+      const dataUrl = canvas.toDataURL("image/png");
+      sessionStorage.setItem("jbj-card-to-resizer", JSON.stringify({
+        dataUrl,
+        name: `business-card-${(data.name || "card").toLowerCase().replace(/\s+/g, "-")}`,
+        width: canvas.width,
+        height: canvas.height,
+      }));
+      toast.success("Card exported! Opening Image Resizer...");
+      navigate("/toolkit/image-resize");
+    } catch (err) {
+      console.error(err);
+      toast.error("Export failed. Please try again.");
+    } finally {
+      setIsExportingToResizer(false);
+    }
+  };
+
     const printWindow = window.open("", "_blank");
     if (!printWindow) { toast.error("Pop-up blocked. Please allow pop-ups."); return; }
     const cardHtml = cardPreviewRef.current?.innerHTML || "";
