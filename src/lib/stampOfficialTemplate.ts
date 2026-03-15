@@ -480,8 +480,8 @@ function generateOvalStamp(config: OfficialStampConfig): string {
     borders += `<ellipse cx="${cx}" cy="${cy}" rx="${innerRx}" ry="${innerRy}" fill="none" stroke="${ink}" stroke-width="${innerSW * 0.7}"/>`;
   }
 
-  // Safe text arc radius — keep well inside borders
-  const textArcR = Math.min(innerRx, innerRy) - 12;
+  // Safe text arc radius — keep well inside borders with generous margin
+  const textArcR = Math.min(innerRx, innerRy) - 14;
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
 
   let textContent = '';
