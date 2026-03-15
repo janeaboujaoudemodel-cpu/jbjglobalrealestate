@@ -67,6 +67,8 @@ export default function EncryptionAuditDashboard() {
   const [loading, setLoading] = useState(true);
   const [keyStatus, setKeyStatus] = useState<{ configured: boolean; checking: boolean }>({ configured: false, checking: true });
   const [migrating, setMigrating] = useState(false);
+  const [rotationKeys, setRotationKeys] = useState<RotationRow[]>([]);
+  const [checkingRotation, setCheckingRotation] = useState(false);
 
   useEffect(() => {
     fetchAll();
