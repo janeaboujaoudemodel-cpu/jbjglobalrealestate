@@ -160,6 +160,7 @@ interface StampLeftPanelProps {
   englishArcSpread: number;
   companyArcOffset: number;
   locationArcOffset: number;
+  locationArcSpread: number;
   onSetArcTextSpacing: (v: number) => void;
   onSetCircleGap: (v: number) => void;
   onSetSeparatorDistance: (v: number) => void;
@@ -167,6 +168,7 @@ interface StampLeftPanelProps {
   onSetEnglishArcSpread: (v: number) => void;
   onSetCompanyArcOffset: (v: number) => void;
   onSetLocationArcOffset: (v: number) => void;
+  onSetLocationArcSpread: (v: number) => void;
 }
 
 export function StampLeftPanel(props: StampLeftPanelProps) {
