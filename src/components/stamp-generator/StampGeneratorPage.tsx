@@ -67,7 +67,7 @@ function injectCenterArt(svgSource: string, iconStyle: string, monogramText: str
   const centerR = S * 0.18;
   const insertBefore = '</svg>';
   if (iconStyle === 'UPLOADED_LOGO' && logoUrl) {
-    const imgSize = centerR * 2.2;
+    const imgSize = centerR * 2.6;
     const logoSvg = `
       <defs><clipPath id="center-clip"><circle cx="${cx}" cy="${cy}" r="${centerR - 1}"/></clipPath></defs>
       <image href="${logoUrl}" x="${cx - imgSize / 2}" y="${cy - imgSize / 2}" width="${imgSize}" height="${imgSize}" 
