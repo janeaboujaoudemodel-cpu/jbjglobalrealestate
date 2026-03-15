@@ -302,9 +302,13 @@ export default function StampGeneratorPage() {
     }
   }
 
+  const generationLockRef = useRef(false);
+
   const generateConcepts = useCallback(async (proj?: any) => {
     const p = proj || project;
     if (!p) return;
+    if (generationLockRef.current) return;
+    generationLockRef.current = true;
     // Only show center spinner on very first generation (no standard yet)
     const isFirstGen = !standardConcept;
     if (isFirstGen) setGenerating(true);
