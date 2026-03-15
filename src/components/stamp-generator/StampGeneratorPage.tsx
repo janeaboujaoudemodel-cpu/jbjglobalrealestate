@@ -910,7 +910,11 @@ export default function StampGeneratorPage() {
           onSetArabicFont={setArabicFont}
           onSetArabicLetterSpacing={setArabicLetterSpacing}
           onSetArabicArcSpread={setArabicArcSpread}
-          onSetArabicFontWeight={setArabicFontWeight}
+           onSetArabicFontWeight={setArabicFontWeight}
+           arabicFontSize={arabicFontSize}
+           onSetArabicFontSize={(v) => { setArabicFontSize(v); triggerPulse(); }}
+           arabicFontItalic={arabicFontItalic}
+           onSetArabicFontItalic={(v) => { setArabicFontItalic(v); triggerPulse(); }}
           arcTextSpacing={arcTextSpacing}
           circleGap={circleGap}
           separatorDistance={separatorDistance}
