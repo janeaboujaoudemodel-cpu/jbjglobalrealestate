@@ -93,18 +93,19 @@ export default function EncryptionAuditDashboard() {
     }
   };
 
-  const runMigration = async () => {
+  const runMigration = async (target: string = "crm_leads") => {
     setMigrating(true);
     try {
       const { data, error } = await supabase.functions.invoke("crm-data-encrypt", {
-        body: { action: "migrate" },
+        body: { action: "migrate", target },
       });
       if (error) throw error;
       if (data?.key_missing) {
-        toast.error("CRM_ENCRYPTION_KEY not configured yet. Add it in your backend secrets.");
+        toast.error("Encryption key not configured yet. Add it in your backend secrets.");
         return;
       }
-      toast.success(`Encrypted ${data?.migrated || 0} leads. ${data?.remaining === "complete" ? "All done!" : "Run again for more."}`);
+      const label = target.replace(/_/g, " ");
+      toast.success(`Encrypted ${data?.migrated || 0} ${label} records. ${data?.remaining === "complete" ? "All done!" : "Run again for more."}`);
       fetchAll();
     } catch (e: any) {
       toast.error(e.message || "Migration failed");
@@ -161,9 +162,14 @@ export default function EncryptionAuditDashboard() {
               </div>
             </div>
             {keyStatus.configured && (
-              <Button onClick={runMigration} disabled={migrating} size="sm" variant="outline" className="border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10">
-                {migrating ? <><RefreshCw className="w-4 h-4 mr-2 animate-spin" /> Encrypting...</> : <><Lock className="w-4 h-4 mr-2" /> Run Data Migration</>}
-              </Button>
+              <div className="flex gap-2">
+                {(["crm_leads", "hr_employees", "resale_listings"] as const).map(t => (
+                  <Button key={t} onClick={() => runMigration(t)} disabled={migrating} size="sm" variant="outline" className="border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 text-xs">
+                    {migrating ? <RefreshCw className="w-3 h-3 mr-1 animate-spin" /> : <Lock className="w-3 h-3 mr-1" />}
+                    {t.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}
+                  </Button>
+                ))}
+              </div>
             )}
           </div>
         </CardContent>
