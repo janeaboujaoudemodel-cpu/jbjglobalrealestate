@@ -196,6 +196,12 @@ export default function StampGeneratorPage() {
   // Element selection state — drives contextual sidebar panel opening
   const [selectedElement, setSelectedElement] = useState<SelectedElement | null>(null);
 
+  // Language mode — persisted
+  const [languageMode, setLanguageModeRaw] = useState<'EN' | 'AR' | 'BILINGUAL'>(
+    () => ssGet(ssKey('languageMode'), (project?.language_mode as 'EN' | 'AR' | 'BILINGUAL') || 'BILINGUAL')
+  );
+  const setLanguageMode = (v: 'EN' | 'AR' | 'BILINGUAL') => { setLanguageModeRaw(v); ssSave(ssKey('languageMode'), v); };
+
   // ═══════════════════════════════════════════════════════════════════
   // LIVE SVG RE-RENDER PIPELINE
   // When any layout/typography control changes, regenerate the SVG
