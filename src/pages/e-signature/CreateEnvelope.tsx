@@ -7,6 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { 
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { 
   ArrowLeft, 
   ArrowRight, 
@@ -18,7 +23,9 @@ import {
   Plus,
   Trash2,
   Loader2,
-  Clock
+  Clock,
+  CheckCircle2,
+  ShieldCheck
 } from "lucide-react";
 import { toast } from "sonner";
 import DocumentFieldPlacer from "@/components/e-signature/DocumentFieldPlacer";
@@ -100,6 +107,7 @@ export default function CreateEnvelope() {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reviewConfirmed, setReviewConfirmed] = useState(false);
 
   // Step 1: Document
   const [documentName, setDocumentName] = useState("");
@@ -767,32 +775,42 @@ export default function CreateEnvelope() {
             {currentStep === 4 && (
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold">Email Customization</h3>
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5 text-[hsl(var(--gold))]" />
+                    Review & Send
+                  </h3>
                   <p className="text-sm text-muted-foreground">
-                    Customize the email that will be sent to recipients
+                    Review all details before sending for signature
                   </p>
                 </div>
 
-                <div>
-                  <Label>Email Subject</Label>
-                  <Input
-                    value={emailSubject}
-                    onChange={(e) => setEmailSubject(e.target.value)}
-                    placeholder={`Please sign: ${documentName}`}
-                    className="mt-2"
-                  />
-                </div>
-
-                <div>
-                  <Label>Message (Optional)</Label>
-                  <Textarea
-                    value={emailMessage}
-                    onChange={(e) => setEmailMessage(e.target.value)}
-                    placeholder="Add a personal message to include in the email..."
-                    className="mt-2"
-                    rows={4}
-                  />
-                </div>
+                {/* Email Customization */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Email Customization</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div>
+                      <Label className="text-xs">Subject</Label>
+                      <Input
+                        value={emailSubject}
+                        onChange={(e) => setEmailSubject(e.target.value)}
+                        placeholder={`Please sign: ${documentName}`}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label className="text-xs">Message (Optional)</Label>
+                      <Textarea
+                        value={emailMessage}
+                        onChange={(e) => setEmailMessage(e.target.value)}
+                        placeholder="Add a personal message to include in the email..."
+                        className="mt-1"
+                        rows={3}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
 
                 {/* Visual Document Preview */}
                 {pdfUrl && (
@@ -804,30 +822,98 @@ export default function CreateEnvelope() {
                   />
                 )}
 
-                {/* Summary */}
-                <Card className="bg-muted/50">
-                  <CardHeader>
-                    <CardTitle className="text-base">Summary</CardTitle>
+                {/* Recipients Table */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <Users className="w-4 h-4 text-[hsl(var(--gold))]" />
+                      Recipients ({recipients.length})
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Document:</span>
-                      <span className="font-medium">{documentName}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Recipients:</span>
-                      <span className="font-medium">{recipients.length}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Signature Fields:</span>
-                      <span className="font-medium">{signatureFields.length}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Expires:</span>
-                      <span className="font-medium">7 days after sending</span>
-                    </div>
+                  <CardContent className="p-0">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="text-xs">Order</TableHead>
+                          <TableHead className="text-xs">Name</TableHead>
+                          <TableHead className="text-xs">Email</TableHead>
+                          <TableHead className="text-xs text-right">Fields</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {recipients.map((r, i) => {
+                          const rFields = signatureFields.filter(f => f.recipientId === r.id);
+                          const types = [...new Set(rFields.map(f => f.type))];
+                          return (
+                            <TableRow key={r.id}>
+                              <TableCell className="text-xs font-mono">#{i + 1}</TableCell>
+                              <TableCell className="text-xs font-medium">{r.name}</TableCell>
+                              <TableCell className="text-xs text-muted-foreground">{r.email}</TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex gap-1 justify-end flex-wrap">
+                                  {types.map(t => (
+                                    <Badge key={t} variant="secondary" className="text-[10px] px-1.5 py-0">
+                                      {rFields.filter(f => f.type === t).length}× {t}
+                                    </Badge>
+                                  ))}
+                                  {rFields.length === 0 && (
+                                    <span className="text-[10px] text-muted-foreground italic">No fields</span>
+                                  )}
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
                   </CardContent>
                 </Card>
+
+                {/* Summary Card */}
+                <Card className="bg-muted/30">
+                  <CardContent className="p-4 space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Document</span>
+                      <span className="font-medium flex items-center gap-1.5">
+                        <FileText className="w-3.5 h-3.5" />
+                        {documentName}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Total Fields</span>
+                      <span className="font-medium">{signatureFields.length}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Expires</span>
+                      <span className="font-medium">
+                        {new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString("en-GB", {
+                          day: "2-digit", month: "short", year: "numeric"
+                        })}
+                      </span>
+                    </div>
+                    {handoffStampSvg && (
+                      <div className="flex justify-between text-sm items-center">
+                        <span className="text-muted-foreground">Stamp Asset</span>
+                        <Badge variant="default" className="text-[10px]">
+                          <CheckCircle2 className="w-3 h-3 mr-1" /> Loaded
+                        </Badge>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Confirmation Gate */}
+                <div className="flex items-start gap-3 p-4 rounded-lg border border-border bg-muted/20">
+                  <Checkbox
+                    id="review-confirm"
+                    checked={reviewConfirmed}
+                    onCheckedChange={(checked) => setReviewConfirmed(checked === true)}
+                    className="mt-0.5"
+                  />
+                  <label htmlFor="review-confirm" className="text-sm leading-snug cursor-pointer select-none">
+                    I have reviewed the document, recipients, and field placements. I confirm this envelope is ready to send.
+                  </label>
+                </div>
               </div>
             )}
           </CardContent>
@@ -852,7 +938,7 @@ export default function CreateEnvelope() {
           ) : (
             <Button 
               onClick={handleSubmit} 
-              disabled={isSubmitting}
+              disabled={isSubmitting || !reviewConfirmed}
               className="bg-gold hover:bg-gold/90"
             >
               {isSubmitting ? (
