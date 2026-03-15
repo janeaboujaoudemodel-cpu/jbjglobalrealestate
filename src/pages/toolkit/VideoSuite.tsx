@@ -14,6 +14,7 @@ const CaptionsTranslate = lazy(() => import('@/pages/toolkit/CaptionsTranslate')
 const AIVideoTourScriptPremium = lazy(() => import('@/components/ai-tools/premium').then(m => ({ default: m.AIVideoTourScriptPremium })));
 const VoiceoverRecorder = lazy(() => import('@/components/ai-video-studio/features/VoiceoverRecorder').then(m => ({ default: m.VoiceoverRecorder })));
 const AudioExtractorPanel = lazy(() => import('@/components/ai-video-studio/features/AudioExtractorPanel').then(m => ({ default: m.AudioExtractorPanel })));
+const ScenePlannerPanel = lazy(() => import('@/components/ai-video-studio/features/ScenePlannerPanel').then(m => ({ default: m.ScenePlannerPanel })));
 
 const LoadingSpinner = () => (
   <div className="min-h-[50vh] flex items-center justify-center" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 100%)" }}>
