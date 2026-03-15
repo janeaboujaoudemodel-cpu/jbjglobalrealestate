@@ -283,6 +283,11 @@ export function StampRightPanel(props: StampRightPanelProps) {
           )}
         </TabsContent>
 
+        {/* Library Tab — Custom Presets + Drafts */}
+        <TabsContent value="library" className="flex-1 overflow-y-auto p-3 mt-0 space-y-4">
+          <StampLibraryPanel onApplyPreset={props.onSelect} />
+        </TabsContent>
+
         {/* History Tab */}
         <TabsContent value="history" className="flex-1 overflow-y-auto p-3 mt-0 space-y-4">
           {/* Version History inline */}
