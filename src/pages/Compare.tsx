@@ -367,7 +367,23 @@ const Compare = () => {
         <div class="rating-item"><div class="rating-item-label">Amenities</div><div class="rating-item-value">${renderStars(r.amenitiesRating)}</div></div>
         <div class="rating-item"><div class="rating-item-label">Investment</div><div class="rating-item-value">${renderStars(r.investmentRating)}</div></div>
         <div class="rating-item"><div class="rating-item-label">Developer</div><div class="rating-item-value">${renderStars(r.developerRating)}</div></div>
+        <div class="rating-item"><div class="rating-item-label">Construction</div><div class="rating-item-value">${renderStars(Math.round((r.developerRating + r.valueRating) / 2))}</div></div>
+        <div class="rating-item"><div class="rating-item-label">Handover</div><div class="rating-item-value">${renderStars(Math.round((r.investmentRating + r.locationRating) / 2))}</div></div>
+        <div class="rating-item"><div class="rating-item-label">Payment Plan</div><div class="rating-item-value">${renderStars(Math.round((r.valueRating + r.investmentRating) / 2))}</div></div>
       </div>
+      ${[
+        { label: 'Location', score: Math.min(10, r.locationRating * 2) },
+        { label: 'Value', score: Math.min(10, r.valueRating * 2) },
+        { label: 'Amenities', score: Math.min(10, r.amenitiesRating * 2) },
+        { label: 'Investment', score: Math.min(10, r.investmentRating * 2) },
+        { label: 'Developer', score: Math.min(10, r.developerRating * 2) },
+        { label: 'Construction', score: Math.min(10, Math.round((r.developerRating + r.valueRating) / 2) * 2) },
+        { label: 'Handover', score: Math.min(10, Math.round((r.investmentRating + r.locationRating) / 2) * 2) },
+        { label: 'Payment Plan', score: Math.min(10, Math.round((r.valueRating + r.investmentRating) / 2) * 2) },
+      ].map(b => {
+        const color = b.score >= 8 ? '#22C55E' : b.score >= 6 ? '#F59E0B' : '#EF4444';
+        return `<div class="score-bar-row"><span class="score-bar-label">${b.label}</span><div class="score-bar-track"><div class="score-bar-fill" style="width:${(b.score/10)*100}%;background:${color}"></div></div><span class="score-bar-value" style="color:${color}">${b.score}</span></div>`;
+      }).join('')}
       <div class="pros-cons">
         <div class="pros"><h4>Pros</h4><ul>${r.pros?.map(p => `<li>${escapeHtml(p)}</li>`).join('') || ''}</ul></div>
         <div class="cons"><h4>Cons</h4><ul>${r.cons?.map(c => `<li>${escapeHtml(c)}</li>`).join('') || ''}</ul></div>
