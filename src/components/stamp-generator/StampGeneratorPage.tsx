@@ -259,6 +259,7 @@ export default function StampGeneratorPage() {
       arcTextSpacing,
       fontFamily,
       inkColor: primaryColor,
+      languageMode,
     };
 
     const newSvg = generateOfficialStampSVG(config);
