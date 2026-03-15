@@ -1,90 +1,51 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+# Replace "Command Center" with "Developer Center" in Developer Mode
 
-### Session Status
+## Problem
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+When a user selects **developer mode**, they still see references to "Command Center" and "Listing Admin" (owner-only tools) in the home page and navigation. The user wants:
 
----
+1. Developer mode should show **"Developer Center"** (linking to `/developer-hub`) instead of "Command Center"
+2. Owner in developer mode should see the **same view as a regular developer** — not the owner Command Center
+3. **Listing Admin** (the owner's full admin version at `/owner/listing-admin`) must NOT appear for developer mode users — only the owner gets it
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+## Files to Change
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+### 1. `src/components/home/DeveloperPortalCTA.tsx`
+- Currently: When owner is NOT in developer mode, shows owner actions including links to `/developer-portal?tab=submit&mode=owner` with "Quick Upload", "Manage Launches", etc.
+- **Change**: When `isDeveloperMode` is true (even for owner), show "Developer Center" as the title (not "Developer Portal"), and point the primary action to `/developer-hub` instead of `/developer-portal`
+- Remove any owner-specific actions when in developer mode — owner sees exactly what a developer sees
 
----
+### 2. `src/components/dashboard/QuickActions.tsx`
+- Currently: `getActionsForRole()` gives owner actions (Command Center, Listing Admin) regardless of mode
+- **Change**: Import `useUserModeContext`, and when `isDeveloperMode` is true, return a new `developerModeActions` array instead of `ownerActions` — even for verified owners
+- `developerModeActions` will include: Developer Center (`/developer-hub`), Submit Project, My Projects, Events, Briefings, Agreements — NO Command Center, NO Listing Admin
 
-### Route Map
+### 3. `src/components/header/MegaMenuAccount.tsx`
+- Currently: `adminLinks` shows "Command Center", "Listing Admin", etc. based on `isOwner` — does NOT check developer mode
+- **Change**: Import `useUserModeContext`. When `isDeveloperMode` is true AND user is NOT the owner's primary identity check, hide owner-exclusive links. When owner IS in developer mode, swap "Command Center" → "Developer Center" (`/developer-hub`) and hide Listing Admin, CRM Dashboard, Admin Panel
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+### 4. `src/components/navigation/GlobalVerticalNav.tsx`
+- Line 291: "Owner Command Center" label in ADMIN & OWNER section
+- Line 472: "Owner Command Center" in shortcuts
+- Line 476: "Listing Admin" in shortcuts
+- **Change**: When developer mode is active, replace "Owner Command Center" with "Developer Center" (`/developer-hub`) and hide Listing Admin from the navigation shortcuts. This requires the component to consume `useUserModeContext`.
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+## What Will NOT Change
+- Owner's actual Command Center at `/owner` — unchanged, still accessible directly
+- Owner's Listing Admin at `/owner/listing-admin` — unchanged, still accessible via direct URL
+- Developer Hub routes — already exist and work
+- Non-developer modes (investor, broker) — unaffected
+- No new components or UI layout changes
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
+## Summary of Label Swaps
 
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
+| Location | Current (developer mode) | After |
+|----------|------------------------|-------|
+| Home DeveloperPortalCTA title | "Developer Portal" | "Developer Center" |
+| Home DeveloperPortalCTA primary link | `/developer-portal` | `/developer-hub` |
+| QuickActions (owner in dev mode) | "Command Center" + "Listing Admin" | "Developer Center" + developer tools |
+| MegaMenu shortcuts (owner in dev mode) | "Command Center" + "Listing Admin" | "Developer Center", no Listing Admin |
+| GlobalVerticalNav shortcuts (dev mode) | "Owner Command Center" | "Developer Center" |
 
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
