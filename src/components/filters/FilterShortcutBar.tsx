@@ -456,7 +456,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         <Popover>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, pillInactive)}>
-              Handover
+              {t('filter.handover')}
               <ChevronDown className="w-3 h-3 opacity-60" />
             </button>
           </PopoverTrigger>
