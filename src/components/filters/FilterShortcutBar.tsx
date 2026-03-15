@@ -302,16 +302,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </button>
               ))}
               {/* Map toggle */}
-              <button
+                <button
                 onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
                 className={cn(
                   "flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20",
                   isMapMode ? "bg-gold/20 text-black" : "text-black/70 hover:bg-gold/10"
                 )}
-                title="Toggle map view"
+                title={t('filter.map')}
               >
                 <Map className="w-3.5 h-3.5" />
-                {isMapMode ? 'List' : 'Map'}
+                {isMapMode ? t('filter.list') : t('filter.map')}
               </button>
               {/* Saved */}
               <ConnectedSavedButton variant={variant} onApplySavedFilter={onFilterChange} />
