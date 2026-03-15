@@ -192,11 +192,18 @@ function LetterheadPreview({ logo, colors, name, font, layout, stampUrl }: {
         <div className="h-2 rounded bg-gray-100 w-5/6 mt-3" />
         <div className="h-2 rounded bg-gray-100 w-2/3" />
       </div>
-      {/* Footer */}
-      <div className="pt-3 border-t" style={{ borderColor: colors.accent + "40" }}>
-        <p className="text-[8px] text-center" style={{ color: "#9ca3af" }}>
+      {/* Footer with optional stamp */}
+      <div className="pt-3 border-t flex items-center justify-between" style={{ borderColor: colors.accent + "40" }}>
+        <p className="text-[8px] text-center flex-1" style={{ color: "#9ca3af" }}>
           {name} | info@company.com | +1 (555) 000-0000 | 123 Business Ave
         </p>
+        {stampUrl && (
+          <img
+            src={stampUrl}
+            alt="Company Stamp"
+            style={{ height: 24, objectFit: "contain", mixBlendMode: "multiply", opacity: 0.8 }}
+          />
+        )}
       </div>
     </div>
   );
