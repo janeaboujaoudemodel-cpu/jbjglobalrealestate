@@ -699,8 +699,8 @@ export default function StampGeneratorPage() {
             project_id: projectId, user_id: user!.id, design_version: 1,
             template_key: concept.templateKey,
             svg_source: svgOverrides[concept.id] || concept.svgSource,
-            style_snapshot_json: project,
-          }).select('id').single();
+            style_snapshot_json: project, source: 'manual',
+          } as any).select('id').single();
           if (inserted) {
             dbId = inserted.id;
             concept = { ...concept, id: inserted.id };
