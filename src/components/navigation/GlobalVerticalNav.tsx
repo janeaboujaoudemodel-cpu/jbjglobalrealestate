@@ -29,6 +29,7 @@ import { useDevelopers } from "@/hooks/useProjects";
 import { useAreas } from "@/hooks/useAreas";
 import { useLanguage, getLanguageInfo } from "@/contexts/LanguageContext";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 
 /* ─── CURATED TOP ENTRIES (matching horizontal mega menus) ─── */
 const FEATURED_DEVELOPER_SLUGS = [
