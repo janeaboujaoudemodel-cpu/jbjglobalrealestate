@@ -42,7 +42,7 @@ export function StampVariationsPanel({
   const [selectedVarId, setSelectedVarId] = useState<string | null>(null);
 
   return (
-    <div className="absolute inset-0 z-20 bg-white/95 backdrop-blur-sm flex flex-col">
+    <div className="flex flex-col h-full">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-[hsl(var(--border))] bg-gradient-to-r from-[hsl(var(--pearl-1))] to-white">
         <div className="flex items-center gap-2">

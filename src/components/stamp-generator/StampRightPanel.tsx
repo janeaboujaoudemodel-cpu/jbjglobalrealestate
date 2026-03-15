@@ -697,6 +697,10 @@ function ConceptCard({
             </button>
           )}
         </div>
+        {/* Generated Concept label */}
+        <Badge className="absolute top-1 left-1 z-10 text-[6px] px-1 py-0 bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))]">
+          {isSelected ? 'Applied' : 'Generated'}
+        </Badge>
         <StampSVGRenderer
           svgSource={displaySvg}
           tintColor={tintColor}

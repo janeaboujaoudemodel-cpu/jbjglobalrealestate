@@ -27,7 +27,7 @@ import {
   ArrowLeft, ChevronRight, AlertTriangle, Heart, MessageSquare,
   Send, X, Sparkles, Palette, Layers, Type, Upload, ChevronDown,
   Undo2, Redo2, RotateCw, Save, ChevronLeft, Trash2, Copy,
-  Clock, Package, Award
+  Clock, Package, Award, Shield
 } from 'lucide-react';
 import { useStampHistory } from '@/hooks/useStampHistory';
 import { StampVariationsPanel } from './StampVariationsPanel';
@@ -535,7 +535,7 @@ export default function StampGeneratorPage() {
                 label: (d.template_key || 'classic-official').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
                 tags: [] as string[], svgSource: d.svg_source || '', isFavorite: false,
               }));
-              setConcepts(newConcepts);
+              setConcepts(prev => [...newConcepts, ...prev.filter(c => !newConcepts.some(n => n.id === c.id))]);
               if (!standardConcept && newConcepts[0]) {
                 setStandardConcept(newConcepts[0]);
                 setSelectedId(newConcepts[0].id);
@@ -550,7 +550,7 @@ export default function StampGeneratorPage() {
     } catch (_) {}
     const clientConcepts = generateStampConcepts(project ? { ...project, ...p } : p);
     if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); generationLockRef.current = false; return; }
-    setConcepts(clientConcepts);
+    setConcepts(prev => [...clientConcepts, ...prev.filter(c => !clientConcepts.some(n => n.id === c.id))]);
     if (!standardConcept && clientConcepts.length > 0) {
       setStandardConcept(clientConcepts[0]);
       setSelectedId(clientConcepts[0].id);
@@ -1035,6 +1035,20 @@ export default function StampGeneratorPage() {
             {/* Grid overlay */}
             {showGrid && <CanvasGridOverlay size={stampSize + 80} />}
 
+            {/* Preview status label */}
+            {activeStandard && (
+              <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
+                <Badge className="text-[7px] px-1.5 py-0 bg-[hsl(var(--gold)/0.12)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">
+                  {standardConcept?.id === activeStandard.id ? 'Standard Model' : 'Active Preview'}
+                </Badge>
+                {generating && (
+                  <Badge className="text-[7px] px-1.5 py-0 bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))] border border-[hsl(var(--border))] animate-pulse">
+                    Generating…
+                  </Badge>
+                )}
+              </div>
+            )}
+
             {/* Stamp preview with pulse feedback */}
             <div className={`relative transition-all duration-200 ${previewPulse ? 'ring-2 ring-[hsl(var(--gold)/0.4)] rounded-full' : ''}`}
               style={{ filter: `drop-shadow(0 8px 24px hsl(0 0% 0% / 0.12))` }}>
@@ -1138,6 +1152,15 @@ export default function StampGeneratorPage() {
                       <DesignFavoriteButton itemType="stamp" itemId={selectedId}
                         itemName={(selectedConcept || allConcepts[0])?.label || "Stamp"}
                         thumbnailSvg={(selectedSvg || allConcepts[0]?.svgSource || '').slice(0, 50000)} size="sm" />
+                      <Button size="sm" variant="outline" className="h-7 px-2 text-[10px] border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] gap-1"
+                        onClick={() => {
+                          if (activeStandard) {
+                            setStandardConcept(activeStandard);
+                            toast.success('Design locked as Standard Base');
+                          }
+                        }}>
+                        <Shield size={9} /> Lock as Standard
+                      </Button>
                     </>
                   )}
                 </>
