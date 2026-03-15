@@ -74,11 +74,21 @@ interface StampRightPanelProps {
   // Export
   savedDesignId?: string | null;
   onExport: () => void;
+  // New props for Session 7
+  isOwner?: boolean;
+  onSwitchToLibrary?: (fn: () => void) => void;
 }
 
 export function StampRightPanel(props: StampRightPanelProps) {
   const [conceptPage, setConceptPage] = useState(0);
   const [activeTab, setActiveTab] = useState('concepts');
+
+  // Expose a way to switch to library tab from parent
+  useEffect(() => {
+    if (props.onSwitchToLibrary) {
+      props.onSwitchToLibrary(() => setActiveTab('library'));
+    }
+  }, [props.onSwitchToLibrary]);
 
   // Build concepts list: standard first (excluded from regular list), then the rest
   const nonStandardConcepts = props.standardConcept
