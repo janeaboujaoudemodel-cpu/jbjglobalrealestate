@@ -53,6 +53,9 @@ interface AIVideoStudioLayoutProps {
   audioExtractPanel?: ReactNode;
   photoClipPanel?: ReactNode;
   sharePanel?: ReactNode;
+  bgRemovePanel?: ReactNode;
+  scenePlannerPanel?: ReactNode;
+  chartOverlayPanel?: ReactNode;
 }
 
 const TOOL_TABS = [
