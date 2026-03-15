@@ -1,22 +1,25 @@
 /**
- * StampLeftPanel — Collapsible accordion sections replacing the old 6-tab system.
- * Three language-grouped sections: Arabic Controls, English Controls, Both/Sync Controls.
- * Context-aware: when monogram/center is focused, color changes target monogram instead of borders.
+ * StampLeftPanel — Element Hierarchy panel replacing flat accordion sections.
+ * Semantic tree: Company Name > Location > Center Content > Separators
+ * Plus: Colors, English/Arabic Controls, Sync, My Stamp.
  */
 import React, { useState, useCallback, useEffect } from 'react';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
 import { StampColorWheel } from './StampColorWheel';
 import { StampTextEditor } from './StampTextEditor';
 import { MonogramColorEditor, DEFAULT_MONOGRAM_COLORS } from './MonogramColorEditor';
 import type { MonogramLetterColors } from './MonogramColorEditor';
 import { ALL_SEPARATOR_STYLES, separatorLabel, type SeparatorStyle } from '@/lib/stampOfficialTemplate';
+import { removeWhiteBackground } from '@/lib/removeWhiteBackground';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import {
   RotateCw, Award, Upload, Wand2, Loader2, Palette, Type,
-  CircleDot, Stamp, Layers, PenTool, Sparkles, Link2
+  CircleDot, Stamp, Layers, PenTool, Sparkles, Link2,
+  ChevronDown, ChevronRight, Building2, MapPin, Image as ImageIcon, Hash
 } from 'lucide-react';
 
 const SEPARATOR_GLYPHS: Record<SeparatorStyle, string> = {
@@ -25,7 +28,6 @@ const SEPARATOR_GLYPHS: Record<SeparatorStyle, string> = {
   'floral': '❀', 'ornament': '❖', 'dash': '—', 'circle': '◉', 'none': '⊘',
 };
 
-// 5 mandatory standard export colors
 const STANDARD_EXPORT_COLORS = [
   { label: 'White', hex: '#ffffff' },
   { label: 'Black', hex: '#0d0d0d' },
@@ -86,7 +88,6 @@ const ARABIC_FONTS = [
 type ColorStop = 'primary' | 'secondary' | 'accent';
 
 interface StampLeftPanelProps {
-  // Colors
   primaryColor: string;
   secondaryColor?: string;
   accentColor?: string;
@@ -103,7 +104,6 @@ interface StampLeftPanelProps {
   onAddCustomColor: (hex: string) => void;
   onRemoveCustomColor: (hex: string) => void;
   onResetColors: () => void;
-  // Fonts
   fontFamily: string;
   fontBold: boolean;
   fontItalic: boolean;
@@ -112,11 +112,9 @@ interface StampLeftPanelProps {
   onSetFontBold: (v: boolean | ((p: boolean) => boolean)) => void;
   onSetFontItalic: (v: boolean | ((p: boolean) => boolean)) => void;
   onSetManualFontSize: (v: number | null | ((p: number | null) => number | null)) => void;
-  // Text
   selectedSvg: string | null;
   selectedConceptId: string | null;
   onSvgTextChange: (conceptId: string, newSvg: string) => void;
-  // Center Art
   localIconStyle: 'NONE' | 'MONOGRAM' | 'UPLOADED_LOGO';
   localMonogramText: string;
   localLogoUrl: string;
@@ -127,7 +125,6 @@ interface StampLeftPanelProps {
   onSetLocalLogoUrl: (v: string) => void;
   onSetMonogramLetterColors: (v: MonogramLetterColors) => void;
   onApplyLogoToAll: () => void;
-  // My Stamp
   uploadedStampUrl: string;
   uploadedSignatureUrl: string;
   signatureX: number;
@@ -143,7 +140,6 @@ interface StampLeftPanelProps {
   onSetRefinePrompt: (v: string) => void;
   onRefineWithAI: () => void;
   hasSelectedSvg: boolean;
-  // Arabic font controls
   arabicFont: string;
   arabicLetterSpacing: number;
   arabicArcSpread: number;
@@ -156,7 +152,6 @@ interface StampLeftPanelProps {
   onSetArabicFontWeight: (v: string) => void;
   onSetArabicFontSize?: (v: number | null) => void;
   onSetArabicFontItalic?: (v: boolean) => void;
-  // Spacing & Layout controls
   arcTextSpacing: number;
   circleGap: number;
   separatorDistance: number;
@@ -175,26 +170,46 @@ interface StampLeftPanelProps {
   onSetLocationArcSpread: (v: number) => void;
 }
 
+/* ─── Collapsible tree node helper ─── */
+function TreeNode({ label, icon, children, defaultOpen = false }: {
+  label: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <CollapsibleTrigger className="w-full flex items-center gap-2 px-2 py-1.5 text-left hover:bg-[hsl(var(--gold)/0.04)] transition-all rounded-md">
+        {open ? <ChevronDown size={10} className="text-[hsl(var(--gold))] flex-shrink-0" /> : <ChevronRight size={10} className="text-[hsl(var(--muted-foreground))] flex-shrink-0" />}
+        {icon}
+        <span className="text-[10px] font-semibold text-[hsl(var(--foreground))]">{label}</span>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="pl-5 pr-1 pb-1">
+        {children}
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
 export function StampLeftPanel(props: StampLeftPanelProps) {
   const [openSections, setOpenSections] = useState<string[]>([]);
-  // Track which element is focused — when center is focused, color changes target monogram
   const [focusedElement, setFocusedElement] = useState<'center' | 'separator' | 'text' | null>(null);
+  const [removingBg, setRemovingBg] = useState(false);
 
-  // Listen for panel open events from canvas element clicks
   useEffect(() => {
     const openCenter = () => {
-      setOpenSections(prev => prev.includes('center') ? prev : [...prev, 'center']);
+      setOpenSections(prev => prev.includes('element-hierarchy') ? prev : [...prev, 'element-hierarchy']);
       setFocusedElement('center');
     };
     const openSeparator = () => {
-      setOpenSections(prev => prev.includes('separators') ? prev : [...prev, 'separators']);
+      setOpenSections(prev => prev.includes('element-hierarchy') ? prev : [...prev, 'element-hierarchy']);
       setFocusedElement('separator');
     };
     const openText = () => {
-      setOpenSections(prev => prev.includes('text') ? prev : [...prev, 'text']);
+      setOpenSections(prev => prev.includes('element-hierarchy') ? prev : [...prev, 'element-hierarchy']);
       setFocusedElement('text');
     };
-    // Language-specific focus events from interactive preview
     const openArabic = () => {
       setOpenSections(['arabic-controls']);
       setFocusedElement('text');
@@ -217,7 +232,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
     };
   }, []);
 
-  // Context-aware color handler: when monogram is focused, route color to monogram
   const handleColorChange = useCallback((hex: string) => {
     if (focusedElement === 'center' && props.localIconStyle === 'MONOGRAM') {
       props.onSetMonogramLetterColors({
@@ -230,11 +244,35 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
     }
   }, [focusedElement, props.localIconStyle, props.monogramLetterColors, props.onSetMonogramLetterColors, props.onSetActiveColor]);
 
+  const handleLogoUpload = useCallback(async (file: File) => {
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = reader.result as string;
+      setRemovingBg(true);
+      try {
+        const { result, removed } = await removeWhiteBackground(dataUrl);
+        props.onSetLocalLogoUrl(result);
+        if (removed) {
+          toast.success('White background removed automatically');
+        } else {
+          toast.info('Clean background detected — no removal needed');
+        }
+      } catch {
+        props.onSetLocalLogoUrl(dataUrl);
+      } finally {
+        setRemovingBg(false);
+      }
+    };
+    reader.readAsDataURL(file);
+  }, [props.onSetLocalLogoUrl]);
+
   const stopDefs: { key: ColorStop; label: string; color: string }[] = [
     { key: 'primary', label: 'Primary', color: props.primaryColor },
     { key: 'secondary', label: 'Secondary', color: props.secondaryColor || '#2a3a5c' },
     { key: 'accent', label: 'Accent', color: props.accentColor || '#B8860B' },
   ];
+
+  const hasSvg = props.selectedSvg && props.selectedConceptId;
 
   return (
     <div className="w-[280px] flex-shrink-0 border-r border-[hsl(var(--border))] bg-white/80 flex flex-col overflow-hidden">
@@ -245,7 +283,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
             <span className="text-[10px] font-semibold text-[hsl(var(--foreground))] uppercase tracking-wider">Tool Controls</span>
           </div>
           <button
-            onClick={() => setOpenSections(prev => prev.length > 0 ? [] : ['colors', 'text', 'center', 'separators', 'arabic-controls', 'english-controls', 'both-controls', 'spacing', 'structure', 'mystamp'])}
+            onClick={() => setOpenSections(prev => prev.length > 0 ? [] : ['element-hierarchy', 'colors', 'english-controls', 'arabic-controls', 'both-controls', 'mystamp'])}
             className="text-[9px] text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--gold-dark))] transition-colors"
           >
             {openSections.length > 0 ? 'Collapse All' : 'Expand All'}
@@ -256,139 +294,205 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
       <div className="flex-1 overflow-y-auto">
         <Accordion type="multiple" value={openSections} onValueChange={setOpenSections} className="px-2 py-1">
 
-          {/* ─── 1. Company Name Arcs ─── */}
-          <AccordionItem value="text" className="border-b border-[hsl(var(--border)/0.5)]">
+          {/* ═══════════════════════════════════════════
+              1. ELEMENT HIERARCHY — semantic tree
+             ═══════════════════════════════════════════ */}
+          <AccordionItem value="element-hierarchy" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
-                <Type size={12} className="text-[hsl(var(--gold))]" />
-                Company Name Arcs
+                <Layers size={12} className="text-[hsl(var(--gold))]" />
+                Element Hierarchy
               </span>
             </AccordionTrigger>
-            <AccordionContent className="pb-3">
-              {props.selectedSvg && props.selectedConceptId ? (
-                <StampTextEditor
-                  svgSource={props.selectedSvg}
-                  onSvgChange={(newSvg) => props.onSvgTextChange(props.selectedConceptId!, newSvg)}
-                  onElementSelect={(elementId) => {}}
-                />
-              ) : (
-                <div className="text-center py-4 space-y-1">
-                  <Type size={16} className="text-[hsl(var(--muted-foreground))] mx-auto opacity-40" />
-                  <p className="text-[10px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit text</p>
-                </div>
-              )}
-            </AccordionContent>
-          </AccordionItem>
+            <AccordionContent className="pb-2 space-y-0.5">
 
-          {/* ─── 2. Center Content ─── */}
-          <AccordionItem value="center" className="border-b border-[hsl(var(--border)/0.5)]">
-            <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
-              <span className="flex items-center gap-1.5">
-                <CircleDot size={12} className="text-[hsl(var(--gold))]" />
-                Center Content
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="pb-3 space-y-2.5">
-              <div className="space-y-1">
-                {([
-                  { val: 'MONOGRAM' as const, label: 'Monogram' },
-                  { val: 'UPLOADED_LOGO' as const, label: 'Upload Logo' },
-                  { val: 'NONE' as const, label: 'No Art' },
-                ] as const).map(opt => (
-                  <button key={opt.val} onClick={() => props.onSetLocalIconStyle(opt.val)}
-                    className={`w-full py-1.5 px-2.5 rounded-lg border-2 text-[10px] text-left transition-all ${props.localIconStyle === opt.val ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))]'}`}>
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-              {props.localIconStyle === 'MONOGRAM' && (
-                <>
-                  <input type="text" maxLength={3} value={props.localMonogramText}
-                    onChange={e => props.onSetLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
-                    placeholder={props.companyName?.slice(0, 2) || 'AB'}
-                    className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]" />
-                  <MonogramColorEditor
-                    monogramText={props.localMonogramText || props.companyName?.slice(0, 2) || ''}
-                    colors={props.monogramLetterColors}
-                    onChange={props.onSetMonogramLetterColors}
-                    defaultColor={props.primaryColor}
-                  />
-                </>
-              )}
-              {props.localIconStyle === 'UPLOADED_LOGO' && (
-                <label className="flex flex-col items-center gap-1 p-3 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))]">
-                  <Upload size={16} className="text-[hsl(var(--gold))]" />
-                  <span className="text-[9px] text-[hsl(var(--muted-foreground))]">{props.localLogoUrl ? 'Change' : 'Upload'}</span>
-                  <input type="file" accept="image/*" className="hidden"
-                    onChange={e => { const f = e.target.files?.[0]; if (!f) return; const r = new FileReader(); r.onload = () => props.onSetLocalLogoUrl(r.result as string); r.readAsDataURL(f); }} />
-                </label>
-              )}
-              <button onClick={props.onApplyLogoToAll}
-                className="w-full py-2 rounded-lg bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-[10px] font-semibold flex items-center justify-center gap-1 hover:opacity-90">
-                <Wand2 size={10} /> Apply to Stamps
-              </button>
-            </AccordionContent>
-          </AccordionItem>
+              {/* ── Company Name ── */}
+              <TreeNode
+                label="Company Name"
+                icon={<Building2 size={10} className="text-[hsl(var(--gold-dark))]" />}
+              >
+                <TreeNode label="Arabic Arc" icon={<span className="text-[9px]">🇦🇪</span>}>
+                  {hasSvg ? (
+                    <StampTextEditor
+                      svgSource={props.selectedSvg!}
+                      onSvgChange={(newSvg) => props.onSvgTextChange(props.selectedConceptId!, newSvg)}
+                      hierarchyFilter={['top-arc']}
+                    />
+                  ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit</p>}
+                </TreeNode>
+                <TreeNode label="English Arc" icon={<span className="text-[9px]">🇬🇧</span>}>
+                  {hasSvg ? (
+                    <StampTextEditor
+                      svgSource={props.selectedSvg!}
+                      onSvgChange={(newSvg) => props.onSvgTextChange(props.selectedConceptId!, newSvg)}
+                      hierarchyFilter={['bottom-arc']}
+                    />
+                  ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit</p>}
+                </TreeNode>
+              </TreeNode>
 
-          {/* ─── 3. Circle Structure ─── */}
-          <AccordionItem value="structure" className="border-b border-[hsl(var(--border)/0.5)]">
-            <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
-              <span className="flex items-center gap-1.5">
-                <Stamp size={12} className="text-[hsl(var(--gold))]" />
-                Circle Structure
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="pb-3 space-y-2">
-              <div className="px-1 py-2 text-center">
-                <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Ring thickness and spacing are controlled by the standard template (3-ring professional structure).</p>
-                <p className="text-[9px] text-[hsl(var(--muted-foreground))] mt-1">Use <strong>AI Smart Designer</strong> for custom ring adjustments.</p>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+              {/* ── Location ── */}
+              <TreeNode
+                label="Location"
+                icon={<MapPin size={10} className="text-[hsl(var(--gold-dark))]" />}
+              >
+                <TreeNode label="Arabic Arc" icon={<span className="text-[9px]">🇦🇪</span>}>
+                  {hasSvg ? (
+                    <StampTextEditor
+                      svgSource={props.selectedSvg!}
+                      onSvgChange={(newSvg) => props.onSvgTextChange(props.selectedConceptId!, newSvg)}
+                      hierarchyFilter={['loc-top']}
+                    />
+                  ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit</p>}
+                </TreeNode>
+                <TreeNode label="English Arc" icon={<span className="text-[9px]">🇬🇧</span>}>
+                  {hasSvg ? (
+                    <StampTextEditor
+                      svgSource={props.selectedSvg!}
+                      onSvgChange={(newSvg) => props.onSvgTextChange(props.selectedConceptId!, newSvg)}
+                      hierarchyFilter={['loc-bottom']}
+                    />
+                  ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit</p>}
+                </TreeNode>
+              </TreeNode>
 
-          {/* ─── 4. Separators ─── */}
-          <AccordionItem value="separators" className="border-b border-[hsl(var(--border)/0.5)]">
-            <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
-              <span className="flex items-center gap-1.5">
-                <PenTool size={12} className="text-[hsl(var(--gold))]" />
-                Separators
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="pb-3 space-y-2.5">
-              {/* Separator Style Grid */}
-              <div>
-                <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Style</p>
-                <div className="grid grid-cols-4 gap-1">
-                  {ALL_SEPARATOR_STYLES.map(style => (
-                    <button key={style} onClick={() => {
-                      window.dispatchEvent(new CustomEvent('stamp-separator-style-change', { detail: style }));
-                    }}
-                      className="flex flex-col items-center gap-0.5 px-1 py-1.5 rounded-lg border-2 text-xs transition-all border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]">
-                      <span className="text-sm">{SEPARATOR_GLYPHS[style]}</span>
-                      <span className="text-[7px] text-[hsl(var(--muted-foreground))]">{separatorLabel(style)}</span>
+              {/* ── Center Content ── */}
+              <TreeNode
+                label="Center Content"
+                icon={<CircleDot size={10} className="text-[hsl(var(--gold-dark))]" />}
+              >
+                {/* Monogram */}
+                <TreeNode label="Monogram" icon={<Type size={9} className="text-[hsl(var(--muted-foreground))]" />}>
+                  <div className="space-y-2 py-1">
+                    <button onClick={() => props.onSetLocalIconStyle('MONOGRAM')}
+                      className={`w-full py-1.5 px-2.5 rounded-lg border-2 text-[10px] text-left transition-all ${props.localIconStyle === 'MONOGRAM' ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))]'}`}>
+                      {props.localIconStyle === 'MONOGRAM' ? '✓ Active' : 'Use Monogram'}
                     </button>
-                  ))}
+                    {props.localIconStyle === 'MONOGRAM' && (
+                      <>
+                        <input type="text" maxLength={3} value={props.localMonogramText}
+                          onChange={e => props.onSetLocalMonogramText(e.target.value.toUpperCase().slice(0, 3))}
+                          placeholder={props.companyName?.slice(0, 2) || 'AB'}
+                          className="w-full px-2 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] bg-white text-center text-sm font-bold tracking-widest text-[hsl(var(--foreground))] focus:outline-none focus:border-[hsl(var(--gold))]" />
+                        <MonogramColorEditor
+                          monogramText={props.localMonogramText || props.companyName?.slice(0, 2) || ''}
+                          colors={props.monogramLetterColors}
+                          onChange={props.onSetMonogramLetterColors}
+                          defaultColor={props.primaryColor}
+                        />
+                      </>
+                    )}
+                  </div>
+                </TreeNode>
+
+                {/* Logo */}
+                <TreeNode label="Logo" icon={<ImageIcon size={9} className="text-[hsl(var(--muted-foreground))]" />}>
+                  <div className="space-y-2 py-1">
+                    <button onClick={() => props.onSetLocalIconStyle('UPLOADED_LOGO')}
+                      className={`w-full py-1.5 px-2.5 rounded-lg border-2 text-[10px] text-left transition-all ${props.localIconStyle === 'UPLOADED_LOGO' ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))]'}`}>
+                      {props.localIconStyle === 'UPLOADED_LOGO' ? '✓ Active' : 'Use Logo'}
+                    </button>
+                    {props.localIconStyle === 'UPLOADED_LOGO' && (
+                      <label className="flex flex-col items-center gap-1 p-3 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))]">
+                        {removingBg ? (
+                          <><Loader2 size={16} className="text-[hsl(var(--gold))] animate-spin" /><span className="text-[9px] text-[hsl(var(--muted-foreground))]">Removing background…</span></>
+                        ) : (
+                          <><Upload size={16} className="text-[hsl(var(--gold))]" /><span className="text-[9px] text-[hsl(var(--muted-foreground))]">{props.localLogoUrl ? 'Change' : 'Upload'}</span></>
+                        )}
+                        <input type="file" accept="image/*" className="hidden"
+                          onChange={e => { const f = e.target.files?.[0]; if (f) handleLogoUpload(f); }} />
+                        <p className="text-[7px] text-[hsl(var(--muted-foreground))]">White backgrounds auto-removed</p>
+                      </label>
+                    )}
+                    {props.localLogoUrl && props.localIconStyle === 'UPLOADED_LOGO' && (
+                      <div className="flex items-center gap-2">
+                        <img src={props.localLogoUrl} alt="Logo" className="w-10 h-10 rounded object-contain border border-[hsl(var(--border))] bg-[hsl(var(--muted))]" />
+                        <button onClick={() => props.onSetLocalLogoUrl('')} className="text-[9px] text-destructive underline">Remove</button>
+                      </div>
+                    )}
+                  </div>
+                </TreeNode>
+
+                {/* License / Registration */}
+                <TreeNode label="License / Registration" icon={<Hash size={9} className="text-[hsl(var(--muted-foreground))]" />}>
+                  {hasSvg ? (
+                    <StampTextEditor
+                      svgSource={props.selectedSvg!}
+                      onSvgChange={(newSvg) => props.onSvgTextChange(props.selectedConceptId!, newSvg)}
+                      hierarchyFilter={['registration']}
+                    />
+                  ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp to edit</p>}
+                </TreeNode>
+
+                {/* No Art option */}
+                <button onClick={() => props.onSetLocalIconStyle('NONE')}
+                  className={`w-full py-1 px-2.5 rounded-lg border-2 text-[9px] text-left transition-all mt-1 ${props.localIconStyle === 'NONE' ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))]'}`}>
+                  No Center Art
+                </button>
+
+                {/* Apply to all */}
+                <button onClick={props.onApplyLogoToAll}
+                  className="w-full py-1.5 rounded-lg bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white text-[9px] font-semibold flex items-center justify-center gap-1 hover:opacity-90 mt-1.5">
+                  <Wand2 size={9} /> Apply to All Stamps
+                </button>
+              </TreeNode>
+
+              {/* ── Separators ── */}
+              <TreeNode
+                label="Separators"
+                icon={<PenTool size={10} className="text-[hsl(var(--gold-dark))]" />}
+              >
+                <TreeNode label="Left" icon={<span className="text-[9px]">◀</span>}>
+                  {hasSvg ? (
+                    <StampTextEditor
+                      svgSource={props.selectedSvg!}
+                      onSvgChange={(newSvg) => props.onSvgTextChange(props.selectedConceptId!, newSvg)}
+                      hierarchyFilter={['separator-left', 'loc-separator-left']}
+                    />
+                  ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp</p>}
+                </TreeNode>
+                <TreeNode label="Right" icon={<span className="text-[9px]">▶</span>}>
+                  {hasSvg ? (
+                    <StampTextEditor
+                      svgSource={props.selectedSvg!}
+                      onSvgChange={(newSvg) => props.onSvgTextChange(props.selectedConceptId!, newSvg)}
+                      hierarchyFilter={['separator-right', 'loc-separator-right']}
+                    />
+                  ) : <p className="text-[9px] text-[hsl(var(--muted-foreground))]">Select a stamp</p>}
+                </TreeNode>
+
+                {/* Separator style grid */}
+                <div className="mt-2 space-y-2">
+                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Style</p>
+                  <div className="grid grid-cols-4 gap-1">
+                    {ALL_SEPARATOR_STYLES.map(style => (
+                      <button key={style} onClick={() => {
+                        window.dispatchEvent(new CustomEvent('stamp-separator-style-change', { detail: style }));
+                      }}
+                        className="flex flex-col items-center gap-0.5 px-1 py-1.5 rounded-lg border-2 text-xs transition-all border-[hsl(var(--border))] hover:border-[hsl(var(--gold)/0.4)]">
+                        <span className="text-sm">{SEPARATOR_GLYPHS[style]}</span>
+                        <span className="text-[7px] text-[hsl(var(--muted-foreground))]">{separatorLabel(style)}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Position</p>
+                      <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.separatorDistance}%</span>
+                    </div>
+                    <Slider min={0} max={100} step={1} value={[props.separatorDistance]}
+                      onValueChange={([v]) => props.onSetSeparatorDistance(v)} />
+                    <p className="text-[7px] text-[hsl(var(--muted-foreground))] mt-0.5">50% = centered between rings</p>
+                  </div>
                 </div>
-              </div>
-              {/* Separator Distance */}
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Position</p>
-                  <span className="text-[8px] font-mono text-[hsl(var(--foreground))]">{props.separatorDistance}%</span>
-                </div>
-                <Slider min={0} max={100} step={1} value={[props.separatorDistance]}
-                  onValueChange={([v]) => props.onSetSeparatorDistance(v)} />
-                <p className="text-[7px] text-[hsl(var(--muted-foreground))] mt-0.5">50% = centered between rings</p>
-              </div>
-              {/* Separator Color */}
-              <div>
-                <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase mb-1">Color</p>
-                <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Separator color follows the Primary ink color. Change it in the Colors section.</p>
-              </div>
+              </TreeNode>
+
             </AccordionContent>
           </AccordionItem>
 
-          {/* ─── 5. 🇬🇧 English Controls ─── */}
+          {/* ═══════════════════════════════════════════
+              2. 🇬🇧 English Controls
+             ═══════════════════════════════════════════ */}
           <AccordionItem value="english-controls" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
@@ -444,7 +548,9 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
             </AccordionContent>
           </AccordionItem>
 
-          {/* ─── 6. 🇦🇪 Arabic Controls ─── */}
+          {/* ═══════════════════════════════════════════
+              3. 🇦🇪 Arabic Controls
+             ═══════════════════════════════════════════ */}
           <AccordionItem value="arabic-controls" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
@@ -504,7 +610,9 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
             </AccordionContent>
           </AccordionItem>
 
-          {/* ─── 7. 🔗 Both / Sync Controls ─── */}
+          {/* ═══════════════════════════════════════════
+              4. 🔗 Both / Sync Controls
+             ═══════════════════════════════════════════ */}
           <AccordionItem value="both-controls" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
@@ -513,7 +621,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </span>
             </AccordionTrigger>
             <AccordionContent className="pb-3 space-y-2.5">
-              {/* Sync Font Size */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Font Size (Both)</p>
@@ -525,7 +632,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     props.onSetArabicFontSize?.(v);
                   }} />
               </div>
-              {/* Sync Letter Spacing */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Letter Spacing (Both)</p>
@@ -537,7 +643,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     props.onSetArabicLetterSpacing(v);
                   }} />
               </div>
-              {/* Sync Arc Spread */}
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <p className="text-[9px] font-medium text-[hsl(var(--muted-foreground))] uppercase">Arc Spread (Both)</p>
@@ -549,8 +654,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                     props.onSetArabicArcSpread(v / 100);
                   }} />
               </div>
-
-              {/* Divider */}
               <div className="border-t border-[hsl(var(--border))] pt-2">
                 <p className="text-[8px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Quick Match</p>
                 <div className="flex gap-1.5">
@@ -578,8 +681,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   </button>
                 </div>
               </div>
-
-              {/* Shared layout controls */}
               <div className="border-t border-[hsl(var(--border))] pt-2 space-y-2.5">
                 <p className="text-[8px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1">Layout</p>
                 <div>
@@ -619,7 +720,9 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
             </AccordionContent>
           </AccordionItem>
 
-          {/* ─── 8. Colors ─── */}
+          {/* ═══════════════════════════════════════════
+              5. Colors
+             ═══════════════════════════════════════════ */}
           <AccordionItem value="colors" className="border-b border-[hsl(var(--border)/0.5)]">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
@@ -628,20 +731,16 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </span>
             </AccordionTrigger>
             <AccordionContent className="pb-3 space-y-2.5">
-              {/* Context indicator */}
               {focusedElement === 'center' && props.localIconStyle === 'MONOGRAM' && (
                 <div className="px-2 py-1.5 rounded-lg bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)]">
                   <p className="text-[9px] font-semibold text-[hsl(var(--gold-dark))]">🎯 Monogram focused — colors apply to monogram letters</p>
                   <button onClick={() => setFocusedElement(null)} className="text-[8px] text-[hsl(var(--muted-foreground))] underline mt-0.5">Switch to borders</button>
                 </div>
               )}
-
               <button onClick={props.onResetColors}
                 className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[10px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all">
                 <RotateCw size={10} /> Reset to Standard
               </button>
-
-              {/* Standard Export Colors */}
               <div className="border border-[hsl(var(--gold)/0.2)] rounded-lg p-2 bg-[hsl(var(--gold)/0.03)]">
                 <p className="text-[8px] font-semibold text-[hsl(var(--gold-dark))] uppercase mb-1.5 flex items-center gap-1">
                   <Award size={8} /> Standard Export Colors
@@ -657,8 +756,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   ))}
                 </div>
               </div>
-
-              {/* Color stops */}
               {focusedElement !== 'center' && (
                 <div className="flex gap-1">
                   {stopDefs.map(s => (
@@ -670,10 +767,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   ))}
                 </div>
               )}
-
               <StampColorWheel color={props.activeColor} onChange={handleColorChange} label="" size={120} />
-
-              {/* Quick Colors */}
               <div className="border-t border-[hsl(var(--border))] pt-2">
                 <p className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Quick Colors</p>
                 <div className="flex flex-wrap gap-1">
@@ -684,8 +778,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   ))}
                 </div>
               </div>
-
-              {/* Palettes */}
               <div className="border-t border-[hsl(var(--border))] pt-2">
                 <p className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Palettes</p>
                 <div className="space-y-1">
@@ -703,8 +795,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   ))}
                 </div>
               </div>
-
-              {/* Ink Mode */}
               <button onClick={() => props.onSetInkMode(!props.inkMode)}
                 className={`w-full flex items-center gap-2 px-2 py-2 rounded-lg border-2 transition-all ${props.inkMode ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.08)]' : 'border-[hsl(var(--border))]'}`}>
                 <div className={`w-4 h-4 rounded text-[8px] font-bold flex items-center justify-center ${props.inkMode ? 'bg-[hsl(var(--gold))] text-white' : 'bg-[hsl(var(--muted))]'}`}>
@@ -715,8 +805,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   <p className="text-[8px] text-[hsl(var(--muted-foreground))]">Rubber stamp texture</p>
                 </div>
               </button>
-
-              {/* Custom Colors */}
               <div className="border-t border-[hsl(var(--border))] pt-2">
                 <div className="flex items-center justify-between mb-1.5">
                   <p className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase">My Colors</p>
@@ -744,7 +832,9 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
             </AccordionContent>
           </AccordionItem>
 
-          {/* ─── 9. My Stamp & Signature ─── */}
+          {/* ═══════════════════════════════════════════
+              6. My Stamp & Signature
+             ═══════════════════════════════════════════ */}
           <AccordionItem value="mystamp" className="border-b-0">
             <AccordionTrigger className="py-2.5 text-[11px] font-semibold hover:no-underline">
               <span className="flex items-center gap-1.5">
@@ -753,7 +843,6 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </span>
             </AccordionTrigger>
             <AccordionContent className="pb-3 space-y-3">
-              {/* Upload Own Stamp */}
               <div className="space-y-1.5">
                 <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Upload Your Stamp</p>
                 <label className="flex flex-col items-center gap-1.5 p-3 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))] transition-all">
@@ -769,10 +858,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   </div>
                 )}
               </div>
-
               <div className="border-t border-[hsl(var(--border))]" />
-
-              {/* AI Refine */}
               <div className="space-y-1.5">
                 <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">AI Refine Stamp</p>
                 <textarea value={props.refinePrompt} onChange={e => props.onSetRefinePrompt(e.target.value)}
@@ -784,10 +870,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                   {props.refiningImage ? <><Loader2 size={10} className="animate-spin" /> Refining…</> : <><Wand2 size={10} /> Refine with AI</>}
                 </Button>
               </div>
-
               <div className="border-t border-[hsl(var(--border))]" />
-
-              {/* Signature Overlay */}
               <div className="space-y-1.5">
                 <p className="text-[10px] font-semibold text-[hsl(var(--foreground))]">Signature Overlay</p>
                 <label className="flex flex-col items-center gap-1 p-2 rounded-lg border-2 border-dashed border-[hsl(var(--gold)/0.4)] cursor-pointer hover:border-[hsl(var(--gold))] transition-all">
