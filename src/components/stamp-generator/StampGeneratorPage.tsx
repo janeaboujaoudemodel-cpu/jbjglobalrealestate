@@ -1026,7 +1026,16 @@ export default function StampGeneratorPage() {
 
         {/* ── CENTER: Premium Canvas Preview ── */}
         <div className="flex-1 min-w-[300px] flex flex-col overflow-hidden relative">
-          <div className="flex-1 flex items-center justify-center overflow-auto relative"
+          {/* Compare mode close bar */}
+          {compareDesign && (
+            <div className="flex-shrink-0 px-3 py-1.5 bg-blue-50 border-b border-blue-200 flex items-center justify-between">
+              <span className="text-[10px] font-semibold text-blue-700">Compare Mode — Side by Side</span>
+              <Button size="sm" variant="ghost" className="h-6 text-[9px] text-blue-700 hover:bg-blue-100" onClick={() => setCompareDesign(null)}>
+                <X size={9} className="mr-1" /> Close Compare
+              </Button>
+            </div>
+          )}
+          <div className={`flex-1 flex items-center justify-center overflow-auto relative ${compareDesign ? 'gap-4' : ''}`}
             style={{
               background: bgMode === 'checker'
                 ? 'repeating-conic-gradient(hsl(var(--muted)) 0% 25%, white 0% 50%) 0 0 / 20px 20px'
@@ -1034,10 +1043,10 @@ export default function StampGeneratorPage() {
             }}>
 
             {/* Grid overlay */}
-            {showGrid && <CanvasGridOverlay size={stampSize + 80} />}
+            {showGrid && !compareDesign && <CanvasGridOverlay size={stampSize + 80} />}
 
             {/* Preview status label */}
-            {activeStandard && (
+            {activeStandard && !compareDesign && (
               <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5">
                 <Badge className="text-[7px] px-1.5 py-0 bg-[hsl(var(--gold)/0.12)] text-[hsl(var(--gold-dark))] border border-[hsl(var(--gold)/0.3)]">
                   {standardConcept?.id === activeStandard.id ? 'Standard Model' : 'Active Preview'}
