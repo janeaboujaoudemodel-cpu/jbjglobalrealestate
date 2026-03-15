@@ -838,6 +838,45 @@ export function AIVideoStudio() {
           }}
         />
       }
+      audioExtractPanel={
+        <AudioExtractorPanel
+          onAddToTimeline={(audioUrl, duration, name) => {
+            const audioTrack = project.tracks.find(t => t.type === 'audio');
+            if (!audioTrack) { toast.error('No audio track found'); return; }
+            const lastEnd = audioTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+            addClip(audioTrack.id, {
+              trackId: audioTrack.id, type: 'audio', name,
+              startTime: lastEnd, duration,
+              source: { url: audioUrl, inPoint: 0, outPoint: duration, originalDuration: duration },
+              transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+              keyframes: [], effects: [],
+              audio: { volume: 1, fadeIn: 0, fadeOut: 0, muted: false, normalized: false, noiseReduction: false },
+            });
+          }}
+        />
+      }
+      photoClipPanel={
+        <PhotoClipPanel
+          onAddToTimeline={(photos) => {
+            const videoTrack = project.tracks.find(t => t.type === 'video');
+            if (!videoTrack) { toast.error('No video track found'); return; }
+            let cursor = videoTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+            photos.forEach(photo => {
+              addClip(videoTrack.id, {
+                trackId: videoTrack.id, type: 'image', name: photo.name,
+                startTime: cursor, duration: photo.duration,
+                source: { url: photo.url, thumbnailUrl: photo.url, inPoint: 0, outPoint: photo.duration, originalDuration: photo.duration },
+                transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                keyframes: [], effects: [{ id: crypto.randomUUID(), type: 'overlay', name: 'animation', settings: { animation: photo.animation } }],
+              });
+              cursor += photo.duration;
+            });
+          }}
+        />
+      }
+      sharePanel={
+        <SharePanel projectName={project.name} />
+      }
     />
     </>
   );

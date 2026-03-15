@@ -123,6 +123,23 @@ export default function VideoSuite() {
                 <AIVideoTourScriptPremium />
               </Suspense>
             </TabsContent>
+            <TabsContent value="voice" className="mt-0 overflow-auto">
+              <Suspense fallback={<LoadingSpinner />}>
+                <div className="max-w-3xl mx-auto p-6">
+                  <VoiceoverRecorder
+                    onRecordingComplete={() => {}}
+                    onAIVoiceGenerated={() => {}}
+                  />
+                </div>
+              </Suspense>
+            </TabsContent>
+            <TabsContent value="audio-tools" className="mt-0 overflow-auto">
+              <Suspense fallback={<LoadingSpinner />}>
+                <div className="max-w-3xl mx-auto p-6">
+                  <AudioExtractorPanel />
+                </div>
+              </Suspense>
+            </TabsContent>
           </div>
         </Tabs>
       </div>
