@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Palette, Save, RotateCcw, Eye, EyeOff, Sparkles, Check, Trash2, Clock, CircleDot, Download, ChevronDown, Pencil, Plus, FolderOpen } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { Palette, Save, RotateCcw, Eye, EyeOff, Sparkles, Check, Trash2, Clock, CircleDot, Download, ChevronDown, Pencil, Plus, FolderOpen, Wand2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
