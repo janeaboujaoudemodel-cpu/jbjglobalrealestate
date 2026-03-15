@@ -82,7 +82,7 @@ const MIDDLE_STROKE = 2.5;
 const INNER_STROKE = 1.2;
 const DECORATIVE_STROKE = 0.5;
 
-const SAFE_ZONE = 5;
+const SAFE_ZONE = 6;
 const ARC_SPREAD_LIMIT = 0.88;
 
 // Theme-based stroke multipliers
