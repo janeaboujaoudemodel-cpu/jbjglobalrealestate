@@ -380,8 +380,8 @@ export default function StampGeneratorPage() {
           action: {
             label: 'Restore',
             onClick: () => {
-              if (saved.svgOverrides) {
-                setSvgOverrides(prev => ({ ...prev, ...saved.svgOverrides }));
+              if (saved.activeOverride && saved.standardConceptId) {
+                setSvgOverrides(prev => ({ ...prev, [saved.standardConceptId]: saved.activeOverride }));
               }
               toast.success('Unsaved changes restored');
               localStorage.removeItem(`stamp-autosave-${projectId}`);
