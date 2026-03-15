@@ -466,8 +466,11 @@ export default function StampProjectWizard() {
   const handleExportSVG = useCallback(() => {
     const svgData = getPreviewSvg();
     if (!svgData) return;
-    const blob = new Blob([svgData], { type: 'image/svg+xml' });
-    triggerDownload(blob, `${form.company_name || 'stamp'}.svg`);
+    // Add XML declaration for standalone file validity
+    const withDecl = svgData.startsWith('<?xml') ? svgData : `<?xml version="1.0" encoding="UTF-8"?>\n${svgData}`;
+    const slug = (form.company_name || 'stamp').toLowerCase().replace(/[^a-z0-9]+/g, '_');
+    const blob = new Blob([withDecl], { type: 'image/svg+xml;charset=utf-8' });
+    triggerDownload(blob, `${slug}_stamp.svg`);
     toast.success('SVG downloaded');
   }, [form.company_name, getPreviewSvg, triggerDownload]);
 
