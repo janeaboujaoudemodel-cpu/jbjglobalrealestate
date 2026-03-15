@@ -19,6 +19,8 @@ interface BusinessCardHeaderProps {
   onExportHtml: () => void;
   isExportingPng: boolean;
   onExportPng: () => void;
+  isExportingToResizer: boolean;
+  onExportToResizer: () => void;
   onBatchPrint: () => void;
   isExporting: boolean;
   onExportPdf: () => void;
