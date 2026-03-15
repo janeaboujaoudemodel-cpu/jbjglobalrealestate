@@ -508,18 +508,19 @@ export default function StampGeneratorPage() {
     if (!p) return;
     if (generationLockRef.current) return;
     generationLockRef.current = true;
-    // Only show center spinner when there is NO standard model yet
-    const hasStandard = !!standardConcept;
-    if (!hasStandard) setGenerating(true);
-    // Right panel always shows loading state via `generating`
-    if (hasStandard) setGenerating(true); // drives right panel skeleton cards
+    setGenerating(true);
     setBlocked(false);
     try {
       if (session?.access_token) {
         const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
-          body: JSON.stringify({ action: 'generate', project: { ...project, ...p }, projectId }),
+          body: JSON.stringify({
+            action: 'generate',
+            project: { ...project, ...p },
+            projectId,
+            selectedDesignId: standardConcept?.id || null,
+          }),
         });
         if (res.ok) {
           const json = await res.json();
@@ -534,8 +535,8 @@ export default function StampGeneratorPage() {
               .limit(11);
             if (saved && saved.length > 0) {
               const newConcepts = saved.map((d: any) => ({
-                id: d.id, templateKey: d.template_key || 'classic-double',
-                label: (d.template_key || 'classic-double').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
+                id: d.id, templateKey: d.template_key || 'classic-official',
+                label: (d.template_key || 'classic-official').replace(/-/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase()),
                 tags: [] as string[], svgSource: d.svg_source || '', isFavorite: false,
               }));
               setConcepts(newConcepts);
@@ -554,7 +555,6 @@ export default function StampGeneratorPage() {
     const clientConcepts = generateStampConcepts(project ? { ...project, ...p } : p);
     if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); generationLockRef.current = false; return; }
     setConcepts(clientConcepts);
-    // Set standard on first generation — never overwrite existing standard
     if (!standardConcept && clientConcepts.length > 0) {
       setStandardConcept(clientConcepts[0]);
       setSelectedId(clientConcepts[0].id);
@@ -593,6 +593,11 @@ export default function StampGeneratorPage() {
   }
 
   async function handleSelectConcept(concept: StampDesignConcept) {
+    // Block selection during active generation
+    if (generating) {
+      toast('Please wait for generation to finish', { duration: 2000 });
+      return;
+    }
     // Swap: previous standard moves into concepts list, clicked becomes new standard
     if (standardConcept && standardConcept.id !== concept.id) {
       setConcepts(prev => {
@@ -604,16 +609,13 @@ export default function StampGeneratorPage() {
     setStandardConcept(concept);
     setSelectedId(concept.id);
     // Persist selected_design_id to database immediately
-    // If it's a local UUID (not yet in DB), insert first
     if (projectId) {
       let dbId = concept.id;
       if (concept.id.length !== 36 || !concept.id.includes('-')) {
         // Not a valid DB UUID, treat as local
       } else {
-        // Check if it exists in stamp_designs
         const { data: exists } = await supabase.from('stamp_designs').select('id').eq('id', concept.id).maybeSingle();
         if (!exists) {
-          // Insert to DB first
           const { data: inserted } = await supabase.from('stamp_designs').insert({
             project_id: projectId, user_id: user!.id, design_version: 1,
             template_key: concept.templateKey,
@@ -622,7 +624,6 @@ export default function StampGeneratorPage() {
           }).select('id').single();
           if (inserted) {
             dbId = inserted.id;
-            // Update concept ID in local state
             concept = { ...concept, id: inserted.id };
             setStandardConcept(concept);
             setSelectedId(inserted.id);
@@ -632,7 +633,7 @@ export default function StampGeneratorPage() {
         await supabase.from('stamp_projects').update({ selected_design_id: dbId }).eq('id', projectId);
       }
     }
-    toast.success('Design applied as Standard', { duration: 2000 });
+    toast.success('Active design changed', { duration: 2000 });
   }
 
   function handleOpenPreview(concept: StampDesignConcept) {
