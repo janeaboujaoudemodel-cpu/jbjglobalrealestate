@@ -334,14 +334,15 @@ function generateOfficialStampSVG(config: OfficialStampConfig): string {
   }/>`;
 
   const decorativeR = outerR - outerSW / 2 - 2;
-  const decorativeRingEl = (bs === 'DOUBLE' || bs === 'RING' || bs === 'CUSTOM')
-    ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${ink}" stroke-width="${DECORATIVE_STROKE * themeMult}" opacity="0.5"/>`
+  const decorativeRingEl = (bs === 'RING' || bs === 'CUSTOM')
+    ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${ink}" stroke-width="${(DECORATIVE_STROKE + 0.5) * themeMult}" opacity="0.6"/>`
     : '';
 
   // Middle ring — HIDDEN for SINGLE border style
+  // DOUBLE: outer + middle (distinct widths), RING: full ornate with thicker middle
   const middleRingEl = bs === 'SINGLE' ? '' : (
     bs === 'RING'
-      ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.4}"/>`
+      ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.6}"/>`
       : `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW}"/>`
   );
 
