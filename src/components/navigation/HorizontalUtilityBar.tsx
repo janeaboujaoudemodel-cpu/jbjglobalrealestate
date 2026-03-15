@@ -94,29 +94,34 @@ export default function HorizontalUtilityBar() {
     navigate(`/properties?${params.toString()}`);
   };
 
-  const divider = <div className="w-px h-6 bg-gold/20 flex-shrink-0" />;
   const totalAlerts = alerts?.totalAlerts || 0;
 
   // Determine if user has CRM access (owner or broker)
   const showCRM = !!user && isOwner;
 
-  /* ─── Shared button classes for premium consistency ─── */
-  const pillBtn = "h-8 flex items-center gap-1.5 rounded-lg border border-gold/30 hover:border-gold/50 bg-gold/5 hover:bg-gold/15 transition-all px-2.5 group whitespace-nowrap shrink-0";
-  const iconBtn = "h-8 w-8 flex items-center justify-center rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all group shrink-0";
-  const iconClass = "w-4 h-4 text-gold group-hover:scale-110 transition-transform shrink-0";
-  const labelClass = "text-[11px] font-semibold text-black/55 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
+  /* ─── Shared styles for connected segmented cells ─── */
+  const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0";
+  const cellHover = "hover:bg-[hsl(var(--gold)/0.1)]";
+  const iconClass = "w-4 h-4 text-[hsl(var(--gold))] group-hover:scale-110 transition-transform shrink-0";
+  const labelClass = "text-[11px] font-semibold text-[hsl(var(--foreground)/0.55)] uppercase tracking-wide hidden xl:inline whitespace-nowrap";
+  
+  /* Vertical divider inside rail */
+  const railDivider = <div className="w-px h-6 bg-[hsl(var(--gold)/0.2)] shrink-0" />;
+
+  /* Standalone minimizer button styling */
+  const minimizerBtn = "h-8 w-8 flex items-center justify-center rounded-none border border-[hsl(var(--gold)/0.25)] bg-[hsl(var(--gold)/0.05)] hover:bg-[hsl(var(--gold)/0.15)] hover:border-[hsl(var(--gold)/0.4)] transition-all group shrink-0";
 
   return (
     <>
       <div
-        className="fixed top-0 left-0 right-0 h-[48px] z-[9996] flex items-center gap-1.5 sm:gap-2.5 px-2 sm:px-4 xl:px-5 pr-4 sm:pr-8 xl:pr-10 border-b border-gold/15 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] overflow-x-auto overflow-y-hidden scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 left-0 right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-4 sm:pr-8 xl:pr-10 border-b border-[hsl(var(--gold)/0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
-        {/* ── Sidebar Toggle (Arrow only) — FIRST ── */}
+        {/* ── Sidebar Toggle (standalone) ── */}
         <Tooltip>
           <TooltipTrigger asChild>
             <button
               onClick={toggleSidebar}
-              className={iconBtn}
+              className={minimizerBtn}
               aria-label="Toggle sidebar"
             >
               {sidebarCollapsed
@@ -130,236 +135,251 @@ export default function HorizontalUtilityBar() {
           </TooltipContent>
         </Tooltip>
 
-        {/* ── Back Button — SECOND ── */}
-        <GlobalBackButton />
+        {/* ── Connected Segmented Rail — all controls in one block ── */}
+        <div className="flex items-center h-8 border border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.03)] shrink-0">
+          
+          {/* Back Button */}
+          <div className={`${cellBase} ${cellHover} px-1`}>
+            <GlobalBackButton />
+          </div>
 
-        {divider}
+          {railDivider}
 
-        {/* ── Search ── */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              onClick={() => setSearchOpen(true)}
-              className={pillBtn}
-              aria-label="Search ⌘K"
-            >
-              <Search className={iconClass} />
-              <span className="text-[11px] text-black/40 font-medium hidden xl:inline">⌘K</span>
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Search ⌘K</TooltipContent>
-        </Tooltip>
+          {/* Search */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => setSearchOpen(true)}
+                className={`${cellBase} ${cellHover}`}
+                aria-label="Search ⌘K"
+              >
+                <Search className={iconClass} />
+                <span className="text-[11px] text-[hsl(var(--foreground)/0.4)] font-medium hidden xl:inline">⌘K</span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Search ⌘K</TooltipContent>
+          </Tooltip>
 
-        {divider}
+          {railDivider}
 
-        {/* ── Quick Nav: Buy / Rent / Sell ── */}
-        <div className="flex items-center gap-0.5 shrink-0">
+          {/* Buy / Rent / Sell */}
           <Link
             to="/properties?transaction=buy"
-            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap shrink-0"
+            className={`${cellBase} ${cellHover}`}
           >
-            <Building2 className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors shrink-0" />
-            <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
+            <Building2 className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
+            <span className="text-[11px] font-semibold text-[hsl(var(--foreground)/0.6)] group-hover:text-[hsl(var(--foreground)/0.8)] uppercase tracking-wide">Buy</span>
           </Link>
           <Link
             to="/properties?transaction=rent"
-            className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap shrink-0"
+            className={`${cellBase} ${cellHover}`}
           >
-            <Key className="w-4 h-4 text-gold/70 group-hover:text-gold transition-colors shrink-0" />
-            <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
+            <Key className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
+            <span className="text-[11px] font-semibold text-[hsl(var(--foreground)/0.6)] group-hover:text-[hsl(var(--foreground)/0.8)] uppercase tracking-wide">Rent</span>
           </Link>
           <Link
             to="/listing-portal"
-            className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all px-2.5 group whitespace-nowrap shrink-0"
+            className={`${cellBase} ${cellHover}`}
           >
-            <Tag className="w-4 h-4 text-gold group-hover:scale-105 transition-transform shrink-0" />
-            <span className="text-[11px] font-bold text-gold uppercase tracking-wide">Sell</span>
+            <Tag className="w-4 h-4 text-[hsl(var(--gold))] group-hover:scale-105 transition-transform shrink-0" />
+            <span className="text-[11px] font-bold text-[hsl(var(--gold))] uppercase tracking-wide">Sell</span>
           </Link>
+
+          {railDivider}
+
+          {/* Favorites */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="/favorites"
+                className={`${cellBase} ${cellHover} px-2`}
+                aria-label="Favorites"
+              >
+                <Heart className={iconClass} />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Favorites</TooltipContent>
+          </Tooltip>
+
+          {railDivider}
+
+          {/* Area Unit Toggle */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={toggleAreaUnit}
+                className="h-8 flex items-center transition-all shrink-0"
+                aria-label="Toggle area unit"
+              >
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
+                  ft²
+                </span>
+                <span className="w-px h-5 bg-[hsl(var(--gold)/0.2)]" />
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
+                  m²
+                </span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
+              {areaUnit === 'sqft' ? 'Square Feet — click to switch to m²' : 'Square Meters — click to switch to ft²'}
+            </TooltipContent>
+          </Tooltip>
+
+          {railDivider}
+
+          {/* Language */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className={`${cellBase} ${cellHover} px-1.5`}><LanguageSwitcher variant="icon-only" /></div>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select or change your language</TooltipContent>
+          </Tooltip>
+
+          {/* Currency */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className={`${cellBase} ${cellHover} px-1.5`}><CurrencySwitcher variant="icon-only" /></div>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select your currency</TooltipContent>
+          </Tooltip>
+
+          {railDivider}
+
+          {/* Filter */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => setFilterOpen(true)}
+                className={`${cellBase} ${cellHover}`}
+                aria-label="Advanced Property Filter"
+              >
+                <SlidersHorizontal className={iconClass} />
+                <span className={labelClass}>Filter</span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Open advanced filters</TooltipContent>
+          </Tooltip>
         </div>
-
-        {divider}
-
-        {/* Favorites */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link
-              to="/favorites"
-              className={iconBtn}
-              aria-label="Favorites"
-            >
-              <Heart className={iconClass} />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Favorites</TooltipContent>
-        </Tooltip>
-
-        {divider}
-
-        {/* ── Area Unit Toggle — segmented block ── */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              onClick={toggleAreaUnit}
-              className="h-8 flex items-center rounded-lg border border-gold/30 overflow-hidden transition-all"
-              aria-label="Toggle area unit"
-            >
-              <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-gold/20 text-gold' : 'text-black/30 hover:bg-gold/5'}`}>
-                ft²
-              </span>
-              <span className="w-px h-5 bg-gold/30" />
-              <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-gold/20 text-gold' : 'text-black/30 hover:bg-gold/5'}`}>
-                m²
-              </span>
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
-            {areaUnit === 'sqft' ? 'Square Feet — click to switch to m²' : 'Square Meters — click to switch to ft²'}
-          </TooltipContent>
-        </Tooltip>
-
-        {divider}
-
-        {/* ── Language ── */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div><LanguageSwitcher variant="icon-only" /></div>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select or change your language</TooltipContent>
-        </Tooltip>
-
-        {/* ── Currency ── */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div><CurrencySwitcher variant="icon-only" /></div>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select your currency</TooltipContent>
-        </Tooltip>
-
-        {divider}
-
-        {/* ── Advanced Filter — opens AdvancedFilterPanel dialog ── */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              onClick={() => setFilterOpen(true)}
-              className={pillBtn}
-              aria-label="Advanced Property Filter"
-            >
-              <SlidersHorizontal className={iconClass} />
-              <span className={labelClass}>Filter</span>
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Open advanced filters</TooltipContent>
-        </Tooltip>
 
         {/* ── Spacer ── */}
         <div className="flex-1" />
 
-        {/* ── Right Side: User Shortcuts ── */}
-        {user && (
-          <>
-            {/* CRM shortcut (owner/broker only) */}
-            {showCRM && (
+        {/* ── Right Side: Connected rail for user shortcuts ── */}
+        <div className="flex items-center h-8 border border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.03)] shrink-0">
+          {user && (
+            <>
+              {/* CRM shortcut (owner/broker only) */}
+              {showCRM && (
+                <>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                        to="/owner/crm"
+                        className={`${cellBase} hover:bg-emerald-500/10`}
+                      >
+                        <BarChart3 className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform shrink-0" />
+                        <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline whitespace-nowrap">CRM</span>
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">CRM Dashboard</TooltipContent>
+                  </Tooltip>
+                  {railDivider}
+                </>
+              )}
+
+              {/* My Tasks */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
-                    to="/owner/crm"
-                    className="h-8 flex items-center gap-1.5 rounded-lg hover:bg-emerald-500/10 transition-all px-2.5 group whitespace-nowrap shrink-0"
-                  >
-                    <BarChart3 className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform shrink-0" />
-                    <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline whitespace-nowrap">CRM</span>
+                     to="/my-dashboard#tasks"
+                     className={`${cellBase} ${cellHover} relative`}
+                   >
+                     <ClipboardList className={iconClass} />
+                    <span className="text-[11px] font-medium text-[hsl(var(--foreground)/0.5)] hidden xl:inline whitespace-nowrap">Tasks</span>
+                    {(alerts?.pendingTasks || 0) > 0 && (
+                      <span className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] rounded-full bg-destructive text-white text-[9px] font-bold flex items-center justify-center px-1">
+                        {alerts!.pendingTasks > 9 ? '9+' : alerts!.pendingTasks}
+                      </span>
+                    )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">CRM Dashboard</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Tasks</TooltipContent>
               </Tooltip>
-            )}
 
-            {/* My Tasks */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                   to="/my-dashboard#tasks"
-                   className="h-8 flex items-center gap-1.5 rounded-lg border border-gold/20 bg-gold/5 hover:bg-gold/15 hover:border-gold/40 transition-all px-2 group relative shrink-0 whitespace-nowrap"
-                 >
-                   <ClipboardList className={iconClass} />
-                  <span className="text-[11px] font-medium text-black/50 hidden xl:inline whitespace-nowrap">Tasks</span>
-                  {(alerts?.pendingTasks || 0) > 0 && (
-                    <span className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">
-                      {alerts!.pendingTasks > 9 ? '9+' : alerts!.pendingTasks}
-                    </span>
-                  )}
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Tasks</TooltipContent>
-            </Tooltip>
+              {/* Alerts / Notifications */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                     to="/my-dashboard#notifications"
+                     className={`${cellBase} ${cellHover} px-2 relative`}
+                   >
+                     <Bell className={iconClass} />
+                    {(alerts?.totalNotificationAlerts || 0) > 0 && (
+                      <span className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] rounded-full bg-destructive text-white text-[9px] font-bold flex items-center justify-center px-1">
+                        {alerts!.totalNotificationAlerts > 9 ? '9+' : alerts!.totalNotificationAlerts}
+                      </span>
+                    )}
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
+                  Notifications{totalAlerts > 0 ? ` (${totalAlerts})` : ''}
+                </TooltipContent>
+              </Tooltip>
 
-            {/* Alerts / Notifications */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                   to="/my-dashboard#notifications"
-                   className={`${iconBtn} relative`}
-                 >
-                   <Bell className={iconClass} />
-                  {(alerts?.totalNotificationAlerts || 0) > 0 && (
-                    <span className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center px-1">
-                      {alerts!.totalNotificationAlerts > 9 ? '9+' : alerts!.totalNotificationAlerts}
-                    </span>
-                  )}
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
-                Notifications{totalAlerts > 0 ? ` (${totalAlerts})` : ''}
-              </TooltipContent>
-            </Tooltip>
+              {/* Inbox */}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                     to="/my-dashboard#inbox"
+                     className={`${cellBase} ${cellHover} px-2`}
+                   >
+                     <Inbox className={iconClass} />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Inbox</TooltipContent>
+              </Tooltip>
 
-            {/* Inbox */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link
-                   to="/my-dashboard#inbox"
-                   className={iconBtn}
-                 >
-                   <Inbox className={iconClass} />
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Inbox</TooltipContent>
-            </Tooltip>
+              {railDivider}
+            </>
+          )}
 
-            {divider}
-          </>
-        )}
+          {/* Dashboard */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="/my-dashboard"
+                className={`${cellBase} ${cellHover} px-2`}
+                aria-label="Dashboard"
+              >
+                <LayoutDashboard className={iconClass} />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Dashboard</TooltipContent>
+          </Tooltip>
 
-        {/* Dashboard */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link
-              to="/my-dashboard"
-              className={iconBtn}
-              aria-label="Dashboard"
-            >
-              <LayoutDashboard className={iconClass} />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Dashboard</TooltipContent>
-        </Tooltip>
+          {railDivider}
 
-        {/* Account — opens Mode Selector via ModeSwitcher */}
-        <ModeSwitcher variant="header" />
+          {/* Account — opens Mode Selector via ModeSwitcher */}
+          <div className={`${cellBase} ${cellHover} px-1`}>
+            <ModeSwitcher variant="header" />
+          </div>
 
-        {/* Settings */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link
-              to="/profile"
-              className={iconBtn}
-              aria-label="Settings"
-            >
-              <Settings className={iconClass} />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Settings & Profile</TooltipContent>
-        </Tooltip>
+          {railDivider}
+
+          {/* Settings — with extra gap from Mode */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="/profile"
+                className={`${cellBase} ${cellHover} px-3`}
+                aria-label="Settings"
+              >
+                <Settings className={iconClass} />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Settings & Profile</TooltipContent>
+          </Tooltip>
+        </div>
       </div>
 
       <GlobalSearchModal isOpen={searchOpen} initialQuery="" onClose={() => setSearchOpen(false)} />
