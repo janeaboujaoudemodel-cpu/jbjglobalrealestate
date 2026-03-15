@@ -323,13 +323,11 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   const sepMax = outerR - 2; // allow touching the outer ring edge
   const separatorR = sepMin + (sepMax - sepMin) * (sepPct / 100);
 
-  // Location text arc radius — true midpoint between middle and inner rings
-  // Ensure text is vertically centered within the location band
-  const locBandMid = (middleR + innerR) / 2;
-  const clampedLocTextR = Math.max(
-    Math.min(locBandMid, middleR - SAFE_ZONE),
-    innerR + SAFE_ZONE
-  );
+  // Location text arc radius — controlled by locationArcBandOffset (0-100, default 50 = midpoint)
+  const locBandPct = Math.max(0, Math.min(100, config.locationArcBandOffset ?? 50));
+  const locBandMin = innerR + SAFE_ZONE;
+  const locBandMax = middleR - SAFE_ZONE;
+  const clampedLocTextR = locBandMin + (locBandMax - locBandMin) * (locBandPct / 100);
 
   // Arabic arc spread
   const arabicSpread = config.arabicArcSpread ?? ARC_SPREAD_LIMIT;
