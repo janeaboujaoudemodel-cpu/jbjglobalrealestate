@@ -30,7 +30,8 @@ export default function DocumentFieldPlacer({
   recipients,
   fields,
   onFieldsChange,
-}: DocumentFieldPlacerProps) {
+  handoffStampSvg,
+}: DocumentFieldPlacerProps & { handoffStampSvg?: string | null }) {
   const { user } = useAuth();
   const [selectedRecipient, setSelectedRecipient] = useState<string>(recipients[0]?.id || "");
   const [selectedFieldType, setSelectedFieldType] = useState<SignatureField["type"]>("signature");
