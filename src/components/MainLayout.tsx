@@ -270,7 +270,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           {children}
         </main>
       </GlobalContactGating>
-      <div className={!isBackOfficeRoute ? (isToolkitGeneratorRoute ? "[body.jj-vertical-nav-active_&]:lg:pl-[200px] [body.jj-vertical-nav-collapsed_&]:lg:pl-[48px]" : "[body.jj-vertical-nav-active_&]:xl:pl-[200px] [body.jj-vertical-nav-collapsed_&]:xl:pl-[48px]") : ""}>
+      <div className={!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:lg:pl-[200px] [body.jj-vertical-nav-collapsed_&]:lg:pl-[48px]" : ""}>
         {!isBackOfficeRoute && !isToolkitGeneratorRoute && <CombinedContactNewsletter />}
         {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
       </div>
