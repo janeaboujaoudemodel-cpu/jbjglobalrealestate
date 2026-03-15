@@ -59,6 +59,10 @@ export function useBusinessCardState() {
   const [shapeOpen, setShapeOpen] = useState(true);
   const [nfcGuideOpen, setNfcGuideOpen] = useState(false);
 
+  // Email signature specific
+  const [sigLayout, setSigLayout] = useState<SigLayout>("divider-left");
+  const [sigAccentColor, setSigAccentColor] = useState("");
+
   // Drag-to-rearrange
   const [editLayout, setEditLayout] = useState(false);
   const [fieldPositions, setFieldPositions] = useState({ ...DEFAULT_FIELD_POSITIONS });
