@@ -356,7 +356,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </Tabs>
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
-                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">Min Price</label>
+                <label className="text-[10px] font-semibold text-black/50 uppercase mb-1 block">{t('filter.minPrice')}</label>
                 <div className="relative">
                   <input
                     type="text"
