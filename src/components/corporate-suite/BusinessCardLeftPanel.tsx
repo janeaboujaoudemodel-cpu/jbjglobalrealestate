@@ -110,7 +110,7 @@ export function BusinessCardLeftPanel(props: BusinessCardLeftPanelProps) {
   } = props;
 
   return (
-    <div className="space-y-4">
+    <div className="lg:overflow-y-auto lg:max-h-full lg:pr-1 space-y-4 scrollbar-thin scrollbar-thumb-[hsl(var(--border))] scrollbar-track-transparent">
 
       {/* Card Shape */}
       <Collapsible open={shapeOpen} onOpenChange={setShapeOpen}>
