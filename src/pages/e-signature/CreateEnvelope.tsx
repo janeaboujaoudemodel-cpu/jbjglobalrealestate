@@ -107,6 +107,7 @@ export default function CreateEnvelope() {
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [reviewConfirmed, setReviewConfirmed] = useState(false);
 
   // Step 1: Document
   const [documentName, setDocumentName] = useState("");
