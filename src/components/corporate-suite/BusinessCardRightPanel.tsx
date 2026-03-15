@@ -173,6 +173,7 @@ export function BusinessCardRightPanel(props: BusinessCardRightPanelProps) {
     activeTemplate, setActiveTemplate, frontSecondary, frontAccent,
     finishOpen, setFinishOpen, finishEffect, setFinishEffect,
     mockupOpen, setMockupOpen, mockupScene, setMockupScene, frontTemplate,
+    sigLayout, setSigLayout, sigAccentColor, setSigAccentColor,
   } = props;
 
   return (
