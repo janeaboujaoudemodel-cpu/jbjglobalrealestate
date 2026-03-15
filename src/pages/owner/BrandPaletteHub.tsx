@@ -614,6 +614,53 @@ const BrandPaletteHub = () => {
               </p>
             </div>
 
+            {/* Color Harmony Generator */}
+            <div className="bg-card/80 border border-gold/20 rounded-2xl p-5">
+              <h3 className="font-bold text-foreground mb-1 text-sm flex items-center gap-2">
+                <Wand2 className="w-4 h-4 text-gold" />
+                Color Harmony
+              </h3>
+              <p className="text-[10px] text-muted-foreground mb-4">
+                Schemes based on your primary color
+                <span
+                  className="inline-block w-3 h-3 rounded-sm border border-gold/30 ml-1.5 align-middle"
+                  style={{ backgroundColor: draft.primary }}
+                />
+              </p>
+              <div className="space-y-3">
+                {harmonySchemes.map((scheme) => (
+                  <div key={scheme.name} className="rounded-xl border border-gold/15 p-3 bg-card/40">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-semibold text-foreground">{scheme.name}</span>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="h-6 px-2 text-[10px] text-gold hover:text-gold hover:bg-gold/10"
+                        onClick={() => {
+                          setDraft(scheme.palette);
+                          if (isPreviewing) setPalettePreview(scheme.palette);
+                          toast.success(`${scheme.name} scheme applied`);
+                        }}
+                      >
+                        Apply
+                      </Button>
+                    </div>
+                    <p className="text-[9px] text-muted-foreground mb-2">{scheme.desc}</p>
+                    <div className="flex gap-0.5">
+                      {PALETTE_KEYS.map(({ key }) => (
+                        <div
+                          key={key}
+                          className="flex-1 h-5 rounded-md border border-gold/10"
+                          style={{ backgroundColor: scheme.palette[key] }}
+                          title={`${key}: ${scheme.palette[key]}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Saved Palettes Manager */}
             {user && (
               <div className="bg-card/80 border border-gold/20 rounded-2xl p-5">
