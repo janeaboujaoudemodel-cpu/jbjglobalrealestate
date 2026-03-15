@@ -887,6 +887,54 @@ export type Database = {
         }
         Relationships: []
       }
+      approval_workflows: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          entity_id: string
+          entity_type: string
+          id: string
+          metadata: Json | null
+          notes: string | null
+          stage: number
+          stage_name: string
+          status: Database["public"]["Enums"]["approval_stage_status"]
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          stage?: number
+          stage_name: string
+          status?: Database["public"]["Enums"]["approval_stage_status"]
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          stage?: number
+          stage_name?: string
+          status?: Database["public"]["Enums"]["approval_stage_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       area_translations: {
         Row: {
           area_id: string
@@ -6645,6 +6693,72 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_contacts: {
+        Row: {
+          created_at: string
+          date_joined_developer: string | null
+          developer_company: string | null
+          developer_user_id: string
+          email: string | null
+          feedback: string | null
+          full_name: string
+          gender: string | null
+          id: string
+          is_active: boolean | null
+          languages: string[] | null
+          nationality: string | null
+          notes: string | null
+          phone: string | null
+          position: string | null
+          projects: string[] | null
+          rating: number | null
+          updated_at: string
+          years_in_real_estate: number | null
+        }
+        Insert: {
+          created_at?: string
+          date_joined_developer?: string | null
+          developer_company?: string | null
+          developer_user_id: string
+          email?: string | null
+          feedback?: string | null
+          full_name: string
+          gender?: string | null
+          id?: string
+          is_active?: boolean | null
+          languages?: string[] | null
+          nationality?: string | null
+          notes?: string | null
+          phone?: string | null
+          position?: string | null
+          projects?: string[] | null
+          rating?: number | null
+          updated_at?: string
+          years_in_real_estate?: number | null
+        }
+        Update: {
+          created_at?: string
+          date_joined_developer?: string | null
+          developer_company?: string | null
+          developer_user_id?: string
+          email?: string | null
+          feedback?: string | null
+          full_name?: string
+          gender?: string | null
+          id?: string
+          is_active?: boolean | null
+          languages?: string[] | null
+          nationality?: string | null
+          notes?: string | null
+          phone?: string | null
+          position?: string | null
+          projects?: string[] | null
+          rating?: number | null
+          updated_at?: string
+          years_in_real_estate?: number | null
+        }
+        Relationships: []
+      }
       developer_file_validations: {
         Row: {
           created_at: string
@@ -6845,6 +6959,75 @@ export type Database = {
           risk_level?: Database["public"]["Enums"]["risk_level"] | null
           total_units?: number | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      developer_registrations: {
+        Row: {
+          admin_notes: string | null
+          company_address: string | null
+          company_email: string | null
+          company_logo_url: string | null
+          company_name: string
+          company_phone: string | null
+          company_website: string | null
+          created_at: string
+          emirate: string | null
+          id: string
+          key_contacts: Json | null
+          rera_number: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["registration_status"]
+          trade_license_number: string | null
+          trade_license_url: string | null
+          updated_at: string
+          user_id: string
+          year_established: number | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          company_address?: string | null
+          company_email?: string | null
+          company_logo_url?: string | null
+          company_name: string
+          company_phone?: string | null
+          company_website?: string | null
+          created_at?: string
+          emirate?: string | null
+          id?: string
+          key_contacts?: Json | null
+          rera_number?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["registration_status"]
+          trade_license_number?: string | null
+          trade_license_url?: string | null
+          updated_at?: string
+          user_id: string
+          year_established?: number | null
+        }
+        Update: {
+          admin_notes?: string | null
+          company_address?: string | null
+          company_email?: string | null
+          company_logo_url?: string | null
+          company_name?: string
+          company_phone?: string | null
+          company_website?: string | null
+          created_at?: string
+          emirate?: string | null
+          id?: string
+          key_contacts?: Json | null
+          rera_number?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["registration_status"]
+          trade_license_number?: string | null
+          trade_license_url?: string | null
+          updated_at?: string
+          user_id?: string
+          year_established?: number | null
         }
         Relationships: []
       }
@@ -9459,33 +9642,48 @@ export type Database = {
       }
       event_invitations: {
         Row: {
+          attended: boolean | null
           created_at: string
           event_id: string
+          feedback: string | null
           id: string
           notes: string | null
+          rating: number | null
           responded_at: string | null
+          rsvp_at: string | null
+          rsvp_status: string | null
           sent_at: string | null
           status: string
           user_email: string | null
           user_id: string | null
         }
         Insert: {
+          attended?: boolean | null
           created_at?: string
           event_id: string
+          feedback?: string | null
           id?: string
           notes?: string | null
+          rating?: number | null
           responded_at?: string | null
+          rsvp_at?: string | null
+          rsvp_status?: string | null
           sent_at?: string | null
           status?: string
           user_email?: string | null
           user_id?: string | null
         }
         Update: {
+          attended?: boolean | null
           created_at?: string
           event_id?: string
+          feedback?: string | null
           id?: string
           notes?: string | null
+          rating?: number | null
           responded_at?: string | null
+          rsvp_at?: string | null
+          rsvp_status?: string | null
           sent_at?: string | null
           status?: string
           user_email?: string | null
@@ -13983,6 +14181,72 @@ export type Database = {
           native_name?: string | null
           sort_order?: number | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      launch_events: {
+        Row: {
+          admin_notes: string | null
+          approval_status: Database["public"]["Enums"]["event_approval_status"]
+          approved_at: string | null
+          approved_by: string | null
+          attachments: Json | null
+          cover_image_url: string | null
+          created_at: string
+          developer_name: string
+          developer_user_id: string
+          event_date: string
+          event_description: string | null
+          event_end_date: string | null
+          event_title: string
+          id: string
+          max_attendees: number | null
+          project_name: string
+          updated_at: string
+          venue: string | null
+          venue_address: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          approval_status?: Database["public"]["Enums"]["event_approval_status"]
+          approved_at?: string | null
+          approved_by?: string | null
+          attachments?: Json | null
+          cover_image_url?: string | null
+          created_at?: string
+          developer_name: string
+          developer_user_id: string
+          event_date: string
+          event_description?: string | null
+          event_end_date?: string | null
+          event_title: string
+          id?: string
+          max_attendees?: number | null
+          project_name: string
+          updated_at?: string
+          venue?: string | null
+          venue_address?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          approval_status?: Database["public"]["Enums"]["event_approval_status"]
+          approved_at?: string | null
+          approved_by?: string | null
+          attachments?: Json | null
+          cover_image_url?: string | null
+          created_at?: string
+          developer_name?: string
+          developer_user_id?: string
+          event_date?: string
+          event_description?: string | null
+          event_end_date?: string | null
+          event_title?: string
+          id?: string
+          max_attendees?: number | null
+          project_name?: string
+          updated_at?: string
+          venue?: string | null
+          venue_address?: string | null
         }
         Relationships: []
       }
@@ -26965,6 +27229,7 @@ export type Database = {
         | "broker_partner"
         | "client"
         | "support_ops"
+      approval_stage_status: "pending" | "approved" | "rejected" | "skipped"
       approval_type:
         | "leave_request"
         | "expense_claim"
@@ -27136,6 +27401,7 @@ export type Database = {
         | "viewed"
         | "signed"
         | "declined"
+      event_approval_status: "draft" | "submitted" | "approved" | "rejected"
       hr_application_status: "pending" | "approved" | "rejected"
       hr_module_track: "company_knowledge" | "real_estate_basics"
       hr_question_type: "mcq" | "true_false" | "short_answer"
@@ -27202,6 +27468,12 @@ export type Database = {
         | "first_deal_bonus"
       prediction_confidence: "low" | "medium" | "high" | "very_high"
       redemption_status: "requested" | "approved" | "delivered" | "rejected"
+      registration_status:
+        | "draft"
+        | "submitted"
+        | "under_review"
+        | "approved"
+        | "rejected"
       reward_type: "points" | "gift" | "badge" | "certificate"
       risk_level: "low" | "medium" | "high" | "critical"
       security_event_type:
@@ -27400,6 +27672,7 @@ export const Constants = {
         "client",
         "support_ops",
       ],
+      approval_stage_status: ["pending", "approved", "rejected", "skipped"],
       approval_type: [
         "leave_request",
         "expense_claim",
@@ -27585,6 +27858,7 @@ export const Constants = {
         "signed",
         "declined",
       ],
+      event_approval_status: ["draft", "submitted", "approved", "rejected"],
       hr_application_status: ["pending", "approved", "rejected"],
       hr_module_track: ["company_knowledge", "real_estate_basics"],
       hr_question_type: ["mcq", "true_false", "short_answer"],
@@ -27658,6 +27932,13 @@ export const Constants = {
       ],
       prediction_confidence: ["low", "medium", "high", "very_high"],
       redemption_status: ["requested", "approved", "delivered", "rejected"],
+      registration_status: [
+        "draft",
+        "submitted",
+        "under_review",
+        "approved",
+        "rejected",
+      ],
       reward_type: ["points", "gift", "badge", "certificate"],
       risk_level: ["low", "medium", "high", "critical"],
       security_event_type: [
