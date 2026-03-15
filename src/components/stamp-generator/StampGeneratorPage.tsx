@@ -924,6 +924,7 @@ export default function StampGeneratorPage() {
 
         {/* ── LEFT PANEL: Collapsible Tool Controls ── */}
         <StampLeftPanel
+          selectedElement={selectedElement}
           primaryColor={primaryColor}
           secondaryColor={secondaryColor}
           accentColor={accentColor}
