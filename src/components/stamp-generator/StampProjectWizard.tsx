@@ -155,13 +155,19 @@ interface FormState {
   arabic_font: string;
   arabic_letter_spacing: number;
   arabic_arc_spread: number;
+  english_arc_spread: number;
   arabic_font_weight: string;
   arc_text_spacing: number;
   circle_gap: number;
   separator_distance: number;
   center_content_size: number;
+  company_arc_offset: number;
+  location_arc_offset: number;
   selected_preset: string;
   monogram_colors: MonogramLetterColors;
+  outer_border_color: string;
+  middle_border_color: string;
+  inner_border_color: string;
 }
 
 export default function StampProjectWizard() {
