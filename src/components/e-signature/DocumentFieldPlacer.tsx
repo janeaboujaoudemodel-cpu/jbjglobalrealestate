@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   PenTool, Trash2, User, Wand2, Loader2,
-  ChevronLeft, ChevronRight, X, FileText, Pencil,
+  ChevronLeft, ChevronRight, X, FileText, Pencil, Package,
 } from "lucide-react";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
