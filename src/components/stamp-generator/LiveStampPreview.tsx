@@ -250,7 +250,7 @@ export function LiveStampPreview({
     centerContentSize, companyArcBandOffset, locationArcBandOffset,
     monogramLetterColors, monogramDividerColor, arcTextSpacing,
     separatorDistance, outerBorderColor, middleBorderColor, innerBorderColor,
-    locationArcSpread,
+    locationArcSpread, onLetterClick, letterOverrides,
   };
 
   // ── Click & double-click handlers ──
