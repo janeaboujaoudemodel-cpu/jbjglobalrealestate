@@ -93,7 +93,7 @@ export default function StampGeneratorPage() {
   const [concepts, setConcepts] = useState<StampDesignConcept[]>([]);
   const [favoriteConcepts, setFavoriteConcepts] = useState<StampDesignConcept[]>([]);
   const [generating, setGenerating] = useState(false);
-  const [generatingInPanel, setGeneratingInPanel] = useState(false);
+  // generatingInPanel removed — unified into single `generating` boolean
   const [selectedId, setSelectedId] = useState<string | null>(null);
   // Standard Model — the pinned working design that is never lost during generation
   const [standardConcept, setStandardConcept] = useState<StampDesignConcept | null>(null);
