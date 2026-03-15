@@ -511,6 +511,14 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
               </span>
             </AccordionTrigger>
             <AccordionContent className="pb-3 space-y-2.5">
+              {/* Context indicator */}
+              {focusedElement === 'center' && props.localIconStyle === 'MONOGRAM' && (
+                <div className="px-2 py-1.5 rounded-lg bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)]">
+                  <p className="text-[9px] font-semibold text-[hsl(var(--gold-dark))]">🎯 Monogram focused — colors apply to monogram letters</p>
+                  <button onClick={() => setFocusedElement(null)} className="text-[8px] text-[hsl(var(--muted-foreground))] underline mt-0.5">Switch to borders</button>
+                </div>
+              )}
+
               <button onClick={props.onResetColors}
                 className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg border-2 border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] text-[10px] font-semibold hover:bg-[hsl(var(--gold)/0.06)] transition-all">
                 <RotateCw size={10} /> Reset to Standard
@@ -523,7 +531,7 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 </p>
                 <div className="flex gap-1.5">
                   {STANDARD_EXPORT_COLORS.map(c => (
-                    <button key={c.hex} onClick={() => props.onSetActiveColor(c.hex)} title={c.label}
+                    <button key={c.hex} onClick={() => handleColorChange(c.hex)} title={c.label}
                       className={`flex flex-col items-center gap-0.5 transition-all hover:scale-110 ${props.activeColor === c.hex ? 'scale-110' : ''}`}>
                       <div className={`w-6 h-6 rounded-full border-2 shadow-sm ${props.activeColor === c.hex ? 'border-[hsl(var(--gold))]' : c.hex === '#ffffff' ? 'border-[hsl(var(--border))]' : 'border-white'}`}
                         style={{ backgroundColor: c.hex }} />
@@ -533,25 +541,27 @@ export function StampLeftPanel(props: StampLeftPanelProps) {
                 </div>
               </div>
 
-              {/* Color stops */}
-              <div className="flex gap-1">
-                {stopDefs.map(s => (
-                  <button key={s.key} onClick={() => props.onSetActiveStop(s.key)} title={s.label}
-                    className={`flex-1 flex flex-col items-center gap-1 p-1.5 rounded-lg border-2 transition-all ${props.activeStop === s.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))]'}`}>
-                    <div className="w-5 h-5 rounded-full border border-white shadow-sm" style={{ backgroundColor: s.color }} />
-                    <span className="text-[8px] text-[hsl(var(--muted-foreground))]">{s.label}</span>
-                  </button>
-                ))}
-              </div>
+              {/* Color stops — only show when NOT targeting monogram */}
+              {focusedElement !== 'center' && (
+                <div className="flex gap-1">
+                  {stopDefs.map(s => (
+                    <button key={s.key} onClick={() => { props.onSetActiveStop(s.key); setFocusedElement(null); }} title={s.label}
+                      className={`flex-1 flex flex-col items-center gap-1 p-1.5 rounded-lg border-2 transition-all ${props.activeStop === s.key ? 'border-[hsl(var(--gold))] bg-[hsl(var(--gold)/0.06)]' : 'border-[hsl(var(--border))]'}`}>
+                      <div className="w-5 h-5 rounded-full border border-white shadow-sm" style={{ backgroundColor: s.color }} />
+                      <span className="text-[8px] text-[hsl(var(--muted-foreground))]">{s.label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
 
-              <StampColorWheel color={props.activeColor} onChange={props.onSetActiveColor} label="" size={120} />
+              <StampColorWheel color={props.activeColor} onChange={handleColorChange} label="" size={120} />
 
               {/* Quick Colors */}
               <div className="border-t border-[hsl(var(--border))] pt-2">
                 <p className="text-[9px] font-semibold text-[hsl(var(--muted-foreground))] uppercase mb-1.5">Quick Colors</p>
                 <div className="flex flex-wrap gap-1">
                   {PRESET_PALETTE.map(c => (
-                    <button key={c.hex} onClick={() => props.onSetActiveColor(c.hex)} title={c.label}
+                    <button key={c.hex} onClick={() => handleColorChange(c.hex)} title={c.label}
                       className={`w-6 h-6 rounded-full border-2 transition-all hover:scale-110 ${props.activeColor === c.hex ? 'border-[hsl(var(--gold))] scale-110' : 'border-white shadow-sm'}`}
                       style={{ backgroundColor: c.hex }} />
                   ))}
