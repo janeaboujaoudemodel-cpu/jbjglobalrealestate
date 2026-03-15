@@ -33,13 +33,13 @@ export function useIsTouchLayout() {
     if (!mql) return;
 
     const onChange = () => {
-      if (window.innerWidth >= 1024) {
-        // Desktop width — only touch layout for true touch-only devices
+      if (window.innerWidth >= 768) {
+        // Tablet/Desktop — only touch layout for phones
         const hasTouchPoints = (navigator.maxTouchPoints ?? 0) > 0;
-        setIsTouch(mql!.matches && hasTouchPoints);
+        setIsTouch(mql!.matches && hasTouchPoints && window.innerWidth < 768);
         return;
       }
-      // Below 1024px — always mobile
+      // Below 768px — always mobile (phone)
       setIsTouch(true);
     };
     onChange();
