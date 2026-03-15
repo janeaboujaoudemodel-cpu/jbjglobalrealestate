@@ -557,9 +557,9 @@ function generateRectStamp(config: OfficialStampConfig, isSquare: boolean): stri
     borders += `<rect x="${x0 + gap}" y="${y0 + gap}" width="${w - gap * 2}" height="${h - gap * 2}" rx="${Math.max(2, rr - 3)}" fill="none" stroke="${ink}" stroke-width="${innerSW * 0.7}"/>`;
   }
 
-  // Safe content area — keep well inside borders
-  const safeW = w - 56;
-  const lineH = isSquare ? 16 : 14;
+  // Safe content area — keep well inside borders with extra padding
+  const safeW = w - 60;
+  const lineH = isSquare ? 18 : 15;
   const lines: { text: string; font: string; size: number; weight: string; opacity?: number }[] = [];
 
   if (mode === 'BILINGUAL') {
