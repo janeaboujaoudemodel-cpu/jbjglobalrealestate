@@ -108,6 +108,7 @@ function AIVideoStudioLayout({
     effects: effectsPanel, transitions: transitionsPanel, resize: resizePanel,
     map: mapPanel, 'ai-editor': aiEditorPanel, inspector: inspectorPanel,
     projects: projectsPanel, 'talking-agent': talkingAgentPanel, history: historyPanel,
+    'audio-extract': audioExtractPanel, 'photo-clip': photoClipPanel, share: sharePanel,
   };
 
   const handleToolClick = (toolId: string) => {
