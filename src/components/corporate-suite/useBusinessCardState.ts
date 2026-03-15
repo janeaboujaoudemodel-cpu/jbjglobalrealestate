@@ -8,7 +8,7 @@ import {
   type Template, type CardShape, type QrPosition, type QrContentType, type TextAlign,
   type GradientDirection, type FinishEffect, type MockupScene, type CardData,
   type BilingualMode, type BilingualLanguage, type FieldPos, type AiDesignData,
-  type FieldConfigMap,
+  type FieldConfigMap, type SigLayout,
   BILINGUAL_LANGUAGES, COLOR_PRESETS, DEFAULT_FIELD_POSITIONS, DEFAULT_LOGO_POS,
   buildQrData, getDefaultFieldConfigs, saveDraftToStorage, loadDraftFromStorage, clearDraftFromStorage,
 } from "./businessCardTypes";
