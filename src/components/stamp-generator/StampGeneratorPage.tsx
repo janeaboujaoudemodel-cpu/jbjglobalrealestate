@@ -186,7 +186,7 @@ export default function StampGeneratorPage() {
     if (!id) return;
     const baseSvg = svgOverrides[id] || concepts.find(c => c.id === id)?.svgSource || favoriteConcepts.find(c => c.id === id)?.svgSource || standardConcept?.svgSource || '';
     if (!baseSvg) return;
-    const colored = applyMonogramColors(baseSvg, localMonogramText, monogramLetterColors, primaryColor);
+    const colored = applyMonogramColors(baseSvg, effectiveMonogram, monogramLetterColors, primaryColor);
     if (colored !== baseSvg) {
       setSvgOverrides(prev => ({ ...prev, [id]: colored }));
       triggerPulse();
