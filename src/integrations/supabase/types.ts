@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      abuse_detection_log: {
+        Row: {
+          cleanup_stats: Json | null
+          created_at: string | null
+          id: string
+          patterns: Json | null
+          patterns_detected: number | null
+          scan_time: string | null
+        }
+        Insert: {
+          cleanup_stats?: Json | null
+          created_at?: string | null
+          id?: string
+          patterns?: Json | null
+          patterns_detected?: number | null
+          scan_time?: string | null
+        }
+        Update: {
+          cleanup_stats?: Json | null
+          created_at?: string | null
+          id?: string
+          patterns?: Json | null
+          patterns_detected?: number | null
+          scan_time?: string | null
+        }
+        Relationships: []
+      }
       activity_points_config: {
         Row: {
           created_at: string
