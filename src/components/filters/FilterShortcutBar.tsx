@@ -256,9 +256,9 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
   const getPropertyTypeLabel = () => {
     if (filters.propertyTypes.length === 0) {
-      if (filters.propertyCategory === 'residential') return 'Residential';
-      if (filters.propertyCategory === 'commercial') return 'Commercial';
-      return 'Property Type';
+      if (filters.propertyCategory === 'residential') return t('filter.residential');
+      if (filters.propertyCategory === 'commercial') return t('filter.commercial');
+      return t('filter.propertyType');
     }
     const first = ALL_PROPERTY_TYPES.find(o => o.value === filters.propertyTypes[0])?.label || '';
     return first;
