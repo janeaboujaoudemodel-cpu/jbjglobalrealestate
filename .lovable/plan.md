@@ -1,90 +1,40 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## Fix Location Arc Spread + Unify EN/AR Typography Controls
 
-### Session Status
+### Problem
+1. **Location arcs** use company arc spreads (`arabicSpread`/`englishSpread`) — the location text (especially Arabic) doesn't fill the half-arc edge-to-edge
+2. **Arabic Typography section** only has 4 controls (font family, letter spacing, arc spread, weight) — missing font size
+3. **English controls** are scattered across "Font Controls" and "Spacing & Layout" — not a unified section matching Arabic
+4. No dedicated location arc spread control
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+### Changes
 
----
+**1. `src/lib/stampOfficialTemplate.ts`**
+- Add `locationArcSpread` to `OfficialStampConfig` (default `0.98`)
+- In `generateRoundStamp`, use `config.locationArcSpread ?? ARC_SPREAD_LIMIT` for location arcs instead of reusing `arabicSpread`/`englishSpread`
+- This ensures location text always fills the full half-arc by default, independently from company name arcs
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+**2. `src/components/stamp-generator/StampLeftPanel.tsx`**
+- Restructure the sidebar into two matching sections:
+  - **English Typography** — font family, font size, bold/italic, letter spacing, arc spread, weight
+  - **Arabic Typography** — font family, font size, bold/italic, letter spacing, arc spread, weight
+- Each section gets a "Match with [other language]" button that copies: arc spread, letter spacing, font size, weight
+- Add a **Location Arc Spread** slider (shared for both languages) in the Spacing & Layout section
+- Move English arc spread from "Spacing & Layout" into the new "English Typography" section
+- Move Arabic arc spread from "Arabic Typography" (already there, keep it)
+- Add font size slider to Arabic section (currently missing)
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+**3. `src/components/stamp-generator/StampGeneratorPage.tsx`**
+- Add `locationArcSpread` state (default `0.98`)
+- Pass it through to the template config and the left panel
+- Add `arabicFontSize` state for manual Arabic font size control
 
----
+**4. `src/components/stamp-generator/LiveStampPreview.tsx`**
+- Pass `locationArcSpread` through to the stamp config
 
-### Route Map
+### Result
+- Location arcs (AR + EN) default to full edge-to-edge (0.98) independently
+- Arabic and English sections have identical controls in sidebar
+- "Match" buttons sync all typography settings between languages
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
-
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
-
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
