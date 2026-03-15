@@ -595,6 +595,30 @@ export function CardCanvas({
         />
       )}
 
+      {/* Stamp overlay — independent layer with ink blend */}
+      {stampUrl && (
+        <img
+          src={stampUrl}
+          alt="stamp"
+          onMouseDown={e => startDrag("logo", e)}
+          style={{
+            position: "absolute",
+            left: `${(stampPos?.x ?? 70)}%`,
+            top: `${(stampPos?.y ?? 65)}%`,
+            width: stampSize ?? 50,
+            height: stampSize ?? 50,
+            objectFit: "contain",
+            mixBlendMode: "multiply",
+            opacity: 0.85,
+            borderRadius: 4,
+            zIndex: 16,
+            pointerEvents: "none",
+            userSelect: "none",
+          }}
+          draggable={false}
+        />
+      )}
+
       {/* Draggable field overlays — front side only, showing REAL content */}
       {side === "front" && editLayout && (
         <>
