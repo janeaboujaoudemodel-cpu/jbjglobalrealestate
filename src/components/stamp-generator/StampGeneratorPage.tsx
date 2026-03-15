@@ -222,7 +222,8 @@ export default function StampGeneratorPage() {
 
     const name = project.company_name || '';
     const arabicName = project.arabic_company_name || '';
-    const locationEn = [project.city_optional, project.country_optional].filter(Boolean).join(', ') || 'Dubai, UAE';
+    const locationEnRaw = [project.city_optional, project.country_optional].filter(Boolean).join(', ') || 'Dubai, UAE';
+    const locationEn = locationEnRaw.replace(/United Arab Emirates/gi, 'UAE');
     const ARABIC_CITY_MAP: Record<string, string> = {
       'dubai': 'دبي، الإمارات', 'abu dhabi': 'أبوظبي، الإمارات',
       'sharjah': 'الشارقة، الإمارات', 'ajman': 'عجمان، الإمارات',
