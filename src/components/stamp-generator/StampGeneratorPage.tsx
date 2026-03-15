@@ -904,7 +904,17 @@ export default function StampGeneratorPage() {
         />
       )}
 
-      {/* ── Header ── */}
+      {/* Post-Save Dialog */}
+      <StampSaveDialog
+        open={showSaveDialog}
+        onClose={() => setShowSaveDialog(false)}
+        projectName={project?.company_name || 'Stamp Project'}
+        savedAt={lastSaved}
+        onViewProjects={() => { setShowSaveDialog(false); navigate('/toolkit/stamp-generator/projects'); }}
+        onOpenLibrary={() => { setShowSaveDialog(false); libraryTabRef?.(); }}
+      />
+
+
       <StampProjectHeader
         projectName={project.company_name || 'Untitled'}
         languageMode={project.language_mode}
