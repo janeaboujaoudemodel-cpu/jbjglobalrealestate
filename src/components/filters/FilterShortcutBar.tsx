@@ -910,7 +910,7 @@ function ConnectedModeButton() {
   const MODE_CONFIG: Record<string, { label: string; icon: typeof Users; color: string; bgColor: string; borderColor: string; description: string }> = {
     investor: {
       label: 'Mode: Investor',
-      icon: Users,
+      icon: User,
       color: 'text-emerald-500',
       bgColor: 'bg-emerald-500/10 border-emerald-500/30',
       borderColor: 'border-emerald-500/40',
@@ -918,7 +918,7 @@ function ConnectedModeButton() {
     },
     broker: {
       label: 'Mode: Broker',
-      icon: Users,
+      icon: Briefcase,
       color: 'text-blue-500',
       bgColor: 'bg-blue-500/10 border-blue-500/30',
       borderColor: 'border-blue-500/40',
@@ -934,7 +934,7 @@ function ConnectedModeButton() {
     },
     developer: {
       label: 'Mode: Developer',
-      icon: Users,
+      icon: Building2,
       color: 'text-amber-500',
       bgColor: 'bg-amber-500/10 border-amber-500/30',
       borderColor: 'border-amber-500/40',
