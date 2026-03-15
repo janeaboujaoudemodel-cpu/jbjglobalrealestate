@@ -1411,7 +1411,7 @@ export default function StampProjectWizard() {
               {form.company_name ? (
                 <>
                   {form.company_name}
-                  <span className="block text-[9px] mt-0.5 opacity-70">Click any element to edit</span>
+                  <span className="block text-[9px] mt-0.5 opacity-70">Click any element to edit · Click individual letters for per-character control</span>
                 </>
               ) : <span className="italic">Enter company name to see live preview</span>}
             </p>
