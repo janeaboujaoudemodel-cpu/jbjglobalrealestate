@@ -5,7 +5,7 @@
  */
 import { useState, useCallback, useEffect, useRef } from "react";
 
-import { ChevronDown, ChevronRight as ChevronRightIcon, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
+import { ChevronDown, ChevronRight as ChevronRightIcon, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, User, Briefcase, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
@@ -910,7 +910,7 @@ function ConnectedModeButton() {
   const MODE_CONFIG: Record<string, { label: string; icon: typeof Users; color: string; bgColor: string; borderColor: string; description: string }> = {
     investor: {
       label: 'Mode: Investor',
-      icon: Users,
+      icon: User,
       color: 'text-emerald-500',
       bgColor: 'bg-emerald-500/10 border-emerald-500/30',
       borderColor: 'border-emerald-500/40',
@@ -918,7 +918,7 @@ function ConnectedModeButton() {
     },
     broker: {
       label: 'Mode: Broker',
-      icon: Users,
+      icon: Briefcase,
       color: 'text-blue-500',
       bgColor: 'bg-blue-500/10 border-blue-500/30',
       borderColor: 'border-blue-500/40',
@@ -934,7 +934,7 @@ function ConnectedModeButton() {
     },
     developer: {
       label: 'Mode: Developer',
-      icon: Users,
+      icon: Building2,
       color: 'text-amber-500',
       bgColor: 'bg-amber-500/10 border-amber-500/30',
       borderColor: 'border-amber-500/40',
@@ -948,7 +948,7 @@ function ConnectedModeButton() {
     <Popover open={modeOpen} onOpenChange={setModeOpen}>
       <PopoverTrigger asChild>
         <button className={cn("flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 max-w-fit", currentConfig.bgColor, currentConfig.color, "hover:brightness-95")} title="Switch your viewing mode">
-          <Users className="w-3.5 h-3.5" />
+          {(() => { const Icon = currentConfig.icon; return <Icon className="w-3.5 h-3.5" />; })()}
           <span className="hidden sm:inline">{currentConfig.label}</span>
           <ChevronDown className={cn("w-3 h-3 transition-transform", modeOpen && "rotate-180")} />
         </button>
@@ -980,7 +980,7 @@ function ConnectedModeButton() {
                 "w-8 h-8 rounded-lg flex items-center justify-center border",
                 config.bgColor, config.borderColor
               )}>
-                <Users className={cn("w-4 h-4", config.color)} />
+                {(() => { const Icon = config.icon; return <Icon className={cn("w-4 h-4", config.color)} />; })()}
               </div>
               <div className="flex-1 min-w-0">
                 <p className={cn("text-sm font-medium", config.color)}>{config.label}</p>
