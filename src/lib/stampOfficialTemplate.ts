@@ -398,20 +398,20 @@ function generateRoundStamp(config: OfficialStampConfig): string {
     if (config.arabicOnTop !== false) {
       topArcContent = renderTopArcTextPath(
         arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
-        arLS, true, 'top-arc', arFW
+        arLS, true, 'top-arc', arFW, config.letterOverrides
       );
       bottomArcContent = renderBottomArcTextPath(
         enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
-        enLS, false, 'bottom-arc'
+        enLS, false, 'bottom-arc', '800', config.letterOverrides
       );
     } else {
       topArcContent = renderTopArcTextPath(
         enText, cx, cy, clampedTextArcR, enSafe.fontSize, enFont, ink,
-        enLS, false, 'top-arc'
+        enLS, false, 'top-arc', '800', config.letterOverrides
       );
       bottomArcContent = renderBottomArcTextPath(
         arText, cx, cy, clampedTextArcR, arSafe.fontSize, arFont, ink,
-        arLS, true, 'bottom-arc', arFW
+        arLS, true, 'bottom-arc', arFW, config.letterOverrides
       );
     }
     separatorContent = renderSeparators(cx, cy, separatorR, config.separatorStyle, ink);
