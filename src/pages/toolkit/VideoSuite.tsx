@@ -29,6 +29,8 @@ const tabs = [
   { value: "resize", label: "Resize / Reframe", shortLabel: "Resize", icon: Maximize2 },
   { value: "captions", label: "Captions & Translation", shortLabel: "Captions", icon: Languages },
   { value: "script", label: "Video Tour Script", shortLabel: "Script", icon: FileText },
+  { value: "voice", label: "Voice Studio", shortLabel: "Voice", icon: Mic },
+  { value: "audio-tools", label: "Audio Tools", shortLabel: "Audio", icon: AudioLines },
 ];
 
 export default function VideoSuite() {
