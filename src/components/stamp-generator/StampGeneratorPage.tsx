@@ -181,6 +181,9 @@ export default function StampGeneratorPage() {
   const setCompanyArcOffset = (v: number) => { setCompanyArcOffsetRaw(v); ssSave(ssKey('companyArcOffset'), v); };
   const [locationArcOffset, setLocationArcOffsetRaw] = useState(() => ssGet(ssKey('locationArcOffset'), 0));
   const setLocationArcOffset = (v: number) => { setLocationArcOffsetRaw(v); ssSave(ssKey('locationArcOffset'), v); };
+  // Location arc spread — independent from company arcs
+  const [locationArcSpread, setLocationArcSpreadRaw] = useState(() => ssGet(ssKey('locationArcSpread'), 0.98));
+  const setLocationArcSpread = (v: number) => { setLocationArcSpreadRaw(v); ssSave(ssKey('locationArcSpread'), v); };
 
   // Live-apply monogram colors whenever they change
   useEffect(() => {
@@ -916,6 +919,8 @@ export default function StampGeneratorPage() {
           onSetEnglishArcSpread={setEnglishArcSpread}
           onSetCompanyArcOffset={setCompanyArcOffset}
           onSetLocationArcOffset={setLocationArcOffset}
+          locationArcSpread={locationArcSpread}
+          onSetLocationArcSpread={setLocationArcSpread}
         />
 
         {/* ── CENTER: Premium Canvas Preview ── */}

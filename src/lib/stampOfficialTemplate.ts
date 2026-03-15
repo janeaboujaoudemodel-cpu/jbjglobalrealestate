@@ -61,6 +61,8 @@ export interface OfficialStampConfig {
   companyArcBandOffset?: number;
   /** Radial offset for location arcs (0-100, 50 = centered between middle+inner rings) */
   locationArcBandOffset?: number;
+  /** Location arc spread (0-1, default 0.98) — independent from company arc spreads */
+  locationArcSpread?: number;
   /** Language mode: EN-only, AR-only, BILINGUAL */
   languageMode?: LanguageMode;
   /** Stamp shape */
@@ -417,8 +419,9 @@ function generateRoundStamp(config: OfficialStampConfig): string {
   if (config.showLocation && mode === 'BILINGUAL') {
     const locEn = config.locationTextEn || 'Dubai, UAE';
     const locAr = config.locationTextAr || 'دبي، الإمارات';
-    const locEnSafe = safeArcFontSize(locEn.toUpperCase(), clampedLocTextR, false, 12, englishSpread);
-    const locArSafe = safeArcFontSize(locAr, clampedLocTextR, true, 12, arabicSpread);
+    const locSpread = config.locationArcSpread ?? ARC_SPREAD_LIMIT;
+    const locEnSafe = safeArcFontSize(locEn.toUpperCase(), clampedLocTextR, false, 12, locSpread);
+    const locArSafe = safeArcFontSize(locAr, clampedLocTextR, true, 12, locSpread);
 
     locationContent = renderTopArcTextPath(
       locAr, cx, cy, clampedLocTextR, locArSafe.fontSize, arFont, ink, locArSafe.letterSpacing, true, 'loc-top', '600'

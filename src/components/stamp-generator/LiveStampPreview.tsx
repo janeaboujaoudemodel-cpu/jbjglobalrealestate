@@ -54,6 +54,7 @@ export interface LiveStampPreviewProps {
   outerBorderColor?: string;
   middleBorderColor?: string;
   innerBorderColor?: string;
+  locationArcSpread?: number;
 }
 
 const FONT_FAMILIES: Record<TypographyStyle, string> = {
@@ -127,6 +128,7 @@ export function LiveStampPreview({
   outerBorderColor,
   middleBorderColor,
   innerBorderColor,
+  locationArcSpread,
 }: LiveStampPreviewProps & { selectedElement?: string | null }) {
   const displayName = companyName || 'Your Company Name';
   const fontFamily = FONT_FAMILIES[typographyStyle];
@@ -240,6 +242,7 @@ export function LiveStampPreview({
       outerBorderColor,
       middleBorderColor,
       innerBorderColor,
+      locationArcSpread: locationArcSpread != null ? 0.30 + (locationArcSpread - 20) / 80 * 0.70 : undefined,
     });
   }, [
     displayName, arabicCompanyName, city, country, registrationNumber,
@@ -248,7 +251,7 @@ export function LiveStampPreview({
     showLicenseNumber, showLocation, separatorStyle, fontFamily, size, ink, arabicCity,
     centerMode, centerIcon, arabicArcSpread, englishArcSpread, arabicLetterSpacing, arabicFont, arabicFontWeight,
     circleGap, centerContentSize, arcTextSpacing, separatorDistance,
-    companyArcBandOffset, locationArcBandOffset, outerBorderColor, middleBorderColor, innerBorderColor,
+    companyArcBandOffset, locationArcBandOffset, outerBorderColor, middleBorderColor, innerBorderColor, locationArcSpread,
   ]);
 
   return (
