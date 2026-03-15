@@ -826,9 +826,9 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
         align="end"
         sideOffset={6}
       >
-        <h4 className="text-sm font-bold text-black mb-2">Saved Filters</h4>
+        <h4 className="text-sm font-bold text-black mb-2">{t('filter.savedFilters')}</h4>
         {savedFilters.length === 0 ? (
-          <p className="text-xs text-black/50 py-4 text-center">No saved filters yet</p>
+          <p className="text-xs text-black/50 py-4 text-center">{t('filter.noSavedFilters')}</p>
         ) : (
           <div className="space-y-1 max-h-60 overflow-y-auto">
             {savedFilters.map((sf, idx) => (
