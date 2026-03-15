@@ -354,7 +354,7 @@ export default function StampGeneratorPage() {
       }
     } catch (_) {}
     const clientConcepts = generateStampConcepts(project ? { ...project, ...p } : p);
-    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); return; }
+    if (clientConcepts[0]?.templateKey === 'blocked') { setBlocked(true); setGenerating(false); setGeneratingInPanel(false); generationLockRef.current = false; return; }
     setConcepts(clientConcepts);
     // Set standard on first generation
     if (!standardConcept && clientConcepts.length > 0) {
