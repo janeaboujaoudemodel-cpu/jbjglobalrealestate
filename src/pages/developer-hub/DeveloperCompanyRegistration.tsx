@@ -92,7 +92,7 @@ const DeveloperCompanyRegistration = () => {
         emirate: form.emirate || null,
         rera_number: form.rera_number || null,
         year_established: form.year_established ? parseInt(form.year_established) : null,
-        key_contacts: form.key_contacts as unknown as Record<string, unknown>[],
+        key_contacts: JSON.parse(JSON.stringify(form.key_contacts)),
         status,
         updated_at: new Date().toISOString(),
       };
