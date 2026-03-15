@@ -573,3 +573,6 @@ verify_jwt = false
 
 [functions.ai-email-assistant]
 verify_jwt = false
+
+[functions.smart-crop-detect]
+verify_jwt = false
