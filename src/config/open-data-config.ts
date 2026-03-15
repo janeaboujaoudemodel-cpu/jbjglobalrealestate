@@ -107,7 +107,7 @@ export interface AreaMarketSnapshot {
   highlights: string[];
 }
 
-// ── Area Market Data (Sources: DLD, Property Monitor, Knight Frank, Bayut) ──
+// ── Area Market Data (Sources: DLD, RERA, DXB Interact) ──
 
 export const DUBAI_AREAS_MARKET_DATA: AreaMarketSnapshot[] = [
   {

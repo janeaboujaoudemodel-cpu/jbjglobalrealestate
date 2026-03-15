@@ -320,7 +320,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
             Get an AI-powered property valuation based on DLD transaction data, RERA Rental Index, and institutional market analysis.
           </p>
           <p className="text-sm text-zinc-500 max-w-xl mx-auto">
-            Sources: DLD Public Records · RERA · Property Monitor · Knight Frank · JLL Middle East
+            Sources: DLD Public Records · RERA · JBJ Analysis Framework
           </p>
           <FounderContent>
             <div className="text-center mt-4">

@@ -232,7 +232,7 @@ ${COMPANY_INFO.website}`;
               <Building2 className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
               <p className="text-muted-foreground">No properties in shortlist</p>
               <p className="text-xs text-muted-foreground mt-1">
-                Add properties from Property Finder
+                Add properties from the listing database
               </p>
             </div>
           ) : (

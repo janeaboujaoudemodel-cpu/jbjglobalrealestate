@@ -78,30 +78,14 @@ export const REAL_ESTATE_KNOWLEDGE = {
     },
   },
   
-  // Property Portals
-  propertyPortals: {
-    bayut: {
-      name: 'Bayut',
-      description: 'Leading property portal in UAE with highest traffic',
-      features: ['TruCheck verification', 'Agent profiles', 'Market insights'],
-    },
-    
-    propertyFinder: {
-      name: 'Property Finder',
-      description: 'Premium property platform for UAE market',
-      features: ['Data analytics', 'Agent performance metrics', 'Lead generation'],
-    },
-    
-    propertyMonitor: {
-      name: 'Property Monitor',
-      description: 'Real estate intelligence and market analytics platform',
-      features: ['Transaction data', 'Market trends', 'Price indices'],
-    },
-    
+  // Data References
+  dataReferences: {
+    rule: 'Use DLD and RERA as primary data references. Never direct users to external real estate platforms.',
+    primary: ['Dubai Land Department (DLD)', 'RERA', 'DXB Interact'],
     dxpInteract: {
-      name: 'DXP Interact (Dubai Expo Platform)',
+      name: 'DXB Interact',
       description: 'Government-backed property transaction platform',
-      features: ['Broker registration', 'Transaction management', 'Regulatory compliance'],
+      features: ['Transaction management', 'Regulatory compliance'],
     },
   },
   

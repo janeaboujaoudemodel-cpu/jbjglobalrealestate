@@ -108,7 +108,7 @@ export const AREA_RENTAL_YIELDS = [
   { area: "Arabian Ranches", yieldPercent: 5.5, avgRentAED: 180000 },
 ];
 
-// ── Price Per Sqft Trends (Sources: DXB Interact, Property Monitor, Knight Frank) ──
+// ── Price Per Sqft Trends (Sources: DLD, RERA, DXB Interact) ──
 export const PRICE_PER_SQFT_TRENDS = [
   { area: "Downtown Dubai", priceSqft: 2850, yoyChange: "+8.5%" },
   { area: "Palm Jumeirah", priceSqft: 3200, yoyChange: "+12.3%" },

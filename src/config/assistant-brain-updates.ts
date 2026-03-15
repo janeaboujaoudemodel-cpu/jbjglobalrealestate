@@ -185,11 +185,8 @@ export const REAL_ESTATE_KNOWLEDGE_RULES = {
   sources: [
     'Dubai REST App - Official DLD app',
     'Dubai Land Department Portal',
-    'Property Monitor - Market analytics',
-    'Property Finder - Listings and data',
-    'Bayut - Market insights',
     'RERA Portal - Regulatory info',
-    'DXP Interact - Broker platform',
+    'DXB Interact - Transaction analytics',
   ],
 
   answeringQuestions: {

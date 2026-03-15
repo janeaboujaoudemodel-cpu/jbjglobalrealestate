@@ -450,7 +450,7 @@ function getPage8TopAreas(liveTopAreas: any[]): string {
         ${liveTopAreas.map((a: any, i: number) => `<tr><td style="color: #A8925A; font-weight: 700;">${i + 1}</td><td style="font-weight: ${i < 3 ? 600 : 400}; color: #1A1814;">${a.area}</td><td style="color: #A8925A; font-weight: 700;">${a.transactions.toLocaleString()}</td><td><span style="color: #059669; font-size: 12px; font-weight: 600;">${a.change}</span></td></tr>`).join('')}
       </table>
     </div>
-    <p style="font-size: 11px; color: #8A8278; text-align: center;">Sources: Dubai Land Department (DLD) · DXB Interact · Bayut</p>
+    <p style="font-size: 11px; color: #8A8278; text-align: center;">Sources: Dubai Land Department (DLD) · DXB Interact</p>
     <span class="page-number">8</span>
   </div>`;
 }
