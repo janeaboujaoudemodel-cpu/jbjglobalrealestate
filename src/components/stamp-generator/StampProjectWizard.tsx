@@ -409,39 +409,154 @@ export default function StampProjectWizard() {
     }
   }, []);
 
-  // Export helpers
-  const handleExportSVG = useCallback(() => {
-    const el = document.querySelector('#stamp-preview-container svg');
-    if (!el) { toast.error('No stamp to export'); return; }
-    const svgData = new XMLSerializer().serializeToString(el);
-    const blob = new Blob([svgData], { type: 'image/svg+xml' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = `${form.company_name || 'stamp'}.svg`; a.click();
-    URL.revokeObjectURL(url);
-    toast.success('SVG downloaded');
-  }, [form.company_name]);
+  // ─── Robust export helpers (Safari/iPad safe) ─────────────────────
 
-  const handleExportPNG = useCallback((size: number) => {
+  const getPreviewSvg = useCallback((): string | null => {
     const el = document.querySelector('#stamp-preview-container svg');
-    if (!el) { toast.error('No stamp to export'); return; }
-    const svgData = new XMLSerializer().serializeToString(el);
-    const canvas = document.createElement('canvas');
-    canvas.width = size; canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    const img = new window.Image();
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0, size, size);
+    if (!el) { toast.error('No stamp to export — enter company details first'); return null; }
+    let svgData = new XMLSerializer().serializeToString(el);
+    if (!svgData.includes('xmlns=')) svgData = svgData.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
+    if (!svgData.includes('xmlns:xlink')) svgData = svgData.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+    return svgData;
+  }, []);
+
+  const triggerDownload = useCallback((blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, []);
+
+  const svgToCanvas = useCallback(async (svgData: string, size: number, whiteBg: boolean): Promise<HTMLCanvasElement> => {
+    const b64 = btoa(unescape(encodeURIComponent(svgData)));
+    const dataUrl = `data:image/svg+xml;base64,${b64}`;
+    return new Promise((resolve, reject) => {
+      const img = new window.Image();
+      img.onload = async () => {
+        try { await img.decode(); } catch {}
+        const canvas = document.createElement('canvas');
+        canvas.width = size; canvas.height = size;
+        const ctx = canvas.getContext('2d')!;
+        if (whiteBg) { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, size, size); }
+        ctx.drawImage(img, 0, 0, size, size);
+        resolve(canvas);
+      };
+      img.onerror = () => reject(new Error('SVG image failed to load'));
+      img.src = dataUrl;
+    });
+  }, []);
+
+  const handleExportSVG = useCallback(() => {
+    const svgData = getPreviewSvg();
+    if (!svgData) return;
+    const blob = new Blob([svgData], { type: 'image/svg+xml' });
+    triggerDownload(blob, `${form.company_name || 'stamp'}.svg`);
+    toast.success('SVG downloaded');
+  }, [form.company_name, getPreviewSvg, triggerDownload]);
+
+  const handleExportPNG = useCallback(async (size: number) => {
+    const svgData = getPreviewSvg();
+    if (!svgData) return;
+    try {
+      const canvas = await svgToCanvas(svgData, size, false);
       canvas.toBlob(blob => {
-        if (!blob) return;
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href = url; a.download = `${form.company_name || 'stamp'}-${size}px.png`; a.click();
-        URL.revokeObjectURL(url);
+        if (!blob) { toast.error('PNG generation failed'); return; }
+        triggerDownload(blob, `${form.company_name || 'stamp'}-${size}px.png`);
         toast.success(`PNG ${size}px downloaded`);
-      });
-    };
-    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
-  }, [form.company_name]);
+      }, 'image/png');
+    } catch (e) { toast.error('PNG export failed'); }
+  }, [form.company_name, getPreviewSvg, svgToCanvas, triggerDownload]);
+
+  const handleExportJPG = useCallback(async (size: number) => {
+    const svgData = getPreviewSvg();
+    if (!svgData) return;
+    try {
+      const canvas = await svgToCanvas(svgData, size, true);
+      canvas.toBlob(blob => {
+        if (!blob) { toast.error('JPG generation failed'); return; }
+        triggerDownload(blob, `${form.company_name || 'stamp'}-${size}px.jpg`);
+        toast.success(`JPG ${size}px downloaded`);
+      }, 'image/jpeg', 0.92);
+    } catch (e) { toast.error('JPG export failed'); }
+  }, [form.company_name, getPreviewSvg, svgToCanvas, triggerDownload]);
+
+  const handleExportWEBP = useCallback(async (size: number) => {
+    const svgData = getPreviewSvg();
+    if (!svgData) return;
+    try {
+      const canvas = await svgToCanvas(svgData, size, false);
+      canvas.toBlob(blob => {
+        if (!blob) { toast.error('WEBP generation failed'); return; }
+        triggerDownload(blob, `${form.company_name || 'stamp'}-${size}px.webp`);
+        toast.success(`WEBP ${size}px downloaded`);
+      }, 'image/webp', 0.92);
+    } catch (e) { toast.error('WEBP export failed'); }
+  }, [form.company_name, getPreviewSvg, svgToCanvas, triggerDownload]);
+
+  const handleExportPDF = useCallback(async () => {
+    const svgData = getPreviewSvg();
+    if (!svgData) return;
+    try {
+      toast.info('Generating PDF…');
+      const canvas = await svgToCanvas(svgData, 1200, true);
+      const pngDataUrl = canvas.toDataURL('image/png');
+      const { PDFDocument, rgb } = await import('pdf-lib');
+      const pdfDoc = await PDFDocument.create();
+      pdfDoc.setTitle(`${form.company_name || 'Stamp'} - PDF`);
+      pdfDoc.setAuthor('JBJ Smart Stamp Generator');
+      const pointSize = 300;
+      const page = pdfDoc.addPage([pointSize, pointSize]);
+      page.drawRectangle({ x: 0, y: 0, width: pointSize, height: pointSize, color: rgb(1, 1, 1) });
+      const response = await fetch(pngDataUrl);
+      const pngBytes = await response.arrayBuffer();
+      const pngImage = await pdfDoc.embedPng(pngBytes);
+      page.drawImage(pngImage, { x: 0, y: 0, width: pointSize, height: pointSize });
+      const bytes = await pdfDoc.save();
+      const blob = new Blob([bytes.buffer as ArrayBuffer], { type: 'application/pdf' });
+      triggerDownload(blob, `${form.company_name || 'stamp'}-print.pdf`);
+      toast.success('PDF downloaded');
+    } catch (e) { toast.error('PDF export failed'); console.error(e); }
+  }, [form.company_name, getPreviewSvg, svgToCanvas, triggerDownload]);
+
+  const handlePrintPreview = useCallback(() => {
+    window.print();
+  }, []);
+
+  const [bulkExporting, setBulkExporting] = useState(false);
+  const handleBulkExport = useCallback(async () => {
+    const svgData = getPreviewSvg();
+    if (!svgData) return;
+    setBulkExporting(true);
+    toast.info('Generating all formats…');
+    try {
+      // SVG
+      const svgBlob = new Blob([svgData], { type: 'image/svg+xml' });
+      triggerDownload(svgBlob, `${form.company_name || 'stamp'}.svg`);
+      // PNG transparent 1024
+      const canvasT = await svgToCanvas(svgData, 1024, false);
+      const pngTBlob: Blob = await new Promise((res, rej) => canvasT.toBlob(b => b ? res(b) : rej(), 'image/png'));
+      triggerDownload(pngTBlob, `${form.company_name || 'stamp'}-1024px-transparent.png`);
+      // PNG white 1024
+      const canvasW = await svgToCanvas(svgData, 1024, true);
+      const pngWBlob: Blob = await new Promise((res, rej) => canvasW.toBlob(b => b ? res(b) : rej(), 'image/png'));
+      triggerDownload(pngWBlob, `${form.company_name || 'stamp'}-1024px-white.png`);
+      // JPG
+      const canvasJ = await svgToCanvas(svgData, 1024, true);
+      const jpgBlob: Blob = await new Promise((res, rej) => canvasJ.toBlob(b => b ? res(b) : rej(), 'image/jpeg', 0.92));
+      triggerDownload(jpgBlob, `${form.company_name || 'stamp'}-1024px.jpg`);
+      // WEBP
+      const canvasWp = await svgToCanvas(svgData, 1024, false);
+      const webpBlob: Blob = await new Promise((res, rej) => canvasWp.toBlob(b => b ? res(b) : rej(), 'image/webp', 0.92));
+      triggerDownload(webpBlob, `${form.company_name || 'stamp'}-1024px.webp`);
+      // PDF
+      await handleExportPDF();
+      toast.success('All formats downloaded!');
+    } catch (e) { toast.error('Bulk export partially failed'); console.error(e); }
+    setBulkExporting(false);
+  }, [form.company_name, getPreviewSvg, svgToCanvas, triggerDownload, handleExportPDF]);
 
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
 
