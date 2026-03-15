@@ -32,6 +32,7 @@ const tabs = [
   { value: "script", label: "Video Tour Script", shortLabel: "Script", icon: FileText },
   { value: "voice", label: "Voice Studio", shortLabel: "Voice", icon: Mic },
   { value: "audio-tools", label: "Audio Tools", shortLabel: "Audio", icon: AudioLines },
+  { value: "storyboard", label: "AI Storyboard", shortLabel: "Story", icon: Film },
 ];
 
 export default function VideoSuite() {
