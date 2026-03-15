@@ -338,9 +338,12 @@ function generateOfficialStampSVG(config: OfficialStampConfig): string {
     ? `<circle data-stamp-element="border-decorative" cx="${cx}" cy="${cy}" r="${decorativeR}" fill="none" stroke="${ink}" stroke-width="${DECORATIVE_STROKE * themeMult}" opacity="0.5"/>`
     : '';
 
-  const middleRingEl = bs === 'RING'
-    ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.4}"/>`
-    : `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW}"/>`;
+  // Middle ring — HIDDEN for SINGLE border style
+  const middleRingEl = bs === 'SINGLE' ? '' : (
+    bs === 'RING'
+      ? `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW * 1.4}"/>`
+      : `<circle data-stamp-element="border-middle" cx="${cx}" cy="${cy}" r="${middleR}" fill="none" stroke="${ink}" stroke-width="${middleSW}"/>`
+  );
 
   const showInnerRing = config.showLocation && mode === 'BILINGUAL';
   const innerRingEl = showInnerRing
