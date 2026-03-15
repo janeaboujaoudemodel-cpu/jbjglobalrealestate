@@ -119,6 +119,16 @@ export function BusinessCardHeader({
           </Button>
 
           <Button
+            onClick={onExportToResizer}
+            disabled={isExportingToResizer}
+            variant="outline"
+            className="gap-1.5 h-8 text-xs font-semibold border-teal-500/40 text-teal-700 hover:bg-teal-500/10"
+            title="Send card to Image Resizer for social media sizes"
+          >
+            {isExportingToResizer ? <RefreshCw size={12} className="animate-spin" /> : <Maximize size={12} />}
+            {isExportingToResizer ? "…" : "Resize"}
+          </Button>
+
             onClick={onBatchPrint}
             variant="outline"
             className="gap-1.5 h-8 text-xs font-semibold border-[hsl(var(--border))] text-[hsl(var(--foreground))] hover:bg-[hsl(var(--muted))]"
