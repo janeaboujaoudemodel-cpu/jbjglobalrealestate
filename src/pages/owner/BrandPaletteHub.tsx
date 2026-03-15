@@ -543,17 +543,18 @@ const BrandPaletteHub = () => {
               </p>
             </div>
 
-            {/* Saved Palettes History */}
+            {/* Saved Palettes Manager */}
             {user && (
               <div className="bg-card/80 border border-gold/20 rounded-2xl p-5">
                 <h4 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
                   <Clock className="w-4 h-4 text-gold" />
                   {isOwner ? 'Saved Presets' : 'My Saved Palettes'}
+                  <span className="ml-auto text-[10px] text-muted-foreground font-normal">{savedPalettes.length} saved</span>
                 </h4>
                 {savedPalettes.length === 0 ? (
-                  <p className="text-xs text-muted-foreground italic">No saved palettes yet. Create one above!</p>
+                  <p className="text-xs text-muted-foreground italic">No saved palettes yet. Use the dropdown above to save one!</p>
                 ) : (
-                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                  <div className="space-y-2 max-h-72 overflow-y-auto">
                     {savedPalettes.map((sp) => (
                       <div
                         key={sp.id}
@@ -562,13 +563,52 @@ const BrandPaletteHub = () => {
                         }`}
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-semibold text-foreground">{sp.name}</span>
-                            {sp.is_active && (
-                              <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full">Active</span>
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            {isRenamingId === sp.id ? (
+                              <Input
+                                value={renameValue}
+                                onChange={(e) => setRenameValue(e.target.value)}
+                                className="h-6 text-xs bg-background border-gold/20 text-foreground px-2"
+                                maxLength={40}
+                                autoFocus
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter' && renameValue.trim()) {
+                                    renameUserPalette(sp.id, renameValue.trim());
+                                    setIsRenamingId(null);
+                                    toast.success('Palette renamed');
+                                  }
+                                  if (e.key === 'Escape') setIsRenamingId(null);
+                                }}
+                                onBlur={() => {
+                                  if (renameValue.trim() && renameValue.trim() !== sp.name) {
+                                    renameUserPalette(sp.id, renameValue.trim());
+                                    toast.success('Palette renamed');
+                                  }
+                                  setIsRenamingId(null);
+                                }}
+                              />
+                            ) : (
+                              <>
+                                <span className="text-xs font-semibold text-foreground truncate">{sp.name}</span>
+                                {sp.is_active && (
+                                  <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full flex-shrink-0">Active</span>
+                                )}
+                              </>
                             )}
                           </div>
-                          <div className="flex gap-1">
+                          <div className="flex gap-0.5 flex-shrink-0">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-6 w-6 p-0 text-muted-foreground hover:text-gold"
+                              title="Rename"
+                              onClick={() => {
+                                setIsRenamingId(sp.id);
+                                setRenameValue(sp.name);
+                              }}
+                            >
+                              <Pencil className="w-3 h-3" />
+                            </Button>
                             {!sp.is_active && (
                               <Button
                                 size="sm"
@@ -576,6 +616,8 @@ const BrandPaletteHub = () => {
                                 className="h-6 px-2 text-[10px] text-gold hover:text-gold"
                                 onClick={() => {
                                   activateUserPalette(sp.id);
+                                  setDraft(sp.palette);
+                                  if (isPreviewing) setPalettePreview(sp.palette);
                                   toast.success('Palette activated');
                                 }}
                               >
@@ -585,7 +627,8 @@ const BrandPaletteHub = () => {
                             <Button
                               size="sm"
                               variant="ghost"
-                              className="h-6 px-1.5 text-destructive hover:text-destructive"
+                              className="h-6 w-6 p-0 text-destructive hover:text-destructive"
+                              title="Delete"
                               onClick={() => {
                                 deleteUserPalette(sp.id);
                                 toast('Palette deleted');
