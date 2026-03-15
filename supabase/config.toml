@@ -576,3 +576,6 @@ verify_jwt = false
 
 [functions.smart-crop-detect]
 verify_jwt = false
+
+[functions.ai-video-scene-planner]
+verify_jwt = false

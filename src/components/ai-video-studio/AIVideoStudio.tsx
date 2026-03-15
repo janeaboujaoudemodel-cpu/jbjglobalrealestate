@@ -880,6 +880,99 @@ export function AIVideoStudio() {
       sharePanel={
         <SharePanel projectName={project.name} />
       }
+      bgRemovePanel={
+        <BackgroundRemoverPanel
+          onAddToTimeline={(imageUrl, name) => {
+            const videoTrack = project.tracks.find(t => t.type === 'video');
+            if (!videoTrack) { toast.error('No video track found'); return; }
+            const lastEnd = videoTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+            addClip(videoTrack.id, {
+              trackId: videoTrack.id, type: 'image', name,
+              startTime: lastEnd, duration: 5,
+              source: { url: imageUrl, thumbnailUrl: imageUrl, inPoint: 0, outPoint: 5, originalDuration: 5 },
+              transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+              keyframes: [], effects: [],
+            });
+            toast.success(`Added "${name}" to timeline`);
+          }}
+        />
+      }
+      scenePlannerPanel={
+        <ScenePlannerPanel
+          onBuildTimeline={(scenes) => {
+            const videoTrack = project.tracks.find(t => t.type === 'video');
+            const textTrack = project.tracks.find(t => t.type === 'text');
+            if (!videoTrack) { toast.error('No video track found'); return; }
+
+            let cursor = videoTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+            scenes.forEach((scene, idx) => {
+              // Add placeholder image clip for each scene
+              addClip(videoTrack.id, {
+                trackId: videoTrack.id, type: 'image',
+                name: `Scene ${scene.number}: ${scene.description.slice(0, 30)}`,
+                startTime: cursor, duration: scene.duration,
+                source: { url: `scene://${scene.number}`, inPoint: 0, outPoint: scene.duration, originalDuration: scene.duration },
+                transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                keyframes: [], effects: [],
+              });
+
+              // Add text overlay if present
+              if (scene.textOverlay && textTrack) {
+                addClip(textTrack.id, {
+                  trackId: textTrack.id, type: 'text',
+                  name: `Scene ${scene.number} Text`,
+                  startTime: cursor, duration: scene.duration,
+                  source: { url: '', inPoint: 0, outPoint: scene.duration, originalDuration: scene.duration },
+                  transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                  keyframes: [], effects: [],
+                  text: {
+                    content: scene.textOverlay,
+                    fontFamily: 'Georgia, serif', fontSize: 28, fontWeight: 'bold',
+                    color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.6)',
+                    textAlign: 'center', position: 'bottom', style: 'lower-third',
+                  },
+                });
+              }
+
+              // Add transition between scenes
+              if (idx < scenes.length - 1) {
+                const transitionMap: Record<string, string> = { 'Fade': 'fade-black', 'Dissolve': 'dissolve', 'Wipe Left': 'wipe-left', 'Wipe Right': 'wipe-right', 'Zoom': 'zoom-in', 'Cut': 'cut' };
+                const tId = transitionMap[scene.transition] || 'fade-black';
+                const td = 0.8;
+                addClip(videoTrack.id, {
+                  trackId: videoTrack.id, type: 'transition', name: scene.transition,
+                  startTime: cursor + scene.duration - td / 2, duration: td,
+                  source: { url: '', inPoint: 0, outPoint: td, originalDuration: td },
+                  transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+                  keyframes: [],
+                  effects: [{ id: crypto.randomUUID(), type: 'transition', name: tId, settings: { transitionId: tId } }],
+                  transition: { transitionId: tId, easing: 'easeInOut' },
+                });
+              }
+
+              cursor += scene.duration;
+            });
+
+            toast.success(`🎬 Storyboard built: ${scenes.length} scenes, ${scenes.reduce((s, sc) => s + sc.duration, 0)}s total`);
+          }}
+        />
+      }
+      chartOverlayPanel={
+        <ChartOverlayPanel
+          onAddToTimeline={(imageUrl, name, duration) => {
+            const videoTrack = project.tracks.find(t => t.type === 'video');
+            if (!videoTrack) { toast.error('No video track found'); return; }
+            const lastEnd = videoTrack.clips.reduce((max, c) => Math.max(max, c.startTime + c.duration), 0);
+            addClip(videoTrack.id, {
+              trackId: videoTrack.id, type: 'image', name,
+              startTime: lastEnd, duration,
+              source: { url: imageUrl, thumbnailUrl: imageUrl, inPoint: 0, outPoint: duration, originalDuration: duration },
+              transform: { x: 0, y: 0, scaleX: 1, scaleY: 1, rotation: 0, opacity: 1 },
+              keyframes: [], effects: [],
+            });
+          }}
+        />
+      }
     />
     </>
   );
