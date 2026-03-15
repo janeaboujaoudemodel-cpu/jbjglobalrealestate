@@ -31,7 +31,7 @@ export default function DocumentPreviewSummary({
   const [previewPage, setPreviewPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pdfDocRef = useRef<any>(null);
-  const { loadPdfJs } = require("./documentFieldTypes");
+  
 
   useEffect(() => {
     let cancelled = false;
