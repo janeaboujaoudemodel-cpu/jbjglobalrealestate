@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   Languages, Mic, Sparkles, Music2, Layers, Maximize2,
   Map, Bot, FolderOpen, ChevronUp, ChevronDown, Settings2, Type, Clapperboard, UserSquare2, History,
-  AudioLines, ImagePlus, Share2
+  AudioLines, ImagePlus, Share2, Eraser, Film, BarChart3
 } from 'lucide-react';
 
 // ─── Luxury palette tokens ────────────────────────────────────────────────────
@@ -53,6 +53,9 @@ interface AIVideoStudioLayoutProps {
   audioExtractPanel?: ReactNode;
   photoClipPanel?: ReactNode;
   sharePanel?: ReactNode;
+  bgRemovePanel?: ReactNode;
+  scenePlannerPanel?: ReactNode;
+  chartOverlayPanel?: ReactNode;
 }
 
 const TOOL_TABS = [
@@ -73,7 +76,10 @@ const TOOL_TABS = [
   { id: 'history',        label: 'Ad History',  icon: History       },
   { id: 'audio-extract',  label: 'Extract Audio', icon: AudioLines  },
   { id: 'photo-clip',     label: 'Photo Clip',  icon: ImagePlus     },
-  { id: 'share',           label: 'Share',       icon: Share2        },
+  { id: 'bg-remove',      label: 'BG Remove',   icon: Eraser        },
+  { id: 'scene-plan',     label: 'Storyboard',  icon: Film          },
+  { id: 'chart-overlay',  label: 'Charts',      icon: BarChart3     },
+  { id: 'share',          label: 'Share',        icon: Share2        },
 ];
 
 export const AIVideoStudioLayout = forwardRef<AIVideoStudioLayoutHandle, AIVideoStudioLayoutProps>(
@@ -83,6 +89,7 @@ function AIVideoStudioLayout({
   beautyPanel, sfxPanel, effectsPanel, transitionsPanel, resizePanel,
   mapPanel, aiEditorPanel, projectsPanel, talkingAgentPanel, historyPanel,
   audioExtractPanel, photoClipPanel, sharePanel,
+  bgRemovePanel, scenePlannerPanel, chartOverlayPanel,
 }, ref) {
   const isMobile = useIsMobile();
   const [activeTool, setActiveTool] = useState<string | null>(null);
@@ -109,6 +116,7 @@ function AIVideoStudioLayout({
     map: mapPanel, 'ai-editor': aiEditorPanel, inspector: inspectorPanel,
     projects: projectsPanel, 'talking-agent': talkingAgentPanel, history: historyPanel,
     'audio-extract': audioExtractPanel, 'photo-clip': photoClipPanel, share: sharePanel,
+    'bg-remove': bgRemovePanel, 'scene-plan': scenePlannerPanel, 'chart-overlay': chartOverlayPanel,
   };
 
   const handleToolClick = (toolId: string) => {
