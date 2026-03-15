@@ -51,9 +51,13 @@ const BrandPaletteHub = () => {
   } = useBrandPalette();
   const { isOwner, user } = useAuth();
   const [draft, setDraft] = useState<BrandPalette>(palette);
-  const [isPreviewing, setIsPreviewing] = useState(true); // Default ON for live preview
+  const [isPreviewing, setIsPreviewing] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [paletteName, setPaletteName] = useState('My Palette');
+  const [isRenamingId, setIsRenamingId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState('');
+  const [showSaveNew, setShowSaveNew] = useState(false);
+  const [newPaletteName, setNewPaletteName] = useState('');
 
   useEffect(() => {
     setDraft(palette);
