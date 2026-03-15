@@ -89,6 +89,7 @@ export function BusinessCardCenterPanel(props: BusinessCardCenterPanelProps) {
     fieldPositions, handleFieldMove,
     qrEnabled, qrDataStr, qrSize, effectiveQrColor, qrBgColor, qrPosition, qrSide,
     logoUrl, logoSize, logoPos, setLogoPos,
+    stampUrl, stampSize, stampPos, setStampPos,
     aiDesignData, cardFontFamily, cardFontBold, cardFontItalic, cardFontSize,
     bilingualMode, bilingualDir, secondaryData, setInlineEditField, inlineEditField, setData,
     finishEffect, frontColorIdx, backColorIdx, setFrontTemplate, setBackTemplate,

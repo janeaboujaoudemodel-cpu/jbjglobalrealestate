@@ -185,6 +185,12 @@ export default function BusinessCardDesigner() {
           setLogoUrl={s.setLogoUrl}
           logoSize={s.logoSize}
           setLogoSize={s.setLogoSize}
+          stampOpen={s.stampOpen}
+          setStampOpen={s.setStampOpen}
+          stampUrl={s.stampUrl}
+          setStampUrl={s.setStampUrl}
+          stampSize={s.stampSize}
+          setStampSize={s.setStampSize}
           typographyOpen={s.typographyOpen}
           setTypographyOpen={s.setTypographyOpen}
           cardFontFamily={s.cardFontFamily}
