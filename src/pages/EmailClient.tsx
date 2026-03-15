@@ -196,6 +196,7 @@ const EmailClient = () => {
   }, [emails, handleAnalysisComplete]);
   const [attachments, setAttachments] = useState<DocumentAttachment[]>([]);
   const [showAttachPicker, setShowAttachPicker] = useState(false);
+  const [isComposeDragOver, setIsComposeDragOver] = useState(false);
   const emailsPerPage = 20;
 
   // ── Prefill from navigation state (ExclusiveDocuments, DocumentStudio, EnvelopeDetail) ──
