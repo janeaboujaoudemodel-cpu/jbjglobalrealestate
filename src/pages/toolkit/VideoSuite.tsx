@@ -5,7 +5,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SEOHead } from '@/components/SEOHead';
-import { Play, Maximize2, Languages, ArrowLeft, Loader2, FileText, Sparkles, Mic, AudioLines } from 'lucide-react';
+import { Play, Maximize2, Languages, ArrowLeft, Loader2, FileText, Sparkles, Mic, AudioLines, Film } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const AIVideoStudio = lazy(() => import('@/components/ai-video-studio/AIVideoStudio').then(m => ({ default: m.AIVideoStudio })));
