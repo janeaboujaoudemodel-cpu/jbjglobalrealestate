@@ -13,7 +13,7 @@ import JSZip from 'jszip';
 import {
   Download, ArrowLeft, Stamp, CheckCircle2, Loader2,
   FileImage, FileText, File, Package, Palette, X, Plus, Image, PenTool,
-  Eye, Ruler, Printer, CircleDot
+  Eye, Ruler, Printer, CircleDot, Save
 } from 'lucide-react';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -1030,11 +1030,93 @@ export default function StampExportPage() {
             <div className="space-y-2.5">
               <Button className="w-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90 gap-2 h-11"
                 onClick={generateBundle} disabled={generating}>
-                {generating ? <><Loader2 size={15} className="animate-spin"/> Downloading…</> : <><Download size={15}/> Download Selected Formats</>}
+                {generating ? <><Loader2 size={15} className="animate-spin"/> Downloading…</> : <><Package size={15}/> Download Full Kit (All Formats)</>}
               </Button>
-              <Button variant="outline" className="w-full gap-2" onClick={downloadSVG}>
-                <Download size={14}/> Quick Download SVG (Vector)
+              <div className="grid grid-cols-2 gap-2">
+                <Button variant="outline" className="gap-1.5 text-xs" onClick={downloadSVG}>
+                  <Download size={12}/> SVG (Vector)
+                </Button>
+                <Button variant="outline" className="gap-1.5 text-xs" onClick={async () => {
+                  if (!tintedSvg) return;
+                  try {
+                    toast.info('Generating PNG (transparent)…');
+                    const blob = await svgToPng(tintedSvg, 1024, true);
+                    triggerDownload(blob, `${companySlug}_stamp_1024px_transparent.png`);
+                    toast.success('PNG (transparent) downloaded!');
+                  } catch { toast.error('PNG download failed'); }
+                }}>
+                  <Download size={12}/> PNG Transparent
+                </Button>
+                <Button variant="outline" className="gap-1.5 text-xs" onClick={async () => {
+                  if (!tintedSvg) return;
+                  try {
+                    toast.info('Generating PNG (white bg)…');
+                    const blob = await svgToPng(tintedSvg, 1024, false, '#ffffff');
+                    triggerDownload(blob, `${companySlug}_stamp_1024px_white.png`);
+                    toast.success('PNG (white) downloaded!');
+                  } catch { toast.error('PNG download failed'); }
+                }}>
+                  <Download size={12}/> PNG White BG
+                </Button>
+                <Button variant="outline" className="gap-1.5 text-xs" onClick={async () => {
+                  if (!tintedSvg) return;
+                  try {
+                    toast.info('Generating JPG…');
+                    const pngBlob = await svgToPng(tintedSvg, 1024, false, '#ffffff');
+                    const jpgBlob = await pngToJpeg(pngBlob);
+                    triggerDownload(jpgBlob, `${companySlug}_stamp_1024px.jpg`);
+                    toast.success('JPG downloaded!');
+                  } catch { toast.error('JPG download failed'); }
+                }}>
+                  <Download size={12}/> JPG
+                </Button>
+                <Button variant="outline" className="gap-1.5 text-xs" onClick={async () => {
+                  if (!tintedSvg) return;
+                  try {
+                    toast.info('Generating PDF…');
+                    const blob = await svgToPdf(tintedSvg, false, true);
+                    triggerDownload(blob, `${companySlug}_stamp_print_300dpi.pdf`);
+                    toast.success('PDF downloaded!');
+                  } catch { toast.error('PDF download failed'); }
+                }}>
+                  <Download size={12}/> PDF (White BG)
+                </Button>
+                <Button variant="outline" className="gap-1.5 text-xs border-[hsl(var(--gold)/0.3)] text-[hsl(var(--gold-dark))]" onClick={() => {
+                  if (!tintedSvg) return;
+                  // Open print dialog
+                  const printWindow = window.open('', '_blank', 'width=800,height=800');
+                  if (printWindow) {
+                    printWindow.document.write(`
+                      <!DOCTYPE html><html><head><title>Print Stamp</title>
+                      <style>@media print { body { margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; } } body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: white; }</style>
+                      </head><body>${tintedSvg}</body></html>`);
+                    printWindow.document.close();
+                    printWindow.focus();
+                    setTimeout(() => printWindow.print(), 500);
+                  }
+                }}>
+                  <Printer size={12}/> Print
+                </Button>
+              </div>
+
+              {/* User Preset Export */}
+              <Button variant="outline" className="w-full gap-2 text-xs" onClick={() => {
+                try {
+                  const presetData = {
+                    exportedAt: new Date().toISOString(),
+                    company: project?.company_name || '',
+                    colors: { primary: primaryColor, secondary: secondaryColor, accent: accentColor },
+                    formats: options.formats,
+                    sizes: effectiveSizes,
+                  };
+                  const blob = new Blob([JSON.stringify(presetData, null, 2)], { type: 'application/json' });
+                  triggerDownload(blob, `${companySlug}_preset.json`);
+                  toast.success('User preset exported!');
+                } catch { toast.error('Preset export failed'); }
+              }}>
+                <Save size={12}/> Export User Preset (.json)
               </Button>
+
               <Button variant="outline" className="w-full gap-2 border-[hsl(var(--gold)/0.3)] hover:border-[hsl(var(--gold))] hover:bg-[hsl(var(--gold)/0.05)]"
                 onClick={() => {
                   try {

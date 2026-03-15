@@ -172,7 +172,7 @@ const PropertyRecommendationPopup = () => {
     <AnimatePresence>
       {isVisible && projects.length > 0 && (
         <motion.div
-          className="fixed bottom-4 right-4 z-50 max-w-sm w-full"
+          className="fixed bottom-4 right-4 z-[10060] max-w-sm w-full"
           initial={{ opacity: 0, y: 80, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 80, scale: 0.95 }}

@@ -206,7 +206,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
   const headerContentRef = useRef<HTMLDivElement | null>(null);
   const [isDesktopWidth, setIsDesktopWidth] = useState(() => {
     if (typeof window === "undefined") return false;
-    return window.innerWidth >= 1024;
+    return window.innerWidth >= 768;
   });
 
   useLayoutEffect(() => {
@@ -214,7 +214,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       headerViewportRef.current?.clientWidth ?? window.innerWidth;
 
     const recompute = () => {
-      setIsDesktopWidth(getViewportWidth() >= 1024);
+      setIsDesktopWidth(getViewportWidth() >= 768);
     };
 
     recompute();
