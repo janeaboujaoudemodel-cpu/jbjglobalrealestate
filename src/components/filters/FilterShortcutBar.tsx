@@ -645,7 +645,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </button>
           </PopoverTrigger>
           <PopoverContent className={cn("w-80 p-4", popoverClass)} side="bottom" align="start" sideOffset={6}>
-            <h4 className="text-sm font-bold text-black mb-3">Property Views</h4>
+            <h4 className="text-sm font-bold text-black mb-3">{t('filter.propertyViews')}</h4>
             <div className="flex flex-wrap gap-2 max-h-64 overflow-y-auto">
               {VIEWS_OPTIONS.map((opt) => (
                 <button
