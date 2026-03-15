@@ -1152,6 +1152,15 @@ export default function StampGeneratorPage() {
                       <DesignFavoriteButton itemType="stamp" itemId={selectedId}
                         itemName={(selectedConcept || allConcepts[0])?.label || "Stamp"}
                         thumbnailSvg={(selectedSvg || allConcepts[0]?.svgSource || '').slice(0, 50000)} size="sm" />
+                      <Button size="sm" variant="outline" className="h-7 px-2 text-[10px] border-[hsl(var(--gold)/0.4)] text-[hsl(var(--gold-dark))] gap-1"
+                        onClick={() => {
+                          if (activeStandard) {
+                            setStandardConcept(activeStandard);
+                            toast.success('Design locked as Standard Base');
+                          }
+                        }}>
+                        <Shield size={9} /> Lock as Standard
+                      </Button>
                     </>
                   )}
                 </>
