@@ -1396,7 +1396,9 @@ export default function StampProjectWizard() {
           onClick={(e) => {
             // Only clear selection on genuine outside clicks, not bubbled element clicks
             if ((e.target as HTMLElement).closest('[data-stamp-element]')) return;
+            if ((e.target as HTMLElement).closest('[data-stamp-letter]')) return;
             setSelectedElement(null);
+            setSelectedLetter(null);
           }}>
           <div className="flex flex-col items-center gap-4">
             <div
