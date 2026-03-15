@@ -6,7 +6,7 @@ import { Table, TableHeader, TableHead, TableBody, TableRow, TableCell } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, ShieldCheck, ShieldAlert, ShieldX, Key, Lock, Unlock, AlertTriangle, CheckCircle2, Clock, Database, HardDrive, Globe, RefreshCw, RotateCcw, Bell } from "lucide-react";
+import { Shield, ShieldCheck, ShieldAlert, Key, Lock, Unlock, AlertTriangle, CheckCircle2, Clock, Database, HardDrive, Globe, RefreshCw, RotateCcw, Bell } from "lucide-react";
 import { toast } from "sonner";
 
 interface EncryptionStatusRow {
@@ -32,6 +32,18 @@ interface AuditLogRow {
   record_id: string | null;
   details: any;
   created_at: string;
+}
+
+interface RotationRow {
+  id: string;
+  key_name: string;
+  description: string | null;
+  last_rotated_at: string | null;
+  rotation_interval_days: number;
+  alert_threshold_days: number;
+  status: string;
+  notified_at: string | null;
+  updated_at: string;
 }
 
 const riskBadge = (level: string | null) => {
@@ -61,6 +73,20 @@ const dataClassIcon = (cls: string) => {
   }
 };
 
+function getDaysSince(date: string | null): number {
+  if (!date) return 999;
+  return Math.floor((Date.now() - new Date(date).getTime()) / (1000 * 60 * 60 * 24));
+}
+
+function rotationStatusBadge(row: RotationRow) {
+  const days = getDaysSince(row.last_rotated_at);
+  if (row.status === "disabled") return <Badge variant="outline">Disabled</Badge>;
+  if (row.status === "pending") return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Not Set</Badge>;
+  if (days >= row.rotation_interval_days) return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Overdue</Badge>;
+  if (days >= row.alert_threshold_days) return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Due Soon</Badge>;
+  return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Active</Badge>;
+}
+
 export default function EncryptionAuditDashboard() {
   const [statusRows, setStatusRows] = useState<EncryptionStatusRow[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLogRow[]>([]);
@@ -76,15 +102,16 @@ export default function EncryptionAuditDashboard() {
 
   const fetchAll = async () => {
     setLoading(true);
-    const [statusRes, auditRes] = await Promise.all([
+    const [statusRes, auditRes, rotationRes] = await Promise.all([
       supabase.from("encryption_status").select("*").order("data_class"),
       supabase.from("encryption_audit_log").select("*").order("created_at", { ascending: false }).limit(50),
+      supabase.from("key_rotation_schedule" as any).select("*").order("key_name"),
     ]);
     if (statusRes.data) setStatusRows(statusRes.data as EncryptionStatusRow[]);
     if (auditRes.data) setAuditLogs(auditRes.data as AuditLogRow[]);
+    if (rotationRes.data) setRotationKeys(rotationRes.data as RotationRow[]);
     setLoading(false);
 
-    // Check key status
     try {
       const { data } = await supabase.functions.invoke("crm-data-encrypt", {
         body: { action: "status" },
@@ -116,12 +143,47 @@ export default function EncryptionAuditDashboard() {
     }
   };
 
+  const runRotationCheck = async () => {
+    setCheckingRotation(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("check-key-rotation", {
+        body: { action: "check" },
+      });
+      if (error) throw error;
+      const overdueCount = data?.overdue_count || 0;
+      if (overdueCount > 0) {
+        toast.warning(`${overdueCount} key(s) overdue for rotation`);
+      } else {
+        toast.success("All keys are within rotation schedule");
+      }
+      fetchAll();
+    } catch (e: any) {
+      toast.error(e.message || "Rotation check failed");
+    } finally {
+      setCheckingRotation(false);
+    }
+  };
+
+  const markKeyRotated = async (keyName: string) => {
+    try {
+      const { error } = await supabase.functions.invoke("check-key-rotation", {
+        body: { action: "rotate", key_name: keyName },
+      });
+      if (error) throw error;
+      toast.success(`${keyName} marked as rotated`);
+      fetchAll();
+    } catch (e: any) {
+      toast.error(e.message || "Failed to record rotation");
+    }
+  };
+
   // Compute summary stats
   const totalClasses = statusRows.length;
   const encryptedCount = statusRows.filter(r => r.is_encrypted === true).length;
   const pendingCount = statusRows.filter(r => r.is_encrypted === false).length;
   const storageRows = statusRows.filter(r => r.data_class === "storage");
   const privateBuckets = storageRows.filter(r => r.bucket_is_private === true).length;
+  const overdueKeys = rotationKeys.filter(r => getDaysSince(r.last_rotated_at) >= r.rotation_interval_days && r.status !== "disabled" && r.status !== "pending").length;
 
   return (
     <div className="space-y-6">
@@ -132,9 +194,34 @@ export default function EncryptionAuditDashboard() {
           Encryption & Security Audit
         </h1>
         <p className="text-muted-foreground mt-1">
-          End-to-end visibility into data encryption, storage security, and key management
+          End-to-end visibility into data encryption, storage security, key rotation, and management
         </p>
       </div>
+
+      {/* Overdue Key Alert Banner */}
+      {overdueKeys > 0 && (
+        <Card className="border-red-500/30 bg-red-500/5">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Bell className="w-5 h-5 text-red-400" />
+                <div>
+                  <p className="font-medium text-foreground">
+                    {overdueKeys} encryption key{overdueKeys > 1 ? "s" : ""} overdue for rotation
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Review the Key Rotation tab and rotate overdue keys to maintain compliance.
+                  </p>
+                </div>
+              </div>
+              <Button onClick={runRotationCheck} disabled={checkingRotation} size="sm" variant="outline" className="border-red-500/30 text-red-400 hover:bg-red-500/10">
+                {checkingRotation ? <RefreshCw className="w-4 h-4 mr-1 animate-spin" /> : <RotateCcw className="w-4 h-4 mr-1" />}
+                Run Check
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Key Status Banner */}
       <Card className={keyStatus.configured ? "border-emerald-500/30 bg-emerald-500/5" : "border-amber-500/30 bg-amber-500/5"}>
@@ -178,7 +265,7 @@ export default function EncryptionAuditDashboard() {
       </Card>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card>
           <CardContent className="p-4 text-center">
             <ShieldCheck className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
@@ -207,6 +294,13 @@ export default function EncryptionAuditDashboard() {
             <p className="text-xs text-muted-foreground">Key Status</p>
           </CardContent>
         </Card>
+        <Card>
+          <CardContent className="p-4 text-center">
+            <RotateCcw className={`w-6 h-6 mx-auto mb-2 ${overdueKeys > 0 ? "text-red-400" : "text-emerald-400"}`} />
+            <div className="text-2xl font-bold text-foreground">{overdueKeys > 0 ? overdueKeys : "✓"}</div>
+            <p className="text-xs text-muted-foreground">{overdueKeys > 0 ? "Keys Overdue" : "Rotation OK"}</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Tabs */}
@@ -214,6 +308,14 @@ export default function EncryptionAuditDashboard() {
         <TabsList className="bg-muted/30">
           <TabsTrigger value="status">Encryption Status</TabsTrigger>
           <TabsTrigger value="storage">Storage Security</TabsTrigger>
+          <TabsTrigger value="rotation" className="relative">
+            Key Rotation
+            {overdueKeys > 0 && (
+              <span className="ml-1.5 inline-flex items-center justify-center w-5 h-5 text-[10px] font-bold rounded-full bg-red-500 text-white">
+                {overdueKeys}
+              </span>
+            )}
+          </TabsTrigger>
           <TabsTrigger value="audit">Access Log</TabsTrigger>
           <TabsTrigger value="secrets">Secret Audit</TabsTrigger>
         </TabsList>
@@ -318,6 +420,86 @@ export default function EncryptionAuditDashboard() {
           </Card>
         </TabsContent>
 
+        {/* Key Rotation Tab */}
+        <TabsContent value="rotation">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <RotateCcw className="w-5 h-5 text-gold" />
+                    Key Rotation Schedule
+                  </CardTitle>
+                  <CardDescription>Track and manage encryption key rotation. Automated daily checks run at 6 AM UTC.</CardDescription>
+                </div>
+                <Button onClick={runRotationCheck} disabled={checkingRotation} size="sm" variant="outline">
+                  {checkingRotation ? <RefreshCw className="w-4 h-4 mr-1 animate-spin" /> : <RefreshCw className="w-4 h-4 mr-1" />}
+                  Run Check Now
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Key</TableHead>
+                    <TableHead>Description</TableHead>
+                    <TableHead>Last Rotated</TableHead>
+                    <TableHead>Interval</TableHead>
+                    <TableHead>Days Since</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Action</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {rotationKeys.map(row => {
+                    const days = getDaysSince(row.last_rotated_at);
+                    const isOverdue = days >= row.rotation_interval_days && row.status !== "disabled" && row.status !== "pending";
+                    const isDueSoon = days >= row.alert_threshold_days && !isOverdue;
+                    return (
+                      <TableRow key={row.id} className={isOverdue ? "bg-red-500/5" : isDueSoon ? "bg-amber-500/5" : ""}>
+                        <TableCell>
+                          <span className="font-mono text-sm font-medium">{row.key_name}</span>
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground max-w-[200px]">{row.description}</TableCell>
+                        <TableCell className="text-sm">
+                          {row.last_rotated_at
+                            ? new Date(row.last_rotated_at).toLocaleDateString()
+                            : <span className="text-muted-foreground">Never</span>}
+                        </TableCell>
+                        <TableCell className="text-sm">{row.rotation_interval_days}d</TableCell>
+                        <TableCell>
+                          <span className={`font-mono text-sm font-bold ${isOverdue ? "text-red-400" : isDueSoon ? "text-amber-400" : "text-emerald-400"}`}>
+                            {row.status === "pending" ? "—" : `${days}d`}
+                          </span>
+                        </TableCell>
+                        <TableCell>{rotationStatusBadge(row)}</TableCell>
+                        <TableCell>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-xs"
+                            onClick={() => markKeyRotated(row.key_name)}
+                          >
+                            <CheckCircle2 className="w-3 h-3 mr-1" />
+                            Mark Rotated
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+              <div className="mt-4 p-3 rounded-lg bg-muted/20 border border-border/50">
+                <p className="text-xs text-muted-foreground">
+                  <Bell className="w-3 h-3 inline mr-1" />
+                  <strong>Automated alerts:</strong> A daily check runs at 6 AM UTC. If any key exceeds its rotation interval by 30+ days, a critical alert email is sent to the owner. Keys approaching their threshold trigger "Due Soon" warnings.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         {/* Audit Log Tab */}
         <TabsContent value="audit">
           <Card>
@@ -350,7 +532,7 @@ export default function EncryptionAuditDashboard() {
                           {new Date(log.created_at).toLocaleString()}
                         </TableCell>
                         <TableCell>
-                          <Badge variant={log.action === "access_denied" ? "destructive" : "outline"} className="text-xs">
+                          <Badge variant={log.action === "access_denied" ? "destructive" : log.action === "key_rotated" ? "default" : "outline"} className="text-xs">
                             {log.action}
                           </Badge>
                         </TableCell>
@@ -381,9 +563,10 @@ export default function EncryptionAuditDashboard() {
                 { label: "Console / log leaks", status: "pass", detail: "No secrets logged to browser console" },
                 { label: "LocalStorage secrets", status: "pass", detail: "Only auth session tokens stored (standard Supabase behavior)" },
                 { label: "URL query params", status: "pass", detail: "No secrets passed in URLs" },
-                { label: "Server-side secrets", status: "pass", detail: "17 secrets managed via backend runtime environment" },
+                { label: "Server-side secrets", status: "pass", detail: "14 secrets managed via backend runtime environment" },
                 { label: "CRM Encryption Key", status: keyStatus.configured ? "pass" : "warn", detail: keyStatus.configured ? "AES-256-GCM key active and managed server-side" : "Not yet configured — add CRM_ENCRYPTION_KEY to backend secrets (64-char hex)" },
-                { label: "Key rotation", status: "info", detail: "Rotation-ready architecture — re-run migration after key change" },
+                { label: "Key rotation", status: overdueKeys > 0 ? "warn" : "pass", detail: overdueKeys > 0 ? `${overdueKeys} key(s) overdue — check Key Rotation tab` : "All keys within rotation schedule" },
+                { label: "Deprecated secrets removed", status: "pass", detail: "VITE_OWNER_EMAIL, REELLY_EMAIL, REELLY_PASSWORD deleted" },
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/20 border border-border/50">
                   {item.status === "pass" ? (
