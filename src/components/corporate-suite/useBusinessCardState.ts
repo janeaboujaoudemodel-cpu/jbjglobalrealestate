@@ -747,7 +747,28 @@ The current card primary color is ${frontPrimary}. Return only the JSON, no othe
     cardPreviewRef, isExportingPng, isExportingToResizer,
     batchPrintOpen, setBatchPrintOpen, batchPrintCount, setBatchPrintCount,
     data, setData,
-...
+    bilingualMode, setBilingualMode, bilingualLang, setBilingualLang,
+    bilingualOpen, setBilingualOpen, secondaryData, setSecondaryData, bilingualDir,
+    inlineEditField, setInlineEditField,
+    landingPageData, setLandingPageData, digitalTab, setDigitalTab,
+    finishEffect, setFinishEffect, finishOpen, setFinishOpen,
+    mockupScene, setMockupScene, mockupOpen, setMockupOpen,
+
+    // Card profiles
+    cardProfiles, activeProfileId, isLoadingProfiles,
+    loadCardProfiles, saveCardProfile, updateCardProfile, deleteCardProfile, applyCardProfile,
+
+    // Derived
+    frontPrimary, frontSecondary, frontAccent,
+    backPrimary, backSecondary, backAccent,
+    effectiveQrColor, activeTemplate, setActiveTemplate, qrDataStr,
+
+    // Handlers
+    set, updateCardField, handleExtractedCard, handleFieldMove,
+    handleAiQrStyle, handleGenerateDesign,
+    handleGenerateGallery, toggleGalleryFavorite, applyGalleryDesign,
+    handleTradeLicenseExtracted,
+    handleLoadSavedDesigns, handleRestoreSaved, handleDeleteSaved,
     handleExportPng, handleExportToResizer, handleBatchPrint, handleSaveCard,
     handleExport, handleExportHtml, handleShareCard, handleResetLayout,
   };
