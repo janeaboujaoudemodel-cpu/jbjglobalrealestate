@@ -788,6 +788,7 @@ interface SavedFilter {
 }
 
 function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light' | 'dark'; onApplySavedFilter: (filters: ShortcutFilterState) => void }) {
+  const { t } = useLanguage();
   const [savedFilters, setSavedFilters] = useState<SavedFilter[]>([]);
   const [savedOpen, setSavedOpen] = useState(false);
   const [confirmDeleteIndex, setConfirmDeleteIndex] = useState<number | null>(null);
