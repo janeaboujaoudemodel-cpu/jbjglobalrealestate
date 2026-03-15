@@ -25,7 +25,15 @@ import {
   ChevronRight,
   User,
   BookOpen,
-  Flame
+  Flame,
+  Cpu,
+  Store,
+  Palmtree,
+  Users,
+  Handshake,
+  BarChart3,
+  Sparkles,
+  ArrowRight
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -68,18 +76,33 @@ const staggerContainer = {
   }
 };
 
-// Exact content from Section 2 - DO NOT MODIFY
+// ── Content merged from the official 18-page Company Profile PDF ──
 const PROFILE_CONTENT = {
   coverPage: {
     title: "JBJ Global Real Estate",
-    subtitle: "Founder & CEO, Jane Bou Jaoude",
+    subtitle: "Global Real Estate Platform & Marketplace",
     subtitleFallback: "Company Profile"
   },
-  executiveSummary: `JBJ Global Real Estate is a Dubai-based real estate brokerage built on precision, transparency, and long-term client relationships. Operating across Dubai's most active residential and investment markets, the firm provides structured advisory for buying, selling, leasing, and investing in property.
 
-Our approach is defined by clarity rather than volume. Every engagement begins with understanding the client's objective, risk profile, and timeline, followed by data-driven market evaluation and disciplined execution. We work with homeowners, landlords, investors, and institutional buyers who value informed decision-making and professional representation.
+  executiveSummary: `A real estate platform and brokerage headquartered in Dubai, designed to connect investors, property buyers, developers, and brokers within a structured real estate ecosystem.
 
-JBJ Global Real Estate combines on-ground market expertise with modern intelligence tools, ensuring each recommendation is grounded in verifiable information, not assumptions. From first consultation to completion and beyond, clients receive direct access, responsive communication, and accountability at every stage.`,
+The company operates as both a brokerage and a marketplace platform, enabling access to curated property opportunities while facilitating collaboration between real estate professionals and investors across Dubai and international markets.
+
+JBJ Global Real Estate focuses on creating a transparent and structured environment where property opportunities can be discovered, evaluated, and executed efficiently — supported by professional advisory at every stage.
+
+The platform is designed to simplify real estate discovery, transactions, and advisory through a professional framework that serves investors, buyers, brokers, and developers alike.
+
+Headquartered in Dubai, one of the world's most dynamic real estate markets, JBJ Global Real Estate is positioned to serve both local and international clients seeking premium property opportunities in the UAE and beyond.`,
+
+  platformPositioning: `JBJ Global Real Estate is positioned as a modern real estate platform that facilitates the interaction between the core players of the property ecosystem.`,
+
+  platformPlayers: [
+    { title: "Global Investors", description: "Seeking property opportunities across Dubai and international markets." },
+    { title: "Property Buyers", description: "Looking for homes or investment assets with professional guidance." },
+    { title: "Real Estate Brokers", description: "Seeking listings, collaboration, and transaction support." },
+    { title: "Developers", description: "Launching residential projects and reaching qualified buyers." },
+    { title: "Service Providers", description: "Supporting real estate transactions end-to-end." },
+  ],
 
   brandStory: `JBJ Global Real Estate was founded with a clear mandate: to elevate the standard of real estate advisory in Dubai by replacing transactional brokerage with structured, client-centric representation.
 
@@ -89,62 +112,160 @@ Founder-led and strategically focused, JBJ Global Real Estate operates with the 
 
 Today, JBJ Global Real Estate serves local and international clients seeking reliable representation, transparent processes, and premium service delivery in Dubai's evolving property landscape.`,
 
-  vision: "To be a trusted reference for real estate advisory in Dubai through clarity, discipline, and client confidence.",
-  mission: "To provide structured, transparent real estate guidance that protects client interests and supports informed decision-making.",
-  
+  vision: "To build one of the most recognized real estate platforms headquartered in Dubai that enables investors and professionals to access property opportunities through a unified ecosystem. The long-term vision is to expand the platform globally while maintaining strong market expertise in Dubai, becoming the preferred gateway for international capital entering the UAE property market.",
+
+  mission: "To simplify access to global real estate opportunities by connecting investors, brokers, developers, and buyers through a structured real estate platform. JBJ Global Real Estate aims to facilitate property transactions through professional advisory and a transparent marketplace environment — ensuring every client interaction is guided by integrity, market knowledge, and a commitment to long-term value creation.",
+
   values: [
-    { title: "Clarity", description: "Information presented accurately, without exaggeration." },
-    { title: "Integrity", description: "Advice aligned with client objectives, not incentives." },
-    { title: "Discipline", description: "Consistent processes and risk-aware execution." },
-    { title: "Responsiveness", description: "Direct access and timely communication." },
-    { title: "Loyalty", description: "Long-term commitment to client success and trust." },
-    { title: "Accountability", description: "Responsibility throughout the transaction lifecycle." }
+    { title: "Transparency", description: "Professional advisory and clear communication at every stage of the client relationship." },
+    { title: "Client Focus", description: "Aligning every opportunity with the client's investment objectives and lifestyle goals." },
+    { title: "Market Knowledge", description: "Deep understanding of the dynamics of global and Dubai real estate markets." },
+    { title: "Professional Execution", description: "Supporting clients throughout the entire transaction process with precision and care." },
+    { title: "Long-Term Relationships", description: "Building lasting partnerships with investors and brokers beyond individual transactions." },
   ],
 
   services: [
     {
-      title: "Residential Sales Advisory",
-      description: "Advisory support for primary and secondary market purchases.",
-      idealFor: "Homeowners and investors.",
-      deliverables: "Market evaluation, property shortlisting, transaction coordination.",
+      title: "Property Brokerage",
+      description: "Licensed brokerage services for buying, selling, and leasing residential properties across Dubai's prime communities.",
+      idealFor: "Buyers, sellers, and tenants.",
+      deliverables: "Property search, listing, negotiation, and closing.",
       icon: Home
     },
     {
-      title: "Premium Leasing (Rentals)",
-      description: "Structured leasing for residential properties.",
-      idealFor: "Tenants and landlords.",
-      deliverables: "Rental valuation, tenant sourcing, contract coordination.",
-      icon: Key
-    },
-    {
-      title: "Seller Representation & Pricing Strategy",
-      description: "Professional representation for property owners.",
-      idealFor: "Homeowners and investors selling assets.",
-      deliverables: "Pricing strategy, marketing coordination, negotiation support.",
-      icon: TrendingUp
-    },
-    {
-      title: "Landlord Services / Property Management",
-      description: "Operational support for rental assets.",
-      idealFor: "Portfolio landlords.",
-      deliverables: "Leasing oversight, tenant coordination, renewal management.",
-      icon: Building2
-    },
-    {
-      title: "Investment Advisory",
-      description: "Data-driven advisory for property investment decisions.",
+      title: "Property Investment Advisory",
+      description: "Guidance for investors seeking curated opportunities in the Dubai property market, aligned with their financial objectives.",
       idealFor: "Yield-focused investors.",
       deliverables: "Market analysis, risk assessment, scenario comparison.",
       icon: Briefcase
     },
     {
-      title: "New Developments / Off-Plan Advisory",
-      description: "Guidance on developer-led projects.",
+      title: "Off-Plan Property Opportunities",
+      description: "Exclusive access to residential developments from leading developers across Dubai's most sought-after locations.",
       idealFor: "Investors and early buyers.",
       deliverables: "Project evaluation, payment plan analysis, booking coordination.",
       icon: HardHat
-    }
+    },
+    {
+      title: "Luxury Property Search",
+      description: "Sourcing premium apartments, villas, and waterfront residences tailored to client specifications.",
+      idealFor: "High-net-worth individuals.",
+      deliverables: "Curated shortlists, exclusive viewings, white-glove service.",
+      icon: Key
+    },
+    {
+      title: "Transaction Coordination",
+      description: "Professional support throughout negotiation, documentation, and closing procedures.",
+      idealFor: "All property transactions.",
+      deliverables: "Contract review, DLD coordination, timeline management.",
+      icon: TrendingUp
+    },
+    {
+      title: "Property Management Support",
+      description: "Connection with trusted partners for comprehensive property management services.",
+      idealFor: "Portfolio landlords.",
+      deliverables: "Leasing oversight, tenant coordination, renewal management.",
+      icon: Building2
+    },
+    {
+      title: "Mortgage & Legal Coordination",
+      description: "Assistance connecting clients with financing institutions and legal advisory partners.",
+      idealFor: "Buyers requiring financing.",
+      deliverables: "Mortgage referrals, legal partner introductions, documentation support.",
+      icon: Shield
+    },
+    {
+      title: "Client Onboarding",
+      description: "A structured onboarding process ensuring every client is properly introduced to the platform, objectives are defined, and the right advisory pathway is established from day one.",
+      idealFor: "All new clients.",
+      deliverables: "Needs assessment, advisor matching, platform orientation.",
+      icon: Users
+    },
   ],
+
+  aiTools: [
+    { title: "AI-Powered Property Matching", description: "Intelligent algorithms that match investors and buyers with the most relevant property opportunities based on their objectives and preferences." },
+    { title: "AI Visual Content Creation", description: "High-quality property visuals, renders, and marketing imagery generated through AI to elevate listings and presentations." },
+    { title: "Smart Content Generation", description: "AI-assisted copywriting for property descriptions, investment briefs, and client-facing materials produced with speed and precision." },
+    { title: "Market Intelligence Tools", description: "Data-driven insights and analytics to support investment decisions and market positioning." },
+    { title: "Creative Marketing Production", description: "End-to-end creative production for digital campaigns, social media, and branded property marketing materials." },
+    { title: "Workflow Automation", description: "Streamlined internal processes and client communication workflows powered by automation enabling faster, more efficient service delivery." },
+  ],
+
+  marketplace: {
+    intro: "JBJ Global Real Estate operates as a real estate marketplace designed to facilitate the discovery and acquisition of property opportunities across Dubai and beyond.",
+    features: [
+      { title: "Curated Listings", description: "Carefully selected residential property listings across Dubai's prime communities." },
+      { title: "Developer Opportunities", description: "Direct access to off-plan and new launch projects from leading developers." },
+      { title: "Broker Collaboration", description: "A structured environment for brokers to connect, collaborate, and transact." },
+      { title: "Investment Advisory", description: "Professional guidance to support informed investment decisions." },
+      { title: "Transaction Facilitation", description: "End-to-end support from property discovery through to completion." },
+    ],
+  },
+
+  dubaiDestination: {
+    intro: "Dubai remains one of the most dynamic and resilient real estate markets globally, consistently attracting international capital and high-net-worth investors from across the world.",
+    highlights: [
+      { title: "World-Class Infrastructure", description: "A city built to global standards with continuous investment in urban development and connectivity." },
+      { title: "Global Connectivity", description: "A strategic hub connecting East and West, with direct access to over 200 destinations worldwide." },
+      { title: "Exceptional Lifestyle", description: "A cosmopolitan environment offering premium living, safety, and quality of life." },
+      { title: "Investor-Friendly Environment", description: "No income tax, strong legal frameworks, and transparent property ownership regulations." },
+      { title: "Continuous Urban Growth", description: "Ongoing mega-projects and master-planned communities driving long-term property value appreciation." },
+      { title: "Golden Visa Destination", description: "Property investments above AED 2 million qualify investors for UAE long-term residency and access." },
+    ],
+  },
+
+  primeAreas: [
+    { name: "Downtown Dubai", description: "The city's iconic centre, home to world-class residences and unmatched urban lifestyle." },
+    { name: "Business Bay", description: "A thriving mixed-use district with strong rental demand and proximity to Downtown Dubai." },
+    { name: "Dubai Marina", description: "A vibrant waterfront community offering premium apartments and marina living." },
+    { name: "Palm Jumeirah", description: "Dubai's iconic island destination with beachfront villas and ultra-luxury residences." },
+    { name: "Dubai Hills Estate", description: "A master-planned community offering family villas and green living within the city." },
+    { name: "Mohammed Bin Rashid City", description: "A premium mixed-use destination with luxury residences and world-class amenities." },
+    { name: "Dubai Creek Harbour", description: "A waterfront district with modern residences, marina views, and strong investment potential." },
+    { name: "Jumeirah Bay Island", description: "An exclusive island community with ultra-luxury villas and panoramic sea views." },
+  ],
+
+  // Used for the area photo card filter
+  areas: [
+    "Downtown Dubai", "Business Bay", "Dubai Marina", "Palm Jumeirah",
+    "Dubai Hills Estate", "Mohammed Bin Rashid City", "Dubai Creek Harbour", "Jumeirah Bay Island"
+  ],
+
+  platformBenefits: {
+    investors: [
+      "Access to curated property opportunities across Dubai's prime communities",
+      "Market insights and professional advisory support",
+      "Guided property acquisition process from search to completion",
+      "Connection to trusted legal, mortgage, and management partners",
+    ],
+    brokers: [
+      "Access to quality property listings and developer opportunities",
+      "Collaboration opportunities within a structured professional network",
+      "Transaction support and coordination services",
+      "A platform designed to enhance broker efficiency and reach",
+    ],
+  },
+
+  investorJourney: [
+    { step: "01", title: "Market Identification", description: "Investor identifies Dubai as a target market for property investment, driven by its robust growth and strategic advantages." },
+    { step: "02", title: "Platform Engagement", description: "JBJ Global Real Estate provides comprehensive market insights, property overviews, and initial advisory services to clarify objectives." },
+    { step: "03", title: "Curated Shortlist", description: "A meticulously selected shortlist of prime properties is presented, precisely aligned with the investor's specific objectives and budgetary parameters." },
+    { step: "04", title: "Property Selection", description: "The investor critically evaluates optimal choices, making an informed selection with expert, professional guidance and due diligence." },
+    { step: "05", title: "Transaction Completion", description: "The acquisition is seamlessly executed with full advisory support, encompassing all legal, financial, and logistical coordinations for a successful close." },
+  ],
+
+  partnerNetwork: {
+    intro: "JBJ Global Real Estate collaborates with a carefully selected network of trusted partners across Dubai's real estate ecosystem — enabling seamless, end-to-end client support from property discovery through to post-acquisition services.",
+    partners: [
+      { title: "Developers", description: "Leading residential developers across Dubai's prime communities and master-planned destinations." },
+      { title: "Legal Advisors", description: "Qualified legal professionals specializing in UAE property law and transaction documentation." },
+      { title: "Mortgage Providers", description: "Trusted financing institutions offering competitive mortgage solutions for local and international buyers." },
+      { title: "Property Management", description: "Professional property management firms ensuring optimal asset performance post-acquisition." },
+      { title: "Relocation Specialists", description: "Expert relocation partners supporting international clients with seamless transitions to Dubai." },
+      { title: "Golden Visa Advisory", description: "Specialist partners guiding investors through the UAE Golden Visa process, supporting long-term residency through property investment." },
+    ],
+  },
 
   process: [
     { step: 1, title: "Consultation", description: "Understand objectives and constraints." },
@@ -166,21 +287,6 @@ Today, JBJ Global Real Estate serves local and international clients seeking rel
     "Client confidentiality"
   ],
 
-  areas: [
-    "Downtown Dubai",
-    "Business Bay",
-    "Dubai Marina",
-    "Palm Jumeirah",
-    "JBR",
-    "City Walk",
-    "DIFC",
-    "Meydan",
-    "Dubai Hills Estate",
-    "Jumeirah Islands",
-    "Jumeirah Village Circle",
-    "Arabian Ranches"
-  ],
-
   clientExperience: [
     "Clear expectations from day one",
     "Verified information only",
@@ -197,10 +303,14 @@ Today, JBJ Global Real Estate serves local and international clients seeking rel
   founderProfile: {
     name: "Jane Bou Jaoude",
     title: "Founder & CEO",
-    bio: `Jane Bou Jaoude is the Founder & CEO of JBJ Global Real Estate. Her leadership philosophy centers on clarity, accountability, and long-term client trust. With hands-on involvement in advisory strategy and client engagement, she ensures that every transaction reflects disciplined market understanding rather than speculation.
-
-Clients working with JBJ can expect direct oversight, transparent communication, and advice grounded in practical market realities. Jane's approach prioritizes alignment with client objectives, risk awareness, and execution quality.`,
-    quote: "Real estate decisions deserve clarity, not pressure."
+    bio: `Jane Bou Jaoude founded JBJ Global Real Estate with the vision of creating a global real estate platform headquartered in Dubai that supports investors and professionals through a structured property ecosystem. Her approach focuses on transparency, professional advisory, and curated real estate opportunities.`,
+    quote: "Real estate decisions deserve clarity, not pressure.",
+    principles: [
+      "Curated opportunities over high-volume transactions",
+      "Professional and transparent advisory",
+      "Premium client experience",
+      "Long-term partnerships with investors and brokers",
+    ],
   },
 
   companySnapshot: {
@@ -225,44 +335,30 @@ Clients working with JBJ can expect direct oversight, transparent communication,
 const ConsistentBook3D = ({ onClick, isGenerating }: { onClick: () => void; isGenerating: boolean }) => {
   return (
     <div className="relative group cursor-pointer" onClick={onClick} style={{ perspective: '1200px' }}>
-      {/* Book shadow */}
       <div className="absolute -bottom-4 left-4 right-4 h-8 bg-black/20 blur-xl rounded-full" />
-
-      {/* 3D Book */}
       <div
         className="relative w-52 sm:w-60 md:w-64 mx-auto transition-transform duration-500 group-hover:[transform:rotateY(-8deg)]"
         style={{ transformStyle: 'preserve-3d' }}
       >
-        {/* Front cover */}
         <div className="relative rounded-r-lg overflow-hidden shadow-[8px_8px_30px_rgba(0,0,0,0.35)]">
-          {/* Spine edge */}
           <div className="absolute left-0 top-0 bottom-0 w-4 bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
-          {/* Top light reflection */}
           <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-white/15 to-transparent z-10" />
-
           <img
             src={companyProfileBook.cover}
             alt={companyProfileBook.title}
             className="w-full aspect-[2/3] object-cover"
           />
-
-          {/* Subtle overlay sheen */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/10 z-10" />
         </div>
-
-        {/* Book spine (3D depth) */}
         <div
           className="absolute top-0 left-0 w-4 h-full bg-gradient-to-r from-zinc-800 to-zinc-700 origin-left"
           style={{ transform: 'rotateY(-90deg) translateX(-8px)' }}
         />
-        {/* Book pages (3D bottom edge) */}
         <div
           className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-b from-[#f5f0e0] to-[#e8dcc8]"
           style={{ transform: 'rotateX(90deg) translateY(6px)', transformOrigin: 'bottom' }}
         />
       </div>
-
-      {/* Download overlay on hover */}
       <div className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg z-20">
         <div className="text-center">
           {isGenerating ? (
@@ -288,11 +384,11 @@ const CompanyProfile = () => {
     setIsGenerating(true);
     try {
       const { generateCompanyProfilePDF } = await import("@/utils/generateCompanyProfilePDF");
-      await generateCompanyProfilePDF(isFounderVisible);
+      await generateCompanyProfilePDF();
       toast.success("Company Profile downloaded successfully!");
     } catch (error) {
-      console.error("Error generating PDF:", error);
-      toast.error("Failed to generate PDF. Please try again.");
+      console.error("Error downloading PDF:", error);
+      toast.error("Failed to download PDF. Please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -310,13 +406,7 @@ const CompanyProfile = () => {
     <div className="min-h-screen bg-black">
       {/* Sticky Actions (Desktop) */}
       <div className="hidden lg:flex fixed right-6 top-1/2 -translate-y-1/2 z-50 flex-col gap-3">
-        <Button
-          onClick={handleWhatsApp}
-          variant="primary"
-          size="icon"
-          className="rounded-full"
-          aria-label="WhatsApp"
-        >
+        <Button onClick={handleWhatsApp} variant="primary" size="icon" className="rounded-full" aria-label="WhatsApp">
           <MessageCircle className="w-5 h-5" />
         </Button>
         <Button onClick={handleCall} variant="primary" size="icon" className="rounded-full" aria-label="Call">
@@ -351,10 +441,7 @@ const CompanyProfile = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <motion.span
-            className="inline-block text-gold text-xs uppercase tracking-[0.4em] mb-6"
-            variants={fadeInUp}
-          >
+          <motion.span className="inline-block text-gold text-xs uppercase tracking-[0.4em] mb-6" variants={fadeInUp}>
             Company Profile
           </motion.span>
           <motion.h1
@@ -367,9 +454,7 @@ const CompanyProfile = () => {
             </span>
           </motion.h1>
           <motion.p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-8" variants={fadeInUp}>
-            <FounderContent fallback={PROFILE_CONTENT.coverPage.subtitleFallback}>
-              {PROFILE_CONTENT.coverPage.subtitle}
-            </FounderContent>
+            {PROFILE_CONTENT.coverPage.subtitle}
           </motion.p>
 
           <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
@@ -377,7 +462,7 @@ const CompanyProfile = () => {
               {isGenerating ? (
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                  Generating...
+                  Downloading...
                 </div>
               ) : (
                 <>
@@ -407,13 +492,21 @@ const CompanyProfile = () => {
           <div className="jj-card-inner">
             <div className="space-y-1">
               {[
-                { title: 'Executive Summary', anchor: 'executive-summary' },
+                { title: 'Company Overview', anchor: 'executive-summary' },
+                { title: 'Platform Positioning', anchor: 'platform-positioning' },
                 { title: 'Brand Story', anchor: 'brand-story' },
                 { title: 'Vision, Mission & Values', anchor: 'vision-mission' },
                 { title: 'Core Services', anchor: 'services' },
+                { title: 'AI Tools & Creativity', anchor: 'ai-tools' },
+                { title: 'Real Estate Marketplace', anchor: 'marketplace' },
+                { title: 'Dubai as a Destination', anchor: 'dubai-destination' },
+                { title: 'Prime Areas of Focus', anchor: 'areas' },
+                { title: 'Platform Benefits', anchor: 'platform-benefits' },
+                { title: 'Portfolio Highlights', anchor: 'portfolio' },
+                { title: 'Investor Journey', anchor: 'investor-journey' },
+                { title: 'Partner Network', anchor: 'partner-network' },
                 { title: 'Our Process', anchor: 'process' },
                 { title: 'What Sets Us Apart', anchor: 'differentiators' },
-                { title: 'Areas of Operation', anchor: 'areas' },
                 { title: 'Client Experience', anchor: 'client-experience' },
                 { title: 'Trust & Compliance', anchor: 'trust' },
                 { title: 'Founder & Leadership', anchor: 'founder' },
@@ -437,12 +530,12 @@ const CompanyProfile = () => {
         </motion.div>
       </SectionShell>
 
-      {/* Gold Divider */}
       <div className="h-px bg-gradient-to-r from-transparent via-[#C8A766]/40 to-transparent" />
 
-      {/* 2. Executive Summary */}
+      {/* 2. Company Overview (Executive Summary) */}
       <SectionShell>
         <motion.div
+          id="executive-summary"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -451,10 +544,9 @@ const CompanyProfile = () => {
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Overview</span>
             <h2 className="text-black text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Executive Summary
+              Company Overview
             </h2>
           </div>
-
           <div className="jj-card-inner">
             <div className="space-y-6 text-black/70 leading-relaxed">
               {PROFILE_CONTENT.executiveSummary.split("\n\n").map((para, i) => (
@@ -462,6 +554,42 @@ const CompanyProfile = () => {
               ))}
             </div>
           </div>
+        </motion.div>
+      </SectionShell>
+
+      {/* Platform Positioning */}
+      <SectionShell>
+        <motion.div
+          id="platform-positioning"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-6xl mx-auto"
+        >
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Ecosystem</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Platform Positioning
+            </h2>
+            <p className="text-black/70 max-w-2xl mx-auto">{PROFILE_CONTENT.platformPositioning}</p>
+          </div>
+          <motion.div
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            {PROFILE_CONTENT.platformPlayers.map((player) => (
+              <motion.div key={player.title} className="jj-card-inner text-center" variants={fadeInUp}>
+                <div className="jj-icon-box-active w-12 h-12 mx-auto mb-3">
+                  <Users className="w-6 h-6" />
+                </div>
+                <h3 className="text-black text-sm font-bold mb-2">{player.title}</h3>
+                <p className="text-black/70 text-xs">{player.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
         </motion.div>
       </SectionShell>
 
@@ -483,7 +611,6 @@ const CompanyProfile = () => {
                 Discover our vision, values, and commitment to excellence in Dubai real estate.
               </p>
             </div>
-
             <div className="jj-card-inner p-0 overflow-hidden rounded-2xl">
               <YouTubeVideoPlayer
                 videoId="lBXXdJ2kAtQ"
@@ -497,6 +624,7 @@ const CompanyProfile = () => {
       {/* 3. Brand Story */}
       <SectionShell>
         <motion.div
+          id="brand-story"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -508,7 +636,6 @@ const CompanyProfile = () => {
               Brand Story
             </h2>
           </div>
-
           <div className="jj-card-inner">
             <div className="space-y-6 text-black/70 leading-relaxed">
               {PROFILE_CONTENT.brandStory.split("\n\n").map((para, i) => (
@@ -521,14 +648,9 @@ const CompanyProfile = () => {
 
       {/* 4. Vision / Mission / Values */}
       <SectionShell>
-        <div className="max-w-6xl mx-auto">
+        <div id="vision-mission" className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-6 mb-16">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="jj-card-inner"
-            >
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="jj-card-inner">
               <div className="flex items-start gap-4">
                 <div className="jj-icon-box-active w-12 h-12">
                   <Eye className="w-6 h-6" />
@@ -539,13 +661,7 @@ const CompanyProfile = () => {
                 </div>
               </div>
             </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="jj-card-inner"
-            >
+            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="jj-card-inner">
               <div className="flex items-start gap-4">
                 <div className="jj-icon-box-active w-12 h-12">
                   <Target className="w-6 h-6" />
@@ -561,7 +677,7 @@ const CompanyProfile = () => {
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Foundation</span>
             <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-              Values
+              Core Values
             </h2>
           </div>
 
@@ -585,9 +701,9 @@ const CompanyProfile = () => {
         </div>
       </SectionShell>
 
-      {/* 5. Services (6-card grid) */}
+      {/* 5. Services (8-card grid) */}
       <SectionShell>
-        <div className="text-center mb-12">
+        <div id="services" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">What We Do</span>
           <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
             Services
@@ -595,7 +711,7 @@ const CompanyProfile = () => {
         </div>
 
         <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -611,12 +727,8 @@ const CompanyProfile = () => {
                 <h3 className="text-black text-lg font-bold mb-2">{service.title}</h3>
                 <p className="text-black/70 text-sm mb-3">{service.description}</p>
                 <div className="space-y-1 text-xs text-black/70">
-                  <p>
-                    <span className="font-semibold text-black">Ideal for:</span> {service.idealFor}
-                  </p>
-                  <p>
-                    <span className="font-semibold text-black">Deliverables:</span> {service.deliverables}
-                  </p>
+                  <p><span className="font-semibold text-black">Ideal for:</span> {service.idealFor}</p>
+                  <p><span className="font-semibold text-black">Deliverables:</span> {service.deliverables}</p>
                 </div>
               </motion.div>
             );
@@ -624,33 +736,63 @@ const CompanyProfile = () => {
         </motion.div>
       </SectionShell>
 
-      {/* 6. Process (timeline) */}
+      {/* AI Tools & Creativity */}
       <SectionShell>
-        <div className="text-center mb-12">
-          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">How We Work</span>
-          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Our Process
-          </h2>
-        </div>
-
-        <div className="max-w-5xl mx-auto">
+        <div id="ai-tools" className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Technology</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              AI Tools & Creativity
+            </h2>
+            <p className="text-black/70 max-w-2xl mx-auto">
+              JBJ Global Real Estate integrates advanced AI tools and creative capabilities into its platform — enhancing the quality, speed, and impact of property marketing, client communication, and content production.
+            </p>
+          </div>
           <motion.div
-            className="relative"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
-
-            {PROFILE_CONTENT.process.map((step) => (
-              <motion.div key={step.step} className="flex items-start gap-6 mb-6 last:mb-0" variants={fadeInUp}>
-                <div className="jj-icon-box-active w-12 h-12 rounded-full border border-gold/40 flex items-center justify-center flex-shrink-0">
-                  <span className="text-black font-bold">{step.step}</span>
+            {PROFILE_CONTENT.aiTools.map((tool) => (
+              <motion.div key={tool.title} className="jj-card-inner" variants={fadeInUp}>
+                <div className="jj-icon-box-active w-10 h-10 mb-3">
+                  <Sparkles className="w-5 h-5" />
                 </div>
-                <div className="jj-card-inner flex-1">
-                  <h3 className="text-black text-lg font-bold mb-1">{step.title}</h3>
-                  <p className="text-black/70">{step.description}</p>
+                <h3 className="text-black font-bold text-sm mb-2">{tool.title}</h3>
+                <p className="text-black/70 text-xs leading-relaxed">{tool.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </SectionShell>
+
+      {/* Real Estate Marketplace */}
+      <SectionShell>
+        <div id="marketplace" className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Platform</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Real Estate Marketplace
+            </h2>
+            <p className="text-black/70 max-w-2xl mx-auto">{PROFILE_CONTENT.marketplace.intro}</p>
+          </div>
+          <motion.div
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            {PROFILE_CONTENT.marketplace.features.map((f) => (
+              <motion.div key={f.title} className="jj-card-inner flex items-start gap-3" variants={fadeInUp}>
+                <div className="jj-icon-box-active w-10 h-10 flex-shrink-0">
+                  <Store className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-black font-bold text-sm mb-1">{f.title}</h3>
+                  <p className="text-black/70 text-xs">{f.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -658,40 +800,46 @@ const CompanyProfile = () => {
         </div>
       </SectionShell>
 
-      {/* 7. Differentiators */}
+      {/* Dubai as a Destination */}
       <SectionShell>
-        <div className="text-center mb-12">
-          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Edge</span>
-          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Why JBJ
-          </h2>
+        <div id="dubai-destination" className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Location</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Dubai — A Global Real Estate Destination
+            </h2>
+            <p className="text-black/70 max-w-2xl mx-auto">{PROFILE_CONTENT.dubaiDestination.intro}</p>
+          </div>
+          <motion.div
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            {PROFILE_CONTENT.dubaiDestination.highlights.map((h) => (
+              <motion.div key={h.title} className="jj-card-inner" variants={fadeInUp}>
+                <div className="jj-icon-box-active w-10 h-10 mb-3">
+                  <Globe className="w-5 h-5" />
+                </div>
+                <h3 className="text-black font-bold text-sm mb-2">{h.title}</h3>
+                <p className="text-black/70 text-xs leading-relaxed">{h.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-
-        <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-        >
-          {PROFILE_CONTENT.differentiators.map((item) => (
-            <motion.div key={item} className="jj-card-inner flex items-center gap-3" variants={fadeInUp}>
-              <div className="jj-icon-box-active w-10 h-10">
-                <CheckCircle className="w-5 h-5" />
-              </div>
-              <span className="text-black/80 text-sm">{item}</span>
-            </motion.div>
-          ))}
-        </motion.div>
       </SectionShell>
 
-      {/* 8. Areas of Focus — Photo Cards */}
+      {/* Prime Areas of Focus — Photo Cards */}
       <SectionShell>
-        <div className="text-center mb-12">
+        <div id="areas" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Where We Operate</span>
-          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-            Areas of Focus
+          <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Prime Areas of Focus
           </h2>
+          <p className="text-black/70 max-w-2xl mx-auto">
+            JBJ Global Real Estate focuses on Dubai's highest-demand residential communities — selected for their location quality, lifestyle appeal, and long-term investment value.
+          </p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 max-w-6xl mx-auto">
@@ -724,7 +872,6 @@ const CompanyProfile = () => {
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
 
-                  {/* Badges */}
                   <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                     {area.is_trending && (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#E8DCC8] text-black text-[9px] font-bold uppercase tracking-wider shadow-lg">
@@ -740,7 +887,6 @@ const CompanyProfile = () => {
                     )}
                   </div>
 
-                  {/* Bottom content */}
                   <div className="absolute bottom-0 left-0 right-0 p-3">
                     {area.property_count != null && area.property_count > 0 && (
                       <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-black/60 text-[#C8A766] text-[9px] font-semibold tracking-wide border border-[#C8A766]/30">
@@ -756,7 +902,22 @@ const CompanyProfile = () => {
             ))}
         </div>
 
-        {/* View All Areas CTA */}
+        {/* Area descriptions from PDF (below the photo cards) */}
+        <motion.div
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 max-w-6xl mx-auto mt-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+        >
+          {PROFILE_CONTENT.primeAreas.map((area) => (
+            <motion.div key={area.name} className="jj-card-inner text-center" variants={fadeInUp}>
+              <h3 className="text-black font-bold text-sm mb-1">{area.name}</h3>
+              <p className="text-black/60 text-xs leading-relaxed">{area.description}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+
         <div className="text-center mt-8">
           <Link
             to="/areas"
@@ -768,15 +929,180 @@ const CompanyProfile = () => {
         </div>
       </SectionShell>
 
+      {/* Platform Benefits */}
+      <SectionShell>
+        <div id="platform-benefits" className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Value</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Platform Benefits
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="jj-card-inner">
+              <h3 className="text-black font-bold text-lg mb-4 flex items-center gap-2">
+                <Briefcase className="w-5 h-5 text-gold" /> For Investors
+              </h3>
+              <ul className="space-y-3">
+                {PROFILE_CONTENT.platformBenefits.investors.map((b, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-black/70">
+                    <CheckCircle className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="jj-card-inner">
+              <h3 className="text-black font-bold text-lg mb-4 flex items-center gap-2">
+                <Handshake className="w-5 h-5 text-gold" /> For Brokers
+              </h3>
+              <ul className="space-y-3">
+                {PROFILE_CONTENT.platformBenefits.brokers.map((b, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-black/70">
+                    <CheckCircle className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
+                    {b}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+        </div>
+      </SectionShell>
+
+      {/* Portfolio Highlights */}
+      <SectionShell>
+        <div id="portfolio" className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Portfolio</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Portfolio Highlights
+            </h2>
+            <p className="text-black/70 max-w-2xl mx-auto">
+              A selection of the property categories and communities represented within the JBJ Global Real Estate portfolio.
+            </p>
+          </div>
+        </div>
+      </SectionShell>
+
+      {/* Investor Journey */}
+      <SectionShell>
+        <div id="investor-journey" className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Process</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              The Investor Journey
+            </h2>
+            <p className="text-black/70 max-w-2xl mx-auto">
+              A structured, advisory-led process designed to guide investors from initial interest through to successful property acquisition.
+            </p>
+          </div>
+          <motion.div className="relative" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
+            <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
+            {PROFILE_CONTENT.investorJourney.map((step) => (
+              <motion.div key={step.step} className="flex items-start gap-6 mb-6 last:mb-0" variants={fadeInUp}>
+                <div className="jj-icon-box-active w-12 h-12 rounded-full border border-gold/40 flex items-center justify-center flex-shrink-0">
+                  <span className="text-black font-bold text-sm">{step.step}</span>
+                </div>
+                <div className="jj-card-inner flex-1">
+                  <h3 className="text-black text-lg font-bold mb-1">{step.title}</h3>
+                  <p className="text-black/70 text-sm">{step.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </SectionShell>
+
+      {/* Partner Network */}
+      <SectionShell>
+        <div id="partner-network" className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Network</span>
+            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Partner Network
+            </h2>
+            <p className="text-black/70 max-w-2xl mx-auto">{PROFILE_CONTENT.partnerNetwork.intro}</p>
+          </div>
+          <motion.div
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            {PROFILE_CONTENT.partnerNetwork.partners.map((p) => (
+              <motion.div key={p.title} className="jj-card-inner" variants={fadeInUp}>
+                <div className="jj-icon-box-active w-10 h-10 mb-3">
+                  <Handshake className="w-5 h-5" />
+                </div>
+                <h3 className="text-black font-bold text-sm mb-2">{p.title}</h3>
+                <p className="text-black/70 text-xs leading-relaxed">{p.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </SectionShell>
+
+      {/* 6. Process (timeline) */}
+      <SectionShell>
+        <div id="process" className="text-center mb-12">
+          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">How We Work</span>
+          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Our Process
+          </h2>
+        </div>
+        <div className="max-w-5xl mx-auto">
+          <motion.div className="relative" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer}>
+            <div className="absolute left-6 top-0 bottom-0 w-px bg-gold/30 hidden md:block" />
+            {PROFILE_CONTENT.process.map((step) => (
+              <motion.div key={step.step} className="flex items-start gap-6 mb-6 last:mb-0" variants={fadeInUp}>
+                <div className="jj-icon-box-active w-12 h-12 rounded-full border border-gold/40 flex items-center justify-center flex-shrink-0">
+                  <span className="text-black font-bold">{step.step}</span>
+                </div>
+                <div className="jj-card-inner flex-1">
+                  <h3 className="text-black text-lg font-bold mb-1">{step.title}</h3>
+                  <p className="text-black/70">{step.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </SectionShell>
+
+      {/* 7. Differentiators */}
+      <SectionShell>
+        <div id="differentiators" className="text-center mb-12">
+          <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Edge</span>
+          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            Why JBJ
+          </h2>
+        </div>
+        <motion.div
+          className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={staggerContainer}
+        >
+          {PROFILE_CONTENT.differentiators.map((item) => (
+            <motion.div key={item} className="jj-card-inner flex items-center gap-3" variants={fadeInUp}>
+              <div className="jj-icon-box-active w-10 h-10">
+                <CheckCircle className="w-5 h-5" />
+              </div>
+              <span className="text-black/80 text-sm">{item}</span>
+            </motion.div>
+          ))}
+        </motion.div>
+      </SectionShell>
+
       {/* 9. Client Experience Standards */}
       <SectionShell>
-        <div className="text-center mb-12">
+        <div id="client-experience" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Commitment</span>
           <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
             Client Experience Standards
           </h2>
         </div>
-
         <motion.div
           className="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto"
           initial="hidden"
@@ -797,7 +1123,7 @@ const CompanyProfile = () => {
 
       {/* 10. Trust & Compliance */}
       <SectionShell>
-        <div className="max-w-6xl mx-auto">
+        <div id="trust" className="max-w-6xl mx-auto">
           <div className="jj-card-inner">
             <div className="flex items-start gap-4">
               <div className="jj-icon-box-active w-12 h-12">
@@ -812,14 +1138,14 @@ const CompanyProfile = () => {
         </div>
       </SectionShell>
 
-      {/* 11. Founder Profile - WRAPPED IN FOUNDER CONTENT */}
+      {/* 11. Founder Profile */}
       <FounderContent>
         <SectionShell>
-          <div className="max-w-6xl mx-auto">
+          <div id="founder" className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Leadership</span>
               <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
-                Founder Profile
+                Founder & CEO
               </h2>
             </div>
 
@@ -830,7 +1156,6 @@ const CompanyProfile = () => {
               className="jj-card-inner"
             >
               <div className="flex flex-col md:flex-row items-start gap-8">
-                {/* Founder Photo */}
                 <div className="w-32 h-40 md:w-40 md:h-52 rounded-xl overflow-hidden border-2 border-gold/30 shadow-xl flex-shrink-0">
                   <img 
                     src={founderCompanyProfile} 
@@ -840,12 +1165,20 @@ const CompanyProfile = () => {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-black text-2xl font-bold mb-1">{PROFILE_CONTENT.founderProfile.name}</h3>
-                  <p className="text-gold mb-6">{PROFILE_CONTENT.founderProfile.title}</p>
-                  <div className="space-y-4 text-black/70 leading-relaxed mb-8">
-                    {PROFILE_CONTENT.founderProfile.bio.split("\n\n").map((para, i) => (
-                      <p key={i}>{para}</p>
-                    ))}
+                  <p className="text-gold mb-4">{PROFILE_CONTENT.founderProfile.title}</p>
+                  <p className="text-black/70 leading-relaxed mb-6">{PROFILE_CONTENT.founderProfile.bio}</p>
+
+                  <div className="mb-6">
+                    <h4 className="text-black font-bold text-sm mb-3">Founder Principles</h4>
+                    <ul className="space-y-2">
+                      {PROFILE_CONTENT.founderProfile.principles.map((p, i) => (
+                        <li key={i} className="flex items-start gap-2 text-sm text-black/70">
+                          <span className="text-gold font-bold">{i + 1}.</span> {p}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
+
                   <blockquote className="border-l-4 border-gold pl-6 py-2">
                     <p className="text-black text-xl italic mb-2">"{PROFILE_CONTENT.founderProfile.quote}"</p>
                     <cite className="text-black/60 text-sm">— {PROFILE_CONTENT.founderProfile.name}</cite>
@@ -859,7 +1192,7 @@ const CompanyProfile = () => {
 
       {/* 12. Company Snapshot */}
       <SectionShell>
-        <div className="text-center mb-12">
+        <div id="snapshot" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">At a Glance</span>
           <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
             Company Snapshot
@@ -873,60 +1206,24 @@ const CompanyProfile = () => {
           className="max-w-3xl mx-auto jj-card-inner"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-center gap-4">
-              <div className="jj-icon-box-active w-10 h-10">
-                <Building2 className="w-5 h-5" />
+            {[
+              { icon: Building2, label: "Headquarters", value: PROFILE_CONTENT.companySnapshot.headquarters },
+              { icon: MapPin, label: "Service Areas", value: PROFILE_CONTENT.companySnapshot.serviceAreas },
+              { icon: Globe, label: "Languages", value: PROFILE_CONTENT.companySnapshot.languages },
+              { icon: Phone, label: "Contact", value: PROFILE_CONTENT.companySnapshot.contact },
+              { icon: Mail, label: "Email", value: PROFILE_CONTENT.companySnapshot.email },
+              { icon: Globe, label: "Website", value: PROFILE_CONTENT.companySnapshot.website },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center gap-4">
+                <div className="jj-icon-box-active w-10 h-10">
+                  <item.icon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-black/50 text-xs uppercase">{item.label}</p>
+                  <p className="text-black">{item.value}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-black/50 text-xs uppercase">Headquarters</p>
-                <p className="text-black">{PROFILE_CONTENT.companySnapshot.headquarters}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="jj-icon-box-active w-10 h-10">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-black/50 text-xs uppercase">Service Areas</p>
-                <p className="text-black">{PROFILE_CONTENT.companySnapshot.serviceAreas}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="jj-icon-box-active w-10 h-10">
-                <Globe className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-black/50 text-xs uppercase">Languages</p>
-                <p className="text-black">{PROFILE_CONTENT.companySnapshot.languages}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="jj-icon-box-active w-10 h-10">
-                <Phone className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-black/50 text-xs uppercase">Contact</p>
-                <p className="text-black">{PROFILE_CONTENT.companySnapshot.contact}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="jj-icon-box-active w-10 h-10">
-                <Mail className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-black/50 text-xs uppercase">Email</p>
-                <p className="text-black">{PROFILE_CONTENT.companySnapshot.email}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="jj-icon-box-active w-10 h-10">
-                <Globe className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-black/50 text-xs uppercase">Website</p>
-                <p className="text-black">{PROFILE_CONTENT.companySnapshot.website}</p>
-              </div>
-            </div>
+            ))}
             <div className="flex items-center gap-4 md:col-span-2">
               <div className="jj-icon-box-active w-10 h-10">
                 <Clock className="w-5 h-5" />
@@ -977,6 +1274,7 @@ const CompanyProfile = () => {
       {/* 14. PDF Download Module with 3D Book Preview */}
       <SectionShell>
         <motion.div
+          id="download"
           className="max-w-4xl mx-auto text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -988,12 +1286,11 @@ const CompanyProfile = () => {
               Get the Full Company Profile
             </h2>
             <p className="text-black/70">
-              {isFounderVisible ? "13" : "12"}-page A4 Landscape • Professional Format
+              18-page Company Profile • Professional Format
             </p>
           </div>
 
           <div className="jj-card-inner py-12">
-            {/* 3D Book Preview */}
             <ConsistentBook3D onClick={generatePDF} isGenerating={isGenerating} />
 
             <div className="mt-8 flex flex-col items-center gap-4">
@@ -1005,7 +1302,7 @@ const CompanyProfile = () => {
                   {isGenerating ? (
                     <div className="flex items-center gap-2">
                       <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
-                      Generating...
+                      Downloading...
                     </div>
                   ) : (
                     <>
@@ -1023,7 +1320,6 @@ const CompanyProfile = () => {
           </div>
         </motion.div>
       </SectionShell>
-
 
       {/* Mobile Sticky Actions */}
       <div className="lg:hidden fixed bottom-4 left-4 right-4 z-50 flex gap-2">
