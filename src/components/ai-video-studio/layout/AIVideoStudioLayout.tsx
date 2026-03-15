@@ -82,6 +82,7 @@ const TOOL_TABS = [
   { id: 'scene-plan',     label: 'Storyboard',  icon: Film          },
   { id: 'chart-overlay',  label: 'Charts',      icon: BarChart3     },
   { id: 'voice-clone',   label: 'Voice Clone', icon: Mic2          },
+  { id: 'batch-photo',   label: 'Slideshow',   icon: Images        },
   { id: 'share',          label: 'Share',        icon: Share2        },
 ];
 
