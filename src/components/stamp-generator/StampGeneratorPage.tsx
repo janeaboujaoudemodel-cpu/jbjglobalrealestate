@@ -351,11 +351,12 @@ export default function StampGeneratorPage() {
     if (autoSaveTimerRef.current) clearTimeout(autoSaveTimerRef.current);
     autoSaveTimerRef.current = setTimeout(() => {
       try {
+        // Store only the active standard's SVG to stay within localStorage limits
+        const activeId = standardConcept?.id;
+        const activeSvg = activeId ? (svgOverrides[activeId] || standardConcept?.svgSource || '') : '';
         const payload = {
-          svgOverrides: Object.fromEntries(
-            Object.entries(svgOverrides).slice(0, 5).map(([k, v]) => [k, v.slice(0, 50000)])
-          ),
-          standardConceptId: standardConcept?.id,
+          activeOverride: activeSvg.slice(0, 100000),
+          standardConceptId: activeId,
           selectedId,
           timestamp: Date.now(),
         };
@@ -379,8 +380,8 @@ export default function StampGeneratorPage() {
           action: {
             label: 'Restore',
             onClick: () => {
-              if (saved.svgOverrides) {
-                setSvgOverrides(prev => ({ ...prev, ...saved.svgOverrides }));
+              if (saved.activeOverride && saved.standardConceptId) {
+                setSvgOverrides(prev => ({ ...prev, [saved.standardConceptId]: saved.activeOverride }));
               }
               toast.success('Unsaved changes restored');
               localStorage.removeItem(`stamp-autosave-${projectId}`);
@@ -406,8 +407,8 @@ export default function StampGeneratorPage() {
           project_id: projectId, user_id: user.id, design_version: 1,
           template_key: standardConcept.templateKey,
           svg_source: svgOverrides[standardConcept.id] || standardConcept.svgSource,
-          style_snapshot_json: project,
-        }).select('id').single();
+          style_snapshot_json: project, source: 'manual',
+        } as any).select('id').single();
         if (inserted) {
           standardDbId = inserted.id;
           setStandardConcept(prev => prev ? { ...prev, id: inserted.id } : prev);
@@ -649,8 +650,8 @@ export default function StampGeneratorPage() {
     if (!isDbId) {
       const { data } = await supabase.from('stamp_designs').insert({
         project_id: projectId, user_id: user!.id, design_version: 1, template_key: concept.templateKey,
-        svg_source: svgOverrides[concept.id] || concept.svgSource, style_snapshot_json: project, is_favorite: true,
-      }).select('id').single();
+        svg_source: svgOverrides[concept.id] || concept.svgSource, style_snapshot_json: project, is_favorite: true, source: 'manual',
+      } as any).select('id').single();
       if (data) dbId = data.id;
     } else {
       await supabase.from('stamp_designs').update({ is_favorite: newFav }).eq('id', concept.id);
@@ -698,8 +699,8 @@ export default function StampGeneratorPage() {
             project_id: projectId, user_id: user!.id, design_version: 1,
             template_key: concept.templateKey,
             svg_source: svgOverrides[concept.id] || concept.svgSource,
-            style_snapshot_json: project,
-          }).select('id').single();
+            style_snapshot_json: project, source: 'manual',
+          } as any).select('id').single();
           if (inserted) {
             dbId = inserted.id;
             concept = { ...concept, id: inserted.id };
@@ -739,8 +740,8 @@ export default function StampGeneratorPage() {
     } else {
       const { data } = await supabase.from('stamp_designs').insert({
         project_id: projectId, user_id: user!.id, design_version: 1,
-        template_key: concept.templateKey, svg_source: svgToSave, style_snapshot_json: project,
-      }).select('id').single();
+        template_key: concept.templateKey, svg_source: svgToSave, style_snapshot_json: project, source: 'manual',
+      } as any).select('id').single();
       if (data) {
         designId = data.id;
         setSavedDesignId(data.id);
@@ -1116,9 +1117,25 @@ export default function StampGeneratorPage() {
           {compareDesign && (
             <div className="flex-shrink-0 px-3 py-1.5 bg-blue-50 border-b border-blue-200 flex items-center justify-between">
               <span className="text-[10px] font-semibold text-blue-700">Compare Mode — Side by Side</span>
-              <Button size="sm" variant="ghost" className="h-6 text-[9px] text-blue-700 hover:bg-blue-100" onClick={() => setCompareDesign(null)}>
-                <X size={9} className="mr-1" /> Close Compare
-              </Button>
+              <div className="flex items-center gap-1.5">
+                <Button size="sm" className="h-6 text-[9px] gap-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold-dark))] text-white hover:opacity-90"
+                  onClick={() => {
+                    const concept: StampDesignConcept = compareDesign;
+                    setCompareDesign(null);
+                    // Swap: move current standard to concepts, apply compared design as new standard
+                    if (standardConcept) {
+                      setConcepts(prev => [standardConcept, ...prev.filter(c => c.id !== standardConcept.id && c.id !== concept.id)]);
+                    }
+                    setStandardConcept(concept);
+                    setSelectedId(concept.id);
+                    toast.success('Applied compared design');
+                  }}>
+                  <Check size={9} /> Apply This
+                </Button>
+                <Button size="sm" variant="ghost" className="h-6 text-[9px] text-blue-700 hover:bg-blue-100" onClick={() => setCompareDesign(null)}>
+                  <X size={9} className="mr-1" /> Close
+                </Button>
+              </div>
             </div>
           )}
           <div className={`flex-1 flex items-center justify-center overflow-auto relative ${compareDesign ? 'gap-4' : ''}`}
