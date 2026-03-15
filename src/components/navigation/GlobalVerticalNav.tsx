@@ -703,25 +703,14 @@ export default function GlobalVerticalNav() {
     if (openSection === 'MY ACCOUNT') {
       setOpenSection(null);
     }
-    // Auto-expand the section containing the active route
-    for (const [section, items] of Object.entries(sectionGroups)) {
-      if (items.some(item => isRouteActive(item.href))) {
-        setOpenSection(section as SectionKey);
-        // Only scroll into view if completely off-screen
-        requestAnimationFrame(() => {
-          const el = document.getElementById(`nav-section-${section.replace(/\s+/g, '-').toLowerCase()}`);
-          if (el) {
-            const rect = el.getBoundingClientRect();
-            const isOffScreen = rect.top < 0 || rect.bottom > window.innerHeight;
-            if (isOffScreen) {
-              el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-          }
-        });
-        break;
-      }
-    }
-  }, [location.pathname, closeMegaMenu]);
+     // Auto-expand the section containing the active route
+     for (const [section, items] of Object.entries(sectionGroups)) {
+       if (items.some(item => isRouteActive(item.href))) {
+         setOpenSection(section as SectionKey);
+         break;
+       }
+     }
+   }, [location.pathname, closeMegaMenu]);
 
   const isRouteActive = (href: string) => {
     if (href === "#") return false;
