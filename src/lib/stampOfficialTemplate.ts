@@ -334,7 +334,7 @@ function generateRoundStamp(config: OfficialStampConfig): string {
 
   if (mode === 'BILINGUAL') {
     const arText = config.companyNameAr || 'اسم الشركة';
-    const enText = (config.companyNameEn || 'COMPANY NAME').toUpperCase();
+    const enText = normalizeEnglishTokenSpacing((config.companyNameEn || 'COMPANY NAME').toUpperCase());
     const arSafe = safeArcFontSize(arText, clampedTextArcR, true, 17, arabicSpread);
     const enSafe = safeArcFontSize(enText, clampedTextArcR, false, 15, englishSpread, 5);
     const arLS = config.arabicLetterSpacing ?? arSafe.letterSpacing;
