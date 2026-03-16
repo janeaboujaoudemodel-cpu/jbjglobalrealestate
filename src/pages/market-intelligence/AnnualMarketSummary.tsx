@@ -133,7 +133,7 @@ const AnnualMarketSummary = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       <SEOHead
         title={`${data.year} Annual Summary | Dubai Real Estate | JBJ GLOBAL REAL ESTATE`}
         description={`Annual market summary for ${data.year} covering Dubai real estate across BUY · SELL · RENT. Comprehensive year-in-review by JBJ GLOBAL REAL ESTATE.`}

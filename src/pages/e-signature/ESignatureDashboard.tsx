@@ -149,9 +149,9 @@ export default function ESignatureDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       {/* Premium Page Header — aligned with sidebar logo divider */}
-      <div className="bg-black border-b border-gold/20">
+      <div className="border-b border-gold/20">
         <div className="max-w-7xl mx-auto px-6 flex items-end h-[84px] pb-4">
           <div className="flex flex-wrap items-center gap-3">
             <FileSignature className="w-6 h-6 text-gold" />
