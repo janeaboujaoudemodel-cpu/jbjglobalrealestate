@@ -1074,14 +1074,11 @@ export default function GlobalVerticalNav() {
         <div className="relative px-4 py-4">
           <div className="flex items-center gap-3">
             <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0 group">
-              <div className="relative">
-                <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain transition-all" />
-                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#E8DCC8]" />
-              </div>
+              <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain transition-all" />
             </Link>
             <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-90 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <span className="text-[12px] font-extrabold text-black/85 tracking-[0.2em] leading-tight">JBJ GLOBAL</span>
-              <span className="text-[10px] font-bold text-black/50 tracking-[0.25em] leading-tight mt-0.5">REAL ESTATE</span>
+              <span className="text-[12px] font-extrabold text-black/85 tracking-[0.15em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
+              <span className="text-[10px] font-bold text-black/50 tracking-[0.18em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
             </Link>
             <button
               onClick={toggleCollapse}
