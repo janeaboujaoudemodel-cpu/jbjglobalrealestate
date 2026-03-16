@@ -1215,35 +1215,35 @@ export default function GlobalVerticalNav() {
 
       {/* Bottom pinned section — SUPPORT hub + Sign In/Out */}
       <div className="mt-auto flex-shrink-0">
-        <div className="px-2.5 py-2 border-t border-gold/15 space-y-1 bg-[#FDFBF7]">
+        <div className="px-2 py-1.5 border-t border-gold/15 space-y-0.5 bg-[#FDFBF7]">
           <Link
             to="/contact"
-            className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-black/60 hover:text-black transition-colors px-2 py-1.5 rounded-md hover:bg-gold/10 w-full"
+            className="flex items-center justify-center gap-1 text-[10px] font-semibold text-black/60 hover:text-black transition-colors px-1.5 py-1 rounded border border-red-400/25 hover:border-red-400/40 hover:bg-red-50/30 w-full"
           >
-            <Headphones className="w-3 h-3 text-gold" />
+            <Headphones className="w-2.5 h-2.5 text-red-400/70" />
             Contact Us
           </Link>
           <Link
             to="/ticket-hub"
-            className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-black/60 hover:text-black transition-colors px-2 py-1.5 rounded-md hover:bg-gold/10 w-full"
+            className="flex items-center justify-center gap-1 text-[10px] font-semibold text-black/60 hover:text-black transition-colors px-1.5 py-1 rounded border border-red-400/25 hover:border-red-400/40 hover:bg-red-50/30 w-full"
           >
-            <Ticket className="w-3 h-3 text-gold" />
+            <Ticket className="w-2.5 h-2.5 text-red-400/70" />
             Support Ticket
           </Link>
           {session ? (
             <button
               onClick={() => { supabase.auth.signOut(); }}
-              className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-black/40 hover:text-black/70 transition-colors px-2 py-1.5 rounded-md hover:bg-black/5 w-full"
+              className="flex items-center justify-center gap-1 text-[10px] font-semibold text-red-500 hover:text-red-600 transition-colors px-1.5 py-1 rounded border border-red-400/30 hover:border-red-500/50 hover:bg-red-50/40 w-full"
             >
-              <LogOut className="w-3 h-3 text-black/40" />
+              <LogOut className="w-2.5 h-2.5" />
               Sign Out
             </button>
           ) : (
             <Link
               to="/auth"
-              className="flex items-center justify-center gap-1.5 text-[11px] font-semibold text-black/60 hover:text-black transition-colors px-2 py-1.5 rounded-md hover:bg-gold/10 w-full"
+              className="flex items-center justify-center gap-1 text-[10px] font-semibold text-black/60 hover:text-black transition-colors px-1.5 py-1 rounded border border-red-400/25 hover:border-red-400/40 hover:bg-red-50/30 w-full"
             >
-              <User className="w-3 h-3 text-gold" />
+              <User className="w-2.5 h-2.5 text-red-400/70" />
               Sign In
             </Link>
           )}
