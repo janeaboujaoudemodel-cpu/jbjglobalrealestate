@@ -23,10 +23,10 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
 // Walking strip that uses translateX transform like book marquee
 function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  // Deduplicate items by id+type to prevent visual duplicates
+  // Deduplicate items by slug+type to prevent visual duplicates
   const seen = new Set<string>();
   const uniqueItems = items.filter(item => {
-    const key = `${item.type}-${item.id}`;
+    const key = `${item.type}-${item.slug}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
