@@ -196,6 +196,16 @@ const Properties = () => {
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const filterSentinelRef = useRef<HTMLDivElement>(null);
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+
+  // Listen for global filter changes from the header bar
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const next = (e as CustomEvent<ShortcutFilterState>).detail;
+      if (next) setShortcutFilters(next);
+    };
+    window.addEventListener('globalFilterChange', handler);
+    return () => window.removeEventListener('globalFilterChange', handler);
+  }, []);
   const [isMapMode, setIsMapMode] = useState(false);
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
   const cardListRef = useRef<HTMLDivElement>(null);
