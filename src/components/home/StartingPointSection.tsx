@@ -68,7 +68,7 @@ const StartingPointSection = () => {
 
         {/* Tab navigation — champagne pill style matching badge */}
         <div className="flex justify-center mb-6 md:mb-8">
-          <div className="inline-flex bg-black/40 border border-gold/30 rounded-full p-1 gap-1">
+          <div className="inline-flex bg-[hsl(38,35%,12%)]/40 border border-gold/30 rounded-full p-1 gap-1">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
