@@ -96,7 +96,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
     setNotifications(all.slice(0, 15));
   };
 
-  const unreadCount = (alertCounts?.unreadTicketNotifications || 0) + (alertCounts?.unreadListingNotifications || 0) + (alertCounts?.unreadSystemNotifications || 0);
+  const unreadCount = alertCounts?.totalNotificationAlerts || 0;
 
   const invalidateCounts = () => {
     queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
