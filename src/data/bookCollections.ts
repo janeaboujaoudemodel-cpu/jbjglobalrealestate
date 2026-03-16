@@ -32,6 +32,7 @@ import trustComplianceCover from '@/assets/books/trust-compliance-cover.jpg';
 
 // Book cover imports - Company
 import companyProfileCover from '@/assets/books/company-profile-cover.jpg';
+import companyProfileBackCover from '@/assets/books/company-profile-back-cover.jpg';
 
 // ─── Guides Library ───
 
