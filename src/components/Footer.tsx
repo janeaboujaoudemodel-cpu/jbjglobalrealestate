@@ -143,9 +143,9 @@ const FooterCurrencyUnit = () => {
   const currentCur = SUPPORTED_CURRENCIES.find(c => c.code === activeCurrency);
 
   return (
-    <div className="mt-6 flex flex-col items-center gap-3">
-      <p className="text-gold/60 text-xs uppercase tracking-[0.15em]">Currency & Unit</p>
-      <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3">
+      <p className="text-gold/60 text-[10px] uppercase tracking-wider whitespace-nowrap">Currency</p>
+      <div className="flex items-center gap-2">
         {/* Currency Dropdown */}
         <div className="relative">
           <button
