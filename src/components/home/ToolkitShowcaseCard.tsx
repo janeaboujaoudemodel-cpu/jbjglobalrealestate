@@ -171,7 +171,7 @@ export function ToolkitShowcaseCard() {
                       </h4>
 
                       {/* Description */}
-                      <p className="text-sm text-zinc-600 mb-4 leading-relaxed flex-grow">
+                      <p className="text-sm text-zinc-400 mb-4 leading-relaxed flex-grow">
                         {tool.description}
                       </p>
 
