@@ -244,7 +244,7 @@ export default function HorizontalUtilityBar() {
         <div className="flex-1" />
 
         {/* ── Right Side: Connected rail for user shortcuts ── */}
-        <div className="flex items-center h-8 border border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.03)] shrink-0">
+        <div className="flex items-center h-8 shrink-0">
           {user && (
             <>
               {/* CRM shortcut (owner/broker only) */}
