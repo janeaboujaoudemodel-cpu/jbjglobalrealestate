@@ -259,24 +259,6 @@ const AreaGuides = () => {
       {/* ─── POST-HERO LAYOUT ─── */}
       {/* Vertical nav handled globally by MainLayout */}
 
-      {/* Filter bar — show inline below hero always, then fixed at top when past hero */}
-      <section
-        className={`${pastHero
-           ? "fixed top-[48px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] backdrop-blur-md"
-           : "relative w-full z-[10]"
-         } bg-gradient-to-r from-[#FDFBF7]/90 via-[#F5F0E6]/90 to-[#EDE4D3]/90 border-b border-gold/20 py-3`}
-      >
-        <div className="px-4 space-y-2">
-          <FilterShortcutBar
-            variant="light"
-            filters={shortcutFilters}
-            onFilterChange={setShortcutFilters}
-            priorityFilter="areas"
-          />
-        </div>
-      </section>
-      {/* Spacer for fixed filter bar */}
-      {pastHero && <div className="h-[60px]" />}
 
       {/* Gold divider */}
       <div ref={gridRef} className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
