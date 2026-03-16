@@ -9,7 +9,7 @@ import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, Palet
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
-import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
+import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 import { CONTACT_INFO } from "@/constants/stats";
 
