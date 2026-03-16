@@ -1280,7 +1280,7 @@ export default function GlobalVerticalNav() {
       <div className="hidden lg:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative">
           {/* Champagne header strip matching expanded header */}
           <div className="w-full flex-shrink-0 relative">
-            <div className="absolute inset-0 bg-gradient-to-b from-[#F5EBD7] to-[#D4C4A8]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)]" />
             <div className="relative flex flex-col items-center py-3 gap-1">
               <Link to="/" className="shrink-0 group">
                 <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain transition-all" />
