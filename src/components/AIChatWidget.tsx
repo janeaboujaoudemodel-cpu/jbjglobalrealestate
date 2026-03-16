@@ -105,8 +105,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
   // Restore session from localStorage on mount (persistent across sessions)
   useEffect(() => {
-    const savedStep = localStorage.getItem('jbj_chat_step');
-    const savedUserInfo = localStorage.getItem('jbj_chat_user');
+    const savedStep = sessionStorage.getItem('jbj_chat_step');
+    const savedUserInfo = sessionStorage.getItem('jbj_chat_user');
     
     // Check if we have saved user data
     if (savedUserInfo) {
