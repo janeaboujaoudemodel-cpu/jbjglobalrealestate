@@ -371,7 +371,7 @@ export default function HorizontalUtilityBar() {
                 <LayoutDashboard className={iconClass} />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Access your dashboard</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Access your personalized dashboard with analytics and activity</TooltipContent>
           </Tooltip>
 
           {railDivider}
