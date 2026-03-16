@@ -85,7 +85,7 @@ const portfolio = [
 
 const Architecture = () => {
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       <SEOHead 
         title="Architecture Services Dubai | Design & Build | JBJ GLOBAL REAL ESTATE"
         description="Visionary architecture services in Dubai. Concept design, technical drawings, project management, and sustainable building solutions. Partner with licensed architects."
