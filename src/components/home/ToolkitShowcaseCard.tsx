@@ -122,7 +122,7 @@ const royalTools = [
 
 export function ToolkitShowcaseCard() {
   return (
-    <section className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-10 md:py-14">
+    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] py-10 md:py-14">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="rounded-2xl overflow-hidden border border-gold/20">
           {/* Header Section */}
