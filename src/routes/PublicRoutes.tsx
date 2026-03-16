@@ -386,6 +386,14 @@ export const PublicRoutes = () => (
     <Route path="/scan-sign-documents" element={<Navigate to="/document-scanner" replace />} />
     <Route path="/signature-studio" element={<Navigate to="/document-scanner" replace />} />
 
+    {/* ── Developer Convenience Redirects ── */}
+    <Route path="/developer-center" element={<Navigate to="/developer-hub" replace />} />
+    <Route path="/developer-registration" element={<Navigate to="/developer-hub/company-registration" replace />} />
+    <Route path="/submit-project" element={<Navigate to="/developer-portal?tab=submit" replace />} />
+    <Route path="/submit-event" element={<Navigate to="/developer-hub/events" replace />} />
+    <Route path="/my-projects" element={<Navigate to="/developer-portal?tab=projects" replace />} />
+    <Route path="/my-events" element={<Navigate to="/developer-hub/events" replace />} />
+
     {/* ── Misc ── */}
     <Route path="/sitemap" element={<Sitemap />} />
     <Route path="/pricing" element={<Pricing />} />

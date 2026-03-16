@@ -180,6 +180,22 @@ const hubSections: HubSection[] = [
     ],
   },
   {
+    id: "developer-hub",
+    title: "Developer Hub",
+    icon: Building2,
+    links: [
+      { href: "/developer-center", label: "Developer Center" },
+      { href: "/developer-registration", label: "Developer Registration" },
+      { href: "/developer-portal", label: "Developer Portal" },
+      { href: "/submit-project", label: "Submit Project" },
+      { href: "/submit-event", label: "Submit Event" },
+      { href: "/my-projects", label: "My Projects" },
+      { href: "/my-events", label: "My Events" },
+      { href: "/developer-hub/crm", label: "Developer CRM" },
+      { href: "/developer-hub/reports", label: "Developer Reports" },
+    ],
+  },
+  {
     id: "company",
     title: "Company",
     icon: Building2,

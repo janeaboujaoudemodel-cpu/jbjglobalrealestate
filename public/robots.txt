@@ -109,6 +109,13 @@ Disallow: /backup/
 Disallow: /sql/
 Disallow: /db/
 
+# Allow developer public routes
+Allow: /developer-center
+Allow: /developer-portal
+Allow: /developer-registration
+Allow: /submit-project
+Allow: /submit-event
+
 # Allow important resources
 Allow: /og-image.jpg
 Allow: /favicon.png
