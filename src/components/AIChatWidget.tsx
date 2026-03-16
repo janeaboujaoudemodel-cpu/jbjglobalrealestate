@@ -726,8 +726,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     setFormErrors({});
     setChatHistory([]);
     // Clear local storage
-    localStorage.removeItem('jbj_chat_step');
-    localStorage.removeItem('jbj_chat_user');
+    sessionStorage.removeItem('jbj_chat_step');
+    sessionStorage.removeItem('jbj_chat_user');
   };
 
   // Handle confirm details update (with admin notification)
