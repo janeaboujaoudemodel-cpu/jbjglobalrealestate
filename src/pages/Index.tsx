@@ -137,6 +137,16 @@ const Index = () => {
         </Suspense>
       )}
       
+      {/* INTRO HERO - Platform Overview */}
+      <Suspense fallback={<SectionLoader />}>
+        <IntroHeroSection />
+      </Suspense>
+
+      {/* VERIFICATION BANNER - Get Verified CTA */}
+      <Suspense fallback={null}>
+        <VerificationBanner />
+      </Suspense>
+
       {/* HERO SECTION - LUXURY CINEMATIC VIDEO - MUST BE 100vh */}
       <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-black">
         {/* Video Background - Luxury Dubai Drone Footage - Optimized for performance */}
