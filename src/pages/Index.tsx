@@ -158,7 +158,7 @@ const Index = () => {
           MERGED HERO: Video Background + Gateway Tagline + CTA Pills
           Single fullscreen section — no separate IntroHeroSection
          ═══════════════════════════════════════════════════════════ */}
-      <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-black">
+      <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         {/* Video Background */}
         <div className="absolute inset-0 bg-black">
           <img 
