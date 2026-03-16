@@ -36,7 +36,7 @@ const VoiceAgentSettings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       {/* Hero Section */}
       <div className="relative py-16 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-gold/10 via-black to-black" />
