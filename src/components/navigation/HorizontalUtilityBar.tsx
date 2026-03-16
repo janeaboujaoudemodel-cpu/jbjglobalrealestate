@@ -83,15 +83,28 @@ export default function HorizontalUtilityBar() {
     window.dispatchEvent(new CustomEvent('jj_nav_toggle'));
   };
 
-  // When filters are applied from the panel, navigate to properties with those filters
+  // When filters are applied from the panel, navigate to properties with ALL filter params
   const handleFilterChange = (newFilters: ShortcutFilterState) => {
     setFilterState(newFilters);
-    // Build query params from filters and navigate
-    const params = new URLSearchParams();
-    if (newFilters.searchQuery) params.set('q', newFilters.searchQuery);
-    if (newFilters.propertyTypes?.length) params.set('type', newFilters.propertyTypes.join(','));
-    if (newFilters.emirates?.length) params.set('emirate', newFilters.emirates.join(','));
-    navigate(`/properties?${params.toString()}`);
+    const p = new URLSearchParams();
+    if (newFilters.searchQuery) p.set('q', newFilters.searchQuery);
+    if (newFilters.priceMin) p.set('priceMin', newFilters.priceMin);
+    if (newFilters.priceMax) p.set('priceMax', newFilters.priceMax);
+    if (newFilters.bedrooms.length) p.set('bedrooms', newFilters.bedrooms.join(','));
+    if (newFilters.emirates.length) p.set('emirates', newFilters.emirates.join(','));
+    if (newFilters.areas.length) p.set('areas', newFilters.areas.join(','));
+    if (newFilters.developers.length) p.set('developers', newFilters.developers.join(','));
+    if (newFilters.propertyTypes.length) p.set('propertyTypes', newFilters.propertyTypes.join(','));
+    if (newFilters.statuses.length) p.set('statuses', newFilters.statuses.join(','));
+    if (newFilters.constructionStatuses.length) p.set('constructionStatuses', newFilters.constructionStatuses.join(','));
+    if (newFilters.sortBy) p.set('sortBy', newFilters.sortBy);
+    if (newFilters.hideSoldOut) p.set('hideSoldOut', '1');
+    if (newFilters.sizeMin) p.set('sizeMin', newFilters.sizeMin);
+    if (newFilters.sizeMax) p.set('sizeMax', newFilters.sizeMax);
+    if (newFilters.views.length) p.set('views', newFilters.views.join(','));
+    if (newFilters.propertyCategory) p.set('category', newFilters.propertyCategory);
+    const qs = p.toString();
+    navigate(`/properties${qs ? `?${qs}` : ''}`);
   };
 
   
@@ -102,7 +115,7 @@ export default function HorizontalUtilityBar() {
   /* ─── Shared styles for connected segmented cells ─── */
   const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0 outline-none focus:outline-none focus-visible:outline-none [&:focus]:outline-none";
   const cellHover = "hover:bg-transparent";
-  const iconClass = "w-4 h-4 text-black/50 group-hover:text-black/70 group-hover:scale-110 transition-transform shrink-0";
+  const iconClass = "w-4 h-4 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))] group-hover:scale-110 transition-transform shrink-0";
   const labelClass = "text-[11px] font-semibold text-black/50 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
   
   /* Vertical divider inside rail — full height, gold */
@@ -111,7 +124,7 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className="fixed top-0 left-0 right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 border-b border-[hsl(var(--gold)/0.2)] bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 left-[200px] right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 border-b border-[hsl(var(--gold)/0.2)] bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
 
         {/* ── Connected Segmented Rail — all controls in one block ── */}
@@ -136,7 +149,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] text-[hsl(var(--foreground)/0.4)] font-medium hidden xl:inline">⌘K</span>
               </button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Search ⌘K</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Search properties, developers, areas, and more (⌘K)</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -152,7 +165,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Explore properties for sale</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Browse off-plan and ready properties for sale in the UAE</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -167,7 +180,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Find properties for rent</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Browse properties available for rent across the UAE</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -182,7 +195,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Sell</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">List your property for sale or rent</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">List your property for sale or rent on JBJ Global</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -198,7 +211,7 @@ export default function HorizontalUtilityBar() {
                 <Heart className="w-4 h-4 text-red-500 group-hover:text-red-600 group-hover:scale-110 transition-transform shrink-0" />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Favorite Properties</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">View your saved and shortlisted properties</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -208,7 +221,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <button
                 onClick={toggleAreaUnit}
-                className="h-8 flex items-center transition-all shrink-0 border border-[hsl(var(--gold)/0.3)] rounded-none overflow-hidden outline-none focus:outline-none focus-visible:outline-none"
+                className="h-8 flex items-center transition-all shrink-0 border border-[hsl(var(--gold)/0.3)] rounded-lg overflow-hidden outline-none focus:outline-none focus-visible:outline-none"
                 aria-label="Toggle area unit"
               >
                 <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-black/30 hover:text-black/50'}`}>
@@ -221,7 +234,7 @@ export default function HorizontalUtilityBar() {
               </button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">
-              {areaUnit === 'sqft' ? 'Square Feet — click to switch to m²' : 'Square Meters — click to switch to ft²'}
+              Toggle between Square Feet and Square Meters for property sizes
             </TooltipContent>
           </Tooltip>
 
@@ -232,7 +245,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1.5`}><LanguageSwitcher variant="icon-only" /></div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your language</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your preferred language for the platform</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -242,7 +255,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1.5`}><CurrencySwitcher variant="icon-only" /></div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your currency</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your preferred currency for property prices</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -259,7 +272,7 @@ export default function HorizontalUtilityBar() {
                 <span className={labelClass}>Filter</span>
               </button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open advanced filters</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open advanced property filters — price, bedrooms, type, handover, and more</TooltipContent>
           </Tooltip>
         </div>
 
@@ -283,7 +296,7 @@ export default function HorizontalUtilityBar() {
                         <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline whitespace-nowrap">CRM</span>
                       </Link>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">CRM Dashboard</TooltipContent>
+                    <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Access your Customer Relationship Management dashboard</TooltipContent>
                   </Tooltip>
                   {railDivider}
                 </>
@@ -305,7 +318,7 @@ export default function HorizontalUtilityBar() {
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">View and manage your tasks</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">View and manage your pending action items</TooltipContent>
               </Tooltip>
 
               {railDivider}
@@ -325,7 +338,7 @@ export default function HorizontalUtilityBar() {
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">View your notifications</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">{`View your unread notifications and updates${(alerts?.totalNotificationAlerts || 0) > 0 ? ` (${alerts!.totalNotificationAlerts})` : ''}`}</TooltipContent>
               </Tooltip>
 
               {railDivider}
@@ -340,7 +353,7 @@ export default function HorizontalUtilityBar() {
                      <Inbox className={iconClass} />
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open your messages</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open your direct messages and correspondence</TooltipContent>
               </Tooltip>
 
               {railDivider}
@@ -358,7 +371,7 @@ export default function HorizontalUtilityBar() {
                 <LayoutDashboard className={iconClass} />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Access your dashboard</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Access your personalized dashboard with analytics and activity</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -386,7 +399,7 @@ export default function HorizontalUtilityBar() {
                 <Settings className={iconClass} />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Manage account settings</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Manage your account, profile, and preferences</TooltipContent>
           </Tooltip>
         </div>
       </div>
