@@ -285,6 +285,8 @@ export default function HorizontalUtilityBar() {
                 <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Tasks</TooltipContent>
               </Tooltip>
 
+              {railDivider}
+
               {/* Alerts / Notifications */}
               <Tooltip>
                 <TooltipTrigger asChild>
