@@ -31,7 +31,7 @@ import {
   Settings
 } from "lucide-react";
 import { SaleStatusSelect } from "@/components/filters/SaleStatusFilter";
-import { FilterToolbar } from "@/components/filters/FilterToolbar";
+
 import { DisplayModeToggle } from "@/components/filters/DisplayModeToggle";
 import { SettingsDropdown } from "@/components/filters/SettingsDropdown";
 import { getSaleStatusConfig, type DisplayMode, type CurrencyCode, type AreaUnit } from "@/constants/filterConfig";
