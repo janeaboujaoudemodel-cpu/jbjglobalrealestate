@@ -1068,10 +1068,10 @@ export default function GlobalVerticalNav() {
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
       {/* ━━━ HEADER — Champagne gold brand block ━━━ */}
-      <div className="relative flex-shrink-0 overflow-hidden">
+      <div className="relative flex-shrink-0 overflow-hidden h-[88px]">
         <div className="absolute inset-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" />
         
-        <div className="relative px-3 py-4">
+        <div className="relative px-3 h-full flex items-center">
           <div className="flex items-center gap-3">
             <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0 group">
               <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain transition-all" />
