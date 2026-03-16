@@ -353,7 +353,7 @@ export default function HorizontalUtilityBar() {
                      <Inbox className={iconClass} />
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open your messages</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open your direct messages and correspondence</TooltipContent>
               </Tooltip>
 
               {railDivider}
