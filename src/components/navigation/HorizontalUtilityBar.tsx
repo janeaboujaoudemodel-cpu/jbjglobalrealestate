@@ -101,42 +101,21 @@ export default function HorizontalUtilityBar() {
 
   /* ─── Shared styles for connected segmented cells ─── */
   const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0";
-  const cellHover = "hover:bg-[hsl(var(--gold)/0.1)]";
-  const iconClass = "w-4 h-4 text-[hsl(var(--gold))] group-hover:scale-110 transition-transform shrink-0";
-  const labelClass = "text-[11px] font-semibold text-[hsl(var(--foreground)/0.55)] uppercase tracking-wide hidden xl:inline whitespace-nowrap";
+  const cellHover = "hover:bg-black/[0.06]";
+  const iconClass = "w-4 h-4 text-black/50 group-hover:text-black/70 group-hover:scale-110 transition-transform shrink-0";
+  const labelClass = "text-[11px] font-semibold text-black/50 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
   
   /* Vertical divider inside rail */
-  const railDivider = <div className="w-px h-6 bg-[hsl(var(--gold)/0.2)] shrink-0" />;
-
-  /* Standalone minimizer button styling */
-  const minimizerBtn = "h-8 w-8 flex items-center justify-center rounded-none border border-[hsl(var(--gold)/0.25)] bg-[hsl(var(--gold)/0.05)] hover:bg-[hsl(var(--gold)/0.15)] hover:border-[hsl(var(--gold)/0.4)] transition-all group shrink-0";
+  const railDivider = <div className="w-px h-6 bg-black/10 shrink-0" />;
 
   return (
     <>
       <div
-        className="fixed top-0 left-0 right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-4 sm:pr-8 xl:pr-10 border-b border-[hsl(var(--gold)/0.15)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_1px_3px_hsl(var(--gold)/0.08)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 left-0 right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-4 sm:pr-8 xl:pr-10 border-b border-[hsl(var(--gold)/0.2)] bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
-        {/* ── Sidebar Toggle (standalone) ── */}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              onClick={toggleSidebar}
-              className={minimizerBtn}
-              aria-label="Toggle sidebar"
-            >
-              {sidebarCollapsed
-                ? <PanelLeftOpen className={iconClass} />
-                : <PanelLeftClose className={iconClass} />
-              }
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
-            {sidebarCollapsed ? 'Expand sidebar' : 'Minimize sidebar'}
-          </TooltipContent>
-        </Tooltip>
 
         {/* ── Connected Segmented Rail — all controls in one block ── */}
-        <div className="flex items-center h-8 border border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.03)] shrink-0">
+        <div className="flex items-center h-8 border border-black/10 bg-black/[0.04] shrink-0">
           
           {/* Back Button */}
           <div className={`${cellBase} ${cellHover} px-1`}>

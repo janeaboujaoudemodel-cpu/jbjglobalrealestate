@@ -1075,7 +1075,7 @@ export default function GlobalVerticalNav() {
           <div className="flex items-center gap-3">
             <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0 group">
               <div className="relative">
-                <img src={jbjMonogramLightBg} alt="JBJ" className="w-12 h-12 object-contain rounded-xl ring-1 ring-gold/30 group-hover:ring-gold/60 transition-all shadow-lg shadow-gold/15" />
+                <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain transition-all" />
                 <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#E8DCC8]" />
               </div>
             </Link>
@@ -1287,7 +1287,7 @@ export default function GlobalVerticalNav() {
             <div className="absolute inset-0 bg-gradient-to-b from-[#F5EBD7] to-[#D4C4A8]" />
             <div className="relative flex flex-col items-center py-3 gap-1">
               <Link to="/" className="shrink-0 group">
-                <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain rounded-lg ring-1 ring-gold/30 group-hover:ring-gold/50 transition-all" />
+                <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain transition-all" />
               </Link>
             </div>
             <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
