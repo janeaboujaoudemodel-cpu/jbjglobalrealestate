@@ -121,9 +121,9 @@ const AnnualMarketSummary = () => {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Report Not Found</h1>
+          <h1 className="text-2xl font-bold text-zinc-900 mb-4">Report Not Found</h1>
           <Link to="/market-intelligence/reports" className="text-gold hover:underline">
             Return to Reports
           </Link>
