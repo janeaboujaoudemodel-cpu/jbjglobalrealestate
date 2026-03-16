@@ -353,7 +353,7 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* EXPLORE OUR SERVICES */}
-      <section className="bg-black">
+      <section>
         <div className="jj-layer-2">
           <Suspense fallback={<SectionLoader />}>
             <ExploreServicesCard />
