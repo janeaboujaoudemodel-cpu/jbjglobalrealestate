@@ -1374,7 +1374,7 @@ export default function GlobalVerticalNav() {
               aria-label="Expand navigation"
               title="Expand navigation"
             >
-              <ChevronRight className="w-4 h-4 text-black/50" />
+              <ChevronRight className="w-4 h-4 text-gold/50" />
             </button>
           </div>
         </div>
