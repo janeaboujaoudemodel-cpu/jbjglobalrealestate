@@ -513,11 +513,11 @@ const Footer = () => {
         </div>
 
         {/* ULTRA PREMIUM 3D Card - License + Newsletter + Social - BELOW logo */}
-        <div className="relative bg-black pt-4 sm:pt-6 md:pt-8 pb-4">
+        <div className="relative pt-4 sm:pt-6 md:pt-8 pb-4">
           <div 
             className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl relative overflow-hidden"
             style={{
-              background: 'linear-gradient(165deg, rgba(12,12,14,0.99) 0%, rgba(8,8,10,1) 40%, rgba(4,4,6,1) 100%)',
+              background: 'linear-gradient(165deg, rgba(245,235,215,0.99) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
               boxShadow: `
                 0 50px 100px -30px rgba(0,0,0,0.98),
                 0 30px 60px -20px rgba(0,0,0,0.9),
