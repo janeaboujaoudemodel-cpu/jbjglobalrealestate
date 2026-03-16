@@ -234,7 +234,7 @@ export default function HorizontalUtilityBar() {
               </button>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">
-              {areaUnit === 'sqft' ? 'Square Feet — click to switch to m²' : 'Square Meters — click to switch to ft²'}
+              Toggle between Square Feet and Square Meters for property sizes
             </TooltipContent>
           </Tooltip>
 
