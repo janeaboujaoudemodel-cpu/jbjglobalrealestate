@@ -318,15 +318,15 @@ export default function HorizontalUtilityBar() {
                      className={`${cellBase} ${cellHover} px-2 relative`}
                    >
                      <Bell className={iconClass} />
-                    {(alerts?.totalNotificationAlerts || 0) > 0 && (
+                    {(alerts?.totalAlerts || 0) > 0 && (
                       <span className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] rounded-full bg-destructive text-white text-[9px] font-bold flex items-center justify-center px-1">
-                        {alerts!.totalNotificationAlerts > 9 ? '9+' : alerts!.totalNotificationAlerts}
+                        {alerts!.totalAlerts > 9 ? '9+' : alerts!.totalAlerts}
                       </span>
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
-                  Notifications{totalAlerts > 0 ? ` (${totalAlerts})` : ''}
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">
+                  Notifications{totalAlerts > 0 ? ` — ${totalAlerts} unread` : ''}
                 </TooltipContent>
               </Tooltip>
 
