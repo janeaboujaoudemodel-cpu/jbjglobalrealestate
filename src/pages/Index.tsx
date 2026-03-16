@@ -172,7 +172,7 @@ const Index = () => {
           <video 
             autoPlay loop muted playsInline
             preload="none"
-            poster={luxuryVillaHero}
+            poster={heroFallbackDubai}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
             className="absolute inset-0 w-full h-full object-cover z-[1]"
