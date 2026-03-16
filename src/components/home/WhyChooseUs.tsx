@@ -50,7 +50,7 @@ const WhyChooseUs = () => {
   ];
 
   return (
-    <section className="bg-black">
+    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       <div className="jj-layer-2">
         <div className="max-w-5xl mx-auto">
           {/* Section Header */}
