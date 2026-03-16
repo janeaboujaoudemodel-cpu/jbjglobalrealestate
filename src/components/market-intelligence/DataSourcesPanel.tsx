@@ -29,7 +29,7 @@ const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; clas
       background: 'linear-gradient(135deg, hsl(38 35% 12%) 0%, hsl(36 30% 16%) 50%, hsl(34 25% 12%) 100%)',
     }}
   >
-    <Icon className="w-6 h-6 text-black" />
+    <Icon className="w-6 h-6 text-gold" />
   </div>
 );
 
