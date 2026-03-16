@@ -318,7 +318,7 @@ export default function HorizontalUtilityBar() {
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">View and manage your tasks</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">View and manage your pending action items</TooltipContent>
               </Tooltip>
 
               {railDivider}
