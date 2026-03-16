@@ -112,6 +112,7 @@ const pillars = [
 
 const Index = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const { t } = useLanguage();
   const { isBroker, hasSelectedRole } = useUserRole();
 
