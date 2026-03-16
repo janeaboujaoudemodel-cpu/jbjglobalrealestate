@@ -1230,7 +1230,7 @@ export default function GlobalVerticalNav() {
       {/* ━━━ BOTTOM — Support + Sign Out ━━━ */}
       <div className="mt-auto flex-shrink-0">
         <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
-        <div className="px-2.5 py-2 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent">
+        <div className="px-2.5 py-2 bg-gradient-to-t from-[hsl(38,35%,10%)]/50 to-transparent">
           <div className="flex gap-1.5 mb-1.5">
             <Link
               to="/contact"
