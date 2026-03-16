@@ -115,7 +115,7 @@ export default function HorizontalUtilityBar() {
       >
 
         {/* ── Connected Segmented Rail — all controls in one block ── */}
-        <div className="flex items-center h-8 border border-[hsl(var(--gold)/0.2)] bg-[hsl(var(--gold)/0.03)] shrink-0">
+        <div className="flex items-center h-8 border border-black/10 bg-black/[0.04] shrink-0">
           
           {/* Back Button */}
           <div className={`${cellBase} ${cellHover} px-1`}>
