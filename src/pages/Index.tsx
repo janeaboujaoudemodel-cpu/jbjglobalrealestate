@@ -320,7 +320,7 @@ const Index = () => {
 
       {/* CONTINUE SEARCHING */}
       <Suspense fallback={<SectionLoader />}>
-        <ContinueSearching type="property" className="bg-black" />
+        <ContinueSearching type="property" />
       </Suspense>
 
       {/* RESALE PROPERTIES - single divider before Starting Point */}
