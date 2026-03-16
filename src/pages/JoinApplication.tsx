@@ -316,7 +316,7 @@ export default function JoinApplication() {
 
   if (checkingExisting) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-gold" />
       </div>
     );
