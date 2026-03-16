@@ -263,13 +263,14 @@ function renderArcLetters(
   text: string, arcId: string, baseFontSize: number, baseColor: string,
   overrides?: Record<string, LetterOverride>
 ): string {
-  if (!overrides || Object.keys(overrides).length === 0) return text;
+  const safeText = escapeXml(text);
+  if (!overrides || Object.keys(overrides).length === 0) return safeText;
   
   // Check if any override applies to this arc
   const hasRelevantOverrides = Object.keys(overrides).some(k => k.startsWith(`${arcId}-`));
-  if (!hasRelevantOverrides) return text;
+  if (!hasRelevantOverrides) return safeText;
 
-  return [...text].map((char, i) => {
+  return [...safeText].map((char, i) => {
     const key = `${arcId}-${i}`;
     const ov = overrides[key];
     if (!ov) return `<tspan data-stamp-letter="${key}">${char}</tspan>`;
