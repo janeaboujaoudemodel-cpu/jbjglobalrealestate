@@ -297,7 +297,7 @@ const AreaGuides = () => {
       )}
 
       {/* Areas Grid */}
-      <section className={`pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] min-h-screen ${pastHero ? "lg:pl-[200px]" : ""}`}>
+      <section className="pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] min-h-screen">
         <div className="px-4 sm:px-6 lg:px-8">
 
           {/* Results count */}
