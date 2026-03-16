@@ -101,17 +101,17 @@ export default function HorizontalUtilityBar() {
 
   /* ─── Shared styles for connected segmented cells ─── */
   const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0";
-  const cellHover = "hover:bg-black/[0.06]";
+  const cellHover = "hover:bg-[hsl(var(--gold)/0.08)]";
   const iconClass = "w-4 h-4 text-black/50 group-hover:text-black/70 group-hover:scale-110 transition-transform shrink-0";
   const labelClass = "text-[11px] font-semibold text-black/50 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
   
-  /* Vertical divider inside rail */
-  const railDivider = <div className="w-px h-6 bg-black/10 shrink-0" />;
+  /* Vertical divider inside rail — full height */
+  const railDivider = <div className="w-px h-full bg-black/10 shrink-0" />;
 
   return (
     <>
       <div
-        className="fixed top-0 left-0 right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-4 sm:pr-8 xl:pr-10 border-b border-[hsl(var(--gold)/0.2)] bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 left-0 right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 border-b border-[hsl(var(--gold)/0.2)] bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
 
         {/* ── Connected Segmented Rail — all controls in one block ── */}
@@ -132,7 +132,7 @@ export default function HorizontalUtilityBar() {
                 className={`${cellBase} ${cellHover}`}
                 aria-label="Search ⌘K"
               >
-                <Search className={iconClass} />
+                <Search className="w-4 h-4 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))] group-hover:scale-110 transition-transform shrink-0" />
                 <span className="text-[11px] text-[hsl(var(--foreground)/0.4)] font-medium hidden xl:inline">⌘K</span>
               </button>
             </TooltipTrigger>
@@ -174,7 +174,7 @@ export default function HorizontalUtilityBar() {
                 className={`${cellBase} ${cellHover} px-2`}
                 aria-label="Favorites"
               >
-                <Heart className={iconClass} />
+                <Heart className="w-4 h-4 text-red-500 group-hover:text-red-600 group-hover:scale-110 transition-transform shrink-0" />
               </Link>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Favorites</TooltipContent>
@@ -182,19 +182,19 @@ export default function HorizontalUtilityBar() {
 
           {railDivider}
 
-          {/* Area Unit Toggle */}
+           {/* Area Unit Toggle — connected field box */}
           <Tooltip>
             <TooltipTrigger asChild>
               <button
                 onClick={toggleAreaUnit}
-                className="h-8 flex items-center transition-all shrink-0"
+                className="h-8 flex items-center transition-all shrink-0 border border-black/10 rounded-md overflow-hidden"
                 aria-label="Toggle area unit"
               >
-                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
                   ft²
                 </span>
-                <span className="w-px h-5 bg-[hsl(var(--gold)/0.2)]" />
-                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
+                <span className="w-px h-full bg-black/10" />
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
                   m²
                 </span>
               </button>
@@ -285,6 +285,8 @@ export default function HorizontalUtilityBar() {
                 <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Tasks</TooltipContent>
               </Tooltip>
 
+              {railDivider}
+
               {/* Alerts / Notifications */}
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -304,6 +306,8 @@ export default function HorizontalUtilityBar() {
                   Notifications{totalAlerts > 0 ? ` (${totalAlerts})` : ''}
                 </TooltipContent>
               </Tooltip>
+
+              {railDivider}
 
               {/* Inbox */}
               <Tooltip>

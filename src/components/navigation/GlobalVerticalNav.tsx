@@ -1071,10 +1071,10 @@ export default function GlobalVerticalNav() {
       <div className="relative flex-shrink-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" />
         
-        <div className="relative px-4 py-4">
-          <div className="flex items-center gap-3">
+        <div className="relative px-3 py-4">
+          <div className="flex items-center gap-2">
             <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0 group">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-10 h-10 object-contain transition-all" />
+              <img src={jbjMonogramLightBg} alt="JBJ" className="w-12 h-12 object-contain transition-all" />
             </Link>
             <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-90 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
               <span className="text-[12px] font-extrabold text-black/85 tracking-[0.15em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
@@ -1082,7 +1082,7 @@ export default function GlobalVerticalNav() {
             </Link>
             <button
               onClick={toggleCollapse}
-              className="w-7 h-7 rounded-lg bg-black/[0.06] hover:bg-black/[0.12] flex items-center justify-center transition-all border border-black/[0.08]"
+              className="ml-auto w-7 h-7 rounded-lg bg-black/[0.06] hover:bg-black/[0.12] flex items-center justify-center transition-all border border-black/[0.08]"
               aria-label="Collapse navigation"
             >
               <ChevronLeft className="w-3.5 h-3.5 text-black/40" />
