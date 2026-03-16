@@ -232,7 +232,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1.5`}><LanguageSwitcher variant="icon-only" /></div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Language</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your language</TooltipContent>
           </Tooltip>
 
           {railDivider}
