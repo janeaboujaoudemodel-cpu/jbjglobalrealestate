@@ -1374,11 +1374,11 @@ export default function GlobalVerticalNav() {
             {/* Expand button */}
             <button
               onClick={toggleCollapse}
-              className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1a1a1a] to-[#2a2520] flex items-center justify-center hover:from-[#2a2520] hover:to-[#1a1a1a] transition-all shadow-md mt-1 mb-1"
+              className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] flex items-center justify-center hover:from-[#E8DCC8] hover:to-[#C4B498] transition-all shadow-md shadow-gold/15 ring-1 ring-gold/20 mt-1 mb-1"
               aria-label="Expand navigation"
               title="Expand navigation"
             >
-              <ChevronRight className="w-4 h-4 text-gold/70" />
+              <ChevronRight className="w-4 h-4 text-black/50" />
             </button>
           </div>
         </div>
