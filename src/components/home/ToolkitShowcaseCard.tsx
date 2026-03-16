@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { 
   Calculator, Layers, Home, TrendingUp, Palette, 
-  Film, Mic, ArrowRight, Sparkles
+  Film, Mic, ArrowRight, Sparkles, Crown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -12,7 +12,13 @@ const royalTools = [
     description: "AI-powered property valuation",
     icon: Calculator, 
     href: "/property-evaluator",
-    cta: "Get Evaluation"
+    cta: "Get Evaluation",
+    themeColor: "blue",
+    borderClass: "border-blue-500/50",
+    hoverBorderClass: "hover:border-blue-400",
+    iconClass: "text-blue-500",
+    glowClass: "hover:shadow-[0_8px_30px_rgba(59,130,246,0.35)]",
+    bgAccent: "bg-blue-500/10",
   },
   { 
     id: "property-comparison",
@@ -20,7 +26,13 @@ const royalTools = [
     description: "Compare properties side-by-side",
     icon: Layers, 
     href: "/compare",
-    cta: "Start Comparing"
+    cta: "Start Comparing",
+    themeColor: "sky",
+    borderClass: "border-sky-500/50",
+    hoverBorderClass: "hover:border-sky-400",
+    iconClass: "text-sky-500",
+    glowClass: "hover:shadow-[0_8px_30px_rgba(14,165,233,0.35)]",
+    bgAccent: "bg-sky-500/10",
   },
   { 
     id: "mortgage-calculator",
@@ -28,7 +40,13 @@ const royalTools = [
     description: "Calculate your monthly payments",
     icon: Calculator, 
     href: "/mortgage-calculator",
-    cta: "Calculate Now"
+    cta: "Calculate Now",
+    themeColor: "amber",
+    borderClass: "border-amber-500/50",
+    hoverBorderClass: "hover:border-amber-400",
+    iconClass: "text-amber-500",
+    glowClass: "hover:shadow-[0_8px_30px_rgba(245,158,11,0.35)]",
+    bgAccent: "bg-amber-500/10",
   },
   { 
     id: "ai-home-finder",
@@ -36,7 +54,13 @@ const royalTools = [
     description: "Find your perfect home with AI",
     icon: Home, 
     href: "/quiz",
-    cta: "Find My Home"
+    cta: "Find My Home",
+    themeColor: "purple",
+    borderClass: "border-purple-500/50",
+    hoverBorderClass: "hover:border-purple-400",
+    iconClass: "text-purple-500",
+    glowClass: "hover:shadow-[0_8px_30px_rgba(168,85,247,0.35)]",
+    bgAccent: "bg-purple-500/10",
   },
   { 
     id: "rental-index",
@@ -44,7 +68,13 @@ const royalTools = [
     description: "Check current rental rates",
     icon: TrendingUp, 
     href: "/rental-index",
-    cta: "Check Rates"
+    cta: "Check Rates",
+    themeColor: "emerald",
+    borderClass: "border-emerald-500/50",
+    hoverBorderClass: "hover:border-emerald-400",
+    iconClass: "text-emerald-500",
+    glowClass: "hover:shadow-[0_8px_30px_rgba(16,185,129,0.35)]",
+    bgAccent: "bg-emerald-500/10",
   },
   { 
     id: "interior-design-ai",
@@ -52,7 +82,13 @@ const royalTools = [
     description: "Visualize your dream space",
     icon: Palette, 
     href: "/interior-design-ai",
-    cta: "Design Space"
+    cta: "Design Space",
+    themeColor: "pink",
+    borderClass: "border-pink-500/50",
+    hoverBorderClass: "hover:border-pink-400",
+    iconClass: "text-pink-500",
+    glowClass: "hover:shadow-[0_8px_30px_rgba(236,72,153,0.35)]",
+    bgAccent: "bg-pink-500/10",
   },
   { 
     id: "ai-video-studio",
@@ -60,7 +96,13 @@ const royalTools = [
     description: "Create professional videos",
     icon: Film, 
     href: "/toolkit/ai-video-studio",
-    cta: "Create Video"
+    cta: "Create Video",
+    themeColor: "red",
+    borderClass: "border-red-500/50",
+    hoverBorderClass: "hover:border-red-400",
+    iconClass: "text-red-500",
+    glowClass: "hover:shadow-[0_8px_30px_rgba(239,68,68,0.35)]",
+    bgAccent: "bg-red-500/10",
   },
   { 
     id: "voice-studio",
@@ -68,7 +110,13 @@ const royalTools = [
     description: "AI text-to-speech synthesis",
     icon: Mic, 
     href: "/toolkit/voice-studio",
-    cta: "Generate Voice"
+    cta: "Generate Voice",
+    themeColor: "violet",
+    borderClass: "border-violet-500/50",
+    hoverBorderClass: "hover:border-violet-400",
+    iconClass: "text-violet-500",
+    glowClass: "hover:shadow-[0_8px_30px_rgba(139,92,246,0.35)]",
+    bgAccent: "bg-violet-500/10",
   },
 ];
 
@@ -108,10 +156,10 @@ export function ToolkitShowcaseCard() {
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <Link to={tool.href} className="group block h-full">
-                    <div className="h-full flex flex-col bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
-                      {/* Icon */}
-                      <div className="w-12 h-12 rounded-xl border-2 border-gold/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <tool.icon className="w-6 h-6 text-black" />
+                    <div className={`h-full flex flex-col bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 ${tool.borderClass} ${tool.hoverBorderClass} p-5 transition-all duration-300 ${tool.glowClass} hover:-translate-y-1`}>
+                      {/* Icon with theme color */}
+                      <div className={`w-12 h-12 rounded-xl border-2 ${tool.borderClass} ${tool.bgAccent} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                        <tool.icon className={`w-6 h-6 ${tool.iconClass}`} />
                       </div>
 
                       {/* Title */}
@@ -136,6 +184,20 @@ export function ToolkitShowcaseCard() {
                   </Link>
                 </div>
               ))}
+            </div>
+
+            {/* Explore All Tools CTA */}
+            <div className="mt-8 text-center">
+              <Link to="/ai-hub">
+                <Button 
+                  size="lg" 
+                  className="gap-3 px-10 py-6 text-base font-bold bg-gradient-to-r from-gold via-gold to-gold/90 hover:from-gold/90 hover:to-gold text-black rounded-xl shadow-lg hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-all duration-300"
+                >
+                  <Crown className="w-5 h-5" />
+                  Explore All Our Tools Now
+                  <ArrowRight className="w-5 h-5" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
