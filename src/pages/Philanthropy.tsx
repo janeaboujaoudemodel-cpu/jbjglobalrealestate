@@ -12,7 +12,7 @@ const fadeInUp = {
 
 const Philanthropy = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       <SEOHead 
         title="Philanthropy | JBJ GLOBAL REAL ESTATE"
         description="Discover how JBJ Global Real Estate gives back to the community through charitable initiatives and social responsibility programs."

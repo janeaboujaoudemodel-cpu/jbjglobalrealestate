@@ -173,7 +173,7 @@ const NewsDetail = () => {
         title={`${article.title} | JBJ Global Real Estate News`}
         description={article.excerpt}
       />
-      <article className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      <article className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         {/* Full-Screen Hero Image */}
         <div className="relative h-[80vh] md:h-[90vh] overflow-hidden">
           <img
