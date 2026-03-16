@@ -437,7 +437,7 @@ const Index = () => {
       </section>
 
       {/* AI COMPARISON & ANALYZER PREVIEW */}
-      <section className="bg-black">
+      <section>
         <div className="jj-layer-2">
           <Suspense fallback={<SectionLoader />}>
             <AIComparisonWidget />
