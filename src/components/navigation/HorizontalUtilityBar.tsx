@@ -325,9 +325,7 @@ export default function HorizontalUtilityBar() {
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">
-                  Notifications{totalAlerts > 0 ? ` — ${totalAlerts} unread` : ''}
-                </TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">View your notifications</TooltipContent>
               </Tooltip>
 
               {railDivider}
