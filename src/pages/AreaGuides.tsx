@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
 import { Badge } from "@/components/ui/badge";
-import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 // PropertiesVerticalNav removed — handled globally by MainLayout
 
 import { SEOHead } from "@/components/SEOHead";
@@ -64,33 +64,12 @@ const AreaGuides = () => {
   const navigate = useNavigate();
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>({...defaultShortcutFilters, sortBy: "most_projects"});
   const [currentPage, setCurrentPage] = useState(1);
-  const [pastHero, setPastHero] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
   // Fetch REAL areas from database
   const { data: areas, isLoading, error } = useAreas();
 
-  // Hero intersection observer — switch header/nav when user scrolls past hero
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const heroVisible = entry.isIntersecting;
-        setPastHero(!heroVisible);
-        if (heroVisible) {
-          document.body.classList.remove("filter-bar-fixed");
-        } else {
-          document.body.classList.add("filter-bar-fixed");
-        }
-      },
-      { threshold: 0.1 }
-    );
-    if (heroRef.current) observer.observe(heroRef.current);
-    return () => {
-      observer.disconnect();
-      document.body.classList.remove("filter-bar-fixed");
-    };
-  }, []);
 
   const scrollToGrid = () => {
     gridRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -280,31 +259,13 @@ const AreaGuides = () => {
       {/* ─── POST-HERO LAYOUT ─── */}
       {/* Vertical nav handled globally by MainLayout */}
 
-      {/* Filter bar — show inline below hero always, then fixed at top when past hero */}
-      <section
-        className={`${pastHero
-           ? "fixed top-[48px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] backdrop-blur-md"
-           : "relative w-full z-[10]"
-         } bg-gradient-to-r from-[#FDFBF7]/90 via-[#F5F0E6]/90 to-[#EDE4D3]/90 border-b border-gold/20 py-3`}
-      >
-        <div className="px-4 space-y-2">
-          <FilterShortcutBar
-            variant="light"
-            filters={shortcutFilters}
-            onFilterChange={setShortcutFilters}
-            priorityFilter="areas"
-          />
-        </div>
-      </section>
-      {/* Spacer for fixed filter bar */}
-      {pastHero && <div className="h-[60px]" />}
 
       {/* Gold divider */}
       <div ref={gridRef} className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
       {/* Emirates Section — clickable cards grouped by emirate */}
       {(!shortcutFilters.emirates || shortcutFilters.emirates.length === 0) && !shortcutFilters.searchQuery && (
-        <section className={`pt-8 pb-4 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] ${pastHero ? "lg:pl-[200px]" : ""}`}>
+        <section className="pt-8 pb-4 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]">
           <div className="px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
               Browse by Emirate
@@ -336,7 +297,7 @@ const AreaGuides = () => {
       )}
 
       {/* Areas Grid */}
-      <section className={`pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] min-h-screen ${pastHero ? "lg:pl-[200px]" : ""}`}>
+      <section className="pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] min-h-screen">
         <div className="px-4 sm:px-6 lg:px-8">
 
           {/* Results count */}
@@ -549,14 +510,14 @@ const AreaGuides = () => {
       </section>
 
       {/* DLD Market Intelligence */}
-      <div className={`py-8 ${pastHero ? "lg:pl-[200px]" : ""}`}>
+      <div className="py-8">
         <div className="px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
           <DLDMarketWidget />
         </div>
       </div>
 
       {/* CTA Section */}
-      <section id="ready-to-get-started" className={`py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark ${pastHero ? "lg:pl-[200px]" : ""}`}>
+      <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
         <div className="px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Can't Find What You're Looking For?

@@ -8,8 +8,8 @@ const DeveloperPortalCTA = () => {
   const { isDeveloperMode } = useUserModeContext();
   const { user, isOwner } = useAuth();
 
-  // Only show for registered developers or owner
-  if (!isDeveloperMode && !isOwner) return null;
+  // Only show when user is in developer mode — owner must switch to developer mode to see this
+  if (!isDeveloperMode) return null;
 
   const displayName = user?.user_metadata?.full_name
     || user?.user_metadata?.name
