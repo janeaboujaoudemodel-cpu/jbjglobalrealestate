@@ -283,7 +283,7 @@ export default function HorizontalUtilityBar() {
                         <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline whitespace-nowrap">CRM</span>
                       </Link>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">CRM Dashboard</TooltipContent>
+                    <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">CRM Dashboard</TooltipContent>
                   </Tooltip>
                   {railDivider}
                 </>
