@@ -143,7 +143,7 @@ const Index = () => {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       {/* SEO Meta Tags */}
       <SEOHead {...pagesSEO.home} />
       
