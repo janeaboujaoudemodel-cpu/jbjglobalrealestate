@@ -34,7 +34,7 @@ const FooterCard = ({ title, links, viewAllHref, viewAllLabel }: {
   viewAllHref?: string;
   viewAllLabel?: string;
 }) => (
-  <div className="group relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl px-6 py-5 hover:border-gold/60 transition-all duration-300 shadow-[0_4px_15px_rgba(200,167,102,0.1)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.2)]">
+  <div className="group relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-none px-6 py-5 hover:border-gold/60 transition-all duration-300 shadow-[0_4px_15px_rgba(200,167,102,0.1)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.2)]">
     <h4 className="text-center font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] mb-3 pb-2.5 border-b-2 border-gold/40 text-gold"
       style={{
         fontFamily: "Poppins, sans-serif",
