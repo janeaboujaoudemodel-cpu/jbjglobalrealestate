@@ -136,7 +136,7 @@ const ThankYou = () => {
         noIndex={true}
       />
       
-      <main className="min-h-screen bg-black flex items-center">
+      <main className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center">
         <section className="w-full py-20">
           <div className="container mx-auto px-4">
             <motion.div

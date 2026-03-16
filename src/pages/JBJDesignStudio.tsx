@@ -309,7 +309,7 @@ const JBJDesignStudio: React.FC = () => {
   const filteredTemplates = TEMPLATES.filter(t => t.category === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       {/* Header */}
       <div className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 lg:top-[48px] z-50">
         <div className="container mx-auto px-4 py-4">

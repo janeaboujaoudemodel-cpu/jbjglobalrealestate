@@ -286,7 +286,7 @@ END:VCARD`;
   return (
     <>
       <SEOHead {...pagesSEO.contact} />
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       {/* Hero Section with Video */}
       <section className="relative pt-28 pb-20 md:pt-36 md:pb-28">
         <div className="absolute inset-0">

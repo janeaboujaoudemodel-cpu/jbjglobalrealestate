@@ -433,9 +433,9 @@ const Footer = () => {
 
   return (
     <>
-      <footer id="site-footer" className="relative overflow-x-hidden bg-black">
-      {/* Pure black background - no gradients */}
-      <div className="absolute inset-0 bg-black" />
+      <footer id="site-footer" className="relative overflow-x-hidden bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      {/* Champagne background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" />
       
       {/* Premium Gold Divider at top - 3D layered effect with symmetric spacing */}
       <div className="relative py-8 sm:py-10 md:py-12">
@@ -447,11 +447,11 @@ const Footer = () => {
       </div>
       
       {/* Full-width footer content */}
-      <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20 px-1 sm:px-2 md:px-3 lg:px-4 bg-black">
+      <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20 px-1 sm:px-2 md:px-3 lg:px-4">
         {/* NOW BELOW THE 3D CARD: Logo + Company Name Section - COMES FIRST */}
-        <div className="flex flex-col items-center justify-center text-center w-full max-w-7xl mx-auto relative bg-black pt-4 pb-8">
-          {/* Pure black background */}
-          <div className="absolute inset-0 bg-black pointer-events-none" />
+        <div className="flex flex-col items-center justify-center text-center w-full max-w-7xl mx-auto relative pt-4 pb-8">
+          {/* Champagne background inherited */}
+          <div className="absolute inset-0 pointer-events-none" />
           
           <Link to="/" className="inline-block group relative">
             {/* 3D Logo with multi-layer shadow depth */}
@@ -490,8 +490,8 @@ const Footer = () => {
           <h2 
             className="relative text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-[0.08em] sm:tracking-[0.12em] md:tracking-[0.15em] lg:tracking-[0.18em] mb-2 sm:mb-3 md:mb-4 px-2 transition-all duration-500 hover:scale-[1.01]"
             style={{
-              color: '#FFFFFF',
-              textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 8px rgba(0,0,0,0.7), 0 0 30px rgba(200,167,102,0.4)',
+              color: '#1a1a1a',
+              textShadow: '0 1px 3px rgba(200,167,102,0.4)',
               letterSpacing: '0.12em',
             }}
           >
@@ -513,11 +513,11 @@ const Footer = () => {
         </div>
 
         {/* ULTRA PREMIUM 3D Card - License + Newsletter + Social - BELOW logo */}
-        <div className="relative bg-black pt-4 sm:pt-6 md:pt-8 pb-4">
+        <div className="relative pt-4 sm:pt-6 md:pt-8 pb-4">
           <div 
             className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl relative overflow-hidden"
             style={{
-              background: 'linear-gradient(165deg, rgba(12,12,14,0.99) 0%, rgba(8,8,10,1) 40%, rgba(4,4,6,1) 100%)',
+              background: 'linear-gradient(165deg, rgba(245,235,215,0.99) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
               boxShadow: `
                 0 50px 100px -30px rgba(0,0,0,0.98),
                 0 30px 60px -20px rgba(0,0,0,0.9),
@@ -684,7 +684,7 @@ const Footer = () => {
               {/* Mode Switcher - Allow users to switch modes from footer with themed styling */}
               <div className="mt-4 flex flex-col items-center gap-2">
                 <p className="text-gold/60 text-xs uppercase tracking-[0.15em]">Your Mode</p>
-              <div className="p-1 rounded-xl bg-black/40">
+              <div className="p-1 rounded-xl bg-gold/10">
                 <ModeSwitcher variant="header" showForUnselected={true} />
               </div>
               </div>
@@ -699,20 +699,20 @@ const Footer = () => {
         </div>
         </div>
 
-        {/* Premium Divider with glow - on pure black */}
-        <div className="relative bg-black py-6 flex items-center justify-center">
+        {/* Premium Divider with glow */}
+        <div className="relative py-6 flex items-center justify-center">
           <div className="relative h-[2px] w-full max-w-7xl mx-auto">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-md" />
           </div>
         </div>
 
-        {/* ZONE 2: ULTRA PREMIUM Navigation + Tools + Contact Block - on pure black */}
-        <div className="relative bg-black py-4">
+        {/* ZONE 2: ULTRA PREMIUM Navigation + Tools + Contact Block */}
+        <div className="relative py-4">
           <div 
             className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden relative"
             style={{
-              background: 'linear-gradient(165deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,1) 100%)',
+              background: 'linear-gradient(165deg, rgba(245,235,215,1) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
               boxShadow: `
                 0 50px 100px -30px rgba(0,0,0,0.98),
                 0 30px 60px -20px rgba(0,0,0,0.9),
@@ -893,20 +893,20 @@ const Footer = () => {
         </div>
         </div>
 
-        {/* Premium Divider before Legal Zone - on pure black */}
-        <div className="relative bg-black py-4">
+        {/* Premium Divider before Legal Zone */}
+        <div className="relative py-4">
           <div className="relative h-[2px] max-w-7xl mx-auto">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-md" />
           </div>
         </div>
 
-        {/* ZONE 3: ULTRA PREMIUM Legal + Google Review Block - on pure black */}
-        <div className="relative bg-black py-4">
+        {/* ZONE 3: ULTRA PREMIUM Legal + Google Review Block */}
+        <div className="relative py-4">
           <div 
             className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden relative"
             style={{
-              background: 'linear-gradient(165deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,1) 100%)',
+              background: 'linear-gradient(165deg, rgba(245,235,215,1) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
               boxShadow: `
                 0 50px 100px -30px rgba(0,0,0,0.98),
                 0 30px 60px -20px rgba(0,0,0,0.9),

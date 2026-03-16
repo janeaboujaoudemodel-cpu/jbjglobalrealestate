@@ -64,7 +64,7 @@ const ExecutivePerformance = () => {
 
   return (
     <ExecutiveAccessGate>
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <SEOHead
           title="Performance Snapshot | Executive Dashboard | JBJ GLOBAL REAL ESTATE"
           description="Brokerage performance trends and operational metrics."

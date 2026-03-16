@@ -67,7 +67,7 @@ const MarketAreaDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       <SEOHead 
         title={`${area.area} Rent Trends & Property Prices | Is ${area.area} Good for Renting? | JBJ GLOBAL REAL ESTATE`}
         description={`${area.area} real estate market analysis. Historical price trends, rent analysis, demand vs supply indicators, and market insights for BUY · SELL · RENT decisions. Powered by official government Open Data.`}

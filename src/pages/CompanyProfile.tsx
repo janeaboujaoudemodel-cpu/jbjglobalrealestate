@@ -403,7 +403,7 @@ const CompanyProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       {/* Sticky Actions (Desktop) */}
       <div className="hidden lg:flex fixed right-6 top-1/2 -translate-y-1/2 z-50 flex-col gap-3">
         <Button onClick={handleWhatsApp} variant="primary" size="icon" className="rounded-full" aria-label="WhatsApp">

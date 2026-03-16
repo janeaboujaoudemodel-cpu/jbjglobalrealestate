@@ -38,7 +38,7 @@ const DataOperations = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       <SEOHead 
         title="Data Operations | JBJ Global Real Estate"
         description="Internal data operations and audit center for JBJ team members."

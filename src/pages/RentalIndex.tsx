@@ -153,7 +153,7 @@ const RentalIndex = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       
       
       {/* Hero Section - Emerald Green Theme */}

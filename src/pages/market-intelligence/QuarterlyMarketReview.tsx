@@ -170,7 +170,7 @@ const QuarterlyMarketReview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       <SEOHead
         title={`${data.period} Quarterly Review | Dubai Real Estate | JBJ GLOBAL REAL ESTATE`}
         description={`Quarterly market review for ${data.period} covering Dubai real estate across BUY · SELL · RENT. Institutional-grade analysis by JBJ GLOBAL REAL ESTATE.`}

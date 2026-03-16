@@ -104,7 +104,7 @@ const AIInsights = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       <SEOHead 
         title="AI Market Narratives | JBJ Global Real Estate"
         description="AI-generated market insights for JBJ team members."
