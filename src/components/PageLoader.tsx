@@ -20,7 +20,7 @@ export function DelayedLoader({ children, delay = 300 }: { children: ReactNode; 
  */
 const PageLoader = () => (
   <DelayedLoader>
-    <div className="min-h-screen bg-black flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
       <BrandedLoader text="Loading..." className="min-h-screen" />
     </div>
   </DelayedLoader>
