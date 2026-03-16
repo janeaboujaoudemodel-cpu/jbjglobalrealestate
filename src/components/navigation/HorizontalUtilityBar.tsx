@@ -305,7 +305,7 @@ export default function HorizontalUtilityBar() {
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Tasks</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">My Tasks</TooltipContent>
               </Tooltip>
 
               {railDivider}
