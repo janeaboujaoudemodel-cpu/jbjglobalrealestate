@@ -776,7 +776,7 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
       if (config.registrationNumber) {
         const regSize = fitFontSize(config.registrationNumber, 11, innerR * 1.4, 0.6);
         return `<text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
-          font-family="${enFont}" font-size="${regSize}" fill="${ink}" font-weight="700" letter-spacing="1">${config.registrationNumber}</text>`;
+          font-family="${enFont}" font-size="${regSize}" fill="${ink}" font-weight="700" letter-spacing="1">${escapeXml(config.registrationNumber)}</text>`;
       }
       return '';
     default:
