@@ -94,7 +94,7 @@ const MonthlyMarketBrief = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       <SEOHead
         title={`${data.period} Market Brief | Dubai Real Estate | JBJ GLOBAL REAL ESTATE`}
         description={`Monthly market brief for ${data.period} covering Dubai real estate across BUY · SELL · RENT. Official report by JBJ GLOBAL REAL ESTATE.`}

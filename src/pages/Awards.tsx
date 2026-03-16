@@ -71,9 +71,9 @@ const Awards = () => {
   return (
     <>
       <SEOHead {...pagesSEO.awards} />
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         {/* Hero Section with Video */}
-        <section className="relative py-24 md:py-32 bg-black overflow-hidden">
+        <section className="relative py-24 md:py-32 overflow-hidden">
           {/* Video Background */}
           <VideoBackground 
             src="https://videos.pexels.com/video-files/3129671/3129671-uhd_2560_1440_30fps.mp4"

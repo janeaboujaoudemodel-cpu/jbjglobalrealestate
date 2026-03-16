@@ -267,7 +267,7 @@ const SellerGuide = () => {
         description="Complete guide to selling property in Dubai. Learn about pricing, documentation, marketing, and the transfer process with JBJ Global Real Estate. Expert brokerage services for sellers."
       />
       
-      <main className="min-h-screen bg-black">
+      <main className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         {/* Premium Hero with Background */}
         <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
           {/* Background */}
