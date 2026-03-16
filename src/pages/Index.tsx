@@ -305,7 +305,7 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* TRUST BAR (8 Cards) - 4x2 Grid */}
-      <div id="trust-bar" className="bg-black py-12 md:py-16">
+      <div id="trust-bar" className="py-12 md:py-16">
         <Suspense fallback={<SectionLoader />}>
           <TrustBar />
         </Suspense>
