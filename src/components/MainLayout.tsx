@@ -257,6 +257,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
               <HorizontalUtilityBar />
             </Suspense>
           </div>
+          <div className="hidden md:block">
+            <Suspense fallback={null}>
+              <GlobalFilterBar />
+            </Suspense>
+          </div>
         </>
       )}
       <GlobalContactGating>
