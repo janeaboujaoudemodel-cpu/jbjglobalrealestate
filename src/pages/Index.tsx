@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, memo, useEffect, forwardRef } from "react";
+import { useState, lazy, Suspense, memo, useEffect, forwardRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -112,6 +112,7 @@ const pillars = [
 
 const Index = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
   const { t } = useLanguage();
   const { isBroker, hasSelectedRole } = useUserRole();
 
@@ -161,33 +162,72 @@ const Index = () => {
       <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         {/* Video Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
-          <img 
-            src={heroFallbackDubai} 
-            alt="Luxury Dubai Real Estate" 
-            className="absolute inset-0 w-full h-full object-cover"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-          />
+          {/* Branded fallback — renders instantly, no network needed */}
+          <div 
+            className="absolute inset-0 z-[1] flex flex-col items-center justify-center"
+            style={{ 
+              opacity: videoLoaded ? 0 : 1, 
+              transition: 'opacity 0.8s ease-in-out',
+              pointerEvents: videoLoaded ? 'none' : 'auto',
+            }}
+          >
+            {/* Gold accent orbs */}
+            <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px]" />
+            <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-gold/8 rounded-full blur-[120px]" />
+            
+            {/* Logo */}
+            <img 
+              src={jbjFullLogoLight} 
+              alt="JBJ Global Real Estate" 
+              className="w-36 h-auto md:w-52 object-contain"
+              style={{ 
+                filter: 'drop-shadow(0 0 32px rgba(200,167,102,0.4))',
+                animation: 'heroFallbackPulse 2.5s ease-in-out infinite',
+              }}
+            />
+            
+            {/* Tagline */}
+            <p 
+              className="mt-6 text-gold/70 text-sm md:text-base tracking-[0.25em] uppercase text-center px-6"
+              style={{ fontFamily: 'Poppins, sans-serif' }}
+            >
+              Your Gateway to Dubai's Finest Real Estate
+            </p>
+            
+            {/* Loading shimmer line */}
+            <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
+          </div>
+
           <video 
             autoPlay loop muted playsInline
             preload="none"
             poster={heroFallbackDubai}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
-            className="absolute inset-0 w-full h-full object-cover z-[1]"
+            className="absolute inset-0 w-full h-full object-cover z-[2]"
             style={{ 
               WebkitTransform: 'translateZ(0)',
               backfaceVisibility: 'hidden',
               opacity: 0,
               transition: 'opacity 0.8s ease-in-out',
             }}
-            onCanPlay={(e) => { e.currentTarget.style.opacity = '1'; }}
+            onCanPlay={(e) => { e.currentTarget.style.opacity = '1'; setVideoLoaded(true); }}
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
             src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70 z-[2]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 z-[2]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70 z-[3]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 z-[3]" />
+          
+          <style>{`
+            @keyframes heroFallbackPulse {
+              0%, 100% { filter: drop-shadow(0 0 24px rgba(200,167,102,0.3)); transform: scale(1); }
+              50% { filter: drop-shadow(0 0 40px rgba(200,167,102,0.6)); transform: scale(1.02); }
+            }
+            @keyframes heroFallbackShimmer {
+              0%, 100% { opacity: 0.3; transform: scaleX(0.6); }
+              50% { opacity: 0.8; transform: scaleX(1.2); }
+            }
+          `}</style>
         </div>
         
         {/* Animated gold accent lines */}
