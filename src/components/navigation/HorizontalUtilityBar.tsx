@@ -221,7 +221,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <button
                 onClick={toggleAreaUnit}
-                className="h-8 flex items-center transition-all shrink-0 border border-[hsl(var(--gold)/0.3)] rounded-none overflow-hidden outline-none focus:outline-none focus-visible:outline-none"
+                className="h-8 flex items-center transition-all shrink-0 border border-[hsl(var(--gold)/0.3)] rounded-lg overflow-hidden outline-none focus:outline-none focus-visible:outline-none"
                 aria-label="Toggle area unit"
               >
                 <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-black/30 hover:text-black/50'}`}>
