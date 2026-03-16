@@ -1,90 +1,24 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## Plan: Remove Champagne Gap Line and Center Hero Content
 
-### Session Status
+### Problem 1: Champagne line visible below filter bar
+The root `<div>` in MainLayout has `md:bg-[#E8DCC8]` (champagne). On the homepage, the hero is full-screen black but the main content has `md:pt-[88px]` padding, creating an 88px champagne strip behind the fixed header. Since the hero uses `jj-hero-fullscreen` (100vh), the top of the hero starts 88px down, and any sub-pixel gap between the fixed filter bar bottom (~88px) and the hero top reveals the champagne background as a thin visible line.
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+**Fix**: On the homepage (transparent header pages), remove the top padding entirely on desktop since the hero is full-screen and goes behind the fixed header. The `md:pt-[88px]` is already only applied when `needsHeaderSpacing` is true, but currently there's a fallback `md:pt-[88px]` for non-spacing pages too. Change the fallback from `md:pt-[88px]` to `md:pt-0` for transparent-header pages so the hero sits flush at the top with no champagne gap.
 
----
+**File**: `src/components/MainLayout.tsx` line 268
+- Change: `"md:pt-[88px] pt-0"` → `"md:pt-0 pt-0"` for the non-header-spacing case
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+### Problem 2: Buy · Sell · Rent should be centered in the hero
+Currently the hero content is left-aligned (`items-start`, `justify-end`). User wants the Buy/Sell/Rent section centered.
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+**File**: `src/pages/Index.tsx`
+- Line 200: Change `items-start justify-end` → `items-center justify-center text-center`
+- Line 205: Change `max-w-4xl` wrapper to center its content with `text-center mx-auto`
+- Line 212-216: Center the Buy · Sell · Rent text block
 
----
+### Files to edit
+- `src/components/MainLayout.tsx` — remove desktop top padding for transparent-header pages
+- `src/pages/Index.tsx` — center the hero content
 
-### Route Map
-
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
-
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
-
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
