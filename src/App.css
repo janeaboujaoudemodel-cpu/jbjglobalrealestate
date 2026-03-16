@@ -51,3 +51,15 @@
 .read-the-docs {
   color: #888;
 }
+
+/* ── Horizontal utility bar — remove blue focus rings and hover rectangles ── */
+.fixed[class*="from-[#F5EBD7]"] button:focus,
+.fixed[class*="from-[#F5EBD7]"] a:focus,
+.fixed[class*="from-[#F5EBD7]"] button:focus-visible,
+.fixed[class*="from-[#F5EBD7]"] a:focus-visible,
+.fixed[class*="from-[#F5EBD7]"] [role="button"]:focus,
+.fixed[class*="from-[#F5EBD7]"] [role="button"]:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  ring: none !important;
+}
