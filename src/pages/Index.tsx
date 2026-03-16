@@ -369,7 +369,7 @@ const Index = () => {
       </Suspense>
 
       {/* AI HOME FINDER — Premium 3D Section */}
-      <section className="bg-black flex items-center justify-center min-h-[340px] relative overflow-hidden">
+      <section className="flex items-center justify-center min-h-[340px] relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/8 rounded-full blur-[120px]" />
           <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-gold/5 rounded-full blur-[80px]" />
