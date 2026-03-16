@@ -471,6 +471,7 @@ const trustComplianceBook: BookData = {
 const companyProfileBook: BookData = {
   title: 'Company Profile',
   cover: companyProfileCover,
+  backCover: companyProfileBackCover,
   href: '/company-profile',
   category: 'report',
   coverLocked: true,
