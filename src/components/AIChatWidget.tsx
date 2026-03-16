@@ -745,7 +745,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     setUserInfo(newUserInfo);
     
     // Save to localStorage immediately
-    localStorage.setItem('jbj_chat_user', JSON.stringify(newUserInfo));
+    sessionStorage.setItem('jbj_chat_user', JSON.stringify(newUserInfo));
     
     // Update lead in backend (upsert)
     try {

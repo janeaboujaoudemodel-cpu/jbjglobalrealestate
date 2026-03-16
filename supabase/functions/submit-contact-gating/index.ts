@@ -102,7 +102,14 @@ Deno.serve(async (req) => {
     }
 
     // Get encryption key from environment
-    const encryptionKey = Deno.env.get('PII_ENCRYPTION_KEY') || 'jbj-secure-pii-key-2024';
+    const encryptionKey = Deno.env.get('PII_ENCRYPTION_KEY');
+    if (!encryptionKey) {
+      console.error('[SECURITY] PII_ENCRYPTION_KEY not configured');
+      return new Response(JSON.stringify({ error: 'Server configuration error' }), {
+        status: 500,
+        headers: { ...headers, 'Content-Type': 'application/json' },
+      });
+    }
 
     // Create Supabase client with service role for secure storage
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;

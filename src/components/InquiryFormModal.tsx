@@ -237,8 +237,8 @@ const InquiryFormModal = ({
         console.warn('Inquiry notification exception (lead still saved):', notifyErr);
       }
 
-      // Save to localStorage for future forms
-      localStorage.setItem('jj_captured_lead', JSON.stringify({
+      // Save to sessionStorage for future forms (not persisted across sessions)
+      sessionStorage.setItem('jj_captured_lead', JSON.stringify({
         email: normalizedEmail,
         fullName: data.fullName,
         phone: normalizedPhone,
