@@ -745,7 +745,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
   return (
     <Popover open={savedOpen} onOpenChange={setSavedOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10" title="View saved filters">
+        <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black/70 hover:border-gold/60 flex-shrink-0" title="View saved filters">
           <Bookmark className="w-3.5 h-3.5 text-black fill-black" />
           <span className="hidden sm:inline">{t('filter.savedFilters')}</span>
         </button>
