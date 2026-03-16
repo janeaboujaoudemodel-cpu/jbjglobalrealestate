@@ -87,7 +87,7 @@ export const useEmployeeChat = (selectedEmployeeId: string | null) => {
 
   // Send message with AI-powered response
   const sendMessage = useCallback(async (content: string) => {
-    if (!selectedEmployeeId || !content.trim()) return;
+    if (!selectedEmployeeId || !content.trim() || !userId) return;
     const employee = getEmployee(selectedEmployeeId);
     if (!employee) return;
 
