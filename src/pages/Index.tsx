@@ -1,12 +1,11 @@
 import { useState, lazy, Suspense, memo, useEffect, forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-// HeroSearchBar removed — global filter bar handles search
 
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, Users } from "lucide-react";
+import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, Palette, FileText, UserCircle, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
@@ -72,7 +71,6 @@ const DeveloperPortalCTA = lazy(() => import("@/components/home/DeveloperPortalC
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
 
-const IntroHeroSection = lazy(() => import("@/components/home/IntroHeroSection"));
 const VerificationBanner = lazy(() => import("@/components/verification/VerificationBanner"));
 
 const SectionLoader = forwardRef<HTMLDivElement>((_, ref) => (
@@ -96,12 +94,28 @@ const staggerContainer = {
   }
 };
 
+// Quick-action CTA pills for hero overlay
+const heroActions = [
+  { label: "Sell Your Property", icon: Building2, href: "/sell" },
+  { label: "AI Home Finder", icon: Home, href: "/quiz" },
+  { label: "Explore AI Tools", icon: Brain, href: "/ai-hub" },
+  { label: "Create Your CV", icon: FileText, href: "/toolkit/cv-builder" },
+  { label: "Update Profile", icon: UserCircle, href: "/profile" },
+];
+
+// Three pillars
+const pillars = [
+  { icon: Building2, title: "Premium Marketplace", desc: "2,400+ Off-Plan & Resale Properties" },
+  { icon: Brain, title: "AI-Powered Tools", desc: "Smart Search & Investment Intelligence" },
+  { icon: Briefcase, title: "Brokerage Services", desc: "Licensed Advisors & Expert Guides" },
+];
+
 const Index = () => {
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const { t } = useLanguage();
   const { isBroker, hasSelectedRole } = useUserRole();
 
-  // Preload only near-the-fold chunks during idle time (avoid loading every section at once)
+  // Preload only near-the-fold chunks during idle time
   useEffect(() => {
     const preloadNearFold = () => {
       [
@@ -140,21 +154,13 @@ const Index = () => {
         </Suspense>
       )}
       
-      {/* INTRO HERO - Platform Overview */}
-      <Suspense fallback={<SectionLoader />}>
-        <IntroHeroSection />
-      </Suspense>
-
-      {/* VERIFICATION BANNER - Get Verified CTA */}
-      <Suspense fallback={null}>
-        <VerificationBanner />
-      </Suspense>
-
-      {/* HERO SECTION - LUXURY CINEMATIC VIDEO - MUST BE 100vh */}
+      {/* ═══════════════════════════════════════════════════════════
+          MERGED HERO: Video Background + Gateway Tagline + CTA Pills
+          Single fullscreen section — no separate IntroHeroSection
+         ═══════════════════════════════════════════════════════════ */}
       <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-black">
-        {/* Video Background - Luxury Dubai Drone Footage - Optimized for performance */}
+        {/* Video Background */}
         <div className="absolute inset-0 bg-black">
-          {/* Fallback image - always visible as base layer for instant load */}
           <img 
             src={luxuryVillaHero} 
             alt="Luxury Dubai Real Estate" 
@@ -163,12 +169,8 @@ const Index = () => {
             fetchPriority="high"
             decoding="async"
           />
-          {/* Video overlays the image when it loads/plays - deferred loading */}
           <video 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
+            autoPlay loop muted playsInline
             preload="none"
             poster={luxuryVillaHero}
             webkit-playsinline="true"
@@ -180,17 +182,11 @@ const Index = () => {
               opacity: 0,
               transition: 'opacity 0.8s ease-in-out',
             }}
-            onCanPlay={(e) => {
-              e.currentTarget.style.opacity = '1';
-            }}
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-            }}
+            onCanPlay={(e) => { e.currentTarget.style.opacity = '1'; }}
+            onError={(e) => { e.currentTarget.style.display = 'none'; }}
             src="https://mdafrewypkkrildjgtey.supabase.co/storage/v1/object/public/videos/hero-video.mp4"
           />
-          {/* Video overlay gradient - above video */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60 z-[2]" />
-          {/* Additional cinematic vignette */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70 z-[2]" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 z-[2]" />
         </div>
         
@@ -208,61 +204,97 @@ const Index = () => {
           transition={{ duration: 1.5, delay: 0.7 }}
         />
         
-        {/* Content - Left-aligned with Search Bar on Hero - Pushed down more, smaller content */}
+        {/* MERGED HERO CONTENT — tagline + CTAs + pillars */}
         <motion.div 
-          className="relative z-10 w-full flex flex-col items-center justify-center text-center px-4 sm:px-8 md:px-12 lg:px-16 pb-16 md:pb-20"
+          className="relative z-10 w-full flex flex-col items-center justify-center text-center px-4 sm:px-8 md:px-12 lg:px-16"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="w-full max-w-4xl mx-auto text-center pt-[max(35vh,180px)] sm:pt-[38vh] md:pt-[40vh] lg:pt-[42vh]">
-            {/* Buy · Sell · Rent - Smaller headline */}
-            <motion.h1 
-              variants={fadeInUp} 
-              className="text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight leading-[1.1] mb-1.5 md:mb-2"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
-              <span className="block whitespace-nowrap">
-                {t('hero.buy')}<span className="inline-block w-1 h-1 rounded-full mx-1.5 align-middle bg-gold" style={{ boxShadow: '0 0 6px rgba(200,167,102,0.8)' }}></span>
-                {t('hero.sell')}<span className="inline-block w-1 h-1 rounded-full mx-1.5 align-middle bg-gold" style={{ boxShadow: '0 0 6px rgba(200,167,102,0.8)' }}></span>
-                {t('hero.rent')}<span className="inline-block w-1 h-1 rounded-full mx-1.5 align-middle bg-gold" style={{ boxShadow: '0 0 6px rgba(200,167,102,0.8)' }}></span>
-              </span>
-            </motion.h1>
-
-            {/* Licensed Real Estate Brokerage - Smaller subtitle */}
-            <motion.p 
+          <div className="w-full max-w-5xl mx-auto text-center pt-[max(20vh,120px)] sm:pt-[22vh] md:pt-[24vh]">
+            {/* Platform tagline badge */}
+            <motion.p
               variants={fadeInUp}
-              className="text-zinc-400 text-[9px] sm:text-[10px] uppercase tracking-[0.12em] md:tracking-[0.15em] font-medium mb-1.5 md:mb-2"
+              className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[hsl(var(--gold)/0.7)] mb-4"
             >
-              {t('hero.subtitle')}
+              Dubai's Trusted Real Estate Technology Platform
             </motion.p>
-          
-            {/* Delivered with Intelligence - Smaller */}
-            <motion.span 
+
+            {/* Main heading */}
+            <motion.h1
               variants={fadeInUp}
-              className="block whitespace-nowrap text-[10px] sm:text-xs md:text-sm lg:text-base mb-4 md:mb-5 uppercase tracking-[0.12em] md:tracking-[0.15em] font-medium"
-              style={{ 
-                background: 'linear-gradient(90deg, #C8A766 0%, #E8D4A8 50%, #C8A766 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                filter: 'drop-shadow(0 1px 3px rgba(200,167,102,0.4))',
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1] mb-6"
+              style={{
+                background: "linear-gradient(135deg, #FFFFFF 0%, #E8DCC8 40%, #C8A766 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                fontFamily: "Poppins, sans-serif",
               }}
             >
-              {t('hero.deliveredWith')}
-            </motion.span>
-          </div>
+              Your Gateway to Dubai's
+              <br className="hidden sm:block" />
+              <span className="block sm:inline"> Finest Real Estate</span>
+            </motion.h1>
 
-          {/* Search bar removed — global filter bar in the header handles search */}
+            {/* Quick-action CTA pills */}
+            <motion.div
+              variants={fadeInUp}
+              className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8"
+            >
+              {heroActions.map((action) => (
+                <Link
+                  key={action.label}
+                  to={action.href}
+                  className="group inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-black/40 backdrop-blur-md text-white/90 text-[10px] sm:text-xs font-medium hover:bg-[hsl(var(--gold)/0.15)] hover:border-[hsl(var(--gold)/0.6)] hover:text-gold transition-all duration-300"
+                >
+                  <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                  {action.label}
+                </Link>
+              ))}
+            </motion.div>
+
+            {/* Three pillar badges */}
+            <motion.div
+              variants={fadeInUp}
+              className="grid grid-cols-3 gap-px max-w-3xl mx-auto mb-8 border border-[hsl(var(--gold)/0.2)] overflow-hidden"
+            >
+              {pillars.map((pillar, i) => (
+                <div
+                  key={pillar.title}
+                  className="bg-black/50 backdrop-blur-sm p-3 sm:p-4 text-center border-r last:border-r-0 border-[hsl(var(--gold)/0.15)]"
+                >
+                  <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-gold mx-auto mb-1.5" />
+                  <h3 className="text-[10px] sm:text-xs font-semibold text-white mb-0.5">{pillar.title}</h3>
+                  <p className="text-[8px] sm:text-[10px] text-zinc-400 leading-tight">{pillar.desc}</p>
+                </div>
+              ))}
+            </motion.div>
+
+            {/* Scroll indicator */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2, duration: 0.5 }}
+              className="flex flex-col items-center gap-1"
+            >
+              <span className="text-[9px] uppercase tracking-[0.2em] text-zinc-500">Explore</span>
+              <ChevronDown className="w-4 h-4 text-[hsl(var(--gold)/0.5)] animate-bounce" />
+            </motion.div>
+          </div>
         </motion.div>
       </div>
 
-
-      {/* DEVELOPER PARTNERS MARQUEE - MOVED UP: Directly under hero */}
+      {/* DEVELOPER PARTNERS MARQUEE */}
       <div id="developer-partners">
         <Suspense fallback={<SectionLoader />}>
           <DeveloperPartnersMarquee />
         </Suspense>
       </div>
+
+      {/* VERIFICATION BANNER - moved here after marquee */}
+      <Suspense fallback={null}>
+        <VerificationBanner />
+      </Suspense>
 
       {/* DEVELOPER PORTAL CTA */}
       <Suspense fallback={<SectionLoader />}>
@@ -281,48 +313,46 @@ const Index = () => {
 
       <SectionDivider fullWidth />
 
-      {/* FEATURED LISTINGS - Master Blueprint: Section 3 (8 cards, Buy/Rent tabs) */}
+      {/* FEATURED LISTINGS */}
       <Suspense fallback={<SectionLoader />}>
         <FeaturedListings />
       </Suspense>
 
-      {/* CONTINUE SEARCHING - Recently viewed properties (primary focus for sales) */}
+      {/* CONTINUE SEARCHING */}
       <Suspense fallback={<SectionLoader />}>
         <ContinueSearching type="property" className="bg-black" />
       </Suspense>
 
-      <SectionDivider fullWidth />
-
-      {/* RESALE PROPERTIES - Investor Network Listings */}
+      {/* RESALE PROPERTIES - single divider before Starting Point */}
       <Suspense fallback={<SectionLoader />}>
         <ResalePropertiesSection />
       </Suspense>
 
-      {/* DIVIDER */}
+      {/* DIVIDER — single divider (removed double) */}
       <SectionDivider fullWidth />
 
-      {/* FIND YOUR STARTING POINT - Tabbed Premium Section */}
+      {/* FIND YOUR STARTING POINT */}
       <Suspense fallback={<SectionLoader />}>
         <StartingPointSection />
       </Suspense>
 
       <SectionDivider fullWidth />
 
-      {/* OVERSEAS INVESTORS - Golden Visa & International Investment */}
+      {/* OVERSEAS INVESTORS */}
       <Suspense fallback={<SectionLoader />}>
         <OverseasInvestorsBanner />
       </Suspense>
 
       <SectionDivider fullWidth />
 
-      {/* EXPLORE OUR GUIDES & REPORTS - Walking Books Marquee */}
+      {/* EXPLORE OUR GUIDES & REPORTS */}
       <Suspense fallback={<SectionLoader />}>
         <HomepageBookMarquee />
       </Suspense>
 
       <SectionDivider fullWidth />
 
-      {/* EXPLORE OUR SERVICES SLIDESHOW - Wrapped in container for consistent sizing */}
+      {/* EXPLORE OUR SERVICES */}
       <section className="bg-black">
         <div className="jj-layer-2">
           <Suspense fallback={<SectionLoader />}>
@@ -331,47 +361,49 @@ const Index = () => {
         </div>
       </section>
 
-      {/* DIVIDER - Between Explore Services and Toolkit Showcase */}
       <SectionDivider fullWidth />
 
-      {/* TOOLKIT SHOWCASE CARD - Free Professional Tools */}
+      {/* TOOLKIT SHOWCASE CARD */}
       <Suspense fallback={<SectionLoader />}>
         <ToolkitShowcaseCard />
       </Suspense>
 
-      {/* AI HOME FINDER - Premium CTA Section - No dividers */}
+      {/* AI HOME FINDER — Premium 3D Section */}
       <section className="bg-black flex items-center justify-center min-h-[340px] relative overflow-hidden">
-        {/* Premium ambient background effects — champagne/gold */}
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/8 rounded-full blur-[120px]" />
           <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-gold/5 rounded-full blur-[80px]" />
           <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-gold/5 rounded-full blur-[80px]" />
-          {/* Subtle grid pattern */}
           <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(hsl(var(--gold) / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--gold) / 0.3) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
         </div>
         
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 relative z-10" style={{ perspective: '1200px' }}>
           <div className="flex justify-center">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 30, rotateX: 8 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+              whileHover={{ y: -6, rotateX: -2, scale: 1.01 }}
               className="text-center relative"
+              style={{ transformStyle: 'preserve-3d' }}
             >
-              {/* Premium multi-layer glow — gold */}
-              <div className="absolute inset-0 -m-6 md:-m-8 rounded-3xl bg-gold/10 blur-3xl" />
-              <div className="absolute inset-0 -m-3 md:-m-4 rounded-3xl bg-gold/8 blur-xl" />
+              {/* Premium multi-layer glow */}
+              <div className="absolute inset-0 -m-8 md:-m-12 rounded-3xl bg-gold/12 blur-[50px]" />
+              <div className="absolute inset-0 -m-4 md:-m-6 rounded-3xl bg-gold/10 blur-2xl" />
               
-              {/* Card with premium glassmorphism */}
+              {/* Card with premium 3D glassmorphism */}
               <div 
                 className="relative z-10 bg-gradient-to-br from-zinc-900/95 via-black/95 to-zinc-800/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/30"
                 style={{
-                  boxShadow: '0 0 50px hsl(var(--gold) / 0.2), 0 0 100px hsl(var(--gold) / 0.08), 0 25px 60px rgba(0,0,0,0.4), inset 0 1px 0 hsl(var(--gold) / 0.12)'
+                  boxShadow: '0 0 60px hsl(var(--gold) / 0.25), 0 0 120px hsl(var(--gold) / 0.1), 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 hsl(var(--gold) / 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
+                  transform: 'translateZ(20px)',
                 }}
               >
                 {/* Top shine line */}
-                <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+                <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+                {/* Bottom reflection */}
+                <div className="absolute bottom-0 left-12 right-12 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
                 
                 {/* Gold label badge */}
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/15 border border-gold/30 text-gold text-xs uppercase tracking-[0.2em] mb-5">
@@ -404,7 +436,6 @@ const Index = () => {
         </div>
       </section>
 
-
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <section className="bg-black">
         <div className="jj-layer-2">
@@ -414,7 +445,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* DIVIDER */}
       <SectionDivider />
 
       {/* MORTGAGE CALCULATOR SECTION */}
@@ -432,7 +462,6 @@ const Index = () => {
                 Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
               </p>
               
-              {/* Dual Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
                 <Link to="/mortgage-calculator">
                   <Button variant="primary" size="lg" className="gap-2 px-8 py-5 text-base group">
@@ -455,16 +484,12 @@ const Index = () => {
         </div>
       </section>
 
-      {/* DIVIDER - Before Why Dubai (fullWidth to match edge-to-edge section) */}
       <SectionDivider fullWidth />
 
       <Suspense fallback={<SectionLoader />}>
         <WhyDubaiCapitalSection />
       </Suspense>
 
-      {/* Spacer before divider - creates visual centering between Why Dubai and Podcast */}
-
-      {/* JBJ PODCAST SECTION - Admin-controlled visibility */}
       <PodcastVisibilityGate>
         <SectionDivider fullWidth />
         <Suspense fallback={<SectionLoader />}>
@@ -472,56 +497,42 @@ const Index = () => {
         </Suspense>
       </PodcastVisibilityGate>
 
-      {/* DIVIDER - Before Best Idea Award (always needed) */}
       <SectionDivider fullWidth />
 
-
-
-      {/* BEST IDEA AWARD */}
       <Suspense fallback={<SectionLoader />}>
         <BestIdeaAward />
       </Suspense>
 
-      {/* DIVIDER */}
       <SectionDivider fullWidth />
 
-      {/* WHY CHOOSE US - Master Blueprint: Section 5 */}
       <Suspense fallback={<SectionLoader />}>
         <WhyChooseUs />
       </Suspense>
 
       <SectionDivider fullWidth />
 
-      {/* AREAS WE COVER - Master Blueprint: Section 6 (12 area links) */}
       <Suspense fallback={<SectionLoader />}>
         <AreasWeCover />
       </Suspense>
 
-      {/* DIVIDER between Areas and Testimonials */}
       <SectionDivider fullWidth />
 
-      {/* TESTIMONIALS - Master Blueprint: Section 7 (3 testimonials) */}
       <Suspense fallback={<SectionLoader />}>
         <TestimonialsSection />
       </Suspense>
 
-      {/* DIVIDER */}
       <SectionDivider fullWidth />
 
-      {/* Stats Counter Section */}
       <Suspense fallback={<SectionLoader />}>
         <StatsCounter />
       </Suspense>
 
-      {/* DIVIDER */}
       <SectionDivider fullWidth />
 
-      {/* SUPPORT TICKET BOX - Always visible (last content before global CTA) */}
       <Suspense fallback={<SectionLoader />}>
         <SupportTicketBox />
       </Suspense>
 
-      {/* Inquiry Modal */}
       <Suspense fallback={null}>
         <InquiryFormModal 
           isOpen={isInquiryOpen} 

@@ -58,13 +58,15 @@ export const ModeSelectionModal = () => {
 
   const isLoggedIn = !!user;
 
+  // For logged-in users without a mode: modal is NOT dismissable (freeze screen)
+  const isForcedOpen = isLoggedIn && !hasMadeInitialSelection;
+
   const handleSelectMode = async () => {
     if (!selectedMode) return;
     
     setIsSubmitting(true);
     try {
       if (isLoggedIn) {
-        // Logged in: set mode directly (visitor maps to investor)
         const actualMode: UserMode = selectedMode === 'visitor' ? 'investor' : selectedMode as UserMode;
         await setMode(actualMode);
         dismiss();
@@ -83,7 +85,6 @@ export const ModeSelectionModal = () => {
           }
         );
       } else {
-        // Not logged in: redirect to auth with mode
         dismiss();
         navigate(`/auth?mode_select=${selectedMode}`);
       }
@@ -95,16 +96,34 @@ export const ModeSelectionModal = () => {
     }
   };
 
+  // When forced open for logged-in users, prevent any close action
+  const handleOpenChange = (open: boolean) => {
+    if (!open && isForcedOpen) {
+      // Do NOT allow closing — user must select a mode
+      return;
+    }
+    if (!open) {
+      dismiss();
+    }
+  };
+
   return (
-    <Dialog open={isVisible} onOpenChange={(open) => !open && dismiss()}>
-      <DialogContent className="w-[calc(100vw-2rem)] max-w-lg sm:max-w-xl p-0 overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <Dialog open={isVisible} onOpenChange={handleOpenChange}>
+      <DialogContent
+        className={cn(
+          "w-[calc(100vw-2rem)] max-w-lg sm:max-w-xl p-0 overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]",
+          isForcedOpen && "[&>button]:hidden" // Hide the X close button when forced
+        )}
+        onPointerDownOutside={isForcedOpen ? (e) => e.preventDefault() : undefined}
+        onEscapeKeyDown={isForcedOpen ? (e) => e.preventDefault() : undefined}
+      >
         <DialogHeader className="p-6 pb-4 border-b border-gold/20">
           <DialogTitle className="text-xl sm:text-2xl font-bold text-center text-black">
             Welcome to JBJ Global
           </DialogTitle>
           <p className="text-center text-zinc-600 text-sm mt-2">
             {isLoggedIn
-              ? 'Choose how you want to use the platform. You can change this anytime.'
+              ? 'Please select your role to continue. You can change this anytime.'
               : 'Select your role to get started. Register for full access.'}
           </p>
         </DialogHeader>

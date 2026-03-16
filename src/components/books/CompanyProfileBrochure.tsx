@@ -5,18 +5,12 @@ import { companyProfileBook } from '@/data/bookCollections';
 import { BookCoverFace } from '@/components/books/BookCoverFace';
 
 interface CompanyProfileBrochureProps {
-  /** Show download overlay on hover (for Company Profile page) */
   showDownload?: boolean;
   onDownload?: () => void;
   isGenerating?: boolean;
-  /** Compact mode for sidebars or smaller placements */
   compact?: boolean;
 }
 
-/**
- * Unified premium Company Profile brochure component.
- * Renders the same 3D book + description across all pages.
- */
 export function CompanyProfileBrochure({
   showDownload = false,
   onDownload,
@@ -42,32 +36,38 @@ export function CompanyProfileBrochure({
     >
       {/* 3D Brochure Cover */}
       <div className="relative flex-shrink-0" style={{ perspective: '1200px' }}>
-        <div className="absolute -bottom-3 left-3 right-3 h-6 bg-black/20 blur-xl rounded-full" />
+        {/* Removed bottom shadow div that created a visible line under the book */}
         <div
           className={`relative ${compact ? 'w-32 h-44' : 'w-36 h-48 md:w-40 md:h-52'} transition-transform duration-500 group-hover:[transform:rotateY(-8deg)]`}
           style={{ transformStyle: 'preserve-3d' }}
         >
-          {/* Front cover — clean, no overlay text */}
+          {/* Front cover */}
           <div
             className="relative rounded-r-lg overflow-hidden ring-1 ring-gold/50 bg-black"
             style={{
               transform: 'translateZ(1px)',
               backfaceVisibility: 'hidden',
               boxShadow:
-                '0 12px 35px rgba(200,167,102,0.4), 0 8px 20px rgba(0,0,0,0.2), inset 0 1px 3px rgba(255,255,255,0.3)',
+                '0 16px 45px rgba(200,167,102,0.5), 0 10px 25px rgba(0,0,0,0.3), 0 0 80px rgba(200,167,102,0.15), inset 0 1px 3px rgba(255,255,255,0.3)',
             }}
           >
+            {/* Spine shadow */}
             <div className="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-black/40 via-black/20 to-transparent z-10" />
+            {/* Gold foil shine line */}
+            <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/60 to-transparent z-10" />
             <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-white/15 to-transparent z-10" />
             <BookCoverFace book={companyProfileBook} bare />
           </div>
 
-          {/* 3D Spine */}
+          {/* 3D Spine — richer dark gold gradient */}
           <div
-            className="absolute top-0 left-0 w-3 h-full bg-gradient-to-r from-zinc-800 to-zinc-700 origin-left"
-            style={{ transform: 'rotateY(-90deg) translateX(-6px)' }}
+            className="absolute top-0 left-0 w-3 h-full origin-left"
+            style={{
+              transform: 'rotateY(-90deg) translateX(-6px)',
+              background: 'linear-gradient(to right, #1a1a1a, #2a2318, #1a1a1a)',
+              boxShadow: 'inset 0 0 4px rgba(200,167,102,0.2)',
+            }}
           />
-          {/* 3D pages edge removed to prevent white divider at book bottom */}
         </div>
 
         {/* Download overlay */}
@@ -85,9 +85,9 @@ export function CompanyProfileBrochure({
         )}
       </div>
 
-      {/* Text description — pushed right with gap */}
+      {/* Text description */}
       {!compact && (
-        <div className="text-center pt-4">
+        <div className="text-center">
           <h3 className="text-gold text-lg md:text-xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>
             JBJ Global Real Estate
           </h3>
