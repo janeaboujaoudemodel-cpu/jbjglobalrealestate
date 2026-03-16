@@ -1180,7 +1180,7 @@ export default function GlobalVerticalNav() {
                       <SectionIcon className="w-3 h-3 text-gold" />
                     </div>
                     <span className="flex-1 text-left">{sectionKey}</span>
-                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold/70' : 'text-black/25'}`} />
+                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold/70' : 'text-gold/25'}`} />
                     {!isOpen && hasActiveChild && (
                       <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
                     )}
