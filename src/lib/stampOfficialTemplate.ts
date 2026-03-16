@@ -14,6 +14,16 @@
  */
 
 export type SeparatorStyle = 'dot' | 'star' | 'square' | 'diamond' | 'line' | 'double-line' | 'triangle' | 'cross' | 'floral' | 'ornament' | 'dash' | 'circle' | 'none';
+
+/** Escape user text for safe SVG/XML embedding — prevents XSS injection */
+function escapeXml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 export type BorderStyleType = 'SINGLE' | 'DOUBLE' | 'RING' | 'DOTTED' | 'ROPE' | 'CUSTOM';
 export type DividerStyle = 'diamond' | 'line' | 'ornate' | 'none';
 export type CenterContentMode = 'monogram' | 'initials' | 'logo' | 'icon' | 'license' | 'none';
