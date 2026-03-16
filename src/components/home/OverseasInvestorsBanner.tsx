@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Globe, Shield, TrendingUp, BadgeCheck, ArrowRight, Building2, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CompanyProfileBrochure } from "@/components/books/CompanyProfileBrochure";
+
 
 const highlights = [
   { icon: Shield, label: "0% Income Tax", desc: "No personal income or capital gains tax in the UAE" },
