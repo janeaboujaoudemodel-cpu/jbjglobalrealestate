@@ -9,7 +9,7 @@ import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, Palet
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
-import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
+import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 import { CONTACT_INFO } from "@/constants/stats";
 
@@ -158,11 +158,11 @@ const Index = () => {
           MERGED HERO: Video Background + Gateway Tagline + CTA Pills
           Single fullscreen section — no separate IntroHeroSection
          ═══════════════════════════════════════════════════════════ */}
-      <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-black">
+      <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         {/* Video Background */}
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
           <img 
-            src={luxuryVillaHero} 
+            src={heroFallbackDubai} 
             alt="Luxury Dubai Real Estate" 
             className="absolute inset-0 w-full h-full object-cover"
             loading="eager"
@@ -172,7 +172,7 @@ const Index = () => {
           <video 
             autoPlay loop muted playsInline
             preload="none"
-            poster={luxuryVillaHero}
+            poster={heroFallbackDubai}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
             className="absolute inset-0 w-full h-full object-cover z-[1]"
@@ -353,7 +353,7 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* EXPLORE OUR SERVICES */}
-      <section>
+      <section className="py-8 md:py-12">
         <div className="jj-layer-2">
           <Suspense fallback={<SectionLoader />}>
             <ExploreServicesCard />
@@ -394,7 +394,7 @@ const Index = () => {
               
               {/* Card with premium 3D glassmorphism */}
               <div 
-                className="relative z-10 bg-gradient-to-br from-zinc-900/95 via-black/95 to-zinc-800/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/30"
+                className="relative z-10 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/30"
                 style={{
                   boxShadow: '0 0 60px hsl(var(--gold) / 0.25), 0 0 120px hsl(var(--gold) / 0.1), 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 hsl(var(--gold) / 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
                   transform: 'translateZ(20px)',
@@ -423,10 +423,10 @@ const Index = () => {
                     </h2>
                     <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-gold group-hover:text-gold-light group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
                   </div>
-                  <p className="text-zinc-400 text-sm md:text-base max-w-lg mx-auto">
+                  <p className="text-zinc-700 text-sm md:text-base max-w-lg mx-auto">
                     {t('hero.aiFinderDesc')}
                   </p>
-                  <p className="text-zinc-600 text-xs mt-3">
+                  <p className="text-zinc-500 text-xs mt-3">
                     {t('home.poweredByJBJ', 'Powered by JBJ Global Real Estate')}
                   </p>
                 </Link>

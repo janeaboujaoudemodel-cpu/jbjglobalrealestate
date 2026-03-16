@@ -29,7 +29,7 @@ const AreasWeCover = () => {
   }
 
   return (
-    <section className="bg-black pt-8 md:pt-12">
+    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] pt-8 md:pt-12">
       <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-10">

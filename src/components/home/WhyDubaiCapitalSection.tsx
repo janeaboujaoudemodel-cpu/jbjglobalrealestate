@@ -50,7 +50,7 @@ export default function WhyDubaiCapitalSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-screen min-h-[100vh] min-h-[100dvh] bg-black overflow-hidden">
+    <section ref={sectionRef} className="relative h-screen min-h-[100vh] min-h-[100dvh] bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] overflow-hidden">
       {/* Poster image — shown immediately */}
       <img
         src={POSTER_URL}

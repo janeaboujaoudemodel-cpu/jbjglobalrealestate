@@ -56,7 +56,7 @@ const StartingPointSection = () => {
   const activeCards = activeTab === 'audience' ? audienceCards : activeTab === 'services' ? serviceCards : professionalCards;
 
   return (
-    <section className="bg-black">
+    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       <div className="jj-layer-2">
         {/* Header badge */}
         <div className="text-center mb-6 md:mb-8">
@@ -68,7 +68,7 @@ const StartingPointSection = () => {
 
         {/* Tab navigation — champagne pill style matching badge */}
         <div className="flex justify-center mb-6 md:mb-8">
-          <div className="inline-flex bg-black/40 border border-gold/30 rounded-full p-1 gap-1">
+          <div className="inline-flex bg-[hsl(38,35%,12%)]/40 border border-gold/30 rounded-full p-1 gap-1">
             {tabs.map((tab) => (
               <button
                 key={tab.key}

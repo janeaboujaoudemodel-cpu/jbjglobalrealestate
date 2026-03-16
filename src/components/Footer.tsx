@@ -447,11 +447,11 @@ const Footer = () => {
       </div>
       
       {/* Full-width footer content */}
-      <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20 px-1 sm:px-2 md:px-3 lg:px-4">
+      <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20">
         {/* NOW BELOW THE 3D CARD: Logo + Company Name Section - COMES FIRST */}
-        <div className="flex flex-col items-center justify-center text-center w-full max-w-7xl mx-auto relative pt-4 pb-8 rounded-2xl">
+        <div className="flex flex-col items-center justify-center text-center w-full relative pt-4 pb-8">
           {/* Dark luxury brown background for monogram section */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] rounded-2xl pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,10%)] via-[hsl(36,30%,13%)] to-[hsl(34,25%,10%)] pointer-events-none" />
           
           <Link to="/" className="inline-block group relative">
             {/* 3D Logo with multi-layer shadow depth */}
@@ -589,36 +589,36 @@ const Footer = () => {
             
             {/* Licensed Badge - ULTRA Enhanced */}
             <div className="relative flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-5 flex-wrap px-1">
-              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-gold via-gold/90 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-zinc-700 via-zinc-600 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
               <p className="text-zinc-900 font-medium text-sm sm:text-base md:text-lg lg:text-xl tracking-wide text-center leading-relaxed">
                 <span 
                   className="font-bold"
                   style={{
-                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
+                    background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     filter: 'drop-shadow(0 0 10px rgba(200,167,102,0.5))',
                   }}
                 >Licensed</span> 
-                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
                 BUY 
-                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
                 SELL 
-                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
                 RENT 
-                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
                 <span className="font-bold">REAL ESTATE</span> In The 
                 <span 
                   className="font-bold ml-1"
                   style={{
-                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
+                    background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     filter: 'drop-shadow(0 0 10px rgba(200,167,102,0.5))',
                   }}
                 > UAE</span>
               </p>
-              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-gold via-gold/90 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-zinc-700 via-zinc-600 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
             </div>
             <p className="relative text-zinc-600 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 md:mb-10 text-center px-2 max-w-2xl mx-auto">
               Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
@@ -634,7 +634,7 @@ const Footer = () => {
             {/* Stay in the Loop - Newsletter inside the 3D card */}
             {!isBackOfficeContext && (
               <div className="relative mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4">
-                <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
+                <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border-2 border-gold/40 shadow-[0_0_40px_rgba(200,167,102,0.18),0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.5)] p-6 md:p-8">
                   {/* Premium Title */}
                   <h3 
                     className="text-center text-2xl md:text-3xl font-bold mb-3 uppercase tracking-[0.15em]"

@@ -142,33 +142,48 @@ export default function HorizontalUtilityBar() {
           {railDivider}
 
           {/* Buy / Rent / Sell */}
-          <Link
-            to="/properties?transaction=buy"
-            className={`${cellBase} ${cellHover}`}
-          >
-            <Building2 className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
-            <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
-          </Link>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="/properties?transaction=buy"
+                className={`${cellBase} ${cellHover}`}
+              >
+                <Building2 className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
+                <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Explore properties for sale</TooltipContent>
+          </Tooltip>
 
           {railDivider}
 
-          <Link
-            to="/properties?transaction=rent"
-            className={`${cellBase} ${cellHover}`}
-          >
-            <Key className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
-            <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
-          </Link>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="/properties?transaction=rent"
+                className={`${cellBase} ${cellHover}`}
+              >
+                <Key className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
+                <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Rent a property</TooltipContent>
+          </Tooltip>
 
           {railDivider}
 
-          <Link
-            to="/listing-portal"
-            className={`${cellBase} ${cellHover}`}
-          >
-            <Tag className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
-            <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Sell</span>
-          </Link>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link
+                to="/listing-portal"
+                className={`${cellBase} ${cellHover}`}
+              >
+                <Tag className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
+                <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Sell</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">List your property for sale or rent</TooltipContent>
+          </Tooltip>
 
           {railDivider}
 
@@ -217,7 +232,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1.5`}><LanguageSwitcher variant="icon-only" /></div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Language</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your language</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -227,7 +242,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1.5`}><CurrencySwitcher variant="icon-only" /></div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Currency</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your currency</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -290,7 +305,7 @@ export default function HorizontalUtilityBar() {
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Tasks</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">My Tasks</TooltipContent>
               </Tooltip>
 
               {railDivider}
@@ -303,15 +318,15 @@ export default function HorizontalUtilityBar() {
                      className={`${cellBase} ${cellHover} px-2 relative`}
                    >
                      <Bell className={iconClass} />
-                    {(alerts?.totalNotificationAlerts || 0) > 0 && (
+                    {(alerts?.totalAlerts || 0) > 0 && (
                       <span className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] rounded-full bg-destructive text-white text-[9px] font-bold flex items-center justify-center px-1">
-                        {alerts!.totalNotificationAlerts > 9 ? '9+' : alerts!.totalNotificationAlerts}
+                        {alerts!.totalAlerts > 9 ? '9+' : alerts!.totalAlerts}
                       </span>
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
-                  Notifications{totalAlerts > 0 ? ` (${totalAlerts})` : ''}
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">
+                  Notifications{totalAlerts > 0 ? ` — ${totalAlerts} unread` : ''}
                 </TooltipContent>
               </Tooltip>
 
@@ -327,7 +342,7 @@ export default function HorizontalUtilityBar() {
                      <Inbox className={iconClass} />
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Inbox</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">My Inbox — Messages & updates</TooltipContent>
               </Tooltip>
 
               {railDivider}
@@ -345,7 +360,7 @@ export default function HorizontalUtilityBar() {
                 <LayoutDashboard className={iconClass} />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">My Dashboard</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">My Dashboard & Profile</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -368,7 +383,7 @@ export default function HorizontalUtilityBar() {
                 <Settings className={iconClass} />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Settings & Profile</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Profile & Settings</TooltipContent>
           </Tooltip>
         </div>
       </div>

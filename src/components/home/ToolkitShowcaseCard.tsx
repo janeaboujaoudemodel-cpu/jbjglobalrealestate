@@ -122,11 +122,11 @@ const royalTools = [
 
 export function ToolkitShowcaseCard() {
   return (
-    <section className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-10 md:py-14">
+    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] py-10 md:py-14">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="rounded-2xl overflow-hidden border border-gold/20">
+        <div className="rounded-2xl overflow-hidden border border-gold/30 bg-gradient-to-br from-[hsl(38,35%,15%)] via-[hsl(36,30%,18%)] to-[hsl(34,25%,15%)]">
           {/* Header Section */}
-          <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-6 md:p-8 border-b border-gold/30">
+          <div className="bg-gradient-to-r from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] p-6 md:p-8 border-b border-gold/20">
             <div className="flex items-center gap-3 mb-3">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-xs uppercase tracking-[0.2em]">
                 <Sparkles className="w-3 h-3" />
@@ -135,13 +135,13 @@ export function ToolkitShowcaseCard() {
             </div>
             
             <h2 
-              className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-2"
+              className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#F5EBD7] mb-2"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               JBJ Royal Tools Hub
             </h2>
             
-            <p className="text-zinc-600 text-sm md:text-base max-w-2xl">
+            <p className="text-zinc-400 text-sm md:text-base max-w-2xl">
               Powerful real estate tools for property valuation, comparison, mortgage calculation, and AI-powered enhancements — all completely free to use.
             </p>
           </div>
@@ -156,7 +156,7 @@ export function ToolkitShowcaseCard() {
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <Link to={tool.href} className="group block h-full">
-                    <div className={`h-full flex flex-col bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 ${tool.borderClass} ${tool.hoverBorderClass} p-5 transition-all duration-300 ${tool.glowClass} hover:-translate-y-1`}>
+                    <div className={`h-full flex flex-col bg-gradient-to-br from-[hsl(38,35%,15%)] via-[hsl(36,30%,18%)] to-[hsl(34,25%,15%)] rounded-xl border-2 ${tool.borderClass} ${tool.hoverBorderClass} p-5 transition-all duration-300 ${tool.glowClass} hover:-translate-y-1`}>
                       {/* Icon with theme color */}
                       <div className={`w-12 h-12 rounded-xl border-2 ${tool.borderClass} ${tool.bgAccent} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                         <tool.icon className={`w-6 h-6 ${tool.iconClass}`} />
@@ -164,14 +164,14 @@ export function ToolkitShowcaseCard() {
 
                       {/* Title */}
                       <h4 
-                        className="text-base font-bold text-black mb-2 group-hover:text-gold transition-colors"
+                        className="text-base font-bold text-[#F5EBD7] mb-2 group-hover:text-gold transition-colors"
                         style={{ fontFamily: "Poppins, sans-serif" }}
                       >
                         {tool.name}
                       </h4>
 
                       {/* Description */}
-                      <p className="text-sm text-zinc-600 mb-4 leading-relaxed flex-grow">
+                      <p className="text-sm text-zinc-400 mb-4 leading-relaxed flex-grow">
                         {tool.description}
                       </p>
 
