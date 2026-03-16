@@ -1,7 +1,7 @@
 import { useState, lazy, Suspense, memo, useEffect, forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import HeroSearchBar from "@/components/home/HeroSearchBar";
+// HeroSearchBar removed — global filter bar handles search
 
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
