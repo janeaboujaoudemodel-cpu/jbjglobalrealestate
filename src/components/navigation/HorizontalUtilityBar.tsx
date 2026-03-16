@@ -83,15 +83,28 @@ export default function HorizontalUtilityBar() {
     window.dispatchEvent(new CustomEvent('jj_nav_toggle'));
   };
 
-  // When filters are applied from the panel, navigate to properties with those filters
+  // When filters are applied from the panel, navigate to properties with ALL filter params
   const handleFilterChange = (newFilters: ShortcutFilterState) => {
     setFilterState(newFilters);
-    // Build query params from filters and navigate
-    const params = new URLSearchParams();
-    if (newFilters.searchQuery) params.set('q', newFilters.searchQuery);
-    if (newFilters.propertyTypes?.length) params.set('type', newFilters.propertyTypes.join(','));
-    if (newFilters.emirates?.length) params.set('emirate', newFilters.emirates.join(','));
-    navigate(`/properties?${params.toString()}`);
+    const p = new URLSearchParams();
+    if (newFilters.searchQuery) p.set('q', newFilters.searchQuery);
+    if (newFilters.priceMin) p.set('priceMin', newFilters.priceMin);
+    if (newFilters.priceMax) p.set('priceMax', newFilters.priceMax);
+    if (newFilters.bedrooms.length) p.set('bedrooms', newFilters.bedrooms.join(','));
+    if (newFilters.emirates.length) p.set('emirates', newFilters.emirates.join(','));
+    if (newFilters.areas.length) p.set('areas', newFilters.areas.join(','));
+    if (newFilters.developers.length) p.set('developers', newFilters.developers.join(','));
+    if (newFilters.propertyTypes.length) p.set('propertyTypes', newFilters.propertyTypes.join(','));
+    if (newFilters.statuses.length) p.set('statuses', newFilters.statuses.join(','));
+    if (newFilters.constructionStatuses.length) p.set('constructionStatuses', newFilters.constructionStatuses.join(','));
+    if (newFilters.sortBy) p.set('sortBy', newFilters.sortBy);
+    if (newFilters.hideSoldOut) p.set('hideSoldOut', '1');
+    if (newFilters.sizeMin) p.set('sizeMin', newFilters.sizeMin);
+    if (newFilters.sizeMax) p.set('sizeMax', newFilters.sizeMax);
+    if (newFilters.views.length) p.set('views', newFilters.views.join(','));
+    if (newFilters.propertyCategory) p.set('category', newFilters.propertyCategory);
+    const qs = p.toString();
+    navigate(`/properties${qs ? `?${qs}` : ''}`);
   };
 
   
