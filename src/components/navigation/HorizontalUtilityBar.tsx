@@ -272,7 +272,7 @@ export default function HorizontalUtilityBar() {
                 <span className={labelClass}>Filter</span>
               </button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open advanced filters</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open advanced property filters — price, bedrooms, type, handover, and more</TooltipContent>
           </Tooltip>
         </div>
 
