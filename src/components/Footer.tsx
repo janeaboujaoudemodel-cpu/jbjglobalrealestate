@@ -594,31 +594,31 @@ const Footer = () => {
                 <span 
                   className="font-bold"
                   style={{
-                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
+                    background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     filter: 'drop-shadow(0 0 10px rgba(200,167,102,0.5))',
                   }}
                 >Licensed</span> 
-                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
                 BUY 
-                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
                 SELL 
-                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
                 RENT 
-                <span className="text-gold/60 mx-1 sm:mx-2">✦</span> 
+                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
                 <span className="font-bold">REAL ESTATE</span> In The 
                 <span 
                   className="font-bold ml-1"
                   style={{
-                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
+                    background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     filter: 'drop-shadow(0 0 10px rgba(200,167,102,0.5))',
                   }}
                 > UAE</span>
               </p>
-              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-gold via-gold/90 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-zinc-700 via-zinc-600 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
             </div>
             <p className="relative text-zinc-600 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 md:mb-10 text-center px-2 max-w-2xl mx-auto">
               Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
