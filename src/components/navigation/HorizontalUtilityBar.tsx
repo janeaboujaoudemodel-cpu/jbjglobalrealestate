@@ -182,19 +182,19 @@ export default function HorizontalUtilityBar() {
 
           {railDivider}
 
-          {/* Area Unit Toggle */}
+           {/* Area Unit Toggle — connected field box */}
           <Tooltip>
             <TooltipTrigger asChild>
               <button
                 onClick={toggleAreaUnit}
-                className="h-8 flex items-center transition-all shrink-0"
+                className="h-8 flex items-center transition-all shrink-0 border border-black/10 rounded-md overflow-hidden"
                 aria-label="Toggle area unit"
               >
-                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
                   ft²
                 </span>
-                <span className="w-px h-5 bg-[hsl(var(--gold)/0.2)]" />
-                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.15)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
+                <span className="w-px h-full bg-black/10" />
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
                   m²
                 </span>
               </button>
