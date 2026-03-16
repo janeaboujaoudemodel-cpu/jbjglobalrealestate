@@ -5,11 +5,9 @@
  */
 import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 
-import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, User, Briefcase, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
+import { ChevronDown, X, Bookmark, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, User, Briefcase, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
@@ -317,21 +315,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <Map className="w-3.5 h-3.5" />
                 {isMapMode ? t('filter.list') : t('filter.map')}
               </button>
-              {/* Saved */}
+              {/* Saved Filters */}
               <ConnectedSavedButton variant={variant} onApplySavedFilter={onFilterChange} />
-              {/* Currency */}
-              <ConnectedCurrencyButton />
-              {/* Filter */}
-              <button
-                onClick={() => setAdvancedOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10"
-                title={t('filter.filter')}
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                {t('filter.filter')}
-              </button>
-              {/* Mode Investor - compact, no stretch */}
-              <ConnectedModeButton />
               {/* Spacer to fill remaining width on desktop */}
               <div className="flex-1 min-w-0" />
             </div>
@@ -733,75 +718,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
 /* ---- Connected toolbar sub-components ---- */
 
-const CURRENCY_KEY = 'jj_currency';
-
-function ConnectedCurrencyButton() {
-  const { t } = useLanguage();
-  const [currency, setCurrencyState] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem(CURRENCY_KEY) || 'AED';
-    }
-    return 'AED';
-  });
-  const [open, setOpen] = useState(false);
-
-  const setCurrency = (code: string) => {
-    setCurrencyState(code);
-    localStorage.setItem(CURRENCY_KEY, code);
-    window.dispatchEvent(new CustomEvent('currencyChange', { detail: code }));
-    setOpen(false);
-  };
-
-  const currentCurrency = SUPPORTED_CURRENCIES.find(c => c.code === currency) || SUPPORTED_CURRENCIES[0];
-
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10" title="Select your currency">
-          <span>{currentCurrency.flag}</span>
-          <span>{currentCurrency.code}</span>
-          <ChevronDown className="w-3 h-3 opacity-60" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="z-[10200] min-w-[280px] rounded-xl shadow-2xl p-0 border-2 border-gold/40"
-        style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
-        align="end"
-        sideOffset={12}
-      >
-        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
-        <div className="px-4 py-3 border-b border-gold/20">
-          <p className="text-xs font-semibold text-black/60 uppercase tracking-wider">{t('filter.selectCurrency')}</p>
-        </div>
-        <div className="p-2 max-h-80 overflow-y-auto">
-          {SUPPORTED_CURRENCIES.map((curr) => (
-            <button
-              key={curr.code}
-              onClick={() => setCurrency(curr.code)}
-              className={cn(
-                "w-full flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5 transition-colors",
-                currency === curr.code
-                  ? 'bg-gold/15 border border-gold/30'
-                  : 'hover:bg-[#F5EBD7]'
-              )}
-            >
-              <span className="flex items-center gap-3">
-                <span className="text-lg">{curr.flag}</span>
-                <span className={cn("text-sm font-semibold", currency === curr.code ? 'text-gold' : 'text-black')}>{curr.name}</span>
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="text-black/50 text-sm">{curr.symbol}</span>
-                {currency === curr.code && <Check className="w-4 h-4 text-gold" />}
-              </span>
-            </button>
-          ))}
-        </div>
-        <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
-      </PopoverContent>
-    </Popover>
-  );
-}
-
 interface SavedFilter {
   name: string;
   filters: ShortcutFilterState;
@@ -837,8 +753,8 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
     <Popover open={savedOpen} onOpenChange={setSavedOpen}>
       <PopoverTrigger asChild>
         <button className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20 text-black/70 hover:bg-gold/10" title="View saved filters">
-          <Heart className="w-3.5 h-3.5 text-black fill-black" />
-          <span className="hidden sm:inline">{t('filter.saved')}</span>
+          <Bookmark className="w-3.5 h-3.5 text-black fill-black" />
+          <span className="hidden sm:inline">{t('filter.savedFilters')}</span>
         </button>
       </PopoverTrigger>
       <PopoverContent
@@ -890,99 +806,6 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
             ))}
           </div>
         )}
-      </PopoverContent>
-    </Popover>
-  );
-}
-
-function ConnectedModeButton() {
-  const { mode, setMode } = useUserModeContext();
-  const { t } = useLanguage();
-  const [modeOpen, setModeOpen] = useState(false);
-
-  const MODE_CONFIG: Record<string, { label: string; icon: typeof Users; color: string; bgColor: string; borderColor: string; description: string }> = {
-    investor: {
-      label: t('filter.modeInvestor'),
-      icon: User,
-      color: 'text-emerald-500',
-      bgColor: 'bg-emerald-500/10 border-emerald-500/30',
-      borderColor: 'border-emerald-500/40',
-      description: t('filter.modeInvestorDesc')
-    },
-    broker: {
-      label: t('filter.modeBroker'),
-      icon: Briefcase,
-      color: 'text-blue-500',
-      bgColor: 'bg-blue-500/10 border-blue-500/30',
-      borderColor: 'border-blue-500/40',
-      description: t('filter.modeBrokerDesc')
-    },
-    investor_broker: {
-      label: t('filter.modeInvestorBroker'),
-      icon: Users,
-      color: 'text-purple-500',
-      bgColor: 'bg-purple-500/10 border-purple-500/30',
-      borderColor: 'border-purple-500/40',
-      description: t('filter.modeInvestorBrokerDesc')
-    },
-    developer: {
-      label: t('filter.modeDeveloper'),
-      icon: Building2,
-      color: 'text-amber-500',
-      bgColor: 'bg-amber-500/10 border-amber-500/30',
-      borderColor: 'border-amber-500/40',
-      description: t('filter.modeDeveloperDesc')
-    }
-  };
-
-  const currentConfig = MODE_CONFIG[mode] || MODE_CONFIG.investor;
-
-  return (
-    <Popover open={modeOpen} onOpenChange={setModeOpen}>
-      <PopoverTrigger asChild>
-        <button className={cn("flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors flex-shrink-0 max-w-fit", currentConfig.bgColor, currentConfig.color, "hover:brightness-95")} title="Switch your viewing mode">
-          {(() => { const Icon = currentConfig.icon; return <Icon className="w-3.5 h-3.5" />; })()}
-          <span className="hidden sm:inline">{currentConfig.label}</span>
-          <ChevronDown className={cn("w-3 h-3 transition-transform", modeOpen && "rotate-180")} />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="w-72 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 z-[10200] shadow-xl rounded-xl"
-        side="bottom"
-        align="end"
-        sideOffset={6}
-      >
-        <div className="px-3 py-2.5 mb-2 rounded-lg bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#D4C4A8] border border-gold/40">
-          <p className="text-sm font-bold text-black/80">{t('filter.selectMode')}</p>
-          <p className="text-xs text-black/50 mt-0.5">{t('filter.modeDesc')}</p>
-        </div>
-        {Object.entries(MODE_CONFIG).map(([modeKey, config]) => {
-          const isActive = mode === modeKey;
-          return (
-            <button
-              key={modeKey}
-              onClick={() => { setMode(modeKey as any); setModeOpen(false); }}
-              className={cn(
-                "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 text-left",
-                isActive
-                  ? cn(config.bgColor, config.borderColor, "border")
-                  : "hover:bg-zinc-50"
-              )}
-            >
-              <div className={cn(
-                "w-8 h-8 rounded-lg flex items-center justify-center border",
-                config.bgColor, config.borderColor
-              )}>
-                {(() => { const Icon = config.icon; return <Icon className={cn("w-4 h-4", config.color)} />; })()}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className={cn("text-sm font-medium", config.color)}>{config.label}</p>
-                <p className="text-xs text-zinc-500 line-clamp-2">{config.description}</p>
-              </div>
-              {isActive && <Check className={cn("w-4 h-4 shrink-0", config.color)} />}
-            </button>
-          );
-        })}
       </PopoverContent>
     </Popover>
   );

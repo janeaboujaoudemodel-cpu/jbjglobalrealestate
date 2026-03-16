@@ -183,7 +183,7 @@ export default function HorizontalUtilityBar() {
                 <Heart className="w-4 h-4 text-red-500 group-hover:text-red-600 group-hover:scale-110 transition-transform shrink-0" />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Favorites</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Favorite Properties</TooltipContent>
           </Tooltip>
 
           {railDivider}
