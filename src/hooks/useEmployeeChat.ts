@@ -172,7 +172,7 @@ export const useEmployeeChat = (selectedEmployeeId: string | null) => {
       }
     }, typingDelay + responseDelay);
 
-  }, [selectedEmployeeId, getEmployee, messages]);
+  }, [selectedEmployeeId, getEmployee, messages, userId]);
 
   // Real-time subscription
   useEffect(() => {
