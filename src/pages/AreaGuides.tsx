@@ -70,26 +70,6 @@ const AreaGuides = () => {
   // Fetch REAL areas from database
   const { data: areas, isLoading, error } = useAreas();
 
-  // Hero intersection observer — switch header/nav when user scrolls past hero
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const heroVisible = entry.isIntersecting;
-        setPastHero(!heroVisible);
-        if (heroVisible) {
-          document.body.classList.remove("filter-bar-fixed");
-        } else {
-          document.body.classList.add("filter-bar-fixed");
-        }
-      },
-      { threshold: 0.1 }
-    );
-    if (heroRef.current) observer.observe(heroRef.current);
-    return () => {
-      observer.disconnect();
-      document.body.classList.remove("filter-bar-fixed");
-    };
-  }, []);
 
   const scrollToGrid = () => {
     gridRef.current?.scrollIntoView({ behavior: "smooth" });
