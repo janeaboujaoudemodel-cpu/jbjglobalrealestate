@@ -1067,43 +1067,62 @@ export default function GlobalVerticalNav() {
 
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
-      {/* Logo — enlarged monogram and wordmark */}
-      <div className="p-4 px-5 border-b border-gold/20 flex-shrink-0">
-        <div className="flex items-center gap-3">
-         <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0">
-            <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain" />
-          </Link>
-          <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-80 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
-            <span className="text-[13px] font-bold text-black tracking-wide leading-tight">JBJ GLOBAL</span>
-            <span className="text-[12px] font-bold text-[#D4B896] tracking-wide leading-tight">REAL ESTATE</span>
-          </Link>
+      {/* ━━━ HEADER — Premium brand block with frosted glass ━━━ */}
+      <div className="relative flex-shrink-0 overflow-hidden">
+        {/* Subtle shimmer background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1a1a]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(212,184,150,0.15),transparent_70%)]" />
+        
+        <div className="relative px-4 py-4">
+          <div className="flex items-center gap-3">
+            <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0 group">
+              <div className="relative">
+                <img src={jbjMonogramLightBg} alt="JBJ" className="w-12 h-12 object-contain rounded-xl ring-1 ring-gold/30 group-hover:ring-gold/60 transition-all shadow-lg shadow-black/20" />
+                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#1a1a1a]" />
+              </div>
+            </Link>
+            <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-90 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <span className="text-[12px] font-extrabold text-white/95 tracking-[0.2em] leading-tight">JBJ GLOBAL</span>
+              <span className="text-[10px] font-bold text-gold/80 tracking-[0.25em] leading-tight mt-0.5">REAL ESTATE</span>
+            </Link>
+            <button
+              onClick={toggleCollapse}
+              className="w-7 h-7 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] flex items-center justify-center transition-all border border-white/[0.06]"
+              aria-label="Collapse navigation"
+            >
+              <ChevronLeft className="w-3.5 h-3.5 text-white/50" />
+            </button>
+          </div>
         </div>
+        {/* Bottom gold accent line */}
+        <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
       </div>
 
-
-      {/* Scrollable area: shortcuts + hubs + sections */}
+      {/* ━━━ SCROLLABLE NAV ━━━ */}
       <nav
         className="flex-1 overflow-y-auto jj-scrollbar-gold jj-scrollbar-always-visible overscroll-contain min-h-0"
         style={{ scrollbarGutter: "stable" }}
       >
-        {/* My Shortcuts — premium flyout trigger */}
-        <div className="px-2 pt-3 pb-1">
+        {/* ── My Shortcuts — elevated trigger ── */}
+        <div className="px-2.5 pt-3 pb-1.5">
           <button
             onClick={(e) => handleNavClick('shortcuts', e as any)}
-            className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-bold w-full transition-all ${
+            className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-bold w-full transition-all duration-200 ${
               activeMegaMenu === 'shortcuts'
-                ? "bg-gradient-to-r from-gold/30 to-gold/20 text-black border-2 border-gold/60 shadow-md shadow-gold/15"
-                : "text-gold hover:bg-gold/15 border-2 border-gold/50 bg-gold/10"
+                ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50 shadow-md shadow-gold/10"
+                : "text-black/70 hover:text-black border border-dashed border-gold/30 hover:border-gold/50 bg-gold/[0.04] hover:bg-gold/[0.08]"
             }`}
           >
-            <Zap className="w-4 h-4 text-gold flex-shrink-0" />
-            <span className="flex-1 text-left">My Shortcuts</span>
-            <ChevronRight className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-gold/50"}`} />
+            <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${activeMegaMenu === 'shortcuts' ? 'bg-gold/20' : 'bg-gold/10'}`}>
+              <Zap className="w-3.5 h-3.5 text-gold" />
+            </div>
+            <span className="flex-1 text-left tracking-wide">My Shortcuts</span>
+            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-black/25"}`} />
           </button>
         </div>
 
-        {/* Highlighted Hubs */}
-        <div className="px-2 py-1 space-y-0.5">
+        {/* ── Highlighted Hubs — color-coded pills ── */}
+        <div className="px-2.5 pb-1 space-y-1">
           {highlightItems.map((item, i) => {
             const hasMega = !!item.megaMenu;
             const isMenuOpen = activeMegaMenu === item.megaMenu;
@@ -1116,25 +1135,24 @@ export default function GlobalVerticalNav() {
                   if (hasMega) handleNavClick(item.megaMenu, e);
                   else handleNavClick(undefined);
                 }}
-                className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item)}`}
+                className={`flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[12px] font-semibold transition-all duration-200 ${getItemStyle(item)}`}
               >
-                <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item)}`} />
+                <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${getIconStyle(item)}`} />
                 <span className="flex-1">{item.label}</span>
                 {hasMega && (
-                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
+                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/25"}`} />
                 )}
                 {item.highlight && !isMenuOpen && !activeMegaMenu && !isRouteActive(item.href) && (
-                  <Sparkles className="w-3 h-3 text-gold/60" />
+                  <Sparkles className="w-3 h-3 text-gold/40" />
                 )}
               </Link>
             );
           })}
         </div>
 
-        {/* Collapsible Section Nav */}
-        <div className="py-2 px-2 space-y-0.5">
+        {/* ── Section Nav — refined accordion with editorial headers ── */}
+        <div className="py-1.5 px-2.5 space-y-0.5">
           {SECTION_KEYS.map((sectionKey, sectionIdx) => {
-            // Role-based visibility
             if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
             if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
             if (sectionKey === 'INVESTOR' && !isInvestor && !isOwner) return null;
@@ -1148,33 +1166,37 @@ export default function GlobalVerticalNav() {
 
             return (
               <React.Fragment key={sectionKey}>
-                {sectionIdx > 0 && <hr className="border-gold/15 mx-1 my-1" />}
+                {sectionIdx > 0 && (
+                  <div className="flex items-center gap-2 px-3 my-1">
+                    <div className="flex-1 h-[1px] bg-gradient-to-r from-gold/15 to-transparent" />
+                    <div className="w-1 h-1 rounded-full bg-gold/20" />
+                    <div className="flex-1 h-[1px] bg-gradient-to-l from-gold/15 to-transparent" />
+                  </div>
+                )}
 
                 <div id={`nav-section-${sectionKey.replace(/\s+/g, '-').toLowerCase()}`}>
                   <button
                     onClick={(e) => toggleSection(sectionKey, e)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-[11px] uppercase tracking-[0.15em] font-bold transition-all border ${
-                      sectionKey === 'MY ACCOUNT'
-                        ? sectionHighlighted
-                          ? "text-gold bg-gradient-to-r from-gold/20 to-gold/10 border-gold/50"
-                          : "text-gold/80 hover:text-gold bg-gradient-to-r from-gold/5 to-transparent border-gold/20 hover:border-gold/30"
-                        : sectionHighlighted
-                        ? "text-gold bg-gold/15 border-gold/40"
-                        : "text-gold/80 hover:text-gold hover:bg-gold/5 border-transparent hover:border-gold/20"
+                    className={`w-full flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group ${
+                      sectionHighlighted
+                        ? "text-black/80 bg-gold/[0.12]"
+                        : "text-black/45 hover:text-black/70 hover:bg-gold/[0.05]"
                     }`}
                   >
-                    <SectionIcon className="w-3.5 h-3.5 flex-shrink-0 text-gold" />
+                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${sectionHighlighted ? 'bg-gold/20' : 'bg-gold/[0.08] group-hover:bg-gold/15'}`}>
+                      <SectionIcon className="w-3 h-3 text-gold" />
+                    </div>
                     <span className="flex-1 text-left">{sectionKey}</span>
-                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold' : 'text-black/40'}`} />
+                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold/70' : 'text-black/25'}`} />
                     {!isOpen && hasActiveChild && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-gold" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
                     )}
                   </button>
 
                   <div
-                    className={`overflow-hidden transition-all duration-200 ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}
+                    className={`overflow-hidden transition-all duration-250 ease-out ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}
                   >
-                    <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pt-0.5 pb-1">
+                    <div className="ml-4 pl-2.5 border-l border-gold/15 space-y-0.5 pt-1 pb-1.5">
                       {items.map((item, i) => {
                         const hasMega = !!item.megaMenu;
                         const isMenuOpen = activeMegaMenu === item.megaMenu;
@@ -1188,18 +1210,17 @@ export default function GlobalVerticalNav() {
                                 handleNavClick(item.megaMenu, e);
                               } else {
                                 handleNavClick(undefined);
-                                // Auto-close My Account section on selection to prevent stuck states
                                 if (sectionKey === 'MY ACCOUNT') {
                                   setOpenSection(null);
                                 }
                               }
                             }}
-                            className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${getItemStyle(item, sectionKey)}`}
+                            className={`flex items-center gap-2 px-2.5 py-[6px] rounded-lg text-[12px] font-medium transition-all duration-150 ${getItemStyle(item, sectionKey)}`}
                           >
-                            <Icon className={`w-4 h-4 flex-shrink-0 ${getIconStyle(item, sectionKey)}`} />
+                            <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${getIconStyle(item, sectionKey)}`} />
                             <span className="flex-1">{item.label}</span>
                             {hasMega && (
-                              <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/30"}`} />
+                              <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/20"}`} />
                             )}
                           </Link>
                         );
@@ -1213,31 +1234,30 @@ export default function GlobalVerticalNav() {
         </div>
       </nav>
 
-      {/* Bottom pinned section — SUPPORT hub + Sign In/Out */}
+      {/* ━━━ BOTTOM — Support + Sign Out ━━━ */}
       <div className="mt-auto flex-shrink-0">
-        <div className="px-2.5 py-2.5 border-t border-black/[0.06] bg-gradient-to-t from-black/[0.03] to-transparent">
-          {/* Contact & Support — inline row */}
+        <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+        <div className="px-2.5 py-2 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent">
           <div className="flex gap-1.5 mb-1.5">
             <Link
               to="/contact"
-              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-black/50 hover:text-black/80 transition-all px-1 py-[5px] rounded-md hover:bg-black/[0.04]"
+              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-black/50 hover:text-black/80 transition-all px-1 py-[5px] rounded-lg hover:bg-black/[0.04]"
             >
               <Headphones className="w-3 h-3 text-red-400" />
               Contact
             </Link>
             <Link
               to="/ticket-hub"
-              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-black/50 hover:text-black/80 transition-all px-1 py-[5px] rounded-md hover:bg-black/[0.04]"
+              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-black/50 hover:text-black/80 transition-all px-1 py-[5px] rounded-lg hover:bg-black/[0.04]"
             >
               <Ticket className="w-3 h-3 text-red-400" />
               Support
             </Link>
           </div>
-          {/* Sign Out / Sign In — full width, distinct */}
           {session ? (
             <button
               onClick={() => { supabase.auth.signOut(); }}
-              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold text-red-400/80 hover:text-white transition-all px-2 py-[5px] rounded-md border border-red-400/20 hover:bg-red-500 hover:border-red-500 w-full group"
+              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold text-red-400/80 hover:text-white transition-all px-2 py-[5px] rounded-lg border border-red-400/20 hover:bg-red-500 hover:border-red-500 w-full group"
             >
               <LogOut className="w-3 h-3 group-hover:text-white" />
               Sign Out
@@ -1245,7 +1265,7 @@ export default function GlobalVerticalNav() {
           ) : (
             <Link
               to="/auth"
-              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold text-gold hover:text-white transition-all px-2 py-[5px] rounded-md border border-gold/25 hover:bg-gold hover:border-gold w-full group"
+              className="flex items-center justify-center gap-1.5 text-[10px] font-semibold text-gold hover:text-white transition-all px-2 py-[5px] rounded-lg border border-gold/25 hover:bg-gold hover:border-gold w-full group"
             >
               <User className="w-3 h-3 group-hover:text-white" />
               Sign In
