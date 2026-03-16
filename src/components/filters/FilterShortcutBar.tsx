@@ -5,7 +5,7 @@
  */
 import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 
-import { ChevronDown, X, Heart, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, User, Briefcase, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
+import { ChevronDown, X, Bookmark, Building2, Bed, Calendar, DollarSign, CreditCard, Activity, Map, Users, User, Briefcase, Trash2, ArrowUpDown, EyeOff, HardHat, Clock, ArrowUp, ArrowDown, SortAsc, SlidersHorizontal, Check, TrendingUp, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useUserModeContext } from "@/contexts/UserModeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
