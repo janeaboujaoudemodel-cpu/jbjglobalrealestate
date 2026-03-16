@@ -160,7 +160,7 @@ const Index = () => {
          ═══════════════════════════════════════════════════════════ */}
       <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         {/* Video Background */}
-        <div className="absolute inset-0 bg-black">
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
           <img 
             src={luxuryVillaHero} 
             alt="Luxury Dubai Real Estate" 
