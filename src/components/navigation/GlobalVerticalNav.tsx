@@ -1282,9 +1282,9 @@ export default function GlobalVerticalNav() {
       >
       {collapsed ? (
       <div className="hidden lg:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative">
-          {/* Dark header strip matching expanded header */}
+          {/* Champagne header strip matching expanded header */}
           <div className="w-full flex-shrink-0 relative">
-            <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] to-[#2a2520]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#F5EBD7] to-[#D4C4A8]" />
             <div className="relative flex flex-col items-center py-3 gap-1">
               <Link to="/" className="shrink-0 group">
                 <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain rounded-lg ring-1 ring-gold/30 group-hover:ring-gold/50 transition-all" />
