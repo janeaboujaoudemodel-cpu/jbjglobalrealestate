@@ -95,7 +95,7 @@ export const useEmployeeChat = (selectedEmployeeId: string | null) => {
     const { data: userMsg, error: userError } = await supabase
       .from('employee_chat_messages')
       .insert({
-        sender_id: 'current-user',
+        sender_id: userId,
         sender_type: 'user',
         recipient_id: selectedEmployeeId,
         message: content.trim(),
