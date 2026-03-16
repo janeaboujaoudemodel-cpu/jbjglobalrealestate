@@ -156,7 +156,7 @@ export function ToolkitShowcaseCard() {
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <Link to={tool.href} className="group block h-full">
-                    <div className={`h-full flex flex-col bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 ${tool.borderClass} ${tool.hoverBorderClass} p-5 transition-all duration-300 ${tool.glowClass} hover:-translate-y-1`}>
+                    <div className={`h-full flex flex-col bg-gradient-to-br from-[hsl(38,35%,15%)] via-[hsl(36,30%,18%)] to-[hsl(34,25%,15%)] rounded-xl border-2 ${tool.borderClass} ${tool.hoverBorderClass} p-5 transition-all duration-300 ${tool.glowClass} hover:-translate-y-1`}>
                       {/* Icon with theme color */}
                       <div className={`w-12 h-12 rounded-xl border-2 ${tool.borderClass} ${tool.bgAccent} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                         <tool.icon className={`w-6 h-6 ${tool.iconClass}`} />
