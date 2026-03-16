@@ -364,9 +364,14 @@ export default function HorizontalUtilityBar() {
           {railDivider}
 
           {/* Account — opens Mode Selector via ModeSwitcher */}
-          <div className={`${cellBase} ${cellHover} px-1`}>
-            <ModeSwitcher variant="header" />
-          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className={`${cellBase} ${cellHover} px-1`}>
+                <ModeSwitcher variant="header" />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your mode based on your role</TooltipContent>
+          </Tooltip>
 
           {railDivider}
 
