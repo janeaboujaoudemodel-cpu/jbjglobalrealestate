@@ -117,8 +117,8 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Beauty Filters", href: "/toolkit/beauty-filters", icon: Sparkles },
   { label: "PDF Editor", href: "/toolkit/pdf-editor", icon: FileText },
 
-  // ── AI Tools ──
-  { label: "AI Tools Hub", href: "/ai-hub", icon: Cpu, section: "AI TOOLS", megaMenu: 'ai-tools' },
+  // ── AI Tools (merged into TOOLS section) ──
+  { label: "AI Tools Hub", href: "/ai-hub", icon: Cpu, section: "TOOLS", megaMenu: 'ai-tools' },
   { label: "AI Personal Shopper", href: "/ai-personal-shopper", icon: Store },
   { label: "AI Investment Report", href: "/ai-investment-report", icon: TrendingUp },
   { label: "Voice Agent Settings", href: "/voice-settings", icon: Mic },
@@ -565,14 +565,13 @@ import { SHORTCUT_GROUPS as CANONICAL_SHORTCUT_GROUPS, filterShortcutGroups } fr
 
 
 /* ─── SECTION KEYS ─── */
-const SECTION_KEYS = ["PROPERTIES", "TOOLS", "AI TOOLS", "INSIGHTS", "GUIDES", "SERVICES", "PARTNERS", "BROKER & ACADEMY", "INVESTOR", "COMPANY", "LEGAL", "PRODUCTIVITY", "MY ACCOUNT", "BUSINESS SUITES", "ADMIN & OWNER"] as const;
+const SECTION_KEYS = ["PROPERTIES", "TOOLS", "INSIGHTS", "GUIDES", "SERVICES", "PARTNERS", "BROKER & ACADEMY", "INVESTOR", "COMPANY", "LEGAL", "PRODUCTIVITY", "MY ACCOUNT", "BUSINESS SUITES", "ADMIN & OWNER"] as const;
 type SectionKey = typeof SECTION_KEYS[number];
 
 /* ─── SECTION ICONS ─── */
 const SECTION_ICONS: Record<SectionKey, any> = {
   "PROPERTIES": Building2,
   "TOOLS": Sparkles,
-  "AI TOOLS": Cpu,
   "INSIGHTS": Lightbulb,
   "GUIDES": BookOpen,
   "SERVICES": Briefcase,

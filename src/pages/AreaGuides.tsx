@@ -302,6 +302,39 @@ const AreaGuides = () => {
       {/* Gold divider */}
       <div ref={gridRef} className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
+      {/* Emirates Section — clickable cards grouped by emirate */}
+      {(!shortcutFilters.emirates || shortcutFilters.emirates.length === 0) && !shortcutFilters.searchQuery && (
+        <section className={`pt-8 pb-4 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] ${pastHero ? "lg:pl-[200px]" : ""}`}>
+          <div className="px-4 sm:px-6 lg:px-8">
+            <h2 className="text-xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              Browse by Emirate
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-2">
+              {heroEmiratesOrder.map(emirate => {
+                const count = emirateCounts[emirate];
+                if (!count) return null;
+                return (
+                  <button
+                    key={emirate}
+                    onClick={() => {
+                      setShortcutFilters(prev => ({ ...prev, emirates: [emirate] }));
+                      scrollToGrid();
+                    }}
+                    className="flex flex-col items-center gap-1 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all"
+                  >
+                    <MapPin className="w-5 h-5 text-gold" />
+                    <span className="text-black font-semibold text-sm">{emirate}</span>
+                    <span className="text-gold text-xs font-bold">{count} Areas</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          {/* Divider */}
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent mt-4" />
+        </section>
+      )}
+
       {/* Areas Grid */}
       <section className={`pt-8 pb-16 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] min-h-screen ${pastHero ? "lg:pl-[200px]" : ""}`}>
         <div className="px-4 sm:px-6 lg:px-8">
@@ -315,6 +348,14 @@ const AreaGuides = () => {
                 <span className="text-black/40 ml-2">· Page {currentPage} of {totalPages}</span>
               )}
             </p>
+            {shortcutFilters.emirates && shortcutFilters.emirates.length > 0 && (
+              <button
+                onClick={() => setShortcutFilters(prev => ({ ...prev, emirates: [] }))}
+                className="text-xs text-gold hover:text-gold/80 flex items-center gap-1 transition-colors"
+              >
+                ✕ Clear emirate filter
+              </button>
+            )}
           </div>
 
           {isLoading ? (
@@ -508,8 +549,10 @@ const AreaGuides = () => {
       </section>
 
       {/* DLD Market Intelligence */}
-      <div className={pastHero ? "lg:pl-[200px]" : ""}>
-        <DLDMarketWidget />
+      <div className={`py-8 ${pastHero ? "lg:pl-[200px]" : ""}`}>
+        <div className="px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
+          <DLDMarketWidget />
+        </div>
       </div>
 
       {/* CTA Section */}

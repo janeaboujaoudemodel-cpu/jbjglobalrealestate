@@ -125,7 +125,9 @@ export function applyShortcutFilters<T extends Record<string, any>>(
       const name = (p.name || p.title || '').toLowerCase();
       const dev = (p.developer_name || p.developer || '').toLowerCase();
       const area = (p.area_name || p.district || '').toLowerCase();
-      return name.includes(q) || dev.includes(q) || area.includes(q);
+      const emirate = (p.emirate || p.location_emirate || '').toLowerCase();
+      const location = (p.location || '').toLowerCase();
+      return name.includes(q) || dev.includes(q) || area.includes(q) || emirate.includes(q) || location.includes(q);
     });
   }
 

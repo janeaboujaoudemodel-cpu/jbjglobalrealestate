@@ -168,9 +168,7 @@ const PropertiesReelly = () => {
   // Convert DB projects to ReellyProject format — DB is the sole data source
   const mergedProjects = useMemo(() => {
     if (!dbProjects?.length) return [];
-    return dbProjects
-      .filter((p: any) => p.cover_image_url && p.cover_image_url !== '')
-      .map(mapDbProjectToReellyProject);
+    return dbProjects.map(mapDbProjectToReellyProject);
   }, [dbProjects]);
 
   // Apply shortcut filters to merged projects
@@ -278,7 +276,8 @@ const PropertiesReelly = () => {
 
       {/* Fixed filter bar removed — handled globally by GlobalFilterBar in MainLayout */}
 
-      {/* Divider removed per user request */}
+      {/* Gold divider between hero and continue searching */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
       {/* Pre-render map hidden in background so Leaflet initialises before user switches to map mode */}
       <div style={{ display: isMapMode ? 'block' : 'none', minHeight: '600px', maxHeight: '85vh' }} className="relative bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden">
@@ -345,8 +344,8 @@ const PropertiesReelly = () => {
         <section className="py-8 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark min-h-screen">
           <div className="px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
             
-            {/* Results Count */}
-            <div className="mb-6 flex items-center justify-between">
+            {/* Results Count + Sort */}
+            <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
               {isDbLoading ? (
                 <p className="text-black/40 animate-pulse">Loading curated developments…</p>
               ) : (
@@ -358,6 +357,18 @@ const PropertiesReelly = () => {
                   )}
                 </p>
               )}
+              {/* Inline Sort */}
+              <select
+                value={shortcutFilters.sortBy || ''}
+                onChange={(e) => setShortcutFilters(prev => ({ ...prev, sortBy: e.target.value as any }))}
+                className="px-3 py-2 rounded-lg border border-gold/30 bg-white/70 text-black/80 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
+              >
+                <option value="">Sort by</option>
+                <option value="newest">Newest First</option>
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="alpha">A–Z</option>
+              </select>
             </div>
 
             {/* Projects Grid — 2 columns max */}
@@ -468,8 +479,8 @@ const PropertiesReelly = () => {
 
       {/* DLD Market Intelligence - hidden in map mode */}
       {!isMapMode && (
-        <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-          <div className={`${showStickyNav ? 'lg:pl-[200px]' : ''}`}>
+        <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark py-8">
+          <div className="px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
             <DLDMarketWidget />
           </div>
         </div>
