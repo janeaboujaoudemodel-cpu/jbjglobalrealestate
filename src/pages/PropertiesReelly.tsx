@@ -107,8 +107,18 @@ const PropertiesReelly = () => {
   // Map mode state
   const [isMapMode, setIsMapMode] = useState(searchParams.get('view') === 'map');
 
-  // Filter shortcut bar state
+  // Filter shortcut bar state — synced with GlobalFilterBar
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+
+  // Listen for global filter changes from the header bar
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const next = (e as CustomEvent<ShortcutFilterState>).detail;
+      if (next) setShortcutFilters(next);
+    };
+    window.addEventListener('globalFilterChange', handler);
+    return () => window.removeEventListener('globalFilterChange', handler);
+  }, []);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
