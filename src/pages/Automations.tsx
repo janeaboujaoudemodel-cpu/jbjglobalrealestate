@@ -213,7 +213,7 @@ const Automations = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] p-6">
         <div className="max-w-5xl mx-auto space-y-6">
           <Skeleton className="h-12 w-64 bg-gold/20" />
           <div className="grid gap-4">
@@ -229,7 +229,7 @@ const Automations = () => {
   const activeCount = rules.filter(r => r.isActive).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       {/* Header - Premium Champagne */}
       <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 lg:top-[48px] z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">

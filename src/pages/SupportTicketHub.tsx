@@ -161,7 +161,7 @@ const SupportTicketHub = () => {
   const isSomeSelected = selectedTicketIds.size > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-zinc-900">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] text-zinc-900">
       {/* Header */}
       <div className="border-b border-gold/20 bg-gradient-to-b from-zinc-900 to-black">
         <div className="max-w-[1600px] mx-auto px-6 py-6">

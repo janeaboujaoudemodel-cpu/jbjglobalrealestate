@@ -39,7 +39,7 @@ const AllToolsSuite = () => {
         description="Access all AI and productivity tools in one unified hub - Property analysis, investment calculators, communication tools, and more."
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         {/* Premium Header - Gold/Champagne theme */}
         <div className="relative bg-gradient-to-b from-black via-zinc-950 to-black border-b border-gold/20">
           {/* Decorative elements */}

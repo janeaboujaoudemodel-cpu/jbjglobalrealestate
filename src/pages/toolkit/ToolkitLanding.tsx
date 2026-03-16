@@ -158,7 +158,7 @@ const tools: ToolCardProps[] = [
 
 export default function ToolkitLanding() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       {/* Hero Section */}
       <section className="relative pt-24 pb-16 px-4 overflow-hidden">
         {/* Background Elements */}

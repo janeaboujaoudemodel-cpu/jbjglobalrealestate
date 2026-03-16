@@ -163,7 +163,7 @@ const EmployeeManagementHub: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold" />
       </div>
     );
@@ -171,7 +171,7 @@ const EmployeeManagementHub: React.FC = () => {
 
   if (!isAuthorized) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         <div className="container mx-auto px-4 py-20 text-center">
           <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 flex items-center justify-center mx-auto mb-6">
             <Shield className="w-10 h-10 text-gold" />
@@ -189,7 +189,7 @@ const EmployeeManagementHub: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       {/* Header Section */}
       <section className="relative py-8 overflow-hidden border-b border-gold/20">
         <div className="container mx-auto px-4">

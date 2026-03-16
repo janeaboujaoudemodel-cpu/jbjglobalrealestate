@@ -479,7 +479,7 @@ const CRM = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <Skeleton className="h-12 w-64 bg-gold/20" />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -495,7 +495,7 @@ const CRM = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center p-6">
         <Card className="w-full max-w-lg border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
           <CardHeader>
             <CardTitle className="text-black">CRM access unavailable</CardTitle>
@@ -566,7 +566,7 @@ const CRM = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] pt-20 lg:pt-24">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] pt-20 lg:pt-24">
       {/* Command Palette */}
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
 

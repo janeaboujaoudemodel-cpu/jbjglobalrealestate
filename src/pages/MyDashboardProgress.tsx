@@ -72,7 +72,7 @@ const MyDashboardProgress = () => {
         description="Track your tier progress, badges, and achievements."
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         {/* Premium Page Header — aligned with sidebar logo divider */}
         <div className="border-b border-gold/20">
           <div className="container mx-auto px-6 max-w-4xl flex items-end h-[84px] pb-4 gap-4">

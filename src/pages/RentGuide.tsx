@@ -195,7 +195,7 @@ const RentGuide = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       <SEOHead 
         title="Renting Guide Dubai | How to Rent Property | JBJ GLOBAL REAL ESTATE"
         description="Complete guide to renting property in Dubai. Learn about the rental process, Ejari registration, payment structures, and how JBJ GLOBAL REAL ESTATE supports tenants and landlords."
