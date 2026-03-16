@@ -276,7 +276,8 @@ const PropertiesReelly = () => {
 
       {/* Fixed filter bar removed — handled globally by GlobalFilterBar in MainLayout */}
 
-      {/* Divider removed per user request */}
+      {/* Gold divider between hero and continue searching */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
 
       {/* Pre-render map hidden in background so Leaflet initialises before user switches to map mode */}
       <div style={{ display: isMapMode ? 'block' : 'none', minHeight: '600px', maxHeight: '85vh' }} className="relative bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark overflow-hidden">
