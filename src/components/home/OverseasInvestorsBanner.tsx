@@ -100,12 +100,6 @@ const OverseasInvestorsBanner = () => {
           </Link>
         </div>
 
-        {/* Company Profile — Premium standalone row */}
-        <div className="pt-6 border-t border-gold/20">
-          <div className="pb-4">
-            <CompanyProfileBrochure />
-          </div>
-        </div>
       </div>
 
     </section>
