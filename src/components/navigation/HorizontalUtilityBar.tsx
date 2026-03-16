@@ -188,19 +188,19 @@ export default function HorizontalUtilityBar() {
 
           {railDivider}
 
-           {/* Area Unit Toggle — connected field box */}
+           {/* Area Unit Toggle — connected field box, gold themed */}
           <Tooltip>
             <TooltipTrigger asChild>
               <button
                 onClick={toggleAreaUnit}
-                className="h-8 flex items-center transition-all shrink-0 border border-black/10 rounded-md overflow-hidden"
+                className="h-8 flex items-center transition-all shrink-0 border border-[hsl(var(--gold)/0.3)] rounded-none overflow-hidden outline-none focus:outline-none focus-visible:outline-none"
                 aria-label="Toggle area unit"
               >
-                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-black/30 hover:text-black/50'}`}>
                   ft²
                 </span>
-                <span className="w-px h-full bg-black/10" />
-                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
+                <span className="w-px h-full bg-[hsl(var(--gold)/0.3)]" />
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-black/30 hover:text-black/50'}`}>
                   m²
                 </span>
               </button>
@@ -217,15 +217,17 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1.5`}><LanguageSwitcher variant="icon-only" /></div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select or change your language</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Language</TooltipContent>
           </Tooltip>
+
+          {railDivider}
 
           {/* Currency */}
           <Tooltip>
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1.5`}><CurrencySwitcher variant="icon-only" /></div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select your currency</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Currency</TooltipContent>
           </Tooltip>
 
           {railDivider}
