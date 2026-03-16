@@ -120,7 +120,7 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible, language,
       {/* Pearl Card with Gold Border - 3-layer compliant */}
       <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-8 text-center hover:shadow-lg hover:shadow-gold/30 transition-all duration-500">
         {/* Icon - Black circle with gold icon */}
-        <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-black flex items-center justify-center shadow-lg">
+        <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] flex items-center justify-center shadow-lg">
           <Icon className="w-6 h-6 text-gold" />
         </div>
         

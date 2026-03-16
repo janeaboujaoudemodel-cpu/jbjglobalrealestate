@@ -120,7 +120,7 @@ const BestIdeaAward = () => {
   };
 
   return (
-    <section className="bg-black">
+    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       {/* Active Champagne Section Layer - using global jj-layer-2 */}
       <div className="jj-layer-2">
         <motion.div
@@ -141,7 +141,7 @@ const BestIdeaAward = () => {
                 {/* Left - Info */}
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] rounded-xl flex items-center justify-center">
                       <Lightbulb className="w-6 h-6 text-gold" />
                     </div>
                     <div>
@@ -160,7 +160,7 @@ const BestIdeaAward = () => {
                   {/* Prize Display - Two Options */}
                   <div className="space-y-3 mb-6">
                     {/* iPad Pro M4 */}
-                    <div className="bg-black rounded-xl p-5 relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] rounded-xl p-5 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
                       <div className="relative z-10 flex items-center gap-4">
                         <div className="w-14 h-14 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">
@@ -173,7 +173,7 @@ const BestIdeaAward = () => {
                       </div>
                     </div>
                     {/* iPhone 16 Pro Max */}
-                    <div className="bg-black rounded-xl p-5 relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] rounded-xl p-5 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
                       <div className="relative z-10 flex items-center gap-4">
                         <div className="w-14 h-14 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">

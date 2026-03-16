@@ -416,7 +416,7 @@ const SupportTicketBox = () => {
   };
 
   return (
-    <section className="bg-black">
+    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       <div className="jj-layer-2">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -453,7 +453,7 @@ const SupportTicketBox = () => {
                   </p>
 
                   {/* Support Promise */}
-                  <div className="bg-black rounded-xl p-6 mb-6 relative overflow-hidden">
+                  <div className="bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] rounded-xl p-6 mb-6 relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
                     <div className="relative z-10">
                       <div className="flex items-center gap-2 mb-3">

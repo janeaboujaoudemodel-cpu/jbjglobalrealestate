@@ -811,17 +811,17 @@ export default function GlobalVerticalNav() {
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40 font-bold"
-        : "text-black/80 font-semibold hover:bg-gold/10 border border-gold/20";
+        ? "bg-gold/20 text-gold border border-gold/40 font-bold"
+        : "text-gold/80 font-semibold hover:bg-gold/10 border border-gold/20";
     }
     if (item.highlight) {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/50 font-bold"
-        : "text-black font-semibold hover:bg-gold/10 border border-gold/20";
+        ? "bg-gold/20 text-gold border border-gold/50 font-bold"
+        : "text-gold font-semibold hover:bg-gold/10 border border-gold/20";
     }
     return shouldHighlight
-      ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40 font-bold"
-      : "text-black/90 hover:bg-white/60 hover:text-black border border-gold/20 hover:border-gold/30";
+      ? "bg-gold/20 text-gold border border-gold/40 font-bold"
+      : "text-gold/80 hover:bg-gold/[0.06] hover:text-gold border border-gold/15 hover:border-gold/30";
   };
 
   const getIconStyle = (item: NavItem, sectionKey?: string) => {
@@ -1068,7 +1068,7 @@ export default function GlobalVerticalNav() {
     <div className="flex flex-col h-full">
       {/* ━━━ HEADER — Champagne gold brand block ━━━ */}
       <div className="relative flex-shrink-0 overflow-hidden h-[88px]">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]" />
         
         <div className="relative px-3 h-full flex items-center">
           <div className="flex items-center gap-3">
@@ -1076,12 +1076,12 @@ export default function GlobalVerticalNav() {
               <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain transition-all" />
             </Link>
             <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-90 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <span className="text-[12px] font-extrabold text-black/85 tracking-[0.15em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
-              <span className="text-[10px] font-bold text-black/50 tracking-[0.18em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
+              <span className="text-[12px] font-extrabold text-gold tracking-[0.15em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
+              <span className="text-[10px] font-bold text-gold/60 tracking-[0.18em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
             </Link>
             <button
               onClick={toggleCollapse}
-              className="ml-auto w-7 h-7 rounded-lg bg-black/[0.06] hover:bg-black/[0.12] flex items-center justify-center transition-all border border-[hsl(var(--gold)/0.2)]"
+              className="ml-auto w-7 h-7 rounded-lg bg-gold/10 hover:bg-gold/20 flex items-center justify-center transition-all border border-gold/30"
               aria-label="Collapse navigation"
             >
               <ChevronLeft className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
@@ -1102,15 +1102,15 @@ export default function GlobalVerticalNav() {
             onClick={(e) => handleNavClick('shortcuts', e as any)}
             className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-bold w-full transition-all duration-200 ${
               activeMegaMenu === 'shortcuts'
-                ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50 shadow-md shadow-gold/10"
-                : "text-black/70 hover:text-black border border-dashed border-gold/30 hover:border-gold/50 bg-gold/[0.04] hover:bg-gold/[0.08]"
+                ? "bg-gradient-to-r from-gold/25 to-gold/15 text-gold border border-gold/50 shadow-md shadow-gold/10"
+                : "text-gold/70 hover:text-gold border border-dashed border-gold/30 hover:border-gold/50 bg-gold/[0.04] hover:bg-gold/[0.08]"
             }`}
           >
             <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${activeMegaMenu === 'shortcuts' ? 'bg-gold/20' : 'bg-gold/10'}`}>
               <Zap className="w-3.5 h-3.5 text-gold" />
             </div>
             <span className="flex-1 text-left tracking-wide">My Shortcuts</span>
-            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-black/25"}`} />
+            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-gold/25"}`} />
           </button>
         </div>
 
@@ -1133,7 +1133,7 @@ export default function GlobalVerticalNav() {
                 <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${getIconStyle(item)}`} />
                 <span className="flex-1">{item.label}</span>
                 {hasMega && (
-                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/25"}`} />
+                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-gold/25"}`} />
                 )}
                 {item.highlight && !isMenuOpen && !activeMegaMenu && !isRouteActive(item.href) && (
                   <Sparkles className="w-3 h-3 text-gold/40" />
@@ -1172,15 +1172,15 @@ export default function GlobalVerticalNav() {
                     onClick={(e) => toggleSection(sectionKey, e)}
                     className={`w-full flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group ${
                       sectionHighlighted
-                        ? "text-black/80 bg-gold/[0.12]"
-                        : "text-black/45 hover:text-black/70 hover:bg-gold/[0.05]"
+                        ? "text-gold bg-gold/[0.12]"
+                        : "text-gold/45 hover:text-gold/70 hover:bg-gold/[0.05]"
                     }`}
                   >
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${sectionHighlighted ? 'bg-gold/20' : 'bg-gold/[0.08] group-hover:bg-gold/15'}`}>
                       <SectionIcon className="w-3 h-3 text-gold" />
                     </div>
                     <span className="flex-1 text-left">{sectionKey}</span>
-                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold/70' : 'text-black/25'}`} />
+                    <ChevronDown className={`w-3 h-3 flex-shrink-0 transition-transform duration-200 ${isOpen ? '' : '-rotate-90'} ${sectionHighlighted ? 'text-gold/70' : 'text-gold/25'}`} />
                     {!isOpen && hasActiveChild && (
                       <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
                     )}
@@ -1213,7 +1213,7 @@ export default function GlobalVerticalNav() {
                             <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${getIconStyle(item, sectionKey)}`} />
                             <span className="flex-1">{item.label}</span>
                             {hasMega && (
-                              <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/20"}`} />
+                              <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-gold/20"}`} />
                             )}
                           </Link>
                         );
@@ -1230,18 +1230,18 @@ export default function GlobalVerticalNav() {
       {/* ━━━ BOTTOM — Support + Sign Out ━━━ */}
       <div className="mt-auto flex-shrink-0">
         <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
-        <div className="px-2.5 py-2 bg-gradient-to-t from-[#F0E8D8]/50 to-transparent">
+        <div className="px-2.5 py-2 bg-gradient-to-t from-[hsl(38,35%,10%)]/50 to-transparent">
           <div className="flex gap-1.5 mb-1.5">
             <Link
               to="/contact"
-              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-black/50 hover:text-black/80 transition-all px-1 py-[5px] rounded-lg hover:bg-black/[0.04]"
+              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-gold/50 hover:text-gold/80 transition-all px-1 py-[5px] rounded-lg hover:bg-gold/[0.04]"
             >
               <Headphones className="w-3 h-3 text-red-400" />
               Contact
             </Link>
             <Link
               to="/ticket-hub"
-              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-black/50 hover:text-black/80 transition-all px-1 py-[5px] rounded-lg hover:bg-black/[0.04]"
+              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-gold/50 hover:text-gold/80 transition-all px-1 py-[5px] rounded-lg hover:bg-gold/[0.04]"
             >
               <Ticket className="w-3 h-3 text-red-400" />
               Support
@@ -1280,7 +1280,7 @@ export default function GlobalVerticalNav() {
       <div className="hidden lg:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative">
           {/* Champagne header strip matching expanded header */}
           <div className="w-full flex-shrink-0 relative">
-            <div className="absolute inset-0 bg-gradient-to-b from-[#F5EBD7] to-[#D4C4A8]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)]" />
             <div className="relative flex flex-col items-center py-3 gap-1">
               <Link to="/" className="shrink-0 group">
                 <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain transition-all" />
@@ -1290,7 +1290,7 @@ export default function GlobalVerticalNav() {
           </div>
 
           {/* Section icons — light background area */}
-          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] w-full border-r border-gold/20">
+          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] w-full border-r border-gold/20">
             {SECTION_KEYS.map((sectionKey) => {
               if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
               if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
@@ -1313,8 +1313,8 @@ export default function GlobalVerticalNav() {
                       }}
                       className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
                         isActive
-                          ? 'bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black shadow-sm shadow-gold/15 ring-1 ring-gold/30'
-                          : 'text-black/40 hover:text-gold hover:bg-gold/10'
+                          ? 'bg-gold/20 text-gold shadow-sm shadow-gold/15 ring-1 ring-gold/30'
+                          : 'text-gold/40 hover:text-gold hover:bg-gold/10'
                       }`}
                     >
                       <SectionIcon className="w-3.5 h-3.5" />
@@ -1370,16 +1370,16 @@ export default function GlobalVerticalNav() {
             {/* Expand button */}
             <button
               onClick={toggleCollapse}
-              className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] flex items-center justify-center hover:from-[#E8DCC8] hover:to-[#C4B498] transition-all shadow-md shadow-gold/15 ring-1 ring-gold/20 mt-1 mb-1"
+              className="w-8 h-8 rounded-lg bg-gradient-to-br from-[hsl(38,35%,18%)] to-[hsl(34,25%,14%)] flex items-center justify-center hover:from-[hsl(38,35%,22%)] hover:to-[hsl(34,25%,18%)] transition-all shadow-md shadow-gold/15 ring-1 ring-gold/20 mt-1 mb-1"
               aria-label="Expand navigation"
               title="Expand navigation"
             >
-              <ChevronRight className="w-4 h-4 text-black/50" />
+              <ChevronRight className="w-4 h-4 text-gold/50" />
             </button>
           </div>
         </div>
       ) : (
-        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/20 h-full relative overscroll-contain">
+        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] border-r border-gold/20 h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}

@@ -26,16 +26,16 @@ const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; clas
   <div 
     className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
     style={{
-      background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+      background: 'linear-gradient(135deg, hsl(38 35% 12%) 0%, hsl(36 30% 16%) 50%, hsl(34 25% 12%) 100%)',
     }}
   >
-    <Icon className="w-6 h-6 text-black" />
+    <Icon className="w-6 h-6 text-gold" />
   </div>
 );
 
 export const DataSourcesPanel = () => {
   return (
-    <section className="py-16 bg-black">
+    <section className="py-16 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       <div className="jj-layer-2">
         <motion.div
           initial="hidden"
@@ -50,10 +50,10 @@ export const DataSourcesPanel = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
               Data Sources
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gold" style={{ fontFamily: "Poppins, sans-serif" }}>
               Powered by Official Open Data
             </h2>
-            <p className="text-black/70 max-w-2xl mx-auto">
+            <p className="text-gold/70 max-w-2xl mx-auto">
               All Market Intelligence is derived exclusively from official government Open Data sources. 
               We do not scrape, republish, or use proprietary third-party data.
             </p>

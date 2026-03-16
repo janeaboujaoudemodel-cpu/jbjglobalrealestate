@@ -116,7 +116,7 @@ export default function HorizontalUtilityBar() {
   const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0 outline-none focus:outline-none focus-visible:outline-none [&:focus]:outline-none";
   const cellHover = "hover:bg-transparent";
   const iconClass = "w-4 h-4 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))] group-hover:scale-110 transition-transform shrink-0";
-  const labelClass = "text-[11px] font-semibold text-black/50 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
+  const labelClass = "text-[11px] font-semibold text-gold/60 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
   
   /* Vertical divider inside rail — full height, gold */
   const railDivider = <div className="w-px h-full bg-[hsl(var(--gold)/0.3)] shrink-0" />;
@@ -124,7 +124,7 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className="fixed top-0 left-[200px] right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 border-b border-[hsl(var(--gold)/0.2)] bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 left-[200px] right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 border-b border-gold/20 bg-gradient-to-r from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
 
         {/* ── Connected Segmented Rail — all controls in one block ── */}
@@ -162,7 +162,7 @@ export default function HorizontalUtilityBar() {
                 className={`${cellBase} ${cellHover}`}
               >
                 <Building2 className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
-                <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
+                <span className="text-[11px] font-semibold text-gold/70 group-hover:text-gold uppercase tracking-wide">Buy</span>
               </Link>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Browse off-plan and ready properties for sale in the UAE</TooltipContent>
@@ -177,7 +177,7 @@ export default function HorizontalUtilityBar() {
                 className={`${cellBase} ${cellHover}`}
               >
                 <Key className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
-                <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
+                <span className="text-[11px] font-semibold text-gold/70 group-hover:text-gold uppercase tracking-wide">Rent</span>
               </Link>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Browse properties available for rent across the UAE</TooltipContent>
@@ -192,7 +192,7 @@ export default function HorizontalUtilityBar() {
                 className={`${cellBase} ${cellHover}`}
               >
                 <Tag className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
-                <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Sell</span>
+                <span className="text-[11px] font-semibold text-gold/70 group-hover:text-gold uppercase tracking-wide">Sell</span>
               </Link>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">List your property for sale or rent on JBJ Global</TooltipContent>
@@ -224,11 +224,11 @@ export default function HorizontalUtilityBar() {
                 className="h-8 flex items-center transition-all shrink-0 border border-[hsl(var(--gold)/0.3)] rounded-lg overflow-hidden outline-none focus:outline-none focus-visible:outline-none"
                 aria-label="Toggle area unit"
               >
-                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-black/30 hover:text-black/50'}`}>
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-gold/30 hover:text-gold/60'}`}>
                   ft²
                 </span>
                 <span className="w-px h-full bg-[hsl(var(--gold)/0.3)]" />
-                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-black/30 hover:text-black/50'}`}>
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-gold/30 hover:text-gold/60'}`}>
                   m²
                 </span>
               </button>

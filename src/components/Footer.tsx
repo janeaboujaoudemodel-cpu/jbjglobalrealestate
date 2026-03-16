@@ -34,7 +34,7 @@ const FooterCard = ({ title, links, viewAllHref, viewAllLabel }: {
   viewAllHref?: string;
   viewAllLabel?: string;
 }) => (
-  <div className="group relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl px-6 py-5 hover:border-gold/60 transition-all duration-300 shadow-[0_4px_15px_rgba(200,167,102,0.1)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.2)]">
+  <div className="group relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-none px-6 py-5 hover:border-gold/60 transition-all duration-300 shadow-[0_4px_15px_rgba(200,167,102,0.1)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.2)]">
     <h4 className="text-center font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] mb-3 pb-2.5 border-b-2 border-gold/40 text-gold"
       style={{
         fontFamily: "Poppins, sans-serif",
@@ -143,9 +143,9 @@ const FooterCurrencyUnit = () => {
   const currentCur = SUPPORTED_CURRENCIES.find(c => c.code === activeCurrency);
 
   return (
-    <div className="mt-6 flex flex-col items-center gap-3">
-      <p className="text-gold/60 text-xs uppercase tracking-[0.15em]">Currency & Unit</p>
-      <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3">
+      <p className="text-gold/60 text-[10px] uppercase tracking-wider whitespace-nowrap">Currency</p>
+      <div className="flex items-center gap-2">
         {/* Currency Dropdown */}
         <div className="relative">
           <button
@@ -663,36 +663,49 @@ const Footer = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/50 to-transparent blur-md" />
             </div>
 
-            {/* Social Links with enhanced container */}
-            <div className="relative flex flex-col items-center gap-4">
-              {/* Connect With Us Label */}
-              <p className="text-gold/80 text-sm uppercase tracking-[0.2em] font-medium">
-                Connect With Us
-              </p>
+            {/* Single Premium Strip: Social + Write Us + Google + Mode + Currency/Unit */}
+            <div className="relative flex flex-col items-center gap-0">
               <div 
-                className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl"
+                className="w-full flex flex-col md:flex-row items-center justify-center gap-0 rounded-none overflow-hidden"
                 style={{
-                  background: 'linear-gradient(145deg, rgba(12,12,14,0.95) 0%, rgba(6,6,8,1) 100%)',
-                  boxShadow: 'inset 0 1px 0 rgba(200,167,102,0.1), inset 0 -1px 0 rgba(0,0,0,0.4)',
+                  background: 'linear-gradient(145deg, hsl(38 35% 12%) 0%, hsl(36 30% 16%) 50%, hsl(34 25% 12%) 100%)',
                   border: '1px solid rgba(200,167,102,0.3)',
                 }}
               >
-                <SocialLinks variant="glow" iconClassName="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9" />
+                {/* Social Icons */}
+                <div className="flex items-center gap-4 px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20">
+                  <p className="text-gold/80 text-xs uppercase tracking-[0.15em] font-medium whitespace-nowrap">Connect</p>
+                  <SocialLinks variant="glow" iconClassName="w-6 h-6 sm:w-7 sm:h-7" />
+                </div>
+
+                {/* Write Us */}
+                <a
+                  href={getEmailUrl()}
+                  className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20 hover:bg-gold/5 transition-colors"
+                >
+                  <Mail className="w-5 h-5 text-gold" />
+                  <div>
+                    <p className="text-gold/60 text-[10px] uppercase tracking-wider">Write Us</p>
+                    <p className="text-gold text-sm font-semibold">{CONTACT_INFO.email}</p>
+                  </div>
+                </a>
+
+                {/* Google Business */}
+                <div className="flex items-center px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20">
+                  <GoogleMyBusinessLink />
+                </div>
+
+                {/* Mode */}
+                <div className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20">
+                  <p className="text-gold/60 text-[10px] uppercase tracking-wider whitespace-nowrap">Mode</p>
+                  <ModeSwitcher variant="header" showForUnselected={true} />
+                </div>
+
+                {/* Currency & Unit */}
+                <div className="flex items-center px-6 py-4">
+                  <FooterCurrencyUnit />
+                </div>
               </div>
-              
-              {/* Google My Business - Relocated here */}
-              <GoogleMyBusinessLink />
-              
-              {/* Mode Switcher - Allow users to switch modes from footer with themed styling */}
-              <div className="mt-4 flex flex-col items-center gap-2">
-                <p className="text-gold/60 text-xs uppercase tracking-[0.15em]">Your Mode</p>
-              <div className="p-1 rounded-xl bg-gold/10">
-                <ModeSwitcher variant="header" showForUnselected={true} />
-              </div>
-              </div>
-              
-              {/* Currency & Unit Switcher */}
-              <FooterCurrencyUnit />
             </div>
           </div>
           
