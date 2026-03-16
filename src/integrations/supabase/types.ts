@@ -27332,6 +27332,16 @@ export type Database = {
         }
         Returns: boolean
       }
+      verify_certificate_by_token: {
+        Args: { p_token: string }
+        Returns: {
+          certificate_number: string
+          full_name: string
+          is_valid: boolean
+          issued_at: string
+          track: string
+        }[]
+      }
     }
     Enums: {
       ai_action_status:
