@@ -53,7 +53,7 @@ export const DataSourcesPanel = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gold" style={{ fontFamily: "Poppins, sans-serif" }}>
               Powered by Official Open Data
             </h2>
-            <p className="text-black/70 max-w-2xl mx-auto">
+            <p className="text-gold/70 max-w-2xl mx-auto">
               All Market Intelligence is derived exclusively from official government Open Data sources. 
               We do not scrape, republish, or use proprietary third-party data.
             </p>
