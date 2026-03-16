@@ -1287,7 +1287,7 @@ export default function GlobalVerticalNav() {
             <div className="absolute inset-0 bg-gradient-to-b from-[#F5EBD7] to-[#D4C4A8]" />
             <div className="relative flex flex-col items-center py-3 gap-1">
               <Link to="/" className="shrink-0 group">
-                <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain rounded-lg ring-1 ring-gold/30 group-hover:ring-gold/50 transition-all" />
+                <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain transition-all" />
               </Link>
             </div>
             <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
