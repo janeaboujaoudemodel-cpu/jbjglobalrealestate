@@ -101,15 +101,12 @@ export default function HorizontalUtilityBar() {
 
   /* ─── Shared styles for connected segmented cells ─── */
   const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0";
-  const cellHover = "hover:bg-[hsl(var(--gold)/0.1)]";
-  const iconClass = "w-4 h-4 text-[hsl(var(--gold))] group-hover:scale-110 transition-transform shrink-0";
-  const labelClass = "text-[11px] font-semibold text-[hsl(var(--foreground)/0.55)] uppercase tracking-wide hidden xl:inline whitespace-nowrap";
+  const cellHover = "hover:bg-black/[0.06]";
+  const iconClass = "w-4 h-4 text-black/50 group-hover:text-black/70 group-hover:scale-110 transition-transform shrink-0";
+  const labelClass = "text-[11px] font-semibold text-black/50 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
   
   /* Vertical divider inside rail */
-  const railDivider = <div className="w-px h-6 bg-[hsl(var(--gold)/0.2)] shrink-0" />;
-
-  /* Standalone minimizer button styling */
-  const minimizerBtn = "h-8 w-8 flex items-center justify-center rounded-none border border-[hsl(var(--gold)/0.25)] bg-[hsl(var(--gold)/0.05)] hover:bg-[hsl(var(--gold)/0.15)] hover:border-[hsl(var(--gold)/0.4)] transition-all group shrink-0";
+  const railDivider = <div className="w-px h-6 bg-black/10 shrink-0" />;
 
   return (
     <>
