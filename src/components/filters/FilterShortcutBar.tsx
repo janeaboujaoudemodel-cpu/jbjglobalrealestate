@@ -269,64 +269,25 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
   return (
     <>
-      <div className="flex flex-col gap-2 w-full">
-        {/* Row 1: Connected toolbar - Search + Sort Pills + Map + Saved + Currency + Filter + Mode */}
-        <div className="relative">
-          <div className="flex items-center w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
-            <div className="flex items-center w-full min-w-max border border-gold/30 rounded-lg overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
-              {/* Search slot or built-in search */}
-              {searchSlot ? (
-                <div className="min-w-0 max-w-[220px] border-r border-gold/20" title="Search area, project, keyword">
-                  {searchSlot}
-                </div>
-              ) : (
-                <div className="min-w-0 max-w-[220px] border-r border-gold/20 flex items-center px-3" title={t('filter.searchPlaceholder')}>
-                  <input
-                    type="text"
-                    value={filters.searchQuery}
-                    onChange={(e) => update({ searchQuery: e.target.value })}
-                    placeholder={t('filter.searchPlaceholder')}
-                    className="w-full h-full py-2.5 bg-transparent text-xs text-black placeholder:text-black/40 outline-none"
-                  />
-                </div>
-              )}
-              {/* Sort pills inline in Row 1 */}
-              {SORT_OPTIONS.map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
-                  className={cn(
-                    "flex items-center gap-1 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20",
-                    filters.sortBy === opt.value ? "bg-gold/20 text-black font-bold" : "text-black/70 hover:bg-gold/10"
-                  )}
-                >
-                  {opt.value === 'trending' ? <TrendingUp className="w-3.5 h-3.5" /> : opt.label}
-                </button>
-              ))}
-              {/* Map toggle */}
-                <button
-                onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
-                className={cn(
-                  "flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap transition-colors border-r border-gold/20",
-                  isMapMode ? "bg-gold/20 text-black" : "text-black/70 hover:bg-gold/10"
-                )}
-                title={t('filter.map')}
-              >
-                <Map className="w-3.5 h-3.5" />
-                {isMapMode ? t('filter.list') : t('filter.map')}
-              </button>
-              {/* Saved Filters */}
-              <ConnectedSavedButton variant={variant} onApplySavedFilter={onFilterChange} />
-              {/* Spacer to fill remaining width on desktop */}
-              <div className="flex-1 min-w-0" />
+      <div className="w-full">
+        {/* Single merged row: Search + Filter Popovers + Sort + Map + Saved + Reset + Results */}
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide w-full" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+          {/* Search slot or built-in search */}
+          {searchSlot ? (
+            <div className="min-w-0 max-w-[180px] flex-shrink-0" title="Search area, project, keyword">
+              {searchSlot}
             </div>
-          </div>
-          {/* No scroll hint for Row 1 - single line, no need */}
-        </div>
-
-        {/* Row 2: Filter popovers + Sort pills */}
-        <div className="relative">
-          <div className="flex items-center gap-2 md:gap-3 overflow-x-auto scrollbar-hide pb-1 -mb-1 w-full" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+          ) : (
+            <div className="min-w-0 w-[160px] flex-shrink-0 flex items-center px-2 border border-gold/30 rounded-full bg-white/40">
+              <input
+                type="text"
+                value={filters.searchQuery}
+                onChange={(e) => update({ searchQuery: e.target.value })}
+                placeholder={t('filter.searchPlaceholder')}
+                className="w-full py-1.5 bg-transparent text-xs text-black placeholder:text-black/40 outline-none"
+              />
+            </div>
+          )}
         {/* Price */}
         <Popover>
           <PopoverTrigger asChild>
