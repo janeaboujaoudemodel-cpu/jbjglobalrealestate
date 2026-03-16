@@ -124,7 +124,7 @@ export default function HorizontalUtilityBar() {
   return (
     <>
       <div
-        className="fixed top-0 left-[200px] right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 border-b border-[hsl(var(--gold)/0.2)] bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 left-[200px] right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 border-b border-gold/20 bg-gradient-to-r from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
       >
 
         {/* ── Connected Segmented Rail — all controls in one block ── */}
