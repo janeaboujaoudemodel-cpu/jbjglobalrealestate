@@ -1102,8 +1102,8 @@ export default function GlobalVerticalNav() {
             onClick={(e) => handleNavClick('shortcuts', e as any)}
             className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-bold w-full transition-all duration-200 ${
               activeMegaMenu === 'shortcuts'
-                ? "bg-gradient-to-r from-gold/25 to-gold/15 text-black border border-gold/50 shadow-md shadow-gold/10"
-                : "text-black/70 hover:text-black border border-dashed border-gold/30 hover:border-gold/50 bg-gold/[0.04] hover:bg-gold/[0.08]"
+                ? "bg-gradient-to-r from-gold/25 to-gold/15 text-gold border border-gold/50 shadow-md shadow-gold/10"
+                : "text-gold/70 hover:text-gold border border-dashed border-gold/30 hover:border-gold/50 bg-gold/[0.04] hover:bg-gold/[0.08]"
             }`}
           >
             <div className={`w-6 h-6 rounded-lg flex items-center justify-center ${activeMegaMenu === 'shortcuts' ? 'bg-gold/20' : 'bg-gold/10'}`}>
