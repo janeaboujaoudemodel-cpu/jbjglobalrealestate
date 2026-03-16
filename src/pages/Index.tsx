@@ -72,6 +72,9 @@ const DeveloperPortalCTA = lazy(() => import("@/components/home/DeveloperPortalC
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
 
+const IntroHeroSection = lazy(() => import("@/components/home/IntroHeroSection"));
+const VerificationBanner = lazy(() => import("@/components/verification/VerificationBanner"));
+
 const SectionLoader = forwardRef<HTMLDivElement>((_, ref) => (
   <div ref={ref} className="py-12 flex items-center justify-center">
     <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />

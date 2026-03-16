@@ -121,5 +121,6 @@ export const OwnerRoutes = () => (
     <Route path="incident-readiness" element={<IncidentReadinessPanel />} />
     <Route path="zero-trust-audit" element={<ZeroTrustAuditPanel />} />
     <Route path="event-management" element={<EventManagementHub />} />
+    <Route path="verification-requests" element={<VerificationRequests />} />
   </Route>
 );
