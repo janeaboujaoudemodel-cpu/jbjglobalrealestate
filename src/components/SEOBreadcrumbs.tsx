@@ -32,6 +32,14 @@ const ROUTE_LABELS: Record<string, string> = {
   '/market-intelligence': 'Market Intelligence',
   '/reviews': 'Reviews',
   '/sitemap': 'Sitemap',
+  '/developer-hub': 'Developer Hub',
+  '/developer-center': 'Developer Center',
+  '/developer-registration': 'Developer Registration',
+  '/developer-portal': 'Developer Portal',
+  '/submit-project': 'Submit Project',
+  '/submit-event': 'Submit Event',
+  '/my-projects': 'My Projects',
+  '/my-events': 'My Events',
 };
 
 /**

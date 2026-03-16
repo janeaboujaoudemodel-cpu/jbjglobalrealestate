@@ -147,7 +147,8 @@ export const GlobalSEO = () => {
           { "@type": "SiteNavigationElement", "position": 7, "name": "Market Intelligence", "url": "https://jbj.ae/market-intelligence" },
           { "@type": "SiteNavigationElement", "position": 8, "name": "Guides", "url": "https://jbj.ae/guides" },
           { "@type": "SiteNavigationElement", "position": 9, "name": "About Us", "url": "https://jbj.ae/about" },
-          { "@type": "SiteNavigationElement", "position": 10, "name": "Contact", "url": "https://jbj.ae/contact" }
+          { "@type": "SiteNavigationElement", "position": 10, "name": "Contact", "url": "https://jbj.ae/contact" },
+          { "@type": "SiteNavigationElement", "position": 11, "name": "Developer Center", "url": "https://jbj.ae/developer-center" }
         ]
       }
     ];
