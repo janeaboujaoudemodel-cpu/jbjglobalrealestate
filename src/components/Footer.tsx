@@ -447,9 +447,9 @@ const Footer = () => {
       </div>
       
       {/* Full-width footer content */}
-      <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20 px-1 sm:px-2 md:px-3 lg:px-4">
+      <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20">
         {/* NOW BELOW THE 3D CARD: Logo + Company Name Section - COMES FIRST */}
-        <div className="flex flex-col items-center justify-center text-center w-full max-w-7xl mx-auto relative pt-4 pb-8 rounded-2xl">
+        <div className="flex flex-col items-center justify-center text-center w-full relative pt-4 pb-8">
           {/* Dark luxury brown background for monogram section */}
           <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] rounded-2xl pointer-events-none" />
           
