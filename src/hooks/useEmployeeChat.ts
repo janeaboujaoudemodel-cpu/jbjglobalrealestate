@@ -33,6 +33,14 @@ export const useEmployeeChat = (selectedEmployeeId: string | null) => {
   const [employeeStatuses, setEmployeeStatuses] = useState<Map<string, EmployeeStatus>>(new Map());
   const [isTyping, setIsTyping] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  // Get current user ID
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUserId(data.user?.id ?? null);
+    });
+  }, []);
 
   const getEmployee = useCallback((id: string): TeamMember | undefined => {
     return allTeamMembers.find(m => m.id === id);
@@ -79,7 +87,7 @@ export const useEmployeeChat = (selectedEmployeeId: string | null) => {
 
   // Send message with AI-powered response
   const sendMessage = useCallback(async (content: string) => {
-    if (!selectedEmployeeId || !content.trim()) return;
+    if (!selectedEmployeeId || !content.trim() || !userId) return;
     const employee = getEmployee(selectedEmployeeId);
     if (!employee) return;
 
@@ -87,7 +95,7 @@ export const useEmployeeChat = (selectedEmployeeId: string | null) => {
     const { data: userMsg, error: userError } = await supabase
       .from('employee_chat_messages')
       .insert({
-        sender_id: 'current-user',
+        sender_id: userId,
         sender_type: 'user',
         recipient_id: selectedEmployeeId,
         message: content.trim(),
@@ -153,7 +161,7 @@ export const useEmployeeChat = (selectedEmployeeId: string | null) => {
         .insert({
           sender_id: selectedEmployeeId,
           sender_type: 'employee',
-          recipient_id: 'current-user',
+          recipient_id: userId!,
           message: aiReply,
         })
         .select()
@@ -164,7 +172,7 @@ export const useEmployeeChat = (selectedEmployeeId: string | null) => {
       }
     }, typingDelay + responseDelay);
 
-  }, [selectedEmployeeId, getEmployee, messages]);
+  }, [selectedEmployeeId, getEmployee, messages, userId]);
 
   // Real-time subscription
   useEffect(() => {

@@ -391,7 +391,11 @@ export default function AdvancedFilterPanel({ open, onOpenChange, filters, onFil
                                   e.currentTarget.style.display = 'none';
                                   const parent = e.currentTarget.parentElement;
                                   if (parent) {
-                                    parent.innerHTML = `<span style="font-size:9px;font-weight:700;color:rgba(0,0,0,0.4)">${dev.name.charAt(0)}</span>`;
+                                    parent.textContent = '';
+                                    const span = document.createElement('span');
+                                    span.style.cssText = 'font-size:9px;font-weight:700;color:rgba(0,0,0,0.4)';
+                                    span.textContent = dev.name.charAt(0);
+                                    parent.appendChild(span);
                                   }
                                 }}
                               />

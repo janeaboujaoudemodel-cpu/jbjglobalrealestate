@@ -105,8 +105,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
   // Restore session from localStorage on mount (persistent across sessions)
   useEffect(() => {
-    const savedStep = localStorage.getItem('jbj_chat_step');
-    const savedUserInfo = localStorage.getItem('jbj_chat_user');
+    const savedStep = sessionStorage.getItem('jbj_chat_step');
+    const savedUserInfo = sessionStorage.getItem('jbj_chat_user');
     
     // Check if we have saved user data
     if (savedUserInfo) {
@@ -150,8 +150,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
   // Persist step and userInfo to localStorage
   useEffect(() => {
-    localStorage.setItem('jbj_chat_step', step);
-    localStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
+    sessionStorage.setItem('jbj_chat_step', step);
+    sessionStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
   }, [step, userInfo]);
 
   // Check email in database
@@ -726,8 +726,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     setFormErrors({});
     setChatHistory([]);
     // Clear local storage
-    localStorage.removeItem('jbj_chat_step');
-    localStorage.removeItem('jbj_chat_user');
+    sessionStorage.removeItem('jbj_chat_step');
+    sessionStorage.removeItem('jbj_chat_user');
   };
 
   // Handle confirm details update (with admin notification)
@@ -745,7 +745,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
     setUserInfo(newUserInfo);
     
     // Save to localStorage immediately
-    localStorage.setItem('jbj_chat_user', JSON.stringify(newUserInfo));
+    sessionStorage.setItem('jbj_chat_user', JSON.stringify(newUserInfo));
     
     // Update lead in backend (upsert)
     try {
