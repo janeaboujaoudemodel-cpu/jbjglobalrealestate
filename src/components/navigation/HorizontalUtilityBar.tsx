@@ -195,7 +195,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Sell</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">List your property for sale or rent</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">List your property for sale or rent on JBJ Global</TooltipContent>
           </Tooltip>
 
           {railDivider}
