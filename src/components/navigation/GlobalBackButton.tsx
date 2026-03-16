@@ -31,7 +31,7 @@ export default function GlobalBackButton({ className = "" }: { className?: strin
           </span>
         </button>
       </TooltipTrigger>
-      <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
+      <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">
         Go back
       </TooltipContent>
     </Tooltip>

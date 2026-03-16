@@ -239,7 +239,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
         />
         {unreadCount > 0 && (
           <span className="absolute -top-0.5 -right-0.5 min-w-[18px] min-h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none animate-pulse">
-            {unreadCount > 9 ? '9+' : unreadCount}
+            {unreadCount}
           </span>
         )}
       </button>
