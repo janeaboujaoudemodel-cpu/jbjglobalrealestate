@@ -136,7 +136,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] text-[hsl(var(--foreground)/0.4)] font-medium hidden xl:inline">⌘K</span>
               </button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Search ⌘K</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Search ⌘K</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -198,7 +198,7 @@ export default function HorizontalUtilityBar() {
                 <Heart className="w-4 h-4 text-red-500 group-hover:text-red-600 group-hover:scale-110 transition-transform shrink-0" />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Favorite Properties</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Favorite Properties</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -220,7 +220,7 @@ export default function HorizontalUtilityBar() {
                 </span>
               </button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">
               {areaUnit === 'sqft' ? 'Square Feet — click to switch to m²' : 'Square Meters — click to switch to ft²'}
             </TooltipContent>
           </Tooltip>
@@ -259,7 +259,7 @@ export default function HorizontalUtilityBar() {
                 <span className={labelClass}>Filter</span>
               </button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Open advanced filters</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open advanced filters</TooltipContent>
           </Tooltip>
         </div>
 
@@ -283,7 +283,7 @@ export default function HorizontalUtilityBar() {
                         <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline whitespace-nowrap">CRM</span>
                       </Link>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">CRM Dashboard</TooltipContent>
+                    <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">CRM Dashboard</TooltipContent>
                   </Tooltip>
                   {railDivider}
                 </>
@@ -318,9 +318,9 @@ export default function HorizontalUtilityBar() {
                      className={`${cellBase} ${cellHover} px-2 relative`}
                    >
                      <Bell className={iconClass} />
-                    {(alerts?.totalAlerts || 0) > 0 && (
+                    {(alerts?.totalNotificationAlerts || 0) > 0 && (
                       <span className="absolute -top-1.5 -right-1 min-w-[18px] h-[18px] rounded-full bg-destructive text-white text-[9px] font-bold flex items-center justify-center px-1">
-                        {alerts!.totalAlerts > 9 ? '9+' : alerts!.totalAlerts}
+                        {alerts!.totalNotificationAlerts}
                       </span>
                     )}
                   </Link>
