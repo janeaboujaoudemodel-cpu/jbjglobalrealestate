@@ -517,7 +517,7 @@ const AreaGuides = () => {
       </div>
 
       {/* CTA Section */}
-      <section id="ready-to-get-started" className={`py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark ${pastHero ? "lg:pl-[200px]" : ""}`}>
+      <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
         <div className="px-4 text-center">
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Can't Find What You're Looking For?

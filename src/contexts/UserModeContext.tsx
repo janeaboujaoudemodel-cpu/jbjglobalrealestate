@@ -68,9 +68,10 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
             .maybeSingle();
 
           if (data?.selected_mode) {
-            // Only adopt DB mode if user hasn't explicitly selected one locally
-            if (!storedMode || storedSelection !== 'true') {
+            // Only adopt DB mode if localStorage has NO mode at all (first visit / cleared)
+            if (!storedMode) {
               const dbMode = normalizeMode(data.selected_mode);
+              console.info('[UserMode] Adopting DB mode (no local mode set):', dbMode);
               setModeState(dbMode);
               localStorage.setItem(MODE_KEY, dbMode);
               setHasMadeInitialSelection(true);

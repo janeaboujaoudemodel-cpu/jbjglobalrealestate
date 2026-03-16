@@ -1,20 +1,27 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { ShieldCheck, Upload, Camera, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { ShieldCheck, Upload, Camera, CheckCircle2, Loader2, AlertCircle, Eye, RotateCcw } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface VerificationModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-type Step = "intro" | "id-upload" | "selfie-upload" | "submitting" | "success" | "error";
+type Step = "intro" | "id-front" | "id-back" | "selfie-upload" | "liveness" | "submitting" | "success" | "error";
+
+type LivenessStage = "blink" | "turn-left" | "turn-right";
+
+const LIVENESS_INSTRUCTIONS: Record<LivenessStage, { text: string; icon: string }> = {
+  "blink": { text: "Blink slowly 2-3 times", icon: "👁️" },
+  "turn-left": { text: "Turn your head to the left", icon: "⬅️" },
+  "turn-right": { text: "Turn your head to the right", icon: "➡️" },
+};
 
 const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
   const { user } = useAuth();
@@ -22,70 +29,155 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
   const queryClient = useQueryClient();
   const [step, setStep] = useState<Step>("intro");
   const [fullName, setFullName] = useState("");
-  const [idFile, setIdFile] = useState<File | null>(null);
+  const [idFrontFile, setIdFrontFile] = useState<File | null>(null);
+  const [idBackFile, setIdBackFile] = useState<File | null>(null);
   const [selfieFile, setSelfieFile] = useState<File | null>(null);
-  const [idPreview, setIdPreview] = useState<string | null>(null);
+  const [idFrontPreview, setIdFrontPreview] = useState<string | null>(null);
+  const [idBackPreview, setIdBackPreview] = useState<string | null>(null);
   const [selfiePreview, setSelfiePreview] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
-  const idInputRef = useRef<HTMLInputElement>(null);
+  const idFrontRef = useRef<HTMLInputElement>(null);
+  const idBackRef = useRef<HTMLInputElement>(null);
   const selfieInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = (file: File, type: "id" | "selfie") => {
+  // Liveness state
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const [livenessStage, setLivenessStage] = useState<LivenessStage>("blink");
+  const [livenessFrames, setLivenessFrames] = useState<Blob[]>([]);
+  const [livenessCapturing, setLivenessCapturing] = useState(false);
+  const [livenessComplete, setLivenessComplete] = useState(false);
+
+  const handleFileSelect = (file: File, type: "id-front" | "id-back" | "selfie") => {
     if (file.size > 10 * 1024 * 1024) {
       toast({ title: "File too large", description: "Maximum file size is 10MB", variant: "destructive" });
       return;
     }
     const url = URL.createObjectURL(file);
-    if (type === "id") {
-      setIdFile(file);
-      setIdPreview(url);
-    } else {
-      setSelfieFile(file);
-      setSelfiePreview(url);
-    }
+    if (type === "id-front") { setIdFrontFile(file); setIdFrontPreview(url); }
+    else if (type === "id-back") { setIdBackFile(file); setIdBackPreview(url); }
+    else { setSelfieFile(file); setSelfiePreview(url); }
   };
 
+  // Start webcam for liveness
+  const startCamera = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: 640, height: 480 } });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
+    } catch {
+      toast({ title: "Camera access denied", description: "Please allow camera access for liveness verification.", variant: "destructive" });
+      setStep("selfie-upload");
+    }
+  }, [toast]);
+
+  const stopCamera = useCallback(() => {
+    streamRef.current?.getTracks().forEach(t => t.stop());
+    streamRef.current = null;
+  }, []);
+
+  // Capture a frame from webcam
+  const captureFrame = useCallback((): Blob | null => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return null;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+    ctx.drawImage(video, 0, 0);
+    let blob: Blob | null = null;
+    canvas.toBlob(b => { blob = b; }, "image/jpeg", 0.85);
+    // Synchronous fallback
+    const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+    const byteString = atob(dataUrl.split(",")[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
+    return new Blob([ab], { type: "image/jpeg" });
+  }, []);
+
+  const handleLivenessCapture = useCallback(() => {
+    setLivenessCapturing(true);
+    const frame = captureFrame();
+    if (frame) {
+      const newFrames = [...livenessFrames, frame];
+      setLivenessFrames(newFrames);
+
+      if (livenessStage === "blink") {
+        setLivenessStage("turn-left");
+      } else if (livenessStage === "turn-left") {
+        setLivenessStage("turn-right");
+      } else {
+        setLivenessComplete(true);
+        stopCamera();
+      }
+    }
+    setTimeout(() => setLivenessCapturing(false), 500);
+  }, [captureFrame, livenessFrames, livenessStage, stopCamera]);
+
+  // Cleanup camera on unmount or step change
+  useEffect(() => {
+    if (step === "liveness") {
+      startCamera();
+    } else {
+      stopCamera();
+    }
+    return () => stopCamera();
+  }, [step, startCamera, stopCamera]);
+
   const handleSubmit = async () => {
-    if (!user || !idFile || !selfieFile || !fullName.trim()) return;
+    if (!user || !idFrontFile || !selfieFile || !fullName.trim()) return;
     setStep("submitting");
 
     try {
       const userId = user.id;
-      const timestamp = Date.now();
+      const ts = Date.now();
 
-      // Upload ID document
-      const idExt = idFile.name.split(".").pop() || "jpg";
-      const idPath = `${userId}/id-${timestamp}.${idExt}`;
-      const { error: idUploadErr } = await supabase.storage
-        .from("verification-documents")
-        .upload(idPath, idFile, { contentType: idFile.type });
-      if (idUploadErr) throw idUploadErr;
+      // Upload ID front
+      const idFrontPath = `${userId}/id-front-${ts}.${idFrontFile.name.split(".").pop() || "jpg"}`;
+      const { error: e1 } = await supabase.storage.from("verification-documents").upload(idFrontPath, idFrontFile, { contentType: idFrontFile.type });
+      if (e1) throw e1;
+
+      // Upload ID back (optional)
+      let idBackPath: string | null = null;
+      if (idBackFile) {
+        idBackPath = `${userId}/id-back-${ts}.${idBackFile.name.split(".").pop() || "jpg"}`;
+        const { error: e2 } = await supabase.storage.from("verification-documents").upload(idBackPath, idBackFile, { contentType: idBackFile.type });
+        if (e2) throw e2;
+      }
 
       // Upload selfie
-      const selfieExt = selfieFile.name.split(".").pop() || "jpg";
-      const selfiePath = `${userId}/selfie-${timestamp}.${selfieExt}`;
-      const { error: selfieUploadErr } = await supabase.storage
-        .from("verification-documents")
-        .upload(selfiePath, selfieFile, { contentType: selfieFile.type });
-      if (selfieUploadErr) throw selfieUploadErr;
+      const selfiePath = `${userId}/selfie-${ts}.${selfieFile.name.split(".").pop() || "jpg"}`;
+      const { error: e3 } = await supabase.storage.from("verification-documents").upload(selfiePath, selfieFile, { contentType: selfieFile.type });
+      if (e3) throw e3;
+
+      // Upload liveness frames
+      const livenessPaths: string[] = [];
+      for (let i = 0; i < livenessFrames.length; i++) {
+        const path = `${userId}/liveness-${ts}-${i}.jpg`;
+        const { error } = await supabase.storage.from("verification-documents").upload(path, livenessFrames[i], { contentType: "image/jpeg" });
+        if (!error) livenessPaths.push(path);
+      }
 
       // Insert verification record
       const { error: insertErr } = await supabase
         .from("user_verifications")
         .insert({
           user_id: userId,
-          id_document_url: idPath,
+          id_document_url: idFrontPath,
           selfie_url: selfiePath,
           full_name: fullName.trim(),
           status: "pending",
         });
       if (insertErr) throw insertErr;
 
-      // Update profile verification_status
-      await supabase
-        .from("profiles")
-        .update({ verification_status: "pending" })
-        .eq("id", userId);
+      // Update profile
+      await supabase.from("profiles").update({ verification_status: "pending" }).eq("id", userId);
 
       queryClient.invalidateQueries({ queryKey: ["verification-status"] });
       setStep("success");
@@ -99,11 +191,13 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
   const resetModal = () => {
     setStep("intro");
     setFullName("");
-    setIdFile(null);
-    setSelfieFile(null);
-    setIdPreview(null);
-    setSelfiePreview(null);
+    setIdFrontFile(null); setIdBackFile(null); setSelfieFile(null);
+    setIdFrontPreview(null); setIdBackPreview(null); setSelfiePreview(null);
     setErrorMsg("");
+    setLivenessStage("blink");
+    setLivenessFrames([]);
+    setLivenessComplete(false);
+    stopCamera();
   };
 
   const handleClose = (open: boolean) => {
@@ -111,12 +205,36 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
     onOpenChange(open);
   };
 
+  const renderFileUpload = (
+    preview: string | null,
+    inputRef: React.RefObject<HTMLInputElement>,
+    onFile: (f: File) => void,
+    label: string,
+    icon: React.ReactNode
+  ) => (
+    <>
+      <input ref={inputRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) onFile(f); }} />
+      {preview ? (
+        <div className="relative rounded-none overflow-hidden border-2 border-[hsl(var(--gold)/0.3)]">
+          <img src={preview} alt="Preview" className="w-full h-48 object-cover" />
+          <button onClick={() => inputRef.current?.click()} className="absolute bottom-2 right-2 px-3 py-1.5 rounded-none bg-black/70 text-white text-xs font-medium hover:bg-black/90 transition">Change</button>
+        </div>
+      ) : (
+        <button onClick={() => inputRef.current?.click()} className="w-full h-40 border-2 border-dashed border-[hsl(var(--gold)/0.4)] rounded-none flex flex-col items-center justify-center gap-2 text-zinc-500 hover:border-[hsl(var(--gold)/0.6)] hover:bg-[hsl(var(--gold)/0.05)] transition-all">
+          {icon}
+          <span className="text-sm font-medium">{label}</span>
+          <span className="text-xs text-zinc-400">JPG, PNG up to 10MB</span>
+        </button>
+      )}
+    </>
+  );
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30">
+      <DialogContent className="sm:max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-[hsl(var(--gold)/0.3)]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-black">
-            <ShieldCheck className="w-5 h-5 text-gold" />
+            <ShieldCheck className="w-5 h-5 text-[hsl(var(--gold))]" />
             Identity Verification
           </DialogTitle>
           <DialogDescription>
@@ -124,177 +242,145 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           </DialogDescription>
         </DialogHeader>
 
-        <AnimatePresence mode="wait">
+        <div className="min-h-[280px]">
           {/* Step: Intro */}
           {step === "intro" && (
-            <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4 pt-2">
-              <div className="bg-gold/10 border border-gold/20 rounded-xl p-4 text-sm text-zinc-700 leading-relaxed">
+            <div className="space-y-4 pt-2">
+              <div className="bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.2)] rounded-none p-4 text-sm text-zinc-700 leading-relaxed">
                 <p className="font-medium text-black mb-2">What you'll need:</p>
                 <ul className="space-y-1.5 list-disc list-inside">
-                  <li>A clear photo of your government-issued ID</li>
+                  <li>A clear photo of your government-issued ID (front & back)</li>
                   <li>A selfie of you holding your ID</li>
+                  <li>A quick liveness check via your camera</li>
                 </ul>
-                <p className="mt-3 text-xs text-zinc-500">We review submissions within 24–48 hours. Your documents are stored securely and only accessible to our verification team.</p>
+                <p className="mt-3 text-xs text-zinc-500">We review submissions within 24–48 hours. Your documents are stored securely.</p>
               </div>
-
               <div className="space-y-2">
                 <label className="text-sm font-medium text-black">Full Name (as on ID)</label>
-                <Input
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Enter your full legal name"
-                />
+                <Input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Enter your full legal name" />
               </div>
-
-              <Button
-                onClick={() => fullName.trim() ? setStep("id-upload") : toast({ title: "Please enter your name", variant: "destructive" })}
-                className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:shadow-lg"
-              >
+              <Button onClick={() => fullName.trim() ? setStep("id-front") : toast({ title: "Please enter your name", variant: "destructive" })} className="w-full bg-black text-[hsl(var(--gold))] font-semibold hover:bg-[hsl(var(--gold))] hover:text-black border border-[hsl(var(--gold)/0.3)]">
                 Continue
               </Button>
-            </motion.div>
+            </div>
           )}
 
-          {/* Step: ID Upload */}
-          {step === "id-upload" && (
-            <motion.div key="id-upload" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4 pt-2">
-              <p className="text-sm text-zinc-600">Upload a clear photo of the front of your government-issued ID (passport, driver's license, or national ID).</p>
-              
-              <input
-                ref={idInputRef}
-                type="file"
-                accept="image/*"
-                capture="environment"
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) handleFileSelect(f, "id");
-                }}
-              />
-
-              {idPreview ? (
-                <div className="relative rounded-xl overflow-hidden border-2 border-gold/30">
-                  <img src={idPreview} alt="ID preview" className="w-full h-48 object-cover" />
-                  <button
-                    onClick={() => idInputRef.current?.click()}
-                    className="absolute bottom-2 right-2 px-3 py-1.5 rounded-lg bg-black/70 text-white text-xs font-medium hover:bg-black/90 transition"
-                  >
-                    Change
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => idInputRef.current?.click()}
-                  className="w-full h-40 border-2 border-dashed border-gold/40 rounded-xl flex flex-col items-center justify-center gap-2 text-zinc-500 hover:border-gold/60 hover:bg-gold/5 transition-all"
-                >
-                  <Upload className="w-8 h-8 text-gold" />
-                  <span className="text-sm font-medium">Upload ID Photo</span>
-                  <span className="text-xs text-zinc-400">JPG, PNG up to 10MB</span>
-                </button>
-              )}
-
+          {/* Step: ID Front */}
+          {step === "id-front" && (
+            <div className="space-y-4 pt-2">
+              <p className="text-sm text-zinc-600">Upload a clear photo of the <strong>front</strong> of your government-issued ID.</p>
+              {renderFileUpload(idFrontPreview, idFrontRef, (f) => handleFileSelect(f, "id-front"), "Upload ID Front", <Upload className="w-8 h-8 text-[hsl(var(--gold))]" />)}
               <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setStep("intro")} className="flex-1 border-gold/30 text-black">
-                  Back
-                </Button>
-                <Button
-                  onClick={() => idFile ? setStep("selfie-upload") : toast({ title: "Please upload your ID", variant: "destructive" })}
-                  className="flex-1 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold"
-                >
-                  Next
-                </Button>
+                <Button variant="outline" onClick={() => setStep("intro")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-black">Back</Button>
+                <Button onClick={() => idFrontFile ? setStep("id-back") : toast({ title: "Please upload ID front", variant: "destructive" })} className="flex-1 bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">Next</Button>
               </div>
-            </motion.div>
+            </div>
+          )}
+
+          {/* Step: ID Back */}
+          {step === "id-back" && (
+            <div className="space-y-4 pt-2">
+              <p className="text-sm text-zinc-600">Upload a clear photo of the <strong>back</strong> of your ID (optional but recommended).</p>
+              {renderFileUpload(idBackPreview, idBackRef, (f) => handleFileSelect(f, "id-back"), "Upload ID Back", <RotateCcw className="w-8 h-8 text-[hsl(var(--gold))]" />)}
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={() => setStep("id-front")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-black">Back</Button>
+                <Button onClick={() => setStep("selfie-upload")} className="flex-1 bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">{idBackFile ? "Next" : "Skip"}</Button>
+              </div>
+            </div>
           )}
 
           {/* Step: Selfie Upload */}
           {step === "selfie-upload" && (
-            <motion.div key="selfie-upload" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-4 pt-2">
-              <p className="text-sm text-zinc-600">Take a selfie while holding your ID next to your face. Make sure both your face and the ID are clearly visible.</p>
-              
-              <input
-                ref={selfieInputRef}
-                type="file"
-                accept="image/*"
-                capture="user"
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) handleFileSelect(f, "selfie");
-                }}
-              />
-
-              {selfiePreview ? (
-                <div className="relative rounded-xl overflow-hidden border-2 border-gold/30">
-                  <img src={selfiePreview} alt="Selfie preview" className="w-full h-48 object-cover" />
-                  <button
-                    onClick={() => selfieInputRef.current?.click()}
-                    className="absolute bottom-2 right-2 px-3 py-1.5 rounded-lg bg-black/70 text-white text-xs font-medium hover:bg-black/90 transition"
-                  >
-                    Change
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => selfieInputRef.current?.click()}
-                  className="w-full h-40 border-2 border-dashed border-gold/40 rounded-xl flex flex-col items-center justify-center gap-2 text-zinc-500 hover:border-gold/60 hover:bg-gold/5 transition-all"
-                >
-                  <Camera className="w-8 h-8 text-gold" />
-                  <span className="text-sm font-medium">Upload Selfie with ID</span>
-                  <span className="text-xs text-zinc-400">JPG, PNG up to 10MB</span>
-                </button>
-              )}
-
+            <div className="space-y-4 pt-2">
+              <p className="text-sm text-zinc-600">Take a selfie while holding your ID next to your face.</p>
+              {renderFileUpload(selfiePreview, selfieInputRef, (f) => handleFileSelect(f, "selfie"), "Upload Selfie with ID", <Camera className="w-8 h-8 text-[hsl(var(--gold))]" />)}
               <div className="flex gap-3">
-                <Button variant="outline" onClick={() => setStep("id-upload")} className="flex-1 border-gold/30 text-black">
-                  Back
-                </Button>
-                <Button
-                  onClick={() => selfieFile ? handleSubmit() : toast({ title: "Please upload your selfie", variant: "destructive" })}
-                  className="flex-1 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold"
-                >
-                  Submit for Review
-                </Button>
+                <Button variant="outline" onClick={() => setStep("id-back")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-black">Back</Button>
+                <Button onClick={() => selfieFile ? setStep("liveness") : toast({ title: "Please upload your selfie", variant: "destructive" })} className="flex-1 bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">Next: Liveness Check</Button>
               </div>
-            </motion.div>
+            </div>
+          )}
+
+          {/* Step: Liveness Detection */}
+          {step === "liveness" && (
+            <div className="space-y-4 pt-2">
+              <p className="text-sm text-zinc-600 font-medium">Liveness Verification — follow the instructions below</p>
+              
+              <div className="relative rounded-none overflow-hidden border-2 border-[hsl(var(--gold)/0.3)] bg-black aspect-video">
+                <video ref={videoRef} className="w-full h-full object-cover" muted playsInline />
+                <canvas ref={canvasRef} className="hidden" />
+                
+                {/* Instruction overlay */}
+                {!livenessComplete && (
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                    <div className="flex items-center justify-center gap-3">
+                      <Eye className="w-5 h-5 text-[hsl(var(--gold))]" />
+                      <span className="text-white text-sm font-medium">
+                        {LIVENESS_INSTRUCTIONS[livenessStage].text}
+                      </span>
+                    </div>
+                    <div className="flex justify-center gap-2 mt-2">
+                      {(["blink", "turn-left", "turn-right"] as LivenessStage[]).map((s, i) => (
+                        <div key={s} className={`w-2 h-2 rounded-full ${i < livenessFrames.length ? "bg-emerald-500" : s === livenessStage ? "bg-[hsl(var(--gold))] animate-pulse" : "bg-zinc-600"}`} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {livenessComplete && (
+                  <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center gap-2">
+                    <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+                    <span className="text-white text-sm font-medium">Liveness verified</span>
+                  </div>
+                )}
+              </div>
+
+              {!livenessComplete ? (
+                <Button onClick={handleLivenessCapture} disabled={livenessCapturing} className="w-full bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)]">
+                  {livenessCapturing ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                  Capture — {LIVENESS_INSTRUCTIONS[livenessStage].text}
+                </Button>
+              ) : (
+                <div className="flex gap-3">
+                  <Button variant="outline" onClick={() => { setLivenessStage("blink"); setLivenessFrames([]); setLivenessComplete(false); setStep("liveness"); }} className="flex-1 border-[hsl(var(--gold)/0.3)] text-black">Redo</Button>
+                  <Button onClick={handleSubmit} className="flex-1 bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)] font-semibold">Submit for Review</Button>
+                </div>
+              )}
+            </div>
           )}
 
           {/* Step: Submitting */}
           {step === "submitting" && (
-            <motion.div key="submitting" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center py-8 gap-4">
-              <Loader2 className="w-10 h-10 text-gold animate-spin" />
+            <div className="flex flex-col items-center justify-center py-8 gap-4">
+              <Loader2 className="w-10 h-10 text-[hsl(var(--gold))] animate-spin" />
               <p className="text-sm text-zinc-600 font-medium">Uploading your documents...</p>
-            </motion.div>
+            </div>
           )}
 
           {/* Step: Success */}
           {step === "success" && (
-            <motion.div key="success" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center py-8 gap-4 text-center">
+            <div className="flex flex-col items-center justify-center py-8 gap-4 text-center">
               <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
                 <CheckCircle2 className="w-8 h-8 text-emerald-500" />
               </div>
               <h3 className="text-lg font-semibold text-black">Verification Submitted!</h3>
-              <p className="text-sm text-zinc-600 max-w-xs">We'll review your documents within 24–48 hours. You'll be notified once your account is verified.</p>
-              <Button onClick={() => handleClose(false)} className="mt-2 bg-gradient-to-r from-gold to-gold-dark text-black font-semibold">
-                Done
-              </Button>
-            </motion.div>
+              <p className="text-sm text-zinc-600 max-w-xs">We'll review your documents within 24–48 hours. You'll be notified once verified.</p>
+              <Button onClick={() => handleClose(false)} className="mt-2 bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)] font-semibold">Done</Button>
+            </div>
           )}
 
           {/* Step: Error */}
           {step === "error" && (
-            <motion.div key="error" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center py-8 gap-4 text-center">
+            <div className="flex flex-col items-center justify-center py-8 gap-4 text-center">
               <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center">
                 <AlertCircle className="w-8 h-8 text-red-500" />
               </div>
               <h3 className="text-lg font-semibold text-black">Submission Failed</h3>
               <p className="text-sm text-zinc-600 max-w-xs">{errorMsg}</p>
-              <Button onClick={() => setStep("selfie-upload")} variant="outline" className="mt-2 border-gold/30 text-black">
-                Try Again
-              </Button>
-            </motion.div>
+              <Button onClick={() => setStep("selfie-upload")} variant="outline" className="mt-2 border-[hsl(var(--gold)/0.3)] text-black">Try Again</Button>
+            </div>
           )}
-        </AnimatePresence>
+        </div>
       </DialogContent>
     </Dialog>
   );

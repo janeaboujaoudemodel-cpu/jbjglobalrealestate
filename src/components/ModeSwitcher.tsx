@@ -140,8 +140,8 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         </DropdownMenuTrigger>
         
         <DropdownMenuContent 
-          align="center" 
-          className="w-72 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 shadow-xl rounded-xl p-2 z-[10001]"
+          align="end" 
+          className="w-72 mr-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 shadow-xl rounded-xl p-2 z-[10001]"
           sideOffset={5}
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
