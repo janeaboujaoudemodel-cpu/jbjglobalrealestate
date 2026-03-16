@@ -893,8 +893,8 @@ const Footer = () => {
         </div>
         </div>
 
-        {/* Premium Divider before Legal Zone - on pure black */}
-        <div className="relative bg-black py-4">
+        {/* Premium Divider before Legal Zone */}
+        <div className="relative py-4">
           <div className="relative h-[2px] max-w-7xl mx-auto">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-md" />
