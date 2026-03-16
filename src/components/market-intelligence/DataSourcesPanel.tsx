@@ -35,7 +35,7 @@ const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; clas
 
 export const DataSourcesPanel = () => {
   return (
-    <section className="py-16 bg-black">
+    <section className="py-16 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       <div className="jj-layer-2">
         <motion.div
           initial="hidden"
