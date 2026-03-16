@@ -141,7 +141,7 @@ const BestIdeaAward = () => {
                 {/* Left - Info */}
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] rounded-xl flex items-center justify-center">
                       <Lightbulb className="w-6 h-6 text-gold" />
                     </div>
                     <div>
