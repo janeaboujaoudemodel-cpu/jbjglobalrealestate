@@ -307,6 +307,8 @@ export default function HorizontalUtilityBar() {
                 </TooltipContent>
               </Tooltip>
 
+              {railDivider}
+
               {/* Inbox */}
               <Tooltip>
                 <TooltipTrigger asChild>
