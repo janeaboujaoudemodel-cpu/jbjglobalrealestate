@@ -147,21 +147,27 @@ export default function HorizontalUtilityBar() {
             className={`${cellBase} ${cellHover}`}
           >
             <Building2 className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
-            <span className="text-[11px] font-semibold text-[hsl(var(--foreground)/0.6)] group-hover:text-[hsl(var(--foreground)/0.8)] uppercase tracking-wide">Buy</span>
+            <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
           </Link>
+
+          {railDivider}
+
           <Link
             to="/properties?transaction=rent"
             className={`${cellBase} ${cellHover}`}
           >
             <Key className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
-            <span className="text-[11px] font-semibold text-[hsl(var(--foreground)/0.6)] group-hover:text-[hsl(var(--foreground)/0.8)] uppercase tracking-wide">Rent</span>
+            <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
           </Link>
+
+          {railDivider}
+
           <Link
             to="/listing-portal"
             className={`${cellBase} ${cellHover}`}
           >
-            <Tag className="w-4 h-4 text-[hsl(var(--gold))] group-hover:scale-105 transition-transform shrink-0" />
-            <span className="text-[11px] font-bold text-[hsl(var(--gold))] uppercase tracking-wide">Sell</span>
+            <Tag className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
+            <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Sell</span>
           </Link>
 
           {railDivider}
