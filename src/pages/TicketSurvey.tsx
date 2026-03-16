@@ -194,7 +194,7 @@ const TicketSurvey = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#FDFBF7] to-[#F5F0E6] py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] py-12 px-4">
       <div className="max-w-lg mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-black mb-2">{surveyCopy.title}</h1>
