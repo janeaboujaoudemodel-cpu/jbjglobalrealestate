@@ -386,7 +386,7 @@ export default function HorizontalUtilityBar() {
                 <Settings className={iconClass} />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Profile & Settings</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Manage account settings</TooltipContent>
           </Tooltip>
         </div>
       </div>
