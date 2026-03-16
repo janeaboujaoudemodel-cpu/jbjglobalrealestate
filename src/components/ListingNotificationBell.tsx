@@ -96,7 +96,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
     setNotifications(all.slice(0, 15));
   };
 
-  const unreadCount = (alertCounts?.unreadTicketNotifications || 0) + (alertCounts?.unreadListingNotifications || 0) + (alertCounts?.unreadSystemNotifications || 0);
+  const unreadCount = alertCounts?.totalNotificationAlerts || 0;
 
   const invalidateCounts = () => {
     queryClient.invalidateQueries({ queryKey: ['user-alert-counts'] });
@@ -157,7 +157,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
     return (
       <div className="w-80 bg-white border-2 border-gold/40 rounded-xl shadow-xl shadow-gold/10 overflow-hidden">
         <div className="p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7] flex items-center justify-between">
-          <h3 className="font-semibold text-sm text-stone-900">Notifications</h3>
+          <h3 className="font-semibold text-sm text-[hsl(var(--gold))]">Notifications</h3>
           {unreadCount > 0 && (
             <button onClick={markAllRead} className="text-xs text-gold hover:text-gold/80 font-medium transition-colors">
               Mark all read
@@ -191,7 +191,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
                     <Headphones className="w-4 h-4 text-gold" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-stone-900 truncate">{n.title}</p>
+                    <p className="text-sm font-medium text-[hsl(var(--gold))] truncate">{n.title}</p>
                     {n.message && (
                       <p className="text-xs text-stone-500 mt-0.5 line-clamp-2">{n.message}</p>
                     )}

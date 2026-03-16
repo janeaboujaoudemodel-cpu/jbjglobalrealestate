@@ -94,7 +94,7 @@ export default function HorizontalUtilityBar() {
     navigate(`/properties?${params.toString()}`);
   };
 
-  const totalAlerts = alerts?.totalAlerts || 0;
+  
 
   // Determine if user has CRM access (owner or broker)
   const showCRM = !!user && isOwner;
@@ -167,7 +167,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Rent a property</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Find properties for rent</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -305,7 +305,7 @@ export default function HorizontalUtilityBar() {
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">My Tasks</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">View and manage your tasks</TooltipContent>
               </Tooltip>
 
               {railDivider}
@@ -325,9 +325,7 @@ export default function HorizontalUtilityBar() {
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">
-                  Notifications{totalAlerts > 0 ? ` — ${totalAlerts} unread` : ''}
-                </TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">View your notifications</TooltipContent>
               </Tooltip>
 
               {railDivider}
@@ -342,7 +340,7 @@ export default function HorizontalUtilityBar() {
                      <Inbox className={iconClass} />
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">My Inbox — Messages & updates</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open your messages</TooltipContent>
               </Tooltip>
 
               {railDivider}
@@ -360,15 +358,20 @@ export default function HorizontalUtilityBar() {
                 <LayoutDashboard className={iconClass} />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">My Dashboard & Profile</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Access your dashboard</TooltipContent>
           </Tooltip>
 
           {railDivider}
 
           {/* Account — opens Mode Selector via ModeSwitcher */}
-          <div className={`${cellBase} ${cellHover} px-1`}>
-            <ModeSwitcher variant="header" />
-          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className={`${cellBase} ${cellHover} px-1`}>
+                <ModeSwitcher variant="header" />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your mode based on your role</TooltipContent>
+          </Tooltip>
 
           {railDivider}
 
@@ -383,7 +386,7 @@ export default function HorizontalUtilityBar() {
                 <Settings className={iconClass} />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Profile & Settings</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Manage account settings</TooltipContent>
           </Tooltip>
         </div>
       </div>
