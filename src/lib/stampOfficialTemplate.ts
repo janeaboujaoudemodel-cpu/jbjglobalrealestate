@@ -788,7 +788,7 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
       } else if (config.showMonogram && mono) {
         const baseSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
         return `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
-          font-family="${enFont}" font-size="${baseSize * centerScale}" fill="${ink}" font-weight="700" letter-spacing="2">${mono.toUpperCase()}</text>`;
+          font-family="${enFont}" font-size="${baseSize * centerScale}" fill="${ink}" font-weight="700" letter-spacing="2">${escapeXml(mono.toUpperCase())}</text>`;
       }
       return '';
   }
