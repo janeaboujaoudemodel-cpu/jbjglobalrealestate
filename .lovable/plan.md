@@ -1,90 +1,43 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## Company Profile — Premium Cover Generation & Standalone Strip
 
-### Session Status
+### What needs to happen
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+1. **Generate proper front & back covers** for the Company Profile using AI image generation (Lovable AI). The current `company-profile-cover.jpg` is a generic placeholder. We will generate a premium branded cover featuring "JBJ GLOBAL REAL ESTATE" / "Company Profile" with gold/black luxury styling, and a back cover with contact details and branding.
 
----
+2. **Add back cover support** to the `BookData` type — add an optional `backCover?: string` field so the Company Profile (and future books) can reference a back cover image.
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+3. **Update the cover asset everywhere** — since the cover is imported from `src/assets/books/company-profile-cover.jpg`, replacing that file automatically updates all places: the marquee strip, the `CompanyProfileBrochure` 3D book, the guides library, etc.
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+4. **Separate Company Profile into its own premium strip** on the homepage marquee — remove it from the scrolling book strip and render it below in a dedicated, static premium row with larger sizing, 3D book treatment, and descriptive text (reusing `CompanyProfileBrochure`).
 
----
+### Files to change
 
-### Route Map
+**`src/types/books.ts`**
+- Add `backCover?: string` optional field to `BookData`
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+**`src/data/bookCollections.ts`**
+- Add back cover import for company profile
+- Set `backCover` on `companyProfileBook`
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+**`src/components/home/HomepageBookMarquee.tsx`**
+- Filter out `Company Profile` from the scrolling marquee strip (like `Guides Library` is already filtered)
+- Add a new premium standalone section below the marquee with a gold divider, featuring the `CompanyProfileBrochure` component centered on its own row with premium styling
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
+**`src/components/books/CompanyProfileBrochure.tsx`**
+- No structural changes needed — it already renders the 3D book. The new cover image will flow through automatically.
 
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
+**AI Image Generation (edge function or inline)**
+- Use Lovable AI (`google/gemini-3-pro-image-preview`) to generate:
+  - **Front cover**: Black/gold luxury design — "JBJ GLOBAL REAL ESTATE" in gold, "Company Profile" subtitle, geometric/architectural elements, 18-page document feel
+  - **Back cover**: Matching design with contact info placeholder, QR code area, gold accents
+- Save generated images to Lovable Cloud storage, then download and place in `src/assets/books/`
 
-**Investor Hub**
-- `/investor-hub` → InvestorHub
+### Implementation order
 
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
+1. Generate front + back cover images via AI
+2. Replace `company-profile-cover.jpg` and add back cover asset
+3. Update `BookData` type and `bookCollections.ts`
+4. Update `HomepageBookMarquee.tsx` to separate the Company Profile into its own premium row below the scrolling strip
 
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
