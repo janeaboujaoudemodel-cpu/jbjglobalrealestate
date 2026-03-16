@@ -49,7 +49,7 @@ const MyDashboardProgress = () => {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center">
         <BrandedLoader text="Loading..." className="min-h-screen" />
       </div>
     );

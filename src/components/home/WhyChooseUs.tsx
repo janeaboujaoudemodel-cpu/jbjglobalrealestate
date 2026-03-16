@@ -79,7 +79,7 @@ const WhyChooseUs = () => {
                 style={{ animationDelay: `${index * 80}ms` }}
               >
                 {/* Icon */}
-                <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                   <prop.icon className="w-6 h-6 text-gold" />
                 </div>
 

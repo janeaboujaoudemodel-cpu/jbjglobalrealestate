@@ -25,7 +25,7 @@ const ResalePropertiesSection = () => {
   if (!isLoading && (!listings || listings.length === 0)) return null;
 
   return (
-    <section className="bg-black">
+    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       <div className="jj-layer-2">
         <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-6 md:p-10 shadow-xl relative overflow-hidden">
           {/* Ambient glow */}

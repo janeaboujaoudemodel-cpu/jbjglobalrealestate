@@ -22,7 +22,7 @@ function BookMarqueeStrip({ books }: { books: BookData[] }) {
 
     let animId: number;
     let pos = 0;
-    const speed = 0.4;
+    const speed = 0.9;
     const singleSetWidth = books.length * 160;
 
     const tick = () => {
