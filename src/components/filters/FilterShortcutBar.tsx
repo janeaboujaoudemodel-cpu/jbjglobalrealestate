@@ -611,9 +611,9 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Divider */}
-        <div className="w-px h-6 bg-gold/30 flex-shrink-0" />
+        <div className="w-px h-5 bg-gold/30 flex-shrink-0" />
 
-        {/* Hide Sold Out - LAST */}
+        {/* Hide Sold Out */}
         <button
           onClick={() => update({ hideSoldOut: !filters.hideSoldOut })}
           className={cn(
@@ -626,12 +626,45 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           {t('filter.hideSold')}
         </button>
 
+        {/* Divider */}
+        <div className="w-px h-5 bg-gold/30 flex-shrink-0" />
+
+        {/* Sort pills */}
+        {SORT_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            onClick={() => update({ sortBy: filters.sortBy === opt.value ? null : opt.value })}
+            className={cn(
+              pillBase, "px-2.5 py-1.5",
+              filters.sortBy === opt.value ? pillActive : pillInactive
+            )}
+          >
+            {opt.value === 'trending' ? <TrendingUp className="w-3.5 h-3.5" /> : opt.label}
+          </button>
+        ))}
+
+        {/* Divider */}
+        <div className="w-px h-5 bg-gold/30 flex-shrink-0" />
+
+        {/* Map toggle */}
+        <button
+          onClick={() => onMapToggle ? onMapToggle(!isMapMode) : navigate('/properties?view=map')}
+          className={cn(pillBase, "px-2.5 py-1.5", isMapMode ? pillActive : pillInactive)}
+          title={t('filter.map')}
+        >
+          <Map className="w-3.5 h-3.5" />
+          {isMapMode ? t('filter.list') : t('filter.map')}
+        </button>
+
+        {/* Saved Filters */}
+        <ConnectedSavedButton variant={variant} onApplySavedFilter={onFilterChange} />
+
         {/* Reset All */}
         {hasActiveFilters && (
           <button
             onClick={resetAll}
             className={cn(
-              pillBase,
+              pillBase, "px-2.5 py-1.5",
               "bg-red-500/10 border border-red-400/40 text-red-600 hover:bg-red-500/20"
             )}
           >
@@ -642,11 +675,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
         {/* Live Results Count Badge */}
         {resultsCount !== undefined && (
-          <div className="flex-shrink-0 ml-auto sticky right-0 pl-3">
+          <div className="flex-shrink-0 ml-auto sticky right-0 pl-2">
             <div
               key={resultsCount}
               className={cn(
-                "inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold transition-all animate-in fade-in zoom-in-95 duration-300",
+                "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all animate-in fade-in zoom-in-95 duration-300",
                 "bg-gradient-to-r from-gold/20 to-gold/10 border-2 border-gold/50 text-black shadow-sm"
               )}
             >
@@ -657,7 +690,6 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           </div>
         )}
 
-        </div>
         </div>
       </div>
 
