@@ -1067,34 +1067,31 @@ export default function GlobalVerticalNav() {
 
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
-      {/* ━━━ HEADER — Premium brand block with frosted glass ━━━ */}
+      {/* ━━━ HEADER — Champagne gold brand block ━━━ */}
       <div className="relative flex-shrink-0 overflow-hidden">
-        {/* Subtle shimmer background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1a1a]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(212,184,150,0.15),transparent_70%)]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" />
         
         <div className="relative px-4 py-4">
           <div className="flex items-center gap-3">
             <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0 group">
               <div className="relative">
-                <img src={jbjMonogramLightBg} alt="JBJ" className="w-12 h-12 object-contain rounded-xl ring-1 ring-gold/30 group-hover:ring-gold/60 transition-all shadow-lg shadow-black/20" />
-                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#1a1a1a]" />
+                <img src={jbjMonogramLightBg} alt="JBJ" className="w-12 h-12 object-contain rounded-xl ring-1 ring-gold/30 group-hover:ring-gold/60 transition-all shadow-lg shadow-gold/15" />
+                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-[#E8DCC8]" />
               </div>
             </Link>
             <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-90 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <span className="text-[12px] font-extrabold text-white/95 tracking-[0.2em] leading-tight">JBJ GLOBAL</span>
-              <span className="text-[10px] font-bold text-gold/80 tracking-[0.25em] leading-tight mt-0.5">REAL ESTATE</span>
+              <span className="text-[12px] font-extrabold text-black/85 tracking-[0.2em] leading-tight">JBJ GLOBAL</span>
+              <span className="text-[10px] font-bold text-black/50 tracking-[0.25em] leading-tight mt-0.5">REAL ESTATE</span>
             </Link>
             <button
               onClick={toggleCollapse}
-              className="w-7 h-7 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] flex items-center justify-center transition-all border border-white/[0.06]"
+              className="w-7 h-7 rounded-lg bg-black/[0.06] hover:bg-black/[0.12] flex items-center justify-center transition-all border border-black/[0.08]"
               aria-label="Collapse navigation"
             >
-              <ChevronLeft className="w-3.5 h-3.5 text-white/50" />
+              <ChevronLeft className="w-3.5 h-3.5 text-black/40" />
             </button>
           </div>
         </div>
-        {/* Bottom gold accent line */}
         <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
       </div>
 
