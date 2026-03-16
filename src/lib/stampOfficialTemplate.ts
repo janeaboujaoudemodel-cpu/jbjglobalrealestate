@@ -14,6 +14,16 @@
  */
 
 export type SeparatorStyle = 'dot' | 'star' | 'square' | 'diamond' | 'line' | 'double-line' | 'triangle' | 'cross' | 'floral' | 'ornament' | 'dash' | 'circle' | 'none';
+
+/** Escape user text for safe SVG/XML embedding — prevents XSS injection */
+function escapeXml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 export type BorderStyleType = 'SINGLE' | 'DOUBLE' | 'RING' | 'DOTTED' | 'ROPE' | 'CUSTOM';
 export type DividerStyle = 'diamond' | 'line' | 'ornate' | 'none';
 export type CenterContentMode = 'monogram' | 'initials' | 'logo' | 'icon' | 'license' | 'none';
@@ -253,13 +263,14 @@ function renderArcLetters(
   text: string, arcId: string, baseFontSize: number, baseColor: string,
   overrides?: Record<string, LetterOverride>
 ): string {
-  if (!overrides || Object.keys(overrides).length === 0) return text;
+  const safeText = escapeXml(text);
+  if (!overrides || Object.keys(overrides).length === 0) return safeText;
   
   // Check if any override applies to this arc
   const hasRelevantOverrides = Object.keys(overrides).some(k => k.startsWith(`${arcId}-`));
-  if (!hasRelevantOverrides) return text;
+  if (!hasRelevantOverrides) return safeText;
 
-  return [...text].map((char, i) => {
+  return [...safeText].map((char, i) => {
     const key = `${arcId}-${i}`;
     const ov = overrides[key];
     if (!ov) return `<tspan data-stamp-letter="${key}">${char}</tspan>`;
@@ -765,7 +776,7 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
       if (config.registrationNumber) {
         const regSize = fitFontSize(config.registrationNumber, 11, innerR * 1.4, 0.6);
         return `<text data-stamp-element="center" x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
-          font-family="${enFont}" font-size="${regSize}" fill="${ink}" font-weight="700" letter-spacing="1">${config.registrationNumber}</text>`;
+          font-family="${enFont}" font-size="${regSize}" fill="${ink}" font-weight="700" letter-spacing="1">${escapeXml(config.registrationNumber)}</text>`;
       }
       return '';
     default:
@@ -777,7 +788,7 @@ function renderCenterContent(config: OfficialStampConfig, cx: number, cy: number
       } else if (config.showMonogram && mono) {
         const baseSize = mono.length === 1 ? innerR * 0.85 : mono.length === 2 ? innerR * 0.65 : innerR * 0.50;
         return `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" 
-          font-family="${enFont}" font-size="${baseSize * centerScale}" fill="${ink}" font-weight="700" letter-spacing="2">${mono.toUpperCase()}</text>`;
+          font-family="${enFont}" font-size="${baseSize * centerScale}" fill="${ink}" font-weight="700" letter-spacing="2">${escapeXml(mono.toUpperCase())}</text>`;
       }
       return '';
   }
