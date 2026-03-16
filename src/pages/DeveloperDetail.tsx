@@ -72,6 +72,16 @@ const DeveloperDetail = () => {
   }, []);
   const [selectedEmirate, setSelectedEmirate] = useState<string | null>(null);
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+
+  // Listen for global filter changes from the header bar
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const next = (e as CustomEvent<ShortcutFilterState>).detail;
+      if (next) setShortcutFilters(next);
+    };
+    window.addEventListener('globalFilterChange', handler);
+    return () => window.removeEventListener('globalFilterChange', handler);
+  }, []);
   const [isDevDescExpanded, setIsDevDescExpanded] = useState(false);
   const [isFilterFixed, setIsFilterFixed] = useState(false);
   const [bottomReached, setBottomReached] = useState(false);
@@ -398,33 +408,7 @@ const DeveloperDetail = () => {
           {/* Spacer when filter is fixed to prevent content hiding under it */}
           {isFilterFixed && <div className="h-[100px]" />}
 
-          {/* Fixed portal filter bar — when scrolled past sentinel */}
-          {isFilterFixed && !bottomReached && createPortal(
-            <div className="fixed top-[48px] left-0 right-0 z-[9998] backdrop-blur-md transition-shadow duration-200 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px]">
-              <div className="mx-0 pt-0">
-                <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/30 p-2 sm:p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
-                   <FilterShortcutBar
-                    variant="light"
-                    filters={shortcutFilters}
-                    onFilterChange={setShortcutFilters}
-                    priorityFilter="developers"
-                    searchSlot={
-                      <div className="relative">
-                        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
-                        <Input
-                          placeholder="Search projects..."
-                          value={filters.search}
-                          onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-                          className="h-8 pl-8 pr-2 text-xs w-full bg-white border-gold/30"
-                        />
-                      </div>
-                    }
-                  />
-                </div>
-              </div>
-            </div>,
-            document.body
-          )}
+          {/* Fixed portal filter bar removed — handled globally by GlobalFilterBar */}
 
           {hasFiltersApplied && (
             <p className="text-foreground/70 mb-6">

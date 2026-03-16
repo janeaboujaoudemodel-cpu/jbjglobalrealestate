@@ -18,6 +18,7 @@ import Footer from "@/components/Footer";
 
 const GlobalVerticalNav = lazy(() => import("@/components/navigation/GlobalVerticalNav"));
 const HorizontalUtilityBar = lazy(() => import("@/components/navigation/HorizontalUtilityBar"));
+const GlobalFilterBar = lazy(() => import("@/components/navigation/GlobalFilterBar"));
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -256,10 +257,15 @@ const MainLayout = ({ children }: MainLayoutProps) => {
               <HorizontalUtilityBar />
             </Suspense>
           </div>
+          <div className="hidden md:block">
+            <Suspense fallback={null}>
+              <GlobalFilterBar />
+            </Suspense>
+          </div>
         </>
       )}
       <GlobalContactGating>
-        <main className={`w-full max-w-full overflow-x-hidden transition-all duration-300 ${!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:md:pl-[200px] [body.jj-vertical-nav-collapsed_&]:md:pl-[48px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-28 md:pt-[52px]" : "md:pt-[52px] pt-0"}`}>
+        <main className={`w-full max-w-full overflow-x-hidden transition-all duration-300 ${!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:md:pl-[200px] [body.jj-vertical-nav-collapsed_&]:md:pl-[48px]" : ""} ${needsHeaderSpacing ? "pt-24 sm:pt-28 md:pt-[100px]" : "md:pt-[100px] pt-0"}`}>
           {layoutGuardTriggered && isServiceRoute && (
             <div role="alert" className="mx-auto mt-4 w-full max-w-6xl px-4 sm:px-6 lg:px-8">
               <div className="rounded-lg border border-destructive/30 bg-background/95 px-4 py-3 text-sm text-foreground shadow-sm backdrop-blur">

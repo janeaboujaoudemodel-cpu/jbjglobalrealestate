@@ -1,7 +1,7 @@
 import { useState, lazy, Suspense, memo, useEffect, forwardRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import HeroSearchBar from "@/components/home/HeroSearchBar";
+// HeroSearchBar removed — global filter bar handles search
 
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -239,13 +239,7 @@ const Index = () => {
             </motion.span>
           </div>
 
-          {/* SEARCH BAR - stretched to the right edge space */}
-          <motion.div 
-            variants={fadeInUp}
-            className="w-full max-w-[1380px] pr-0 md:pr-6 lg:pr-10"
-          >
-            <HeroSearchBar />
-          </motion.div>
+          {/* Search bar removed — global filter bar in the header handles search */}
         </motion.div>
       </div>
 
