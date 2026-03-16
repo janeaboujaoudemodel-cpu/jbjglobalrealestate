@@ -4,7 +4,7 @@ import { BookOpen, ArrowRight } from "lucide-react";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
 import { BookCoverFace } from "@/components/books/BookCoverFace";
 import { CompanyProfileBrochure } from "@/components/books/CompanyProfileBrochure";
-import { SectionDivider } from "@/components/ui/section-divider";
+
 import type { BookData } from "@/types/books";
 
 const allBooks = INVESTOR_BOOKS.filter(
