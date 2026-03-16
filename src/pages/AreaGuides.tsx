@@ -510,7 +510,7 @@ const AreaGuides = () => {
       </section>
 
       {/* DLD Market Intelligence */}
-      <div className={`py-8 ${pastHero ? "lg:pl-[200px]" : ""}`}>
+      <div className="py-8">
         <div className="px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
           <DLDMarketWidget />
         </div>
