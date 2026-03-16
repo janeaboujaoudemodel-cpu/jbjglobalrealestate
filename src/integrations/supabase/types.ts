@@ -18174,6 +18174,7 @@ export type Database = {
           first_name: string | null
           full_name: string | null
           id: string
+          is_verified: boolean
           last_login_at: string | null
           last_name: string | null
           login_streak: number | null
@@ -18186,6 +18187,8 @@ export type Database = {
           updated_at: string
           user_role: string | null
           user_type: string | null
+          verification_status: string
+          verified_at: string | null
         }
         Insert: {
           avatar_initials?: string | null
@@ -18199,6 +18202,7 @@ export type Database = {
           first_name?: string | null
           full_name?: string | null
           id: string
+          is_verified?: boolean
           last_login_at?: string | null
           last_name?: string | null
           login_streak?: number | null
@@ -18211,6 +18215,8 @@ export type Database = {
           updated_at?: string
           user_role?: string | null
           user_type?: string | null
+          verification_status?: string
+          verified_at?: string | null
         }
         Update: {
           avatar_initials?: string | null
@@ -18224,6 +18230,7 @@ export type Database = {
           first_name?: string | null
           full_name?: string | null
           id?: string
+          is_verified?: boolean
           last_login_at?: string | null
           last_name?: string | null
           login_streak?: number | null
@@ -18236,6 +18243,8 @@ export type Database = {
           updated_at?: string
           user_role?: string | null
           user_type?: string | null
+          verification_status?: string
+          verified_at?: string | null
         }
         Relationships: []
       }
@@ -24115,6 +24124,51 @@ export type Database = {
           upload_source?: string | null
           upload_type?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_verifications: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          id_document_url: string | null
+          rejection_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          selfie_url: string | null
+          status: string
+          submitted_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          id_document_url?: string | null
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          selfie_url?: string | null
+          status?: string
+          submitted_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          id_document_url?: string | null
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          selfie_url?: string | null
+          status?: string
+          submitted_at?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

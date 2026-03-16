@@ -72,6 +72,9 @@ const DeveloperPortalCTA = lazy(() => import("@/components/home/DeveloperPortalC
 import { PodcastVisibilityGate } from "@/components/home/PodcastVisibilityGate";
 import { SectionDivider } from "@/components/ui/section-divider";
 
+const IntroHeroSection = lazy(() => import("@/components/home/IntroHeroSection"));
+const VerificationBanner = lazy(() => import("@/components/verification/VerificationBanner"));
+
 const SectionLoader = forwardRef<HTMLDivElement>((_, ref) => (
   <div ref={ref} className="py-12 flex items-center justify-center">
     <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
@@ -137,6 +140,16 @@ const Index = () => {
         </Suspense>
       )}
       
+      {/* INTRO HERO - Platform Overview */}
+      <Suspense fallback={<SectionLoader />}>
+        <IntroHeroSection />
+      </Suspense>
+
+      {/* VERIFICATION BANNER - Get Verified CTA */}
+      <Suspense fallback={null}>
+        <VerificationBanner />
+      </Suspense>
+
       {/* HERO SECTION - LUXURY CINEMATIC VIDEO - MUST BE 100vh */}
       <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-black">
         {/* Video Background - Luxury Dubai Drone Footage - Optimized for performance */}
