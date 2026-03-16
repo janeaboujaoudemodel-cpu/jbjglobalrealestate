@@ -191,7 +191,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
                     <Headphones className="w-4 h-4 text-gold" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-stone-900 truncate">{n.title}</p>
+                    <p className="text-sm font-medium text-[hsl(var(--gold))] truncate">{n.title}</p>
                     {n.message && (
                       <p className="text-xs text-stone-500 mt-0.5 line-clamp-2">{n.message}</p>
                     )}
