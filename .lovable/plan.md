@@ -1,90 +1,42 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## Plan: Global Fixed FilterShortcutBar Under Horizontal Utility Bar
 
-### Session Status
+### What changes
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+1. **Add FilterShortcutBar to MainLayout** — render a global `FilterShortcutBar` as a second fixed row directly below the `HorizontalUtilityBar` (at `top-[48px]`), matching the same champagne gold gradient. This becomes part of the L-shaped header on desktop, visible on all pages.
 
----
+2. **Create a `GlobalFilterBar` wrapper component** (`src/components/navigation/GlobalFilterBar.tsx`) that:
+   - Manages its own `ShortcutFilterState` (using `defaultShortcutFilters`)
+   - Reads URL search params on mount to sync state (so navigating from filters goes to the right page)
+   - On filter change, navigates to `/properties` with the filter params encoded in the URL
+   - Uses the same champagne gradient background (`from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]`) with gold border-bottom
+   - Positioned fixed at `top-[48px]`, left-aligned with sidebar (`left-[200px]` / `left-[48px]` collapsed)
+   - Hidden on mobile (`hidden md:block`)
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+3. **Update `MainLayout.tsx`**:
+   - Import and render `<GlobalFilterBar />` right after `<HorizontalUtilityBar />`
+   - Update the `<main>` top padding from `md:pt-[52px]` to `md:pt-[100px]` (48px utility bar + ~52px filter bar) to account for the new row
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+4. **Remove per-page fixed filter bars**:
+   - `src/pages/Properties.tsx`: Remove the `isFilterFixed && createPortal(...)` block (lines 1140-1208) and the hero section filter bar. Keep the inline filter in the hero section's initial view or remove it since the global bar replaces it.
+   - `src/pages/PropertiesReelly.tsx`: Remove the `showStickyNav` fixed FilterShortcutBar portal
+   - `src/pages/DeveloperDetail.tsx`: Remove duplicate fixed FilterShortcutBar
 
----
+5. **Remove HeroSearchBar from homepage**:
+   - `src/pages/Index.tsx`: Remove `<HeroSearchBar />` import and rendering (the global filter bar replaces it)
+   - The hero section can keep its visual content (video/image, tagline) but the search/filter UI moves to the global bar
 
-### Route Map
+6. **Adjust stacking**: The global filter bar uses `z-[9996]` (below utility bar at 9998, above page content)
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+### Files to edit
+- **Create**: `src/components/navigation/GlobalFilterBar.tsx`
+- **Edit**: `src/components/MainLayout.tsx` — add GlobalFilterBar, adjust main padding
+- **Edit**: `src/pages/Properties.tsx` — remove fixed filter portal and hero filter
+- **Edit**: `src/pages/PropertiesReelly.tsx` — remove fixed filter portal
+- **Edit**: `src/pages/DeveloperDetail.tsx` — remove fixed filter bar
+- **Edit**: `src/pages/Index.tsx` — remove HeroSearchBar
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+### Key implementation detail
+The GlobalFilterBar will dispatch filter changes by navigating to `/properties?priceMin=X&bedrooms=Y...` so the Properties page picks them up. On the Properties page itself, the global bar's state will be synced with the page's local filter state via URL params.
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
