@@ -1284,95 +1284,109 @@ export default function GlobalVerticalNav() {
         style={{ willChange: 'transform, opacity' }}
       >
       {collapsed ? (
-      <div className="hidden lg:flex w-[48px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex-col h-full items-center pt-[56px] pb-4 gap-2 overflow-y-auto overflow-x-visible">
-          <Link to="/" className="mb-2 shrink-0">
-            <img src={jbjMonogramLightBg} alt="JBJ" className="w-9 h-9 object-contain" />
-          </Link>
-
-          {/* Section icons in collapsed state */}
-          {SECTION_KEYS.map((sectionKey) => {
-            const SectionIcon = SECTION_ICONS[sectionKey];
-            const items = sectionGroups[sectionKey];
-            const hasActiveChild = items?.some(item => isRouteActive(item.href)) || false;
-            const hasMegaActive = sectionHasActiveMega(sectionKey);
-            const isActive = hasActiveChild || hasMegaActive;
-
-            return (
-              <Tooltip key={sectionKey}>
-                <TooltipTrigger asChild>
-                  <button
-                    onClick={() => {
-                      const firstItem = items?.[0];
-                      if (firstItem?.href && firstItem.href !== '#') {
-                        navigate(firstItem.href);
-                      }
-                    }}
-                    className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${
-                      isActive
-                        ? 'bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40'
-                        : 'text-black/60 hover:text-gold hover:bg-gold/10'
-                    }`}
-                  >
-                    <SectionIcon className="w-4 h-4" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
-              </Tooltip>
-            );
-          })}
-
-          <div className="flex-1" />
-
-          {/* Bottom pinned: Support, Ticket, Sign Out — vertical like owner command center */}
-          <div className="flex flex-col items-center gap-1.5 pb-1 border-t border-red-500/20 pt-2">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link to="/contact" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
-                  <Headphones className="w-3.5 h-3.5" />
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link to="/ticket-hub" className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
-                  <Ticket className="w-3.5 h-3.5" />
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Create or Follow Up Ticket</TooltipContent>
-            </Tooltip>
-            {session ? (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button onClick={() => { supabase.auth.signOut(); }} className="w-8 h-8 rounded-lg flex items-center justify-center text-red-500 hover:bg-red-50/50 border border-red-500/20 hover:border-red-500/40 transition-all">
-                    <LogOut className="w-3.5 h-3.5" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
-              </Tooltip>
-            ) : (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link to="/auth" className="w-8 h-8 rounded-lg flex items-center justify-center text-black/60 hover:text-gold hover:bg-gold/10 border border-gold/20 hover:border-gold/40 transition-all">
-                    <User className="w-3.5 h-3.5" />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign In</TooltipContent>
-              </Tooltip>
-            )}
+      <div className="hidden lg:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative">
+          {/* Dark header strip matching expanded header */}
+          <div className="w-full flex-shrink-0 relative">
+            <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] to-[#2a2520]" />
+            <div className="relative flex flex-col items-center py-3 gap-1">
+              <Link to="/" className="shrink-0 group">
+                <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain rounded-lg ring-1 ring-gold/30 group-hover:ring-gold/50 transition-all" />
+              </Link>
+            </div>
+            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
           </div>
 
-          <button
-            onClick={toggleCollapse}
-            className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/50 flex items-center justify-center hover:from-gold/30 hover:to-gold/15 transition-all shadow-lg shadow-gold/15"
-            aria-label="Expand navigation"
-            title="Expand navigation"
-          >
-            <ChevronRight className="w-5 h-5 text-black/70" />
-          </button>
+          {/* Section icons — light background area */}
+          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] w-full border-r border-gold/20">
+            {SECTION_KEYS.map((sectionKey) => {
+              if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
+              if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
+              if (sectionKey === 'INVESTOR' && !isInvestor && !isOwner) return null;
+              const SectionIcon = SECTION_ICONS[sectionKey];
+              const items = sectionGroups[sectionKey];
+              const hasActiveChild = items?.some(item => isRouteActive(item.href)) || false;
+              const hasMegaActive = sectionHasActiveMega(sectionKey);
+              const isActive = hasActiveChild || hasMegaActive;
+
+              return (
+                <Tooltip key={sectionKey}>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => {
+                        const firstItem = items?.[0];
+                        if (firstItem?.href && firstItem.href !== '#') {
+                          navigate(firstItem.href);
+                        }
+                      }}
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                        isActive
+                          ? 'bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black shadow-sm shadow-gold/15 ring-1 ring-gold/30'
+                          : 'text-black/40 hover:text-gold hover:bg-gold/10'
+                      }`}
+                    >
+                      <SectionIcon className="w-3.5 h-3.5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">{sectionKey}</TooltipContent>
+                </Tooltip>
+              );
+            })}
+
+            <div className="flex-1" />
+
+            {/* Bottom pinned */}
+            <div className="flex flex-col items-center gap-1 pt-1.5">
+              <div className="w-5 h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-0.5" />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link to="/contact" className="w-7 h-7 rounded-lg flex items-center justify-center text-red-400 hover:bg-red-50/60 transition-all">
+                    <Headphones className="w-3.5 h-3.5" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Contact Us</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link to="/ticket-hub" className="w-7 h-7 rounded-lg flex items-center justify-center text-red-400 hover:bg-red-50/60 transition-all">
+                    <Ticket className="w-3.5 h-3.5" />
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Support</TooltipContent>
+              </Tooltip>
+              {session ? (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button onClick={() => { supabase.auth.signOut(); }} className="w-7 h-7 rounded-lg flex items-center justify-center text-red-400 hover:text-white hover:bg-red-500 transition-all">
+                      <LogOut className="w-3.5 h-3.5" />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign Out</TooltipContent>
+                </Tooltip>
+              ) : (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link to="/auth" className="w-7 h-7 rounded-lg flex items-center justify-center text-gold hover:bg-gold/10 transition-all">
+                      <User className="w-3.5 h-3.5" />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" sideOffset={8} className="text-xs z-[10100]">Sign In</TooltipContent>
+                </Tooltip>
+              )}
+            </div>
+
+            {/* Expand button */}
+            <button
+              onClick={toggleCollapse}
+              className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1a1a1a] to-[#2a2520] flex items-center justify-center hover:from-[#2a2520] hover:to-[#1a1a1a] transition-all shadow-md mt-1 mb-1"
+              aria-label="Expand navigation"
+              title="Expand navigation"
+            >
+              <ChevronRight className="w-4 h-4 text-gold/70" />
+            </button>
+          </div>
         </div>
       ) : (
-        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 h-full relative overscroll-contain">
+        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/20 h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}
