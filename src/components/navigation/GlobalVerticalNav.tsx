@@ -572,7 +572,6 @@ type SectionKey = typeof SECTION_KEYS[number];
 const SECTION_ICONS: Record<SectionKey, any> = {
   "PROPERTIES": Building2,
   "TOOLS": Sparkles,
-  "AI TOOLS": Cpu,
   "INSIGHTS": Lightbulb,
   "GUIDES": BookOpen,
   "SERVICES": Briefcase,

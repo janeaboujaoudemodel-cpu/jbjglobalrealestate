@@ -478,8 +478,8 @@ const PropertiesReelly = () => {
 
       {/* DLD Market Intelligence - hidden in map mode */}
       {!isMapMode && (
-        <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
-          <div className={`${showStickyNav ? 'lg:pl-[200px]' : ''}`}>
+        <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark py-8">
+          <div className="px-4 sm:px-6 lg:px-8 max-w-[1600px] mx-auto">
             <DLDMarketWidget />
           </div>
         </div>

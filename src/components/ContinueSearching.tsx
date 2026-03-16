@@ -41,16 +41,14 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     const speed = 0.4;
     // Card width (200px) + gap (16px) = 216px per card
     const singleSetWidth = uniqueItems.length * 216;
-    // Start fully off-screen to the right: position = negative container width
-    // This means translateX(-pos) = translateX(containerWidth) → cards start at full right
-    const containerWidth = el.parentElement?.clientWidth ?? window.innerWidth;
-    let pos = -containerWidth;
+    // Start from left, scroll left-to-right (cards move rightward)
+    let pos = 0;
 
     const tick = () => {
-      pos += speed;
-      // When all cards have scrolled past, reset seamlessly
-      if (pos >= singleSetWidth) pos -= singleSetWidth;
-      el.style.transform = `translateX(${-pos}px)`;
+      pos -= speed;
+      // When scrolled past one full set, reset seamlessly
+      if (pos <= -singleSetWidth) pos += singleSetWidth;
+      el.style.transform = `translateX(${pos}px)`;
       animId = requestAnimationFrame(tick);
     };
     animId = requestAnimationFrame(tick);
