@@ -150,8 +150,8 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
 
   // Persist step and userInfo to localStorage
   useEffect(() => {
-    localStorage.setItem('jbj_chat_step', step);
-    localStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
+    sessionStorage.setItem('jbj_chat_step', step);
+    sessionStorage.setItem('jbj_chat_user', JSON.stringify(userInfo));
   }, [step, userInfo]);
 
   // Check email in database
