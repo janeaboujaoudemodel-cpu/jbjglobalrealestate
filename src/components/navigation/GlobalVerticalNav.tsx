@@ -1110,7 +1110,7 @@ export default function GlobalVerticalNav() {
               <Zap className="w-3.5 h-3.5 text-gold" />
             </div>
             <span className="flex-1 text-left tracking-wide">My Shortcuts</span>
-            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-black/25"}`} />
+            <ChevronRight className={`w-3 h-3 transition-transform duration-200 ${activeMegaMenu === 'shortcuts' ? "rotate-90 text-gold" : "text-gold/25"}`} />
           </button>
         </div>
 
