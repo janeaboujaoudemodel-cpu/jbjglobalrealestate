@@ -187,7 +187,7 @@ export default function JBJBrokerReports() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       {/* Header */}
       <header className="sticky top-0 lg:top-[48px] z-50 border-b border-gold/20">
         <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] px-6 py-4">

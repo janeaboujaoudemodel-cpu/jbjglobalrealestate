@@ -961,7 +961,7 @@ const CustomerHappiness = () => {
         canonicalPath="/customer-happiness"
       />
 
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         {/* Hero Section - Premium Champagne */}
         <section className="relative py-20 md:py-28 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">

@@ -33,7 +33,7 @@ const BrokerIntelligence = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       <SEOHead 
         title="Broker Intelligence Hub | JBJ Global Real Estate"
         description="Unified broker intelligence hub with market signals, AI assistant, calendar, notes, and DocuSign integration."
