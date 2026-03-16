@@ -100,13 +100,13 @@ export default function HorizontalUtilityBar() {
   const showCRM = !!user && isOwner;
 
   /* ─── Shared styles for connected segmented cells ─── */
-  const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0";
-  const cellHover = "hover:bg-[hsl(var(--gold)/0.08)]";
+  const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0 outline-none focus:outline-none focus-visible:outline-none [&:focus]:outline-none";
+  const cellHover = "hover:bg-transparent";
   const iconClass = "w-4 h-4 text-black/50 group-hover:text-black/70 group-hover:scale-110 transition-transform shrink-0";
   const labelClass = "text-[11px] font-semibold text-black/50 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
   
-  /* Vertical divider inside rail — full height */
-  const railDivider = <div className="w-px h-full bg-black/10 shrink-0" />;
+  /* Vertical divider inside rail — full height, gold */
+  const railDivider = <div className="w-px h-full bg-[hsl(var(--gold)/0.3)] shrink-0" />;
 
   return (
     <>
@@ -147,21 +147,27 @@ export default function HorizontalUtilityBar() {
             className={`${cellBase} ${cellHover}`}
           >
             <Building2 className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
-            <span className="text-[11px] font-semibold text-[hsl(var(--foreground)/0.6)] group-hover:text-[hsl(var(--foreground)/0.8)] uppercase tracking-wide">Buy</span>
+            <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
           </Link>
+
+          {railDivider}
+
           <Link
             to="/properties?transaction=rent"
             className={`${cellBase} ${cellHover}`}
           >
             <Key className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
-            <span className="text-[11px] font-semibold text-[hsl(var(--foreground)/0.6)] group-hover:text-[hsl(var(--foreground)/0.8)] uppercase tracking-wide">Rent</span>
+            <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
           </Link>
+
+          {railDivider}
+
           <Link
             to="/listing-portal"
             className={`${cellBase} ${cellHover}`}
           >
-            <Tag className="w-4 h-4 text-[hsl(var(--gold))] group-hover:scale-105 transition-transform shrink-0" />
-            <span className="text-[11px] font-bold text-[hsl(var(--gold))] uppercase tracking-wide">Sell</span>
+            <Tag className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
+            <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Sell</span>
           </Link>
 
           {railDivider}
@@ -182,19 +188,19 @@ export default function HorizontalUtilityBar() {
 
           {railDivider}
 
-           {/* Area Unit Toggle — connected field box */}
+           {/* Area Unit Toggle — connected field box, gold themed */}
           <Tooltip>
             <TooltipTrigger asChild>
               <button
                 onClick={toggleAreaUnit}
-                className="h-8 flex items-center transition-all shrink-0 border border-black/10 rounded-md overflow-hidden"
+                className="h-8 flex items-center transition-all shrink-0 border border-[hsl(var(--gold)/0.3)] rounded-none overflow-hidden outline-none focus:outline-none focus-visible:outline-none"
                 aria-label="Toggle area unit"
               >
-                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqft' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-black/30 hover:text-black/50'}`}>
                   ft²
                 </span>
-                <span className="w-px h-full bg-black/10" />
-                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-[hsl(var(--foreground)/0.3)] hover:bg-[hsl(var(--gold)/0.05)]'}`}>
+                <span className="w-px h-full bg-[hsl(var(--gold)/0.3)]" />
+                <span className={`text-[11px] font-bold px-3 py-1.5 transition-all ${areaUnit === 'sqm' ? 'bg-[hsl(var(--gold)/0.18)] text-[hsl(var(--gold))]' : 'text-black/30 hover:text-black/50'}`}>
                   m²
                 </span>
               </button>
@@ -211,15 +217,17 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1.5`}><LanguageSwitcher variant="icon-only" /></div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select or change your language</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Language</TooltipContent>
           </Tooltip>
+
+          {railDivider}
 
           {/* Currency */}
           <Tooltip>
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1.5`}><CurrencySwitcher variant="icon-only" /></div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Select your currency</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Currency</TooltipContent>
           </Tooltip>
 
           {railDivider}
