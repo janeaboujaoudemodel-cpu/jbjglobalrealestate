@@ -124,7 +124,7 @@ export function ToolkitShowcaseCard() {
   return (
     <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] py-10 md:py-14">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="rounded-2xl overflow-hidden border border-gold/20">
+        <div className="rounded-2xl overflow-hidden border border-gold/30 bg-gradient-to-br from-[hsl(38,35%,15%)] via-[hsl(36,30%,18%)] to-[hsl(34,25%,15%)]">
           {/* Header Section */}
           <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-6 md:p-8 border-b border-gold/30">
             <div className="flex items-center gap-3 mb-3">
