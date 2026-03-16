@@ -162,7 +162,7 @@ const Index = () => {
         {/* Video Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
           <img 
-            src={luxuryVillaHero} 
+            src={heroFallbackDubai} 
             alt="Luxury Dubai Real Estate" 
             className="absolute inset-0 w-full h-full object-cover"
             loading="eager"
