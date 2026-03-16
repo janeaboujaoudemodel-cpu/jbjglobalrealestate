@@ -33,6 +33,14 @@ export const useEmployeeChat = (selectedEmployeeId: string | null) => {
   const [employeeStatuses, setEmployeeStatuses] = useState<Map<string, EmployeeStatus>>(new Map());
   const [isTyping, setIsTyping] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  // Get current user ID
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUserId(data.user?.id ?? null);
+    });
+  }, []);
 
   const getEmployee = useCallback((id: string): TeamMember | undefined => {
     return allTeamMembers.find(m => m.id === id);
