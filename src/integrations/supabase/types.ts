@@ -25003,15 +25003,19 @@ export type Database = {
           is_bounced: boolean | null
           is_converted: boolean | null
           landing_page: string | null
+          language: string | null
           last_activity_at: string
+          network_type: string | null
           os: string | null
           pages_visited: number | null
           referrer: string | null
+          screen_resolution: string | null
           scroll_depth_max: number | null
           session_id: string
           total_time_spent: number | null
           user_agent: string | null
           user_id: string | null
+          viewport_size: string | null
           visitor_fingerprint: string | null
         }
         Insert: {
@@ -25027,15 +25031,19 @@ export type Database = {
           is_bounced?: boolean | null
           is_converted?: boolean | null
           landing_page?: string | null
+          language?: string | null
           last_activity_at?: string
+          network_type?: string | null
           os?: string | null
           pages_visited?: number | null
           referrer?: string | null
+          screen_resolution?: string | null
           scroll_depth_max?: number | null
           session_id: string
           total_time_spent?: number | null
           user_agent?: string | null
           user_id?: string | null
+          viewport_size?: string | null
           visitor_fingerprint?: string | null
         }
         Update: {
@@ -25051,15 +25059,19 @@ export type Database = {
           is_bounced?: boolean | null
           is_converted?: boolean | null
           landing_page?: string | null
+          language?: string | null
           last_activity_at?: string
+          network_type?: string | null
           os?: string | null
           pages_visited?: number | null
           referrer?: string | null
+          screen_resolution?: string | null
           scroll_depth_max?: number | null
           session_id?: string
           total_time_spent?: number | null
           user_agent?: string | null
           user_id?: string | null
+          viewport_size?: string | null
           visitor_fingerprint?: string | null
         }
         Relationships: []
