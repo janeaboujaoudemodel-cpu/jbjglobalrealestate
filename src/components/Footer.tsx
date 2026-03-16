@@ -451,7 +451,7 @@ const Footer = () => {
         {/* NOW BELOW THE 3D CARD: Logo + Company Name Section - COMES FIRST */}
         <div className="flex flex-col items-center justify-center text-center w-full relative pt-4 pb-8">
           {/* Dark luxury brown background for monogram section */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] rounded-2xl pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,10%)] via-[hsl(36,30%,13%)] to-[hsl(34,25%,10%)] pointer-events-none" />
           
           <Link to="/" className="inline-block group relative">
             {/* 3D Logo with multi-layer shadow depth */}
