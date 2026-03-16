@@ -197,12 +197,12 @@ const Index = () => {
         
         {/* Content - Left-aligned with Search Bar on Hero - Pushed down more, smaller content */}
         <motion.div 
-          className="relative z-10 w-full flex flex-col items-start justify-end px-4 sm:px-8 md:px-12 lg:px-16 pb-16 md:pb-20"
+          className="relative z-10 w-full flex flex-col items-center justify-center text-center px-4 sm:px-8 md:px-12 lg:px-16 pb-16 md:pb-20"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="w-full max-w-4xl pt-[max(35vh,180px)] sm:pt-[38vh] md:pt-[40vh] lg:pt-[42vh]">
+          <div className="w-full max-w-4xl mx-auto text-center pt-[max(35vh,180px)] sm:pt-[38vh] md:pt-[40vh] lg:pt-[42vh]">
             {/* Buy · Sell · Rent - Smaller headline */}
             <motion.h1 
               variants={fadeInUp} 
