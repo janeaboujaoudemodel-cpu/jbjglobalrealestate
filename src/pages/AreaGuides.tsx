@@ -64,7 +64,6 @@ const AreaGuides = () => {
   const navigate = useNavigate();
   const [shortcutFilters, setShortcutFilters] = useState<ShortcutFilterState>({...defaultShortcutFilters, sortBy: "most_projects"});
   const [currentPage, setCurrentPage] = useState(1);
-  const [pastHero, setPastHero] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
