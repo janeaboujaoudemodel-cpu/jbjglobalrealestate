@@ -1229,7 +1229,7 @@ export default function GlobalVerticalNav() {
               to="/ticket-hub"
               className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-black/50 hover:text-black/80 transition-all px-1 py-[5px] rounded-md hover:bg-black/[0.04]"
             >
-              <Ticket className="w-3 h-3 text-black/30" />
+              <Ticket className="w-3 h-3 text-red-400" />
               Support
             </Link>
           </div>
