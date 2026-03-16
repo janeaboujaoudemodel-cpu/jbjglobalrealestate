@@ -490,8 +490,8 @@ const Footer = () => {
           <h2 
             className="relative text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-[0.08em] sm:tracking-[0.12em] md:tracking-[0.15em] lg:tracking-[0.18em] mb-2 sm:mb-3 md:mb-4 px-2 transition-all duration-500 hover:scale-[1.01]"
             style={{
-              color: '#FFFFFF',
-              textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 8px rgba(0,0,0,0.7), 0 0 30px rgba(200,167,102,0.4)',
+              color: '#1a1a1a',
+              textShadow: '0 1px 3px rgba(200,167,102,0.4)',
               letterSpacing: '0.12em',
             }}
           >
