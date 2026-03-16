@@ -33,4 +33,7 @@ export interface BookData {
 
   /** Maps each TOC chapter to a direct href for cross-page navigation (same order as tableOfContents). */
   _chapterHrefs?: string[];
+
+  /** Optional back cover image for brochure-style books. */
+  backCover?: string;
 }

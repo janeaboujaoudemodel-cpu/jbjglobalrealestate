@@ -3,22 +3,23 @@ import { Link } from "react-router-dom";
 import { BookOpen, ArrowRight } from "lucide-react";
 import { INVESTOR_BOOKS } from "@/data/bookCollections";
 import { BookCoverFace } from "@/components/books/BookCoverFace";
+import { CompanyProfileBrochure } from "@/components/books/CompanyProfileBrochure";
+import { SectionDivider } from "@/components/ui/section-divider";
 import type { BookData } from "@/types/books";
 
-const allBooks = INVESTOR_BOOKS.filter(b => b.title !== 'Guides Library');
+const allBooks = INVESTOR_BOOKS.filter(
+  b => b.title !== 'Guides Library' && b.title !== 'Company Profile'
+);
 
 function BookMarqueeStrip({ books }: { books: BookData[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  // Don't duplicate books if there's only one
   const duplicated = books.length <= 1 ? books : [...books, ...books, ...books];
 
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    
-    // Don't animate if there's only one book
     if (books.length <= 1) return;
-    
+
     let animId: number;
     let pos = 0;
     const speed = 0.4;
@@ -105,6 +106,12 @@ export default function HomepageBookMarquee() {
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
+      </div>
+
+      {/* Premium Company Profile standalone strip */}
+      <SectionDivider />
+      <div className="px-4 md:px-6 lg:px-8 pt-8 pb-2">
+        <CompanyProfileBrochure />
       </div>
     </section>
   );

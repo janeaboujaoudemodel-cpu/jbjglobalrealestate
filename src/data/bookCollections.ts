@@ -32,6 +32,7 @@ import trustComplianceCover from '@/assets/books/trust-compliance-cover.jpg';
 
 // Book cover imports - Company
 import companyProfileCover from '@/assets/books/company-profile-cover.jpg';
+import companyProfileBackCover from '@/assets/books/company-profile-back-cover.jpg';
 
 // ─── Guides Library ───
 
@@ -470,6 +471,7 @@ const trustComplianceBook: BookData = {
 const companyProfileBook: BookData = {
   title: 'Company Profile',
   cover: companyProfileCover,
+  backCover: companyProfileBackCover,
   href: '/company-profile',
   category: 'report',
   coverLocked: true,
