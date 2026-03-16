@@ -132,7 +132,7 @@ export default function HorizontalUtilityBar() {
                 className={`${cellBase} ${cellHover}`}
                 aria-label="Search ⌘K"
               >
-                <Search className={iconClass} />
+                <Search className="w-4 h-4 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))] group-hover:scale-110 transition-transform shrink-0" />
                 <span className="text-[11px] text-[hsl(var(--foreground)/0.4)] font-medium hidden xl:inline">⌘K</span>
               </button>
             </TooltipTrigger>
