@@ -94,7 +94,7 @@ export default function HorizontalUtilityBar() {
     navigate(`/properties?${params.toString()}`);
   };
 
-  const totalAlerts = alerts?.totalAlerts || 0;
+  
 
   // Determine if user has CRM access (owner or broker)
   const showCRM = !!user && isOwner;
