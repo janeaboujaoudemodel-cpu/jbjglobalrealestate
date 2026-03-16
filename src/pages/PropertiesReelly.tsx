@@ -168,9 +168,7 @@ const PropertiesReelly = () => {
   // Convert DB projects to ReellyProject format — DB is the sole data source
   const mergedProjects = useMemo(() => {
     if (!dbProjects?.length) return [];
-    return dbProjects
-      .filter((p: any) => p.cover_image_url && p.cover_image_url !== '')
-      .map(mapDbProjectToReellyProject);
+    return dbProjects.map(mapDbProjectToReellyProject);
   }, [dbProjects]);
 
   // Apply shortcut filters to merged projects
