@@ -164,7 +164,7 @@ export function ToolkitShowcaseCard() {
 
                       {/* Title */}
                       <h4 
-                        className="text-base font-bold text-black mb-2 group-hover:text-gold transition-colors"
+                        className="text-base font-bold text-[#F5EBD7] mb-2 group-hover:text-gold transition-colors"
                         style={{ fontFamily: "Poppins, sans-serif" }}
                       >
                         {tool.name}
