@@ -115,7 +115,7 @@ export default function HorizontalUtilityBar() {
   /* ─── Shared styles for connected segmented cells ─── */
   const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0 outline-none focus:outline-none focus-visible:outline-none [&:focus]:outline-none";
   const cellHover = "hover:bg-transparent";
-  const iconClass = "w-4 h-4 text-black/50 group-hover:text-black/70 group-hover:scale-110 transition-transform shrink-0";
+  const iconClass = "w-4 h-4 text-[hsl(var(--gold))] group-hover:text-[hsl(var(--gold))] group-hover:scale-110 transition-transform shrink-0";
   const labelClass = "text-[11px] font-semibold text-black/50 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
   
   /* Vertical divider inside rail — full height, gold */
