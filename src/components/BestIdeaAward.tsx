@@ -160,7 +160,7 @@ const BestIdeaAward = () => {
                   {/* Prize Display - Two Options */}
                   <div className="space-y-3 mb-6">
                     {/* iPad Pro M4 */}
-                    <div className="bg-black rounded-xl p-5 relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] rounded-xl p-5 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
                       <div className="relative z-10 flex items-center gap-4">
                         <div className="w-14 h-14 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">
