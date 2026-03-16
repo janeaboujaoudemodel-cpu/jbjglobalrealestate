@@ -282,7 +282,7 @@ const MyDashboard = () => {
         description="Your personalized dashboard with favorites, shortlists, progress, and notifications."
       />
       
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
         <div className="mx-0 my-0 rounded-none border-0 bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
           <div className="container mx-auto px-4 py-6 max-w-7xl">
             {/* Dashboard Title + Badge */}

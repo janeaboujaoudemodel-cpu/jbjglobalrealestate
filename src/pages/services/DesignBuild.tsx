@@ -84,7 +84,7 @@ const aiTools = [
 
 const DesignBuild = () => {
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       {/* Hero Section - Premium Video Background */}
       <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">

@@ -7,9 +7,9 @@ export default function SignatureStudio() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
       {/* Premium Page Header — aligned with sidebar logo divider */}
-      <div className="bg-black border-b border-gold/20">
+      <div className="border-b border-gold/20">
         <div className="max-w-4xl mx-auto px-6 flex items-end h-[84px] pb-4 gap-4">
           <Button variant="ghost" onClick={() => navigate("/e-signature")} className="text-gold hover:text-gold/80 hover:bg-gold/10 mb-0.5">
             <ArrowLeft className="w-4 h-4 mr-2" />
