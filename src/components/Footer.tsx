@@ -699,8 +699,8 @@ const Footer = () => {
         </div>
         </div>
 
-        {/* Premium Divider with glow - on pure black */}
-        <div className="relative bg-black py-6 flex items-center justify-center">
+        {/* Premium Divider with glow */}
+        <div className="relative py-6 flex items-center justify-center">
           <div className="relative h-[2px] w-full max-w-7xl mx-auto">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-md" />
