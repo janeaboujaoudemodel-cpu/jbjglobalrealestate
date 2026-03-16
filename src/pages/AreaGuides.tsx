@@ -265,7 +265,7 @@ const AreaGuides = () => {
 
       {/* Emirates Section — clickable cards grouped by emirate */}
       {(!shortcutFilters.emirates || shortcutFilters.emirates.length === 0) && !shortcutFilters.searchQuery && (
-        <section className={`pt-8 pb-4 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC] ${pastHero ? "lg:pl-[200px]" : ""}`}>
+        <section className="pt-8 pb-4 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]">
           <div className="px-4 sm:px-6 lg:px-8">
             <h2 className="text-xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
               Browse by Emirate
