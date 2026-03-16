@@ -136,7 +136,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] text-[hsl(var(--foreground)/0.4)] font-medium hidden xl:inline">⌘K</span>
               </button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-xs z-[10100]">Search ⌘K</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Search ⌘K</TooltipContent>
           </Tooltip>
 
           {railDivider}
