@@ -1,90 +1,80 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## Plan: Fix Notification Counter Sync, Title Color, and Header Tooltips
 
-### Session Status
+### Analysis Summary
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+**TASK 1 — Notification Count Mismatch**
+
+Two separate count sources create the discrepancy:
+
+- **HorizontalUtilityBar.tsx (line 321)**: Badge shows `alerts?.totalAlerts` from `useUserAlerts` hook — this is a `head: true` count query across 4 tables (ticket notifs + listing notifs + system notifs + pending tasks). Returns aggregate counts only.
+- **ListingNotificationBell.tsx (line 99)**: Bell badge shows `unreadCount` = ticket + listing + system (3 tables, **excludes tasks**). Panel fetches actual records with limits (5 + 10 + 5 = 20 max, capped at 15). The panel list length may differ from any badge count because it fetches all notifications (read + unread), not just unread.
+- **Root cause**: Badge counts unread items via `count: "exact", head: true`, while panel fetches actual rows (both read and unread) with arbitrary limits. Badge = unread count; panel list = all recent notifications.
+
+**Fix**: Make the bell badge in `ListingNotificationBell` use `alertCounts?.totalAlerts` (same as HorizontalUtilityBar) so both badges match. In the panel, filter `notifications.filter(n => !n.is_read).length` should equal the badge. Display total count consistently.
+
+**Files**: `src/components/ListingNotificationBell.tsx` line 99, `src/components/navigation/HorizontalUtilityBar.tsx` lines 321-324.
 
 ---
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+**TASK 2 — Notification Title Color**
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+- **Current**: `ListingNotificationBell.tsx` line 194: `text-stone-900` (black)
+- **Fix**: Change to `text-[hsl(var(--gold))]` for gold champagne color
+- **File**: `src/components/ListingNotificationBell.tsx` line 194
 
----
-
-### Route Map
-
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
-
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
-
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
+Also fix the panel header title (line 160): `text-stone-900` → gold-tinted.
 
 ---
 
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
+**TASK 3 — Header Tooltip Descriptions**
+
+Current tooltips in `HorizontalUtilityBar.tsx` are mostly one-liners. Update to match required descriptions:
+
+| Item | Current (line) | Required |
+|------|--------|----------|
+| Tasks | "My Tasks" (308) | "View and manage your tasks" |
+| Notifications | "Notifications — N unread" (328-330) | "View your notifications" |
+| Inbox | "My Inbox — Messages & updates" (345) | "Open your messages" |
+| Dashboard | "My Dashboard & Profile" (363) | "Access your dashboard" |
+| Settings | "Profile & Settings" (386) | "Manage account settings" |
+| Buy | "Explore properties for sale" (155) | Already correct |
+| Rent | "Rent a property" (170) | "Find properties for rent" |
+| Sell | "List your property for sale or rent" (185) | Already correct |
+| Language | "Select your language" (235) | Already correct |
+| Currency | "Select your currency" (245) | Already correct |
+| Mode | No tooltip wrapping ModeSwitcher (369-371) | "Select your mode based on your role" |
+
+**Files**: `src/components/navigation/HorizontalUtilityBar.tsx` — update tooltip text on ~6 lines, add Tooltip wrapper around ModeSwitcher.
+
+---
+
+### Implementation
+
+**Batch 1 (all 3 tasks, 2 files)**:
+
+1. **`src/components/ListingNotificationBell.tsx`**:
+   - Line 99: Change `unreadCount` to use `alertCounts?.totalAlerts || 0` for consistency
+   - Line 194: Change `text-stone-900` → `text-[hsl(var(--gold))]`
+   - Line 160: Change header `text-stone-900` → `text-[hsl(var(--gold))]`
+
+2. **`src/components/navigation/HorizontalUtilityBar.tsx`**:
+   - Line 308: "My Tasks" → "View and manage your tasks"
+   - Line 328-330: Simplify to "View your notifications"
+   - Line 345: "My Inbox — Messages & updates" → "Open your messages"
+   - Line 363: "My Dashboard & Profile" → "Access your dashboard"
+   - Line 170: "Rent a property" → "Find properties for rent"
+   - Line 386: "Profile & Settings" → "Manage account settings"
+   - Lines 369-371: Wrap ModeSwitcher in Tooltip with "Select your mode based on your role"
+
+### Testing Steps
+1. Log in, check bell badge count matches panel unread count
+2. Open notification panel, verify titles show in gold
+3. Hover each header item, verify tooltip text matches spec
+
+### Proof Deliverables
+- Component names: `ListingNotificationBell`, `HorizontalUtilityBar`
+- Routes: `/` (homepage header), `/my-dashboard#notifications`
+- No database changes required
+
