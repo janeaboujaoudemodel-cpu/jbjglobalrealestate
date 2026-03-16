@@ -100,13 +100,13 @@ export default function HorizontalUtilityBar() {
   const showCRM = !!user && isOwner;
 
   /* ─── Shared styles for connected segmented cells ─── */
-  const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0";
-  const cellHover = "hover:bg-[hsl(var(--gold)/0.08)]";
+  const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0 outline-none focus:outline-none focus-visible:outline-none [&:focus]:outline-none";
+  const cellHover = "hover:bg-transparent";
   const iconClass = "w-4 h-4 text-black/50 group-hover:text-black/70 group-hover:scale-110 transition-transform shrink-0";
   const labelClass = "text-[11px] font-semibold text-black/50 uppercase tracking-wide hidden xl:inline whitespace-nowrap";
   
-  /* Vertical divider inside rail — full height */
-  const railDivider = <div className="w-px h-full bg-black/10 shrink-0" />;
+  /* Vertical divider inside rail — full height, gold */
+  const railDivider = <div className="w-px h-full bg-[hsl(var(--gold)/0.3)] shrink-0" />;
 
   return (
     <>
