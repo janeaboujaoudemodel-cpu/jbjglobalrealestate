@@ -161,7 +161,7 @@ export const useEmployeeChat = (selectedEmployeeId: string | null) => {
         .insert({
           sender_id: selectedEmployeeId,
           sender_type: 'employee',
-          recipient_id: 'current-user',
+          recipient_id: userId!,
           message: aiReply,
         })
         .select()
