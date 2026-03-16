@@ -495,7 +495,7 @@ const CRM = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center p-6">
         <Card className="w-full max-w-lg border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
           <CardHeader>
             <CardTitle className="text-black">CRM access unavailable</CardTitle>
