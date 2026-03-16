@@ -266,42 +266,7 @@ const PropertiesReelly = () => {
 
       {/* Vertical nav handled globally by MainLayout */}
 
-      {/* Single Unified FilterShortcutBar — only fixed after scrolling past hero */}
-      {showStickyNav && (
-      <section 
-        className={cn(
-          "fixed top-[48px] z-[9998] backdrop-blur-md bg-gradient-to-br from-champagne-light/90 via-champagne/90 to-champagne-dark/90 py-2 border-b border-gold/30 right-0",
-          isMapMode ? "left-0" : "left-0 [body.jj-vertical-nav-active_&]:lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px]"
-        )}
-      >
-        <div className="container mx-auto px-3 sm:px-4">
-          <FilterShortcutBar
-            variant="light"
-            filters={shortcutFilters}
-            onFilterChange={setShortcutFilters}
-            isMapMode={isMapMode}
-            onMapToggle={handleMapToggle}
-            resultsCount={projects.length}
-            resultsLabel="Properties"
-            searchSlot={
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-black/40" />
-                <input
-                  type="text"
-                  placeholder="Search area, project or keyword..."
-                  value={shortcutFilters.searchQuery}
-                  onChange={(e) => setShortcutFilters(prev => ({ ...prev, searchQuery: e.target.value }))}
-                  className="w-full h-full pl-9 pr-3 py-2.5 text-xs text-black bg-transparent border-0 outline-none placeholder:text-black/40 focus:ring-0"
-                />
-              </div>
-            }
-          />
-        </div>
-      </section>
-      )}
-
-      {/* Spacer for fixed filter bar — only when sticky nav is shown */}
-      {showStickyNav && <div className="h-[60px]" />}
+      {/* Fixed filter bar removed — handled globally by GlobalFilterBar in MainLayout */}
 
       {/* Divider removed per user request */}
 

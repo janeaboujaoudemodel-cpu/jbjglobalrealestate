@@ -239,13 +239,7 @@ const Index = () => {
             </motion.span>
           </div>
 
-          {/* SEARCH BAR - stretched to the right edge space */}
-          <motion.div 
-            variants={fadeInUp}
-            className="w-full max-w-[1380px] pr-0 md:pr-6 lg:pr-10"
-          >
-            <HeroSearchBar />
-          </motion.div>
+          {/* Search bar removed — global filter bar in the header handles search */}
         </motion.div>
       </div>
 
