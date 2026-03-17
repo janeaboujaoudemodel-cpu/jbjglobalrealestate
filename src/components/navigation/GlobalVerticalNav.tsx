@@ -1314,7 +1314,7 @@ export default function GlobalVerticalNav() {
                       className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-200 ${
                         isActive
                           ? 'bg-gold/20 text-gold shadow-sm shadow-gold/15 ring-1 ring-gold/30'
-                          : 'text-gold/40 hover:text-gold hover:bg-gold/10'
+                          : 'text-black/40 hover:text-gold hover:bg-gold/10'
                       }`}
                     >
                       <SectionIcon className="w-3.5 h-3.5" />
