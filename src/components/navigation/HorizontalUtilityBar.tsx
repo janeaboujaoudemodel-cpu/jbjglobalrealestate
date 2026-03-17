@@ -6,8 +6,10 @@ import {
   Building2, Key, Tag, Bell, ClipboardList, Inbox, BarChart3,
   Shield, MapPin, Users, Sparkles, BookOpen, UserCircle,
   Crown, Headphones, FileUser, MessageSquare, SmilePlus,
+  ChevronLeft, ChevronRight,
 } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
