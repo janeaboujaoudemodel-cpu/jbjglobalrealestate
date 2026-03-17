@@ -380,23 +380,29 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* FIND YOUR STARTING POINT */}
-      <Suspense fallback={<SectionLoader />}>
-        <StartingPointSection />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <StartingPointSection />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
       {/* OVERSEAS INVESTORS */}
-      <Suspense fallback={<SectionLoader />}>
-        <OverseasInvestorsBanner />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <OverseasInvestorsBanner />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
       {/* EXPLORE OUR GUIDES & REPORTS */}
-      <Suspense fallback={<SectionLoader />}>
-        <HomepageBookMarquee />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <HomepageBookMarquee />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
