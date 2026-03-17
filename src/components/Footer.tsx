@@ -862,12 +862,9 @@ const Footer = () => {
         </div>
         </div>
 
-        {/* Premium Divider before Legal Zone */}
-        <div className="relative py-4">
-          <div className="relative h-[2px] max-w-7xl mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-md" />
-          </div>
+        {/* Thin inline gold divider */}
+        <div className="relative py-2">
+          <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
         </div>
 
         {/* ZONE 3: ULTRA PREMIUM Legal + Google Review Block */}
