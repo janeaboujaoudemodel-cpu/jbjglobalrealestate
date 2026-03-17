@@ -337,9 +337,11 @@ const Index = () => {
       </Suspense>
 
       {/* DEVELOPER PORTAL CTA */}
-      <Suspense fallback={<SectionLoader />}>
-        <DeveloperPortalCTA />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <DeveloperPortalCTA />
+        </Suspense>
+      </div>
 
       {/* DIVIDER between Developer Partners and Trust Bar */}
       <SectionDivider fullWidth />
@@ -354,41 +356,53 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* FEATURED LISTINGS */}
-      <Suspense fallback={<SectionLoader />}>
-        <FeaturedListings />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <FeaturedListings />
+        </Suspense>
+      </div>
 
       {/* CONTINUE SEARCHING */}
-      <Suspense fallback={<SectionLoader />}>
-        <ContinueSearching type="property" />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <ContinueSearching type="property" />
+        </Suspense>
+      </div>
 
       {/* RESALE PROPERTIES - single divider before Starting Point */}
-      <Suspense fallback={<SectionLoader />}>
-        <ResalePropertiesSection />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <ResalePropertiesSection />
+        </Suspense>
+      </div>
 
       {/* DIVIDER — single divider (removed double) */}
       <SectionDivider fullWidth />
 
       {/* FIND YOUR STARTING POINT */}
-      <Suspense fallback={<SectionLoader />}>
-        <StartingPointSection />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <StartingPointSection />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
       {/* OVERSEAS INVESTORS */}
-      <Suspense fallback={<SectionLoader />}>
-        <OverseasInvestorsBanner />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <OverseasInvestorsBanner />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
       {/* EXPLORE OUR GUIDES & REPORTS */}
-      <Suspense fallback={<SectionLoader />}>
-        <HomepageBookMarquee />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <HomepageBookMarquee />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
@@ -404,9 +418,11 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* TOOLKIT SHOWCASE CARD */}
-      <Suspense fallback={<SectionLoader />}>
-        <ToolkitShowcaseCard />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <ToolkitShowcaseCard />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
@@ -532,52 +548,68 @@ const Index = () => {
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <WhyDubaiCapitalSection />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <WhyDubaiCapitalSection />
+        </Suspense>
+      </div>
 
       <PodcastVisibilityGate>
         <SectionDivider fullWidth />
-        <Suspense fallback={<SectionLoader />}>
-          <JBJPodcastSection />
-        </Suspense>
+        <div className="cv-auto">
+          <Suspense fallback={<SectionLoader />}>
+            <JBJPodcastSection />
+          </Suspense>
+        </div>
       </PodcastVisibilityGate>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <BestIdeaAward />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <BestIdeaAward />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <WhyChooseUs />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <WhyChooseUs />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <AreasWeCover />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <AreasWeCover />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <TestimonialsSection />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <TestimonialsSection />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <StatsCounter />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <StatsCounter />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <SupportTicketBox />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <SupportTicketBox />
+        </Suspense>
+      </div>
 
       <Suspense fallback={null}>
         <InquiryFormModal 

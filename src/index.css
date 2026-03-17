@@ -1967,3 +1967,19 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
       0 8px 24px -8px hsl(var(--gold-dark) / 0.12);
   }
 }
+
+/* ── Scroll Performance: content-visibility for offscreen sections ── */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* ── GPU-promote large blur decorative elements to prevent repaint during scroll ── */
+[class*="blur-[80px]"],
+[class*="blur-[100px]"],
+[class*="blur-[120px]"],
+[class*="blur-3xl"] {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
