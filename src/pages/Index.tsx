@@ -434,7 +434,7 @@ const Index = () => {
               
               {/* Card with premium 3D glassmorphism */}
               <div 
-                className="relative z-10 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/30"
+                className="relative z-10 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/50"
                 style={{
                   boxShadow: '0 0 60px hsl(var(--gold) / 0.25), 0 0 120px hsl(var(--gold) / 0.1), 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 hsl(var(--gold) / 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
                   transform: 'translateZ(20px)',
