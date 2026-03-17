@@ -463,7 +463,7 @@ const Index = () => {
                     </h2>
                     <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-stone-800 group-hover:text-gold transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </div>
-                  <p className="text-zinc-700 text-sm md:text-base max-w-lg mx-auto">
+                  <p className="text-stone-800 text-sm md:text-base max-w-lg mx-auto">
                     {t('hero.aiFinderDesc')}
                   </p>
                   <p className="text-zinc-500 text-xs mt-3">
