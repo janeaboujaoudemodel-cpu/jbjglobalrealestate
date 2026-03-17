@@ -741,10 +741,10 @@ const CompanyProfile = () => {
         <div id="ai-tools" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Technology</span>
-            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
               AI Tools & Creativity
             </h2>
-            <p className="text-black/70 max-w-2xl mx-auto">
+            <p className="text-white/70 max-w-2xl mx-auto">
               JBJ Global Real Estate integrates advanced AI tools and creative capabilities into its platform — enhancing the quality, speed, and impact of property marketing, client communication, and content production.
             </p>
           </div>
