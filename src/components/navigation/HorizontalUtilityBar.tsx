@@ -221,7 +221,8 @@ export default function HorizontalUtilityBar() {
       >
         {/* ── ROW 1 (48px): Navigation controls ── */}
         <div
-          className="h-[48px] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto overflow-y-visible scrollbar-hide shrink-0"
+          className="h-[48px] flex items-center gap-2 px-3 sm:px-5 xl:px-6 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto overflow-y-visible scrollbar-hide shrink-0"
+          style={{ overscrollBehaviorX: 'contain', touchAction: 'pan-x' }}
         >
 
         {/* ── Connected Segmented Rail — all controls in one block ── */}
