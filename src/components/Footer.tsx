@@ -438,7 +438,7 @@ const Footer = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]" />
       
       {/* Premium Gold Divider at top - 3D layered effect with symmetric spacing */}
-      <div className="relative py-8 sm:py-10 md:py-12">
+      <div className="relative py-4">
         <div className="w-full max-w-4xl mx-auto px-8">
           <div className="h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
           <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mt-[1px]" />
