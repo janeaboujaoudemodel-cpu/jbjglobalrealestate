@@ -127,7 +127,7 @@ export default function WhyDubaiCapitalSection() {
                   className="group relative rounded-lg overflow-hidden"
                 >
                   <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-gold/30 via-gold/15 to-gold/30 p-[1px]">
-                    <div className="h-full w-full rounded-lg bg-black/70 backdrop-blur-md" />
+                    <div className="h-full w-full rounded-lg bg-[hsl(38,35%,12%)]/70 backdrop-blur-md" />
                   </div>
                   <div className="relative px-2 py-2.5 text-center">
                     <div 

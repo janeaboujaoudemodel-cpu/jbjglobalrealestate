@@ -177,7 +177,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             ) : (
               <div className="absolute top-3 left-3 z-10">
-                <div className="w-12 h-12 rounded-lg bg-black/80 shadow-lg border border-gold/40 flex items-center justify-center backdrop-blur-sm">
+                <div className="w-12 h-12 rounded-lg bg-[hsl(38,35%,12%)]/80 shadow-lg border border-gold/40 flex items-center justify-center backdrop-blur-sm">
                   <span className="text-gold font-bold text-lg" style={{ fontFamily: "serif" }}>
                     {devName.charAt(0)}
                   </span>

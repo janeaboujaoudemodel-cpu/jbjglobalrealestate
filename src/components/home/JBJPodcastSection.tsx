@@ -370,7 +370,7 @@ const JBJPodcastSection = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={toggleMute}
-                      className="w-8 h-8 rounded-full bg-black/10 hover:bg-black/20 border border-gold/30 flex items-center justify-center transition-colors"
+                      className="w-8 h-8 rounded-full bg-[hsl(38,35%,12%)]/10 hover:bg-[hsl(38,35%,12%)]/20 border border-gold/30 flex items-center justify-center transition-colors"
                       title={isMuted ? "Unmute" : "Mute"}
                     >
                       {isMuted || volume[0] === 0 ? (
