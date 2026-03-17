@@ -1,90 +1,37 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## Fix Plan: AI Home Finder Floating + Chat Pulse Visibility
 
-### Session Status
+### Root Cause Analysis
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+**AI Home Finder — Float not working:**
+- The `jbj-float` CSS animation is applied on the same `motion.div` that uses Framer Motion's `whileInView` and `whileHover`. Framer Motion takes control of the `transform` property, which **overrides and kills** the CSS keyframe animation entirely.
+- **Fix:** Move the `animation: jbj-float` to an **inner wrapper div** (not the motion.div), so Framer Motion entry animation and the CSS float animation don't conflict.
+
+**Chat Pulse — Not visible:**
+- On desktop, `showAttentionPulse` is `true` after the scroll delay, which renders the **banner mode** (the wide card with text). The circle button with the pulse ring **only renders when `showAttentionPulse` is false** — meaning the pulse ring is never seen by the user on initial load.
+- **Fix:** Add an elegant gold pulse ring to the **banner mode** as well, so the pulse is visible regardless of which mode is active. Also increase the pulse ring visibility (slightly larger scale, better opacity range).
 
 ---
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+### Files Modified
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+| File | Change |
+|------|--------|
+| `src/pages/Index.tsx` | Wrap card content in a new inner div with `jbj-float` animation; remove animation from the motion.div |
+| `src/components/chat/CollapsedChatButton.tsx` | Add pulse ring div to the banner (showAttentionPulse) mode; increase circle pulse ring visibility |
+| `src/index.css` | Adjust `jbj-pulse-ring` keyframe for better visibility (scale 1→1.35, opacity 0.7→0) |
 
----
+### Technical Detail
 
-### Route Map
+**Index.tsx (lines 424-432):**
+- Remove `animation: 'jbj-float ...'` from the `motion.div` style prop
+- Add a new `<div style={{ animation: 'jbj-float 6s ease-in-out infinite' }}>` wrapping the inner card content
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+**CollapsedChatButton.tsx (lines 78-112):**
+- Inside the banner mode's `<div className="relative">` (line 79), add a pulse ring: `<div className="absolute -inset-1 rounded-xl border-2 border-gold/30 animate-[jbj-pulse-ring_2s_ease-in-out_infinite]" />`
+- On the circle mode pulse ring (line 116), increase from `inset-0` to `-inset-1` for better visibility beyond the button edge
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+**index.css (lines 1950-1954):**
+- Change scale from `1.25` to `1.4` and starting opacity from `0.6` to `0.7` for a more noticeable pulse
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
