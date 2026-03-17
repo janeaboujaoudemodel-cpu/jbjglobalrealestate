@@ -411,7 +411,7 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* AI HOME FINDER — Premium 3D Section */}
-      <section className="flex items-center justify-center py-16 md:py-20 min-h-[340px] relative overflow-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <section className="flex items-center justify-center py-16 md:py-24 min-h-[340px] relative overflow-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/8 rounded-full blur-[120px]" />
           <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-gold/5 rounded-full blur-[80px]" />
@@ -436,9 +436,9 @@ const Index = () => {
               
               {/* Card with premium 3D glassmorphism */}
               <div 
-                className="relative z-10 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/50"
+                className="relative z-10 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/60"
                 style={{
-                  boxShadow: '0 0 60px hsl(var(--gold) / 0.25), 0 0 120px hsl(var(--gold) / 0.1), 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 hsl(var(--gold) / 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
+                  boxShadow: '0 0 60px hsl(var(--gold) / 0.25), 0 0 120px hsl(var(--gold) / 0.1), 0 30px 80px rgba(0,0,0,0.5), 0 4px 20px rgba(200,167,102,0.15), inset 0 1px 0 hsl(var(--gold) / 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
                   transform: 'translateZ(20px)',
                 }}
               >
@@ -448,8 +448,8 @@ const Index = () => {
                 <div className="absolute bottom-0 left-12 right-12 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
                 
                 {/* Gold label badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1a1a1a]/10 border border-[#1a1a1a]/20 text-[#1a1a1a] text-xs uppercase tracking-[0.2em] mb-5">
-                  <Sparkles className="w-3 h-3" />
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/10 border border-purple-800/20 text-purple-900 text-xs uppercase tracking-[0.2em] mb-5">
+                  <Sparkles className="w-3 h-3 text-purple-700" />
                   {t('home.aiPowered', 'AI-Powered')}
                 </div>
                 <Link to="/quiz" className="block group">
