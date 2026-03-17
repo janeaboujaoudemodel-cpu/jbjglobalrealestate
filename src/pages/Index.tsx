@@ -430,7 +430,7 @@ const Index = () => {
               className="text-center relative max-w-2xl"
               style={{ transformStyle: 'preserve-3d' }}
             >
-            <div style={{ animation: 'jbj-float 6s ease-in-out infinite' }}>
+            <div style={{ animation: 'jbj-float 4s ease-in-out infinite', borderRadius: '1.5rem' }}>
               {/* Premium multi-layer glow */}
               <div className="absolute inset-0 -m-8 md:-m-12 rounded-3xl bg-gold/12 blur-[50px]" />
               <div className="absolute inset-0 -m-4 md:-m-6 rounded-3xl bg-gold/10 blur-2xl" />
