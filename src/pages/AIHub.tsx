@@ -546,7 +546,7 @@ const AIHub = () => {
         viewport={{ once: true }}
       >
         <Link to={tool.link} className="block group h-full">
-          <Card className={`bg-black/40 backdrop-blur-sm border-2 ${meta.glowClass} transition-all duration-300 h-full group-hover:scale-[1.02]`}>
+          <Card className={`${meta.cardClass} transition-all duration-300 h-full group-hover:scale-[1.02]`}>
             <CardContent className="p-5">
               <div className="flex items-start gap-4">
                 <div className={`w-12 h-12 ${meta.iconWrapClass} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
