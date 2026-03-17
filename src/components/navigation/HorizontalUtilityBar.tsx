@@ -69,7 +69,34 @@ function decodeFiltersFromURL(p: URLSearchParams): ShortcutFilterState {
   };
 }
 
+function ScrollArrow({ direction, scrollRef }: { direction: 'left' | 'right'; scrollRef: React.RefObject<HTMLDivElement | null> }) {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const check = () => {
+      if (direction === 'left') setShow(el.scrollLeft > 4);
+      else setShow(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+    };
+    check();
+    el.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    return () => { el.removeEventListener('scroll', check); window.removeEventListener('resize', check); };
+  }, [scrollRef, direction]);
+  if (!show) return null;
+  return (
+    <button
+      onClick={() => scrollRef.current?.scrollBy({ left: direction === 'left' ? -160 : 160, behavior: 'smooth' })}
+      className={`absolute ${direction === 'left' ? 'left-0' : 'right-0'} z-10 w-7 h-7 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-[hsl(var(--gold)/0.5)] flex items-center justify-center shadow-sm hover:border-[hsl(var(--gold))] transition-all`}
+      aria-label={`Scroll ${direction}`}
+    >
+      {direction === 'left' ? <ChevronLeft className="w-3.5 h-3.5 text-[hsl(var(--gold))]" /> : <ChevronRight className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />}
+    </button>
+  );
+}
+
 export default function HorizontalUtilityBar() {
+  const row1ScrollRef = useRef<HTMLDivElement>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [filterState, setFilterState] = useState<ShortcutFilterState>(defaultShortcutFilters);
