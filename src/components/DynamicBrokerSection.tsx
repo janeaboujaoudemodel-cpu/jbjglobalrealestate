@@ -188,7 +188,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
   const content = CONTENT_BY_USER_TYPE[userType];
 
   return (
-    <section className="py-20 md:py-28 bg-gradient-to-b from-zinc-950 via-black to-zinc-950">
+    <section className="py-20 md:py-28 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       <div className="container mx-auto px-4">
         <motion.div
           className="max-w-4xl mx-auto text-center"
