@@ -329,7 +329,7 @@ const JBJPodcastSection = () => {
                     </button>
                     <button
                       onClick={handleSkipForward}
-                      className="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 border border-gold/30 flex items-center justify-center transition-colors"
+                      className="w-10 h-10 rounded-full bg-[hsl(38,35%,12%)]/10 hover:bg-[hsl(38,35%,12%)]/20 border border-gold/30 flex items-center justify-center transition-colors"
                     >
                       <SkipForward className="w-5 h-5 text-black" />
                     </button>
