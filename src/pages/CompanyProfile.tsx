@@ -1229,8 +1229,8 @@ const CompanyProfile = () => {
                 <Clock className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-black/50 text-xs uppercase">Working Hours</p>
-                <p className="text-black">{PROFILE_CONTENT.companySnapshot.workingHours}</p>
+                <p className="text-zinc-400 text-xs uppercase">Working Hours</p>
+                <p className="text-white">{PROFILE_CONTENT.companySnapshot.workingHours}</p>
               </div>
             </div>
           </div>
