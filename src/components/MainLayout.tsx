@@ -247,7 +247,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       </div>
       {!isBackOfficeRoute && (
         <>
-          <div className="hidden md:block fixed left-0 top-0 h-screen z-[9997]">
+          <div className="hidden md:block fixed left-0 top-[48px] h-[calc(100vh-48px)] z-[9997]">
             <Suspense fallback={null}>
               <GlobalVerticalNav />
             </Suspense>

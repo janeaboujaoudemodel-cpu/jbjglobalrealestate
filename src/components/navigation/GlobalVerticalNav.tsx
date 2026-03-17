@@ -1345,7 +1345,7 @@ export default function GlobalVerticalNav() {
           </div>
         </div>
       ) : (
-        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/20 h-full relative overscroll-contain">
+        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] border-r border-gold/20 h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}
