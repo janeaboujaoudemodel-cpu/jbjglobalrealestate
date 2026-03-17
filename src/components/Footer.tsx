@@ -144,7 +144,7 @@ const FooterCurrencyUnit = () => {
 
   return (
     <div className="flex items-center gap-3">
-      <p className="text-gold/60 text-[10px] uppercase tracking-wider whitespace-nowrap">Currency</p>
+      <p className="text-gold text-[10px] uppercase tracking-wider whitespace-nowrap">Currency</p>
       <div className="flex items-center gap-2">
         {/* Currency Dropdown */}
         <div className="relative">
@@ -202,7 +202,7 @@ const FooterCurrencyUnit = () => {
                 "px-4 py-2.5 text-sm font-semibold transition-all",
                 areaUnit === unit
                   ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
-                  : "bg-[#F5EBD7]/40 text-black/50 hover:bg-[#F5EBD7]/70 hover:text-black/80"
+                  : "bg-[#F5EBD7]/40 text-black/70 hover:bg-[#F5EBD7]/70 hover:text-black/90"
               )}
             >
               {unit === 'sqft' ? 'sq ft' : 'sq m'}
@@ -589,36 +589,19 @@ const Footer = () => {
             
             {/* Licensed Badge - ULTRA Enhanced */}
             <div className="relative flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-5 flex-wrap px-1">
-              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-zinc-700 via-zinc-600 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
-              <p className="text-zinc-900 font-medium text-sm sm:text-base md:text-lg lg:text-xl tracking-wide text-center leading-relaxed">
-                <span 
-                  className="font-bold"
-                  style={{
-                    background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    filter: 'drop-shadow(0 0 10px rgba(200,167,102,0.5))',
-                  }}
-                >Licensed</span> 
-                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
-                BUY 
-                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
-                SELL 
-                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
-                RENT 
-                <span className="text-zinc-700 mx-1 sm:mx-2">✦</span> 
-                <span className="font-bold">REAL ESTATE</span> In The 
-                <span 
-                  className="font-bold ml-1"
-                  style={{
-                    background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    filter: 'drop-shadow(0 0 10px rgba(200,167,102,0.5))',
-                  }}
-                > UAE</span>
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gold rounded-full shadow-[0_0_8px_rgba(200,167,102,0.4)]" />
+              <p 
+                className="font-bold text-sm sm:text-base md:text-lg lg:text-xl tracking-wide text-center leading-relaxed uppercase"
+                style={{
+                  fontFamily: "Poppins, sans-serif",
+                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                Licensed ✦ BUY ✦ SELL ✦ RENT ✦ REAL ESTATE In The UAE
               </p>
-              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gradient-to-br from-zinc-700 via-zinc-600 to-gold/60 rounded-full animate-pulse shadow-[0_0_20px_rgba(200,167,102,0.7),0_0_40px_rgba(200,167,102,0.3)]" />
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gold rounded-full shadow-[0_0_8px_rgba(200,167,102,0.4)]" />
             </div>
             <p className="relative text-zinc-600 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 md:mb-10 text-center px-2 max-w-2xl mx-auto">
               Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
@@ -674,7 +657,7 @@ const Footer = () => {
               >
                 {/* Social Icons */}
                 <div className="flex items-center gap-4 px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20">
-                  <p className="text-gold/80 text-xs uppercase tracking-[0.15em] font-medium whitespace-nowrap">Connect</p>
+                  <p className="text-gold text-xs uppercase tracking-[0.15em] font-medium whitespace-nowrap">Connect</p>
                   <SocialLinks variant="glow" iconClassName="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
 
@@ -685,7 +668,7 @@ const Footer = () => {
                 >
                   <Mail className="w-5 h-5 text-gold" />
                   <div>
-                    <p className="text-gold/60 text-[10px] uppercase tracking-wider">Write Us</p>
+                    <p className="text-gold/90 text-[10px] uppercase tracking-wider">Write Us</p>
                     <p className="text-gold text-sm font-semibold">{CONTACT_INFO.email}</p>
                   </div>
                 </a>
@@ -697,7 +680,7 @@ const Footer = () => {
 
                 {/* Mode */}
                 <div className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20">
-                  <p className="text-gold/60 text-[10px] uppercase tracking-wider whitespace-nowrap">Mode</p>
+                  <p className="text-gold text-[10px] uppercase tracking-wider whitespace-nowrap">Mode</p>
                   <ModeSwitcher variant="header" showForUnselected={true} />
                 </div>
 
