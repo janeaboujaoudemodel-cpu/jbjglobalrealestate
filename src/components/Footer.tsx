@@ -687,12 +687,9 @@ const Footer = () => {
         </div>
         </div>
 
-        {/* Premium Divider with glow */}
-        <div className="relative py-6 flex items-center justify-center">
-          <div className="relative h-[2px] w-full max-w-7xl mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-md" />
-          </div>
+        {/* Thin inline gold divider */}
+        <div className="relative py-2">
+          <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
         </div>
 
         {/* ZONE 2: ULTRA PREMIUM Navigation + Tools + Contact Block */}
