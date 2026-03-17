@@ -433,12 +433,12 @@ const Footer = () => {
 
   return (
     <>
-      <footer id="site-footer" className="relative overflow-x-hidden bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
-      {/* Champagne background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" />
+      <footer id="site-footer" className="relative overflow-x-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      {/* Dark premium brown background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]" />
       
       {/* Premium Gold Divider at top - 3D layered effect with symmetric spacing */}
-      <div className="relative py-8 sm:py-10 md:py-12">
+      <div className="relative py-4">
         <div className="w-full max-w-4xl mx-auto px-8">
           <div className="h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
           <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mt-[1px]" />
@@ -490,11 +490,12 @@ const Footer = () => {
           <h2 
             className="relative text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-[0.08em] sm:tracking-[0.12em] md:tracking-[0.15em] lg:tracking-[0.18em] mb-2 sm:mb-3 md:mb-4 px-2 transition-all duration-500 hover:scale-[1.01]"
             style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #E8DCC8 40%, #D4AF37 60%, #FFFFFF 100%)',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #F5E6C8 25%, #D4AF37 50%, #C8A766 75%, #FFFFFF 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               textShadow: 'none',
               letterSpacing: '0.12em',
+              filter: 'drop-shadow(0 2px 4px rgba(200,167,102,0.4))',
             }}
           >
             JBJ GLOBAL REAL ESTATE
@@ -517,7 +518,7 @@ const Footer = () => {
         {/* ULTRA PREMIUM 3D Card - License + Newsletter + Social - BELOW logo */}
         <div className="relative pt-4 sm:pt-6 md:pt-8 pb-4">
           <div 
-            className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl relative overflow-hidden"
+            className="w-full rounded-none relative overflow-hidden"
             style={{
               background: 'linear-gradient(165deg, rgba(245,235,215,0.99) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
               boxShadow: `
@@ -531,12 +532,12 @@ const Footer = () => {
             }}
           >
             {/* Outer Gold Border Ring */}
-            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/50 pointer-events-none" />
-            <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/25 pointer-events-none" />
+            <div className="absolute inset-0 rounded-none border-2 border-gold/50 pointer-events-none" />
+            <div className="absolute inset-[3px] rounded-none border border-gold/25 pointer-events-none" />
             
             {/* Animated Shimmer Sweep */}
             <div 
-              className="absolute inset-0 rounded-2xl sm:rounded-3xl pointer-events-none opacity-60"
+              className="absolute inset-0 rounded-none pointer-events-none opacity-60"
               style={{
                 background: 'linear-gradient(110deg, transparent 20%, rgba(200,167,102,0.08) 40%, rgba(245,230,200,0.15) 50%, rgba(200,167,102,0.08) 60%, transparent 80%)',
                 backgroundSize: '250% 100%',
@@ -544,23 +545,7 @@ const Footer = () => {
               }}
             />
           
-          {/* Premium Gold Corner Accents - BOLD */}
-          <div className="absolute top-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
-            <div className="absolute top-0 left-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
-          </div>
-          <div className="absolute top-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute top-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
-            <div className="absolute top-0 right-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
-          </div>
-          <div className="absolute bottom-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
-            <div className="absolute bottom-0 left-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
-          </div>
-          <div className="absolute bottom-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute bottom-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
-            <div className="absolute bottom-0 right-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
-          </div>
+          {/* Edge-to-edge: no corner accents needed */}
           
           {/* Inner Content Container with padding */}
           <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
@@ -617,7 +602,12 @@ const Footer = () => {
             {/* Stay in the Loop - Newsletter inside the 3D card */}
             {!isBackOfficeContext && (
               <div className="relative mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4">
-                <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border-2 border-gold/40 shadow-[0_0_40px_rgba(200,167,102,0.18),0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.5)] p-6 md:p-8">
+                <div 
+                  className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border-2 border-gold/40 p-6 md:p-8"
+                  style={{
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.3), 0 6px 15px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(0,0,0,0.15), 0 0 0 2px rgba(200,167,102,0.4)',
+                  }}
+                >
                   {/* Premium Title */}
                   <h3 
                     className="text-center text-2xl md:text-3xl font-bold mb-3 uppercase tracking-[0.15em]"
@@ -697,18 +687,15 @@ const Footer = () => {
         </div>
         </div>
 
-        {/* Premium Divider with glow */}
-        <div className="relative py-6 flex items-center justify-center">
-          <div className="relative h-[2px] w-full max-w-7xl mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-md" />
-          </div>
+        {/* Thin inline gold divider */}
+        <div className="relative py-2">
+          <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
         </div>
 
         {/* ZONE 2: ULTRA PREMIUM Navigation + Tools + Contact Block */}
         <div className="relative py-4">
           <div 
-            className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden relative"
+            className="w-full rounded-none overflow-hidden relative"
             style={{
               background: 'linear-gradient(165deg, rgba(245,235,215,1) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
               boxShadow: `
@@ -722,12 +709,12 @@ const Footer = () => {
             }}
           >
             {/* Outer Gold Border Ring - Enhanced */}
-            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/50 pointer-events-none" />
-            <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/25 pointer-events-none" />
+            <div className="absolute inset-0 rounded-none border-2 border-gold/50 pointer-events-none" />
+            <div className="absolute inset-[3px] rounded-none border border-gold/25 pointer-events-none" />
             
             {/* Animated Shimmer Sweep */}
             <div 
-              className="absolute inset-0 rounded-2xl sm:rounded-3xl pointer-events-none opacity-50"
+              className="absolute inset-0 rounded-none pointer-events-none opacity-50"
               style={{
                 background: 'linear-gradient(110deg, transparent 20%, rgba(200,167,102,0.06) 40%, rgba(245,230,200,0.12) 50%, rgba(200,167,102,0.06) 60%, transparent 80%)',
                 backgroundSize: '250% 100%',
@@ -735,26 +722,10 @@ const Footer = () => {
               }}
             />
           
-          {/* Premium Gold Corner Accents - BOLD with gradients */}
-          <div className="absolute top-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
-            <div className="absolute top-0 left-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
-          </div>
-          <div className="absolute top-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute top-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
-            <div className="absolute top-0 right-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
-          </div>
-          <div className="absolute bottom-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
-            <div className="absolute bottom-0 left-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
-          </div>
-          <div className="absolute bottom-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute bottom-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
-            <div className="absolute bottom-0 right-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
-          </div>
+          {/* Edge-to-edge: no corner accents needed */}
           
           {/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact - Fills to gold border */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] m-1 overflow-hidden">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-none border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] m-0 overflow-hidden">
             
             {/* Navigation Grid Section - Card-Based 2-Column Layout */}
             <div className="p-4 sm:p-6 md:p-8">
@@ -891,18 +862,15 @@ const Footer = () => {
         </div>
         </div>
 
-        {/* Premium Divider before Legal Zone */}
-        <div className="relative py-4">
-          <div className="relative h-[2px] max-w-7xl mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-md" />
-          </div>
+        {/* Thin inline gold divider */}
+        <div className="relative py-2">
+          <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
         </div>
 
         {/* ZONE 3: ULTRA PREMIUM Legal + Google Review Block */}
         <div className="relative py-4">
           <div 
-            className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden relative"
+            className="w-full rounded-none overflow-hidden relative"
             style={{
               background: 'linear-gradient(165deg, rgba(245,235,215,1) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
               boxShadow: `
@@ -916,12 +884,12 @@ const Footer = () => {
             }}
           >
           {/* Outer Gold Border Ring - Enhanced */}
-          <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/50 pointer-events-none" />
-          <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/25 pointer-events-none" />
+          <div className="absolute inset-0 rounded-none border-2 border-gold/50 pointer-events-none" />
+          <div className="absolute inset-[3px] rounded-none border border-gold/25 pointer-events-none" />
           
           {/* Animated Shimmer Sweep */}
           <div 
-            className="absolute inset-0 rounded-2xl sm:rounded-3xl pointer-events-none opacity-50"
+            className="absolute inset-0 rounded-none pointer-events-none opacity-50"
             style={{
               background: 'linear-gradient(110deg, transparent 20%, rgba(200,167,102,0.06) 40%, rgba(245,230,200,0.12) 50%, rgba(200,167,102,0.06) 60%, transparent 80%)',
               backgroundSize: '250% 100%',
@@ -932,23 +900,7 @@ const Footer = () => {
           {/* Top Radial Glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-20 bg-gradient-to-b from-gold/8 to-transparent blur-2xl pointer-events-none" />
           
-          {/* Premium Gold Corner Accents - BOLD with gradients */}
-          <div className="absolute top-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
-            <div className="absolute top-0 left-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tl-2xl sm:rounded-tl-3xl" />
-          </div>
-          <div className="absolute top-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute top-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
-            <div className="absolute top-0 right-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold/80 to-transparent rounded-tr-2xl sm:rounded-tr-3xl" />
-          </div>
-          <div className="absolute bottom-0 left-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute bottom-0 left-0 w-full h-[3px] bg-gradient-to-r from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
-            <div className="absolute bottom-0 left-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-bl-2xl sm:rounded-bl-3xl" />
-          </div>
-          <div className="absolute bottom-0 right-0 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 pointer-events-none">
-            <div className="absolute bottom-0 right-0 w-full h-[3px] bg-gradient-to-l from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
-            <div className="absolute bottom-0 right-0 h-full w-[3px] bg-gradient-to-t from-gold via-gold/80 to-transparent rounded-br-2xl sm:rounded-br-3xl" />
-          </div>
+          {/* Edge-to-edge: no corner accents needed */}
 
           <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
             {/* Legal Disclaimer Section */}
