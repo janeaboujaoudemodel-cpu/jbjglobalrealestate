@@ -1290,7 +1290,7 @@ export default function GlobalVerticalNav() {
           </div>
 
           {/* Section icons — light background area */}
-          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] w-full border-r border-gold/20">
+          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] w-full border-r border-gold/20">
             {SECTION_KEYS.map((sectionKey) => {
               if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
               if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
