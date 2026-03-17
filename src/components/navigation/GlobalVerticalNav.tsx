@@ -1076,8 +1076,8 @@ export default function GlobalVerticalNav() {
               <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain transition-all" />
             </Link>
             <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-90 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <span className="text-[12px] font-extrabold text-gold tracking-[0.15em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
-              <span className="text-[10px] font-bold text-gold/60 tracking-[0.18em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
+              <span className="text-[12px] font-extrabold text-black/85 tracking-[0.15em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
+              <span className="text-[10px] font-bold text-black/50 tracking-[0.18em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
             </Link>
             <button
               onClick={toggleCollapse}
