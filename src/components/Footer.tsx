@@ -202,7 +202,7 @@ const FooterCurrencyUnit = () => {
                 "px-4 py-2.5 text-sm font-semibold transition-all",
                 areaUnit === unit
                   ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
-                  : "bg-[#F5EBD7]/40 text-black/50 hover:bg-[#F5EBD7]/70 hover:text-black/80"
+                  : "bg-[#F5EBD7]/40 text-black/70 hover:bg-[#F5EBD7]/70 hover:text-black/90"
               )}
             >
               {unit === 'sqft' ? 'sq ft' : 'sq m'}
