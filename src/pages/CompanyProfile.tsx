@@ -1047,7 +1047,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="process" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">How We Work</span>
-          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
             Our Process
           </h2>
         </div>
