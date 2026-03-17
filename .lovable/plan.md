@@ -1,90 +1,41 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## Fix: Ultra Calm Chat Pulse
 
-### Session Status
+The current `jbj-glow-pulse` animation at 7.2s is still too fast and aggressive. The user wants an "ultra calm" effect — barely perceptible, like a slow breathing glow.
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+### Changes
 
----
+**`src/index.css` (lines 1956-1976) — Replace `jbj-glow-pulse` keyframes:**
+- Increase cycle to **12s** (very slow breathing)
+- Reduce max shadow spread from 18px/34px to **8px/16px**
+- Reduce max opacity from 0.24 to **0.12** at start, fading to 0 at peak
+- Use only 2 stages (0% → 50% → 100%) for a smooth sine-wave feel, not 3 choppy stages
+- Result: a gentle, almost imperceptible gold glow that slowly breathes in and out
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+New keyframes:
+```css
+@keyframes jbj-glow-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0 hsl(var(--gold) / 0),
+      0 4px 16px -8px hsl(var(--gold-dark) / 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 0 8px hsl(var(--gold) / 0.08),
+      0 0 0 16px hsl(var(--gold-light) / 0.03),
+      0 8px 24px -8px hsl(var(--gold-dark) / 0.12);
+  }
+}
+```
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+**`src/components/chat/CollapsedChatButton.tsx` (lines 84, 120):**
+- Change animation duration from `7.2s` to `12s`
+- Change easing from `cubic-bezier(0.16,1,0.3,1)` to `ease-in-out` (smoother sine wave for slow animations)
 
----
+Both the banner mode (line 84) and circle mode (line 120) get updated.
 
-### Route Map
+### Result
+A barely-there, ultra-slow gold glow that breathes every 12 seconds — premium and calming, no eye strain.
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
-
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
-
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
