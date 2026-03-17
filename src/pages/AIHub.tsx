@@ -546,7 +546,7 @@ const AIHub = () => {
         viewport={{ once: true }}
       >
         <Link to={tool.link} className="block group h-full">
-          <Card className={`bg-black/40 backdrop-blur-sm border-2 ${meta.glowClass} transition-all duration-300 h-full group-hover:scale-[1.02]`}>
+          <Card className={`${meta.cardClass} transition-all duration-300 h-full group-hover:scale-[1.02]`}>
             <CardContent className="p-5">
               <div className="flex items-start gap-4">
                 <div className={`w-12 h-12 ${meta.iconWrapClass} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
@@ -554,14 +554,17 @@ const AIHub = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start gap-2 mb-1 flex-wrap">
-                    <h3 className={`font-semibold text-sm leading-tight ${meta.iconClass}`}>{tool.title}</h3>
+                    <h3 className="font-semibold text-sm leading-tight text-white">{tool.title}</h3>
                     <Badge className="bg-emerald-500/30 text-emerald-200 border-emerald-400/50 text-[10px] px-1.5 py-0 flex-shrink-0">
                       FREE
                     </Badge>
                   </div>
                   <p className="text-white/70 text-sm line-clamp-2">{tool.description}</p>
                 </div>
-                <ArrowUpRight className={`w-5 h-5 ${meta.arrowClass} opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0`} />
+                <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                  <ArrowUpRight className={`w-5 h-5 ${meta.arrowClass} opacity-60 group-hover:opacity-100 transition-opacity`} />
+                  <span className={`text-[10px] font-semibold ${meta.arrowClass} opacity-60 group-hover:opacity-100 transition-opacity`}>Open →</span>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -598,7 +601,10 @@ const AIHub = () => {
                   </div>
                   <p className="text-white/70 text-sm line-clamp-2">{tool.description}</p>
                 </div>
-                <ArrowUpRight className="w-5 h-5 text-white/50 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0" />
+                <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                  <ArrowUpRight className="w-5 h-5 text-white/50 opacity-60 group-hover:opacity-100 group-hover:text-gold transition-all" />
+                  <span className="text-[10px] font-semibold text-white/50 opacity-60 group-hover:opacity-100 group-hover:text-gold transition-all">Open →</span>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -637,7 +643,10 @@ const AIHub = () => {
                 </div>
                 <p className="text-zinc-300 text-sm line-clamp-2">{tool.description}</p>
               </div>
-              <ArrowUpRight className="w-5 h-5 text-gold opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0" />
+              <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                <ArrowUpRight className="w-5 h-5 text-gold opacity-60 group-hover:opacity-100 transition-all" />
+                <span className="text-[10px] font-semibold text-gold opacity-60 group-hover:opacity-100 transition-all">Open →</span>
+              </div>
             </div>
           </CardContent>
         </Card>
