@@ -1,4 +1,4 @@
-import { Briefcase, Building2, Home, Paintbrush, Scale, MessageCircle, FileText, Plane, Compass, Ruler, Settings, Users, LayoutDashboard, Mail, ClipboardList, Shield, BookOpen, Heart, Bell, Star, Inbox } from 'lucide-react';
+import { Briefcase, Building2, Home, Paintbrush, Scale, MessageCircle, FileText, Plane, Compass, Ruler, Settings, Users, LayoutDashboard, Mail, ClipboardList, Shield, BookOpen, Heart, Bell, Star, Inbox, Sparkles, FileUser } from 'lucide-react';
 import { T } from '@/components/ui/T';
 import { useUserRole, VisitorRole } from '@/hooks/useUserRole';
 import { useOwnerVerification } from '@/hooks/useOwnerVerification';
