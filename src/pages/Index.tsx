@@ -356,19 +356,25 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* FEATURED LISTINGS */}
-      <Suspense fallback={<SectionLoader />}>
-        <FeaturedListings />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <FeaturedListings />
+        </Suspense>
+      </div>
 
       {/* CONTINUE SEARCHING */}
-      <Suspense fallback={<SectionLoader />}>
-        <ContinueSearching type="property" />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <ContinueSearching type="property" />
+        </Suspense>
+      </div>
 
       {/* RESALE PROPERTIES - single divider before Starting Point */}
-      <Suspense fallback={<SectionLoader />}>
-        <ResalePropertiesSection />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <ResalePropertiesSection />
+        </Suspense>
+      </div>
 
       {/* DIVIDER — single divider (removed double) */}
       <SectionDivider fullWidth />
