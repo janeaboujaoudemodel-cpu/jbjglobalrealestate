@@ -1213,7 +1213,7 @@ export default function GlobalVerticalNav() {
                             <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${getIconStyle(item, sectionKey)}`} />
                             <span className="flex-1">{item.label}</span>
                             {hasMega && (
-                              <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-gold/20"}`} />
+                              <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/20"}`} />
                             )}
                           </Link>
                         );
