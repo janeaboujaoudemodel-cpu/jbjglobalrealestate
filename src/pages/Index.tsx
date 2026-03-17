@@ -456,7 +456,7 @@ const Index = () => {
                       <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-gold group-hover:text-gold-light transition-colors" strokeWidth={1.5} />
                     </div>
                     <h2 
-                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide bg-gradient-to-r from-gold via-[#E8DCC8] to-gold bg-clip-text text-transparent group-hover:from-gold-light group-hover:to-gold transition-all duration-500" 
+                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide bg-gradient-to-r from-[#1a1a1a] via-[#2d2319] to-[#1a1a1a] bg-clip-text text-transparent group-hover:from-gold group-hover:via-gold-light group-hover:to-gold transition-all duration-500" 
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {t('hero.aiFinder')}
