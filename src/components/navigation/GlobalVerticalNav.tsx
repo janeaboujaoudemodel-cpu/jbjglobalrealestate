@@ -1066,7 +1066,23 @@ export default function GlobalVerticalNav() {
 
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
-      {/* ━━━ SCROLLABLE NAV — no header, logo is now in HorizontalUtilityBar ━━━ */}
+      {/* ━━━ LOGO HEADER (88px) — restored, matches horizontal header height ━━━ */}
+      <div className="h-[88px] shrink-0 flex flex-col items-center justify-center px-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-b border-gold/20">
+        <Link to="/" className="flex items-center gap-2.5 hover:opacity-90 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <img src={jbjMonogramLightBg} alt="JBJ" className="w-11 h-11 object-contain" />
+          <div className="flex flex-col">
+            <span className="text-[11px] font-extrabold text-black/85 tracking-[0.13em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
+            <span className="text-[9px] font-bold text-black/50 tracking-[0.16em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
+          </div>
+        </Link>
+        <button
+          onClick={toggleCollapse}
+          className="mt-1.5 w-6 h-6 rounded-md bg-black/5 hover:bg-black/10 flex items-center justify-center transition-all border border-black/10"
+          aria-label="Collapse navigation"
+        >
+          <ChevronLeft className="w-3 h-3 text-black/60" />
+        </button>
+      </div>
 
       {/* ━━━ SCROLLABLE NAV ━━━ */}
       <nav
