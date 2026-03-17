@@ -478,6 +478,8 @@ const Index = () => {
         </div>
       </section>
 
+      <SectionDivider fullWidth />
+
       {/* AI COMPARISON & ANALYZER PREVIEW */}
       <section>
         <div className="jj-layer-2">
