@@ -1282,10 +1282,10 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-8">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Download</span>
-            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
               Get the Full Company Profile
             </h2>
-            <p className="text-black/70">
+            <p className="text-white/70">
               18-page Company Profile • Professional Format
             </p>
           </div>
