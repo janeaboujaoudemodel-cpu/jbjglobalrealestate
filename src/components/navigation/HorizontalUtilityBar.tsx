@@ -455,6 +455,16 @@ export default function HorizontalUtilityBar() {
           </Tooltip>
         </div>
         </div>
+
+        {/* ── ROW 2 (40px): Filter Shortcut Bar — NO divider, same background ── */}
+        <div className="h-[40px] shrink-0 px-3 flex items-center">
+          <FilterShortcutBar
+            variant="light"
+            filters={globalFilters}
+            onFilterChange={handleGlobalFilterChange}
+            resultsLabel="Properties"
+          />
+        </div>
       </div>
 
       <GlobalSearchModal isOpen={searchOpen} initialQuery="" onClose={() => setSearchOpen(false)} />
