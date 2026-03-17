@@ -55,7 +55,7 @@ function SectionShell({
   className?: string;
 }) {
   return (
-    <section className={`py-8 md:py-10 bg-black ${className ?? ""}`.trim()}>
+    <section className={`py-8 md:py-10 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] ${className ?? ""}`.trim()}>
       <div className="jj-layer-2">
         <div className="w-full px-4 sm:px-6 lg:px-8">{children}</div>
       </div>

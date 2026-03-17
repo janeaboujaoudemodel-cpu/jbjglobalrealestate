@@ -454,8 +454,8 @@ const Index = () => {
                 </div>
                 <Link to="/quiz" className="block group">
                   <div className="flex items-center justify-center gap-3 mb-3">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-gold/20 to-gold/10 border border-gold/30 flex items-center justify-center shadow-[0_0_30px_hsl(var(--gold)_/_0.25)] group-hover:shadow-[0_0_50px_hsl(var(--gold)_/_0.4)] transition-all duration-500">
-                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-gold group-hover:text-gold-light transition-colors" strokeWidth={1.5} />
+                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-400/10 border border-purple-400/30 flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.25)] group-hover:shadow-[0_0_50px_rgba(139,92,246,0.4)] transition-all duration-500">
+                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-purple-500 group-hover:text-purple-400 transition-colors" strokeWidth={1.5} />
                     </div>
                     <h2 
                       className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide bg-gradient-to-r from-[#1a1a1a] via-[#2d2319] to-[#1a1a1a] bg-clip-text text-transparent group-hover:from-gold group-hover:via-gold-light group-hover:to-gold transition-all duration-500" 
