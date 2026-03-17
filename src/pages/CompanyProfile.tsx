@@ -834,10 +834,10 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="areas" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Where We Operate</span>
-          <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
             Prime Areas of Focus
           </h2>
-          <p className="text-black/70 max-w-2xl mx-auto">
+          <p className="text-white/70 max-w-2xl mx-auto">
             JBJ Global Real Estate focuses on Dubai's highest-demand residential communities — selected for their location quality, lifestyle appeal, and long-term investment value.
           </p>
         </div>
