@@ -213,7 +213,7 @@ const JBJPodcastSection = () => {
                   
                   {/* Episode Badge - Top Left - Using proper gold, no yellow */}
                   <div className="absolute top-3 left-3">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black/60 backdrop-blur-sm border border-gold/40 text-gold rounded-full text-xs font-bold uppercase tracking-wider">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[hsl(38,35%,12%)]/60 backdrop-blur-sm border border-gold/40 text-gold rounded-full text-xs font-bold uppercase tracking-wider">
                       <Mic className="w-3 h-3" />
                       <T>Episode</T> {selectedEpisode.id}
                     </span>
@@ -230,7 +230,7 @@ const JBJPodcastSection = () => {
                       aria-label={playback.status === "playing" ? "Pause" : "Play"}
                     >
                       <div 
-                        className="w-20 h-20 rounded-full bg-black/50 backdrop-blur-sm border-2 border-gold flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
+                        className="w-20 h-20 rounded-full bg-[hsl(38,35%,12%)]/50 backdrop-blur-sm border-2 border-gold flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
                         style={{ boxShadow: '0 0 40px rgba(200,167,102,0.3)' }}
                       >
                         {playback.status === "loading" ? (
@@ -310,7 +310,7 @@ const JBJPodcastSection = () => {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={handleSkipBack}
-                      className="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 border border-gold/30 flex items-center justify-center transition-colors"
+                      className="w-10 h-10 rounded-full bg-[hsl(38,35%,12%)]/10 hover:bg-[hsl(38,35%,12%)]/20 border border-gold/30 flex items-center justify-center transition-colors"
                     >
                       <SkipBack className="w-5 h-5 text-black" />
                     </button>
@@ -329,7 +329,7 @@ const JBJPodcastSection = () => {
                     </button>
                     <button
                       onClick={handleSkipForward}
-                      className="w-10 h-10 rounded-full bg-black/10 hover:bg-black/20 border border-gold/30 flex items-center justify-center transition-colors"
+                      className="w-10 h-10 rounded-full bg-[hsl(38,35%,12%)]/10 hover:bg-[hsl(38,35%,12%)]/20 border border-gold/30 flex items-center justify-center transition-colors"
                     >
                       <SkipForward className="w-5 h-5 text-black" />
                     </button>
@@ -338,7 +338,7 @@ const JBJPodcastSection = () => {
                   {/* Playback Speed */}
                   <button
                     onClick={cyclePlaybackSpeed}
-                    className="px-3 py-1.5 bg-black/10 hover:bg-black/20 border border-gold/30 rounded-lg text-sm font-medium text-black transition-colors"
+                    className="px-3 py-1.5 bg-[hsl(38,35%,12%)]/10 hover:bg-[hsl(38,35%,12%)]/20 border border-gold/30 rounded-lg text-sm font-medium text-black transition-colors"
                   >
                     {playbackSpeed}x
                   </button>
@@ -370,7 +370,7 @@ const JBJPodcastSection = () => {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={toggleMute}
-                      className="w-8 h-8 rounded-full bg-black/10 hover:bg-black/20 border border-gold/30 flex items-center justify-center transition-colors"
+                      className="w-8 h-8 rounded-full bg-[hsl(38,35%,12%)]/10 hover:bg-[hsl(38,35%,12%)]/20 border border-gold/30 flex items-center justify-center transition-colors"
                       title={isMuted ? "Unmute" : "Mute"}
                     >
                       {isMuted || volume[0] === 0 ? (
