@@ -1,90 +1,73 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## Restructure Header + Sidebar Color System
 
-### Session Status
+### Current State
+- **Header** (`HorizontalUtilityBar`): Starts at `left-[200px]`, offset by sidebar width. Uses champagne gradient `#F5EBD7 → #E8DCC8 → #D4C4A8`.
+- **Sidebar header** (88px tall): Contains logo + "JBJ GLOBAL" + collapse button. Same champagne gradient.
+- **Sidebar body**: Very light `#FDFBF7 → #F5F0E6 → #EDE4D3`.
+- **FilterBar**: Starts at `left-[200px]`, `top-[48px]`.
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+### What Changes
 
----
+#### 1. Header becomes full-width with logo integrated
+**File: `HorizontalUtilityBar.tsx`**
+- Change `left-[200px]` → `left-0` (full width from edge)
+- Add left section (200px wide when sidebar expanded, 48px when collapsed): Logo + "JBJ GLOBAL REAL ESTATE" + collapse/expand button
+- Left section background: Sidebar TOP color (`#F5EBD7 → #E8DCC8 → #D4C4A8`) — light premium gold
+- Right/center section background: Sidebar BODY color (new darker shade: `#E8DCC8 → #DCCFB5 → #D4C4A8`)
+- Fixed, `top-0`, `z-[9998]`, no changes on scroll
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+#### 2. Sidebar loses its header, body gets darker
+**File: `GlobalVerticalNav.tsx`**
+- **Remove** the 88px header block (logo area) from both expanded and collapsed states — logo now lives in the horizontal header
+- Sidebar starts rendering from `top-[48px]` (below the header)
+- Sidebar body gradient changes from very-light (`#FDFBF7 → #F5F0E6 → #EDE4D3`) to darker (`#E8DCC8 → #DCCFB5 → #D4C4A8`)
+- Nav item text colors adjusted for darker background (keep gold icons, adjust text contrast)
+- Collapsed sidebar: same darker body color, no header strip
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+#### 3. FilterBar alignment
+**File: `GlobalFilterBar.tsx`**
+- Keep `left-[200px]` (still starts after sidebar, not full-width)
+- Background matches header center section color (`#E8DCC8 → #DCCFB5 → #D4C4A8`)
 
----
+#### 4. MainLayout sidebar positioning
+**File: `MainLayout.tsx`**
+- Sidebar container: add `top-[48px]` and adjust height to `h-[calc(100vh-48px)]` so it sits below the new full-width header
 
-### Route Map
+### Color Map (HEX)
+```text
+┌──────────────────────────────────────────────────┐
+│ LOGO + JBJ GLOBAL + ≪  │  Back Search Buy Rent … │  ← Header (full width, fixed)
+│ #F5EBD7→#D4C4A8        │  #E8DCC8→#D4C4A8        │
+├─────────────────────────┼────────────────────────-│
+│  My Shortcuts           │                         │
+│  Properties             │   PAGE CONTENT           │
+│  Services               │                         │
+│  #E8DCC8→#D4C4A8        │                         │  ← Sidebar body (darker)
+│  (same as header center)│                         │
+└─────────────────────────┴─────────────────────────┘
+```
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+### Files Modified
+1. `src/components/navigation/HorizontalUtilityBar.tsx` — full-width, logo section added, two-tone bg
+2. `src/components/navigation/GlobalVerticalNav.tsx` — remove header block, darker body, top offset
+3. `src/components/navigation/GlobalFilterBar.tsx` — match center section color
+4. `src/components/MainLayout.tsx` — sidebar container top offset
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+### No Changes To
+- Footer, index.css, page sections, typography, other components
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
+### Database Changes
+None.
 
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
+### Testing Steps
+1. Verify header spans full width with logo on left, nav controls on right
+2. Verify header left section matches sidebar TOP champagne tone
+3. Verify header center/right matches darker sidebar body tone
+4. Verify sidebar has no duplicate logo area, starts below header
+5. Verify collapsed sidebar state works (logo in header shrinks to icon, sidebar narrow)
+6. Verify fixed header on scroll — no color/size change
+7. Verify "JBJ GLOBAL REAL ESTATE" text never shrinks or wraps
+8. Verify filter bar aligns correctly below header
 
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
