@@ -1,90 +1,44 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## SESSION 12 — AI Home Finder Visual Fix
 
-### Session Status
+### Current State Analysis
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+**Section background** (line 414): Uses dark premium brown `bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]` — correct dark tone.
 
----
+**Problem**: Three large gold glow orbs (lines 416-418) wash out the dark background, making it appear lighter than intended:
+- Center: `w-[600px] h-[600px] bg-gold/8 blur-[120px]`
+- Top-left: `w-[300px] h-[300px] bg-gold/5 blur-[80px]`
+- Bottom-right: `w-[300px] h-[300px] bg-gold/5 blur-[80px]`
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+**Card** (line 440): Currently uses champagne gold: `from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95` — this is already gold champagne, BUT the `/95` opacity lets the light glow bleed through making the overall look washed out. The user wants a stronger gold champagne card.
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+### Fix Plan
 
----
+**File: `src/pages/Index.tsx`**
 
-### Route Map
+#### 1. Darken the section background glow effects
+Reduce the ambient glow orbs to prevent the "too light" appearance:
+- Line 416: Center orb `bg-gold/8` → `bg-gold/4` (halve intensity)
+- Line 417: Top-left orb `bg-gold/5` → `bg-gold/3`
+- Line 418: Bottom-right orb `bg-gold/5` → `bg-gold/3`
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+#### 2. Change card to full-opacity gold champagne
+- Line 440: Replace `from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95` → `from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]` (remove `/95` transparency — fully opaque champagne gold)
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+This ensures:
+- The dark brown section background reads as properly dark
+- The card is a solid, warm gold champagne — not gray/black
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
+### Files Modified
+- `src/pages/Index.tsx` — 4 lines (3 glow orbs + 1 card background)
 
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
+### Route
+- `/` (Homepage)
 
-**Investor Hub**
-- `/investor-hub` → InvestorHub
+### Testing Steps
+1. Navigate to homepage, scroll to AI Home Finder section
+2. Verify dark brown background is visibly darker than before
+3. Verify card is warm gold champagne with no gray/black tone
+4. Screenshot the section
 
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
