@@ -230,7 +230,7 @@ const JBJPodcastSection = () => {
                       aria-label={playback.status === "playing" ? "Pause" : "Play"}
                     >
                       <div 
-                        className="w-20 h-20 rounded-full bg-black/50 backdrop-blur-sm border-2 border-gold flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
+                        className="w-20 h-20 rounded-full bg-[hsl(38,35%,12%)]/50 backdrop-blur-sm border-2 border-gold flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-all duration-300 disabled:opacity-50"
                         style={{ boxShadow: '0 0 40px rgba(200,167,102,0.3)' }}
                       >
                         {playback.status === "loading" ? (
