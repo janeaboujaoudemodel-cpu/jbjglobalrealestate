@@ -434,7 +434,7 @@ const Index = () => {
               
               {/* Card with premium 3D glassmorphism */}
               <div 
-                className="relative z-10 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/30"
+                className="relative z-10 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/50"
                 style={{
                   boxShadow: '0 0 60px hsl(var(--gold) / 0.25), 0 0 120px hsl(var(--gold) / 0.1), 0 30px 80px rgba(0,0,0,0.5), inset 0 1px 0 hsl(var(--gold) / 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
                   transform: 'translateZ(20px)',
@@ -446,7 +446,7 @@ const Index = () => {
                 <div className="absolute bottom-0 left-12 right-12 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
                 
                 {/* Gold label badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/15 border border-gold/30 text-gold text-xs uppercase tracking-[0.2em] mb-5">
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1a1a1a]/10 border border-[#1a1a1a]/20 text-[#1a1a1a] text-xs uppercase tracking-[0.2em] mb-5">
                   <Sparkles className="w-3 h-3" />
                   {t('home.aiPowered', 'AI-Powered')}
                 </div>
@@ -456,17 +456,17 @@ const Index = () => {
                       <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-gold group-hover:text-gold-light transition-colors" strokeWidth={1.5} />
                     </div>
                     <h2 
-                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide bg-gradient-to-r from-gold via-[#E8DCC8] to-gold bg-clip-text text-transparent group-hover:from-gold-light group-hover:to-gold transition-all duration-500" 
+                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide bg-gradient-to-r from-[#1a1a1a] via-[#2d2319] to-[#1a1a1a] bg-clip-text text-transparent group-hover:from-gold group-hover:via-gold-light group-hover:to-gold transition-all duration-500" 
                       style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {t('hero.aiFinder')}
                     </h2>
-                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-gold group-hover:text-gold-light group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" />
+                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-stone-800 group-hover:text-gold transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </div>
-                  <p className="text-zinc-700 text-sm md:text-base max-w-lg mx-auto">
+                  <p className="text-stone-800 text-sm md:text-base max-w-lg mx-auto">
                     {t('hero.aiFinderDesc')}
                   </p>
-                  <p className="text-zinc-500 text-xs mt-3">
+                  <p className="text-stone-500 text-xs mt-3">
                     {t('home.poweredByJBJ', 'Powered by JBJ Global Real Estate')}
                   </p>
                 </Link>
