@@ -118,7 +118,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "PDF Editor", href: "/toolkit/pdf-editor", icon: FileText },
 
   // ── AI Tools (merged into TOOLS section) ──
-  { label: "AI Tools Hub", href: "/ai-hub", icon: Cpu, section: "TOOLS", megaMenu: 'ai-tools' },
   { label: "AI Personal Shopper", href: "/ai-personal-shopper", icon: Store },
   { label: "AI Investment Report", href: "/ai-investment-report", icon: TrendingUp },
   { label: "Voice Agent Settings", href: "/voice-settings", icon: Mic },
@@ -790,12 +789,6 @@ export default function GlobalVerticalNav() {
       return shouldHighlight
         ? "bg-violet-500 text-white border border-violet-400 font-bold"
         : "bg-violet-50/80 text-violet-500 font-semibold hover:bg-violet-100/60 border border-violet-300/25";
-    }
-    // AI Tools Hub — Amber
-    if (item.href === '/ai-hub') {
-      return shouldHighlight
-        ? "bg-amber-500 text-white border border-amber-400 font-bold"
-        : "bg-amber-50/80 text-amber-700 font-semibold hover:bg-amber-100/60 border border-amber-300/30";
     }
     // List Your Property — Sky Blue
     if (item.href === '/listing-portal' && item.highlight) {
