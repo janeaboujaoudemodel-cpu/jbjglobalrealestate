@@ -97,7 +97,7 @@ export default function WhyDubaiCapitalSection() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5 }}
           >
-            <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-gold/30 bg-black/50 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] font-semibold text-gold/90">
+            <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-gold/30 bg-[hsl(38,35%,12%)]/50 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] font-semibold text-gold/90">
               <T>Global Investment Hub</T>
             </span>
 
