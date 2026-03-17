@@ -100,7 +100,18 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
               <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gold hidden sm:block flex-shrink-0" />
             )}
           </div>
-...
+          {onMinimize && (
+            <button
+              onClick={handleMinimize}
+              aria-label={t('chat.minimize', 'Minimize chat')}
+              className="absolute -top-2 -right-2 w-7 h-7 bg-white border-2 border-gold rounded-full flex items-center justify-center shadow-lg hover:bg-gold/10 transition-colors z-10"
+            >
+              <Minus className="w-4 h-4 text-gold" />
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className="relative">
           <div
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
