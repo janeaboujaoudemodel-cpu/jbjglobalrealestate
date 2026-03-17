@@ -725,7 +725,7 @@ const Footer = () => {
           {/* Edge-to-edge: no corner accents needed */}
           
           {/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact - Fills to gold border */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] m-1 overflow-hidden">
+          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-none border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] m-0 overflow-hidden">
             
             {/* Navigation Grid Section - Card-Based 2-Column Layout */}
             <div className="p-4 sm:p-6 md:p-8">
