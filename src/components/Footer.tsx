@@ -518,7 +518,7 @@ const Footer = () => {
         {/* ULTRA PREMIUM 3D Card - License + Newsletter + Social - BELOW logo */}
         <div className="relative pt-4 sm:pt-6 md:pt-8 pb-4">
           <div 
-            className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl relative overflow-hidden"
+            className="w-full rounded-none relative overflow-hidden"
             style={{
               background: 'linear-gradient(165deg, rgba(245,235,215,0.99) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
               boxShadow: `
@@ -532,8 +532,8 @@ const Footer = () => {
             }}
           >
             {/* Outer Gold Border Ring */}
-            <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/50 pointer-events-none" />
-            <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/25 pointer-events-none" />
+            <div className="absolute inset-0 rounded-none border-2 border-gold/50 pointer-events-none" />
+            <div className="absolute inset-[3px] rounded-none border border-gold/25 pointer-events-none" />
             
             {/* Animated Shimmer Sweep */}
             <div 
