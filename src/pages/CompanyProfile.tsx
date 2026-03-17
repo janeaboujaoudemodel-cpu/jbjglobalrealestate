@@ -1294,7 +1294,7 @@ const CompanyProfile = () => {
             <ConsistentBook3D onClick={generatePDF} isGenerating={isGenerating} />
 
             <div className="mt-8 flex flex-col items-center gap-4">
-              <p className="text-black/60 text-sm">
+              <p className="text-white/60 text-sm">
                 JBJ_Global_Real_Estate_Company_Profile.pdf
               </p>
               <div className="flex flex-wrap justify-center gap-3">
