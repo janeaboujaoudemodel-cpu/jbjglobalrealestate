@@ -485,7 +485,7 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-8">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Contents</span>
-            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
               Table of Contents
             </h2>
           </div>
