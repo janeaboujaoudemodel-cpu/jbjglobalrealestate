@@ -601,7 +601,10 @@ const AIHub = () => {
                   </div>
                   <p className="text-white/70 text-sm line-clamp-2">{tool.description}</p>
                 </div>
-                <ArrowUpRight className="w-5 h-5 text-white/50 opacity-0 group-hover:opacity-100 group-hover:text-gold transition-all flex-shrink-0" />
+                <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                  <ArrowUpRight className="w-5 h-5 text-white/50 opacity-60 group-hover:opacity-100 group-hover:text-gold transition-all" />
+                  <span className="text-[10px] font-semibold text-white/50 opacity-60 group-hover:opacity-100 group-hover:text-gold transition-all">Open →</span>
+                </div>
               </div>
             </CardContent>
           </Card>
