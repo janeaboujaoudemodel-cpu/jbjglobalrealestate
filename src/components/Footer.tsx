@@ -714,7 +714,7 @@ const Footer = () => {
             
             {/* Animated Shimmer Sweep */}
             <div 
-              className="absolute inset-0 rounded-2xl sm:rounded-3xl pointer-events-none opacity-50"
+              className="absolute inset-0 rounded-none pointer-events-none opacity-50"
               style={{
                 background: 'linear-gradient(110deg, transparent 20%, rgba(200,167,102,0.06) 40%, rgba(245,230,200,0.12) 50%, rgba(200,167,102,0.06) 60%, transparent 80%)',
                 backgroundSize: '250% 100%',
