@@ -77,6 +77,7 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
     >
       {showAttentionPulse && !isMobile ? (
         <div className="relative">
+          <div className="absolute -inset-1 rounded-xl border-2 border-gold/30 animate-[jbj-pulse-ring_2s_ease-in-out_infinite]" />
           <div
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
@@ -113,7 +114,7 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
       ) : (
         <div className="relative">
           {/* Elegant pulse ring */}
-          <div className="absolute inset-0 rounded-full border-2 border-gold/40 animate-[jbj-pulse-ring_2s_ease-in-out_infinite]" />
+          <div className="absolute -inset-1 rounded-full border-2 border-gold/40 animate-[jbj-pulse-ring_2s_ease-in-out_infinite]" />
           <div
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
