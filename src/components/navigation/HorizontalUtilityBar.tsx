@@ -502,7 +502,10 @@ export default function HorizontalUtilityBar() {
         </div>
         </div>
 
-        {/* ── ROW 2 (40px): Filter Shortcut Bar — NO divider, same background ── */}
+        {/* ── Subtle gold divider between rows ── */}
+        <div className="h-px mx-4 bg-gradient-to-r from-transparent via-gold/20 to-transparent shrink-0" />
+
+        {/* ── ROW 2 (40px): Filter Shortcut Bar ── */}
         <div className="h-[40px] shrink-0 px-3 flex items-center">
           <FilterShortcutBar
             variant="light"

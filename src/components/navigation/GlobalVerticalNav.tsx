@@ -1317,7 +1317,7 @@ export default function GlobalVerticalNav() {
 
             {/* Bottom pinned */}
             <div className="flex flex-col items-center gap-1 pt-1.5">
-              <div className="w-5 h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-0.5" />
+              <div className="w-5 h-[1px] bg-gradient-to-r from-gold/10 via-gold/50 to-gold/10 mb-0.5" />
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link to="/contact" className="w-7 h-7 rounded-lg flex items-center justify-center text-red-400 hover:bg-red-50/60 transition-all">
