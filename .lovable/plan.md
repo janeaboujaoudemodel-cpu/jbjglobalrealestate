@@ -1,90 +1,33 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## Fix Plan: Chat Pulse + AI Home Finder Float
 
-### Session Status
+### Problem 1: Chat Pulse — Rectangle expanding outward
+The current `jbj-pulse-ring` animation uses `transform: scale()` on a bordered div. This scales the entire element including its rectangular/rounded shape, creating an ugly box that grows and shrinks. This is not a pulse — it's a scaling rectangle.
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+**Fix:** Replace the border-based scale approach with a proper **box-shadow glow pulse**. Instead of scaling a bordered div, use a single element with `box-shadow` that radiates outward like a real pulse. No separate pulse div needed — apply directly to the button container.
 
----
+- Remove the separate `absolute -inset-1 rounded-xl border-2 border-gold/30 animate-[...]` div entirely (both banner and circle modes)
+- Apply a `box-shadow` pulse animation directly on the interactive element
+- New keyframe `jbj-glow-pulse`: alternates between `box-shadow: 0 0 0 0 rgba(200,167,102,0.5)` and `box-shadow: 0 0 20px 10px rgba(200,167,102,0)` — a radial gold glow that fades outward
+- For the banner (rounded-xl): glow radiates smoothly from the card edges
+- For the circle (rounded-full): glow radiates as a perfect circle
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+### Problem 2: AI Home Finder Float — Not visibly floating
+`translateY(-8px)` over 6s is too subtle to notice. The animation also fights with `translateZ(20px)`.
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+**Fix:** Make the float premium and obvious:
+- Increase amplitude: `translateY(0)` → `translateY(-14px)` (nearly double)
+- Reduce period: 6s → 4s (faster = more noticeable)
+- Add a **shadow shift** that follows the float: when card floats up, shadow grows larger and softer (simulating lifting off surface)
+- New keyframe combines Y movement + shadow: at 50% position, `box-shadow` expands from `0 8px 30px rgba(200,167,102,0.15)` to `0 20px 50px rgba(200,167,102,0.25)`
+- Remove `translateZ(20px)` from the keyframe (unnecessary, causes issues)
 
----
+### Files to modify
 
-### Route Map
+| File | Change |
+|------|--------|
+| `src/index.css` | Replace `jbj-pulse-ring` with `jbj-glow-pulse`; enhance `jbj-float` amplitude + shadow |
+| `src/components/chat/CollapsedChatButton.tsx` | Remove separate pulse ring divs; add glow-pulse class to the button elements directly |
+| `src/pages/Index.tsx` | Update float animation reference if keyframe name changes; adjust shadow on float wrapper |
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
-
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
-
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
-
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
-
-**Investor Hub**
-- `/investor-hub` → InvestorHub
-
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
-
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
-
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
-
----
-
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
