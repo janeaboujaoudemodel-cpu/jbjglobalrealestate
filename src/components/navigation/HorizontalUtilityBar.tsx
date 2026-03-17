@@ -220,10 +220,14 @@ export default function HorizontalUtilityBar() {
         className={`fixed top-0 right-0 h-[88px] z-[9998] flex flex-col border-b border-[hsl(var(--gold)/0.2)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] transition-all duration-300 [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]`}
       >
         {/* ── ROW 1 (48px): Navigation controls ── */}
-        <div
-          className="h-[48px] flex items-center gap-2 px-3 sm:px-5 xl:px-6 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto overflow-y-visible scrollbar-hide shrink-0"
-          style={{ overscrollBehaviorX: 'contain', touchAction: 'pan-x' }}
-        >
+        <div className="h-[48px] flex items-center shrink-0 relative">
+          {/* Left scroll arrow */}
+          <ScrollArrow direction="left" scrollRef={row1ScrollRef} />
+          <div
+            ref={row1ScrollRef}
+            className="flex-1 h-full flex items-center gap-2 px-3 sm:px-5 xl:px-6 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto overflow-y-visible scrollbar-hide"
+            style={{ overscrollBehaviorX: 'contain', touchAction: 'pan-x' }}
+          >
 
         {/* ── Connected Segmented Rail — all controls in one block ── */}
         <div className="flex items-center h-8 shrink-0">
