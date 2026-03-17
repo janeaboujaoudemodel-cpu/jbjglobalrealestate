@@ -1219,8 +1219,8 @@ const CompanyProfile = () => {
                   <item.icon className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-black/50 text-xs uppercase">{item.label}</p>
-                  <p className="text-black">{item.value}</p>
+                   <p className="text-zinc-400 text-xs uppercase">{item.label}</p>
+                  <p className="text-white">{item.value}</p>
                 </div>
               </div>
             ))}
