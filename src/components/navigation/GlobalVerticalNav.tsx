@@ -1165,8 +1165,8 @@ export default function GlobalVerticalNav() {
                     onClick={(e) => toggleSection(sectionKey, e)}
                     className={`w-full flex items-center gap-2 px-2.5 py-[7px] rounded-xl text-[10px] uppercase tracking-[0.18em] font-bold transition-all duration-200 group ${
                       sectionHighlighted
-                        ? "text-black/80 bg-gold/[0.12]"
-                        : "text-black/45 hover:text-black/70 hover:bg-gold/[0.05]"
+                        ? "text-black/85 bg-gold/[0.12]"
+                        : "text-black/65 hover:text-black/85 hover:bg-gold/[0.05]"
                     }`}
                   >
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${sectionHighlighted ? 'bg-gold/20' : 'bg-gold/[0.08] group-hover:bg-gold/15'}`}>
