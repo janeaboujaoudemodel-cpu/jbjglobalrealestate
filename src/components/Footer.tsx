@@ -870,7 +870,7 @@ const Footer = () => {
         {/* ZONE 3: ULTRA PREMIUM Legal + Google Review Block */}
         <div className="relative py-4">
           <div 
-            className="w-full max-w-7xl mx-auto rounded-2xl sm:rounded-3xl overflow-hidden relative"
+            className="w-full rounded-none overflow-hidden relative"
             style={{
               background: 'linear-gradient(165deg, rgba(245,235,215,1) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
               boxShadow: `
@@ -884,8 +884,8 @@ const Footer = () => {
             }}
           >
           {/* Outer Gold Border Ring - Enhanced */}
-          <div className="absolute inset-0 rounded-2xl sm:rounded-3xl border-2 border-gold/50 pointer-events-none" />
-          <div className="absolute inset-[3px] rounded-2xl sm:rounded-3xl border border-gold/25 pointer-events-none" />
+          <div className="absolute inset-0 rounded-none border-2 border-gold/50 pointer-events-none" />
+          <div className="absolute inset-[3px] rounded-none border border-gold/25 pointer-events-none" />
           
           {/* Animated Shimmer Sweep */}
           <div 
