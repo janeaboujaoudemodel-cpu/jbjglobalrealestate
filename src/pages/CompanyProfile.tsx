@@ -521,8 +521,8 @@ const CompanyProfile = () => {
                   <span className="w-8 h-8 rounded-lg bg-[#C8A766]/10 border border-[#C8A766]/20 flex items-center justify-center text-[#C8A766] text-sm font-medium flex-shrink-0">
                     {index + 1}
                   </span>
-                  <span className="text-black/80 text-sm flex-1 group-hover:text-[#C8A766] transition-colors">{item.title}</span>
-                  <ChevronRight className="w-4 h-4 text-black/30 group-hover:text-[#C8A766] transition-colors flex-shrink-0" />
+                  <span className="text-white/80 text-sm flex-1 group-hover:text-[#C8A766] transition-colors">{item.title}</span>
+                  <ChevronRight className="w-4 h-4 text-white/30 group-hover:text-[#C8A766] transition-colors flex-shrink-0" />
                 </a>
               ))}
             </div>
