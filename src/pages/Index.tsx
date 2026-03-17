@@ -428,8 +428,9 @@ const Index = () => {
               transition={{ duration: 0.7, ease: "easeOut" }}
               whileHover={{ y: -6, rotateX: -2, scale: 1.01 }}
               className="text-center relative max-w-2xl"
-              style={{ transformStyle: 'preserve-3d', animation: 'jbj-float 6s ease-in-out infinite' }}
+              style={{ transformStyle: 'preserve-3d' }}
             >
+            <div style={{ animation: 'jbj-float 6s ease-in-out infinite' }}>
               {/* Premium multi-layer glow */}
               <div className="absolute inset-0 -m-8 md:-m-12 rounded-3xl bg-gold/12 blur-[50px]" />
               <div className="absolute inset-0 -m-4 md:-m-6 rounded-3xl bg-gold/10 blur-2xl" />
