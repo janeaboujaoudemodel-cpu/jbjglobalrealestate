@@ -657,7 +657,7 @@ const Footer = () => {
               >
                 {/* Social Icons */}
                 <div className="flex items-center gap-4 px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20">
-                  <p className="text-gold/80 text-xs uppercase tracking-[0.15em] font-medium whitespace-nowrap">Connect</p>
+                  <p className="text-gold text-xs uppercase tracking-[0.15em] font-medium whitespace-nowrap">Connect</p>
                   <SocialLinks variant="glow" iconClassName="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
 
