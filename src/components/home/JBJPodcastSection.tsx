@@ -338,7 +338,7 @@ const JBJPodcastSection = () => {
                   {/* Playback Speed */}
                   <button
                     onClick={cyclePlaybackSpeed}
-                    className="px-3 py-1.5 bg-black/10 hover:bg-black/20 border border-gold/30 rounded-lg text-sm font-medium text-black transition-colors"
+                    className="px-3 py-1.5 bg-[hsl(38,35%,12%)]/10 hover:bg-[hsl(38,35%,12%)]/20 border border-gold/30 rounded-lg text-sm font-medium text-black transition-colors"
                   >
                     {playbackSpeed}x
                   </button>
