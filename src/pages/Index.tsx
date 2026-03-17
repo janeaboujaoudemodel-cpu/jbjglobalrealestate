@@ -418,9 +418,11 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* TOOLKIT SHOWCASE CARD */}
-      <Suspense fallback={<SectionLoader />}>
-        <ToolkitShowcaseCard />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <ToolkitShowcaseCard />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
