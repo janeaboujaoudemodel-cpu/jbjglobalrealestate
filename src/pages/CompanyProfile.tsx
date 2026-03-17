@@ -1018,10 +1018,10 @@ const CompanyProfile = () => {
         <div id="partner-network" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Network</span>
-            <h2 className="text-black text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
               Partner Network
             </h2>
-            <p className="text-black/70 max-w-2xl mx-auto">{PROFILE_CONTENT.partnerNetwork.intro}</p>
+            <p className="text-white/70 max-w-2xl mx-auto">{PROFILE_CONTENT.partnerNetwork.intro}</p>
           </div>
           <motion.div
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
