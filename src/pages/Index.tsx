@@ -466,7 +466,7 @@ const Index = () => {
                   <p className="text-stone-800 text-sm md:text-base max-w-lg mx-auto">
                     {t('hero.aiFinderDesc')}
                   </p>
-                  <p className="text-zinc-500 text-xs mt-3">
+                  <p className="text-stone-500 text-xs mt-3">
                     {t('home.poweredByJBJ', 'Powered by JBJ Global Real Estate')}
                   </p>
                 </Link>
