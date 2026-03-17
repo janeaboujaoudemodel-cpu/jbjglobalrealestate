@@ -1,90 +1,55 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## Fix Layout, Spacing, Readability — AI Home Finder + Sidebar
 
-### Session Status
+### 1. AI Home Finder Card — Centering & Spacing (`src/pages/Index.tsx`)
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+**Lines 411-477** — The section currently has no background matching other sections and no dividers around it.
 
----
+**Changes:**
+- **Add `SectionDivider`** above the AI Home Finder section (after line 410, before line 411) — matches the pattern used between all other sections
+- **Add `SectionDivider`** below the section (after line 477, before line 479)
+- **Add section background** to match other sections: `bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]` — currently the section has no explicit bg class, inheriting inconsistently
+- **Add vertical padding**: Change `min-h-[340px]` to `py-16 md:py-20 min-h-[340px]` for proper breathing room matching other sections
+- **Max-width constraint on card**: Add `max-w-2xl` to the motion.div wrapper so it doesn't stretch too wide, keeping it centered and proportional
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+### 2. AI Comparison Section Spacing (`src/pages/Index.tsx`)
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+**Lines 479-486** — The AI Comparison section has no divider above it and sits right under the Home Finder.
 
----
+- The new `SectionDivider` added after the Home Finder section (point 1) handles separation above the comparison widget.
 
-### Route Map
+### 3. Sidebar — Divider Above Contact/Support (`src/components/navigation/GlobalVerticalNav.tsx`)
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+**Line 1224-1226** — Currently there's already a thin gold divider (`h-[1px] bg-gradient-to-r from-transparent via-gold/20 to-transparent`). This is too subtle.
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+**Change:**
+- Increase divider opacity: `via-gold/20` → `via-gold/35`
+- Add `my-1` padding around the divider for clearer separation
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
+### 4. Sidebar Text Readability (`src/components/navigation/GlobalVerticalNav.tsx`)
 
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
+**Section headers (line 1166-1169):**
+- Default state: `text-black/45` → `text-black/65` (stronger contrast)
+- Hover: `hover:text-black/70` → `hover:text-black/85`
 
-**Investor Hub**
-- `/investor-hub` → InvestorHub
+**Sub-items (line 1204):**
+- Check `getItemStyle` and `getIconStyle` functions for contrast values and increase them similarly
 
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
+**Let me check those functions:**
 
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
+The `getItemStyle` function likely controls nav item text. Section headers at `text-black/45` are too faint on the champagne background — bumping to `text-black/65` default and `text-black/80` highlighted gives readable but still elegant contrast.
 
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
+### Files Modified
+1. **`src/pages/Index.tsx`** — Add dividers, section bg, vertical padding, max-width on card
+2. **`src/components/navigation/GlobalVerticalNav.tsx`** — Strengthen bottom divider, increase sidebar text contrast
 
----
+### Spacing Values
+- Section padding: `py-16 md:py-20` (64px / 80px)
+- Card max-width: `max-w-2xl` (672px)
+- Sidebar divider: `via-gold/35`, `my-1`
+- Text contrast: `text-black/45` → `text-black/65`
 
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
+### No Changes To
+- Layout structure, sidebar width, header height, fonts, colors palette, card 3D transforms
+
