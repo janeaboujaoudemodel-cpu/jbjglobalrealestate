@@ -1234,7 +1234,7 @@ export default function GlobalVerticalNav() {
           <div className="flex gap-1.5 mb-1.5">
             <Link
               to="/contact"
-              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-gold/50 hover:text-gold/80 transition-all px-1 py-[5px] rounded-lg hover:bg-gold/[0.04]"
+               className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-black/50 hover:text-black/80 transition-all px-1 py-[5px] rounded-lg hover:bg-black/[0.04]"
             >
               <Headphones className="w-3 h-3 text-red-400" />
               Contact
