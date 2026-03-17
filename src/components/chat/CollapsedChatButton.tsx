@@ -77,12 +77,11 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
     >
       {showAttentionPulse && !isMobile ? (
         <div className="relative">
-          <div className="absolute -inset-1 rounded-xl border-2 border-gold/30 animate-[jbj-pulse-ring_2s_ease-in-out_infinite]" />
           <div
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
-            className="relative flex items-center gap-2 sm:gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl px-3 sm:px-5 py-2.5 sm:py-3.5 shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 group select-none max-w-[240px] sm:max-w-none"
+            className="relative flex items-center gap-2 sm:gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl px-3 sm:px-5 py-2.5 sm:py-3.5 shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 group select-none max-w-[240px] sm:max-w-none animate-[jbj-glow-pulse_2s_ease-in-out_infinite]"
             aria-label={t('chat.openChat', 'Open chat support')}
           >
             <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold flex items-center justify-center flex-shrink-0 shadow-md shadow-gold/20">
