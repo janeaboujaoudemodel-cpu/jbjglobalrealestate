@@ -1,4 +1,4 @@
-import { Briefcase, Building2, Home, Paintbrush, Scale, MessageCircle, FileText, Plane, Compass, Ruler, Settings, Users, LayoutDashboard, Mail, ClipboardList, Shield, BookOpen, Heart, Bell, Star, Inbox } from 'lucide-react';
+import { Briefcase, Building2, Home, Paintbrush, Scale, MessageCircle, FileText, Plane, Compass, Ruler, Settings, Users, LayoutDashboard, Mail, ClipboardList, Shield, BookOpen, Heart, Bell, Star, Inbox, Sparkles, FileUser } from 'lucide-react';
 import { T } from '@/components/ui/T';
 import { useUserRole, VisitorRole } from '@/hooks/useUserRole';
 import { useOwnerVerification } from '@/hooks/useOwnerVerification';
@@ -37,12 +37,15 @@ const BASE_SHORTCUTS: ShortcutItem[] = [
 
 const OWNER_SHORTCUTS: ShortcutItem[] = [
   { id: 'owner_command', icon: Shield, label: 'Owner Command Center', description: 'Full control panel', color: 'text-gold' },
+  { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', description: 'Your overview', color: 'text-blue-600' },
   { id: 'crm_dashboard', icon: Users, label: 'CRM Dashboard', description: 'Leads, deals & pipeline', color: 'text-blue-600' },
   { id: 'admin_panel', icon: Settings, label: 'Admin Panel', description: 'System administration', color: 'text-red-500' },
-  { id: 'listing_admin', icon: ClipboardList, label: 'Listing Admin', description: 'Manage all listings', color: 'text-orange-500' },
-  { id: 'inbox', icon: Inbox, label: 'Inbox & Enquiries', description: 'Messages & lead enquiries', color: 'text-cyan-500' },
+  { id: 'listing_admin', icon: ClipboardList, label: 'Listings Manager', description: 'Manage all listings', color: 'text-orange-500' },
+  { id: 'cv_center', icon: FileUser, label: 'CV Center', description: 'Review applications', color: 'text-teal-500' },
+  { id: 'inbox', icon: Inbox, label: 'Inbox & Messages', description: 'Messages & lead enquiries', color: 'text-cyan-500' },
   { id: 'customer_happiness', icon: Heart, label: 'Customer Happiness', description: 'Support & satisfaction', color: 'text-rose-500' },
-  { id: 'cv_center', icon: FileText, label: 'CV Center', description: 'Review applications', color: 'text-teal-500' },
+  { id: 'property_management', icon: Building2, label: 'Property Management', description: 'Manage investments', color: 'text-purple-500' },
+  { id: 'ai_tools', icon: Sparkles, label: 'AI Tools Hub', description: 'AI-powered features', color: 'text-indigo-500' },
   { id: 'email_client', icon: Mail, label: 'Email Client', description: 'Send & manage emails', color: 'text-violet-500' },
   { id: 'team_chat', icon: MessageCircle, label: 'Team Chat', description: 'Internal messaging', color: 'text-emerald-500' },
   { id: 'automations', icon: Compass, label: 'Automations', description: 'Workflows & triggers', color: 'text-amber-500' },

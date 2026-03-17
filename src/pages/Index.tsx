@@ -422,8 +422,8 @@ const Index = () => {
         <div className="container mx-auto px-4 relative z-10" style={{ perspective: '1200px' }}>
           <div className="flex justify-center">
             <motion.div
-              initial={{ opacity: 0, y: 30, rotateX: 8 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              initial={{ opacity: 0, y: 30, rotateX: 8, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: "easeOut" }}
               whileHover={{ y: -6, rotateX: -2, scale: 1.01 }}
@@ -436,7 +436,7 @@ const Index = () => {
               
               {/* Card with premium 3D glassmorphism */}
               <div 
-                className="relative z-10 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/60"
+                className="relative z-10 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/60 transition-all duration-300 hover:shadow-[0_0_80px_hsl(var(--gold)_/_0.3)]"
                 style={{
                   boxShadow: '0 0 60px hsl(var(--gold) / 0.25), 0 0 120px hsl(var(--gold) / 0.1), 0 30px 80px rgba(0,0,0,0.5), 0 4px 20px rgba(200,167,102,0.15), inset 0 1px 0 hsl(var(--gold) / 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
                   transform: 'translateZ(20px)',

@@ -453,7 +453,7 @@ const CompanyProfile = () => {
               {PROFILE_CONTENT.coverPage.title}
             </span>
           </motion.h1>
-          <motion.p className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-8" variants={fadeInUp}>
+          <motion.p className="text-[#E8DCC8] text-lg md:text-xl max-w-2xl mx-auto mb-8" variants={fadeInUp}>
             {PROFILE_CONTENT.coverPage.subtitle}
           </motion.p>
 
