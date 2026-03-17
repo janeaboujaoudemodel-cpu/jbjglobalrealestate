@@ -602,7 +602,12 @@ const Footer = () => {
             {/* Stay in the Loop - Newsletter inside the 3D card */}
             {!isBackOfficeContext && (
               <div className="relative mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4">
-                <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border-2 border-gold/40 shadow-[0_0_40px_rgba(200,167,102,0.18),0_8px_32px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.5)] p-6 md:p-8">
+                <div 
+                  className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border-2 border-gold/40 p-6 md:p-8"
+                  style={{
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.3), 0 6px 15px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(0,0,0,0.15), 0 0 0 2px rgba(200,167,102,0.4)',
+                  }}
+                >
                   {/* Premium Title */}
                   <h3 
                     className="text-center text-2xl md:text-3xl font-bold mb-3 uppercase tracking-[0.15em]"
