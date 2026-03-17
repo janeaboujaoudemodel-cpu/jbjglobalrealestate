@@ -422,8 +422,8 @@ const Index = () => {
         <div className="container mx-auto px-4 relative z-10" style={{ perspective: '1200px' }}>
           <div className="flex justify-center">
             <motion.div
-              initial={{ opacity: 0, y: 30, rotateX: 8 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              initial={{ opacity: 0, y: 30, rotateX: 8, scale: 0.97 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: "easeOut" }}
               whileHover={{ y: -6, rotateX: -2, scale: 1.01 }}
