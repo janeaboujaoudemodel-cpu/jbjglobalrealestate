@@ -112,14 +112,12 @@ const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false 
         </div>
       ) : (
         <div className="relative">
-          {/* Elegant pulse ring */}
-          <div className="absolute -inset-1 rounded-full border-2 border-gold/40 animate-[jbj-pulse-ring_2s_ease-in-out_infinite]" />
           <div
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
             aria-label={t('chat.openChat', 'Open chat support')}
-            className="relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 select-none"
+            className="relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 select-none animate-[jbj-glow-pulse_2s_ease-in-out_infinite]"
           >
             <SquareChatIcon className="w-6 h-6 text-gold" size={24} />
           </div>
