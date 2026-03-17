@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import {
   Search, Heart, Settings, LayoutDashboard,
@@ -69,7 +69,34 @@ function decodeFiltersFromURL(p: URLSearchParams): ShortcutFilterState {
   };
 }
 
+function ScrollArrow({ direction, scrollRef }: { direction: 'left' | 'right'; scrollRef: React.RefObject<HTMLDivElement | null> }) {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const check = () => {
+      if (direction === 'left') setShow(el.scrollLeft > 4);
+      else setShow(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+    };
+    check();
+    el.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    return () => { el.removeEventListener('scroll', check); window.removeEventListener('resize', check); };
+  }, [scrollRef, direction]);
+  if (!show) return null;
+  return (
+    <button
+      onClick={() => scrollRef.current?.scrollBy({ left: direction === 'left' ? -160 : 160, behavior: 'smooth' })}
+      className={`absolute ${direction === 'left' ? 'left-0' : 'right-0'} z-10 w-7 h-7 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-[hsl(var(--gold)/0.5)] flex items-center justify-center shadow-sm hover:border-[hsl(var(--gold))] transition-all`}
+      aria-label={`Scroll ${direction}`}
+    >
+      {direction === 'left' ? <ChevronLeft className="w-3.5 h-3.5 text-[hsl(var(--gold))]" /> : <ChevronRight className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />}
+    </button>
+  );
+}
+
 export default function HorizontalUtilityBar() {
+  const row1ScrollRef = useRef<HTMLDivElement>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [filterState, setFilterState] = useState<ShortcutFilterState>(defaultShortcutFilters);
@@ -220,10 +247,14 @@ export default function HorizontalUtilityBar() {
         className={`fixed top-0 right-0 h-[88px] z-[9998] flex flex-col border-b border-[hsl(var(--gold)/0.2)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] transition-all duration-300 [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]`}
       >
         {/* ── ROW 1 (48px): Navigation controls ── */}
-        <div
-          className="h-[48px] flex items-center gap-2 px-3 sm:px-5 xl:px-6 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto overflow-y-visible scrollbar-hide shrink-0"
-          style={{ overscrollBehaviorX: 'contain', touchAction: 'pan-x' }}
-        >
+        <div className="h-[48px] flex items-center shrink-0 relative">
+          {/* Left scroll arrow */}
+          <ScrollArrow direction="left" scrollRef={row1ScrollRef} />
+          <div
+            ref={row1ScrollRef}
+            className="flex-1 h-full flex items-center gap-2 px-3 sm:px-5 xl:px-6 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto overflow-y-visible scrollbar-hide"
+            style={{ overscrollBehaviorX: 'contain', touchAction: 'pan-x' }}
+          >
 
         {/* ── Connected Segmented Rail — all controls in one block ── */}
         <div className="flex items-center h-8 shrink-0">
@@ -500,6 +531,9 @@ export default function HorizontalUtilityBar() {
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Manage your account, profile, and preferences</TooltipContent>
           </Tooltip>
         </div>
+        </div>
+          {/* Right scroll arrow */}
+          <ScrollArrow direction="right" scrollRef={row1ScrollRef} />
         </div>
 
         {/* ── Subtle gold divider between rows ── */}
