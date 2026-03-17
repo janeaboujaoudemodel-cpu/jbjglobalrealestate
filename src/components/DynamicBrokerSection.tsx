@@ -247,7 +247,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
                 className={`px-3 py-1.5 text-xs rounded-full transition-all ${
                   userType === type
                     ? 'bg-gold text-black font-semibold'
-                    : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white'
+                    : 'bg-[hsl(38,35%,18%)] text-zinc-400 hover:bg-[hsl(38,35%,22%)] hover:text-white'
                 }`}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}

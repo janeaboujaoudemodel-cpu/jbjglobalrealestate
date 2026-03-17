@@ -398,7 +398,7 @@ const BestIdeaAward = () => {
                           <Button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full bg-black text-gold hover:bg-zinc-900 border border-gold/30 py-6"
+                            className="w-full bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] text-gold hover:from-[hsl(38,35%,15%)] hover:to-[hsl(34,25%,15%)] border border-gold/30 py-6"
                           >
                             {isSubmitting ? (
                               <>Submitting...</>
