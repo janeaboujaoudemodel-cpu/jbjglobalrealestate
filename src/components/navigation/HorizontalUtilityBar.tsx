@@ -177,7 +177,7 @@ export default function HorizontalUtilityBar() {
                 className={`${cellBase} ${cellHover}`}
               >
                 <Key className="w-4 h-4 text-[hsl(var(--gold)/0.7)] group-hover:text-[hsl(var(--gold))] transition-colors shrink-0" />
-                <span className="text-[11px] font-semibold text-gold/70 group-hover:text-gold uppercase tracking-wide">Rent</span>
+                <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
               </Link>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Browse properties available for rent across the UAE</TooltipContent>
