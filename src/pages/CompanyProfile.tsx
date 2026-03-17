@@ -1073,7 +1073,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="differentiators" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Edge</span>
-          <h2 className="text-black text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
             Why JBJ
           </h2>
         </div>
