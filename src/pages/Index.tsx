@@ -393,7 +393,7 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* EXPLORE OUR SERVICES */}
-      <section className="py-8 md:py-12">
+      <section className="py-12 md:py-20">
         <div className="jj-layer-2">
           <Suspense fallback={<SectionLoader />}>
             <ExploreServicesCard />
