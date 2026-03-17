@@ -18,7 +18,7 @@ import Footer from "@/components/Footer";
 
 const GlobalVerticalNav = lazy(() => import("@/components/navigation/GlobalVerticalNav"));
 const HorizontalUtilityBar = lazy(() => import("@/components/navigation/HorizontalUtilityBar"));
-const GlobalFilterBar = lazy(() => import("@/components/navigation/GlobalFilterBar"));
+// GlobalFilterBar is now embedded inside HorizontalUtilityBar
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
 import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
