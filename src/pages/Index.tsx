@@ -411,7 +411,7 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* AI HOME FINDER — Premium 3D Section */}
-      <section className="flex items-center justify-center py-16 md:py-20 min-h-[340px] relative overflow-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <section className="flex items-center justify-center py-16 md:py-24 min-h-[340px] relative overflow-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/8 rounded-full blur-[120px]" />
           <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-gold/5 rounded-full blur-[80px]" />
