@@ -505,6 +505,9 @@ export default function HorizontalUtilityBar() {
           </Tooltip>
         </div>
         </div>
+          {/* Right scroll arrow */}
+          <ScrollArrow direction="right" scrollRef={row1ScrollRef} />
+        </div>
 
         {/* ── Subtle gold divider between rows ── */}
         <div className="h-px mx-4 bg-gradient-to-r from-transparent via-gold/20 to-transparent shrink-0" />
