@@ -1089,7 +1089,7 @@ const CompanyProfile = () => {
               <div className="jj-icon-box-active w-10 h-10">
                 <CheckCircle className="w-5 h-5" />
               </div>
-              <span className="text-black/80 text-sm">{item}</span>
+              <span className="text-white/80 text-sm">{item}</span>
             </motion.div>
           ))}
         </motion.div>
