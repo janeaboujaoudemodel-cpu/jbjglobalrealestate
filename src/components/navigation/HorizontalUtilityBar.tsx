@@ -6,8 +6,10 @@ import {
   Building2, Key, Tag, Bell, ClipboardList, Inbox, BarChart3,
   Shield, MapPin, Users, Sparkles, BookOpen, UserCircle,
   Crown, Headphones, FileUser, MessageSquare, SmilePlus,
+  ChevronLeft, ChevronRight,
 } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
@@ -121,11 +123,62 @@ export default function HorizontalUtilityBar() {
   /* Vertical divider inside rail — full height, gold */
   const railDivider = <div className="w-px h-full bg-[hsl(var(--gold)/0.3)] shrink-0" />;
 
+  const toggleSidebarFromHeader = () => {
+    const isCollapsed = document.body.classList.contains('jj-vertical-nav-collapsed');
+    if (isCollapsed) {
+      localStorage.setItem('jj_nav_collapsed', '0');
+      document.body.classList.remove('jj-vertical-nav-collapsed');
+      document.body.classList.add('jj-vertical-nav-active');
+    } else {
+      localStorage.setItem('jj_nav_collapsed', '1');
+      document.body.classList.remove('jj-vertical-nav-active');
+      document.body.classList.add('jj-vertical-nav-collapsed');
+    }
+    window.dispatchEvent(new CustomEvent('jj_nav_toggle'));
+  };
+
   return (
     <>
       <div
-        className="fixed top-0 left-[200px] right-0 h-[48px] z-[9998] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 border-b border-[hsl(var(--gold)/0.2)] bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] overflow-x-auto overflow-y-visible scrollbar-hide [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px]"
+        className="fixed top-0 left-0 right-0 h-[48px] z-[9998] flex items-stretch border-b border-[hsl(var(--gold)/0.2)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)]"
       >
+        {/* ── LEFT: Logo + Brand + Collapse — matches sidebar TOP champagne gold ── */}
+        <div
+          className={`flex-shrink-0 flex items-center gap-2 px-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-r border-[hsl(var(--gold)/0.2)] transition-all duration-300 ${sidebarCollapsed ? 'w-[48px] justify-center' : 'w-[200px]'}`}
+        >
+          <Link to="/" className="flex-shrink-0 group">
+            <img src={jbjMonogramLightBg} alt="JBJ" className={`object-contain transition-all ${sidebarCollapsed ? 'w-8 h-8' : 'w-10 h-10'}`} />
+          </Link>
+          {!sidebarCollapsed && (
+            <>
+              <Link to="/" className="flex flex-col flex-1 min-w-0 hover:opacity-90 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <span className="text-[11px] font-extrabold text-black/85 tracking-[0.13em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
+                <span className="text-[9px] font-bold text-black/50 tracking-[0.16em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
+              </Link>
+              <button
+                onClick={toggleSidebarFromHeader}
+                className="ml-auto w-6 h-6 rounded-md bg-black/5 hover:bg-black/10 flex items-center justify-center transition-all border border-black/10 flex-shrink-0"
+                aria-label="Collapse navigation"
+              >
+                <ChevronLeft className="w-3 h-3 text-black/60" />
+              </button>
+            </>
+          )}
+          {sidebarCollapsed && (
+            <button
+              onClick={toggleSidebarFromHeader}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-5 h-5 rounded-full bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] flex items-center justify-center shadow-md ring-1 ring-black/10 z-10 hover:scale-110 transition-transform"
+              aria-label="Expand navigation"
+            >
+              <ChevronRight className="w-3 h-3 text-black/60" />
+            </button>
+          )}
+        </div>
+
+        {/* ── RIGHT: Navigation controls — matches sidebar BODY darker shade ── */}
+        <div
+          className="flex-1 flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] overflow-x-auto overflow-y-visible scrollbar-hide"
+        >
 
         {/* ── Connected Segmented Rail — all controls in one block ── */}
         <div className="flex items-center h-8 shrink-0">
@@ -401,6 +454,7 @@ export default function HorizontalUtilityBar() {
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Manage your account, profile, and preferences</TooltipContent>
           </Tooltip>
+        </div>
         </div>
       </div>
 

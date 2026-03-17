@@ -1066,30 +1066,7 @@ export default function GlobalVerticalNav() {
 
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
-      {/* ━━━ HEADER — Champagne gold brand block ━━━ */}
-      <div className="relative flex-shrink-0 overflow-hidden h-[88px]">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" />
-        
-        <div className="relative px-3 h-full flex items-center">
-          <div className="flex items-center gap-3">
-            <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0 group">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain transition-all" />
-            </Link>
-            <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-90 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <span className="text-[12px] font-extrabold text-black/85 tracking-[0.15em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
-              <span className="text-[10px] font-bold text-black/50 tracking-[0.18em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
-            </Link>
-            <button
-              onClick={toggleCollapse}
-              className="ml-auto w-7 h-7 rounded-lg bg-black/5 hover:bg-black/10 flex items-center justify-center transition-all border border-black/10"
-              aria-label="Collapse navigation"
-            >
-              <ChevronLeft className="w-3.5 h-3.5 text-black/60" />
-            </button>
-          </div>
-        </div>
-        <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-      </div>
+      {/* ━━━ SCROLLABLE NAV — no header, logo is now in HorizontalUtilityBar ━━━ */}
 
       {/* ━━━ SCROLLABLE NAV ━━━ */}
       <nav
@@ -1278,19 +1255,8 @@ export default function GlobalVerticalNav() {
       >
       {collapsed ? (
       <div className="hidden lg:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative">
-          {/* Champagne header strip matching expanded header */}
-          <div className="w-full flex-shrink-0 relative">
-            <div className="absolute inset-0 bg-gradient-to-b from-[#F5EBD7] to-[#D4C4A8]" />
-            <div className="relative flex flex-col items-center py-3 gap-1">
-              <Link to="/" className="shrink-0 group">
-                <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain transition-all" />
-              </Link>
-            </div>
-            <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
-          </div>
-
-          {/* Section icons — light background area */}
-          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] w-full border-r border-gold/20">
+          {/* Section icons — darker body matching header center */}
+          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] w-full border-r border-gold/20">
             {SECTION_KEYS.map((sectionKey) => {
               if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
               if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
@@ -1379,7 +1345,7 @@ export default function GlobalVerticalNav() {
           </div>
         </div>
       ) : (
-        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/20 h-full relative overscroll-contain">
+        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] border-r border-gold/20 h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}
