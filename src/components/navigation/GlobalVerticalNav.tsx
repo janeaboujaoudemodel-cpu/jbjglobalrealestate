@@ -1133,7 +1133,7 @@ export default function GlobalVerticalNav() {
                 <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${getIconStyle(item)}`} />
                 <span className="flex-1">{item.label}</span>
                 {hasMega && (
-                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-gold/25"}`} />
+                  <ChevronRight className={`w-3 h-3 flex-shrink-0 transition-transform ${isMenuOpen ? "rotate-90 text-gold" : "text-black/25"}`} />
                 )}
                 {item.highlight && !isMenuOpen && !activeMegaMenu && !isRouteActive(item.href) && (
                   <Sparkles className="w-3 h-3 text-gold/40" />
