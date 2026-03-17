@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import {
   Search, Heart, Settings, LayoutDashboard,
   Ruler, SlidersHorizontal, PanelLeftClose, PanelLeftOpen,
@@ -9,7 +9,6 @@ import {
   ChevronLeft, ChevronRight,
 } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
@@ -22,7 +21,7 @@ import { useUserAlerts } from "@/hooks/useUserAlerts";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import GlobalBackButton from "@/components/navigation/GlobalBackButton";
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
-import { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
+import FilterShortcutBar, { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
 
 
 export default function HorizontalUtilityBar() {
