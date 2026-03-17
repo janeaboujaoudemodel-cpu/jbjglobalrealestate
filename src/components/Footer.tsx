@@ -144,7 +144,7 @@ const FooterCurrencyUnit = () => {
 
   return (
     <div className="flex items-center gap-3">
-      <p className="text-gold/60 text-[10px] uppercase tracking-wider whitespace-nowrap">Currency</p>
+      <p className="text-gold text-[10px] uppercase tracking-wider whitespace-nowrap">Currency</p>
       <div className="flex items-center gap-2">
         {/* Currency Dropdown */}
         <div className="relative">
