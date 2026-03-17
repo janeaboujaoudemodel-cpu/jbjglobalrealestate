@@ -1066,30 +1066,7 @@ export default function GlobalVerticalNav() {
 
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
-      {/* ━━━ HEADER — Champagne gold brand block ━━━ */}
-      <div className="relative flex-shrink-0 overflow-hidden h-[88px]">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" />
-        
-        <div className="relative px-3 h-full flex items-center">
-          <div className="flex items-center gap-3">
-            <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex-shrink-0 group">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain transition-all" />
-            </Link>
-            <Link to="/" onClick={() => setActiveMegaMenu(null)} onMouseEnter={() => { import("@/pages/Index"); }} className="flex flex-col flex-1 min-w-0 hover:opacity-90 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
-              <span className="text-[12px] font-extrabold text-black/85 tracking-[0.15em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
-              <span className="text-[10px] font-bold text-black/50 tracking-[0.18em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
-            </Link>
-            <button
-              onClick={toggleCollapse}
-              className="ml-auto w-7 h-7 rounded-lg bg-black/5 hover:bg-black/10 flex items-center justify-center transition-all border border-black/10"
-              aria-label="Collapse navigation"
-            >
-              <ChevronLeft className="w-3.5 h-3.5 text-black/60" />
-            </button>
-          </div>
-        </div>
-        <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-      </div>
+      {/* ━━━ SCROLLABLE NAV — no header, logo is now in HorizontalUtilityBar ━━━ */}
 
       {/* ━━━ SCROLLABLE NAV ━━━ */}
       <nav
