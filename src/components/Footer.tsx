@@ -490,11 +490,12 @@ const Footer = () => {
           <h2 
             className="relative text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-[0.08em] sm:tracking-[0.12em] md:tracking-[0.15em] lg:tracking-[0.18em] mb-2 sm:mb-3 md:mb-4 px-2 transition-all duration-500 hover:scale-[1.01]"
             style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #E8DCC8 40%, #D4AF37 60%, #FFFFFF 100%)',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #F5E6C8 25%, #D4AF37 50%, #C8A766 75%, #FFFFFF 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               textShadow: 'none',
               letterSpacing: '0.12em',
+              filter: 'drop-shadow(0 2px 4px rgba(200,167,102,0.4))',
             }}
           >
             JBJ GLOBAL REAL ESTATE
