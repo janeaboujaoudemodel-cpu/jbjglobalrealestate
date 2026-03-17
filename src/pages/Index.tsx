@@ -548,52 +548,68 @@ const Index = () => {
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <WhyDubaiCapitalSection />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <WhyDubaiCapitalSection />
+        </Suspense>
+      </div>
 
       <PodcastVisibilityGate>
         <SectionDivider fullWidth />
-        <Suspense fallback={<SectionLoader />}>
-          <JBJPodcastSection />
-        </Suspense>
+        <div className="cv-auto">
+          <Suspense fallback={<SectionLoader />}>
+            <JBJPodcastSection />
+          </Suspense>
+        </div>
       </PodcastVisibilityGate>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <BestIdeaAward />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <BestIdeaAward />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <WhyChooseUs />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <WhyChooseUs />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <AreasWeCover />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <AreasWeCover />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <TestimonialsSection />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <TestimonialsSection />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <StatsCounter />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <StatsCounter />
+        </Suspense>
+      </div>
 
       <SectionDivider fullWidth />
 
-      <Suspense fallback={<SectionLoader />}>
-        <SupportTicketBox />
-      </Suspense>
+      <div className="cv-auto">
+        <Suspense fallback={<SectionLoader />}>
+          <SupportTicketBox />
+        </Suspense>
+      </div>
 
       <Suspense fallback={null}>
         <InquiryFormModal 
