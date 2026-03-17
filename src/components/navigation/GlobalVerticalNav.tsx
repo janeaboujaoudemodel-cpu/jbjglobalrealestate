@@ -1084,7 +1084,7 @@ export default function GlobalVerticalNav() {
               className="ml-auto w-7 h-7 rounded-lg bg-black/5 hover:bg-black/10 flex items-center justify-center transition-all border border-black/10"
               aria-label="Collapse navigation"
             >
-              <ChevronLeft className="w-3.5 h-3.5 text-[hsl(var(--gold))]" />
+              <ChevronLeft className="w-3.5 h-3.5 text-black/60" />
             </button>
           </div>
         </div>
