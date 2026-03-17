@@ -680,7 +680,7 @@ const Footer = () => {
 
                 {/* Mode */}
                 <div className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20">
-                  <p className="text-gold/60 text-[10px] uppercase tracking-wider whitespace-nowrap">Mode</p>
+                  <p className="text-gold text-[10px] uppercase tracking-wider whitespace-nowrap">Mode</p>
                   <ModeSwitcher variant="header" showForUnselected={true} />
                 </div>
 
