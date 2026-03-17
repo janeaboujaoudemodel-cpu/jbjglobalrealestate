@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import {
   Search, Heart, Settings, LayoutDashboard,
   Ruler, SlidersHorizontal, PanelLeftClose, PanelLeftOpen,
@@ -9,7 +9,6 @@ import {
   ChevronLeft, ChevronRight,
 } from "lucide-react";
 import ModeSwitcher from "@/components/ModeSwitcher";
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
@@ -22,8 +21,53 @@ import { useUserAlerts } from "@/hooks/useUserAlerts";
 import GlobalSearchModal from "@/components/GlobalSearchModal";
 import GlobalBackButton from "@/components/navigation/GlobalBackButton";
 import AdvancedFilterPanel from "@/components/filters/AdvancedFilterPanel";
-import { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
+import FilterShortcutBar, { defaultShortcutFilters, type ShortcutFilterState } from "@/components/filters/FilterShortcutBar";
 
+
+/** Encode filter state into URLSearchParams */
+function encodeFiltersToURL(f: ShortcutFilterState): URLSearchParams {
+  const p = new URLSearchParams();
+  if (f.searchQuery) p.set("q", f.searchQuery);
+  if (f.priceMin) p.set("priceMin", f.priceMin);
+  if (f.priceMax) p.set("priceMax", f.priceMax);
+  if (f.bedrooms.length) p.set("bedrooms", f.bedrooms.join(","));
+  if (f.emirates.length) p.set("emirates", f.emirates.join(","));
+  if (f.areas.length) p.set("areas", f.areas.join(","));
+  if (f.developers.length) p.set("developers", f.developers.join(","));
+  if (f.propertyTypes.length) p.set("propertyTypes", f.propertyTypes.join(","));
+  if (f.statuses.length) p.set("statuses", f.statuses.join(","));
+  if (f.constructionStatuses.length) p.set("constructionStatuses", f.constructionStatuses.join(","));
+  if (f.sortBy) p.set("sortBy", f.sortBy);
+  if (f.hideSoldOut) p.set("hideSoldOut", "1");
+  if (f.sizeMin) p.set("sizeMin", f.sizeMin);
+  if (f.sizeMax) p.set("sizeMax", f.sizeMax);
+  if (f.views.length) p.set("views", f.views.join(","));
+  if (f.propertyCategory) p.set("category", f.propertyCategory);
+  return p;
+}
+
+/** Decode URLSearchParams into ShortcutFilterState */
+function decodeFiltersFromURL(p: URLSearchParams): ShortcutFilterState {
+  return {
+    ...defaultShortcutFilters,
+    searchQuery: p.get("q") || p.get("keyword") || p.get("search") || "",
+    priceMin: p.get("priceMin") || "",
+    priceMax: p.get("priceMax") || "",
+    bedrooms: p.get("bedrooms")?.split(",").filter(Boolean) || [],
+    emirates: p.get("emirates")?.split(",").filter(Boolean) || (p.get("emirate") ? [p.get("emirate")!] : []),
+    areas: p.get("areas")?.split(",").filter(Boolean) || (p.get("area") ? [p.get("area")!.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())] : []),
+    developers: p.get("developers")?.split(",").filter(Boolean) || [],
+    propertyTypes: p.get("propertyTypes")?.split(",").filter(Boolean) || [],
+    statuses: p.get("statuses")?.split(",").filter(Boolean) || (p.get("status") ? [p.get("status")!] : []),
+    constructionStatuses: p.get("constructionStatuses")?.split(",").filter(Boolean) || [],
+    sortBy: (p.get("sortBy") as ShortcutFilterState["sortBy"]) || null,
+    hideSoldOut: p.get("hideSoldOut") === "1",
+    sizeMin: p.get("sizeMin") || "",
+    sizeMax: p.get("sizeMax") || "",
+    views: p.get("views")?.split(",").filter(Boolean) || [],
+    propertyCategory: (p.get("category") as "residential" | "commercial") || null,
+  };
+}
 
 export default function HorizontalUtilityBar() {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -137,47 +181,47 @@ export default function HorizontalUtilityBar() {
     window.dispatchEvent(new CustomEvent('jj_nav_toggle'));
   };
 
+  // ── Filter bar state (merged from GlobalFilterBar) ──
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const isPropertyPage =
+    location.pathname === "/properties" ||
+    location.pathname === "/properties-reelly" ||
+    location.pathname.startsWith("/developer/");
+
+  const [globalFilters, setGlobalFilters] = useState<ShortcutFilterState>(() =>
+    isPropertyPage ? decodeFiltersFromURL(searchParams) : defaultShortcutFilters
+  );
+
+  useEffect(() => {
+    if (isPropertyPage) {
+      setGlobalFilters(decodeFiltersFromURL(searchParams));
+    } else {
+      setGlobalFilters(defaultShortcutFilters);
+    }
+  }, [location.pathname]);
+
+  const handleGlobalFilterChange = useCallback(
+    (next: ShortcutFilterState) => {
+      setGlobalFilters(next);
+      window.dispatchEvent(new CustomEvent("globalFilterChange", { detail: next }));
+      if (!isPropertyPage) {
+        const p = encodeFiltersToURL(next);
+        const qs = p.toString();
+        navigate(`/properties${qs ? `?${qs}` : ""}`);
+      }
+    },
+    [isPropertyPage, navigate]
+  );
+
   return (
     <>
       <div
-        className="fixed top-0 left-0 right-0 h-[48px] z-[9998] flex items-stretch border-b border-[hsl(var(--gold)/0.2)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)]"
+        className={`fixed top-0 right-0 h-[88px] z-[9998] flex flex-col border-b border-[hsl(var(--gold)/0.2)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)] bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] transition-all duration-300 [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]`}
       >
-        {/* ── LEFT: Logo + Brand + Collapse — matches sidebar TOP champagne gold ── */}
+        {/* ── ROW 1 (48px): Navigation controls ── */}
         <div
-          className={`flex-shrink-0 flex items-center gap-2 px-3 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-r border-[hsl(var(--gold)/0.2)] transition-all duration-300 ${sidebarCollapsed ? 'w-[48px] justify-center' : 'w-[200px]'}`}
-        >
-          <Link to="/" className="flex-shrink-0 group">
-            <img src={jbjMonogramLightBg} alt="JBJ" className={`object-contain transition-all ${sidebarCollapsed ? 'w-8 h-8' : 'w-10 h-10'}`} />
-          </Link>
-          {!sidebarCollapsed && (
-            <>
-              <Link to="/" className="flex flex-col flex-1 min-w-0 hover:opacity-90 transition-opacity" style={{ fontFamily: "Poppins, sans-serif" }}>
-                <span className="text-[11px] font-extrabold text-black/85 tracking-[0.13em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
-                <span className="text-[9px] font-bold text-black/50 tracking-[0.16em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
-              </Link>
-              <button
-                onClick={toggleSidebarFromHeader}
-                className="ml-auto w-6 h-6 rounded-md bg-black/5 hover:bg-black/10 flex items-center justify-center transition-all border border-black/10 flex-shrink-0"
-                aria-label="Collapse navigation"
-              >
-                <ChevronLeft className="w-3 h-3 text-black/60" />
-              </button>
-            </>
-          )}
-          {sidebarCollapsed && (
-            <button
-              onClick={toggleSidebarFromHeader}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-5 h-5 rounded-full bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] flex items-center justify-center shadow-md ring-1 ring-black/10 z-10 hover:scale-110 transition-transform"
-              aria-label="Expand navigation"
-            >
-              <ChevronRight className="w-3 h-3 text-black/60" />
-            </button>
-          )}
-        </div>
-
-        {/* ── RIGHT: Navigation controls — matches sidebar BODY darker shade ── */}
-        <div
-          className="flex-1 flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] overflow-x-auto overflow-y-visible scrollbar-hide"
+          className="h-[48px] flex items-center gap-2 px-2 sm:px-4 xl:px-5 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto overflow-y-visible scrollbar-hide shrink-0"
         >
 
         {/* ── Connected Segmented Rail — all controls in one block ── */}
@@ -455,6 +499,16 @@ export default function HorizontalUtilityBar() {
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Manage your account, profile, and preferences</TooltipContent>
           </Tooltip>
         </div>
+        </div>
+
+        {/* ── ROW 2 (40px): Filter Shortcut Bar — NO divider, same background ── */}
+        <div className="h-[40px] shrink-0 px-3 flex items-center">
+          <FilterShortcutBar
+            variant="light"
+            filters={globalFilters}
+            onFilterChange={handleGlobalFilterChange}
+            resultsLabel="Properties"
+          />
         </div>
       </div>
 
