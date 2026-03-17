@@ -1,90 +1,70 @@
-## SESSION CLOSURE — FINAL STATUS (March 2026)
 
-### 🔒 ALL SESSIONS CLOSED — SYSTEM FROZEN
 
----
+## SESSION 5 — Global Scroll Performance Optimization
 
-### Session Status
+### Current State Analysis
 
-| Session | Objective | Status | Production-Ready |
-|---------|-----------|--------|------------------|
-| 1 | CRM Full System Audit | ✅ CLOSED | Yes |
-| 2 | CRM Leads Security Hardening | ✅ CLOSED | Yes |
-| 3 | Encryption Hardening | ✅ CLOSED | Yes |
-| 4 | Lead Lifecycle Upgrade | ✅ CLOSED | Yes |
-| 5 | CRM Structure Upgrade | ✅ CLOSED | Yes |
-| 6 | Performance Optimization | ✅ CLOSED | Yes |
-| 7 | AI Intelligence + Workflow Automation | ✅ CLOSED | Yes |
-| 8 | Business/Legal Stamp Presets | ✅ CLOSED | Yes |
-| 9 | AI Generation Engine + Standard Preview | ✅ CLOSED | Yes |
-| 10 | Arc Text Engine Fixes | ✅ CLOSED | Yes |
-| 11 | Developer Portal Overhaul | ✅ CLOSED | Yes |
-| 12 | Developer Portal UX Enhancements | ✅ CLOSED | Yes |
-| 13 | Developer Portal Owner Controls | ✅ CLOSED | Yes |
-| 14 | Investor Portal Rebuild | ✅ CLOSED | Yes |
-| 15 | Broker Portal Enhancement | ✅ CLOSED | Yes |
-| 16 | Homepage CTA + Portal Navigation | ✅ CLOSED | Yes |
-| 17 | Email Hub Infrastructure | ✅ CLOSED | Yes |
-| 18 | Attachment System + Cross-Channel | ✅ CLOSED | Yes |
-| 19 | Identity & Security Hardening | ✅ CLOSED | Yes |
-| 20 | Security Infrastructure (Zero Trust) | ✅ CLOSED | Yes |
-| 21 | Developer Moderation Queue + Events | ✅ CLOSED | Yes |
-| 22 | Chat Systems (Team + Employee) | ✅ CLOSED | Yes |
+**Existing optimizations already in place:**
+- `scroll-behavior: smooth` in global CSS with `prefers-reduced-motion` fallback
+- `-webkit-overflow-scrolling: touch` on body
+- `will-change-transform` on marquee/ticker elements
+- Lazy loading with `Suspense` for below-fold sections on homepage
+- `requestIdleCallback` preloading of near-fold chunks
+- `once: true` on all `whileInView` animations (no re-triggering)
 
----
+**Performance bottlenecks identified:**
 
-### 🔒 Locked Baseline Systems (Do NOT modify without explicit instruction)
+1. **2,000+ framer-motion `whileInView` observers across 114 files** — Each creates an IntersectionObserver. On long pages like Index.tsx, dozens are active simultaneously, causing layout recalculations during scroll.
 
-1. **Stamp Generator** — 23 components + `stampOfficialTemplate.ts` + `stampTemplates.ts`
-2. **Email Hub** — `EmailClient.tsx` + 5 sub-panels + 4 edge functions
-3. **Attachment System** — `DocumentAttachmentPicker.tsx` + renderers
-4. **Chat Systems** — `TeamChat.tsx` + `EmployeeChatHub.tsx` + `useEmployeeChat.ts`
+2. **No CSS `content-visibility: auto`** — Offscreen sections are fully rendered and laid out, consuming GPU/paint resources during scroll even when invisible.
 
----
+3. **Large blur elements (`blur-[80px]`, `blur-[120px]`)** — Multiple sections have decorative blur orbs that trigger expensive GPU compositing layers on every repaint. These are NOT promoted to their own layers.
 
-### Route Map
+4. **Missing `transform-gpu` / `will-change` on fixed/sticky elements** — The sticky BrokerToolkitNavigation and other fixed headers lack GPU layer promotion, causing repaints during scroll.
 
-**Stamp Generator**
-- `/toolkit/stamp-generator` → Landing
-- `/toolkit/stamp-generator/projects` → Dashboard
-- `/toolkit/stamp-generator/new` → Wizard
-- `/toolkit/stamp-generator/:projectId/generate` → 3-Panel Studio
-- `/toolkit/stamp-generator/:projectId/export/:id` → Export
-- `/toolkit/stamp-generator/:projectId/gallery` → Gallery
-- `/toolkit/stamp-generator/history` → History
+5. **No passive scroll listeners declared in components** — `PageNavigation.tsx` adds scroll listener with `{ passive: true }` (good), but framer-motion's internal observers don't use passive.
 
-**Email Hub**
-- `/owner/email-client` → EmailClient
-- `/email-client` → EmailClient
+### Plan — Targeted Performance Fixes
 
-**Chat Systems**
-- `/owner/team-chat` → TeamChat
-- `/team-chat` → TeamChat
-- `/employee-chat` → EmployeeChatPage
+#### Fix 1: Add `content-visibility: auto` to offscreen sections
+**File: `src/index.css`**
+Add a utility class `.cv-auto` that applies `content-visibility: auto; contain-intrinsic-size: auto 500px;` — this tells the browser to skip rendering offscreen sections entirely, dramatically reducing paint and layout costs during scroll.
 
-**Developer Portal**
-- `/developer-portal` → DeveloperPortal
+#### Fix 2: GPU-promote blur orbs and decorative layers
+**File: `src/index.css`**
+Add a global rule for elements with large `blur-` classes to use `transform: translateZ(0)` (GPU layer promotion), preventing blur recalculation during scroll compositing.
 
-**Investor Hub**
-- `/investor-hub` → InvestorHub
+#### Fix 3: Add `transform-gpu` to sticky/fixed navigation elements
+**Files:**
+- `src/components/broker-toolkit/BrokerToolkitNavigation.tsx` — add `transform-gpu` to sticky nav
+- `src/components/PageNavigation.tsx` — add `transform-gpu` to the fixed floating button
 
-**Broker Hub**
-- `/broker-hub` → BrokerHub
-- `/broker-portal` → BrokerPortal
-- `/broker-dashboard` → BrokerDashboard
+#### Fix 4: Apply `content-visibility: auto` to homepage lazy sections
+**File: `src/pages/Index.tsx`**
+Wrap each `<Suspense>` block's parent `<section>` / `<div>` with the `.cv-auto` class. This means the browser skips layout/paint for sections far below the viewport.
 
-**Security & Audit**
-- `/owner/zero-trust-audit` → ZeroTrustAuditPanel
-- `/owner/global-audit` → GlobalAuditDashboard
-- `/owner/incident-readiness` → IncidentReadinessPanel
-- `/owner/encryption-audit` → EncryptionAuditDashboard
-- `/owner/api-security` → APISecurityDashboard
-- `/owner/crm-security` → CRMSecurityDashboard
+#### Fix 5: Optimize framer-motion `viewport.margin` for early trigger
+**Multiple files** — Ensure all `whileInView` animations use `margin: "-100px"` so animations trigger early (before the element is visible), preventing visible "pop-in" during fast scrolling. Currently, many use `-50px` or no margin.
 
-**Owner Moderation**
-- `/owner/developer-moderation` → DeveloperModerationQueue
-- `/owner/events` → EventManagementHub
+### Files Modified
+1. `src/index.css` — Add `.cv-auto` utility class + blur GPU promotion rule (~10 lines)
+2. `src/pages/Index.tsx` — Add `cv-auto` class to ~15 section wrappers
+3. `src/components/broker-toolkit/BrokerToolkitNavigation.tsx` — Add `transform-gpu`
+4. `src/components/PageNavigation.tsx` — Add `transform-gpu` to fixed container
 
----
+### NOT Changing
+- Individual component animation variants (too many files, all use `once: true` which is correct)
+- Scroll utility functions in `src/lib/scroll.ts` (already optimized)
+- Lazy loading strategy (already well-structured)
 
-### System Readiness: ✅ READY FOR NEXT DEVELOPMENT TASKS
+### Route
+- `/` (Homepage — primary beneficiary)
+- All pages benefit from the CSS-level fixes
+
+### Testing Steps
+1. Open homepage on desktop, scroll through all sections — verify no jank
+2. Open DevTools Performance tab, record a full-page scroll — verify no long tasks > 50ms
+3. Test on mobile viewport (375px) — verify smooth touch scrolling
+4. Test on tablet viewport (768px) — verify smooth scrolling
+5. Verify animations still trigger correctly with `content-visibility: auto`
+
