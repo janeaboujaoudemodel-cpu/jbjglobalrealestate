@@ -413,9 +413,9 @@ const Index = () => {
       {/* AI HOME FINDER — Premium 3D Section */}
       <section className="flex items-center justify-center py-16 md:py-24 min-h-[340px] relative overflow-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/8 rounded-full blur-[120px]" />
-          <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-gold/5 rounded-full blur-[80px]" />
-          <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-gold/5 rounded-full blur-[80px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/4 rounded-full blur-[120px]" />
+          <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-gold/3 rounded-full blur-[80px]" />
+          <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-gold/3 rounded-full blur-[80px]" />
           <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(hsl(var(--gold) / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--gold) / 0.3) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
         </div>
         
@@ -437,7 +437,7 @@ const Index = () => {
               
               {/* Card with premium 3D glassmorphism */}
               <div 
-                className="relative z-10 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/60 transition-all duration-300 hover:shadow-[0_0_80px_hsl(var(--gold)_/_0.3)]"
+                className="relative z-10 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/60 transition-all duration-300 hover:shadow-[0_0_80px_hsl(var(--gold)_/_0.3)]"
                 style={{
                   boxShadow: '0 0 60px hsl(var(--gold) / 0.25), 0 0 120px hsl(var(--gold) / 0.1), 0 30px 80px rgba(0,0,0,0.5), 0 4px 20px rgba(200,167,102,0.15), inset 0 1px 0 hsl(var(--gold) / 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
                   transform: 'translateZ(20px)',
