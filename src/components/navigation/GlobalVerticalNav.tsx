@@ -118,7 +118,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "PDF Editor", href: "/toolkit/pdf-editor", icon: FileText },
 
   // ── AI Tools (merged into TOOLS section) ──
-  { label: "AI Tools Hub", href: "/ai-hub", icon: Cpu, section: "TOOLS", megaMenu: 'ai-tools' },
   { label: "AI Personal Shopper", href: "/ai-personal-shopper", icon: Store },
   { label: "AI Investment Report", href: "/ai-investment-report", icon: TrendingUp },
   { label: "Voice Agent Settings", href: "/voice-settings", icon: Mic },
