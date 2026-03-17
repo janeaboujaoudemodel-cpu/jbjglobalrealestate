@@ -811,17 +811,17 @@ export default function GlobalVerticalNav() {
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
-        ? "bg-gold/20 text-gold border border-gold/40 font-bold"
-        : "text-gold/80 font-semibold hover:bg-gold/10 border border-gold/20";
+        ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40 font-bold"
+        : "text-black/80 font-semibold hover:bg-gold/10 border border-black/10";
     }
     if (item.highlight) {
       return shouldHighlight
-        ? "bg-gold/20 text-gold border border-gold/50 font-bold"
-        : "text-gold font-semibold hover:bg-gold/10 border border-gold/20";
+        ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/50 font-bold"
+        : "text-black/80 font-semibold hover:bg-gold/10 border border-black/10";
     }
     return shouldHighlight
-      ? "bg-gold/20 text-gold border border-gold/40 font-bold"
-      : "text-gold/80 hover:bg-gold/[0.06] hover:text-gold border border-gold/15 hover:border-gold/30";
+      ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40 font-bold"
+      : "text-black/80 hover:bg-gold/[0.08] hover:text-black border border-black/10 hover:border-gold/30";
   };
 
   const getIconStyle = (item: NavItem, sectionKey?: string) => {
