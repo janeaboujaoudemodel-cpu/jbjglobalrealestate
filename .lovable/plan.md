@@ -1,46 +1,30 @@
 
 
-# Fix CRM Shortcut Not Visible in Header
+# Fix CRM Shortcut Visibility in Header
 
 ## Problem
-The CRM shortcut (lines 416-431) is nested inside the `{user && (...)}` block (line 413). Since `showCRM` already includes a `!!user` check, the outer `{user && (...)}` gate is redundant but causes the CRM to not render when `user` hasn't resolved yet from the auth context.
-
-More importantly, the CRM block needs to be moved **outside** the `{user && (...)}` wrapper so it renders independently based on its own `showCRM` condition.
+The `showCRM` variable uses conditional logic (`!user || isOwner || mode === 'broker' || mode === 'investor_broker'`) that fails when a user IS logged in but hasn't been assigned owner/broker roles. The CRM shortcut should always be visible in the header for discoverability — the access gate at `/owner/crm` (BrokerCRMAccessGate) already handles permission checking.
 
 ## Fix
 
 ### File: `src/components/navigation/HorizontalUtilityBar.tsx`
 
-Move the CRM shortcut block **before** the `{user && (...)}` block so it's independently gated by `showCRM`:
+**Change 1** — Line 186: Hardcode `showCRM = true` so the CRM icon is always visible in the header rail regardless of auth state or role.
 
 ```tsx
-{/* CRM shortcut (owner/broker only) — outside user gate since showCRM already checks user */}
-{showCRM && (
-  <>
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Link to="/owner/crm" className={`${cellBase} hover:bg-emerald-500/10`}>
-          <BarChart3 className="w-4 h-4 text-emerald-600 ..." />
-          <span className="...">CRM</span>
-        </Link>
-      </TooltipTrigger>
-      <TooltipContent ...>...</TooltipContent>
-    </Tooltip>
-    {railDivider}
-  </>
-)}
+// Before
+const showCRM = !user || isOwner || mode === 'broker' || mode === 'investor_broker';
 
-{user && (
-  <>
-    {/* Tasks, Notifications, Inbox stay here */}
-  </>
-)}
+// After
+const showCRM = true;
 ```
 
-Lines 413-432 restructured: extract the CRM `{showCRM && (...)}` block (lines 416-431) to sit before line 413's `{user && (`, and remove the now-empty leading position inside the user block.
+This is safe because the CRM page itself has `BrokerCRMAccessGate` which checks permissions on navigation. The header shortcut is just a link — it should always be discoverable.
 
 ## What stays the same
-- All other buttons (Tasks, Notifications, Inbox, Dashboard, ModeSwitcher, Settings)
-- All icons, tooltips, badges, links, conditional logic
-- `showCRM` definition unchanged — already includes `!!user` check
+- All other buttons, icons, tooltips, badges, links
+- CRM icon styling, tooltip text, link destination (`/owner/crm`)
+- BrokerCRMAccessGate still enforces actual access control
+- ModeSwitcher with `showForUnselected` prop
+- Right rail structure and layout
 
