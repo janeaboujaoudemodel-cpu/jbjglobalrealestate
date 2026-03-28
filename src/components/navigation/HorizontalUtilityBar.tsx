@@ -252,7 +252,7 @@ export default function HorizontalUtilityBar() {
           <ScrollArrow direction="left" scrollRef={row1ScrollRef} />
           <div
             ref={row1ScrollRef}
-            className="flex-1 h-full flex items-center gap-2 px-3 sm:px-5 xl:px-6 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto overflow-y-visible scrollbar-hide"
+            className="flex-1 min-w-0 h-full flex items-center gap-2 px-3 sm:px-5 xl:px-6 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto overflow-y-visible scrollbar-hide"
             style={{ overscrollBehaviorX: 'contain', touchAction: 'pan-x' }}
           >
 
