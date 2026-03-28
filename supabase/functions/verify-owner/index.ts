@@ -95,7 +95,6 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         isOwner: false,
-        email: user.email,
         reason: "email_mismatch",
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
