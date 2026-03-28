@@ -13,7 +13,7 @@ interface BrandedLoaderProps {
  * variant='light': light background → dark monogram
  */
 export function BrandedLoader({ text = "Loading...", className = "", variant = "dark" }: BrandedLoaderProps) {
-  const logo = variant === 'light' ? jbjMonogramDarkOnLight : jbjMonogramLightOnDark;
+  const logo = variant === 'light' ? jbjMonogramNobuffer : jbjMonogramLightTransparent;
   
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen gap-6 ${className}`}>
