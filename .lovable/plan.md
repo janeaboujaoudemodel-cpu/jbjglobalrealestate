@@ -1,41 +1,41 @@
 
 
-# Fix Logo Backgrounds and Homepage Hero Overlap
+# Fix Logo White Background and Hero Overlap
 
-## Problems Identified
+## Problem
+1. **GuidedTour modal** (the "Welcome" screen visible on load) uses `JJLogoImage variant="light"` which renders `jbj-monogram-light-bg.png` — an asset with a visible background box on a white modal.
+2. **JJLogoImage component** uses `jbjMonogramLightBg` for `variant="light"`, which has a solid background. Should use `jbjMonogramNobuffer` (dark letters, transparent background) instead.
+3. **BrandIntroSplash** and **AlertsDemo** use `jbj-monogram-light-on-dark.png` which may also carry a background — should use `jbjMonogramLightTransparent` for consistency.
 
-1. **White/solid background behind logos**: The image file `jbj-monogram-dark-bg.png` has a visible solid background box. It is used in 6+ components, making the logo appear on a white or dark square instead of blending into the page.
+## Changes
 
-2. **Homepage hero unreadable**: The fallback screen (logo + tagline) renders at z-index 1 and never fully disappears — it bleeds through under the gradient overlays, stacking on top of the hero text content at z-index 10, making everything unreadable.
+### 1. Fix JJLogoImage — swap light variant to transparent asset
+**File**: `src/components/JJLogoImage.tsx`
+- Change `variant === 'light'` to use `jbjMonogramNobuffer` instead of `jbjMonogramLightBg`
+- Import `jbjMonogramNobuffer` instead of `jbjMonogramLightBg`
+- Also update `JJLogoTransparent` component which uses `jbjMonogramLightBg`
 
-## Plan
+### 2. Fix BrandIntroSplash — use transparent asset
+**File**: `src/components/BrandIntroSplash.tsx`
+- Replace `jbjMonogramLightOnDark` import with `jbjMonogramLightTransparent`
 
-### 1. Replace all `jbj-monogram-dark-bg.png` with transparent variants
-Every file using `jbjMonogramDarkBg` will switch to the correct transparent logo:
-- **Dark surfaces** (modals on dark bg, video players, dark pages): use `jbj-monogram-light-transparent.png` (light/gold letters, transparent background)
-- **Light surfaces** (walkthrough modal with white bg): use `jbj-monogram-nobuffer.png` (dark letters, transparent background)
+### 3. Fix AlertsDemo — use transparent asset
+**File**: `src/pages/AlertsDemo.tsx`
+- Replace `jbjMonogramLightOnDark` import with `jbjMonogramLightTransparent`
 
-Files to update:
-- `src/components/ActionGateModal.tsx` — switch to `jbjMonogramLightTransparent`
-- `src/components/WelcomeModal.tsx` — switch to `jbjMonogramLightTransparent`
-- `src/components/YouTubeVideoPlayer.tsx` — switch to `jbjMonogramLightTransparent`
-- `src/components/broker-toolkit/BrokerToolkitReferral.tsx` — switch to `jbjMonogramLightTransparent`
-- `src/pages/ComingSoon.tsx` — switch to `jbjMonogramLightTransparent`
-- `src/pages/News.tsx` — switch to `jbjMonogramLightTransparent`
-- `src/components/JJLogoImage.tsx` — switch dark variant to `jbjMonogramLightTransparent`
-- `src/components/GlobalHeader.tsx` line 1088 (walkthrough modal, light bg) — switch to `jbjMonogramNobuffer`
-
-### 2. Fix homepage hero fallback overlapping content
-In `src/pages/Index.tsx`, the fallback screen (lines 166-199) must be fully hidden once the video loads, and must not visually overlap with the hero text content:
-- Add `visibility: hidden` when `videoLoaded` is true (not just `opacity: 0`) so it cannot bleed through
-- Add `pointer-events: none` to prevent interaction blocking
-- Ensure the fallback container has a lower z-index than the gradient overlay so it never shows through
-
-### 3. Remove unused `jbjMonogramDarkBg` import from GlobalHeader
-The import at line 40 is no longer needed after these changes — clean it up to avoid confusion.
+### 4. Fix BrandedLoader — use transparent assets
+**File**: `src/components/ui/BrandedLoader.tsx`
+- Replace `jbjMonogramDarkOnLight` with `jbjMonogramNobuffer` (for light backgrounds)
+- Replace `jbjMonogramLightOnDark` with `jbjMonogramLightTransparent` (for dark backgrounds)
 
 ## What stays the same
-- All visual design, layout, colors, and UX remain identical
-- The transparent logo variants are the same monogram design, just without the background box
-- The hero content, animations, and video behavior are unchanged
+- All layout, animations, UX, and design remain identical
+- Only the PNG asset references change to transparent variants
+- The monogram design itself is the same, just without background boxes
+
+## Technical Details
+Asset mapping:
+- `jbj-monogram-light-bg.png` → `jbj-monogram-nobuffer.png` (dark letters, transparent bg, for light surfaces)
+- `jbj-monogram-light-on-dark.png` → `jbj-monogram-light-transparent.png` (light letters, transparent bg, for dark surfaces)
+- `jbj-monogram-dark-on-light.png` → `jbj-monogram-nobuffer.png` (dark letters, transparent bg, for light surfaces)
 
