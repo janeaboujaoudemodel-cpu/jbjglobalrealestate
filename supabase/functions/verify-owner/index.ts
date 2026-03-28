@@ -86,7 +86,7 @@ serve(async (req) => {
     const envOwnerEmail = Deno.env.get("OWNER_EMAIL");
     if (envOwnerEmail && user.email?.toLowerCase() === envOwnerEmail.toLowerCase()) {
       return new Response(
-        JSON.stringify({ isOwner: true, email: user.email, source: "env_fallback" }),
+        JSON.stringify({ isOwner: true, source: "env_fallback" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
