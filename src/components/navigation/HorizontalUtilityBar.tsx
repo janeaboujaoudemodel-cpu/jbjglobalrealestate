@@ -182,8 +182,8 @@ export default function HorizontalUtilityBar() {
 
   
 
-  // Determine if user has CRM access (owner or broker)
-  const showCRM = !!user && (isOwner || mode === 'broker' || mode === 'investor_broker');
+  // Determine if user has CRM access (owner or broker) — always show in header for discoverability
+  const showCRM = !user || isOwner || mode === 'broker' || mode === 'investor_broker';
 
   /* ─── Shared styles for connected segmented cells ─── */
   const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0 outline-none focus:outline-none focus-visible:outline-none [&:focus]:outline-none";
@@ -278,7 +278,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] text-[hsl(var(--foreground)/0.4)] font-medium hidden xl:inline">⌘K</span>
               </button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Search properties, developers, areas, and more (⌘K)</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Search properties, developers, areas, and more (⌘K)</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -294,7 +294,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Buy</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Browse off-plan and ready properties for sale in the UAE</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Browse off-plan and ready properties for sale in the UAE</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -309,7 +309,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Rent</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Browse properties available for rent across the UAE</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Browse properties available for rent across the UAE</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -324,7 +324,7 @@ export default function HorizontalUtilityBar() {
                 <span className="text-[11px] font-semibold text-black/60 group-hover:text-black/80 uppercase tracking-wide">Sell</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">List your property for sale or rent on JBJ Global</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">List your property for sale or rent on JBJ Global</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -340,7 +340,7 @@ export default function HorizontalUtilityBar() {
                 <Heart className="w-4 h-4 text-red-500 group-hover:text-red-600 group-hover:scale-110 transition-transform shrink-0" />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">View your saved and shortlisted properties</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">View your saved and shortlisted properties</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -362,7 +362,7 @@ export default function HorizontalUtilityBar() {
                 </span>
               </button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">
               Toggle between Square Feet and Square Meters for property sizes
             </TooltipContent>
           </Tooltip>
@@ -374,7 +374,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1.5`}><LanguageSwitcher variant="icon-only" /></div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your preferred language for the platform</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Select your preferred language for the platform</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -384,7 +384,7 @@ export default function HorizontalUtilityBar() {
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1.5`}><CurrencySwitcher variant="icon-only" /></div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your preferred currency for property prices</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Select your preferred currency for property prices</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -401,7 +401,7 @@ export default function HorizontalUtilityBar() {
                 <span className={labelClass}>Filter</span>
               </button>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open advanced property filters — price, bedrooms, type, handover, and more</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Open advanced property filters — price, bedrooms, type, handover, and more</TooltipContent>
           </Tooltip>
         </div>
         </div>
@@ -423,7 +423,7 @@ export default function HorizontalUtilityBar() {
                     <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline whitespace-nowrap">CRM</span>
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Access your Customer Relationship Management dashboard</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Access your Customer Relationship Management dashboard</TooltipContent>
               </Tooltip>
               {railDivider}
             </>
@@ -447,7 +447,7 @@ export default function HorizontalUtilityBar() {
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">View and manage your pending action items</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">View and manage your pending action items</TooltipContent>
               </Tooltip>
 
               {railDivider}
@@ -467,7 +467,7 @@ export default function HorizontalUtilityBar() {
                     )}
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">{`View your unread notifications and updates${(alerts?.totalNotificationAlerts || 0) > 0 ? ` (${alerts!.totalNotificationAlerts})` : ''}`}</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">{`View your unread notifications and updates${(alerts?.totalNotificationAlerts || 0) > 0 ? ` (${alerts!.totalNotificationAlerts})` : ''}`}</TooltipContent>
               </Tooltip>
 
               {railDivider}
@@ -482,7 +482,7 @@ export default function HorizontalUtilityBar() {
                      <Inbox className={iconClass} />
                   </Link>
                 </TooltipTrigger>
-                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open your direct messages and correspondence</TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Open your direct messages and correspondence</TooltipContent>
               </Tooltip>
 
               {railDivider}
@@ -500,7 +500,7 @@ export default function HorizontalUtilityBar() {
                 <LayoutDashboard className={iconClass} />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Access your personalized dashboard with analytics and activity</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Access your personalized dashboard with analytics and activity</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -512,7 +512,7 @@ export default function HorizontalUtilityBar() {
                 <ModeSwitcher variant="header" showForUnselected />
               </div>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your mode based on your role</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Select your mode based on your role</TooltipContent>
           </Tooltip>
 
           {railDivider}
@@ -528,7 +528,7 @@ export default function HorizontalUtilityBar() {
                 <Settings className={iconClass} />
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Manage your account, profile, and preferences</TooltipContent>
+            <TooltipContent side="bottom" sideOffset={8} className="max-w-[200px] whitespace-normal text-center text-[hsl(var(--gold))] text-xs z-[10100]">Manage your account, profile, and preferences</TooltipContent>
           </Tooltip>
         </div>
         </div>
