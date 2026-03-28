@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
-import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 import { CONTACT_INFO } from "@/constants/stats";
 
 // Chunk imports — stored so we can preload them all after hero renders
@@ -162,42 +162,38 @@ const Index = () => {
       <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
         {/* Video Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
-          {/* Branded fallback — renders instantly, no network needed */}
-          <div 
-            className="absolute inset-0 z-[1] flex flex-col items-center justify-center"
-            style={{ 
-              opacity: videoLoaded ? 0 : 1, 
-              visibility: videoLoaded ? 'hidden' : 'visible',
-              transition: 'opacity 0.8s ease-in-out, visibility 0s linear 0.8s',
-              pointerEvents: 'none',
-            }}
-          >
-            {/* Gold accent orbs */}
-            <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px]" />
-            <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-gold/8 rounded-full blur-[120px]" />
-            
-            {/* Logo */}
-            <img 
-              src={jbjFullLogoLight} 
-              alt="JBJ Global Real Estate" 
-              className="w-36 h-auto md:w-52 object-contain"
-              style={{ 
-                filter: 'drop-shadow(0 0 32px rgba(200,167,102,0.4))',
-                animation: 'heroFallbackPulse 2.5s ease-in-out infinite',
-              }}
-            />
-            
-            {/* Tagline */}
-            <p 
-              className="mt-6 text-gold/70 text-sm md:text-base tracking-[0.25em] uppercase text-center px-6"
-              style={{ fontFamily: 'Poppins, sans-serif' }}
+          {/* Branded fallback — renders instantly, unmounts after video loads */}
+          {!videoLoaded && (
+            <div 
+              className="absolute inset-0 z-[1] flex flex-col items-center justify-center pointer-events-none"
             >
-              Your Gateway to Dubai's Finest Real Estate
-            </p>
-            
-            {/* Loading shimmer line */}
-            <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
-          </div>
+              {/* Gold accent orbs */}
+              <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px]" />
+              <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-gold/8 rounded-full blur-[120px]" />
+              
+              {/* Logo — transparent monogram, no background */}
+              <img 
+                src={jbjMonogramLightTransparent} 
+                alt="JBJ Global Real Estate" 
+                className="w-36 h-auto md:w-52 object-contain bg-transparent"
+                style={{ 
+                  filter: 'drop-shadow(0 0 32px rgba(200,167,102,0.4))',
+                  animation: 'heroFallbackPulse 2.5s ease-in-out infinite',
+                }}
+              />
+              
+              {/* Tagline */}
+              <p 
+                className="mt-6 text-gold/70 text-sm md:text-base tracking-[0.25em] uppercase text-center px-6"
+                style={{ fontFamily: 'Poppins, sans-serif' }}
+              >
+                Your Gateway to Dubai's Finest Real Estate
+              </p>
+              
+              {/* Loading shimmer line */}
+              <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
+            </div>
+          )}
 
           <video 
             autoPlay loop muted playsInline
