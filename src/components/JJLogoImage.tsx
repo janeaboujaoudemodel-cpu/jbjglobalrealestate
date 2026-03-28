@@ -2,7 +2,7 @@
 // This component is DEPRECATED - Use JBJLogo.tsx instead
 // Keeping for backward compatibility - all imports redirect to JBJ assets
 
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // White J's - for dark backgrounds
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png"; // White J's - transparent bg
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png"; // Black J's - for light backgrounds
 import jbjFullLogoDark from "@/assets/jbj-fulllogo-dark.png";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
