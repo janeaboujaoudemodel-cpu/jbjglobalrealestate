@@ -61,7 +61,7 @@ serve(async (req) => {
 
     if (hasOwnerRole) {
       return new Response(
-        JSON.stringify({ isOwner: true, email: user.email, source: "user_roles" }),
+        JSON.stringify({ isOwner: true, source: "user_roles" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -77,7 +77,7 @@ serve(async (req) => {
 
     if (dbOwnerEmail && user.email?.toLowerCase() === dbOwnerEmail.toLowerCase()) {
       return new Response(
-        JSON.stringify({ isOwner: true, email: user.email, source: "app_settings" }),
+        JSON.stringify({ isOwner: true, source: "app_settings" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -86,7 +86,7 @@ serve(async (req) => {
     const envOwnerEmail = Deno.env.get("OWNER_EMAIL");
     if (envOwnerEmail && user.email?.toLowerCase() === envOwnerEmail.toLowerCase()) {
       return new Response(
-        JSON.stringify({ isOwner: true, email: user.email, source: "env_fallback" }),
+        JSON.stringify({ isOwner: true, source: "env_fallback" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -95,7 +95,6 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         isOwner: false,
-        email: user.email,
         reason: "email_mismatch",
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
