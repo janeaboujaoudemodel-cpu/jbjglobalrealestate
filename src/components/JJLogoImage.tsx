@@ -3,7 +3,7 @@
 // Keeping for backward compatibility - all imports redirect to JBJ assets
 
 import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png"; // White J's - transparent bg
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png"; // Black J's - for light backgrounds
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png"; // Black J's - transparent bg for light backgrounds
 import jbjFullLogoDark from "@/assets/jbj-fulllogo-dark.png";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 
