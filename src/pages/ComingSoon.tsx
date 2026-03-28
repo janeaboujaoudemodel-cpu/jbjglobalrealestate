@@ -69,7 +69,7 @@ const ComingSoon = () => {
             className="mb-10"
           >
             <img 
-              src={jbjMonogramDarkBg}
+              src={jbjMonogramLightTransparent}
               alt="JBJ" 
               className="h-32 md:h-44 lg:h-56 w-auto mx-auto"
             />

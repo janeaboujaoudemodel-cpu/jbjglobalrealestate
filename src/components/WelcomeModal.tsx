@@ -105,7 +105,7 @@ const WelcomeModal = () => {
             {/* Transparent Logo - Larger and Centered */}
             <div className="flex justify-center mb-6">
               <img 
-                src={jbjMonogramDarkBg} 
+                src={jbjMonogramLightTransparent} 
                 alt="JBJ Global Real Estate" 
                 className="h-36 md:h-44 w-auto object-contain"
               />
