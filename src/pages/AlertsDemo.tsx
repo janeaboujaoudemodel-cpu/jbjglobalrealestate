@@ -43,7 +43,7 @@ export default function AlertsDemo() {
           <div className="absolute inset-0 bg-black flex flex-col items-center justify-center">
             <div className="animate-in zoom-in-50 fade-in duration-700">
               <img
-                src={jbjMonogramLightOnDark}
+                src={jbjMonogramLightTransparent}
                 alt="JBJ Global Real Estate"
                 className="w-28 h-28 object-contain"
                 style={{ filter: "drop-shadow(0 0 40px rgba(200,167,102,0.5))", animation: "splashPulse 2s ease-in-out infinite" }}
