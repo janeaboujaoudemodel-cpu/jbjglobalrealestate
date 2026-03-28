@@ -77,7 +77,7 @@ serve(async (req) => {
 
     if (dbOwnerEmail && user.email?.toLowerCase() === dbOwnerEmail.toLowerCase()) {
       return new Response(
-        JSON.stringify({ isOwner: true, email: user.email, source: "app_settings" }),
+        JSON.stringify({ isOwner: true, source: "app_settings" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
