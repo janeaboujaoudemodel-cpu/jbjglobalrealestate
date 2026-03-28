@@ -509,7 +509,7 @@ export default function HorizontalUtilityBar() {
           <Tooltip>
             <TooltipTrigger asChild>
               <div className={`${cellBase} ${cellHover} px-1`}>
-                <ModeSwitcher variant="header" />
+                <ModeSwitcher variant="header" showForUnselected />
               </div>
             </TooltipTrigger>
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Select your mode based on your role</TooltipContent>
