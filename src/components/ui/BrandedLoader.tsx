@@ -1,5 +1,5 @@
-import jbjMonogramDarkOnLight from "@/assets/jbj-monogram-dark-on-light.png";
-import jbjMonogramLightOnDark from "@/assets/jbj-monogram-light-on-dark.png";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 interface BrandedLoaderProps {
   text?: string;
