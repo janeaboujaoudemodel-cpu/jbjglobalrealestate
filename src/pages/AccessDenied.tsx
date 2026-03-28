@@ -85,11 +85,10 @@ const AccessDenied = () => {
           This is an Owner-only system. The page you are trying to access is restricted.
         </p>
 
-        {/* User Info */}
-        {user?.email && (
+        {/* User status — email hidden for security */}
+        {user && (
           <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 mb-6">
-            <p className="text-zinc-500 text-sm mb-1">Signed in as</p>
-            <p className="text-white font-medium">{user.email}</p>
+            <p className="text-zinc-400 text-sm">You are signed in but do not have access to this page.</p>
           </div>
         )}
 

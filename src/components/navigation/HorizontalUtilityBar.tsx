@@ -182,8 +182,8 @@ export default function HorizontalUtilityBar() {
 
   
 
-  // Determine if user has CRM access (owner or broker) — always show in header for discoverability
-  const showCRM = true;
+  // Show CRM shortcut only for users with relevant roles
+  const showCRM = !!user && (isOwner || mode === 'broker' || mode === 'investor_broker');
 
   /* ─── Shared styles for connected segmented cells ─── */
   const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0 outline-none focus:outline-none focus-visible:outline-none [&:focus]:outline-none";
