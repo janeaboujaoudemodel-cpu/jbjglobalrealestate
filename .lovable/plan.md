@@ -1,45 +1,46 @@
 
 
-# Fix CRM and Mode Switcher Not Showing in Header
+# Fix CRM Shortcut Not Visible in Header
 
-## Root Cause
+## Problem
+The CRM shortcut (lines 416-431) is nested inside the `{user && (...)}` block (line 413). Since `showCRM` already includes a `!!user` check, the outer `{user && (...)}` gate is redundant but causes the CRM to not render when `user` hasn't resolved yet from the auth context.
 
-Two separate gating issues prevent these buttons from rendering:
-
-1. **ModeSwitcher** (line 512): The component internally checks `hasSelectedRole` from `useUserRole()` and returns `null` if the user hasn't completed role selection. The header already passes no `showForUnselected` prop, so it defaults to `false`.
-
-2. **CRM + Tasks + Notifications + Inbox** (lines 413-489): All wrapped in `{user && (...)}` — if `user` is null (not yet loaded or in preview), none render. The `showCRM` logic itself is correct (`isOwner || broker || investor_broker`), but the outer `user` gate blocks everything.
-
-3. **ModeSwitcher** also depends on `useUserModeContext()` which may show loading state indefinitely if auth hasn't resolved.
+More importantly, the CRM block needs to be moved **outside** the `{user && (...)}` wrapper so it renders independently based on its own `showCRM` condition.
 
 ## Fix
 
 ### File: `src/components/navigation/HorizontalUtilityBar.tsx`
 
-**Change 1**: Pass `showForUnselected={true}` to `ModeSwitcher` in the header so it always renders regardless of role selection state.
+Move the CRM shortcut block **before** the `{user && (...)}` block so it's independently gated by `showCRM`:
 
 ```tsx
-// Line 512: Change from
-<ModeSwitcher variant="header" />
-// To
-<ModeSwitcher variant="header" showForUnselected />
+{/* CRM shortcut (owner/broker only) — outside user gate since showCRM already checks user */}
+{showCRM && (
+  <>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Link to="/owner/crm" className={`${cellBase} hover:bg-emerald-500/10`}>
+          <BarChart3 className="w-4 h-4 text-emerald-600 ..." />
+          <span className="...">CRM</span>
+        </Link>
+      </TooltipTrigger>
+      <TooltipContent ...>...</TooltipContent>
+    </Tooltip>
+    {railDivider}
+  </>
+)}
+
+{user && (
+  <>
+    {/* Tasks, Notifications, Inbox stay here */}
+  </>
+)}
 ```
 
-**Change 2**: Move ModeSwitcher, Dashboard, and Settings OUTSIDE the `{user && (...)}` block (they're already outside — confirmed). No change needed here.
-
-**Change 3**: Show CRM for ALL logged-in users who are owner/broker, and ensure the `user` gate doesn't hide everything when auth is still loading. Add a fallback: show Dashboard, ModeSwitcher, and Settings even without `user` so they're always visible.
-
-Restructure the right rail (lines 412-533) to:
-- Keep CRM, Tasks, Notifications, Inbox inside `{user && (...)}`
-- Keep Dashboard, ModeSwitcher, Settings OUTSIDE `{user && (...)}` — they're already outside, just confirm no structural issue
-
-### File: `src/components/ModeSwitcher.tsx`
-
-No changes needed — the `showForUnselected` prop already exists and works correctly.
+Lines 413-432 restructured: extract the CRM `{showCRM && (...)}` block (lines 416-431) to sit before line 413's `{user && (`, and remove the now-empty leading position inside the user block.
 
 ## What stays the same
+- All other buttons (Tasks, Notifications, Inbox, Dashboard, ModeSwitcher, Settings)
 - All icons, tooltips, badges, links, conditional logic
-- Row 2 filter bar
-- Mobile header
-- CRM visibility logic (`showCRM` predicate is already correct)
+- `showCRM` definition unchanged — already includes `!!user` check
 
