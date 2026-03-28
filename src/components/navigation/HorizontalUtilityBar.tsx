@@ -404,12 +404,12 @@ export default function HorizontalUtilityBar() {
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Open advanced property filters — price, bedrooms, type, handover, and more</TooltipContent>
           </Tooltip>
         </div>
+        </div>
+          {/* Right scroll arrow */}
+          <ScrollArrow direction="right" scrollRef={row1ScrollRef} />
 
-        {/* ── Spacer ── */}
-        <div className="flex-1" />
-
-        {/* ── Right Side: Connected rail for user shortcuts ── */}
-        <div className="flex items-center h-8 shrink-0">
+          {/* ── Right Side: Fixed rail for user shortcuts (always visible) ── */}
+          <div className="flex items-center h-8 shrink-0 ml-auto border-l border-[hsl(var(--gold)/0.25)] pl-1 mr-2">
           {user && (
             <>
               {/* CRM shortcut (owner/broker only) */}
@@ -517,7 +517,7 @@ export default function HorizontalUtilityBar() {
 
           {railDivider}
 
-          {/* Settings — with extra gap from Mode */}
+          {/* Settings */}
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
@@ -531,9 +531,6 @@ export default function HorizontalUtilityBar() {
             <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Manage your account, profile, and preferences</TooltipContent>
           </Tooltip>
         </div>
-        </div>
-          {/* Right scroll arrow */}
-          <ScrollArrow direction="right" scrollRef={row1ScrollRef} />
         </div>
 
         {/* ── Subtle gold divider between rows ── */}
