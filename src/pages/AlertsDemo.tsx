@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { X, Bell, AlertTriangle, ArrowRight, CheckCircle, Headphones, Volume2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import jbjMonogramLightOnDark from "@/assets/jbj-monogram-light-on-dark.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 /**
  * AlertsDemo — Owner-only demo page to preview all alert/notification UIs.

@@ -85,7 +85,7 @@ export default function BrandIntroSplash() {
       {/* Logo animation */}
       <div className="relative animate-in zoom-in-50 fade-in duration-700">
         <img
-          src={jbjMonogramLightOnDark}
+          src={jbjMonogramLightTransparent}
           alt="JBJ Global Real Estate"
           className="w-28 h-28 md:w-40 md:h-40 object-contain"
           style={{

@@ -59,7 +59,7 @@ export function BrandedLoader({ text = "Loading...", className = "", variant = "
  * Compact branded loader for inline/button use — small monogram with pulse.
  */
 export function BrandedLoaderInline({ size = 24, className = "", variant = "dark" }: { size?: number; className?: string; variant?: 'dark' | 'light' }) {
-  const logo = variant === 'light' ? jbjMonogramDarkOnLight : jbjMonogramLightOnDark;
+  const logo = variant === 'light' ? jbjMonogramNobuffer : jbjMonogramLightTransparent;
   
   return (
     <img

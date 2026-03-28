@@ -81,7 +81,7 @@ export const JJLogoTransparent = ({ size = 'md', className = '' }: JJLogoTranspa
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <img 
-        src={jbjMonogramLightBg}
+        src={jbjMonogramNobuffer}
         alt="JBJ Global Real Estate"
         width={config.imgSize}
         height={config.imgSize}
