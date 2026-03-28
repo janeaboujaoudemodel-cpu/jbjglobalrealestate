@@ -183,7 +183,7 @@ export default function HorizontalUtilityBar() {
   
 
   // Determine if user has CRM access (owner or broker)
-  const showCRM = !!user && isOwner;
+  const showCRM = !!user && (isOwner || mode === 'broker' || mode === 'investor_broker');
 
   /* ─── Shared styles for connected segmented cells ─── */
   const cellBase = "h-8 flex items-center gap-1.5 transition-all px-2.5 group whitespace-nowrap shrink-0 outline-none focus:outline-none focus-visible:outline-none [&:focus]:outline-none";
