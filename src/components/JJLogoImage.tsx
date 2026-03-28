@@ -32,7 +32,7 @@ export const JJLogoImage = ({
   const config = sizeConfig[size];
   
   // Use JBJ monogram - LightBg (black J's) for light backgrounds, DarkBg (white J's) for dark backgrounds
-  const logoSrc = variant === 'dark' ? jbjMonogramLightTransparent : jbjMonogramLightBg;
+  const logoSrc = variant === 'dark' ? jbjMonogramLightTransparent : jbjMonogramNobuffer;
   
   return (
     <div className={`flex flex-col items-center ${className}`}>
