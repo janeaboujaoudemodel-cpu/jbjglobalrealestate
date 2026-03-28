@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
-import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 import { CONTACT_INFO } from "@/constants/stats";
 
 // Chunk imports — stored so we can preload them all after hero renders
