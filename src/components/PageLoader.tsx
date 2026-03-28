@@ -32,8 +32,8 @@ const PageLoader = () => (
  */
 export const InlinePageLoader = () => (
   <DelayedLoader>
-    <div className="flex items-center justify-center py-32 min-h-[60vh]">
-      <BrandedLoader text="Loading..." variant="light" className="min-h-0" />
+    <div className="flex items-center justify-center py-32 min-h-[60vh] bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <BrandedLoader text="Loading..." className="min-h-0" />
     </div>
   </DelayedLoader>
 );
