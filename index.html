@@ -127,6 +127,10 @@
   </head>
 
   <body>
+    <!-- CLS fix: apply nav padding class before first paint -->
+    <script>
+      try{var c=localStorage.getItem('jj_nav_collapsed'),s=sessionStorage.getItem('jj_nav_revealed');if(s==='1'){document.body.classList.add(c==='1'?'jj-vertical-nav-collapsed':'jj-vertical-nav-active');}}catch(e){}
+    </script>
     <noscript>
       <div style="padding:2rem;text-align:center;min-height:100vh;display:flex;align-items:center;justify-content:center;">
         <div style="max-width:720px;">
