@@ -1,25 +1,45 @@
 
 
-# Fix: Right-Side Buttons Pushed Off-Screen
+# Fix CRM and Mode Switcher Not Showing in Header
 
 ## Root Cause
-The scroll container (`ref={row1ScrollRef}`) at line 253 has `flex-1` but lacks `min-w-0`. In CSS flexbox, items default to `min-width: auto`, meaning the scroll container refuses to shrink below the natural width of its children. The right rail (CRM, Tasks, Notifications, Inbox, Dashboard, Mode Switcher, Settings) gets pushed beyond the viewport.
+
+Two separate gating issues prevent these buttons from rendering:
+
+1. **ModeSwitcher** (line 512): The component internally checks `hasSelectedRole` from `useUserRole()` and returns `null` if the user hasn't completed role selection. The header already passes no `showForUnselected` prop, so it defaults to `false`.
+
+2. **CRM + Tasks + Notifications + Inbox** (lines 413-489): All wrapped in `{user && (...)}` — if `user` is null (not yet loaded or in preview), none render. The `showCRM` logic itself is correct (`isOwner || broker || investor_broker`), but the outer `user` gate blocks everything.
+
+3. **ModeSwitcher** also depends on `useUserModeContext()` which may show loading state indefinitely if auth hasn't resolved.
 
 ## Fix
 
 ### File: `src/components/navigation/HorizontalUtilityBar.tsx`
 
-**One-line change** on line 255: Add `min-w-0` to the scroll container's className.
+**Change 1**: Pass `showForUnselected={true}` to `ModeSwitcher` in the header so it always renders regardless of role selection state.
 
-```
-Before: "flex-1 h-full flex items-center gap-2 px-3 sm:px-5 xl:px-6 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto ..."
-After:  "flex-1 min-w-0 h-full flex items-center gap-2 px-3 sm:px-5 xl:px-6 pr-2 sm:pr-3 xl:pr-4 overflow-x-auto ..."
+```tsx
+// Line 512: Change from
+<ModeSwitcher variant="header" />
+// To
+<ModeSwitcher variant="header" showForUnselected />
 ```
 
-This allows the left scrollable zone to shrink, giving the right fixed rail (`shrink-0`) the space it needs to stay visible.
+**Change 2**: Move ModeSwitcher, Dashboard, and Settings OUTSIDE the `{user && (...)}` block (they're already outside — confirmed). No change needed here.
+
+**Change 3**: Show CRM for ALL logged-in users who are owner/broker, and ensure the `user` gate doesn't hide everything when auth is still loading. Add a fallback: show Dashboard, ModeSwitcher, and Settings even without `user` so they're always visible.
+
+Restructure the right rail (lines 412-533) to:
+- Keep CRM, Tasks, Notifications, Inbox inside `{user && (...)}`
+- Keep Dashboard, ModeSwitcher, Settings OUTSIDE `{user && (...)}` — they're already outside, just confirm no structural issue
+
+### File: `src/components/ModeSwitcher.tsx`
+
+No changes needed — the `showForUnselected` prop already exists and works correctly.
 
 ## What stays the same
-- All buttons, icons, tooltips, badges, links, and conditional logic remain exactly as-is
-- The right rail structure (already outside the scroll container) is correct and untouched
-- Row 2 filter bar unchanged
+- All icons, tooltips, badges, links, conditional logic
+- Row 2 filter bar
+- Mobile header
+- CRM visibility logic (`showCRM` predicate is already correct)
 
