@@ -3,7 +3,7 @@
 // Keeping for backward compatibility - all imports redirect to JBJ assets
 
 import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png"; // White J's - transparent bg
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png"; // Black J's - for light backgrounds
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png"; // Black J's - transparent bg for light backgrounds
 import jbjFullLogoDark from "@/assets/jbj-fulllogo-dark.png";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
 
@@ -32,7 +32,7 @@ export const JJLogoImage = ({
   const config = sizeConfig[size];
   
   // Use JBJ monogram - LightBg (black J's) for light backgrounds, DarkBg (white J's) for dark backgrounds
-  const logoSrc = variant === 'dark' ? jbjMonogramLightTransparent : jbjMonogramLightBg;
+  const logoSrc = variant === 'dark' ? jbjMonogramLightTransparent : jbjMonogramNobuffer;
   
   return (
     <div className={`flex flex-col items-center ${className}`}>
@@ -81,7 +81,7 @@ export const JJLogoTransparent = ({ size = 'md', className = '' }: JJLogoTranspa
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <img 
-        src={jbjMonogramLightBg}
+        src={jbjMonogramNobuffer}
         alt="JBJ Global Real Estate"
         width={config.imgSize}
         height={config.imgSize}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Volume2, VolumeX, X } from "lucide-react";
-import jbjMonogramLightOnDark from "@/assets/jbj-monogram-light-on-dark.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 const STORAGE_KEY = "jj_intro_seen";
 const SPLASH_DURATION = 4000; // 4 seconds total
@@ -85,7 +85,7 @@ export default function BrandIntroSplash() {
       {/* Logo animation */}
       <div className="relative animate-in zoom-in-50 fade-in duration-700">
         <img
-          src={jbjMonogramLightOnDark}
+          src={jbjMonogramLightTransparent}
           alt="JBJ Global Real Estate"
           className="w-28 h-28 md:w-40 md:h-40 object-contain"
           style={{

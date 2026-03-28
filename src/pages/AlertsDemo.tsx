@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { X, Bell, AlertTriangle, ArrowRight, CheckCircle, Headphones, Volume2, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import jbjMonogramLightOnDark from "@/assets/jbj-monogram-light-on-dark.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 /**
  * AlertsDemo — Owner-only demo page to preview all alert/notification UIs.
@@ -43,7 +43,7 @@ export default function AlertsDemo() {
           <div className="absolute inset-0 bg-black flex flex-col items-center justify-center">
             <div className="animate-in zoom-in-50 fade-in duration-700">
               <img
-                src={jbjMonogramLightOnDark}
+                src={jbjMonogramLightTransparent}
                 alt="JBJ Global Real Estate"
                 className="w-28 h-28 object-contain"
                 style={{ filter: "drop-shadow(0 0 40px rgba(200,167,102,0.5))", animation: "splashPulse 2s ease-in-out infinite" }}

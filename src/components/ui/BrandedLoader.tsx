@@ -1,5 +1,5 @@
-import jbjMonogramDarkOnLight from "@/assets/jbj-monogram-dark-on-light.png";
-import jbjMonogramLightOnDark from "@/assets/jbj-monogram-light-on-dark.png";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 interface BrandedLoaderProps {
   text?: string;
@@ -13,7 +13,7 @@ interface BrandedLoaderProps {
  * variant='light': light background → dark monogram
  */
 export function BrandedLoader({ text = "Loading...", className = "", variant = "dark" }: BrandedLoaderProps) {
-  const logo = variant === 'light' ? jbjMonogramDarkOnLight : jbjMonogramLightOnDark;
+  const logo = variant === 'light' ? jbjMonogramNobuffer : jbjMonogramLightTransparent;
   
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen gap-6 ${className}`}>
@@ -59,7 +59,7 @@ export function BrandedLoader({ text = "Loading...", className = "", variant = "
  * Compact branded loader for inline/button use — small monogram with pulse.
  */
 export function BrandedLoaderInline({ size = 24, className = "", variant = "dark" }: { size?: number; className?: string; variant?: 'dark' | 'light' }) {
-  const logo = variant === 'light' ? jbjMonogramDarkOnLight : jbjMonogramLightOnDark;
+  const logo = variant === 'light' ? jbjMonogramNobuffer : jbjMonogramLightTransparent;
   
   return (
     <img
