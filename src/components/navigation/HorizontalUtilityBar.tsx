@@ -410,27 +410,27 @@ export default function HorizontalUtilityBar() {
 
           {/* ── Right Side: Fixed rail for user shortcuts (always visible) ── */}
           <div className="flex items-center h-8 shrink-0 ml-auto border-l border-[hsl(var(--gold)/0.25)] pl-1 mr-2">
+          {/* CRM shortcut (owner/broker only) — independent gate since showCRM already checks user */}
+          {showCRM && (
+            <>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/owner/crm"
+                    className={`${cellBase} hover:bg-emerald-500/10`}
+                  >
+                    <BarChart3 className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform shrink-0" />
+                    <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline whitespace-nowrap">CRM</span>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Access your Customer Relationship Management dashboard</TooltipContent>
+              </Tooltip>
+              {railDivider}
+            </>
+          )}
+
           {user && (
             <>
-              {/* CRM shortcut (owner/broker only) */}
-              {showCRM && (
-                <>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link
-                        to="/owner/crm"
-                        className={`${cellBase} hover:bg-emerald-500/10`}
-                      >
-                        <BarChart3 className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform shrink-0" />
-                        <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide hidden xl:inline whitespace-nowrap">CRM</span>
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom" sideOffset={8} className="text-[hsl(var(--gold))] text-xs z-[10100]">Access your Customer Relationship Management dashboard</TooltipContent>
-                  </Tooltip>
-                  {railDivider}
-                </>
-              )}
-
               {/* My Tasks */}
               <Tooltip>
                 <TooltipTrigger asChild>
