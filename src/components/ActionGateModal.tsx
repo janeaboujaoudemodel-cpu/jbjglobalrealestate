@@ -4,7 +4,7 @@ import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
 import { useActionGate } from "@/contexts/ActionGateContext";
 import { Star, TrendingUp, Shield, Gift, Sparkles, ArrowRight, X } from "lucide-react";
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 const REASON_HEADLINES: Record<string, string> = {
   save_favorite: "Save Your Favourite Properties",
@@ -72,7 +72,7 @@ const ActionGateModal = () => {
         <div className="relative px-8 py-10">
           {/* Logo */}
           <div className="flex justify-center mb-5">
-            <img src={jbjMonogramDarkBg} alt="JBJ Global Real Estate" className="h-20 w-auto object-contain" />
+            <img src={jbjMonogramLightTransparent} alt="JBJ Global Real Estate" className="h-20 w-auto object-contain" />
           </div>
 
           {/* Headline */}

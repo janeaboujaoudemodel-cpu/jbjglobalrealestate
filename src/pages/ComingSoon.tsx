@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import InquiryFormModal from "@/components/InquiryFormModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 type PageMode = 'coming-soon' | 'maintenance' | 'opening-soon' | 'welcome-back';
 
@@ -69,7 +69,7 @@ const ComingSoon = () => {
             className="mb-10"
           >
             <img 
-              src={jbjMonogramDarkBg}
+              src={jbjMonogramLightTransparent}
               alt="JBJ" 
               className="h-32 md:h-44 lg:h-56 w-auto mx-auto"
             />

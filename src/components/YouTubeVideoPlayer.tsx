@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Play } from "lucide-react";
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 declare global {
   interface Window {
@@ -139,7 +139,7 @@ export default function YouTubeVideoPlayer({
           aria-label="Replay video"
         >
           <img
-            src={jbjMonogramDarkBg}
+            src={jbjMonogramLightTransparent}
             alt="JBJ Global Real Estate"
             className="w-40 h-40 md:w-52 md:h-52 object-contain mb-12 opacity-90"
           />

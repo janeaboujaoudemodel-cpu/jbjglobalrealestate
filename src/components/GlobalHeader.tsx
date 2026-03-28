@@ -37,7 +37,7 @@ import MobileMenuWalkthrough, { useAutoWalkthrough } from "@/components/MobileMe
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { useIsTouchLayout } from "@/hooks/use-touch-layout";
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
+// jbj-monogram-dark-bg removed — use transparent variants only
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";

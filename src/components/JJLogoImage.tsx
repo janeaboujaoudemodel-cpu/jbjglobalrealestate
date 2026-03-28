@@ -2,7 +2,7 @@
 // This component is DEPRECATED - Use JBJLogo.tsx instead
 // Keeping for backward compatibility - all imports redirect to JBJ assets
 
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png"; // White J's - for dark backgrounds
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png"; // White J's - transparent bg
 import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png"; // Black J's - for light backgrounds
 import jbjFullLogoDark from "@/assets/jbj-fulllogo-dark.png";
 import jbjFullLogoLight from "@/assets/jbj-fulllogo-light.png";
@@ -32,7 +32,7 @@ export const JJLogoImage = ({
   const config = sizeConfig[size];
   
   // Use JBJ monogram - LightBg (black J's) for light backgrounds, DarkBg (white J's) for dark backgrounds
-  const logoSrc = variant === 'dark' ? jbjMonogramDarkBg : jbjMonogramLightBg;
+  const logoSrc = variant === 'dark' ? jbjMonogramLightTransparent : jbjMonogramLightBg;
   
   return (
     <div className={`flex flex-col items-center ${className}`}>
@@ -100,7 +100,7 @@ export const JJLogoHeaderImage = ({ className = '' }: { className?: string }) =>
   >
     {/* JBJ Logo image - dark bg version for header (white J's visible on dark header) */}
     <img 
-      src={jbjMonogramDarkBg} 
+      src={jbjMonogramLightTransparent} 
       alt="JBJ Global Real Estate"
       width={44}
       height={44}

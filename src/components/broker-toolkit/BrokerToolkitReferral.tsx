@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 import {
   DollarSign, GraduationCap, Briefcase, Award, Globe,
   Handshake, ArrowRight, ArrowUpRight, Sparkles
@@ -94,7 +94,7 @@ export function BrokerToolkitReferral() {
               <CardContent className="p-8">
                 <div className="text-center mb-10">
                   <div className="flex flex-col items-center justify-center mb-8">
-                    <img src={jbjMonogramDarkBg} alt="JBJ Global Real Estate" className="w-28 h-28 md:w-32 md:h-32 object-contain mb-3" />
+                    <img src={jbjMonogramLightTransparent} alt="JBJ Global Real Estate" className="w-28 h-28 md:w-32 md:h-32 object-contain mb-3" />
                     <span className="text-white font-semibold text-lg md:text-xl tracking-[0.12em] uppercase" style={{ fontFamily: "Poppins, sans-serif" }}>
                       JBJ GLOBAL REAL ESTATE
                     </span>
