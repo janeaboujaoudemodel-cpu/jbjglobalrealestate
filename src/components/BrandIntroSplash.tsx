@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Volume2, VolumeX, X } from "lucide-react";
-import jbjMonogramLightOnDark from "@/assets/jbj-monogram-light-on-dark.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 const STORAGE_KEY = "jj_intro_seen";
 const SPLASH_DURATION = 4000; // 4 seconds total
