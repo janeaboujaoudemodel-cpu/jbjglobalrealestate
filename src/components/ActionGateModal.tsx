@@ -72,7 +72,7 @@ const ActionGateModal = () => {
         <div className="relative px-8 py-10">
           {/* Logo */}
           <div className="flex justify-center mb-5">
-            <img src={jbjMonogramDarkBg} alt="JBJ Global Real Estate" className="h-20 w-auto object-contain" />
+            <img src={jbjMonogramLightTransparent} alt="JBJ Global Real Estate" className="h-20 w-auto object-contain" />
           </div>
 
           {/* Headline */}

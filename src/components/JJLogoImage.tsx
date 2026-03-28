@@ -100,7 +100,7 @@ export const JJLogoHeaderImage = ({ className = '' }: { className?: string }) =>
   >
     {/* JBJ Logo image - dark bg version for header (white J's visible on dark header) */}
     <img 
-      src={jbjMonogramDarkBg} 
+      src={jbjMonogramLightTransparent} 
       alt="JBJ Global Real Estate"
       width={44}
       height={44}

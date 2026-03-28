@@ -139,7 +139,7 @@ export default function YouTubeVideoPlayer({
           aria-label="Replay video"
         >
           <img
-            src={jbjMonogramDarkBg}
+            src={jbjMonogramLightTransparent}
             alt="JBJ Global Real Estate"
             className="w-40 h-40 md:w-52 md:h-52 object-contain mb-12 opacity-90"
           />

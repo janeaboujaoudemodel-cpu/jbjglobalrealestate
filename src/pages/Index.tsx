@@ -167,8 +167,9 @@ const Index = () => {
             className="absolute inset-0 z-[1] flex flex-col items-center justify-center"
             style={{ 
               opacity: videoLoaded ? 0 : 1, 
-              transition: 'opacity 0.8s ease-in-out',
-              pointerEvents: videoLoaded ? 'none' : 'auto',
+              visibility: videoLoaded ? 'hidden' : 'visible',
+              transition: 'opacity 0.8s ease-in-out, visibility 0s linear 0.8s',
+              pointerEvents: 'none',
             }}
           >
             {/* Gold accent orbs */}
