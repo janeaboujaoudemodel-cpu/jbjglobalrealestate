@@ -1974,6 +1974,74 @@ export type Database = {
           },
         ]
       }
+      broker_access_requests: {
+        Row: {
+          admin_notes: string | null
+          broker_company: string | null
+          broker_name: string
+          broker_user_id: string
+          created_at: string
+          developer_id: string | null
+          developer_name: string | null
+          id: string
+          intent_description: string | null
+          request_code: string
+          request_type: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          scheduled_date: string | null
+          shared_with_developer: boolean
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          broker_company?: string | null
+          broker_name: string
+          broker_user_id: string
+          created_at?: string
+          developer_id?: string | null
+          developer_name?: string | null
+          id?: string
+          intent_description?: string | null
+          request_code?: string
+          request_type?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          scheduled_date?: string | null
+          shared_with_developer?: boolean
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          broker_company?: string | null
+          broker_name?: string
+          broker_user_id?: string
+          created_at?: string
+          developer_id?: string | null
+          developer_name?: string | null
+          id?: string
+          intent_description?: string | null
+          request_code?: string
+          request_type?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          scheduled_date?: string | null
+          shared_with_developer?: boolean
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "broker_access_requests_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "developers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       broker_activity_stats: {
         Row: {
           calls_made: number | null
@@ -6989,6 +7057,127 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_project_submissions: {
+        Row: {
+          admin_notes: string | null
+          attachments: Json | null
+          city_emirate: string | null
+          community_location: string | null
+          completion_status: string | null
+          created_at: string
+          description: string | null
+          developer_id: string | null
+          handover_date: string | null
+          id: string
+          is_premium: boolean | null
+          launch_phase: string | null
+          marketing_materials_url: string | null
+          meta_description: string | null
+          payment_plan: string | null
+          premium_flagged: boolean | null
+          premium_justification: string | null
+          project_id: string | null
+          project_name: string
+          project_type: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          sales_status: string | null
+          service_charge: string | null
+          short_description: string | null
+          starting_price: number | null
+          status: string
+          unit_types: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          attachments?: Json | null
+          city_emirate?: string | null
+          community_location?: string | null
+          completion_status?: string | null
+          created_at?: string
+          description?: string | null
+          developer_id?: string | null
+          handover_date?: string | null
+          id?: string
+          is_premium?: boolean | null
+          launch_phase?: string | null
+          marketing_materials_url?: string | null
+          meta_description?: string | null
+          payment_plan?: string | null
+          premium_flagged?: boolean | null
+          premium_justification?: string | null
+          project_id?: string | null
+          project_name: string
+          project_type?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sales_status?: string | null
+          service_charge?: string | null
+          short_description?: string | null
+          starting_price?: number | null
+          status?: string
+          unit_types?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          attachments?: Json | null
+          city_emirate?: string | null
+          community_location?: string | null
+          completion_status?: string | null
+          created_at?: string
+          description?: string | null
+          developer_id?: string | null
+          handover_date?: string | null
+          id?: string
+          is_premium?: boolean | null
+          launch_phase?: string | null
+          marketing_materials_url?: string | null
+          meta_description?: string | null
+          payment_plan?: string | null
+          premium_flagged?: boolean | null
+          premium_justification?: string | null
+          project_id?: string | null
+          project_name?: string
+          project_type?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sales_status?: string | null
+          service_charge?: string | null
+          short_description?: string | null
+          starting_price?: number | null
+          status?: string
+          unit_types?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_project_submissions_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_project_submissions_developer_id_fkey"
+            columns: ["developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "developer_project_submissions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_registrations: {
         Row: {
           admin_notes: string | null
@@ -7062,7 +7251,10 @@ export type Database = {
         Row: {
           activity_score: number | null
           auto_approve_uploads: boolean | null
+          city: string | null
+          company_email: string | null
           company_phone: string | null
+          country: string | null
           created_at: string | null
           custom_role_title: string | null
           date_of_join: string | null
@@ -7072,10 +7264,12 @@ export type Database = {
           gender: string | null
           id: string
           is_on_leave: boolean | null
+          job_title: string | null
           languages: string[] | null
           last_active_at: string | null
           leave_end_date: string | null
           leave_start_date: string | null
+          marketing_materials_url: string | null
           nationality: string | null
           passport_document_url: string | null
           personal_email: string | null
@@ -7092,13 +7286,19 @@ export type Database = {
           trade_license_url: string | null
           updated_at: string | null
           user_id: string | null
+          verification_document_url: string | null
+          verification_type: string | null
           whatsapp_group_number: string | null
+          whatsapp_number: string | null
           years_in_real_estate: number | null
         }
         Insert: {
           activity_score?: number | null
           auto_approve_uploads?: boolean | null
+          city?: string | null
+          company_email?: string | null
           company_phone?: string | null
+          country?: string | null
           created_at?: string | null
           custom_role_title?: string | null
           date_of_join?: string | null
@@ -7108,10 +7308,12 @@ export type Database = {
           gender?: string | null
           id?: string
           is_on_leave?: boolean | null
+          job_title?: string | null
           languages?: string[] | null
           last_active_at?: string | null
           leave_end_date?: string | null
           leave_start_date?: string | null
+          marketing_materials_url?: string | null
           nationality?: string | null
           passport_document_url?: string | null
           personal_email?: string | null
@@ -7128,13 +7330,19 @@ export type Database = {
           trade_license_url?: string | null
           updated_at?: string | null
           user_id?: string | null
+          verification_document_url?: string | null
+          verification_type?: string | null
           whatsapp_group_number?: string | null
+          whatsapp_number?: string | null
           years_in_real_estate?: number | null
         }
         Update: {
           activity_score?: number | null
           auto_approve_uploads?: boolean | null
+          city?: string | null
+          company_email?: string | null
           company_phone?: string | null
+          country?: string | null
           created_at?: string | null
           custom_role_title?: string | null
           date_of_join?: string | null
@@ -7144,10 +7352,12 @@ export type Database = {
           gender?: string | null
           id?: string
           is_on_leave?: boolean | null
+          job_title?: string | null
           languages?: string[] | null
           last_active_at?: string | null
           leave_end_date?: string | null
           leave_start_date?: string | null
+          marketing_materials_url?: string | null
           nationality?: string | null
           passport_document_url?: string | null
           personal_email?: string | null
@@ -7164,7 +7374,10 @@ export type Database = {
           trade_license_url?: string | null
           updated_at?: string | null
           user_id?: string | null
+          verification_document_url?: string | null
+          verification_type?: string | null
           whatsapp_group_number?: string | null
+          whatsapp_number?: string | null
           years_in_real_estate?: number | null
         }
         Relationships: []
@@ -15663,6 +15876,54 @@ export type Database = {
           subject_line?: string | null
           template_type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      material_ingestion_jobs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          developer_id: string | null
+          enrichment_results: Json | null
+          error_log: Json | null
+          extracted_projects: Json | null
+          folder_structure: Json | null
+          id: string
+          needs_review_reason: string | null
+          source_type: string
+          source_url: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          developer_id?: string | null
+          enrichment_results?: Json | null
+          error_log?: Json | null
+          extracted_projects?: Json | null
+          folder_structure?: Json | null
+          id?: string
+          needs_review_reason?: string | null
+          source_type?: string
+          source_url: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          developer_id?: string | null
+          enrichment_results?: Json | null
+          error_log?: Json | null
+          extracted_projects?: Json | null
+          folder_structure?: Json | null
+          id?: string
+          needs_review_reason?: string | null
+          source_type?: string
+          source_url?: string
+          status?: string
+          user_id?: string
         }
         Relationships: []
       }
