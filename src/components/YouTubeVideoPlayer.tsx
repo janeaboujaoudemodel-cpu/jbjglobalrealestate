@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Play } from "lucide-react";
-import jbjMonogramDarkBg from "@/assets/jbj-monogram-dark-bg.png";
+import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 
 declare global {
   interface Window {
