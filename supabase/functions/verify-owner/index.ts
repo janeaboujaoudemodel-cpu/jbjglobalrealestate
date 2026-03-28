@@ -61,7 +61,7 @@ serve(async (req) => {
 
     if (hasOwnerRole) {
       return new Response(
-        JSON.stringify({ isOwner: true, email: user.email, source: "user_roles" }),
+        JSON.stringify({ isOwner: true, source: "user_roles" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
