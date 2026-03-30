@@ -93,7 +93,7 @@ const DeveloperHubShell = () => {
       {!isMobile && (
         <aside
           className={cn(
-            "fixed left-0 top-[48px] h-[calc(100vh-48px)] bg-[hsl(38,35%,12%)] border-r border-gold/30 transition-all duration-300 z-40 flex flex-col",
+            "fixed left-0 top-[88px] h-[calc(100vh-88px)] bg-[hsl(38,35%,12%)] border-r border-gold/30 transition-all duration-300 z-40 flex flex-col",
             sidebarCollapsed ? "w-16" : "w-64"
           )}
         >

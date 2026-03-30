@@ -162,7 +162,7 @@ const PropertyMap = () => {
   return (
     <div className="min-h-screen bg-background relative">
       {/* Fixed horizontal filter bar below utility bar */}
-      <div className="fixed top-[48px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9990] bg-background/95 backdrop-blur-md border-b border-gold/20">
+      <div className="fixed top-[88px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9990] bg-background/95 backdrop-blur-md border-b border-gold/20">
         <div className="flex items-center gap-2 px-3 py-1.5">
           <Badge variant="secondary" className="gap-1 shrink-0">
             <MapPin className="h-3 w-3" />
@@ -188,7 +188,7 @@ const PropertyMap = () => {
       </div>
 
       {/* Map Container — offset for utility bar (48px) + filter bar (~90px) */}
-      <div className="pt-[140px] h-screen">
+      <div className="pt-[52px] h-screen">
         <MapContainer
           center={center}
           zoom={11}
@@ -253,7 +253,7 @@ const PropertyMap = () => {
 
       {/* List Panel */}
       {showList && (
-        <div className="absolute top-[140px] right-0 bottom-0 w-full sm:w-96 bg-background/95 backdrop-blur-sm border-l z-[999] overflow-hidden flex flex-col">
+        <div className="absolute top-[52px] right-0 bottom-0 w-full sm:w-96 bg-background/95 backdrop-blur-sm border-l z-[999] overflow-hidden flex flex-col">
           <div className="p-4 border-b flex items-center justify-between">
             <h2 className="font-semibold">{filteredProjects.length} {t('map.properties')}</h2>
             <Button variant="ghost" size="sm" onClick={() => setShowList(false)}>
