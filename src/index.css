@@ -465,25 +465,20 @@ All colors MUST be HSL.
    * be full-width edge-to-edge, passing behind TOC navigator
    * ============================================================ */
 
-  /* LAYER 2: Active champagne section layer (placed on black background) */
+  /* LAYER 2: Active section layer (grayscale) */
   .jj-layer-active {
-    @apply rounded-2xl border border-gold/30;
+    @apply rounded-2xl border border-white/10;
     background: linear-gradient(
       to bottom right,
-      hsl(var(--champagne-1)),
-      hsl(var(--champagne-2)),
-      hsl(var(--champagne-3))
+      hsl(0 0% 10%),
+      hsl(0 0% 7%),
+      hsl(0 0% 4%)
     );
-    box-shadow: 0 0 40px hsl(var(--gold) / 0.18);
+    box-shadow: 0 0 40px hsl(0 0% 100% / 0.05);
   }
 
   /*
-   * Full-width champagne section background (edge-to-edge)
-   * Global rule: show a THIN black contour around the active layer.
-   */
-  /* 
-   * LAYER 2: Active Champagne Section (Full-width with thin black contour)
-   * This is the "active layer" sitting on the black page background.
+   * Full-width section background (edge-to-edge)
    */
 .jj-section-champagne {
   @apply py-12 md:py-16;
