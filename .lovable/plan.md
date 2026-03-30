@@ -1,61 +1,81 @@
 
 
-# Fix Vertical Text in Nearby Projects Map
+# Fix Nearby Map Popup Image + Close Button + Audit
 
-## Root Cause
+## 1. Image Not Full Width — Root Cause & Fix
 
-The global CSS rule in `src/index.css` line 1886:
+**File: `src/components/project-detail/ProjectNearbyPropertiesMap.tsx`**
+
+The popup content div has `p-3` padding, and the image uses `-mx-3 -mt-3` with `width: calc(100% + 24px)` to compensate. This negative-margin hack is fragile and doesn't achieve true edge-to-edge because the global CSS already strips Leaflet popup padding (`margin: 0 !important; padding: 0 !important` in index.css lines 1883-1887).
+
+**Fix**: Remove `p-3` from the outer wrapper and restructure so the image sits at the top with no padding, and only the text content below gets padding:
+
+```tsx
+<Popup>
+  <div className="min-w-[200px] max-w-[280px]">
+    {p.cover_image_url && (
+      <img src={p.cover_image_url} alt={p.name} 
+           className="w-full h-24 object-cover" loading="lazy" />
+    )}
+    <div className="p-3">
+      <Link to={`/project/${p.slug}`} 
+            className="text-sm font-semibold text-blue-600 hover:underline block">
+        {p.name}
+      </Link>
+      {p.price_from && (
+        <p className="text-xs font-semibold text-amber-700 mt-1">
+          From AED {Math.round(Number(p.price_from)).toLocaleString()}
+        </p>
+      )}
+    </div>
+  </div>
+</Popup>
+```
+
+Same pattern for the current project marker (remove `p-3` from wrapper, add it to a text-only inner div).
+
+## 2. Close (X) Button — Leaflet Default
+
+Leaflet popups have a built-in close button. The global CSS in index.css does NOT hide it, so it should render. However, the `border-radius: 12px !important` + `overflow: hidden` on `.leaflet-popup-content-wrapper` may clip it since the close button sits outside the content wrapper in Leaflet's DOM.
+
+**Fix**: Add CSS to ensure the Leaflet close button is visible and properly styled:
+
 ```css
-.leaflet-popup-content {
-  width: auto !important;
+/* index.css — after existing leaflet popup rules */
+.leaflet-popup-close-button {
+  z-index: 10 !important;
+  color: #333 !important;
+  font-size: 20px !important;
+  padding: 4px 8px !important;
 }
 ```
 
-This overrides Leaflet's default inline `width: 200px` on popup content. This was added to support edge-to-edge images in the main property map popups (which have explicit `min-w-[220px]` containers). But the Nearby Projects map popup contains only a bare `<Link>` with no width container — so the content collapses to single-character width, stacking text vertically.
+## 3. Main Map Card X Button (PropertyMap.tsx)
 
-The AreaMapSection popups are unaffected because they wrap content in `<div className="min-w-[220px] max-w-[260px]">`.
+Already implemented at line 413-417 with `absolute top-2 right-2 z-10`. This is correct. No change needed.
 
-## Fix
+## 4. Global Audit Results
 
-### 1. `src/components/project-detail/ProjectNearbyPropertiesMap.tsx` — Add width container to popups
+### Maps
+- **PropertyMap.tsx**: Uses custom hover/click cards (no Leaflet popups). X button present on click card. Image is full-width via `w-full h-full object-cover rounded-t-lg`. ✅
+- **ProjectNearbyPropertiesMap.tsx**: Uses Leaflet popups. Image not full-width (the bug). Fix above. Close via Leaflet's built-in X.
+- **AreaMapSection.tsx**: Uses Leaflet popups with `min-w-[220px]` wrapper. Same padding structure — needs same image fix pattern if images are used.
 
-Wrap both popup contents (red current-project marker and gold nearby markers) in a container with explicit min-width:
+### Cards (UI components)
+- `Card` component: consistent `rounded-lg border` pattern. ✅
+- All cards use `CardContent p-0` for image cards and add padding to text sections. ✅
+- List/Grid panel cards in PropertyMap (lines 488-524): consistent image + text layout. ✅
 
-**Current project popup (line 132-135):**
-```tsx
-<Popup>
-  <div className="min-w-[180px] max-w-[260px] p-3">
-    <div className="text-sm font-bold">{currentProjectName}</div>
-    <div className="text-xs text-muted-foreground">{t('map.thisProject')}</div>
-  </div>
-</Popup>
-```
-
-**Nearby project popup (line 141-144):**
-```tsx
-<Popup>
-  <div className="min-w-[200px] max-w-[280px] p-3">
-    {p.cover_image_url && (
-      <img src={p.cover_image_url} alt={p.name} className="w-full h-24 object-cover -mx-3 -mt-3 mb-2" style={{width: 'calc(100% + 24px)'}} />
-    )}
-    <Link to={`/project/${p.slug}`} className="text-sm font-semibold text-blue-600 hover:underline block">
-      {p.name}
-    </Link>
-    {p.price_from && (
-      <p className="text-xs font-semibold text-amber-700 mt-1">
-        From AED {Math.round(Number(p.price_from)).toLocaleString()}
-      </p>
-    )}
-  </div>
-</Popup>
-```
-
-This matches the pattern used in `AreaMapSection.tsx` where popups work correctly.
-
-### 2. Global audit — no other vertical text issues
-
-The `width: auto !important` only affects `.leaflet-popup-content`. All other map popup usages (AreaMapSection, PropertiesMapView) already have explicit width containers or don't use Leaflet popups at all (PropertyMap uses custom cards). No other components are affected.
+### No other issues found
+- No vertical text issues elsewhere (the prior fix resolved that)
+- Z-index system is standardized via `src/config/z-index.ts`
+- No overflow clipping issues in other components
+- Sidebar, header, modals all use consistent layering
 
 ## Files to modify
-- `src/components/project-detail/ProjectNearbyPropertiesMap.tsx` — add width containers to popup content
+
+| File | Change |
+|------|--------|
+| `src/components/project-detail/ProjectNearbyPropertiesMap.tsx` | Restructure popup content: image outside padding wrapper, text inside padded div |
+| `src/index.css` | Add `.leaflet-popup-close-button` styling for visibility |
 
