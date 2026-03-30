@@ -1602,46 +1602,45 @@ All colors MUST be HSL.
   }
 
   /* ============================================================
-   * GLOBAL FORM PLACEHOLDER STYLING - GOLD GLOW
-   * All form inputs show glowing gold placeholder text
+   * GLOBAL FORM PLACEHOLDER STYLING — MONOCHROME
    * ============================================================ */
   .gold-placeholder::placeholder {
-    color: hsl(var(--gold));
+    color: hsl(0 0% 40%);
     opacity: 0.9;
-    text-shadow: 0 0 8px hsl(var(--gold) / 0.4);
+    text-shadow: none;
   }
 
   input.gold-placeholder::placeholder,
   textarea.gold-placeholder::placeholder {
-    color: hsl(var(--gold));
+    color: hsl(0 0% 40%);
     opacity: 0.85;
-    text-shadow: 0 0 6px hsl(var(--gold) / 0.3);
+    text-shadow: none;
   }
 }
 
-/* Global form placeholder gold styling - applies to all forms */
+/* Global form placeholder styling */
 @layer utilities {
   .placeholder-gold::placeholder {
-    color: hsl(42 45% 59%);
+    color: hsl(0 0% 40%);
     opacity: 0.9;
-    text-shadow: 0 0 8px hsl(42 45% 59% / 0.4);
+    text-shadow: none;
   }
 
-  /* Gold scrollbar styling for TOC and navigation panels */
+  /* Scrollbar styling — monochrome */
   .scrollbar-thin {
     scrollbar-width: thin;
   }
   
   .scrollbar-thumb-gold {
-    scrollbar-color: hsl(42 45% 59%) transparent;
+    scrollbar-color: hsl(0 0% 40%) transparent;
   }
   
   .scrollbar-thumb-gold\/60 {
-    scrollbar-color: hsl(42 45% 59% / 0.6) hsl(42 45% 59% / 0.1);
+    scrollbar-color: hsl(0 0% 40% / 0.6) hsl(0 0% 20% / 0.1);
   }
   
   .scrollbar-track-gold\/10 {
-    scrollbar-color: inherit hsl(42 45% 59% / 0.1);
+    scrollbar-color: inherit hsl(0 0% 20% / 0.1);
   }
 
   /* Webkit scrollbar styling */
@@ -1651,16 +1650,16 @@ All colors MUST be HSL.
   }
   
   .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb {
-    background: hsl(42 45% 59% / 0.6);
+    background: hsl(0 0% 40% / 0.6);
     border-radius: 3px;
   }
   
   .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb:hover {
-    background: hsl(42 45% 59%);
+    background: hsl(0 0% 60%);
   }
   
   .scrollbar-track-gold\/10::-webkit-scrollbar-track {
-    background: hsl(42 45% 59% / 0.1);
+    background: hsl(0 0% 20% / 0.1);
     border-radius: 3px;
   }
 
