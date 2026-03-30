@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo, useRef } from "react";
-import { MapContainer, Marker, Popup, useMap } from "react-leaflet";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { MapContainer, Marker, useMap } from "react-leaflet";
 import { DivIcon } from "leaflet";
 import L from "leaflet";
 import { useProjectsListing } from "@/hooks/useProjects";
