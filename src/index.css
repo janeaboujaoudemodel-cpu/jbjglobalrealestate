@@ -1368,11 +1368,11 @@ All colors MUST be HSL.
   }
   
   .jj-gold-accent {
-    @apply text-gold;
+    @apply text-white;
   }
   
   .jj-gold-border {
-    @apply border-gold/30;
+    @apply border-white/10;
   }
 
   /* ============================================================
