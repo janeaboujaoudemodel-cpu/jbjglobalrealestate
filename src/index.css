@@ -42,60 +42,60 @@ All colors MUST be HSL.
   :root {
     /* Responsive header height — used by mobile menu Sheet positioning */
     --responsive-header-height: 96px;
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%;
 
-    --card: 0 0% 7%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
 
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
 
-    /* PRIMARY: White accent on black */
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 0%;
+    /* PRIMARY: Black accent on white */
+    --primary: 0 0% 7%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Active gradient replaced with grayscale */
-    --jj-gradient-active: linear-gradient(135deg, hsl(0 0% 10%), hsl(0 0% 7%), hsl(0 0% 4%));
+    /* Active gradient — light */
+    --jj-gradient-active: linear-gradient(135deg, hsl(0 0% 96%), hsl(0 0% 98%), hsl(0 0% 100%));
 
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 7%;
 
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 63%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 0 0% 10%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 7%;
 
-    --destructive: 0 0% 100%;
-    --destructive-foreground: 0 0% 0%;
+    --destructive: 0 0% 7%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 16%;
-    --input: 0 0% 16%;
-    --ring: 0 0% 100%;
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
+    --ring: 0 0% 7%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 4%;
-    --sidebar-foreground: 0 0% 63%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 0 0% 10%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 12%;
-    --sidebar-ring: 0 0% 100%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 30%;
+    --sidebar-primary: 0 0% 7%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 7%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 0 0% 7%;
 
-    /* Monochrome accent — replaces gold */
-    --gold: 0 0% 100%;
-    --gold-light: 0 0% 88%;
-    --gold-dark: 0 0% 27%;
-    --gold-muted: 0 0% 63%;
-    --gold-foreground: 0 0% 0%;
+    /* Monochrome accent — dark for contrast on white */
+    --gold: 0 0% 10%;
+    --gold-light: 0 0% 30%;
+    --gold-dark: 0 0% 7%;
+    --gold-muted: 0 0% 45%;
+    --gold-foreground: 0 0% 100%;
 
-    /* Champagne replaced with grayscale surfaces */
-    --champagne-1: 0 0% 10%;
-    --champagne-2: 0 0% 7%;
-    --champagne-3: 0 0% 4%;
+    /* Champagne replaced with light surfaces */
+    --champagne-1: 0 0% 98%;
+    --champagne-2: 0 0% 96%;
+    --champagne-3: 0 0% 93%;
 
     /* ============================================================
      * GLOBAL WIDTH + GUTTER SYSTEM (LOCKED - FINAL)
@@ -103,45 +103,45 @@ All colors MUST be HSL.
     --jj-content-max: 1600px;
     --jj-gutter: 0.125rem;
 
-    /* Pearl replaced with dark surfaces */
-    --pearl-1: 0 0% 10%;
-    --pearl-2: 0 0% 8%;
-    --pearl-3: 0 0% 6%;
+    /* Pearl — light surfaces */
+    --pearl-1: 0 0% 97%;
+    --pearl-2: 0 0% 95%;
+    --pearl-3: 0 0% 92%;
 
-    /* Premium surfaces */
-    --premium-bg: 0 0% 3%;
-    --premium-card: 0 0% 7%;
-    --premium-card-border: 0 0% 16%;
+    /* Premium surfaces — white dominant */
+    --premium-bg: 0 0% 98%;
+    --premium-card: 0 0% 100%;
+    --premium-card-border: 0 0% 85%;
 
-    /* CRM Theme — monochrome */
-    --crm-bg: 0 0% 0%;
-    --crm-card: 0 0% 7%;
-    --crm-card-border: 0 0% 16%;
-    --crm-text: 0 0% 100%;
-    --crm-text-muted: 0 0% 63%;
-    --crm-highlight: 0 0% 10%;
+    /* CRM Theme — white dominant */
+    --crm-bg: 0 0% 98%;
+    --crm-card: 0 0% 100%;
+    --crm-card-border: 0 0% 85%;
+    --crm-text: 0 0% 7%;
+    --crm-text-muted: 0 0% 45%;
+    --crm-highlight: 0 0% 96%;
 
-    /* Suit accent replaced with grayscale */
-    --jj-suit: 0 0% 16%;
-    --jj-suit-dark: 0 0% 10%;
+    /* Suit accent — subtle gray */
+    --jj-suit: 0 0% 90%;
+    --jj-suit-dark: 0 0% 85%;
 
-    /* AI Theme — monochrome grayscale */
-    --ai-purple: 0 0% 63%;
-    --ai-purple-dark: 0 0% 40%;
-    --ai-fuchsia: 0 0% 55%;
-    --ai-cyan: 0 0% 70%;
-    --ai-emerald: 0 0% 55%;
-    --ai-amber: 0 0% 63%;
-    --ai-rose: 0 0% 55%;
-    --ai-glow: 0 0% 75%;
+    /* AI Theme — grayscale */
+    --ai-purple: 0 0% 45%;
+    --ai-purple-dark: 0 0% 30%;
+    --ai-fuchsia: 0 0% 40%;
+    --ai-cyan: 0 0% 50%;
+    --ai-emerald: 0 0% 40%;
+    --ai-amber: 0 0% 45%;
+    --ai-rose: 0 0% 40%;
+    --ai-glow: 0 0% 60%;
 
-    /* Listing badges — monochrome */
-    --handover: 0 0% 100%;
-    --handover-foreground: 0 0% 0%;
+    /* Listing badges */
+    --handover: 0 0% 7%;
+    --handover-foreground: 0 0% 100%;
 
     /* Image overlay controls */
-    --overlay: 0 0% 100%;
-    --overlay-foreground: 0 0% 0%;
+    --overlay: 0 0% 7%;
+    --overlay-foreground: 0 0% 100%;
   }
 
   @media (min-width: 768px) {
