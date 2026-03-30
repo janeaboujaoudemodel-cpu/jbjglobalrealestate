@@ -75,7 +75,7 @@ export default function EventManagementHub() {
         </div>
         <Dialog open={showCreate} onOpenChange={setShowCreate}>
           <DialogTrigger asChild>
-            <Button className="bg-gradient-to-r from-[hsl(36,40%,70%)] to-[hsl(38,35%,60%)] text-[hsl(38,35%,12%)]">
+            <Button className="bg-gradient-to-r from-[hsl(36,40%,70%)] to-[hsl(38,35%,60%)] text-[hsl(32,28%,13%)]">
               <Plus className="w-4 h-4 mr-2" /> Create Event
             </Button>
           </DialogTrigger>
@@ -116,7 +116,7 @@ export default function EventManagementHub() {
               <div><Label>Max Attendees</Label><Input type="number" value={form.max_attendees} onChange={(e) => setForm(f => ({ ...f, max_attendees: e.target.value }))} placeholder="Unlimited" /></div>
               <div><Label>Invitation Template</Label><Textarea value={form.invitation_template} onChange={(e) => setForm(f => ({ ...f, invitation_template: e.target.value }))} placeholder="Custom invitation message..." rows={3} /></div>
               <div className="flex gap-3">
-                <Button onClick={handleCreate} className="bg-gradient-to-r from-[hsl(36,40%,70%)] to-[hsl(38,35%,60%)] text-[hsl(38,35%,12%)]">Create Event</Button>
+                <Button onClick={handleCreate} className="bg-gradient-to-r from-[hsl(36,40%,70%)] to-[hsl(38,35%,60%)] text-[hsl(32,28%,13%)]">Create Event</Button>
                 <Button variant="outline" onClick={() => setShowCreate(false)}>Cancel</Button>
               </div>
             </div>
@@ -179,7 +179,7 @@ export default function EventManagementHub() {
                               <Label>Email addresses (comma-separated)</Label>
                               <Textarea value={inviteEmails} onChange={(e) => setInviteEmails(e.target.value)} placeholder="email1@example.com, email2@example.com" rows={4} />
                             </div>
-                            <Button onClick={handleSendInvites} className="bg-gradient-to-r from-[hsl(36,40%,70%)] to-[hsl(38,35%,60%)] text-[hsl(38,35%,12%)]">
+                            <Button onClick={handleSendInvites} className="bg-gradient-to-r from-[hsl(36,40%,70%)] to-[hsl(38,35%,60%)] text-[hsl(32,28%,13%)]">
                               <Send className="w-4 h-4 mr-2" /> Send Invitations
                             </Button>
                           </div>

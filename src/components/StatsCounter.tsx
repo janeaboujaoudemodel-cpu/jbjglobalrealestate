@@ -120,7 +120,7 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible, language,
       {/* Pearl Card with Gold Border - 3-layer compliant */}
       <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-6 md:p-8 text-center hover:shadow-lg hover:shadow-gold/30 transition-all duration-500">
         {/* Icon - Black circle with gold icon */}
-        <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] flex items-center justify-center shadow-lg">
+        <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] flex items-center justify-center shadow-lg">
           <Icon className="w-6 h-6 text-gold" />
         </div>
         
@@ -164,7 +164,7 @@ const StatsCounter = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <section ref={sectionRef} className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Active Champagne Section Layer - using global jj-layer-2 */}
       <div className="jj-layer-2">
           {/* Section Header - Premium Label */}

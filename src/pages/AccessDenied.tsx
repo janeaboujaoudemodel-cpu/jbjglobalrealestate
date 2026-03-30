@@ -65,7 +65,7 @@ const AccessDenied = () => {
   }, [ownerLoading, isOwner, ownerError]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center p-6">
       <div className="max-w-md w-full text-center">
         {/* Icon */}
         <div className="w-24 h-24 rounded-full bg-red-500/10 border border-red-500/30 flex items-center justify-center mx-auto mb-8">

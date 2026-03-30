@@ -129,7 +129,7 @@ function book3dCover(title: string, subtitle: string, href: string, imageUrl: st
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr><td style="padding:0;text-align:center;">
 <img src="${imageUrl}" alt="${title}" width="150" style="width:150px;height:220px;object-fit:cover;display:block;margin:0 auto;border-radius:12px;border:1px solid #C8A766;box-shadow:8px 8px 24px rgba(0,0,0,0.35);" />
 <p style="margin:10px 0 2px;color:#1a1a1a;font-size:13px;font-weight:700;">${title}</p>
-<p style="margin:0;color:#8b7355;font-size:11px;letter-spacing:1px;text-transform:uppercase;">${subtitle}</p>
+<p style="margin:0;color:#8a7356;font-size:11px;letter-spacing:1px;text-transform:uppercase;">${subtitle}</p>
 </td></tr></table></a></td>`;
 }
 
@@ -318,7 +318,7 @@ export function rateExperienceCardAr(surveyLink: string): string {
 // ─── Issue Not Resolved (EN + AR) ───
 export function issueNotResolvedCard(reopenUrl: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0;">
-<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:1px solid #ef4444;border-radius:18px;padding:16px;text-align:center;">
+<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:1px solid #dc2626;border-radius:18px;padding:16px;text-align:center;">
   <p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">Issue Not Resolved?</p>
   <p style="color:#666;font-size:13px;margin:0 0 15px;">If your issue persists, you can reopen this ticket anytime.</p>
   <a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">Reopen This Ticket</a>
@@ -327,7 +327,7 @@ export function issueNotResolvedCard(reopenUrl: string): string {
 
 export function issueNotResolvedCardAr(reopenUrl: string): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin:20px 0;direction:rtl;">
-<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:1px solid #ef4444;border-radius:18px;padding:16px;text-align:center;">
+<tr><td style="background:linear-gradient(135deg,#fff5f5,#fff0f0);border:1px solid #dc2626;border-radius:18px;padding:16px;text-align:center;">
   <p style="color:#c0392b;margin:0 0 10px;font-size:16px;font-weight:bold;">المشكلة لم تُحل؟</p>
   <p style="color:#666;font-size:13px;margin:0 0 15px;">إذا استمرت المشكلة، يمكنك إعادة فتح هذه التذكرة في أي وقت.</p>
   <a href="${reopenUrl}" style="display:inline-block;background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;text-decoration:none;padding:14px 30px;border-radius:12px;font-weight:bold;font-size:14px;">إعادة فتح التذكرة</a>

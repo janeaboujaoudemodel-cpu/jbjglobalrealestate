@@ -176,7 +176,7 @@ const TicketSurvey = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center p-4">
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gold/30 p-8 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#C8A766] to-[#B8956E] flex items-center justify-center">
             <CheckCircle className="w-8 h-8 text-white" />
@@ -194,7 +194,7 @@ const TicketSurvey = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] py-12 px-4">
       <div className="max-w-lg mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-black mb-2">{surveyCopy.title}</h1>

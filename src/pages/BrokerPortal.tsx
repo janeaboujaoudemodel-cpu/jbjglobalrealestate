@@ -76,7 +76,7 @@ function BrokerProfileHero() {
         <Lock className="w-12 h-12 text-[hsl(36,40%,70%)]/50 mx-auto mb-3" />
         <p className="text-muted-foreground mb-4">Sign in to access your Broker Portal</p>
         <Link to="/auth?redirect=/broker-portal">
-          <Button className="bg-[hsl(36,40%,70%)] text-[hsl(38,35%,12%)] hover:opacity-90">Sign In</Button>
+          <Button className="bg-[hsl(36,40%,70%)] text-[hsl(32,28%,13%)] hover:opacity-90">Sign In</Button>
         </Link>
       </div>
     );
@@ -280,7 +280,7 @@ export default function BrokerPortal() {
       <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] to-[hsl(36,25%,88%)]">
         {/* Hero */}
         <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(36,40%,20%)_0%,transparent_60%)]" />
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
             <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
@@ -409,7 +409,7 @@ export default function BrokerPortal() {
                       <div><Label className="text-xs text-muted-foreground">Years in Real Estate</Label><Input value={profileForm.years_in_re} onChange={(e) => setProfileForm(p => ({ ...p, years_in_re: e.target.value }))} type="number" className="border-[hsl(36,40%,70%)]/30" /></div>
                       <div><Label className="text-xs text-muted-foreground">Date of Joining Company</Label><Input value={profileForm.date_of_joining} onChange={(e) => setProfileForm(p => ({ ...p, date_of_joining: e.target.value }))} type="date" className="border-[hsl(36,40%,70%)]/30" /></div>
                     </div>
-                    <Button className="bg-gradient-to-r from-[hsl(36,40%,70%)] to-[hsl(38,35%,60%)] text-[hsl(38,35%,12%)] hover:opacity-90" onClick={() => toast.success("Profile saved")}>Save Profile</Button>
+                    <Button className="bg-gradient-to-r from-[hsl(36,40%,70%)] to-[hsl(38,35%,60%)] text-[hsl(32,28%,13%)] hover:opacity-90" onClick={() => toast.success("Profile saved")}>Save Profile</Button>
                   </CardContent>
                 </Card>
 

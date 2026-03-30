@@ -38,7 +38,7 @@ interface SignatureData {
 
 const G = {
   accent: "#059669",
-  accentLight: "#10B981",
+  accentLight: "#059669",
   accentDim: "#047857",
   card: "rgba(5,150,105,0.03)",
   border: "rgba(5,150,105,0.15)",

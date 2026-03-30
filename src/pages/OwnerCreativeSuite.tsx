@@ -106,7 +106,7 @@ const OwnerCreativeSuite = () => {
         <div className="container mx-auto px-4 py-10">
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-5 py-1.5 mb-5">
-              <Sparkles className="w-4 h-4 text-[#8B7355]" />
+              <Sparkles className="w-4 h-4 text-[#8A7356]" />
               <span className="text-black text-sm font-semibold tracking-wide">Owner Creative Suite</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-black mb-3">Creative Suite</h1>
@@ -131,7 +131,7 @@ const OwnerCreativeSuite = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="font-bold text-black text-sm">{tool.title}</h3>
-                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-gold/20 text-[#8B7355]">{tool.badge}</span>
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-gold/20 text-[#8A7356]">{tool.badge}</span>
                   </div>
                   <p className="text-xs text-zinc-500 leading-relaxed">{tool.description}</p>
                 </div>

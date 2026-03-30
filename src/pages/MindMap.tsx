@@ -41,8 +41,8 @@ const MindMap = () => {
   const [mapTitle, setMapTitle] = useState("Mind Map");
 
   const colorOptions = [
-    "#8b5cf6", "#3b82f6", "#22c55e", "#eab308", "#f97316",
-    "#ef4444", "#ec4899", "#06b6d4", "#84cc16", "#6366f1"
+    "#8b5cf6", "#3b82f6", "#22c55e", "#eab308", "#ea580c",
+    "#dc2626", "#ec4899", "#06b6d4", "#84cc16", "#6366f1"
   ];
 
   const drawConnections = useCallback((ctx: CanvasRenderingContext2D) => {

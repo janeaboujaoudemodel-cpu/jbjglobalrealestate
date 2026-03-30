@@ -55,7 +55,7 @@ const tools = [
     icon: ImageIcon,
     href: "/toolkit/corporate-suite/logo-creator",
     badge: "AI",
-    accentColor: "#F97316",
+    accentColor: "#EA580C",
   },
   {
     id: "company-profile",

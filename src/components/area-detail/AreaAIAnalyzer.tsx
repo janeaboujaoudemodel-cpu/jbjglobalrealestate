@@ -187,7 +187,7 @@ function parseInvestmentMetrics(text: string) {
 
   return [
     { name: 'Rental Yield', value: roiMatch ? parseFloat(roiMatch[1]) : 6.5, fill: '#C8A766' },
-    { name: 'Cap Rate', value: capMatch ? parseFloat(capMatch[1]) : 5.8, fill: '#10b981' },
+    { name: 'Cap Rate', value: capMatch ? parseFloat(capMatch[1]) : 5.8, fill: '#059669' },
     { name: 'Appreciation', value: appreciationMatch ? parseFloat(appreciationMatch[1]) : 8.2, fill: '#6366f1' },
     { name: 'Occupancy', value: occupancyMatch ? parseFloat(occupancyMatch[1]) : 88, fill: '#f59e0b' },
   ];
@@ -262,8 +262,8 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
                 <stop offset="95%" stopColor="#C8A766" stopOpacity={0.05} />
               </linearGradient>
               <linearGradient id="demandGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#10b981" stopOpacity={0.05} />
+                <stop offset="5%" stopColor="#059669" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#059669" stopOpacity={0.05} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0ebe0" />
@@ -274,7 +274,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
               formatter={(value: number, name: string) => [value.toLocaleString() + ' units', name === 'supply' ? 'Supply' : 'Demand']}
             />
             <Area type="monotone" dataKey="supply" stroke="#C8A766" strokeWidth={2.5} fill="url(#supplyGradient)" dot={{ fill: '#C8A766', r: 3 }} />
-            <Area type="monotone" dataKey="demand" stroke="#10b981" strokeWidth={2.5} fill="url(#demandGradient)" dot={{ fill: '#10b981', r: 3 }} />
+            <Area type="monotone" dataKey="demand" stroke="#059669" strokeWidth={2.5} fill="url(#demandGradient)" dot={{ fill: '#059669', r: 3 }} />
           </AreaChart>
         </ResponsiveContainer>
       </div>

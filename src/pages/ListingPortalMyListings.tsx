@@ -165,7 +165,7 @@ const ListingPortalMyListings = () => {
     switch (status) {
       case 'approved': return 'bg-emerald-100 text-emerald-800 border-emerald-300';
       case 'rejected': return 'bg-red-100 text-red-800 border-red-300';
-      default: return 'bg-[#F7F1E6] text-[#8B7355] border-[#B89555]/30';
+      default: return 'bg-[#F7F1E6] text-[#8A7356] border-[#B89555]/30';
     }
   };
 

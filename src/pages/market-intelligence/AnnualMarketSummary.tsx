@@ -121,7 +121,7 @@ const AnnualMarketSummary = () => {
 
   if (!data) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-zinc-900 mb-4">Report Not Found</h1>
           <Link to="/market-intelligence/reports" className="text-gold hover:underline">
@@ -133,7 +133,7 @@ const AnnualMarketSummary = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       <SEOHead
         title={`${data.year} Annual Summary | Dubai Real Estate | JBJ GLOBAL REAL ESTATE`}
         description={`Annual market summary for ${data.year} covering Dubai real estate across BUY · SELL · RENT. Comprehensive year-in-review by JBJ GLOBAL REAL ESTATE.`}

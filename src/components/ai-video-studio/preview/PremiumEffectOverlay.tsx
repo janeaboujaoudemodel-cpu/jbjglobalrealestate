@@ -65,7 +65,7 @@ function MoneyRain() {
 
 // ── Confetti Burst ────────────────────────────────────────────────────────────
 function ConfettiBurst() {
-  const particles = useParticles(55, ['#EF4444', '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4']);
+  const particles = useParticles(55, ['#DC2626', '#3B82F6', '#059669', '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4']);
   return (
     <>
       <style>{`
@@ -212,7 +212,7 @@ function LuxurySparkle() {
 
 // ── Fire Energy ───────────────────────────────────────────────────────────────
 function FireEnergy() {
-  const particles = useParticles(25, ['#EF4444', '#F97316', '#FBBF24', '#DC2626', '#FB923C']);
+  const particles = useParticles(25, ['#DC2626', '#EA580C', '#FBBF24', '#DC2626', '#FB923C']);
   return (
     <>
       <style>{`

@@ -287,7 +287,7 @@ const Compare = () => {
     .pros, .cons { padding: 15px; border-radius: 8px; }
     .pros { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); }
     .cons { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); }
-    .pros h4 { color: #22c55e; } .cons h4 { color: #ef4444; }
+    .pros h4 { color: #22c55e; } .cons h4 { color: #dc2626; }
     .pros li, .cons li { margin: 5px 0; font-size: 14px; color: #ccc; }
     
     .recommendation-box { background: linear-gradient(135deg, #A8925A, #8B7744); border-radius: 12px; padding: 30px; margin: 30px 0; }
@@ -299,7 +299,7 @@ const Compare = () => {
     .best-for-value { color: #000; margin-top: 5px; }
     
     .risk-section { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; padding: 20px; margin: 30px 0; }
-    .risk-section h4 { color: #ef4444; margin-bottom: 15px; }
+    .risk-section h4 { color: #dc2626; margin-bottom: 15px; }
     .risk-section li { color: #ccc; margin: 8px 0; }
     
     .footer { text-align: center; margin-top: 50px; padding-top: 30px; border-top: 1px solid #333; color: #666; }
@@ -381,7 +381,7 @@ const Compare = () => {
         { label: 'Handover', score: Math.min(10, Math.round((r.investmentRating + r.locationRating) / 2) * 2) },
         { label: 'Payment Plan', score: Math.min(10, Math.round((r.valueRating + r.investmentRating) / 2) * 2) },
       ].map(b => {
-        const color = b.score >= 8 ? '#22C55E' : b.score >= 6 ? '#F59E0B' : '#EF4444';
+        const color = b.score >= 8 ? '#22C55E' : b.score >= 6 ? '#F59E0B' : '#DC2626';
         return `<div class="score-bar-row"><span class="score-bar-label">${b.label}</span><div class="score-bar-track"><div class="score-bar-fill" style="width:${(b.score/10)*100}%;background:${color}"></div></div><span class="score-bar-value" style="color:${color}">${b.score}</span></div>`;
       }).join('')}
       <div class="pros-cons">
@@ -485,7 +485,7 @@ const Compare = () => {
   const renderScoreBar = (rating: number, label: string) => {
     const score = toScore(rating);
     const pct = (score / 10) * 100;
-    const color = score >= 8 ? '#22C55E' : score >= 6 ? '#F59E0B' : '#EF4444';
+    const color = score >= 8 ? '#22C55E' : score >= 6 ? '#F59E0B' : '#DC2626';
     return (
       <div className="flex items-center gap-2">
         <span className="text-[10px] text-zinc-500 w-20 shrink-0 text-right">{label}</span>

@@ -55,7 +55,7 @@ interface LeadStatus {
   count: number;
 }
 
-const COLORS = ["#C8A766", "#10B981", "#3B82F6", "#8B5CF6", "#F59E0B"];
+const COLORS = ["#C8A766", "#059669", "#3B82F6", "#8B5CF6", "#F59E0B"];
 
 export default function JBJBrokerReports() {
   const navigate = useNavigate();
@@ -180,14 +180,14 @@ export default function JBJBrokerReports() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-gold" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Header */}
       <header className="sticky top-0 lg:top-[48px] z-50 border-b border-gold/20">
         <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] px-6 py-4">

@@ -201,7 +201,7 @@ const SuggestionCard = ({
         <p className="text-xs font-semibold text-gold uppercase tracking-wide mb-1">
           {typeLabels[suggestion.type] || suggestion.title}
         </p>
-        <p className="text-xs text-[#8B7355] line-clamp-2">
+        <p className="text-xs text-[#8A7356] line-clamp-2">
           {suggestion.message.slice(0, 120)}...
         </p>
         <p className="text-[10px] text-gold/60 mt-1">Click to preview full response</p>
@@ -620,7 +620,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                           "text-xs font-semibold uppercase",
                           msg.sender_type === "staff"
                             ? "text-gold"
-                            : "text-[#8B7355]"
+                            : "text-[#8A7356]"
                         )}
                       >
                         {msg.sender_type === "staff" ? "Staff Reply" : "Customer"}

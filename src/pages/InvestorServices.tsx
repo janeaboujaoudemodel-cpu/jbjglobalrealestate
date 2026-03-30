@@ -167,7 +167,7 @@ const InvestorServices = () => {
         </Link>
       </div>
       
-      <main className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] pb-20 lg:pb-0">
+      <main className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] pb-20 lg:pb-0">
         {/* ═══ HERO ═══ */}
         <section className="relative pt-24 pb-14 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-gold/8 via-gold/3 to-transparent" />

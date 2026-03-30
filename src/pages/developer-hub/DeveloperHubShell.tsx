@@ -52,7 +52,7 @@ const DeveloperHubShell = () => {
       </div>
 
       {/* Navigation area — dark background */}
-      <div className="flex-1 overflow-y-auto bg-[hsl(38,35%,12%)]">
+      <div className="flex-1 overflow-y-auto bg-[hsl(32,28%,13%)]">
         <DeveloperHubSidebarNav collapsed={collapsed} onNavigate={() => setMobileOpen(false)} />
       </div>
 
@@ -77,11 +77,11 @@ const DeveloperHubShell = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex">
       {/* Mobile Sheet */}
       {isMobile && (
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetContent side="left" className="w-64 p-0 bg-[hsl(38,35%,12%)] border-r border-gold/30">
+          <SheetContent side="left" className="w-64 p-0 bg-[hsl(32,28%,13%)] border-r border-gold/30">
             <div className="h-full flex flex-col">
               <SidebarContent collapsed={false} />
             </div>
@@ -93,7 +93,7 @@ const DeveloperHubShell = () => {
       {!isMobile && (
         <aside
           className={cn(
-            "fixed left-0 top-[88px] h-[calc(100vh-88px)] bg-[hsl(38,35%,12%)] border-r border-gold/30 transition-all duration-300 z-40 flex flex-col",
+            "fixed left-0 top-[88px] h-[calc(100vh-88px)] bg-[hsl(32,28%,13%)] border-r border-gold/30 transition-all duration-300 z-40 flex flex-col",
             sidebarCollapsed ? "w-16" : "w-64"
           )}
         >

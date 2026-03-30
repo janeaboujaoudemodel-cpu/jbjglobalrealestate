@@ -346,7 +346,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30">
-                      <stat.icon className="w-4 h-4 text-[#8B7355]" />
+                      <stat.icon className="w-4 h-4 text-[#8A7356]" />
                     </div>
                     <span className="text-zinc-600 text-xs font-medium">{stat.label}</span>
                   </div>
@@ -406,7 +406,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                           labelStyle={{ fontWeight: 600, color: '#000' }}
                         />
                         <Area type="monotone" dataKey="visitors" stroke="#B89555" strokeWidth={2} fill="url(#visitorsGradient)" name="Unique Visitors" />
-                        <Area type="monotone" dataKey="pageViews" stroke="#8B7355" strokeWidth={1.5} fill="transparent" name="Page Views" strokeDasharray="4 4" />
+                        <Area type="monotone" dataKey="pageViews" stroke="#8A7356" strokeWidth={1.5} fill="transparent" name="Page Views" strokeDasharray="4 4" />
                       </AreaChart>
                     </ResponsiveContainer>
                   )}
@@ -468,7 +468,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                           </div>
                           <div className="h-2 bg-gold/20 rounded-full overflow-hidden">
                             <div 
-                              className="h-full bg-gradient-to-r from-[#D8C7A6] to-[#8B7355] rounded-full"
+                              className="h-full bg-gradient-to-r from-[#D8C7A6] to-[#8A7356] rounded-full"
                               style={{ width: `${(tool.usage_count / (toolUsage[0]?.usage_count || 1)) * 100}%` }}
                             />
                           </div>

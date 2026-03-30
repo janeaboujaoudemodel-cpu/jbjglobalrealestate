@@ -136,7 +136,7 @@ function buildEmailHtml(req: CVEmailRequest): { html: string; subject: string } 
   const normalizedStatus = req.status === 'pending' ? 'under_review' : req.status;
   const config = statusConfig[normalizedStatus] || statusConfig.submitted;
   const statusBadgeStyle = normalizedStatus === 'approved' ? 'background:#dcfce7;color:#166534;border:1px solid #22c55e;' :
-    normalizedStatus === 'rejected' ? 'background:#fef2f2;color:#991b1b;border:1px solid #ef4444;' :
+    normalizedStatus === 'rejected' ? 'background:#fef2f2;color:#991b1b;border:1px solid #dc2626;' :
     normalizedStatus === 'under_review' ? 'background:#fef3c7;color:#92400e;border:1px solid #f59e0b;' :
     'background:#dbeafe;color:#1e40af;border:1px solid #3b82f6;';
   const statusBadgeText = normalizedStatus === 'approved' ? 'APPROVED' : normalizedStatus === 'rejected' ? 'NOT SELECTED' : normalizedStatus === 'under_review' ? 'UNDER REVIEW' : 'APPLICATION RECEIVED';

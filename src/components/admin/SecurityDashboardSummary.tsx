@@ -254,7 +254,7 @@ export const SecurityDashboardSummary = () => {
     }));
   }, [rateLimits]);
 
-  const CHART_COLORS = ['#f97316', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899'];
+  const CHART_COLORS = ['#ea580c', '#eab308', '#22c55e', '#3b82f6', '#8b5cf6', '#ec4899'];
 
   // Export to CSV
   const doExportCSV = useCallback(() => {
@@ -610,12 +610,12 @@ export const SecurityDashboardSummary = () => {
               <AreaChart data={blockedPerDayData}>
                 <defs>
                   <linearGradient id="colorBlocked" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#dc2626" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#dc2626" stopOpacity={0}/>
                   </linearGradient>
                   <linearGradient id="colorAutoBlocked" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f97316" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#f97316" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#ea580c" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#ea580c" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
@@ -642,7 +642,7 @@ export const SecurityDashboardSummary = () => {
                 <Area 
                   type="monotone" 
                   dataKey="blocked" 
-                  stroke="#ef4444" 
+                  stroke="#dc2626" 
                   fillOpacity={1} 
                   fill="url(#colorBlocked)"
                   name="Total Blocked"
@@ -650,7 +650,7 @@ export const SecurityDashboardSummary = () => {
                 <Area 
                   type="monotone" 
                   dataKey="autoBlocked" 
-                  stroke="#f97316" 
+                  stroke="#ea580c" 
                   fillOpacity={1} 
                   fill="url(#colorAutoBlocked)"
                   name="Auto Blocked"
@@ -693,7 +693,7 @@ export const SecurityDashboardSummary = () => {
                 />
                 <Bar 
                   dataKey="violations" 
-                  fill="#f97316" 
+                  fill="#ea580c" 
                   radius={[4, 4, 0, 0]}
                   name="Violations"
                 />

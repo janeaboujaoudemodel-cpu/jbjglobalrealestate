@@ -433,9 +433,9 @@ const Footer = () => {
 
   return (
     <>
-      <footer id="site-footer" className="relative overflow-x-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <footer id="site-footer" className="relative overflow-x-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Dark premium brown background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]" />
       
       {/* Premium Gold Divider at top - 3D layered effect with symmetric spacing */}
       <div className="relative py-4">
@@ -641,7 +641,7 @@ const Footer = () => {
               <div 
                 className="w-full flex flex-col md:flex-row items-center justify-center gap-0 rounded-none overflow-hidden"
                 style={{
-                  background: 'linear-gradient(145deg, hsl(38 35% 12%) 0%, hsl(36 30% 16%) 50%, hsl(34 25% 12%) 100%)',
+                  background: 'linear-gradient(145deg, hsl(32 28% 13%) 0%, hsl(33 27% 15%) 50%, hsl(33 28% 11%) 100%)',
                   border: '1px solid rgba(200,167,102,0.3)',
                 }}
               >

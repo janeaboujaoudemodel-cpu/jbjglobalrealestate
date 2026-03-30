@@ -34,7 +34,7 @@ export const TEMPLATES = [
   { id: "cream", name: "Warm Cream", bg: "#fdf6e3", text: "#3c3836", accent: "#b57614", category: "Minimal", preview: "Solarized warm" },
   { id: "midnight", name: "Midnight", bg: "#020617", text: "#e2e8f0", accent: "#06b6d4", category: "Business", preview: "Dark elegant" },
   { id: "champagne", name: "Champagne Gold", bg: "#FDFBF7", text: "#1e293b", accent: "#B89555", category: "Business", preview: "Luxury premium" },
-  { id: "emerald", name: "Emerald Night", bg: "#022c22", text: "#d1fae5", accent: "#10b981", category: "Creative", preview: "Dark emerald" },
+  { id: "emerald", name: "Emerald Night", bg: "#022c22", text: "#d1fae5", accent: "#059669", category: "Creative", preview: "Dark emerald" },
   { id: "slate", name: "Modern Slate", bg: "#334155", text: "#f1f5f9", accent: "#f59e0b", category: "Business", preview: "Clean executive" },
   { id: "rose", name: "Rose Quartz", bg: "#fff1f2", text: "#1e293b", accent: "#e11d48", category: "Creative", preview: "Soft elegance" },
 ];

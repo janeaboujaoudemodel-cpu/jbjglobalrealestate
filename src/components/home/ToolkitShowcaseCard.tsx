@@ -122,11 +122,11 @@ const royalTools = [
 
 export function ToolkitShowcaseCard() {
   return (
-    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] py-10 md:py-14">
+    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] py-10 md:py-14">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="rounded-2xl overflow-hidden border border-gold/30 bg-gradient-to-br from-[hsl(38,35%,15%)] via-[hsl(36,30%,18%)] to-[hsl(34,25%,15%)]">
           {/* Header Section */}
-          <div className="bg-gradient-to-r from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] p-6 md:p-8 border-b border-gold/20">
+          <div className="bg-gradient-to-r from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] p-6 md:p-8 border-b border-gold/20">
             <div className="flex items-center gap-3 mb-3">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-xs uppercase tracking-[0.2em]">
                 <Sparkles className="w-3 h-3" />

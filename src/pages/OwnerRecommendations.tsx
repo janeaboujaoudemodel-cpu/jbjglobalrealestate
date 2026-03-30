@@ -130,7 +130,7 @@ const OwnerRecommendations = () => {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-4 py-1 mb-3">
-                <Sparkles className="w-4 h-4 text-[#8B7355]" />
+                <Sparkles className="w-4 h-4 text-[#8A7356]" />
                 <span className="text-black text-sm font-medium">AI Intelligence</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-bold text-black">Global Recommendations</h1>

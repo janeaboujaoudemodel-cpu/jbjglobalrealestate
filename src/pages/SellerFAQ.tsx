@@ -107,7 +107,7 @@ const SellerFAQ = () => {
   const allFaqItems = categories.flatMap(cat => cat.questions);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       <SEOHead title="Seller FAQ | Property Selling Questions | JBJ Global Real Estate" description="Answers to common questions about selling property in the UAE — pricing, fees, process, and marketing." canonicalPath="/seller-faq" faqItems={allFaqItems} />
       <FAQHero badge="Seller FAQ" badgeIcon={HelpCircle} title={<>Seller Questions <span className="text-gold">Answered</span></>} description="Everything you need to know about selling property in the UAE." backgroundImage="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=2000&q=80"
         actions={<>

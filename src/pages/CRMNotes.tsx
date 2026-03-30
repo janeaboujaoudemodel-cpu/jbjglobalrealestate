@@ -168,7 +168,7 @@ const CRMNotes = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] p-6">
         <div className="max-w-6xl mx-auto space-y-6">
           <Skeleton className="h-12 w-64 bg-gold/20" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -182,10 +182,10 @@ const CRMNotes = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Layer 2 - Active Champagne */}
       <div className="mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8">
-        <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+        <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
           {/* Header - Layer 3 */}
           <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 lg:top-[48px] z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
             <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">

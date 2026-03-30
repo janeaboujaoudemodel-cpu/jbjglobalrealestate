@@ -57,7 +57,7 @@ function MiniMoneyRain() {
 
 // ── CONFETTI ──────────────────────────────────────────────────────────────────
 function MiniConfetti() {
-  const COLORS = ['#EF4444','#3B82F6','#10B981','#F59E0B','#8B5CF6','#EC4899','#06B6D4'];
+  const COLORS = ['#DC2626','#3B82F6','#059669','#F59E0B','#8B5CF6','#EC4899','#06B6D4'];
   const pieces = useMemo(() => Array.from({ length: 22 }, (_, i) => ({
     id: i,
     left: seeded(i * 3, 100),
@@ -169,7 +169,7 @@ function MiniSnow() {
 
 // ── FIRE ──────────────────────────────────────────────────────────────────────
 function MiniFire() {
-  const FIRE_COLORS = ['#EF4444','#F97316','#FBBF24','#DC2626','#FB923C'];
+  const FIRE_COLORS = ['#DC2626','#EA580C','#FBBF24','#DC2626','#FB923C'];
   const flames = useMemo(() => Array.from({ length: 16 }, (_, i) => ({
     id: i,
     left: seeded(i * 3, 100),

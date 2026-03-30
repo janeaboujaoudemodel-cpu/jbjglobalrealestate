@@ -40,7 +40,7 @@ interface StatusEmailRequest {
 
 function getStatusColor(status: string): string {
   if (["approved", "accepted", "published", "active"].includes(status)) return "#22c55e";
-  if (["rejected", "declined", "removed"].includes(status)) return "#ef4444";
+  if (["rejected", "declined", "removed"].includes(status)) return "#dc2626";
   if (["request_edit", "revision_needed", "info_requested"].includes(status)) return "#f59e0b";
   return "#B89555";
 }

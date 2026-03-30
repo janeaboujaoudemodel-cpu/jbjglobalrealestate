@@ -154,7 +154,7 @@ export default function BrokerTraining() {
   const totalProgress = trainingModules.reduce((acc, m) => acc + (m.progress || 0), 0) / trainingModules.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       <SEOHead 
         title="Broker Training | Market Intelligence | JBJ GLOBAL REAL ESTATE"
         description="Internal broker training modules powered by Market Intelligence."

@@ -192,7 +192,7 @@ export default function AIBrokerWorkspace() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Header */}
       <header className="bg-black border-b border-zinc-800 sticky top-0 lg:top-[48px] z-50">
         <div className="container mx-auto px-4 py-4">

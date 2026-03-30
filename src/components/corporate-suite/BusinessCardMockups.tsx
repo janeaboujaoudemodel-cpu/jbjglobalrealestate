@@ -6,7 +6,7 @@ import { getFinishOverlayStyle } from "./businessCardTypes";
 export function DeskMockup({ children, finishEffect }: { children: React.ReactNode; finishEffect: FinishEffect }) {
   return (
     <div className="relative w-full rounded-2xl overflow-hidden" style={{ background: "linear-gradient(160deg, #f5efe6 0%, #e8dfd3 50%, #d4cbbe 100%)", padding: "40px 32px 48px", minHeight: 280 }}>
-      <div style={{ position: "absolute", inset: 0, opacity: 0.04, backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 18px, #8b7355 18px, #8b7355 19px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", inset: 0, opacity: 0.04, backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 18px, #8a7356 18px, #8a7356 19px)", pointerEvents: "none" }} />
       <div className="relative mx-auto" style={{ maxWidth: 320 }}>
         <div style={{ position: "absolute", bottom: -12, left: "8%", right: "8%", height: 20, background: "rgba(0,0,0,0.15)", filter: "blur(12px)", borderRadius: "50%" }} />
         <div className="relative" style={{ transform: "perspective(600px) rotateX(2deg)", transformOrigin: "center bottom" }}>

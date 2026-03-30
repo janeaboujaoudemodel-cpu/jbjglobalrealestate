@@ -36,13 +36,13 @@ const RED_PIN_SVG = `
 <svg xmlns="http://www.w3.org/2000/svg" width="36" height="46" viewBox="0 0 36 46" fill="none">
   <defs>
     <linearGradient id="rpin" x1="18" y1="0" x2="18" y2="42" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#EF4444"/>
+      <stop offset="0%" stop-color="#DC2626"/>
       <stop offset="100%" stop-color="#991B1B"/>
     </linearGradient>
   </defs>
   <path d="M18 0C8 0 0 8 0 18c0 14 18 28 18 28s18-14 18-28C36 8 28 0 18 0z" fill="url(#rpin)"/>
   <circle cx="18" cy="16" r="7" fill="white" opacity="0.9"/>
-  <circle cx="18" cy="16" r="3.5" fill="#EF4444"/>
+  <circle cx="18" cy="16" r="3.5" fill="#DC2626"/>
 </svg>`;
 
 const RedIcon = L.divIcon({

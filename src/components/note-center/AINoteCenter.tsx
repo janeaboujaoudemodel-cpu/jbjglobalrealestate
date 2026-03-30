@@ -927,7 +927,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
             <div className="space-y-2">
               <Label className="text-zinc-600">Color</Label>
               <div className="flex gap-2">
-                {['#A8925A', '#EF4444', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B'].map(color => (
+                {['#A8925A', '#DC2626', '#3B82F6', '#059669', '#8B5CF6', '#F59E0B'].map(color => (
                   <button key={color} onClick={() => setNewProject(prev => ({ ...prev, color }))} className={`w-8 h-8 rounded-full transition-transform ${newProject.color === color ? 'ring-2 ring-[#B89555] ring-offset-2 scale-110' : ''}`} style={{ backgroundColor: color }} />
                 ))}
               </div>

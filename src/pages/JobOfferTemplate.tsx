@@ -22,7 +22,7 @@ const JobOfferTemplate = () => {
   const [tone, setTone] = useState("professional");
   const [additionalPrompt, setAdditionalPrompt] = useState("");
   const [headerColor1, setHeaderColor1] = useState("#C8A766");
-  const [headerColor2, setHeaderColor2] = useState("#8B7355");
+  const [headerColor2, setHeaderColor2] = useState("#8A7356");
   const [generating, setGenerating] = useState(false);
   const [generatedHtml, setGeneratedHtml] = useState("");
   const previewRef = useRef<HTMLDivElement>(null);
@@ -89,7 +89,7 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
         <div className="container mx-auto px-4 py-8">
           <div className="text-center max-w-2xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-4 py-1 mb-4">
-              <FileSpreadsheet className="w-4 h-4 text-[#8B7355]" />
+              <FileSpreadsheet className="w-4 h-4 text-[#8A7356]" />
               <span className="text-black text-sm font-medium">Job Offer Template</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">Job Offer Generator</h1>

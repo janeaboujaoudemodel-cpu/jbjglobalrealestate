@@ -308,7 +308,7 @@ export default function GlobalRecommendationsHub() {
             <section.icon className="w-4 h-4" />
             <span>{section.label}</span>
             {section.id !== "all" && (
-              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 ml-1 border-gold/30 text-[#8B7355] bg-gold/10">
+              <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 ml-1 border-gold/30 text-[#8A7356] bg-gold/10">
                 {globalRecommendations.filter(r => r.source === section.id || r.category === section.id).length}
               </Badge>
             )}

@@ -104,8 +104,8 @@ const TrustBar = () => {
             <div 
               className={`w-8 h-8 md:w-11 md:h-11 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
                 item.highlight 
-                  ? 'bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] shadow-lg' 
-                  : 'bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)]/90 group-hover:from-[hsl(38,35%,14%)] group-hover:to-[hsl(34,25%,14%)] shadow-md'
+                  ? 'bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] shadow-lg' 
+                  : 'bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)]/90 group-hover:from-[hsl(38,35%,14%)] group-hover:to-[hsl(34,25%,14%)] shadow-md'
               }`}
             >
               <item.icon 

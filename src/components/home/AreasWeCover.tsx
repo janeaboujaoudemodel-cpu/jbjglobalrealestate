@@ -29,7 +29,7 @@ const AreasWeCover = () => {
   }
 
   return (
-    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] pt-8 md:pt-12">
+    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] pt-8 md:pt-12">
       <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-10">
@@ -97,7 +97,7 @@ const AreasWeCover = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-3">
                   {/* Property count badge */}
                   {area.propertyCount != null && area.propertyCount > 0 && (
-                    <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-[hsl(38,35%,12%)]/60 text-gold text-[9px] font-semibold tracking-wide border border-gold/30">
+                    <span className="inline-block mb-1.5 px-2 py-0.5 rounded-full bg-[hsl(32,28%,13%)]/60 text-gold text-[9px] font-semibold tracking-wide border border-gold/30">
                       {area.propertyCount} Projects
                     </span>
                   )}

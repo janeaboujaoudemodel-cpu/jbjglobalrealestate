@@ -40,7 +40,7 @@ const AreaIntelligence = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       <SEOHead 
         title="Dubai Area Intelligence | Rent Trends & Property Prices by Neighborhood | JBJ GLOBAL REAL ESTATE"
         description="Deep dive into Dubai neighborhoods. Historical price trends, rent analysis, demand vs supply indicators, and market insights for BUY · SELL · RENT decisions."

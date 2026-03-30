@@ -84,7 +84,7 @@ const aiTools = [
 
 const DesignBuild = () => {
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <section className="relative w-full min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Hero Section - Premium Video Background */}
       <div className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">

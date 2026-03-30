@@ -57,7 +57,7 @@ const AIComparisonWidget = () => {
               Powered by JBJ Global Real Estate
             </p>
           </div>
-          <div className="hidden md:flex w-16 h-16 bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] rounded-2xl items-center justify-center shadow-lg">
+          <div className="hidden md:flex w-16 h-16 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-2xl items-center justify-center shadow-lg">
             <BarChart3 className="w-8 h-8 text-gold" />
           </div>
         </div>

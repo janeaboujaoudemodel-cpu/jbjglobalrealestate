@@ -26,7 +26,7 @@ const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; clas
   <div 
     className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
     style={{
-      background: 'linear-gradient(135deg, hsl(38 35% 12%) 0%, hsl(36 30% 16%) 50%, hsl(34 25% 12%) 100%)',
+      background: 'linear-gradient(135deg, hsl(32 28% 13%) 0%, hsl(33 27% 15%) 50%, hsl(33 28% 11%) 100%)',
     }}
   >
     <Icon className="w-6 h-6 text-gold" />
@@ -35,7 +35,7 @@ const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; clas
 
 export const DataSourcesPanel = () => {
   return (
-    <section className="py-16 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <section className="py-16 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       <div className="jj-layer-2">
         <motion.div
           initial="hidden"

@@ -180,7 +180,7 @@ const OwnerAuditPage = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
-                <Shield className="w-6 h-6 text-[#8B7355]" />
+                <Shield className="w-6 h-6 text-[#8A7356]" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-black">Owner Audit</h1>
@@ -290,7 +290,7 @@ const OwnerAuditPage = () => {
               <Card className="border-2 border-gold/30 bg-white/60">
                 <CardHeader className="border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardTitle className="text-black flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-[#8B7355]" />
+                    <FileText className="w-5 h-5 text-[#8A7356]" />
                     Route Inventory ({filteredRoutes.length} routes)
                   </CardTitle>
                 </CardHeader>
@@ -362,7 +362,7 @@ const OwnerAuditPage = () => {
                                   variant="ghost"
                                   size="sm"
                                   asChild
-                                  className="text-[#8B7355] hover:text-black hover:bg-gold/10"
+                                  className="text-[#8A7356] hover:text-black hover:bg-gold/10"
                                 >
                                   <Link to={route.path} target="_blank">
                                     <ExternalLink className="w-4 h-4 mr-1" />
@@ -384,15 +384,15 @@ const OwnerAuditPage = () => {
                 <h3 className="text-sm font-semibold text-black mb-3">Legend</h3>
                 <div className="flex flex-wrap gap-4 text-sm">
                   <div className="flex items-center gap-2">
-                    <Layout className="w-4 h-4 text-[#8B7355]" />
+                    <Layout className="w-4 h-4 text-[#8A7356]" />
                     <span className="text-zinc-700">Dashboard = Visible on dashboard page</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Menu className="w-4 h-4 text-[#8B7355]" />
+                    <Menu className="w-4 h-4 text-[#8A7356]" />
                     <span className="text-zinc-700">Sidebar = Visible in navigation sidebar</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#8B7355]" />
+                    <FileText className="w-4 h-4 text-[#8A7356]" />
                     <span className="text-zinc-700">Registry = Listed in Feature Registry</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -462,7 +462,7 @@ const OwnerAuditPage = () => {
               <Card className="border-2 border-gold/30 bg-white/60">
                 <CardHeader className="border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardTitle className="text-black flex items-center gap-2">
-                    <Brain className="w-5 h-5 text-[#8B7355]" />
+                    <Brain className="w-5 h-5 text-[#8A7356]" />
                     AI Tools Inventory ({AI_TOOLS_INVENTORY_VERIFIED.length} tools)
                   </CardTitle>
                 </CardHeader>
@@ -488,7 +488,7 @@ const OwnerAuditPage = () => {
                           >
                             <td className="p-4">
                               <div className="font-medium text-black flex items-center gap-2">
-                                <Sparkles className="w-4 h-4 text-[#8B7355]" />
+                                <Sparkles className="w-4 h-4 text-[#8A7356]" />
                                 {tool.name}
                               </div>
                             </td>
@@ -530,7 +530,7 @@ const OwnerAuditPage = () => {
                                   variant="ghost"
                                   size="sm"
                                   asChild
-                                  className="text-[#8B7355] hover:text-black hover:bg-gold/10"
+                                  className="text-[#8A7356] hover:text-black hover:bg-gold/10"
                                 >
                                   <Link to={tool.route} target="_blank">
                                     <ExternalLink className="w-4 h-4 mr-1" />

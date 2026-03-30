@@ -185,7 +185,7 @@ const CustomerHappinessCenter = () => {
       </section>
 
       {/* SUPPORT TICKET SECTION - Reusing existing component */}
-      <section id="create-ticket" className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <section id="create-ticket" className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         <SupportTicketBox />
       </section>
 

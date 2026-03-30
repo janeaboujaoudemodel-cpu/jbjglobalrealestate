@@ -110,7 +110,7 @@ const getStatusConfig = (status: string | null) => {
     case 'action_required': return { label: 'Action Required', bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-300' };
     case 'highlighted': return { label: 'Highlighted', bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-300' };
     case 'open': return { label: 'Open', bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300' };
-    default: return { label: 'Active', bg: 'bg-[#F7F1E6]', text: 'text-[#8B7355]', border: 'border-[#B89555]/40' };
+    default: return { label: 'Active', bg: 'bg-[#F7F1E6]', text: 'text-[#8A7356]', border: 'border-[#B89555]/40' };
   }
 };
 
@@ -680,11 +680,11 @@ const AdminChatDashboard = () => {
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     {cv.ai_ranking ? (
-                      <Badge className="bg-[#B89555]/10 text-[#8B7355] border-[#B89555]/30">
+                      <Badge className="bg-[#B89555]/10 text-[#8A7356] border-[#B89555]/30">
                         <Star className="w-3 h-3 mr-1 fill-[#B89555] text-[#B89555]" /> {cv.ai_ranking}/10
                       </Badge>
                     ) : null}
-                    <Badge className={`${cv.status === 'approved' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : cv.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-[#F7F1E6] text-[#8B7355] border-[#B89555]/30'}`}>
+                    <Badge className={`${cv.status === 'approved' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : cv.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-[#F7F1E6] text-[#8A7356] border-[#B89555]/30'}`}>
                       {cv.status || 'pending'}
                     </Badge>
                     <span className="text-[10px] text-stone-500">{format(new Date(cv.created_at), 'dd MMM yyyy')}</span>
@@ -999,7 +999,7 @@ const AdminChatDashboard = () => {
                       <a href={`mailto:${selectedCV.email}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Mail className="w-3 h-3" /> {selectedCV.email}</a>
                       {selectedCV.phone && <a href={`tel:${selectedCV.phone}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Phone className="w-3 h-3" /> {selectedCV.phone}</a>}
                       <span className="text-xs text-stone-400 flex items-center gap-1"><Calendar className="w-3 h-3" /> {format(new Date(selectedCV.created_at), 'dd MMM yyyy')}</span>
-                      <Badge className="bg-[#F7F1E6] text-[#8B7355] border-[#B89555]/30 text-[10px]">Source: Chat Widget</Badge>
+                      <Badge className="bg-[#F7F1E6] text-[#8A7356] border-[#B89555]/30 text-[10px]">Source: Chat Widget</Badge>
                     </div>
                   </div>
                 </div>
@@ -1097,7 +1097,7 @@ const AdminChatDashboard = () => {
                           href={selectedCV.cv_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 px-4 py-2 bg-[#B89555]/10 hover:bg-[#B89555]/20 text-[#8B7355] text-sm font-medium rounded-lg transition-colors border border-[#B89555]/30"
+                          className="flex items-center gap-1.5 px-4 py-2 bg-[#B89555]/10 hover:bg-[#B89555]/20 text-[#8A7356] text-sm font-medium rounded-lg transition-colors border border-[#B89555]/30"
                         >
                           <ExternalLink className="w-4 h-4" /> Open CV in New Tab
                         </a>

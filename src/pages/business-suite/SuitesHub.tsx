@@ -102,7 +102,7 @@ const SuitesHub = () => {
         description="Access organized suites of AI-powered tools for real estate, brokerage, investment, creative, and corporate needs."
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         {/* Hero */}
         <div className="relative pt-28 pb-16 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(200,167,102,0.1),transparent_60%)]" />

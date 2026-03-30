@@ -559,7 +559,7 @@ export default function ProjectDetailLayout({
               fallbackSrc="/placeholder.svg"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#1a1510] via-[#0d0b08] to-black flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-[#18130F] via-[#0d0b08] to-black flex items-center justify-center">
               <BrandedLoader text="Loading project..." />
             </div>
           )}
