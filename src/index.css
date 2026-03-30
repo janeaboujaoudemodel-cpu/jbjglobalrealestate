@@ -380,9 +380,9 @@ All colors MUST be HSL.
    * Replaces: data-[state=active]:bg-gold
    * ============================================================ */
   .tab-trigger-champagne[data-state="active"] {
-    background: linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%);
-    border: 1px solid hsl(var(--gold) / 0.4);
-    color: #000;
+    background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
+    border: 1px solid hsl(0 0% 30%);
+    color: #FFF;
   }
 
   /* ============================================================
