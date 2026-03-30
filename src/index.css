@@ -30,7 +30,7 @@ body {
 
 @media (min-width: 768px) {
   body {
-    background-color: #000000;
+    background-color: #FFFFFF;
   }
 }
 
@@ -42,60 +42,60 @@ All colors MUST be HSL.
   :root {
     /* Responsive header height — used by mobile menu Sheet positioning */
     --responsive-header-height: 96px;
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%;
 
-    --card: 0 0% 7%;
-    --card-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
 
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
 
-    /* PRIMARY: White accent on black */
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 0%;
+    /* PRIMARY: Black accent on white */
+    --primary: 0 0% 7%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Active gradient replaced with grayscale */
-    --jj-gradient-active: linear-gradient(135deg, hsl(0 0% 10%), hsl(0 0% 7%), hsl(0 0% 4%));
+    /* Active gradient — light */
+    --jj-gradient-active: linear-gradient(135deg, hsl(0 0% 96%), hsl(0 0% 98%), hsl(0 0% 100%));
 
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 7%;
 
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 63%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 0 0% 10%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 7%;
 
-    --destructive: 0 0% 100%;
-    --destructive-foreground: 0 0% 0%;
+    --destructive: 0 0% 7%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 16%;
-    --input: 0 0% 16%;
-    --ring: 0 0% 100%;
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
+    --ring: 0 0% 7%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 4%;
-    --sidebar-foreground: 0 0% 63%;
-    --sidebar-primary: 0 0% 100%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 0 0% 10%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 0 0% 12%;
-    --sidebar-ring: 0 0% 100%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 30%;
+    --sidebar-primary: 0 0% 7%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 7%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 0 0% 7%;
 
-    /* Monochrome accent — replaces gold */
-    --gold: 0 0% 100%;
-    --gold-light: 0 0% 88%;
-    --gold-dark: 0 0% 27%;
-    --gold-muted: 0 0% 63%;
-    --gold-foreground: 0 0% 0%;
+    /* Monochrome accent — dark for contrast on white */
+    --gold: 0 0% 10%;
+    --gold-light: 0 0% 30%;
+    --gold-dark: 0 0% 7%;
+    --gold-muted: 0 0% 45%;
+    --gold-foreground: 0 0% 100%;
 
-    /* Champagne replaced with grayscale surfaces */
-    --champagne-1: 0 0% 10%;
-    --champagne-2: 0 0% 7%;
-    --champagne-3: 0 0% 4%;
+    /* Champagne replaced with light surfaces */
+    --champagne-1: 0 0% 98%;
+    --champagne-2: 0 0% 96%;
+    --champagne-3: 0 0% 93%;
 
     /* ============================================================
      * GLOBAL WIDTH + GUTTER SYSTEM (LOCKED - FINAL)
@@ -103,45 +103,45 @@ All colors MUST be HSL.
     --jj-content-max: 1600px;
     --jj-gutter: 0.125rem;
 
-    /* Pearl replaced with dark surfaces */
-    --pearl-1: 0 0% 10%;
-    --pearl-2: 0 0% 8%;
-    --pearl-3: 0 0% 6%;
+    /* Pearl — light surfaces */
+    --pearl-1: 0 0% 97%;
+    --pearl-2: 0 0% 95%;
+    --pearl-3: 0 0% 92%;
 
-    /* Premium surfaces */
-    --premium-bg: 0 0% 3%;
-    --premium-card: 0 0% 7%;
-    --premium-card-border: 0 0% 16%;
+    /* Premium surfaces — white dominant */
+    --premium-bg: 0 0% 98%;
+    --premium-card: 0 0% 100%;
+    --premium-card-border: 0 0% 85%;
 
-    /* CRM Theme — monochrome */
-    --crm-bg: 0 0% 0%;
-    --crm-card: 0 0% 7%;
-    --crm-card-border: 0 0% 16%;
-    --crm-text: 0 0% 100%;
-    --crm-text-muted: 0 0% 63%;
-    --crm-highlight: 0 0% 10%;
+    /* CRM Theme — white dominant */
+    --crm-bg: 0 0% 98%;
+    --crm-card: 0 0% 100%;
+    --crm-card-border: 0 0% 85%;
+    --crm-text: 0 0% 7%;
+    --crm-text-muted: 0 0% 45%;
+    --crm-highlight: 0 0% 96%;
 
-    /* Suit accent replaced with grayscale */
-    --jj-suit: 0 0% 16%;
-    --jj-suit-dark: 0 0% 10%;
+    /* Suit accent — subtle gray */
+    --jj-suit: 0 0% 90%;
+    --jj-suit-dark: 0 0% 85%;
 
-    /* AI Theme — monochrome grayscale */
-    --ai-purple: 0 0% 63%;
-    --ai-purple-dark: 0 0% 40%;
-    --ai-fuchsia: 0 0% 55%;
-    --ai-cyan: 0 0% 70%;
-    --ai-emerald: 0 0% 55%;
-    --ai-amber: 0 0% 63%;
-    --ai-rose: 0 0% 55%;
-    --ai-glow: 0 0% 75%;
+    /* AI Theme — grayscale */
+    --ai-purple: 0 0% 45%;
+    --ai-purple-dark: 0 0% 30%;
+    --ai-fuchsia: 0 0% 40%;
+    --ai-cyan: 0 0% 50%;
+    --ai-emerald: 0 0% 40%;
+    --ai-amber: 0 0% 45%;
+    --ai-rose: 0 0% 40%;
+    --ai-glow: 0 0% 60%;
 
-    /* Listing badges — monochrome */
-    --handover: 0 0% 100%;
-    --handover-foreground: 0 0% 0%;
+    /* Listing badges */
+    --handover: 0 0% 7%;
+    --handover-foreground: 0 0% 100%;
 
     /* Image overlay controls */
-    --overlay: 0 0% 100%;
-    --overlay-foreground: 0 0% 0%;
+    --overlay: 0 0% 7%;
+    --overlay-foreground: 0 0% 100%;
   }
 
   @media (min-width: 768px) {
@@ -169,7 +169,7 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 0 0% 0%;
+    --background: 0 0% 4%;
     --foreground: 0 0% 100%;
 
     --card: 0 0% 7%;
@@ -380,9 +380,9 @@ All colors MUST be HSL.
    * Replaces: data-[state=active]:bg-gold
    * ============================================================ */
   .tab-trigger-champagne[data-state="active"] {
-    background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
-    border: 1px solid hsl(0 0% 30%);
-    color: #FFF;
+    background: linear-gradient(135deg, #F5F5F5 0%, #FAFAFA 50%, #FFFFFF 100%);
+    border: 1px solid hsl(0 0% 85%);
+    color: #111;
   }
 
   /* ============================================================
@@ -467,14 +467,14 @@ All colors MUST be HSL.
 
   /* LAYER 2: Active section layer (grayscale) */
   .jj-layer-active {
-    @apply rounded-2xl border border-white/10;
+    @apply rounded-2xl border border-gray-200;
     background: linear-gradient(
       to bottom right,
-      hsl(0 0% 10%),
-      hsl(0 0% 7%),
-      hsl(0 0% 4%)
+      hsl(0 0% 98%),
+      hsl(0 0% 96%),
+      hsl(0 0% 100%)
     );
-    box-shadow: 0 0 40px hsl(0 0% 100% / 0.05);
+    box-shadow: 0 1px 3px hsl(0 0% 0% / 0.05);
   }
 
   /*
@@ -482,16 +482,16 @@ All colors MUST be HSL.
    */
 .jj-section-champagne {
   @apply py-12 md:py-16;
-  background: linear-gradient(135deg, hsl(0 0% 4%) 0%, hsl(0 0% 6%) 50%, hsl(0 0% 3%) 100%);
+  background: linear-gradient(135deg, hsl(0 0% 98%) 0%, hsl(0 0% 96%) 50%, hsl(0 0% 100%) 100%);
 }
 
 .jj-section-champagne > div,
 .jj-section-champagne > .container,
 .jj-section-champagne > .max-w-5xl,
 .jj-section-champagne > .max-w-4xl {
-  @apply mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-white/10 p-4 md:p-6 lg:p-8;
-  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
-  box-shadow: 0 0 40px rgba(255,255,255,0.03);
+  @apply mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-gray-200 p-4 md:p-6 lg:p-8;
+  background: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 /* Market Intelligence pages: full-bleed sections stretch behind fixed TOC */
@@ -521,62 +521,53 @@ All colors MUST be HSL.
 }
 
 /* Layer 2 wrapper with proper gutters */
-.jj-layer-2 {
-  @apply jj-section-gutter rounded-2xl border border-white/10 p-2 sm:p-3 md:p-4 lg:p-6;
-  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
-  box-shadow: 0 0 40px rgba(255,255,255,0.03);
-}
+  .jj-layer-2 {
+    @apply jj-section-gutter rounded-2xl border border-gray-200 p-2 sm:p-3 md:p-4 lg:p-6;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
 
 /* Layer 3 - Inner content cards */
-.jj-card-inner {
-  @apply rounded-xl border border-white/10 p-6;
-  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.5);
-  transition: all 0.3s ease;
-}
+  .jj-card-inner {
+    @apply rounded-xl border border-gray-200 p-6;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
 
-.jj-card-inner:hover {
-  @apply border-white/20;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-}
+  .jj-card-inner:hover {
+    @apply border-gray-300;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  }
 
-/* Active box - for inner content cards (Layer 3) */
-.jj-box-active {
-  @apply rounded-xl border border-white/10 p-6;
-  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.5);
-  transition: all 0.3s ease;
-}
+  .jj-box-active {
+    @apply rounded-xl border border-gray-200 p-6;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
 
-.jj-box-active:hover {
-  @apply border-white/20;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-}
+  .jj-box-active:hover {
+    @apply border-gray-300;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  }
 
 /* Icon box - grayscale */
-.jj-icon-box-active {
-  @apply rounded-lg flex items-center justify-center border border-white/10;
-  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
-}
+  .jj-icon-box-active {
+    @apply rounded-lg flex items-center justify-center border border-gray-200;
+    background: #F5F5F5;
+  }
 
-.jj-icon-box-active svg {
-  @apply text-white;
-}
+  .jj-icon-box-active svg {
+    @apply text-black;
+  }
 
-/* Icon box */
-.jj-icon-box {
-    @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-white/10;
-    background: linear-gradient(
-      to bottom right,
-      hsl(0 0% 10%),
-      hsl(0 0% 7%),
-      hsl(0 0% 4%)
-    );
-    box-shadow:
-      inset 0 1px 0 hsl(0 0% 100% / 0.05),
-      0 4px 14px hsl(0 0% 0% / 0.3);
+  .jj-icon-box {
+    @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-gray-200;
+    background: #F5F5F5;
+    box-shadow: 0 1px 3px hsl(0 0% 0% / 0.05);
   }
 
   .jj-icon-box-active > svg {
@@ -1022,16 +1013,16 @@ All colors MUST be HSL.
    * ============================================================ */
   .jj-section-champagne {
     @apply bg-gradient-to-br;
-    --tw-gradient-from: #111111;
-    --tw-gradient-via: #0A0A0A;
-    --tw-gradient-to: #000000;
+    --tw-gradient-from: #FAFAFA;
+    --tw-gradient-via: #F5F5F5;
+    --tw-gradient-to: #FFFFFF;
   }
 
   .jj-card-champagne {
-    @apply bg-gradient-to-br border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.03)];
-    --tw-gradient-from: #1A1A1A;
-    --tw-gradient-via: #111111;
-    --tw-gradient-to: #0A0A0A;
+    @apply bg-gradient-to-br border border-gray-200 shadow-sm;
+    --tw-gradient-from: #FFFFFF;
+    --tw-gradient-via: #FAFAFA;
+    --tw-gradient-to: #F5F5F5;
   }
 
   /* ============================================================
@@ -1954,11 +1945,11 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 }
 
 /* ============================================================
- * GLOBAL MONOCHROME OVERRIDE
+ * GLOBAL MONOCHROME OVERRIDE — WHITE DOMINANT
  * Catches hardcoded colors across 800+ component files
  * ============================================================ */
 
-/* Champagne/cream gradient backgrounds → dark surface */
+/* Champagne/cream gradient backgrounds → white surface */
 [class*="from-[#FDFBF7]"],
 [class*="from-[#F7F1E6]"],
 [class*="from-[#F7F2EA]"],
@@ -1968,41 +1959,49 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 [class*="from-[#DCCFB5]"],
 [class*="from-[#D8C7A6]"],
 [class*="from-[#D4C4A8]"] {
-  --tw-gradient-from: #1A1A1A !important;
-  --tw-gradient-via: #111111 !important;
-  --tw-gradient-to: #0A0A0A !important;
+  --tw-gradient-from: #FFFFFF !important;
+  --tw-gradient-via: #FAFAFA !important;
+  --tw-gradient-to: #F5F5F5 !important;
 }
 
-/* Gold hex text → white */
+/* Gold hex text → black */
 [class*="text-[#D4AF37]"],
 [class*="text-[#C8A766]"],
 [class*="text-[#B8860B]"],
 [class*="text-[#F5E6C8]"] {
-  color: white !important;
+  color: #111111 !important;
 }
 
-/* Light/cream backgrounds → dark surface */
+/* Light/cream backgrounds → white */
 [class*="bg-[#FDFBF7]"],
 [class*="bg-[#F7F1E6]"],
 [class*="bg-[#F7F2EA]"],
 [class*="bg-[#ECE2D2]"],
 [class*="bg-[#EFE6D6]"] {
-  background-color: #111111 !important;
+  background-color: #FFFFFF !important;
 }
 
-/* Brown/champagne background gradients → dark */
+/* Dark backgrounds used as sections → light */
+[class*="bg-[#0A0A0A]"],
+[class*="bg-[#111111]"],
+[class*="bg-[#1A1A1A]"] {
+  background-color: #FAFAFA !important;
+  color: #111 !important;
+}
+
+/* Brown/champagne background gradients → white */
 [class*="from-[hsl(32"],
 [class*="from-[hsl(33"],
 [class*="from-[hsl(34"],
 [class*="from-[hsl(36"],
 [class*="from-[hsl(38"] {
-  --tw-gradient-from: #0A0A0A !important;
-  --tw-gradient-via: #080808 !important;
-  --tw-gradient-to: #050505 !important;
+  --tw-gradient-from: #FFFFFF !important;
+  --tw-gradient-via: #FAFAFA !important;
+  --tw-gradient-to: #F5F5F5 !important;
 }
 
-/* Gold border overrides */
+/* Gold border overrides → gray */
 [class*="border-[#D4AF37]"],
 [class*="border-[#C8A766]"] {
-  border-color: rgba(255,255,255,0.2) !important;
+  border-color: #d4d4d4 !important;
 }

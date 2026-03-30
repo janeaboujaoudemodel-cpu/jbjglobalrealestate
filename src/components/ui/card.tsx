@@ -77,7 +77,7 @@ CardMeta.displayName = "CardMeta";
 /* --- Card Detail Component --- */
 const CardDetail = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn("text-base font-medium text-white", className)} {...props} />
+    <p ref={ref} className={cn("text-base font-medium text-foreground", className)} {...props} />
   ),
 );
 CardDetail.displayName = "CardDetail";

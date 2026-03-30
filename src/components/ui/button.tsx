@@ -11,39 +11,34 @@ import { cn } from "@/lib/utils";
  * ============================================================
  */
 
-const BTN_3D =
-  "shadow-[0_10px_30px_hsl(0_0%_100%/0.08),0_6px_15px_hsl(0_0%_0%/0.22),inset_0_1px_0_hsl(0_0%_100%/0.15)]";
-const BTN_3D_HOVER =
-  "hover:shadow-[0_14px_45px_hsl(0_0%_100%/0.12),0_10px_25px_hsl(0_0%_0%/0.28),inset_0_1px_0_hsl(0_0%_100%/0.2)]";
-
-// PRIMARY: White bg, black text
+// PRIMARY: Solid black button — strong CTA on white pages
 const BRAND_PRIMARY =
-  `bg-white text-black border-2 border-white/80 ${BTN_3D} ${BTN_3D_HOVER} hover:-translate-y-0.5 active:translate-y-0 hover:bg-white/90`;
+  "bg-black text-white border-2 border-black hover:bg-gray-800 hover:border-gray-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0";
 
-// SECONDARY: transparent with white border
+// SECONDARY: Outlined — black border on white
 const BRAND_SECONDARY =
-  `bg-transparent text-white border-2 border-white/40 ${BTN_3D} hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 active:translate-y-0 ${BTN_3D_HOVER}`;
+  "bg-transparent text-black border-2 border-gray-300 hover:bg-gray-100 hover:border-gray-400 hover:-translate-y-0.5 active:translate-y-0";
 
-// TERTIARY: Dark surface
+// TERTIARY: Subtle ghost
 const BRAND_TERTIARY =
-  `bg-[#1A1A1A] text-white border-2 border-white/20 ${BTN_3D} ${BTN_3D_HOVER} hover:border-white/40`;
+  "bg-gray-100 text-gray-700 border-2 border-gray-200 hover:bg-gray-200 hover:text-black hover:border-gray-300";
 
-// HERO: transparent with white border on dark images
+// HERO: transparent with white border on dark images (keep dark for hero overlays)
 const BRAND_HERO =
-  `bg-transparent text-white border-2 border-white/60 shadow-[0_14px_45px_hsl(0_0%_0%/0.35),inset_0_1px_0_hsl(0_0%_100%/0.18)] hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 active:translate-y-0`;
+  "bg-transparent text-white border-2 border-white/60 shadow-[0_14px_45px_hsl(0_0%_0%/0.35),inset_0_1px_0_hsl(0_0%_100%/0.18)] hover:bg-white hover:text-black hover:border-white hover:-translate-y-0.5 active:translate-y-0";
 
 // MEDIA: alias to HERO
 const BRAND_MEDIA = BRAND_HERO;
 
-// DARK: dark surface with white border
+// DARK: dark surface (for dark sections only)
 const BRAND_DARK =
-  `bg-[#0A0A0A] text-white border-2 border-white/30 ${BTN_3D} hover:bg-white hover:text-black ${BTN_3D_HOVER} hover:-translate-y-0.5 active:translate-y-0`;
+  "bg-gray-900 text-white border-2 border-gray-700 hover:bg-white hover:text-black hover:border-gray-300 hover:-translate-y-0.5 active:translate-y-0";
 
-// AI Tool button variants — all monochrome grayscale
-const AI_MONO = "bg-gradient-to-r from-zinc-700 to-zinc-600 hover:from-zinc-600 hover:to-zinc-500 text-white border border-white/20 shadow-lg shadow-black/20";
+// AI Tool button variants — dark unified
+const AI_MONO = "bg-gray-900 hover:bg-gray-800 text-white border border-gray-700 shadow-sm";
 
-// Dark theme variants
-const DARK_GHOST = "bg-transparent text-white border-2 border-zinc-600 hover:bg-white/10 hover:border-white/40 transition-all";
+// Dark theme variants (for use on dark sections)
+const DARK_GHOST = "bg-transparent text-white border-2 border-gray-600 hover:bg-white/10 hover:border-white/40 transition-all";
 const DARK_OUTLINE = "bg-transparent text-white border-2 border-white/40 hover:bg-white/10 hover:border-white/60 transition-all";
 
 const buttonVariants = cva(
