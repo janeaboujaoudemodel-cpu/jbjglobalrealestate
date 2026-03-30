@@ -332,7 +332,7 @@ const PropertyMap = () => {
       </div>
 
       {/* ── MAP CONTAINER ── */}
-      <div ref={mapContainerRef} className="flex-1 relative overflow-hidden" onClick={(e) => { if (e.target === e.currentTarget) setSelectedProject(null); }}>
+      <div ref={mapContainerRef} className="flex-1 relative overflow-hidden" onClick={(e) => { if (e.target === e.currentTarget) { setSelectedProject(null); setHoveredProject(null); } }}>
         <MapContainer
           center={center}
           zoom={11}
