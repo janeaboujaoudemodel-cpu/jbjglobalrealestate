@@ -22,6 +22,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     ownerLoading, 
     ownerError, 
     isOwner,
+    isAuditor,
     refreshOwnerVerification,
     signOut,
   } = useAuth();
