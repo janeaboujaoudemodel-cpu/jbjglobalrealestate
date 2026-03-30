@@ -1897,6 +1897,13 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   z-index: 1000 !important;
 }
 
+.leaflet-popup-close-button {
+  z-index: 10 !important;
+  color: hsl(var(--foreground)) !important;
+  font-size: 20px !important;
+  padding: 4px 8px !important;
+}
+
 /* ============================================================
  * FOLDABLE / FLIP PHONE ADAPTATION
  * Ensures content adapts when a foldable phone opens/closes
