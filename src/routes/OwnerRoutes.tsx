@@ -123,5 +123,6 @@ export const OwnerRoutes = () => (
     <Route path="zero-trust-audit" element={<ZeroTrustAuditPanel />} />
     <Route path="event-management" element={<EventManagementHub />} />
     <Route path="verification-requests" element={<VerificationRequests />} />
+    <Route path="external-access" element={<ExternalAccessManagement />} />
   </Route>
 );

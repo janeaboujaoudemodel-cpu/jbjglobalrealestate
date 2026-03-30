@@ -315,6 +315,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </div>
       )}
       <Suspense fallback={null}>
+        <AuditorFeedbackButton />
+      </Suspense>
+      <Suspense fallback={null}>
         <GuidedTour
           isOpen={showTour}
           onClose={() => { completeTour(); setShowTour(false); }}

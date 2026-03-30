@@ -104,6 +104,7 @@ const NAV_SECTIONS: NavSection[] = [
   {
     label: "SYSTEM",
     items: [
+      { label: "External Access", icon: Shield, path: "/owner/external-access" },
       { label: "Audit", icon: Eye, path: "/owner/audit" },
       { label: "Integrations", icon: Link, path: "/owner/integrations" },
       { label: "Safety Panel", icon: ShieldAlert, path: "/owner/safety" },
