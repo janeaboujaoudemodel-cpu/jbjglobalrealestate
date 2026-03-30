@@ -404,62 +404,62 @@ const PropertyMap = () => {
         </div>
       )}
 
-      {/* Selected Project Detail Card */}
-      {selectedProject && (
-        <div className="fixed bottom-4 left-4 right-4 sm:left-4 sm:right-auto sm:w-96 z-[1000]">
-          <Card className="shadow-xl border-2">
-            <CardContent className="p-0">
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="absolute top-2 right-2 z-10 bg-background/80 backdrop-blur-sm rounded-full p-1 hover:bg-background"
-              >
-                <X className="h-4 w-4" />
-              </button>
-              {selectedProject.cover_image_url && (
-                <div className="relative h-40">
-                  <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" />
-                  <Badge className="absolute bottom-2 left-2 bg-primary text-primary-foreground">
-                    {selectedProject.status || "Off-Plan"}
-                  </Badge>
+        {/* Selected Project Detail Card — inside map container, absolute */}
+        {selectedProject && (
+          <div className="absolute bottom-4 left-4 right-4 sm:left-4 sm:right-auto sm:w-96 z-[1000]">
+            <Card className="shadow-xl border-2">
+              <CardContent className="p-0">
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="absolute top-2 right-2 z-10 bg-background/80 backdrop-blur-sm rounded-full p-1 hover:bg-background"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+                {selectedProject.cover_image_url && (
+                  <div className="relative h-40">
+                    <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" />
+                    <Badge className="absolute bottom-2 left-2 bg-primary text-primary-foreground">
+                      {selectedProject.status || "Off-Plan"}
+                    </Badge>
+                  </div>
+                )}
+                <div className="p-4">
+                  <h3 className="font-semibold text-lg mb-1">{selectedProject.name}</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    {t('map.by')} {selectedProject.developer_name} • {selectedProject.area_name || selectedProject.location}
+                  </p>
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    <div className="text-center p-2 bg-muted rounded-lg">
+                      <Bed className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
+                      <p className="text-xs font-medium">{selectedProject.bedrooms_min || "—"}-{selectedProject.bedrooms_max || "—"} BR</p>
+                    </div>
+                    <div className="text-center p-2 bg-muted rounded-lg">
+                      <Maximize className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
+                      <p className="text-xs font-medium">{selectedProject.size_min || "—"} sqft</p>
+                    </div>
+                    <div className="text-center p-2 bg-muted rounded-lg">
+                      <Calendar className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
+                      <p className="text-xs font-medium">{selectedProject.handover_date || "TBA"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-xs text-muted-foreground">{t('map.startingFrom')}</p>
+                      <p className="text-xl font-bold text-foreground">{formatPrice(selectedProject.price_from)}</p>
+                    </div>
+                    <Link to={`/project/${selectedProject.slug}`}>
+                      <Button className="gap-2">
+                        {t('map.viewDetails')}
+                        <ExternalLink className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
-              )}
-              <div className="p-4">
-                <h3 className="font-semibold text-lg mb-1">{selectedProject.name}</h3>
-                <p className="text-sm text-muted-foreground mb-3">
-                  {t('map.by')} {selectedProject.developer_name} • {selectedProject.area_name || selectedProject.location}
-                </p>
-                <div className="grid grid-cols-3 gap-3 mb-4">
-                  <div className="text-center p-2 bg-muted rounded-lg">
-                    <Bed className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
-                    <p className="text-xs font-medium">{selectedProject.bedrooms_min || "—"}-{selectedProject.bedrooms_max || "—"} BR</p>
-                  </div>
-                  <div className="text-center p-2 bg-muted rounded-lg">
-                    <Maximize className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
-                    <p className="text-xs font-medium">{selectedProject.size_min || "—"} sqft</p>
-                  </div>
-                  <div className="text-center p-2 bg-muted rounded-lg">
-                    <Calendar className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
-                    <p className="text-xs font-medium">{selectedProject.handover_date || "TBA"}</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs text-muted-foreground">{t('map.startingFrom')}</p>
-                    <p className="text-xl font-bold text-foreground">{formatPrice(selectedProject.price_from)}</p>
-                  </div>
-                  <Link to={`/project/${selectedProject.slug}`}>
-                    <Button className="gap-2">
-                      {t('map.viewDetails')}
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-    </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </div>
   );
 };
 
