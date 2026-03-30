@@ -24140,18 +24140,21 @@ export type Database = {
       user_roles: {
         Row: {
           created_at: string
+          expires_at: string | null
           id: string
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Insert: {
           created_at?: string
+          expires_at?: string | null
           id?: string
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Update: {
           created_at?: string
+          expires_at?: string | null
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
@@ -27677,6 +27680,7 @@ export type Database = {
         | "broker_partner"
         | "client"
         | "support_ops"
+        | "auditor"
       approval_stage_status: "pending" | "approved" | "rejected" | "skipped"
       approval_type:
         | "leave_request"
@@ -28119,6 +28123,7 @@ export const Constants = {
         "broker_partner",
         "client",
         "support_ops",
+        "auditor",
       ],
       approval_stage_status: ["pending", "approved", "rejected", "skipped"],
       approval_type: [

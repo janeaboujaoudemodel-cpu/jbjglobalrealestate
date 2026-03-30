@@ -22,6 +22,8 @@ interface AuthContextType {
   ownerError: string | null;
   /** True if authenticated user is verified as the Owner (server-verified) */
   isOwner: boolean;
+  /** True if authenticated user has the 'auditor' role (read-only access) */
+  isAuditor: boolean;
   /** Re-run owner verification without page reload */
   refreshOwnerVerification: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
@@ -45,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ownerLoading, setOwnerLoading] = useState(true);
   const [ownerError, setOwnerError] = useState<string | null>(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [isAuditor, setIsAuditor] = useState(false);
 
   const verifyOwner = useCallback(async (currentSession: Session | null): Promise<boolean> => {
     if (!currentSession?.access_token) {
@@ -185,6 +188,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // If no session, we're done loading
       if (!nextSession?.user) {
         setIsOwner(false);
+        setIsAuditor(false);
         setOwnerError(null);
         setOwnerLoading(false);
         setLoading(false);
@@ -205,6 +209,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try {
         const ownerStatus = await verifyOwner(nextSession);
         if (!mounted) return;
+
+        // Check auditor role for non-owners
+        if (!ownerStatus && nextSession?.user?.id) {
+          try {
+            const { data: hasAuditor } = await supabase.rpc("has_role", {
+              _user_id: nextSession.user.id,
+              _role: "auditor",
+            });
+            if (mounted) setIsAuditor(hasAuditor === true);
+          } catch {
+            if (mounted) setIsAuditor(false);
+          }
+        } else {
+          if (mounted) setIsAuditor(false);
+        }
 
         if (nextSession?.user?.email) {
           console.info("Owner check resolved", {
@@ -329,6 +348,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setSession(null);
       setIsOwner(false);
+      setIsAuditor(false);
       setOwnerError(null);
       localStorage.removeItem('jj_role_selected');
       localStorage.removeItem('jj_employee_welcomed');
@@ -343,6 +363,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setSession(null);
       setIsOwner(false);
+      setIsAuditor(false);
       setOwnerError(null);
       localStorage.removeItem('jj_role_selected');
       localStorage.removeItem('jj_employee_welcomed');
@@ -369,6 +390,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         ownerLoading,
         ownerError,
         isOwner,
+        isAuditor,
         refreshOwnerVerification,
         signIn,
         signUp,

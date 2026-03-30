@@ -20,6 +20,7 @@ const GlobalVerticalNav = lazy(() => import("@/components/navigation/GlobalVerti
 const HorizontalUtilityBar = lazy(() => import("@/components/navigation/HorizontalUtilityBar"));
 // GlobalFilterBar is now embedded inside HorizontalUtilityBar
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
+import AuditorReadOnlyBanner from "@/components/AuditorReadOnlyBanner";
 import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
@@ -223,6 +224,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   return (
     <div className="min-h-screen bg-background md:bg-[#E8DCC8]">
+      <AuditorReadOnlyBanner />
       {/* Mobile Desktop Banner */}
       {isMobile && showDesktopBanner && (
         <div className="fixed top-0 left-0 right-0 z-[10001] bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-b border-gold/30 px-4 py-2.5 flex items-center gap-3 shadow-md">
