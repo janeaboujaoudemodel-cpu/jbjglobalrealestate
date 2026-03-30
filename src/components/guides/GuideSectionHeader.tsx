@@ -28,8 +28,8 @@ export const GuideSectionHeader = ({
         <Icon className="w-6 h-6" />
       </div>
       <h2 className="text-2xl md:text-3xl font-bold">
-        <span className="text-gold">{firstWord}</span>
-        {restWords && <span className="text-black ml-2">{restWords}</span>}
+        <span className="text-foreground">{firstWord}</span>
+        {restWords && <span className="text-foreground/70 ml-2">{restWords}</span>}
       </h2>
     </div>
   );
