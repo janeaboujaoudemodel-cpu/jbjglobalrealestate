@@ -251,8 +251,15 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       { href: '/owner/admin', label: 'Admin Panel', icon: LayoutDashboard, requiresOwner: true },
       { href: '/owner/listing-admin', label: 'Listing Admin', icon: FolderOpen, requiresOwner: true },
       { href: '/ticket-hub', label: 'Customer Happiness', icon: Headphones, requiresOwner: true },
-      { href: '/hr-dashboard?tab=cv-center', label: 'CV Center', icon: ListChecks, requiresOwner: true },
+      { href: '/hr-dashboard', label: 'HR Dashboard', icon: UserCog, requiresOwner: true },
+      { href: '/owner/properties', label: 'Properties', icon: Home, requiresOwner: true },
+      { href: '/owner/analytics', label: 'Analytics', icon: BarChart3, requiresOwner: true },
+      { href: '/owner/safety', label: 'Security Console', icon: ShieldAlert, requiresOwner: true },
+      { href: '/owner/external-access', label: 'External Access', icon: ShieldAlert, requiresOwner: true },
       { href: '/owner/team-chat', label: 'Team Chat', icon: Bell, requiresOwner: true },
+      { href: '/hr-dashboard?tab=cv-center', label: 'CV Center', icon: ListChecks, requiresOwner: true },
+      { href: '/owner/event-management', label: 'Event Management', icon: CalendarDays, requiresOwner: true },
+      { href: '/developer-portal', label: 'Developer Hub', icon: Code2, requiresOwner: true },
       { href: '/founder-assistant', label: 'My Assistant', icon: Sparkles, requiresAdmin: true },
     ];
 
