@@ -114,8 +114,8 @@ All colors MUST be HSL.
     /* Locked Champagne / Inner Card Surface (Layer 3) */
     /* Warmer + less bright than pure white; matches the global "Locked Champagne" requirement */
     --pearl-1: 40 38% 96%;
-    --pearl-2: 39 28% 92%;
-    --pearl-3: 38 24% 87%;
+    --pearl-2: 37 38% 94%;
+    --pearl-3: 38 40% 89%;
 
     /* Premium surfaces */
     --premium-bg: 0 0% 5%;
