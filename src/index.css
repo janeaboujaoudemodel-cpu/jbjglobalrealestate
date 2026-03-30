@@ -714,7 +714,7 @@ All colors MUST be HSL.
   }
 
   .jj-property-card:hover {
-    @apply border-gold/50;
+    @apply border-white/20;
   }
 
   .jj-property-card-image {
