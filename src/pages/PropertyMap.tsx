@@ -160,6 +160,12 @@ const PropertyMap = () => {
   const [listSearch, setListSearch] = useState("");
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
+  const [hoveredProject, setHoveredProject] = useState<any | null>(null);
+  const [hoverPos, setHoverPos] = useState<{ left: number; top: number } | null>(null);
+  const [clickPos, setClickPos] = useState<{ left: number; top: number } | null>(null);
+
+  const onMapReady = useCallback((map: L.Map) => { mapInstanceRef.current = map; }, []);
 
   // Listen for global filter changes from the header
   useEffect(() => {
