@@ -218,8 +218,8 @@ export function MegaMenuIconLink({
       className={cn(
         "flex items-center gap-3 rounded-xl transition-all duration-300 group relative",
         emphasis
-          ? "bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 hover:-translate-y-0.5"
-          : "bg-transparent hover:bg-white/5",
+          ? "bg-gray-100 hover:bg-gray-200 border border-gray-200 hover:border-gray-300 hover:-translate-y-0.5"
+          : "bg-transparent hover:bg-gray-50",
         emphasis ? "py-3 px-4" : compact ? "py-1.5 px-2" : "py-3 px-3"
       )}
     >
