@@ -58,6 +58,7 @@ const IncidentReadinessPanel = lazy(() => import("@/pages/owner/IncidentReadines
 const ZeroTrustAuditPanel = lazy(() => import("@/pages/owner/ZeroTrustAuditPanel"));
 const EventManagementHub = lazy(() => import("@/pages/owner/EventManagementHub"));
 const VerificationRequests = lazy(() => import("@/pages/owner/VerificationRequests"));
+const ExternalAccessManagement = lazy(() => import("@/pages/owner/ExternalAccessManagement"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -122,5 +123,6 @@ export const OwnerRoutes = () => (
     <Route path="zero-trust-audit" element={<ZeroTrustAuditPanel />} />
     <Route path="event-management" element={<EventManagementHub />} />
     <Route path="verification-requests" element={<VerificationRequests />} />
+    <Route path="external-access" element={<ExternalAccessManagement />} />
   </Route>
 );

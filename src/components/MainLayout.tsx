@@ -26,6 +26,10 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
 import { useVisitorTracking } from "@/hooks/useVisitorTracking";
+import { useAntiCapture } from "@/hooks/useAntiCapture";
+import { useAuditorTracking } from "@/hooks/useAuditorTracking";
+
+const AuditorFeedbackButton = lazy(() => import("@/components/auditor/AuditorFeedbackButton"));
 
 // Lazy-load non-critical components to reduce initial bundle
 const AIChatWidget = lazy(() => import("@/components/AIChatWidget"));
@@ -65,6 +69,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const location = useLocation();
   const { trackPageVisit } = useActivityTracker();
   useVisitorTracking();
+  useAntiCapture();
+  useAuditorTracking();
 
   // Track page visits on route change
   useEffect(() => { trackPageVisit(); }, [location.pathname, trackPageVisit]);
@@ -308,6 +314,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           ))}
         </div>
       )}
+      <Suspense fallback={null}>
+        <AuditorFeedbackButton />
+      </Suspense>
       <Suspense fallback={null}>
         <GuidedTour
           isOpen={showTour}

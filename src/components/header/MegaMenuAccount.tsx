@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks, AlertCircle, Building2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -518,6 +518,16 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                 )}
               </div>
             </div>
+
+            {/* Auditor Feedback Inbox for Owner */}
+            {isOwner && (
+              <Suspense fallback={null}>
+                {React.createElement(
+                  React.lazy(() => import("@/components/owner/AuditorFeedbackInbox")),
+                  { onClose }
+                )}
+              </Suspense>
+            )}
 
             {/* ═══ FULL-WIDTH DIVIDER — spans under both columns, under CRM ═══ */}
             <div className="h-[1px] bg-gradient-to-r from-gold/40 via-gold/50 to-gold/40 mt-4 mb-3" />

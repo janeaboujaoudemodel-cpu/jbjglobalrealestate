@@ -1,8 +1,11 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAuditorPasswordChange } from "@/hooks/useAuditorPasswordChange";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, LogOut, Shield, AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
+import { RefreshCw, LogOut, Shield, AlertTriangle, CheckCircle2, XCircle, Ban } from "lucide-react";
+import AuditorForcePasswordChange from "@/components/auth/AuditorForcePasswordChange";
 
 interface OwnerGuardProps {
   children: ReactNode;
@@ -10,10 +13,8 @@ interface OwnerGuardProps {
 }
 
 /**
- * OwnerGuard - Restricts routes to Owner-only access
- * 
- * After successful verification retry → auto-navigates back to intended route.
- * Shows green/red feedback on retry verification.
+ * OwnerGuard - Restricts routes to Owner or Auditor (read-only) access.
+ * Auditors must change password on first login and are blocked if suspended.
  */
 const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   const { 
@@ -27,26 +28,64 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     signOut,
   } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
   const [loadingTimedOut, setLoadingTimedOut] = useState(false);
   const [retryStatus, setRetryStatus] = useState<"idle" | "success" | "failed">("idle");
   const autoRetryCount = useRef(0);
   const autoRetryTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Store intended route for auto-redirect after successful verification
   const intendedRoute = useRef(location.pathname + location.search);
+
+  // Auditor suspend check
+  const [isSuspended, setIsSuspended] = useState(false);
+  const [suspendChecked, setSuspendChecked] = useState(false);
+
+  // Auditor password change
+  const {
+    needsPasswordChange,
+    isLoading: pwLoading,
+    displayName,
+    changePassword,
+  } = useAuditorPasswordChange();
 
   useEffect(() => {
     intendedRoute.current = location.pathname + location.search;
   }, [location.pathname, location.search]);
 
-  // Auto-redirect when isOwner becomes true
+  // Check if auditor is suspended
+  useEffect(() => {
+    if (!user || !isAuditor || isOwner) {
+      setSuspendChecked(true);
+      return;
+    }
+
+    const checkSuspend = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("auditor_profiles")
+          .select("is_suspended, access_expires_at")
+          .eq("user_id", user.id)
+          .single();
+
+        if (error || !data) {
+          setSuspendChecked(true);
+          return;
+        }
+
+        const suspended = (data as any).is_suspended === true;
+        const expired = (data as any).access_expires_at && new Date((data as any).access_expires_at) < new Date();
+        setIsSuspended(suspended || !!expired);
+      } catch {
+        // silent
+      } finally {
+        setSuspendChecked(true);
+      }
+    };
+
+    checkSuspend();
+  }, [user, isAuditor, isOwner]);
+
   useEffect(() => {
     if (isOwner && retryStatus === "success") {
-      const timer = setTimeout(() => {
-        // Already on the right page if OwnerGuard wraps it
-        setRetryStatus("idle");
-      }, 500);
+      const timer = setTimeout(() => setRetryStatus("idle"), 500);
       return () => clearTimeout(timer);
     }
   }, [isOwner, retryStatus]);
@@ -63,13 +102,9 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   const handleRetry = async () => {
     setRetryStatus("idle");
     await refreshOwnerVerification();
-    // Check after a tick
-    setTimeout(() => {
-      // We read from the auth context via the component re-render
-    }, 100);
+    setTimeout(() => {}, 100);
   };
 
-  // Track retry result
   useEffect(() => {
     if (!ownerLoading && retryStatus === "idle") return;
     if (!ownerLoading && isOwner) {
@@ -85,7 +120,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
         <div className="min-h-screen bg-black flex items-center justify-center">
           <div className="text-center px-6">
             <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
-            <p className="text-zinc-200 font-medium">Verifying owner access…</p>
+            <p className="text-zinc-200 font-medium">Verifying access…</p>
             <p className="text-zinc-400 text-sm mt-2">Please wait a moment.</p>
           </div>
         </div>
@@ -131,7 +166,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   }
 
   // Owner verification failed — auto-retry up to 3 times silently
-  if (ownerError && !isOwner) {
+  if (ownerError && !isOwner && !isAuditor) {
     if (autoRetryCount.current < 3) {
       if (!autoRetryTimer.current) {
         autoRetryTimer.current = setTimeout(() => {
@@ -144,29 +179,22 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
         <div className="min-h-screen bg-black flex items-center justify-center">
           <div className="text-center px-6">
             <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
-            <p className="text-zinc-200 font-medium">Verifying owner access…</p>
+            <p className="text-zinc-200 font-medium">Verifying access…</p>
             <p className="text-zinc-400 text-sm mt-2">Retrying ({autoRetryCount.current + 1}/3)…</p>
           </div>
         </div>
       );
     }
 
-    // After 3 failed retries, show error UI
     return (
       <div className="min-h-screen bg-black flex items-center justify-center p-6">
         <div className="max-w-md text-center">
           <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center mx-auto mb-6">
             <AlertTriangle className="w-10 h-10 text-amber-500" />
           </div>
-          <h1 className="text-2xl font-bold text-white mb-3">
-            Verification Temporarily Unavailable
-          </h1>
-          <p className="text-zinc-400 mb-2">
-            We couldn't verify your owner access at this time.
-          </p>
-          <p className="text-zinc-500 text-sm mb-6">
-            Error: {ownerError}
-          </p>
+          <h1 className="text-2xl font-bold text-white mb-3">Verification Temporarily Unavailable</h1>
+          <p className="text-zinc-400 mb-2">We couldn't verify your access at this time.</p>
+          <p className="text-zinc-500 text-sm mb-6">Error: {ownerError}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => {
@@ -194,6 +222,52 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
   // AUTHENTICATED but NOT OWNER and NOT AUDITOR → AccessDenied
   if (!isOwner && !isAuditor) {
     return <Navigate to="/403" replace />;
+  }
+
+  // AUDITOR: Check if suspended
+  if (isAuditor && !isOwner) {
+    if (!suspendChecked || pwLoading) {
+      return (
+        <div className="min-h-screen bg-black flex items-center justify-center">
+          <div className="text-center px-6">
+            <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
+            <p className="text-zinc-200 font-medium">Checking access status…</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (isSuspended) {
+      return (
+        <div className="min-h-screen bg-black flex items-center justify-center p-6">
+          <div className="max-w-md text-center">
+            <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
+              <Ban className="w-10 h-10 text-red-500" />
+            </div>
+            <h1 className="text-2xl font-bold text-white mb-3">Access Suspended</h1>
+            <p className="text-zinc-400 mb-6">
+              Your access has been suspended or expired by the administrator. Please contact Jane for assistance.
+            </p>
+            <Button
+              onClick={() => signOut()}
+              className="bg-white hover:bg-zinc-100 text-black border-2 border-white font-semibold"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    if (needsPasswordChange) {
+      return (
+        <AuditorForcePasswordChange
+          displayName={displayName}
+          onPasswordChanged={changePassword}
+        />
+      );
+    }
   }
 
   // OWNER or AUDITOR → allowed
