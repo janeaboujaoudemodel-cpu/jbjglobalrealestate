@@ -784,7 +784,7 @@ All colors MUST be HSL.
   }
 
   .jj-crm-card:hover {
-    @apply border-gold/50;
+    @apply border-white/20;
   }
 
   .jj-crm-card-header {
