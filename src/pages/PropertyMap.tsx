@@ -196,9 +196,9 @@ const PropertyMap = () => {
   ];
 
   return (
-    <div className="min-h-screen relative">
+    <div className="flex flex-col h-[calc(100vh-88px)] overflow-hidden">
       {/* ── MAP CONTROL BAR — below header, NOT part of header ── */}
-      <div className="sticky top-[88px] z-[60] bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] border-b border-gold/20">
+      <div className="shrink-0 z-10 bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] border-b border-gold/20">
         <div className="flex items-center gap-2 px-3 py-2 flex-wrap">
           {/* Left: count */}
           <Badge variant="secondary" className="gap-1 shrink-0 bg-gold/10 text-foreground border-gold/30">
@@ -257,7 +257,7 @@ const PropertyMap = () => {
       </div>
 
       {/* ── MAP CONTAINER ── */}
-      <div style={{ height: "calc(100vh - 88px - 48px)" }}>
+      <div className="flex-1 relative overflow-hidden">
         <MapContainer
           center={center}
           zoom={11}
@@ -314,7 +314,7 @@ const PropertyMap = () => {
 
       {/* ── LIST / GRID PANEL (overlay on right, map still interactive) ── */}
       {showPanel && (
-        <div className="fixed top-[136px] right-0 bottom-0 w-full sm:w-[420px] bg-background/98 backdrop-blur-sm border-l border-border z-[999] overflow-hidden flex flex-col">
+        <div className="fixed top-[132px] right-0 bottom-0 w-full sm:w-[420px] bg-background/98 backdrop-blur-sm border-l border-border z-[999] overflow-hidden flex flex-col">
           {/* Panel header with search */}
           <div className="p-3 border-b border-border space-y-2">
             <div className="flex items-center justify-between">
