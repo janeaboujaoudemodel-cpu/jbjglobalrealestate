@@ -22,6 +22,8 @@ interface AuthContextType {
   ownerError: string | null;
   /** True if authenticated user is verified as the Owner (server-verified) */
   isOwner: boolean;
+  /** True if authenticated user has the 'auditor' role (read-only access) */
+  isAuditor: boolean;
   /** Re-run owner verification without page reload */
   refreshOwnerVerification: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
