@@ -155,15 +155,15 @@ export function MegaMenuCTAButton({
     <Link
       to={to}
       onClick={onClick}
-      className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 hover:-translate-y-0.5 transition-all duration-300 group"
+      className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl bg-gray-100 hover:bg-gray-200 border border-gray-200 hover:border-gray-300 hover:-translate-y-0.5 transition-all duration-300 group"
     >
-      <div className="w-10 h-10 rounded-lg bg-white border border-white/80 flex items-center justify-center group-hover:shadow-[0_0_12px_rgba(255,255,255,0.3)] transition-all">
-        <Icon className="w-5 h-5 text-black" />
+      <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center group-hover:shadow-md transition-all">
+        <Icon className="w-5 h-5 text-white" />
       </div>
-      <span className="text-white font-bold text-base group-hover:text-white transition-colors">
+      <span className="text-black font-bold text-base group-hover:text-black transition-colors">
         {title}
       </span>
-      <ArrowRight className="w-5 h-5 text-white/60 ml-auto" />
+      <ArrowRight className="w-5 h-5 text-gray-400 ml-auto" />
     </Link>
   );
 }
