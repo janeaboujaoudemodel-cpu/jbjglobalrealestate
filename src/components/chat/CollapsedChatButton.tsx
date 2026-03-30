@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Minus } from 'lucide-react';
+import { useRef, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { SquareChatIcon } from '@/components/ui/SquareChatIcon';
-import { useIsMobile } from '@/hooks/use-mobile';
 
 interface CollapsedChatButtonProps {
   onToggle: () => void;
@@ -10,119 +8,22 @@ interface CollapsedChatButtonProps {
   showAttentionPulse?: boolean;
 }
 
-const CollapsedChatButton = ({ onToggle, onMinimize, showAttentionPulse = false }: CollapsedChatButtonProps) => {
+const CollapsedChatButton = ({ onToggle }: CollapsedChatButtonProps) => {
   const { isRTL, t } = useLanguage();
-  const isMobile = useIsMobile();
-
-  // Drag-to-move state
-  const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragRef = useRef({ startX: 0, startY: 0, startOffX: 0, startOffY: 0, moved: false });
-  const buttonRef = useRef<HTMLDivElement>(null);
-
-  function onPointerDown(e: React.PointerEvent) {
-    // Only drag on left click / touch
-    if (e.button !== undefined && e.button !== 0) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
-    const curOff = dragOffset ?? { x: 0, y: 0 };
-    dragRef.current = { startX: e.clientX, startY: e.clientY, startOffX: curOff.x, startOffY: curOff.y, moved: false };
-    setIsDragging(true);
-  }
-
-  function onPointerMove(e: React.PointerEvent) {
-    if (!isDragging) return;
-    const dx = e.clientX - dragRef.current.startX;
-    const dy = e.clientY - dragRef.current.startY;
-    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) {
-      dragRef.current.moved = true;
-    }
-    if (dragRef.current.moved) {
-      setDragOffset({ x: dragRef.current.startOffX + dx, y: dragRef.current.startOffY + dy });
-    }
-  }
-
-  function onPointerUp(e: React.PointerEvent) {
-    setIsDragging(false);
-    if (!dragRef.current.moved) {
-      onToggle();
-      return;
-    }
-    // Clamp to viewport edges (20px margin)
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      const margin = 20;
-      let adjX = 0, adjY = 0;
-      if (rect.left < margin) adjX = margin - rect.left;
-      if (rect.top < margin) adjY = margin - rect.top;
-      if (rect.right > window.innerWidth - margin) adjX = window.innerWidth - margin - rect.right;
-      if (rect.bottom > window.innerHeight - margin) adjY = window.innerHeight - margin - rect.bottom;
-      if (adjX !== 0 || adjY !== 0) {
-        setDragOffset(prev => prev ? { x: prev.x + adjX, y: prev.y + adjY } : null);
-      }
-    }
-  }
-
-  const handleMinimize = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onMinimize?.();
-  };
-
-  const transform = dragOffset ? `translate(${dragOffset.x}px, ${dragOffset.y}px)` : undefined;
 
   return (
     <div
-      ref={buttonRef}
       className={`fixed bottom-20 ${isRTL ? 'left-4' : 'right-6'} z-[10050]`}
-      style={{ transform, transition: isDragging ? 'none' : 'transform 0.2s ease', cursor: isDragging ? 'grabbing' : 'grab' }}
     >
-      {showAttentionPulse && !isMobile ? (
-        <div className="relative">
-          <div
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            className="relative flex items-center gap-2 sm:gap-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl px-3 sm:px-5 py-2.5 sm:py-3.5 shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 group select-none max-w-[240px] sm:max-w-none animate-[jbj-glow-pulse_12s_ease-in-out_infinite]"
-            aria-label={t('chat.openChat', 'Open chat support')}
-          >
-            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold flex items-center justify-center flex-shrink-0 shadow-md shadow-gold/20">
-              <SquareChatIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gold" size={20} />
-            </div>
-            <div className="flex flex-col items-start min-w-0">
-              <span className="text-black text-xs sm:text-sm font-bold truncate">{t('chat.title', 'JBJ Support')}</span>
-              <div className="flex items-center gap-1 sm:gap-1.5">
-                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-gold flex-shrink-0" />
-                <span className="text-gold text-[10px] sm:text-xs font-medium truncate">{t('chat.available247', 'Available 24/7')}</span>
-              </div>
-            </div>
-            {isRTL ? (
-              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-gold hidden sm:block flex-shrink-0" />
-            ) : (
-              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-gold hidden sm:block flex-shrink-0" />
-            )}
-          </div>
-          {onMinimize && (
-            <button
-              onClick={handleMinimize}
-              aria-label={t('chat.minimize', 'Minimize chat')}
-              className="absolute -top-2 -right-2 w-7 h-7 bg-white border-2 border-gold rounded-full flex items-center justify-center shadow-lg hover:bg-gold/10 transition-colors z-10"
-            >
-              <Minus className="w-4 h-4 text-gold" />
-            </button>
-          )}
+      <div className="relative">
+        <div
+          onClick={onToggle}
+          aria-label={t('chat.openChat', 'Open chat support')}
+          className="relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 cursor-pointer select-none"
+        >
+          <SquareChatIcon className="w-6 h-6 text-gold" size={24} />
         </div>
-      ) : (
-        <div className="relative">
-          <div
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            aria-label={t('chat.openChat', 'Open chat support')}
-            className="relative flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold shadow-2xl shadow-gold/20 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] transition-shadow duration-300 select-none animate-[jbj-glow-pulse_12s_ease-in-out_infinite]"
-          >
-            <SquareChatIcon className="w-6 h-6 text-gold" size={24} />
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };
