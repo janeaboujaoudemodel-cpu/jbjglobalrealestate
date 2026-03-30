@@ -1,24 +1,20 @@
 
 
-# Fix Duplicate Desktop Recommendation Banner
+# TASK 1: FULL FRONT-END AUDIT REPORT
 
-## Problem
-When loading on mobile, two "best experience on desktop" messages appear simultaneously:
-1. A **fixed banner at the top** (overlays the header) — pearl/champagne gradient with gold accents
-2. A **toast notification at the bottom** — default toast styling
+---
 
-## Solution
-- **Remove** the top fixed banner entirely (lines 235-242 in `MainLayout.tsx`)
-- **Restyle the bottom toast** to match the top banner's premium look: pearl-to-champagne gradient background (`#FDFBF7` → `#EFE6D6`), gold icon, gold border, and the same text styling
+## 1. LAYOUT & SPACING ISSUES
 
-## Changes
+### 1.1 Homepage (`Index.tsx`)
+- **Hero top padding inconsistency**: Uses `pt-[max(20vh,120px)] sm:pt-[22vh] md:pt-[24vh]` — on small viewports this creates excessive or insufficient spacing depending on device height. No `lg:` breakpoint defined.
+- **Section wrappers inconsistent**: Some sections use `<div className="cv-auto">`, others use `<section className="py-12 md:py-20">`, and others have no wrapper at all. No unified section spacing system.
+- **Mortgage Calculator section** (lines 510-543): Has `p-4 md:p-12` which creates a jarring 4px-to-48px jump with no intermediate breakpoint.
+- **SectionDivider** used between every section — some use `fullWidth` prop, some don't. Inconsistent visual rhythm.
+- **Pillar badges grid** (line 296): `gap-px` creates pixel-thin gaps which look broken rather than intentional on some screens.
 
-### `src/components/MainLayout.tsx`
-1. **Delete** the fixed banner JSX block (the `<div className="fixed top-0 ...">` block, lines 235-242)
-2. **Update the toast call** (lines 218-222) to use styled options matching the deleted banner's colors:
-   - Custom `className` or `style` with `background: linear-gradient(to right, #FDFBF7, #EFE6D6)`, `border: 1px solid` gold/30, `color: black/80`, and a gold Monitor icon
-   - Keep the same message text: "For the best experience on our full portal, use a desktop browser."
-
-## Files Modified
-- `src/components/MainLayout.tsx` — 1 file only
-
+### 1.2 Footer (`Footer.tsx`)
+- **Massive footer**: ~989 lines, 3 separate "ULTRA PREMIUM 3D" card zones stacked vertically, creating an extremely long footer (~2000px+ estimated height).
+- **Redundant content**: Newsletter appears BOTH in the footer's licensed card zone AND in `CombinedContactNewsletter` pre-footer section — duplicate newsletter forms.
+- **Logo section**: 4 layered `<img>` tags for the same logo (3 shadow copies + main) — performance concern and over-engineered for a footer.
+- **Footer navigation grid**: 16 FooterCards in
