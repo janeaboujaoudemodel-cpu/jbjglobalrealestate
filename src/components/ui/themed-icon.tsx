@@ -33,8 +33,8 @@ export function ThemedIcon({
     xl: "w-8 h-8",
   };
 
-  const bgClass = variant === "dark" ? "bg-white" : "bg-[#1A1A1A]";
-  const iconColor = variant === "dark" ? "text-black" : "text-white";
+  const bgClass = variant === "dark" ? "bg-black" : "bg-gray-100";
+  const iconColor = variant === "dark" ? "text-white" : "text-black";
 
   return (
     <div 
