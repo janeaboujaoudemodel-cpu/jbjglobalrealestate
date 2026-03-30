@@ -10,7 +10,7 @@ const SelectGroup = SelectPrimitive.Group;
 
 const SelectValue = SelectPrimitive.Value;
 
-// === DEFAULT (Light/Champagne) SelectTrigger ===
+// === DEFAULT SelectTrigger — Monochrome ===
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-10 w-full cursor-pointer items-center justify-between rounded-md border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] px-3 py-2 text-sm text-black ring-offset-background placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      "flex h-10 w-full cursor-pointer items-center justify-between rounded-md border border-white/20 bg-[#0A0A0A] px-3 py-2 text-sm text-white ring-offset-background placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
       "touch-action-manipulation",
       className,
     )}
@@ -27,13 +27,13 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 text-gold opacity-70" />
+      <ChevronDown className="h-4 w-4 text-white/60 opacity-70" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
-// === DARK SelectTrigger (for AI tools on dark backgrounds) ===
+// === DARK SelectTrigger ===
 const SelectTriggerDark = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
@@ -68,7 +68,7 @@ const SelectScrollUpButton = React.forwardRef<
     className={cn("flex cursor-default items-center justify-center py-1", className)}
     {...props}
   >
-    <ChevronUp className="h-4 w-4 text-gold" />
+    <ChevronUp className="h-4 w-4 text-white/60" />
   </SelectPrimitive.ScrollUpButton>
 ));
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName;
@@ -82,7 +82,7 @@ const SelectScrollDownButton = React.forwardRef<
     className={cn("flex cursor-default items-center justify-center py-1", className)}
     {...props}
   >
-    <ChevronDown className="h-4 w-4 text-gold" />
+    <ChevronDown className="h-4 w-4 text-white/60" />
   </SelectPrimitive.ScrollDownButton>
 ));
 SelectScrollDownButton.displayName = SelectPrimitive.ScrollDownButton.displayName;
@@ -116,7 +116,7 @@ const SelectScrollDownButtonDark = React.forwardRef<
 ));
 SelectScrollDownButtonDark.displayName = "SelectScrollDownButtonDark";
 
-// === DEFAULT (Light/Champagne) SelectContent ===
+// === DEFAULT SelectContent — Monochrome ===
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
@@ -125,13 +125,9 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        // z-[10200] ensures Select menu is ABOVE dialog overlay (z-10050) and content
         "relative z-[10200] max-h-96 min-w-[8rem] overflow-hidden rounded-xl",
-        // Solid opaque background - no transparency issues
-        "border-2 border-gold/50 bg-[#FDFBF7] text-black",
-        // Strong shadow for visibility
-        "shadow-[0_10px_40px_rgba(0,0,0,0.3),0_4px_15px_rgba(200,167,102,0.4)]",
-        // Animations
+        "border-2 border-white/20 bg-[#111111] text-white",
+        "shadow-[0_10px_40px_rgba(0,0,0,0.5),0_4px_15px_rgba(0,0,0,0.3)]",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         position === "popper" &&
           "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
@@ -156,7 +152,7 @@ const SelectContent = React.forwardRef<
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
-// === DARK SelectContent (for AI tools on dark backgrounds) ===
+// === DARK SelectContent ===
 const SelectContentDark = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
@@ -196,7 +192,7 @@ const SelectLabel = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
 >(({ className, ...props }, ref) => (
-  <SelectPrimitive.Label ref={ref} className={cn("py-1.5 pl-8 pr-2 text-sm font-semibold text-black", className)} {...props} />
+  <SelectPrimitive.Label ref={ref} className={cn("py-1.5 pl-8 pr-2 text-sm font-semibold text-white", className)} {...props} />
 ));
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
@@ -209,7 +205,7 @@ const SelectLabelDark = React.forwardRef<
 ));
 SelectLabelDark.displayName = "SelectLabelDark";
 
-// === DEFAULT (Light/Champagne) SelectItem ===
+// === DEFAULT SelectItem — Monochrome ===
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
@@ -217,19 +213,18 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm text-black outline-none transition-all duration-200",
+      "relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-3 text-sm text-white outline-none transition-all duration-200",
       "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      // Normal: black text. Hover/Focus: gold text with 3D effect
-      "hover:bg-gold/15 hover:text-gold hover:shadow-[0_4px_15px_rgba(200,167,102,0.25)] hover:-translate-y-0.5",
-      "focus:bg-gold/15 focus:text-gold focus:shadow-[0_4px_15px_rgba(200,167,102,0.25)] focus:-translate-y-0.5",
-      "data-[highlighted]:bg-gold/15 data-[highlighted]:text-gold data-[highlighted]:shadow-[0_4px_15px_rgba(200,167,102,0.25)] data-[highlighted]:-translate-y-0.5",
+      "hover:bg-white/10 hover:text-white",
+      "focus:bg-white/10 focus:text-white",
+      "data-[highlighted]:bg-white/10 data-[highlighted]:text-white",
       className,
     )}
     {...props}
   >
-    <span className="absolute left-2 flex h-4 w-4 items-center justify-center rounded border-2 border-gold/40 transition-colors [&:has([data-state=checked])]:bg-gold [&:has([data-state=checked])]:border-gold">
+    <span className="absolute left-2 flex h-4 w-4 items-center justify-center rounded border-2 border-white/30 transition-colors [&:has([data-state=checked])]:bg-white [&:has([data-state=checked])]:border-white">
       <SelectPrimitive.ItemIndicator>
-        <Check className="h-3 w-3 text-white" />
+        <Check className="h-3 w-3 text-black" />
       </SelectPrimitive.ItemIndicator>
     </span>
 
@@ -238,7 +233,7 @@ const SelectItem = React.forwardRef<
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
-// === DARK SelectItem (for AI tools on dark backgrounds) ===
+// === DARK SelectItem ===
 const SelectItemDark = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
@@ -258,7 +253,7 @@ const SelectItemDark = React.forwardRef<
   >
     <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <SelectPrimitive.ItemIndicator>
-        <Check className="h-4 w-4 text-emerald-400" />
+        <Check className="h-4 w-4 text-white" />
       </SelectPrimitive.ItemIndicator>
     </span>
 
@@ -271,7 +266,7 @@ const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
 >(({ className, ...props }, ref) => (
-  <SelectPrimitive.Separator ref={ref} className={cn("-mx-1 my-1 h-px bg-gold/20", className)} {...props} />
+  <SelectPrimitive.Separator ref={ref} className={cn("-mx-1 my-1 h-px bg-white/10", className)} {...props} />
 ));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 

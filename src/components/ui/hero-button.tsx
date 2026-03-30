@@ -10,9 +10,9 @@ interface HeroButtonProps {
 }
 
 /**
- * Premium hero button with consistent styling across all hero sections.
- * - Normal: transparent with white border
- * - Hover: gold border with gold text
+ * Premium hero button — monochrome design system.
+ * Normal: transparent with white border
+ * Hover: white bg with black text
  */
 export const HeroButton = ({ children, href, onClick, className }: HeroButtonProps) => {
   const buttonContent = (
@@ -23,17 +23,16 @@ export const HeroButton = ({ children, href, onClick, className }: HeroButtonPro
         "px-4 sm:px-5 md:px-6 py-2 sm:py-2.5",
         "text-[11px] sm:text-xs md:text-sm font-semibold tracking-wide",
         "rounded-lg transition-all duration-300",
-        "bg-transparent border border-white/60 hover:border-gold/80",
+        "bg-transparent border border-white/60 hover:border-white hover:bg-white",
         className
       )}
       style={{
         boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
       }}
     >
-      <span className="text-white group-hover:text-gold transition-colors">{children}</span>
+      <span className="text-white group-hover:text-black transition-colors">{children}</span>
       <ArrowUpRight 
-        className="w-3.5 h-3.5 text-gold group-hover:scale-110 transition-all" 
-        style={{ filter: 'drop-shadow(0 0 4px rgba(200,167,102,0.6))' }} 
+        className="w-3.5 h-3.5 text-white group-hover:text-black group-hover:scale-110 transition-all" 
       />
     </button>
   );
