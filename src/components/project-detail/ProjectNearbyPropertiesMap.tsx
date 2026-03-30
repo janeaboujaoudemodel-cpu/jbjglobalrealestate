@@ -130,9 +130,11 @@ export default function ProjectNearbyPropertiesMap({
         {/* Current project marker (red) */}
         <Marker position={[latitude, longitude]} icon={RedIcon}>
           <Popup>
-            <div className="min-w-[180px] max-w-[260px] p-3">
-              <div className="text-sm font-bold">{currentProjectName}</div>
-              <div className="text-xs text-muted-foreground">{t('map.thisProject')}</div>
+            <div className="min-w-[180px] max-w-[260px]">
+              <div className="p-3">
+                <div className="text-sm font-bold">{currentProjectName}</div>
+                <div className="text-xs text-muted-foreground">{t('map.thisProject')}</div>
+              </div>
             </div>
           </Popup>
         </Marker>
@@ -141,18 +143,20 @@ export default function ProjectNearbyPropertiesMap({
         {markers.map((p) => (
           <Marker key={p.id} position={[p.latitude!, p.longitude!]} icon={GoldIcon}>
             <Popup>
-              <div className="min-w-[200px] max-w-[280px] p-3">
+              <div className="min-w-[200px] max-w-[280px]">
                 {p.cover_image_url && (
-                  <img src={p.cover_image_url} alt={p.name} className="w-full h-24 object-cover -mx-3 -mt-3 mb-2" style={{width: 'calc(100% + 24px)'}} loading="lazy" />
+                  <img src={p.cover_image_url} alt={p.name} className="w-full h-24 object-cover" loading="lazy" />
                 )}
-                <Link to={`/project/${p.slug}`} className="text-sm font-semibold text-blue-600 hover:underline block">
-                  {p.name}
-                </Link>
-                {p.price_from && (
-                  <p className="text-xs font-semibold text-amber-700 mt-1">
-                    From AED {Math.round(Number(p.price_from)).toLocaleString()}
-                  </p>
-                )}
+                <div className="p-3">
+                  <Link to={`/project/${p.slug}`} className="text-sm font-semibold text-blue-600 hover:underline block">
+                    {p.name}
+                  </Link>
+                  {p.price_from && (
+                    <p className="text-xs font-semibold text-amber-700 mt-1">
+                      From AED {Math.round(Number(p.price_from)).toLocaleString()}
+                    </p>
+                  )}
+                </div>
               </div>
             </Popup>
           </Marker>
