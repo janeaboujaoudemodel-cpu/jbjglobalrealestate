@@ -528,32 +528,31 @@ All colors MUST be HSL.
   }
 
 /* Layer 3 - Inner content cards */
-.jj-card-inner {
-  @apply rounded-xl border border-white/10 p-6;
-  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.5);
-  transition: all 0.3s ease;
-}
+  .jj-card-inner {
+    @apply rounded-xl border border-gray-200 p-6;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
 
-.jj-card-inner:hover {
-  @apply border-white/20;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-}
+  .jj-card-inner:hover {
+    @apply border-gray-300;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  }
 
-/* Active box - for inner content cards (Layer 3) */
-.jj-box-active {
-  @apply rounded-xl border border-white/10 p-6;
-  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.5);
-  transition: all 0.3s ease;
-}
+  .jj-box-active {
+    @apply rounded-xl border border-gray-200 p-6;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+  }
 
-.jj-box-active:hover {
-  @apply border-white/20;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-}
+  .jj-box-active:hover {
+    @apply border-gray-300;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  }
 
 /* Icon box - grayscale */
 .jj-icon-box-active {
