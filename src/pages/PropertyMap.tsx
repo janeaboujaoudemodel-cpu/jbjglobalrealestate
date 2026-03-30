@@ -314,7 +314,7 @@ const PropertyMap = () => {
 
       {/* ── LIST / GRID PANEL (overlay on right, map still interactive) ── */}
       {showPanel && (
-        <div className="fixed top-[136px] right-0 bottom-0 w-full sm:w-[420px] bg-background/98 backdrop-blur-sm border-l border-border z-[999] overflow-hidden flex flex-col">
+        <div className="fixed top-[132px] right-0 bottom-0 w-full sm:w-[420px] bg-background/98 backdrop-blur-sm border-l border-border z-[999] overflow-hidden flex flex-col">
           {/* Panel header with search */}
           <div className="p-3 border-b border-border space-y-2">
             <div className="flex items-center justify-between">
