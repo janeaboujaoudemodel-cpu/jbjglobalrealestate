@@ -109,10 +109,10 @@ export default function PropertiesVerticalNav() {
         {/* Compact panel */}
         <div
           className="fixed z-[10000] flex items-start justify-center pointer-events-none"
-          style={{ left: '200px', top: 0, bottom: 0, right: 0 }}
+          style={{ left: '200px', top: '88px', bottom: 0, right: 0 }}
         >
           <div
-            className="pointer-events-auto max-w-[360px] w-full max-h-[60vh] overflow-y-auto jj-scrollbar-gold mt-8 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]"
+            className="pointer-events-auto max-w-[360px] w-full max-h-[calc(100vh-100px)] overflow-y-auto jj-scrollbar-gold mt-2 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]"
             onClick={(e) => e.stopPropagation()}
             onMouseLeave={closeMegaMenu}
           >
