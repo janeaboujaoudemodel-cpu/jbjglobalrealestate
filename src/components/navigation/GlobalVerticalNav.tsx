@@ -925,10 +925,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           />
           <div
             className="fixed z-[10000] flex items-start justify-start pointer-events-none"
-            style={{ left: sidebarWidth, top: '40px', bottom: 0, right: 0 }}
+style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-60px)]"
+              className="pointer-events-auto w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
