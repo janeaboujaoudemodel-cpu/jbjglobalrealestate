@@ -1,70 +1,66 @@
 
 
-# Fix Map Page Layout — Eliminate Gap Between Header and Map
+# Fix Map Page Floating Card & State Bugs
 
-## Root Cause
+## Problem
 
-The `<main>` element in MainLayout (line 271) applies `pt-[88px]` top padding to push content below the fixed header. The PropertyMap page then has a `min-h-screen relative` wrapper followed by a `sticky top-[88px]` toolbar. This creates the visible gap: the 88px padding shows the page background (`md:bg-[#E8DCC8]`) as an empty beige band before any PropertyMap content renders. The sticky toolbar then appears as a second strip, and the map's `calc(100vh - 88px - 48px)` height doesn't account for this padding, making the map too tall and partially hidden.
+The selected project detail card (lines 381-434) uses `fixed` positioning (`fixed bottom-4 left-4`), making it float relative to the **viewport** — not the map container. Since the page lives inside MainLayout which can scroll, the card persists visually over footer/contact sections when scrolling. Additionally, `selectedProject` state is never cleared on view mode changes, filter changes, or when the source marker becomes invalid.
 
-## Fix: Flexbox Column Layout (No Sticky, No Calc Guessing)
+## Changes — `src/pages/PropertyMap.tsx` only
 
-Replace the entire PropertyMap return structure with a simple flex column that:
-1. Uses **negative top margin** (`-mt-[88px] pt-[88px]`) — not needed. Better: use `h-[calc(100vh-88px)]` flex column with `overflow-hidden` so the entire page fits exactly in the viewport below the header.
-2. Toolbar is a `shrink-0` flex child — no sticky, no top offset. It naturally sits at the top of the content area (right below the header).
-3. Map is a `flex-1 relative overflow-hidden` child — fills all remaining space. No hardcoded height calc.
+### 1. Add state cleanup effects
 
-This eliminates: sticky positioning, manual height calculations, and any possibility of gaps.
+Add three `useEffect` hooks after the existing filter listener (after line 129):
 
-## Changes to `src/pages/PropertyMap.tsx`
+- **Clear on view mode change**: `useEffect(() => { setSelectedProject(null); }, [viewMode]);`
+- **Clear on filter/sort change**: `useEffect(() => { setSelectedProject(null); }, [filters, sortMode, hideSold]);`
+- **Clear when selected project no longer in filtered results**: `useEffect(() => { if (selectedProject && !filteredProjects.some(p => p.id === selectedProject.id)) setSelectedProject(null); }, [selectedProject, filteredProjects]);`
 
-### Outer wrapper (line 199)
-Change from:
+### 2. Add IntersectionObserver to auto-close card when map leaves viewport
+
+Add a `useRef` on the map container div (line 260) and an `IntersectionObserver` effect that sets `selectedProject(null)` when the map container is less than 15% visible. This handles the scroll-past-map scenario.
+
 ```tsx
-<div className="min-h-screen relative">
-```
-To:
-```tsx
-<div className="flex flex-col h-[calc(100vh-88px)] overflow-hidden">
+const mapContainerRef = useRef<HTMLDivElement>(null);
+
+useEffect(() => {
+  const el = mapContainerRef.current;
+  if (!el) return;
+  const io = new IntersectionObserver(
+    ([entry]) => { if (!entry.isIntersecting) setSelectedProject(null); },
+    { threshold: 0.15 }
+  );
+  io.observe(el);
+  return () => io.disconnect();
+}, []);
 ```
 
-### Toolbar (line 201)
-Change from:
-```tsx
-<div className="sticky top-[88px] z-[60] bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] border-b border-gold/20">
-```
-To:
-```tsx
-<div className="shrink-0 z-10 bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] border-b border-gold/20">
-```
-- Removed `sticky top-[88px]` — not needed in flex layout, it's naturally at top
-- Reduced z-index to `10` (only needs to beat map internals)
+Apply `ref={mapContainerRef}` to the flex-1 map container div (line 260).
 
-### Map container (line 260)
-Change from:
-```tsx
-<div style={{ height: "calc(100vh - 88px - 48px)" }}>
-```
-To:
-```tsx
-<div className="flex-1 relative overflow-hidden">
-```
-- Fills remaining flex space automatically — no manual height calc
+### 3. Change selected card from `fixed` to `absolute` within map container
 
-### List/Grid panel (line 317)
-Change `top-[136px]` to `top-[88px]` and compute height from there, OR better: keep it as a sibling inside the flex layout. Since it's `fixed` positioned, change:
+Move the selected project card (lines 381-434) **inside** the map container div (the `flex-1 relative overflow-hidden` div at line 260). Change positioning from `fixed bottom-4 left-4` to `absolute bottom-4 left-4`. This ensures the card is bounded by the map container and cannot float over other page sections.
+
+The card's z-index `z-[1000]` stays — it only needs to beat the map's internal elements, and since the parent has `overflow-hidden`, it can't leak out.
+
+### 4. Add click-outside-to-close on map container
+
+On the map container div (line 260), add an `onClick` handler that closes the card when clicking the container background (not a child):
+
 ```tsx
-<div className="fixed top-[136px] right-0 bottom-0 ...">
+onClick={(e) => { if (e.target === e.currentTarget) setSelectedProject(null); }}
 ```
-To use the correct offset. The header is 88px, toolbar is ~44px, so `top-[132px]` is approximately right. But since we're removing sticky and using flex, the toolbar is no longer fixed — so the panel should overlay from the toolbar height down. Keep `fixed top-[132px]` (88px header + ~44px toolbar).
 
 ## Summary of changes
 
-| Line | From | To |
-|------|------|----|
-| 199 | `min-h-screen relative` | `flex flex-col h-[calc(100vh-88px)] overflow-hidden` |
-| 201 | `sticky top-[88px] z-[60]` | `shrink-0 z-10` |
-| 260 | `style={{ height: "calc(100vh - 88px - 48px)" }}` | `className="flex-1 relative overflow-hidden"` + remove inline style |
-| 317 | `top-[136px]` | `top-[132px]` |
+| What | How |
+|------|-----|
+| Card floats over footer | Move card inside map container, change `fixed` → `absolute` |
+| Card survives view/filter changes | Add cleanup effects on `viewMode`, `filters`, `sortMode`, `hideSold` |
+| Card stays when marker filtered out | Add effect checking `selectedProject` against `filteredProjects` |
+| Card visible when scrolled past map | IntersectionObserver closes card when map <15% visible |
+| Click outside doesn't close | Add click-on-background handler |
 
-### File: `src/pages/PropertyMap.tsx` — only file modified
+### File modified
+- `src/pages/PropertyMap.tsx`
 
