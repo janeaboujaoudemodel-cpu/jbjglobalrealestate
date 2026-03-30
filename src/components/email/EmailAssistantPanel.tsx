@@ -79,7 +79,7 @@ export default function EmailAssistantPanel({
   const priorityCfg = PRIORITY_CONFIG[analysis?.priority || "normal"] || PRIORITY_CONFIG.normal;
 
   return (
-    <div className="mt-8 p-4 rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
+    <div className="mt-8 p-4 rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-[#B89555]" />

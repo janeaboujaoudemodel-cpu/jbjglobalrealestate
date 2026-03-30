@@ -133,7 +133,7 @@ export default function CorporateSuite() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 50%, #EDE4D3 100%)" }}>
+    <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #F5EFE3 50%, #EFE6D6 100%)" }}>
       {/* ── Hero Header ── */}
       <div className="relative overflow-hidden" style={{ borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
         <div
@@ -156,7 +156,7 @@ export default function CorporateSuite() {
             <div
               className="w-16 h-16 rounded-2xl flex-shrink-0 flex items-center justify-center shadow-xl"
               style={{
-                background: "linear-gradient(135deg, #D4C4A8, #B8943E)",
+                background: "linear-gradient(135deg, #D8C7A6, #B8943E)",
                 boxShadow: "0 0 40px rgba(184,148,62,0.25)",
               }}
             >

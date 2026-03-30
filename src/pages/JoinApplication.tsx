@@ -326,7 +326,7 @@ export default function JoinApplication() {
   // Redirect returning users directly to onboarding dashboard
   if (existingApplication) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <section className="flex-1 flex items-center justify-center px-4 py-16 min-h-screen">
           <div className="w-full max-w-3xl mx-auto">
             <Card className="bg-white/80 backdrop-blur-sm border-2 border-gold/30 shadow-2xl p-8 md:p-12 rounded-2xl">

@@ -44,7 +44,7 @@ export function JBJSidebar({ brokerProfile, activePage }: JBJSidebarProps) {
   };
 
   return (
-    <aside className="w-64 bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] fixed h-screen flex flex-col border-r border-gold/30">
+    <aside className="w-64 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] fixed h-screen flex flex-col border-r border-gold/30">
       {/* Header - Company Name on ONE LINE */}
       <div className="p-4 border-b border-gold/30">
         <h1 className="text-gold font-bold tracking-wide text-lg">

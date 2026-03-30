@@ -33,7 +33,7 @@ const AreasWeCover = () => {
       <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-10">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
             <MapPin className="w-3.5 h-3.5 text-gold" />
             <span className="text-black">{t('areas.label', 'Explore Areas')}</span>
           </span>
@@ -64,7 +64,7 @@ const AreasWeCover = () => {
                     style={{ backgroundImage: `url(${area.imageUrl})` }}
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center">
                     <span
                       className="text-6xl font-black text-black select-none"
                       style={{ opacity: 0.1, fontFamily: "Poppins, sans-serif" }}
@@ -80,7 +80,7 @@ const AreasWeCover = () => {
                 {/* Top-right badges */}
                 <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                   {area.isTrending && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#E8DCC8] text-black text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-black text-[9px] font-bold uppercase tracking-wider shadow-lg">
                       <TrendingUp className="w-2.5 h-2.5" />
                       Trending
                     </span>
@@ -115,7 +115,7 @@ const AreasWeCover = () => {
         <div className="text-center mt-10 mb-14">
           <Link
             to="/areas"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
             style={{
               boxShadow: `
                 0 6px 20px rgba(200,167,102,0.3),

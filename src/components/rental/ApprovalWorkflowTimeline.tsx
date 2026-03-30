@@ -197,7 +197,7 @@ export function ApprovalWorkflowTimeline({
                             </button>
                           </HoverCardTrigger>
                           <HoverCardContent className="w-80 p-0" side="right" align="start">
-                            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800 rounded-lg overflow-hidden">
+                            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800 rounded-lg overflow-hidden">
                               {/* Header */}
                               <div className="p-4 border-b border-gold/10">
                                 <div className="flex items-center gap-3">

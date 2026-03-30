@@ -34,7 +34,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
         {/* Chat with Team Option */}
         <button
           onClick={onStartChat}
-          className="w-full p-4 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 hover:border-gold rounded-xl transition-all duration-300 group shadow-md shadow-gold/20"
+          className="w-full p-4 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold/40 hover:border-gold rounded-xl transition-all duration-300 group shadow-md shadow-gold/20"
         >
           <div className="flex items-center justify-center gap-3">
             <div className="w-12 h-12 rounded-full bg-white border border-gold/30 flex items-center justify-center shadow-sm">
@@ -54,7 +54,7 @@ const ChatWelcome = ({ onStartChat }: ChatWelcomeProps) => {
           )}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full p-4 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 hover:border-gold rounded-xl transition-all duration-300 group block shadow-md shadow-gold/20"
+          className="w-full p-4 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold/40 hover:border-gold rounded-xl transition-all duration-300 group block shadow-md shadow-gold/20"
         >
           <div className="flex items-center justify-center gap-3">
             <div className="w-12 h-12 rounded-full bg-white border border-gold/30 flex items-center justify-center shadow-sm">

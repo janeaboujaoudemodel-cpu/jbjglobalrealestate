@@ -130,7 +130,7 @@ const Terms = () => {
             {/* 1 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="definitions" number={1}>Definitions</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30 space-y-4">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30 space-y-4">
                 <p className="text-zinc-700 leading-relaxed"><strong className="text-black">"Platform"</strong> refers to this website and all digital services operated by the Company.</p>
                 <p className="text-zinc-700 leading-relaxed"><strong className="text-black">"Company"</strong> refers to JBJ Global Real Estate L.L.C. S.O.C, a licensed real estate brokerage registered in the United Arab Emirates.</p>
                 <p className="text-zinc-700 leading-relaxed"><strong className="text-black">"User"</strong> refers to any individual or entity accessing or using the Platform.</p>
@@ -143,7 +143,7 @@ const Terms = () => {
             {/* 2 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="scope" number={2}>Scope of Services</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed mb-4">The Platform provides:</p>
                 <BulletList items={[
                   "Real estate listings and property information",
@@ -165,7 +165,7 @@ const Terms = () => {
             {/* 3 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="eligibility" number={3}>Eligibility</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed mb-4">By using this Platform, you confirm that you:</p>
                 <BulletList items={[
                   "Are at least 18 years of age",
@@ -179,7 +179,7 @@ const Terms = () => {
             {/* 4 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="responsibilities" number={4}>User Responsibilities</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed mb-4">Users shall not:</p>
                 <BulletList items={[
                   "Misuse or interfere with the Platform's functionality or security",
@@ -195,7 +195,7 @@ const Terms = () => {
             {/* 5 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="listings" number={5}>Property Listings & Information Accuracy</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <BulletList items={[
                   "Property listings are provided for informational purposes only",
                   "Prices, availability, specifications, and imagery may change without notice",
@@ -210,7 +210,7 @@ const Terms = () => {
             {/* 6 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="golden-visa" number={6}>Golden Visa & Immigration Disclaimer</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30 space-y-4">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30 space-y-4">
                 <p className="text-zinc-700 leading-relaxed">The Platform does not grant, issue, or approve visas or residency permits.</p>
                 <p className="text-zinc-700 leading-relaxed">We coordinate with licensed, government-approved immigration partners to facilitate the application process on behalf of eligible clients.</p>
                 <p className="text-zinc-700 leading-relaxed">Final approval of any visa or residency application rests solely with the relevant UAE government authorities, including the Federal Authority for Identity, Citizenship, Customs & Port Security (ICP) and the General Directorate of Residency and Foreigners Affairs (GDRFA).</p>
@@ -222,7 +222,7 @@ const Terms = () => {
             {/* 7 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="third-party" number={7}>Third-Party Services</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed mb-4">In delivering our Services, we may engage or coordinate with:</p>
                 <BulletList items={[
                   "Real estate developers",
@@ -241,7 +241,7 @@ const Terms = () => {
             {/* 8 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="ip" number={8}>Intellectual Property</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed mb-4">All content on this Platform, including but not limited to:</p>
                 <BulletList items={[
                   "Branding, logos, and trademarks",
@@ -260,7 +260,7 @@ const Terms = () => {
             {/* 9 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="liability" number={9}>Limitation of Liability</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed mb-4">To the maximum extent permitted by applicable law, the Company shall not be held liable for:</p>
                 <BulletList items={[
                   "Changes in market conditions or property values",
@@ -280,7 +280,7 @@ const Terms = () => {
             {/* 10 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="indemnification" number={10}>Indemnification</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed">
                   Users agree to indemnify, defend, and hold harmless the Company, its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, or expenses arising from or related to the User's misuse of the Platform, violation of these Terms, or breach of applicable law.
                 </p>
@@ -291,7 +291,7 @@ const Terms = () => {
             {/* 11 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="privacy-ref" number={11}>Privacy</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed">
                   Your use of this Platform is also governed by our <Link to="/privacy" className="text-[#C8A766] font-medium hover:underline">Privacy Policy</Link>, which outlines how we collect, use, process, and protect your personal data.
                 </p>
@@ -302,7 +302,7 @@ const Terms = () => {
             {/* 12 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="termination" number={12}>Termination of Access</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed mb-4">The Company reserves the right to, at its sole discretion:</p>
                 <BulletList items={[
                   "Suspend or terminate user accounts",
@@ -319,7 +319,7 @@ const Terms = () => {
             {/* 13 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="governing-law" number={13}>Governing Law</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed">
                   These Terms shall be governed by and construed in accordance with the laws of the United Arab Emirates. Any disputes arising from or in connection with these Terms shall be subject to the exclusive jurisdiction of the competent courts in the UAE.
                 </p>
@@ -330,7 +330,7 @@ const Terms = () => {
             {/* 14 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="amendments" number={14}>Amendments</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed">
                   The Company reserves the right to update or modify these Terms at any time. Updated Terms will be posted on this page. Continued use of the Platform following any changes constitutes acceptance of those changes.
                 </p>
@@ -341,7 +341,7 @@ const Terms = () => {
             {/* 15 */}
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="contact-info" number={15}>Contact Information</ClauseTitle>
-              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30">
+              <div className="p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30">
                 <p className="text-zinc-700 leading-relaxed mb-4">For questions regarding these Terms:</p>
                 <div className="flex items-start gap-3 p-4 rounded-xl bg-[#C8A766]/10 border border-[#C8A766]/20">
                   <Mail className="w-5 h-5 text-[#C8A766] shrink-0 mt-0.5" />

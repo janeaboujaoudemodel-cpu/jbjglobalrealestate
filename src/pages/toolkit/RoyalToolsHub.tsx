@@ -28,7 +28,7 @@ const ToolCard: React.FC<ToolCardProps> = ({ tool }) => {
   
   return (
     <Link to={tool.href} className="group block h-full">
-      <div className="h-full flex flex-col bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
+      <div className="h-full flex flex-col bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
         <div className="w-12 h-12 rounded-xl border-2 border-gold/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
           <Icon className="w-6 h-6 text-black" />
         </div>
@@ -85,9 +85,9 @@ export default function RoyalToolsHub() {
       />
       
       {/* Seamless champagne background - no black borders */}
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* Hero Header */}
-        <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-b border-gold/30">
+        <div className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-gold/30">
           <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
             <div className="flex items-center gap-3 mb-3">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold/20 border border-gold/40 text-gold text-xs uppercase tracking-[0.2em]">
@@ -141,7 +141,7 @@ export default function RoyalToolsHub() {
               onClick={() => setSelectedCategory('all')}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                 selectedCategory === 'all' 
-                  ? 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black shadow-md' 
+                  ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold text-black shadow-md' 
                   : 'bg-white/30 border border-gold/30 text-zinc-600 hover:border-gold/60'
               }`}
             >
@@ -153,7 +153,7 @@ export default function RoyalToolsHub() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                   selectedCategory === cat 
-                    ? 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold text-black shadow-md' 
+                    ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold text-black shadow-md' 
                     : 'bg-white/30 border border-gold/30 text-zinc-600 hover:border-gold/60'
                 }`}
               >
@@ -217,7 +217,7 @@ export default function RoyalToolsHub() {
         
         {/* Fair Usage Notice */}
         <div className="max-w-7xl mx-auto px-4 pb-8">
-          <div className="rounded-xl border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-6 md:p-8">
+          <div className="rounded-xl border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] p-6 md:p-8">
             <h3 className="text-lg font-semibold text-black mb-4 flex items-center gap-2">
               <Shield className="h-5 w-5 text-gold" />
               Fair Usage & Privacy

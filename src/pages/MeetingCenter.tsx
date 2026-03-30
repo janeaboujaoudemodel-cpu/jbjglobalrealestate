@@ -26,7 +26,7 @@ const MeetingCenter = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Back Button */}
       <div className="max-w-6xl mx-auto px-4 pt-6">
         <Button variant="outline" size="sm" onClick={() => window.history.back()} className="border-gold/30 text-black hover:bg-gold/10">
@@ -54,7 +54,7 @@ const MeetingCenter = () => {
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link to="/ai-meeting-summarizer">
-              <Button className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/40 hover:brightness-105">
+              <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/40 hover:brightness-105">
                 <Video className="w-4 h-4 mr-2" />
                 New Meeting Summary
               </Button>
@@ -122,7 +122,7 @@ const MeetingCenter = () => {
                 </p>
                 <div className="flex justify-center gap-4">
                   <Link to="/ai-meeting-summarizer">
-                    <Button className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/40">
+                    <Button className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/40">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Meeting
                     </Button>

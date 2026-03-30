@@ -80,8 +80,8 @@ const TrustBar = () => {
           <div 
             className={`flex items-center gap-2 md:gap-3 px-3 py-2 md:px-5 md:py-3 rounded-xl transition-all duration-300 cursor-default h-full overflow-hidden ${
               item.highlight 
-                ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/60 md:border-2' 
-                : 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 md:border-2 hover:border-gold/70'
+                ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/60 md:border-2' 
+                : 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 md:border-2 hover:border-gold/70'
             }`}
             style={{
               boxShadow: item.highlight

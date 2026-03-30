@@ -47,7 +47,7 @@ const TeamMemberDetailDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black max-w-2xl max-h-[90vh] overflow-y-auto shadow-[0_0_40px_rgba(200,167,102,0.3)]">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black max-w-2xl max-h-[90vh] overflow-y-auto shadow-[0_0_40px_rgba(200,167,102,0.3)]">
         <DialogHeader>
           <DialogTitle className="sr-only">{member.name}</DialogTitle>
         </DialogHeader>
@@ -102,14 +102,14 @@ const TeamMemberDetailDialog = ({
             </div>
 
             {/* Contact Actions - For Everyone (changed from Chat to Contact Us) */}
-            <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-lg p-4 border border-gold/30 shadow-md">
+            <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-lg p-4 border border-gold/30 shadow-md">
               <h4 className="text-sm font-medium text-black mb-3">Contact Options</h4>
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={handleContactClick}
                   className="relative inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold rounded-lg transition-all duration-300 group overflow-hidden"
                   style={{
-                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
                     boxShadow: `
                       0 6px 15px rgba(200,167,102,0.3),
                       0 3px 8px rgba(0,0,0,0.1),
@@ -144,7 +144,7 @@ const TeamMemberDetailDialog = ({
 
             {/* Reporting Structure */}
             {reportsToMember && (
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-lg p-3 border border-gold/30">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-lg p-3 border border-gold/30">
                 <h4 className="text-sm font-medium text-zinc-600 mb-2 flex items-center gap-1.5">
                   <ArrowUpRight className="w-3.5 h-3.5 text-gold" />
                   Reports To
@@ -168,14 +168,14 @@ const TeamMemberDetailDialog = ({
 
             {/* Direct Reports */}
             {directReportsMembers.length > 0 && (
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-lg p-3 border border-gold/30">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-lg p-3 border border-gold/30">
                 <h4 className="text-sm font-medium text-zinc-600 mb-2 flex items-center gap-1.5">
                   <Users className="w-3.5 h-3.5 text-gold" />
                   Direct Reports ({directReportsMembers.length})
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {directReportsMembers.slice(0, 6).map((report) => (
-                    <div key={report.id} className="flex items-center gap-2 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] rounded-lg px-2 py-1.5 border border-gold/20">
+                    <div key={report.id} className="flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] rounded-lg px-2 py-1.5 border border-gold/20">
                       {/* GLOBAL IMAGE RULE - LOCKED (FINAL):
                           object-fit: cover + center 15% = max zoom, crop from bottom */}
                       <img
@@ -188,7 +188,7 @@ const TeamMemberDetailDialog = ({
                     </div>
                   ))}
                   {directReportsMembers.length > 6 && (
-                    <div className="flex items-center gap-2 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] rounded-lg px-2 py-1.5 border border-gold/20">
+                    <div className="flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] rounded-lg px-2 py-1.5 border border-gold/20">
                       <span className="text-zinc-600 text-xs">+{directReportsMembers.length - 6} more</span>
                     </div>
                   )}

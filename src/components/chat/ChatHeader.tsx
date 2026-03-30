@@ -39,7 +39,7 @@ const ChatHeader = React.forwardRef<HTMLDivElement, ChatHeaderProps>(({ step, is
   return (
     <div
       ref={ref}
-      className="flex items-center justify-between p-4 border-b-2 border-gold/60 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] shadow-[0_2px_10px_rgba(200,167,102,0.3)]"
+      className="flex items-center justify-between p-4 border-b-2 border-gold/60 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] shadow-[0_2px_10px_rgba(200,167,102,0.3)]"
     >
       <div className="flex items-center gap-3">
         {showBackButton && (

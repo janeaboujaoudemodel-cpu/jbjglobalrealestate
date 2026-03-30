@@ -196,7 +196,7 @@ const SupportTicketForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
             placeholder="John Smith"
           />
         </div>
@@ -210,7 +210,7 @@ const SupportTicketForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
             placeholder="john@example.com"
           />
         </div>
@@ -224,7 +224,7 @@ const SupportTicketForm = () => {
             id="phone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
             placeholder="+971 50 123 4567"
           />
         </div>
@@ -241,7 +241,7 @@ const SupportTicketForm = () => {
               }
             }}
           >
-            <SelectTrigger className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} text-black`}>
+            <SelectTrigger className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 ${fieldErrors.serviceCategory ? 'border-red-500' : 'border-gold/40'} text-black`}>
               <SelectValue placeholder="Select service" />
             </SelectTrigger>
             <SelectContent>
@@ -266,7 +266,7 @@ const SupportTicketForm = () => {
           value={formData.subject}
           onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
           required
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
           placeholder="Brief description of your inquiry"
         />
       </div>
@@ -275,7 +275,7 @@ const SupportTicketForm = () => {
           Priority
         </Label>
         <Select value={formData.priority} onValueChange={(v) => setFormData({ ...formData, priority: v })}>
-          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
+          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
             <SelectValue placeholder="Select priority" />
           </SelectTrigger>
           <SelectContent>
@@ -297,7 +297,7 @@ const SupportTicketForm = () => {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70 focus:border-gold"
           placeholder="Please describe your inquiry in detail..."
         />
       </div>
@@ -306,7 +306,7 @@ const SupportTicketForm = () => {
         disabled={isSubmitting}
         className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50"
         style={{
-          background: "linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)",
+          background: "linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F7F2EA 100%)",
           border: "2px solid rgba(200,167,102,0.5)",
           boxShadow:
             "0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)",
@@ -425,7 +425,7 @@ const FeedbackForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
@@ -436,7 +436,7 @@ const FeedbackForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
           />
         </div>
       </div>
@@ -462,7 +462,7 @@ const FeedbackForm = () => {
       <div>
         <Label htmlFor="serviceType" className="text-black">Service Used *</Label>
         <Select value={formData.serviceType} onValueChange={(v) => setFormData({ ...formData, serviceType: v })}>
-          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
+          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
             <SelectValue placeholder="Select service" />
           </SelectTrigger>
           <SelectContent>
@@ -485,7 +485,7 @@ const FeedbackForm = () => {
           onChange={(e) => setFormData({ ...formData, review: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Share your experience with JBJ Global Real Estate..."
         />
       </div>
@@ -493,7 +493,7 @@ const FeedbackForm = () => {
       <div>
         <Label htmlFor="recommend" className="text-black">Would you recommend us?</Label>
         <Select value={formData.wouldRecommend} onValueChange={(v) => setFormData({ ...formData, wouldRecommend: v })}>
-          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
+          <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
             <SelectValue placeholder="Select option" />
           </SelectTrigger>
           <SelectContent>
@@ -511,7 +511,7 @@ const FeedbackForm = () => {
         disabled={isSubmitting} 
         className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50"
         style={{
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F7F2EA 100%)',
           border: '2px solid rgba(200,167,102,0.5)',
           boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
         }}
@@ -585,7 +585,7 @@ const IssueReportForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
@@ -596,7 +596,7 @@ const IssueReportForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
           />
         </div>
       </div>
@@ -608,13 +608,13 @@ const IssueReportForm = () => {
             id="issuePhone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
           <Label htmlFor="browser" className="text-black">Browser *</Label>
           <Select value={formData.browser} onValueChange={(v) => setFormData({ ...formData, browser: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
               <SelectValue placeholder="Select browser" />
             </SelectTrigger>
             <SelectContent>
@@ -633,7 +633,7 @@ const IssueReportForm = () => {
         <div>
           <Label htmlFor="device" className="text-black">Device *</Label>
           <Select value={formData.device} onValueChange={(v) => setFormData({ ...formData, device: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
               <SelectValue placeholder="Select device" />
             </SelectTrigger>
             <SelectContent>
@@ -654,7 +654,7 @@ const IssueReportForm = () => {
             value={formData.pageUrl}
             onChange={(e) => setFormData({ ...formData, pageUrl: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
             placeholder="https://jbjglobalrealestate.lovable.app/..."
           />
         </div>
@@ -666,7 +666,7 @@ const IssueReportForm = () => {
           id="errorMessage"
           value={formData.errorMessage}
           onChange={(e) => setFormData({ ...formData, errorMessage: e.target.value })}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Copy and paste any error message you see"
         />
       </div>
@@ -679,7 +679,7 @@ const IssueReportForm = () => {
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={4}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Describe what's not working..."
         />
       </div>
@@ -691,14 +691,14 @@ const IssueReportForm = () => {
           value={formData.stepsToReproduce}
           onChange={(e) => setFormData({ ...formData, stepsToReproduce: e.target.value })}
           rows={3}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Optional: List the steps you took when the issue occurred"
         />
       </div>
 
       <div>
         <Label className="text-black">Screenshot (optional)</Label>
-        <div className="mt-2 border-2 border-dashed border-gold/40 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <div className="mt-2 border-2 border-dashed border-gold/40 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <input
             type="file"
             accept="image/*"
@@ -720,7 +720,7 @@ const IssueReportForm = () => {
         disabled={isSubmitting} 
         className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50"
         style={{
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F7F2EA 100%)',
           border: '2px solid rgba(200,167,102,0.5)',
           boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
         }}
@@ -848,7 +848,7 @@ const IdeaBoxForm = () => {
             value={formData.fullName}
             onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
@@ -859,7 +859,7 @@ const IdeaBoxForm = () => {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
           />
         </div>
       </div>
@@ -871,13 +871,13 @@ const IdeaBoxForm = () => {
             id="ideaPhone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black"
           />
         </div>
         <div>
           <Label htmlFor="ideaCategory" className="text-black">Idea Category *</Label>
           <Select value={formData.ideaCategory} onValueChange={(v) => setFormData({ ...formData, ideaCategory: v })}>
-            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black">
+            <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black">
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
@@ -900,7 +900,7 @@ const IdeaBoxForm = () => {
           value={formData.ideaTitle}
           onChange={(e) => setFormData({ ...formData, ideaTitle: e.target.value })}
           required
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Give your idea a catchy title"
         />
       </div>
@@ -913,7 +913,7 @@ const IdeaBoxForm = () => {
           onChange={(e) => setFormData({ ...formData, ideaDescription: e.target.value })}
           required
           rows={5}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="Describe your creative idea in detail. Be as specific as possible!"
         />
       </div>
@@ -925,7 +925,7 @@ const IdeaBoxForm = () => {
           value={formData.expectedBenefit}
           onChange={(e) => setFormData({ ...formData, expectedBenefit: e.target.value })}
           rows={2}
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-gold/70"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gold/70"
           placeholder="How would this idea benefit JBJ Global Real Estate or our clients?"
         />
       </div>
@@ -935,7 +935,7 @@ const IdeaBoxForm = () => {
         disabled={isSubmitting} 
         className="group relative w-full inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50"
         style={{
-          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+          background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F7F2EA 100%)',
           border: '2px solid rgba(200,167,102,0.5)',
           boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
         }}
@@ -1026,7 +1026,7 @@ const CustomerHappiness = () => {
             <Card className="max-w-4xl mx-auto bg-gradient-to-br from-zinc-900/90 to-zinc-950/90 border-2 border-gold/30 backdrop-blur-sm shadow-[0_20px_60px_rgba(200,167,102,0.15)] overflow-hidden">
               <CardContent className="p-4 md:p-8">
                 <Tabs defaultValue="support">
-                  <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 p-1.5 md:p-2 rounded-xl mb-8 h-auto">
+                  <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 p-1.5 md:p-2 rounded-xl mb-8 h-auto">
                     <TabsTrigger value="support" className="flex items-center gap-2 data-[state=active]:bg-white/80 data-[state=active]:text-black data-[state=active]:border-gold data-[state=active]:border-2 text-black py-3">
                       <TicketCheck className="w-4 h-4" />
                       <span className="hidden sm:inline">Support</span> Ticket
@@ -1046,7 +1046,7 @@ const CustomerHappiness = () => {
                   </TabsList>
 
               <TabsContent value="support">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 overflow-hidden">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center border border-blue-500/40">
@@ -1067,7 +1067,7 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="feedback">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 overflow-hidden">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center border border-pink-500/40">
@@ -1088,7 +1088,7 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="issue">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 overflow-hidden">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center border border-red-500/40">
@@ -1109,7 +1109,7 @@ const CustomerHappiness = () => {
               </TabsContent>
 
               <TabsContent value="idea">
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 overflow-hidden">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 overflow-hidden">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center border border-purple-500/40">
@@ -1148,7 +1148,7 @@ const CustomerHappiness = () => {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Call Us - Blue */}
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-blue-500 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 transform-gpu">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-blue-500 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 transform-gpu">
                   <CardContent className="p-6 text-center">
                     <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-blue-500/10 border-2 border-blue-500/40 flex items-center justify-center">
                       <Phone className="w-7 h-7 text-blue-500" />
@@ -1160,7 +1160,7 @@ const CustomerHappiness = () => {
                   </CardContent>
                 </Card>
                 {/* Email Us - Purple */}
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-purple-500 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 transform-gpu">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-purple-500 hover:shadow-lg hover:shadow-purple-500/20 transition-all duration-300 transform-gpu">
                   <CardContent className="p-6 text-center">
                     <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-purple-500/10 border-2 border-purple-500/40 flex items-center justify-center">
                       <Mail className="w-7 h-7 text-purple-500" />
@@ -1172,7 +1172,7 @@ const CustomerHappiness = () => {
                   </CardContent>
                 </Card>
                 {/* Office Hours - Gold */}
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 transform-gpu">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold hover:shadow-lg hover:shadow-gold/20 transition-all duration-300 transform-gpu">
                   <CardContent className="p-6 text-center">
                     <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-gold/10 border-2 border-gold/40 flex items-center justify-center">
                       <Calendar className="w-7 h-7 text-gold" />

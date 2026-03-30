@@ -81,7 +81,7 @@ const DeveloperPortalCTA = () => {
     <section className="py-12 md:py-16 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#F5EBD7] mb-1 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-2xl md:text-3xl font-bold text-[#F7F1E6] mb-1 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
             Developer Center
           </h2>
           <p className="text-[#D4B896]/60 text-sm mb-8 text-center">
@@ -105,7 +105,7 @@ const DeveloperPortalCTA = () => {
                 </p>
                 <Button
                   onClick={handleStartNow}
-                  className="bg-gradient-to-r from-gold via-[#E8DCC8] to-gold text-black font-bold px-8 py-3 text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] transition-all"
+                  className="bg-gradient-to-r from-gold via-[#ECE2D2] to-gold text-black font-bold px-8 py-3 text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] transition-all"
                 >
                   <Rocket className="w-4 h-4 mr-2" />
                   Start Now
@@ -121,7 +121,7 @@ const DeveloperPortalCTA = () => {
               {shortcuts.map((action) => (
                 <Link key={action.label} to={action.href}>
                   <div className="group flex flex-col items-center gap-2 p-5 rounded-xl border border-[#D4B896]/20 hover:border-[#D4B896]/50 bg-white/5 hover:bg-white/10 transition-all duration-300 cursor-pointer min-h-[120px] justify-center">
-                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_2px_8px_rgba(212,184,150,0.3)]">
+                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center group-hover:scale-110 transition-transform shadow-[0_2px_8px_rgba(212,184,150,0.3)]">
                       <action.icon className="w-5 h-5 text-[hsl(38,35%,12%)]" />
                     </div>
                     <span className="text-white text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
@@ -176,13 +176,13 @@ const DeveloperPortalCTA = () => {
                     <div className="w-8 h-8 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center shrink-0">
                       <CheckCircle2 className="w-4 h-4 text-gold" />
                     </div>
-                    <span className="text-[#F5EBD7] text-sm">{b.label}</span>
+                    <span className="text-[#F7F1E6] text-sm">{b.label}</span>
                   </div>
                 ))}
               </div>
               <div className="text-center">
                 <Link to={user ? "/developer-hub" : "/auth?redirect=/developer-hub"}>
-                  <Button className="bg-gradient-to-r from-gold via-[#E8DCC8] to-gold text-black font-bold px-8 py-3 text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] transition-all">
+                  <Button className="bg-gradient-to-r from-gold via-[#ECE2D2] to-gold text-black font-bold px-8 py-3 text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] transition-all">
                     <UserCheck className="w-4 h-4 mr-2" />
                     Register Now as Developer or Sales Representative
                     <ArrowRight className="w-4 h-4 ml-2" />

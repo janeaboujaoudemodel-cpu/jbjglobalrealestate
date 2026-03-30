@@ -139,9 +139,9 @@ const PWAAnalyticsDashboard = () => {
           {pwaGuide && <PageGuide guide={pwaGuide} />}
           <Tabs value={dateRange} onValueChange={(v) => setDateRange(v as typeof dateRange)}>
             <TabsList className="bg-white/80 border-2 border-gold/30">
-              <TabsTrigger value="7d" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">7 Days</TabsTrigger>
-              <TabsTrigger value="30d" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">30 Days</TabsTrigger>
-              <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">All Time</TabsTrigger>
+              <TabsTrigger value="7d" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">7 Days</TabsTrigger>
+              <TabsTrigger value="30d" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">30 Days</TabsTrigger>
+              <TabsTrigger value="all" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">All Time</TabsTrigger>
             </TabsList>
           </Tabs>
           <Button
@@ -158,7 +158,7 @@ const PWAAnalyticsDashboard = () => {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-black/60 flex items-center gap-2">
               <Download className="w-4 h-4 text-gold" />
@@ -170,7 +170,7 @@ const PWAAnalyticsDashboard = () => {
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-black/60 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-green-600" />
@@ -182,7 +182,7 @@ const PWAAnalyticsDashboard = () => {
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-black/60 flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-gold" />
@@ -194,7 +194,7 @@ const PWAAnalyticsDashboard = () => {
           </CardContent>
         </Card>
         
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-black/60 flex items-center gap-2">
               <Smartphone className="w-4 h-4 text-blue-600" />
@@ -211,7 +211,7 @@ const PWAAnalyticsDashboard = () => {
 
       {/* Event Breakdown */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader>
             <CardTitle className="text-black">Events Breakdown</CardTitle>
           </CardHeader>
@@ -233,7 +233,7 @@ const PWAAnalyticsDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <CardHeader>
             <CardTitle className="text-black">Device & Platform</CardTitle>
           </CardHeader>
@@ -246,7 +246,7 @@ const PWAAnalyticsDashboard = () => {
                   size="sm"
                   onClick={() => setPwaView('device')}
                   className={pwaView === 'device' 
-                    ? 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold/40 font-semibold' 
+                    ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border-2 border-gold/40 font-semibold' 
                     : 'border-gold/30 text-black hover:bg-gold/10'}
                 >
                   <Monitor className="w-3.5 h-3.5 mr-1.5" />
@@ -257,7 +257,7 @@ const PWAAnalyticsDashboard = () => {
                   size="sm"
                   onClick={() => setPwaView('platform')}
                   className={pwaView === 'platform' 
-                    ? 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold/40 font-semibold' 
+                    ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border-2 border-gold/40 font-semibold' 
                     : 'border-gold/30 text-black hover:bg-gold/10'}
                 >
                   <Smartphone className="w-3.5 h-3.5 mr-1.5" />
@@ -299,7 +299,7 @@ const PWAAnalyticsDashboard = () => {
       </div>
 
       {/* Recent Events */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <CardHeader>
           <CardTitle className="text-black">Recent Events</CardTitle>
         </CardHeader>

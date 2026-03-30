@@ -54,7 +54,7 @@ export const PremiumHeroButton = ({
     "font-semibold tracking-wide",
     "rounded-xl transition-all duration-300 cursor-pointer",
     isLight 
-      ? "bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold/80 hover:-translate-y-1"
+      ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold/80 hover:-translate-y-1"
       : "bg-transparent border-2 border-white/70 hover:border-gold/80 hover:-translate-y-0.5",
     className
   );
@@ -95,7 +95,7 @@ export const PremiumHeroButton = ({
       {/* Hover fill effect - champagne gradient (only for dark-bg variant) */}
       {!isLight && (
         <span 
-          className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 border-2 border-gold/60" 
+          className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 border-2 border-gold/60" 
         />
       )}
     </>

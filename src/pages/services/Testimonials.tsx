@@ -337,31 +337,31 @@ const Testimonials = () => {
                 <TabsList className="w-full flex flex-wrap justify-center gap-2 bg-transparent mb-8">
                   <TabsTrigger 
                     value="buyers" 
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
                   >
                     Buyers
                   </TabsTrigger>
                   <TabsTrigger 
                     value="sellers"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
                   >
                     Sellers
                   </TabsTrigger>
                   <TabsTrigger 
                     value="investors"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
                   >
                     Investors
                   </TabsTrigger>
                   <TabsTrigger 
                     value="landlords"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
                   >
                     Landlords
                   </TabsTrigger>
                   <TabsTrigger 
                     value="partners"
-                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
+                    className="px-6 py-3 rounded-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] text-black data-[state=active]:bg-black data-[state=active]:text-gold data-[state=active]:border-gold"
                   >
                     Brokers & Partners
                   </TabsTrigger>
@@ -620,7 +620,7 @@ const Testimonials = () => {
                   <AccordionItem
                     key={index}
                     value={`item-${index}`}
-                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden"
+                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
                   >
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-black font-medium">{faq.question}</span>

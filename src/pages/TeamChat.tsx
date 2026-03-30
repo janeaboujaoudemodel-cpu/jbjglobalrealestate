@@ -300,7 +300,7 @@ const TeamChat = () => {
 
       {/* ─── Channel Sidebar ─── */}
       <div className={cn(
-        "w-full md:w-72 flex flex-col bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] border-r border-[#B89555]/15",
+        "w-full md:w-72 flex flex-col bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border-r border-[#B89555]/15",
         showSidebar ? "flex" : "hidden md:flex"
       )}>
         {/* Workspace Header */}
@@ -464,7 +464,7 @@ const TeamChat = () => {
 
       {/* ─── Main Chat Area ─── */}
       <div className={cn(
-        "flex-1 flex flex-col bg-gradient-to-br from-[#FDFBF7] via-white to-[#F5F0E6]/30",
+        "flex-1 flex flex-col bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA]/30",
         !showSidebar ? "flex" : "hidden md:flex"
       )}>
         {/* Channel Header */}
@@ -669,7 +669,7 @@ const TeamChat = () => {
 
       {/* ─── Members Sidebar (real employees by department) ─── */}
       {showMembers && !isMobile && (
-        <div className="w-64 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] border-l border-[#B89555]/15 flex flex-col">
+        <div className="w-64 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border-l border-[#B89555]/15 flex flex-col">
           <div className="p-4 border-b border-[#B89555]/15">
             <h3 className="text-xs font-semibold text-black/40 uppercase tracking-wider">
               Team — {totalCount} members
@@ -735,7 +735,7 @@ const TeamChat = () => {
 
       {/* Productivity Panel */}
       {showProductivityPanel && !isMobile && (
-        <div className="w-64 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] border-l border-[#B89555]/15 flex flex-col overflow-y-auto">
+        <div className="w-64 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] border-l border-[#B89555]/15 flex flex-col overflow-y-auto">
           <div className="p-4 border-b border-[#B89555]/15">
             <h3 className="text-xs font-semibold text-black/40 uppercase tracking-wider flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-[#B89555]" /> Chat Productivity

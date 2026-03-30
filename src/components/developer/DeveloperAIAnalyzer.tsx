@@ -271,7 +271,7 @@ function PortfolioStrengthCard({ text }: { text: string }) {
       </div>
       <div className="space-y-3">
         {devEntries.map((dev, i) => (
-          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] border border-gold/10 hover:border-gold/30 transition-colors">
+          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-gold/10 hover:border-gold/30 transition-colors">
             <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
               <span className="text-gold font-bold text-xs">{dev.name.charAt(0)}</span>
             </div>
@@ -445,7 +445,7 @@ export const DeveloperAIAnalyzer = ({
   const ratingScore = ratingMatch ? parseFloat(ratingMatch[1]) : null;
 
   return (
-    <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl mt-8">
+    <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl mt-8">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="w-6 h-6 text-gold" />
@@ -563,7 +563,7 @@ export const DeveloperAIAnalyzer = ({
                     {/* Key Highlights Row */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
                       {foundedYear && (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
                           <CalendarDays className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-black">{foundedYear}</div>
@@ -572,7 +572,7 @@ export const DeveloperAIAnalyzer = ({
                         </div>
                       )}
                       {headquarters && (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
                           <MapPin className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-black truncate">{headquarters.split(',')[0]}</div>
@@ -581,7 +581,7 @@ export const DeveloperAIAnalyzer = ({
                         </div>
                       )}
                       {completedProjects && (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
                           <Landmark className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-black">{completedProjects.toLocaleString()}+</div>
@@ -590,7 +590,7 @@ export const DeveloperAIAnalyzer = ({
                         </div>
                       )}
                       {activeProjects && (
-                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
                           <Home className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-black">{activeProjects}</div>

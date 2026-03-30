@@ -135,7 +135,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
         </div>
 
         {/* Content Section - Champagne Background */}
-        <div className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col">
+        <div className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
           {/* Developer Name */}
           <h3 className="text-black font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
             {developer.name}

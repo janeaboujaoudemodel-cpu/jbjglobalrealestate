@@ -67,7 +67,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
         sideOffset={1}
         className="z-[9999] min-w-[280px] rounded-xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] p-0 overflow-hidden border-2 border-gold/40"
         style={{
-          background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+          background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
         }}
       >
         {/* Top gold accent line */}
@@ -81,7 +81,7 @@ const LanguageSwitcher = ({ variant = 'default' }: LanguageSwitcherProps) => {
                 className={`flex items-center justify-between cursor-pointer transition-all duration-200 rounded-lg px-4 py-3 my-0.5 group ${
                   language === lang.code 
                     ? 'bg-gold/15 border border-gold/30' 
-                    : 'hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]'
+                    : 'hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2]'
                 }`}
               >
                 <span className="flex items-center gap-3">

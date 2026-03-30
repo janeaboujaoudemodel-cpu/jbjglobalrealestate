@@ -177,7 +177,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
     <div className="space-y-6">
       {/* Stats Row */}
       <div className="grid grid-cols-3 gap-4">
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-amber-500/40">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-amber-500/40">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -190,7 +190,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-purple-500/40">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-purple-500/40">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -203,7 +203,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-green-500/40">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-green-500/40">
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -217,7 +217,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
       </div>
 
       {/* Provisioning Queue */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle className="text-black flex items-center gap-2">
@@ -295,7 +295,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
 
       {/* Provisioning Dialog */}
       <Dialog open={showProvisionDialog} onOpenChange={setShowProvisionDialog}>
-        <DialogContent className="max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+        <DialogContent className="max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
           <DialogHeader>
             <DialogTitle className="text-black flex items-center gap-2">
               <Key className="w-5 h-5 text-gold" />

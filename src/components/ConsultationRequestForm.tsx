@@ -167,7 +167,7 @@ export const ConsultationRequestForm = ({
   };
 
   const selectTriggerClass = "h-12 bg-white border-2 border-gold/50 hover:border-gold focus:border-gold rounded-lg";
-  const selectContentClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50";
+  const selectContentClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50";
   const inputClass = "h-12 bg-white border-2 border-gold/50 hover:border-gold focus:border-gold text-black rounded-lg";
 
   if (isSuccess) {
@@ -175,7 +175,7 @@ export const ConsultationRequestForm = ({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-8 text-center max-w-2xl mx-auto ${className}`}
+        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-8 text-center max-w-2xl mx-auto ${className}`}
       >
         <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-gold" />
@@ -195,7 +195,7 @@ export const ConsultationRequestForm = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-[3px] border-gold rounded-2xl p-6 md:p-8 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_4px_6px_rgba(0,0,0,0.1)] max-w-3xl mx-auto ${className}`}
+      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[3px] border-gold rounded-2xl p-6 md:p-8 shadow-[0_12px_40px_rgba(200,167,102,0.4),0_4px_6px_rgba(0,0,0,0.1)] max-w-3xl mx-auto ${className}`}
       style={{ transform: 'perspective(1200px) rotateX(1deg)' }}
     >
       {/* Header */}
@@ -456,7 +456,7 @@ export const ConsultationRequestForm = ({
             disabled={isSubmitting}
             className="w-full h-14 text-base font-bold relative overflow-hidden group"
             style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
               border: '2px solid rgba(200,167,102,0.6)',
               boxShadow: '0 10px 30px rgba(200,167,102,0.4)',
             }}

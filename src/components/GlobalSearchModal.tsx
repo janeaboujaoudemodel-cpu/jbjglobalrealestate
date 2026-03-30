@@ -234,7 +234,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
       onClick={() => handleSelect(route)}
       className={`w-full flex items-center gap-3 p-2 rounded-lg transition-all text-left ${isFirst ? 'bg-black/10 border border-gold/40' : 'hover:bg-black/5'}`}
     >
-      <div className="w-8 h-8 rounded-lg overflow-hidden border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center flex-shrink-0">
+      <div className="w-8 h-8 rounded-lg overflow-hidden border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center flex-shrink-0">
         {item.image ? (
           <SafeImage src={item.image} alt={item.name} className="w-full h-full object-cover" />
         ) : (
@@ -318,9 +318,9 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       <button
                         key={`${item.id}-${idx}`}
                         onClick={() => handleSelect(item.route)}
-                        className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8] transition-all text-left group"
+                        className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all text-left group"
                       >
-                        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-gold">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 text-gold">
                           {item.icon && <item.icon className="w-4 h-4" />}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -346,7 +346,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     <button
                       key={s.route}
                       onClick={() => handleSelect(s.route)}
-                      className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8] transition-all group"
+                      className="flex flex-col items-center gap-1.5 p-2.5 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all group"
                     >
                       <div className={`w-9 h-9 rounded-lg ${s.color} flex items-center justify-center`}>
                         <s.icon className="w-4 h-4 text-white" />
@@ -363,9 +363,9 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                     <button
                       key={page.route}
                       onClick={() => handleSelect(page.route)}
-                      className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8] transition-all text-left group"
+                      className="flex items-center gap-2.5 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all text-left group"
                     >
-                      <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 flex items-center justify-center text-gold">
+                      <div className="w-7 h-7 rounded-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 flex items-center justify-center text-gold">
                         <page.icon className="w-3.5 h-3.5" />
                       </div>
                       <span className="text-xs text-black font-medium">{page.label}</span>
@@ -385,7 +385,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                       <button
                         key={i}
                         onClick={() => handleRecentSearchClick(search)}
-                        className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8] transition-all text-left group"
+                        className="w-full flex items-center gap-2.5 p-2 rounded-lg hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2] transition-all text-left group"
                       >
                         <Clock className="w-3.5 h-3.5 text-gold/60" />
                         <span className="text-xs text-black font-medium">{search}</span>
@@ -423,7 +423,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
             className="fixed left-1/2 -translate-x-1/2 [body.jj-vertical-nav-active_&]:lg:left-[calc(50%+100px)] [body.jj-vertical-nav-collapsed_&]:lg:left-[calc(50%+24px)] w-full max-w-3xl z-[10001] px-6 sm:px-8 top-[56px] sm:top-[56px]"
             style={{ maxHeight: 'calc(100dvh - 80px)' }}
           >
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 96px)' }}>
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl shadow-2xl overflow-hidden flex flex-col" style={{ maxHeight: 'calc(100dvh - 96px)' }}>
               {/* Search Input - Larger */}
               <div className="relative border-b border-gold/30 flex-shrink-0">
                 <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-gold" />

@@ -144,7 +144,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
   return (
     <div className="group h-full animate-fade-in-up">
       <Link to={`/project/${project.slug}`} className="block h-full" onMouseEnter={prefetchProjectDetail}>
-        <div className="flex flex-col h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl overflow-hidden border-2 border-gold/30 hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
+        <div className="flex flex-col h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl overflow-hidden border-2 border-gold/30 hover:border-gold transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
           {/* Image */}
           <div className="relative aspect-[4/3] overflow-hidden bg-gold/5">
             {imageUrl ? (
@@ -281,7 +281,7 @@ const FeaturedListings = () => {
       <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-8">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
             <Home className="w-3.5 h-3.5 text-gold" />
             <span className="text-black">{t('featured.title', 'Featured Properties')}</span>
           </span>
@@ -315,7 +315,7 @@ const FeaturedListings = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {isLoading
             ? [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl overflow-hidden border-2 border-gold/40">
+                <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl overflow-hidden border-2 border-gold/40">
                   <Skeleton className="aspect-[4/3] rounded-none" />
                   <div className="p-4 space-y-2">
                     <Skeleton className="h-3 w-2/3" />
@@ -339,7 +339,7 @@ const FeaturedListings = () => {
         <div className="text-center mt-10 mb-6">
           <Link
             to="/properties"
-            className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group"
+            className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group"
             style={{
               boxShadow: `
                 0 10px 30px rgba(200,167,102,0.4),

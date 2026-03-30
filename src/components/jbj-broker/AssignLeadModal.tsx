@@ -172,7 +172,7 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      <DialogContent className="sm:max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-black">
             <UserPlus className="h-5 w-5 text-gold" />
@@ -181,7 +181,7 @@ export function AssignLeadModal({ open, onOpenChange, brokers, onAssigned }: Ass
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "existing" | "new")}>
-          <TabsList className="grid w-full grid-cols-2 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+          <TabsList className="grid w-full grid-cols-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
             <TabsTrigger value="existing" className="flex items-center gap-2 data-[state=active]:bg-gold data-[state=active]:text-black">
               <Users className="h-4 w-4" />
               Existing Lead

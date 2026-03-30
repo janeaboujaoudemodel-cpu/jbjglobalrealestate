@@ -62,7 +62,7 @@ export function ChatSessionSidebar({
   };
 
   return (
-    <div className="w-64 border-r-2 border-[#B89555]/20 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] flex flex-col h-full">
+    <div className="w-64 border-r-2 border-[#B89555]/20 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] flex flex-col h-full">
       {/* Header */}
       <div className="p-3 border-b border-[#B89555]/20">
         <Button

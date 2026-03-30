@@ -38,7 +38,7 @@ const OwnerDashboardShell = () => {
   const SidebarContent = ({ collapsed = false }: { collapsed?: boolean }) => (
     <>
       {/* Logo Area */}
-      <div className="h-16 border-b border-[#B89555]/30 flex items-center justify-between px-4 flex-shrink-0 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6]">
+      <div className="h-16 border-b border-[#B89555]/30 flex items-center justify-between px-4 flex-shrink-0 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
         {!collapsed && (
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B89555] via-[#A68444] to-[#B89555] font-bold text-lg tracking-wide">
             JBJ Owner
@@ -87,13 +87,13 @@ const OwnerDashboardShell = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex">
       {/* Owner Tasks Popup Alert */}
       <OwnerTasksPopupAlert />
       {/* Mobile Sidebar */}
       {isMobile && (
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetContent side="left" className="w-64 p-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-[#B89555]/30">
+          <SheetContent side="left" className="w-64 p-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-r border-[#B89555]/30">
             <div className="h-full flex flex-col">
               <SidebarContent collapsed={false} />
             </div>
@@ -105,7 +105,7 @@ const OwnerDashboardShell = () => {
       {!isMobile && (
         <aside 
           className={cn(
-            "fixed left-0 top-0 h-full bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-[#B89555]/30 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
+            "fixed left-0 top-0 h-full bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-r border-[#B89555]/30 transition-all duration-300 z-40 flex flex-col shadow-xl shadow-[#B89555]/5",
             sidebarCollapsed ? "w-16" : "w-64"
           )}
           role="navigation"

@@ -20,7 +20,7 @@ const OverseasInvestorsBanner = () => {
       <div className="jj-layer-2">
         {/* Badge */}
         <div className="text-center mb-6 md:mb-8">
-          <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md">
+          <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md">
             <Globe className="w-3 h-3 md:w-3.5 md:h-3.5 text-gold" />
             <span className="text-black">International Investors</span>
           </span>
@@ -43,7 +43,7 @@ const OverseasInvestorsBanner = () => {
           {highlights.map((item, i) => (
             <div
               key={item.label}
-              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-2xl p-4 md:p-5 text-center hover:border-gold hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] transition-all duration-300 animate-fade-in-up"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 rounded-2xl p-4 md:p-5 text-center hover:border-gold hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] transition-all duration-300 animate-fade-in-up"
               style={{ animationDelay: `${i * 80}ms` }}
             >
               <div className="w-10 h-10 md:w-12 md:h-12 mx-auto rounded-xl bg-gradient-to-br from-gold/20 to-gold/10 border-2 border-gold/40 flex items-center justify-center mb-3">
@@ -83,7 +83,7 @@ const OverseasInvestorsBanner = () => {
           </Link>
           <Link to="/investor-hub">
             <Button 
-              className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold px-8 md:px-10 py-4 md:py-5 rounded-2xl text-base md:text-lg border-2 border-gold/60 hover:border-gold"
+              className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-bold px-8 md:px-10 py-4 md:py-5 rounded-2xl text-base md:text-lg border-2 border-gold/60 hover:border-gold"
               style={{
                 boxShadow: `
                   0 10px 30px rgba(200,167,102,0.35),

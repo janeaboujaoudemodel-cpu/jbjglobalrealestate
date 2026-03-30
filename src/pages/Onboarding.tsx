@@ -319,7 +319,7 @@ export default function Onboarding() {
           <div className="jj-card-inner border-2 border-gold rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
-                style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
                 <Building2 className="h-5 w-5 text-black" />
               </div>
               <span className="text-sm font-medium text-zinc-600">Company Knowledge</span>
@@ -336,7 +336,7 @@ export default function Onboarding() {
           <div className="jj-card-inner border-2 border-gold rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
-                style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
                 <Briefcase className="h-5 w-5 text-black" />
               </div>
               <span className="text-sm font-medium text-zinc-600">Real Estate Basics</span>
@@ -353,7 +353,7 @@ export default function Onboarding() {
           <div className="jj-card-inner border-2 border-gold rounded-xl p-6 transition-all hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] hover:-translate-y-1">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center border-2 border-gold"
-                style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}>
+                style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
                 <Trophy className="h-5 w-5 text-black" />
               </div>
               <span className="text-sm font-medium text-zinc-600">Combined Score</span>

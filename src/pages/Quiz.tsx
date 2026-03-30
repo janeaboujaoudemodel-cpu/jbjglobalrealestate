@@ -471,7 +471,7 @@ const Quiz = () => {
   // Intro screen before starting
   if (!started && currentStep === 0 && Object.keys(answers).length === 0 && !showForm) {
     return (
-      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col">
+      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
         {/* Header */}
         <div className="border-b border-[#B89555]/20 bg-white/50 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4">
@@ -588,7 +588,7 @@ const Quiz = () => {
   // Form Screen after completing questions
   if (showForm) {
     return (
-      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col">
+      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
         {/* Header */}
         <div className="border-b border-[#B89555]/20 bg-white/50 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-4">
@@ -663,7 +663,7 @@ const Quiz = () => {
                     placeholder="Select your nationality"
                     searchPlaceholder="Search countries..."
                     priorityItem="United Arab Emirates"
-                    triggerClassName="bg-white border-[#B89555]/30 text-stone-900 hover:bg-[#F5F0E6] hover:text-stone-900"
+                    triggerClassName="bg-white border-[#B89555]/30 text-stone-900 hover:bg-[#F7F2EA] hover:text-stone-900"
                     className="bg-white border-[#B89555]/30"
                   />
                 </div>
@@ -676,7 +676,7 @@ const Quiz = () => {
                     placeholder="Select preferred language"
                     searchPlaceholder="Search languages..."
                     priorityItem="English"
-                    triggerClassName="bg-white border-[#B89555]/30 text-stone-900 hover:bg-[#F5F0E6] hover:text-stone-900"
+                    triggerClassName="bg-white border-[#B89555]/30 text-stone-900 hover:bg-[#F7F2EA] hover:text-stone-900"
                     className="bg-white border-[#B89555]/30"
                   />
                 </div>
@@ -743,7 +743,7 @@ const Quiz = () => {
 
   // Quiz Questions Screen
   return (
-    <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col">
+    <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col">
       {/* Header */}
       <div className="border-b border-[#B89555]/20 bg-white/50 backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="container mx-auto px-4 py-4">
@@ -789,7 +789,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleSelectAll}
                   disabled={allSelected()}
-                  className="bg-white text-stone-900 hover:bg-[#F5F0E6] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-white text-stone-900 hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
                 >
                   Select All
                 </Button>
@@ -798,7 +798,7 @@ const Quiz = () => {
                   size="sm"
                   onClick={handleClearAll}
                   disabled={!answers[currentQuestion.id] || (answers[currentQuestion.id] as string[]).length === 0}
-                  className="bg-white text-stone-900 hover:bg-[#F5F0E6] border-[#B89555]/40 font-semibold disabled:opacity-50"
+                  className="bg-white text-stone-900 hover:bg-[#F7F2EA] border-[#B89555]/40 font-semibold disabled:opacity-50"
                 >
                   Clear All
                 </Button>
@@ -844,7 +844,7 @@ const Quiz = () => {
               <Button
                 variant="outline"
                 onClick={() => currentStep > 0 ? setCurrentStep(currentStep - 1) : setStarted(false)}
-                className="border-[#B89555]/40 text-stone-700 bg-white hover:bg-[#F5F0E6] hover:text-stone-900 px-8 py-6 text-lg"
+                className="border-[#B89555]/40 text-stone-700 bg-white hover:bg-[#F7F2EA] hover:text-stone-900 px-8 py-6 text-lg"
               >
                 <ChevronLeft className="w-5 h-5 mr-2" />
                 Back

@@ -131,7 +131,7 @@ export default function HRAgentChat() {
 
   if (initializing) {
     return (
-      <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/30">
+      <Card className="w-full max-w-2xl mx-auto bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/30">
         <CardContent className="flex items-center justify-center py-20">
           <div className="text-center space-y-4">
             <Loader2 className="w-12 h-12 animate-spin text-gold mx-auto" />
@@ -143,7 +143,7 @@ export default function HRAgentChat() {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-xl bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/30">
+    <Card className="w-full max-w-2xl mx-auto shadow-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/30">
       <CardHeader className="border-b border-gold/20 bg-gradient-to-r from-gold/10 to-gold/5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -177,15 +177,15 @@ export default function HRAgentChat() {
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                     message.role === 'user' 
                       ? 'bg-gold text-black' 
-                      : 'bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/20'
+                      : 'bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/20'
                   }`}>
                     {message.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4 text-gold" />}
                   </div>
                   <div className="flex flex-col max-w-[80%]">
                     <div className={`rounded-2xl px-4 py-3 select-text cursor-text ${
                       message.role === 'user'
-                        ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-tr-none'
-                        : 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-tl-none'
+                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md rounded-tr-none'
+                        : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm rounded-tl-none'
                     }`}>
                       <div className="prose prose-sm max-w-none whitespace-pre-wrap text-black select-text">
                         {message.content}
@@ -218,10 +218,10 @@ export default function HRAgentChat() {
                 animate={{ opacity: 1 }}
                 className="flex gap-3"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/20 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/20 flex items-center justify-center">
                   <Bot className="w-4 h-4 text-gold" />
                 </div>
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/20 rounded-2xl rounded-tl-none px-4 py-3">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/20 rounded-2xl rounded-tl-none px-4 py-3">
                   <div className="flex gap-1">
                     <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                     <span className="w-2 h-2 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />

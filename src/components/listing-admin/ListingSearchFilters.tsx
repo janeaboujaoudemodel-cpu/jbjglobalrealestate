@@ -93,7 +93,7 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
                 developerValue !== "all" ? "border-gold bg-gold/10" : ""
               }`}
             >
@@ -124,7 +124,7 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
                 searchValue ? "border-gold bg-gold/10" : ""
               }`}
             >
@@ -152,7 +152,7 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
                 emirateValue !== "all" ? "border-gold bg-gold/10" : ""
               }`}
             >
@@ -182,7 +182,7 @@ const ListingSearchFilters = ({
             <Button
               variant="outline"
               size="sm"
-              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
+              className={`bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black hover:bg-black hover:text-white hover:border-black transition-all duration-300 ${
                 locationValue ? "border-gold bg-gold/10" : ""
               }`}
             >

@@ -70,7 +70,7 @@ interface ReellyProjectCardProps {
    }
     // "sold" / "out of stock" handled by dedicated red Sold Out badge, not here
    if (normalizedStatus.includes('announced')) {
-     return { label: 'Announced', className: 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/40' };
+     return { label: 'Announced', className: 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#C8A766]/40' };
    }
    if (normalizedStatus.includes('presale') || normalizedStatus.includes('eoi')) {
      return { label: 'Presale', className: 'bg-amber-500 text-black' };

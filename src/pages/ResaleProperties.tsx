@@ -222,7 +222,7 @@ const ResaleProperties = () => {
       />
 
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-12 md:py-16 px-4">
+      <section className="relative bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-12 md:py-16 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <Link to="/properties" className="inline-flex items-center gap-2 text-gold hover:underline text-sm mb-4">
             <ArrowLeft className="w-4 h-4" />
@@ -239,7 +239,7 @@ const ResaleProperties = () => {
       </section>
 
       {/* Filters - Champagne bar connected to hero (no black gap) */}
-      <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-3 md:py-4 border-b border-gold/30 sticky top-0">
+      <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 md:py-4 border-b border-gold/30 sticky top-0">
         <div className="container mx-auto px-3 sm:px-4">
           <div className="bg-white/60 border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg backdrop-blur-sm">
             {/* Search Bar */}
@@ -249,7 +249,7 @@ const ResaleProperties = () => {
                 placeholder="Search by property name, project, area..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
+                className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
               />
             </div>
 
@@ -257,7 +257,7 @@ const ResaleProperties = () => {
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               {/* Area */}
               <Select value={areaFilter} onValueChange={setAreaFilter}>
-                <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <MapPin className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{areaFilter === "all" ? "All Areas" : areaFilter}</span>
                 </SelectTrigger>
@@ -273,7 +273,7 @@ const ResaleProperties = () => {
 
               {/* Property Type */}
               <Select value={typeFilter} onValueChange={setTypeFilter}>
-                <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <Building2 className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{typeFilter === "all" ? "All Types" : typeFilter}</span>
                 </SelectTrigger>
@@ -286,7 +286,7 @@ const ResaleProperties = () => {
 
               {/* Bedrooms */}
               <Select value={bedroomFilter} onValueChange={setBedroomFilter}>
-                <SelectTrigger className="w-[130px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[130px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <BedDouble className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{BEDROOM_OPTIONS.find(b => b.value === bedroomFilter)?.label || "Any Beds"}</span>
                 </SelectTrigger>
@@ -299,7 +299,7 @@ const ResaleProperties = () => {
 
               {/* Price */}
               <Select value={priceFilter} onValueChange={setPriceFilter}>
-                <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[150px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <DollarSign className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{PRICE_RANGES.find(p => p.value === priceFilter)?.label || "Any Price"}</span>
                 </SelectTrigger>
@@ -312,7 +312,7 @@ const ResaleProperties = () => {
 
               {/* Handover */}
               <Select value={handoverFilter} onValueChange={setHandoverFilter}>
-                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <Calendar className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{HANDOVER_OPTIONS.find(h => h.value === handoverFilter)?.label || "All Status"}</span>
                 </SelectTrigger>
@@ -325,7 +325,7 @@ const ResaleProperties = () => {
 
               {/* Furnishing */}
               <Select value={furnishingFilter} onValueChange={setFurnishingFilter}>
-                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <Sofa className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{FURNISHING_OPTIONS.find(f => f.value === furnishingFilter)?.label || "Any Furnishing"}</span>
                 </SelectTrigger>
@@ -338,7 +338,7 @@ const ResaleProperties = () => {
 
               {/* Developer */}
               <Select value={developerFilter} onValueChange={setDeveloperFilter}>
-                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[160px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <Users className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{developerFilter === "all" ? "All Developers" : developerFilter}</span>
                 </SelectTrigger>
@@ -352,7 +352,7 @@ const ResaleProperties = () => {
 
               {/* View */}
               <Select value={viewFilter} onValueChange={setViewFilter}>
-                <SelectTrigger className="w-[140px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[140px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <MapPin className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{VIEW_OPTIONS.find(v => v.value === viewFilter)?.label || "Any View"}</span>
                 </SelectTrigger>
@@ -365,7 +365,7 @@ const ResaleProperties = () => {
 
               {/* Sort */}
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
+                <SelectTrigger className="w-[170px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm">
                   <ArrowUpDown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                   <span className="truncate text-left flex-1">{SORT_OPTIONS.find(s => s.value === sortBy)?.label || "Sort"}</span>
                 </SelectTrigger>
@@ -390,7 +390,7 @@ const ResaleProperties = () => {
                   placeholder={`Min ${unitLabel}`}
                   value={sizeMin}
                   onChange={(e) => setSizeMin(e.target.value)}
-                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm"
+                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm"
                 />
                 <span className="text-black/40 text-xs">–</span>
                 <Input
@@ -398,7 +398,7 @@ const ResaleProperties = () => {
                   placeholder={`Max ${unitLabel}`}
                   value={sizeMax}
                   onChange={(e) => setSizeMax(e.target.value)}
-                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm"
+                  className="w-[110px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl text-sm shadow-sm"
                 />
               </div>
 
@@ -433,7 +433,7 @@ const ResaleProperties = () => {
       </section>
 
       {/* Listings Grid */}
-      <section className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-10 px-4 min-h-[60vh]">
+      <section className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-10 px-4 min-h-[60vh]">
         <div className="max-w-6xl mx-auto">
           {/* Results count */}
           <div className="flex items-center justify-between mb-6">
@@ -560,7 +560,7 @@ const ResaleProperties = () => {
                       placeholder="Enter your email"
                       value={subscribeEmail}
                       onChange={(e) => setSubscribeEmail(e.target.value)}
-                      className="flex-1 h-11 border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] text-black"
+                      className="flex-1 h-11 border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] text-black"
                     />
                     <Button
                       onClick={handleSubscribe}

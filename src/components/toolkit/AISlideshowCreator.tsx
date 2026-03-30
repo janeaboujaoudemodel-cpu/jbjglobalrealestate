@@ -138,7 +138,7 @@ export default function AISlideshowCreator({ embedded = false }: { embedded?: bo
   const currentSlide = slides[currentIndex];
 
   return (
-    <div className={embedded ? "" : "min-h-screen"} style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EDE4D3 100%)" }}>
+    <div className={embedded ? "" : "min-h-screen"} style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EFE6D6 100%)" }}>
       <style>{`
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideInRight { from { transform: translateX(30px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }

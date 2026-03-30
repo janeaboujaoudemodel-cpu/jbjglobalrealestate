@@ -281,7 +281,7 @@ const AreaGuides = () => {
                       setShortcutFilters(prev => ({ ...prev, emirates: [emirate] }));
                       scrollToGrid();
                     }}
-                    className="flex flex-col items-center gap-1 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all"
+                    className="flex flex-col items-center gap-1 p-4 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold hover:shadow-lg hover:shadow-gold/20 transition-all"
                   >
                     <MapPin className="w-5 h-5 text-gold" />
                     <span className="text-black font-semibold text-sm">{emirate}</span>
@@ -375,7 +375,7 @@ const AreaGuides = () => {
                               }}
                             />
                           ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
+                            <div className="w-full h-full bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center">
                               <img src={jbjMonogram} alt="" className="w-16 h-16 object-contain opacity-10" />
                             </div>
                           )}
@@ -406,7 +406,7 @@ const AreaGuides = () => {
                         </div>
 
                         {/* Content Section */}
-                        <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex flex-col flex-1">
+                        <div className="p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col flex-1">
                           <h3 className="text-black font-bold text-lg mb-2 line-clamp-1 group-hover:text-gold transition-colors">
                             {area.name}
                           </h3>

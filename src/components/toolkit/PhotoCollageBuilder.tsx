@@ -139,7 +139,7 @@ export default function PhotoCollageBuilder({ embedded = false }: { embedded?: b
   }, [images, layout, gap, bgColor, borderRadius, projectTitle, currentLayout]);
 
   return (
-    <div className={embedded ? "" : "min-h-screen"} style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EDE4D3 100%)" }}>
+    <div className={embedded ? "" : "min-h-screen"} style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EFE6D6 100%)" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         {!embedded && (
           <div className="text-center mb-6">

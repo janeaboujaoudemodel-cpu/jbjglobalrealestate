@@ -39,7 +39,7 @@ const PageGuide: React.FC<PageGuideProps> = ({ guide, className }) => {
           variant="outline"
           size="sm"
           className={cn(
-            "gap-2 border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]",
+            "gap-2 border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]",
             "hover:border-gold hover:bg-gold/10 text-black font-medium",
             "shadow-[0_2px_10px_rgba(200,167,102,0.15)]",
             className
@@ -49,7 +49,7 @@ const PageGuide: React.FC<PageGuideProps> = ({ guide, className }) => {
           Guide
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[85vh] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      <DialogContent className="max-w-2xl max-h-[85vh] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3 text-black text-xl">
             {guide.icon || <Info className="w-6 h-6 text-gold" />}

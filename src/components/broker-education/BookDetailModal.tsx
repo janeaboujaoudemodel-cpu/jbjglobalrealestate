@@ -39,7 +39,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <DialogHeader>
           <div className="flex items-start gap-5">
             {/* 3D Mini Book Cover */}
@@ -140,7 +140,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
                   <AccordionItem 
                     key={module.id} 
                     value={module.id}
-                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-white/80 via-[#F5EBD7]/50 to-[#E8DCC8]/30 overflow-hidden"
+                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-white/80 via-[#F7F1E6]/50 to-[#ECE2D2]/30 overflow-hidden"
                   >
                     <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-gold/10">
                       <div className="flex items-center gap-3 text-left w-full">
@@ -225,7 +225,7 @@ export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: Boo
             </Button>
           </div>
         ) : (
-          <div className="mt-6 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-lg p-4">
+          <div className="mt-6 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30 rounded-lg p-4">
             <p className="text-muted-foreground text-xs text-center">
               This content is proprietary to JBJ Global Real Estate. Internal recognition only — not for external certification.
             </p>

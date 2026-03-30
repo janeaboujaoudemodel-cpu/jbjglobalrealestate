@@ -69,7 +69,7 @@ const Admin = () => {
 
   if (h.loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-gold" />
       </div>
     );
@@ -78,11 +78,11 @@ const Admin = () => {
   if (!h.isOwner) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <CommandPalette isOpen={h.showCommandPalette} onClose={() => h.setShowCommandPalette(false)} />
 
       {/* Premium Header */}
-      <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+      <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex items-center gap-3 flex-shrink-0">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#B89555] to-[#A68444] flex items-center justify-center shadow-lg shadow-gold/20">
@@ -207,7 +207,7 @@ const Admin = () => {
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="max-w-xl"><VoiceRecorder /></div>
-                  <Card className="border-2 border-[#B89555]/20 bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6]">
+                  <Card className="border-2 border-[#B89555]/20 bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA]">
                     <CardHeader><CardTitle className="text-base text-black flex items-center gap-2"><Headphones className="w-4 h-4 text-[#B89555]" /> Quick Access</CardTitle></CardHeader>
                     <CardContent className="space-y-3">
                       {[

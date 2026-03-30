@@ -78,14 +78,14 @@ export const EmergencyMirrorPanel = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <Button onClick={checkStatus} disabled={isCheckingStatus} className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold">
+          <Button onClick={checkStatus} disabled={isCheckingStatus} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-black hover:border-gold">
             {isCheckingStatus ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <RefreshCw className="w-4 h-4 mr-2" />}
             Check Current Status
           </Button>
 
           {status && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-              <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-4 text-center">
+              <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-4 text-center">
                 <p className="text-zinc-500 text-xs mb-1">Total Reelly Projects</p>
                 <p className="text-black text-2xl font-bold">{status.total_reelly_projects?.toLocaleString()}</p>
               </div>
@@ -159,7 +159,7 @@ export const EmergencyMirrorPanel = () => {
           </Button>
 
           {lastResult && (
-            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-4 space-y-2">
+            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-4 space-y-2">
               <p className="text-emerald-700 text-sm font-semibold">Mirror Dispatched Successfully</p>
               <div className="text-zinc-600 text-xs space-y-1">
                 <p>Projects queued: <span className="text-black font-medium">{lastResult.projects_queued}</span></p>

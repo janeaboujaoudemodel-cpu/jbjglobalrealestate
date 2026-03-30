@@ -182,7 +182,7 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6]"
+          className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
         >
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-purple-100">
@@ -199,7 +199,7 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
-          className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6]"
+          className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
         >
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-green-100">
@@ -216,7 +216,7 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6]"
+          className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
         >
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-red-100">
@@ -259,7 +259,7 @@ const SubscribersPanel: React.FC<SubscribersPanelProps> = ({ count }) => {
           <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full" />
         </div>
       ) : filteredSubscribers?.length === 0 ? (
-        <div className="text-center py-12 border-2 border-gold/30 rounded-xl bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6]">
+        <div className="text-center py-12 border-2 border-gold/30 rounded-xl bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA]">
           <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-purple-100 flex items-center justify-center">
             <UserPlus className="h-8 w-8 text-purple-600" />
           </div>

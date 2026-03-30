@@ -107,7 +107,7 @@ export default function Welcome() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-8 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen flex items-center justify-center py-8 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
       <div className="relative z-10 w-full max-w-2xl">
@@ -140,7 +140,7 @@ export default function Welcome() {
                   "p-5 rounded-2xl border-2 transition-all duration-300 text-left",
                   "hover:shadow-lg hover:scale-[1.01]",
                   isSelected
-                    ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] border-gold shadow-md"
+                    ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] border-gold shadow-md"
                     : "bg-white/90 backdrop-blur-sm border-gold/15 hover:border-gold/40"
                 )}
               >
@@ -181,7 +181,7 @@ export default function Welcome() {
         <Button
           onClick={handleContinue}
           disabled={!selected || isSubmitting}
-          className="w-full h-14 bg-gradient-to-r from-[#D4C4A8] via-gold to-[#D4C4A8] hover:from-gold hover:to-gold text-black font-bold rounded-2xl shadow-xl disabled:opacity-50 text-base"
+          className="w-full h-14 bg-gradient-to-r from-[#D8C7A6] via-gold to-[#D8C7A6] hover:from-gold hover:to-gold text-black font-bold rounded-2xl shadow-xl disabled:opacity-50 text-base"
         >
           {isSubmitting ? (
             <Loader2 className="w-5 h-5 animate-spin" />

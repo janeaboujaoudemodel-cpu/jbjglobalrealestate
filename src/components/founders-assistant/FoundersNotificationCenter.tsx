@@ -177,10 +177,10 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-md bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-l-2 border-[#B89555]/30 z-[9999] flex flex-col shadow-2xl"
+            className="fixed right-0 top-0 h-full w-full max-w-md bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-l-2 border-[#B89555]/30 z-[9999] flex flex-col shadow-2xl"
           >
             {/* Header */}
-            <div className="p-4 border-b-2 border-[#B89555]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6]">
+            <div className="p-4 border-b-2 border-[#B89555]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-[#B89555]/10 border border-[#B89555]/30">
                   <Bell className="w-5 h-5 text-[#B89555]" />

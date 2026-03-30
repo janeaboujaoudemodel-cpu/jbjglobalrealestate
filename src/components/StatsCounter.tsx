@@ -118,7 +118,7 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible, language,
   return (
     <div className="relative group">
       {/* Pearl Card with Gold Border - 3-layer compliant */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-6 md:p-8 text-center hover:shadow-lg hover:shadow-gold/30 transition-all duration-500">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-6 md:p-8 text-center hover:shadow-lg hover:shadow-gold/30 transition-all duration-500">
         {/* Icon - Black circle with gold icon */}
         <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] flex items-center justify-center shadow-lg">
           <Icon className="w-6 h-6 text-gold" />
@@ -169,7 +169,7 @@ const StatsCounter = () => {
       <div className="jj-layer-2">
           {/* Section Header - Premium Label */}
           <div className="text-center mb-10">
-            <span className="inline-block px-5 py-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-3 shadow-sm">
+            <span className="inline-block px-5 py-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-3 shadow-sm">
               <span className="text-gold">{t('home.stats.trackRecord', 'Track Record').split(' ')[0]}</span>
               <span className="text-black"> {t('home.stats.trackRecord', 'Track Record').split(' ').slice(1).join(' ')}</span>
             </span>

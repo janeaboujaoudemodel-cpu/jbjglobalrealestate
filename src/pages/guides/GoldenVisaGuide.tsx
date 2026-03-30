@@ -45,7 +45,7 @@ const scrollTo = (id: string) => {
 // ─── Reusable section wrapper ───
 const Section = ({ id, children, ivory = false }: { id: string; children: React.ReactNode; ivory?: boolean }) => (
   <section id={id} className="scroll-mt-24">
-    <div className={`py-16 md:py-20 ${ivory ? "bg-gradient-to-br from-[#FAF6EE] via-[#F5EBD7]/30 to-[#FAF6EE]" : "bg-gradient-to-b from-white to-[#FDFBF7]"}`}>
+    <div className={`py-16 md:py-20 ${ivory ? "bg-gradient-to-br from-[#FAF6EE] via-[#F7F1E6]/30 to-[#FAF6EE]" : "bg-gradient-to-b from-white to-[#FDFBF7]"}`}>
       <div className="max-w-5xl mx-auto px-4 md:px-8">{children}</div>
     </div>
     {/* Gold divider */}
@@ -55,7 +55,7 @@ const Section = ({ id, children, ivory = false }: { id: string; children: React.
 
 const SectionHeader = ({ icon: Icon, title, gold }: { icon: any; title: string; gold: string }) => (
   <div className="flex items-center gap-4 mb-8 pb-4 border-b-2 border-[#C8A766]/30">
-    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border border-[#C8A766]/40 flex items-center justify-center flex-shrink-0">
+    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border border-[#C8A766]/40 flex items-center justify-center flex-shrink-0">
       <Icon className="w-6 h-6 text-[#8B7340]" />
     </div>
     <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#1A1A1A]">
@@ -112,7 +112,7 @@ const GoldenVisaGuide = () => {
       {/* ═══════════════════════════════════════════ */}
       {/* 1. HERO — COVER PAGE */}
       {/* ═══════════════════════════════════════════ */}
-      <div className="relative bg-gradient-to-b from-[#FAF6EE] via-[#F5EBD7] to-white pt-28 pb-20 overflow-hidden">
+      <div className="relative bg-gradient-to-b from-[#FAF6EE] via-[#F7F1E6] to-white pt-28 pb-20 overflow-hidden">
         {/* Decorative border */}
         <div className="absolute inset-4 md:inset-8 border border-[#C8A766]/20 rounded-3xl pointer-events-none" />
 
@@ -627,9 +627,9 @@ const GoldenVisaGuide = () => {
       </Section>
 
       {/* Premium Contact CTA */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-[#FAF6EE] via-[#F5EBD7] to-[#E8DCC8]">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-[#FAF6EE] via-[#F7F1E6] to-[#ECE2D2]">
         <div className="max-w-3xl mx-auto px-4 md:px-8 text-center">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#C8A766]/40 rounded-2xl p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)]">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#C8A766]/40 rounded-2xl p-10 md:p-14 shadow-[0_0_30px_rgba(200,167,102,0.25)]">
             <div className="w-16 h-16 bg-black border border-[#C8A766]/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Phone className="w-8 h-8 text-[#C8A766]" />
             </div>
@@ -650,7 +650,7 @@ const GoldenVisaGuide = () => {
       </section>
 
       {/* Guide Navigation */}
-      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-2 md:mx-4 lg:mx-6 rounded-2xl">
+      <section className="py-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-2 md:mx-4 lg:mx-6 rounded-2xl">
         <div className="container mx-auto px-4">
           <GuideNavigation current="/guides/golden-visa-uae" guides={GUIDE_LINKS} />
         </div>

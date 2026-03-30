@@ -906,7 +906,7 @@ const DeveloperPortal = () => {
             <Badge className="mb-4 bg-gold/20 text-gold border-gold/30 text-sm">
               Developer Portal
             </Badge>
-            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#F5EBD7]">
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 text-[#F7F1E6]">
               Developer Portal
             </h1>
             <p className="text-lg md:text-xl text-[#D4B896]">

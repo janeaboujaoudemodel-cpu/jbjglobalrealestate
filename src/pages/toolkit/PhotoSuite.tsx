@@ -40,9 +40,9 @@ export default function PhotoSuite() {
         description="AI photo studio, interior design, virtual staging, scan & sign, and photo-to-PDF tools."
       />
 
-      <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EDE4D3 100%)" }}>
+      <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #FDFBF7 0%, #EFE6D6 100%)" }}>
         {/* ── Suite Header ── */}
-        <div style={{ background: "linear-gradient(180deg, #F5EBD7 0%, #EDE4D3 100%)", borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
+        <div style={{ background: "linear-gradient(180deg, #F7F1E6 0%, #EFE6D6 100%)", borderBottom: "1px solid rgba(184,148,62,0.25)" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-0">
             <Link to="/toolkit"
               className="inline-flex items-center gap-1.5 text-xs mb-4 transition-colors group"
@@ -55,7 +55,7 @@ export default function PhotoSuite() {
 
             <div className="flex items-center gap-4 mb-5">
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center shrink-0"
-                style={{ background: "linear-gradient(135deg, #F5EBD7, #D4C4A8)", border: "1px solid rgba(184,148,62,0.4)", boxShadow: "0 0 30px rgba(184,148,62,0.15)" }}>
+                style={{ background: "linear-gradient(135deg, #F7F1E6, #D8C7A6)", border: "1px solid rgba(184,148,62,0.4)", boxShadow: "0 0 30px rgba(184,148,62,0.15)" }}>
                 <Image className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: "#B8943E" }} />
               </div>
               <div>

@@ -84,7 +84,7 @@ ${monogramBadge(52)}
 </tr>
 </table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin-bottom:24px;">
-<tr><td style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;padding:28px;text-align:center;">
+<tr><td style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;padding:28px;text-align:center;">
 <span style="font-size:40px;font-weight:700;letter-spacing:10px;color:#1a1a1a;font-family:'SF Mono',Monaco,Consolas,monospace;">${otpCode}</span>
 </td></tr>
 </table>
@@ -96,7 +96,7 @@ ${arabicDivider()}
 <p style="margin:0;font-size:16px;color:#333;">مرحباً${full_name ? ` <strong>${full_name}</strong>` : ''}،</p>
 <p style="margin:4px 0 16px;font-size:13px;color:#888;">رمز التحقق الخاص بك من JBJ أدناه</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;margin-bottom:24px;">
-<tr><td style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;padding:28px;text-align:center;">
+<tr><td style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;padding:28px;text-align:center;">
 <span style="font-size:40px;font-weight:700;letter-spacing:10px;color:#1a1a1a;font-family:'SF Mono',Monaco,Consolas,monospace;">${otpCode}</span>
 </td></tr>
 </table>

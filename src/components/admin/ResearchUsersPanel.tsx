@@ -176,7 +176,7 @@ export default function ResearchUsersPanel() {
       {/* Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
             <Users className="w-5 h-5 text-[#8B7355]" />
           </div>
           <div>
@@ -191,7 +191,7 @@ export default function ResearchUsersPanel() {
           <Button variant="outline" size="sm" onClick={exportCSV} className="border-gold/40 text-black hover:bg-gold/10">
             <Download className="w-4 h-4 mr-1" /> CSV
           </Button>
-          <Button size="sm" onClick={exportExcel} className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/40 hover:shadow-md">
+          <Button size="sm" onClick={exportExcel} className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/40 hover:shadow-md">
             <Download className="w-4 h-4 mr-1" /> Excel
           </Button>
         </div>
@@ -236,7 +236,7 @@ export default function ResearchUsersPanel() {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:bg-[#F5F0E6]">
+                <TableRow className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:bg-[#F7F2EA]">
                   <TableHead className="text-black font-semibold whitespace-nowrap">Email</TableHead>
                   <TableHead className="text-black font-semibold whitespace-nowrap">Name</TableHead>
                   <TableHead className="text-black font-semibold whitespace-nowrap">Subscribed</TableHead>

@@ -316,7 +316,7 @@ const Founder = () => {
                 {executiveTeam.map((member, index) => (
                   <motion.div 
                     key={index}
-                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-8 hover:border-gold transition-all duration-500 text-center shadow-sm"
+                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-8 hover:border-gold transition-all duration-500 text-center shadow-sm"
                     variants={fadeInUp}
                   >
                     <div className="w-14 h-14 mx-auto mb-6 bg-black rounded-xl flex items-center justify-center border border-gold/30">
@@ -367,7 +367,7 @@ const Founder = () => {
                 className="max-w-4xl mx-auto"
                 variants={fadeInUp}
               >
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm">
                   <p className="text-lg mb-6 text-black">
                     JBJ Global Real Estate operates with a centralized governance structure designed to ensure:
                   </p>
@@ -434,7 +434,7 @@ const Founder = () => {
                 className="max-w-4xl mx-auto"
                 variants={fadeInUp}
               >
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm space-y-6">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-10 shadow-sm space-y-6">
                   <div className="flex items-center gap-4 pb-6 border-b border-gold/20">
                     <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center">
                       <Building2 className="w-7 h-7 text-gold" />
@@ -464,10 +464,10 @@ const Founder = () => {
         <div className="container mx-auto px-3 sm:px-4 lg:px-8 relative z-10">
           <div className="max-w-[1100px] mx-auto">
             {/* OUTER CARD - Active Champagne Layer */}
-            <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6">
+            <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6">
               {/* INNER CARD - Champagne Layer */}
               <motion.div 
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-100px" }}
@@ -475,7 +475,7 @@ const Founder = () => {
               >
                 {/* Badge */}
                 <motion.div 
-                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
                   variants={fadeInUp}
                 >
                   <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
@@ -498,7 +498,7 @@ const Founder = () => {
                     to="/contact"
                     className="relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
                     style={{
-                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
                       boxShadow: `
                         0 10px 30px rgba(200,167,102,0.4),
                         0 6px 15px rgba(0,0,0,0.2),

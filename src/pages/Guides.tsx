@@ -198,7 +198,7 @@ const Guides = () => {
 
       {/* Explore Guides — Premium gold/champagne background + auto-scrolling marquee */}
       <section id="guides-library" className="py-10 md:py-16 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_center,_var(--tw-gradient-stops))] from-gold/15 via-transparent to-transparent" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -331,7 +331,7 @@ const Guides = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
+            className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
             style={{ boxShadow: '0 20px 60px rgba(200,167,102,0.3), 0 10px 30px rgba(0,0,0,0.2)' }}
             onClick={(e) => e.stopPropagation()}
           >

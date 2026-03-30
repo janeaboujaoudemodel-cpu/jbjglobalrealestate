@@ -356,11 +356,11 @@ export default function VoiceStudioPro() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <audio ref={audioRef} onEnded={() => setIsPlaying(false)} onPause={() => setIsPlaying(false)} />
 
       {/* ── Header ── */}
-      <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
+      <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] backdrop-blur-sm sticky top-0 lg:top-[48px] z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
           <Link to="/toolkit" className="text-black/60 hover:text-black transition-colors">
             <ChevronLeft className="h-5 w-5" />
@@ -437,7 +437,7 @@ export default function VoiceStudioPro() {
 
             {/* Video Preview Area */}
             {showVideo && (
-              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-black text-base flex items-center gap-2">
                     <Video className="h-4 w-4 text-gold" />
@@ -477,7 +477,7 @@ export default function VoiceStudioPro() {
               <div className="space-y-5">
 
                 {/* AI Script Writer */}
-                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-black text-base flex items-center gap-2">
                       <Bot className="h-4 w-4 text-gold" />
@@ -515,7 +515,7 @@ export default function VoiceStudioPro() {
                 </Card>
 
                 {/* Script Editor */}
-                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <CardTitle className="text-black text-base flex items-center gap-2">
@@ -554,7 +554,7 @@ export default function VoiceStudioPro() {
                 </Card>
 
                 {/* Voice Selection with Filters */}
-                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-black text-base flex items-center gap-2">
                       <Volume2 className="h-4 w-4 text-gold" />
@@ -712,7 +712,7 @@ export default function VoiceStudioPro() {
               <div className="space-y-5">
 
                 {/* Language */}
-                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-black text-base flex items-center gap-2">
                       <Globe className="h-4 w-4 text-gold" />
@@ -774,7 +774,7 @@ export default function VoiceStudioPro() {
                 </Card>
 
                 {/* Voice Settings */}
-                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/40 rounded-2xl">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/40 rounded-2xl">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-black text-base flex items-center gap-2">
                       <Wand2 className="h-4 w-4 text-gold" />
@@ -821,7 +821,7 @@ export default function VoiceStudioPro() {
 
                 {/* Result */}
                 {result && !generating && (
-                  <Card className="bg-gradient-to-br from-gold/10 to-[#F5F0E6] border-2 border-gold/50 rounded-2xl">
+                  <Card className="bg-gradient-to-br from-gold/10 to-[#F7F2EA] border-2 border-gold/50 rounded-2xl">
                     <CardHeader className="pb-3">
                       <CardTitle className="text-black flex items-center gap-2 text-sm">
                         <Check className="h-4 w-4 text-gold" />

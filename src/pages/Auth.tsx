@@ -377,7 +377,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   // ─── Already signed in ────────────────────────────────────
   if (user && mode !== "reset" && !isReactivationPreview) {
     return (
-      <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
         <div className="relative z-10 w-full max-w-md">
           <div className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl p-10 shadow-sm">
@@ -401,7 +401,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
   // ─── Post-signup "Check your email" screen ─────────────────
   if (mode === "verify-email") {
     return (
-      <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div ref={ref} className="min-h-screen flex items-center justify-center py-12 px-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
         <div className="relative z-10 w-full max-w-md">
           <div className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl p-10 shadow-sm text-center">
@@ -682,7 +682,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           if (!open && isReactivationPreview) setIsReactivationPreview(false);
         }}
       >
-        <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-md relative">
+        <AlertDialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-w-md relative">
           {/* X close button */}
           <button
             onClick={() => {

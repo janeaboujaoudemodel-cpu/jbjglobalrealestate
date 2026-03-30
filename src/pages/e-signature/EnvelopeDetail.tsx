@@ -173,7 +173,7 @@ export default function EnvelopeDetail() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-6">
         <div className="max-w-5xl mx-auto space-y-6">
           {/* Header */}
           <div className="flex items-start justify-between gap-4">
@@ -289,7 +289,7 @@ export default function EnvelopeDetail() {
                       return (
                         <div 
                           key={recipient.id} 
-                          className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] border border-[#C8A766]/15 gap-3"
+                          className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-[#C8A766]/15 gap-3"
                         >
                           <div className="flex items-center gap-4 min-w-0">
                             <div className="w-10 h-10 rounded-full bg-[#C8A766]/10 flex items-center justify-center shrink-0 border border-[#C8A766]/20">

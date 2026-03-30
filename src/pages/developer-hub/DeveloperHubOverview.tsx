@@ -86,7 +86,7 @@ const DeveloperHubOverview = () => {
       submitted: { label: "Submitted", className: "bg-amber-500/20 text-amber-400 border-amber-500/30", icon: Clock },
       under_review: { label: "Under Review", className: "bg-blue-500/20 text-blue-400 border-blue-500/30", icon: Clock },
       rejected: { label: "Rejected", className: "bg-red-500/20 text-red-400 border-red-500/30", icon: AlertTriangle },
-      draft: { label: "Draft", className: "bg-white/10 text-[#E8DCC8]/60 border-white/20", icon: Clock },
+      draft: { label: "Draft", className: "bg-white/10 text-[#ECE2D2]/60 border-white/20", icon: Clock },
     };
     const s = map[status || "draft"] || map.draft;
     const Icon = s.icon;
@@ -112,12 +112,12 @@ const DeveloperHubOverview = () => {
     <div className="space-y-8">
       {/* Developer Identity Block */}
       <div className="space-y-1">
-        <h1 className="text-2xl md:text-3xl font-bold text-[#E8DCC8]">Developer Hub</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-[#ECE2D2]">Developer Hub</h1>
         <p className="text-gold font-medium text-lg">
           {registration?.company_name || "Complete your company registration"}
         </p>
         <div className="flex items-center gap-3 mt-2">
-          <span className="text-[#E8DCC8]/50 text-sm">{user?.email}</span>
+          <span className="text-[#ECE2D2]/50 text-sm">{user?.email}</span>
           {registration && statusBadge(registration.status)}
         </div>
       </div>
@@ -131,7 +131,7 @@ const DeveloperHubOverview = () => {
             onClick={() => navigate(card.path)}
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-[#E8DCC8]/60">{card.title}</CardTitle>
+              <CardTitle className="text-sm font-medium text-[#ECE2D2]/60">{card.title}</CardTitle>
               <card.icon className="w-5 h-5 text-gold/60 group-hover:text-gold transition-colors" />
             </CardHeader>
             <CardContent>

@@ -98,7 +98,7 @@ const DocumentStudio = () => {
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] min-h-screen">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] min-h-screen">
         <div className="max-w-6xl mx-auto px-6 py-8">
           <Tabs defaultValue="generate" className="space-y-6">
             <TabsList className="bg-black/5 border border-gold/20 p-1 h-auto flex-wrap">

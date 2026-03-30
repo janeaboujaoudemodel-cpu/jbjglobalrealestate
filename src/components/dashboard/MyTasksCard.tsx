@@ -251,7 +251,7 @@ export default function MyTasksCard() {
               className={cn(
                 "px-3 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-colors",
                 filter === f
-                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60"
+                  ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#C8A766]/60"
                   : "text-black/50 hover:text-gold hover:bg-gold/5"
               )}
             >

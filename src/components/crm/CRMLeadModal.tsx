@@ -169,7 +169,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <DialogHeader className="pt-2">
           <DialogTitle className="text-black">Add New Lead</DialogTitle>
           <DialogDescription className="text-zinc-600">
@@ -219,7 +219,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
               <Label>Nationality</Label>
               <Popover open={nationalityOpen} onOpenChange={setNationalityOpen}>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black hover:bg-gold/10">
+                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black hover:bg-gold/10">
                     {formData.nationality
                       ? `${ALL_NATIONALITIES.find(n => n.nationality === formData.nationality)?.flag || ''} ${formData.nationality}`
                       : "Select nationality"}
@@ -257,7 +257,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
               <Label>Preferred Language</Label>
               <Popover open={languageOpen} onOpenChange={setLanguageOpen}>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black hover:bg-gold/10">
+                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black hover:bg-gold/10">
                     {formData.preferred_language
                       ? `${LANGUAGES_WITH_FLAGS.find(l => l.code === formData.preferred_language)?.flag || ''} ${LANGUAGES_WITH_FLAGS.find(l => l.code === formData.preferred_language)?.name || ''}`
                       : "Select language"}
@@ -299,7 +299,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
               <Label>Country</Label>
               <Popover open={countryOpen} onOpenChange={setCountryOpen}>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black hover:bg-gold/10">
+                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black hover:bg-gold/10">
                     {formData.current_location_country
                       ? `${COUNTRIES.find(c => c.name === formData.current_location_country)?.flag || ''} ${formData.current_location_country}`
                       : "Select country"}
@@ -337,7 +337,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
               <Label>City</Label>
               <Popover open={cityOpen} onOpenChange={setCityOpen}>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black hover:bg-gold/10">
+                  <Button variant="outline" role="combobox" className="w-full justify-between h-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black hover:bg-gold/10">
                     {formData.current_location_city || "Select city"}
                     <ChevronsUpDown className="ml-1 h-3.5 w-3.5 shrink-0 opacity-50" />
                   </Button>

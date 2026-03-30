@@ -209,7 +209,7 @@ const PressKit = () => {
             className="max-w-4xl mx-auto"
           >
             <motion.div 
-              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-3xl p-8 md:p-12 shadow-lg"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-3xl p-8 md:p-12 shadow-lg"
               variants={fadeInUp}
             >
               <div className="flex items-start justify-between mb-6">
@@ -262,7 +262,7 @@ const PressKit = () => {
                   Jane Bou Jaoude <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Headshots</span>
                 </h2>
               </div>
-              <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-lg px-4 py-2 shadow-sm">
+              <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-lg px-4 py-2 shadow-sm">
                 <p className="text-zinc-700 text-sm">
                   <Mail className="w-4 h-4 inline mr-2 text-gold" />
                   For media inquiries: <span className="text-gold font-medium">media@JBJ.ae</span>
@@ -277,7 +277,7 @@ const PressKit = () => {
               {founderHeadshots.map((asset) => (
                 <motion.div
                   key={asset.id}
-                  className="group bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl overflow-hidden hover:border-gold/60 hover:shadow-lg hover:shadow-gold/10 transition-all duration-300"
+                  className="group bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl overflow-hidden hover:border-gold/60 hover:shadow-lg hover:shadow-gold/10 transition-all duration-300"
                   variants={fadeInUp}
                 >
                   <div className="aspect-[4/5] relative overflow-hidden">
@@ -346,7 +346,7 @@ const PressKit = () => {
             >
               {/* Company Info - Champagne Card */}
               <motion.div 
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 shadow-lg"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-8 shadow-lg"
                 variants={fadeInUp}
               >
                 <h4 className="text-gold text-sm uppercase tracking-wider mb-6 flex items-center gap-2">
@@ -382,7 +382,7 @@ const PressKit = () => {
 
               {/* Key Metrics - Champagne Card */}
               <motion.div 
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-8 shadow-lg"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-8 shadow-lg"
                 variants={fadeInUp}
               >
                 <h4 className="text-gold text-sm uppercase tracking-wider mb-6 flex items-center gap-2">
@@ -414,7 +414,7 @@ const PressKit = () => {
       </section>
 
       {/* Media Contact - Premium champagne Section */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-t border-zinc-200">
+      <section className="py-20 md:py-28 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-t border-zinc-200">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"

@@ -73,7 +73,7 @@ export default function RecommendedDevelopers({
         >
           {/* Header */}
           <div className="text-center mb-8">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
               <Sparkles className="w-3.5 h-3.5 text-gold" />
               <span className="text-black">Explore Developers</span>
             </span>
@@ -98,7 +98,7 @@ export default function RecommendedDevelopers({
               >
                 <Link
                   to={`/developer/${dev.slug}`}
-                  className="group block rounded-xl border-2 border-gold/20 hover:border-gold/60 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)]"
+                  className="group block rounded-xl border-2 border-gold/20 hover:border-gold/60 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)]"
                 >
                   {/* Logo */}
                   <div className="h-28 flex items-center justify-center p-4 bg-white/50">
@@ -137,7 +137,7 @@ export default function RecommendedDevelopers({
           <div className="text-center mt-8">
             <Link
               to="/developers"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
               style={{
                 boxShadow:
                   "0 6px 20px rgba(200,167,102,0.3), inset 0 2px 4px rgba(255,255,255,0.8)",

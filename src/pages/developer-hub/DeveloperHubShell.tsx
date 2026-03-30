@@ -31,7 +31,7 @@ const DeveloperHubShell = () => {
   const SidebarContent = ({ collapsed = false }: { collapsed?: boolean }) => (
     <>
       {/* Sidebar Header — champagne gradient */}
-      <div className="h-16 flex items-center justify-between px-4 flex-shrink-0 bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] border-b border-gold/30">
+      <div className="h-16 flex items-center justify-between px-4 flex-shrink-0 bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] border-b border-gold/30">
         {!collapsed && (
           <span className="text-black/80 font-bold text-lg tracking-wide">
             Developer Hub
@@ -60,14 +60,14 @@ const DeveloperHubShell = () => {
       <div className="flex-shrink-0 border-t border-gold/30 bg-[hsl(38,35%,10%)] p-3 space-y-1">
         <button
           onClick={() => { navigate("/"); setMobileOpen(false); }}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#E8DCC8]/70 hover:text-gold hover:bg-gold/10 transition-all"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#ECE2D2]/70 hover:text-gold hover:bg-gold/10 transition-all"
         >
           <Home className="w-5 h-5 flex-shrink-0" />
           {!collapsed && <span>Return to Site</span>}
         </button>
         <button
           onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#E8DCC8]/70 hover:text-red-400 hover:bg-red-400/10 transition-all"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-[#ECE2D2]/70 hover:text-red-400 hover:bg-red-400/10 transition-all"
         >
           <LogOut className="w-5 h-5 flex-shrink-0" />
           {!collapsed && <span>Sign Out</span>}
@@ -104,7 +104,7 @@ const DeveloperHubShell = () => {
       {/* Main content */}
       <main className={cn("flex-1 transition-all duration-300", isMobile ? "ml-0" : sidebarCollapsed ? "ml-16" : "ml-64")}>
         {/* Header — champagne gradient */}
-        <header className="h-14 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-b border-gold/30 sticky top-[48px] z-30 flex items-center justify-between px-3 md:px-6">
+        <header className="h-14 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-gold/30 sticky top-[48px] z-30 flex items-center justify-between px-3 md:px-6">
           <div className="flex items-center gap-2 md:gap-3 min-w-0">
             {isMobile && (
               <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} className="text-black/60 hover:text-black/80">

@@ -129,7 +129,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
       </div>
 
       {/* Hero Header */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 overflow-hidden">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 overflow-hidden">
         <div className="flex flex-col lg:flex-row">
           {/* Hero Image */}
           <div className="lg:w-2/5 aspect-[16/10] lg:aspect-auto overflow-hidden bg-muted">
@@ -212,7 +212,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
 
       {/* Tabs: Overview, Gallery, Enrichment Log */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border border-gold/30">
+        <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border border-gold/30">
           <TabsTrigger value="overview" className="data-[state=active]:bg-background data-[state=active]:text-foreground">
             <Layers className="w-3.5 h-3.5 mr-1.5" /> Overview
           </TabsTrigger>
@@ -231,7 +231,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
         <TabsContent value="overview" className="mt-4 space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Description */}
-            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
               <CardContent className="p-5 space-y-3">
                 <h3 className="font-semibold text-foreground">Description</h3>
                 {project.description ? (
@@ -243,7 +243,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
             </Card>
 
             {/* Enrichment Scorecard */}
-            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
               <CardContent className="p-5 space-y-3">
                 <h3 className="font-semibold text-foreground">Field Coverage</h3>
                 <div className="grid grid-cols-2 gap-2">
@@ -262,7 +262,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
             </Card>
 
             {/* Project Details */}
-            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 lg:col-span-2">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 lg:col-span-2">
               <CardContent className="p-5 space-y-3">
                 <h3 className="font-semibold text-foreground">Project Details</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
@@ -345,7 +345,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
         <TabsContent value="enrichment" className="mt-4 space-y-4">
           {/* Enrichment suggestions */}
           {enrichmentSuggestions && enrichmentSuggestions.length > 0 && (
-            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
               <CardContent className="p-5 space-y-3">
                 <h3 className="font-semibold text-foreground flex items-center gap-2">
                   <Zap className="w-4 h-4 text-gold" /> Enrichment Suggestions
@@ -367,7 +367,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
           )}
 
           {/* Edit audit log */}
-          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20">
             <CardContent className="p-5 space-y-3">
               <h3 className="font-semibold text-foreground flex items-center gap-2">
                 <Clock className="w-4 h-4 text-muted-foreground" /> Edit History

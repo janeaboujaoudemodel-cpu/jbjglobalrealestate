@@ -278,7 +278,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
           { label: 'Broker Lists', value: brokerLists.length, color: 'text-blue-600' },
           { label: 'Active Reps', value: reps.length, color: 'text-purple-600' },
         ].map((s, i) => (
-          <Card key={i} className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
+          <Card key={i} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30">
             <CardContent className="pt-4 pb-3">
               <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
               <p className="text-xs text-muted-foreground">{s.label}</p>
@@ -329,7 +329,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
           <ScrollArea className="h-[500px]">
             <div className="space-y-3">
               {filteredBriefings.map(b => (
-                <Card key={b.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/20 hover:border-gold/40 transition-all">
+                <Card key={b.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/20 hover:border-gold/40 transition-all">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
@@ -392,7 +392,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
               {attendance.map(a => {
                 const briefing = briefings.find(b => b.id === a.briefing_request_id);
                 return (
-                  <Card key={a.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/20">
+                  <Card key={a.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/20">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
@@ -438,7 +438,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {brokerLists.map(list => (
-              <Card key={list.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/20">
+              <Card key={list.id} className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/20">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="text-foreground font-semibold">{list.name}</h4>
@@ -464,7 +464,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
               {reps.map((rep, idx) => {
                 const rating = responsiveRating(rep.response_time_avg_hours);
                 return (
-                  <Card key={rep.id} className={`bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 ${idx === 0 ? 'border-gold ring-1 ring-gold/30' : 'border-gold/20'}`}>
+                  <Card key={rep.id} className={`bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 ${idx === 0 ? 'border-gold ring-1 ring-gold/30' : 'border-gold/20'}`}>
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -517,7 +517,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
 
         {/* WHATSAPP LOG */}
         <TabsContent value="whatsapp" className="mt-4">
-          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/20">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/20">
             <CardHeader>
               <CardTitle className="text-foreground flex items-center gap-2">
                 <MessageCircle className="w-5 h-5 text-emerald-600" />
@@ -533,7 +533,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
 
       {/* Briefing Detail Dialog */}
       <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 text-foreground max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 text-foreground max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Briefing Details</DialogTitle>
           </DialogHeader>
@@ -619,7 +619,7 @@ Provide: 1) Key takeaways 2) Action items 3) Follow-up recommendations. Keep it 
 
       {/* Create Broker List Dialog */}
       <Dialog open={listDialogOpen} onOpenChange={setListDialogOpen}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 text-foreground">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 text-foreground">
           <DialogHeader>
             <DialogTitle>Create Broker List</DialogTitle>
           </DialogHeader>

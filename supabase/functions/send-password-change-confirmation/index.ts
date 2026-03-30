@@ -53,7 +53,7 @@ const handler = async (req: Request): Promise<Response> => {
 </table>
 ${userGreetingRow(recipientName)}
 <p style="margin:8px 0 20px;font-size:14px;line-height:1.6;color:#444;">Your password was changed. If this was you, no further action is needed.</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:1px solid #C8A766;border-radius:18px;margin-bottom:16px;">
 <tr><td style="padding:20px;">
 <p style="color:#1a1a1a;font-size:18px;margin:0 0 10px;text-transform:uppercase;letter-spacing:1.3px;font-weight:800;text-align:center;">Activity Summary</p>
 <div style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,#C8A766,transparent);margin:0 0 12px;"></div>
@@ -78,7 +78,7 @@ ${arabicDivider()}
 <p style="margin:0 0 20px;font-size:15px;color:#C8A766;font-weight:700;">تم تحديث أمان حسابك</p>
 ${userGreetingRow(recipientName, true)}
 <p style="margin:8px 0 20px;font-size:14px;line-height:1.6;color:#444;">تم تغيير كلمة المرور الخاصة بك. إذا كنت أنت من قام بذلك، فلا حاجة لأي إجراء إضافي.</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:16px;direction:rtl;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:1px solid #C8A766;border-radius:18px;margin-bottom:16px;direction:rtl;">
 <tr><td style="padding:20px;">
 <p style="color:#1a1a1a;font-size:18px;margin:0 0 10px;letter-spacing:1.3px;font-weight:800;text-align:center;">ملخص النشاط</p>
 <div style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,#C8A766,transparent);margin:0 0 12px;"></div>

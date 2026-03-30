@@ -385,7 +385,7 @@ const BrokerCertification = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
               {modules.map((module, index) => (
                 <motion.div key={index} variants={fadeInUp}>
-                  <Card className="h-full border-2 border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden">
+                  <Card className="h-full border-2 border-gold/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden">
                     <CardContent className="p-0">
                       {/* Book-style header */}
                       <div className="bg-black p-4 flex items-center gap-4">
@@ -467,7 +467,7 @@ const BrokerCertification = () => {
                 <Card 
                   className="jj-card-inner border-4 border-gold/60 pt-8"
                   style={{
-                    background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 25%, #D4C4A8 50%, #E8DCC8 75%, #F5EBD7 100%)',
+                    background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 25%, #D8C7A6 50%, #ECE2D2 75%, #F7F1E6 100%)',
                     boxShadow: `
                       0 25px 50px rgba(200,167,102,0.4),
                       0 15px 30px rgba(0,0,0,0.2),
@@ -607,7 +607,7 @@ const BrokerCertification = () => {
                   <AccordionItem
                     key={index}
                     value={`faq-${index}`}
-                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden"
+                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
                   >
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-black font-medium">{faq.question}</span>

@@ -156,7 +156,7 @@ const DesignBuild = () => {
                 <span className="text-white group-hover:text-black transition-colors">Book a Consultation</span>
                 <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                 {/* Hover fill overlay */}
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
               </button>
             </a>
           </motion.div>
@@ -211,7 +211,7 @@ const DesignBuild = () => {
                 className="group"
                 variants={fadeInUp}
               >
-                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-500 overflow-hidden h-full">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 hover:border-gold hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-500 overflow-hidden h-full">
                   {/* Image */}
                   <div className="relative h-56 overflow-hidden">
                     <img 
@@ -253,7 +253,7 @@ const DesignBuild = () => {
                     </ul>
 
                     <Link to={`/services/${service.slug}`}>
-                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
+                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
                         Explore {service.title}
                         <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
@@ -300,7 +300,7 @@ const DesignBuild = () => {
             {aiTools.map((tool) => (
               <motion.div key={tool.id} variants={fadeInUp}>
                 <Link to={tool.link} className="block group">
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 hover:border-gold hover:shadow-[0_0_40px_rgba(200,167,102,0.4)] transition-all duration-300 h-full">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 hover:border-gold hover:shadow-[0_0_40px_rgba(200,167,102,0.4)] transition-all duration-300 h-full">
                     <CardContent className="p-8">
                       <div className="flex items-start gap-4 mb-4">
                         <div className="w-14 h-14 rounded-xl bg-black flex items-center justify-center border border-gold/30 group-hover:scale-110 transition-transform">
@@ -316,7 +316,7 @@ const DesignBuild = () => {
                         </div>
                       </div>
                       <p className="text-zinc-600 mb-6">{tool.description}</p>
-                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
+                      <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
                         {tool.cta}
                         <ArrowUpRight className="w-4 h-4 ml-2" />
                       </Button>
@@ -337,7 +337,7 @@ const DesignBuild = () => {
             <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-2 sm:p-3">
               {/* INNER CARD (Champagne) */}
               <motion.div
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-8 md:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -360,7 +360,7 @@ const DesignBuild = () => {
                     <button 
                       className="relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] group"
                       style={{
-                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
                         boxShadow: `
                           0 10px 30px rgba(200,167,102,0.4),
                           0 6px 15px rgba(0,0,0,0.2),

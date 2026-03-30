@@ -36,7 +36,7 @@ const VerificationBanner = () => {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative overflow-hidden bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-y border-[hsl(var(--gold)/0.3)]"
+        className="relative overflow-hidden bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-y border-[hsl(var(--gold)/0.3)]"
       >
         {/* Subtle shine */}
         <div className="absolute inset-0 bg-gradient-to-r from-[hsl(var(--gold)/0.08)] via-transparent to-[hsl(var(--gold)/0.08)] pointer-events-none" />

@@ -63,7 +63,7 @@ export default function InlineStatusSelect({
         <LeadStatusBadge status={currentStatus} size="sm" />
       </SelectTrigger>
       <SelectContent 
-        className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-border max-h-80"
+        className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-border max-h-80"
         onClick={(e) => e.stopPropagation()}
       >
         {/* POSITIVE - Green */}

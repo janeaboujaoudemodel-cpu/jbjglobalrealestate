@@ -432,7 +432,7 @@ const TicketHub = () => {
   return (
     <>
       <SEOHead title="Support Ticket Hub | JBJ Global" description="Submit a new support ticket or track existing tickets." />
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="pt-8 pb-16 px-4">
           <div className="max-w-5xl mx-auto">
             {/* Header */}
@@ -446,15 +446,15 @@ const TicketHub = () => {
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               <TabsList className="grid w-full grid-cols-3 bg-muted/60 border-2 border-gold/30 rounded-xl h-12 p-1 gap-1">
-                <TabsTrigger value="new" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-foreground data-[state=active]:shadow-md">
+                <TabsTrigger value="new" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-foreground data-[state=active]:shadow-md">
                   <Plus className="w-4 h-4 mr-2" />
                   New Ticket
                 </TabsTrigger>
-                <TabsTrigger value="track" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-foreground data-[state=active]:shadow-md">
+                <TabsTrigger value="track" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-foreground data-[state=active]:shadow-md">
                   <Search className="w-4 h-4 mr-2" />
                   My Tickets
                 </TabsTrigger>
-                <TabsTrigger value="inbox" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-foreground data-[state=active]:shadow-md relative">
+                <TabsTrigger value="inbox" className="text-sm font-semibold h-full rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-foreground data-[state=active]:shadow-md relative">
                   <Inbox className="w-4 h-4 mr-2" />
                   Inbox
                   {(inboxQuery.data?.length || 0) > 0 && (
@@ -467,7 +467,7 @@ const TicketHub = () => {
 
               {/* NEW TICKET TAB */}
               <TabsContent value="new">
-                <Card className="border-2 border-red-500/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
+                <Card className="border-2 border-red-500/20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-foreground">
                       <Plus className="w-5 h-5 text-red-500" />
@@ -656,7 +656,7 @@ const TicketHub = () => {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Ticket List */}
                     <div className="bg-background rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
-                      <div className="p-4 border-b border-gold/20 bg-gradient-to-r from-[#F5EBD7]/50 to-transparent">
+                      <div className="p-4 border-b border-gold/20 bg-gradient-to-r from-[#F7F1E6]/50 to-transparent">
                         <h2 className="font-semibold text-foreground flex items-center gap-2">
                           <Ticket className="w-4 h-4 text-gold" />
                           Your Tickets ({userTickets?.length || 0})
@@ -696,7 +696,7 @@ const TicketHub = () => {
                     <div className="bg-background rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
                       {selectedTicket ? (
                         <>
-                          <div className="p-4 border-b border-gold/20 bg-gradient-to-r from-[#F5EBD7]/50 to-transparent">
+                          <div className="p-4 border-b border-gold/20 bg-gradient-to-r from-[#F7F1E6]/50 to-transparent">
                             <div className="flex items-center gap-2">
                               <span className="font-mono text-gold font-semibold">{selectedTicket.ticket_number}</span>
                               <button onClick={() => handleCopyTicketNumber(selectedTicket.ticket_number)}
@@ -787,7 +787,7 @@ const TicketHub = () => {
               {/* INBOX TAB */}
               <TabsContent value="inbox">
                 <div className="bg-background rounded-2xl border-2 border-gold/30 shadow-lg overflow-hidden">
-                  <div className="p-4 border-b border-gold/20 bg-gradient-to-r from-[#F5EBD7]/50 to-transparent">
+                  <div className="p-4 border-b border-gold/20 bg-gradient-to-r from-[#F7F1E6]/50 to-transparent">
                     <h2 className="font-semibold text-foreground flex items-center gap-2">
                       <Inbox className="w-4 h-4 text-gold" />
                       JBJ Messages Inbox

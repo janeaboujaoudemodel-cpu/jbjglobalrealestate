@@ -246,7 +246,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                   >
                     <div className={`max-w-[75%] rounded-2xl px-4 py-3 ${
                       message.direction === 'outbound'
-                        ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black rounded-tr-sm'
+                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black rounded-tr-sm'
                         : 'bg-white border border-gold/20 text-black rounded-tl-sm'
                     }`}>
                       {message.voice_url && (

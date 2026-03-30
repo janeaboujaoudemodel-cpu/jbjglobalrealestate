@@ -50,7 +50,7 @@ const JBJ_BRAND_PALETTE: Color[] = [
   { hex: '#000000', name: 'Black' },
   { hex: '#FFFFFF', name: 'White' },
   { hex: '#1A1A1A', name: 'Dark Gray' },
-  { hex: '#F5F0E6', name: 'Champagne' },
+  { hex: '#F7F2EA', name: 'Champagne' },
   { hex: '#B8860B', name: 'Dark Gold' },
 ];
 

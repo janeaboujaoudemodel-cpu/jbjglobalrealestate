@@ -183,7 +183,7 @@ const TicketSurvey = () => {
           </div>
           <h2 className="text-2xl font-bold text-black mb-2">Thank You!</h2>
           <p className="text-zinc-600 mb-4">Your feedback helps us improve our service.</p>
-          <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-4 border border-[#C8A766]">
+          <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-4 border border-[#C8A766]">
             <Gift className="w-6 h-6 text-[#C8A766] mx-auto mb-2" />
             <p className="text-lg font-bold text-[#C8A766]">+{pointsAwarded} Points Earned!</p>
             <p className="text-xs text-zinc-500">Thank you for your feedback</p>

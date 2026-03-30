@@ -38,7 +38,7 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
         <Card
           className={`cursor-pointer transition-all border-2 ${
             selectedSource === "provident"
-              ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-lg"
+              ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg"
               : "border-border hover:border-gold/40 bg-card"
           }`}
           onClick={() => handleSourceSelect(selectedSource === "provident" ? "none" : "provident")}
@@ -86,7 +86,7 @@ export function SourceCountsPanel({ reellyApiTotal, onSourceChange, activeSource
         <Card
           className={`cursor-pointer transition-all border-2 ${
             selectedSource === "reelly"
-              ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-lg"
+              ? "border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg"
               : "border-border hover:border-gold/40 bg-card opacity-75"
           }`}
           onClick={() => handleSourceSelect(selectedSource === "reelly" ? "none" : "reelly")}

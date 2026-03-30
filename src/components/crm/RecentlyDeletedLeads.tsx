@@ -137,7 +137,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
     : leads;
 
   return (
-    <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-sm">
+    <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-sm">
       <CardHeader>
         <CardTitle className="text-lg text-black flex items-center gap-2">
           <Trash2 className="h-5 w-5 text-red-500" />

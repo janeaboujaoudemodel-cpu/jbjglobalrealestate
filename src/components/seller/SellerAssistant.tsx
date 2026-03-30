@@ -173,11 +173,11 @@ Help the user complete their listing form and answer questions about the selling
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 rounded-xl overflow-hidden shadow-xl"
+      className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold/40 rounded-xl overflow-hidden shadow-xl"
       id="seller-assistant-panel"
     >
       {/* Header - ACTIVE COLOR */}
-      <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-b-2 border-gold/40 px-4 py-3 flex items-center justify-between">
+      <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b-2 border-gold/40 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 bg-white border border-gold/30 rounded-full flex items-center justify-center">
             <Sparkles className="w-4 h-4 text-gold" />
@@ -198,7 +198,7 @@ Help the user complete their listing form and answer questions about the selling
       </div>
 
       {/* Quick Actions - Champagne BG */}
-      <div className="px-4 py-2 border-b border-gold/30 flex gap-2 overflow-x-auto bg-gradient-to-r from-[#FDFBF7] via-white to-[#F5F0E6]">
+      <div className="px-4 py-2 border-b border-gold/30 flex gap-2 overflow-x-auto bg-gradient-to-r from-[#FDFBF7] via-white to-[#F7F2EA]">
         {quickActions.map((action, index) => (
           <Button
             key={index}
@@ -214,7 +214,7 @@ Help the user complete their listing form and answer questions about the selling
       </div>
 
       {/* Messages - Champagne BG */}
-      <ScrollArea className="h-[300px] p-4 bg-gradient-to-br from-[#FDFBF7] via-white to-[#F5F0E6]" ref={scrollRef}>
+      <ScrollArea className="h-[300px] p-4 bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA]" ref={scrollRef}>
         <div className="space-y-4">
           {messages.map((message, index) => (
             <div
@@ -225,7 +225,7 @@ Help the user complete their listing form and answer questions about the selling
                 className={`max-w-[85%] rounded-lg px-4 py-2.5 ${
                   message.role === "user"
                     ? "bg-gold text-black"
-                    : "bg-gradient-to-br from-[#FDFBF7] via-white to-[#F5F0E6] text-zinc-800 border border-gold/30"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA] text-zinc-800 border border-gold/30"
                 }`}
               >
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -234,7 +234,7 @@ Help the user complete their listing form and answer questions about the selling
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-white to-[#F5F0E6] border border-gold/30 rounded-lg px-4 py-2.5">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA] border border-gold/30 rounded-lg px-4 py-2.5">
                 <Loader2 className="w-4 h-4 animate-spin text-gold" />
               </div>
             </div>
@@ -243,7 +243,7 @@ Help the user complete their listing form and answer questions about the selling
       </ScrollArea>
 
       {/* Suggested Questions - Champagne BG */}
-      <div className="px-4 py-2 border-t border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F5F0E6]">
+      <div className="px-4 py-2 border-t border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F7F2EA]">
         <p className="text-zinc-600 text-xs mb-2 flex items-center gap-1">
           <Lightbulb className="w-3 h-3 text-gold" />
           Suggested questions:
@@ -263,7 +263,7 @@ Help the user complete their listing form and answer questions about the selling
       </div>
 
       {/* Input - Champagne BG */}
-      <div className="p-4 border-t border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F5F0E6]">
+      <div className="p-4 border-t border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F7F2EA]">
         <form
           onSubmit={(e) => {
             e.preventDefault();

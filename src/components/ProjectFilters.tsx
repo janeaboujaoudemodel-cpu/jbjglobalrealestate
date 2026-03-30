@@ -313,7 +313,7 @@ const ProjectFilters = ({
   return (
     <div className="mb-8 space-y-4">
       {/* Always-Visible Top Bar */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-2xl p-3 overflow-hidden">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-2xl p-3 overflow-hidden">
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-1 -mb-1" style={{ WebkitOverflowScrolling: 'touch' }}>
           {/* Search */}
           <div className="relative flex-1 min-w-[200px] snap-start flex-shrink-0">
@@ -409,7 +409,7 @@ const ProjectFilters = ({
               onClick={() => updateFilter("sizeUnit", "sqft")}
               className={`px-3 h-full text-sm font-medium transition-all ${
                 filters.sizeUnit === "sqft"
-                  ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] text-black border-r border-gold/30"
+                  ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] text-black border-r border-gold/30"
                   : "text-zinc-500 hover:text-black"
               }`}
             >
@@ -419,7 +419,7 @@ const ProjectFilters = ({
               onClick={() => updateFilter("sizeUnit", "sqm")}
               className={`px-3 h-full text-sm font-medium transition-all ${
                 filters.sizeUnit === "sqm"
-                  ? "bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] text-black border-l border-gold/30"
+                  ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] text-black border-l border-gold/30"
                   : "text-zinc-500 hover:text-black"
               }`}
             >
@@ -446,7 +446,7 @@ const ProjectFilters = ({
                 )}
               </Button>
             </SheetTrigger>
-            <SheetContent className="w-full sm:max-w-lg bg-gradient-to-b from-[#FDFBF7] to-[#EDE4D3] border-gold/30 p-0 top-[72px] h-[calc(100vh-72px)]">
+            <SheetContent className="w-full sm:max-w-lg bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] border-gold/30 p-0 top-[72px] h-[calc(100vh-72px)]">
               <SheetHeader className="p-6 border-b border-gold/20">
                 <div className="flex items-center justify-between">
                   <SheetTitle className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -483,7 +483,7 @@ const ProjectFilters = ({
                             }
                             className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                                 : "text-black hover:bg-champagne-light"
                             }`}
                           >
@@ -615,7 +615,7 @@ const ProjectFilters = ({
                             }
                             className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                                 : "text-black hover:bg-champagne-light"
                             }`}
                           >
@@ -646,7 +646,7 @@ const ProjectFilters = ({
                             }
                             className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                                 : "text-black hover:bg-champagne-light"
                             }`}
                           >
@@ -668,7 +668,7 @@ const ProjectFilters = ({
                           onClick={() => updateFilter("trendingArea", null)}
                           className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                             filters.trendingArea === null
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                              ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                               : "text-black hover:bg-champagne-light"
                           }`}
                         >
@@ -690,7 +690,7 @@ const ProjectFilters = ({
                               }
                               className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                                 isActive
-                                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                  ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                                   : "text-black hover:bg-champagne-light"
                               }`}
                             >
@@ -711,7 +711,7 @@ const ProjectFilters = ({
                       onClick={() => updateFilter("premiumOnly", !filters.premiumOnly)}
                       className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all w-full ${
                         filters.premiumOnly
-                          ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+                          ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border-2 border-gold shadow-sm"
                           : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
                       }`}
                     >
@@ -737,7 +737,7 @@ const ProjectFilters = ({
                             }
                             className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                                 : "text-black hover:bg-champagne-light"
                             }`}
                           >
@@ -758,7 +758,7 @@ const ProjectFilters = ({
                         onClick={() => updateFilter("views", [])}
                         className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                           filters.views.length === 0
-                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                            ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                             : "text-black hover:bg-champagne-light"
                         }`}
                       >
@@ -775,7 +775,7 @@ const ProjectFilters = ({
                             onClick={() => toggleArrayFilter("views", view)}
                             className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                                 : "text-black hover:bg-champagne-light"
                             }`}
                           >
@@ -796,7 +796,7 @@ const ProjectFilters = ({
                         onClick={() => updateFilter("amenities", [])}
                         className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                           filters.amenities.length === 0
-                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                            ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                             : "text-black hover:bg-champagne-light"
                         }`}
                       >
@@ -813,7 +813,7 @@ const ProjectFilters = ({
                             onClick={() => toggleArrayFilter("amenities", amenity)}
                             className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                                 : "text-black hover:bg-champagne-light"
                             }`}
                           >
@@ -834,7 +834,7 @@ const ProjectFilters = ({
                         onClick={() => updateFilter("facilities", [])}
                         className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                           filters.facilities.length === 0
-                            ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                            ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                             : "text-black hover:bg-champagne-light"
                         }`}
                       >
@@ -851,7 +851,7 @@ const ProjectFilters = ({
                             onClick={() => toggleArrayFilter("facilities", facility)}
                             className={`flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                               isActive
-                                ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
+                                ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
                                 : "text-black hover:bg-champagne-light"
                             }`}
                           >
@@ -892,7 +892,7 @@ const ProjectFilters = ({
               </ScrollArea>
 
               {/* Apply Button */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#EDE4D3] to-[#EDE4D3]/90 border-t border-gold/20">
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#EFE6D6] to-[#EFE6D6]/90 border-t border-gold/20">
                 <Button
                   onClick={() => setIsFiltersOpen(false)}
                   className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark text-gold-foreground hover:from-gold-light hover:to-gold font-semibold text-base shadow-lg shadow-gold/20"
@@ -1059,7 +1059,7 @@ const QuickFilterChip = forwardRef<HTMLButtonElement, {
     onClick={onClick}
     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
       active
-        ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-gold shadow-sm"
+        ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border-2 border-gold shadow-sm"
         : "bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
     }`}
   >
@@ -1076,7 +1076,7 @@ const FilterPill = ({
   label: string;
   onRemove: () => void;
 }) => (
-  <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-full text-black text-sm">
+  <span className="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full text-black text-sm">
     {label}
     <button
       onClick={onRemove}

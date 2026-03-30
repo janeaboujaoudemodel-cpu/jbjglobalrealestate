@@ -190,7 +190,7 @@ export default function JBJBrokerReports() {
     <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       {/* Header */}
       <header className="sticky top-0 lg:top-[48px] z-50 border-b border-gold/20">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] px-6 py-4">
+        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] px-6 py-4">
           <div className="container mx-auto flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Button
@@ -218,7 +218,7 @@ export default function JBJBrokerReports() {
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="flex gap-1 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-lg p-1 border border-gold/30">
+              <div className="flex gap-1 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-lg p-1 border border-gold/30">
                 {["week", "month", "quarter"].map((range) => (
                   <Button
                     key={range}
@@ -325,7 +325,7 @@ export default function JBJBrokerReports() {
               <h3 className="text-lg font-semibold text-black mb-4">Daily Activity</h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={dailyActivity}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#D4C4A8" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#D8C7A6" />
                   <XAxis dataKey="date" tick={{ fontSize: 12, fill: '#1a1a1a' }} />
                   <YAxis tick={{ fontSize: 12, fill: '#1a1a1a' }} />
                   <Tooltip 

@@ -28,7 +28,7 @@ const SaveFilterModal = ({ open, onOpenChange, onSave }: SaveFilterModalProps) =
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[440px] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      <DialogContent className="sm:max-w-[440px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <DialogHeader>
           <DialogTitle className="text-black text-lg font-bold">
             Give name for your saved filter

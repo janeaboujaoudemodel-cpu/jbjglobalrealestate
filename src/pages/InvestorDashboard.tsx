@@ -129,7 +129,7 @@ export default function InvestorDashboard() {
               </AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-[#F5EBD7] tracking-tight">Investor Portal</h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-[#F7F1E6] tracking-tight">Investor Portal</h1>
               <p className="text-[#D4B896]/60 text-sm">Welcome back, {displayName}</p>
             </div>
           </div>

@@ -119,10 +119,10 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black max-h-[90vh] overflow-y-auto shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)]">
+      <DialogContent className="sm:max-w-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black max-h-[90vh] overflow-y-auto shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)]">
         <DialogHeader className="pb-4 border-b border-gold/20">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 flex items-center justify-center shadow-md">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center shadow-md">
               <MessageSquare className="w-5 h-5 text-gold" />
             </div>
             <div>
@@ -144,7 +144,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="Your full name"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
                 required
               />
             </div>
@@ -155,7 +155,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.email}
                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="your@email.com"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
                 required
               />
             </div>
@@ -168,13 +168,13 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.phone}
                 onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                 placeholder="+971 50 XXX XXXX"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
               />
             </div>
             <div className="space-y-2">
               <Label className="text-black font-medium">Preferred Language</Label>
               <Select value={formData.preferredLanguage} onValueChange={(v) => setFormData(prev => ({ ...prev, preferredLanguage: v }))}>
-                <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black">
+                <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black">
                   <SelectValue placeholder="Select language" />
                 </SelectTrigger>
                 <SelectContent>
@@ -192,7 +192,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
             <div className="space-y-2">
               <Label className="text-black font-medium">Nationality</Label>
               <Select value={formData.nationality} onValueChange={(v) => setFormData(prev => ({ ...prev, nationality: v }))}>
-                <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black">
+                <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black">
                   <SelectValue placeholder="Select nationality" />
                 </SelectTrigger>
                 <SelectContent className="max-h-60">
@@ -210,7 +210,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.currentLocation}
                 onChange={(e) => setFormData(prev => ({ ...prev, currentLocation: e.target.value }))}
                 placeholder="City, Country"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
               />
             </div>
           </div>
@@ -218,7 +218,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
           <div className="space-y-2">
             <Label className="text-black font-medium">Service Interested In *</Label>
             <Select value={formData.service} onValueChange={(v) => setFormData(prev => ({ ...prev, service: v }))}>
-              <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black">
+              <SelectTrigger className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black">
                 <SelectValue placeholder="Select a service" />
               </SelectTrigger>
               <SelectContent>
@@ -237,7 +237,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
               value={formData.inquiry}
               onChange={(e) => setFormData(prev => ({ ...prev, inquiry: e.target.value }))}
               placeholder="Tell us about your requirements, budget, preferred areas, or any questions..."
-              className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-black placeholder:text-zinc-500 min-h-[100px] resize-none focus:border-gold focus:ring-gold/30"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-zinc-500 min-h-[100px] resize-none focus:border-gold focus:ring-gold/30"
             />
           </div>
 
@@ -255,7 +255,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
               disabled={isSubmitting}
               className="relative flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold rounded-xl transition-all duration-300 group overflow-hidden disabled:opacity-50 hover:scale-[1.02] transform active:scale-95"
               style={{
-                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
                 border: '2px solid rgba(200,167,102,0.6)',
                 boxShadow: `
                   0 8px 20px rgba(200,167,102,0.35),

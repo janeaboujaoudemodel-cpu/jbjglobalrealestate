@@ -218,7 +218,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
           className="relative"
         >
           {/* Main Bar - Champagne styling */}
-          <div className="flex items-center gap-1 p-1.5 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] backdrop-blur-xl border-2 border-gold/40 rounded-2xl shadow-[0_10px_40px_rgba(200,167,102,0.25)]">
+          <div className="flex items-center gap-1 p-1.5 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-xl border-2 border-gold/40 rounded-2xl shadow-[0_10px_40px_rgba(200,167,102,0.25)]">
             {/* Quick Action Buttons */}
             <AnimatePresence mode="popLayout">
               {actions.map((action, index) => (
@@ -231,7 +231,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
                   onClick={action.action}
                   className={cn(
                     'flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300',
-                    'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30',
+                    'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30',
                     'hover:shadow-[0_8px_25px_rgba(200,167,102,0.35)] hover:-translate-y-0.5 active:translate-y-0'
                   )}
                 >
@@ -279,7 +279,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
                 initial={{ opacity: 0, y: 10, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                className="absolute bottom-full mb-3 right-0 min-w-[200px] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl shadow-[0_10px_40px_rgba(200,167,102,0.25)] p-2"
+                className="absolute bottom-full mb-3 right-0 min-w-[200px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl shadow-[0_10px_40px_rgba(200,167,102,0.25)] p-2"
               >
                 <div className="text-xs uppercase tracking-wider text-gold font-semibold px-3 py-2">
                   AI Quick Actions

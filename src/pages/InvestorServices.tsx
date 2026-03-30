@@ -322,7 +322,7 @@ const InvestorServices = () => {
                     <motion.div
                       key={index}
                       variants={fadeInUp}
-                      className="relative p-6 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border-b border-r border-gold/20 last:border-b-0 group hover:bg-gradient-to-br hover:from-[#F5F0E6] hover:to-[#EDE4D3] transition-all duration-300"
+                      className="relative p-6 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-b border-r border-gold/20 last:border-b-0 group hover:bg-gradient-to-br hover:from-[#F7F2EA] hover:to-[#EFE6D6] transition-all duration-300"
                     >
                       <div className="flex items-start gap-4">
                         <div className="w-11 h-11 bg-gold/10 border border-gold/40 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-gold/20 transition-colors">

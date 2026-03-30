@@ -24,10 +24,10 @@ export const GuideCard = ({
   children
 }: GuideCardProps) => {
   const variants = {
-    default: "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold hover:shadow-xl hover:shadow-gold/20",
-    highlight: "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/40",
-    dark: "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold",
-    numbered: "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 hover:border-gold hover:shadow-xl hover:shadow-gold/20"
+    default: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 hover:border-gold hover:shadow-xl hover:shadow-gold/20",
+    highlight: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/40",
+    dark: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 hover:border-gold",
+    numbered: "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 hover:border-gold hover:shadow-xl hover:shadow-gold/20"
   };
 
   return (

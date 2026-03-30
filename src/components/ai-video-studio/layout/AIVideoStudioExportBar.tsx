@@ -94,7 +94,7 @@ export function AIVideoStudioExportBar({
             disabled={isExporting}
             className="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all disabled:opacity-40"
             style={{
-              background: 'linear-gradient(135deg, #D4C4A8, #B8943E)',
+              background: 'linear-gradient(135deg, #D8C7A6, #B8943E)',
               color: '#0A0A0F',
               boxShadow: '0 0 16px rgba(184,148,62,0.2)',
             }}

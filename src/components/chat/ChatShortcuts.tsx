@@ -122,7 +122,7 @@ const ChatShortcuts = ({ onSelectShortcut, userFirstName: userFullName }: ChatSh
               onClick={() => onSelectShortcut(shortcut.id)}
               className="w-full p-3 bg-white border-2 border-gold/30 hover:border-gold hover:bg-gold/5 rounded-xl text-left transition-all duration-300 group flex items-center gap-3"
             >
-              <div className={`w-10 h-10 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] flex items-center justify-center border border-gold/30 shadow-sm`}>
+              <div className={`w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center border border-gold/30 shadow-sm`}>
                 <Icon className={`w-5 h-5 ${shortcut.color}`} />
               </div>
               <div className="flex-1">

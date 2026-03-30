@@ -160,7 +160,7 @@ export function ExtractionJobsPanel() {
   return (
     <div className="space-y-6">
       {/* Data Sources */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg text-foreground">Data Sources</CardTitle>
           <Button variant="outline" size="sm" onClick={fetchData} className="border-gold/30 hover:bg-gold/10">
@@ -223,7 +223,7 @@ export function ExtractionJobsPanel() {
       </Card>
 
       {/* Recent Jobs */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
         <CardHeader>
           <CardTitle className="text-lg text-foreground">Recent Extraction Jobs</CardTitle>
         </CardHeader>

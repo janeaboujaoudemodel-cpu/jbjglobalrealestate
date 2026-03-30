@@ -259,7 +259,7 @@ export default function BrokerDashboard() {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {filteredActions.map((action, index) => (
                 <Link key={index} to={action.href}>
-                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold transition-all cursor-pointer group">
+                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold transition-all cursor-pointer group">
                     <CardContent className="p-4 text-center">
                       <div className="w-12 h-12 bg-black border border-gold/30 rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-gold/10 transition-colors">
                         <action.icon className="w-6 h-6 text-gold" />
@@ -285,7 +285,7 @@ export default function BrokerDashboard() {
             </h3>
             <div className={`grid grid-cols-2 ${isInternalBroker ? 'md:grid-cols-3 lg:grid-cols-6' : 'md:grid-cols-4'} gap-4`}>
               {performanceBlocks.map((block, index) => (
-                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
                   <CardContent className="p-4 text-center">
                     <block.icon className="w-6 h-6 text-gold mx-auto mb-2" />
                     <p className="text-2xl font-bold text-foreground">{block.value}</p>
@@ -302,7 +302,7 @@ export default function BrokerDashboard() {
               <CheckSquare className="w-5 h-5 text-gold" />
               Tasks & Reminders
             </h3>
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
               <CardContent className="p-6">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                   <div className="text-center md:text-left">
@@ -344,7 +344,7 @@ export default function BrokerDashboard() {
               <Bell className="w-5 h-5 text-gold" />
               Notifications
             </h3>
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
               <CardContent className="p-6">
                 <div className="text-center py-8">
                   <Bell className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
@@ -366,7 +366,7 @@ export default function BrokerDashboard() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
               {brokerHubLinks.map((link, index) => (
                 <Link key={index} to={link.href}>
-                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold transition-all cursor-pointer group">
+                  <Card className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold transition-all cursor-pointer group">
                     <CardContent className="p-5">
                       <div className="flex items-start gap-3">
                         <div className="w-10 h-10 bg-black border border-gold/30 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-gold/10 transition-colors">

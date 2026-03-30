@@ -116,7 +116,7 @@ export default function EmailProductivityPanel({
         </div>
 
         {/* Section Tabs */}
-        <div className="flex gap-1 bg-[#F5F0E6] rounded-lg p-0.5">
+        <div className="flex gap-1 bg-[#F7F2EA] rounded-lg p-0.5">
           <button
             className={`flex-1 text-[10px] font-medium py-1.5 rounded-md transition-all ${
               activeSection === "overview"

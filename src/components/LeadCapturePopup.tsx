@@ -115,7 +115,7 @@ const LeadCapturePopup = () => {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border-2 border-gold/50 shadow-[0_20px_60px_rgba(200,167,102,0.4)] overflow-hidden max-h-[90vh] overflow-y-auto"
+            className="relative w-full max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border-2 border-gold/50 shadow-[0_20px_60px_rgba(200,167,102,0.4)] overflow-hidden max-h-[90vh] overflow-y-auto"
           >
             {/* Close button */}
             <button
@@ -126,7 +126,7 @@ const LeadCapturePopup = () => {
             </button>
 
             {/* Header - Context-aware */}
-            <div className="bg-gradient-to-r from-[#E8DCC8] to-[#D4C4A8] p-6 pb-4 border-b border-gold/30">
+            <div className="bg-gradient-to-r from-[#ECE2D2] to-[#D8C7A6] p-6 pb-4 border-b border-gold/30">
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="w-5 h-5 text-gold" />
                 <span className="text-xs uppercase tracking-[0.2em] font-semibold text-gold">Exclusive Access</span>
@@ -163,7 +163,7 @@ const LeadCapturePopup = () => {
 
               {/* Nationality */}
               <Select value={formData.nationality} onValueChange={(v) => setFormData((p) => ({ ...p, nationality: v }))}>
-                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
                   <SelectValue placeholder="Nationality (optional)" />
                 </SelectTrigger>
                 <SelectContent className="z-[20100]">
@@ -175,7 +175,7 @@ const LeadCapturePopup = () => {
 
               {/* Preferred Language */}
               <Select value={formData.language} onValueChange={(v) => setFormData((p) => ({ ...p, language: v }))}>
-                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
                   <SelectValue placeholder="Preferred Language (optional)" />
                 </SelectTrigger>
                 <SelectContent className="z-[20100]">
@@ -187,7 +187,7 @@ const LeadCapturePopup = () => {
 
               {/* Preferred Contact Time */}
               <Select value={formData.contactTime} onValueChange={(v) => setFormData((p) => ({ ...p, contactTime: v }))}>
-                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
                   <SelectValue placeholder="Preferred Contact Time (optional)" />
                 </SelectTrigger>
                 <SelectContent className="z-[20100]">
@@ -199,7 +199,7 @@ const LeadCapturePopup = () => {
 
               {/* Services */}
               <Select value={formData.service} onValueChange={(v) => setFormData((p) => ({ ...p, service: v }))}>
-                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
                   <SelectValue placeholder="Service Interest" />
                 </SelectTrigger>
                 <SelectContent className="z-[20100]">

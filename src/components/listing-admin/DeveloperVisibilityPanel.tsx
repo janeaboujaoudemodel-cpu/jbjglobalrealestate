@@ -110,7 +110,7 @@ export function DeveloperVisibilityPanel() {
   }
 
   return (
-    <Card className="border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <Card className="border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-foreground">
           <Building2 className="w-5 h-5 text-gold" />

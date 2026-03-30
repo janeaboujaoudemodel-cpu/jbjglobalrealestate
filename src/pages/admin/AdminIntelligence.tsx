@@ -286,7 +286,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
   if (isLoading) {
     return (
-      <div className={`${embedded ? '' : 'min-h-screen bg-gradient-to-b from-[#F5EBD7] via-[#EDE4D3] to-[#E0D5C0]'} flex items-center justify-center p-12`}>
+      <div className={`${embedded ? '' : 'min-h-screen bg-gradient-to-b from-[#F7F1E6] via-[#EFE6D6] to-[#E0D5C0]'} flex items-center justify-center p-12`}>
         <Loader2 className="w-8 h-8 text-gold animate-spin" />
       </div>
     );
@@ -295,7 +295,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
   return (
     <>
       {!embedded && <SEOHead title="Intelligence Panel | JBJ Admin" description="AI-driven user intelligence and scoring" />}
-      <div className={embedded ? '' : 'min-h-screen bg-gradient-to-b from-[#F5EBD7] via-[#EDE4D3] to-[#E0D5C0]'}>
+      <div className={embedded ? '' : 'min-h-screen bg-gradient-to-b from-[#F7F1E6] via-[#EFE6D6] to-[#E0D5C0]'}>
         <div className={embedded ? '' : 'container mx-auto px-4 py-8 max-w-7xl'}>
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
@@ -384,7 +384,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
             <CardContent className="p-0">
               <ScrollArea className="h-[600px]">
                 <table className="w-full text-sm">
-                  <thead className="sticky top-0 bg-gradient-to-r from-[#F5EBD7] to-[#EDE4D3] backdrop-blur z-10">
+                  <thead className="sticky top-0 bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6] backdrop-blur z-10">
                     <tr className="border-b-2 border-gold/20">
                       <th className="text-left p-3 text-gold font-bold">User</th>
                       <th className="text-center p-3 text-gold font-bold">Category</th>
@@ -444,7 +444,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
 
         {/* User Detail Dialog */}
         <Dialog open={!!selectedUser} onOpenChange={() => { setSelectedUser(null); setUserActivities(null); setUserDocuments(null); setUserScannedCards(null); setUserSessions(null); }}>
-          <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/40 text-black max-w-5xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/40 text-black max-w-5xl max-h-[90vh] overflow-y-auto">
             {selectedUser && (
               <>
                 <DialogHeader>

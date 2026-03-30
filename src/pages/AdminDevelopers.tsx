@@ -274,7 +274,7 @@ const AdminDevelopers = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[hsl(40,33%,98%)] via-[hsl(38,30%,93%)] to-[hsl(36,25%,88%)] text-foreground">
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] backdrop-blur-md border-b-2 border-gold/30">
+      <div className="sticky top-0 z-40 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] backdrop-blur-md border-b-2 border-gold/30">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button
@@ -352,25 +352,25 @@ const AdminDevelopers = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30">
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-gold">{developers.length}</div>
               <p className="text-sm text-muted-foreground">Total Developers</p>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30">
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-blue-600">{dubaiDevelopers.length}</div>
               <p className="text-sm text-muted-foreground">Dubai Developers</p>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30">
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-purple-600">{salesReps.length}</div>
               <p className="text-sm text-muted-foreground">Sales Reps</p>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30">
             <CardContent className="pt-6">
               <div className="text-2xl font-bold text-emerald-600">
                 {salesReps.filter(r => r.is_primary).length}
@@ -462,7 +462,7 @@ const AdminDevelopers = () => {
 
       {/* Developer Dialog */}
       <Dialog open={isDevDialogOpen} onOpenChange={setIsDevDialogOpen}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 text-foreground max-w-lg">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 text-foreground max-w-lg">
           <DialogHeader>
             <DialogTitle>{editingDev ? "Edit Developer" : "Add Developer"}</DialogTitle>
           </DialogHeader>
@@ -507,7 +507,7 @@ const AdminDevelopers = () => {
 
       {/* Sales Rep Dialog */}
       <Dialog open={isRepDialogOpen} onOpenChange={setIsRepDialogOpen}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 text-foreground max-w-lg">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 text-foreground max-w-lg">
           <DialogHeader>
             <DialogTitle>
               {editingRep ? "Edit Sales Rep" : "Add Sales Rep"}
@@ -600,7 +600,7 @@ interface DeveloperCardProps {
 
 const DeveloperCard = ({ developer, reps, onEdit, onDelete, onAddRep, onEditRep, onDeleteRep }: DeveloperCardProps) => {
   return (
-    <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30">
+    <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">

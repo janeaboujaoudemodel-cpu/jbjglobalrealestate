@@ -35,7 +35,7 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
           maxWidth: 'calc(100vw - 48px)',
           maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
           overflowY: 'auto' as const,
-          background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+          background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
           ...style,
         }}
       >
@@ -251,7 +251,7 @@ export function MegaMenuIconLink({
           // Emphasis style: Gold gradient bg, black text for readability, 3D shadow
           ? "bg-gradient-to-r from-gold/40 via-gold/30 to-gold/40 hover:from-gold/60 hover:via-gold/50 hover:to-gold/60 shadow-[0_4px_15px_rgba(200,167,102,0.35)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] hover:-translate-y-0.5 border-2 border-gold/60 hover:border-gold"
           // Normal: transparent; Hover: champagne gradient background
-          : "bg-transparent hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]",
+          : "bg-transparent hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2]",
         // Emphasis links get extra padding for prominence
         emphasis ? "py-3 px-4" : compact ? "py-1.5 px-2" : "py-3 px-3"
       )}
@@ -326,7 +326,7 @@ export function MegaMenuCard({
 }: MegaMenuCardProps) {
   return (
     <div className={cn(
-      "bg-gradient-to-br from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8]",
+      "bg-gradient-to-br from-[#F7F1E6] via-[#EDE0C8] to-[#E2D4B8]",
       "rounded-xl border border-gold/30 shadow-sm",
       "transition-all",
       compact ? "p-2.5" : "p-4",

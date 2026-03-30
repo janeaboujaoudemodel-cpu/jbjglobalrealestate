@@ -205,7 +205,7 @@ const MeetingConsentSection = ({
   }
 
   return (
-    <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 shadow-sm">
+    <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30 shadow-sm">
       <CardContent className="p-5 space-y-4">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center">

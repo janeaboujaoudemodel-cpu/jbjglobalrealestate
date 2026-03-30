@@ -98,7 +98,7 @@ export const NationalitySelect: React.FC<NationalitySelectProps> = ({ value, onC
           )}
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-h-[300px] overflow-y-auto z-[9999]">
+      <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-h-[300px] overflow-y-auto z-[9999]">
         {NATIONALITIES.map(nat => (
           <SelectItem
             key={nat.value}

@@ -55,7 +55,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
         <div 
           className="rounded-2xl border-2 border-gold/40 p-6 md:p-8"
           style={{
-            background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)',
+            background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
             boxShadow: '0 8px 32px rgba(200,167,102,0.25), inset 0 1px 2px rgba(255,255,255,0.4)',
           }}
         >

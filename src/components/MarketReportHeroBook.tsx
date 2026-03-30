@@ -131,7 +131,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="absolute -bottom-2 -right-4 md:right-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/50 px-4 py-2 rounded-full shadow-lg"
+            className="absolute -bottom-2 -right-4 md:right-8 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/50 px-4 py-2 rounded-full shadow-lg"
           >
             <span className="text-xs font-bold uppercase tracking-wider">Free Download</span>
           </motion.div>

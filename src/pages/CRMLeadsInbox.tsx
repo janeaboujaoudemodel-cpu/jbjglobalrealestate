@@ -52,7 +52,7 @@ export default function CRMLeadsInbox() {
 
         {/* Active / Deleted Tabs */}
         <Tabs value={cx.activeView} onValueChange={(v) => { cx.setActiveView(v as "active" | "deleted"); cx.setPage(1); }} className="mb-6">
-          <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-1">
+          <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-1">
             <TabsTrigger value="active" className="tab-trigger-champagne text-black data-[state=active]:text-black px-6 py-2">All Leads</TabsTrigger>
             <TabsTrigger value="deleted" className="tab-trigger-champagne text-black data-[state=active]:text-black px-6 py-2">
               <Trash2 className="h-4 w-4 mr-2" />Recently Deleted
@@ -61,7 +61,7 @@ export default function CRMLeadsInbox() {
         </Tabs>
 
         {/* Filters */}
-        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] mb-6">
+        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] mb-6">
           <CardContent className="p-4">
             <div className="flex flex-col gap-3">
               <div className="flex flex-col md:flex-row gap-3">
@@ -76,7 +76,7 @@ export default function CRMLeadsInbox() {
                   <SelectTrigger className="w-full md:w-[200px] bg-white/80 border-2 border-gold/30 text-black">
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
-                  <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 max-h-[400px]">
+                  <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 max-h-[400px]">
                     <SelectItem value="all" className="text-black hover:bg-gold/10 font-medium focus:bg-gold/15 focus:text-black">All Statuses</SelectItem>
                     {(["positive", "neutral", "negative"] as const).map((cat) => {
                       const colors = { positive: "emerald", neutral: "blue", negative: "red" };
@@ -103,7 +103,7 @@ export default function CRMLeadsInbox() {
                   <SelectTrigger className="w-full md:w-[180px] bg-white/80 border-2 border-gold/30 text-black">
                     <SelectValue placeholder="Source" />
                   </SelectTrigger>
-                  <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+                  <SelectContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
                     {SOURCE_OPTIONS.map((opt) => (
                       <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10 focus:bg-gold/15 focus:text-black">{opt.label}</SelectItem>
                     ))}
@@ -138,7 +138,7 @@ export default function CRMLeadsInbox() {
         )}
 
         {/* Leads Table */}
-        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <CardContent className="p-0">
             {cx.isLoading ? (
               <div className="p-6 space-y-3">

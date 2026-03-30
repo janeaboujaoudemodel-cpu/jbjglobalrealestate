@@ -110,7 +110,7 @@ const getStatusConfig = (status: string | null) => {
     case 'action_required': return { label: 'Action Required', bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-300' };
     case 'highlighted': return { label: 'Highlighted', bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-300' };
     case 'open': return { label: 'Open', bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300' };
-    default: return { label: 'Active', bg: 'bg-[#F5EBD7]', text: 'text-[#8B7355]', border: 'border-[#B89555]/40' };
+    default: return { label: 'Active', bg: 'bg-[#F7F1E6]', text: 'text-[#8B7355]', border: 'border-[#B89555]/40' };
   }
 };
 
@@ -402,12 +402,12 @@ const AdminChatDashboard = () => {
 
   // Champagne theme classes
   const cardBg = 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8]';
-  const containerBg = 'bg-gradient-to-b from-[#FDFBF7] via-[#F9F3E9] to-[#F5EBD7]';
+  const containerBg = 'bg-gradient-to-b from-[#FDFBF7] via-[#F9F3E9] to-[#F7F1E6]';
 
   return (
     <div className={`min-h-screen ${containerBg} text-stone-900`}>
       {/* Header - Champagne */}
-      <div className="border-b border-[#B89555]/25 bg-gradient-to-r from-[#F5EBD7] via-[#FDFBF7] to-[#F5EBD7] sticky top-0 z-30 shadow-sm">
+      <div className="border-b border-[#B89555]/25 bg-gradient-to-r from-[#F7F1E6] via-[#FDFBF7] to-[#F7F1E6] sticky top-0 z-30 shadow-sm">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -422,7 +422,7 @@ const AdminChatDashboard = () => {
                 <p className="text-xs text-stone-500 mt-0.5">Conversations, transcripts, CV submissions & alerts</p>
               </div>
             </div>
-            <Button onClick={exportToCSV} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 gap-2 shadow-sm">
+            <Button onClick={exportToCSV} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 gap-2 shadow-sm">
               <Download className="w-3.5 h-3.5" /> Export
             </Button>
           </div>
@@ -478,7 +478,7 @@ const AdminChatDashboard = () => {
               onClick={() => setTab(t.id)}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                 tab === t.id
-                  ? 'bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] text-stone-900 shadow-md border border-[#B89555]/30'
+                  ? 'bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] text-stone-900 shadow-md border border-[#B89555]/30'
                   : 'text-stone-500 hover:text-stone-700 hover:bg-[#FDFBF7]/50'
               }`}
             >
@@ -684,7 +684,7 @@ const AdminChatDashboard = () => {
                         <Star className="w-3 h-3 mr-1 fill-[#B89555] text-[#B89555]" /> {cv.ai_ranking}/10
                       </Badge>
                     ) : null}
-                    <Badge className={`${cv.status === 'approved' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : cv.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-[#F5EBD7] text-[#8B7355] border-[#B89555]/30'}`}>
+                    <Badge className={`${cv.status === 'approved' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : cv.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-[#F7F1E6] text-[#8B7355] border-[#B89555]/30'}`}>
                       {cv.status || 'pending'}
                     </Badge>
                     <span className="text-[10px] text-stone-500">{format(new Date(cv.created_at), 'dd MMM yyyy')}</span>
@@ -701,7 +701,7 @@ const AdminChatDashboard = () => {
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); }}>
           <div className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col`} onClick={e => e.stopPropagation()}>
             {/* Header */}
-            <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F5EBD7] to-[#FDFBF7] rounded-t-2xl">
+            <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F7F1E6] to-[#FDFBF7] rounded-t-2xl">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[#B89555]/15 flex items-center justify-center">
@@ -768,7 +768,7 @@ const AdminChatDashboard = () => {
                   size="sm"
                   onClick={() => generateAISummary(selectedConversation, displayMessages)}
                   disabled={aiSummaryLoading || displayMessages.length === 0}
-                  className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 text-xs font-semibold gap-1.5 shadow-sm"
+                  className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 text-xs font-semibold gap-1.5 shadow-sm"
                 >
                   {aiSummaryLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-[#B89555]" />}
                   {aiSummaryLoading ? 'Analyzing...' : 'AI Summarize & Analyze'}
@@ -792,7 +792,7 @@ const AdminChatDashboard = () => {
 
             {/* AI Summary Panel */}
             {aiSummary && (
-              <div className="mx-5 mt-4 p-4 rounded-xl border border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] space-y-3">
+              <div className="mx-5 mt-4 p-4 rounded-xl border border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] space-y-3">
                 <div className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-[#B89555]" />
                   <h4 className="text-sm font-bold text-stone-900">AI Intelligence Report</h4>
@@ -973,7 +973,7 @@ const AdminChatDashboard = () => {
                     <UserPlus className="w-3 h-3" /> Join
                   </Button>
                 )}
-                <Button onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); setIsJoined(false); setOwnerReplyInput(''); }} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 text-xs">
+                <Button onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); setIsJoined(false); setOwnerReplyInput(''); }} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 text-xs">
                   Close
                 </Button>
               </div>
@@ -987,7 +987,7 @@ const AdminChatDashboard = () => {
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-start justify-center p-4 pt-8 overflow-y-auto" onClick={() => setSelectedCV(null)}>
           <div className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-4xl w-full flex flex-col my-4`} onClick={e => e.stopPropagation()}>
             {/* CV Header */}
-            <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F5EBD7] to-[#FDFBF7] rounded-t-2xl">
+            <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F7F1E6] to-[#FDFBF7] rounded-t-2xl">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-full bg-[#B89555]/15 flex items-center justify-center">
@@ -999,7 +999,7 @@ const AdminChatDashboard = () => {
                       <a href={`mailto:${selectedCV.email}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Mail className="w-3 h-3" /> {selectedCV.email}</a>
                       {selectedCV.phone && <a href={`tel:${selectedCV.phone}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Phone className="w-3 h-3" /> {selectedCV.phone}</a>}
                       <span className="text-xs text-stone-400 flex items-center gap-1"><Calendar className="w-3 h-3" /> {format(new Date(selectedCV.created_at), 'dd MMM yyyy')}</span>
-                      <Badge className="bg-[#F5EBD7] text-[#8B7355] border-[#B89555]/30 text-[10px]">Source: Chat Widget</Badge>
+                      <Badge className="bg-[#F7F1E6] text-[#8B7355] border-[#B89555]/30 text-[10px]">Source: Chat Widget</Badge>
                     </div>
                   </div>
                 </div>
@@ -1011,7 +1011,7 @@ const AdminChatDashboard = () => {
 
             <div className="p-5 space-y-5 overflow-y-auto max-h-[calc(90vh-120px)]">
               {/* AI Analysis Section */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border border-[#B89555]/20 rounded-xl p-4 space-y-3">
+              <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/20 rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-[#B89555]" />
@@ -1022,7 +1022,7 @@ const AdminChatDashboard = () => {
                       size="sm"
                       onClick={() => generateCVSummary(selectedCV)}
                       disabled={cvAiLoading}
-                      className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 text-xs font-semibold gap-1 shadow-sm"
+                      className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 text-xs font-semibold gap-1 shadow-sm"
                     >
                       {cvAiLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-[#B89555]" />}
                       {cvAiLoading ? 'Analyzing...' : 'Generate AI Summary'}
@@ -1120,7 +1120,7 @@ const AdminChatDashboard = () => {
                 <Button className="bg-red-500 hover:bg-red-600 text-white font-semibold gap-2">
                   <X className="w-4 h-4" /> Reject
                 </Button>
-                <Button className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 font-semibold gap-2 shadow-sm">
+                <Button className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 font-semibold gap-2 shadow-sm">
                   <Calendar className="w-4 h-4 text-[#B89555]" /> Schedule Interview
                 </Button>
               </div>

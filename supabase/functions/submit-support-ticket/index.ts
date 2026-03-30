@@ -167,7 +167,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send email to support team using unified shared template
     const supportEmailHtml = emailShell("Support Team Alert", `<tr><td class="content-pad" style="padding:32px;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">A new support ticket has been created and needs review.</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:20px;">
 <p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Ticket Summary</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -179,12 +179,12 @@ const handler = async (req: Request): Promise<Response> => {
 ${phone ? `<tr><td style="padding:7px 0;color:#666;font-size:13px;">Phone</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;"><a href="tel:${phone}" style="color:#1a1a1a;text-decoration:underline;">${phone}</a></td></tr>` : ""}
 </table>
 </td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:20px;">
 <p style="margin:0 0 8px;font-size:12px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;">Subject</p>
 <p style="margin:0;color:#333;font-size:14px;line-height:1.7;">${subject}</p>
 </td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:20px;">
 <p style="margin:0 0 8px;font-size:12px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;">Issue Description</p>
 <div style="margin:0;color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;background:#fff;padding:16px;border-radius:12px;border:1px solid #e8e8e8;">${description}</div>

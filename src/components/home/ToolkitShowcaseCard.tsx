@@ -135,7 +135,7 @@ export function ToolkitShowcaseCard() {
             </div>
             
             <h2 
-              className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#F5EBD7] mb-2"
+              className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#F7F1E6] mb-2"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
               JBJ Royal Tools Hub
@@ -164,7 +164,7 @@ export function ToolkitShowcaseCard() {
 
                       {/* Title */}
                       <h4 
-                        className="text-base font-bold text-[#F5EBD7] mb-2 group-hover:text-gold transition-colors"
+                        className="text-base font-bold text-[#F7F1E6] mb-2 group-hover:text-gold transition-colors"
                         style={{ fontFamily: "Poppins, sans-serif" }}
                       >
                         {tool.name}

@@ -99,7 +99,7 @@ const Partners = () => {
           <div className="container mx-auto px-4 relative z-10">
             <motion.div initial="hidden" animate="visible" variants={stagger} className="max-w-4xl mx-auto text-center">
               <motion.div variants={fadeIn}>
-                <button className="group inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-sm cursor-default">
+                <button className="group inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-sm cursor-default">
                   <Handshake className="w-4 h-4 text-gold" />
                   <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">Strategic Partnerships</span>
                 </button>
@@ -244,7 +244,7 @@ const Partners = () => {
                   {PROCESS_STEPS.map((step) => (
                     <motion.div key={step.num} variants={fadeIn} className="relative pl-16 md:pl-20">
                       {/* Step number circle */}
-                      <div className="absolute left-0 top-0 w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 flex items-center justify-center shadow-md z-10">
+                      <div className="absolute left-0 top-0 w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 flex items-center justify-center shadow-md z-10">
                         <span className="text-lg md:text-xl font-bold text-gold">{step.num}</span>
                       </div>
 
@@ -351,7 +351,7 @@ const Partners = () => {
 
               <motion.div variants={fadeIn} className="flex flex-wrap justify-center gap-3 mb-10">
                 {REGIONS.map((r) => (
-                  <span key={r} className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black font-semibold text-sm rounded-full px-5 py-2.5 shadow-sm">{r}</span>
+                  <span key={r} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black font-semibold text-sm rounded-full px-5 py-2.5 shadow-sm">{r}</span>
                 ))}
               </motion.div>
 

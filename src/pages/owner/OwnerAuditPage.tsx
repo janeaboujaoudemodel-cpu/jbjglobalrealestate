@@ -174,12 +174,12 @@ const OwnerAuditPage = () => {
 
   return (
     <OwnerGuard>
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* Header */}
-        <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <div className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 flex items-center justify-center">
                 <Shield className="w-6 h-6 text-[#8B7355]" />
               </div>
               <div>
@@ -192,16 +192,16 @@ const OwnerAuditPage = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Tabs defaultValue="routes" className="w-full">
-            <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3] border-2 border-gold/30 mb-6">
-              <TabsTrigger value="routes" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
+            <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6] border-2 border-gold/30 mb-6">
+              <TabsTrigger value="routes" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
                 <FileText className="w-4 h-4 mr-2" />
                 Route Inventory
               </TabsTrigger>
-              <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
                 <Brain className="w-4 h-4 mr-2" />
                 AI Tools Audit
               </TabsTrigger>
-              <TabsTrigger value="delivery" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="delivery" className="data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-gold/40 text-black">
                 <ClipboardCheck className="w-4 h-4 mr-2" />
                 Delivery Checklist
               </TabsTrigger>
@@ -210,37 +210,37 @@ const OwnerAuditPage = () => {
             {/* Routes Tab */}
             <TabsContent value="routes">
               <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-black">{stats.total}</div>
                     <div className="text-xs text-zinc-600">Total Routes</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-purple-700">{stats.ownerRoutes}</div>
                     <div className="text-xs text-zinc-600">Owner Only</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-blue-700">{stats.brokerRoutes}</div>
                     <div className="text-xs text-zinc-600">Broker</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-zinc-700">{stats.publicRoutes}</div>
                     <div className="text-xs text-zinc-600">Public</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-green-700">{stats.visibleRoutes}</div>
                     <div className="text-xs text-zinc-600">Linked in UI</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-red-600">{stats.orphanRoutes}</div>
                     <div className="text-xs text-zinc-600">Orphan Routes</div>
@@ -288,7 +288,7 @@ const OwnerAuditPage = () => {
 
               {/* Route Table */}
               <Card className="border-2 border-gold/30 bg-white/60">
-                <CardHeader className="border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <CardHeader className="border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardTitle className="text-black flex items-center gap-2">
                     <FileText className="w-5 h-5 text-[#8B7355]" />
                     Route Inventory ({filteredRoutes.length} routes)
@@ -297,7 +297,7 @@ const OwnerAuditPage = () => {
                 <CardContent className="p-0">
                   <ScrollArea className="h-[600px]">
                     <table className="w-full">
-                      <thead className="sticky top-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3] border-b border-gold/20">
+                      <thead className="sticky top-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6] border-b border-gold/20">
                         <tr>
                           <th className="text-left p-4 text-xs font-semibold text-black uppercase">Route</th>
                           <th className="text-left p-4 text-xs font-semibold text-black uppercase">Access</th>
@@ -406,25 +406,25 @@ const OwnerAuditPage = () => {
             {/* AI Tools Tab */}
             <TabsContent value="ai-tools">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-black">{aiStats.total}</div>
                     <div className="text-xs text-zinc-600">Total AI Tools</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-green-700">{aiStats.working}</div>
                     <div className="text-xs text-zinc-600">Working</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-amber-700">{aiStats.partial}</div>
                     <div className="text-xs text-zinc-600">Partial</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-red-600">{aiStats.missing}</div>
                     <div className="text-xs text-zinc-600">404 Missing</div>
@@ -432,25 +432,25 @@ const OwnerAuditPage = () => {
                 </Card>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-pink-700">{aiStats.apiMissing}</div>
                     <div className="text-xs text-zinc-600">API Missing</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-orange-700">{aiStats.componentOnly}</div>
                     <div className="text-xs text-zinc-600">Component Only</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-blue-700">{aiStats.comingSoon}</div>
                     <div className="text-xs text-zinc-600">Coming Soon</div>
                   </CardContent>
                 </Card>
-                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardContent className="p-4 text-center">
                     <div className="text-2xl font-bold text-purple-700">{aiStats.withEdgeFunction}</div>
                     <div className="text-xs text-zinc-600">Edge Functions</div>
@@ -460,7 +460,7 @@ const OwnerAuditPage = () => {
 
               {/* AI Tools Table */}
               <Card className="border-2 border-gold/30 bg-white/60">
-                <CardHeader className="border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3]">
+                <CardHeader className="border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6]">
                   <CardTitle className="text-black flex items-center gap-2">
                     <Brain className="w-5 h-5 text-[#8B7355]" />
                     AI Tools Inventory ({AI_TOOLS_INVENTORY_VERIFIED.length} tools)
@@ -469,7 +469,7 @@ const OwnerAuditPage = () => {
                 <CardContent className="p-0">
                   <ScrollArea className="h-[600px]">
                     <table className="w-full">
-                      <thead className="sticky top-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EDE4D3] border-b border-gold/20">
+                      <thead className="sticky top-0 bg-gradient-to-r from-[#FDFBF7] via-[#F5E0E6] to-[#EFE6D6] border-b border-gold/20">
                         <tr>
                           <th className="text-left p-4 text-xs font-semibold text-black uppercase">Tool Name</th>
                           <th className="text-left p-4 text-xs font-semibold text-black uppercase">Route</th>

@@ -133,7 +133,7 @@ const JoinInvestorList = () => {
         canonicalPath="/investors/join"
       />
 
-      <main className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <main className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* Hero Header */}
         <section className="pt-28 pb-8 px-4">
           <div className="max-w-5xl mx-auto text-center">

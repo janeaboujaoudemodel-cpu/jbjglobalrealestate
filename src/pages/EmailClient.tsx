@@ -399,7 +399,7 @@ const EmailClient = () => {
   return (
     <div className="h-[calc(100vh-11rem)] bg-background text-foreground flex rounded-xl border-2 border-[#B89555]/20 overflow-hidden shadow-sm">
       {/* Sidebar */}
-      <div className="w-56 border-r border-[#B89555]/15 flex flex-col bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]">
+      <div className="w-56 border-r border-[#B89555]/15 flex flex-col bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA]">
         {/* Compose + Search */}
         <div className="p-4 space-y-3 border-b border-[#B89555]/15">
           <Dialog open={composeOpen} onOpenChange={setComposeOpen}>
@@ -622,7 +622,7 @@ const EmailClient = () => {
 
                 {/* Full email preview */}
                 <div className="border-2 border-[#B89555]/20 rounded-xl overflow-hidden">
-                  <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] px-6 py-4 border-b border-[#B89555]/15">
+                  <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] px-6 py-4 border-b border-[#B89555]/15">
                     <p className="text-sm text-black/60">From: <strong className="text-black">{currentSender.name}</strong> &lt;{currentSender.email}&gt;</p>
                     <p className="text-sm text-black/60">To: <strong className="text-black">{newEmail.to}</strong></p>
                     <p className="text-sm text-black/60">Subject: <strong className="text-black">{newEmail.subject}</strong></p>
@@ -697,7 +697,7 @@ const EmailClient = () => {
         {/* Account Section Tabs */}
         <div className="px-2 pt-3 pb-1">
           <Tabs value={activeAccount} onValueChange={(v) => { setActiveAccount(v as any); setCurrentPage(1); }}>
-            <TabsList className="w-full h-9 bg-[#F5F0E6]">
+            <TabsList className="w-full h-9 bg-[#F7F2EA]">
               <TabsTrigger value="all" className="text-[10px] flex-1 h-7 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white">All</TabsTrigger>
               <TabsTrigger value="company" className="text-[10px] flex-1 h-7 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white">
                 <Building2 className="w-3 h-3 mr-1" />Company

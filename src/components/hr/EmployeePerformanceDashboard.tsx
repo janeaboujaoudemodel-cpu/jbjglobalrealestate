@@ -164,7 +164,7 @@ export function EmployeePerformanceDashboard() {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -178,7 +178,7 @@ export function EmployeePerformanceDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -192,7 +192,7 @@ export function EmployeePerformanceDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -206,7 +206,7 @@ export function EmployeePerformanceDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
@@ -222,7 +222,7 @@ export function EmployeePerformanceDashboard() {
       </div>
 
       {/* Employee Performance List */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/30 shadow-lg">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/30 shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground">
             <Activity className="h-5 w-5 text-gold" />
@@ -299,7 +299,7 @@ export function EmployeePerformanceDashboard() {
                     </div>
 
                     {isExpanded && (
-                      <div className="border-t border-gold/20 p-4 bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7]/50">
+                      <div className="border-t border-gold/20 p-4 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6]/50">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                           <MetricCard icon={<Clock className="h-4 w-4" />} label="Total Hours" value={`${metrics.totalHours.toFixed(1)}h`} />
                           <MetricCard icon={<Phone className="h-4 w-4" />} label="Calls Made" value={String(metrics.totalCalls)} />

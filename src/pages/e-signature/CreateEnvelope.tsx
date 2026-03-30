@@ -535,7 +535,7 @@ export default function CreateEnvelope() {
         </div>
 
         {/* Step Content */}
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[hsl(var(--gold)/.2)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[hsl(var(--gold)/.2)]">
           <CardContent className="p-6">
             {/* Step 1: Upload Document */}
             {currentStep === 1 && (

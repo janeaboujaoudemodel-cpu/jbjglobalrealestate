@@ -284,7 +284,7 @@ const Developers = () => {
         <div ref={filterSentinelRef} className="h-0" />
 
         {/* Filters Section - Champagne Layer matching Properties page */}
-        <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-4 border-b border-gold/30">
+        <section className="z-40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-4 border-b border-gold/30">
           <div className="container mx-auto px-3 sm:px-4">
             <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
               <FilterShortcutBar
@@ -306,7 +306,7 @@ const Developers = () => {
               <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-gold/20">
                 {/* Tier Filter */}
                 <Select value={tierFilter} onValueChange={setTierFilter}>
-                  <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                  <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
                     <Crown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                     <span className="truncate text-left flex-1">
                       {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}
@@ -354,7 +354,7 @@ const Developers = () => {
 
         {/* Fixed portal copy of filters when scrolled past */}
         {isFilterFixed && createPortal(
-          <section className="fixed top-[88px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9998] backdrop-blur-md bg-gradient-to-br from-[#FDFBF7]/90 via-[#F5F0E6]/90 to-[#EDE4D3]/90 py-4 border-b border-gold/30 shadow-lg">
+          <section className="fixed top-[88px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9998] backdrop-blur-md bg-gradient-to-br from-[#FDFBF7]/90 via-[#F7F2EA]/90 to-[#EFE6D6]/90 py-4 border-b border-gold/30 shadow-lg">
             <div className="container mx-auto px-3 sm:px-4">
               <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-4 sm:p-5 shadow-lg">
                 <FilterShortcutBar
@@ -375,7 +375,7 @@ const Developers = () => {
                 {/* Tier filter row */}
                 <div className="flex items-center gap-3 flex-wrap mt-3 pt-3 border-t border-gold/20">
                   <Select value={tierFilter} onValueChange={setTierFilter}>
-                    <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
+                    <SelectTrigger className="w-full sm:w-[180px] h-11 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-lg text-sm shadow-sm">
                       <Crown className="w-4 h-4 mr-2 text-gold flex-shrink-0" />
                       <span className="truncate text-left flex-1">
                         {TIER_FILTERS.find(t => t.value === tierFilter)?.label || "All Tiers"}

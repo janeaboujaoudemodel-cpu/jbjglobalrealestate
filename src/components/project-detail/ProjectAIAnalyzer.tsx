@@ -230,7 +230,7 @@ export const ProjectAIAnalyzer = ({
 
   if (!hasMinimumData) {
     return (
-      <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl">
+      <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-3 mb-4">
             <Brain className="w-6 h-6 text-gold" />
@@ -247,7 +247,7 @@ export const ProjectAIAnalyzer = ({
   }
 
   return (
-    <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl">
+    <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="w-6 h-6 text-gold" />

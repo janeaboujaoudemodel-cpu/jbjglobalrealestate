@@ -128,7 +128,7 @@ export const MarketIntelligenceTableOfContents = ({
                 I Understand
               </Button>
             </div>
-            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-[#E8DCC8]" />
+            <div className="absolute top-4 -right-2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-[#ECE2D2]" />
           </motion.div>
         )}
       </AnimatePresence>

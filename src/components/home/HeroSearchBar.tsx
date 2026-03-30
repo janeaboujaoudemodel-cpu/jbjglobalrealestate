@@ -612,7 +612,7 @@ const HeroSearchBar = () => {
             </button>
           </PopoverTrigger>
           <PopoverContent 
-            className="w-32 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
+            className="w-32 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[9999]"
             side="top"
             align="start"
             sideOffset={4}
@@ -649,7 +649,7 @@ const HeroSearchBar = () => {
             </button>
           </PopoverTrigger>
           <PopoverContent 
-            className="w-48 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999] max-h-60 overflow-y-auto overscroll-contain"
+            className="w-48 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[9999] max-h-60 overflow-y-auto overscroll-contain"
             side="top"
             align="start"
             sideOffset={8}
@@ -688,7 +688,7 @@ const HeroSearchBar = () => {
             className={cn(
               "flex items-center gap-1.5 px-4 transition-all font-semibold min-w-[56px] justify-center",
               areaUnit === 'sqft'
-                ? "bg-gradient-to-r from-[#C8A766] to-[#E8DCC8] text-black"
+                ? "bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-black"
                 : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
             )}
           >
@@ -701,7 +701,7 @@ const HeroSearchBar = () => {
             className={cn(
               "flex items-center gap-1.5 px-4 transition-all font-semibold min-w-[56px] justify-center",
               areaUnit === 'sqm'
-                ? "bg-gradient-to-r from-[#C8A766] to-[#E8DCC8] text-black"
+                ? "bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-black"
                 : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
             )}
           >
@@ -739,7 +739,7 @@ const HeroSearchBar = () => {
               </button>
             </PopoverTrigger>
             <PopoverContent 
-              className="w-36 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
+              className="w-36 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[9999]"
               side="bottom"
               align="start"
               sideOffset={4}
@@ -773,7 +773,7 @@ const HeroSearchBar = () => {
               </button>
             </PopoverTrigger>
             <PopoverContent 
-              className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
+              className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[9999]"
               side="bottom"
               align="start"
               sideOffset={4}
@@ -808,7 +808,7 @@ const HeroSearchBar = () => {
               </button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999]"
+              className="w-44 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[9999]"
               side="bottom"
               align="start"
               sideOffset={4}
@@ -863,7 +863,7 @@ const HeroSearchBar = () => {
               </button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-52 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[9999] max-h-72 overflow-y-auto jj-scrollbar-gold"
+              className="w-52 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[9999] max-h-72 overflow-y-auto jj-scrollbar-gold"
               side="bottom"
               align="start"
               sideOffset={4}
@@ -921,7 +921,7 @@ const HeroSearchBar = () => {
                 <span className="hidden sm:inline">Filters</span>
               </button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[650px] max-h-[85vh] overflow-y-auto overscroll-contain bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <DialogContent className="sm:max-w-[650px] max-h-[85vh] overflow-y-auto overscroll-contain bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <DialogHeader>
                 <DialogTitle className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                   Advanced Filters

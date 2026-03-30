@@ -195,7 +195,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 inputMode="text"
                 enterKeyHint="send"
                 autoComplete="off"
-                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"
@@ -224,7 +224,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 enterKeyHint="send"
                 autoComplete="off"
                 autoFocus
-                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"
@@ -253,7 +253,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 enterKeyHint="send"
                 autoComplete="off"
                 autoFocus
-                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"
@@ -282,7 +282,7 @@ const ChatConversationalCollect = React.memo(({ onComplete, onPreferForm, initia
                 enterKeyHint="send"
                 autoComplete="off"
                 autoFocus
-                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full pl-10 pr-12 h-10 rounded-xl border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black placeholder:text-muted-foreground text-sm outline-none focus:ring-2 focus:ring-gold/50"
               />
               <Button
                 size="icon"

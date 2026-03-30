@@ -116,10 +116,10 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       )}
     >
       {/* Header - Champagne gradient */}
-      <div className="p-4 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="p-4 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-lg border border-gold/30">
+            <div className="p-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-lg border border-gold/30">
               <Sparkles className="w-5 h-5 text-gold" />
             </div>
             <div>
@@ -150,13 +150,13 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       </div>
 
       {/* Summary Stats - Champagne cards with gold borders */}
-      <div className="grid grid-cols-3 gap-2 p-4 border-b-2 border-gold/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="grid grid-cols-3 gap-2 p-4 border-b-2 border-gold/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {[
           { label: 'Score', value: '0%', icon: <Target className="w-3 h-3" />, color: 'text-emerald-600' },
           { label: 'Tasks', value: '0', icon: <Clock className="w-3 h-3" />, color: 'text-gold' },
           { label: 'Leads', value: '0', icon: <Users className="w-3 h-3" />, color: 'text-blue-600' },
         ].map((stat, i) => (
-          <div key={i} className="text-center p-2 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 shadow-sm">
+          <div key={i} className="text-center p-2 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 shadow-sm">
             <div className={cn('flex items-center justify-center gap-1 text-lg font-bold', stat.color)}>
               {stat.icon}
               {stat.value}
@@ -167,7 +167,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       </div>
 
       {/* Insights List - With champagne background */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <AnimatePresence mode="popLayout">
           {insights.map((insight, index) => (
             <motion.div
@@ -242,7 +242,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       </div>
 
       {/* Footer - Premium champagne */}
-      <div className="p-4 border-t-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="p-4 border-t-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <Button variant="primary" className="w-full" onClick={() => {}}>
           <Sparkles className="w-4 h-4 mr-2" />
           View All Insights

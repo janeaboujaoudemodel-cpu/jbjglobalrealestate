@@ -112,7 +112,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
 
   if (loading[url]) {
     return (
-      <div className="flex items-center gap-2 bg-[#F5EBD7]/20 px-3 py-2 rounded-lg text-sm text-gold border border-gold/30">
+      <div className="flex items-center gap-2 bg-[#F7F1E6]/20 px-3 py-2 rounded-lg text-sm text-gold border border-gold/30">
         <Loader2 className="w-4 h-4 animate-spin" />
         Loading...
       </div>
@@ -146,7 +146,7 @@ const AttachmentItem = ({ url, index }: { url: string; index: number }) => {
         <button
           onClick={handleView}
           disabled={!signedUrl}
-          className="flex items-center gap-2 bg-[#FDFBF7] px-3 py-2 rounded-lg text-sm text-gold hover:bg-[#F5EBD7] transition-colors border border-gold/30 disabled:opacity-50 disabled:cursor-not-allowed flex-1"
+          className="flex items-center gap-2 bg-[#FDFBF7] px-3 py-2 rounded-lg text-sm text-gold hover:bg-[#F7F1E6] transition-colors border border-gold/30 disabled:opacity-50 disabled:cursor-not-allowed flex-1"
         >
           {isImage ? <ImageIcon className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
           <span className="truncate max-w-[120px]">{filename || `Attachment ${index + 1}`}</span>
@@ -177,9 +177,9 @@ const SuggestionCard = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
   const typeColors = {
-    quick_resolution: 'border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7]',
-    needs_info: 'border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3]',
-    acknowledgment: 'border-gold/40 bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8]/30',
+    quick_resolution: 'border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6]',
+    needs_info: 'border-gold/40 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]',
+    acknowledgment: 'border-gold/40 bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]/30',
   };
 
   const typeLabels = {
@@ -211,7 +211,7 @@ const SuggestionCard = ({
       {expanded && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4" onClick={() => setExpanded(false)}>
           <div
-            className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-lg w-full max-h-[80vh] flex flex-col"
+            className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-lg w-full max-h-[80vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="px-5 py-4 border-b border-gold/30 flex items-center justify-between">
@@ -282,7 +282,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
   if (!ticketId) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EDE4D3]/80 rounded-xl border border-gold/20">
+      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-gold/20">
         <div className="text-center text-gold/60">
           <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gold/30" />
           <p>Select a ticket to view details</p>
@@ -293,7 +293,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
   if (isLoading) {
     return (
-      <div className="flex-1 bg-gradient-to-b from-[#FDFBF7]/80 to-[#EDE4D3]/80 rounded-xl border border-gold/20 p-6">
+      <div className="flex-1 bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-gold/20 p-6">
         <div className="space-y-4">
           <Skeleton className="h-8 w-48 bg-gold/20" />
           <Skeleton className="h-4 w-full bg-gold/20" />
@@ -306,7 +306,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
 
   if (!data) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EDE4D3]/80 rounded-xl border border-gold/20">
+      <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-[#FDFBF7]/80 to-[#EFE6D6]/80 rounded-xl border border-gold/20">
         <p className="text-gold/60">Ticket not found</p>
       </div>
     );
@@ -365,9 +365,9 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
   };
 
   return (
-    <div className="flex-1 bg-gradient-to-b from-[#FDFBF7] to-[#EDE4D3] rounded-xl border border-gold/30 flex flex-col overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.1)]">
+    <div className="flex-1 bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] rounded-xl border border-gold/30 flex flex-col overflow-hidden shadow-[0_0_30px_rgba(200,167,102,0.1)]">
       {/* Header */}
-      <div className="px-3 py-2.5 border-b border-gold/30 flex items-start justify-between bg-gradient-to-r from-[#F5EBD7] to-[#EDE4D3]">
+      <div className="px-3 py-2.5 border-b border-gold/30 flex items-start justify-between bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6]">
         <div className="min-w-0 flex-1 mr-2">
           <div className="flex items-center gap-2 mb-1 overflow-x-auto scrollbar-hide whitespace-nowrap">
             <span className="text-gold font-mono font-bold text-sm whitespace-nowrap shrink-0">
@@ -556,7 +556,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
                 size="sm"
                 onClick={handleGenerateAISuggestions}
                 disabled={aiSuggestions.isLoading}
-                className="bg-gradient-to-r from-gold to-[#D4C4A8] hover:from-gold/90 hover:to-[#D4C4A8]/90 text-black font-semibold"
+                className="bg-gradient-to-r from-gold to-[#D8C7A6] hover:from-gold/90 hover:to-[#D8C7A6]/90 text-black font-semibold"
               >
                 {aiSuggestions.isLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -652,7 +652,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
       </ScrollArea>
 
       {/* Reply Composer */}
-      <div className="p-3 border-t border-gold/30 bg-gradient-to-r from-[#F5EBD7] to-[#EDE4D3]">
+      <div className="p-3 border-t border-gold/30 bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6]">
         <p className="text-[10px] text-gold/60 mb-1 flex items-center gap-1">
           <Mic className="w-3 h-3" /> Speak in any language — auto-translated to English
         </p>
@@ -706,7 +706,7 @@ const TicketDetailPanel = ({ ticketId, onClose }: TicketDetailPanelProps) => {
       {replyMaximized && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setReplyMaximized(false)}>
           <div
-            className="bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-2xl w-full max-h-[80vh] flex flex-col"
+            className="bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl shadow-[0_0_60px_rgba(200,167,102,0.3)] max-w-2xl w-full max-h-[80vh] flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="px-5 py-4 border-b border-gold/30 flex items-center justify-between">

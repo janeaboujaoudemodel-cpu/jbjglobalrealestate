@@ -118,7 +118,7 @@ const MarketingHub: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full" />
       </div>
     );
@@ -214,11 +214,11 @@ const MarketingHub: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="sticky top-0 z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <header className="sticky top-0 z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <div className="flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-4">
               <Button variant="ghost" size="icon" onClick={() => navigate('/admin')} className="text-black hover:bg-gold/10">
@@ -276,7 +276,7 @@ const MarketingHub: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
-                className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6] shadow-[0_4px_20px_rgba(200,167,102,0.15)]"
+                className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA] shadow-[0_4px_20px_rgba(200,167,102,0.15)]"
               >
                 <div className="flex items-center gap-3">
                   <div className={`p-2.5 rounded-xl ${stat.iconBg} border`}>
@@ -295,18 +295,18 @@ const MarketingHub: React.FC = () => {
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
             <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
               <TabsList className="bg-white/80 border-2 border-gold/30">
-                <TabsTrigger value="campaigns" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+                <TabsTrigger value="campaigns" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
                   <Megaphone className="w-3.5 h-3.5 mr-1.5" />
                   Campaigns
                 </TabsTrigger>
-                <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+                <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
                   <Sparkles className="w-3.5 h-3.5 mr-1.5" />
                   AI Tools
                 </TabsTrigger>
-                <TabsTrigger value="templates" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+                <TabsTrigger value="templates" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
                   Templates
                 </TabsTrigger>
-                <TabsTrigger value="subscribers" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+                <TabsTrigger value="subscribers" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
                   Subscribers
                 </TabsTrigger>
               </TabsList>
@@ -353,7 +353,7 @@ const MarketingHub: React.FC = () => {
                   >
                     <Link
                       to={tool.route}
-                      className="block p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6] hover:border-gold hover:shadow-lg transition-all group"
+                      className="block p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA] hover:border-gold hover:shadow-lg transition-all group"
                     >
           <div className="flex items-start gap-3">
                         <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center shadow-lg shrink-0`}>
@@ -377,7 +377,7 @@ const MarketingHub: React.FC = () => {
                   <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full" />
                 </div>
               ) : filteredCampaigns?.length === 0 ? (
-                <div className="text-center py-12 border-2 border-gold/30 rounded-xl bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6]">
+                <div className="text-center py-12 border-2 border-gold/30 rounded-xl bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA]">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gold/20 flex items-center justify-center">
                     <Send className="h-8 w-8 text-gold" />
                   </div>
@@ -494,7 +494,7 @@ const MarketingHub: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.03 }}
-                    className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6] hover:border-gold hover:shadow-lg transition-all cursor-pointer group"
+                    className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA] hover:border-gold hover:shadow-lg transition-all cursor-pointer group"
                     onClick={() => setIsCreating(true)}
                   >
                     <div className="flex items-start justify-between mb-3">
@@ -520,7 +520,7 @@ const MarketingHub: React.FC = () => {
       </div>
 
       {/* Horizontal Quick Actions Bar (replaces right sidebar) */}
-      <div className="sticky bottom-0 z-40 border-t-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_-4px_20px_rgba(200,167,102,0.1)] px-4 py-3">
+      <div className="sticky bottom-0 z-40 border-t-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_-4px_20px_rgba(200,167,102,0.1)] px-4 py-3">
         <div className="flex items-center justify-between gap-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
             <Button

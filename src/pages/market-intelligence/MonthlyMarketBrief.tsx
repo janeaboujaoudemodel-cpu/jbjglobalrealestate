@@ -102,7 +102,7 @@ const MonthlyMarketBrief = () => {
       />
 
       {/* Main Content - 3-layer system */}
-      <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] min-h-screen">
+      <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] min-h-screen">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Header */}
           <motion.div
@@ -121,7 +121,7 @@ const MonthlyMarketBrief = () => {
 
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <Badge className="mb-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-gold/30 shadow-sm">
+                <Badge className="mb-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-gold/30 shadow-sm">
                   <span className="text-gold">MONTHLY</span>
                   <span className="text-black ml-1">MARKET BRIEF</span>
                 </Badge>
@@ -152,7 +152,7 @@ const MonthlyMarketBrief = () => {
             transition={{ delay: 0.1 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader>
                 <CardTitle className="text-lg text-black">Executive Summary</CardTitle>
               </CardHeader>
@@ -170,7 +170,7 @@ const MonthlyMarketBrief = () => {
             transition={{ delay: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
                   <Building className="w-4 h-4" />
@@ -191,7 +191,7 @@ const MonthlyMarketBrief = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
                   <Key className="w-4 h-4" />
@@ -211,7 +211,7 @@ const MonthlyMarketBrief = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
                   <Home className="w-4 h-4" />
@@ -241,7 +241,7 @@ const MonthlyMarketBrief = () => {
             transition={{ delay: 0.3 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader>
                 <CardTitle className="text-lg text-black flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-gold" />
@@ -276,7 +276,7 @@ const MonthlyMarketBrief = () => {
             variants={fadeInUp}
             transition={{ delay: 0.4 }}
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardContent className="pt-6">
                 <h3 className="text-sm font-semibold text-black mb-3">Methodology & Disclaimer</h3>
                 <p className="text-sm text-zinc-600 mb-4">

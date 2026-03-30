@@ -507,7 +507,7 @@ const Compare = () => {
 
   if (!projects?.length) {
     return (
-      <section className="min-h-screen bg-gradient-to-br from-[#F5EBD7]/10 via-zinc-950 to-zinc-950">
+      <section className="min-h-screen bg-gradient-to-br from-[#F7F1E6]/10 via-zinc-950 to-zinc-950">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gold/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gold/3 rounded-full blur-3xl pointer-events-none" />
@@ -532,7 +532,7 @@ const Compare = () => {
             {/* Welcome Title */}
             <h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
               Welcome to{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#E8DCC8]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#ECE2D2]">
                 Property Comparison
               </span>
             </h1>
@@ -567,7 +567,7 @@ const Compare = () => {
                       <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold/30 to-gold/10 flex items-center justify-center mb-4 mx-auto shadow-lg shadow-gold/20">
                         <item.icon className="w-7 h-7 text-gold" />
                       </div>
-                      <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-gradient-to-br from-gold to-[#E8DCC8] flex items-center justify-center text-black font-bold text-sm shadow-lg">
+                      <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center text-black font-bold text-sm shadow-lg">
                         {item.step}
                       </div>
                       <h3 className="text-white font-semibold text-lg mb-2">{item.title}</h3>
@@ -599,7 +599,7 @@ const Compare = () => {
               <button 
                 className="relative inline-flex items-center justify-center gap-2 px-10 py-6 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
                   boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
                 }}
               >
@@ -646,7 +646,7 @@ const Compare = () => {
             </div>
             
             <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#E8DCC8]">Property Comparison</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#ECE2D2]">Property Comparison</span>
             </h1>
             <p className="text-zinc-300 text-lg md:text-xl mb-4 max-w-2xl">
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
@@ -685,7 +685,7 @@ const Compare = () => {
                 disabled={isGenerating || projects.length < 2}
                 className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)',
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F7F2EA 100%)',
                   border: '2px solid rgba(200,167,102,0.5)',
                   boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9)',
                 }}
@@ -868,7 +868,7 @@ const Compare = () => {
               {/* Summary */}
               <div className="bg-gradient-to-br from-gold/10 to-zinc-900 rounded-2xl border border-gold/20 p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-[#E8DCC8] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center">
                     <Sparkles className="w-5 h-5 text-black" />
                   </div>
                   <div>
@@ -938,7 +938,7 @@ const Compare = () => {
               </div>
 
               {/* Recommendation - Champagne Theme */}
-              <div className="bg-gradient-to-r from-gold/10 to-[#E8DCC8]/10 rounded-2xl border border-gold/30 p-6">
+              <div className="bg-gradient-to-r from-gold/10 to-[#ECE2D2]/10 rounded-2xl border border-gold/30 p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <Award className="w-8 h-8 text-gold" />
                   <div>
@@ -991,7 +991,7 @@ const Compare = () => {
             /* Premium loading state */
             <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-[#C8A766]/30 p-10">
               <div className="flex flex-col items-center text-center">
-                <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-gold to-[#E8DCC8] flex items-center justify-center mx-auto mb-6">
+                <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center mx-auto mb-6">
                   <Sparkles className="w-10 h-10 text-black animate-pulse" />
                   <div className="absolute inset-0 rounded-full border-2 border-gold/40 animate-ping" />
                 </div>
@@ -1000,14 +1000,14 @@ const Compare = () => {
                   Our AI is comparing locations, pricing, ROI potential, developer track records, and generating investment recommendations.
                 </p>
                 <div className="w-full max-w-sm h-2 bg-zinc-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-gold via-[#E8DCC8] to-gold rounded-full animate-[shimmer_2s_ease-in-out_infinite]" style={{ width: '75%', backgroundSize: '200% 100%' }} />
+                  <div className="h-full bg-gradient-to-r from-gold via-[#ECE2D2] to-gold rounded-full animate-[shimmer_2s_ease-in-out_infinite]" style={{ width: '75%', backgroundSize: '200% 100%' }} />
                 </div>
                 <p className="text-zinc-600 text-xs mt-3">This may take 15-30 seconds</p>
               </div>
             </div>
           ) : (
             <div className="bg-gradient-to-br from-gold/5 to-zinc-900 rounded-2xl border border-gold/20 p-8 text-center">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-[#E8DCC8] flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center mx-auto mb-4">
                 <Sparkles className="w-8 h-8 text-black" />
               </div>
               <h3 className="text-white text-2xl font-bold mb-2">AI Analysis Ready</h3>
@@ -1018,7 +1018,7 @@ const Compare = () => {
                 onClick={generateSmartAnalysis}
                 disabled={projects.length < 2}
                 size="lg"
-                className="bg-gradient-to-r from-gold to-[#E8DCC8] text-black hover:from-gold/90 hover:to-[#E8DCC8]/90 font-semibold"
+                className="bg-gradient-to-r from-gold to-[#ECE2D2] text-black hover:from-gold/90 hover:to-[#ECE2D2]/90 font-semibold"
               >
                 <Sparkles className="w-5 h-5 mr-2" />
                 Generate AI Analysis
@@ -1035,7 +1035,7 @@ const Compare = () => {
           {/* Contact Advisor Section - Champagne Theme */}
           <div className="bg-gold/5 rounded-2xl border border-gold/20 p-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-[#E8DCC8] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-[#ECE2D2] flex items-center justify-center">
                 <Users className="w-5 h-5 text-black" />
               </div>
               <div>
@@ -1076,7 +1076,7 @@ const Compare = () => {
                   <Button
                     onClick={() => submitRequest.mutate()}
                     disabled={!formData.email || submitRequest.isPending}
-                    className="flex-1 bg-gradient-to-r from-gold to-[#E8DCC8] text-black font-semibold hover:from-gold/90 hover:to-[#E8DCC8]/90"
+                    className="flex-1 bg-gradient-to-r from-gold to-[#ECE2D2] text-black font-semibold hover:from-gold/90 hover:to-[#ECE2D2]/90"
                   >
                     {submitRequest.isPending ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -1100,7 +1100,7 @@ const Compare = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Button
                   onClick={() => setShowRequestForm(true)}
-                  className="bg-gradient-to-r from-gold to-[#E8DCC8] text-black font-semibold hover:from-gold/90 hover:to-[#E8DCC8]/90"
+                  className="bg-gradient-to-r from-gold to-[#ECE2D2] text-black font-semibold hover:from-gold/90 hover:to-[#ECE2D2]/90"
                 >
                   <Mail className="w-4 h-4 mr-2" />
                   Request Consultation

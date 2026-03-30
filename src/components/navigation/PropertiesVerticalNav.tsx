@@ -112,7 +112,7 @@ export default function PropertiesVerticalNav() {
           style={{ left: '200px', top: '88px', bottom: 0, right: 0 }}
         >
           <div
-            className="pointer-events-auto max-w-[360px] w-full max-h-[calc(100vh-100px)] overflow-y-auto jj-scrollbar-gold mt-2 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]"
+            className="pointer-events-auto max-w-[360px] w-full max-h-[calc(100vh-100px)] overflow-y-auto jj-scrollbar-gold mt-2 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA]"
             onClick={(e) => e.stopPropagation()}
             onMouseLeave={closeMegaMenu}
           >
@@ -141,7 +141,7 @@ export default function PropertiesVerticalNav() {
   return (
     <>
       <div
-        className="w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-r border-gold/30 flex flex-col h-full"
+        className="w-[200px] flex-shrink-0 bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-r border-gold/30 flex flex-col h-full"
         style={{ borderRight: "1px solid hsl(42 45% 59% / 0.3)" }}
       >
         {/* Logo - Links to homepage */}

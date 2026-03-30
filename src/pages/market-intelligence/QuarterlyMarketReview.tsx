@@ -178,7 +178,7 @@ const QuarterlyMarketReview = () => {
       />
 
       {/* Main Content - 3-layer system */}
-      <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] min-h-screen">
+      <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] min-h-screen">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Header */}
           <motion.div
@@ -227,7 +227,7 @@ const QuarterlyMarketReview = () => {
             transition={{ delay: 0.1 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader>
                 <CardTitle className="text-lg text-black">Executive Summary</CardTitle>
               </CardHeader>
@@ -250,7 +250,7 @@ const QuarterlyMarketReview = () => {
               Segment Performance
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
                     <Building className="w-4 h-4" />
@@ -268,7 +268,7 @@ const QuarterlyMarketReview = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
                     <Home className="w-4 h-4" />
@@ -286,7 +286,7 @@ const QuarterlyMarketReview = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
                     <Key className="w-4 h-4" />
@@ -314,7 +314,7 @@ const QuarterlyMarketReview = () => {
             transition={{ delay: 0.3 }}
             className="mb-8"
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader>
                 <CardTitle className="text-lg text-black flex items-center gap-2">
                   <Activity className="w-5 h-5 text-gold" />
@@ -346,7 +346,7 @@ const QuarterlyMarketReview = () => {
             </h2>
             <div className="space-y-4">
               {data.areaAnalysis.map((area, index) => (
-                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+                <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                   <CardContent className="pt-4">
                     <h3 className="text-lg font-semibold text-black mb-3">{area.name}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
@@ -376,7 +376,7 @@ const QuarterlyMarketReview = () => {
             variants={fadeInUp}
             transition={{ delay: 0.5 }}
           >
-            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+            <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardContent className="pt-6">
                 <h3 className="text-sm font-semibold text-black mb-3">Methodology & Disclaimer</h3>
                 <p className="text-sm text-zinc-600 mb-4">

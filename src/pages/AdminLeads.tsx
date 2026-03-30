@@ -476,7 +476,7 @@ const AdminLeads = () => {
           <ChevronDown className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity text-black/40" />
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-56 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/40 z-[10001]" align="start">
+      <PopoverContent className="w-56 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 z-[10001]" align="start">
         <div className="space-y-1 max-h-72 overflow-y-auto">
           <p className="text-xs font-semibold text-emerald-700 px-2 py-1">Positive</p>
           {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
@@ -510,7 +510,7 @@ const AdminLeads = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
       {/* Header */}
-      <header className="border-b-2 border-[#B89555]/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <header className="border-b-2 border-[#B89555]/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="ghost" onClick={() => navigate("/admin")} className="text-black hover:text-[#B89555] hover:bg-[#B89555]/10 cursor-pointer active:scale-95 transition-all">
@@ -537,42 +537,42 @@ const AdminLeads = () => {
       <main className="container mx-auto px-4 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/60 rounded-xl p-5 hover:shadow-lg hover:shadow-[#B89555]/20 transition-all">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/60 rounded-xl p-5 hover:shadow-lg hover:shadow-[#B89555]/20 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <Users className="w-5 h-5 text-[#B89555]" />
               <span className="text-black/60 text-sm">Total</span>
             </div>
             <p className="text-black text-3xl font-bold">{leads.length}</p>
           </div>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-purple-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-purple-500/20 transition-all">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-purple-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-purple-500/20 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <MessageSquare className="w-5 h-5 text-purple-600" />
               <span className="text-black/60 text-sm">Chats</span>
             </div>
             <p className="text-black text-3xl font-bold">{conversations.length}</p>
           </div>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-blue-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-blue-500/20 transition-all">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-blue-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-blue-500/20 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <Clock className="w-5 h-5 text-blue-600" />
               <span className="text-black/60 text-sm">New Today</span>
             </div>
             <p className="text-black text-3xl font-bold">{stats.newToday}</p>
           </div>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-amber-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-amber-500/20 transition-all">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-amber-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-amber-500/20 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <AlertTriangle className="w-5 h-5 text-amber-600" />
               <span className="text-black/60 text-sm">Needs Action</span>
             </div>
             <p className="text-black text-3xl font-bold">{stats.actionNeeded}</p>
           </div>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-yellow-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-yellow-500/20 transition-all">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-yellow-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-yellow-500/20 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <Star className="w-5 h-5 text-yellow-600" />
               <span className="text-black/60 text-sm">VIP</span>
             </div>
             <p className="text-black text-3xl font-bold">{stats.vipCount}</p>
           </div>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-green-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-green-500/20 transition-all">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-green-500/40 rounded-xl p-5 hover:shadow-lg hover:shadow-green-500/20 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <UserCheck className="w-5 h-5 text-green-600" />
               <span className="text-black/60 text-sm">Qualified</span>
@@ -585,21 +585,21 @@ const AdminLeads = () => {
         <div className="flex gap-2 mb-6">
           <Button
             onClick={() => handleTabSwitch("leads")}
-            className={`cursor-pointer active:scale-95 transition-all font-semibold ${activeTab === "leads" ? "bg-[#B89555] text-black hover:bg-[#B89555]/90 shadow-lg" : "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-[#B89555]/30 text-black hover:bg-[#B89555]/15"}`}
+            className={`cursor-pointer active:scale-95 transition-all font-semibold ${activeTab === "leads" ? "bg-[#B89555] text-black hover:bg-[#B89555]/90 shadow-lg" : "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 text-black hover:bg-[#B89555]/15"}`}
           >
             <Users className="w-4 h-4 mr-2" />
             Leads ({leads.length})
           </Button>
           <Button
             onClick={() => handleTabSwitch("chats")}
-            className={`cursor-pointer active:scale-95 transition-all font-semibold ${activeTab === "chats" ? "bg-[#B89555] text-black hover:bg-[#B89555]/90 shadow-lg" : "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-[#B89555]/30 text-black hover:bg-[#B89555]/15"}`}
+            className={`cursor-pointer active:scale-95 transition-all font-semibold ${activeTab === "chats" ? "bg-[#B89555] text-black hover:bg-[#B89555]/90 shadow-lg" : "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 text-black hover:bg-[#B89555]/15"}`}
           >
             <MessageSquare className="w-4 h-4 mr-2" />
             AI Chat Sessions ({conversations.length})
           </Button>
           <Button
             onClick={() => handleTabSwitch("deleted")}
-            className={`cursor-pointer active:scale-95 transition-all font-semibold ${activeTab === "deleted" ? "bg-red-600 text-white hover:bg-red-700 shadow-lg" : "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border-2 border-[#B89555]/30 text-black hover:bg-[#B89555]/15"}`}
+            className={`cursor-pointer active:scale-95 transition-all font-semibold ${activeTab === "deleted" ? "bg-red-600 text-white hover:bg-red-700 shadow-lg" : "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border-2 border-[#B89555]/30 text-black hover:bg-[#B89555]/15"}`}
           >
             <Trash2 className="w-4 h-4 mr-2" />
             Recently Deleted ({deletedLeads.length})
@@ -608,7 +608,7 @@ const AdminLeads = () => {
 
         {/* Bulk Actions Bar */}
         {selectedLeadIds.size > 0 && (
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/50 rounded-xl p-4 mb-4 flex items-center justify-between flex-wrap gap-3 shadow-[0_4px_20px_rgba(200,167,102,0.18)]">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 rounded-xl p-4 mb-4 flex items-center justify-between flex-wrap gap-3 shadow-[0_4px_20px_rgba(200,167,102,0.18)]">
             <p className="text-black font-bold text-sm">
               <CheckSquare className="w-4 h-4 inline mr-2 text-[#B89555]" />
               {selectedLeadIds.size} lead{selectedLeadIds.size > 1 ? 's' : ''} selected
@@ -619,7 +619,7 @@ const AdminLeads = () => {
                 <Star className="w-3 h-3 mr-1" /> Mark VIP
               </Button>
               <Button size="sm" onClick={() => bulkMarkVip(false)} disabled={bulkActionLoading}
-                className="bg-[#EDE4D3] hover:bg-[#D4C4A8] text-black border border-[#B89555]/30 font-semibold">
+                className="bg-[#EFE6D6] hover:bg-[#D8C7A6] text-black border border-[#B89555]/30 font-semibold">
                 <Star className="w-3 h-3 mr-1" /> Remove VIP
               </Button>
               <Popover>
@@ -629,7 +629,7 @@ const AdminLeads = () => {
                     <ChevronDown className="w-3 h-3 ml-1" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-56 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/40 z-[10001]" align="start">
+                <PopoverContent className="w-56 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 z-[10001]" align="start">
                   <div className="space-y-1 max-h-72 overflow-y-auto">
                     <p className="text-xs font-semibold text-emerald-700 px-2 py-1">Positive</p>
                     {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
@@ -674,7 +674,7 @@ const AdminLeads = () => {
                       <ChevronDown className="w-3 h-3 ml-1" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-56 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/40 z-[10001]" align="start">
+                  <PopoverContent className="w-56 p-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 z-[10001]" align="start">
                     <div className="space-y-1 max-h-60 overflow-y-auto">
                       {aiBrokers.map(broker => (
                         <button key={broker.id} onClick={() => toast.success(`Assigned ${selectedLeadIds.size} leads to ${broker.name}`)}
@@ -696,7 +696,7 @@ const AdminLeads = () => {
         )}
 
         {/* Filters */}
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/30 rounded-xl p-4 mb-6">
+        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl p-4 mb-6">
           <div className="flex flex-wrap items-center gap-4">
             <div className="relative flex-1 min-w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B89555]" />
@@ -713,7 +713,7 @@ const AdminLeads = () => {
                 <SelectTrigger className="w-48 cursor-pointer bg-white/60 border-[#B89555]/30 text-black focus:ring-[#B89555]/20">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
-                <SelectContent className="max-h-80 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/40">
+                <SelectContent className="max-h-80 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                   <SelectItem value="all" className="text-black focus:bg-[#B89555]/15 focus:text-black">All Statuses</SelectItem>
                   <div className="px-2 py-1 text-xs font-semibold text-emerald-700 uppercase">Positive</div>
                   {PIPELINE_STATUSES.filter(s => s.category === 'positive').map(status => (
@@ -751,7 +751,7 @@ const AdminLeads = () => {
                   <SelectTrigger className="w-52 cursor-pointer bg-white/60 border-[#B89555]/30 text-black focus:ring-[#B89555]/20">
                     <SelectValue placeholder="Source Type" />
                   </SelectTrigger>
-                  <SelectContent className="max-h-96 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/40">
+                  <SelectContent className="max-h-96 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                     <SelectItem value="all" className="text-black focus:bg-[#B89555]/15 focus:text-black"><span className="flex items-center gap-2"><Filter className="w-3 h-3 text-[#B89555]" />All Sources</span></SelectItem>
                     <div className="px-2 py-1.5 text-xs font-bold text-[#B89555] uppercase tracking-wide border-t border-[#B89555]/20 mt-1">Main Categories</div>
                     <SelectItem value="chat" className="text-black focus:bg-[#B89555]/15 focus:text-black"><span className="flex items-center gap-2"><MessageSquare className="w-3 h-3 text-purple-600" />Chat Leads</span></SelectItem>
@@ -765,7 +765,7 @@ const AdminLeads = () => {
                   <SelectTrigger className="w-52 cursor-pointer bg-white/60 border-[#B89555]/30 text-black focus:ring-[#B89555]/20">
                     <SelectValue placeholder="Specific Source" />
                   </SelectTrigger>
-                  <SelectContent className="max-h-80 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/40">
+                  <SelectContent className="max-h-80 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40">
                     <SelectItem value="all" className="text-black focus:bg-[#B89555]/15 focus:text-black">All Specific Sources</SelectItem>
                     <div className="px-2 py-1.5 text-xs font-bold text-purple-700 uppercase tracking-wide border-t border-[#B89555]/20 mt-1">Chat Sources</div>
                     {['ai_chat_support', 'chat_support', 'chat', 'live_chat'].map(s => {
@@ -801,7 +801,7 @@ const AdminLeads = () => {
         </div>
 
         {/* Table */}
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/30 rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(200,167,102,0.12)]">
+        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(200,167,102,0.12)]">
           {isLoading ? (
             <div className="p-6 space-y-4">
               {[1,2,3,4,5].map(i => <Skeleton key={i} className="h-12 w-full bg-[#B89555]/10" />)}
@@ -817,7 +817,7 @@ const AdminLeads = () => {
                 </div>
               ) : (
                 <Table>
-                  <TableHeader className="bg-[#EDE4D3] sticky top-0">
+                  <TableHeader className="bg-[#EFE6D6] sticky top-0">
                     <TableRow>
                       <TableHead className="text-black font-semibold">Name</TableHead>
                       <TableHead className="text-black font-semibold">Email</TableHead>
@@ -850,7 +850,7 @@ const AdminLeads = () => {
           ) : activeTab === "leads" ? (
             <ScrollArea className="h-[600px]">
               <Table>
-                <TableHeader className="bg-[#EDE4D3] sticky top-0">
+                <TableHeader className="bg-[#EFE6D6] sticky top-0">
                   <TableRow>
                     <TableHead className="text-black font-semibold w-10">
                       <Checkbox
@@ -953,7 +953,7 @@ const AdminLeads = () => {
                                       <MessageCircle className="w-4 h-4" />
                                     </a>
                                   </TooltipTrigger>
-                                  <TooltipContent className="bg-[#EDE4D3] border-[#B89555]/30 text-black">WhatsApp</TooltipContent>
+                                  <TooltipContent className="bg-[#EFE6D6] border-[#B89555]/30 text-black">WhatsApp</TooltipContent>
                                 </Tooltip>
                               </TooltipProvider>
                               <TooltipProvider>
@@ -965,7 +965,7 @@ const AdminLeads = () => {
                                       <PhoneCall className="w-4 h-4" />
                                     </a>
                                   </TooltipTrigger>
-                                  <TooltipContent className="bg-[#EDE4D3] border-[#B89555]/30 text-black">Call</TooltipContent>
+                                  <TooltipContent className="bg-[#EFE6D6] border-[#B89555]/30 text-black">Call</TooltipContent>
                                 </Tooltip>
                               </TooltipProvider>
                               <TooltipProvider>
@@ -977,7 +977,7 @@ const AdminLeads = () => {
                                       <Mail className="w-4 h-4" />
                                     </a>
                                   </TooltipTrigger>
-                                  <TooltipContent className="bg-[#EDE4D3] border-[#B89555]/30 text-black">Email</TooltipContent>
+                                  <TooltipContent className="bg-[#EFE6D6] border-[#B89555]/30 text-black">Email</TooltipContent>
                                 </Tooltip>
                               </TooltipProvider>
                               <Button variant="ghost" size="sm" onClick={() => softDeleteLeads([lead.id])}
@@ -1001,7 +1001,7 @@ const AdminLeads = () => {
             /* Chats Tab */
             <ScrollArea className="h-[600px]">
               <Table>
-                <TableHeader className="bg-[#EDE4D3] sticky top-0">
+                <TableHeader className="bg-[#EFE6D6] sticky top-0">
                   <TableRow>
                     <TableHead className="text-black font-semibold">User</TableHead>
                     <TableHead className="text-black font-semibold">Email</TableHead>
@@ -1061,7 +1061,7 @@ const AdminLeads = () => {
                                     <MessageCircle className="w-4 h-4" />
                                   </a>
                                 </TooltipTrigger>
-                                <TooltipContent className="bg-[#EDE4D3] border-[#B89555]/30 text-black">WhatsApp</TooltipContent>
+                                <TooltipContent className="bg-[#EFE6D6] border-[#B89555]/30 text-black">WhatsApp</TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
                             <TooltipProvider>
@@ -1073,7 +1073,7 @@ const AdminLeads = () => {
                                     <PhoneCall className="w-4 h-4" />
                                   </a>
                                 </TooltipTrigger>
-                                <TooltipContent className="bg-[#EDE4D3] border-[#B89555]/30 text-black">Call</TooltipContent>
+                                <TooltipContent className="bg-[#EFE6D6] border-[#B89555]/30 text-black">Call</TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
                             <TooltipProvider>
@@ -1084,7 +1084,7 @@ const AdminLeads = () => {
                                     <Mail className="w-4 h-4" />
                                   </a>
                                 </TooltipTrigger>
-                                <TooltipContent className="bg-[#EDE4D3] border-[#B89555]/30 text-black">Email</TooltipContent>
+                                <TooltipContent className="bg-[#EFE6D6] border-[#B89555]/30 text-black">Email</TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
                             <Button variant="ghost" size="sm" onClick={() => handleSelectConversation(chat)} className="text-[#B89555] hover:text-[#B89555]/80 hover:bg-[#B89555]/10 cursor-pointer active:scale-95 transition-all">
@@ -1104,7 +1104,7 @@ const AdminLeads = () => {
 
       {/* Lead Detail Modal */}
       <Dialog open={!!selectedLead} onOpenChange={() => setSelectedLead(null)}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/40 text-black max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/40 text-black max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader className="flex-shrink-0">
             <DialogTitle className="text-xl font-bold flex items-center gap-3">
               {selectedLead?.full_name || "Lead Details"}
@@ -1123,7 +1123,7 @@ const AdminLeads = () => {
                 <Button size="sm" onClick={() => toggleVip(selectedLead.id, selectedLead.vip)}
                   className={selectedLead.vip 
                     ? "bg-yellow-500 hover:bg-yellow-600 text-black font-semibold" 
-                    : "bg-[#EDE4D3] hover:bg-[#D4C4A8] text-black border border-[#B89555]/30 font-semibold"}>
+                    : "bg-[#EFE6D6] hover:bg-[#D8C7A6] text-black border border-[#B89555]/30 font-semibold"}>
                   <Star className={`w-3 h-3 mr-1 ${selectedLead.vip ? 'fill-black' : ''}`} />
                   {selectedLead.vip ? 'Remove VIP' : 'Mark as VIP'}
                 </Button>
@@ -1131,7 +1131,7 @@ const AdminLeads = () => {
               </div>
 
               {/* Tab bar */}
-              <div className="flex gap-1 bg-[#EDE4D3] rounded-lg p-1 flex-shrink-0 border border-[#B89555]/30">
+              <div className="flex gap-1 bg-[#EFE6D6] rounded-lg p-1 flex-shrink-0 border border-[#B89555]/30">
                 <button onClick={() => setLeadDetailTab("details")}
                   className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${leadDetailTab === "details" ? "bg-white text-black shadow" : "text-black/60 hover:text-black"}`}>
                   <span className="flex items-center justify-center gap-2"><Eye className="w-3.5 h-3.5" />Lead Details</span>
@@ -1146,7 +1146,7 @@ const AdminLeads = () => {
                 {leadDetailTab === "details" ? (
                   <div className="space-y-5">
                     {/* Contact Quick Actions */}
-                    <div className="flex flex-wrap gap-2 p-4 bg-[#EDE4D3] rounded-xl border border-[#B89555]/30">
+                    <div className="flex flex-wrap gap-2 p-4 bg-[#EFE6D6] rounded-xl border border-[#B89555]/30">
                       <a href={`https://wa.me/${selectedLead.phone_e164?.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer"
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all cursor-pointer active:scale-95 font-semibold ${selectedLead.phone_e164 ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-black/5 text-black/30 cursor-not-allowed'}`}
                         onClick={(e) => !selectedLead.phone_e164 && e.preventDefault()}>

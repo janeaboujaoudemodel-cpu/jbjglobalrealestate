@@ -232,16 +232,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const pillBase = "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-[13px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[200px] flex-shrink-0";
   const pillInactive = isDark
     ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
-    : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 text-black hover:border-gold/60";
+    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 text-black hover:border-gold/60";
   const pillActive = isDark
     ? "bg-white text-black border border-white shadow-lg"
-    : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black font-bold shadow-md";
+    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black font-bold shadow-md";
 
-  const popoverClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[10200] shadow-xl";
+  const popoverClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[10200] shadow-xl";
 
   const togglePillBase = "px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer";
   const togglePillOff = "border-gold/30 text-black/70 bg-white/60 hover:bg-white";
-  const togglePillOn = "border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black font-bold";
+  const togglePillOn = "border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black font-bold";
 
   const handleSaveFilter = (name: string) => {
     const saved = JSON.parse(localStorage.getItem('jbj-saved-filters') || '[]');
@@ -251,7 +251,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
   const CountBadge = ({ count }: { count: number }) =>
     count > 0 ? (
-      <span className="ml-1 w-5 h-5 rounded-full bg-gradient-to-r from-[#D4C4A8] to-[#C8A766] text-white text-[10px] font-bold flex items-center justify-center">
+      <span className="ml-1 w-5 h-5 rounded-full bg-gradient-to-r from-[#D8C7A6] to-[#C8A766] text-white text-[10px] font-bold flex items-center justify-center">
         +{count}
       </span>
     ) : null;
@@ -340,7 +340,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   className={cn(
                     "px-3 py-1 rounded-full text-xs font-medium border transition-all",
                     filters.priceMax === p.value
-                      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold text-black font-bold"
+                      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black font-bold"
                       : "bg-white/80 text-black border-gold/30 hover:border-gold"
                   )}
                 >
@@ -489,8 +489,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               }}
             >
               <TabsList className="w-full mb-3 bg-white/60">
-                <TabsTrigger value="residential" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F5F0E6] data-[state=active]:to-[#EDE4D3] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">{t('filter.residential')}</TabsTrigger>
-                <TabsTrigger value="commercial" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F5F0E6] data-[state=active]:to-[#EDE4D3] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">{t('filter.commercial')}</TabsTrigger>
+                <TabsTrigger value="residential" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F7F2EA] data-[state=active]:to-[#EFE6D6] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">{t('filter.residential')}</TabsTrigger>
+                <TabsTrigger value="commercial" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F7F2EA] data-[state=active]:to-[#EFE6D6] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">{t('filter.commercial')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="flex flex-wrap gap-2">
@@ -620,7 +620,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             pillBase, "px-3 py-1.5",
             filters.hideSoldOut
               ? "bg-red-50 border-2 border-red-500 text-red-600 font-bold shadow-md"
-              : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-red-300/50 text-red-600/80 hover:border-red-400"
+              : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-red-300/50 text-red-600/80 hover:border-red-400"
           )}
         >
           {t('filter.hideSold')}
@@ -745,13 +745,13 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
   return (
     <Popover open={savedOpen} onOpenChange={setSavedOpen}>
       <PopoverTrigger asChild>
-        <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black/70 hover:border-gold/60 flex-shrink-0" title="View saved filters">
+        <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black/70 hover:border-gold/60 flex-shrink-0" title="View saved filters">
           <Bookmark className="w-3.5 h-3.5 text-black fill-black" />
           <span className="hidden sm:inline">{t('filter.savedFilters')}</span>
         </button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-72 p-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 z-[10200] shadow-xl"
+        className="w-72 p-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[10200] shadow-xl"
         side="bottom"
         align="end"
         sideOffset={6}

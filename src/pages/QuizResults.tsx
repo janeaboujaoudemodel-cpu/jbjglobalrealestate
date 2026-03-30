@@ -121,7 +121,7 @@ const QuizResults = () => {
     .developer { color: #B89555; font-size: 14px; font-weight: 600; }
     .rank { font-size: 28px; font-weight: bold; color: #B89555; }
     .details { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
-    .detail-item { background: #F5F0E6; padding: 12px; border-radius: 8px; border: 1px solid #B8955520; }
+    .detail-item { background: #F7F2EA; padding: 12px; border-radius: 8px; border: 1px solid #B8955520; }
     .detail-label { color: #888; font-size: 12px; margin-bottom: 4px; }
     .detail-value { font-size: 14px; font-weight: 600; color: #1a1a1a; }
     .footer { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 2px solid #B89555; color: #666; }
@@ -235,7 +235,7 @@ Best regards`);
 
   if (isLoading) {
     return (
-      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center">
+      <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
         <div className="text-center">
           <Sparkles className="w-12 h-12 text-[#B89555] mx-auto mb-4 animate-pulse" />
           <p className="text-stone-800 text-xl font-semibold">Finding your perfect matches...</p>
@@ -245,7 +245,7 @@ Best regards`);
   }
 
   return (
-    <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-12 md:py-20">
+    <section className="min-h-screen bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-12 md:py-20">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
@@ -265,7 +265,7 @@ Best regards`);
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button
               onClick={handleDownloadReport}
-              className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-stone-900 hover:brightness-95 font-semibold shadow-md border-2 border-[#B89555]"
+              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 font-semibold shadow-md border-2 border-[#B89555]"
             >
               <Download className="w-4 h-4 mr-2" />
               Download Report
@@ -314,7 +314,7 @@ Best regards`);
                   <p className="text-stone-600 mb-6">{projects[0].location}, {projects[0].emirate}</p>
                   
                   <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="bg-[#F5F0E6] rounded-xl p-4 border border-[#B89555]/20">
+                    <div className="bg-[#F7F2EA] rounded-xl p-4 border border-[#B89555]/20">
                       <p className="text-stone-500 text-sm">Price From</p>
                       <p className="text-stone-900 text-xl font-semibold">
                         {projects[0].price_from
@@ -322,7 +322,7 @@ Best regards`);
                           : "Price on Request"}
                       </p>
                     </div>
-                    <div className="bg-[#F5F0E6] rounded-xl p-4 border border-[#B89555]/20">
+                    <div className="bg-[#F7F2EA] rounded-xl p-4 border border-[#B89555]/20">
                       <p className="text-stone-500 text-sm">Bedrooms</p>
                       <p className="text-stone-900 text-xl font-semibold">
                         {projects[0].bedrooms_min != null && projects[0].bedrooms_max != null
@@ -363,7 +363,7 @@ Best regards`);
                   </div>
                   
                   <Link to={`/project/${projects[0].slug}`}>
-                    <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-stone-900 hover:brightness-95 w-full md:w-auto border-2 border-[#B89555] font-semibold">
+                    <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 w-full md:w-auto border-2 border-[#B89555] font-semibold">
                       View Property
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
@@ -514,7 +514,7 @@ Best regards`);
         <div className="text-center">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
             <Link to="/">
-              <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-stone-900 hover:brightness-95 font-semibold px-6 py-3 border-2 border-[#B89555]">
+              <Button className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-stone-900 hover:brightness-95 font-semibold px-6 py-3 border-2 border-[#B89555]">
                 Browse All Properties
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -542,7 +542,7 @@ Best regards`);
           </DialogHeader>
 
           <div className="space-y-4 mt-4">
-            <div className="bg-[#F5F0E6] rounded-lg p-4 border border-[#B89555]/20">
+            <div className="bg-[#F7F2EA] rounded-lg p-4 border border-[#B89555]/20">
               <p className="text-stone-500 text-xs mb-3">Properties to share:</p>
               {projects?.map((p, i) => {
                 const badge = badges[p.id];

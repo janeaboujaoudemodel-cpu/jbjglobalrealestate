@@ -17,7 +17,7 @@ export function BrokerToolkitReferral() {
   return (
     <section className="py-8 md:py-10 bg-black">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-6 md:p-10">
+        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6 md:p-10">
           <motion.div
             className="text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
@@ -38,7 +38,7 @@ export function BrokerToolkitReferral() {
 
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
                 <CardContent className="p-6 flex flex-col flex-1">
                   <div className="w-14 h-14 rounded-xl bg-transparent border-2 border-gold/40 flex items-center justify-center mb-4">
                     <GraduationCap className="w-7 h-7 text-gold" />
@@ -54,7 +54,7 @@ export function BrokerToolkitReferral() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
                 <CardContent className="p-6 flex flex-col flex-1">
                   <div className="w-14 h-14 rounded-xl bg-transparent border-2 border-gold/40 flex items-center justify-center mb-4">
                     <Briefcase className="w-7 h-7 text-gold" />
@@ -70,7 +70,7 @@ export function BrokerToolkitReferral() {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 hover:border-gold shadow-lg hover:shadow-[0_0_30px_rgba(200,167,102,0.3)] transition-all duration-300 h-full flex flex-col">
                 <CardContent className="p-6 flex flex-col flex-1">
                   <div className="w-14 h-14 rounded-xl bg-transparent border-2 border-gold/40 flex items-center justify-center mb-4">
                     <Award className="w-7 h-7 text-gold" />
@@ -99,7 +99,7 @@ export function BrokerToolkitReferral() {
                       JBJ GLOBAL REAL ESTATE
                     </span>
                   </div>
-                  <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 rounded-full shadow-lg mb-4">
+                  <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 rounded-full shadow-lg mb-4">
                     <Handshake className="w-3.5 h-3.5 text-black" />
                     <span className="text-black text-xs uppercase tracking-wider font-medium">How Referral Works</span>
                   </span>
@@ -117,7 +117,7 @@ export function BrokerToolkitReferral() {
                     { step: 4, title: "Start Referring", desc: "Refer clients and earn commission on deals" },
                   ].map((item, idx) => (
                     <div key={item.step} className="text-center">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)', border: '2px solid rgba(200,167,102,0.6)' }}>
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3" style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F7F2EA 100%)', border: '2px solid rgba(200,167,102,0.6)' }}>
                         <span className={`font-bold text-lg ${idx % 2 === 0 ? 'text-black' : 'text-gold'}`}>{item.step}</span>
                       </div>
                       <h4 className="text-white font-semibold mb-1">{item.title}</h4>
@@ -127,12 +127,12 @@ export function BrokerToolkitReferral() {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6 mb-8">
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6">
                     <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3">Passive Referral — 2.5%</Badge>
                     <h4 className="text-black font-bold text-lg mb-2">Share Contact Details Only</h4>
                     <p className="text-zinc-600 text-sm">Simply provide us with your contact's details. We'll reach out discreetly without mentioning your name.</p>
                   </div>
-                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6">
+                  <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6">
                     <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3">Active Referral — 5%</Badge>
                     <h4 className="text-black font-bold text-lg mb-2">Facilitate the Introduction</h4>
                     <p className="text-zinc-600 text-sm">Introduce your contact directly to us. Help convince them to invest — earn double!</p>
@@ -141,7 +141,7 @@ export function BrokerToolkitReferral() {
 
                 <div className="text-center">
                   <Link to="/referral-onboarding">
-                    <button className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden" style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)', border: '2px solid rgba(200,167,102,0.5)', boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.2), 0 0 20px rgba(200,167,102,0.3)' }}>
+                    <button className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden" style={{ background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F7F2EA 100%)', border: '2px solid rgba(200,167,102,0.5)', boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.2), 0 0 20px rgba(200,167,102,0.3)' }}>
                       <span className="relative flex items-center justify-center gap-2">
                         <DollarSign className="w-5 h-5 text-gold" />
                         <span className="text-gold">Become</span>

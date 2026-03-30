@@ -765,7 +765,7 @@ const UserProfile = () => {
       
       {/* Email Change Dialog - OTP Based */}
       <Dialog open={showEmailChangeDialog} onOpenChange={handleEmailDialogClose}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 w-full max-w-[calc(100vw-2rem)] sm:max-w-md mx-auto max-h-[calc(100dvh-2rem)] overflow-y-auto p-4 sm:p-6">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 w-full max-w-[calc(100vw-2rem)] sm:max-w-md mx-auto max-h-[calc(100dvh-2rem)] overflow-y-auto p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle className="text-foreground flex items-center gap-2">
               <Mail className="h-5 w-5 text-gold" />
@@ -897,7 +897,7 @@ const UserProfile = () => {
 
       {/* Premium Account Lifecycle Dialogs */}
       <AlertDialog open={accountDialogType === 'deactivate'} onOpenChange={(open) => !open && setAccountDialogType(null)}>
-        <AlertDialogContent className="relative w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+        <AlertDialogContent className="relative w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
           <button
             type="button"
             aria-label="Close"
@@ -957,7 +957,7 @@ const UserProfile = () => {
       </AlertDialog>
 
       <AlertDialog open={accountDialogType === 'delete'} onOpenChange={(open) => !open && setAccountDialogType(null)}>
-        <AlertDialogContent className="relative w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+        <AlertDialogContent className="relative w-full max-w-[calc(100vw-1.5rem)] sm:max-w-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
           <button
             type="button"
             aria-label="Close"

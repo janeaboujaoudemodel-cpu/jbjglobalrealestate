@@ -425,7 +425,7 @@ const SupportTicketBox = () => {
           transition={{ duration: 0.6 }}
         >
           {/* Main Card - Full width inside champagne layer, no max-w constraint */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl md:rounded-2xl border border-gold/40 md:border-2 md:border-gold shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-gold/40 md:border-2 md:border-gold shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
@@ -491,7 +491,7 @@ const SupportTicketBox = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                       <Button
-                        className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/50 px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group"
+                        className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-2 border-gold/50 px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group"
                         style={{
                           textShadow: 'none',
                           boxShadow: `
@@ -517,8 +517,8 @@ const SupportTicketBox = () => {
                       </Button>
                     </DialogTrigger>
 
-                      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-2xl max-h-[90vh] z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                      <DialogHeader className="flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] z-10 pb-4 px-6 pt-6 border-b border-gold/20">
+                      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold max-w-2xl max-h-[90vh] z-[10050] flex flex-col overflow-hidden shadow-[0_8px_40px_rgba(200,167,102,0.4),0_4px_20px_rgba(0,0,0,0.2)] p-0 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                      <DialogHeader className="flex-shrink-0 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] z-10 pb-4 px-6 pt-6 border-b border-gold/20">
                         <DialogTitle className="text-black text-xl font-bold flex items-center gap-2">
                           <PremiumHeadsetIcon size={20} color="#ef4444" />
                           {isSubmitted ? "Ticket Created!" : "Create Support Ticket"}
@@ -717,7 +717,7 @@ const SupportTicketBox = () => {
                                  initial={{ opacity: 0, y: 10 }}
                                  animate={{ opacity: 1, y: 0 }}
                                  transition={{ delay: 0.65 }}
-                                 className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 rounded-xl p-4 mb-4"
+                                 className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30 rounded-xl p-4 mb-4"
                                >
                                  <p className="text-sm font-bold text-black mb-3 text-center">Explore While You Wait</p>
                                  <div className="grid grid-cols-2 gap-2">
@@ -781,7 +781,7 @@ const SupportTicketBox = () => {
                                     <motion.div
                                       initial={{ scale: 0.8, opacity: 0 }}
                                       animate={{ scale: 1, opacity: 1 }}
-                                      className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl p-10 shadow-[0_8px_40px_rgba(200,167,102,0.4)] border-2 border-gold text-center flex flex-col items-center max-w-sm mx-4"
+                                      className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl p-10 shadow-[0_8px_40px_rgba(200,167,102,0.4)] border-2 border-gold text-center flex flex-col items-center max-w-sm mx-4"
                                     >
                                       <img 
                                         src="/jbj-monogram-dark-on-light.png" 
@@ -1206,7 +1206,7 @@ const SupportTicketBox = () => {
                               disabled={isSubmitting}
                               className="w-full relative inline-flex items-center justify-center gap-2 py-5 font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] transform active:scale-95 group disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100"
                               style={{
-                                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                                background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
                                 border: '2px solid rgba(200,167,102,0.6)',
                                 boxShadow: `
                                   0 10px 30px rgba(200,167,102,0.4),

@@ -126,7 +126,7 @@ const Presentations = () => {
           <button onClick={h.saveToStorage} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-all"><Save className="w-3.5 h-3.5" /> Save</button>
           <button onClick={() => { navigator.clipboard.writeText(window.location.href); toast.success("Link copied"); }} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-all"><Share2 className="w-3.5 h-3.5" /> Share</button>
           <div className="relative">
-            <button onClick={() => h.setShowExportMenu(!h.showExportMenu)} disabled={h.isExporting} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all border border-[#B89555]/60 disabled:opacity-50" style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)", color: "#1e293b" }}>
+            <button onClick={() => h.setShowExportMenu(!h.showExportMenu)} disabled={h.isExporting} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all border border-[#B89555]/60 disabled:opacity-50" style={{ background: "linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)", color: "#1e293b" }}>
               {h.isExporting ? <span className="animate-pulse">Exporting...</span> : <><FileDown className="w-3.5 h-3.5" /> Export</>}
             </button>
             {h.showExportMenu && (
@@ -135,7 +135,7 @@ const Presentations = () => {
               </div>
             )}
           </div>
-          <button onClick={h.startPresentation} className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold rounded-lg transition-all border border-[#B89555]/60" style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)", color: "#1e293b" }}><Play className="w-3.5 h-3.5" /> Present</button>
+          <button onClick={h.startPresentation} className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold rounded-lg transition-all border border-[#B89555]/60" style={{ background: "linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)", color: "#1e293b" }}><Play className="w-3.5 h-3.5" /> Present</button>
         </div>
       </div>
 

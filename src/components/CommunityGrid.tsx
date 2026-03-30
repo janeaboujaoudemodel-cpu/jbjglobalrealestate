@@ -47,7 +47,7 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
             
             {/* Premium badge - Champagne with gold accent */}
             {isPremium && (
-              <div className="absolute top-3 right-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-gold/40 shadow-md">
+              <div className="absolute top-3 right-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-sm text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-gold/40 shadow-md">
                 <TrendingUp className="w-3 h-3 text-gold" />
                 <span className="text-black">Trending</span>
               </div>

@@ -364,7 +364,7 @@ export const RateLimitDashboard = () => {
         ) : (
           <ScrollArea className="h-[400px]">
             <table className="w-full">
-              <thead className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] sticky top-0">
+              <thead className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] sticky top-0">
                 <tr>
                   <th className="text-left text-black/60 font-medium px-6 py-3 text-sm">Function</th>
                   <th className="text-left text-black/60 font-medium px-6 py-3 text-sm">IP / Key</th>

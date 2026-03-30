@@ -86,9 +86,9 @@ const quarterlyArchive = [
 const SectionWrapper = ({ id, children }: { id: string; children: React.ReactNode }) => (
   <section id={id} className="scroll-mt-24">
     {/* Layer 2: Active Champagne with thin black contour */}
-    <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-3 shadow-lg">
+    <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-2xl p-3 shadow-lg">
       {/* Layer 3: Champagne Card with gold border */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-8 border-2 border-gold/40">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl p-8 border-2 border-gold/40">
         {children}
       </div>
     </div>
@@ -358,7 +358,7 @@ const MarketReportsPage = () => {
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.1 }}
                     >
-                      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] hover:scale-[1.02] transition-all h-full group">
+                      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_25px_rgba(200,167,102,0.4)] hover:scale-[1.02] transition-all h-full group">
                         <CardContent className="p-6 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-4">
                             {getTypeBadge(report.type)}
@@ -415,10 +415,10 @@ const MarketReportsPage = () => {
 
                 <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                   {/* Monthly Reports Selector */}
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center border border-gold/30">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center border border-gold/30">
                           <Calendar className="w-6 h-6 text-gold" />
                         </div>
                         <div>
@@ -456,10 +456,10 @@ const MarketReportsPage = () => {
                   </Card>
 
                   {/* Quarterly Reports Selector */}
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold hover:shadow-[0_0_20px_rgba(200,167,102,0.3)] transition-all">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center border border-gold/30">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center border border-gold/30">
                           <FileText className="w-6 h-6 text-gold" />
                         </div>
                         <div>
@@ -518,8 +518,8 @@ const MarketReportsPage = () => {
 
               {/* Custom Report CTA */}
               <section id="custom-report" className="scroll-mt-24">
-                <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl p-3 shadow-lg">
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 overflow-hidden">
+                <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-2xl p-3 shadow-lg">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 overflow-hidden">
                     <CardContent className="p-8 md:p-10 text-center relative">
                       <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-gold/20 to-transparent rounded-full -translate-x-1/2 -translate-y-1/2" />
                       <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-gold/15 to-transparent rounded-full translate-x-1/2 translate-y-1/2" />
@@ -561,13 +561,13 @@ const MarketReportsPage = () => {
       <div className="h-1 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_20px_rgba(200,167,102,0.5)]" />
 
       {/* Market Intelligence Navigation */}
-      <section id="navigation" className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] scroll-mt-24 mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl">
+      <section id="navigation" className="py-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] scroll-mt-24 mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl">
         <div className="container mx-auto px-4">
           <MarketIntelligenceNavigation current="/market-intelligence/reports" />
           
           {/* Disclaimer Box */}
           <div className="max-w-3xl mx-auto mt-8">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 text-center">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 text-center">
               <div className="flex items-center justify-center gap-4 mb-4">
                 <Database className="w-5 h-5 text-gold" />
                 <Shield className="w-5 h-5 text-gold" />

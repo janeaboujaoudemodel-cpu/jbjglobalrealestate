@@ -243,7 +243,7 @@ export function ProvidentPortalHub() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 rounded-xl p-5">
+      <div className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 rounded-xl p-5">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-foreground font-bold text-lg flex items-center gap-2">

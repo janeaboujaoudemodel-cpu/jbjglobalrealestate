@@ -140,7 +140,7 @@ function AIScriptWriterButton({ onScriptGenerated, language = 'en' }: { onScript
 /** Premium section card wrapper */
 function SuiteCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <Card className={`bg-gradient-to-br from-[#FDFBF7]/[0.03] via-[#F5F0E6]/[0.02] to-transparent border-gold/15 shadow-[0_4px_20px_rgba(0,0,0,0.3)] ${className}`}>
+    <Card className={`bg-gradient-to-br from-[#FDFBF7]/[0.03] via-[#F7F2EA]/[0.02] to-transparent border-gold/15 shadow-[0_4px_20px_rgba(0,0,0,0.3)] ${className}`}>
       {children}
     </Card>
   );

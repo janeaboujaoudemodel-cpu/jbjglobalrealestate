@@ -306,7 +306,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               <Link to="/profile" onClick={onClose} className="w-16 h-16 flex-shrink-0 cursor-pointer group">
                 <Avatar className="h-16 w-16 border border-gold bg-transparent group-hover:border-gold/80 transition-all group-hover:ring-2 group-hover:ring-gold/30">
                   <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
-                  <AvatarFallback className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold text-black text-xl font-bold">
+                  <AvatarFallback className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold text-black text-xl font-bold">
                     {avatarInitials}
                   </AvatarFallback>
                 </Avatar>
@@ -342,7 +342,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               <div className="flex flex-col items-end gap-2 shrink-0">
                 {/* Mode selector card */}
                 <div 
-                  className="flex flex-col items-center gap-1.5 px-3 py-2 rounded-lg border border-gold/30 bg-gradient-to-br from-[#FDFBF7]/10 via-[#F5F0E6]/5 to-[#EDE4D3]/10"
+                  className="flex flex-col items-center gap-1.5 px-3 py-2 rounded-lg border border-gold/30 bg-gradient-to-br from-[#FDFBF7]/10 via-[#F7F2EA]/5 to-[#EFE6D6]/10"
                   onClick={(e) => e.stopPropagation()} 
                   onPointerDown={(e) => e.stopPropagation()}
                   onMouseDown={(e) => e.stopPropagation()}
@@ -558,7 +558,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                   {showSearchDropdown && (
                     <div
                       className="absolute right-0 top-10 w-72 rounded-xl border-2 border-gold/30 shadow-2xl z-[10001] overflow-hidden"
-                      style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}
+                      style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}
                       onClick={(e) => e.stopPropagation()}
                       onPointerDown={(e) => e.stopPropagation()}
                     >
@@ -658,7 +658,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       className={cn(
                         "py-1.5 rounded-lg text-[10px] font-medium transition-colors text-center tracking-wide flex flex-col items-center gap-0.5",
                         activeCurrency === cur.code
-                          ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm"
+                          ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#C8A766]/60 shadow-sm"
                           : "bg-champagne-light text-black hover:bg-champagne"
                       )}
                     >
@@ -686,7 +686,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       className={cn(
                         "flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors tracking-wider",
                         areaUnit === unit
-                          ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 shadow-sm"
+                          ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#C8A766]/60 shadow-sm"
                           : "bg-champagne-light text-black hover:bg-champagne"
                       )}
                     >
@@ -716,7 +716,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               {showLangDropdown && (
                 <div
                   className="absolute left-0 right-0 bottom-full mb-1 rounded-xl border-2 border-gold/30 shadow-2xl z-[10001] p-2 max-h-64 overflow-y-auto"
-                  style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}
+                  style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}
                   onClick={(e) => e.stopPropagation()}
                   onPointerDown={(e) => e.stopPropagation()}
                 >

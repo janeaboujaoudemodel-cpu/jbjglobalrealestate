@@ -225,27 +225,27 @@ export function AIBrokersDashboard() {
         <TabsList className="bg-white/80 border-2 border-gold/30">
           <TabsTrigger
             value="brokers"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black"
           >
             Brokers
           </TabsTrigger>
           <TabsTrigger
             value="pipelines"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black"
           >
             <PieChart className="h-4 w-4 mr-2" />
             Pipeline Analytics
           </TabsTrigger>
           <TabsTrigger
             value="assignment"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black"
           >
             <Settings className="h-4 w-4 mr-2" />
             Lead Assignment
           </TabsTrigger>
           <TabsTrigger
             value="filters"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black"
           >
             <Shield className="h-4 w-4 mr-2" />
             Message Filters

@@ -258,7 +258,7 @@ const JobOfferManager = () => {
               <TabsTrigger 
                 key={dept} 
                 value={dept}
-                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-muted-foreground text-xs px-3 py-1.5 whitespace-nowrap"
+                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-muted-foreground text-xs px-3 py-1.5 whitespace-nowrap"
               >
                 {dept}
                 {getOffersByDepartment(dept).length > 0 && (

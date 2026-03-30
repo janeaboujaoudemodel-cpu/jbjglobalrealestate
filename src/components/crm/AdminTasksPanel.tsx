@@ -181,7 +181,7 @@ export function AdminTasksPanel() {
 
   if (loading) {
     return (
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-6">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6">
         <div className="flex items-center justify-center py-8">
           <Clock className="w-6 h-6 animate-spin text-gold" />
         </div>
@@ -191,7 +191,7 @@ export function AdminTasksPanel() {
 
   if (loadError) {
     return (
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-6">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6">
         <div className="flex items-center gap-2 mb-4">
           <AlertTriangle className="w-5 h-5 text-red-500" />
           <h3 className="font-semibold text-black">My Tasks</h3>
@@ -205,7 +205,7 @@ export function AdminTasksPanel() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl shadow-lg">
+    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl shadow-lg">
       {/* Header */}
       <div className="flex items-center justify-between p-5 border-b border-gold/20">
         <div className="flex items-center gap-3">

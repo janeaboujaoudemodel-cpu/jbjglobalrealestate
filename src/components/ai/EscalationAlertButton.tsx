@@ -87,7 +87,7 @@ export function EscalationAlertButton({
         sideOffset={16}
       >
         {/* Header */}
-        <div className="p-4 border-b border-[#B89555]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] rounded-t-md">
+        <div className="p-4 border-b border-[#B89555]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] rounded-t-md">
           <div className="flex items-center gap-2">
             <Zap className="h-5 w-5 text-[#B89555]" />
             <span className="font-semibold text-black">Escalations</span>

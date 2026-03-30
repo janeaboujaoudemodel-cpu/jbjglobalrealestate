@@ -69,7 +69,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
         align="end" 
         sideOffset={12}
         className="z-[9999] min-w-[280px] rounded-xl shadow-2xl p-0 border-2 border-gold/40"
-        style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
       >
         <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
         <div className="px-4 py-3 border-b border-gold/20">
@@ -83,7 +83,7 @@ const CurrencySwitcher = ({ variant = 'default' }: CurrencySwitcherProps) => {
               className={`flex items-center justify-between cursor-pointer rounded-lg px-4 py-3 my-0.5 ${
                 currency === curr.code 
                   ? 'bg-gold/15 border border-gold/30' 
-                  : 'hover:bg-gradient-to-r hover:from-[#F5EBD7] hover:to-[#E8DCC8]'
+                  : 'hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2]'
               }`}
             >
               <span className="flex items-center gap-3">

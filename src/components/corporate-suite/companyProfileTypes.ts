@@ -55,7 +55,7 @@ export const TEMPLATES: TemplateConfig[] = [
 export const DEFAULT_PALETTE: PaletteColor[] = [
   { hex: "#1a1a1a", name: "Primary",    role: "primary",    opacity: 100 },
   { hex: "#C8A766", name: "Secondary",  role: "secondary",  opacity: 100 },
-  { hex: "#F5F0E6", name: "Accent",     role: "accent",     opacity: 100 },
+  { hex: "#F7F2EA", name: "Accent",     role: "accent",     opacity: 100 },
   { hex: "#ffffff", name: "Background", role: "background", opacity: 100 },
   { hex: "#374151", name: "Text",       role: "text",       opacity: 100 },
 ];

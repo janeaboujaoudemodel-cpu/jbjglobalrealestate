@@ -262,7 +262,7 @@ const Index = () => {
               variants={fadeInUp}
               className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1] mb-6"
               style={{
-                background: "linear-gradient(135deg, #FFFFFF 0%, #E8DCC8 40%, #C8A766 100%)",
+                background: "linear-gradient(135deg, #FFFFFF 0%, #ECE2D2 40%, #C8A766 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 fontFamily: "Poppins, sans-serif",
@@ -450,7 +450,7 @@ const Index = () => {
               
               {/* Card with premium 3D glassmorphism */}
               <div 
-                className="relative z-10 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/60 transition-all duration-300 hover:shadow-[0_0_80px_hsl(var(--gold)_/_0.3)]"
+                className="relative z-10 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/60 transition-all duration-300 hover:shadow-[0_0_80px_hsl(var(--gold)_/_0.3)]"
                 style={{
                   boxShadow: '0 0 60px hsl(var(--gold) / 0.25), 0 0 120px hsl(var(--gold) / 0.1), 0 30px 80px rgba(0,0,0,0.5), 0 4px 20px rgba(200,167,102,0.15), inset 0 1px 0 hsl(var(--gold) / 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
                   transform: 'translateZ(20px)',
@@ -509,7 +509,7 @@ const Index = () => {
       {/* MORTGAGE CALCULATOR SECTION */}
       <section>
         <div className="jj-layer-2">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl relative overflow-hidden">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-24 md:w-48 h-24 md:h-48 bg-gold/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
             

@@ -31,7 +31,7 @@ const OwnerFounderSettings = () => {
       </div>
 
       {/* Podcast Studio Quick Access */}
-      <Card className="border-2 border-[#B89555]/20 bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6] shadow-sm">
+      <Card className="border-2 border-[#B89555]/20 bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA] shadow-sm">
         <CardHeader className="pb-3">
           <CardTitle className="text-base font-bold text-black flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-[#B89555]/15 flex items-center justify-center">
@@ -66,7 +66,7 @@ const OwnerFounderSettings = () => {
       </Card>
 
       {/* Info Section */}
-      <div className="rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-6 space-y-5 shadow-sm">
+      <div className="rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-6 space-y-5 shadow-sm">
         <h3 className="text-base font-bold text-black flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-[#B89555]/15 flex items-center justify-center">
             <Info className="w-4 h-4 text-[#B89555]" />

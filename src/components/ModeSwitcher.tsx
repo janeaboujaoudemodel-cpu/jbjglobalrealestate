@@ -141,11 +141,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         
         <DropdownMenuContent 
           align="end" 
-          className="w-72 mr-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 shadow-xl rounded-xl p-2 z-[10001]"
+          className="w-72 mr-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 shadow-xl rounded-xl p-2 z-[10001]"
           sideOffset={5}
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <div className="px-3 py-2.5 mb-2 rounded-lg bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#D4C4A8] border border-gold/40">
+          <div className="px-3 py-2.5 mb-2 rounded-lg bg-gradient-to-r from-[#F7F1E6] via-[#EDE0C8] to-[#D8C7A6] border border-gold/40">
             <p className="text-sm font-bold text-black/80">
               Select your mode
             </p>

@@ -27,7 +27,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     label: "All Leads", 
     icon: Inbox, 
     color: "text-black",
-    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-gold/30",
     statuses: [] 
   },
   { 
@@ -35,7 +35,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     label: "New", 
     icon: Star, 
     color: "text-black",
-    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-gold/30",
     statuses: ["new"] 
   },
   { 
@@ -43,7 +43,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     label: "Hot Leads", 
     icon: TrendingUp, 
     color: "text-emerald-700",
-    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-gold/30",
     statuses: ["interested", "qualified", "negotiation"] 
   },
   { 
@@ -51,7 +51,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     label: "Follow-up", 
     icon: Clock, 
     color: "text-black",
-    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-gold/30",
     statuses: ["no_answer", "callback", "followup"] 
   },
   { 
@@ -59,7 +59,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     label: "Won", 
     icon: CheckCircle, 
     color: "text-emerald-700",
-    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-gold/30",
     statuses: ["closed_won"] 
   },
   { 
@@ -67,7 +67,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     label: "Lost", 
     icon: XCircle, 
     color: "text-red-700",
-    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-gold/30",
     statuses: ["not_interested", "closed_lost", "do_not_contact"] 
   },
   { 
@@ -75,7 +75,7 @@ const QUICK_FILTERS: QuickFilter[] = [
     label: "Invalid", 
     icon: Trash2, 
     color: "text-red-700",
-    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] hover:from-[#F5F0E6] hover:to-[#E8DCC8] border-gold/30",
+    bgColor: "bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] hover:from-[#F7F2EA] hover:to-[#ECE2D2] border-gold/30",
     statuses: ["junk"] 
   },
 ];

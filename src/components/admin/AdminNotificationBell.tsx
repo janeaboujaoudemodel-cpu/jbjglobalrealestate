@@ -113,7 +113,7 @@ export function AdminNotificationBell() {
         align="end"
         sideOffset={8}
       >
-        <div className="flex items-center justify-between p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6]">
+        <div className="flex items-center justify-between p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
           <h3 className="text-black font-semibold text-sm flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-gold" />
             System Alerts

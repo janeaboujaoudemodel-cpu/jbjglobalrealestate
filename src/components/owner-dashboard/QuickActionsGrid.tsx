@@ -48,7 +48,7 @@ export default function QuickActionsGrid() {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
+    <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-black mb-4">Quick Actions</h3>
       <TooltipProvider delayDuration={200}>
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">

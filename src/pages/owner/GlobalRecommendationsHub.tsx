@@ -283,7 +283,7 @@ export default function GlobalRecommendationsHub() {
               onClick={() => setActiveStatus(status)}
             className={`capitalize ${
                 activeStatus === status
-                  ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#B89555]/40 shadow-sm"
+                  ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#B89555]/40 shadow-sm"
                   : "bg-white text-zinc-600 border border-gold/20 hover:border-gold/40"
               }`}
             >
@@ -301,7 +301,7 @@ export default function GlobalRecommendationsHub() {
             onClick={() => setActiveSource(section.id)}
             className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all ${
               activeSource === section.id
-                ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#B89555]/40 shadow-sm"
+                ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#B89555]/40 shadow-sm"
                 : "bg-white border border-gold/20 text-zinc-600 hover:border-gold/40"
             }`}
           >
@@ -450,7 +450,7 @@ export default function GlobalRecommendationsHub() {
 
       {/* Preview/Apply Dialog */}
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30">
+        <DialogContent className="max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
               <Eye className="w-5 h-5 text-gold" />

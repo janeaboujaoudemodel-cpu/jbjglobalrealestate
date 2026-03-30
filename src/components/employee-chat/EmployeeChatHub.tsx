@@ -272,7 +272,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
 
       {/* Chat Area */}
       <div className={cn(
-        "flex-1 flex flex-col bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6]/30 to-[#EDE4D3]/20",
+        "flex-1 flex flex-col bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA]/30 to-[#EFE6D6]/20",
         !showSidebar ? "flex" : "hidden md:flex"
       )}>
         {selectedEmployeeData ? (

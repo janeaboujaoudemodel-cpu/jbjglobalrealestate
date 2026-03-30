@@ -109,7 +109,7 @@ const EmailHubStatusPanel = () => {
       </div>
 
       {/* Company Email */}
-      <div className="rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] p-4">
+      <div className="rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-4">
         <div className="flex items-center gap-3 mb-3">
           <Building2 className="w-4 h-4 text-[#B89555]" />
           <span className="text-sm font-semibold text-foreground">Company Email (jbj.ae)</span>
@@ -146,7 +146,7 @@ const EmailHubStatusPanel = () => {
       </div>
 
       {/* Personal Email */}
-      <div className="rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] p-4">
+      <div className="rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-4">
         <div className="flex items-center gap-3 mb-3">
           <User className="w-4 h-4 text-[#B89555]" />
           <span className="text-sm font-semibold text-foreground">Personal Email</span>
@@ -184,7 +184,7 @@ const EmailHubStatusPanel = () => {
       </div>
 
       {/* Last Sent */}
-      <div className="rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] p-4">
+      <div className="rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] p-4">
         <div className="flex items-center gap-3 mb-2">
           <Clock className="w-4 h-4 text-[#B89555]" />
           <span className="text-sm font-semibold text-foreground">Last Email Sent</span>

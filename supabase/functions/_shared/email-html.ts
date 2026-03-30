@@ -241,7 +241,7 @@ export function progressSteps(labels: [string, string, string], active: [boolean
 
 // ─── Team Reply Card ───
 export function teamReplyCard(teamLabel: string, replyMessage: string): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;overflow:hidden;"><tr><td style="padding:20px;"><p style="color:#C8A766;margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;">${teamLabel}</p><div style="color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;background:#fff;padding:18px;border-radius:18px;border:1px solid #ece6db;">${replyMessage}</div></td></tr></table>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;overflow:hidden;"><tr><td style="padding:20px;"><p style="color:#C8A766;margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;">${teamLabel}</p><div style="color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;background:#fff;padding:18px;border-radius:18px;border:1px solid #ece6db;">${replyMessage}</div></td></tr></table>`;
 }
 
 // ─── Inquiry Stages ───
@@ -263,7 +263,7 @@ export function ticketSummaryCard(rows: Array<{ label: string; value: string; hi
       return `<tr><td style="padding:8px 0;color:#555;font-size:13px;width:40%;border-right:1px solid #C8A76655;padding-right:12px;">${r.label}</td><td style="${valueStyle}">${r.value}</td></tr>`;
     })
     .join("");
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:14px;"><tr><td style="padding:20px;"><p style="color:#1a1a1a;font-size:18px;margin:0 0 10px;text-transform:uppercase;letter-spacing:1.6px;font-weight:800;text-align:center;text-shadow:0 1px 0 #fff,0 1px 2px rgba(0,0,0,0.1);">Ticket Summary</p><div style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,#C8A766,transparent);margin:0 0 12px;"></div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rowsHtml}</table></td></tr></table>${goldDivider()}`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:1px solid #C8A766;border-radius:18px;margin-bottom:14px;"><tr><td style="padding:20px;"><p style="color:#1a1a1a;font-size:18px;margin:0 0 10px;text-transform:uppercase;letter-spacing:1.6px;font-weight:800;text-align:center;text-shadow:0 1px 0 #fff,0 1px 2px rgba(0,0,0,0.1);">Ticket Summary</p><div style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,#C8A766,transparent);margin:0 0 12px;"></div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rowsHtml}</table></td></tr></table>${goldDivider()}`;
 }
 
 export function ticketSummaryCardAr(rows: Array<{ label: string; value: string; highlight?: boolean }>): string {
@@ -279,12 +279,12 @@ export function ticketSummaryCardAr(rows: Array<{ label: string; value: string; 
       return `<tr><td style="padding:8px 0;color:#555;font-size:13px;width:40%;border-left:1px solid #C8A76655;padding-left:12px;text-align:right;">${r.label}</td><td style="${valueStyle}">${renderedValue}</td></tr>`;
     })
     .join("");
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:14px;direction:rtl;"><tr><td style="padding:20px;"><p style="color:#1a1a1a;font-size:18px;margin:0 0 10px;letter-spacing:1.4px;font-weight:800;text-align:center;text-shadow:0 1px 0 #fff,0 1px 2px rgba(0,0,0,0.1);">ملخص التذكرة</p><div style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,#C8A766,transparent);margin:0 0 12px;"></div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rowsHtml}</table></td></tr></table>${goldDivider()}`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:1px solid #C8A766;border-radius:18px;margin-bottom:14px;direction:rtl;"><tr><td style="padding:20px;"><p style="color:#1a1a1a;font-size:18px;margin:0 0 10px;letter-spacing:1.4px;font-weight:800;text-align:center;text-shadow:0 1px 0 #fff,0 1px 2px rgba(0,0,0,0.1);">ملخص التذكرة</p><div style="height:2px;background:linear-gradient(90deg,transparent,#C8A766,#C8A766,transparent);margin:0 0 12px;"></div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rowsHtml}</table></td></tr></table>${goldDivider()}`;
 }
 
 // ─── Rate Experience Card (EN + AR) ───
 export function rateExperienceCard(surveyLink: string): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="color:#1a1a1a;font-size:16px;font-weight:bold;margin:0 0 8px;">Rate Your Experience</p>
 <p style="color:#666;font-size:13px;margin:0 0 16px;">Help us improve by sharing your feedback</p>
@@ -300,7 +300,7 @@ export function rateExperienceCard(surveyLink: string): string {
 }
 
 export function rateExperienceCardAr(surveyLink: string): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;">
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;">
 <tr><td style="padding:24px;text-align:center;">
 <p style="color:#1a1a1a;font-size:16px;font-weight:bold;margin:0 0 8px;">قيّم تجربتك</p>
 <p style="color:#666;font-size:13px;margin:0 0 16px;">ساعدنا في التحسين من خلال مشاركة ملاحظاتك</p>
@@ -349,6 +349,6 @@ ${signOffHtml(teamName)}
 // ─── Email Shell ───
 // 🔒 LOCKED: Outer shell with rounded wrapper, header rounded top, footer rounded bottom
 export function emailShell(departmentLabel: string, bodyContent: string): string {
-  const raw = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}img{display:block;border:0;outline:none;text-decoration:none;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:22px 16px!important;}}</style></head><body style="margin:0;padding:0;background:#fff;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;"><tr><td align="center" style="padding:22px 12px;"><table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#F5F0E6,#F0EBE0,#EDE4D3);border-radius:18px;overflow:hidden;">${sharedHeader(departmentLabel)}${bodyContent}${sharedFooterHtml()}</table></td></tr></table></body></html>`;
+  const raw = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><style>body{margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,sans-serif;}table{border-collapse:collapse;}img{display:block;border:0;outline:none;text-decoration:none;}@media only screen and (max-width:620px){.wrapper{width:100%!important;}.content-pad{padding:22px 16px!important;}}</style></head><body style="margin:0;padding:0;background:#fff;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fff;"><tr><td align="center" style="padding:22px 12px;"><table role="presentation" class="wrapper" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:linear-gradient(180deg,#F7F2EA,#F0EBE0,#EFE6D6);border-radius:18px;overflow:hidden;">${sharedHeader(departmentLabel)}${bodyContent}${sharedFooterHtml()}</table></td></tr></table></body></html>`;
   return minifyHtml(raw);
 }

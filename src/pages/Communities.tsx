@@ -14,7 +14,7 @@ const Communities = React.forwardRef<HTMLElement>((_, ref) => {
         className="relative w-full min-h-screen bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]"
       >
         {/* Hero Header */}
-        <div className="w-full bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-b border-[hsl(var(--gold)/0.3)] py-10 md:py-14">
+        <div className="w-full bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-[hsl(var(--gold)/0.3)] py-10 md:py-14">
           <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[hsl(var(--gold)/0.2)] to-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.3)] flex items-center justify-center">

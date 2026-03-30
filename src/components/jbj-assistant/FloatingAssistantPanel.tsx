@@ -235,10 +235,10 @@ JBJ Contact Information:
         initial={{ opacity: 0, y: 50, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 50, scale: 0.95 }}
-        className="fixed bottom-6 right-6 z-[9000] w-[380px] h-[550px] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-2xl shadow-[0_20px_60px_rgba(200,167,102,0.3)] flex flex-col overflow-hidden"
+        className="fixed bottom-6 right-6 z-[9000] w-[380px] h-[550px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 rounded-2xl shadow-[0_20px_60px_rgba(200,167,102,0.3)] flex flex-col overflow-hidden"
       >
         {/* Header - Premium Champagne */}
-        <div className="bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] p-4 flex items-center justify-between border-b-2 border-gold/30">
+        <div className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] p-4 flex items-center justify-between border-b-2 border-gold/30">
           <div className="flex items-center gap-3">
             <div className="relative">
               <Avatar className="w-10 h-10 border-2 border-gold/50 shadow-md">
@@ -307,7 +307,7 @@ JBJ Contact Information:
         </AnimatePresence>
 
         {/* Messages - Champagne background */}
-        <ScrollArea className="flex-1 p-4 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]" ref={scrollRef}>
+        <ScrollArea className="flex-1 p-4 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA]" ref={scrollRef}>
           <div className="space-y-4">
             {messages.map(message => (
               <motion.div
@@ -337,7 +337,7 @@ JBJ Contact Information:
         </ScrollArea>
 
         {/* Input - Premium champagne */}
-        <div className="p-4 border-t-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <div className="p-4 border-t-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <div className="flex items-center gap-2">
             <Input
               ref={inputRef}

@@ -100,7 +100,7 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
       <EmailHubStatusPanel />
 
       {/* Company Email Status */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl border-2 border-[#B89555]/20 p-5">
+      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl border-2 border-[#B89555]/20 p-5">
         <div className="flex items-center gap-3 mb-3">
           <Building2 className="w-5 h-5 text-[#B89555]" />
           <h3 className="font-semibold text-foreground">Company Email (jbj.ae)</h3>
@@ -118,7 +118,7 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
       </div>
 
       {/* Personal Email Setup */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl border-2 border-[#B89555]/20 p-5">
+      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl border-2 border-[#B89555]/20 p-5">
         <div className="flex items-center gap-3 mb-3">
           <User className="w-5 h-5 text-[#B89555]" />
           <h3 className="font-semibold text-foreground">Personal Email</h3>
@@ -219,7 +219,7 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
       </div>
 
       {/* Send Defaults */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl border-2 border-[#B89555]/20 p-5">
+      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl border-2 border-[#B89555]/20 p-5">
         <div className="flex items-center gap-3 mb-3">
           <Mail className="w-5 h-5 text-[#B89555]" />
           <h3 className="font-semibold text-foreground">Default Send Preferences</h3>

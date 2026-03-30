@@ -229,11 +229,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background md:bg-[#E8DCC8]">
+    <div className="min-h-screen bg-background md:bg-[#ECE2D2]">
       <AuditorReadOnlyBanner />
       {/* Mobile Desktop Banner */}
       {isMobile && showDesktopBanner && (
-        <div className="fixed top-0 left-0 right-0 z-[10001] bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-b border-gold/30 px-4 py-2.5 flex items-center gap-3 shadow-md">
+        <div className="fixed top-0 left-0 right-0 z-[10001] bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-b border-gold/30 px-4 py-2.5 flex items-center gap-3 shadow-md">
           <Monitor className="w-4 h-4 text-gold flex-shrink-0" />
           <p className="text-xs text-black/80 flex-1">For the best experience on our full portal, use a desktop browser.</p>
           <button onClick={dismissDesktopBanner} className="w-5 h-5 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">

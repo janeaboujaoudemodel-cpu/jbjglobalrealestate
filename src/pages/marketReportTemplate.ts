@@ -89,7 +89,7 @@ function getStyles(): string {
   @page { margin: 0; size: A4; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Poppins', sans-serif; background: #FDFBF7; color: #2C2A26; line-height: 1.7; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .page { width: 794px; min-height: 1123px; padding: 56px 55px 56px; page-break-after: always; background: linear-gradient(180deg, #FDFBF7 0%, #F5F0E6 100%); position: relative; overflow: visible; display: flex; flex-direction: column; }
+  .page { width: 794px; min-height: 1123px; padding: 56px 55px 56px; page-break-after: always; background: linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 100%); position: relative; overflow: visible; display: flex; flex-direction: column; }
   .page::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #A8925A, #d4c4a0, #A8925A); }
   .page::after { content: 'JBJ'; position: absolute; bottom: 30px; left: 55px; font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: rgba(168,146,90,0.08); letter-spacing: 0.15em; }
   .page.cover { background: radial-gradient(ellipse at center, #1a1814 0%, #0a0a0a 70%); padding: 0 !important; display: flex; flex-direction: column; }
@@ -139,7 +139,7 @@ function getStyles(): string {
   .qr-section { display: flex; align-items: center; gap: 30px; background: rgba(168,146,90,0.08); border: 1px solid rgba(168,146,90,0.3); border-radius: 16px; padding: 28px; margin: 36px 0; }
   .qr-code { width: 130px; height: 130px; background: #fff; padding: 8px; border-radius: 10px; flex-shrink: 0; }
   .villa-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin: 26px 0; }
-  .villa-gallery img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center center; border-radius: 16px; border: 1px solid rgba(168,146,90,0.3); background: #F5EBD7; display: block; }
+  .villa-gallery img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center center; border-radius: 16px; border: 1px solid rgba(168,146,90,0.3); background: #F7F1E6; display: block; }
   .founder-image { width: 200px; height: 200px; border-radius: 50%; object-fit: contain; object-position: center top; transform: scaleX(1.08); border: 4px solid #A8925A; margin: 0 auto 24px; display: block; background: #ffffff; box-shadow: 0 8px 30px rgba(168,146,90,0.3); }
   .founder-section { text-align: center; padding: 28px 0; }
   .disclaimer { background: rgba(168,146,90,0.06); border: 1px solid rgba(168,146,90,0.2); border-radius: 12px; padding: 18px 22px; margin: 26px 0; font-size: 11px; color: #6B6459; line-height: 1.6; }
@@ -152,7 +152,7 @@ function getStyles(): string {
   .bar-value { font-size: 11px; font-weight: 600; color: #FFFFFF; }
   .area-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0; }
   .area-card { background: #FFFFFF; border: 1px solid rgba(168,146,90,0.3); border-radius: 10px; overflow: hidden; text-decoration: none; display: block; }
-  .area-card img { width: 100%; aspect-ratio: 4/3; object-fit: contain; object-position: center; display: block; background: #F5EBD7; }
+  .area-card img { width: 100%; aspect-ratio: 4/3; object-fit: contain; object-position: center; display: block; background: #F7F1E6; }
   .area-card-body { padding: 12px; min-height: 92px; display: flex; flex-direction: column; justify-content: center; }
   .area-card-body .area-name { font-size: 11px; font-weight: 600; color: #1A1814; margin: 0 0 3px 0; line-height: 1.3; }
   .area-card-body .area-meta { font-size: 9px; color: #6B6459; margin: 0 0 2px 0; }
@@ -805,7 +805,7 @@ function getPage20FeaturedAreas(featuredAreas: any[], downloadDate: string): str
     <div class="area-grid">
       ${featuredAreas.map((a: any) => `
       <a href="https://JBJ.AE/area/${a.slug}" class="area-card" target="_blank">
-        ${a.image_url ? `<img src="${a.image_url}" alt="${a.name}" style="aspect-ratio: 4/3; object-fit: cover;" onerror="this.style.background='#F5EBD7'; this.style.aspectRatio='4/3';" />` : `<div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 22px; color: rgba(168,146,90,0.3); font-weight: 700;">JBJ</span></div>`}
+        ${a.image_url ? `<img src="${a.image_url}" alt="${a.name}" style="aspect-ratio: 4/3; object-fit: cover;" onerror="this.style.background='#F7F1E6'; this.style.aspectRatio='4/3';" />` : `<div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F7F1E6, #ECE2D2); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 22px; color: rgba(168,146,90,0.3); font-weight: 700;">JBJ</span></div>`}
         <div class="area-card-body">
           ${a.is_trending ? '<span class="badge-trending">● Trending</span>' : ''}
           ${a.is_high_demand && !a.is_trending ? '<span class="badge-demand">● High Demand</span>' : ''}
@@ -830,7 +830,7 @@ function getPage21FeaturedDevelopers(featuredDevelopers: any[]): string {
     <div class="area-grid" style="gap: 12px;">
       ${featuredDevelopers.map((d: any) => `
       <a href="https://JBJ.AE/developers/${d.slug}" class="area-card" target="_blank" style="text-align: center;">
-        ${d.logo_url ? `<div style="aspect-ratio: 4/3; background: #FFFFFF; display: flex; align-items: center; justify-content: center; padding: 8px;"><img src="${d.logo_url}" alt="${d.name}" style="max-height: 80%; max-width: 85%; object-fit: contain;" onerror="this.parentElement.innerHTML='<span style=&quot;font-family: Playfair Display, serif; font-size: 14px; color: #A8925A; font-weight: 700;&quot;>' + '${d.name.split(' ')[0]}' + '</span>'" /></div>` : `<div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 14px; color: #A8925A; font-weight: 700;">${d.name.split(' ')[0]}</span></div>`}
+        ${d.logo_url ? `<div style="aspect-ratio: 4/3; background: #FFFFFF; display: flex; align-items: center; justify-content: center; padding: 8px;"><img src="${d.logo_url}" alt="${d.name}" style="max-height: 80%; max-width: 85%; object-fit: contain;" onerror="this.parentElement.innerHTML='<span style=&quot;font-family: Playfair Display, serif; font-size: 14px; color: #A8925A; font-weight: 700;&quot;>' + '${d.name.split(' ')[0]}' + '</span>'" /></div>` : `<div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F7F1E6, #ECE2D2); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 14px; color: #A8925A; font-weight: 700;">${d.name.split(' ')[0]}</span></div>`}
         <div class="area-card-body" style="text-align: center;">
           <div class="area-name" style="text-align: center;">${d.name}</div>
           <a href="https://JBJ.AE/developers/${d.slug}" class="area-link" target="_blank" style="display: block; text-align: center; margin-top: 3px;">View Projects →</a>
@@ -840,7 +840,7 @@ function getPage21FeaturedDevelopers(featuredDevelopers: any[]): string {
     <div class="area-grid" style="gap: 12px;">
       ${["Emaar Properties","DAMAC Properties","Sobha Realty","Nakheel","Aldar Properties","Meraas","Ellington Properties","Binghatti Developers"].map((name) => `
       <div class="area-card" style="text-align: center;">
-        <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;">
+        <div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F7F1E6, #ECE2D2); display: flex; align-items: center; justify-content: center;">
           <span style="font-family: 'Playfair Display', serif; font-size: 14px; color: #A8925A; font-weight: 700;">${name.split(' ')[0]}</span>
         </div>
         <div class="area-card-body" style="text-align: center;">
@@ -862,7 +862,7 @@ function formatPrice(p: any): string {
 function renderProjectCard(p: any): string {
   const priceStr = formatPrice(p);
   return `<a href="https://JBJ.AE/projects/${p.slug || ''}" class="area-card" target="_blank" style="display: block; text-decoration: none;">
-    ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="${p.name}" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: #F5EBD7;" onerror="this.style.display='none'" />` : `<div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F5EBD7, #E8DCC8); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 16px; color: rgba(168,146,90,0.5); font-weight: 700;">JBJ</span></div>`}
+    ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="${p.name}" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; background: #F7F1E6;" onerror="this.style.display='none'" />` : `<div style="aspect-ratio: 4/3; background: linear-gradient(135deg, #F7F1E6, #ECE2D2); display: flex; align-items: center; justify-content: center;"><span style="font-family: 'Playfair Display', serif; font-size: 16px; color: rgba(168,146,90,0.5); font-weight: 700;">JBJ</span></div>`}
     <div class="area-card-body">
       <div class="area-name">${p.name}</div>
       <div class="area-meta">${p.area_name || p.location || 'Dubai, UAE'}</div>
