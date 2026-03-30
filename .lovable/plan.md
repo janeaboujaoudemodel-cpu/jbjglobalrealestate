@@ -1,66 +1,91 @@
 
 
-# Fix Map Page Floating Card & State Bugs
+# Fix Map Card System — Unified Hover + Click Logic
 
-## Problem
+## Root Cause
 
-The selected project detail card (lines 381-434) uses `fixed` positioning (`fixed bottom-4 left-4`), making it float relative to the **viewport** — not the map container. Since the page lives inside MainLayout which can scroll, the card persists visually over footer/contact sections when scrolling. Additionally, `selectedProject` state is never cleared on view mode changes, filter changes, or when the source marker becomes invalid.
+There are TWO independent card systems rendering simultaneously:
+1. **Leaflet `<Popup>`** — opens on marker click (built into react-leaflet), shows a compact card with image/name/price
+2. **Custom `selectedProject` card** — also opens on marker click (absolute positioned at bottom-left), shows a larger detail card
 
-## Changes — `src/pages/PropertyMap.tsx` only
+Both fire on the same click event, creating duplicate cards. The Popup is anchored to the marker while the detail card is anchored to the container bottom-left. They visually conflict and the detail card can go behind the sidebar.
 
-### 1. Add state cleanup effects
+## Solution
 
-Add three `useEffect` hooks after the existing filter listener (after line 129):
+### 1. Remove Leaflet `<Popup>` from markers entirely
+The `<Popup>` component inside each `<Marker>` (lines 315-337) will be removed. All card display is handled by the single custom card system.
 
-- **Clear on view mode change**: `useEffect(() => { setSelectedProject(null); }, [viewMode]);`
-- **Clear on filter/sort change**: `useEffect(() => { setSelectedProject(null); }, [filters, sortMode, hideSold]);`
-- **Clear when selected project no longer in filtered results**: `useEffect(() => { if (selectedProject && !filteredProjects.some(p => p.id === selectedProject.id)) setSelectedProject(null); }, [selectedProject, filteredProjects]);`
+### 2. Hover → Compact preview via `hoveredProject` state
+- Add `hoveredProject` state (separate from `selectedProject`)
+- On marker `mouseover`: set `hoveredProject`
+- On marker `mouseout`: clear `hoveredProject` (only if not the `selectedProject`)
+- Render a small compact card (image, name, developer, price) near the marker's screen position
 
-### 2. Add IntersectionObserver to auto-close card when map leaves viewport
+### 3. Click → Larger detail card via `selectedProject` state
+- On marker `click`: set `selectedProject`, clear `hoveredProject`
+- The existing detail card (lines 409-461) serves this role
+- When a `selectedProject` is active, hover cards are suppressed for that project
 
-Add a `useRef` on the map container div (line 260) and an `IntersectionObserver` effect that sets `selectedProject(null)` when the map container is less than 15% visible. This handles the scroll-past-map scenario.
+### 4. Only one card at a time
+- `hoveredProject` card is hidden when `selectedProject` is set
+- Clicking a new marker replaces `selectedProject`
+- Clicking map background clears both
 
+### 5. Smart positioning (sidebar-aware)
+Both cards use a positioning function that:
+- Gets the marker's pixel position via Leaflet's `latLngToContainerPoint`
+- Checks distance from left edge (sidebar is ~72px wide) → if too close, position card to the RIGHT
+- Checks distance from right edge → if too close, position to LEFT
+- Checks distance from top (header+toolbar ~132px) → if too close, position BELOW
+- Checks distance from bottom → if too close, position ABOVE
+- Card is rendered with `position: absolute` + computed `top`/`left` in the map container div
+
+### 6. Implementation detail
+
+**New helper inside the component:**
 ```tsx
-const mapContainerRef = useRef<HTMLDivElement>(null);
-
-useEffect(() => {
-  const el = mapContainerRef.current;
-  if (!el) return;
-  const io = new IntersectionObserver(
-    ([entry]) => { if (!entry.isIntersecting) setSelectedProject(null); },
-    { threshold: 0.15 }
-  );
-  io.observe(el);
-  return () => io.disconnect();
-}, []);
+function getCardPosition(map, latlng, cardWidth, cardHeight) {
+  const point = map.latLngToContainerPoint(latlng);
+  const container = map.getContainer().getBoundingClientRect();
+  const sidebarWidth = 72; // vertical sidebar
+  let left = point.x + 16;
+  let top = point.y - cardHeight / 2;
+  // Push right if near left/sidebar
+  if (point.x < sidebarWidth + cardWidth + 20) left = point.x + 16;
+  // Push left if near right edge
+  if (point.x + cardWidth + 20 > container.width) left = point.x - cardWidth - 16;
+  // Clamp top
+  if (top < 8) top = 8;
+  if (top + cardHeight > container.height - 8) top = container.height - cardHeight - 8;
+  return { left, top };
+}
 ```
 
-Apply `ref={mapContainerRef}` to the flex-1 map container div (line 260).
+**Access the Leaflet map instance** via a child component that calls `useMap()` and exposes it via a ref/callback.
 
-### 3. Change selected card from `fixed` to `absolute` within map container
+### 7. Hover card content (compact)
+- 220px wide
+- Small image (80px tall), name, developer, price — one compact block
 
-Move the selected project card (lines 381-434) **inside** the map container div (the `flex-1 relative overflow-hidden` div at line 260). Change positioning from `fixed bottom-4 left-4` to `absolute bottom-4 left-4`. This ensures the card is bounded by the map container and cannot float over other page sections.
+### 8. Click card content
+- Keep existing detail card (lines 411-460) but position it near the marker instead of fixed bottom-left
+- 384px wide, with image/details/CTA
 
-The card's z-index `z-[1000]` stays — it only needs to beat the map's internal elements, and since the parent has `overflow-hidden`, it can't leak out.
+### 9. State cleanup
+- All existing cleanup effects (viewMode change, filter change, intersection observer) also clear `hoveredProject`
 
-### 4. Add click-outside-to-close on map container
+## Changes
 
-On the map container div (line 260), add an `onClick` handler that closes the card when clicking the container background (not a child):
+### File: `src/pages/PropertyMap.tsx`
 
-```tsx
-onClick={(e) => { if (e.target === e.currentTarget) setSelectedProject(null); }}
-```
-
-## Summary of changes
-
-| What | How |
-|------|-----|
-| Card floats over footer | Move card inside map container, change `fixed` → `absolute` |
-| Card survives view/filter changes | Add cleanup effects on `viewMode`, `filters`, `sortMode`, `hideSold` |
-| Card stays when marker filtered out | Add effect checking `selectedProject` against `filteredProjects` |
-| Card visible when scrolled past map | IntersectionObserver closes card when map <15% visible |
-| Click outside doesn't close | Add click-on-background handler |
-
-### File modified
-- `src/pages/PropertyMap.tsx`
+| Change | Detail |
+|--------|--------|
+| Remove `<Popup>` from markers | Lines 315-337 deleted |
+| Add `hoveredProject` state + `mapRef` | New state + ref to access Leaflet map instance |
+| Add `MapRefGetter` child component | Tiny component using `useMap()` to pass map instance to parent via callback ref |
+| Add marker `mouseover`/`mouseout` handlers | Set/clear `hoveredProject` |
+| Add positioning logic | `getCardPosition()` function computing absolute position from latlng |
+| Replace bottom-left detail card | Position it near the clicked marker using computed coords |
+| Add compact hover card | Rendered when `hoveredProject` is set and `selectedProject` is not the same project |
+| Update cleanup effects | Also clear `hoveredProject` |
 
