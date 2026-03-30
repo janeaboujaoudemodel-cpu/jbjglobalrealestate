@@ -118,6 +118,8 @@ const PropertyMap = () => {
   const [hideSold, setHideSold] = useState(false);
   const [listSearch, setListSearch] = useState("");
 
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+
   // Listen for global filter changes from the header
   useEffect(() => {
     const handler = (e: Event) => {
@@ -126,6 +128,31 @@ const PropertyMap = () => {
     };
     window.addEventListener("globalFilterChange", handler);
     return () => window.removeEventListener("globalFilterChange", handler);
+  }, []);
+
+  // Clear selected project on view mode change
+  useEffect(() => { setSelectedProject(null); }, [viewMode]);
+
+  // Clear selected project on filter/sort changes
+  useEffect(() => { setSelectedProject(null); }, [filters, sortMode, hideSold]);
+
+  // Clear if selected project no longer in filtered results
+  useEffect(() => {
+    if (selectedProject && !filteredProjects.some(p => p.id === selectedProject.id)) {
+      setSelectedProject(null);
+    }
+  }, [selectedProject, filteredProjects]);
+
+  // Auto-close card when map container leaves viewport
+  useEffect(() => {
+    const el = mapContainerRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => { if (!entry.isIntersecting) setSelectedProject(null); },
+      { threshold: 0.15 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   const formatPrice = (price: number | null) => {
