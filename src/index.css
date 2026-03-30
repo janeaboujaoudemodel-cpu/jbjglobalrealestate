@@ -934,14 +934,12 @@ All colors MUST be HSL.
   }
 
   /* ============================================================
-   * GLOBAL ACTIVE STATE SYSTEM - LOCKED
-   * Champagne gradient when active, consistent across platform
-   * Used in: Guides TOC, Filters, Tabs, Nav Items, Sidebars
+   * GLOBAL ACTIVE STATE SYSTEM — MONOCHROME
    * ============================================================ */
   
-  /* --- Active Item (Light/White Background Sections) --- */
+  /* --- Active Item --- */
   .jj-active-item {
-    @apply bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-medium shadow-md border border-gold/40;
+    @apply bg-white text-black font-medium shadow-md border border-white/40;
   }
 
   .jj-active-item-text {
@@ -953,50 +951,50 @@ All colors MUST be HSL.
   }
 
   .jj-active-item-number {
-    @apply bg-black text-gold;
+    @apply bg-white text-black;
   }
 
   /* --- Inactive/Default Item --- */
   .jj-inactive-item {
-    @apply text-zinc-600 bg-transparent border border-transparent;
+    @apply text-white/40 bg-transparent border border-transparent;
   }
 
   .jj-inactive-item:hover {
-    @apply text-black bg-zinc-100 border-zinc-200;
+    @apply text-white bg-white/5 border-white/10;
   }
 
   .jj-inactive-item-icon {
-    @apply text-gold;
+    @apply text-white/60;
   }
 
   .jj-inactive-item-number {
-    @apply bg-gold/10 text-gold;
+    @apply bg-white/10 text-white;
   }
 
-  /* --- Tab/Filter Active State (for buttons/pills) --- */
+  /* --- Tab/Filter Active State --- */
   .jj-tab-active {
-    @apply bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-medium shadow-sm border border-gold/40;
+    @apply bg-white text-black font-medium shadow-sm border border-white/40;
   }
 
   .jj-tab-inactive {
-    @apply bg-white text-zinc-600 border border-zinc-300;
+    @apply bg-transparent text-white/60 border border-white/10;
   }
 
   .jj-tab-inactive:hover {
-    @apply border-gold/50 text-gold;
+    @apply border-white/30 text-white;
   }
 
   /* --- Sort Button Active State --- */
   .jj-sort-active {
-    @apply bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-medium;
+    @apply bg-white text-black font-medium;
   }
 
   .jj-sort-inactive {
-    @apply bg-zinc-100 text-zinc-600;
+    @apply bg-white/5 text-white/60;
   }
 
   .jj-sort-inactive:hover {
-    @apply bg-gold/20 text-gold;
+    @apply bg-white/10 text-white;
   }
 
   /* --- User & Employee Names --- */
@@ -1005,37 +1003,35 @@ All colors MUST be HSL.
   }
 
   .jj-role {
-    @apply font-normal text-gold;
+    @apply font-normal text-white/60;
   }
 
   /* --- Label / Tag --- */
   .jj-label {
-    @apply text-xs font-medium uppercase tracking-wider text-gold;
+    @apply text-xs font-medium uppercase tracking-wider text-white/60;
   }
 
   /* --- Premium Section Label --- */
   .jj-section-label {
-    @apply text-xs md:text-sm font-medium uppercase tracking-widest text-gold;
+    @apply text-xs md:text-sm font-medium uppercase tracking-widest text-white/60;
     letter-spacing: 0.15em;
   }
 
   /* ============================================================
-   * GLOBAL CHAMPAGNE SECTION BACKGROUND - LOCKED
-   * Standard champagne gradient for white section backgrounds
-   * Matching Best Idea Award box styling
+   * GLOBAL SECTION BACKGROUND — MONOCHROME
    * ============================================================ */
   .jj-section-champagne {
     @apply bg-gradient-to-br;
-    --tw-gradient-from: #FDFBF7;
-    --tw-gradient-via: #F7F2EA;
-    --tw-gradient-to: #EFE6D6;
+    --tw-gradient-from: #111111;
+    --tw-gradient-via: #0A0A0A;
+    --tw-gradient-to: #000000;
   }
 
   .jj-card-champagne {
-    @apply bg-gradient-to-br border-2 border-gold/40 shadow-[0_0_40px_rgba(200,167,102,0.3)];
-    --tw-gradient-from: #FDFBF7;
-    --tw-gradient-via: #F7F2EA;
-    --tw-gradient-to: #EFE6D6;
+    @apply bg-gradient-to-br border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.03)];
+    --tw-gradient-from: #1A1A1A;
+    --tw-gradient-via: #111111;
+    --tw-gradient-to: #0A0A0A;
   }
 
   /* ============================================================
