@@ -214,33 +214,32 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     return !sessionStorage.getItem('jj_desktop_banner_dismissed');
   });
 
-  useEffect(() => {
-    if (isMobile && showDesktopBanner) {
-      toast("For the best experience, we recommend using a desktop browser.", {
-        icon: <Monitor className="w-4 h-4 text-gold" />,
-        duration: 6000,
-      });
-    }
-  }, [isMobile, showDesktopBanner]);
-
   const dismissDesktopBanner = useCallback(() => {
     setShowDesktopBanner(false);
     try { sessionStorage.setItem('jj_desktop_banner_dismissed', '1'); } catch {}
   }, []);
 
+  useEffect(() => {
+    if (isMobile && showDesktopBanner) {
+      toast("For the best experience on our full portal, use a desktop browser.", {
+        icon: <Monitor className="w-4 h-4" style={{ color: 'hsl(var(--gold))' }} />,
+        duration: 8000,
+        style: {
+          background: 'linear-gradient(to right, hsl(var(--pearl-1)), hsl(var(--pearl-3)))',
+          border: '1px solid hsl(var(--gold) / 0.3)',
+          color: 'hsl(0 0% 0% / 0.8)',
+        },
+        className: 'text-xs',
+      });
+      dismissDesktopBanner();
+    }
+  }, [isMobile, showDesktopBanner, dismissDesktopBanner]);
+
   return (
     <div className="min-h-screen bg-background md:bg-[#ECE2D2]">
       <AuditorReadOnlyBanner />
       {/* Mobile Desktop Banner */}
-      {isMobile && showDesktopBanner && (
-        <div className="fixed top-0 left-0 right-0 z-[10001] bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-b border-gold/30 px-4 py-2.5 flex items-center gap-3 shadow-md">
-          <Monitor className="w-4 h-4 text-gold flex-shrink-0" />
-          <p className="text-xs text-black/80 flex-1">For the best experience on our full portal, use a desktop browser.</p>
-          <button onClick={dismissDesktopBanner} className="w-5 h-5 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
-            <X className="w-3 h-3 text-gold" />
-          </button>
-        </div>
-      )}
+      {/* Desktop banner removed — now only shows as bottom toast */}
       {/* Defer non-critical shell components */}
       {shellReady && (
         <Suspense fallback={null}>
