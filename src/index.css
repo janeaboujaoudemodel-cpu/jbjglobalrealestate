@@ -810,7 +810,7 @@ All colors MUST be HSL.
   }
 
   .jj-insight-card:hover {
-    @apply border-gold/40;
+    @apply border-white/20;
   }
 
   .jj-insight-card-title {
