@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo, useRef } from "react";
-import { MapContainer, Marker, Popup, useMap } from "react-leaflet";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import { MapContainer, Marker, useMap } from "react-leaflet";
 import { DivIcon } from "leaflet";
 import L from "leaflet";
 import { useProjectsListing } from "@/hooks/useProjects";
@@ -51,6 +51,47 @@ function MapViewToggle({ mapView, onViewChange, t }: { mapView: MapViewType; onV
       </div>
     </div>
   );
+}
+
+// Expose Leaflet map instance to parent via callback
+function MapRefGetter({ onMap }: { onMap: (map: L.Map) => void }) {
+  const map = useMap();
+  useEffect(() => { onMap(map); }, [map, onMap]);
+  return null;
+}
+
+// Smart card positioning: keeps card visible, avoids sidebar/header
+function getCardPosition(
+  map: L.Map,
+  latlng: [number, number],
+  cardWidth: number,
+  cardHeight: number,
+  containerEl: HTMLElement
+) {
+  const point = map.latLngToContainerPoint(latlng);
+  const rect = containerEl.getBoundingClientRect();
+  const cw = rect.width;
+  const ch = rect.height;
+  const sidebarSafe = 80; // left sidebar width + margin
+  const padding = 12;
+  const markerOffset = 20;
+
+  // Horizontal: prefer right of marker, flip left if near right edge
+  let left = point.x + markerOffset;
+  if (left + cardWidth + padding > cw) {
+    left = point.x - cardWidth - markerOffset;
+  }
+  // Ensure not behind sidebar
+  if (left < sidebarSafe) {
+    left = sidebarSafe;
+  }
+
+  // Vertical: center on marker, clamp to container
+  let top = point.y - cardHeight / 2;
+  if (top < padding) top = padding;
+  if (top + cardHeight + padding > ch) top = ch - cardHeight - padding;
+
+  return { left, top };
 }
 
 function ScrollWheelZoomGuard() {
@@ -119,6 +160,12 @@ const PropertyMap = () => {
   const [listSearch, setListSearch] = useState("");
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
+  const [hoveredProject, setHoveredProject] = useState<any | null>(null);
+  const [hoverPos, setHoverPos] = useState<{ left: number; top: number } | null>(null);
+  const [clickPos, setClickPos] = useState<{ left: number; top: number } | null>(null);
+
+  const onMapReady = useCallback((map: L.Map) => { mapInstanceRef.current = map; }, []);
 
   // Listen for global filter changes from the header
   useEffect(() => {
@@ -130,11 +177,11 @@ const PropertyMap = () => {
     return () => window.removeEventListener("globalFilterChange", handler);
   }, []);
 
-  // Clear selected project on view mode change
-  useEffect(() => { setSelectedProject(null); }, [viewMode]);
+  // Clear selected/hovered project on view mode change
+  useEffect(() => { setSelectedProject(null); setHoveredProject(null); }, [viewMode]);
 
-  // Clear selected project on filter/sort changes
-  useEffect(() => { setSelectedProject(null); }, [filters, sortMode, hideSold]);
+  // Clear selected/hovered project on filter/sort changes
+  useEffect(() => { setSelectedProject(null); setHoveredProject(null); }, [filters, sortMode, hideSold]);
 
 
   // Auto-close card when map container leaves viewport
@@ -285,7 +332,7 @@ const PropertyMap = () => {
       </div>
 
       {/* ── MAP CONTAINER ── */}
-      <div ref={mapContainerRef} className="flex-1 relative overflow-hidden" onClick={(e) => { if (e.target === e.currentTarget) setSelectedProject(null); }}>
+      <div ref={mapContainerRef} className="flex-1 relative overflow-hidden" onClick={(e) => { if (e.target === e.currentTarget) { setSelectedProject(null); setHoveredProject(null); } }}>
         <MapContainer
           center={center}
           zoom={11}
@@ -304,40 +351,115 @@ const PropertyMap = () => {
           <MapNavigationControls latitude={center[0]} longitude={center[1]} />
           <ScrollWheelZoomGuard />
           <FitBounds coords={coordsList} />
+          <MapRefGetter onMap={onMapReady} />
 
           {projectsWithCoords.map((project) => (
             <Marker
               key={project.id}
               position={[project.lat, project.lng]}
               icon={createCustomIcon(project.price_from)}
-              eventHandlers={{ click: () => setSelectedProject(project) }}
-            >
-              <Popup>
-                <div className="w-64 p-0">
-                  {project.cover_image_url && (
-                    <div className="relative h-32">
-                      <SafeImage src={project.cover_image_url} alt={project.name} className="w-full h-full object-cover" />
-                    </div>
-                  )}
-                  <div className="p-3">
-                    <h3 className="font-semibold text-sm mb-1">{project.name}</h3>
-                    <p className="text-xs text-muted-foreground mb-2">
-                      {project.developer_name} • {project.area_name || project.location}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-foreground">{formatPrice(project.price_from)}</span>
-                      <Link to={`/project/${project.slug}`}>
-                        <Button size="sm" variant="outline" className="h-7 text-xs">
-                          {t('map.view')} <ChevronRight className="h-3 w-3 ml-1" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
+              eventHandlers={{
+                click: () => {
+                  setHoveredProject(null);
+                  setSelectedProject(project);
+                  if (mapInstanceRef.current && mapContainerRef.current) {
+                    setClickPos(getCardPosition(mapInstanceRef.current, [project.lat, project.lng], 384, 340, mapContainerRef.current));
+                  }
+                },
+                mouseover: () => {
+                  if (selectedProject?.id === project.id) return;
+                  setHoveredProject(project);
+                  if (mapInstanceRef.current && mapContainerRef.current) {
+                    setHoverPos(getCardPosition(mapInstanceRef.current, [project.lat, project.lng], 220, 140, mapContainerRef.current));
+                  }
+                },
+                mouseout: () => {
+                  if (hoveredProject?.id === project.id) setHoveredProject(null);
+                },
+              }}
+            />
           ))}
         </MapContainer>
+
+        {/* ── HOVER CARD (compact) ── */}
+        {hoveredProject && !selectedProject && hoverPos && (
+          <div
+            className="absolute z-[1000] pointer-events-none"
+            style={{ left: hoverPos.left, top: hoverPos.top, width: 220 }}
+          >
+            <Card className="shadow-lg border border-gold/30 pointer-events-auto">
+              <CardContent className="p-0">
+                {hoveredProject.cover_image_url && (
+                  <SafeImage src={hoveredProject.cover_image_url} alt={hoveredProject.name} className="w-full h-20 object-cover rounded-t-lg" />
+                )}
+                <div className="p-2">
+                  <h4 className="font-semibold text-xs truncate">{hoveredProject.name}</h4>
+                  <p className="text-[10px] text-muted-foreground truncate">{hoveredProject.developer_name} • {hoveredProject.area_name || hoveredProject.location}</p>
+                  <p className="text-xs font-bold text-foreground mt-1">{formatPrice(hoveredProject.price_from)}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* ── CLICK CARD (detailed) ── */}
+        {selectedProject && clickPos && (
+          <div
+            className="absolute z-[1000]"
+            style={{ left: clickPos.left, top: clickPos.top, width: 384, maxWidth: 'calc(100% - 24px)' }}
+          >
+            <Card className="shadow-xl border-2">
+              <CardContent className="p-0">
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="absolute top-2 right-2 z-10 bg-background/80 backdrop-blur-sm rounded-full p-1 hover:bg-background"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+                {selectedProject.cover_image_url && (
+                  <div className="relative h-36">
+                    <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" />
+                    <Badge className="absolute bottom-2 left-2 bg-primary text-primary-foreground">
+                      {selectedProject.status || "Off-Plan"}
+                    </Badge>
+                  </div>
+                )}
+                <div className="p-3">
+                  <h3 className="font-semibold text-base mb-1">{selectedProject.name}</h3>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    {t('map.by')} {selectedProject.developer_name} • {selectedProject.area_name || selectedProject.location}
+                  </p>
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    <div className="text-center p-1.5 bg-muted rounded-lg">
+                      <Bed className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                      <p className="text-[10px] font-medium">{selectedProject.bedrooms_min || "—"}-{selectedProject.bedrooms_max || "—"} BR</p>
+                    </div>
+                    <div className="text-center p-1.5 bg-muted rounded-lg">
+                      <Maximize className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                      <p className="text-[10px] font-medium">{selectedProject.size_min || "—"} sqft</p>
+                    </div>
+                    <div className="text-center p-1.5 bg-muted rounded-lg">
+                      <Calendar className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                      <p className="text-[10px] font-medium">{selectedProject.handover_date || "TBA"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] text-muted-foreground">{t('map.startingFrom')}</p>
+                      <p className="text-lg font-bold text-foreground">{formatPrice(selectedProject.price_from)}</p>
+                    </div>
+                    <Link to={`/project/${selectedProject.slug}`}>
+                      <Button size="sm" className="gap-1.5">
+                        {t('map.viewDetails')}
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
 
       {/* ── LIST / GRID PANEL (overlay on right, map still interactive) ── */}
@@ -405,61 +527,6 @@ const PropertyMap = () => {
         </div>
       )}
 
-        {/* Selected Project Detail Card — inside map container, absolute */}
-        {selectedProject && (
-          <div className="absolute bottom-4 left-4 right-4 sm:left-4 sm:right-auto sm:w-96 z-[1000]">
-            <Card className="shadow-xl border-2">
-              <CardContent className="p-0">
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="absolute top-2 right-2 z-10 bg-background/80 backdrop-blur-sm rounded-full p-1 hover:bg-background"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-                {selectedProject.cover_image_url && (
-                  <div className="relative h-40">
-                    <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" />
-                    <Badge className="absolute bottom-2 left-2 bg-primary text-primary-foreground">
-                      {selectedProject.status || "Off-Plan"}
-                    </Badge>
-                  </div>
-                )}
-                <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-1">{selectedProject.name}</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    {t('map.by')} {selectedProject.developer_name} • {selectedProject.area_name || selectedProject.location}
-                  </p>
-                  <div className="grid grid-cols-3 gap-3 mb-4">
-                    <div className="text-center p-2 bg-muted rounded-lg">
-                      <Bed className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
-                      <p className="text-xs font-medium">{selectedProject.bedrooms_min || "—"}-{selectedProject.bedrooms_max || "—"} BR</p>
-                    </div>
-                    <div className="text-center p-2 bg-muted rounded-lg">
-                      <Maximize className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
-                      <p className="text-xs font-medium">{selectedProject.size_min || "—"} sqft</p>
-                    </div>
-                    <div className="text-center p-2 bg-muted rounded-lg">
-                      <Calendar className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
-                      <p className="text-xs font-medium">{selectedProject.handover_date || "TBA"}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs text-muted-foreground">{t('map.startingFrom')}</p>
-                      <p className="text-xl font-bold text-foreground">{formatPrice(selectedProject.price_from)}</p>
-                    </div>
-                    <Link to={`/project/${selectedProject.slug}`}>
-                      <Button className="gap-2">
-                        {t('map.viewDetails')}
-                        <ExternalLink className="h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
       </div>
   );
 };
