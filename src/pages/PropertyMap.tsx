@@ -177,11 +177,11 @@ const PropertyMap = () => {
     return () => window.removeEventListener("globalFilterChange", handler);
   }, []);
 
-  // Clear selected project on view mode change
-  useEffect(() => { setSelectedProject(null); }, [viewMode]);
+  // Clear selected/hovered project on view mode change
+  useEffect(() => { setSelectedProject(null); setHoveredProject(null); }, [viewMode]);
 
-  // Clear selected project on filter/sort changes
-  useEffect(() => { setSelectedProject(null); }, [filters, sortMode, hideSold]);
+  // Clear selected/hovered project on filter/sort changes
+  useEffect(() => { setSelectedProject(null); setHoveredProject(null); }, [filters, sortMode, hideSold]);
 
 
   // Auto-close card when map container leaves viewport
