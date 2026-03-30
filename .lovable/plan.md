@@ -1,43 +1,41 @@
 
 
-# Fix Duplicate Filter Bar and White Gap on Map Page (+ Audit Other Pages)
+# Fix Map Page White Gap, Background Color + Sidebar Mega-Menu Still Hidden
 
-## Problems
+## Problems Found (verified in code)
 
-1. **White gap on /map**: PropertyMap's fixed filter bar uses `top-[48px]` — but the full header is 88px (48px nav + 40px filter row). The map container then uses `pt-[140px]` which stacks on top of MainLayout's `pt-[88px]`, creating ~228px of dead space.
+### 1. Map Page — White background and gap
+**PropertyMap.tsx line 165**: The fixed filter bar uses `bg-background/95` (white). It should match the header's champagne gradient (`from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8]`).
 
-2. **Duplicate filter bar**: The HorizontalUtilityBar always renders a global FilterShortcutBar (Row 2). PropertyMap also renders its own FilterShortcutBar. Result: two filter rows visible on `/map`.
+**PropertyMap.tsx line 191**: `pt-[52px]` padding on the map container, but since MainLayout already adds `pt-[88px]` to the `<main>`, and then the map's own fixed filter bar is at `top-[88px]`, the map content needs to account for the filter bar height (~52px) below that. The white gap is because `bg-background` (white) shows through. The map container's outer div (line 163) uses `bg-background` — should be transparent or match the page.
 
-3. **Same bug on other pages**: `AreaDetail.tsx` and `Developers.tsx` also use fixed portals at `top-[48px]` — these are similarly hidden behind the 88px header.
+**Root fix**: The map page filter bar at `top-[88px]` with `bg-background/95` creates a white strip. Change it to match the header gradient. The map container `pt-[52px]` is roughly correct for the filter bar height, but the outer wrapper `bg-background` creates white around it.
 
-## Fix
+### 2. Map Page — Filter bar appears as separate band
+The filter bar (line 165) is a separate fixed div below the header with a different background color (white vs champagne). It should visually merge with the header by using the same gradient and removing the visible border gap.
 
-### 1. PropertyMap.tsx — fix position and remove duplicate
+### 3. Sidebar mega-menu — ALREADY FIXED
+The `PropertiesVerticalNav.tsx` line 112 already shows `top: '88px'` — this was fixed in the previous edit. If the user still sees it hidden, it may be a cache issue, but the code is correct.
 
-- Change fixed filter bar from `top-[48px]` to `top-[88px]` (below the full 88px header)
-- Change map container padding from `pt-[140px]` to `pt-[52px]` (MainLayout already provides 88px, so only need ~52px for the map's own filter bar)
-- Change list panel `top-[140px]` to `top-[52px]` for the same reason
+## Fix Plan
 
-### 2. HorizontalUtilityBar.tsx — hide global filter row on /map
+### File: `src/pages/PropertyMap.tsx`
 
-- On `/map` route, hide Row 2 (the global FilterShortcutBar) since PropertyMap has its own specialized filter bar with map-specific controls (property count badge, list toggle, `isMapMode`)
+1. **Line 163**: Change `bg-background` to no background or transparent — the map fills the space
+2. **Line 165**: Change the fixed filter bar background from `bg-background/95 backdrop-blur-md border-b border-gold/20` to `bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] border-b border-[hsl(var(--gold)/0.2)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)]` — matching the header exactly
+3. **Line 191**: Verify `pt-[52px]` is correct (filter bar is ~52px tall with badge row + filter row). This looks right.
 
-### 3. AreaDetail.tsx — fix fixed portal position
+### File: `src/components/navigation/HorizontalUtilityBar.tsx`
 
-- Change the fixed filter portal from `top-[48px]` to `top-[88px]`
+Already correctly hides Row 2 on `/map` (lines 537-551). No change needed.
 
-### 4. Developers.tsx — fix fixed portal position
+### Verification of other pages (from previous plan)
 
-- Change the fixed filter portal from `top-[48px]` to `top-[88px]`
+- **AreaDetail.tsx** — already patched to `top-[88px]` ✓
+- **Developers.tsx** — already patched to `top-[88px]` ✓  
+- **DeveloperHubShell.tsx** — already patched to `top-[88px]` / `h-[calc(100vh-88px)]` ✓
+- **PropertiesVerticalNav.tsx** — already patched to `top: '88px'` ✓
 
-### 5. DeveloperHubShell.tsx — fix sidebar position
-
-- Change sidebar from `top-[48px]` / `h-[calc(100vh-48px)]` to `top-[88px]` / `h-[calc(100vh-88px)]`
-
-## Files to modify
-- `src/pages/PropertyMap.tsx` — fix top offset + padding
-- `src/components/navigation/HorizontalUtilityBar.tsx` — hide Row 2 on /map
-- `src/pages/AreaDetail.tsx` — fix fixed portal top offset
-- `src/pages/Developers.tsx` — fix fixed portal top offset
-- `src/pages/developer-hub/DeveloperHubShell.tsx` — fix sidebar top offset
+### Summary of changes
+- **`src/pages/PropertyMap.tsx`**: Change filter bar background to match header gradient, remove white outer background
 
