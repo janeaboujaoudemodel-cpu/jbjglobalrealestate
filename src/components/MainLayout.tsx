@@ -69,6 +69,8 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const location = useLocation();
   const { trackPageVisit } = useActivityTracker();
   useVisitorTracking();
+  useAntiCapture();
+  useAuditorTracking();
 
   // Track page visits on route change
   useEffect(() => { trackPageVisit(); }, [location.pathname, trackPageVisit]);
