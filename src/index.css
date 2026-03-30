@@ -521,11 +521,11 @@ All colors MUST be HSL.
 }
 
 /* Layer 2 wrapper with proper gutters */
-.jj-layer-2 {
-  @apply jj-section-gutter rounded-2xl border border-white/10 p-2 sm:p-3 md:p-4 lg:p-6;
-  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
-  box-shadow: 0 0 40px rgba(255,255,255,0.03);
-}
+  .jj-layer-2 {
+    @apply jj-section-gutter rounded-2xl border border-gray-200 p-2 sm:p-3 md:p-4 lg:p-6;
+    background: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
 
 /* Layer 3 - Inner content cards */
 .jj-card-inner {
