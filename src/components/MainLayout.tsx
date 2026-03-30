@@ -216,12 +216,19 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 
   useEffect(() => {
     if (isMobile && showDesktopBanner) {
-      toast("For the best experience, we recommend using a desktop browser.", {
-        icon: <Monitor className="w-4 h-4 text-gold" />,
-        duration: 6000,
+      toast("For the best experience on our full portal, use a desktop browser.", {
+        icon: <Monitor className="w-4 h-4" style={{ color: 'hsl(var(--gold))' }} />,
+        duration: 8000,
+        style: {
+          background: 'linear-gradient(to right, hsl(var(--pearl-1)), hsl(var(--pearl-3)))',
+          border: '1px solid hsl(var(--gold) / 0.3)',
+          color: 'hsl(0 0% 0% / 0.8)',
+        },
+        className: 'text-xs',
       });
+      dismissDesktopBanner();
     }
-  }, [isMobile, showDesktopBanner]);
+  }, [isMobile, showDesktopBanner, dismissDesktopBanner]);
 
   const dismissDesktopBanner = useCallback(() => {
     setShowDesktopBanner(false);
