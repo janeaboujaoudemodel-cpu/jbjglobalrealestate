@@ -1129,26 +1129,25 @@ All colors MUST be HSL.
   }
 
   /* ============================================================
-   * 3. GLOBAL BUTTON SYSTEM - INVERTED HOVER (LOCKED)
-   * All buttons must invert on hover
+   * 3. GLOBAL BUTTON SYSTEM — MONOCHROME INVERTED HOVER
    * ============================================================ */
   
-  /* Button Type A - White Base (Default) */
+  /* Button Type A - White Base (Primary) */
   .jj-btn-primary {
-    @apply bg-white text-gold border border-gold font-semibold;
+    @apply bg-white text-black border border-white font-semibold;
     @apply transition-all duration-300;
   }
   .jj-btn-primary:hover {
-    @apply bg-transparent text-gold border-gold;
+    @apply bg-transparent text-white border-white;
   }
   
-  /* Button Type B - Transparent Base (For images/videos) */
+  /* Button Type B - Transparent Base (Secondary) */
   .jj-btn-secondary {
-    @apply bg-transparent text-gold border border-gold font-semibold;
+    @apply bg-transparent text-white border border-white/40 font-semibold;
     @apply transition-all duration-300;
   }
   .jj-btn-secondary:hover {
-    @apply bg-white text-gold border-gold;
+    @apply bg-white text-black border-white;
   }
   
   /* Button on Hero/Image backgrounds */
@@ -1157,7 +1156,7 @@ All colors MUST be HSL.
     @apply transition-all duration-300;
   }
   .jj-btn-hero:hover {
-    @apply bg-white text-gold border-white;
+    @apply bg-white text-black border-white;
   }
 
   /* ============================================================
