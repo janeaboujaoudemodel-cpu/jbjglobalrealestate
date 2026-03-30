@@ -179,13 +179,13 @@ export const MegaMenuSectionTitle = React.forwardRef<HTMLDivElement, MegaMenuSec
     return (
       <div ref={ref} className="mb-3 h-[36px] flex flex-col justify-end">
         <div className="flex items-center justify-center pb-2">
-          <h4 className="text-white font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2 whitespace-nowrap">
-            <Icon className="w-4 h-4 text-white/60 shrink-0" />
+          <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2 whitespace-nowrap">
+            <Icon className="w-4 h-4 text-gray-400 shrink-0" />
             {title}
           </h4>
           {rightSlot}
         </div>
-        <div className="h-[1px] w-full bg-white/20" />
+        <div className="h-[1px] w-full bg-gray-200" />
       </div>
     );
   }
