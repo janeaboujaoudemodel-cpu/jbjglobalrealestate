@@ -191,8 +191,8 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     );
   }
 
-  // AUTHENTICATED but NOT OWNER → AccessDenied
-  if (!isOwner) {
+  // AUTHENTICATED but NOT OWNER and NOT AUDITOR → AccessDenied
+  if (!isOwner && !isAuditor) {
     return <Navigate to="/403" replace />;
   }
 

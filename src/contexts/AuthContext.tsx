@@ -348,6 +348,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setSession(null);
       setIsOwner(false);
+      setIsAuditor(false);
       setOwnerError(null);
       localStorage.removeItem('jj_role_selected');
       localStorage.removeItem('jj_employee_welcomed');
