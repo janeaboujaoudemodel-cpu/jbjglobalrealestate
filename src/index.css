@@ -1381,7 +1381,7 @@ All colors MUST be HSL.
 
   /* Filter chip active state */
   .filter-chip-active {
-    @apply bg-gradient-to-r from-gold to-gold-dark text-gold-foreground shadow-sm;
+    @apply bg-white text-black shadow-sm;
   }
   
   .filter-chip-inactive {
