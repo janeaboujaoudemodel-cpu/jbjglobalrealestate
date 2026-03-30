@@ -262,7 +262,7 @@ export function MegaMenuIconLink({
 
 export function MegaMenuSectionDivider() {
   return (
-    <div className="my-4 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+    <div className="my-4 h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
   );
 }
 
