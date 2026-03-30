@@ -93,8 +93,8 @@ All colors MUST be HSL.
 
     /* Premium Refined Gold Theme - #C8A766 (HSL: 42 45% 59%) - Refined Champagne Gold */
     --gold: 42 45% 59%;
-    --gold-light: 42 50% 65%;
-    --gold-dark: 42 40% 50%;
+    --gold-light: 44 55% 75%;
+    --gold-dark: 40 50% 36%;
     --gold-muted: 42 35% 55%;
     --gold-foreground: 0 0% 100%;
 
