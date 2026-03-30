@@ -179,6 +179,13 @@ const PropertyMap = () => {
     return result;
   }, [allProjects, filters, hideSold, listSearch, sortMode]);
 
+  // Clear if selected project no longer in filtered results
+  useEffect(() => {
+    if (selectedProject && !filteredProjects.some(p => p.id === selectedProject.id)) {
+      setSelectedProject(null);
+    }
+  }, [selectedProject, filteredProjects]);
+
   const projectsWithCoords = useMemo(() => {
     return filteredProjects.filter(p =>
       p.latitude != null && p.longitude != null &&
