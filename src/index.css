@@ -681,7 +681,7 @@ All colors MUST be HSL.
   }
 
   .jj-card-base:hover {
-    @apply border-gold/40;
+    @apply border-white/20;
   }
 
   /* --- Card with Image --- */
