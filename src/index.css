@@ -30,7 +30,7 @@ body {
 
 @media (min-width: 768px) {
   body {
-    background-color: #ECE2D2;
+    background-color: #000000;
   }
 }
 
@@ -42,115 +42,106 @@ All colors MUST be HSL.
   :root {
     /* Responsive header height — used by mobile menu Sheet positioning */
     --responsive-header-height: 96px;
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 100%;
 
-    /* ACTIVE COLOR (LOCKED): match the platform's champagne active layer (NOT navy/blue). */
-    --primary: 38 38% 85%;
-    /* Primary foreground must be true-black (no navy tint) */
+    /* PRIMARY: White accent on black */
+    --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
 
-    /* Active champagne gradient (Layer 2) — reused for active buttons/sections */
-    --jj-gradient-active: linear-gradient(
-      135deg,
-      hsl(var(--champagne-1)),
-      hsl(var(--champagne-2)),
-      hsl(var(--champagne-3))
-    );
+    /* Active gradient replaced with grayscale */
+    --jj-gradient-active: linear-gradient(135deg, hsl(0 0% 10%), hsl(0 0% 7%), hsl(0 0% 4%));
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 63%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 79% 50%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 0% 100%;
+    --destructive-foreground: 0 0% 0%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 38 28% 74%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 0 0% 100%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 0 0% 4%;
+    --sidebar-foreground: 0 0% 63%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 0 0% 100%;
 
-    /* Premium Refined Gold Theme - #C8A766 (HSL: 42 45% 59%) - Refined Champagne Gold */
-    --gold: 42 45% 59%;
-    --gold-light: 44 55% 75%;
-    --gold-dark: 40 50% 36%;
-    --gold-muted: 42 35% 55%;
-    --gold-foreground: 0 0% 100%;
+    /* Monochrome accent — replaces gold */
+    --gold: 0 0% 100%;
+    --gold-light: 0 0% 88%;
+    --gold-dark: 0 0% 27%;
+    --gold-muted: 0 0% 63%;
+    --gold-foreground: 0 0% 0%;
 
-    /* Champagne / "Best Idea Award" Surface (HSL approximations of existing palette) */
-    --champagne-1: 38 55% 90%;
-    --champagne-2: 38 40% 83%;
-    --champagne-3: 38 30% 70%;
+    /* Champagne replaced with grayscale surfaces */
+    --champagne-1: 0 0% 10%;
+    --champagne-2: 0 0% 7%;
+    --champagne-3: 0 0% 4%;
 
     /* ============================================================
      * GLOBAL WIDTH + GUTTER SYSTEM (LOCKED - FINAL)
-     * Single source of truth for section sizing across Frontend + Backend.
-     * These values are LOCKED and match the approved "Developer Partners" spacing.
      * ============================================================ */
     --jj-content-max: 1600px;
-    --jj-gutter: 0.125rem; /* Locked: minimal gap on mobile */
+    --jj-gutter: 0.125rem;
 
-    /* Locked Champagne / Inner Card Surface (Layer 3) */
-    /* Warmer + less bright than pure white; matches the global "Locked Champagne" requirement */
-    --pearl-1: 40 38% 96%;
-    --pearl-2: 37 38% 94%;
-    --pearl-3: 38 40% 89%;
+    /* Pearl replaced with dark surfaces */
+    --pearl-1: 0 0% 10%;
+    --pearl-2: 0 0% 8%;
+    --pearl-3: 0 0% 6%;
 
     /* Premium surfaces */
-    --premium-bg: 0 0% 5%;
-    --premium-card: 0 0% 9%;
-    --premium-card-border: 0 0% 18%;
+    --premium-bg: 0 0% 3%;
+    --premium-card: 0 0% 7%;
+    --premium-card-border: 0 0% 16%;
 
-    /* CRM Theme - White/Gold/Black */
-    --crm-bg: 0 0% 100%;
-    --crm-card: 0 0% 100%;
-    --crm-card-border: 220 13% 91%;
-    --crm-text: 222 47% 11%;
-    --crm-text-muted: 215 16% 47%;
-    --crm-highlight: 210 40% 98%;
+    /* CRM Theme — monochrome */
+    --crm-bg: 0 0% 0%;
+    --crm-card: 0 0% 7%;
+    --crm-card-border: 0 0% 16%;
+    --crm-text: 0 0% 100%;
+    --crm-text-muted: 0 0% 63%;
+    --crm-highlight: 0 0% 10%;
 
-    /* Accent suit green used in icons */
-    --jj-suit: 155 18% 18%;
-    --jj-suit-dark: 155 22% 12%;
+    /* Suit accent replaced with grayscale */
+    --jj-suit: 0 0% 16%;
+    --jj-suit-dark: 0 0% 10%;
 
-    /* AI Theme Colors */
-    --ai-purple: 270 70% 60%;
-    --ai-purple-dark: 270 65% 45%;
-    --ai-fuchsia: 292 70% 55%;
-    --ai-cyan: 185 75% 50%;
-    --ai-emerald: 155 65% 45%;
-    --ai-amber: 38 90% 55%;
-    --ai-rose: 350 75% 55%;
-    --ai-glow: 270 90% 70%;
+    /* AI Theme — monochrome grayscale */
+    --ai-purple: 0 0% 63%;
+    --ai-purple-dark: 0 0% 40%;
+    --ai-fuchsia: 0 0% 55%;
+    --ai-cyan: 0 0% 70%;
+    --ai-emerald: 0 0% 55%;
+    --ai-amber: 0 0% 63%;
+    --ai-rose: 0 0% 55%;
+    --ai-glow: 0 0% 75%;
 
-    /* Listing badges (Provident mirror) */
-    --handover: 21 92% 48%;
-    --handover-foreground: 0 0% 100%;
+    /* Listing badges — monochrome */
+    --handover: 0 0% 100%;
+    --handover-foreground: 0 0% 0%;
 
-    /* Image overlay controls (arrows / dots on photos) */
+    /* Image overlay controls */
     --overlay: 0 0% 100%;
-    --overlay-foreground: 222 47% 11%;
+    --overlay-foreground: 0 0% 0%;
   }
 
   @media (min-width: 768px) {
@@ -178,57 +169,52 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --card: 222.2 70% 8%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 222.2 70% 8%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 100%;
 
-    /* Keep the same active champagne primary even in dark mode for consistency */
-    --primary: 38 38% 85%;
+    --primary: 0 0% 100%;
     --primary-foreground: 0 0% 0%;
 
-    --jj-gradient-active: linear-gradient(
-      135deg,
-      hsl(var(--champagne-1)),
-      hsl(var(--champagne-2)),
-      hsl(var(--champagne-3))
-    );
+    --jj-gradient-active: linear-gradient(135deg, hsl(0 0% 10%), hsl(0 0% 7%), hsl(0 0% 4%));
 
-    --secondary: 217.2 32.6% 20%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 217.2 32.6% 20%;
-    --muted-foreground: 215 20% 75%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 63%;
 
-    --accent: 217.2 32.6% 20%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 0 0% 10%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 70% 45%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 0% 100%;
+    --destructive-foreground: 0 0% 0%;
 
-    --border: 217.2 32.6% 25%;
-    --input: 217.2 32.6% 25%;
-    --ring: 38 28% 74%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 45 32% 39%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 18%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 20%;
-    --sidebar-ring: 45 32% 39%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 0 0% 100%;
 
-    /* Listing badges (Provident mirror) */
-    --handover: 24 95% 52%;
-    --handover-foreground: 0 0% 100%;
+    --sidebar-background: 0 0% 4%;
+    --sidebar-foreground: 0 0% 63%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 0 0% 100%;
 
-    /* Image overlay controls (arrows / dots on photos) */
+    /* Listing badges */
+    --handover: 0 0% 100%;
+    --handover-foreground: 0 0% 0%;
+
+    /* Image overlay controls */
     --overlay: 0 0% 100%;
-    --overlay-foreground: 222 47% 11%;
+    --overlay-foreground: 0 0% 0%;
   }
 }
 
@@ -341,9 +327,9 @@ All colors MUST be HSL.
 .animate-shimmer {
   background: linear-gradient(
     90deg,
-    hsl(var(--ai-purple) / 0.1) 0%,
-    hsl(var(--ai-fuchsia) / 0.3) 50%,
-    hsl(var(--ai-purple) / 0.1) 100%
+    hsl(0 0% 10% / 0.3) 0%,
+    hsl(0 0% 30% / 0.5) 50%,
+    hsl(0 0% 10% / 0.3) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 2s linear infinite;
@@ -394,9 +380,9 @@ All colors MUST be HSL.
    * Replaces: data-[state=active]:bg-gold
    * ============================================================ */
   .tab-trigger-champagne[data-state="active"] {
-    background: linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%);
-    border: 1px solid hsl(var(--gold) / 0.4);
-    color: #000;
+    background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
+    border: 1px solid hsl(0 0% 30%);
+    color: #FFF;
   }
 
   /* ============================================================
@@ -479,38 +465,33 @@ All colors MUST be HSL.
    * be full-width edge-to-edge, passing behind TOC navigator
    * ============================================================ */
 
-  /* LAYER 2: Active champagne section layer (placed on black background) */
+  /* LAYER 2: Active section layer (grayscale) */
   .jj-layer-active {
-    @apply rounded-2xl border border-gold/30;
+    @apply rounded-2xl border border-white/10;
     background: linear-gradient(
       to bottom right,
-      hsl(var(--champagne-1)),
-      hsl(var(--champagne-2)),
-      hsl(var(--champagne-3))
+      hsl(0 0% 10%),
+      hsl(0 0% 7%),
+      hsl(0 0% 4%)
     );
-    box-shadow: 0 0 40px hsl(var(--gold) / 0.18);
+    box-shadow: 0 0 40px hsl(0 0% 100% / 0.05);
   }
 
   /*
-   * Full-width champagne section background (edge-to-edge)
-   * Global rule: show a THIN black contour around the active layer.
-   */
-  /* 
-   * LAYER 2: Active Champagne Section (Full-width with thin black contour)
-   * This is the "active layer" sitting on the black page background.
+   * Full-width section background (edge-to-edge)
    */
 .jj-section-champagne {
   @apply py-12 md:py-16;
-  background: linear-gradient(135deg, hsl(32 28% 13%) 0%, hsl(33 27% 15%) 50%, hsl(33 28% 11%) 100%);
+  background: linear-gradient(135deg, hsl(0 0% 4%) 0%, hsl(0 0% 6%) 50%, hsl(0 0% 3%) 100%);
 }
 
 .jj-section-champagne > div,
 .jj-section-champagne > .container,
 .jj-section-champagne > .max-w-5xl,
 .jj-section-champagne > .max-w-4xl {
-  @apply mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-gold/30 p-4 md:p-6 lg:p-8;
-  background: linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%);
-  box-shadow: 0 0 40px rgba(200,167,102,0.18);
+  @apply mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-white/10 p-4 md:p-6 lg:p-8;
+  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
+  box-shadow: 0 0 40px rgba(255,255,255,0.03);
 }
 
 /* Market Intelligence pages: full-bleed sections stretch behind fixed TOC */
@@ -539,74 +520,74 @@ All colors MUST be HSL.
   @apply mx-1 sm:mx-2 md:mx-3 lg:mx-4;
 }
 
-/* Layer 2 wrapper with proper gutters - stretched cards */
+/* Layer 2 wrapper with proper gutters */
 .jj-layer-2 {
-  @apply jj-section-gutter rounded-2xl border border-gold/30 p-2 sm:p-3 md:p-4 lg:p-6;
-  background: linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%);
-  box-shadow: 0 0 40px rgba(200,167,102,0.18);
+  @apply jj-section-gutter rounded-2xl border border-white/10 p-2 sm:p-3 md:p-4 lg:p-6;
+  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
+  box-shadow: 0 0 40px rgba(255,255,255,0.03);
 }
 
-/* Layer 3 - Inner content with champagne fill */
+/* Layer 3 - Inner content cards */
 .jj-card-inner {
-  @apply rounded-xl border-2 border-gold/40 p-6;
-  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%);
-  box-shadow: 0 0 15px rgba(200,167,102,0.22), inset 0 1px 2px hsl(0 0% 100% / 0.4);
+  @apply rounded-xl border border-white/10 p-6;
+  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.5);
   transition: all 0.3s ease;
 }
 
 .jj-card-inner:hover {
-  @apply border-gold;
+  @apply border-white/20;
   transform: translateY(-3px);
-  box-shadow: 0 0 25px rgba(200,167,102,0.28), 0 18px 50px rgba(0,0,0,0.35);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
 }
 
 /* Active box - for inner content cards (Layer 3) */
 .jj-box-active {
-  @apply rounded-xl border-2 border-gold/40 p-6;
-  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%);
-  box-shadow: 0 0 15px rgba(200,167,102,0.22), inset 0 1px 2px hsl(0 0% 100% / 0.4);
+  @apply rounded-xl border border-white/10 p-6;
+  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.5);
   transition: all 0.3s ease;
 }
 
 .jj-box-active:hover {
-  @apply border-gold;
+  @apply border-white/20;
   transform: translateY(-3px);
-  box-shadow: 0 0 25px rgba(200,167,102,0.28), 0 18px 50px rgba(0,0,0,0.35);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
 }
 
-/* Icon box with active champagne color - Black icons on active bg */
+/* Icon box - grayscale */
 .jj-icon-box-active {
-  @apply rounded-lg flex items-center justify-center border border-gold/30;
-  background: linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%);
+  @apply rounded-lg flex items-center justify-center border border-white/10;
+  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
 }
 
 .jj-icon-box-active svg {
-  @apply text-black;
+  @apply text-white;
 }
 
-/* Premium icon box - black background with gold icon */
+/* Icon box */
 .jj-icon-box {
-    @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-gold/40;
+    @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-white/10;
     background: linear-gradient(
       to bottom right,
-      hsl(var(--champagne-1)),
-      hsl(var(--champagne-2)),
-      hsl(var(--champagne-3))
+      hsl(0 0% 10%),
+      hsl(0 0% 7%),
+      hsl(0 0% 4%)
     );
     box-shadow:
-      inset 0 1px 0 hsl(0 0% 100% / 0.5),
-      0 4px 14px hsl(var(--gold) / 0.2);
+      inset 0 1px 0 hsl(0 0% 100% / 0.05),
+      0 4px 14px hsl(0 0% 0% / 0.3);
   }
 
   .jj-icon-box-active > svg {
     color: hsl(var(--foreground));
   }
 
-/* Always-visible gold scrollbar for TOC/navigator containers */
+/* Scrollbar styling — monochrome */
 .jj-scrollbar-gold {
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: hsl(42 45% 59% / 0.85) hsl(42 45% 59% / 0.2);
+  scrollbar-color: hsl(0 0% 40% / 0.85) hsl(0 0% 20% / 0.2);
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar {
@@ -615,21 +596,21 @@ All colors MUST be HSL.
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar-track {
-  background: hsl(42 45% 59% / 0.1);
+  background: hsl(0 0% 20% / 0.1);
   border-radius: 4px;
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar-thumb {
-  background: hsl(42 45% 59% / 0.7);
+  background: hsl(0 0% 40% / 0.7);
   border-radius: 4px;
   min-height: 40px;
 }
 
 .jj-scrollbar-gold::-webkit-scrollbar-thumb:hover {
-  background: hsl(42 45% 59%);
+  background: hsl(0 0% 60%);
 }
 
-/* Force scrollbar always visible (not auto-hide) */
+/* Force scrollbar always visible */
 .jj-scrollbar-always-visible {
   overflow-y: scroll !important;
 }
@@ -640,24 +621,24 @@ All colors MUST be HSL.
 }
 
 .jj-scrollbar-always-visible::-webkit-scrollbar-track {
-  background: hsl(42 45% 59% / 0.15);
+  background: hsl(0 0% 20% / 0.15);
   border-radius: 4px;
 }
 
 .jj-scrollbar-always-visible::-webkit-scrollbar-thumb {
-  background: hsl(42 45% 59% / 0.7);
+  background: hsl(0 0% 40% / 0.7);
   border-radius: 4px;
   min-height: 30px;
 }
 
-/* Horizontal gold scrollbar for admin tab strips */
+/* Horizontal scrollbar */
 .jj-scrollbar-gold-x {
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: hsl(42 45% 59% / 0.6) transparent;
+  scrollbar-color: hsl(0 0% 40% / 0.6) transparent;
 }
 
 .jj-scrollbar-gold-x::-webkit-scrollbar {
@@ -670,21 +651,21 @@ All colors MUST be HSL.
 }
 
 .jj-scrollbar-gold-x::-webkit-scrollbar-thumb {
-  background: hsl(42 45% 59% / 0.5);
+  background: hsl(0 0% 40% / 0.5);
   border-radius: 4px;
 }
 
 .jj-scrollbar-gold-x::-webkit-scrollbar-thumb:hover {
-  background: hsl(42 45% 59% / 0.8);
+  background: hsl(0 0% 60% / 0.8);
 }
 
-  /* Title styling: First word gold, rest black (Guides & Market Intelligence) */
+  /* Title styling: First word white, rest gray */
   .jj-title-split span:first-child {
-    @apply text-gold;
+    @apply text-white;
   }
   
   .jj-title-split span:not(:first-child) {
-    @apply text-black;
+    @apply text-white/60;
   }
 
   /* ============================================================
@@ -700,7 +681,7 @@ All colors MUST be HSL.
   }
 
   .jj-card-base:hover {
-    @apply border-gold/40;
+    @apply border-white/20;
   }
 
   /* --- Card with Image --- */
@@ -709,7 +690,7 @@ All colors MUST be HSL.
   }
 
   .jj-card-media:hover {
-    @apply border-gold/40;
+    @apply border-white/20;
   }
 
   .jj-card-media-image {
@@ -733,7 +714,7 @@ All colors MUST be HSL.
   }
 
   .jj-property-card:hover {
-    @apply border-gold/50;
+    @apply border-white/20;
   }
 
   .jj-property-card-image {
@@ -761,7 +742,7 @@ All colors MUST be HSL.
   }
 
   .jj-property-card-detail {
-    @apply text-base font-medium text-gold;
+    @apply text-base font-medium text-white;
   }
 
   /* --- User / Employee Card --- */
@@ -771,7 +752,7 @@ All colors MUST be HSL.
   }
 
   .jj-user-card:hover {
-    @apply border-gold/50;
+    @apply border-white/20;
   }
 
   .jj-user-card-centered {
@@ -779,7 +760,7 @@ All colors MUST be HSL.
   }
 
   .jj-user-card-image {
-    @apply w-20 h-20 rounded-full overflow-hidden border-2 border-gold/30;
+    @apply w-20 h-20 rounded-full overflow-hidden border-2 border-white/10;
   }
 
   .jj-user-card-image img {
@@ -793,7 +774,7 @@ All colors MUST be HSL.
   }
 
   .jj-user-card-role {
-    @apply text-sm font-normal text-gold;
+    @apply text-sm font-normal text-white/60;
   }
 
   /* --- CRM Record Card --- */
@@ -803,7 +784,7 @@ All colors MUST be HSL.
   }
 
   .jj-crm-card:hover {
-    @apply border-gold/50;
+    @apply border-white/20;
   }
 
   .jj-crm-card-header {
@@ -815,7 +796,7 @@ All colors MUST be HSL.
   }
 
   .jj-crm-card-status {
-    @apply text-xs font-medium uppercase tracking-wide px-2 py-1 rounded bg-gold/10 text-gold;
+    @apply text-xs font-medium uppercase tracking-wide px-2 py-1 rounded bg-white/10 text-white;
   }
 
   .jj-crm-card-meta {
@@ -829,7 +810,7 @@ All colors MUST be HSL.
   }
 
   .jj-insight-card:hover {
-    @apply border-gold/40;
+    @apply border-white/20;
   }
 
   .jj-insight-card-title {
@@ -953,14 +934,12 @@ All colors MUST be HSL.
   }
 
   /* ============================================================
-   * GLOBAL ACTIVE STATE SYSTEM - LOCKED
-   * Champagne gradient when active, consistent across platform
-   * Used in: Guides TOC, Filters, Tabs, Nav Items, Sidebars
+   * GLOBAL ACTIVE STATE SYSTEM — MONOCHROME
    * ============================================================ */
   
-  /* --- Active Item (Light/White Background Sections) --- */
+  /* --- Active Item --- */
   .jj-active-item {
-    @apply bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-medium shadow-md border border-gold/40;
+    @apply bg-white text-black font-medium shadow-md border border-white/40;
   }
 
   .jj-active-item-text {
@@ -972,50 +951,50 @@ All colors MUST be HSL.
   }
 
   .jj-active-item-number {
-    @apply bg-black text-gold;
+    @apply bg-white text-black;
   }
 
   /* --- Inactive/Default Item --- */
   .jj-inactive-item {
-    @apply text-zinc-600 bg-transparent border border-transparent;
+    @apply text-white/40 bg-transparent border border-transparent;
   }
 
   .jj-inactive-item:hover {
-    @apply text-black bg-zinc-100 border-zinc-200;
+    @apply text-white bg-white/5 border-white/10;
   }
 
   .jj-inactive-item-icon {
-    @apply text-gold;
+    @apply text-white/60;
   }
 
   .jj-inactive-item-number {
-    @apply bg-gold/10 text-gold;
+    @apply bg-white/10 text-white;
   }
 
-  /* --- Tab/Filter Active State (for buttons/pills) --- */
+  /* --- Tab/Filter Active State --- */
   .jj-tab-active {
-    @apply bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-medium shadow-sm border border-gold/40;
+    @apply bg-white text-black font-medium shadow-sm border border-white/40;
   }
 
   .jj-tab-inactive {
-    @apply bg-white text-zinc-600 border border-zinc-300;
+    @apply bg-transparent text-white/60 border border-white/10;
   }
 
   .jj-tab-inactive:hover {
-    @apply border-gold/50 text-gold;
+    @apply border-white/30 text-white;
   }
 
   /* --- Sort Button Active State --- */
   .jj-sort-active {
-    @apply bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-medium;
+    @apply bg-white text-black font-medium;
   }
 
   .jj-sort-inactive {
-    @apply bg-zinc-100 text-zinc-600;
+    @apply bg-white/5 text-white/60;
   }
 
   .jj-sort-inactive:hover {
-    @apply bg-gold/20 text-gold;
+    @apply bg-white/10 text-white;
   }
 
   /* --- User & Employee Names --- */
@@ -1024,37 +1003,35 @@ All colors MUST be HSL.
   }
 
   .jj-role {
-    @apply font-normal text-gold;
+    @apply font-normal text-white/60;
   }
 
   /* --- Label / Tag --- */
   .jj-label {
-    @apply text-xs font-medium uppercase tracking-wider text-gold;
+    @apply text-xs font-medium uppercase tracking-wider text-white/60;
   }
 
   /* --- Premium Section Label --- */
   .jj-section-label {
-    @apply text-xs md:text-sm font-medium uppercase tracking-widest text-gold;
+    @apply text-xs md:text-sm font-medium uppercase tracking-widest text-white/60;
     letter-spacing: 0.15em;
   }
 
   /* ============================================================
-   * GLOBAL CHAMPAGNE SECTION BACKGROUND - LOCKED
-   * Standard champagne gradient for white section backgrounds
-   * Matching Best Idea Award box styling
+   * GLOBAL SECTION BACKGROUND — MONOCHROME
    * ============================================================ */
   .jj-section-champagne {
     @apply bg-gradient-to-br;
-    --tw-gradient-from: #FDFBF7;
-    --tw-gradient-via: #F7F2EA;
-    --tw-gradient-to: #EFE6D6;
+    --tw-gradient-from: #111111;
+    --tw-gradient-via: #0A0A0A;
+    --tw-gradient-to: #000000;
   }
 
   .jj-card-champagne {
-    @apply bg-gradient-to-br border-2 border-gold/40 shadow-[0_0_40px_rgba(200,167,102,0.3)];
-    --tw-gradient-from: #FDFBF7;
-    --tw-gradient-via: #F7F2EA;
-    --tw-gradient-to: #EFE6D6;
+    @apply bg-gradient-to-br border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.03)];
+    --tw-gradient-from: #1A1A1A;
+    --tw-gradient-via: #111111;
+    --tw-gradient-to: #0A0A0A;
   }
 
   /* ============================================================
@@ -1136,7 +1113,7 @@ All colors MUST be HSL.
   }
   
   .jj-profile-card .jj-profile-role {
-    @apply text-gold text-sm mt-1;
+    @apply text-white/60 text-sm mt-1;
   }
 
   /* Profile image container - ensures proper sizing */
@@ -1152,26 +1129,25 @@ All colors MUST be HSL.
   }
 
   /* ============================================================
-   * 3. GLOBAL BUTTON SYSTEM - INVERTED HOVER (LOCKED)
-   * All buttons must invert on hover
+   * 3. GLOBAL BUTTON SYSTEM — MONOCHROME INVERTED HOVER
    * ============================================================ */
   
-  /* Button Type A - White Base (Default) */
+  /* Button Type A - White Base (Primary) */
   .jj-btn-primary {
-    @apply bg-white text-gold border border-gold font-semibold;
+    @apply bg-white text-black border border-white font-semibold;
     @apply transition-all duration-300;
   }
   .jj-btn-primary:hover {
-    @apply bg-transparent text-gold border-gold;
+    @apply bg-transparent text-white border-white;
   }
   
-  /* Button Type B - Transparent Base (For images/videos) */
+  /* Button Type B - Transparent Base (Secondary) */
   .jj-btn-secondary {
-    @apply bg-transparent text-gold border border-gold font-semibold;
+    @apply bg-transparent text-white border border-white/40 font-semibold;
     @apply transition-all duration-300;
   }
   .jj-btn-secondary:hover {
-    @apply bg-white text-gold border-gold;
+    @apply bg-white text-black border-white;
   }
   
   /* Button on Hero/Image backgrounds */
@@ -1180,7 +1156,7 @@ All colors MUST be HSL.
     @apply transition-all duration-300;
   }
   .jj-btn-hero:hover {
-    @apply bg-white text-gold border-white;
+    @apply bg-white text-black border-white;
   }
 
   /* ============================================================
@@ -1392,11 +1368,11 @@ All colors MUST be HSL.
   }
   
   .jj-gold-accent {
-    @apply text-gold;
+    @apply text-white;
   }
   
   .jj-gold-border {
-    @apply border-gold/30;
+    @apply border-white/10;
   }
 
   /* ============================================================
@@ -1405,22 +1381,20 @@ All colors MUST be HSL.
 
   /* Filter chip active state */
   .filter-chip-active {
-    @apply bg-gradient-to-r from-gold to-gold-dark text-gold-foreground shadow-sm;
+    @apply bg-white text-black shadow-sm;
   }
   
   .filter-chip-inactive {
     @apply bg-zinc-900 text-zinc-300 hover:bg-zinc-800 border border-zinc-800;
   }
 
-  /* Services section background (cinematic + warm bokeh) */
+  /* Services section background — monochrome */
   .jj-services {
     background-color: hsl(var(--premium-bg));
     background-image:
-      radial-gradient(900px 420px at 50% 92%, hsl(var(--gold) / 0.16) 0%, transparent 55%),
-      radial-gradient(520px 360px at 18% 46%, hsl(var(--gold-dark) / 0.22) 0%, transparent 62%),
-      radial-gradient(640px 420px at 86% 48%, hsl(var(--gold-dark) / 0.20) 0%, transparent 60%),
-      radial-gradient(380px 240px at 36% 58%, hsl(var(--gold) / 0.18) 0%, transparent 58%),
-      radial-gradient(420px 260px at 68% 60%, hsl(var(--gold) / 0.16) 0%, transparent 60%),
+      radial-gradient(900px 420px at 50% 92%, hsl(0 0% 20% / 0.12) 0%, transparent 55%),
+      radial-gradient(520px 360px at 18% 46%, hsl(0 0% 15% / 0.15) 0%, transparent 62%),
+      radial-gradient(640px 420px at 86% 48%, hsl(0 0% 15% / 0.12) 0%, transparent 60%),
       linear-gradient(180deg, hsl(0 0% 2% / 1) 0%, hsl(var(--premium-bg)) 45%, hsl(0 0% 2% / 1) 100%);
   }
 
@@ -1429,17 +1403,7 @@ All colors MUST be HSL.
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.9;
-    background-image:
-      radial-gradient(10px 10px at 16% 58%, hsl(var(--gold-light) / 0.22) 0%, transparent 60%),
-      radial-gradient(12px 12px at 22% 44%, hsl(var(--gold) / 0.20) 0%, transparent 62%),
-      radial-gradient(9px 9px at 32% 66%, hsl(var(--gold) / 0.16) 0%, transparent 62%),
-      radial-gradient(14px 14px at 48% 54%, hsl(var(--gold-light) / 0.16) 0%, transparent 62%),
-      radial-gradient(10px 10px at 60% 62%, hsl(var(--gold) / 0.18) 0%, transparent 62%),
-      radial-gradient(13px 13px at 72% 46%, hsl(var(--gold-light) / 0.18) 0%, transparent 62%),
-      radial-gradient(10px 10px at 84% 60%, hsl(var(--gold) / 0.16) 0%, transparent 62%),
-      radial-gradient(12px 12px at 90% 44%, hsl(var(--gold-light) / 0.14) 0%, transparent 62%);
-    filter: blur(0.6px);
+    opacity: 0;
   }
 
   .jj-services::after {
@@ -1451,7 +1415,6 @@ All colors MUST be HSL.
     height: 34%;
     pointer-events: none;
     background:
-      radial-gradient(1200px 220px at 50% 120%, hsl(var(--gold) / 0.10) 0%, transparent 55%),
       linear-gradient(180deg, transparent 0%, hsl(0 0% 0% / 0.55) 90%, hsl(0 0% 0% / 0.8) 100%);
     opacity: 0.95;
   }
@@ -1531,10 +1494,10 @@ All colors MUST be HSL.
   }
 
   .jj-gold-text {
-    color: hsl(var(--gold));
+    color: hsl(0 0% 100%);
     text-shadow:
       0 1px 0 hsl(0 0% 0% / 0.6),
-      0 8px 18px hsl(var(--gold-dark) / 0.28);
+      0 8px 18px hsl(0 0% 0% / 0.28);
   }
 
   .jj-ornament {
@@ -1551,19 +1514,19 @@ All colors MUST be HSL.
     content: "";
     width: 34px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, hsl(var(--gold) / 0.85));
+    background: linear-gradient(90deg, transparent, hsl(0 0% 40% / 0.85));
     opacity: 0.9;
   }
 
   .jj-ornament::after {
-    background: linear-gradient(90deg, hsl(var(--gold) / 0.85), transparent);
+    background: linear-gradient(90deg, hsl(0 0% 40% / 0.85), transparent);
   }
 
   .jj-ornament span {
     display: inline-block;
     border-radius: 999px;
-    background: hsl(var(--gold));
-    box-shadow: 0 0 10px hsl(var(--gold) / 0.35);
+    background: hsl(0 0% 60%);
+    box-shadow: 0 0 10px hsl(0 0% 60% / 0.35);
   }
 
   .jj-ornament .dot-lg {
@@ -1639,46 +1602,45 @@ All colors MUST be HSL.
   }
 
   /* ============================================================
-   * GLOBAL FORM PLACEHOLDER STYLING - GOLD GLOW
-   * All form inputs show glowing gold placeholder text
+   * GLOBAL FORM PLACEHOLDER STYLING — MONOCHROME
    * ============================================================ */
   .gold-placeholder::placeholder {
-    color: hsl(var(--gold));
+    color: hsl(0 0% 40%);
     opacity: 0.9;
-    text-shadow: 0 0 8px hsl(var(--gold) / 0.4);
+    text-shadow: none;
   }
 
   input.gold-placeholder::placeholder,
   textarea.gold-placeholder::placeholder {
-    color: hsl(var(--gold));
+    color: hsl(0 0% 40%);
     opacity: 0.85;
-    text-shadow: 0 0 6px hsl(var(--gold) / 0.3);
+    text-shadow: none;
   }
 }
 
-/* Global form placeholder gold styling - applies to all forms */
+/* Global form placeholder styling */
 @layer utilities {
   .placeholder-gold::placeholder {
-    color: hsl(42 45% 59%);
+    color: hsl(0 0% 40%);
     opacity: 0.9;
-    text-shadow: 0 0 8px hsl(42 45% 59% / 0.4);
+    text-shadow: none;
   }
 
-  /* Gold scrollbar styling for TOC and navigation panels */
+  /* Scrollbar styling — monochrome */
   .scrollbar-thin {
     scrollbar-width: thin;
   }
   
   .scrollbar-thumb-gold {
-    scrollbar-color: hsl(42 45% 59%) transparent;
+    scrollbar-color: hsl(0 0% 40%) transparent;
   }
   
   .scrollbar-thumb-gold\/60 {
-    scrollbar-color: hsl(42 45% 59% / 0.6) hsl(42 45% 59% / 0.1);
+    scrollbar-color: hsl(0 0% 40% / 0.6) hsl(0 0% 20% / 0.1);
   }
   
   .scrollbar-track-gold\/10 {
-    scrollbar-color: inherit hsl(42 45% 59% / 0.1);
+    scrollbar-color: inherit hsl(0 0% 20% / 0.1);
   }
 
   /* Webkit scrollbar styling */
@@ -1688,16 +1650,16 @@ All colors MUST be HSL.
   }
   
   .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb {
-    background: hsl(42 45% 59% / 0.6);
+    background: hsl(0 0% 40% / 0.6);
     border-radius: 3px;
   }
   
   .scrollbar-thumb-gold\/60::-webkit-scrollbar-thumb:hover {
-    background: hsl(42 45% 59%);
+    background: hsl(0 0% 60%);
   }
   
   .scrollbar-track-gold\/10::-webkit-scrollbar-track {
-    background: hsl(42 45% 59% / 0.1);
+    background: hsl(0 0% 20% / 0.1);
     border-radius: 3px;
   }
 
@@ -1833,16 +1795,16 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 /* Dark theme variant for SelectTrigger */
 [data-radix-select-trigger].dark-select,
 .dark-select-trigger {
-  @apply bg-zinc-800 border-gold/30 text-white;
+  @apply bg-zinc-800 border-white/10 text-white;
 }
 
 /* Dark theme variant for SelectContent */
 [data-radix-select-content].dark-select-content {
-  @apply bg-zinc-800 border-gold/40 text-white;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 4px 15px rgba(200,167,102,0.2);
+  @apply bg-zinc-800 border-white/10 text-white;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
 }
 
-/* Dark theme SelectItem styling with gold hover */
+/* Dark theme SelectItem styling */
 .dark-select-item {
   @apply text-white;
 }
@@ -1850,11 +1812,11 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 .dark-select-item:hover,
 .dark-select-item:focus,
 .dark-select-item[data-highlighted] {
-  @apply bg-gold/20 text-gold;
+  @apply bg-white/10 text-white;
 }
 
 .dark-select-item[data-state="checked"] {
-  @apply bg-gold/25 text-gold;
+  @apply bg-white/15 text-white;
 }
 
 /* ============================================================
@@ -1948,30 +1910,30 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   display: none;
 }
 
-/* AI Home Finder floating animation — premium with shadow shift */
+/* Floating animation — monochrome */
 @keyframes jbj-float {
   0%, 100% {
     transform: translateY(0);
-    box-shadow: 0 8px 30px rgba(200,167,102,0.15);
+    box-shadow: 0 8px 30px rgba(255,255,255,0.05);
   }
   50% {
     transform: translateY(-14px);
-    box-shadow: 0 20px 50px rgba(200,167,102,0.25);
+    box-shadow: 0 20px 50px rgba(255,255,255,0.08);
   }
 }
 
-/* Chat button glow pulse — ultra calm breathing wave */
+/* Button glow pulse — monochrome */
 @keyframes jbj-glow-pulse {
   0%, 100% {
     box-shadow:
-      0 0 0 0 hsl(var(--gold) / 0),
-      0 4px 16px -8px hsl(var(--gold-dark) / 0.1);
+      0 0 0 0 hsl(0 0% 100% / 0),
+      0 4px 16px -8px hsl(0 0% 50% / 0.1);
   }
   50% {
     box-shadow:
-      0 0 0 8px hsl(var(--gold) / 0.08),
-      0 0 0 16px hsl(var(--gold-light) / 0.03),
-      0 8px 24px -8px hsl(var(--gold-dark) / 0.12);
+      0 0 0 8px hsl(0 0% 100% / 0.05),
+      0 0 0 16px hsl(0 0% 100% / 0.02),
+      0 8px 24px -8px hsl(0 0% 50% / 0.12);
   }
 }
 
