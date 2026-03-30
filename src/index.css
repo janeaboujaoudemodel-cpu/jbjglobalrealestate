@@ -467,14 +467,14 @@ All colors MUST be HSL.
 
   /* LAYER 2: Active section layer (grayscale) */
   .jj-layer-active {
-    @apply rounded-2xl border border-white/10;
+    @apply rounded-2xl border border-gray-200;
     background: linear-gradient(
       to bottom right,
-      hsl(0 0% 10%),
-      hsl(0 0% 7%),
-      hsl(0 0% 4%)
+      hsl(0 0% 98%),
+      hsl(0 0% 96%),
+      hsl(0 0% 100%)
     );
-    box-shadow: 0 0 40px hsl(0 0% 100% / 0.05);
+    box-shadow: 0 1px 3px hsl(0 0% 0% / 0.05);
   }
 
   /*
