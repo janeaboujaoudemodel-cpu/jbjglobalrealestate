@@ -1952,3 +1952,57 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   will-change: transform;
   backface-visibility: hidden;
 }
+
+/* ============================================================
+ * GLOBAL MONOCHROME OVERRIDE
+ * Catches hardcoded colors across 800+ component files
+ * ============================================================ */
+
+/* Champagne/cream gradient backgrounds → dark surface */
+[class*="from-[#FDFBF7]"],
+[class*="from-[#F7F1E6]"],
+[class*="from-[#F7F2EA]"],
+[class*="from-[#ECE2D2]"],
+[class*="from-[#E8DCC8]"],
+[class*="from-[#EFE6D6]"],
+[class*="from-[#DCCFB5]"],
+[class*="from-[#D8C7A6]"],
+[class*="from-[#D4C4A8]"] {
+  --tw-gradient-from: #1A1A1A !important;
+  --tw-gradient-via: #111111 !important;
+  --tw-gradient-to: #0A0A0A !important;
+}
+
+/* Gold hex text → white */
+[class*="text-[#D4AF37]"],
+[class*="text-[#C8A766]"],
+[class*="text-[#B8860B]"],
+[class*="text-[#F5E6C8]"] {
+  color: white !important;
+}
+
+/* Light/cream backgrounds → dark surface */
+[class*="bg-[#FDFBF7]"],
+[class*="bg-[#F7F1E6]"],
+[class*="bg-[#F7F2EA]"],
+[class*="bg-[#ECE2D2]"],
+[class*="bg-[#EFE6D6]"] {
+  background-color: #111111 !important;
+}
+
+/* Brown/champagne background gradients → dark */
+[class*="from-[hsl(32"],
+[class*="from-[hsl(33"],
+[class*="from-[hsl(34"],
+[class*="from-[hsl(36"],
+[class*="from-[hsl(38"] {
+  --tw-gradient-from: #0A0A0A !important;
+  --tw-gradient-via: #080808 !important;
+  --tw-gradient-to: #050505 !important;
+}
+
+/* Gold border overrides */
+[class*="border-[#D4AF37]"],
+[class*="border-[#C8A766]"] {
+  border-color: rgba(255,255,255,0.2) !important;
+}
