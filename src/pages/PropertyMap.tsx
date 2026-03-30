@@ -257,7 +257,7 @@ const PropertyMap = () => {
       </div>
 
       {/* ── MAP CONTAINER ── */}
-      <div style={{ height: "calc(100vh - 88px - 48px)" }}>
+      <div className="flex-1 relative overflow-hidden">
         <MapContainer
           center={center}
           zoom={11}
