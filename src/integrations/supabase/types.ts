@@ -27677,6 +27677,7 @@ export type Database = {
         | "broker_partner"
         | "client"
         | "support_ops"
+        | "auditor"
       approval_stage_status: "pending" | "approved" | "rejected" | "skipped"
       approval_type:
         | "leave_request"
@@ -28119,6 +28120,7 @@ export const Constants = {
         "broker_partner",
         "client",
         "support_ops",
+        "auditor",
       ],
       approval_stage_status: ["pending", "approved", "rejected", "skipped"],
       approval_type: [
