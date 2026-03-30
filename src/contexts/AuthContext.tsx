@@ -47,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [ownerLoading, setOwnerLoading] = useState(true);
   const [ownerError, setOwnerError] = useState<string | null>(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [isAuditor, setIsAuditor] = useState(false);
 
   const verifyOwner = useCallback(async (currentSession: Session | null): Promise<boolean> => {
     if (!currentSession?.access_token) {
