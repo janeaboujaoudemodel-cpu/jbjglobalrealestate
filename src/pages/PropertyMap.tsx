@@ -196,7 +196,7 @@ const PropertyMap = () => {
   ];
 
   return (
-    <div className="min-h-screen relative">
+    <div className="flex flex-col h-[calc(100vh-88px)] overflow-hidden">
       {/* ── MAP CONTROL BAR — below header, NOT part of header ── */}
       <div className="sticky top-[88px] z-[60] bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] border-b border-gold/20">
         <div className="flex items-center gap-2 px-3 py-2 flex-wrap">
