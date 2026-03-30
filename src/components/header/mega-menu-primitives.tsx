@@ -120,7 +120,7 @@ export function MegaMenuFeaturedCard({
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-[2]" />
-      <div className="absolute inset-0 border-2 border-white/20 rounded-xl group-hover:border-white/40 transition-colors z-[3]" />
+      <div className="absolute inset-0 border border-gray-200 rounded-xl group-hover:border-gray-300 transition-colors z-[3]" />
       <div className="absolute bottom-0 left-0 right-0 p-5 z-[4]">
         {kicker ? (
           <p className="text-white/70 text-[10px] font-bold tracking-[0.2em] uppercase mb-1.5">
