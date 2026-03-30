@@ -752,7 +752,7 @@ All colors MUST be HSL.
   }
 
   .jj-user-card:hover {
-    @apply border-gold/50;
+    @apply border-white/20;
   }
 
   .jj-user-card-centered {
