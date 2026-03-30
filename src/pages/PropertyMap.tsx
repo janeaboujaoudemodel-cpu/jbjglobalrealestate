@@ -53,6 +53,47 @@ function MapViewToggle({ mapView, onViewChange, t }: { mapView: MapViewType; onV
   );
 }
 
+// Expose Leaflet map instance to parent via callback
+function MapRefGetter({ onMap }: { onMap: (map: L.Map) => void }) {
+  const map = useMap();
+  useEffect(() => { onMap(map); }, [map, onMap]);
+  return null;
+}
+
+// Smart card positioning: keeps card visible, avoids sidebar/header
+function getCardPosition(
+  map: L.Map,
+  latlng: [number, number],
+  cardWidth: number,
+  cardHeight: number,
+  containerEl: HTMLElement
+) {
+  const point = map.latLngToContainerPoint(latlng);
+  const rect = containerEl.getBoundingClientRect();
+  const cw = rect.width;
+  const ch = rect.height;
+  const sidebarSafe = 80; // left sidebar width + margin
+  const padding = 12;
+  const markerOffset = 20;
+
+  // Horizontal: prefer right of marker, flip left if near right edge
+  let left = point.x + markerOffset;
+  if (left + cardWidth + padding > cw) {
+    left = point.x - cardWidth - markerOffset;
+  }
+  // Ensure not behind sidebar
+  if (left < sidebarSafe) {
+    left = sidebarSafe;
+  }
+
+  // Vertical: center on marker, clamp to container
+  let top = point.y - cardHeight / 2;
+  if (top < padding) top = padding;
+  if (top + cardHeight + padding > ch) top = ch - cardHeight - padding;
+
+  return { left, top };
+}
+
 function ScrollWheelZoomGuard() {
   const map = useMap();
   useEffect(() => {
