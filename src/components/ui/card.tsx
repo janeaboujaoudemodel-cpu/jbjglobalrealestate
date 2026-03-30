@@ -3,9 +3,8 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 /* ============================================================
- * GLOBAL CARD SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
- * Architectural · Calm · Premium · Trustworthy
- * No shadows, no gradients, no animated hover effects
+ * GLOBAL CARD SYSTEM - JBJ GLOBAL REAL ESTATE
+ * Monochrome Design System
  * ============================================================ */
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (
@@ -67,7 +66,7 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
 );
 CardFooter.displayName = "CardFooter";
 
-/* --- Card Meta Component (for secondary info) --- */
+/* --- Card Meta Component --- */
 const CardMeta = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
     <p ref={ref} className={cn("text-sm text-muted-foreground", className)} {...props} />
@@ -75,10 +74,10 @@ const CardMeta = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTM
 );
 CardMeta.displayName = "CardMeta";
 
-/* --- Card Detail Component (for key details like price/status) --- */
+/* --- Card Detail Component --- */
 const CardDetail = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
   ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn("text-base font-medium text-gold", className)} {...props} />
+    <p ref={ref} className={cn("text-base font-medium text-white", className)} {...props} />
   ),
 );
 CardDetail.displayName = "CardDetail";

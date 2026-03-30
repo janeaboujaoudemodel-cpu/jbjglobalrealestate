@@ -9,10 +9,9 @@ interface ThemedIconProps {
 }
 
 /**
- * ThemedIcon - Globally consistent icon styling
- * 
- * On dark/black backgrounds (variant="dark"): White circle with gold icon
- * On light/white backgrounds (variant="light"): Black circle with gold icon
+ * ThemedIcon — Monochrome design system
+ * On dark backgrounds (variant="dark"): White circle with black icon
+ * On light backgrounds (variant="light"): Black circle with white icon
  */
 export function ThemedIcon({ 
   icon: Icon, 
@@ -34,9 +33,8 @@ export function ThemedIcon({
     xl: "w-8 h-8",
   };
 
-  // Dark background = white circle + gold icon
-  // Light background = black circle + gold icon
-  const bgClass = variant === "dark" ? "bg-white" : "bg-black";
+  const bgClass = variant === "dark" ? "bg-white" : "bg-[#1A1A1A]";
+  const iconColor = variant === "dark" ? "text-black" : "text-white";
 
   return (
     <div 
@@ -47,7 +45,7 @@ export function ThemedIcon({
         className
       )}
     >
-      <Icon className={cn(iconSizeClasses[size], "text-gold")} />
+      <Icon className={cn(iconSizeClasses[size], iconColor)} />
     </div>
   );
 }

@@ -6,17 +6,12 @@ import { cn } from "@/lib/utils";
 type MegaMenuShellProps = {
   children: React.ReactNode;
   className?: string;
-  /** When true, removes max-height and overflow-y to prevent scrolling */
   noScroll?: boolean;
-  /** Optional inline styles for fixed dimensions to prevent layout shift */
   style?: React.CSSProperties;
 };
 
 /**
- * Shared mega-menu shell:
- * - No top gold border / shimmer line (per user requirement)
- * - Wide, consistent container
- * - Champagne gradient background (design token classes)
+ * Shared mega-menu shell — monochrome design system
  */
 export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps>(
   ({ children, className, noScroll = false, style }, ref) => {
@@ -24,7 +19,7 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
       <div
         ref={ref}
         className={cn(
-          "fixed z-[10050] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] rounded-xl overflow-hidden border-2 border-gold/40",
+          "fixed z-[10050] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.7)] rounded-xl overflow-hidden border-2 border-white/20",
           className
         )}
         style={{
@@ -35,7 +30,7 @@ export const MegaMenuShell = React.forwardRef<HTMLDivElement, MegaMenuShellProps
           maxWidth: 'calc(100vw - 48px)',
           maxHeight: 'calc(100vh - var(--header-height, 128px) - 24px)',
           overflowY: 'auto' as const,
-          background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
+          background: 'linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%)',
           ...style,
         }}
       >
@@ -49,9 +44,7 @@ MegaMenuShell.displayName = "MegaMenuShell";
 type MegaMenuFeaturedCardProps = {
   to: string;
   onClick: () => void;
-  /** Static image fallback */
   image?: string;
-  /** Video source for hover playback */
   video?: string;
   kicker?: string;
   title: string;
@@ -60,10 +53,6 @@ type MegaMenuFeaturedCardProps = {
   className?: string;
 };
 
-/**
- * Compact featured card used in all mega menus.
- * Supports video on hover (desktop) with image fallback.
- */
 export function MegaMenuFeaturedCard({
   to,
   onClick,
@@ -78,12 +67,10 @@ export function MegaMenuFeaturedCard({
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = React.useState(false);
 
-  // Play video immediately on mount with aggressive preloading
   React.useEffect(() => {
     const vid = videoRef.current;
     if (!vid || !video) return;
     
-    // If already have enough data, play immediately
     if (vid.readyState >= 2) {
       setVideoReady(true);
       vid.play().catch(() => {});
@@ -104,14 +91,11 @@ export function MegaMenuFeaturedCard({
       to={to}
       onClick={onClick}
       className={cn(
-        // Compact card with 3D effect - proper rounded corners with gold border
         "block group relative overflow-hidden rounded-xl min-h-[260px] lg:min-h-[340px] transition-all duration-500",
-        // 3D depth and hover zoom effect
         "shadow-lg hover:shadow-2xl hover:scale-[1.02] transform-gpu",
         className
       )}
     >
-      {/* Video background — uses preload="metadata" for faster start, upgrades to full on play */}
       {video && (
         <video
           ref={videoRef}
@@ -126,7 +110,6 @@ export function MegaMenuFeaturedCard({
           preload="auto"
         />
       )}
-      {/* Static image background — always visible until video is ready */}
       {image && (
         <div
           className={cn(
@@ -137,11 +120,10 @@ export function MegaMenuFeaturedCard({
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-[2]" />
-      {/* Gold border with hover enhancement */}
-      <div className="absolute inset-0 border-2 border-gold/40 rounded-xl group-hover:border-gold/80 transition-colors z-[3]" />
+      <div className="absolute inset-0 border-2 border-white/20 rounded-xl group-hover:border-white/40 transition-colors z-[3]" />
       <div className="absolute bottom-0 left-0 right-0 p-5 z-[4]">
         {kicker ? (
-          <p className="text-gold text-[10px] font-bold tracking-[0.2em] uppercase mb-1.5">
+          <p className="text-white/70 text-[10px] font-bold tracking-[0.2em] uppercase mb-1.5">
             {kicker}
           </p>
         ) : null}
@@ -149,8 +131,7 @@ export function MegaMenuFeaturedCard({
         {description ? (
           <p className="text-white/80 text-xs mb-3 max-w-[48ch] line-clamp-2">{description}</p>
         ) : null}
-        {/* CTA with gold border */}
-        <span className="inline-flex items-center gap-1.5 text-gold font-semibold text-xs group-hover:gap-2.5 transition-all px-3 py-1.5 border border-gold/50 rounded-lg bg-black/30 hover:bg-gold hover:text-black">
+        <span className="inline-flex items-center gap-1.5 text-white font-semibold text-xs group-hover:gap-2.5 transition-all px-3 py-1.5 border border-white/40 rounded-lg bg-black/30 hover:bg-white hover:text-black">
           {cta}
           <ArrowRight className="w-3.5 h-3.5" />
         </span>
@@ -159,10 +140,6 @@ export function MegaMenuFeaturedCard({
   );
 }
 
-/**
- * Full-width rectangular CTA button for mega menus
- * Used for "See All Properties", "View All Projects" etc.
- */
 export function MegaMenuCTAButton({
   to,
   onClick,
@@ -178,15 +155,15 @@ export function MegaMenuCTAButton({
     <Link
       to={to}
       onClick={onClick}
-      className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl bg-gradient-to-r from-gold/50 via-gold/40 to-gold/50 hover:from-gold/70 hover:via-gold/60 hover:to-gold/70 border-2 border-gold/60 hover:border-gold shadow-[0_4px_15px_rgba(200,167,102,0.35)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] hover:-translate-y-0.5 transition-all duration-300 group"
+      className="flex items-center justify-center gap-3 w-full py-4 px-6 rounded-xl bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 hover:-translate-y-0.5 transition-all duration-300 group"
     >
-      <div className="w-10 h-10 rounded-lg bg-black border border-gold flex items-center justify-center group-hover:shadow-[0_0_12px_rgba(200,167,102,0.5)] transition-all">
-        <Icon className="w-5 h-5 text-gold" />
+      <div className="w-10 h-10 rounded-lg bg-white border border-white/80 flex items-center justify-center group-hover:shadow-[0_0_12px_rgba(255,255,255,0.3)] transition-all">
+        <Icon className="w-5 h-5 text-black" />
       </div>
-      <span className="text-black font-bold text-base group-hover:text-black transition-colors">
+      <span className="text-white font-bold text-base group-hover:text-white transition-colors">
         {title}
       </span>
-      <ArrowRight className="w-5 h-5 text-gold ml-auto" />
+      <ArrowRight className="w-5 h-5 text-white/60 ml-auto" />
     </Link>
   );
 }
@@ -202,13 +179,13 @@ export const MegaMenuSectionTitle = React.forwardRef<HTMLDivElement, MegaMenuSec
     return (
       <div ref={ref} className="mb-3 h-[36px] flex flex-col justify-end">
         <div className="flex items-center justify-center pb-2">
-          <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2 whitespace-nowrap">
-            <Icon className="w-4 h-4 text-gold shrink-0" />
+          <h4 className="text-white font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2 whitespace-nowrap">
+            <Icon className="w-4 h-4 text-white/60 shrink-0" />
             {title}
           </h4>
           {rightSlot}
         </div>
-        <div className="h-[1px] w-full bg-gold/40" />
+        <div className="h-[1px] w-full bg-white/20" />
       </div>
     );
   }
@@ -222,16 +199,9 @@ type MegaMenuIconLinkProps = {
   title: string;
   description?: string;
   compact?: boolean;
-  /** Emphasis style for "See All" type links - gold, 3D, highlighted */
   emphasis?: boolean;
 };
 
-/**
- * Standardized link row:
- * Normal: transparent bg, black icon with gold border, black title
- * Hover: champagne-gold bg, gold title, black icon bg with gold icon
- * Emphasis: Premium gold styling with black text for maximum readability - 3D effect - LARGER title
- */
 export function MegaMenuIconLink({
   to,
   onClick,
@@ -248,45 +218,40 @@ export function MegaMenuIconLink({
       className={cn(
         "flex items-center gap-3 rounded-xl transition-all duration-300 group relative",
         emphasis
-          // Emphasis style: Gold gradient bg, black text for readability, 3D shadow
-          ? "bg-gradient-to-r from-gold/40 via-gold/30 to-gold/40 hover:from-gold/60 hover:via-gold/50 hover:to-gold/60 shadow-[0_4px_15px_rgba(200,167,102,0.35)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.5)] hover:-translate-y-0.5 border-2 border-gold/60 hover:border-gold"
-          // Normal: transparent; Hover: champagne gradient background
-          : "bg-transparent hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2]",
-        // Emphasis links get extra padding for prominence
+          ? "bg-white/10 hover:bg-white/20 border-2 border-white/30 hover:border-white/50 hover:-translate-y-0.5"
+          : "bg-transparent hover:bg-white/5",
         emphasis ? "py-3 px-4" : compact ? "py-1.5 px-2" : "py-3 px-3"
       )}
     >
-      {/* Icon container - larger for emphasis links */}
       <div
         className={cn(
           "rounded-lg border transition-all duration-300 flex items-center justify-center shrink-0",
           emphasis
-            ? "bg-black border-gold group-hover:border-gold group-hover:shadow-[0_0_12px_rgba(200,167,102,0.5)] w-10 h-10"
-            : "bg-transparent border-gold/50 group-hover:border-gold",
+            ? "bg-white border-white/80 group-hover:shadow-[0_0_12px_rgba(255,255,255,0.3)] w-10 h-10"
+            : "bg-transparent border-white/30 group-hover:border-white/50",
           !emphasis && compact ? "w-7 h-7" : !emphasis ? "w-10 h-10" : ""
         )}
       >
         <Icon className={cn(
           "transition-colors duration-300",
           emphasis
-            ? "text-gold w-5 h-5"
-            : "text-gold group-hover:text-black",
+            ? "text-black w-5 h-5"
+            : "text-white/60 group-hover:text-white",
           !emphasis && compact ? "w-3.5 h-3.5" : !emphasis ? "w-5 h-5" : ""
         )} />
       </div>
       <div className="min-w-0 flex-1">
-        {/* Title - Emphasis uses LARGER text for better visual balance in gold cards */}
         <span className={cn(
           "block font-bold transition-colors duration-300",
           emphasis
-            ? "text-black group-hover:text-black text-base"
-            : "text-black group-hover:text-gold",
+            ? "text-white group-hover:text-white text-base"
+            : "text-white/80 group-hover:text-white",
           !emphasis && compact ? "text-[13px]" : !emphasis ? "text-sm" : ""
         )}>
           {title}
         </span>
         {description ? (
-          <span className="block text-xs text-black/60 group-hover:text-black/70 truncate transition-colors">
+          <span className="block text-xs text-white/40 group-hover:text-white/60 truncate transition-colors">
             {description}
           </span>
         ) : null}
@@ -295,12 +260,9 @@ export function MegaMenuIconLink({
   );
 }
 
-/**
- * Section divider - thin gold line between sections in mega menus
- */
 export function MegaMenuSectionDivider() {
   return (
-    <div className="my-4 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
+    <div className="my-4 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
   );
 }
 
@@ -309,14 +271,9 @@ type MegaMenuCardProps = {
   title: string;
   children: React.ReactNode;
   className?: string;
-  /** When true, uses tighter padding and no max-height scroll */
   compact?: boolean;
 };
 
-/**
- * Premium champagne gradient card for mega menu sections
- * Matches the MegaMenuInsights premium card styling
- */
 export function MegaMenuCard({
   icon,
   title,
@@ -326,8 +283,8 @@ export function MegaMenuCard({
 }: MegaMenuCardProps) {
   return (
     <div className={cn(
-      "bg-gradient-to-br from-[#F7F1E6] via-[#EDE0C8] to-[#E2D4B8]",
-      "rounded-xl border border-gold/30 shadow-sm",
+      "bg-[#111111]",
+      "rounded-xl border border-white/10 shadow-sm",
       "transition-all",
       compact ? "p-2.5" : "p-4",
       className
@@ -347,11 +304,6 @@ type MegaMenuSectionProps = {
   className?: string;
 };
 
-/**
- * Borderless section for connected mega menu layouts.
- * No card border, no background, no rounded corners —
- * content flows seamlessly within the MegaMenuShell.
- */
 export function MegaMenuSection({
   icon,
   title,
