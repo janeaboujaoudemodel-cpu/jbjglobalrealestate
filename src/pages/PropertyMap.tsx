@@ -136,12 +136,6 @@ const PropertyMap = () => {
   // Clear selected project on filter/sort changes
   useEffect(() => { setSelectedProject(null); }, [filters, sortMode, hideSold]);
 
-  // Clear if selected project no longer in filtered results
-  useEffect(() => {
-    if (selectedProject && !filteredProjects.some(p => p.id === selectedProject.id)) {
-      setSelectedProject(null);
-    }
-  }, [selectedProject, filteredProjects]);
 
   // Auto-close card when map container leaves viewport
   useEffect(() => {
