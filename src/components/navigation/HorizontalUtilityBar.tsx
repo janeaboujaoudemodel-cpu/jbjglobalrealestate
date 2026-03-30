@@ -534,21 +534,17 @@ export default function HorizontalUtilityBar() {
         </div>
 
         {/* ── Subtle gold divider between rows ── */}
-        {location.pathname !== "/map" && (
-          <div className="h-px mx-4 bg-gradient-to-r from-transparent via-gold/20 to-transparent shrink-0" />
-        )}
+        <div className="h-px mx-4 bg-gradient-to-r from-transparent via-gold/20 to-transparent shrink-0" />
 
-        {/* ── ROW 2 (40px): Filter Shortcut Bar — hidden on /map which has its own ── */}
-        {location.pathname !== "/map" && (
-          <div className="h-[40px] shrink-0 px-3 flex items-center">
-            <FilterShortcutBar
-              variant="light"
-              filters={globalFilters}
-              onFilterChange={handleGlobalFilterChange}
-              resultsLabel="Properties"
-            />
-          </div>
-        )}
+        {/* ── ROW 2 (40px): Filter Shortcut Bar — shown on ALL pages including /map ── */}
+        <div className="h-[40px] shrink-0 px-3 flex items-center">
+          <FilterShortcutBar
+            variant="light"
+            filters={globalFilters}
+            onFilterChange={handleGlobalFilterChange}
+            resultsLabel="Properties"
+          />
+        </div>
       </div>
 
       <GlobalSearchModal isOpen={searchOpen} initialQuery="" onClose={() => setSearchOpen(false)} />

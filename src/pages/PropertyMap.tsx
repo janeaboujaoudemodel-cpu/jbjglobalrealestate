@@ -6,11 +6,12 @@ import { useProjectsListing } from "@/hooks/useProjects";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
-import { MapPin, List, X, ChevronRight, ExternalLink, Bed, Maximize, Calendar } from "lucide-react";
+import { MapPin, List, X, ChevronRight, ExternalLink, Bed, Maximize, Calendar, Grid3X3, ArrowUpDown, Search, EyeOff } from "lucide-react";
 import { SafeImage } from "@/components/SafeImage";
 import { MapNavigationControls } from "@/components/maps/MapNavigationControls";
-import FilterShortcutBar, { ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
+import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { getMapTiles, type MapViewType } from "@/constants/mapTiles";
@@ -52,7 +53,6 @@ function MapViewToggle({ mapView, onViewChange, t }: { mapView: MapViewType; onV
   );
 }
 
-// ── Scroll wheel zoom guard ──
 function ScrollWheelZoomGuard() {
   const map = useMap();
   useEffect(() => {
@@ -69,7 +69,6 @@ function ScrollWheelZoomGuard() {
   return null;
 }
 
-// ── Fit bounds ──
 function FitBounds({ coords }: { coords: [number, number][] }) {
   const map = useMap();
   useEffect(() => {
@@ -80,7 +79,6 @@ function FitBounds({ coords }: { coords: [number, number][] }) {
   return null;
 }
 
-// ── Marker icon ──
 const createCustomIcon = (price: number | null) => {
   const priceText = price ? `${(price / 1000000).toFixed(1)}M` : "Ask";
   return new DivIcon({
@@ -106,14 +104,29 @@ const createCustomIcon = (price: number | null) => {
   });
 };
 
-// ── Main component ──
+type ViewMode = "map" | "list" | "grid";
+type SortMode = "newest" | "price_asc" | "price_desc" | "alpha";
+
 const PropertyMap = () => {
   const { t, language } = useLanguage();
   const { data: allProjects = [], isLoading } = useProjectsListing();
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
-  const [showList, setShowList] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>("map");
   const [mapView, setMapView] = useState<MapViewType>("satellite");
   const [filters, setFilters] = useState<ShortcutFilterState>(defaultShortcutFilters);
+  const [sortMode, setSortMode] = useState<SortMode>("newest");
+  const [hideSold, setHideSold] = useState(false);
+  const [listSearch, setListSearch] = useState("");
+
+  // Listen for global filter changes from the header
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail as ShortcutFilterState;
+      if (detail) setFilters(detail);
+    };
+    window.addEventListener("globalFilterChange", handler);
+    return () => window.removeEventListener("globalFilterChange", handler);
+  }, []);
 
   const formatPrice = (price: number | null) => {
     if (!price) return t('map.priceOnRequest');
@@ -121,22 +134,36 @@ const PropertyMap = () => {
     return `AED ${(price / 1000).toFixed(0)}K`;
   };
 
-  // Apply filters
+  // Apply filters + local sort + hideSold
   const filteredProjects = useMemo(() => {
-    return applyShortcutFilters(allProjects, filters);
-  }, [allProjects, filters]);
+    let result = applyShortcutFilters(allProjects, { ...filters, hideSoldOut: hideSold || filters.hideSoldOut });
 
-  // Get coordinates for projects
+    // Local list search
+    if (listSearch.trim()) {
+      const q = listSearch.trim().toLowerCase();
+      result = result.filter(p => {
+        const name = (p.name || '').toLowerCase();
+        const dev = (p.developer_name || '').toLowerCase();
+        const area = (p.area_name || p.location || '').toLowerCase();
+        return name.includes(q) || dev.includes(q) || area.includes(q);
+      });
+    }
+
+    // Sort
+    if (sortMode === 'newest') result.sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime());
+    else if (sortMode === 'price_asc') result.sort((a, b) => (a.price_from || 0) - (b.price_from || 0));
+    else if (sortMode === 'price_desc') result.sort((a, b) => (b.price_from || 0) - (a.price_from || 0));
+    else if (sortMode === 'alpha') result.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+    return result;
+  }, [allProjects, filters, hideSold, listSearch, sortMode]);
+
   const projectsWithCoords = useMemo(() => {
     return filteredProjects.filter(p =>
       p.latitude != null && p.longitude != null &&
       !isNaN(Number(p.latitude)) && !isNaN(Number(p.longitude)) &&
       Number(p.latitude) !== 0 && Number(p.longitude) !== 0
-    ).map(p => ({
-      ...p,
-      lat: Number(p.latitude),
-      lng: Number(p.longitude),
-    }));
+    ).map(p => ({ ...p, lat: Number(p.latitude), lng: Number(p.longitude) }));
   }, [filteredProjects]);
 
   const center: [number, number] = useMemo(() => {
@@ -150,7 +177,7 @@ const PropertyMap = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
           <p className="text-muted-foreground">{t('map.loadingProperties')}</p>
@@ -159,36 +186,78 @@ const PropertyMap = () => {
     );
   }
 
+  const showPanel = viewMode === "list" || viewMode === "grid";
+
+  const sortOptions: { value: SortMode; label: string }[] = [
+    { value: "newest", label: "Newest" },
+    { value: "price_asc", label: "Low → High" },
+    { value: "price_desc", label: "High → Low" },
+    { value: "alpha", label: "A → Z" },
+  ];
+
   return (
     <div className="min-h-screen relative">
-      {/* Fixed horizontal filter bar below utility bar */}
-      <div className="fixed top-[88px] left-0 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px] right-0 z-[9990] bg-gradient-to-r from-[#1B3A5C] via-[#24507A] to-[#1B3A5C] border-b border-[hsl(210,50%,20%/0.3)] shadow-[0_1px_3px_hsl(210,50%,15%/0.2)]">
-        <div className="flex items-center gap-2 px-3 py-1.5">
-          <Badge variant="secondary" className="gap-1 shrink-0">
+      {/* ── MAP CONTROL BAR — below header, NOT part of header ── */}
+      <div className="sticky top-[88px] z-[60] bg-[#FAF9F6] border-b border-border/50 shadow-sm">
+        <div className="flex items-center gap-2 px-3 py-2 flex-wrap">
+          {/* Left: count */}
+          <Badge variant="secondary" className="gap-1 shrink-0 bg-gold/10 text-foreground border-gold/30">
             <MapPin className="h-3 w-3" />
             {filteredProjects.length} {t('map.properties')}
           </Badge>
-          <Button
-            variant={showList ? "default" : "outline"}
-            size="sm"
-            onClick={() => setShowList(!showList)}
-            className="gap-1.5 shrink-0 h-7 text-xs"
+
+          <div className="flex-1" />
+
+          {/* View toggles */}
+          <div className="flex items-center border border-border rounded-lg overflow-hidden">
+            <button
+              onClick={() => setViewMode("map")}
+              className={`px-3 py-1.5 text-xs font-medium transition-colors ${viewMode === "map" ? "bg-gold/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
+            >
+              <MapPin className="h-3.5 w-3.5 inline mr-1" />
+              Map
+            </button>
+            <button
+              onClick={() => setViewMode("list")}
+              className={`px-3 py-1.5 text-xs font-medium transition-colors border-x border-border ${viewMode === "list" ? "bg-gold/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
+            >
+              <List className="h-3.5 w-3.5 inline mr-1" />
+              List
+            </button>
+            <button
+              onClick={() => setViewMode("grid")}
+              className={`px-3 py-1.5 text-xs font-medium transition-colors ${viewMode === "grid" ? "bg-gold/20 text-foreground" : "text-muted-foreground hover:bg-muted"}`}
+            >
+              <Grid3X3 className="h-3.5 w-3.5 inline mr-1" />
+              Grid
+            </button>
+          </div>
+
+          {/* Sort dropdown */}
+          <div className="relative">
+            <select
+              value={sortMode}
+              onChange={(e) => setSortMode(e.target.value as SortMode)}
+              className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 text-xs font-medium text-foreground cursor-pointer pr-7"
+            >
+              {sortOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+            </select>
+            <ArrowUpDown className="h-3 w-3 absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+          </div>
+
+          {/* Hide Sold toggle */}
+          <button
+            onClick={() => setHideSold(!hideSold)}
+            className={`flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${hideSold ? "bg-gold/20 border-gold/40 text-foreground" : "border-border text-muted-foreground hover:bg-muted"}`}
           >
-            <List className="h-3.5 w-3.5" />
-            {t('map.list')}
-          </Button>
+            <EyeOff className="h-3.5 w-3.5" />
+            Hide Sold
+          </button>
         </div>
-        <FilterShortcutBar
-          variant="light"
-          filters={filters}
-          onFilterChange={setFilters}
-          isMapMode={true}
-          priorityFilter="projects"
-        />
       </div>
 
-      {/* Map Container — offset for utility bar (48px) + filter bar (~90px) */}
-      <div className="pt-[52px] h-screen">
+      {/* ── MAP CONTAINER ── */}
+      <div style={{ height: "calc(100vh - 88px - 48px)" }}>
         <MapContainer
           center={center}
           zoom={11}
@@ -213,19 +282,13 @@ const PropertyMap = () => {
               key={project.id}
               position={[project.lat, project.lng]}
               icon={createCustomIcon(project.price_from)}
-              eventHandlers={{
-                click: () => setSelectedProject(project),
-              }}
+              eventHandlers={{ click: () => setSelectedProject(project) }}
             >
               <Popup>
                 <div className="w-64 p-0">
                   {project.cover_image_url && (
                     <div className="relative h-32">
-                      <SafeImage
-                        src={project.cover_image_url}
-                        alt={project.name}
-                        className="w-full h-full object-cover"
-                      />
+                      <SafeImage src={project.cover_image_url} alt={project.name} className="w-full h-full object-cover" />
                     </div>
                   )}
                   <div className="p-3">
@@ -234,9 +297,7 @@ const PropertyMap = () => {
                       {project.developer_name} • {project.area_name || project.location}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-primary">
-                        {formatPrice(project.price_from)}
-                      </span>
+                      <span className="font-bold text-foreground">{formatPrice(project.price_from)}</span>
                       <Link to={`/project/${project.slug}`}>
                         <Button size="sm" variant="outline" className="h-7 text-xs">
                           {t('map.view')} <ChevronRight className="h-3 w-3 ml-1" />
@@ -251,52 +312,63 @@ const PropertyMap = () => {
         </MapContainer>
       </div>
 
-      {/* List Panel */}
-      {showList && (
-        <div className="absolute top-[52px] right-0 bottom-0 w-full sm:w-96 bg-background/95 backdrop-blur-sm border-l z-[999] overflow-hidden flex flex-col">
-          <div className="p-4 border-b flex items-center justify-between">
-            <h2 className="font-semibold">{filteredProjects.length} {t('map.properties')}</h2>
-            <Button variant="ghost" size="sm" onClick={() => setShowList(false)}>
-              <X className="h-4 w-4" />
-            </Button>
+      {/* ── LIST / GRID PANEL (overlay on right, map still interactive) ── */}
+      {showPanel && (
+        <div className="fixed top-[136px] right-0 bottom-0 w-full sm:w-[420px] bg-background/98 backdrop-blur-sm border-l border-border z-[999] overflow-hidden flex flex-col">
+          {/* Panel header with search */}
+          <div className="p-3 border-b border-border space-y-2">
+            <div className="flex items-center justify-between">
+              <h2 className="font-semibold text-sm">{filteredProjects.length} {t('map.properties')}</h2>
+              <Button variant="ghost" size="sm" onClick={() => setViewMode("map")}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+              <Input
+                placeholder="Search properties..."
+                value={listSearch}
+                onChange={(e) => setListSearch(e.target.value)}
+                className="pl-9 h-8 text-xs"
+              />
+            </div>
           </div>
-          <div className="flex-1 overflow-auto p-4 space-y-4">
+
+          {/* Scrollable content */}
+          <div className={`flex-1 overflow-auto p-3 ${viewMode === "grid" ? "grid grid-cols-2 gap-3 auto-rows-min" : "space-y-3"}`}>
             {filteredProjects.slice(0, 100).map((project) => (
               <Card
                 key={project.id}
-                className="cursor-pointer hover:border-primary transition-colors"
+                className="cursor-pointer hover:border-gold/50 transition-colors"
                 onClick={() => setSelectedProject(project)}
               >
-                <CardContent className="p-3">
-                  <div className="flex gap-3">
-                    {project.cover_image_url && (
-                      <div className="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden">
-                        <SafeImage
-                          src={project.cover_image_url}
-                          alt={project.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-medium text-sm truncate">{project.name}</h3>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {project.developer_name}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {project.area_name || project.location}
-                      </p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-sm font-bold text-primary">
-                          {formatPrice(project.price_from)}
-                        </span>
-                        {project.bedrooms_min != null && (
-                          <Badge variant="secondary" className="text-xs">
-                            {project.bedrooms_min}-{project.bedrooms_max} BR
-                          </Badge>
-                        )}
-                      </div>
+                <CardContent className="p-0">
+                  {/* Image */}
+                  <div className={viewMode === "grid" ? "h-28 w-full" : "h-24 w-full"}>
+                    <SafeImage
+                      src={project.cover_image_url || "/placeholder.svg"}
+                      alt={project.name}
+                      className="w-full h-full object-cover rounded-t-lg"
+                      fallbackSrc="/placeholder.svg"
+                    />
+                  </div>
+                  <div className="p-2.5">
+                    <h3 className="font-semibold text-xs truncate">{project.name}</h3>
+                    <p className="text-[11px] text-muted-foreground truncate">{project.developer_name}</p>
+                    <p className="text-[11px] text-muted-foreground truncate">{project.area_name || project.location}</p>
+                    <div className="flex items-center gap-1.5 mt-1.5">
+                      <span className="text-sm font-bold text-foreground">{formatPrice(project.price_from)}</span>
+                      {project.bedrooms_min != null && (
+                        <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                          {project.bedrooms_min}-{project.bedrooms_max} BR
+                        </Badge>
+                      )}
                     </div>
+                    <Link to={`/project/${project.slug}`} onClick={(e) => e.stopPropagation()}>
+                      <Button size="sm" variant="outline" className="w-full mt-2 h-7 text-xs">
+                        View Details <ExternalLink className="h-3 w-3 ml-1" />
+                      </Button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
@@ -307,7 +379,7 @@ const PropertyMap = () => {
 
       {/* Selected Project Detail Card */}
       {selectedProject && (
-        <div className="absolute bottom-4 left-4 right-4 sm:left-4 sm:right-auto sm:w-96 z-[1000]">
+        <div className="fixed bottom-4 left-4 right-4 sm:left-4 sm:right-auto sm:w-96 z-[1000]">
           <Card className="shadow-xl border-2">
             <CardContent className="p-0">
               <button
@@ -316,53 +388,37 @@ const PropertyMap = () => {
               >
                 <X className="h-4 w-4" />
               </button>
-
               {selectedProject.cover_image_url && (
                 <div className="relative h-40">
-                  <SafeImage
-                    src={selectedProject.cover_image_url}
-                    alt={selectedProject.name}
-                    className="w-full h-full object-cover rounded-t-lg"
-                  />
+                  <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" />
                   <Badge className="absolute bottom-2 left-2 bg-primary text-primary-foreground">
                     {selectedProject.status || "Off-Plan"}
                   </Badge>
                 </div>
               )}
-
               <div className="p-4">
                 <h3 className="font-semibold text-lg mb-1">{selectedProject.name}</h3>
                 <p className="text-sm text-muted-foreground mb-3">
                   {t('map.by')} {selectedProject.developer_name} • {selectedProject.area_name || selectedProject.location}
                 </p>
-
                 <div className="grid grid-cols-3 gap-3 mb-4">
                   <div className="text-center p-2 bg-muted rounded-lg">
                     <Bed className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
-                    <p className="text-xs font-medium">
-                      {selectedProject.bedrooms_min || "—"}-{selectedProject.bedrooms_max || "—"} BR
-                    </p>
+                    <p className="text-xs font-medium">{selectedProject.bedrooms_min || "—"}-{selectedProject.bedrooms_max || "—"} BR</p>
                   </div>
                   <div className="text-center p-2 bg-muted rounded-lg">
                     <Maximize className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
-                    <p className="text-xs font-medium">
-                      {selectedProject.size_min || "—"} sqft
-                    </p>
+                    <p className="text-xs font-medium">{selectedProject.size_min || "—"} sqft</p>
                   </div>
                   <div className="text-center p-2 bg-muted rounded-lg">
                     <Calendar className="h-4 w-4 mx-auto mb-1 text-muted-foreground" />
-                    <p className="text-xs font-medium">
-                      {selectedProject.handover_date || "TBA"}
-                    </p>
+                    <p className="text-xs font-medium">{selectedProject.handover_date || "TBA"}</p>
                   </div>
                 </div>
-
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs text-muted-foreground">{t('map.startingFrom')}</p>
-                    <p className="text-xl font-bold text-primary">
-                      {formatPrice(selectedProject.price_from)}
-                    </p>
+                    <p className="text-xl font-bold text-foreground">{formatPrice(selectedProject.price_from)}</p>
                   </div>
                   <Link to={`/project/${selectedProject.slug}`}>
                     <Button className="gap-2">
