@@ -214,6 +214,11 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     return !sessionStorage.getItem('jj_desktop_banner_dismissed');
   });
 
+  const dismissDesktopBanner = useCallback(() => {
+    setShowDesktopBanner(false);
+    try { sessionStorage.setItem('jj_desktop_banner_dismissed', '1'); } catch {}
+  }, []);
+
   useEffect(() => {
     if (isMobile && showDesktopBanner) {
       toast("For the best experience on our full portal, use a desktop browser.", {
@@ -229,11 +234,6 @@ const MainLayout = ({ children }: MainLayoutProps) => {
       dismissDesktopBanner();
     }
   }, [isMobile, showDesktopBanner, dismissDesktopBanner]);
-
-  const dismissDesktopBanner = useCallback(() => {
-    setShowDesktopBanner(false);
-    try { sessionStorage.setItem('jj_desktop_banner_dismissed', '1'); } catch {}
-  }, []);
 
   return (
     <div className="min-h-screen bg-background md:bg-[#ECE2D2]">
