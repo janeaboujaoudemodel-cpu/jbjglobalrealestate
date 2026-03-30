@@ -317,7 +317,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                     {accountDisplayName}
                   </p>
                 </Link>
-                <p className="text-black/60 text-sm truncate">{user.email}</p>
+                <p className="text-black/60 text-sm truncate">{getModeLabel()}</p>
                 {/* Show mode + tier badges + points */}
                 {isCombinedMode && investorTierProgress && brokerTierProgress ? (
                   <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
