@@ -1113,7 +1113,7 @@ All colors MUST be HSL.
   }
   
   .jj-profile-card .jj-profile-role {
-    @apply text-gold text-sm mt-1;
+    @apply text-white/60 text-sm mt-1;
   }
 
   /* Profile image container - ensures proper sizing */
