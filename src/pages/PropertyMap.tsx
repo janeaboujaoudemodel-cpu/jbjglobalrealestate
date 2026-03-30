@@ -351,40 +351,115 @@ const PropertyMap = () => {
           <MapNavigationControls latitude={center[0]} longitude={center[1]} />
           <ScrollWheelZoomGuard />
           <FitBounds coords={coordsList} />
+          <MapRefGetter onMap={onMapReady} />
 
           {projectsWithCoords.map((project) => (
             <Marker
               key={project.id}
               position={[project.lat, project.lng]}
               icon={createCustomIcon(project.price_from)}
-              eventHandlers={{ click: () => setSelectedProject(project) }}
-            >
-              <Popup>
-                <div className="w-64 p-0">
-                  {project.cover_image_url && (
-                    <div className="relative h-32">
-                      <SafeImage src={project.cover_image_url} alt={project.name} className="w-full h-full object-cover" />
-                    </div>
-                  )}
-                  <div className="p-3">
-                    <h3 className="font-semibold text-sm mb-1">{project.name}</h3>
-                    <p className="text-xs text-muted-foreground mb-2">
-                      {project.developer_name} • {project.area_name || project.location}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-foreground">{formatPrice(project.price_from)}</span>
-                      <Link to={`/project/${project.slug}`}>
-                        <Button size="sm" variant="outline" className="h-7 text-xs">
-                          {t('map.view')} <ChevronRight className="h-3 w-3 ml-1" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
+              eventHandlers={{
+                click: () => {
+                  setHoveredProject(null);
+                  setSelectedProject(project);
+                  if (mapInstanceRef.current && mapContainerRef.current) {
+                    setClickPos(getCardPosition(mapInstanceRef.current, [project.lat, project.lng], 384, 340, mapContainerRef.current));
+                  }
+                },
+                mouseover: () => {
+                  if (selectedProject?.id === project.id) return;
+                  setHoveredProject(project);
+                  if (mapInstanceRef.current && mapContainerRef.current) {
+                    setHoverPos(getCardPosition(mapInstanceRef.current, [project.lat, project.lng], 220, 140, mapContainerRef.current));
+                  }
+                },
+                mouseout: () => {
+                  if (hoveredProject?.id === project.id) setHoveredProject(null);
+                },
+              }}
+            />
           ))}
         </MapContainer>
+
+        {/* ── HOVER CARD (compact) ── */}
+        {hoveredProject && !selectedProject && hoverPos && (
+          <div
+            className="absolute z-[1000] pointer-events-none"
+            style={{ left: hoverPos.left, top: hoverPos.top, width: 220 }}
+          >
+            <Card className="shadow-lg border border-gold/30 pointer-events-auto">
+              <CardContent className="p-0">
+                {hoveredProject.cover_image_url && (
+                  <SafeImage src={hoveredProject.cover_image_url} alt={hoveredProject.name} className="w-full h-20 object-cover rounded-t-lg" />
+                )}
+                <div className="p-2">
+                  <h4 className="font-semibold text-xs truncate">{hoveredProject.name}</h4>
+                  <p className="text-[10px] text-muted-foreground truncate">{hoveredProject.developer_name} • {hoveredProject.area_name || hoveredProject.location}</p>
+                  <p className="text-xs font-bold text-foreground mt-1">{formatPrice(hoveredProject.price_from)}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* ── CLICK CARD (detailed) ── */}
+        {selectedProject && clickPos && (
+          <div
+            className="absolute z-[1000]"
+            style={{ left: clickPos.left, top: clickPos.top, width: 384, maxWidth: 'calc(100% - 24px)' }}
+          >
+            <Card className="shadow-xl border-2">
+              <CardContent className="p-0">
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="absolute top-2 right-2 z-10 bg-background/80 backdrop-blur-sm rounded-full p-1 hover:bg-background"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+                {selectedProject.cover_image_url && (
+                  <div className="relative h-36">
+                    <SafeImage src={selectedProject.cover_image_url} alt={selectedProject.name} className="w-full h-full object-cover rounded-t-lg" />
+                    <Badge className="absolute bottom-2 left-2 bg-primary text-primary-foreground">
+                      {selectedProject.status || "Off-Plan"}
+                    </Badge>
+                  </div>
+                )}
+                <div className="p-3">
+                  <h3 className="font-semibold text-base mb-1">{selectedProject.name}</h3>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    {t('map.by')} {selectedProject.developer_name} • {selectedProject.area_name || selectedProject.location}
+                  </p>
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    <div className="text-center p-1.5 bg-muted rounded-lg">
+                      <Bed className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                      <p className="text-[10px] font-medium">{selectedProject.bedrooms_min || "—"}-{selectedProject.bedrooms_max || "—"} BR</p>
+                    </div>
+                    <div className="text-center p-1.5 bg-muted rounded-lg">
+                      <Maximize className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                      <p className="text-[10px] font-medium">{selectedProject.size_min || "—"} sqft</p>
+                    </div>
+                    <div className="text-center p-1.5 bg-muted rounded-lg">
+                      <Calendar className="h-3.5 w-3.5 mx-auto mb-0.5 text-muted-foreground" />
+                      <p className="text-[10px] font-medium">{selectedProject.handover_date || "TBA"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] text-muted-foreground">{t('map.startingFrom')}</p>
+                      <p className="text-lg font-bold text-foreground">{formatPrice(selectedProject.price_from)}</p>
+                    </div>
+                    <Link to={`/project/${selectedProject.slug}`}>
+                      <Button size="sm" className="gap-1.5">
+                        {t('map.viewDetails')}
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
 
       {/* ── LIST / GRID PANEL (overlay on right, map still interactive) ── */}
