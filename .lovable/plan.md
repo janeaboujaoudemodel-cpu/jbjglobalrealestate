@@ -1,41 +1,65 @@
 
 
-# Fix Map Page White Gap, Background Color + Sidebar Mega-Menu Still Hidden
+# Fix Map Page Structure — Complete Overhaul
 
-## Problems Found (verified in code)
+## Summary
 
-### 1. Map Page — White background and gap
-**PropertyMap.tsx line 165**: The fixed filter bar uses `bg-background/95` (white). It should match the header's champagne gradient (`from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8]`).
+The map page has a blue duplicate header bar, wrong positioning, and broken list view. This plan restructures it to match the home page exactly: champagne header with filters inside, then a separate light toolbar below for map controls.
 
-**PropertyMap.tsx line 191**: `pt-[52px]` padding on the map container, but since MainLayout already adds `pt-[88px]` to the `<main>`, and then the map's own fixed filter bar is at `top-[88px]`, the map content needs to account for the filter bar height (~52px) below that. The white gap is because `bg-background` (white) shows through. The map container's outer div (line 163) uses `bg-background` — should be transparent or match the page.
+## Changes
 
-**Root fix**: The map page filter bar at `top-[88px]` with `bg-background/95` creates a white strip. Change it to match the header gradient. The map container `pt-[52px]` is roughly correct for the filter bar height, but the outer wrapper `bg-background` creates white around it.
+### 1. PropertyMap.tsx — Complete restructure
 
-### 2. Map Page — Filter bar appears as separate band
-The filter bar (line 165) is a separate fixed div below the header with a different background color (white vs champagne). It should visually merge with the header by using the same gradient and removing the visible border gap.
+**Remove**: The entire fixed blue bar (lines 164-188) that duplicates the header with its own FilterShortcutBar. This is the "blue strip" the user sees.
 
-### 3. Sidebar mega-menu — ALREADY FIXED
-The `PropertiesVerticalNav.tsx` line 112 already shows `top: '88px'` — this was fixed in the previous edit. If the user still sees it hidden, it may be a cache issue, but the code is correct.
+**Add**: A new **Map Control Bar** below the header (not fixed to header, just sticky below it). Light/neutral style (white/soft beige), containing:
+- LEFT: `"{count} Properties"` badge
+- CENTER/RIGHT: View toggle buttons (Map / List / **Grid** — Grid is new), Sorting dropdown (Newest, Low→High, High→Low, A→Z), Hide Sold toggle, Views filter
+- Sticky at `top-[88px]` with `z-[60]` — visually separate from the header
 
-## Fix Plan
+**Fix map container**: 
+- Remove `pt-[52px]` — the map should start directly after the control bar
+- Use `h-[calc(100vh-88px-48px)]` (viewport minus header minus control bar) so the map fills remaining space without being cropped
+- No background color on wrapper (transparent)
 
-### File: `src/pages/PropertyMap.tsx`
+**Fix list panel**:
+- Position `top` to account for header + control bar (136px)
+- Add a search input at the top of the list panel, synced with main filters
+- Fix image rendering (ensure SafeImage has proper fallback and aspect ratio)
+- Increase price contrast: use `text-foreground font-bold` instead of `text-primary` (which may be too faded)
 
-1. **Line 163**: Change `bg-background` to no background or transparent — the map fills the space
-2. **Line 165**: Change the fixed filter bar background from `bg-background/95 backdrop-blur-md border-b border-gold/20` to `bg-gradient-to-r from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] border-b border-[hsl(var(--gold)/0.2)] shadow-[0_1px_3px_hsl(var(--gold)/0.12)]` — matching the header exactly
-3. **Line 191**: Verify `pt-[52px]` is correct (filter bar is ~52px tall with badge row + filter row). This looks right.
+**Add Grid view**:
+- New `viewMode` state: `'map' | 'list' | 'grid'`
+- Grid shows cards in a responsive grid layout (2-3 columns) in a panel similar to list
+- Map remains interactive underneath in all modes
 
-### File: `src/components/navigation/HorizontalUtilityBar.tsx`
+### 2. HorizontalUtilityBar.tsx — Show Row 2 on /map
 
-Already correctly hides Row 2 on `/map` (lines 537-551). No change needed.
+**Revert** the `/map` exclusion (lines 537-551): Remove the `location.pathname !== "/map"` condition so the filter row (Row 2) renders on the map page too — exactly matching the home page. The map page should NOT have its own filter bar; it uses the global one.
 
-### Verification of other pages (from previous plan)
+Wire the global filter change event so PropertyMap listens to `globalFilterChange` custom events to update its local filter state.
 
-- **AreaDetail.tsx** — already patched to `top-[88px]` ✓
-- **Developers.tsx** — already patched to `top-[88px]` ✓  
-- **DeveloperHubShell.tsx** — already patched to `top-[88px]` / `h-[calc(100vh-88px)]` ✓
-- **PropertiesVerticalNav.tsx** — already patched to `top: '88px'` ✓
+### 3. PropertyMap.tsx — Listen to global filters
 
-### Summary of changes
-- **`src/pages/PropertyMap.tsx`**: Change filter bar background to match header gradient, remove white outer background
+Instead of having its own FilterShortcutBar, PropertyMap listens for `globalFilterChange` events from the HorizontalUtilityBar and applies those filters to its data. Add a `useEffect` that listens for this event.
+
+### 4. AIChatWidget / CollapsedChatButton — Force small only
+
+In `CollapsedChatButton.tsx`, always render the small circular button (the `else` branch, lines 113-125). Remove the medium/attention-pulse expanded state (lines 78-112). The widget should only show the small circle; it expands on click.
+
+### 5. Sidebar mega-menus — Already fixed
+
+PropertiesVerticalNav already uses `top: '88px'`. No changes needed.
+
+### 6. Dropdowns/panels z-index
+
+All dropdown content already uses `z-[10000]`+ which is above the header's `z-[9998]`. The key fix is ensuring `top` positioning starts at 88px, which is already done. No additional changes.
+
+## Files to modify
+
+| File | Change |
+|------|--------|
+| `src/pages/PropertyMap.tsx` | Remove blue filter bar, add light control bar with Grid view, fix map height, fix list panel, add search in list, listen to global filter events |
+| `src/components/navigation/HorizontalUtilityBar.tsx` | Remove `/map` exclusion from Row 2 so filters show on map page |
+| `src/components/chat/CollapsedChatButton.tsx` | Always render small circular button, remove medium/attention state |
 
