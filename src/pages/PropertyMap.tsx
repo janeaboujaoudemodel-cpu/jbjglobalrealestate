@@ -253,7 +253,7 @@ const PropertyMap = () => {
 
       {/* List Panel */}
       {showList && (
-        <div className="absolute top-[140px] right-0 bottom-0 w-full sm:w-96 bg-background/95 backdrop-blur-sm border-l z-[999] overflow-hidden flex flex-col">
+        <div className="absolute top-[52px] right-0 bottom-0 w-full sm:w-96 bg-background/95 backdrop-blur-sm border-l z-[999] overflow-hidden flex flex-col">
           <div className="p-4 border-b flex items-center justify-between">
             <h2 className="font-semibold">{filteredProjects.length} {t('map.properties')}</h2>
             <Button variant="ghost" size="sm" onClick={() => setShowList(false)}>
