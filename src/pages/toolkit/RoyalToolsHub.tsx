@@ -185,7 +185,7 @@ export default function RoyalToolsHub() {
                 return (
                   <div key={category}>
                     <div className="flex items-center gap-3 mb-6">
-                      <Sparkles className="w-5 h-5 text-[#C9A84C]" />
+                      <Sparkles className="w-5 h-5 text-[#B89555]" />
                       <h2 
                         className="text-xl md:text-2xl font-bold text-black"
                         style={{ fontFamily: "Poppins, sans-serif" }}

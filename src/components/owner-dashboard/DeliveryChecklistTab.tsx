@@ -46,7 +46,7 @@ export default function DeliveryChecklistTab() {
     <div className="space-y-6">
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <Card className="bg-white/70 border-[#C9A84C]/20">
+        <Card className="bg-white/70 border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-black">{stats.total}</div>
             <div className="text-xs text-zinc-500">Total Items</div>
@@ -79,14 +79,14 @@ export default function DeliveryChecklistTab() {
       </div>
 
       {/* Completion bar */}
-      <div className="bg-white/70 border border-[#C9A84C]/20 rounded-lg p-4">
+      <div className="bg-white/70 border border-[#B89555]/20 rounded-lg p-4">
         <div className="flex justify-between text-sm mb-2">
           <span className="text-zinc-600">Overall Completion</span>
-          <span className="text-[#C9A84C] font-semibold">{Math.round((stats.done / stats.total) * 100)}%</span>
+          <span className="text-[#B89555] font-semibold">{Math.round((stats.done / stats.total) * 100)}%</span>
         </div>
-        <div className="w-full h-3 bg-[#C9A84C]/10 rounded-full overflow-hidden">
+        <div className="w-full h-3 bg-[#B89555]/10 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-green-500 to-[#C9A84C] rounded-full transition-all"
+            className="h-full bg-gradient-to-r from-green-500 to-[#B89555] rounded-full transition-all"
             style={{ width: `${(stats.done / stats.total) * 100}%` }}
           />
         </div>
@@ -95,8 +95,8 @@ export default function DeliveryChecklistTab() {
       {/* Filters */}
       <div className="flex gap-3">
         <Select value={scopeFilter} onValueChange={(v) => setScopeFilter(v as any)}>
-          <SelectTrigger className="w-48 bg-white/70 border-[#C9A84C]/30 text-black">
-            <Filter className="w-4 h-4 mr-2 text-[#C9A84C]" />
+          <SelectTrigger className="w-48 bg-white/70 border-[#B89555]/30 text-black">
+            <Filter className="w-4 h-4 mr-2 text-[#B89555]" />
             <SelectValue placeholder="Filter by scope" />
           </SelectTrigger>
           <SelectContent>
@@ -108,7 +108,7 @@ export default function DeliveryChecklistTab() {
         </Select>
 
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as any)}>
-          <SelectTrigger className="w-48 bg-white/70 border-[#C9A84C]/30 text-black">
+          <SelectTrigger className="w-48 bg-white/70 border-[#B89555]/30 text-black">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
           <SelectContent>
@@ -127,7 +127,7 @@ export default function DeliveryChecklistTab() {
           const cfg = STATUS_CONFIG[item.status];
           const Icon = cfg.icon;
           return (
-            <Card key={item.id} className="bg-white/70 border-[#C9A84C]/10 hover:border-[#C9A84C]/30 transition-colors">
+            <Card key={item.id} className="bg-white/70 border-[#B89555]/10 hover:border-[#B89555]/30 transition-colors">
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
                   <div className={`mt-0.5 ${cfg.color}`}>
@@ -137,7 +137,7 @@ export default function DeliveryChecklistTab() {
                     <div className="flex items-center gap-2 flex-wrap mb-1">
                       <span className="text-black font-medium">{item.title}</span>
                       <Badge className={cfg.badgeClass}>{cfg.label}</Badge>
-                      <Badge className="bg-[#C9A84C]/10 text-zinc-600 border-[#C9A84C]/20 text-[10px]">
+                      <Badge className="bg-[#B89555]/10 text-zinc-600 border-[#B89555]/20 text-[10px]">
                         {item.scope.replace('_', ' ')}
                       </Badge>
                     </div>
@@ -150,7 +150,7 @@ export default function DeliveryChecklistTab() {
                     {item.evidence && item.evidence.length > 0 && (
                       <div className="flex flex-wrap gap-1">
                         {item.evidence.map((e, i) => (
-                          <span key={i} className="text-[10px] text-zinc-500 bg-[#C9A84C]/5 border border-[#C9A84C]/10 px-2 py-0.5 rounded font-mono">
+                          <span key={i} className="text-[10px] text-zinc-500 bg-[#B89555]/5 border border-[#B89555]/10 px-2 py-0.5 rounded font-mono">
                             {e}
                           </span>
                         ))}

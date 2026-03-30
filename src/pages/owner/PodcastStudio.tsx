@@ -275,14 +275,14 @@ const PodcastStudio = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       {/* Header */}
-      <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-[#C9A84C]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+      <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="flex h-16 items-center justify-between px-6">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/owner/founder-settings")} className="text-black hover:bg-[#C9A84C]/10">
+            <Button variant="ghost" size="icon" onClick={() => navigate("/owner/founder-settings")} className="text-black hover:bg-[#B89555]/10">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#C9A84C] to-amber-600 flex items-center justify-center shadow-lg shadow-[#C9A84C]/20">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#B89555] to-amber-600 flex items-center justify-center shadow-lg shadow-[#B89555]/20">
                 <Headphones className="h-5 w-5 text-white" />
               </div>
               <div>
@@ -317,20 +317,20 @@ const PodcastStudio = () => {
 
       <div className="p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="bg-white/80 border-2 border-[#C9A84C]/30 mb-6">
-            <TabsTrigger value="record" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#C9A84C] text-black">
+          <TabsList className="bg-white/80 border-2 border-[#B89555]/30 mb-6">
+            <TabsTrigger value="record" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-black">
               <Mic className="w-3.5 h-3.5 mr-1.5" /> Record Episode
             </TabsTrigger>
-            <TabsTrigger value="voices" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#C9A84C] text-black">
+            <TabsTrigger value="voices" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-black">
               <Volume2 className="w-3.5 h-3.5 mr-1.5" /> Voice Library
             </TabsTrigger>
-            <TabsTrigger value="episodes" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#C9A84C] text-black">
+            <TabsTrigger value="episodes" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-black">
               <FileAudio className="w-3.5 h-3.5 mr-1.5" /> Episodes ({episodes.length})
             </TabsTrigger>
-            <TabsTrigger value="video" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#C9A84C] text-black">
+            <TabsTrigger value="video" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-black">
               <Video className="w-3.5 h-3.5 mr-1.5" /> Video Studio
             </TabsTrigger>
-            <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#C9A84C] text-black">
+            <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555]/30 data-[state=active]:to-amber-600/20 data-[state=active]:text-black data-[state=active]:border-b-2 data-[state=active]:border-[#B89555] text-black">
               <Settings2 className="w-3.5 h-3.5 mr-1.5" /> Settings
             </TabsTrigger>
           </TabsList>
@@ -340,7 +340,7 @@ const PodcastStudio = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Main Editor */}
               <div className="lg:col-span-2 space-y-4">
-                <Card className="border-2 border-[#C9A84C]/20 bg-white/80">
+                <Card className="border-2 border-[#B89555]/20 bg-white/80">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-bold text-black">Episode Details</CardTitle>
                   </CardHeader>
@@ -349,7 +349,7 @@ const PodcastStudio = () => {
                       value={episodeTitle}
                       onChange={(e) => setEpisodeTitle(e.target.value)}
                       placeholder="Episode title..."
-                      className="border-[#C9A84C]/30 text-black text-lg font-semibold"
+                      className="border-[#B89555]/30 text-black text-lg font-semibold"
                     />
                     {/* Tone selector */}
                     <div>
@@ -362,8 +362,8 @@ const PodcastStudio = () => {
                             variant={selectedTone === tone.id ? "default" : "outline"}
                             onClick={() => setSelectedTone(tone.id)}
                             className={selectedTone === tone.id
-                              ? "bg-gradient-to-r from-[#C9A84C] to-amber-600 text-black text-xs"
-                              : "border-[#C9A84C]/30 text-black text-xs hover:bg-[#C9A84C]/10"}
+                              ? "bg-gradient-to-r from-[#B89555] to-amber-600 text-black text-xs"
+                              : "border-[#B89555]/30 text-black text-xs hover:bg-[#B89555]/10"}
                           >
                             {tone.label}
                           </Button>
@@ -374,14 +374,14 @@ const PodcastStudio = () => {
                       value={script}
                       onChange={(e) => setScript(e.target.value)}
                       placeholder="Write or paste your podcast script here. This text will be converted to speech using the selected voice..."
-                      className="border-[#C9A84C]/30 min-h-[300px] text-black"
+                      className="border-[#B89555]/30 min-h-[300px] text-black"
                     />
                     <div className="flex items-center justify-between">
                       <p className="text-xs text-black/50">{script.length}/5000 characters</p>
                       <Button
                         onClick={generateAudio}
                         disabled={generating || !script.trim()}
-                        className="bg-gradient-to-r from-[#C9A84C] to-amber-600 hover:from-[#C9A84C]/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-[#C9A84C]/20"
+                        className="bg-gradient-to-r from-[#B89555] to-amber-600 hover:from-[#B89555]/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-[#B89555]/20"
                       >
                         {generating ? (
                           <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...</>
@@ -395,19 +395,19 @@ const PodcastStudio = () => {
 
                 {/* Audio Player */}
                 {currentAudioUrl && (
-                  <Card className="border-2 border-[#C9A84C]/20 bg-white/80">
+                  <Card className="border-2 border-[#B89555]/20 bg-white/80">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-4">
                         <Button
                           size="icon"
                           onClick={() => playing ? stopAudio() : playAudio(currentAudioUrl)}
-                          className="bg-gradient-to-r from-[#C9A84C] to-amber-600 text-black h-12 w-12 rounded-full"
+                          className="bg-gradient-to-r from-[#B89555] to-amber-600 text-black h-12 w-12 rounded-full"
                         >
                           {playing ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
                         </Button>
                         <div className="flex-1">
-                          <div className="h-2 bg-[#C9A84C]/20 rounded-full overflow-hidden">
-                            <div className="h-full bg-gradient-to-r from-[#C9A84C] to-amber-600 rounded-full w-0 transition-all" />
+                          <div className="h-2 bg-[#B89555]/20 rounded-full overflow-hidden">
+                            <div className="h-full bg-gradient-to-r from-[#B89555] to-amber-600 rounded-full w-0 transition-all" />
                           </div>
                           <p className="text-xs text-black/50 mt-1">Latest generation</p>
                         </div>
@@ -415,7 +415,7 @@ const PodcastStudio = () => {
                           variant="outline"
                           size="sm"
                           onClick={() => downloadAudio(currentAudioUrl, episodeTitle || "podcast")}
-                          className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10"
+                          className="border-[#B89555]/30 text-black hover:bg-[#B89555]/10"
                         >
                           <Download className="w-4 h-4 mr-1" /> Download
                         </Button>
@@ -427,15 +427,15 @@ const PodcastStudio = () => {
 
               {/* Voice Selector Sidebar */}
               <div className="space-y-4">
-                <Card className="border-2 border-[#C9A84C]/20 bg-white/80">
+                <Card className="border-2 border-[#B89555]/20 bg-white/80">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-sm font-bold text-black flex items-center gap-2">
-                      <Volume2 className="w-4 h-4 text-[#C9A84C]" /> Selected Voice
+                      <Volume2 className="w-4 h-4 text-[#B89555]" /> Selected Voice
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <Select value={selectedVoice} onValueChange={setSelectedVoice}>
-                      <SelectTrigger className="border-[#C9A84C]/30">
+                      <SelectTrigger className="border-[#B89555]/30">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -447,34 +447,34 @@ const PodcastStudio = () => {
                       </SelectContent>
                     </Select>
                     {selectedVoiceInfo && (
-                      <div className="p-3 rounded-lg bg-[#C9A84C]/5 border border-[#C9A84C]/15 space-y-2">
+                      <div className="p-3 rounded-lg bg-[#B89555]/5 border border-[#B89555]/15 space-y-2">
                         <div className="flex items-center gap-2">
-                          <User className="w-4 h-4 text-[#C9A84C]" />
+                          <User className="w-4 h-4 text-[#B89555]" />
                           <span className="font-semibold text-black text-sm">{selectedVoiceInfo.name}</span>
                         </div>
                         <div className="flex flex-wrap gap-1.5">
-                          <Badge className="bg-[#C9A84C]/10 text-[#8B7D3A] border border-[#C9A84C]/20 text-[10px]">{selectedVoiceInfo.gender}</Badge>
-                          <Badge className="bg-[#C9A84C]/10 text-[#8B7D3A] border border-[#C9A84C]/20 text-[10px]">
+                          <Badge className="bg-[#B89555]/10 text-[#8B7D3A] border border-[#B89555]/20 text-[10px]">{selectedVoiceInfo.gender}</Badge>
+                          <Badge className="bg-[#B89555]/10 text-[#8B7D3A] border border-[#B89555]/20 text-[10px]">
                             <Globe className="w-2.5 h-2.5 mr-0.5" /> {selectedVoiceInfo.accent}
                           </Badge>
-                          <Badge className="bg-[#C9A84C]/10 text-[#8B7D3A] border border-[#C9A84C]/20 text-[10px]">{selectedVoiceInfo.style}</Badge>
+                          <Badge className="bg-[#B89555]/10 text-[#8B7D3A] border border-[#B89555]/20 text-[10px]">{selectedVoiceInfo.style}</Badge>
                         </div>
                       </div>
                     )}
                   </CardContent>
                 </Card>
 
-                <Card className="border-2 border-[#C9A84C]/20 bg-white/80">
+                <Card className="border-2 border-[#B89555]/20 bg-white/80">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-sm font-bold text-black flex items-center gap-2">
-                      <Settings2 className="w-4 h-4 text-[#C9A84C]" /> Voice Settings
+                      <Settings2 className="w-4 h-4 text-[#B89555]" /> Voice Settings
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
                       <p className="text-xs font-medium text-black/60 mb-2">Model</p>
                       <Select value={selectedModel} onValueChange={setSelectedModel}>
-                        <SelectTrigger className="border-[#C9A84C]/30 text-xs">
+                        <SelectTrigger className="border-[#B89555]/30 text-xs">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -516,27 +516,27 @@ const PodcastStudio = () => {
                   key={voice.id}
                   className={`border-2 cursor-pointer transition-all hover:shadow-lg ${
                     selectedVoice === voice.id
-                      ? "border-[#C9A84C] bg-[#C9A84C]/5 shadow-lg shadow-[#C9A84C]/10"
-                      : "border-[#C9A84C]/20 bg-white/80 hover:border-[#C9A84C]/40"
+                      ? "border-[#B89555] bg-[#B89555]/5 shadow-lg shadow-[#B89555]/10"
+                      : "border-[#B89555]/20 bg-white/80 hover:border-[#B89555]/40"
                   }`}
                   onClick={() => { setSelectedVoice(voice.id); toast.success(`Voice set to ${voice.name}`); }}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C9A84C]/20 to-[#C9A84C]/5 border border-[#C9A84C]/30 flex items-center justify-center">
-                        <User className="w-5 h-5 text-[#C9A84C]" />
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#B89555]/20 to-[#B89555]/5 border border-[#B89555]/30 flex items-center justify-center">
+                        <User className="w-5 h-5 text-[#B89555]" />
                       </div>
                       <div>
                         <p className="font-semibold text-black text-sm">{voice.name}</p>
                         <p className="text-[10px] text-black/50">{voice.style}</p>
                       </div>
                       {selectedVoice === voice.id && (
-                        <CheckCircle2 className="w-5 h-5 text-[#C9A84C] ml-auto" />
+                        <CheckCircle2 className="w-5 h-5 text-[#B89555] ml-auto" />
                       )}
                     </div>
                     <div className="flex flex-wrap gap-1.5">
-                      <Badge className="bg-[#C9A84C]/10 text-[#8B7D3A] border border-[#C9A84C]/20 text-[10px]">{voice.gender}</Badge>
-                      <Badge className="bg-[#C9A84C]/10 text-[#8B7D3A] border border-[#C9A84C]/20 text-[10px]">
+                      <Badge className="bg-[#B89555]/10 text-[#8B7D3A] border border-[#B89555]/20 text-[10px]">{voice.gender}</Badge>
+                      <Badge className="bg-[#B89555]/10 text-[#8B7D3A] border border-[#B89555]/20 text-[10px]">
                         <Globe className="w-2.5 h-2.5 mr-0.5" /> {voice.accent}
                       </Badge>
                     </div>
@@ -549,16 +549,16 @@ const PodcastStudio = () => {
           {/* Episodes Tab */}
           <TabsContent value="episodes" className="m-0">
             {episodes.length === 0 ? (
-              <Card className="border-2 border-[#C9A84C]/20 bg-white/80">
+              <Card className="border-2 border-[#B89555]/20 bg-white/80">
                 <CardContent className="p-12 text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#C9A84C]/20 flex items-center justify-center">
-                    <FileAudio className="w-8 h-8 text-[#C9A84C]" />
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#B89555]/20 flex items-center justify-center">
+                    <FileAudio className="w-8 h-8 text-[#B89555]" />
                   </div>
                   <h3 className="font-semibold text-black mb-2">No episodes yet</h3>
                   <p className="text-sm text-black/60 mb-4">Record your first podcast episode using the Record tab.</p>
                   <Button
                     onClick={() => setActiveTab("record")}
-                    className="bg-gradient-to-r from-[#C9A84C] to-amber-600 text-black font-semibold"
+                    className="bg-gradient-to-r from-[#B89555] to-amber-600 text-black font-semibold"
                   >
                     <Mic className="w-4 h-4 mr-2" /> Start Recording
                   </Button>
@@ -567,15 +567,15 @@ const PodcastStudio = () => {
             ) : (
               <div className="space-y-3">
                 {episodes.map(ep => (
-                  <Card key={ep.id} className="border-2 border-[#C9A84C]/20 bg-white/80">
+                  <Card key={ep.id} className="border-2 border-[#B89555]/20 bg-white/80">
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C9A84C]/20 to-[#C9A84C]/5 border border-[#C9A84C]/30 flex items-center justify-center">
-                            {ep.status === "generating" ? <Loader2 className="w-5 h-5 text-[#C9A84C] animate-spin" />
+                          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#B89555]/20 to-[#B89555]/5 border border-[#B89555]/30 flex items-center justify-center">
+                            {ep.status === "generating" ? <Loader2 className="w-5 h-5 text-[#B89555] animate-spin" />
                               : ep.status === "ready" ? <CheckCircle2 className="w-5 h-5 text-green-600" />
                               : ep.status === "error" ? <AlertCircle className="w-5 h-5 text-red-500" />
-                              : <FileAudio className="w-5 h-5 text-[#C9A84C]" />}
+                              : <FileAudio className="w-5 h-5 text-[#B89555]" />}
                           </div>
                           <div>
                             <p className="font-semibold text-black">{ep.title}</p>
@@ -588,11 +588,11 @@ const PodcastStudio = () => {
                           {ep.status === "ready" && ep.audioUrl && (
                             <>
                               <Button size="sm" variant="outline" onClick={() => playAudio(ep.audioUrl!)}
-                                className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10">
+                                className="border-[#B89555]/30 text-black hover:bg-[#B89555]/10">
                                 <Play className="w-3.5 h-3.5 mr-1" /> Play
                               </Button>
                               <Button size="sm" variant="outline" onClick={() => downloadAudio(ep.audioUrl!, ep.title)}
-                                className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10">
+                                className="border-[#B89555]/30 text-black hover:bg-[#B89555]/10">
                                 <Download className="w-3.5 h-3.5 mr-1" /> Download
                               </Button>
                             </>
@@ -618,10 +618,10 @@ const PodcastStudio = () => {
           <TabsContent value="video" className="m-0">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Video Upload */}
-              <Card className="border-2 border-[#C9A84C]/20 bg-white/80">
+              <Card className="border-2 border-[#B89555]/20 bg-white/80">
                 <CardHeader>
                   <CardTitle className="text-base font-bold text-black flex items-center gap-2">
-                    <Film className="w-4 h-4 text-[#C9A84C]" /> Upload Video
+                    <Film className="w-4 h-4 text-[#B89555]" /> Upload Video
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -630,7 +630,7 @@ const PodcastStudio = () => {
                       <video
                         src={videoPreviewUrl}
                         controls
-                        className="w-full rounded-lg border-2 border-[#C9A84C]/20"
+                        className="w-full rounded-lg border-2 border-[#B89555]/20"
                       />
                       <div className="flex items-center justify-between">
                         <p className="text-xs text-black/50">{videoFile?.name}</p>
@@ -638,15 +638,15 @@ const PodcastStudio = () => {
                           size="sm"
                           variant="outline"
                           onClick={() => { setVideoFile(null); setVideoPreviewUrl(null); }}
-                          className="border-[#C9A84C]/30 text-black text-xs"
+                          className="border-[#B89555]/30 text-black text-xs"
                         >
                           Remove
                         </Button>
                       </div>
                     </div>
                   ) : (
-                    <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-[#C9A84C]/30 rounded-lg cursor-pointer hover:border-[#C9A84C]/60 hover:bg-[#C9A84C]/5 transition-all">
-                      <Upload className="w-8 h-8 text-[#C9A84C]/60 mb-2" />
+                    <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-[#B89555]/30 rounded-lg cursor-pointer hover:border-[#B89555]/60 hover:bg-[#B89555]/5 transition-all">
+                      <Upload className="w-8 h-8 text-[#B89555]/60 mb-2" />
                       <span className="text-sm text-black/60">Upload your video file</span>
                       <span className="text-xs text-black/40 mt-1">MP4, MOV, WebM supported</span>
                       <input type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} />
@@ -656,10 +656,10 @@ const PodcastStudio = () => {
               </Card>
 
               {/* Video Voiceover */}
-              <Card className="border-2 border-[#C9A84C]/20 bg-white/80">
+              <Card className="border-2 border-[#B89555]/20 bg-white/80">
                 <CardHeader>
                   <CardTitle className="text-base font-bold text-black flex items-center gap-2">
-                    <Wand2 className="w-4 h-4 text-[#C9A84C]" /> AI Voiceover & Lip Sync
+                    <Wand2 className="w-4 h-4 text-[#B89555]" /> AI Voiceover & Lip Sync
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -667,7 +667,7 @@ const PodcastStudio = () => {
                     value={videoScript}
                     onChange={e => setVideoScript(e.target.value)}
                     placeholder="Write the voiceover script for this video. The AI will generate audio matching the selected voice..."
-                    className="border-[#C9A84C]/30 min-h-[150px] text-black"
+                    className="border-[#B89555]/30 min-h-[150px] text-black"
                   />
                   <div className="flex items-center gap-2 text-xs text-black/50">
                     <Volume2 className="w-3 h-3" />
@@ -683,9 +683,9 @@ const PodcastStudio = () => {
                         { icon: Radio, label: "Voice Clone", desc: "Use your cloned voice" },
                         { icon: Sparkles, label: "Auto-Detect", desc: "Detect speech segments" },
                       ].map((f, i) => (
-                        <div key={i} className="p-2 rounded-lg bg-[#C9A84C]/5 border border-[#C9A84C]/15">
+                        <div key={i} className="p-2 rounded-lg bg-[#B89555]/5 border border-[#B89555]/15">
                           <div className="flex items-center gap-1.5 mb-0.5">
-                            <f.icon className="w-3 h-3 text-[#C9A84C]" />
+                            <f.icon className="w-3 h-3 text-[#B89555]" />
                             <span className="text-xs font-semibold text-black">{f.label}</span>
                           </div>
                           <p className="text-[10px] text-black/50">{f.desc}</p>
@@ -697,7 +697,7 @@ const PodcastStudio = () => {
                   <Button
                     onClick={generateVideoVoiceover}
                     disabled={videoProcessing || !videoScript.trim()}
-                    className="w-full bg-gradient-to-r from-[#C9A84C] to-amber-600 hover:from-[#C9A84C]/90 hover:to-amber-600/90 text-black font-semibold"
+                    className="w-full bg-gradient-to-r from-[#B89555] to-amber-600 hover:from-[#B89555]/90 hover:to-amber-600/90 text-black font-semibold"
                   >
                     {videoProcessing ? (
                       <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
@@ -718,14 +718,14 @@ const PodcastStudio = () => {
           {/* Settings Tab */}
           <TabsContent value="settings" className="m-0">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="border-2 border-[#C9A84C]/20 bg-white/80">
+              <Card className="border-2 border-[#B89555]/20 bg-white/80">
                 <CardHeader>
                   <CardTitle className="text-base font-bold text-black">ElevenLabs Configuration</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="p-4 rounded-lg bg-[#C9A84C]/5 border border-[#C9A84C]/15">
+                  <div className="p-4 rounded-lg bg-[#B89555]/5 border border-[#B89555]/15">
                     <div className="flex items-center gap-2 mb-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#C9A84C]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#B89555]" />
                       <span className="font-semibold text-black text-sm">API Status</span>
                     </div>
                     <p className="text-xs text-black/60">
@@ -750,7 +750,7 @@ const PodcastStudio = () => {
                         "Voice cloning (owner exclusive)",
                       ].map((feature, i) => (
                         <div key={i} className="flex items-center gap-2 text-xs text-black/70">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#C9A84C]" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#B89555]" />
                           <span>{feature}</span>
                         </div>
                       ))}
@@ -759,7 +759,7 @@ const PodcastStudio = () => {
                 </CardContent>
               </Card>
 
-              <Card className="border-2 border-[#C9A84C]/20 bg-white/80">
+              <Card className="border-2 border-[#B89555]/20 bg-white/80">
                 <CardHeader>
                   <CardTitle className="text-base font-bold text-black">Use Cases</CardTitle>
                 </CardHeader>
@@ -771,9 +771,9 @@ const PodcastStudio = () => {
                     { icon: Radio, title: "Phone Calls", desc: "Answer calls with selected voice profiles" },
                     { icon: Volume2, title: "Narration", desc: "Generate voiceovers for property tours" },
                   ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-[#C9A84C]/5 border border-[#C9A84C]/15">
-                      <div className="w-8 h-8 rounded-lg bg-[#C9A84C]/15 flex items-center justify-center shrink-0">
-                        <item.icon className="w-4 h-4 text-[#C9A84C]" />
+                    <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-[#B89555]/5 border border-[#B89555]/15">
+                      <div className="w-8 h-8 rounded-lg bg-[#B89555]/15 flex items-center justify-center shrink-0">
+                        <item.icon className="w-4 h-4 text-[#B89555]" />
                       </div>
                       <div>
                         <p className="font-semibold text-black text-sm">{item.title}</p>

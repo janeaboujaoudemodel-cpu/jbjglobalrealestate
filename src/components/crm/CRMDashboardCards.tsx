@@ -255,7 +255,7 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
           {cards.map((card, index) => (
             <Tooltip key={index}>
               <TooltipTrigger asChild>
-                <Card className="border-2 border-[#C9A84C]/30 bg-white/80 hover:shadow-md hover:shadow-[#C9A84C]/10 transition-all cursor-help">
+                <Card className="border-2 border-[#B89555]/30 bg-white/80 hover:shadow-md hover:shadow-[#B89555]/10 transition-all cursor-help">
                   <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-3">
                     <CardTitle className="text-xs font-semibold text-black whitespace-nowrap">
                       {card.title}
@@ -284,7 +284,7 @@ const CRMDashboardCards = ({ userId, hasOwnerAccess }: CRMDashboardCardsProps) =
           {metricsCards.map((card, index) => (
             <Tooltip key={index}>
               <TooltipTrigger asChild>
-                <Card className="border-2 border-[#C9A84C]/30 bg-white/80 hover:shadow-md hover:shadow-[#C9A84C]/10 transition-all cursor-help">
+                <Card className="border-2 border-[#B89555]/30 bg-white/80 hover:shadow-md hover:shadow-[#B89555]/10 transition-all cursor-help">
                   <CardHeader className="flex flex-row items-center justify-between pb-1 pt-3 px-3">
                     <CardTitle className="text-xs font-semibold text-black whitespace-nowrap">
                       {card.title}

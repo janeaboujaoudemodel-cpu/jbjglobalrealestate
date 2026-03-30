@@ -71,7 +71,7 @@ export function UserTasksPopupAlert() {
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#C9A84C]/50 rounded-2xl shadow-2xl shadow-[#C9A84C]/20 p-6 md:p-8 max-w-md w-[90vw] relative">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/50 rounded-2xl shadow-2xl shadow-[#B89555]/20 p-6 md:p-8 max-w-md w-[90vw] relative">
         <button
           onClick={handleDismiss}
           className="absolute top-3 right-3 text-zinc-400 hover:text-zinc-600 transition-colors"
@@ -80,8 +80,8 @@ export function UserTasksPopupAlert() {
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C9A84C]/20 to-[#C9A84C]/10 border-2 border-[#C9A84C]/40 flex items-center justify-center">
-            <Bell className="w-6 h-6 text-[#C9A84C]" />
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#B89555]/20 to-[#B89555]/10 border-2 border-[#B89555]/40 flex items-center justify-center">
+            <Bell className="w-6 h-6 text-[#B89555]" />
           </div>
           <div>
             <h3 className="text-black font-bold text-lg">
@@ -112,9 +112,9 @@ export function UserTasksPopupAlert() {
         )}
 
         {pendingCount > 0 && (
-          <div className="bg-white/60 border border-[#C9A84C]/20 rounded-xl p-4 mb-5">
+          <div className="bg-white/60 border border-[#B89555]/20 rounded-xl p-4 mb-5">
             <p className="text-black text-sm">
-              You have <span className="font-bold text-[#C9A84C] text-lg">{pendingCount}</span> pending task{pendingCount !== 1 ? "s" : ""} that require your attention.
+              You have <span className="font-bold text-[#B89555] text-lg">{pendingCount}</span> pending task{pendingCount !== 1 ? "s" : ""} that require your attention.
             </p>
           </div>
         )}
@@ -132,7 +132,7 @@ export function UserTasksPopupAlert() {
           {pendingCount > 0 && (
             <Button
               onClick={() => { handleDismiss(); navigate("/my-account#tasks"); }}
-              className="flex-1 bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold rounded-xl"
+              className="flex-1 bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#A7862E] text-black font-bold rounded-xl"
             >
               View Tasks <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -140,7 +140,7 @@ export function UserTasksPopupAlert() {
           <Button
             variant="outline"
             onClick={handleDismiss}
-            className="border-[#C9A84C]/30 text-zinc-600 hover:bg-[#C9A84C]/10 rounded-xl"
+            className="border-[#B89555]/30 text-zinc-600 hover:bg-[#B89555]/10 rounded-xl"
           >
             Later
           </Button>

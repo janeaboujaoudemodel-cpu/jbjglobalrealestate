@@ -144,11 +144,11 @@ const FoundersInsightsPanel: React.FC = () => {
             </CardContent>
           </Card>
           
-          <Card className={weeklySummary.efficiencyChange >= 0 ? 'bg-[#C9A84C]/10 border-[#C9A84C]/30' : 'bg-destructive/5 border-destructive/20'}>
+          <Card className={weeklySummary.efficiencyChange >= 0 ? 'bg-[#B89555]/10 border-[#B89555]/30' : 'bg-destructive/5 border-destructive/20'}>
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
                 {weeklySummary.efficiencyChange >= 0 ? (
-                  <TrendingUp className="h-4 w-4 text-[#C9A84C]" />
+                  <TrendingUp className="h-4 w-4 text-[#B89555]" />
                 ) : (
                   <TrendingDown className="h-4 w-4 text-destructive" />
                 )}
@@ -156,7 +156,7 @@ const FoundersInsightsPanel: React.FC = () => {
               </div>
               <p className={cn(
                 "text-2xl font-bold",
-                weeklySummary.efficiencyChange >= 0 ? "text-[#C9A84C]" : "text-destructive"
+                weeklySummary.efficiencyChange >= 0 ? "text-[#B89555]" : "text-destructive"
               )}>
                 {weeklySummary.efficiencyChange > 0 ? '+' : ''}{weeklySummary.efficiencyChange}%
               </p>
@@ -183,13 +183,13 @@ const FoundersInsightsPanel: React.FC = () => {
             </CardContent>
           </Card>
           
-          <Card className="bg-[#C9A84C]/10 border-[#C9A84C]/30">
+          <Card className="bg-[#B89555]/10 border-[#B89555]/30">
             <CardContent className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Zap className="h-4 w-4 text-[#C9A84C]" />
+                <Zap className="h-4 w-4 text-[#B89555]" />
                 <span className="text-xs text-zinc-600 font-medium">Optimized</span>
               </div>
-              <p className="text-2xl font-bold text-[#C9A84C]">{weeklySummary.optimizationsApplied}</p>
+              <p className="text-2xl font-bold text-[#B89555]">{weeklySummary.optimizationsApplied}</p>
             </CardContent>
           </Card>
         </div>
@@ -320,7 +320,7 @@ const FoundersInsightsPanel: React.FC = () => {
                     <CardTitle className="text-base">{dept.departmentName}</CardTitle>
                     <Badge variant="outline" className={
                       dept.weekOverWeekChange >= 0 
-                        ? 'bg-[#C9A84C]/15 text-[#8B6914] border-[#C9A84C]/30 font-bold' 
+                        ? 'bg-[#B89555]/15 text-[#8B6914] border-[#B89555]/30 font-bold' 
                         : 'bg-destructive/10 text-destructive border-destructive/20 font-bold'
                     }>
                       {dept.weekOverWeekChange > 0 ? '+' : ''}{dept.weekOverWeekChange}%

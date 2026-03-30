@@ -49,11 +49,11 @@ const OwnerIntegrationsPage = () => {
     <OwnerGuard>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         {/* Header */}
-        <div className="border-b border-[#C9A84C]/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#FDFBF7]">
+        <div className="border-b border-[#B89555]/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#FDFBF7]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-[#C9A84C]/10 border border-[#C9A84C]/20 flex items-center justify-center">
-                <Plug className="w-6 h-6 text-[#C9A84C]" />
+              <div className="w-12 h-12 rounded-xl bg-[#B89555]/10 border border-[#B89555]/20 flex items-center justify-center">
+                <Plug className="w-6 h-6 text-[#B89555]" />
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-black">Integration Status</h1>
@@ -82,12 +82,12 @@ const OwnerIntegrationsPage = () => {
           {/* Integration Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {integrations.map((integration) => (
-              <Card key={integration.id} className="bg-white/70 border-[#C9A84C]/20">
+              <Card key={integration.id} className="bg-white/70 border-[#B89555]/20">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-[#C9A84C]/10 border border-[#C9A84C]/20 flex items-center justify-center">
-                        <integration.icon className="w-5 h-5 text-[#C9A84C]" />
+                      <div className="w-10 h-10 rounded-lg bg-[#B89555]/10 border border-[#B89555]/20 flex items-center justify-center">
+                        <integration.icon className="w-5 h-5 text-[#B89555]" />
                       </div>
                       <div>
                         <CardTitle className="text-black text-lg">{integration.name}</CardTitle>
@@ -109,7 +109,7 @@ const OwnerIntegrationsPage = () => {
                     <span className="text-sm text-zinc-500">Last Sync</span>
                     <span className="text-sm text-zinc-600">{integration.lastSync || 'Never'}</span>
                   </div>
-                  <div className="pt-3 border-t border-[#C9A84C]/10">
+                  <div className="pt-3 border-t border-[#B89555]/10">
                     <div className="flex gap-4">
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-zinc-500">Can Send:</span>
@@ -122,10 +122,10 @@ const OwnerIntegrationsPage = () => {
                     </div>
                   </div>
                   <div className="pt-3 flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1 border-[#C9A84C]/30 text-zinc-600 hover:text-black hover:bg-[#C9A84C]/10" disabled>
+                    <Button variant="outline" size="sm" className="flex-1 border-[#B89555]/30 text-zinc-600 hover:text-black hover:bg-[#B89555]/10" disabled>
                       <Settings className="w-4 h-4 mr-1" />Configure
                     </Button>
-                    <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-zinc-600 hover:text-black hover:bg-[#C9A84C]/10" disabled>
+                    <Button variant="outline" size="sm" className="border-[#B89555]/30 text-zinc-600 hover:text-black hover:bg-[#B89555]/10" disabled>
                       <RefreshCw className="w-4 h-4" />
                     </Button>
                   </div>
@@ -135,7 +135,7 @@ const OwnerIntegrationsPage = () => {
           </div>
 
           {/* Legend */}
-          <div className="mt-8 p-4 rounded-lg bg-white/70 border border-[#C9A84C]/20">
+          <div className="mt-8 p-4 rounded-lg bg-white/70 border border-[#B89555]/20">
             <h3 className="text-sm font-semibold text-black mb-3">Status Legend</h3>
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">

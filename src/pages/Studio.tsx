@@ -41,7 +41,7 @@ const typeIcons: Record<string, any> = {
 
 // Champagne gold accent colors per type
 const typeHex: Record<string, string> = {
-  video: "#C9A84C",
+  video: "#B89555",
   image: "#B8964A",
   pdf: "#D4AF37",
   marketing_pack: "#A89048",
@@ -171,7 +171,7 @@ export default function Studio() {
     return matchesSearch && matchesType;
   });
 
-  const goldAccent = "#C9A84C";
+  const goldAccent = "#B89555";
   const goldLight = "rgba(201,168,76,0.15)";
   const goldBorder = "rgba(201,168,76,0.3)";
 

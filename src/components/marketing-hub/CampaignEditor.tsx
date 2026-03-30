@@ -317,7 +317,7 @@ const CampaignEditor: React.FC<CampaignEditorProps> = ({ campaign, onClose, onSa
           
 Target audience: ${targetAudience}
 ${campaignType === 'email' ? `Include a compelling subject line at the start, marked as "Subject: ".
-Then write the email body in clean HTML with inline styles. Use elegant fonts, gold (#C9A84C) accent colors, and professional formatting. Include proper headings, paragraphs, and a call-to-action button styled with background-color:#C9A84C; color:#000; padding:12px 32px; border-radius:8px; text-decoration:none; font-weight:bold;` : ''}
+Then write the email body in clean HTML with inline styles. Use elegant fonts, gold (#B89555) accent colors, and professional formatting. Include proper headings, paragraphs, and a call-to-action button styled with background-color:#B89555; color:#000; padding:12px 32px; border-radius:8px; text-decoration:none; font-weight:bold;` : ''}
 
 The content should be:
 - Professional and engaging

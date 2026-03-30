@@ -235,20 +235,20 @@ export function FoundersDecisionPanel() {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-6 w-full bg-white/80 border-2 border-[#C9A84C]/30 p-1 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
-          <TabsTrigger value="overview" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+        <TabsList className="grid grid-cols-6 w-full bg-white/80 border-2 border-[#B89555]/30 p-1 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+          <TabsTrigger value="overview" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <BarChart3 className="h-4 w-4" />
             <span className="hidden sm:inline">Overview</span>
           </TabsTrigger>
-          <TabsTrigger value="insights" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="insights" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <Lightbulb className="h-4 w-4" />
             <span className="hidden sm:inline">Insights</span>
           </TabsTrigger>
-          <TabsTrigger value="predictions" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="predictions" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <LineChart className="h-4 w-4" />
             <span className="hidden sm:inline">Predictions</span>
           </TabsTrigger>
-          <TabsTrigger value="recommendations" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="recommendations" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <Target className="h-4 w-4" />
             <span className="hidden sm:inline whitespace-nowrap">Recommendations</span>
             {recommendations.filter(r => r.status === 'pending').length > 0 && (
@@ -257,7 +257,7 @@ export function FoundersDecisionPanel() {
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="risks" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="risks" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <AlertTriangle className="h-4 w-4" />
             <span className="hidden sm:inline">Risks</span>
             {riskAlerts.filter(a => a.status === 'new').length > 0 && (
@@ -266,7 +266,7 @@ export function FoundersDecisionPanel() {
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="decisions" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
+          <TabsTrigger value="decisions" className="flex items-center gap-2 text-zinc-600 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white data-[state=active]:shadow-md rounded-lg transition-all">
             <History className="h-4 w-4" />
             <span className="hidden sm:inline">Decisions</span>
           </TabsTrigger>

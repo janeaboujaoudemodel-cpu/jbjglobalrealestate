@@ -310,7 +310,7 @@ const CRMNotes = () => {
                                 variant="ghost" 
                                 size="sm" 
                                 onClick={() => extractTasks(note.id)}
-                                className="h-7 w-7 p-0 text-zinc-600 hover:text-[#C9A84C]"
+                                className="h-7 w-7 p-0 text-zinc-600 hover:text-[#B89555]"
                                 title="Extract tasks from note"
                               >
                                 <ListChecks className="h-3 w-3" />

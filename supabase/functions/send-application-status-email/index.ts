@@ -42,7 +42,7 @@ function getStatusColor(status: string): string {
   if (["approved", "accepted", "published", "active"].includes(status)) return "#22c55e";
   if (["rejected", "declined", "removed"].includes(status)) return "#ef4444";
   if (["request_edit", "revision_needed", "info_requested"].includes(status)) return "#f59e0b";
-  return "#C9A84C";
+  return "#B89555";
 }
 
 function getApplicationTypeLabel(type: ApplicationType): string {
@@ -84,7 +84,7 @@ function buildEmailHtml(req: StatusEmailRequest): string {
 Your <strong>${typeLabel.toLowerCase()}</strong> — <strong>${req.applicationTitle}</strong> — has been updated.
 </p>
 ${progressSteps(['Received', 'Under Review', 'Decision'], steps, [steps[0], steps[1], false])}
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#fdfbf7;border:1px solid #C9A84C33;border-radius:18px;margin:0 0 24px;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#fdfbf7;border:1px solid #B8955533;border-radius:18px;margin:0 0 24px;">
 <tr><td style="padding:16px 20px;">
 <table width="100%" cellpadding="0" cellspacing="0">
 <tr><td style="padding:6px 0;color:#888;font-size:13px;width:120px;">Reference:</td><td style="padding:6px 0;color:#333;font-size:13px;font-weight:600;">${req.applicationId.substring(0, 8).toUpperCase()}</td></tr>

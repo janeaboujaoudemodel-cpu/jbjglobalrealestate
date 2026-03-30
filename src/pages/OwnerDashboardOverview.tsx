@@ -66,13 +66,13 @@ function KPICard({ title, value, icon, trend, loading, onClick }: KPICardProps) 
         <div className="flex items-start justify-between">
           <div>
             {loading ? (
-              <Skeleton className="h-8 w-16 bg-[#C9A84C]/10 mb-1" />
+              <Skeleton className="h-8 w-16 bg-[#B89555]/10 mb-1" />
             ) : (
               <p className="text-3xl font-bold text-black">{value}</p>
             )}
             <p className="text-sm text-zinc-600 mt-1 font-medium">{title}</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C9A84C]/20 to-[#C9A84C]/10 flex items-center justify-center border border-[#C9A84C]/20 shadow-sm">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#B89555]/20 to-[#B89555]/10 flex items-center justify-center border border-[#B89555]/20 shadow-sm">
             {icon}
           </div>
         </div>
@@ -102,12 +102,12 @@ interface LeadRowProps {
 function LeadRow({ lead, onOpen }: LeadRowProps) {
   return (
     <div 
-      className="p-4 rounded-lg bg-[#FDFBF7] hover:bg-[#C9A84C]/5 transition-colors cursor-pointer group border border-[#C9A84C]/20 hover:border-[#C9A84C]/40"
+      className="p-4 rounded-lg bg-[#FDFBF7] hover:bg-[#B89555]/5 transition-colors cursor-pointer group border border-[#B89555]/20 hover:border-[#B89555]/40"
       onClick={() => onOpen(lead.id)}
     >
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-10 h-10 rounded-full bg-[#C9A84C]/20 flex items-center justify-center flex-shrink-0">
-          <span className="text-[#C9A84C] font-semibold text-sm">
+        <div className="w-10 h-10 rounded-full bg-[#B89555]/20 flex items-center justify-center flex-shrink-0">
+          <span className="text-[#B89555] font-semibold text-sm">
             {lead.full_name.charAt(0).toUpperCase()}
           </span>
         </div>
@@ -120,7 +120,7 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
       </div>
       <div className="flex items-center gap-2 flex-wrap">
         {lead.source && (
-          <Badge variant="secondary" className="bg-[#C9A84C]/10 text-zinc-700 text-xs border border-[#C9A84C]/20">
+          <Badge variant="secondary" className="bg-[#B89555]/10 text-zinc-700 text-xs border border-[#B89555]/20">
             {lead.source}
           </Badge>
         )}
@@ -139,7 +139,7 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-[#C9A84C] hover:text-[#B8973F] hover:bg-[#C9A84C]/10 text-xs h-7"
+          className="text-[#B89555] hover:text-[#A68444] hover:bg-[#B89555]/10 text-xs h-7"
           onClick={(e) => { e.stopPropagation(); onOpen(lead.id); }}
         >
           Open <ExternalLink className="h-3 w-3 ml-1" />
@@ -162,7 +162,7 @@ interface ConversationRowProps {
 
 function ConversationRow({ conversation }: ConversationRowProps) {
   return (
-    <div className="flex items-center justify-between p-4 rounded-lg bg-[#FDFBF7] border border-[#C9A84C]/10">
+    <div className="flex items-center justify-between p-4 rounded-lg bg-[#FDFBF7] border border-[#B89555]/10">
       <div className="flex items-center gap-3 min-w-0">
         <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
           <MessageSquare className="h-4 w-4 text-purple-600" />
@@ -214,15 +214,15 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
   const displayName = item.type === 'task' ? item.title : item.full_name;
   
   return (
-    <div className="flex items-center justify-between p-4 rounded-lg bg-[#FDFBF7] border border-[#C9A84C]/10">
+    <div className="flex items-center justify-between p-4 rounded-lg bg-[#FDFBF7] border border-[#B89555]/10">
       <div className="flex items-center gap-3 min-w-0 flex-1">
         {item.type === 'task' && onComplete ? (
           <button
             onClick={(e) => { e.stopPropagation(); onComplete(item.id); }}
             className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 transition-colors ${
               item.status === 'completed' 
-                ? 'bg-[#C9A84C] border-[#C9A84C]' 
-                : 'border-[#C9A84C]/40 hover:border-[#C9A84C]'
+                ? 'bg-[#B89555] border-[#B89555]' 
+                : 'border-[#B89555]/40 hover:border-[#B89555]'
             }`}
           >
             {item.status === 'completed' && <CheckSquare className="h-3 w-3 text-white" />}
@@ -237,7 +237,7 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
             {displayName}
           </p>
           {(item as any).lead_context && (
-            <p className="text-xs text-[#C9A84C]/70 truncate">
+            <p className="text-xs text-[#B89555]/70 truncate">
               Lead: {(item as any).lead_context}
             </p>
           )}
@@ -257,7 +257,7 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
         <Button
           variant="ghost"
           size="sm"
-          className="text-[#C9A84C] hover:text-[#B8973F] hover:bg-[#C9A84C]/10"
+          className="text-[#B89555] hover:text-[#A68444] hover:bg-[#B89555]/10"
           onClick={() => onOpen(item.id)}
         >
           Open
@@ -465,7 +465,7 @@ export default function OwnerDashboardOverview() {
       {/* Command Center Header */}
       <div className="mb-4">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-1 h-8 bg-gradient-to-b from-[#C9A84C] to-[#C9A84C]/40 rounded-full" />
+          <div className="w-1 h-8 bg-gradient-to-b from-[#B89555] to-[#B89555]/40 rounded-full" />
           <h1 className="text-2xl md:text-3xl font-bold text-black tracking-tight">
             Owner Command Center
           </h1>
@@ -480,7 +480,7 @@ export default function OwnerDashboardOverview() {
         <KPICard
           title="Total Leads"
           value={totalLeads ?? '—'}
-          icon={<Users className="h-6 w-6 text-[#C9A84C]" />}
+          icon={<Users className="h-6 w-6 text-[#B89555]" />}
           loading={loadingLeads}
           onClick={() => setActiveTab('leads')}
         />
@@ -514,7 +514,7 @@ export default function OwnerDashboardOverview() {
 
       {/* Main Tabbed Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#C9A84C]/30 p-2 mb-6 flex flex-wrap justify-center gap-1.5 rounded-xl shadow-sm h-auto">
+        <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[#B89555]/30 p-2 mb-6 flex flex-wrap justify-center gap-1.5 rounded-xl shadow-sm h-auto">
           <TabsTrigger 
             value="overview" 
             className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black data-[state=active]:shadow-sm px-4 py-2"
@@ -574,7 +574,7 @@ export default function OwnerDashboardOverview() {
 
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Newest Leads */}
-            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 lg:col-span-2 shadow-sm overflow-hidden min-w-0">
+            <Card className="bg-white/70 border-2 border-[#B89555]/30 lg:col-span-2 shadow-sm overflow-hidden min-w-0">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
                   <CardTitle className="text-lg text-black">Newest Leads</CardTitle>
@@ -584,7 +584,7 @@ export default function OwnerDashboardOverview() {
                   variant="ghost" 
                   size="sm" 
                   onClick={() => setActiveTab('leads')}
-                  className="text-[#C9A84C] hover:text-[#B8973F] hover:bg-[#C9A84C]/10"
+                  className="text-[#B89555] hover:text-[#A68444] hover:bg-[#B89555]/10"
                 >
                   View All <ChevronRight className="h-4 w-4 ml-1" />
                 </Button>
@@ -593,7 +593,7 @@ export default function OwnerDashboardOverview() {
                 {loadingNewestLeads ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {Array.from({ length: 6 }).map((_, i) => (
-                      <Skeleton key={i} className="h-32 bg-[#C9A84C]/10 rounded-lg" />
+                      <Skeleton key={i} className="h-32 bg-[#B89555]/10 rounded-lg" />
                     ))}
                   </div>
                 ) : newestLeads && newestLeads.length > 0 ? (
@@ -608,7 +608,7 @@ export default function OwnerDashboardOverview() {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <Users className="h-12 w-12 text-[#C9A84C]/40 mx-auto mb-3" />
+                    <Users className="h-12 w-12 text-[#B89555]/40 mx-auto mb-3" />
                     <p className="text-zinc-500">No leads yet</p>
                     <Button 
                       variant="secondary" 
@@ -624,7 +624,7 @@ export default function OwnerDashboardOverview() {
             </Card>
 
             {/* Needs Follow-up */}
-            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm overflow-hidden min-w-0">
+            <Card className="bg-white/70 border-2 border-[#B89555]/30 shadow-sm overflow-hidden min-w-0">
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
                   <CardTitle className="text-base text-black flex items-center gap-2">
@@ -637,7 +637,7 @@ export default function OwnerDashboardOverview() {
                   variant="ghost" 
                   size="sm" 
                   onClick={() => navigate('/owner/crm/tasks')}
-                  className="text-[#C9A84C] hover:text-[#B8973F] hover:bg-[#C9A84C]/10"
+                  className="text-[#B89555] hover:text-[#A68444] hover:bg-[#B89555]/10"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
@@ -645,7 +645,7 @@ export default function OwnerDashboardOverview() {
               <CardContent className="space-y-2 pt-0 max-h-[400px] overflow-y-auto scrollbar-hide">
                 {loadingFollowUp ? (
                   Array.from({ length: 4 }).map((_, i) => (
-                    <Skeleton key={i} className="h-14 bg-[#C9A84C]/10" />
+                    <Skeleton key={i} className="h-14 bg-[#B89555]/10" />
                   ))
                 ) : followUpItems && followUpItems.length > 0 ? (
                   followUpItems.map((item: any) => (
@@ -658,7 +658,7 @@ export default function OwnerDashboardOverview() {
                   ))
                 ) : (
                   <div className="text-center py-6">
-                    <CheckSquare className="h-10 w-10 text-[#C9A84C]/40 mx-auto mb-2" />
+                    <CheckSquare className="h-10 w-10 text-[#B89555]/40 mx-auto mb-2" />
                     <p className="text-sm text-zinc-500">All caught up!</p>
                   </div>
                 )}
@@ -667,7 +667,7 @@ export default function OwnerDashboardOverview() {
           </div>
 
           {/* Recent Conversations */}
-          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
+          <Card className="bg-white/70 border-2 border-[#B89555]/30 shadow-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg text-black flex items-center gap-2">
                 <Activity className="h-5 w-5 text-purple-600" />
@@ -679,7 +679,7 @@ export default function OwnerDashboardOverview() {
               {loadingRecentConvos ? (
                 <div className="grid md:grid-cols-2 gap-3">
                   {Array.from({ length: 4 }).map((_, i) => (
-                    <Skeleton key={i} className="h-16 bg-[#C9A84C]/10" />
+                    <Skeleton key={i} className="h-16 bg-[#B89555]/10" />
                   ))}
                 </div>
               ) : recentConversations && recentConversations.length > 0 ? (
@@ -690,7 +690,7 @@ export default function OwnerDashboardOverview() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <MessageSquare className="h-12 w-12 text-[#C9A84C]/40 mx-auto mb-3" />
+                  <MessageSquare className="h-12 w-12 text-[#B89555]/40 mx-auto mb-3" />
                   <p className="text-zinc-500">No conversations yet</p>
                   <p className="text-zinc-400 text-xs mt-1">Conversations from website visitors will appear here</p>
                 </div>
@@ -709,7 +709,7 @@ export default function OwnerDashboardOverview() {
         {/* All Leads Tab — lazy rendered */}
         <TabsContent value="leads" className="space-y-4 mt-0">
           {activeTab === "leads" && (
-            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
+            <Card className="bg-white/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-black">All Leads</CardTitle>
                 <CardDescription className="text-zinc-500">Complete lead management</CardDescription>
@@ -731,7 +731,7 @@ export default function OwnerDashboardOverview() {
         {/* Flagged Leads Tab — lazy rendered */}
         <TabsContent value="flagged" className="space-y-4 mt-0">
           {activeTab === "flagged" && (
-            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
+            <Card className="bg-white/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-black flex items-center gap-2">
                   <Flag className="h-5 w-5 text-red-500" />
@@ -755,10 +755,10 @@ export default function OwnerDashboardOverview() {
         {/* VIP Leads Tab — lazy rendered */}
         <TabsContent value="vip" className="space-y-4 mt-0">
           {activeTab === "vip" && (
-            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
+            <Card className="bg-white/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-black flex items-center gap-2">
-                  <Crown className="h-5 w-5 text-[#C9A84C]" />
+                  <Crown className="h-5 w-5 text-[#B89555]" />
                   VIP Leads
                 </CardTitle>
                 <CardDescription className="text-zinc-500">High-value contacts</CardDescription>
@@ -789,7 +789,7 @@ export default function OwnerDashboardOverview() {
         {/* Employees Hub Tab — lazy rendered */}
         <TabsContent value="employees" className="space-y-4 mt-0">
           {activeTab === "employees" && (
-            <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
+            <Card className="bg-white/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-black flex items-center gap-2">
                   <Briefcase className="h-5 w-5 text-blue-600" />
@@ -808,7 +808,7 @@ export default function OwnerDashboardOverview() {
 
         {/* Audit Logs Tab */}
         <TabsContent value="audit" className="space-y-4 mt-0">
-          <Card className="bg-white/70 border-2 border-[#C9A84C]/30 shadow-sm">
+          <Card className="bg-white/70 border-2 border-[#B89555]/30 shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg text-black flex items-center gap-2">
                 <Shield className="h-5 w-5 text-purple-600" />
@@ -818,7 +818,7 @@ export default function OwnerDashboardOverview() {
             </CardHeader>
             <CardContent>
               <div className="text-center py-12">
-                <Shield className="h-12 w-12 text-[#C9A84C]/40 mx-auto mb-3" />
+                <Shield className="h-12 w-12 text-[#B89555]/40 mx-auto mb-3" />
                 <p className="text-zinc-500 mb-4">View audit logs for all CRM activity</p>
                 <Button 
                   variant="secondary"

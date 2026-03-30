@@ -480,7 +480,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
               )}
               <div className={`max-w-[80%] ${
                 message.role === 'user' 
-                  ? 'bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white' 
+                  ? 'bg-gradient-to-r from-[#B89555] to-[#A68444] text-white' 
                   : 'bg-white text-black border border-[hsl(var(--gold))]/30 shadow-sm'
               } rounded-2xl px-4 py-3`}>
                 {message.isTyping ? (
@@ -499,7 +499,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                         let rendered = escapeHtml(line);
                         rendered = rendered.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                         rendered = rendered.replace(/\*(.*?)\*/g, '<em>$1</em>');
-                        rendered = rendered.replace(/`(.*?)`/g, '<code class="bg-[#C9A84C]/20 px-1 rounded text-[#C9A84C]">$1</code>');
+                        rendered = rendered.replace(/`(.*?)`/g, '<code class="bg-[#B89555]/20 px-1 rounded text-[#B89555]">$1</code>');
                         const sanitized = DOMPurify.sanitize(rendered, {
                           ALLOWED_TAGS: ['strong', 'em', 'code', 'p', 'br'],
                           ALLOWED_ATTR: ['class']
@@ -533,7 +533,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                 )}
               </div>
               {message.role === 'user' && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C9A84C] to-[#B8973F] flex items-center justify-center ml-2 flex-shrink-0 shadow-sm">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#B89555] to-[#A68444] flex items-center justify-center ml-2 flex-shrink-0 shadow-sm">
                   <User className="w-4 h-4 text-white" />
                 </div>
               )}
@@ -551,7 +551,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
               {SUGGESTED_AI_PROMPTS.map((prompt, i) => (
                 <button key={i} onClick={() => handleSuggestedPrompt(prompt)}
                   className="text-left px-3 py-2 rounded-lg bg-white border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))] text-sm text-black hover:shadow-md transition-all group">
-                  <span className="text-[hsl(var(--gold))] group-hover:text-[#B8973F]">→</span> {prompt}
+                  <span className="text-[hsl(var(--gold))] group-hover:text-[#A68444]">→</span> {prompt}
                 </button>
               ))}
             </div>
@@ -664,7 +664,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             </button>
           </div>
           <Button onClick={handleSendMessage} disabled={(!input.trim() && pendingFiles.length === 0) || isLoading}
-            className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#C9A84C] text-white w-11 h-11 p-0">
+            className="bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#B89555] text-white w-11 h-11 p-0">
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
           </Button>
         </div>
@@ -777,7 +777,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <div className="pt-3 border-t border-[hsl(var(--gold))]/20">
             <Button
               onClick={handleNewChat}
-              className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white hover:from-[#B8973F] hover:to-[#C9A84C]"
+              className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] text-white hover:from-[#A68444] hover:to-[#B89555]"
               size="sm"
             >
               <Plus className="w-4 h-4 mr-2" />

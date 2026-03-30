@@ -664,7 +664,7 @@ const ListingAdmin = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] pt-0">
       {/* Premium Dashboard Shell — full bleed, no black gaps */}
-      <div className="border-b border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="border-b border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
       {/* Header - Clean neutral style — top offset accounts for owner shell header (64px + 48px utility bar) */}
       <header className="border-b border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-20">
         <div className="max-w-[1200px] mx-auto px-4 pt-6 pb-4">
@@ -1094,7 +1094,7 @@ const ListingAdmin = () => {
               </CardHeader>
               <CardContent className="p-6 max-h-[calc(100vh-300px)] overflow-y-auto">
                 <Tabs defaultValue="details" className="space-y-6">
-                  <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C9A84C]/30">
+                  <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#B89555]/30">
                     <TabsTrigger value="details" className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black">
                       {t('listingAdmin.details')}
                     </TabsTrigger>

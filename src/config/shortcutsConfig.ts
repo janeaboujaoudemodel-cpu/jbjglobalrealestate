@@ -89,8 +89,8 @@ export const SHORTCUT_GROUPS: ShortcutGroup[] = [
   },
   {
     label: "Owner Command Center",
-    colorBorder: "border-l-[#C9A84C]",
-    colorText: "text-[#C9A84C]",
+    colorBorder: "border-l-[#B89555]",
+    colorText: "text-[#B89555]",
     colorBg: "bg-gold/5",
     visibility: ['owner'],
     items: [

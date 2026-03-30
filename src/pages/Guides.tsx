@@ -376,7 +376,7 @@ const Guides = () => {
 
             <div className="p-6 border-t border-gold/20">
               <Button
-                className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold py-3 rounded-xl"
+                className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#A7862E] text-black font-bold py-3 rounded-xl"
                 style={{ boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.5)' }}
                 onClick={() => {
                   setSelectedBook(null);

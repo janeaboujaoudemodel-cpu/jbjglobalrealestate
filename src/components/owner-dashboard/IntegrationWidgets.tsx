@@ -64,7 +64,7 @@ export default function IntegrationWidgets() {
   return (
     <div className="grid md:grid-cols-2 gap-4">
       {/* Upcoming Events */}
-      <div className="bg-white/70 border-2 border-[#C9A84C]/30 rounded-xl p-5 shadow-sm">
+      <div className="bg-white/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-blue-600" />
@@ -74,7 +74,7 @@ export default function IntegrationWidgets() {
             variant="ghost" 
             size="sm" 
             onClick={() => navigate('/crm/calendar')}
-            className="text-[#C9A84C] hover:text-[#B8973F] hover:bg-[#C9A84C]/10 h-7 px-2"
+            className="text-[#B89555] hover:text-[#A68444] hover:bg-[#B89555]/10 h-7 px-2"
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -83,7 +83,7 @@ export default function IntegrationWidgets() {
         {loadingEvents ? (
           <div className="space-y-2">
             {Array.from({ length: 3 }).map((_, i) => (
-              <Skeleton key={i} className="h-10 bg-[#C9A84C]/10" />
+              <Skeleton key={i} className="h-10 bg-[#B89555]/10" />
             ))}
           </div>
         ) : upcomingEvents && upcomingEvents.length > 0 ? (
@@ -91,7 +91,7 @@ export default function IntegrationWidgets() {
             {upcomingEvents.slice(0, 4).map((event) => (
               <div 
                 key={event.id}
-                className="flex items-center justify-between p-2 rounded-lg bg-[#FDFBF7] hover:bg-[#C9A84C]/5 transition-colors cursor-pointer border border-[#C9A84C]/10"
+                className="flex items-center justify-between p-2 rounded-lg bg-[#FDFBF7] hover:bg-[#B89555]/5 transition-colors cursor-pointer border border-[#B89555]/10"
                 onClick={() => navigate('/crm/calendar')}
               >
                 <p className="text-sm text-black truncate flex-1">{event.title}</p>
@@ -103,17 +103,17 @@ export default function IntegrationWidgets() {
           </div>
         ) : (
           <div className="text-center py-6">
-            <Calendar className="h-8 w-8 text-[#C9A84C]/40 mx-auto mb-2" />
+            <Calendar className="h-8 w-8 text-[#B89555]/40 mx-auto mb-2" />
             <p className="text-xs text-zinc-500">No upcoming events</p>
           </div>
         )}
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white/70 border-2 border-[#C9A84C]/30 rounded-xl p-5 shadow-sm">
+      <div className="bg-white/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Zap className="h-4 w-4 text-[#C9A84C]" />
+            <Zap className="h-4 w-4 text-[#B89555]" />
             <h3 className="text-sm font-semibold text-black">Quick Actions</h3>
           </div>
         </div>
@@ -121,7 +121,7 @@ export default function IntegrationWidgets() {
         <div className="space-y-3">
           <Button 
             variant="outline" 
-            className="w-full justify-start gap-3 h-11 border-[#C9A84C]/30 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 text-black"
+            className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-black"
             onClick={() => navigate('/crm/tasks?action=new')}
           >
             <Plus className="h-4 w-4 text-emerald-600" />
@@ -130,7 +130,7 @@ export default function IntegrationWidgets() {
           
           <Button 
             variant="outline" 
-            className="w-full justify-start gap-3 h-11 border-[#C9A84C]/30 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5 text-black"
+            className="w-full justify-start gap-3 h-11 border-[#B89555]/30 hover:border-[#B89555]/50 hover:bg-[#B89555]/5 text-black"
             onClick={() => navigate('/crm/notes?action=new')}
           >
             <FileText className="h-4 w-4 text-purple-600" />
@@ -138,14 +138,14 @@ export default function IntegrationWidgets() {
           </Button>
 
           <div 
-            className="flex items-center justify-between p-3 rounded-lg bg-[#FDFBF7] cursor-pointer hover:bg-[#C9A84C]/5 transition-colors border border-[#C9A84C]/10"
+            className="flex items-center justify-between p-3 rounded-lg bg-[#FDFBF7] cursor-pointer hover:bg-[#B89555]/5 transition-colors border border-[#B89555]/10"
             onClick={() => navigate('/automations')}
           >
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-sm text-zinc-600">Active Automations</span>
             </div>
-            <span className="text-sm font-medium text-[#C9A84C]">
+            <span className="text-sm font-medium text-[#B89555]">
               {loadingAutomations ? '...' : automationsCount}
             </span>
           </div>

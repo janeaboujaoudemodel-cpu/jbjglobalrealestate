@@ -216,7 +216,7 @@ Aspect ratio: ${ratio}. Make it look like a high-quality, clickable video thumbn
             onClick={generateThumbnail}
             disabled={loading || !title.trim()}
             className="w-full h-11 text-white font-semibold"
-            style={{ background: 'linear-gradient(135deg, #C9A84C, #B8943E)', opacity: loading || !title.trim() ? 0.6 : 1 }}
+            style={{ background: 'linear-gradient(135deg, #B89555, #B8943E)', opacity: loading || !title.trim() ? 0.6 : 1 }}
           >
             {loading ? (
               <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Generating...</>

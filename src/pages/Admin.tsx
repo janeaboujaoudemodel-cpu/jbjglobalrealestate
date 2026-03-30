@@ -85,7 +85,7 @@ const Admin = () => {
       <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 z-50 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C9A84C] to-[#B8973F] flex items-center justify-center shadow-lg shadow-gold/20">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#B89555] to-[#A68444] flex items-center justify-center shadow-lg shadow-gold/20">
               <Shield className="w-5 h-5 text-black" />
             </div>
             <div className="hidden sm:block">
@@ -201,21 +201,21 @@ const Admin = () => {
                     <h2 className="text-xl font-bold text-black">Podcast & Voice Studio</h2>
                     <p className="text-sm text-black/60">Manage your podcast episodes and voice cloning</p>
                   </div>
-                  <Button onClick={() => h.navigate("/owner/podcast-studio")} className="bg-gradient-to-r from-[#C9A84C] to-amber-600 hover:from-[#C9A84C]/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-[#C9A84C]/20">
+                  <Button onClick={() => h.navigate("/owner/podcast-studio")} className="bg-gradient-to-r from-[#B89555] to-amber-600 hover:from-[#B89555]/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-[#B89555]/20">
                     <Mic className="w-4 h-4 mr-2" />Open Full Studio
                   </Button>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="max-w-xl"><VoiceRecorder /></div>
-                  <Card className="border-2 border-[#C9A84C]/20 bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6]">
-                    <CardHeader><CardTitle className="text-base text-black flex items-center gap-2"><Headphones className="w-4 h-4 text-[#C9A84C]" /> Quick Access</CardTitle></CardHeader>
+                  <Card className="border-2 border-[#B89555]/20 bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6]">
+                    <CardHeader><CardTitle className="text-base text-black flex items-center gap-2"><Headphones className="w-4 h-4 text-[#B89555]" /> Quick Access</CardTitle></CardHeader>
                     <CardContent className="space-y-3">
                       {[
                         { label: "Record New Episode", desc: "Write script & generate with ElevenLabs" },
                         { label: "Voice Library", desc: "18+ premium voices with accent controls" },
                         { label: "Episode Manager", desc: "View all generated episodes" },
                       ].map((item, i) => (
-                        <button key={i} onClick={() => h.navigate("/owner/podcast-studio")} className="w-full text-left p-3 rounded-lg border border-[#C9A84C]/20 hover:border-[#C9A84C]/40 hover:bg-[#C9A84C]/5 transition-all">
+                        <button key={i} onClick={() => h.navigate("/owner/podcast-studio")} className="w-full text-left p-3 rounded-lg border border-[#B89555]/20 hover:border-[#B89555]/40 hover:bg-[#B89555]/5 transition-all">
                           <p className="font-semibold text-black text-sm">{item.label}</p>
                           <p className="text-xs text-black/50">{item.desc}</p>
                         </button>

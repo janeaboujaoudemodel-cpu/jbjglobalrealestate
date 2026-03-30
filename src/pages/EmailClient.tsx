@@ -397,22 +397,22 @@ const EmailClient = () => {
   const signatureLines = currentSender.signature.split("\n");
 
   return (
-    <div className="h-[calc(100vh-11rem)] bg-background text-foreground flex rounded-xl border-2 border-[#C9A84C]/20 overflow-hidden shadow-sm">
+    <div className="h-[calc(100vh-11rem)] bg-background text-foreground flex rounded-xl border-2 border-[#B89555]/20 overflow-hidden shadow-sm">
       {/* Sidebar */}
-      <div className="w-56 border-r border-[#C9A84C]/15 flex flex-col bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]">
+      <div className="w-56 border-r border-[#B89555]/15 flex flex-col bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6]">
         {/* Compose + Search */}
-        <div className="p-4 space-y-3 border-b border-[#C9A84C]/15">
+        <div className="p-4 space-y-3 border-b border-[#B89555]/15">
           <Dialog open={composeOpen} onOpenChange={setComposeOpen}>
             <DialogTrigger asChild>
-              <Button className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A78636] text-white">
+              <Button className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#957539] text-white">
                 <Pencil className="w-4 h-4 mr-2" />
                 Compose
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-2xl">
+            <DialogContent className="bg-white border-2 border-[#B89555]/30 max-w-2xl">
               <DialogHeader>
                 <DialogTitle className="text-black flex items-center gap-2">
-                  <Mail className="w-5 h-5 text-[#C9A84C]" />
+                  <Mail className="w-5 h-5 text-[#B89555]" />
                   New Message
                 </DialogTitle>
               </DialogHeader>
@@ -421,10 +421,10 @@ const EmailClient = () => {
                 <div className="flex items-center gap-3">
                   <span className="text-sm text-black/60 whitespace-nowrap w-16 font-medium">Send As:</span>
                   <Select value={composeSender} onValueChange={setComposeSender}>
-                    <SelectTrigger className="flex-1 border-[#C9A84C]/30 bg-[#FDFBF7]">
+                    <SelectTrigger className="flex-1 border-[#B89555]/30 bg-[#FDFBF7]">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border-[#C9A84C]/30">
+                    <SelectContent className="bg-white border-[#B89555]/30">
                       <div className="px-2 py-1.5 text-[10px] font-semibold text-black/40 uppercase tracking-wider">Company Email (@jbj.ae)</div>
                       {SENDER_IDENTITIES.filter(s => s.account === 'company').map(s => (
                         <SelectItem key={s.id} value={s.id}>
@@ -435,7 +435,7 @@ const EmailClient = () => {
                           </span>
                         </SelectItem>
                       ))}
-                      <div className="px-2 py-1.5 text-[10px] font-semibold text-black/40 uppercase tracking-wider border-t border-[#C9A84C]/10 mt-1">Personal Email</div>
+                      <div className="px-2 py-1.5 text-[10px] font-semibold text-black/40 uppercase tracking-wider border-t border-[#B89555]/10 mt-1">Personal Email</div>
                       {SENDER_IDENTITIES.filter(s => s.account === 'personal').map(s => (
                         <SelectItem key={s.id} value={s.id}>
                           <span className="flex items-center gap-2">
@@ -450,9 +450,9 @@ const EmailClient = () => {
                 </div>
 
                 {/* Send Method Toggle */}
-                <div className="flex items-center justify-between bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg px-3 py-2">
+                <div className="flex items-center justify-between bg-[#FDFBF7] border border-[#B89555]/20 rounded-lg px-3 py-2">
                   <div className="flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-[#C9A84C]" />
+                    <Zap className="w-4 h-4 text-[#B89555]" />
                     <span className="text-sm text-black">Send via Resend API</span>
                   </div>
                   <Switch checked={sendViaResend} onCheckedChange={setSendViaResend} />
@@ -471,7 +471,7 @@ const EmailClient = () => {
                 <div
                   className={cn(
                     "relative rounded-md transition-all",
-                    isComposeDragOver && "ring-2 ring-[#C9A84C] ring-offset-2 bg-[#C9A84C]/5"
+                    isComposeDragOver && "ring-2 ring-[#B89555] ring-offset-2 bg-[#B89555]/5"
                   )}
                   onDragOver={(e) => { e.preventDefault(); setIsComposeDragOver(true); }}
                   onDragLeave={(e) => { e.preventDefault(); setIsComposeDragOver(false); }}
@@ -484,8 +484,8 @@ const EmailClient = () => {
                   }}
                 >
                   {isComposeDragOver && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#C9A84C]/10 rounded-md border-2 border-dashed border-[#C9A84C] pointer-events-none">
-                      <p className="text-sm font-medium text-[#C9A84C]">Drop files to attach</p>
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#B89555]/10 rounded-md border-2 border-dashed border-[#B89555] pointer-events-none">
+                      <p className="text-sm font-medium text-[#B89555]">Drop files to attach</p>
                     </div>
                   )}
                   <Textarea
@@ -497,11 +497,11 @@ const EmailClient = () => {
                 </div>
 
                 {/* Signature info + persona consistency badge */}
-                <div className="bg-[#FDFBF7] border border-[#C9A84C]/20 rounded-lg p-3">
+                <div className="bg-[#FDFBF7] border border-[#B89555]/20 rounded-lg p-3">
                   <p className="text-xs text-black/60 mb-1">Sending as: <strong className="text-black">{currentSender.name}</strong></p>
                   <p className="text-[10px] text-black/40">{currentSender.title} · {currentSender.email}</p>
                   {attachments.some(a => ['stamp', 'signature', 'letterhead'].includes(a.type)) && (
-                    <p className="text-[10px] text-[#C9A84C] mt-1.5 font-medium flex items-center gap-1">
+                    <p className="text-[10px] text-[#B89555] mt-1.5 font-medium flex items-center gap-1">
                       <Shield className="w-3 h-3" />
                       Brand assets attached — sending as {currentSender.name}
                     </p>
@@ -510,7 +510,7 @@ const EmailClient = () => {
 
                 {/* Attachment chips */}
                 {attachments.length > 0 && (
-                  <div className="flex flex-wrap gap-2 bg-[#FDFBF7] border border-[#C9A84C]/15 rounded-lg p-2.5">
+                  <div className="flex flex-wrap gap-2 bg-[#FDFBF7] border border-[#B89555]/15 rounded-lg p-2.5">
                     {attachments.map(att => (
                       <AttachmentChip
                         key={att.id}
@@ -523,16 +523,16 @@ const EmailClient = () => {
 
                 <div className="flex justify-between">
                   <div className="flex gap-2">
-                    <Button variant="ghost" size="sm" className="text-black/60 hover:bg-[#C9A84C]/10" onClick={() => setShowAttachPicker(true)}>
+                    <Button variant="ghost" size="sm" className="text-black/60 hover:bg-[#B89555]/10" onClick={() => setShowAttachPicker(true)}>
                       <Paperclip className="w-4 h-4 mr-1" /> Attach
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-[#C9A84C] hover:bg-[#C9A84C]/10" onClick={() => setShowAttachPicker(true)}>
+                    <Button variant="ghost" size="sm" className="text-[#B89555] hover:bg-[#B89555]/10" onClick={() => setShowAttachPicker(true)}>
                       <Stamp className="w-4 h-4 mr-1" /> Stamp
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-[#C9A84C] hover:bg-[#C9A84C]/10"
+                      className="text-[#B89555] hover:bg-[#B89555]/10"
                       disabled={isDraftingWithAI}
                       onClick={async () => {
                         if (!newEmail.subject && !newEmail.body) {
@@ -565,8 +565,8 @@ const EmailClient = () => {
                     </Button>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => setComposeOpen(false)} className="border-[#C9A84C]/30">Cancel</Button>
-                    <Button onClick={() => setApprovePreviewOpen(true)} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A78636] text-white">
+                    <Button variant="outline" onClick={() => setComposeOpen(false)} className="border-[#B89555]/30">Cancel</Button>
+                    <Button onClick={() => setApprovePreviewOpen(true)} className="bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#957539] text-white">
                       <CheckCheck className="w-4 h-4 mr-2" /> Preview & Send
                     </Button>
                   </div>
@@ -594,10 +594,10 @@ const EmailClient = () => {
 
           {/* ── Approve & Send — Final Preview Modal ── */}
           <Dialog open={approvePreviewOpen} onOpenChange={setApprovePreviewOpen}>
-            <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-3xl max-h-[85vh] overflow-y-auto">
+            <DialogContent className="bg-white border-2 border-[#B89555]/30 max-w-3xl max-h-[85vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="text-black flex items-center gap-2">
-                  <CheckCheck className="w-5 h-5 text-[#C9A84C]" />
+                  <CheckCheck className="w-5 h-5 text-[#B89555]" />
                   Approve & Send — Final Preview
                 </DialogTitle>
               </DialogHeader>
@@ -610,7 +610,7 @@ const EmailClient = () => {
                   )}>
                     {sendViaResend ? "⚡ Resend API" : "📤 Normal Send"}
                   </Badge>
-                  <Badge className="bg-[#C9A84C]/15 text-[#C9A84C] border-[#C9A84C]/30 text-xs px-2 py-0.5">
+                  <Badge className="bg-[#B89555]/15 text-[#B89555] border-[#B89555]/30 text-xs px-2 py-0.5">
                     {currentSender.icon} Sending as {currentSender.name}
                   </Badge>
                   {alsoNotifyChat && (
@@ -621,8 +621,8 @@ const EmailClient = () => {
                 </div>
 
                 {/* Full email preview */}
-                <div className="border-2 border-[#C9A84C]/20 rounded-xl overflow-hidden">
-                  <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] px-6 py-4 border-b border-[#C9A84C]/15">
+                <div className="border-2 border-[#B89555]/20 rounded-xl overflow-hidden">
+                  <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] px-6 py-4 border-b border-[#B89555]/15">
                     <p className="text-sm text-black/60">From: <strong className="text-black">{currentSender.name}</strong> &lt;{currentSender.email}&gt;</p>
                     <p className="text-sm text-black/60">To: <strong className="text-black">{newEmail.to}</strong></p>
                     <p className="text-sm text-black/60">Subject: <strong className="text-black">{newEmail.subject}</strong></p>
@@ -633,17 +633,17 @@ const EmailClient = () => {
                     </div>
                     {/* Attached assets preview in Approve & Send */}
                     {attachments.length > 0 && (
-                      <div className="mt-4 pt-3 border-t border-[#C9A84C]/10">
+                      <div className="mt-4 pt-3 border-t border-[#B89555]/10">
                         <p className="text-xs text-black/40 mb-2 uppercase tracking-wider font-medium">Attachments</p>
                         <div className="flex flex-wrap gap-3">
                           {attachments.map(att => {
                             const isImage = att.mimeType?.startsWith('image/') || ['stamp', 'signature', 'logo', 'letterhead', 'business_card', 'email_signature'].includes(att.type);
                             return (
-                              <div key={att.id} className="flex items-center gap-2 bg-[#FDFBF7] border border-[#C9A84C]/15 rounded-lg px-3 py-2">
+                              <div key={att.id} className="flex items-center gap-2 bg-[#FDFBF7] border border-[#B89555]/15 rounded-lg px-3 py-2">
                                 {isImage && att.content ? (
                                   <img src={att.content} alt={att.name} className="w-8 h-8 object-contain rounded" />
                                 ) : (
-                                  <FileText className="w-5 h-5 text-[#C9A84C]" />
+                                  <FileText className="w-5 h-5 text-[#B89555]" />
                                 )}
                                 <span className="text-xs text-black font-medium">{att.name}</span>
                               </div>
@@ -654,13 +654,13 @@ const EmailClient = () => {
                     )}
                   </div>
                   {/* Dynamic Signature Block per Persona */}
-                  <div className="px-6 py-4 bg-[#FDFBF7] border-t border-[#C9A84C]/15">
+                  <div className="px-6 py-4 bg-[#FDFBF7] border-t border-[#B89555]/15">
                     <p className="text-sm text-black/70 mb-2">Best regards,</p>
                     {signatureLines.map((line, i) => (
                       <p key={i} className={cn(
                         "text-sm",
                         i === 0 ? "font-semibold text-black" : "text-black/50 text-xs",
-                        line.includes("@") && "text-[#C9A84C] mt-0.5"
+                        line.includes("@") && "text-[#B89555] mt-0.5"
                       )}>
                         {line}
                       </p>
@@ -669,7 +669,7 @@ const EmailClient = () => {
                 </div>
 
                 <div className="flex justify-end gap-3 pt-2">
-                  <Button variant="outline" onClick={() => setApprovePreviewOpen(false)} className="border-[#C9A84C]/30">Back to Edit</Button>
+                  <Button variant="outline" onClick={() => setApprovePreviewOpen(false)} className="border-[#B89555]/30">Back to Edit</Button>
                   <Button
                     onClick={() => { setApprovePreviewOpen(false); sendEmail(); }}
                     disabled={isSending}
@@ -689,7 +689,7 @@ const EmailClient = () => {
               placeholder="Search emails..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 h-9 text-sm bg-white border-[#C9A84C]/20 focus-visible:ring-[#C9A84C]/30"
+              className="pl-9 h-9 text-sm bg-white border-[#B89555]/20 focus-visible:ring-[#B89555]/30"
             />
           </div>
         </div>
@@ -698,11 +698,11 @@ const EmailClient = () => {
         <div className="px-2 pt-3 pb-1">
           <Tabs value={activeAccount} onValueChange={(v) => { setActiveAccount(v as any); setCurrentPage(1); }}>
             <TabsList className="w-full h-9 bg-[#F5F0E6]">
-              <TabsTrigger value="all" className="text-[10px] flex-1 h-7 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white">All</TabsTrigger>
-              <TabsTrigger value="company" className="text-[10px] flex-1 h-7 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white">
+              <TabsTrigger value="all" className="text-[10px] flex-1 h-7 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white">All</TabsTrigger>
+              <TabsTrigger value="company" className="text-[10px] flex-1 h-7 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white">
                 <Building2 className="w-3 h-3 mr-1" />Company
               </TabsTrigger>
-              <TabsTrigger value="personal" className="text-[10px] flex-1 h-7 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white">
+              <TabsTrigger value="personal" className="text-[10px] flex-1 h-7 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white">
                 <User className="w-3 h-3 mr-1" />Personal
               </TabsTrigger>
             </TabsList>
@@ -717,8 +717,8 @@ const EmailClient = () => {
               className={cn(
                 "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm mb-0.5 transition-colors",
                 activeFolder === folder.id
-                  ? "bg-[#C9A84C]/15 text-black font-medium"
-                  : "text-black/60 hover:bg-[#C9A84C]/5 hover:text-black"
+                  ? "bg-[#B89555]/15 text-black font-medium"
+                  : "text-black/60 hover:bg-[#B89555]/5 hover:text-black"
               )}
               onClick={() => { setActiveFolder(folder.id); setSelectedEmail(null); setCurrentPage(1); }}
             >
@@ -727,7 +727,7 @@ const EmailClient = () => {
                 {folder.label}
               </span>
               {folder.count > 0 && (
-                <Badge className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white text-[10px] px-1.5 h-5 font-bold border-0">{folder.count}</Badge>
+                <Badge className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white text-[10px] px-1.5 h-5 font-bold border-0">{folder.count}</Badge>
               )}
             </button>
           ))}
@@ -738,7 +738,7 @@ const EmailClient = () => {
           {labels.map((label) => (
             <button
               key={label.name}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm text-black/60 hover:bg-[#C9A84C]/5 hover:text-black"
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-lg text-sm text-black/60 hover:bg-[#B89555]/5 hover:text-black"
             >
               <div className={cn("w-2.5 h-2.5 rounded-full", label.color)} />
               <span className="capitalize">{label.name}</span>
@@ -747,10 +747,10 @@ const EmailClient = () => {
         </div>
 
         {/* Bottom Buttons */}
-        <div className="p-2 border-t border-[#C9A84C]/15 space-y-1">
+        <div className="p-2 border-t border-[#B89555]/15 space-y-1">
           <Button
             variant="ghost"
-            className="w-full justify-start text-sm text-black/60 hover:bg-[#C9A84C]/10 hover:text-black"
+            className="w-full justify-start text-sm text-black/60 hover:bg-[#B89555]/10 hover:text-black"
             onClick={() => setShowProductivity(!showProductivity)}
           >
             <BarChart3 className="w-4 h-4 mr-2" />
@@ -758,7 +758,7 @@ const EmailClient = () => {
           </Button>
           <Button
             variant="ghost"
-            className="w-full justify-start text-sm text-black/60 hover:bg-[#C9A84C]/10 hover:text-black"
+            className="w-full justify-start text-sm text-black/60 hover:bg-[#B89555]/10 hover:text-black"
             onClick={() => setShowEmailSettings(true)}
           >
             <Settings className="w-4 h-4 mr-2" />
@@ -769,10 +769,10 @@ const EmailClient = () => {
 
       {/* Email Settings Dialog */}
       <Dialog open={showEmailSettings} onOpenChange={setShowEmailSettings}>
-        <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-2xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="bg-white border-2 border-[#B89555]/30 max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-black flex items-center gap-2">
-              <Settings className="w-5 h-5 text-[#C9A84C]" />
+              <Settings className="w-5 h-5 text-[#B89555]" />
               Email Settings & API Integration
             </DialogTitle>
           </DialogHeader>
@@ -782,8 +782,8 @@ const EmailClient = () => {
 
       {/* Productivity Panel (collapsible) */}
       {showProductivity && (
-        <div className="w-64 border-r border-[#C9A84C]/15 bg-[#FDFBF7] overflow-y-auto">
-        <div className="w-72 border-r border-[#C9A84C]/15 bg-[#FDFBF7] overflow-y-auto">
+        <div className="w-64 border-r border-[#B89555]/15 bg-[#FDFBF7] overflow-y-auto">
+        <div className="w-72 border-r border-[#B89555]/15 bg-[#FDFBF7] overflow-y-auto">
           <EmailProductivityPanel
             emails={emails}
             analysisCache={analysisCacheRef.current}
@@ -799,21 +799,21 @@ const EmailClient = () => {
       )}
 
       {/* Email List */}
-      <div className="w-[340px] border-r border-[#C9A84C]/15 flex flex-col bg-[#FDFBF7]">
+      <div className="w-[340px] border-r border-[#B89555]/15 flex flex-col bg-[#FDFBF7]">
         {/* Toolbar */}
-        <div className="px-3 py-2 border-b border-[#C9A84C]/15 flex items-center justify-between gap-2 bg-white/80">
+        <div className="px-3 py-2 border-b border-[#B89555]/15 flex items-center justify-between gap-2 bg-white/80">
           <div className="flex items-center gap-2">
-            <Checkbox checked={selectedIds.size > 0 && selectedIds.size === paginatedEmails.length} onCheckedChange={toggleSelectAll} className="border-[#C9A84C]/30" />
+            <Checkbox checked={selectedIds.size > 0 && selectedIds.size === paginatedEmails.length} onCheckedChange={toggleSelectAll} className="border-[#B89555]/30" />
             {selectedIds.size > 0 && (
               <>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={markSelectedRead} title="Mark read"><MailOpen className="w-3.5 h-3.5 text-black/60" /></Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToArchive(Array.from(selectedIds))} title="Archive"><Archive className="w-3.5 h-3.5 text-black/60" /></Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" onClick={() => moveToTrash(Array.from(selectedIds))} title="Trash"><Trash2 className="w-3.5 h-3.5 text-black/60" /></Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" title="Star selected" onClick={() => {
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" onClick={markSelectedRead} title="Mark read"><MailOpen className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" onClick={() => moveToArchive(Array.from(selectedIds))} title="Archive"><Archive className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" onClick={() => moveToTrash(Array.from(selectedIds))} title="Trash"><Trash2 className="w-3.5 h-3.5 text-black/60" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" title="Star selected" onClick={() => {
                   setEmails(emails.map(e => selectedIds.has(e.id) ? { ...e, starred: true } : e));
                   toast.success(`${selectedIds.size} email(s) starred`);
-                }}><Star className="w-3.5 h-3.5 text-[#C9A84C]" /></Button>
-                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10" title="AI Analyze selected" onClick={async () => {
+                }}><Star className="w-3.5 h-3.5 text-[#B89555]" /></Button>
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10" title="AI Analyze selected" onClick={async () => {
                   const toAnalyze = emails.filter(e => selectedIds.has(e.id) && !analysisCacheRef.current.has(e.id)).slice(0, 5);
                   if (toAnalyze.length === 0) { toast.info("Already analyzed"); return; }
                   toast.info(`Analyzing ${toAnalyze.length}...`);
@@ -826,13 +826,13 @@ const EmailClient = () => {
                     } catch { /* skip */ }
                   }
                   toast.success("Analysis complete");
-                }}><Sparkles className="w-3.5 h-3.5 text-[#C9A84C]" /></Button>
+                }}><Sparkles className="w-3.5 h-3.5 text-[#B89555]" /></Button>
                 <span className="text-[10px] text-black/40">{selectedIds.size} selected</span>
               </>
             )}
           </div>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#C9A84C]/10"><RefreshCw className="w-3.5 h-3.5 text-black/60" /></Button>
+            <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-[#B89555]/10"><RefreshCw className="w-3.5 h-3.5 text-black/60" /></Button>
             {totalPages > 1 && (
               <>
                 <Button variant="ghost" size="icon" className="h-7 w-7" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}><ChevronLeft className="w-3.5 h-3.5" /></Button>
@@ -855,9 +855,9 @@ const EmailClient = () => {
               <div
                 key={email.id}
                 className={cn(
-                  "flex items-start gap-2 px-3 py-3 border-b border-[#C9A84C]/10 cursor-pointer transition-colors",
-                  selectedEmail?.id === email.id ? "bg-[#C9A84C]/10" : "hover:bg-[#C9A84C]/5",
-                  !email.read && "bg-[#C9A84C]/[0.03]"
+                  "flex items-start gap-2 px-3 py-3 border-b border-[#B89555]/10 cursor-pointer transition-colors",
+                  selectedEmail?.id === email.id ? "bg-[#B89555]/10" : "hover:bg-[#B89555]/5",
+                  !email.read && "bg-[#B89555]/[0.03]"
                 )}
                 onClick={() => { setSelectedEmail(email); markAsRead(email.id); }}
               >
@@ -865,11 +865,11 @@ const EmailClient = () => {
                   checked={selectedIds.has(email.id)}
                   onCheckedChange={() => toggleSelect(email.id)}
                   onClick={(e) => e.stopPropagation()}
-                  className="mt-1 border-[#C9A84C]/30"
+                  className="mt-1 border-[#B89555]/30"
                 />
                 <button
                   onClick={(e) => { e.stopPropagation(); toggleStar(email.id); }}
-                  className={cn("mt-1 flex-shrink-0", email.starred ? "text-[#C9A84C]" : "text-black/20 hover:text-black/40")}
+                  className={cn("mt-1 flex-shrink-0", email.starred ? "text-[#B89555]" : "text-black/20 hover:text-black/40")}
                 >
                   <Star className="w-3.5 h-3.5" fill={email.starred ? "currentColor" : "none"} />
                 </button>
@@ -882,13 +882,13 @@ const EmailClient = () => {
                   <p className="text-[11px] text-black/40 truncate mt-0.5">{email.body.substring(0, 80)}…</p>
                   <div className="flex items-center gap-1.5 mt-1.5">
                     {email.account === "company" ? (
-                      <Badge variant="outline" className="text-[9px] h-4 px-1 border-[#C9A84C]/30 text-[#C9A84C]"><Building2 className="w-2.5 h-2.5 mr-0.5" />Company</Badge>
+                      <Badge variant="outline" className="text-[9px] h-4 px-1 border-[#B89555]/30 text-[#B89555]"><Building2 className="w-2.5 h-2.5 mr-0.5" />Company</Badge>
                     ) : (
                       <Badge variant="outline" className="text-[9px] h-4 px-1 border-emerald-300 text-emerald-600"><User className="w-2.5 h-2.5 mr-0.5" />Personal</Badge>
                     )}
                     {email.hasAttachment && <Paperclip className="w-3 h-3 text-black/40" />}
                     {email.labels.map((l) => (
-                      <Badge key={l} variant="outline" className="text-[9px] h-4 px-1 capitalize border-[#C9A84C]/20 text-black/50">{l}</Badge>
+                      <Badge key={l} variant="outline" className="text-[9px] h-4 px-1 capitalize border-[#B89555]/20 text-black/50">{l}</Badge>
                     ))}
                   </div>
                 </div>
@@ -903,20 +903,20 @@ const EmailClient = () => {
         {selectedEmail ? (
           <>
             {/* Email Header */}
-            <div className="p-5 border-b border-[#C9A84C]/15">
+            <div className="p-5 border-b border-[#B89555]/15">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold text-black">{selectedEmail.subject}</h2>
                 <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10" onClick={() => moveToArchive([selectedEmail.id])}><Archive className="w-4 h-4 text-black/60" /></Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10" onClick={() => moveToTrash([selectedEmail.id])}><Trash2 className="w-4 h-4 text-black/60" /></Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10"><MoreVertical className="w-4 h-4 text-black/60" /></Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10" onClick={() => moveToArchive([selectedEmail.id])}><Archive className="w-4 h-4 text-black/60" /></Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10" onClick={() => moveToTrash([selectedEmail.id])}><Trash2 className="w-4 h-4 text-black/60" /></Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10"><MoreVertical className="w-4 h-4 text-black/60" /></Button>
                 </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={cn(
                     "w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold",
-                    selectedEmail.account === "company" ? "bg-gradient-to-br from-[#C9A84C] to-[#B8973F]" : "bg-emerald-500"
+                    selectedEmail.account === "company" ? "bg-gradient-to-br from-[#B89555] to-[#A68444]" : "bg-emerald-500"
                   )}>
                     {selectedEmail.from[0]}
                   </div>
@@ -950,14 +950,14 @@ const EmailClient = () => {
             </ScrollArea>
 
             {/* Actions — Reply / Reply All / Forward / Calendar / Notes / Draft with Amanda */}
-            <div className="p-4 border-t border-[#C9A84C]/15 flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10" onClick={() => openReply("reply")}>
+            <div className="p-4 border-t border-[#B89555]/15 flex flex-wrap gap-2">
+              <Button variant="outline" size="sm" className="border-[#B89555]/30 text-black hover:bg-[#B89555]/10" onClick={() => openReply("reply")}>
                 <Reply className="w-4 h-4 mr-1.5" /> Reply
               </Button>
-              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10" onClick={() => openReply("replyAll")}>
+              <Button variant="outline" size="sm" className="border-[#B89555]/30 text-black hover:bg-[#B89555]/10" onClick={() => openReply("replyAll")}>
                 <ReplyAll className="w-4 h-4 mr-1.5" /> Reply All
               </Button>
-              <Button variant="outline" size="sm" className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10" onClick={() => openReply("forward")}>
+              <Button variant="outline" size="sm" className="border-[#B89555]/30 text-black hover:bg-[#B89555]/10" onClick={() => openReply("forward")}>
                 <Forward className="w-4 h-4 mr-1.5" /> Forward
               </Button>
               <QuickCalendarWidget compact source="email" prefillTitle={selectedEmail.subject} />
@@ -965,7 +965,7 @@ const EmailClient = () => {
               <Button
                 variant="outline"
                 size="sm"
-                className="ml-auto border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C]/10"
+                className="ml-auto border-[#B89555]/30 text-[#B89555] hover:bg-[#B89555]/10"
                 disabled={isDraftingWithAI}
                 onClick={draftWithAmanda}
               >

@@ -145,20 +145,20 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
 
   return (
     <div className={cn(
-      "flex h-[calc(100vh-280px)] min-h-[500px] bg-white rounded-xl border border-[#C9A84C]/20 overflow-hidden shadow-sm",
+      "flex h-[calc(100vh-280px)] min-h-[500px] bg-white rounded-xl border border-[#B89555]/20 overflow-hidden shadow-sm",
       className
     )}>
       {/* Employee List Sidebar */}
       <div className={cn(
-        "w-full md:w-80 border-r border-[#C9A84C]/10 flex flex-col bg-gradient-to-b from-white to-[#FDFBF7]",
+        "w-full md:w-80 border-r border-[#B89555]/10 flex flex-col bg-gradient-to-b from-white to-[#FDFBF7]",
         showSidebar ? "flex" : "hidden md:flex"
       )}>
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-[#C9A84C]/10">
+        <div className="p-4 border-b border-[#B89555]/10">
           <div className="flex items-center gap-2 mb-3">
-            <MessageCircle className="h-5 w-5 text-[#C9A84C]" />
+            <MessageCircle className="h-5 w-5 text-[#B89555]" />
             <h2 className="font-semibold text-black">Team Chat</h2>
-            <Badge variant="outline" className="ml-auto text-xs border-[#C9A84C]/30 text-[#C9A84C]">
+            <Badge variant="outline" className="ml-auto text-xs border-[#B89555]/30 text-[#B89555]">
               {filteredEmployees.length}
             </Badge>
           </div>
@@ -170,13 +170,13 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
               placeholder="Search team members..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 bg-[#FDFBF7] border-[#C9A84C]/20 text-black placeholder:text-black/40 focus-visible:ring-[#C9A84C]/30"
+              className="pl-9 bg-[#FDFBF7] border-[#B89555]/20 text-black placeholder:text-black/40 focus-visible:ring-[#B89555]/30"
             />
           </div>
         </div>
 
         {/* Department Filter - scrollable, no slice limit */}
-        <div className="p-2 border-b border-[#C9A84C]/10">
+        <div className="p-2 border-b border-[#B89555]/10">
           <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
             <Button
               variant="ghost"
@@ -185,8 +185,8 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
               className={cn(
                 "text-xs shrink-0 rounded-full px-3",
                 selectedDepartment === null 
-                  ? "bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white hover:from-[#B8973F] hover:to-[#A78636]" 
-                  : "text-black/70 hover:bg-[#C9A84C]/10 border border-[#C9A84C]/20"
+                  ? "bg-gradient-to-r from-[#B89555] to-[#A68444] text-white hover:from-[#A68444] hover:to-[#957539]" 
+                  : "text-black/70 hover:bg-[#B89555]/10 border border-[#B89555]/20"
               )}
             >
               <Users className="h-3 w-3 mr-1" />
@@ -203,8 +203,8 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                   className={cn(
                     "text-xs shrink-0 rounded-full px-3 whitespace-nowrap",
                     selectedDepartment === dept 
-                      ? "bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white hover:from-[#B8973F] hover:to-[#A78636]" 
-                      : "text-black/70 hover:bg-[#C9A84C]/10 border border-[#C9A84C]/20"
+                      ? "bg-gradient-to-r from-[#B89555] to-[#A68444] text-white hover:from-[#A68444] hover:to-[#957539]" 
+                      : "text-black/70 hover:bg-[#B89555]/10 border border-[#B89555]/20"
                   )}
                 >
                   {dept} ({count})
@@ -234,14 +234,14 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                   className={cn(
                     "w-full flex items-center gap-3 p-3 rounded-lg text-left transition-all duration-200",
                     isSelected 
-                      ? "bg-gradient-to-r from-[#C9A84C]/15 to-[#C9A84C]/5 border border-[#C9A84C]/30 shadow-sm" 
-                      : "hover:bg-[#C9A84C]/5 border border-transparent"
+                      ? "bg-gradient-to-r from-[#B89555]/15 to-[#B89555]/5 border border-[#B89555]/30 shadow-sm" 
+                      : "hover:bg-[#B89555]/5 border border-transparent"
                   )}
                 >
                   <div className="relative shrink-0">
-                    <Avatar className="h-10 w-10 border border-[#C9A84C]/20">
+                    <Avatar className="h-10 w-10 border border-[#B89555]/20">
                       <AvatarImage src={employee.avatar} alt={employee.name} />
-                      <AvatarFallback className="bg-[#C9A84C]/10 text-[#C9A84C] text-xs font-semibold">
+                      <AvatarFallback className="bg-[#B89555]/10 text-[#B89555] text-xs font-semibold">
                         {employee.name.split(' ').map(n => n[0]).join('')}
                       </AvatarFallback>
                     </Avatar>
@@ -258,9 +258,9 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                   
                   {status?.is_typing && (
                     <div className="flex gap-0.5">
-                      <span className="h-1.5 w-1.5 bg-[#C9A84C] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="h-1.5 w-1.5 bg-[#C9A84C] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="h-1.5 w-1.5 bg-[#C9A84C] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      <span className="h-1.5 w-1.5 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="h-1.5 w-1.5 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="h-1.5 w-1.5 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
                   )}
                 </button>
@@ -278,21 +278,21 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
         {selectedEmployeeData ? (
           <>
             {/* Chat Header */}
-            <div className="p-3 sm:p-4 border-b border-[#C9A84C]/10 bg-white/80 backdrop-blur-sm flex items-center gap-3">
+            <div className="p-3 sm:p-4 border-b border-[#B89555]/10 bg-white/80 backdrop-blur-sm flex items-center gap-3">
               {/* Back button on mobile */}
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={handleBackToList}
-                className="md:hidden shrink-0 h-8 w-8 hover:bg-[#C9A84C]/10"
+                className="md:hidden shrink-0 h-8 w-8 hover:bg-[#B89555]/10"
               >
                 <ArrowLeft className="h-4 w-4 text-black" />
               </Button>
 
               <div className="relative shrink-0">
-                <Avatar className="h-10 w-10 border border-[#C9A84C]/20">
+                <Avatar className="h-10 w-10 border border-[#B89555]/20">
                   <AvatarImage src={selectedEmployeeData.avatar} alt={selectedEmployeeData.name} />
-                  <AvatarFallback className="bg-[#C9A84C]/10 text-[#C9A84C] text-xs">
+                  <AvatarFallback className="bg-[#B89555]/10 text-[#B89555] text-xs">
                     {selectedEmployeeData.name.split(' ').map(n => n[0]).join('')}
                   </AvatarFallback>
                 </Avatar>
@@ -312,17 +312,17 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
               </div>
               
               <div className="flex items-center gap-1">
-                <Badge variant="outline" className="text-[10px] border-[#C9A84C]/20 text-black/60 hidden sm:flex">
+                <Badge variant="outline" className="text-[10px] border-[#B89555]/20 text-black/60 hidden sm:flex">
                   <Building2 className="h-3 w-3 mr-1" />
                   {selectedEmployeeData.department}
                 </Badge>
-                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10 hidden sm:flex">
+                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10 hidden sm:flex">
                   <Phone className="h-4 w-4 text-black/60" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10 hidden sm:flex">
+                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10 hidden sm:flex">
                   <Video className="h-4 w-4 text-black/60" />
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#C9A84C]/10">
+                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-[#B89555]/10">
                   <MoreVertical className="h-4 w-4 text-black/60" />
                 </Button>
               </div>
@@ -333,8 +333,8 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
               <div className="space-y-3">
                 {messages.length === 0 && !loading && (
                   <div className="text-center py-12 text-black/40">
-                    <div className="h-16 w-16 rounded-full bg-[#C9A84C]/10 flex items-center justify-center mx-auto mb-3">
-                      <MessageCircle className="h-8 w-8 text-[#C9A84C]/50" />
+                    <div className="h-16 w-16 rounded-full bg-[#B89555]/10 flex items-center justify-center mx-auto mb-3">
+                      <MessageCircle className="h-8 w-8 text-[#B89555]/50" />
                     </div>
                     <p className="font-medium text-black/60">No messages yet</p>
                     <p className="text-sm mt-1">Start a conversation with {selectedEmployeeData.name}</p>
@@ -352,13 +352,13 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                         isUser ? "flex-row-reverse" : "flex-row"
                       )}
                     >
-                      <Avatar className="h-7 w-7 flex-shrink-0 mt-0.5 border border-[#C9A84C]/10">
+                      <Avatar className="h-7 w-7 flex-shrink-0 mt-0.5 border border-[#B89555]/10">
                         {isUser ? (
-                          <AvatarFallback className="bg-gradient-to-br from-[#C9A84C] to-[#B8973F] text-white text-[10px]">You</AvatarFallback>
+                          <AvatarFallback className="bg-gradient-to-br from-[#B89555] to-[#A68444] text-white text-[10px]">You</AvatarFallback>
                         ) : (
                           <>
                             <AvatarImage src={selectedEmployeeData.avatar} />
-                            <AvatarFallback className="bg-[#C9A84C]/10 text-[#C9A84C] text-[10px]">
+                            <AvatarFallback className="bg-[#B89555]/10 text-[#B89555] text-[10px]">
                               {selectedEmployeeData.name.split(' ').map(n => n[0]).join('')}
                             </AvatarFallback>
                           </>
@@ -369,8 +369,8 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                         <div className={cn(
                           "rounded-2xl px-3.5 py-2.5 select-text cursor-text",
                           isUser 
-                            ? "bg-gradient-to-br from-[#C9A84C] to-[#B8973F] text-white rounded-tr-md shadow-md" 
-                            : "bg-white text-black border border-[#C9A84C]/15 rounded-tl-md shadow-sm"
+                            ? "bg-gradient-to-br from-[#B89555] to-[#A68444] text-white rounded-tr-md shadow-md" 
+                            : "bg-white text-black border border-[#B89555]/15 rounded-tl-md shadow-sm"
                         )}>
                           <p className="text-sm whitespace-pre-wrap select-text leading-relaxed">{msg.message}</p>
                           <p className={cn(
@@ -388,7 +388,7 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                               toast.success(t('chat.messageCopied') || 'Message copied');
                             }}
                             className={cn(
-                              "text-[10px] text-black/30 hover:text-[#C9A84C] flex items-center gap-0.5 px-1.5 py-0.5 rounded hover:bg-[#C9A84C]/5",
+                              "text-[10px] text-black/30 hover:text-[#B89555] flex items-center gap-0.5 px-1.5 py-0.5 rounded hover:bg-[#B89555]/5",
                               isUser ? "mr-1" : "ml-1"
                             )}
                           >
@@ -405,17 +405,17 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                 {/* Typing Indicator */}
                 {isTyping && (
                   <div className="flex gap-2.5">
-                    <Avatar className="h-7 w-7 border border-[#C9A84C]/10">
+                    <Avatar className="h-7 w-7 border border-[#B89555]/10">
                       <AvatarImage src={selectedEmployeeData.avatar} />
-                      <AvatarFallback className="bg-[#C9A84C]/10 text-[#C9A84C] text-[10px]">
+                      <AvatarFallback className="bg-[#B89555]/10 text-[#B89555] text-[10px]">
                         {selectedEmployeeData.name.split(' ').map(n => n[0]).join('')}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="bg-white border border-[#C9A84C]/15 rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
+                    <div className="bg-white border border-[#B89555]/15 rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
                       <div className="flex gap-1 items-center h-4">
-                        <span className="h-2 w-2 bg-[#C9A84C] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <span className="h-2 w-2 bg-[#C9A84C] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <span className="h-2 w-2 bg-[#C9A84C] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <span className="h-2 w-2 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="h-2 w-2 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="h-2 w-2 bg-[#B89555] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     </div>
                   </div>
@@ -426,9 +426,9 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
             </ScrollArea>
 
             {/* Message Input */}
-            <div className="p-3 sm:p-4 border-t border-[#C9A84C]/10 bg-white/80 backdrop-blur-sm">
+            <div className="p-3 sm:p-4 border-t border-[#B89555]/10 bg-white/80 backdrop-blur-sm">
               <div className="flex items-end gap-2">
-                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0 hover:bg-[#C9A84C]/10 hidden sm:flex" onClick={() => setShowAttachPicker(true)}>
+                <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0 hover:bg-[#B89555]/10 hidden sm:flex" onClick={() => setShowAttachPicker(true)}>
                   <Paperclip className="h-4 w-4 text-black/40" />
                 </Button>
                 <div className="flex-1 relative">
@@ -437,16 +437,16 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
                     value={messageInput}
                     onChange={(e) => setMessageInput(e.target.value)}
                     onKeyDown={handleKeyPress}
-                    className="bg-[#FDFBF7] border-[#C9A84C]/20 text-black placeholder:text-black/40 pr-10 focus-visible:ring-[#C9A84C]/30"
+                    className="bg-[#FDFBF7] border-[#B89555]/20 text-black placeholder:text-black/40 pr-10 focus-visible:ring-[#B89555]/30"
                   />
-                  <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 hover:bg-[#C9A84C]/10 hidden sm:flex">
+                  <Button variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 hover:bg-[#B89555]/10 hidden sm:flex">
                     <Smile className="h-4 w-4 text-black/40" />
                   </Button>
                 </div>
                 <Button 
                   onClick={handleSendMessage}
                   disabled={!messageInput.trim() || isTyping}
-                  className="h-9 w-9 shrink-0 bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A78636] text-white shadow-sm"
+                  className="h-9 w-9 shrink-0 bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#957539] text-white shadow-sm"
                   size="icon"
                 >
                   {isTyping ? (
@@ -492,8 +492,8 @@ const EmployeeChatHub: React.FC<EmployeeChatHubProps> = ({ className }) => {
         ) : (
           <div className="flex-1 flex items-center justify-center text-black/40">
             <div className="text-center">
-              <div className="h-20 w-20 rounded-full bg-[#C9A84C]/10 flex items-center justify-center mx-auto mb-4">
-                <Users className="h-10 w-10 text-[#C9A84C]/40" />
+              <div className="h-20 w-20 rounded-full bg-[#B89555]/10 flex items-center justify-center mx-auto mb-4">
+                <Users className="h-10 w-10 text-[#B89555]/40" />
               </div>
               <h3 className="font-semibold text-black/60 text-lg">Select a Team Member</h3>
               <p className="text-sm mt-1 text-black/40">Choose someone from the list to start chatting</p>

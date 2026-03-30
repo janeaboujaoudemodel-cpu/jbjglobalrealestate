@@ -394,18 +394,18 @@ const JBJAnalyticsDashboard: React.FC = () => {
                       <AreaChart data={dailyVisitors}>
                         <defs>
                           <linearGradient id="visitorsGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#C9A84C" stopOpacity={0.3} />
-                            <stop offset="95%" stopColor="#C9A84C" stopOpacity={0} />
+                            <stop offset="5%" stopColor="#B89555" stopOpacity={0.3} />
+                            <stop offset="95%" stopColor="#B89555" stopOpacity={0} />
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#C9A84C20" />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#B8955520" />
                         <XAxis dataKey="date" tick={{ fill: '#666', fontSize: 12 }} />
                         <YAxis tick={{ fill: '#666', fontSize: 12 }} />
                         <RechartsTooltip
-                          contentStyle={{ backgroundColor: '#FDFBF7', border: '1px solid #C9A84C40', borderRadius: 12, fontSize: 13 }}
+                          contentStyle={{ backgroundColor: '#FDFBF7', border: '1px solid #B8955540', borderRadius: 12, fontSize: 13 }}
                           labelStyle={{ fontWeight: 600, color: '#000' }}
                         />
-                        <Area type="monotone" dataKey="visitors" stroke="#C9A84C" strokeWidth={2} fill="url(#visitorsGradient)" name="Unique Visitors" />
+                        <Area type="monotone" dataKey="visitors" stroke="#B89555" strokeWidth={2} fill="url(#visitorsGradient)" name="Unique Visitors" />
                         <Area type="monotone" dataKey="pageViews" stroke="#8B7355" strokeWidth={1.5} fill="transparent" name="Page Views" strokeDasharray="4 4" />
                       </AreaChart>
                     </ResponsiveContainer>

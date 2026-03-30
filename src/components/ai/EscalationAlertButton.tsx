@@ -31,7 +31,7 @@ function getUrgencyIcon(urgency: string) {
     case 'high':
       return <AlertTriangle className="h-5 w-5 text-amber-600" />;
     default:
-      return <Zap className="h-5 w-5 text-[#C9A84C]" />;
+      return <Zap className="h-5 w-5 text-[#B89555]" />;
   }
 }
 
@@ -64,12 +64,12 @@ export function EscalationAlertButton({
               ? 'bg-red-100 border border-red-400/50 animate-pulse hover:bg-red-200'
               : pendingEscalations.length > 0
               ? 'bg-amber-100 border border-amber-400/50 hover:bg-amber-200'
-              : 'bg-white border-2 border-[#C9A84C]/30 hover:border-[#C9A84C]/50'
+              : 'bg-white border-2 border-[#B89555]/30 hover:border-[#B89555]/50'
           }`}
         >
           <Zap className={`h-5 w-5 ${
             criticalEscalations.length > 0 ? 'text-red-600' :
-            pendingEscalations.length > 0 ? 'text-amber-600' : 'text-[#C9A84C]'
+            pendingEscalations.length > 0 ? 'text-amber-600' : 'text-[#B89555]'
           }`} />
           {pendingEscalations.length > 0 && (
             <span className={`absolute -top-1 -right-1 w-5 h-5 rounded-full text-white text-xs flex items-center justify-center font-bold ${
@@ -82,14 +82,14 @@ export function EscalationAlertButton({
       </PopoverTrigger>
 
       <PopoverContent 
-        className="w-96 p-0 bg-white border-2 border-[#C9A84C]/30 shadow-[0_8px_30px_rgba(200,167,102,0.15)]"
+        className="w-96 p-0 bg-white border-2 border-[#B89555]/30 shadow-[0_8px_30px_rgba(200,167,102,0.15)]"
         align="end"
         sideOffset={16}
       >
         {/* Header */}
-        <div className="p-4 border-b border-[#C9A84C]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] rounded-t-md">
+        <div className="p-4 border-b border-[#B89555]/20 flex items-center justify-between bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] rounded-t-md">
           <div className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-[#C9A84C]" />
+            <Zap className="h-5 w-5 text-[#B89555]" />
             <span className="font-semibold text-black">Escalations</span>
             {pendingEscalations.length > 0 && (
               <Badge 
@@ -110,13 +110,13 @@ export function EscalationAlertButton({
               <p className="text-sm text-zinc-400">All systems running smoothly</p>
             </div>
           ) : (
-            <div className="divide-y divide-[#C9A84C]/10">
+            <div className="divide-y divide-[#B89555]/10">
               {pendingEscalations.slice(0, 5).map((event) => (
                 <motion.div
                   key={event.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`p-4 hover:bg-[#C9A84C]/5 transition-colors cursor-pointer ${
+                  className={`p-4 hover:bg-[#B89555]/5 transition-colors cursor-pointer ${
                     event.emotionAnalysis.urgency === 'critical' ? 'bg-red-50' : ''
                   }`}
                   onClick={() => onEscalationClick?.(event)}
@@ -133,7 +133,7 @@ export function EscalationAlertButton({
                         <span className="font-medium text-black truncate">
                           {event.senderName}
                         </span>
-                        <Badge className="bg-[#C9A84C]/10 text-[#C9A84C] border-[#C9A84C]/30 text-[10px]">
+                        <Badge className="bg-[#B89555]/10 text-[#B89555] border-[#B89555]/30 text-[10px]">
                           {event.emotionAnalysis.emotion}
                         </Badge>
                       </div>
@@ -155,7 +155,7 @@ export function EscalationAlertButton({
                             e.stopPropagation();
                             handleAcknowledge(event.id);
                           }}
-                          className="h-6 text-xs text-[#C9A84C] hover:bg-[#C9A84C]/10"
+                          className="h-6 text-xs text-[#B89555] hover:bg-[#B89555]/10"
                         >
                           <Eye className="h-3 w-3 mr-1" />
                           Acknowledge
@@ -171,10 +171,10 @@ export function EscalationAlertButton({
 
         {/* Footer */}
         {pendingEscalations.length > 0 && (
-          <div className="p-3 border-t border-[#C9A84C]/20 bg-[#FDFBF7] rounded-b-md">
+          <div className="p-3 border-t border-[#B89555]/20 bg-[#FDFBF7] rounded-b-md">
             <Button
               variant="ghost"
-              className="w-full text-[#C9A84C] hover:bg-[#C9A84C]/10"
+              className="w-full text-[#B89555] hover:bg-[#B89555]/10"
               onClick={() => {
                 setIsOpen(false);
                 onViewAll?.();

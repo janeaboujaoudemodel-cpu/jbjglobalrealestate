@@ -79,10 +79,10 @@ export default function EmailAssistantPanel({
   const priorityCfg = PRIORITY_CONFIG[analysis?.priority || "normal"] || PRIORITY_CONFIG.normal;
 
   return (
-    <div className="mt-8 p-4 rounded-xl border-2 border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
+    <div className="mt-8 p-4 rounded-xl border-2 border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-[#C9A84C]" />
+          <Sparkles className="w-4 h-4 text-[#B89555]" />
           <span className="text-sm font-semibold text-black">Amanda Clarke — Executive Assistant</span>
           {analysis && (
             <Badge className={`${priorityCfg.color} text-[9px] gap-1`}>
@@ -107,11 +107,11 @@ export default function EmailAssistantPanel({
         <>
           {/* Bilingual Summaries */}
           <div className="grid grid-cols-2 gap-3 mb-3">
-            <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3">
+            <div className="bg-white/70 rounded-lg border border-[#B89555]/15 p-3">
               <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1">Summary (EN)</p>
               <p className="text-xs text-black/70 leading-relaxed">{analysis.summary_en}</p>
             </div>
-            <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3" dir="rtl">
+            <div className="bg-white/70 rounded-lg border border-[#B89555]/15 p-3" dir="rtl">
               <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1 text-right">ملخص (AR)</p>
               <p className="text-xs text-black/70 leading-relaxed text-right">{analysis.summary_ar}</p>
             </div>
@@ -119,14 +119,14 @@ export default function EmailAssistantPanel({
 
           {/* Suggested Reply */}
           {analysis.suggested_reply && (
-            <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3 mb-3">
+            <div className="bg-white/70 rounded-lg border border-[#B89555]/15 p-3 mb-3">
               <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-1">Suggested Reply</p>
               <p className="text-xs text-black/70 leading-relaxed">{analysis.suggested_reply}</p>
               <div className="flex gap-2 mt-2">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-7 text-[10px] border-[#C9A84C]/30 text-[#C9A84C]"
+                  className="h-7 text-[10px] border-[#B89555]/30 text-[#B89555]"
                   onClick={() => onUseAsReply(analysis.suggested_reply)}
                 >
                   <Reply className="w-3 h-3 mr-1" /> Use as Reply
@@ -134,7 +134,7 @@ export default function EmailAssistantPanel({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-7 text-[10px] border-[#C9A84C]/30 text-black/60"
+                  className="h-7 text-[10px] border-[#B89555]/30 text-black/60"
                   onClick={() => onEditDraft(analysis.suggested_reply)}
                 >
                   <Pencil className="w-3 h-3 mr-1" /> Edit Draft
@@ -145,12 +145,12 @@ export default function EmailAssistantPanel({
 
           {/* Action Items */}
           {analysis.action_items && analysis.action_items.length > 0 && (
-            <div className="bg-white/70 rounded-lg border border-[#C9A84C]/15 p-3">
+            <div className="bg-white/70 rounded-lg border border-[#B89555]/15 p-3">
               <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider mb-2">Action Items</p>
               <ul className="space-y-1">
                 {analysis.action_items.map((item, i) => (
                   <li key={i} className="text-xs text-black/70 flex items-start gap-2">
-                    <span className="text-[#C9A84C] mt-0.5">•</span>
+                    <span className="text-[#B89555] mt-0.5">•</span>
                     {item}
                   </li>
                 ))}

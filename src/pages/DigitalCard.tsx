@@ -56,9 +56,9 @@ const CONTACT_INFO = {
 // Luxury gold color - LOCKED (Active Champagne, NO YELLOW)
 const GOLD = {
   primary: "#C8A766",
-  light: "#D4B87A",
+  light: "#E0CFA0",
   dark: "#A8925A",
-  gradient: "linear-gradient(135deg, #C8A766, #D4B87A, #C8A766)",
+  gradient: "linear-gradient(135deg, #C8A766, #E0CFA0, #C8A766)",
   // Active Champagne background for icons (NO YELLOW)
   activeBackground: "linear-gradient(135deg, #F5EBD7, #E8DCC8, #D4C4A8)",
 };

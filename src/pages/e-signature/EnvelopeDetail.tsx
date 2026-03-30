@@ -158,7 +158,7 @@ export default function EnvelopeDetail() {
             This envelope may have been deleted or you don't have access.
           </p>
           <Link to="/e-signature">
-            <Button className="bg-[#C8A766] hover:bg-[#B8973F] text-black">Back to Dashboard</Button>
+            <Button className="bg-[#C8A766] hover:bg-[#A68444] text-black">Back to Dashboard</Button>
           </Link>
         </div>
       </div>
@@ -219,7 +219,7 @@ export default function EnvelopeDetail() {
                 <>
                   <Button 
                     onClick={() => handleDownload(signedDoc.document_url, signedDoc.document_filename)}
-                    className="bg-[#C8A766] hover:bg-[#B8973F] text-black font-semibold"
+                    className="bg-[#C8A766] hover:bg-[#A68444] text-black font-semibold"
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Download Signed

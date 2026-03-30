@@ -125,7 +125,7 @@ const tools = [
     icon: FolderOpen,
     href: "/documents",
     badge: "Pro",
-    accentColor: "#C9A84C",
+    accentColor: "#B89555",
   },
 ];
 

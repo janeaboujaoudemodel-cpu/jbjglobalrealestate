@@ -77,7 +77,7 @@ export default function EmailProductivityPanel({
     { label: "Unread", value: unreadEmails.length, icon: Mail, color: "text-blue-600 bg-blue-50 border-blue-200" },
     { label: "Reply", value: needsReply.length, icon: Reply, color: "text-amber-600 bg-amber-50 border-amber-200" },
     { label: "Urgent", value: urgentEmails.length, icon: AlertTriangle, color: "text-red-600 bg-red-50 border-red-200" },
-    { label: "Starred", value: starredEmails.length, icon: Bell, color: "text-[#C9A84C] bg-[#C9A84C]/10 border-[#C9A84C]/30" },
+    { label: "Starred", value: starredEmails.length, icon: Bell, color: "text-[#B89555] bg-[#B89555]/10 border-[#B89555]/30" },
   ];
 
   // Load brand assets for quick access
@@ -101,17 +101,17 @@ export default function EmailProductivityPanel({
   }, []);
 
   const assetIcons: Record<string, React.ReactNode> = {
-    stamp: <Stamp className="w-3 h-3 text-[#C9A84C]" />,
-    signature: <FileSignature className="w-3 h-3 text-[#C9A84C]" />,
-    letterhead: <Mail className="w-3 h-3 text-[#C9A84C]" />,
-    logo: <Image className="w-3 h-3 text-[#C9A84C]" />,
+    stamp: <Stamp className="w-3 h-3 text-[#B89555]" />,
+    signature: <FileSignature className="w-3 h-3 text-[#B89555]" />,
+    letterhead: <Mail className="w-3 h-3 text-[#B89555]" />,
+    logo: <Image className="w-3 h-3 text-[#B89555]" />,
   };
 
   return (
     <ScrollArea className="h-full">
       <div className="p-4 space-y-4">
         <div className="flex items-center gap-2 mb-1">
-          <Sparkles className="w-4 h-4 text-[#C9A84C]" />
+          <Sparkles className="w-4 h-4 text-[#B89555]" />
           <span className="text-sm font-semibold text-black">Productivity Hub</span>
         </div>
 
@@ -157,24 +157,24 @@ export default function EmailProductivityPanel({
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full h-7 text-[10px] border-[#C9A84C]/20 text-[#C9A84C] hover:bg-[#C9A84C]/10"
+                className="w-full h-7 text-[10px] border-[#B89555]/20 text-[#B89555] hover:bg-[#B89555]/10"
                 onClick={onBulkAnalyze}
               >
                 <Zap className="w-3 h-3 mr-1" /> Bulk AI Analyze Inbox
               </Button>
             )}
 
-            <Separator className="bg-[#C9A84C]/10" />
+            <Separator className="bg-[#B89555]/10" />
 
             {/* Calendar Widget */}
             <QuickCalendarWidget source="email" prefillTitle={selectedEmailSubject} />
 
-            <Separator className="bg-[#C9A84C]/10" />
+            <Separator className="bg-[#B89555]/10" />
 
             {/* Notes Widget */}
             <QuickNoteWidget source="email" prefillTitle={selectedEmailSubject} />
 
-            <Separator className="bg-[#C9A84C]/10" />
+            <Separator className="bg-[#B89555]/10" />
 
             {/* Reply Queue */}
             {needsReply.length > 0 && (
@@ -185,7 +185,7 @@ export default function EmailProductivityPanel({
                     <button
                       key={e.id}
                       onClick={() => onSelectEmail(e.id)}
-                      className="w-full text-left px-3 py-2 rounded-lg border border-[#C9A84C]/15 hover:bg-[#C9A84C]/5 transition-colors"
+                      className="w-full text-left px-3 py-2 rounded-lg border border-[#B89555]/15 hover:bg-[#B89555]/5 transition-colors"
                     >
                       <p className="text-xs font-medium text-black truncate">{e.subject}</p>
                       <p className="text-[10px] text-black/50">{e.from}</p>
@@ -203,10 +203,10 @@ export default function EmailProductivityPanel({
                   {allActionItems.map((ai, i) => (
                     <div
                       key={i}
-                      className="text-xs text-black/70 flex items-start gap-2 px-2 py-1.5 rounded-lg hover:bg-[#C9A84C]/5 cursor-pointer"
+                      className="text-xs text-black/70 flex items-start gap-2 px-2 py-1.5 rounded-lg hover:bg-[#B89555]/5 cursor-pointer"
                       onClick={() => onSelectEmail(ai.emailId)}
                     >
-                      <CheckCircle2 className="w-3 h-3 text-[#C9A84C] mt-0.5 flex-shrink-0" />
+                      <CheckCircle2 className="w-3 h-3 text-[#B89555] mt-0.5 flex-shrink-0" />
                       <span>{ai.item}</span>
                     </div>
                   ))}
@@ -217,11 +217,11 @@ export default function EmailProductivityPanel({
             {/* Brand Assets Quick Access */}
             {brandAssets.length > 0 && (
               <>
-                <Separator className="bg-[#C9A84C]/10" />
+                <Separator className="bg-[#B89555]/10" />
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider">Brand Assets</p>
-                    <a href="/owner/brand-assets" className="text-[10px] text-[#C9A84C] hover:underline flex items-center gap-0.5">
+                    <a href="/owner/brand-assets" className="text-[10px] text-[#B89555] hover:underline flex items-center gap-0.5">
                       <ExternalLink className="w-2.5 h-2.5" /> Manage
                     </a>
                   </div>
@@ -229,7 +229,7 @@ export default function EmailProductivityPanel({
                     {brandAssets.map(asset => (
                       <div
                         key={asset.id}
-                        className="flex flex-col items-center bg-white/70 rounded-lg border border-[#C9A84C]/15 p-2 hover:border-[#C9A84C]/30 cursor-pointer transition-colors"
+                        className="flex flex-col items-center bg-white/70 rounded-lg border border-[#B89555]/15 p-2 hover:border-[#B89555]/30 cursor-pointer transition-colors"
                         title={asset.name}
                       >
                         {asset.thumbnail_url ? (

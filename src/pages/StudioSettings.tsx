@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 
-const G = "#C9A84C"; // gold hex (used only for inline styles)
+const G = "#B89555"; // gold hex (used only for inline styles)
 
 const quickTools = [
   { icon: Wand2, label: "Background AI", href: "/toolkit/background-ai", color: "#5B8AF5" },

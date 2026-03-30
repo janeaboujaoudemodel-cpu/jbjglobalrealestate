@@ -74,7 +74,7 @@ export function BusinessCardHeader({
               onClick={onSave}
               disabled={isSaving}
               variant="outline"
-              className="gap-1.5 h-8 text-xs font-semibold border-[#C9A84C]/60 text-[#C9A84C] hover:bg-[#C9A84C]/10"
+              className="gap-1.5 h-8 text-xs font-semibold border-[#B89555]/60 text-[#B89555] hover:bg-[#B89555]/10"
             >
               {isSaving ? <RefreshCw size={12} className="animate-spin" /> : <Save size={12} />}
               {isSaving ? "Saving…" : "Save Card"}

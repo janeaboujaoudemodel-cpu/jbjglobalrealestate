@@ -55,10 +55,10 @@ const OwnerSafetyPage = () => {
   const renderFeatureRow = (feature: SafetyFeature, icon: React.ElementType) => {
     const Icon = icon;
     return (
-      <div key={feature.id} className="flex items-center justify-between p-4 rounded-lg bg-white/60 border border-[#C9A84C]/15">
+      <div key={feature.id} className="flex items-center justify-between p-4 rounded-lg bg-white/60 border border-[#B89555]/15">
         <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[#C9A84C]/10 border border-[#C9A84C]/20 flex items-center justify-center">
-            <Icon className="w-5 h-5 text-[#C9A84C]" />
+          <div className="w-10 h-10 rounded-lg bg-[#B89555]/10 border border-[#B89555]/20 flex items-center justify-center">
+            <Icon className="w-5 h-5 text-[#B89555]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -85,7 +85,7 @@ const OwnerSafetyPage = () => {
     <OwnerGuard>
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
         {/* Header */}
-        <div className="border-b border-[#C9A84C]/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#FDFBF7]">
+        <div className="border-b border-[#B89555]/20 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#FDFBF7]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-red-100 border border-red-200 flex items-center justify-center">
@@ -101,14 +101,14 @@ const OwnerSafetyPage = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Master Kill Switch */}
-          <Card className={`mb-8 ${masterKillSwitch ? 'bg-red-50 border-red-300' : 'bg-white/70 border-[#C9A84C]/20'}`}>
+          <Card className={`mb-8 ${masterKillSwitch ? 'bg-red-50 border-red-300' : 'bg-white/70 border-[#B89555]/20'}`}>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
-                    masterKillSwitch ? 'bg-red-100 border-red-300' : 'bg-[#C9A84C]/10 border-[#C9A84C]/20'
+                    masterKillSwitch ? 'bg-red-100 border-red-300' : 'bg-[#B89555]/10 border-[#B89555]/20'
                   } border`}>
-                    <Power className={`w-7 h-7 ${masterKillSwitch ? 'text-red-600' : 'text-[#C9A84C]'}`} />
+                    <Power className={`w-7 h-7 ${masterKillSwitch ? 'text-red-600' : 'text-[#B89555]'}`} />
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-black">Master Emergency Kill Switch</h2>
@@ -135,7 +135,7 @@ const OwnerSafetyPage = () => {
 
           {/* What AI Can / Cannot Do */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <Card className="bg-white/70 border-[#C9A84C]/20">
+            <Card className="bg-white/70 border-[#B89555]/20">
               <CardHeader>
                 <CardTitle className="text-green-700 flex items-center gap-2">
                   <Check className="w-5 h-5" />
@@ -152,7 +152,7 @@ const OwnerSafetyPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white/70 border-[#C9A84C]/20">
+            <Card className="bg-white/70 border-[#B89555]/20">
               <CardHeader>
                 <CardTitle className="text-red-600 flex items-center gap-2">
                   <X className="w-5 h-5" />
@@ -187,10 +187,10 @@ const OwnerSafetyPage = () => {
 
           {/* Feature Toggles */}
           <div className="space-y-6">
-            <Card className="bg-white/70 border-[#C9A84C]/20">
+            <Card className="bg-white/70 border-[#B89555]/20">
               <CardHeader>
                 <CardTitle className="text-black flex items-center gap-2">
-                  <Brain className="w-5 h-5 text-[#C9A84C]" />
+                  <Brain className="w-5 h-5 text-[#B89555]" />
                   AI Features
                 </CardTitle>
                 <CardDescription>Artificial intelligence capabilities</CardDescription>
@@ -200,10 +200,10 @@ const OwnerSafetyPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white/70 border-[#C9A84C]/20">
+            <Card className="bg-white/70 border-[#B89555]/20">
               <CardHeader>
                 <CardTitle className="text-black flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-[#C9A84C]" />
+                  <Zap className="w-5 h-5 text-[#B89555]" />
                   Automation Features
                 </CardTitle>
                 <CardDescription>Automated workflows and processes</CardDescription>
@@ -213,10 +213,10 @@ const OwnerSafetyPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white/70 border-[#C9A84C]/20">
+            <Card className="bg-white/70 border-[#B89555]/20">
               <CardHeader>
                 <CardTitle className="text-black flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-[#C9A84C]" />
+                  <Clock className="w-5 h-5 text-[#B89555]" />
                   Scheduled Actions
                 </CardTitle>
                 <CardDescription>Scheduled sends and reports</CardDescription>
@@ -228,13 +228,13 @@ const OwnerSafetyPage = () => {
           </div>
 
           {/* Safety Summary */}
-          <div className="mt-8 p-4 rounded-lg bg-white/70 border border-[#C9A84C]/20">
+          <div className="mt-8 p-4 rounded-lg bg-white/70 border border-[#B89555]/20">
             <h3 className="text-sm font-semibold text-black mb-3 flex items-center gap-2">
-              <Shield className="w-4 h-4 text-[#C9A84C]" />
+              <Shield className="w-4 h-4 text-[#B89555]" />
               Safety Summary
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-              <div className="text-center p-3 rounded-lg bg-[#C9A84C]/5 border border-[#C9A84C]/10">
+              <div className="text-center p-3 rounded-lg bg-[#B89555]/5 border border-[#B89555]/10">
                 <div className="text-2xl font-bold text-black">{features.filter(f => f.enabled).length}</div>
                 <div className="text-zinc-500">Features Enabled</div>
               </div>
@@ -242,7 +242,7 @@ const OwnerSafetyPage = () => {
                 <div className="text-2xl font-bold text-purple-700">{features.filter(f => f.requiresApproval).length}</div>
                 <div className="text-zinc-500">Require Approval</div>
               </div>
-              <div className="text-center p-3 rounded-lg bg-[#C9A84C]/5 border border-[#C9A84C]/10">
+              <div className="text-center p-3 rounded-lg bg-[#B89555]/5 border border-[#B89555]/10">
                 <div className={`text-2xl font-bold ${masterKillSwitch ? 'text-red-600' : 'text-green-600'}`}>
                   {masterKillSwitch ? 'ACTIVE' : 'OFF'}
                 </div>

@@ -123,16 +123,16 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
   return (
     <div className="fixed inset-0 z-[10100] flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="bg-white rounded-2xl shadow-2xl border border-[#C9A84C]/30 w-[90vw] max-w-[420px] overflow-hidden"
+        className="bg-white rounded-2xl shadow-2xl border border-[#B89555]/30 w-[90vw] max-w-[420px] overflow-hidden"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#C9A84C]/15 bg-gradient-to-r from-[#FDFBF7] to-white">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#FDFBF7] to-white">
           <div className="flex items-center gap-2">
-            <Paperclip className="w-4 h-4 text-[#C9A84C]" />
+            <Paperclip className="w-4 h-4 text-[#B89555]" />
             <span className="font-semibold text-sm text-black">Attach Document or Asset</span>
           </div>
-          <button onClick={onClose} className="w-7 h-7 rounded-full hover:bg-[#C9A84C]/10 flex items-center justify-center">
+          <button onClick={onClose} className="w-7 h-7 rounded-full hover:bg-[#B89555]/10 flex items-center justify-center">
             <X className="w-4 h-4 text-black/60" />
           </button>
         </div>
@@ -148,12 +148,12 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
             className={cn(
               "w-full flex flex-col items-center justify-center gap-2 px-4 py-5 rounded-xl border-2 border-dashed cursor-pointer transition-all",
               isDragOver
-                ? "border-[#C9A84C] bg-[#C9A84C]/10 scale-[1.01]"
-                : "border-[#C9A84C]/25 hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/5"
+                ? "border-[#B89555] bg-[#B89555]/10 scale-[1.01]"
+                : "border-[#B89555]/25 hover:border-[#B89555]/50 hover:bg-[#B89555]/5"
             )}
           >
-            <div className="w-10 h-10 rounded-full bg-[#C9A84C]/10 flex items-center justify-center">
-              <Paperclip className={cn("w-5 h-5 transition-colors", isDragOver ? "text-[#C9A84C]" : "text-[#C9A84C]/60")} />
+            <div className="w-10 h-10 rounded-full bg-[#B89555]/10 flex items-center justify-center">
+              <Paperclip className={cn("w-5 h-5 transition-colors", isDragOver ? "text-[#B89555]" : "text-[#B89555]/60")} />
             </div>
             <div className="text-center">
               <p className="text-sm font-medium text-black">{isDragOver ? 'Drop files here' : 'Upload Files'}</p>
@@ -172,9 +172,9 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
 
           {/* Divider */}
           <div className="flex items-center gap-2 py-1.5 px-2">
-            <div className="flex-1 h-px bg-[#C9A84C]/15" />
+            <div className="flex-1 h-px bg-[#B89555]/15" />
             <span className="text-[10px] text-black/30 uppercase tracking-wider font-medium">Brand Assets</span>
-            <div className="flex-1 h-px bg-[#C9A84C]/15" />
+            <div className="flex-1 h-px bg-[#B89555]/15" />
           </div>
 
           {/* Brand asset options */}
@@ -182,10 +182,10 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
             <button
               key={opt.type}
               onClick={() => setShowBrandPicker(opt.type)}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#C9A84C]/5 border border-transparent hover:border-[#C9A84C]/20 transition-all text-left"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[#B89555]/5 border border-transparent hover:border-[#B89555]/20 transition-all text-left"
             >
-              <div className="w-9 h-9 rounded-lg bg-[#C9A84C]/10 flex items-center justify-center shrink-0">
-                {React.cloneElement(opt.icon as React.ReactElement, { className: 'w-4 h-4 text-[#C9A84C]' })}
+              <div className="w-9 h-9 rounded-lg bg-[#B89555]/10 flex items-center justify-center shrink-0">
+                {React.cloneElement(opt.icon as React.ReactElement, { className: 'w-4 h-4 text-[#B89555]' })}
               </div>
               <div>
                 <p className="text-sm font-medium text-black">{opt.label}</p>
@@ -198,9 +198,9 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
           {context === 'email' && (
             <>
               <div className="flex items-center gap-2 py-1.5 px-2">
-                <div className="flex-1 h-px bg-[#C9A84C]/15" />
+                <div className="flex-1 h-px bg-[#B89555]/15" />
                 <span className="text-[10px] text-black/30 uppercase tracking-wider font-medium">Actions</span>
-                <div className="flex-1 h-px bg-[#C9A84C]/15" />
+                <div className="flex-1 h-px bg-[#B89555]/15" />
               </div>
               <button
                 onClick={() => { onClose(); navigate('/e-signature/create'); }}
@@ -224,7 +224,7 @@ export function DocumentAttachmentPicker({ context, onAttach, onClose }: Documen
 
 /** Type-specific styling config for attachment chips and chat renderers */
 const TYPE_STYLES: Record<string, { border: string; bg: string; badge: string; badgeLabel: string; icon: React.ReactNode }> = {
-  stamp: { border: 'border-[#C9A84C]/40', bg: 'bg-[#C9A84C]/5', badge: 'bg-[#C9A84C]/15 text-[#C9A84C]', badgeLabel: 'Official Stamp', icon: <Stamp className="w-4 h-4 text-[#C9A84C]" /> },
+  stamp: { border: 'border-[#B89555]/40', bg: 'bg-[#B89555]/5', badge: 'bg-[#B89555]/15 text-[#B89555]', badgeLabel: 'Official Stamp', icon: <Stamp className="w-4 h-4 text-[#B89555]" /> },
   signature: { border: 'border-indigo-300/50', bg: 'bg-indigo-50/50', badge: 'bg-indigo-100 text-indigo-700', badgeLabel: 'Signature', icon: <Signature className="w-4 h-4 text-indigo-500" /> },
   letterhead: { border: 'border-slate-300/50', bg: 'bg-slate-50/50', badge: 'bg-slate-100 text-slate-700', badgeLabel: 'Letterhead', icon: <FileText className="w-4 h-4 text-slate-500" /> },
   business_card: { border: 'border-amber-300/50', bg: 'bg-amber-50/50', badge: 'bg-amber-100 text-amber-700', badgeLabel: 'Business Card', icon: <CreditCard className="w-4 h-4 text-amber-600" /> },
@@ -240,12 +240,12 @@ export function AttachmentChip({ attachment, onRemove }: { attachment: DocumentA
   return (
     <div className={cn(
       "inline-flex items-center gap-2 rounded-lg px-2.5 py-1.5 group border",
-      style ? `${style.bg} ${style.border}` : "bg-[#FDFBF7] border-[#C9A84C]/20"
+      style ? `${style.bg} ${style.border}` : "bg-[#FDFBF7] border-[#B89555]/20"
     )}>
       {style?.icon || (isImage && attachment.content ? (
         <img src={attachment.content} alt={attachment.name} className="w-6 h-6 object-contain rounded" />
       ) : (
-        <FileText className="w-4 h-4 text-[#C9A84C]" />
+        <FileText className="w-4 h-4 text-[#B89555]" />
       ))}
       <div className="min-w-0">
         <p className="text-[11px] font-medium text-foreground truncate max-w-[120px]">{attachment.name}</p>
@@ -277,10 +277,10 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
     // Check if content is SVG data URI
     const isSvgDataUri = attachment.content.startsWith('data:image/svg+xml');
     return (
-      <div className="mt-2 rounded-xl overflow-hidden border-2 border-[#C9A84C]/30 bg-[#C9A84C]/5 p-3 max-w-[200px]">
+      <div className="mt-2 rounded-xl overflow-hidden border-2 border-[#B89555]/30 bg-[#B89555]/5 p-3 max-w-[200px]">
         <div className="flex items-center gap-1.5 mb-2">
-          <Shield className="w-3 h-3 text-[#C9A84C]" />
-          <span className="text-[9px] font-bold text-[#C9A84C] uppercase tracking-wider">Official Stamp</span>
+          <Shield className="w-3 h-3 text-[#B89555]" />
+          <span className="text-[9px] font-bold text-[#B89555] uppercase tracking-wider">Official Stamp</span>
         </div>
         {isSvgDataUri ? (
           <div className="flex justify-center">
@@ -330,7 +330,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
           <FileText className="w-3 h-3 text-slate-500" />
           <span className="text-[9px] font-semibold text-slate-600 uppercase tracking-wider">Letterhead</span>
         </div>
-        <div className="border-t-2 border-[#C9A84C] pt-2">
+        <div className="border-t-2 border-[#B89555] pt-2">
           <img src={attachment.content} alt={attachment.name} className="max-h-[120px] object-contain rounded" />
         </div>
         <p className="text-[10px] text-muted-foreground mt-2 truncate">{attachment.name}</p>
@@ -369,7 +369,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
   // Generic image fallback
   if (isImage && attachment.content) {
     return (
-      <div className="mt-2 rounded-lg overflow-hidden border border-[#C9A84C]/15 bg-white/80 p-2 max-w-[200px]">
+      <div className="mt-2 rounded-lg overflow-hidden border border-[#B89555]/15 bg-white/80 p-2 max-w-[200px]">
         <img src={attachment.content} alt={attachment.name} className="max-h-[150px] object-contain rounded" />
         <p className="text-[10px] text-muted-foreground mt-1 truncate">{attachment.name}</p>
       </div>
@@ -378,8 +378,8 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
 
   // Document / PDF / file card
   return (
-    <div className="mt-2 flex items-center gap-2 bg-white border border-[#C9A84C]/15 rounded-lg px-3 py-2 max-w-[250px]">
-      <FileText className="w-5 h-5 text-[#C9A84C] shrink-0" />
+    <div className="mt-2 flex items-center gap-2 bg-white border border-[#B89555]/15 rounded-lg px-3 py-2 max-w-[250px]">
+      <FileText className="w-5 h-5 text-[#B89555] shrink-0" />
       <div className="min-w-0 flex-1">
         <p className="text-xs font-medium text-foreground truncate">{attachment.name}</p>
         {attachment.size && (
@@ -392,7 +392,7 @@ export function ChatAttachmentRenderer({ attachment }: { attachment: DocumentAtt
       </div>
       {attachment.content && (
         <a href={attachment.content} download={attachment.name} className="shrink-0">
-          <Download className="w-4 h-4 text-[#C9A84C] hover:text-[#B8973F]" />
+          <Download className="w-4 h-4 text-[#B89555] hover:text-[#A68444]" />
         </a>
       )}
     </div>

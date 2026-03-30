@@ -546,19 +546,19 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Voice Recording Card */}
         <Card 
-          className={`bg-white border-2 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-all cursor-pointer group ${
+          className={`bg-white border-2 border-[#B89555]/20 hover:border-[#B89555]/40 transition-all cursor-pointer group ${
             isRecording ? 'border-red-300 bg-red-50' : ''
           }`}
           onClick={isRecording ? stopRecording : startRecording}
         >
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
             <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 transition-transform group-hover:scale-110 ${
-              isRecording ? 'bg-red-500 animate-pulse' : 'bg-[#C9A84C]/10'
+              isRecording ? 'bg-red-500 animate-pulse' : 'bg-[#B89555]/10'
             }`}>
               {isRecording ? (
                 <Square className="w-6 h-6 text-white fill-white" />
               ) : (
-                <Mic className="w-6 h-6 text-[#C9A84C]" />
+                <Mic className="w-6 h-6 text-[#B89555]" />
               )}
             </div>
             {isRecording ? (
@@ -578,7 +578,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
         {/* New Note Card */}
         <Card 
-          className="bg-white border-2 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-all cursor-pointer group"
+          className="bg-white border-2 border-[#B89555]/20 hover:border-[#B89555]/40 transition-all cursor-pointer group"
           onClick={() => setShowNoteEditor(true)}
         >
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
@@ -592,7 +592,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
         {/* Upload Document Card */}
         <Card 
-          className="bg-white border-2 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-all cursor-pointer group"
+          className="bg-white border-2 border-[#B89555]/20 hover:border-[#B89555]/40 transition-all cursor-pointer group"
           onClick={() => setShowUploadDialog(true)}
         >
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
@@ -606,7 +606,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
         {/* New Project Card */}
         <Card 
-          className="bg-white border-2 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-all cursor-pointer group"
+          className="bg-white border-2 border-[#B89555]/20 hover:border-[#B89555]/40 transition-all cursor-pointer group"
           onClick={() => setShowProjectDialog(true)}
         >
           <CardContent className="p-6 flex flex-col items-center justify-center text-center">
@@ -621,9 +621,9 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
       {/* Processing Indicator */}
       {isProcessing && (
-        <Card className="bg-[#C9A84C]/10 border border-[#C9A84C]/30">
+        <Card className="bg-[#B89555]/10 border border-[#B89555]/30">
           <CardContent className="p-4 flex items-center gap-3">
-            <Loader2 className="w-5 h-5 text-[#C9A84C] animate-spin" />
+            <Loader2 className="w-5 h-5 text-[#B89555] animate-spin" />
             <div>
               <p className="text-black font-medium">Processing...</p>
               <p className="text-sm text-zinc-500">Extracting key points and action items</p>
@@ -716,7 +716,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
         {filteredNotes.map(note => (
           <Card 
             key={note.id} 
-            className="bg-white border-2 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-all cursor-pointer group"
+            className="bg-white border-2 border-[#B89555]/20 hover:border-[#B89555]/40 transition-all cursor-pointer group"
             onClick={() => setActiveNote(note)}
           >
             <CardContent className="p-4">
@@ -728,7 +728,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                   {note.source_type === 'meeting' && <MessageSquare className="w-4 h-4 text-green-600" />}
                   <h3 className="text-black font-medium truncate">{note.title}</h3>
                 </div>
-                <Badge variant="outline" className="text-xs border-[#C9A84C]/30 text-[#C9A84C]">
+                <Badge variant="outline" className="text-xs border-[#B89555]/30 text-[#B89555]">
                   {note.source_type}
                 </Badge>
               </div>
@@ -739,8 +739,8 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
               {note.ai_action_items && note.ai_action_items.length > 0 && (
                 <div className="flex items-center gap-2 mb-3">
-                  <ListTodo className="w-3 h-3 text-[#C9A84C]" />
-                  <span className="text-xs text-[#C9A84C]">{note.ai_action_items.length} action items</span>
+                  <ListTodo className="w-3 h-3 text-[#B89555]" />
+                  <span className="text-xs text-[#B89555]">{note.ai_action_items.length} action items</span>
                 </div>
               )}
 
@@ -756,7 +756,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                     className="h-6 w-6"
                     onClick={(e) => { e.stopPropagation(); generatePDF(note); }}
                   >
-                    <FileDown className="w-3 h-3 text-[#C9A84C]" />
+                    <FileDown className="w-3 h-3 text-[#B89555]" />
                   </Button>
                   <Button 
                     size="icon" 
@@ -774,7 +774,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
         {filteredNotes.length === 0 && (
           <div className="col-span-full text-center py-12">
-            <BookOpen className="w-12 h-12 text-[#C9A84C]/30 mx-auto mb-4" />
+            <BookOpen className="w-12 h-12 text-[#B89555]/30 mx-auto mb-4" />
             <p className="text-zinc-500">No notes yet</p>
             <p className="text-sm text-zinc-400 mt-1">Start by recording a voice note or creating a new note</p>
           </div>
@@ -783,7 +783,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
       {/* Note Viewer Dialog */}
       <Dialog open={!!activeNote} onOpenChange={() => setActiveNote(null)}>
-        <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-3xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="bg-white border-2 border-[#B89555]/30 max-w-3xl max-h-[80vh] overflow-y-auto">
           {activeNote && (
             <>
               <DialogHeader>
@@ -796,7 +796,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
               </DialogHeader>
               
               <Tabs defaultValue="content" className="mt-4">
-                <TabsList className="bg-zinc-50 border border-[#C9A84C]/20">
+                <TabsList className="bg-zinc-50 border border-[#B89555]/20">
                   <TabsTrigger value="content">Content</TabsTrigger>
                   <TabsTrigger value="summary">Summary</TabsTrigger>
                   <TabsTrigger value="actions">Action Items</TabsTrigger>
@@ -811,10 +811,10 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                 <TabsContent value="summary" className="mt-4">
                   {activeNote.ai_summary ? (
                     <div className="prose max-w-none">
-                      <div className="p-4 bg-[#C9A84C]/10 rounded-lg border border-[#C9A84C]/20">
+                      <div className="p-4 bg-[#B89555]/10 rounded-lg border border-[#B89555]/20">
                         <div className="flex items-center gap-2 mb-3">
-                          <Sparkles className="w-4 h-4 text-[#C9A84C]" />
-                          <span className="text-[#C9A84C] font-medium">Generated Summary</span>
+                          <Sparkles className="w-4 h-4 text-[#B89555]" />
+                          <span className="text-[#B89555] font-medium">Generated Summary</span>
                         </div>
                         <p className="text-zinc-700 whitespace-pre-wrap">{activeNote.ai_summary}</p>
                       </div>
@@ -846,14 +846,14 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                 <Button 
                   variant="outline" 
                   onClick={() => generatePDF(activeNote)}
-                  className="border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C]/10"
+                  className="border-[#B89555]/30 text-[#B89555] hover:bg-[#B89555]/10"
                 >
                   <FileDown className="w-4 h-4 mr-2" />
                   Download
                 </Button>
                 <Button 
                   onClick={() => setActiveNote(null)}
-                  className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white"
+                  className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white"
                 >
                   Close
                 </Button>
@@ -865,10 +865,10 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
       {/* New Note Dialog */}
       <Dialog open={showNoteEditor} onOpenChange={setShowNoteEditor}>
-        <DialogContent className="bg-white border-2 border-[#C9A84C]/30 max-w-2xl">
+        <DialogContent className="bg-white border-2 border-[#B89555]/30 max-w-2xl">
           <DialogHeader>
             <DialogTitle className="text-black flex items-center gap-2">
-              <Plus className="w-5 h-5 text-[#C9A84C]" />
+              <Plus className="w-5 h-5 text-[#B89555]" />
               Create New Note
             </DialogTitle>
           </DialogHeader>
@@ -876,16 +876,16 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
           <div className="space-y-4 mt-4">
             <div className="space-y-2">
               <Label className="text-zinc-600">Title</Label>
-              <Input value={newNote.title} onChange={(e) => setNewNote(prev => ({ ...prev, title: e.target.value }))} placeholder="Note title..." className="bg-zinc-50 border-[#C9A84C]/20 text-black" />
+              <Input value={newNote.title} onChange={(e) => setNewNote(prev => ({ ...prev, title: e.target.value }))} placeholder="Note title..." className="bg-zinc-50 border-[#B89555]/20 text-black" />
             </div>
             <div className="space-y-2">
               <Label className="text-zinc-600">Content</Label>
-              <Textarea value={newNote.content} onChange={(e) => setNewNote(prev => ({ ...prev, content: e.target.value }))} placeholder="Write your note here..." className="bg-zinc-50 border-[#C9A84C]/20 text-black min-h-[200px]" />
+              <Textarea value={newNote.content} onChange={(e) => setNewNote(prev => ({ ...prev, content: e.target.value }))} placeholder="Write your note here..." className="bg-zinc-50 border-[#B89555]/20 text-black min-h-[200px]" />
             </div>
             <div className="space-y-2">
               <Label className="text-zinc-600">Project (optional)</Label>
               <Select value={newNote.project_id} onValueChange={(v) => setNewNote(prev => ({ ...prev, project_id: v }))}>
-                <SelectTrigger className="bg-zinc-50 border-[#C9A84C]/20 text-black">
+                <SelectTrigger className="bg-zinc-50 border-[#B89555]/20 text-black">
                   <SelectValue placeholder="Select project" />
                 </SelectTrigger>
                 <SelectContent>
@@ -898,8 +898,8 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
           </div>
 
           <DialogFooter className="mt-6">
-            <Button variant="outline" onClick={() => setShowNoteEditor(false)} className="border-[#C9A84C]/20">Cancel</Button>
-            <Button onClick={saveNote} disabled={isProcessing} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white">
+            <Button variant="outline" onClick={() => setShowNoteEditor(false)} className="border-[#B89555]/20">Cancel</Button>
+            <Button onClick={saveNote} disabled={isProcessing} className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white">
               {isProcessing ? (<><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</>) : (<><Save className="w-4 h-4 mr-2" />Save Note</>)}
             </Button>
           </DialogFooter>
@@ -908,54 +908,54 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
 
       {/* New Project Dialog */}
       <Dialog open={showProjectDialog} onOpenChange={setShowProjectDialog}>
-        <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
+        <DialogContent className="bg-white border-2 border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="text-black flex items-center gap-2">
-              <FolderOpen className="w-5 h-5 text-[#C9A84C]" />
+              <FolderOpen className="w-5 h-5 text-[#B89555]" />
               Create New Project
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div className="space-y-2">
               <Label className="text-zinc-600">Project Name</Label>
-              <Input value={newProject.name} onChange={(e) => setNewProject(prev => ({ ...prev, name: e.target.value }))} placeholder="e.g., Client Meetings Q1" className="bg-zinc-50 border-[#C9A84C]/20 text-black" />
+              <Input value={newProject.name} onChange={(e) => setNewProject(prev => ({ ...prev, name: e.target.value }))} placeholder="e.g., Client Meetings Q1" className="bg-zinc-50 border-[#B89555]/20 text-black" />
             </div>
             <div className="space-y-2">
               <Label className="text-zinc-600">Description (optional)</Label>
-              <Textarea value={newProject.description} onChange={(e) => setNewProject(prev => ({ ...prev, description: e.target.value }))} placeholder="Project description..." className="bg-zinc-50 border-[#C9A84C]/20 text-black" />
+              <Textarea value={newProject.description} onChange={(e) => setNewProject(prev => ({ ...prev, description: e.target.value }))} placeholder="Project description..." className="bg-zinc-50 border-[#B89555]/20 text-black" />
             </div>
             <div className="space-y-2">
               <Label className="text-zinc-600">Color</Label>
               <div className="flex gap-2">
                 {['#A8925A', '#EF4444', '#3B82F6', '#10B981', '#8B5CF6', '#F59E0B'].map(color => (
-                  <button key={color} onClick={() => setNewProject(prev => ({ ...prev, color }))} className={`w-8 h-8 rounded-full transition-transform ${newProject.color === color ? 'ring-2 ring-[#C9A84C] ring-offset-2 scale-110' : ''}`} style={{ backgroundColor: color }} />
+                  <button key={color} onClick={() => setNewProject(prev => ({ ...prev, color }))} className={`w-8 h-8 rounded-full transition-transform ${newProject.color === color ? 'ring-2 ring-[#B89555] ring-offset-2 scale-110' : ''}`} style={{ backgroundColor: color }} />
                 ))}
               </div>
             </div>
           </div>
           <DialogFooter className="mt-6">
-            <Button variant="outline" onClick={() => setShowProjectDialog(false)} className="border-[#C9A84C]/20">Cancel</Button>
-            <Button onClick={createProject} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white">Create Project</Button>
+            <Button variant="outline" onClick={() => setShowProjectDialog(false)} className="border-[#B89555]/20">Cancel</Button>
+            <Button onClick={createProject} className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white">Create Project</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Upload Dialog */}
       <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
-        <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
+        <DialogContent className="bg-white border-2 border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="text-black flex items-center gap-2">
-              <Upload className="w-5 h-5 text-[#C9A84C]" />
+              <Upload className="w-5 h-5 text-[#B89555]" />
               Upload Document
             </DialogTitle>
           </DialogHeader>
           <div className="mt-4">
-            <div className="border-2 border-dashed border-[#C9A84C]/30 rounded-xl p-8 text-center hover:border-[#C9A84C]/50 transition-colors relative">
-              <Upload className="w-12 h-12 text-[#C9A84C]/40 mx-auto mb-4" />
+            <div className="border-2 border-dashed border-[#B89555]/30 rounded-xl p-8 text-center hover:border-[#B89555]/50 transition-colors relative">
+              <Upload className="w-12 h-12 text-[#B89555]/40 mx-auto mb-4" />
               <p className="text-zinc-500 mb-2">Drop your file here or click to upload</p>
               <p className="text-xs text-zinc-400">Supports PDF, DOC, DOCX, TXT, and more</p>
               <input type="file" accept=".pdf,.doc,.docx,.txt,.md" onChange={handleFileUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
-              <Button className="mt-4 relative bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white">
+              <Button className="mt-4 relative bg-gradient-to-r from-[#B89555] to-[#A68444] text-white">
                 Choose File
                 <input type="file" accept=".pdf,.doc,.docx,.txt,.md" onChange={handleFileUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
               </Button>

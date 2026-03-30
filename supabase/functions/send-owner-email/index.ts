@@ -278,7 +278,7 @@ serve(async (req: Request) => {
         <p style="margin: 0; font-weight: 600; color: #333;">${emailBody.senderName}</p>
         <p style="margin: 2px 0; font-size: 13px; color: #666;">${emailBody.senderTitle}</p>
         ${emailBody.account === "company" ? '<p style="margin: 2px 0; font-size: 13px; color: #666;">JBJ Global Real Estate</p>' : ''}
-        <p style="margin: 2px 0; font-size: 13px; color: #C9A84C;">${emailBody.senderEmail}</p>
+        <p style="margin: 2px 0; font-size: 13px; color: #B89555;">${emailBody.senderEmail}</p>
       </div>
     `;
 

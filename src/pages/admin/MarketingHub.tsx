@@ -328,22 +328,22 @@ const MarketingHub: React.FC = () => {
             <TabsContent value="ai-tools" className="m-0">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {[
-              { label: 'AI Email Generator', desc: 'Generate professional emails with AI', icon: Mail, route: '/ai/email-generator', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Suggest Reply', desc: 'Smart reply suggestions for tickets', icon: MessageCircle, route: '/admin/support-tickets', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Assistant', desc: 'Your personal AI business assistant', icon: Bot, route: '/founders-assistant', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Social Media', desc: 'Create social media content', icon: Share2, route: '/ai/social-media', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Description Writer', desc: 'Property descriptions in seconds', icon: PenTool, route: '/ai/description-writer', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Translation Hub', desc: 'Translate content to 15+ languages', icon: Globe, route: '/ai/translation-hub', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Video Tour Script', desc: 'Script video tours for properties', icon: Video, route: '/ai/video-tour-script', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Client Matcher', desc: 'Match clients to properties with AI', icon: Target, route: '/ai/client-matcher', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Lead Qualification', desc: 'Score and qualify leads automatically', icon: TrendingUp, route: '/ai/lead-qualification', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Objection Handler', desc: 'Handle client objections professionally', icon: Shield, route: '/ai/objection-handler', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Follow-up Scheduler', desc: 'Smart follow-up timing', icon: Calendar, route: '/ai/followup-scheduler', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Meeting Summarizer', desc: 'Summarize meetings into action items', icon: ClipboardList, route: '/ai/meeting-summarizer', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Market Report', desc: 'Generate market intelligence reports', icon: BarChart3, route: '/ai/market-report', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Contract Reviewer', desc: 'Review contracts for key terms', icon: FileText, route: '/ai/contract-reviewer', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Investment Report', desc: 'Investment analysis reports', icon: Lightbulb, route: '/ai/investment-report', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'All AI Tools', desc: 'Access all 52+ platform tools', icon: Sparkles, route: '/toolkit', color: 'from-[#C9A84C] to-[#A68A3A]' },
+              { label: 'AI Email Generator', desc: 'Generate professional emails with AI', icon: Mail, route: '/ai/email-generator', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Suggest Reply', desc: 'Smart reply suggestions for tickets', icon: MessageCircle, route: '/admin/support-tickets', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Assistant', desc: 'Your personal AI business assistant', icon: Bot, route: '/founders-assistant', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Social Media', desc: 'Create social media content', icon: Share2, route: '/ai/social-media', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Description Writer', desc: 'Property descriptions in seconds', icon: PenTool, route: '/ai/description-writer', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Translation Hub', desc: 'Translate content to 15+ languages', icon: Globe, route: '/ai/translation-hub', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Video Tour Script', desc: 'Script video tours for properties', icon: Video, route: '/ai/video-tour-script', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Client Matcher', desc: 'Match clients to properties with AI', icon: Target, route: '/ai/client-matcher', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Lead Qualification', desc: 'Score and qualify leads automatically', icon: TrendingUp, route: '/ai/lead-qualification', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Objection Handler', desc: 'Handle client objections professionally', icon: Shield, route: '/ai/objection-handler', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Follow-up Scheduler', desc: 'Smart follow-up timing', icon: Calendar, route: '/ai/followup-scheduler', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Meeting Summarizer', desc: 'Summarize meetings into action items', icon: ClipboardList, route: '/ai/meeting-summarizer', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Market Report', desc: 'Generate market intelligence reports', icon: BarChart3, route: '/ai/market-report', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Contract Reviewer', desc: 'Review contracts for key terms', icon: FileText, route: '/ai/contract-reviewer', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Investment Report', desc: 'Investment analysis reports', icon: Lightbulb, route: '/ai/investment-report', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'All AI Tools', desc: 'Access all 52+ platform tools', icon: Sparkles, route: '/toolkit', color: 'from-[#B89555] to-[#A68A3A]' },
                 ].map((tool, idx) => (
                   <motion.div
                     key={tool.route}
@@ -520,7 +520,7 @@ const MarketingHub: React.FC = () => {
       </div>
 
       {/* Horizontal Quick Actions Bar (replaces right sidebar) */}
-      <div className="sticky bottom-0 z-40 border-t-2 border-[#C9A84C]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_-4px_20px_rgba(200,167,102,0.1)] px-4 py-3">
+      <div className="sticky bottom-0 z-40 border-t-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_-4px_20px_rgba(200,167,102,0.1)] px-4 py-3">
         <div className="flex items-center justify-between gap-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
             <Button

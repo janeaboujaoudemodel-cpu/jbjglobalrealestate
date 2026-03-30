@@ -18,7 +18,7 @@ const TEMPLATES: LandingTemplate[] = [
     id: 'minimal-dark',
     name: 'Minimal Dark',
     description: 'Clean black background with gold accents',
-    colors: { primary: '#C8A766', secondary: '#1a1a1a', accent: '#D4B87A', bg: '#0a0a0a', text: '#ffffff' },
+    colors: { primary: '#C8A766', secondary: '#1a1a1a', accent: '#E0CFA0', bg: '#0a0a0a', text: '#ffffff' },
     font: 'Inter',
     layout: 'centered',
   },

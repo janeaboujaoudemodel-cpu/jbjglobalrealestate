@@ -67,7 +67,7 @@ const OverseasInvestorsBanner = () => {
         <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-12 md:mb-16">
           <Link to="/guides/golden-visa-uae">
             <Button 
-              className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A7862E] text-black font-bold px-8 md:px-10 py-4 md:py-5 rounded-2xl text-base md:text-lg border-2 border-gold/60"
+              className="bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#A7862E] text-black font-bold px-8 md:px-10 py-4 md:py-5 rounded-2xl text-base md:text-lg border-2 border-gold/60"
               style={{
                 boxShadow: `
                   0 10px 30px rgba(200,167,102,0.4),

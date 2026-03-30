@@ -28,12 +28,12 @@ import { toast } from "sonner";
 
 // Source sections with their metadata
 const SOURCE_SECTIONS = [
-  { id: "all", label: "All Sources", icon: Target, color: "#C9A84C" },
-  { id: "crm", label: "CRM & Leads", icon: Users, color: "#C9A84C" },
+  { id: "all", label: "All Sources", icon: Target, color: "#B89555" },
+  { id: "crm", label: "CRM & Leads", icon: Users, color: "#B89555" },
   { id: "hr", label: "HR & Team", icon: Users, color: "#B8964A" },
   { id: "admin", label: "Operations", icon: ClipboardList, color: "#D4AF37" },
   { id: "listings", label: "Listings", icon: Building2, color: "#A89048" },
-  { id: "marketing", label: "Marketing", icon: BarChart3, color: "#C9A84C" },
+  { id: "marketing", label: "Marketing", icon: BarChart3, color: "#B89555" },
   { id: "finance", label: "Finance", icon: FileText, color: "#D4AF37" },
 ] as const;
 
@@ -283,7 +283,7 @@ export default function GlobalRecommendationsHub() {
               onClick={() => setActiveStatus(status)}
             className={`capitalize ${
                 activeStatus === status
-                  ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C9A84C]/40 shadow-sm"
+                  ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#B89555]/40 shadow-sm"
                   : "bg-white text-zinc-600 border border-gold/20 hover:border-gold/40"
               }`}
             >
@@ -301,7 +301,7 @@ export default function GlobalRecommendationsHub() {
             onClick={() => setActiveSource(section.id)}
             className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all ${
               activeSource === section.id
-                ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C9A84C]/40 shadow-sm"
+                ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#B89555]/40 shadow-sm"
                 : "bg-white border border-gold/20 text-zinc-600 hover:border-gold/40"
             }`}
           >
@@ -404,7 +404,7 @@ export default function GlobalRecommendationsHub() {
                         <Button
                           size="sm"
                           onClick={() => handleApply(rec)}
-                          className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white border-0 text-xs"
+                          className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white border-0 text-xs"
                         >
                           <ThumbsUp className="w-3.5 h-3.5 mr-1" />
                           Apply
@@ -538,7 +538,7 @@ export default function GlobalRecommendationsHub() {
                   </Button>
                   <Button
                     onClick={() => handleApply(selectedRec)}
-                    className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white border-0"
+                    className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white border-0"
                   >
                     <CheckCircle className="w-4 h-4 mr-2" />
                     Apply Recommendation

@@ -157,7 +157,7 @@ const ListingPortalMyListings = () => {
     switch (status) {
       case 'approved': return <CheckCircle className="w-4 h-4 text-emerald-600" />;
       case 'rejected': return <XCircle className="w-4 h-4 text-red-500" />;
-      default: return <Clock className="w-4 h-4 text-[#C9A84C]" />;
+      default: return <Clock className="w-4 h-4 text-[#B89555]" />;
     }
   };
 
@@ -165,7 +165,7 @@ const ListingPortalMyListings = () => {
     switch (status) {
       case 'approved': return 'bg-emerald-100 text-emerald-800 border-emerald-300';
       case 'rejected': return 'bg-red-100 text-red-800 border-red-300';
-      default: return 'bg-[#F5EBD7] text-[#8B7355] border-[#C9A84C]/30';
+      default: return 'bg-[#F5EBD7] text-[#8B7355] border-[#B89555]/30';
     }
   };
 
