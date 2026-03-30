@@ -796,7 +796,7 @@ All colors MUST be HSL.
   }
 
   .jj-crm-card-status {
-    @apply text-xs font-medium uppercase tracking-wide px-2 py-1 rounded bg-gold/10 text-gold;
+    @apply text-xs font-medium uppercase tracking-wide px-2 py-1 rounded bg-white/10 text-white;
   }
 
   .jj-crm-card-meta {
