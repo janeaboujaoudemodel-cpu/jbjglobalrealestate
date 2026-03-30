@@ -373,6 +373,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         ownerLoading,
         ownerError,
         isOwner,
+        isAuditor,
         refreshOwnerVerification,
         signIn,
         signUp,
