@@ -227,16 +227,16 @@ export function MegaMenuIconLink({
         className={cn(
           "rounded-lg border transition-all duration-300 flex items-center justify-center shrink-0",
           emphasis
-            ? "bg-white border-white/80 group-hover:shadow-[0_0_12px_rgba(255,255,255,0.3)] w-10 h-10"
-            : "bg-transparent border-white/30 group-hover:border-white/50",
+            ? "bg-black border-black group-hover:shadow-md w-10 h-10"
+            : "bg-transparent border-gray-300 group-hover:border-gray-400",
           !emphasis && compact ? "w-7 h-7" : !emphasis ? "w-10 h-10" : ""
         )}
       >
         <Icon className={cn(
           "transition-colors duration-300",
           emphasis
-            ? "text-black w-5 h-5"
-            : "text-white/60 group-hover:text-white",
+            ? "text-white w-5 h-5"
+            : "text-gray-400 group-hover:text-black",
           !emphasis && compact ? "w-3.5 h-3.5" : !emphasis ? "w-5 h-5" : ""
         )} />
       </div>
@@ -244,14 +244,14 @@ export function MegaMenuIconLink({
         <span className={cn(
           "block font-bold transition-colors duration-300",
           emphasis
-            ? "text-white group-hover:text-white text-base"
-            : "text-white/80 group-hover:text-white",
+            ? "text-black group-hover:text-black text-base"
+            : "text-gray-700 group-hover:text-black",
           !emphasis && compact ? "text-[13px]" : !emphasis ? "text-sm" : ""
         )}>
           {title}
         </span>
         {description ? (
-          <span className="block text-xs text-white/40 group-hover:text-white/60 truncate transition-colors">
+          <span className="block text-xs text-gray-400 group-hover:text-gray-600 truncate transition-colors">
             {description}
           </span>
         ) : null}
