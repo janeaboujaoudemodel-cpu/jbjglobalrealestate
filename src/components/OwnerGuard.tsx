@@ -196,7 +196,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
     return <Navigate to="/403" replace />;
   }
 
-  // OWNER → allowed
+  // OWNER or AUDITOR → allowed
   return <>{children}</>;
 };
 
