@@ -690,7 +690,7 @@ All colors MUST be HSL.
   }
 
   .jj-card-media:hover {
-    @apply border-gold/40;
+    @apply border-white/20;
   }
 
   .jj-card-media-image {
