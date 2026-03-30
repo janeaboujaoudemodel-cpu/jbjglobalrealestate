@@ -39,7 +39,7 @@ export function useAuditorTracking() {
           auditor_user_id: user!.id,
           session_start: new Date().toISOString(),
           device_type: window.innerWidth < 768 ? "mobile" : window.innerWidth < 1024 ? "tablet" : "desktop",
-        })
+        } as any)
         .select("id")
         .single();
 

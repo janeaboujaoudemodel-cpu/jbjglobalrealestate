@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks, AlertCircle, Building2 } from 'lucide-react';
+import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks, AlertCircle, Building2, Home, BarChart3, ShieldAlert, UserCog, CalendarDays, Code2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage, SUPPORTED_LANGUAGES } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -251,8 +251,15 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
       { href: '/owner/admin', label: 'Admin Panel', icon: LayoutDashboard, requiresOwner: true },
       { href: '/owner/listing-admin', label: 'Listing Admin', icon: FolderOpen, requiresOwner: true },
       { href: '/ticket-hub', label: 'Customer Happiness', icon: Headphones, requiresOwner: true },
-      { href: '/hr-dashboard?tab=cv-center', label: 'CV Center', icon: ListChecks, requiresOwner: true },
+      { href: '/hr-dashboard', label: 'HR Dashboard', icon: UserCog, requiresOwner: true },
+      { href: '/owner/properties', label: 'Properties', icon: Home, requiresOwner: true },
+      { href: '/owner/analytics', label: 'Analytics', icon: BarChart3, requiresOwner: true },
+      { href: '/owner/safety', label: 'Security Console', icon: ShieldAlert, requiresOwner: true },
+      { href: '/owner/external-access', label: 'External Access', icon: ShieldAlert, requiresOwner: true },
       { href: '/owner/team-chat', label: 'Team Chat', icon: Bell, requiresOwner: true },
+      { href: '/hr-dashboard?tab=cv-center', label: 'CV Center', icon: ListChecks, requiresOwner: true },
+      { href: '/owner/event-management', label: 'Event Management', icon: CalendarDays, requiresOwner: true },
+      { href: '/developer-portal', label: 'Developer Hub', icon: Code2, requiresOwner: true },
       { href: '/founder-assistant', label: 'My Assistant', icon: Sparkles, requiresAdmin: true },
     ];
 
@@ -310,7 +317,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                     {accountDisplayName}
                   </p>
                 </Link>
-                <p className="text-black/60 text-sm truncate">{user.email}</p>
+                <p className="text-black/60 text-sm truncate">{getModeLabel()}</p>
                 {/* Show mode + tier badges + points */}
                 {isCombinedMode && investorTierProgress && brokerTierProgress ? (
                   <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
