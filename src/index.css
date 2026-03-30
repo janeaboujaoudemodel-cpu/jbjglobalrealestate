@@ -99,9 +99,9 @@ All colors MUST be HSL.
     --gold-foreground: 0 0% 100%;
 
     /* Champagne / "Best Idea Award" Surface (HSL approximations of existing palette) */
-    --champagne-1: 39 52% 90%;
-    --champagne-2: 38 38% 85%;
-    --champagne-3: 38 28% 74%;
+    --champagne-1: 38 55% 90%;
+    --champagne-2: 38 40% 83%;
+    --champagne-3: 38 30% 70%;
 
     /* ============================================================
      * GLOBAL WIDTH + GUTTER SYSTEM (LOCKED - FINAL)
