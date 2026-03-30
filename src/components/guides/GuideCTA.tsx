@@ -31,7 +31,7 @@ const Premium3DButton = ({
   
   const variantStyles = {
     primary: {
-      bg: "bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]",
+      bg: "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]",
       text: "text-black",
       border: "border-2 border-gold/50",
       shadow: `0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2), inset 0 2px 4px rgba(255,255,255,0.9), inset 0 -2px 4px rgba(200,167,102,0.2), 0 0 20px rgba(200,167,102,0.3)`,
@@ -85,7 +85,7 @@ export const GuideCTA = ({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl ${variant === "compact" ? "p-6" : "p-8 md:p-12"} shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center`}
+              className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl ${variant === "compact" ? "p-6" : "p-8 md:p-12"} shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center`}
             >
               {Icon && (
                 <div className="w-16 h-16 bg-black border border-gold/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
@@ -109,7 +109,7 @@ export const GuideCTA = ({
                     href={primaryAction.href}
                     className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden hover:scale-[1.02]"
                     style={{
-                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                      background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
                       boxShadow: `
                         0 10px 30px rgba(200,167,102,0.4),
                         0 6px 15px rgba(0,0,0,0.2),

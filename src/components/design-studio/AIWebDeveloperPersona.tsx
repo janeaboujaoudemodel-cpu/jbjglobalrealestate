@@ -167,7 +167,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
   return (
     <div className="space-y-6">
       {/* Persona Header */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/20 shadow-lg overflow-hidden">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20 shadow-lg overflow-hidden">
         <CardContent className="p-6">
           <div className="flex items-start gap-6">
             {/* Photo */}
@@ -238,7 +238,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Task Queue */}
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/20">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
               <FileCode className="w-5 h-5 text-gold" />
@@ -332,7 +332,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
         </Card>
 
         {/* Version History */}
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/20">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
               <GitBranch className="w-5 h-5 text-gold" />
@@ -400,7 +400,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
       </div>
 
       {/* Connected Tools */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/20">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
             <Layers className="w-5 h-5 text-gold" />

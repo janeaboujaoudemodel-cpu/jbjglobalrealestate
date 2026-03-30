@@ -217,7 +217,7 @@ const AreaDetail = () => {
       <div ref={sentinelRef} className="h-0" />
 
       {/* Phase 1: Inline filter bar — always rendered in natural flow */}
-      <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-3 px-4 md:px-6 border-b border-gold/20">
+      <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-3 px-4 md:px-6 border-b border-gold/20">
         <div className="container mx-auto">
           <div className="flex flex-wrap items-center gap-3">
             {filterBarContent}
@@ -231,7 +231,7 @@ const AreaDetail = () => {
       {/* Phase 2: Fixed portal copy — only when scrolled past sentinel */}
       {isFixed && !bottomReached && createPortal(
         <div
-          className="fixed top-[88px] left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] backdrop-blur-md bg-gradient-to-r from-[#FDFBF7]/90 via-[#F5F0E6]/90 to-[#EDE4D3]/90 border-b border-gold/20 py-2 px-2 sm:py-3 sm:px-4 transition-all duration-200 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px]"
+          className="fixed top-[88px] left-0 right-0 z-[9998] shadow-[0_4px_20px_rgba(200,167,102,0.15)] backdrop-blur-md bg-gradient-to-r from-[#FDFBF7]/90 via-[#F7F2EA]/90 to-[#EFE6D6]/90 border-b border-gold/20 py-2 px-2 sm:py-3 sm:px-4 transition-all duration-200 lg:left-[200px] [body.jj-vertical-nav-collapsed_&]:lg:left-[48px]"
         >
           <div className="container mx-auto px-4">
             <div className="flex flex-wrap items-center gap-3">
@@ -263,7 +263,7 @@ const AreaDetail = () => {
       <AreaAIAnalyzer areaName={area.name} emirate={area.emirate} />
 
       {/* CTA Section */}
-      <section id="area-cta-section" className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] relative overflow-hidden">
+      <section id="area-cta-section" className="py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <motion.div 
             className="max-w-4xl mx-auto text-center rounded-3xl p-10 md:p-14 border-2 border-gold/30 relative overflow-hidden bg-white/70 backdrop-blur-sm"
@@ -310,7 +310,7 @@ const AreaDetail = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
               {/* Header */}
               <div className="text-center mb-8">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
+                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
                   <MapPin className="w-3.5 h-3.5 text-gold" />
                   <span className="text-black">Similar Areas</span>
                 </span>
@@ -341,7 +341,7 @@ const AreaDetail = () => {
                           style={{ backgroundImage: `url(${relatedArea.image_url})` }}
                         />
                       ) : (
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center">
                           <span className="text-6xl font-black text-black select-none" style={{ opacity: 0.1, fontFamily: "Poppins, sans-serif" }}>JBJ</span>
                         </div>
                       )}
@@ -352,7 +352,7 @@ const AreaDetail = () => {
                       {/* Badges */}
                       <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                         {relatedArea.is_trending && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#E8DCC8] text-black text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-black text-[9px] font-bold uppercase tracking-wider shadow-lg">
                             Trending
                           </span>
                         )}
@@ -383,7 +383,7 @@ const AreaDetail = () => {
               <div className="text-center mt-8">
                 <Link
                   to="/areas"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
                   style={{ boxShadow: "0 6px 20px rgba(200,167,102,0.3), inset 0 2px 4px rgba(255,255,255,0.8)" }}
                 >
                   <span>View All Areas</span>

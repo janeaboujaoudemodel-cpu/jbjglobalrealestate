@@ -63,7 +63,7 @@ export default function InlineStatusSelect({
         <LeadStatusBadge status={currentStatus} size="sm" />
       </SelectTrigger>
       <SelectContent 
-        className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-border max-h-80"
+        className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-border max-h-80"
         onClick={(e) => e.stopPropagation()}
       >
         {/* POSITIVE - Green */}
@@ -75,7 +75,7 @@ export default function InlineStatusSelect({
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-black hover:bg-[#C9A84C]/10 pl-4 focus:bg-[#C9A84C]/15 focus:text-black"
+            className="text-black hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-black"
           >
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0" />
@@ -93,7 +93,7 @@ export default function InlineStatusSelect({
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-black hover:bg-[#C9A84C]/10 pl-4 focus:bg-[#C9A84C]/15 focus:text-black"
+            className="text-black hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-black"
           >
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-zinc-400 flex-shrink-0" />
@@ -111,7 +111,7 @@ export default function InlineStatusSelect({
           <SelectItem 
             key={status.value} 
             value={status.value} 
-            className="text-black hover:bg-[#C9A84C]/10 pl-4 focus:bg-[#C9A84C]/15 focus:text-black"
+            className="text-black hover:bg-[#B89555]/10 pl-4 focus:bg-[#B89555]/15 focus:text-black"
           >
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />

@@ -222,9 +222,9 @@ const ExploreServicesCard = () => {
   const currentService = services[currentIndex];
 
   return (
-    <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border-2 border-gold/50 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_12px_40px_rgba(200,167,102,0.45),0_6px_20px_rgba(0,0,0,0.2)]">
+    <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border-2 border-gold/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_12px_40px_rgba(200,167,102,0.45),0_6px_20px_rgba(0,0,0,0.2)]">
       {/* Header */}
-      <div className="px-6 md:px-8 py-5 md:py-6 border-b border-gold/30 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      <div className="px-6 md:px-8 py-5 md:py-6 border-b border-gold/30 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
         <h3 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
           Explore Our Services
         </h3>
@@ -266,7 +266,7 @@ const ExploreServicesCard = () => {
             className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 transition-all duration-300" 
             style={{ 
               fontFamily: "Poppins, sans-serif",
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #F5EBD7 50%, #C8A766 100%)',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, #F7F1E6 50%, #C8A766 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}
@@ -307,7 +307,7 @@ const ExploreServicesCard = () => {
                 onClick={goToPrevious}
                 className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-200 group overflow-hidden hover:scale-110 active:scale-95"
                 style={{
-                  background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
+                  background: 'linear-gradient(145deg, #FDFBF7, #ECE2D2)',
                   border: '2px solid rgba(200, 167, 102, 0.7)',
                   boxShadow: '0 6px 16px rgba(0,0,0,0.35), inset 0 3px 6px rgba(255,255,255,0.9), 0 0 20px rgba(200,167,102,0.25)',
                 }}
@@ -318,7 +318,7 @@ const ExploreServicesCard = () => {
                 onClick={goToNext}
                 className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center transition-all duration-200 group overflow-hidden hover:scale-110 active:scale-95"
                 style={{
-                  background: 'linear-gradient(145deg, #FDFBF7, #E8DCC8)',
+                  background: 'linear-gradient(145deg, #FDFBF7, #ECE2D2)',
                   border: '2px solid rgba(200, 167, 102, 0.7)',
                   boxShadow: '0 6px 16px rgba(0,0,0,0.35), inset 0 3px 6px rgba(255,255,255,0.9), 0 0 20px rgba(200,167,102,0.25)',
                 }}

@@ -283,11 +283,11 @@ const CRMCommunicationPanel = () => {
   };
 
   return (
-    <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+    <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
       <CardHeader className="pb-2">
         <CardTitle className="text-black font-bold text-base flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+            <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
               <MessageSquare className="h-4 w-4 text-black" />
             </div>
             Team Communication
@@ -304,7 +304,7 @@ const CRMCommunicationPanel = () => {
       </CardHeader>
       <CardContent className="p-0">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] grid grid-cols-4 rounded-none border-b border-[#C9A84C]/30">
+          <TabsList className="w-full bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] grid grid-cols-4 rounded-none border-b border-[#B89555]/30">
             <TabsTrigger value="chat" className="tab-trigger-champagne text-black text-xs data-[state=active]:text-black">
               <Hash className="h-3 w-3 mr-1" />
               Channels
@@ -336,8 +336,8 @@ const CRMCommunicationPanel = () => {
                       <button
                         key={channel.id}
                         onClick={() => setSelectedChannel(channel.id)}
-                        className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs hover:bg-[#C9A84C]/10 transition-colors ${
-                          selectedChannel === channel.id ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C9A84C]/40' : 'text-zinc-600'
+                        className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs hover:bg-[#B89555]/10 transition-colors ${
+                          selectedChannel === channel.id ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#B89555]/40' : 'text-zinc-600'
                         }`}
                       >
                         <span className="flex items-center gap-1.5">

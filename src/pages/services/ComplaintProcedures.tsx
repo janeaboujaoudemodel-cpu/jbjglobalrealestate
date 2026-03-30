@@ -371,7 +371,7 @@ const ComplaintProcedures = () => {
                   <AccordionItem
                     key={index}
                     value={`item-${index}`}
-                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden"
+                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
                   >
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-black font-medium">{faq.question}</span>

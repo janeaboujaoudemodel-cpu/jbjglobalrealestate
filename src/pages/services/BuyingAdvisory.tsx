@@ -580,7 +580,7 @@ const BuyingAdvisory = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gold/20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+                <tbody className="divide-y divide-gold/20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
                   {comparisonData.map((row, index) => (
                     <tr key={index}>
                       <td className="px-6 py-4 text-black font-medium">{row.aspect}</td>

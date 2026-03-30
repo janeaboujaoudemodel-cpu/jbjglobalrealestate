@@ -207,7 +207,7 @@ export default function PortfolioViews() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Premium Video Hero Section */}
       <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
         {/* Video Background */}
@@ -257,7 +257,7 @@ export default function PortfolioViews() {
 
       {/* Main Content - Layer 2 Champagne Background */}
       <section className="py-16">
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-none p-8 md:p-12">
+        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-none p-8 md:p-12">
           {/* Back Link */}
           <Link
             to="/investor-dashboard"

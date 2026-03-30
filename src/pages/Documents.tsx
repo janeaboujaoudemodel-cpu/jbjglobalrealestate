@@ -438,13 +438,13 @@ const Documents = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* Header */}
-        <div className="border-b-2 border-[hsl(var(--gold)/0.3)] bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <div className="border-b-2 border-[hsl(var(--gold)/0.3)] bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <div className="max-w-[1600px] mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #F5EBD7, #D4C4A8)", border: "1px solid rgba(184,148,62,0.4)" }}>
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #F7F1E6, #D8C7A6)", border: "1px solid rgba(184,148,62,0.4)" }}>
                   <FileText className="w-5 h-5" style={{ color: "#B8943E" }} />
                 </div>
                 <div>

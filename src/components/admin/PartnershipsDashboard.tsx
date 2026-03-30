@@ -65,7 +65,7 @@ interface PartnershipApplication {
 }
 
 const STAGE_CONFIG: Record<PartnershipStage, { label: string; color: string; icon: any }> = {
-  submitted: { label: "Submitted", color: "bg-[#C9A84C]/10 text-[#C9A84C] border-[#C9A84C]/30", icon: Clock },
+  submitted: { label: "Submitted", color: "bg-[#B89555]/10 text-[#B89555] border-[#B89555]/30", icon: Clock },
   admin_review: { label: "Admin Review", color: "bg-blue-50 text-blue-700 border-blue-300", icon: Eye },
   senior_management_review: { label: "Senior Mgmt Review", color: "bg-amber-50 text-amber-700 border-amber-300", icon: Shield },
   ceo_approval: { label: "CEO Approval", color: "bg-purple-50 text-purple-700 border-purple-300", icon: Crown },
@@ -243,7 +243,7 @@ export function PartnershipsDashboard() {
           { label: "Approved Partners", value: stats.approved, color: "text-green-600" },
           { label: "Rejected", value: stats.rejected, color: "text-red-500" },
         ].map(s => (
-          <Card key={s.label} className="bg-white/80 border-[#C9A84C]/30">
+          <Card key={s.label} className="bg-white/80 border-[#B89555]/30">
             <CardContent className="p-4 text-center">
               <p className="text-2xl font-bold text-black">{s.value}</p>
               <p className="text-xs text-zinc-500">{s.label}</p>
@@ -255,7 +255,7 @@ export function PartnershipsDashboard() {
       {/* Filter & Refresh */}
       <div className="flex items-center gap-3">
         <Select value={filterStage} onValueChange={setFilterStage}>
-          <SelectTrigger className="w-[200px] border-[#C9A84C]/30 text-black">
+          <SelectTrigger className="w-[200px] border-[#B89555]/30 text-black">
             <SelectValue placeholder="Filter by stage" />
           </SelectTrigger>
           <SelectContent>
@@ -265,16 +265,16 @@ export function PartnershipsDashboard() {
             ))}
           </SelectContent>
         </Select>
-        <Button variant="outline" size="sm" onClick={fetchApplications} className="border-[#C9A84C]/30 text-black">
+        <Button variant="outline" size="sm" onClick={fetchApplications} className="border-[#B89555]/30 text-black">
           <RefreshCw className="w-4 h-4 mr-1" /> Refresh
         </Button>
       </div>
 
       {/* Applications List */}
       {loading ? (
-        <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-[#C9A84C]" /></div>
+        <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-[#B89555]" /></div>
       ) : filtered.length === 0 ? (
-        <Card className="bg-white/80 border-[#C9A84C]/20">
+        <Card className="bg-white/80 border-[#B89555]/20">
           <CardContent className="p-12 text-center text-zinc-400">No partnership applications found.</CardContent>
         </Card>
       ) : (
@@ -283,12 +283,12 @@ export function PartnershipsDashboard() {
             const stageInfo = STAGE_CONFIG[app.stage];
             const StageIcon = stageInfo.icon;
             return (
-              <Card key={app.id} className="bg-white/80 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 transition-colors cursor-pointer" onClick={() => { setSelectedApp(app); setNotes(""); setMessageMode("action"); setMessageText(""); }}>
+              <Card key={app.id} className="bg-white/80 border-[#B89555]/20 hover:border-[#B89555]/40 transition-colors cursor-pointer" onClick={() => { setSelectedApp(app); setNotes(""); setMessageMode("action"); setMessageText(""); }}>
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <Building2 className="w-4 h-4 text-[#C9A84C] flex-shrink-0" />
+                        <Building2 className="w-4 h-4 text-[#B89555] flex-shrink-0" />
                         <h3 className="font-bold text-black truncate">{app.company_name}</h3>
                       </div>
                       <p className="text-sm text-zinc-500">{app.contact_person} · {app.position} · {app.partnership_type}</p>
@@ -352,14 +352,14 @@ export function PartnershipsDashboard() {
                   {selectedApp.company_profile && (
                     <div>
                       <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Company Profile</p>
-                      <p className="text-sm text-black bg-[#FDFBF7] border border-[#C9A84C]/20 p-3 rounded-lg">{selectedApp.company_profile}</p>
+                      <p className="text-sm text-black bg-[#FDFBF7] border border-[#B89555]/20 p-3 rounded-lg">{selectedApp.company_profile}</p>
                     </div>
                   )}
 
                   {/* Proposal */}
                   <div>
                     <p className="text-xs text-zinc-400 uppercase tracking-wider mb-1">Proposal</p>
-                    <p className="text-sm text-black bg-[#FDFBF7] border border-[#C9A84C]/20 p-3 rounded-lg whitespace-pre-wrap">{selectedApp.proposal}</p>
+                    <p className="text-sm text-black bg-[#FDFBF7] border border-[#B89555]/20 p-3 rounded-lg whitespace-pre-wrap">{selectedApp.proposal}</p>
                   </div>
 
                   {/* Existing Notes */}
@@ -389,13 +389,13 @@ export function PartnershipsDashboard() {
                   )}
 
                   {/* Message / Request Edit Tabs */}
-                  <div className="border-t border-[#C9A84C]/20 pt-4">
+                  <div className="border-t border-[#B89555]/20 pt-4">
                     <div className="flex gap-2 mb-3">
                       <Button
                         variant={messageMode === "action" ? "default" : "outline"}
                         size="sm"
                         onClick={() => setMessageMode("action")}
-                        className={messageMode === "action" ? "bg-[#C9A84C] text-black" : "border-[#C9A84C]/30 text-black"}
+                        className={messageMode === "action" ? "bg-[#B89555] text-black" : "border-[#B89555]/30 text-black"}
                       >
                         <UserCheck className="w-3.5 h-3.5 mr-1" /> Actions
                       </Button>
@@ -424,13 +424,13 @@ export function PartnershipsDashboard() {
                           value={notes}
                           onChange={(e) => setNotes(e.target.value)}
                           rows={3}
-                          className="border-[#C9A84C]/30"
+                          className="border-[#B89555]/30"
                         />
                         <div className="flex gap-2">
                           <Button
                             onClick={() => updateStage(selectedApp.id, action.next, action.noteField, notes)}
                             disabled={updating}
-                            className="flex-1 bg-gradient-to-r from-[#C9A84C] to-amber-600 text-black font-semibold"
+                            className="flex-1 bg-gradient-to-r from-[#B89555] to-amber-600 text-black font-semibold"
                           >
                             {updating ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <UserCheck className="w-4 h-4 mr-2" />}
                             {action.label}
@@ -467,7 +467,7 @@ export function PartnershipsDashboard() {
                           value={messageText}
                           onChange={(e) => setMessageText(e.target.value)}
                           rows={4}
-                          className="border-[#C9A84C]/30"
+                          className="border-[#B89555]/30"
                         />
                         <Button
                           onClick={sendMessage}

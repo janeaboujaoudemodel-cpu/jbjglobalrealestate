@@ -278,12 +278,12 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
               toast.success('Project cleared');
             }}
             canSave={!!transcription}
-            accentColor="#C9A84C"
+            accentColor="#B89555"
             accentBorder="rgba(201,168,76,0.3)"
           />
         </div>
 
-        <ToolContentWrapper accentColor="#C9A84C">
+        <ToolContentWrapper accentColor="#B89555">
         {/* Steps */}
         <div className="grid grid-cols-3 gap-4 mb-8">
           {[
@@ -292,7 +292,7 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
             { step: 3, label: 'Translate & Export', icon: Globe },
           ].map(({ step, label }) => (
             <div key={step} className="text-center">
-              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full font-bold mb-2" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", color: "#C9A84C" }}>
+              <div className="inline-flex items-center justify-center w-10 h-10 rounded-full font-bold mb-2" style={{ background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.3)", color: "#B89555" }}>
                 {step}
               </div>
               <p className="text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>{label}</p>
@@ -395,7 +395,7 @@ export default function CaptionsTranslate({ embedded = false }: CaptionsTranslat
                         style={{
                           background: selectedLanguages.includes(lang.code) ? "rgba(201,168,76,0.22)" : "rgba(255,255,255,0.08)",
                           border: `1px solid ${selectedLanguages.includes(lang.code) ? "rgba(201,168,76,0.65)" : "rgba(255,255,255,0.2)"}`,
-                          color: selectedLanguages.includes(lang.code) ? "#C9A84C" : "rgba(255,255,255,0.88)",
+                          color: selectedLanguages.includes(lang.code) ? "#B89555" : "rgba(255,255,255,0.88)",
                         }}>
                         <span>{lang.name}</span>
                         {lang.rtl && <span className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>(RTL)</span>}

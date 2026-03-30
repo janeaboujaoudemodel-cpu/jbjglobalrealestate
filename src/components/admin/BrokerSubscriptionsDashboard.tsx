@@ -344,28 +344,28 @@ export default function BrokerSubscriptionsDashboard() {
 
       {/* Stats Cards - Champagne theme */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Users className="w-5 h-5 text-gold" />
             <span className="text-zinc-600 text-sm">Total Subscriptions</span>
           </div>
           <p className="text-black text-3xl font-bold">{totalSubscriptions}</p>
         </Card>
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Shield className="w-5 h-5 text-green-600" />
             <span className="text-zinc-600 text-sm">Active</span>
           </div>
           <p className="text-black text-3xl font-bold">{activeSubscriptions}</p>
         </Card>
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Calendar className="w-5 h-5 text-blue-600" />
             <span className="text-zinc-600 text-sm">On Trial</span>
           </div>
           <p className="text-black text-3xl font-bold">{trialSubscriptions}</p>
         </Card>
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-lg">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <CreditCard className="w-5 h-5 text-gold" />
             <span className="text-zinc-600 text-sm">Active Revenue</span>
@@ -428,7 +428,7 @@ export default function BrokerSubscriptionsDashboard() {
       <div className="bg-white border-2 border-gold/30 rounded-xl overflow-hidden shadow-lg">
         <ScrollArea className="h-[500px]">
           <Table>
-            <TableHeader className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] sticky top-0">
+            <TableHeader className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] sticky top-0">
               <TableRow className="border-gold/20">
                 <TableHead className="text-black font-semibold">Broker</TableHead>
                 <TableHead className="text-black font-semibold">Contact</TableHead>

@@ -29,7 +29,7 @@ export const STATUS_GROUPS = {
     label: 'NEGATIVE',
     color: 'text-red-400',
     bgColor: 'bg-red-500/20',
-    dotColor: '#EF4444', // Red
+    dotColor: '#DC2626', // Red
   },
 } as const;
 
@@ -59,10 +59,10 @@ export const PIPELINE_STATUSES: PipelineStatus[] = [
   { value: "archived", label: "Archived", color: "bg-slate-400", bgColor: "bg-slate-400/20", textColor: "text-slate-300", dotColor: "#94A3B8", category: "neutral" },
 
   // NEGATIVE (red) - Lost / DNC / Invalid / Deleted
-  { value: "not_interested", label: "Not Interested", color: "bg-red-500", bgColor: "bg-red-500/20", textColor: "text-red-300", dotColor: "#EF4444", category: "negative" },
-  { value: "closed_lost", label: "Lost", color: "bg-red-500", bgColor: "bg-red-500/20", textColor: "text-red-300", dotColor: "#EF4444", category: "negative" },
-  { value: "do_not_contact", label: "Do Not Contact", color: "bg-red-600", bgColor: "bg-red-600/20", textColor: "text-red-300", dotColor: "#EF4444", category: "negative" },
-  { value: "junk", label: "Invalid Lead", color: "bg-red-400", bgColor: "bg-red-400/20", textColor: "text-red-300", dotColor: "#EF4444", category: "negative" },
+  { value: "not_interested", label: "Not Interested", color: "bg-red-500", bgColor: "bg-red-500/20", textColor: "text-red-300", dotColor: "#DC2626", category: "negative" },
+  { value: "closed_lost", label: "Lost", color: "bg-red-500", bgColor: "bg-red-500/20", textColor: "text-red-300", dotColor: "#DC2626", category: "negative" },
+  { value: "do_not_contact", label: "Do Not Contact", color: "bg-red-600", bgColor: "bg-red-600/20", textColor: "text-red-300", dotColor: "#DC2626", category: "negative" },
+  { value: "junk", label: "Invalid Lead", color: "bg-red-400", bgColor: "bg-red-400/20", textColor: "text-red-300", dotColor: "#DC2626", category: "negative" },
   { value: "deleted", label: "Deleted", color: "bg-red-700", bgColor: "bg-red-700/20", textColor: "text-red-200", dotColor: "#B91C1C", category: "negative" },
   { value: "permanently_erased", label: "Permanently Erased", color: "bg-red-900", bgColor: "bg-red-900/20", textColor: "text-red-100", dotColor: "#7F1D1D", category: "negative" },
 ];

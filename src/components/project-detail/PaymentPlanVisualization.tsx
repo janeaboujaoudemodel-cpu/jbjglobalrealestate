@@ -176,11 +176,11 @@ export default function PaymentPlanVisualization({
       {/* Two-Tab Layout: 100% vs Installment */}
       <Tabs defaultValue="installment" className="w-full">
         <TabsList className="w-full mb-6 bg-muted/50 border border-gold/20">
-          <TabsTrigger value="installment" className="flex-1 data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#C8A766]/60">
+          <TabsTrigger value="installment" className="flex-1 data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#C8A766]/60">
             <CreditCard className="w-4 h-4 mr-2" />
             Payment Plan {paymentPlan && `(${paymentPlan})`}
           </TabsTrigger>
-          <TabsTrigger value="full" className="flex-1 data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#C8A766]/60">
+          <TabsTrigger value="full" className="flex-1 data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#C8A766]/60">
             <Wallet className="w-4 h-4 mr-2" />
             100% Payment
           </TabsTrigger>

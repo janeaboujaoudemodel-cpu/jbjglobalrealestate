@@ -68,7 +68,7 @@ export function BookCard({ book, progress, onOpen, index }: BookCardProps) {
           {/* Book Cover Mock */}
           <div className="relative mb-4">
             <div 
-              className="w-full aspect-[3/4] rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 flex items-center justify-center relative overflow-hidden"
+              className="w-full aspect-[3/4] rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold/40 flex items-center justify-center relative overflow-hidden"
               style={{
                 boxShadow: '8px 8px 20px rgba(0,0,0,0.15), -2px -2px 10px rgba(200,167,102,0.2)',
                 transform: 'perspective(500px) rotateY(-5deg)',

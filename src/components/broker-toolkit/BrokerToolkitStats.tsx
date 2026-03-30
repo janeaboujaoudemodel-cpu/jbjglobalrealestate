@@ -47,7 +47,7 @@ const STATS = [
 
 export function BrokerToolkitStats() {
   return (
-    <section className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] relative">
+    <section className="py-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] relative">
       {/* Top gold glow divider */}
       <div 
         className="absolute top-0 left-0 right-0 h-1"
@@ -78,7 +78,7 @@ export function BrokerToolkitStats() {
               className="text-center group"
             >
               {/* Card with darker champagne fill, equal sizing */}
-              <div className="bg-gradient-to-br from-[#EDE4D3] via-[#E8DCC8] to-[#D4C4A8] border-2 border-black rounded-xl p-4 h-full flex flex-col items-center justify-center transition-all duration-300 group-hover:border-gold group-hover:shadow-lg group-hover:shadow-gold/20">
+              <div className="bg-gradient-to-br from-[#EFE6D6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-black rounded-xl p-4 h-full flex flex-col items-center justify-center transition-all duration-300 group-hover:border-gold group-hover:shadow-lg group-hover:shadow-gold/20">
                 <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-black mb-2 group-hover:bg-gold transition-all">
                   <stat.icon className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
                 </div>

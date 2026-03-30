@@ -100,7 +100,7 @@ const AdditionalServicesGrid = () => {
         >
           {service.available ? (
             <Link to={service.href} className="group block h-full">
-              <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
+              <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-gold/30 hover:border-gold p-5 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 shadow-lg`}>
                   <service.icon className="w-6 h-6 text-white" />
                 </div>
@@ -117,7 +117,7 @@ const AdditionalServicesGrid = () => {
               </div>
             </Link>
           ) : (
-            <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-zinc-300/50 p-5 opacity-75">
+            <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-zinc-300/50 p-5 opacity-75">
               <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 shadow-lg opacity-50`}>
                 <service.icon className="w-6 h-6 text-white" />
               </div>

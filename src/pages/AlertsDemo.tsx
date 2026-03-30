@@ -67,7 +67,7 @@ export default function AlertsDemo() {
       {/* 2 — Owner Tasks Popup */}
       <DemoSection title="2. Owner Tasks Popup" description="Shown to owner on login when pending tasks exist. Once per day.">
         <div className="rounded-xl overflow-hidden border border-zinc-200 relative flex items-center justify-center bg-black/40 backdrop-blur-sm" style={{ height: 360 }}>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[hsl(var(--gold))]/50 rounded-2xl shadow-2xl p-6 max-w-md w-[90%] relative">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[hsl(var(--gold))]/50 rounded-2xl shadow-2xl p-6 max-w-md w-[90%] relative">
             <button className="absolute top-3 right-3 text-zinc-400 hover:text-zinc-600"><X className="w-5 h-5" /></button>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/20 to-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))]/40 flex items-center justify-center">
@@ -82,7 +82,7 @@ export default function AlertsDemo() {
               <p className="text-black text-sm">You have <span className="font-bold text-[hsl(var(--gold))] text-lg">7</span> pending items that need your review today.</p>
             </div>
             <div className="flex gap-3">
-              <Button className="flex-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[#B8973F] text-black font-bold rounded-xl">View Tasks <ArrowRight className="w-4 h-4 ml-2" /></Button>
+              <Button className="flex-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[#A68444] text-black font-bold rounded-xl">View Tasks <ArrowRight className="w-4 h-4 ml-2" /></Button>
               <Button variant="outline" className="border-[hsl(var(--gold))]/30 text-zinc-600 rounded-xl">Later</Button>
             </div>
           </div>
@@ -92,7 +92,7 @@ export default function AlertsDemo() {
       {/* 3 — User Tasks + Ticket Updates Popup */}
       <DemoSection title="3. User Notifications Popup" description="Shown to regular users when they have ticket replies or pending tasks. Once per 24h.">
         <div className="rounded-xl overflow-hidden border border-zinc-200 relative flex items-center justify-center bg-black/40 backdrop-blur-sm" style={{ height: 460 }}>
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-[hsl(var(--gold))]/50 rounded-2xl shadow-2xl p-6 max-w-md w-[90%] relative">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[hsl(var(--gold))]/50 rounded-2xl shadow-2xl p-6 max-w-md w-[90%] relative">
             <button className="absolute top-3 right-3 text-zinc-400 hover:text-zinc-600"><X className="w-5 h-5" /></button>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/20 to-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))]/40 flex items-center justify-center">
@@ -131,7 +131,7 @@ export default function AlertsDemo() {
               <Button className="flex-1 bg-gradient-to-r from-green-600 to-green-700 text-white font-bold rounded-xl">
                 <Headphones className="w-4 h-4 mr-2" /> My Tickets
               </Button>
-              <Button className="flex-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[#B8973F] text-black font-bold rounded-xl">
+              <Button className="flex-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[#A68444] text-black font-bold rounded-xl">
                 View Tasks <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
               <Button variant="outline" className="border-[hsl(var(--gold))]/30 text-zinc-600 rounded-xl">Later</Button>

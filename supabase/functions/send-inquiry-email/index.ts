@@ -300,7 +300,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     const companyEmailHtml = emailShell("Inquiries Desk", `<tr><td class="content-pad" style="padding:32px;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">A new website inquiry has been received.</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:20px;">
 <p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Inquiry Summary</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -313,7 +313,7 @@ const handler = async (req: Request): Promise<Response> => {
 <tr><td style="padding:7px 0;color:#666;font-size:13px;">Preferred Language</td><td style="padding:7px 0;color:#1a1a1a;font-weight:600;font-size:13px;">${safeLanguage}</td></tr>
 </table>
 </td></tr></table>
-${safeMessage ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="margin:0 0 8px;font-size:12px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;">Client Message</p><p style="margin:0;color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;">${safeMessage}</p></td></tr></table>` : ""}
+${safeMessage ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="margin:0 0 8px;font-size:12px;color:#C8A766;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;">Client Message</p><p style="margin:0;color:#333;font-size:14px;line-height:1.8;white-space:pre-wrap;">${safeMessage}</p></td></tr></table>` : ""}
 ${contextRows ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fdfbf7;border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;"><tr><td style="padding:20px;"><p style="margin:0 0 8px;font-size:12px;color:#666;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Search Context</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${contextRows}</table></td></tr></table>` : ""}
 ${sharedSections("inquiry submission", "JBJ Global Real Estate Inquiries Desk")}
 </td></tr>`);

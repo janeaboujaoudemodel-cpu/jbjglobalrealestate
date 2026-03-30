@@ -342,7 +342,7 @@ const VisitorInsightsDashboard = () => {
                   <div className="text-center text-black/50 py-8">No visitors found</div>
                 ) : (
                   <table className="w-full">
-                    <thead className="sticky top-0 bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8]">
+                    <thead className="sticky top-0 bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2]">
                       <tr className="text-left text-black/60 text-sm">
                         <th className="p-4">Visitor</th>
                         <th className="p-4">Contact</th>
@@ -435,7 +435,7 @@ const VisitorInsightsDashboard = () => {
                   <div className="text-center text-black/50 py-8">No contact submissions found</div>
                 ) : (
                   <table className="w-full">
-                    <thead className="sticky top-0 bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8]">
+                    <thead className="sticky top-0 bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2]">
                       <tr className="text-left text-black/60 text-sm">
                         <th className="p-4">Name</th>
                         <th className="p-4">Email</th>
@@ -467,7 +467,7 @@ const VisitorInsightsDashboard = () => {
 
       {/* Visitor Detail Dialog - Drill-down */}
       <Dialog open={showDetailDialog} onOpenChange={setShowDetailDialog}>
-        <DialogContent className="max-w-4xl bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-gold/30 max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogContent className="max-w-4xl bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-gold/30 max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader className="flex-shrink-0">
             <DialogTitle className="text-black flex items-center gap-2">
               <Users className="h-5 w-5 text-gold" />

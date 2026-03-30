@@ -41,7 +41,7 @@ const typeIcons: Record<string, any> = {
 
 // Champagne gold accent colors per type
 const typeHex: Record<string, string> = {
-  video: "#C9A84C",
+  video: "#B89555",
   image: "#B8964A",
   pdf: "#D4AF37",
   marketing_pack: "#A89048",
@@ -171,15 +171,15 @@ export default function Studio() {
     return matchesSearch && matchesType;
   });
 
-  const goldAccent = "#C9A84C";
+  const goldAccent = "#B89555";
   const goldLight = "rgba(201,168,76,0.15)";
   const goldBorder = "rgba(201,168,76,0.3)";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
 
       {/* ─── Sub-Header ─── */}
-      <header className="border-b border-gold/20 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      <header className="border-b border-gold/20 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
           {/* Brand */}
           <Link to="/studio" className="flex items-center gap-2.5 shrink-0">
@@ -233,7 +233,7 @@ export default function Studio() {
                 New Project
               </Button>
             </DialogTrigger>
-            <DialogContent className="border border-gold/30 max-w-md mx-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]" style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.15)" }}>
+            <DialogContent className="border border-gold/30 max-w-md mx-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]" style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.15)" }}>
               <DialogHeader>
                 <DialogTitle className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                   Create New <span className="text-gold">Project</span>
@@ -411,7 +411,7 @@ export default function Studio() {
                 return (
                   <div key={project.id} className="group relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 bg-white/50 border border-gold/15 hover:border-gold/40 hover:shadow-[0_12px_40px_rgba(201,168,76,0.15)]">
                     <Link to={`/studio/editor/${project.id}`}>
-                      <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8]">
+                      <div className="aspect-video relative overflow-hidden bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2]">
                         {project.thumbnail_url ? (
                           <img src={project.thumbnail_url} alt={project.name} className="w-full h-full object-cover" />
                         ) : (
@@ -470,7 +470,7 @@ function ProjectMenu({ projectId, onRename, onDuplicate, onShare, onDelete }: {
       <DropdownMenuTrigger className="p-1.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 text-zinc-400 hover:bg-gold/10">
         <MoreVertical className="w-4 h-4" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="border border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
+      <DropdownMenuContent align="end" className="border border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
         <DropdownMenuItem onClick={onRename} className="text-zinc-700 focus:text-black focus:bg-gold/10 text-xs"><Pencil className="w-3.5 h-3.5 mr-2" />Rename</DropdownMenuItem>
         <DropdownMenuItem onClick={onDuplicate} className="text-zinc-700 focus:text-black focus:bg-gold/10 text-xs"><Copy className="w-3.5 h-3.5 mr-2" />Duplicate</DropdownMenuItem>
         <DropdownMenuItem onClick={onShare} className="text-zinc-700 focus:text-black focus:bg-gold/10 text-xs"><Share2 className="w-3.5 h-3.5 mr-2" />Share</DropdownMenuItem>

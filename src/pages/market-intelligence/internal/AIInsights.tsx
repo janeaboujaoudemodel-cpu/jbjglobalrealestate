@@ -104,7 +104,7 @@ const AIInsights = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       <SEOHead 
         title="AI Market Narratives | JBJ Global Real Estate"
         description="AI-generated market insights for JBJ team members."
@@ -166,7 +166,7 @@ const AIInsights = () => {
                 <TabsTrigger
                   key={type.id}
                   value={type.id}
-                  className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40"
+                  className="flex items-center gap-2 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40"
                 >
                   <type.icon className="w-4 h-4" />
                   <span className="hidden sm:inline">{type.title}</span>

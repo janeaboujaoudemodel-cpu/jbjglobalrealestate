@@ -149,7 +149,7 @@ export default function ESignatureDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Premium Page Header — aligned with sidebar logo divider */}
       <div className="border-b border-gold/20">
         <div className="max-w-7xl mx-auto px-6 flex items-end h-[84px] pb-4">
@@ -194,7 +194,7 @@ export default function ESignatureDashboard() {
           {/* Stats Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card 
-              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] ${statusFilter === "all" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "all" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
               onClick={() => setStatusFilter("all")}
             >
               <CardContent className="p-4">
@@ -209,7 +209,7 @@ export default function ESignatureDashboard() {
             </Card>
             
             <Card 
-              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] ${statusFilter === "draft" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "draft" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
               onClick={() => setStatusFilter("draft")}
             >
               <CardContent className="p-4">
@@ -224,7 +224,7 @@ export default function ESignatureDashboard() {
             </Card>
             
             <Card 
-              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] ${statusFilter === "sent" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "sent" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
               onClick={() => setStatusFilter("sent")}
             >
               <CardContent className="p-4">
@@ -239,7 +239,7 @@ export default function ESignatureDashboard() {
             </Card>
             
             <Card 
-              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] ${statusFilter === "completed" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
+              className={`cursor-pointer transition-all border-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] ${statusFilter === "completed" ? "border-gold ring-2 ring-gold/20" : "border-gold/20 hover:border-gold/40"}`}
               onClick={() => setStatusFilter("completed")}
             >
               <CardContent className="p-4">
@@ -268,7 +268,7 @@ export default function ESignatureDashboard() {
           </div>
 
           {/* Envelopes List */}
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/20">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/20">
             <CardHeader>
               <CardTitle className="text-foreground">Recent Documents</CardTitle>
             </CardHeader>

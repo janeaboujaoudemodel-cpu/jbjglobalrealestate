@@ -36,7 +36,7 @@ function benefitRow(num: string, title: string, desc: string): string {
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
 <td style="width:40px;min-width:40px;vertical-align:top;padding-top:2px;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr>
-<td style="width:36px;height:36px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:36px;text-align:center;vertical-align:middle;font-size:16px;font-weight:700;line-height:36px;color:#C8A766;">${num}</td>
+<td style="width:36px;height:36px;background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:1px solid #C8A766;border-radius:36px;text-align:center;vertical-align:middle;font-size:16px;font-weight:700;line-height:36px;color:#C8A766;">${num}</td>
 </tr></table>
 </td>
 <td style="padding-left:12px;"><strong style="color:#1a1a1a;font-size:14px;">${title}</strong>
@@ -50,7 +50,7 @@ function benefitRowAr(num: string, title: string, desc: string): string {
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="direction:rtl;"><tr>
 <td style="width:40px;min-width:40px;vertical-align:top;padding-top:2px;">
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;"><tr>
-<td style="width:36px;height:36px;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:36px;text-align:center;vertical-align:middle;font-size:16px;font-weight:700;line-height:36px;color:#C8A766;">${num}</td>
+<td style="width:36px;height:36px;background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:1px solid #C8A766;border-radius:36px;text-align:center;vertical-align:middle;font-size:16px;font-weight:700;line-height:36px;color:#C8A766;">${num}</td>
 </tr></table>
 </td>
 <td style="padding-right:12px;"><strong style="color:#1a1a1a;font-size:14px;">${title}</strong>
@@ -75,7 +75,7 @@ function buildWelcomeHtml(
 ${userGreetingRow(displayName)}
 <p style="margin:0 0 24px;font-size:18px;color:#C8A766;font-weight:600;line-height:1.3;">Your JBJ account is ready — we're thrilled to have you.</p>
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 20px;">You have successfully created your account with <strong>JBJ Global Real Estate</strong>. As a valued member, you now have access to our full suite of services and tools.</p>
-<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;margin:0 0 24px;"><tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:18px;border:1px solid #C8A766;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">Your Account Details</p><p style="color:#555;font-size:13px;margin:0;"><strong>Registered Email:</strong> ${email}</p></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;margin:0 0 24px;"><tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F7F1E6 0%,#FDFBF7 100%);border-radius:18px;border:1px solid #C8A766;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">Your Account Details</p><p style="color:#555;font-size:13px;margin:0;"><strong>Registered Email:</strong> ${email}</p></td></tr></table>
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 24px;">As a Dubai-based real estate brokerage, we specialize in connecting clients with exceptional properties across the UAE.</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">${benefitsHtml}</table>
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:0 0 28px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="padding:0 6px;"><a href="${SITE_URL}/properties" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 28px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">Explore Properties</a></td><td style="padding:0 6px;"><a href="${SITE_URL}/my-dashboard" style="display:inline-block;background:#FDFBF7;color:#1a1a1a;text-decoration:none;padding:14px 28px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A766;">Discover More</a></td></tr></table></td></tr></table>
@@ -85,7 +85,7 @@ ${arabicDivider()}
 ${userGreetingRow(displayName, true)}
 <p style="margin:8px 0 0;font-size:18px;color:#C8A766;font-weight:600;">حسابك في JBJ جاهز — يسعدنا انضمامك إلينا.</p>
 <p style="color:#555;font-size:15px;line-height:1.6;margin:16px 0 20px;">لقد قمت بإنشاء حسابك بنجاح مع <strong>JBJ Global Real Estate</strong>. بصفتك عضواً مميزاً، يمكنك الآن الوصول إلى جميع خدماتنا وأدواتنا.</p>
-<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;margin:0 0 24px;"><tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);border-radius:18px;border:1px solid #C8A766;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">تفاصيل حسابك</p><p style="color:#555;font-size:13px;margin:0;"><strong>البريد الإلكتروني المسجل:</strong> ${email}</p></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;margin:0 0 24px;"><tr><td style="padding:18px 22px;background:linear-gradient(135deg,#F7F1E6 0%,#FDFBF7 100%);border-radius:18px;border:1px solid #C8A766;"><p style="color:#1a1a1a;font-size:14px;font-weight:700;margin:0 0 10px;">تفاصيل حسابك</p><p style="color:#555;font-size:13px;margin:0;"><strong>البريد الإلكتروني المسجل:</strong> ${email}</p></td></tr></table>
 <p style="color:#555;font-size:15px;line-height:1.6;margin:0 0 24px;">بصفتنا شركة وساطة عقارية مقرها دبي، نحن متخصصون في ربط العملاء بأفضل العقارات في جميع أنحاء الإمارات.</p>
 <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">${benefitsHtmlAr}</table>
 <table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:0 0 20px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td style="padding:0 6px;"><a href="${SITE_URL}/properties" style="display:inline-block;background:#000;color:#C8A766;text-decoration:none;padding:14px 28px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A76650;">تصفح العقارات</a></td><td style="padding:0 6px;"><a href="${SITE_URL}/my-dashboard" style="display:inline-block;background:#FDFBF7;color:#1a1a1a;text-decoration:none;padding:14px 28px;border-radius:12px;font-weight:700;font-size:14px;letter-spacing:0.5px;border:1px solid #C8A766;">اكتشف المزيد</a></td></tr></table></td></tr></table>

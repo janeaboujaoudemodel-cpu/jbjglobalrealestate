@@ -157,7 +157,7 @@ export default function CRMLeadsBulkBar({
 
   return (
     <div className="sticky top-0 z-40">
-      <div className="rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_4px_20px_rgba(200,167,102,0.18)] px-4 py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.18)] px-4 py-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
           <span className="text-sm font-bold text-black">
             {count} selected

@@ -70,7 +70,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
   return (
     <motion.div variants={fadeInUp} className="min-w-[280px]">
       <Card 
-        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_25px_rgba(200,167,102,0.35),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
+        className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-[0_0_20px_rgba(200,167,102,0.2)] hover:shadow-[0_0_25px_rgba(200,167,102,0.35),0_22px_60px_rgba(0,0,0,0.45)] hover:-translate-y-2 hover:scale-[1.02] transition-all duration-300 overflow-hidden group h-full ${isInternalUser ? 'cursor-pointer' : ''}`}
         onClick={handleCardClick}
       >
         <CardContent className="p-0">
@@ -96,7 +96,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
           </div>
 
           {/* Info - Positioned below photo, not overlapping */}
-          <div className="p-5 flex flex-col bg-gradient-to-b from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+          <div className="p-5 flex flex-col bg-gradient-to-b from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
             <h3 className="text-black font-semibold text-lg mb-1">{member.name}</h3>
 
             {/* Premium shiny job title - allow wrapping */}
@@ -274,7 +274,7 @@ const MeetTheTeam: React.FC = () => {
         canonicalPath="/team"
       />
 
-        <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+        <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
           {/* Hero Section with Premium Animated Team Collage */}
           <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden">
           {/* Background Video */}
@@ -303,7 +303,7 @@ const MeetTheTeam: React.FC = () => {
             >
               {/* Badge at top */}
               <motion.div variants={fadeInUp} className="mb-6 text-center">
-                <Badge className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-gold border-gold/40 px-4 py-1.5 shadow-md">
+                <Badge className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-gold border-gold/40 px-4 py-1.5 shadow-md">
                   <Users className="w-3.5 h-3.5 mr-1.5" />
                   Our Team
                 </Badge>
@@ -395,7 +395,7 @@ const MeetTheTeam: React.FC = () => {
                           variants={fadeInUp}
                           className="flex items-center gap-3 mb-4"
                         >
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/40 rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/40 rounded-lg flex items-center justify-center">
                             <Building2 className="w-5 h-5 text-gold" />
                           </div>
                           <div>
@@ -472,7 +472,7 @@ const MeetTheTeam: React.FC = () => {
                       variants={fadeInUp}
                       className="flex items-center gap-3 mb-4"
                     >
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/40 rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/40 rounded-lg flex items-center justify-center">
                         <Building2 className="w-5 h-5 text-gold" />
                       </div>
                       <div>
@@ -515,7 +515,7 @@ const MeetTheTeam: React.FC = () => {
               <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8">
                 {/* INNER CARD - Pearl Layer - Smaller for balance */}
                 <motion.div 
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center"
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
@@ -523,7 +523,7 @@ const MeetTheTeam: React.FC = () => {
                 >
                   {/* Badge */}
                   <motion.div 
-                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
+                    className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20"
                     variants={fadeInUp}
                   >
                     <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
@@ -555,7 +555,7 @@ const MeetTheTeam: React.FC = () => {
                       onClick={handleOpenContactForm}
                       className="relative w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-10 py-4 sm:py-5 text-sm sm:text-base font-bold rounded-xl transition-all duration-300 group overflow-hidden"
                       style={{
-                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                        background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
                         boxShadow: `
                           0 10px 30px rgba(200,167,102,0.4),
                           0 6px 15px rgba(0,0,0,0.2),

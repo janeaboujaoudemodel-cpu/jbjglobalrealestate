@@ -257,7 +257,7 @@ const MyDashboard = () => {
 
   if (authLoading || roleLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-gold animate-spin" />
       </div>
     );
@@ -282,7 +282,7 @@ const MyDashboard = () => {
         description="Your personalized dashboard with favorites, shortlists, progress, and notifications."
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         <div className="mx-0 my-0 rounded-none border-0 bg-[linear-gradient(135deg,hsl(var(--champagne-1)),hsl(var(--champagne-2)),hsl(var(--champagne-3)))]">
           <div className="container mx-auto px-4 py-6 max-w-7xl">
             {/* Dashboard Title + Badge */}

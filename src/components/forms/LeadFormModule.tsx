@@ -247,7 +247,7 @@ const LeadFormModule = ({
   }
 
   return (
-    <div className={compact ? '' : 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/30 p-6 md:p-8'}>
+    <div className={compact ? '' : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-gold/30 p-6 md:p-8'}>
       {title && (
         <div className="text-center mb-6">
           <h3 className="text-xl font-semibold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>

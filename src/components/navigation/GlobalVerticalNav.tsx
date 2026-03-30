@@ -804,16 +804,16 @@ export default function GlobalVerticalNav() {
     }
     if (sectionKey === 'MY ACCOUNT') {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40 font-bold"
+        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black border border-gold/40 font-bold"
         : "text-black/80 font-semibold hover:bg-gold/10 border border-black/10";
     }
     if (item.highlight) {
       return shouldHighlight
-        ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/50 font-bold"
+        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black border border-gold/50 font-bold"
         : "text-black/80 font-semibold hover:bg-gold/10 border border-black/10";
     }
     return shouldHighlight
-      ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40 font-bold"
+      ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black border border-gold/40 font-bold"
       : "text-black/80 hover:bg-gold/[0.08] hover:text-black border border-black/10 hover:border-gold/30";
   };
 
@@ -850,10 +850,10 @@ export default function GlobalVerticalNav() {
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
+              className="pointer-events-auto w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#ECE2D2]/50 to-transparent">
                 <div className="flex items-center gap-2.5">
                   <Zap className="w-4 h-4 text-gold" />
                   <h3 className="text-sm font-bold text-black tracking-tight">{title}</h3>
@@ -928,11 +928,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
+              className="pointer-events-auto w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#ECE2D2]/50 to-transparent">
                 <div className="flex items-center gap-2.5">
                   <ItemIcon className="w-4 h-4 text-gold" />
                   <h3 className="text-sm font-bold text-black tracking-tight">{title}</h3>
@@ -958,7 +958,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       onClick={closeMegaMenu}
                       className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                         linkActive
-                          ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black font-bold border border-gold/40"
+                          ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black font-bold border border-gold/40"
                           : "text-black/80 hover:bg-gold/10 hover:text-black"
                       }`}
                     >
@@ -1014,10 +1014,10 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
+            className={`pointer-events-auto w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#E8DCC8]/50 to-transparent">
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#ECE2D2]/50 to-transparent">
               <div className="flex items-center gap-2.5">
                 <Sparkles className="w-4 h-4 text-gold" />
                 <h3 className="text-sm font-bold text-black tracking-tight">{title}</h3>
@@ -1040,7 +1040,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     onClick={closeMegaMenu}
                     className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all break-inside-avoid ${
                       linkActive
-                        ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black font-bold border border-gold/40"
+                        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black font-bold border border-gold/40"
                         : "text-black/80 hover:bg-gold/10 hover:text-black"
                     }`}
                   >
@@ -1060,7 +1060,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
   const renderNavContent = () => (
     <div className="flex flex-col h-full">
       {/* ━━━ LOGO HEADER (88px) — restored, matches horizontal header height ━━━ */}
-      <div className="h-[88px] shrink-0 flex flex-row items-center justify-between px-2.5 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-b border-gold/20">
+      <div className="h-[88px] shrink-0 flex flex-row items-center justify-between px-2.5 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-gold/20">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-1" style={{ fontFamily: "Poppins, sans-serif" }}>
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0" />
           <div className="flex flex-col mt-1">
@@ -1265,13 +1265,13 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       {collapsed ? (
       <div className="hidden lg:flex w-[48px] flex-shrink-0 flex-col h-full items-center overflow-y-auto overflow-x-visible relative">
           {/* Logo header (88px) — collapsed: just icon */}
-          <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-b border-gold/20">
+          <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-gold/20">
             <Link to="/">
               <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain" />
             </Link>
           </div>
           {/* Section icons — darker body matching header center */}
-          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] w-full border-r border-gold/20">
+          <div className="flex-1 flex flex-col items-center pt-2 pb-2 gap-1 bg-gradient-to-b from-[#ECE2D2] via-[#E0D3BF] to-[#D8C7A6] w-full border-r border-gold/20">
             {SECTION_KEYS.map((sectionKey) => {
               if (sectionKey === 'ADMIN & OWNER' && (!isOwner || isDeveloperMode)) return null;
               if (sectionKey === 'BROKER & ACADEMY' && !isBroker && !isOwner) return null;
@@ -1351,7 +1351,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
             {/* Expand button */}
             <button
               onClick={toggleCollapse}
-              className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] flex items-center justify-center hover:from-[#E8DCC8] hover:to-[#C9B896] transition-all shadow-md shadow-black/10 ring-1 ring-black/10 mt-1 mb-1"
+              className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] flex items-center justify-center hover:from-[#ECE2D2] hover:to-[#C9B896] transition-all shadow-md shadow-black/10 ring-1 ring-black/10 mt-1 mb-1"
               aria-label="Expand navigation"
               title="Expand navigation"
             >
@@ -1360,7 +1360,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           </div>
         </div>
       ) : (
-        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#E8DCC8] via-[#DCCFB5] to-[#D4C4A8] border-r border-gold/20 h-full relative overscroll-contain">
+        <div className="hidden lg:flex w-[200px] flex-shrink-0 bg-gradient-to-b from-[#ECE2D2] via-[#E0D3BF] to-[#D8C7A6] border-r border-gold/20 h-full relative overscroll-contain">
           {renderNavContent()}
         </div>
       )}

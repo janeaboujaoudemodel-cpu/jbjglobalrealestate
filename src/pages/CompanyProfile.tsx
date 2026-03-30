@@ -55,7 +55,7 @@ function SectionShell({
   className?: string;
 }) {
   return (
-    <section className={`py-8 md:py-10 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] ${className ?? ""}`.trim()}>
+    <section className={`py-8 md:py-10 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] ${className ?? ""}`.trim()}>
       <div className="jj-layer-2">
         <div className="w-full px-4 sm:px-6 lg:px-8">{children}</div>
       </div>
@@ -355,7 +355,7 @@ const ConsistentBook3D = ({ onClick, isGenerating }: { onClick: () => void; isGe
           style={{ transform: 'rotateY(-90deg) translateX(-8px)' }}
         />
         <div
-          className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-b from-[#f5f0e0] to-[#e8dcc8]"
+          className="absolute bottom-0 left-0 right-0 h-3 bg-gradient-to-b from-[#f5f0e0] to-[#ECE2D2]"
           style={{ transform: 'rotateX(90deg) translateY(6px)', transformOrigin: 'bottom' }}
         />
       </div>
@@ -403,7 +403,7 @@ const CompanyProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Sticky Actions (Desktop) */}
       <div className="hidden lg:flex fixed right-6 top-1/2 -translate-y-1/2 z-50 flex-col gap-3">
         <Button onClick={handleWhatsApp} variant="primary" size="icon" className="rounded-full" aria-label="WhatsApp">
@@ -453,7 +453,7 @@ const CompanyProfile = () => {
               {PROFILE_CONTENT.coverPage.title}
             </span>
           </motion.h1>
-          <motion.p className="text-[#E8DCC8] text-lg md:text-xl max-w-2xl mx-auto mb-8" variants={fadeInUp}>
+          <motion.p className="text-[#ECE2D2] text-lg md:text-xl max-w-2xl mx-auto mb-8" variants={fadeInUp}>
             {PROFILE_CONTENT.coverPage.subtitle}
           </motion.p>
 
@@ -865,7 +865,7 @@ const CompanyProfile = () => {
                       style={{ backgroundImage: `url(${area.image_url})` }}
                     />
                   ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#E8DCC8] to-[#D4C4A8] flex items-center justify-center">
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center">
                       <span className="text-6xl font-black text-black select-none" style={{ opacity: 0.1, fontFamily: "Poppins, sans-serif" }}>JBJ</span>
                     </div>
                   )}
@@ -874,7 +874,7 @@ const CompanyProfile = () => {
 
                   <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
                     {area.is_trending && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#E8DCC8] text-black text-[9px] font-bold uppercase tracking-wider shadow-lg">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gradient-to-r from-[#C8A766] to-[#ECE2D2] text-black text-[9px] font-bold uppercase tracking-wider shadow-lg">
                         <TrendingUp className="w-2.5 h-2.5" />
                         Trending
                       </span>
@@ -921,7 +921,7 @@ const CompanyProfile = () => {
         <div className="text-center mt-8">
           <Link
             to="/areas"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-[#C8A766] rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-[#C8A766] rounded-xl text-black font-semibold text-sm hover:shadow-[0_4px_20px_rgba(200,167,102,0.4)] hover:-translate-y-0.5 transition-all duration-300 group"
           >
             <span>View All Areas</span>
             <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

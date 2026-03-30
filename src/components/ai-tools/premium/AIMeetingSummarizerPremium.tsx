@@ -585,7 +585,7 @@ const AIMeetingSummarizerPremium = () => {
     >
       <div className="space-y-6">
         {/* Meeting Details */}
-        <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 shadow-md">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30 shadow-md">
           <CardContent className="p-6 space-y-5">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center">
@@ -888,7 +888,7 @@ const AIMeetingSummarizerPremium = () => {
 
             {/* AI Response Generator — visible LIVE during recording */}
             {showLiveTools && (
-              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30">
                 <CardContent className="p-5 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -925,7 +925,7 @@ const AIMeetingSummarizerPremium = () => {
 
             {/* CRM Tools — visible LIVE during recording */}
             {showLiveTools && (
-              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30">
                 <CardContent className="p-5">
                   <Tabs defaultValue="properties">
                     <TabsList className="bg-white border border-gold/20 w-full">
@@ -1026,7 +1026,7 @@ const AIMeetingSummarizerPremium = () => {
               {/* Action Items */}
               {response.actionItems && response.actionItems.length > 0 && (
                 <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 p-5">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30 p-5">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center">
@@ -1088,7 +1088,7 @@ const AIMeetingSummarizerPremium = () => {
 
               {/* Follow-ups */}
               {response.followUps && response.followUps.length > 0 && (
-                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30 p-5">
+                <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30 p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-7 h-7 rounded-full bg-black flex items-center justify-center">
                       <Calendar className="h-3.5 w-3.5 text-gold" />
@@ -1107,7 +1107,7 @@ const AIMeetingSummarizerPremium = () => {
               )}
 
               {/* Full Summary */}
-              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/30">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/30">
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between mb-4">
                     <h4 className="font-semibold text-black">Full Summary</h4>

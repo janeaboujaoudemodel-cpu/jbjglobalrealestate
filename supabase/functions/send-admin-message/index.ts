@@ -65,7 +65,7 @@ function buildEmailHtml(req: AdminMessageRequest): string {
   // Admin messages: EN only with sharedSections at end (LTR)
   const bodyContent = `<tr><td style="padding:0;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
-<tr><td style="background:linear-gradient(135deg,#F5EBD7 0%,#FDFBF7 100%);padding:16px 32px 14px;">
+<tr><td style="background:linear-gradient(135deg,#F7F1E6 0%,#FDFBF7 100%);padding:16px 32px 14px;">
 <p style="margin:0;font-size:10px;color:#888;text-transform:uppercase;letter-spacing:2px;">Department Inquiry</p>
 <p style="margin:4px 0 0;font-size:16px;color:#1a1a1a;font-weight:700;">${typeLabel}</p>
 </td></tr></table>

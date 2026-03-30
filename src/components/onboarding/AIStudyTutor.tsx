@@ -170,7 +170,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                   message.role === 'user' 
                     ? 'bg-gold text-black' 
-                    : 'bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/20'
+                    : 'bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/20'
                 }`}>
                   {message.role === 'user' ? (
                     <User className="w-4 h-4" />
@@ -181,8 +181,8 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
                 <div className="flex flex-col max-w-[80%]">
                   <div className={`rounded-2xl px-4 py-2.5 select-text cursor-text ${
                     message.role === 'user'
-                      ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-br-md'
-                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-bl-md'
+                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md rounded-br-md'
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm rounded-bl-md'
                   }`}>
                     <p className="text-sm whitespace-pre-wrap select-text">{message.content}</p>
                   </div>
@@ -214,10 +214,10 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
             ))}
             {isLoading && (
               <div className="flex gap-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-gold/20 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-gold/20 flex items-center justify-center">
                   <Bot className="w-4 h-4 text-gold" />
                 </div>
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/20 rounded-2xl rounded-bl-md px-4 py-3">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/20 rounded-2xl rounded-bl-md px-4 py-3">
                   <div className="flex items-center gap-2">
                     <Loader2 className="w-4 h-4 animate-spin text-gold" />
                     <span className="text-black/60 text-sm">Thinking...</span>

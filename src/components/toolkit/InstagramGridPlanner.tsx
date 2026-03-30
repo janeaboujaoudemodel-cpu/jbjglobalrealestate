@@ -124,7 +124,7 @@ function CaptionPanel({
 
       {/* Character count */}
       <div className="flex items-center justify-between">
-        <span className="text-[10px]" style={{ color: remaining < 50 ? '#EF4444' : I.dim }}>
+        <span className="text-[10px]" style={{ color: remaining < 50 ? '#DC2626' : I.dim }}>
           {remaining} characters remaining
         </span>
         <div className="flex gap-1">
@@ -827,7 +827,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                                   <div className="flex items-center gap-2">
                                     <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
                                       style={{ background: "rgba(239,68,68,0.15)" }}>
-                                      <Heart className="h-3 w-3" style={{ color: "#EF4444" }} />
+                                      <Heart className="h-3 w-3" style={{ color: "#DC2626" }} />
                                     </div>
                                     <div>
                                       <p className="text-white text-xs font-bold leading-tight">
@@ -902,7 +902,7 @@ export default function InstagramGridPlanner({ selectedPreset }: Props) {
                             <button
                               onClick={() => handleCancelSchedule(photo.id)}
                               className="text-[10px] px-2 py-0.5 rounded"
-                              style={{ color: '#EF4444', border: '1px solid rgba(239,68,68,0.3)' }}>
+                              style={{ color: '#DC2626', border: '1px solid rgba(239,68,68,0.3)' }}>
                               Cancel
                             </button>
                           </div>

@@ -297,7 +297,7 @@ export const AdminOverviewDashboard = () => {
       </div>
 
       {/* System Health Panel - Champagne theme */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-xl">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-xl">
         <CardHeader className="pb-2">
           <CardTitle className="text-black flex items-center gap-2">
             <Activity className="w-5 h-5 text-gold" />

@@ -88,7 +88,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
   if (!projects || projects.length === 0) return null;
 
   return (
-    <section className="py-16 overflow-visible px-4 sm:px-6 md:px-8" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
+    <section className="py-16 overflow-visible px-4 sm:px-6 md:px-8" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div>
         <h2 className="text-black text-2xl md:text-3xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
           Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
@@ -126,7 +126,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
           {filteredProjects.length > 0 && (
             <div className="text-center mt-8">
               <Link to={`/properties?area=${areaSlug}`}>
-                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all">
+                <Button className="px-8 py-6 text-base bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all">
                   View All Projects in {areaName}
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>

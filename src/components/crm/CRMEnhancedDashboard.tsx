@@ -44,11 +44,11 @@ interface Stats {
 const PIPELINE_COLORS: Record<string, string> = {
   new: "#3B82F6",
   contacted: "#8B5CF6",
-  interested: "#10B981",
+  interested: "#059669",
   qualified: "#059669",
   negotiation: "#F59E0B",
   closed_won: "#22C55E",
-  closed_lost: "#EF4444",
+  closed_lost: "#DC2626",
   junk: "#6B7280"
 };
 
@@ -274,8 +274,8 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
                       <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
                     </linearGradient>
                     <linearGradient id="whatsappGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.3}/>
-                      <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#059669" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#059669" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
                   <XAxis dataKey="day" tick={{ fill: '#71717a', fontSize: 12 }} />
@@ -298,7 +298,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
                   <Area 
                     type="monotone" 
                     dataKey="whatsapp" 
-                    stroke="#10B981" 
+                    stroke="#059669" 
                     fill="url(#whatsappGradient)" 
                     name="WhatsApp"
                   />

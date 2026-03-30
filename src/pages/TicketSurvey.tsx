@@ -176,14 +176,14 @@ const TicketSurvey = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center p-4">
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="max-w-md w-full bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gold/30 p-8 text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-[#C8A766] to-[#B8956E] flex items-center justify-center">
             <CheckCircle className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-black mb-2">Thank You!</h2>
           <p className="text-zinc-600 mb-4">Your feedback helps us improve our service.</p>
-          <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-4 border border-[#C8A766]">
+          <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-4 border border-[#C8A766]">
             <Gift className="w-6 h-6 text-[#C8A766] mx-auto mb-2" />
             <p className="text-lg font-bold text-[#C8A766]">+{pointsAwarded} Points Earned!</p>
             <p className="text-xs text-zinc-500">Thank you for your feedback</p>
@@ -194,7 +194,7 @@ const TicketSurvey = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] py-12 px-4">
       <div className="max-w-lg mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-black mb-2">{surveyCopy.title}</h1>

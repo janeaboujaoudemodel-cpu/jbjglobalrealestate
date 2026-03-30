@@ -99,7 +99,7 @@ const ListingPortal = () => {
         title="Listing Portal | JBJ Global Real Estate"
         description="List your property for sale or rent using our manual form or AI-powered listing creator. Browse approved listings across the UAE."
       />
-      <section className="relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <section className="relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* Hero */}
         <div className="relative py-16 md:py-20 overflow-hidden">
           <div className="container mx-auto px-4 relative z-10">
@@ -280,7 +280,7 @@ const ListingPortal = () => {
             <div className="text-center mb-8">
               <Button
                 onClick={() => navigate('/listing-portal/my-listings')}
-                className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] px-8 py-3 h-auto"
+                className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-black hover:border-gold hover:shadow-[0_4px_20px_rgba(200,167,102,0.3)] px-8 py-3 h-auto"
               >
                 <Eye className="w-4 h-4 mr-2 text-gold" />
                 View My Listings
@@ -376,7 +376,7 @@ const ListingPortal = () => {
                       </Button>
                       <Button
                         onClick={() => navigate('/listing-portal/submit')}
-                        className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold"
+                        className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-black hover:border-gold"
                       >
                         <Wand2 className="w-4 h-4 mr-2 text-gold" /> AI Listing
                       </Button>
@@ -390,7 +390,7 @@ const ListingPortal = () => {
                         className="bg-white border-2 border-gold/20 rounded-2xl overflow-hidden hover:border-gold/50 transition-all group hover:shadow-[0_8px_30px_rgba(200,167,102,0.2)]"
                         whileHover={{ y: -4 }}
                       >
-                        <div className="h-48 bg-[#F5F0E6] relative">
+                        <div className="h-48 bg-[#F7F2EA] relative">
                           {listing.images[0] ? (
                             <img src={listing.images[0]} alt={listing.title} className="w-full h-full object-cover" />
                           ) : (

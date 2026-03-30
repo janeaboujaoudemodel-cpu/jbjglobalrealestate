@@ -144,7 +144,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
       exit={{ opacity: 0, y: 100, scale: 0.9 }}
       className="fixed bottom-6 right-6 z-50 w-80 max-w-[calc(100vw-3rem)]"
     >
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl shadow-2xl shadow-gold/20 border border-gold/30 overflow-hidden">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl shadow-2xl shadow-gold/20 border border-gold/30 overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-gold to-gold-dark p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">

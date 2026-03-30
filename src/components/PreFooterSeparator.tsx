@@ -45,9 +45,9 @@ export const PreFooterSeparator = ({
       <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
         <div>
           {/* Pearl Card - Single inner layer on champagne section */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10 lg:p-12 shadow-[0_0_30px_rgba(200,167,102,0.25)] text-center">
             {badgeText && (
-              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F5F0E6] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 bg-gradient-to-r from-gold/20 via-[#F7F2EA] to-gold/20 border border-gold/50 rounded-full text-black text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-6 shadow-lg shadow-gold/20">
                 <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-gold" />
                 {badgeText}
               </div>
@@ -68,7 +68,7 @@ export const PreFooterSeparator = ({
                 <button 
                   className="group relative inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 text-sm sm:text-base font-bold rounded-lg sm:rounded-xl transition-all duration-300 overflow-hidden"
                   style={{
-                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F5F0E6 50%, #E8DFD0 75%, #C8A766 100%)',
+                    background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
                     boxShadow: `
                       0 10px 30px rgba(200,167,102,0.4),
                       0 6px 15px rgba(0,0,0,0.2),

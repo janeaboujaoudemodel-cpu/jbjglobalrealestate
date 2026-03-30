@@ -20,7 +20,7 @@ type SectionDividerProps = {
 export function SectionDivider({ className, fullWidth = false, bg, variant = "default" }: SectionDividerProps) {
   const bgClass = bg ?? (variant === "champagne" 
     ? "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark" 
-    : "bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]");
+    : "bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]");
 
   return (
     <div role="separator" aria-hidden="true" className={`${bgClass} py-4 md:py-6 ${className ?? ""}`.trim()}>

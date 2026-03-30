@@ -100,7 +100,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
         "absolute right-0 top-full mt-2 w-[min(95vw,900px)] rounded-xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] z-[9999] overflow-hidden"
       )}
       style={{
-        background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+        background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
       }}
     >
       {/* Gold border overlay (matches Language dropdown) */}

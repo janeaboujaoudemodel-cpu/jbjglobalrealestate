@@ -127,14 +127,14 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
             >
               {/* Arrow pointing up */}
               <div 
-                className="absolute -top-2 w-4 h-4 bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] rotate-45 border-l border-t border-gold/40"
+                className="absolute -top-2 w-4 h-4 bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] rotate-45 border-l border-t border-gold/40"
                 style={{ left: Math.min(targetRect.left + targetRect.width / 2 - 8, 240) }}
               />
               
               {/* Tooltip Card */}
               <div 
                 className="relative rounded-xl p-4 border-2 border-gold/40 shadow-2xl"
-                style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
+                style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
               >
                 {/* Close button */}
                 <button

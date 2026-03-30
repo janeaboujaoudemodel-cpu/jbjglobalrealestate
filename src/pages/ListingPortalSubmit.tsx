@@ -177,7 +177,7 @@ const ListingPortalSubmit = () => {
 
   if (!user) {
     return (
-      <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center">
+      <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-black text-xl font-bold mb-4">Please sign in to submit a listing</h2>
           <Button onClick={() => navigate('/auth')} className="bg-gold hover:bg-gold/90 text-black border-0">
@@ -540,7 +540,7 @@ const ListingPortalSubmit = () => {
   // ========== SUCCESS PHASE ==========
   if (phase === 'success') {
     return (
-      <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] pt-24 pb-16">
+      <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] pt-24 pb-16">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -584,7 +584,7 @@ const ListingPortalSubmit = () => {
               <Button onClick={() => navigate('/listing-portal/my-listings')} className="bg-gold hover:bg-gold/90 text-black border-0">
                 View My Listings
               </Button>
-              <Button onClick={() => navigate('/listing-portal')} className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold">
+              <Button onClick={() => navigate('/listing-portal')} className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-black hover:border-gold">
                 Back to Portal
               </Button>
             </div>
@@ -595,7 +595,7 @@ const ListingPortalSubmit = () => {
   }
 
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <div className="relative py-12 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div ref={creatorRef} className="max-w-3xl mx-auto">
@@ -816,7 +816,7 @@ const ListingPortalSubmit = () => {
                         </Button>
                         <Button
                           onClick={() => setPhase('pricing_ai')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold h-12"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-black hover:border-gold h-12"
                         >
                           Skip — Fill Manually
                         </Button>
@@ -876,22 +876,22 @@ const ListingPortalSubmit = () => {
                         {/* Quick summary of extracted data */}
                         {extractedData && (
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-3 text-center">
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
                               <MapPin className="w-4 h-4 text-gold mx-auto mb-1" />
                               <p className="text-xs text-zinc-500">Location</p>
                               <p className="text-black text-sm font-medium truncate">{form.location || 'N/A'}</p>
                             </div>
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-3 text-center">
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
                               <Bed className="w-4 h-4 text-gold mx-auto mb-1" />
                               <p className="text-xs text-zinc-500">Bedrooms</p>
                               <p className="text-black text-sm font-medium">{form.bedrooms || 'N/A'}</p>
                             </div>
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-3 text-center">
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
                               <Maximize className="w-4 h-4 text-gold mx-auto mb-1" />
                               <p className="text-xs text-zinc-500">Area</p>
                               <p className="text-black text-sm font-medium">{form.area_sqft ? `${parseInt(form.area_sqft).toLocaleString()} sqft` : 'N/A'}</p>
                             </div>
-                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-3 text-center">
+                            <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-3 text-center">
                               <Building className="w-4 h-4 text-gold mx-auto mb-1" />
                               <p className="text-xs text-zinc-500">Type</p>
                               <p className="text-black text-sm font-medium capitalize">{form.property_type || 'N/A'}</p>
@@ -947,7 +947,7 @@ const ListingPortalSubmit = () => {
                       <div className="flex gap-3">
                         <Button
                           onClick={() => setPhase('upload')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold h-12"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-black hover:border-gold h-12"
                         >
                           <ArrowLeft className="w-4 h-4 mr-2" /> Back
                         </Button>
@@ -1016,7 +1016,7 @@ const ListingPortalSubmit = () => {
                             {uploadedImageUrls.length > 0 ? (
                               <img src={uploadedImageUrls[0]} alt="" className="w-full h-48 object-cover" />
                             ) : (
-                              <div className="w-full h-48 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] flex items-center justify-center">
+                              <div className="w-full h-48 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] flex items-center justify-center">
                                 <Image className="w-12 h-12 text-gold/30" />
                               </div>
                             )}
@@ -1236,7 +1236,7 @@ const ListingPortalSubmit = () => {
                       <div className="flex gap-3">
                         <Button
                           onClick={() => setPhase('pricing_ai')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold h-12"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-black hover:border-gold h-12"
                         >
                           <ArrowLeft className="w-4 h-4 mr-2" /> Back
                         </Button>
@@ -1383,7 +1383,7 @@ const ListingPortalSubmit = () => {
                       <div className="flex gap-3">
                         <Button
                           onClick={() => setPhase('review')}
-                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 text-black hover:border-gold h-12"
+                          className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 text-black hover:border-gold h-12"
                         >
                           <ArrowLeft className="w-4 h-4 mr-2" /> Back
                         </Button>

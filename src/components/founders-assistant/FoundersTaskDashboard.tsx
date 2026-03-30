@@ -307,8 +307,8 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
             size="sm"
             onClick={() => setFilter(f as typeof filter)}
             className={filter === f 
-              ? 'bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border-2 border-[#C9A84C]/50 shadow-md font-semibold' 
-              : 'bg-white text-zinc-700 border-2 border-[#C9A84C]/30 hover:bg-[#C9A84C]/5 hover:border-[#C9A84C]/50'
+              ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border-2 border-[#B89555]/50 shadow-md font-semibold' 
+              : 'bg-white text-zinc-700 border-2 border-[#B89555]/30 hover:bg-[#B89555]/5 hover:border-[#B89555]/50'
             }
           >
             {f === 'all' && `All Tasks (${stats.total})`}

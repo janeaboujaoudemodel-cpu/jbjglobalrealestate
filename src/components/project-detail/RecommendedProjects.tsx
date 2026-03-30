@@ -122,7 +122,7 @@ export default function RecommendedProjects({
           </div>
           <Link
             to="/properties"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-[#C8A766]/60 text-black font-semibold text-sm shadow-md hover:shadow-lg hover:border-gold transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-[#C8A766]/60 text-black font-semibold text-sm shadow-md hover:shadow-lg hover:border-gold transition-all"
           >
             View All <ChevronRight className="w-4 h-4" />
           </Link>
@@ -158,7 +158,7 @@ export default function RecommendedProjects({
               <Link
                 key={project.id}
                 to={`/project/${project.slug}`}
-                className="group relative overflow-hidden rounded-xl border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] hover:border-gold/60 transition-all shadow-sm flex flex-col h-full"
+                className="group relative overflow-hidden rounded-xl border border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] hover:border-gold/60 transition-all shadow-sm flex flex-col h-full"
               >
                 {/* Image */}
                 <div className="aspect-[16/10] overflow-hidden relative flex-shrink-0">
@@ -180,7 +180,7 @@ export default function RecommendedProjects({
                         {saleStatus}
                       </span>
                     </div>
-                    <span className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-[#C8A766]/60 px-2 py-0.5 rounded text-[11px] font-bold">
+                    <span className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#C8A766]/60 px-2 py-0.5 rounded text-[11px] font-bold">
                       Recommended
                     </span>
                   </div>

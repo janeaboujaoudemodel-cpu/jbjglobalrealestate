@@ -119,7 +119,7 @@ export const DEPARTMENTS: Record<string, Department> = {
     name: 'Sales / Brokers',
     shortName: 'Sales',
     icon: 'SALES',
-    color: '#10B981',
+    color: '#059669',
     headId: 'james_morgan',
     headName: 'James Morgan',
     subAIId: 'alex_ai',

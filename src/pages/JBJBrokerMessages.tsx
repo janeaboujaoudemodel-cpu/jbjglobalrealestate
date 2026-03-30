@@ -210,16 +210,16 @@ export default function JBJBrokerMessages() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-gold" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] pt-24 lg:pt-28">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] pt-24 lg:pt-28">
       {/* Header */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-4">
@@ -339,7 +339,7 @@ export default function JBJBrokerMessages() {
           {selectedLead ? (
             <>
               {/* Chat Header */}
-              <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 p-4 flex items-center justify-between">
+              <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-gold/20 p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-10 w-10 border-2 border-gold/30">
                     <AvatarFallback className="bg-gold/20 text-gold">
@@ -356,7 +356,7 @@ export default function JBJBrokerMessages() {
               </div>
 
               {/* Messages Area - Full Height */}
-              <ScrollArea className="flex-1 p-4 bg-gradient-to-br from-[#F5EBD7]/30 via-[#E8DCC8]/30 to-[#D4C4A8]/30">
+              <ScrollArea className="flex-1 p-4 bg-gradient-to-br from-[#F7F1E6]/30 via-[#ECE2D2]/30 to-[#D8C7A6]/30">
                 <div className="space-y-4">
                   {messages.map((msg) => (
                     <div
@@ -369,8 +369,8 @@ export default function JBJBrokerMessages() {
                         <div
                           className={`p-3 rounded-lg select-text cursor-text ${
                             msg.direction === "outbound"
-                              ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-tr-sm"
-                              : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-tl-sm"
+                              ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md rounded-tr-sm"
+                              : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm rounded-tl-sm"
                           }`}
                         >
                           <div className="flex items-center gap-2 mb-1">
@@ -447,7 +447,7 @@ export default function JBJBrokerMessages() {
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-center bg-gradient-to-br from-[#F5EBD7]/30 via-[#E8DCC8]/30 to-[#D4C4A8]/30">
+            <div className="flex-1 flex items-center justify-center text-center bg-gradient-to-br from-[#F7F1E6]/30 via-[#ECE2D2]/30 to-[#D8C7A6]/30">
               <div>
                 <MessageSquare className="h-16 w-16 text-gold/40 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-black">

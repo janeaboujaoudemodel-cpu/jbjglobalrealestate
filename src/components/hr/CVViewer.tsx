@@ -190,7 +190,7 @@ const CVViewer = ({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-5xl h-[90dvh] p-0 bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border-2 border-gold/30">
+      <DialogContent className="sm:max-w-5xl h-[90dvh] p-0 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border-2 border-gold/30">
         <DialogHeader className="p-4 border-b border-gold/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -231,7 +231,7 @@ const CVViewer = ({
           <div className="w-80 border-r border-gold/20 p-4 overflow-y-auto">
             <div className="space-y-4">
               {/* Contact Info */}
-              <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30">
+              <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm text-black flex items-center gap-2">
                     <User className="h-4 w-4 text-gold" />
@@ -267,7 +267,7 @@ const CVViewer = ({
               </Card>
 
               {/* Quick Actions */}
-              <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30">
+              <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm text-black">Quick Actions</CardTitle>
                 </CardHeader>
@@ -386,11 +386,11 @@ const CVViewer = ({
           {/* Main content - CV Preview */}
           <div className="flex-1 p-4 overflow-hidden">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-              <TabsList className="mb-4 bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30">
-                <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
+              <TabsList className="mb-4 bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
+                <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
                   Document Preview
                 </TabsTrigger>
-                <TabsTrigger value="details" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40">
+                <TabsTrigger value="details" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40">
                   Application Details
                 </TabsTrigger>
               </TabsList>
@@ -425,7 +425,7 @@ const CVViewer = ({
               </TabsContent>
 
               <TabsContent value="details" className="flex-1 overflow-auto">
-                <Card className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-2 border-gold/30">
+                <Card className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-2 border-gold/30">
                   <CardContent className="pt-6">
                     <div className="grid grid-cols-2 gap-4">
                       <div>

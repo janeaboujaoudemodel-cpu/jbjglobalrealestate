@@ -27,7 +27,7 @@ const fadeInUp = {
 export const FounderPhilosophySection = () => {
   return (
     <FounderContent>
-      <section className="w-full py-20 md:py-28 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] relative overflow-hidden">
+      <section className="w-full py-20 md:py-28 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] relative overflow-hidden">
         {/* Active Layer Container */}
         <div className="w-full relative z-10 px-4 md:px-8 lg:px-12">
           <motion.div
@@ -44,7 +44,7 @@ export const FounderPhilosophySection = () => {
             {/* Left - Portrait with gold champagne card on mobile */}
             <motion.div variants={fadeInUp} className="flex flex-col items-center">
               {/* Gold champagne card wrapper for mobile separation */}
-              <div className="bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] md:bg-transparent rounded-2xl p-4 md:p-0 border border-gold/30 md:border-0 shadow-xl md:shadow-none">
+              <div className="bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6] md:bg-transparent rounded-2xl p-4 md:p-0 border border-gold/30 md:border-0 shadow-xl md:shadow-none">
                 <Link to="/founder" className="block relative group">
                   <div className="relative w-64 h-80 md:w-80 md:h-96 rounded-2xl overflow-hidden border-2 border-gold/30 shadow-2xl shadow-gold/20 group-hover:border-gold transition-all duration-300">
                     <img 
@@ -92,7 +92,7 @@ export const FounderPhilosophySection = () => {
               </div>
               
               {/* Card with Gold Champagne background - matching Developer Marquee logos area */}
-              <div className="bg-gradient-to-r from-[#EDE4D3] via-[#F5EBD7] to-[#EDE4D3] rounded-2xl p-6 md:p-8 border border-gold/30">
+              <div className="bg-gradient-to-r from-[#EFE6D6] via-[#F7F1E6] to-[#EFE6D6] rounded-2xl p-6 md:p-8 border border-gold/30">
                 <p className="text-zinc-800 text-base leading-relaxed mb-4">
                   <Link to="/about" className="text-gold hover:underline">JBJ Global Real Estate</Link> is a founder-led brokerage built on unwavering standards, discretion, and long-term vision.
                 </p>

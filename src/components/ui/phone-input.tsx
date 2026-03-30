@@ -516,14 +516,14 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     // Theme-based styling - CHAMPAGNE gradient for light variant, GOLD borders
     const isLight = variant === 'light';
     const buttonStyles = isLight 
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black hover:border-gold focus:border-gold"
+      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black hover:border-gold focus:border-gold"
       : "bg-zinc-900 border-2 border-gold/50 text-white hover:bg-zinc-800 hover:text-white hover:border-gold focus:border-gold";
     const inputStyles = isLight
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold hover:border-gold"
+      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold hover:border-gold"
       : "bg-zinc-900 border-2 border-gold/50 text-white placeholder:text-zinc-500 focus:border-gold hover:border-gold";
     const popoverStyles = isLight
-      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50"
-      : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50";
+      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50"
+      : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50";
     const commandStyles = isLight
       ? "bg-transparent"
       : "bg-transparent";

@@ -252,7 +252,7 @@ export default function AuditLogDashboard() {
           <ScrollArea className="h-[500px] rounded-md border border-gold/20">
             <Table>
               <TableHeader>
-                <TableRow className="border-gold/20 hover:bg-gold/5 bg-gradient-to-r from-[#F5EBD7] to-[#E8DCC8]">
+                <TableRow className="border-gold/20 hover:bg-gold/5 bg-gradient-to-r from-[#F7F1E6] to-[#ECE2D2]">
                   <TableHead className="w-[160px] text-black/60">Timestamp</TableHead>
                   <TableHead className="w-[180px] text-black/60">User</TableHead>
                   <TableHead className="w-[100px] text-black/60">Action</TableHead>

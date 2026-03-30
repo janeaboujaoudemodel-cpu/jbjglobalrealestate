@@ -179,7 +179,7 @@ const VIPExportButton = () => {
             <ChevronDown className="h-3 w-3 ml-2" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+        <DropdownMenuContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
           <DropdownMenuItem 
             onClick={handleExportCSV}
             className="text-black hover:bg-gold/20 cursor-pointer"

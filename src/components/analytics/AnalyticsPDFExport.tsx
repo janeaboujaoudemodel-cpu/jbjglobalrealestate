@@ -108,7 +108,7 @@ export function AnalyticsPDFExport({ className }: AnalyticsPDFExportProps) {
             .tool-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
             .issue-card { background: #fff; border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; }
             .issue-pending { border-left: 4px solid #f59e0b; }
-            .issue-resolved { border-left: 4px solid #10b981; }
+            .issue-resolved { border-left: 4px solid #059669; }
             .footer { margin-top: 40px; text-align: center; color: #888; font-size: 12px; }
           </style>
         </head>

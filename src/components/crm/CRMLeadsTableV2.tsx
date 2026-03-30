@@ -361,7 +361,7 @@ export default function CRMLeadsTableV2({
         onSuccess={() => { fetchLeads(); onRefresh(); }}
       />
 
-      <div className="w-full overflow-x-auto rounded-lg border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="w-full overflow-x-auto rounded-lg border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <Table className="min-w-[1300px]">
           <TableHeader>
             <TableRow className="border-gold/20 hover:bg-transparent">

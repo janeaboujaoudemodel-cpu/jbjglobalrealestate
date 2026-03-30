@@ -858,7 +858,7 @@ export default function CVResumeBuilder() {
                 onClick={() => setExportMenuOpen(o => !o)}
                 disabled={isExporting}
                 className="gap-2 h-8 text-xs font-semibold hover:opacity-90"
-                style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)", color: "#1a1a1a", border: "1px solid #C9A84C40" }}>
+                style={{ background: "linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)", color: "#1a1a1a", border: "1px solid #B8955540" }}>
                 {isExporting ? <RefreshCw size={12} className="animate-spin" /> : <Download size={12} />}
                 {isExporting ? "Exporting..." : "Export"}
                 <ChevronDown size={11} />
@@ -1123,7 +1123,7 @@ export default function CVResumeBuilder() {
                         { color: "#111827", label: "Charcoal" },
                         { color: "#8b0000", label: "Crimson" },
                         { color: "#003399", label: "Navy" },
-                        { color: "#C9A84C", label: "Gold" },
+                        { color: "#B89555", label: "Gold" },
                       ].map(p => (
                         <button
                           key={p.label}

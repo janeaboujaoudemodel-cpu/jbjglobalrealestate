@@ -201,7 +201,7 @@ const VerificationRequests = () => {
         <div className="rounded-xl border border-gold/10 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gradient-to-r from-[#F5EBD7] to-[#EDE4D3] text-black">
+              <thead className="bg-gradient-to-r from-[#F7F1E6] to-[#EFE6D6] text-black">
                 <tr>
                   <th className="text-left px-4 py-3 font-semibold">Name</th>
                   <th className="text-left px-4 py-3 font-semibold">Status</th>

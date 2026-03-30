@@ -316,7 +316,7 @@ export default function JoinApplication() {
 
   if (checkingExisting) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-gold" />
       </div>
     );
@@ -326,7 +326,7 @@ export default function JoinApplication() {
   // Redirect returning users directly to onboarding dashboard
   if (existingApplication) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <section className="flex-1 flex items-center justify-center px-4 py-16 min-h-screen">
           <div className="w-full max-w-3xl mx-auto">
             <Card className="bg-white/80 backdrop-blur-sm border-2 border-gold/30 shadow-2xl p-8 md:p-12 rounded-2xl">
@@ -408,7 +408,7 @@ export default function JoinApplication() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Full-width champagne section */}
       <section className="jj-section-champagne py-16 px-4 pt-20 lg:pt-16">
         <div className="max-w-2xl mx-auto">

@@ -185,7 +185,7 @@ const CustomerHappinessCenter = () => {
       </section>
 
       {/* SUPPORT TICKET SECTION - Reusing existing component */}
-      <section id="create-ticket" className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <section id="create-ticket" className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         <SupportTicketBox />
       </section>
 
@@ -305,7 +305,7 @@ const CustomerHappinessCenter = () => {
                   <AccordionItem
                     key={index}
                     value={`item-${index}`}
-                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden"
+                    className="border-2 border-gold/30 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden"
                   >
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-black font-medium">{faq.question}</span>

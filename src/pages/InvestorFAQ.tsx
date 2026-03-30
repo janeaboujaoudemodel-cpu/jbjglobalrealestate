@@ -155,7 +155,7 @@ const InvestorFAQ = () => {
   const allFaqItems = categories.flatMap(cat => cat.questions);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       <SEOHead 
         title="Investor FAQ | Investment Questions Answered | JBJ Global Real Estate"
         description="Find answers to common investor questions about UAE real estate investment, returns, off-plan properties, rental performance, and working with JBJ Global Real Estate."
@@ -178,13 +178,13 @@ const InvestorFAQ = () => {
         actions={
           <>
             <Button 
-              className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+              className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
               onClick={() => document.getElementById('faq-content')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <Search className="w-4 h-4 mr-2 text-black" />
               <span className="text-gold font-semibold">Browse FAQs</span>
             </Button>
-            <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
+            <Button asChild className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
               <Link to="/contact">
                 <Phone className="w-4 h-4 mr-2 text-black" />
                 <span className="text-gold font-semibold">Ask Our Team</span>
@@ -203,10 +203,10 @@ const InvestorFAQ = () => {
       </div>
 
       {/* FAQ Content - Layer 2 Active Champagne Edge-to-Edge */}
-      <section id="faq-content" className="py-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl relative">
+      <section id="faq-content" className="py-16 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl relative">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* Sticky FAQ Quick Access - Mobile/Tablet Only */}
-          <div className="lg:hidden sticky top-0 z-50 -mx-4 px-4 py-3 bg-gradient-to-br from-[#F5EBD7]/95 via-[#E8DCC8]/95 to-[#D4C4A8]/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
+          <div className="lg:hidden sticky top-0 z-50 -mx-4 px-4 py-3 bg-gradient-to-br from-[#F7F1E6]/95 via-[#ECE2D2]/95 to-[#D8C7A6]/95 backdrop-blur-sm border-b border-gold/20 shadow-lg">
             <div className="w-full">
               <FAQTableOfContents 
                 categories={categories}
@@ -233,7 +233,7 @@ const InvestorFAQ = () => {
                   variants={fadeInUp}
                   className="flex items-center gap-4 mb-6"
                 >
-                  <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl flex items-center justify-center">
                     <category.icon className="w-6 h-6 text-black" />
                   </div>
                   <h2 className="text-2xl md:text-3xl font-bold text-black">{category.title}</h2>
@@ -247,7 +247,7 @@ const InvestorFAQ = () => {
                         <AccordionItem 
                           value={`${categoryIndex}-${faqIndex}`}
                           data-accordion-item={`${categoryIndex}-${faqIndex}`}
-                          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl px-6 py-2 data-[state=open]:border-gold/60 data-[state=open]:shadow-md transition-all"
+                          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl px-6 py-2 data-[state=open]:border-gold/60 data-[state=open]:shadow-md transition-all"
                         >
                           <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
                             {faq.question}
@@ -267,7 +267,7 @@ const InvestorFAQ = () => {
       </section>
 
       {/* Still Have Questions - Layer 2 */}
-      <section className="py-16 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8">
+      <section className="py-16 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8">
         <div className="container mx-auto px-4">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -276,8 +276,8 @@ const InvestorFAQ = () => {
             className="max-w-3xl mx-auto"
           >
             {/* Layer 3 Card */}
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12 text-center">
-              <div className="w-14 h-14 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 md:p-12 text-center">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-7 h-7 text-black" />
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
@@ -306,17 +306,17 @@ const InvestorFAQ = () => {
       </section>
 
       {/* Guide Navigation - Layer 2 */}
-      <section className="py-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8">
+      <section className="py-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8">
         <div className="container mx-auto px-4">
           <GuideNavigation current="/investor-faq" guides={GUIDE_LINKS} />
         </div>
       </section>
 
       {/* Disclaimer - Layer 2 with Layer 3 Card */}
-      <section className="py-8 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8 mb-8">
+      <section className="py-8 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-2xl mt-8 mb-8">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6">
               <p className="text-center text-zinc-600 text-sm leading-relaxed">
                 <span className="text-black font-medium">Disclaimer:</span> All content is educational 
                 and informational in nature. It does not constitute financial guarantees or investment promises. 

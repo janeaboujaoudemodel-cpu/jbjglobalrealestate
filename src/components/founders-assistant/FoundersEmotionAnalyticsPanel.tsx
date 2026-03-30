@@ -87,7 +87,7 @@ export function FoundersEmotionAnalyticsPanel() {
         </div>
         <div className="flex items-center gap-3">
           <Select value={dateRange} onValueChange={(v) => setDateRange(v as typeof dateRange)}>
-            <SelectTrigger className="w-[140px] bg-white border-[#C9A84C]/30 text-black">
+            <SelectTrigger className="w-[140px] bg-white border-[#B89555]/30 text-black">
               <Calendar className="h-4 w-4 mr-2" /><SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -96,7 +96,7 @@ export function FoundersEmotionAnalyticsPanel() {
               <SelectItem value="month">This Month</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={() => toast.success('Generating report...')} className="border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C]/10">
+          <Button variant="outline" onClick={() => toast.success('Generating report...')} className="border-[#B89555]/30 text-[#B89555] hover:bg-[#B89555]/10">
             <Download className="h-4 w-4 mr-2" />Export PDF
           </Button>
         </div>
@@ -144,16 +144,16 @@ export function FoundersEmotionAnalyticsPanel() {
 
       {/* Tabs */}
       <Tabs value={activeView} onValueChange={(v) => setActiveView(v as typeof activeView)}>
-        <TabsList className="bg-white border-2 border-[#C9A84C]/20 p-1">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white"><BarChart3 className="h-4 w-4 mr-2" />Overview</TabsTrigger>
-          <TabsTrigger value="channels" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white"><MessageSquare className="h-4 w-4 mr-2" />Channels</TabsTrigger>
-          <TabsTrigger value="teams" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#C9A84C] data-[state=active]:to-[#B8973F] data-[state=active]:text-white"><Users className="h-4 w-4 mr-2" />Teams</TabsTrigger>
+        <TabsList className="bg-white border-2 border-[#B89555]/20 p-1">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white"><BarChart3 className="h-4 w-4 mr-2" />Overview</TabsTrigger>
+          <TabsTrigger value="channels" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white"><MessageSquare className="h-4 w-4 mr-2" />Channels</TabsTrigger>
+          <TabsTrigger value="teams" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#B89555] data-[state=active]:to-[#A68444] data-[state=active]:text-white"><Users className="h-4 w-4 mr-2" />Teams</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="bg-white border-2 border-[#C9A84C]/20">
-              <CardHeader><CardTitle className="text-black flex items-center gap-2"><PieChart className="h-5 w-5 text-[#C9A84C]" />Emotion Distribution</CardTitle><CardDescription className="text-zinc-500">Breakdown of detected emotions this {dateRange}</CardDescription></CardHeader>
+            <Card className="bg-white border-2 border-[#B89555]/20">
+              <CardHeader><CardTitle className="text-black flex items-center gap-2"><PieChart className="h-5 w-5 text-[#B89555]" />Emotion Distribution</CardTitle><CardDescription className="text-zinc-500">Breakdown of detected emotions this {dateRange}</CardDescription></CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {emotionStats.map(({ emotion, count, percentage, trend }) => (
@@ -168,14 +168,14 @@ export function FoundersEmotionAnalyticsPanel() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-white border-2 border-[#C9A84C]/20">
+            <Card className="bg-white border-2 border-[#B89555]/20">
               <CardHeader><CardTitle className="text-black flex items-center gap-2"><AlertTriangle className="h-5 w-5 text-amber-500" />Top Escalation Triggers</CardTitle><CardDescription className="text-zinc-500">Most frequent reasons for escalation</CardDescription></CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {topTriggers.map(({ trigger, count }, index) => (
-                    <motion.div key={trigger} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }} className="flex items-center justify-between p-3 rounded-lg bg-zinc-50 border border-[#C9A84C]/10">
-                      <div className="flex items-center gap-3"><span className="text-lg font-bold text-[#C9A84C]">#{index + 1}</span><span className="text-black text-sm">{trigger}</span></div>
-                      <Badge variant="outline" className="border-[#C9A84C]/30 text-[#C9A84C]">{count}x</Badge>
+                    <motion.div key={trigger} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }} className="flex items-center justify-between p-3 rounded-lg bg-zinc-50 border border-[#B89555]/10">
+                      <div className="flex items-center gap-3"><span className="text-lg font-bold text-[#B89555]">#{index + 1}</span><span className="text-black text-sm">{trigger}</span></div>
+                      <Badge variant="outline" className="border-[#B89555]/30 text-[#B89555]">{count}x</Badge>
                     </motion.div>
                   ))}
                 </div>
@@ -185,12 +185,12 @@ export function FoundersEmotionAnalyticsPanel() {
         </TabsContent>
 
         <TabsContent value="channels" className="mt-6">
-          <Card className="bg-white border-2 border-[#C9A84C]/20">
+          <Card className="bg-white border-2 border-[#B89555]/20">
             <CardHeader><CardTitle className="text-black">Channel Performance</CardTitle><CardDescription className="text-zinc-500">Sentiment analysis across communication channels</CardDescription></CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {channelStats.map((ch) => (
-                  <div key={ch.channel} className="p-4 rounded-lg bg-zinc-50 border border-[#C9A84C]/10">
+                  <div key={ch.channel} className="p-4 rounded-lg bg-zinc-50 border border-[#B89555]/10">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         {ch.channel === 'WhatsApp' && <MessageSquare className="h-5 w-5 text-green-600" />}
@@ -214,12 +214,12 @@ export function FoundersEmotionAnalyticsPanel() {
         </TabsContent>
 
         <TabsContent value="teams" className="mt-6">
-          <Card className="bg-white border-2 border-[#C9A84C]/20">
+          <Card className="bg-white border-2 border-[#B89555]/20">
             <CardHeader><CardTitle className="text-black">Team Sentiment</CardTitle><CardDescription className="text-zinc-500">Sentiment analysis by department</CardDescription></CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {teamSentiment.map((team) => (
-                  <div key={team.teamName} className="p-4 rounded-lg bg-zinc-50 border border-[#C9A84C]/10">
+                  <div key={team.teamName} className="p-4 rounded-lg bg-zinc-50 border border-[#B89555]/10">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         {getSentimentIcon(team.sentiment)}

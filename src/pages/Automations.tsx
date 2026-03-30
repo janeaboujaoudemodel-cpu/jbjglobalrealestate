@@ -213,7 +213,7 @@ const Automations = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] p-6">
         <div className="max-w-5xl mx-auto space-y-6">
           <Skeleton className="h-12 w-64 bg-gold/20" />
           <div className="grid gap-4">
@@ -229,9 +229,9 @@ const Automations = () => {
   const activeCount = rules.filter(r => r.isActive).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Header - Premium Champagne */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 lg:top-[48px] z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 lg:top-[48px] z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="sm" className="text-black hover:text-gold hover:bg-gold/10" onClick={() => navigate(-1)}>
@@ -262,7 +262,7 @@ const Automations = () => {
           {rules.map((rule) => (
             <Card 
               key={rule.id} 
-              className={`border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] transition-all duration-300 hover:shadow-[0_10px_40px_rgba(200,167,102,0.25)] hover:scale-[1.01] ${
+              className={`border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] transition-all duration-300 hover:shadow-[0_10px_40px_rgba(200,167,102,0.25)] hover:scale-[1.01] ${
                 rule.isActive ? 'border-l-4 border-l-gold' : 'opacity-70'
               }`}
             >
@@ -271,7 +271,7 @@ const Automations = () => {
                   <div className="flex items-center gap-4">
                     <div className={`p-3 rounded-xl border transition-all ${
                       rule.isActive 
-                        ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-gold/40' 
+                        ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-gold/40' 
                         : 'bg-zinc-100 border-zinc-200'
                     }`}>
                       <rule.icon className={`h-5 w-5 ${rule.isActive ? 'text-black' : 'text-zinc-400'}`} />
@@ -322,10 +322,10 @@ const Automations = () => {
         </div>
 
         {/* Info Card - Premium Champagne */}
-        <Card className="mt-8 border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.15)]">
+        <Card className="mt-8 border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.15)]">
           <CardContent className="p-6">
             <div className="flex items-start gap-4">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30">
                 <Shield className="h-6 w-6 text-black" />
               </div>
               <div>

@@ -50,12 +50,12 @@ const WhyChooseUs = () => {
   ];
 
   return (
-    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       <div className="jj-layer-2">
         <div className="max-w-5xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-10">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
               <Award className="w-3.5 h-3.5 text-gold" />
               <span className="text-black">{t('whyUs.ourCommitment', 'Our Commitment')}</span>
             </span>
@@ -79,7 +79,7 @@ const WhyChooseUs = () => {
                 style={{ animationDelay: `${index * 80}ms` }}
               >
                 {/* Icon */}
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                   <prop.icon className="w-6 h-6 text-gold" />
                 </div>
 

@@ -187,7 +187,7 @@ function parseInvestmentMetrics(text: string) {
 
   return [
     { name: 'Rental Yield', value: roiMatch ? parseFloat(roiMatch[1]) : 6.5, fill: '#C8A766' },
-    { name: 'Cap Rate', value: capMatch ? parseFloat(capMatch[1]) : 5.8, fill: '#10b981' },
+    { name: 'Cap Rate', value: capMatch ? parseFloat(capMatch[1]) : 5.8, fill: '#059669' },
     { name: 'Appreciation', value: appreciationMatch ? parseFloat(appreciationMatch[1]) : 8.2, fill: '#6366f1' },
     { name: 'Occupancy', value: occupancyMatch ? parseFloat(occupancyMatch[1]) : 88, fill: '#f59e0b' },
   ];
@@ -262,8 +262,8 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
                 <stop offset="95%" stopColor="#C8A766" stopOpacity={0.05} />
               </linearGradient>
               <linearGradient id="demandGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#10b981" stopOpacity={0.05} />
+                <stop offset="5%" stopColor="#059669" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#059669" stopOpacity={0.05} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0ebe0" />
@@ -274,7 +274,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
               formatter={(value: number, name: string) => [value.toLocaleString() + ' units', name === 'supply' ? 'Supply' : 'Demand']}
             />
             <Area type="monotone" dataKey="supply" stroke="#C8A766" strokeWidth={2.5} fill="url(#supplyGradient)" dot={{ fill: '#C8A766', r: 3 }} />
-            <Area type="monotone" dataKey="demand" stroke="#10b981" strokeWidth={2.5} fill="url(#demandGradient)" dot={{ fill: '#10b981', r: 3 }} />
+            <Area type="monotone" dataKey="demand" stroke="#059669" strokeWidth={2.5} fill="url(#demandGradient)" dot={{ fill: '#059669', r: 3 }} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
@@ -332,7 +332,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
 
       <div className="space-y-3">
         {devEntries.map((dev, i) => (
-          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] border border-gold/10 hover:border-gold/30 transition-colors">
+          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border border-gold/10 hover:border-gold/30 transition-colors">
             <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
               <span className="text-gold font-bold text-xs">{dev.name.charAt(0)}</span>
             </div>
@@ -468,7 +468,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
   const ratingScore = ratingMatch ? parseFloat(ratingMatch[1]) : null;
 
   return (
-    <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <section ref={sectionRef} className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="w-6 h-6 text-gold" />
@@ -551,28 +551,28 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                     {/* Quick insight stats row */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                       {hasStats && stats.totalProjects > 0 && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-3 border border-gold/15 text-center">
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <Home className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-black">{stats.totalProjects}</div>
                           <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Projects</div>
                         </div>
                       )}
                       {hasStats && stats.developers?.length > 0 && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-3 border border-gold/15 text-center">
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <Landmark className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-black">{stats.developers.length}</div>
                           <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Developers</div>
                         </div>
                       )}
                       {hasStats && stats.pricePerSqft && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-3 border border-gold/15 text-center">
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <BarChart3 className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-black">{stats.pricePerSqft.toLocaleString()}</div>
                           <div className="text-[10px] text-zinc-500 uppercase tracking-wider">AED/sqft</div>
                         </div>
                       )}
                       {hasStats && stats.avgPrice && (
-                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-3 border border-gold/15 text-center">
+                        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <TrendingUp className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-black">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
                           <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Avg Price</div>

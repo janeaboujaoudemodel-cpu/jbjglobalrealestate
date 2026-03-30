@@ -317,7 +317,7 @@ const CampaignEditor: React.FC<CampaignEditorProps> = ({ campaign, onClose, onSa
           
 Target audience: ${targetAudience}
 ${campaignType === 'email' ? `Include a compelling subject line at the start, marked as "Subject: ".
-Then write the email body in clean HTML with inline styles. Use elegant fonts, gold (#C9A84C) accent colors, and professional formatting. Include proper headings, paragraphs, and a call-to-action button styled with background-color:#C9A84C; color:#000; padding:12px 32px; border-radius:8px; text-decoration:none; font-weight:bold;` : ''}
+Then write the email body in clean HTML with inline styles. Use elegant fonts, gold (#B89555) accent colors, and professional formatting. Include proper headings, paragraphs, and a call-to-action button styled with background-color:#B89555; color:#000; padding:12px 32px; border-radius:8px; text-decoration:none; font-weight:bold;` : ''}
 
 The content should be:
 - Professional and engaging
@@ -461,7 +461,7 @@ The content should be:
     return (
       <div className="border-2 border-gold/30 rounded-lg overflow-hidden bg-white min-h-[400px]">
         {/* Email header simulation */}
-        <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] border-b border-gold/20 p-4 space-y-2">
+        <div className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border-b border-gold/20 p-4 space-y-2">
           {subjectLine && (
             <div className="flex items-start gap-2">
               <span className="text-xs text-black/50 shrink-0 pt-0.5">Subject:</span>
@@ -524,13 +524,13 @@ The content should be:
   const filteredRecipients = getFilteredRecipients();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Hidden file inputs */}
       <input ref={fileInputRef} type="file" accept=".pdf,.doc,.docx,.xls,.xlsx" multiple className="hidden" onChange={(e) => handleFileUpload(e, 'document')} />
       <input ref={imageInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFileUpload(e, 'image')} />
 
       {/* Header */}
-      <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+      <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="container flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" onClick={onClose} className="text-black hover:bg-gold/10">
@@ -583,7 +583,7 @@ The content should be:
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6]"
+              className="p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
             >
               <h2 className="font-semibold mb-4 text-black">Campaign Settings</h2>
               
@@ -736,7 +736,7 @@ The content should be:
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6]"
+              className="p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
             >
               <div className="flex items-center gap-2 mb-4">
                 <Sparkles className="w-5 h-5 text-gold" />
@@ -776,16 +776,16 @@ The content should be:
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6]"
+              className="p-6 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA]"
             >
               <Tabs value={activeTab} onValueChange={setActiveTab}>
                 <div className="flex items-center justify-between mb-4">
                   <TabsList className="bg-gold/10 border-2 border-gold/30">
-                    <TabsTrigger value="content" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">Content</TabsTrigger>
-                    <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+                    <TabsTrigger value="content" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">Content</TabsTrigger>
+                    <TabsTrigger value="preview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
                       <Eye className="w-3.5 h-3.5 mr-1" /> Preview
                     </TabsTrigger>
-                    <TabsTrigger value="attachments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+                    <TabsTrigger value="attachments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
                       Attachments
                       {attachments.length > 0 && (
                         <Badge className="ml-2 bg-gold/30 text-black text-xs">{attachments.length}</Badge>
@@ -893,7 +893,7 @@ The content should be:
 
       {/* Schedule Dialog */}
       <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-black">
               <Clock className="w-5 h-5 text-gold" />
@@ -930,7 +930,7 @@ The content should be:
 
       {/* Send Confirmation Dialog */}
       <Dialog open={showSendConfirm} onOpenChange={setShowSendConfirm}>
-        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+        <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-black">
               <Send className="w-5 h-5 text-gold" />

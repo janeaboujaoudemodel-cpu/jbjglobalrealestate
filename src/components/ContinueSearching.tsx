@@ -116,7 +116,7 @@ const ContinueSearching = ({
         {/* Header */}
         <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 flex items-center justify-center">
               <History className="w-5 h-5 text-gold" />
             </div>
             <h2 className="text-lg md:text-xl font-bold text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
@@ -126,7 +126,7 @@ const ContinueSearching = ({
           <div className="flex items-center gap-3">
               <button
                 onClick={() => setLeadCaptureOpen(true)}
-                className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black text-xs font-semibold tracking-wide hover:shadow-lg hover:shadow-gold/20 transition-all duration-300"
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 text-black text-xs font-semibold tracking-wide hover:shadow-lg hover:shadow-gold/20 transition-all duration-300"
               >
                 Register Your Interest
               </button>

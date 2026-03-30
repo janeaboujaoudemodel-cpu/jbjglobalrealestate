@@ -73,7 +73,7 @@ const Section = ({
   <section
     className={`py-16 md:py-24 ${
       ivory
-        ? "bg-gradient-to-br from-[#FAF6EE] via-[#F5EBD7]/30 to-[#FAF6EE]"
+        ? "bg-gradient-to-br from-[#FAF6EE] via-[#F7F1E6]/30 to-[#FAF6EE]"
         : "bg-gradient-to-b from-white to-[#FDFBF7]"
     } ${className}`}
   >
@@ -303,7 +303,7 @@ const Snagging = () => {
       />
 
       {/* ═══ HERO ═══ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5EBD7] to-[#E8DCC8] py-20 md:py-32">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7F1E6] to-[#ECE2D2] py-20 md:py-32">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#C8A766]/10 rounded-full blur-[140px] pointer-events-none" />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 relative z-10">
           <motion.div
@@ -440,7 +440,7 @@ const Snagging = () => {
                 variants={fadeInUp}
                 className="bg-white rounded-2xl border border-[#C8A766]/20 p-6 hover:shadow-lg hover:shadow-[#C8A766]/10 transition-shadow"
               >
-                <div className="w-12 h-12 mb-4 rounded-xl bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] flex items-center justify-center">
+                <div className="w-12 h-12 mb-4 rounded-xl bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center">
                   <area.icon className="w-6 h-6 text-[#C8A766]" />
                 </div>
                 <h3 className="font-bold text-[#1a1a1a] mb-3">{area.title}</h3>
@@ -498,7 +498,7 @@ const Snagging = () => {
               <div className="space-y-5">
                 {processSteps.map((s, i) => (
                   <motion.div key={i} variants={fadeInUp} className="flex items-center gap-5">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] flex items-center justify-center shrink-0 z-10 border-2 border-[#C8A766]/40">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center shrink-0 z-10 border-2 border-[#C8A766]/40">
                       <span className="text-[#C8A766] font-bold text-sm">{s.step}</span>
                     </div>
                     <div className="flex-1 bg-white rounded-xl border border-[#C8A766]/20 p-4 flex items-center gap-3">
@@ -526,7 +526,7 @@ const Snagging = () => {
                 variants={fadeInUp}
                 className="bg-white rounded-xl border border-[#C8A766]/20 p-5 flex items-center gap-4"
               >
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center shrink-0">
                   <w.icon className="w-5 h-5 text-[#C8A766]" />
                 </div>
                 <span className="text-sm font-medium text-[#1a1a1a]/80">{w.label}</span>
@@ -730,7 +730,7 @@ const Snagging = () => {
       <GoldDivider />
 
       {/* ═══ PREMIUM ASSURANCE ═══ */}
-      <section className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] py-16 md:py-20">
+      <section className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] py-16 md:py-20">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -807,7 +807,7 @@ const Snagging = () => {
                 variants={fadeInUp}
                 className="bg-white rounded-xl border border-[#C8A766]/20 p-6 flex items-start gap-4"
               >
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] flex items-center justify-center shrink-0">
                   <t.icon className="w-5 h-5 text-[#C8A766]" />
                 </div>
                 <div>

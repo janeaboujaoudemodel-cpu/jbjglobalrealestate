@@ -475,7 +475,7 @@ export default function ImageResize({ embedded = false }: ImageResizeProps) {
   const hasImages = images.length > 0;
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)" }}>
+    <div className="min-h-screen" style={{ background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)" }}>
       {/* Header */}
       {!embedded && (
         <div className="border-b border-gold/20" style={{ background: "linear-gradient(135deg, #FDFBF7 0%, #F0E8D8 100%)" }}>

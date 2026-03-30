@@ -34,7 +34,7 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+      <DialogContent className="max-w-2xl p-0 overflow-hidden bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
         <DialogTitle className="sr-only">{project.name} Preview</DialogTitle>
         
         {/* Hero Image */}

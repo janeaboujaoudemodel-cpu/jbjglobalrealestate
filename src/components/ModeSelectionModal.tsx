@@ -81,7 +81,7 @@ export const ModeSelectionModal = () => {
             duration: 8000,
             icon: <CheckCircle2 className="w-5 h-5 text-gold" />,
             position: 'bottom-center',
-            className: 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 text-black shadow-xl rounded-xl',
+            className: 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 text-black shadow-xl rounded-xl',
           }
         );
       } else {
@@ -111,7 +111,7 @@ export const ModeSelectionModal = () => {
     <Dialog open={isVisible} onOpenChange={handleOpenChange}>
       <DialogContent
         className={cn(
-          "w-[calc(100vw-2rem)] max-w-lg sm:max-w-xl p-0 overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]",
+          "w-[calc(100vw-2rem)] max-w-lg sm:max-w-xl p-0 overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]",
           isForcedOpen && "[&>button]:hidden" // Hide the X close button when forced
         )}
         onPointerDownOutside={isForcedOpen ? (e) => e.preventDefault() : undefined}

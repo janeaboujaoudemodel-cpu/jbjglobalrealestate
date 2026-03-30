@@ -172,7 +172,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-2xl shadow-gold/20">
+      <DialogContent className="sm:max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-2xl shadow-gold/20">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3 text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
             <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
@@ -235,7 +235,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                       <FormItem>
                         <FormLabel className="text-zinc-700">Full Name *</FormLabel>
                         <FormControl>
-                          <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black focus:border-gold" placeholder="Your full legal name" />
+                          <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black focus:border-gold" placeholder="Your full legal name" />
                         </FormControl>
                         <FormMessage className="text-red-500 text-xs" />
                       </FormItem>
@@ -250,7 +250,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                         <FormItem>
                           <FormLabel className="text-zinc-700">Email Address *</FormLabel>
                           <FormControl>
-                            <Input {...field} type="email" className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black focus:border-gold" placeholder="email@example.com" />
+                            <Input {...field} type="email" className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black focus:border-gold" placeholder="email@example.com" />
                           </FormControl>
                           <FormMessage className="text-red-500 text-xs" />
                         </FormItem>
@@ -301,7 +301,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                         <FormItem>
                           <FormLabel className="text-zinc-700">Current Location *</FormLabel>
                           <FormControl>
-                            <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black focus:border-gold" placeholder="City, Country" />
+                            <Input {...field} className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black focus:border-gold" placeholder="City, Country" />
                           </FormControl>
                           <FormMessage className="text-red-500 text-xs" />
                         </FormItem>
@@ -317,7 +317,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                         <FormLabel className="text-zinc-700">Service Needed *</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black hover:border-gold focus:border-gold">
+                            <SelectTrigger className="h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black hover:border-gold focus:border-gold">
                               <SelectValue placeholder="Select a service" />
                             </SelectTrigger>
                           </FormControl>
@@ -343,7 +343,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                         <FormControl>
                           <Textarea 
                             {...field} 
-                            className="min-h-[120px] bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black resize-none focus:border-gold" 
+                            className="min-h-[120px] bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black resize-none focus:border-gold" 
                             placeholder="Please describe in detail: What specific property or service are you interested in? What is your budget range? What is your timeline? Any specific requirements?"
                           />
                         </FormControl>

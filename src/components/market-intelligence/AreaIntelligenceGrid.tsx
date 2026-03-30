@@ -42,7 +42,7 @@ const IconBox = ({ icon: Icon, className = "" }: { icon: React.ElementType; clas
   <div 
     className={`w-10 h-10 rounded-lg flex items-center justify-center border-2 border-gold transition-all duration-300 hover:shadow-[0_8px_20px_rgba(200,167,102,0.4)] ${className}`}
     style={{
-      background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)',
+      background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
     }}
   >
     <Icon className="w-5 h-5 text-black" />

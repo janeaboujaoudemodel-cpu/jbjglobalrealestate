@@ -271,7 +271,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black max-w-3xl max-h-[85vh] overflow-y-auto mt-8">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black max-w-3xl max-h-[85vh] overflow-y-auto mt-8">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-black flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gold/20 border border-gold/30 flex items-center justify-center">

@@ -43,7 +43,7 @@ const Whiteboard = () => {
   const [boardName, setBoardName] = useState("Untitled Whiteboard");
 
   const colorOptions = [
-    "#ffffff", "#ef4444", "#f97316", "#eab308", "#22c55e",
+    "#ffffff", "#dc2626", "#ea580c", "#eab308", "#22c55e",
     "#3b82f6", "#8b5cf6", "#ec4899", "#06b6d4", "#000000"
   ];
 

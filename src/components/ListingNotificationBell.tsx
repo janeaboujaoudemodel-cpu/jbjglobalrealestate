@@ -156,7 +156,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
   if (panelMode) {
     return (
       <div className="w-80 bg-white border-2 border-gold/40 rounded-xl shadow-xl shadow-gold/10 overflow-hidden">
-        <div className="p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7] flex items-center justify-between">
+        <div className="p-3 border-b border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F7F1E6] flex items-center justify-between">
           <h3 className="font-semibold text-sm text-[hsl(var(--gold))]">Notifications{unreadCount > 0 ? ` (${unreadCount})` : ''}</h3>
           {unreadCount > 0 && (
             <button onClick={markAllRead} className="text-xs text-gold hover:text-gold/80 font-medium transition-colors">
@@ -205,7 +205,7 @@ const ListingNotificationBell = ({ onOpen, onHoverEnter, onHoverLeave, forceClos
           )}
         </div>
 
-        <div className="p-2 border-t border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F5EBD7] flex gap-2">
+        <div className="p-2 border-t border-gold/20 bg-gradient-to-r from-[#FDF9F3] to-[#F7F1E6] flex gap-2">
           <button
             onClick={() => { navigate('/my-tickets'); onClose?.(); }}
             className="flex-1 text-center text-xs text-gold hover:text-gold/80 font-semibold py-1.5 transition-colors"

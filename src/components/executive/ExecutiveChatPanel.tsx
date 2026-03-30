@@ -275,8 +275,8 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                 <div className="flex flex-col max-w-[80%]">
                   <div className={`rounded-2xl px-4 py-3 select-text cursor-text ${
                     message.role === 'user' 
-                      ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md rounded-tr-sm' 
-                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm rounded-tl-sm'
+                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md rounded-tr-sm' 
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm rounded-tl-sm'
                   }`}>
                     {message.isTyping ? (
                       <div className="flex gap-1 py-1">

@@ -36,9 +36,9 @@ const MortgageCalculatorPage = () => {
   const { t } = useLanguage();
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <section className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Hero Section - Champagne Layer */}
-      <div className="relative py-16 md:py-24 bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      <div className="relative py-16 md:py-24 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
         {/* Background effects */}
         <div className="absolute inset-0">
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-gold/20 rounded-full blur-[120px] pointer-events-none" />
@@ -91,7 +91,7 @@ const MortgageCalculatorPage = () => {
       </div>
 
       {/* Mortgage Advisors Section - Champagne Layer */}
-      <div className="py-16 md:py-24 bg-gradient-to-b from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      <div className="py-16 md:py-24 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <span className="inline-block px-4 py-1.5 bg-black/10 border border-gold/40 rounded-full text-black/80 text-sm font-medium mb-6">
@@ -147,7 +147,7 @@ const MortgageCalculatorPage = () => {
       </div>
 
       {/* CTA Section - Full-bleed, square corners, premium beige */}
-      <div className="py-16 md:py-24 bg-gradient-to-b from-[#E8DCC8] to-[#F5EBD7]">
+      <div className="py-16 md:py-24 bg-gradient-to-b from-[#ECE2D2] to-[#F7F1E6]">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 
@@ -161,7 +161,7 @@ const MortgageCalculatorPage = () => {
             </p>
             <button 
               onClick={() => setIsInquiryOpen(true)}
-              className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold transition-all duration-300 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/60 hover:scale-[1.02] transform active:scale-95 group text-black"
+              className="relative inline-flex items-center justify-center gap-2 px-10 py-5 text-lg font-bold transition-all duration-300 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold/60 hover:scale-[1.02] transform active:scale-95 group text-black"
               style={{
                 boxShadow: `
                   0 10px 30px rgba(200,167,102,0.3),
@@ -177,7 +177,7 @@ const MortgageCalculatorPage = () => {
         </div>
 
         {/* Financial Disclaimer — premium beige styling */}
-        <div className="mt-8 p-5 bg-gradient-to-r from-[#D4C4A8]/40 to-[#E8DCC8]/40 border border-gold/30 max-w-4xl mx-auto">
+        <div className="mt-8 p-5 bg-gradient-to-r from-[#D8C7A6]/40 to-[#ECE2D2]/40 border border-gold/30 max-w-4xl mx-auto">
           <p className="text-black/60 text-sm leading-relaxed">
             <strong className="text-black/80">Disclaimer:</strong> This calculator provides estimates for informational purposes only. Does not constitute financial advice.{" "}
             <Link to="/contact" className="text-gold hover:underline font-medium">Contact our team</Link> for professional guidance.

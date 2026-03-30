@@ -62,12 +62,12 @@ export function ChatSessionSidebar({
   };
 
   return (
-    <div className="w-64 border-r-2 border-[#C9A84C]/20 bg-gradient-to-b from-[#FDFBF7] to-[#F5F0E6] flex flex-col h-full">
+    <div className="w-64 border-r-2 border-[#B89555]/20 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] flex flex-col h-full">
       {/* Header */}
-      <div className="p-3 border-b border-[#C9A84C]/20">
+      <div className="p-3 border-b border-[#B89555]/20">
         <Button
           onClick={onNewChat}
-          className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white hover:from-[#B8973F] hover:to-[#C9A84C] shadow-md"
+          className="w-full bg-gradient-to-r from-[#B89555] to-[#A68444] text-white hover:from-[#A68444] hover:to-[#B89555] shadow-md"
           size="sm"
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -76,7 +76,7 @@ export function ChatSessionSidebar({
       </div>
 
       {/* Actions bar */}
-      <div className="px-3 py-2 flex items-center justify-between border-b border-[#C9A84C]/10">
+      <div className="px-3 py-2 flex items-center justify-between border-b border-[#B89555]/10">
         <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-medium">
           History ({sessions.length})
         </span>
@@ -106,7 +106,7 @@ export function ChatSessionSidebar({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 text-zinc-500 hover:text-[#C9A84C] hover:bg-[#C9A84C]/10"
+                className="h-6 w-6 text-zinc-500 hover:text-[#B89555] hover:bg-[#B89555]/10"
                 onClick={() => setSelectMode(true)}
                 title="Select chats"
               >
@@ -133,7 +133,7 @@ export function ChatSessionSidebar({
         <div className="p-2 space-y-1">
           {sessions.length === 0 ? (
             <div className="text-center py-8">
-              <MessageSquare className="w-8 h-8 text-[#C9A84C]/30 mx-auto mb-2" />
+              <MessageSquare className="w-8 h-8 text-[#B89555]/30 mx-auto mb-2" />
               <p className="text-xs text-zinc-400">No chats yet</p>
               <p className="text-[10px] text-zinc-400">Start a new conversation</p>
             </div>
@@ -145,7 +145,7 @@ export function ChatSessionSidebar({
                 animate={{ opacity: 1, x: 0 }}
                 className={`group flex items-center gap-2 px-3 py-2.5 rounded-lg cursor-pointer transition-all ${
                   activeSessionId === session.id
-                    ? 'bg-gradient-to-r from-[#C9A84C]/15 to-[#C9A84C]/5 border border-[#C9A84C]/30'
+                    ? 'bg-gradient-to-r from-[#B89555]/15 to-[#B89555]/5 border border-[#B89555]/30'
                     : 'hover:bg-white/60 border border-transparent'
                 }`}
                 onClick={() => {
@@ -158,7 +158,7 @@ export function ChatSessionSidebar({
               >
                 {selectMode && (
                   <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
-                    selected.has(session.id) ? 'bg-[#C9A84C] border-[#C9A84C]' : 'border-zinc-300'
+                    selected.has(session.id) ? 'bg-[#B89555] border-[#B89555]' : 'border-zinc-300'
                   }`}>
                     {selected.has(session.id) && (
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -168,7 +168,7 @@ export function ChatSessionSidebar({
                   </div>
                 )}
                 <MessageSquare className={`w-3.5 h-3.5 flex-shrink-0 ${
-                  activeSessionId === session.id ? 'text-[#C9A84C]' : 'text-zinc-400'
+                  activeSessionId === session.id ? 'text-[#B89555]' : 'text-zinc-400'
                 }`} />
                 <div className="flex-1 min-w-0">
                   <p className={`text-xs font-medium truncate ${

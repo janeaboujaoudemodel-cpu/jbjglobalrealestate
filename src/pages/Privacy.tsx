@@ -57,7 +57,7 @@ const BulletList = ({ items }: { items: string[] }) => (
 
 /* Champagne card wrapper */
 const CCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <div className={`p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-[#C8A766]/30 ${className}`}>
+  <div className={`p-6 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#C8A766]/30 ${className}`}>
     {children}
   </div>
 );

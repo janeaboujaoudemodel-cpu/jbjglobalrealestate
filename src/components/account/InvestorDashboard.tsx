@@ -208,7 +208,7 @@ const InvestorDashboard = () => {
   return (
     <div className="space-y-8">
       {/* Profile Header */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row items-center gap-6">
             <Avatar className="h-24 w-24 border-4 border-gold/30">
@@ -318,16 +318,16 @@ const InvestorDashboard = () => {
       {/* Tabs Section */}
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="bg-white border-2 border-gold/30 p-1 shadow-[0_2px_10px_rgba(200,167,102,0.08)]">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
             Overview
           </TabsTrigger>
-          <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+          <TabsTrigger value="tickets" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
             Support Tickets
           </TabsTrigger>
-          <TabsTrigger value="ideas" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+          <TabsTrigger value="ideas" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
             My Ideas
           </TabsTrigger>
-          <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+          <TabsTrigger value="settings" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
             Settings
           </TabsTrigger>
         </TabsList>

@@ -163,7 +163,7 @@ const EmployeeManagementHub: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold" />
       </div>
     );
@@ -171,9 +171,9 @@ const EmployeeManagementHub: React.FC = () => {
 
   if (!isAuthorized) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         <div className="container mx-auto px-4 py-20 text-center">
-          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 flex items-center justify-center mx-auto mb-6">
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 flex items-center justify-center mx-auto mb-6">
             <Shield className="w-10 h-10 text-gold" />
           </div>
           <h1 className="text-3xl font-bold text-black mb-4">Access Restricted</h1>
@@ -189,7 +189,7 @@ const EmployeeManagementHub: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Header Section */}
       <section className="relative py-8 overflow-hidden border-b border-gold/20">
         <div className="container mx-auto px-4">
@@ -203,7 +203,7 @@ const EmployeeManagementHub: React.FC = () => {
               </Link>
               <div className="h-6 w-px bg-gold/30" />
               <div className="flex items-center gap-3">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                   <Users className="h-6 w-6 text-gold" />
                 </div>
                 <div>
@@ -229,7 +229,7 @@ const EmployeeManagementHub: React.FC = () => {
       {/* Stats Cards */}
       <section className="container mx-auto px-4 py-6">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-amber-500/40">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-amber-500/40">
             <CardContent className="pt-4 pb-3 px-4">
               <div className="flex items-center justify-between mb-2">
                 <Clock className="w-5 h-5 text-amber-600" />
@@ -239,7 +239,7 @@ const EmployeeManagementHub: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-purple-500/40">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-purple-500/40">
             <CardContent className="pt-4 pb-3 px-4">
               <div className="flex items-center justify-between mb-2">
                 <Monitor className="w-5 h-5 text-purple-600" />
@@ -249,7 +249,7 @@ const EmployeeManagementHub: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-blue-500/40">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-blue-500/40">
             <CardContent className="pt-4 pb-3 px-4">
               <div className="flex items-center justify-between mb-2">
                 <Zap className="w-5 h-5 text-blue-600" />
@@ -259,7 +259,7 @@ const EmployeeManagementHub: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-green-500/40">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-green-500/40">
             <CardContent className="pt-4 pb-3 px-4">
               <div className="flex items-center justify-between mb-2">
                 <CheckCircle className="w-5 h-5 text-green-600" />
@@ -269,7 +269,7 @@ const EmployeeManagementHub: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
             <CardContent className="pt-4 pb-3 px-4">
               <div className="flex items-center justify-between mb-2">
                 <Users className="w-5 h-5 text-gold" />
@@ -279,7 +279,7 @@ const EmployeeManagementHub: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-orange-500/40">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-orange-500/40">
             <CardContent className="pt-4 pb-3 px-4">
               <div className="flex items-center justify-between mb-2">
                 <AlertCircle className="w-5 h-5 text-orange-600" />
@@ -289,7 +289,7 @@ const EmployeeManagementHub: React.FC = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-cyan-500/40">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-cyan-500/40">
             <CardContent className="pt-4 pb-3 px-4">
               <div className="flex items-center justify-between mb-2">
                 <TrendingUp className="w-5 h-5 text-cyan-600" />
@@ -305,24 +305,24 @@ const EmployeeManagementHub: React.FC = () => {
       <section className="container mx-auto px-4 pb-12">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
-            <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 p-1">
-              <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+            <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 p-1">
+              <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <BarChart3 className="w-4 h-4 mr-2" />
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="applications" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <UserPlus className="w-4 h-4 mr-2" />
                 Applications
               </TabsTrigger>
-              <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="provisioning" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <Key className="w-4 h-4 mr-2" />
                 IT Provisioning
               </TabsTrigger>
-              <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="journey" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <Activity className="w-4 h-4 mr-2" />
                 Employee Journey
               </TabsTrigger>
-              <TabsTrigger value="audit" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
+              <TabsTrigger value="audit" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border-gold/40 text-black">
                 <Eye className="w-4 h-4 mr-2" />
                 Activity Audit
               </TabsTrigger>
@@ -335,7 +335,7 @@ const EmployeeManagementHub: React.FC = () => {
                   placeholder="Search employees..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black w-64 placeholder:text-zinc-500"
+                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black w-64 placeholder:text-zinc-500"
                 />
               </div>
             </div>
@@ -345,7 +345,7 @@ const EmployeeManagementHub: React.FC = () => {
           <TabsContent value="overview">
             <div className="grid lg:grid-cols-3 gap-6">
               {/* Recent Activity */}
-              <Card className="lg:col-span-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <Card className="lg:col-span-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader>
                   <CardTitle className="text-black flex items-center gap-2">
                     <Activity className="w-5 h-5 text-gold" />
@@ -386,7 +386,7 @@ const EmployeeManagementHub: React.FC = () => {
               </Card>
 
               {/* Quick Actions */}
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader>
                   <CardTitle className="text-black flex items-center gap-2">
                     <Zap className="w-5 h-5 text-gold" />
@@ -430,7 +430,7 @@ const EmployeeManagementHub: React.FC = () => {
               </Card>
 
               {/* Onboarding Pipeline */}
-              <Card className="lg:col-span-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+              <Card className="lg:col-span-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader>
                   <CardTitle className="text-black flex items-center gap-2">
                     <Briefcase className="w-5 h-5 text-gold" />

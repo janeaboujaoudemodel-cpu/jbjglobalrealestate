@@ -450,7 +450,7 @@ export default function SharedBusinessCard() {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center px-4 py-10"
-      style={{ background: "linear-gradient(160deg, #0a0a0a 0%, #111 60%, #1a1510 100%)" }}
+      style={{ background: "linear-gradient(160deg, #0a0a0a 0%, #111 60%, #18130F 100%)" }}
     >
       {/* Header */}
       <div className="mb-6 text-center">

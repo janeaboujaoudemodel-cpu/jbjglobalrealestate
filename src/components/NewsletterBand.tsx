@@ -11,7 +11,7 @@
  
  const NewsletterBand = ({ className = "" }: NewsletterBandProps) => {
    return (
-      <section className={`py-12 md:py-16 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] ${className}`}>
+      <section className={`py-12 md:py-16 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] ${className}`}>
         <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
          {/* Premium Title */}
          <h3 

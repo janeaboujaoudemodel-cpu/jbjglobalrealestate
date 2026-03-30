@@ -114,7 +114,7 @@ const LeadCaptureModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
+      <DialogContent className="sm:max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
         {isSuccess ? (
           <div className="flex flex-col items-center justify-center py-8">
             <div className="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center mb-4">

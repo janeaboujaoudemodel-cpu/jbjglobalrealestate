@@ -30,7 +30,7 @@ body {
 
 @media (min-width: 768px) {
   body {
-    background-color: #E8DCC8;
+    background-color: #ECE2D2;
   }
 }
 
@@ -68,12 +68,12 @@ All colors MUST be HSL.
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 220 9% 46%;
 
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 79% 50%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
@@ -93,15 +93,15 @@ All colors MUST be HSL.
 
     /* Premium Refined Gold Theme - #C8A766 (HSL: 42 45% 59%) - Refined Champagne Gold */
     --gold: 42 45% 59%;
-    --gold-light: 42 50% 65%;
-    --gold-dark: 42 40% 50%;
+    --gold-light: 44 55% 75%;
+    --gold-dark: 40 50% 36%;
     --gold-muted: 42 35% 55%;
     --gold-foreground: 0 0% 100%;
 
     /* Champagne / "Best Idea Award" Surface (HSL approximations of existing palette) */
-    --champagne-1: 39 52% 90%;
-    --champagne-2: 38 38% 85%;
-    --champagne-3: 38 28% 74%;
+    --champagne-1: 38 55% 90%;
+    --champagne-2: 38 40% 83%;
+    --champagne-3: 38 30% 70%;
 
     /* ============================================================
      * GLOBAL WIDTH + GUTTER SYSTEM (LOCKED - FINAL)
@@ -114,8 +114,8 @@ All colors MUST be HSL.
     /* Locked Champagne / Inner Card Surface (Layer 3) */
     /* Warmer + less bright than pure white; matches the global "Locked Champagne" requirement */
     --pearl-1: 40 38% 96%;
-    --pearl-2: 39 28% 92%;
-    --pearl-3: 38 24% 87%;
+    --pearl-2: 37 38% 94%;
+    --pearl-3: 38 40% 89%;
 
     /* Premium surfaces */
     --premium-bg: 0 0% 5%;
@@ -145,7 +145,7 @@ All colors MUST be HSL.
     --ai-glow: 270 90% 70%;
 
     /* Listing badges (Provident mirror) */
-    --handover: 24 95% 52%;
+    --handover: 21 92% 48%;
     --handover-foreground: 0 0% 100%;
 
     /* Image overlay controls (arrows / dots on photos) */
@@ -394,7 +394,7 @@ All colors MUST be HSL.
    * Replaces: data-[state=active]:bg-gold
    * ============================================================ */
   .tab-trigger-champagne[data-state="active"] {
-    background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%);
+    background: linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%);
     border: 1px solid hsl(var(--gold) / 0.4);
     color: #000;
   }
@@ -501,7 +501,7 @@ All colors MUST be HSL.
    */
 .jj-section-champagne {
   @apply py-12 md:py-16;
-  background: linear-gradient(135deg, hsl(38 35% 12%) 0%, hsl(36 30% 16%) 50%, hsl(34 25% 12%) 100%);
+  background: linear-gradient(135deg, hsl(32 28% 13%) 0%, hsl(33 27% 15%) 50%, hsl(33 28% 11%) 100%);
 }
 
 .jj-section-champagne > div,
@@ -509,7 +509,7 @@ All colors MUST be HSL.
 .jj-section-champagne > .max-w-5xl,
 .jj-section-champagne > .max-w-4xl {
   @apply mx-3 md:mx-4 lg:mx-6 rounded-2xl border border-gold/30 p-4 md:p-6 lg:p-8;
-  background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%);
+  background: linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%);
   box-shadow: 0 0 40px rgba(200,167,102,0.18);
 }
 
@@ -542,14 +542,14 @@ All colors MUST be HSL.
 /* Layer 2 wrapper with proper gutters - stretched cards */
 .jj-layer-2 {
   @apply jj-section-gutter rounded-2xl border border-gold/30 p-2 sm:p-3 md:p-4 lg:p-6;
-  background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%);
+  background: linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%);
   box-shadow: 0 0 40px rgba(200,167,102,0.18);
 }
 
 /* Layer 3 - Inner content with champagne fill */
 .jj-card-inner {
   @apply rounded-xl border-2 border-gold/40 p-6;
-  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%);
   box-shadow: 0 0 15px rgba(200,167,102,0.22), inset 0 1px 2px hsl(0 0% 100% / 0.4);
   transition: all 0.3s ease;
 }
@@ -563,7 +563,7 @@ All colors MUST be HSL.
 /* Active box - for inner content cards (Layer 3) */
 .jj-box-active {
   @apply rounded-xl border-2 border-gold/40 p-6;
-  background: linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%);
+  background: linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%);
   box-shadow: 0 0 15px rgba(200,167,102,0.22), inset 0 1px 2px hsl(0 0% 100% / 0.4);
   transition: all 0.3s ease;
 }
@@ -577,7 +577,7 @@ All colors MUST be HSL.
 /* Icon box with active champagne color - Black icons on active bg */
 .jj-icon-box-active {
   @apply rounded-lg flex items-center justify-center border border-gold/30;
-  background: linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%);
+  background: linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%);
 }
 
 .jj-icon-box-active svg {
@@ -960,7 +960,7 @@ All colors MUST be HSL.
   
   /* --- Active Item (Light/White Background Sections) --- */
   .jj-active-item {
-    @apply bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-medium shadow-md border border-gold/40;
+    @apply bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-medium shadow-md border border-gold/40;
   }
 
   .jj-active-item-text {
@@ -994,7 +994,7 @@ All colors MUST be HSL.
 
   /* --- Tab/Filter Active State (for buttons/pills) --- */
   .jj-tab-active {
-    @apply bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-medium shadow-sm border border-gold/40;
+    @apply bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-medium shadow-sm border border-gold/40;
   }
 
   .jj-tab-inactive {
@@ -1007,7 +1007,7 @@ All colors MUST be HSL.
 
   /* --- Sort Button Active State --- */
   .jj-sort-active {
-    @apply bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-medium;
+    @apply bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-medium;
   }
 
   .jj-sort-inactive {
@@ -1046,15 +1046,15 @@ All colors MUST be HSL.
   .jj-section-champagne {
     @apply bg-gradient-to-br;
     --tw-gradient-from: #FDFBF7;
-    --tw-gradient-via: #F5F0E6;
-    --tw-gradient-to: #EDE4D3;
+    --tw-gradient-via: #F7F2EA;
+    --tw-gradient-to: #EFE6D6;
   }
 
   .jj-card-champagne {
     @apply bg-gradient-to-br border-2 border-gold/40 shadow-[0_0_40px_rgba(200,167,102,0.3)];
     --tw-gradient-from: #FDFBF7;
-    --tw-gradient-via: #F5F0E6;
-    --tw-gradient-to: #EDE4D3;
+    --tw-gradient-via: #F7F2EA;
+    --tw-gradient-to: #EFE6D6;
   }
 
   /* ============================================================

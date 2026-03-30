@@ -239,7 +239,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-md shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold max-w-md shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl text-black">
             <Shield className="h-5 w-5 text-gold" />
@@ -307,7 +307,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
                 Nationality
               </Label>
               <Select value={formData.nationality} onValueChange={(v) => handleInputChange('nationality', v)}>
-                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black">
+                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black">
                   <SelectValue placeholder="Select nationality" />
                 </SelectTrigger>
                 <SelectContent>
@@ -339,7 +339,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
                 Preferred Language
               </Label>
               <Select value={formData.preferredLanguage} onValueChange={(v) => handleInputChange('preferredLanguage', v)}>
-                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black">
+                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black">
                   <SelectValue placeholder="Select language" />
                 </SelectTrigger>
                 <SelectContent>
@@ -357,7 +357,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
                 Interested In
               </Label>
               <Select value={formData.interestedService} onValueChange={(v) => handleInputChange('interestedService', v)}>
-                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black">
+                <SelectTrigger className="border-2 border-gold/40 hover:border-gold focus:border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black">
                   <SelectValue placeholder="Select a service" />
                 </SelectTrigger>
                 <SelectContent>

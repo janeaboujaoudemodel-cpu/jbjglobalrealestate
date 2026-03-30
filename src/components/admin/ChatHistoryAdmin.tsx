@@ -353,7 +353,7 @@ export function ChatHistoryAdmin() {
 
       {/* Flag Dialog */}
       <Dialog open={showFlagDialog} onOpenChange={setShowFlagDialog}>
-        <DialogContent className="bg-gradient-to-br from-[#F5EBD7] to-[#E8DCC8] border-gold/30">
+        <DialogContent className="bg-gradient-to-br from-[#F7F1E6] to-[#ECE2D2] border-gold/30">
           <DialogHeader>
             <DialogTitle className="text-black flex items-center gap-2">
               <Flag className="w-5 h-5 text-red-500" />

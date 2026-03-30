@@ -42,9 +42,9 @@ export const fieldTypes = [
 
 export const recipientColorStyles = [
   { bg: "bg-blue-500", border: "border-blue-500", text: "text-blue-700", light: "bg-blue-50", hex: "#3B82F6" },
-  { bg: "bg-emerald-500", border: "border-emerald-500", text: "text-emerald-700", light: "bg-emerald-50", hex: "#10B981" },
+  { bg: "bg-emerald-500", border: "border-emerald-500", text: "text-emerald-700", light: "bg-emerald-50", hex: "#059669" },
   { bg: "bg-purple-500", border: "border-purple-500", text: "text-purple-700", light: "bg-purple-50", hex: "#8B5CF6" },
-  { bg: "bg-orange-500", border: "border-orange-500", text: "text-orange-700", light: "bg-orange-50", hex: "#F97316" },
+  { bg: "bg-orange-500", border: "border-orange-500", text: "text-orange-700", light: "bg-orange-50", hex: "#EA580C" },
   { bg: "bg-pink-500", border: "border-pink-500", text: "text-pink-700", light: "bg-pink-50", hex: "#EC4899" },
 ];
 

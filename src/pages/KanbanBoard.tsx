@@ -35,7 +35,7 @@ interface Column {
 }
 
 const PRIORITY_CONFIG = {
-  low: { label: "Low", className: "bg-[#C9A84C]/10 text-[#8B7D3A] border border-[#C9A84C]/20", icon: Circle },
+  low: { label: "Low", className: "bg-[#B89555]/10 text-[#8B7D3A] border border-[#B89555]/20", icon: Circle },
   medium: { label: "Medium", className: "bg-amber-100 text-amber-700 border border-amber-200", icon: Clock },
   high: { label: "High", className: "bg-red-50 text-red-700 border border-red-200", icon: AlertCircle },
   urgent: { label: "Urgent", className: "bg-red-100 text-red-800 border border-red-300", icon: AlertCircle },
@@ -45,7 +45,7 @@ const KanbanBoard = () => {
   const navigate = useNavigate();
   const [boardName, setBoardName] = useState("Project Board");
   const [columns, setColumns] = useState<Column[]>([
-    { id: "todo", title: "To Do", color: "#C9A84C", tasks: [] },
+    { id: "todo", title: "To Do", color: "#B89555", tasks: [] },
     { id: "in-progress", title: "In Progress", color: "#D4A843", tasks: [] },
     { id: "review", title: "Review", color: "#B89A3E", tasks: [] },
     { id: "done", title: "Done", color: "#8B7D3A", tasks: [] }
@@ -156,7 +156,7 @@ const KanbanBoard = () => {
   };
 
   const addColumn = () => {
-    setColumns([...columns, { id: Date.now().toString(), title: "New Column", color: "#C9A84C", tasks: [] }]);
+    setColumns([...columns, { id: Date.now().toString(), title: "New Column", color: "#B89555", tasks: [] }]);
   };
 
   const deleteColumn = (columnId: string) => {
@@ -176,16 +176,16 @@ const KanbanBoard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Header */}
-      <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-[#C9A84C]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+      <header className="sticky top-0 lg:top-[48px] z-50 border-b-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
         <div className="flex h-16 items-center justify-between px-6">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-black hover:bg-[#C9A84C]/10">
+            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="text-black hover:bg-[#B89555]/10">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#C9A84C] to-amber-600 flex items-center justify-center shadow-lg shadow-[#C9A84C]/20">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-[#B89555] to-amber-600 flex items-center justify-center shadow-lg shadow-[#B89555]/20">
                 <Columns3 className="h-5 w-5 text-white" />
               </div>
               <div>
@@ -206,12 +206,12 @@ const KanbanBoard = () => {
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 placeholder="Search tasks..."
-                className="pl-8 w-44 h-9 text-xs border-[#C9A84C]/30 bg-white/60"
+                className="pl-8 w-44 h-9 text-xs border-[#B89555]/30 bg-white/60"
               />
             </div>
             {/* Priority filter */}
             <Select value={filterPriority} onValueChange={setFilterPriority}>
-              <SelectTrigger className="w-28 h-9 text-xs border-[#C9A84C]/30 bg-white/60">
+              <SelectTrigger className="w-28 h-9 text-xs border-[#B89555]/30 bg-white/60">
                 <Filter className="w-3 h-3 mr-1" />
                 <SelectValue />
               </SelectTrigger>
@@ -226,9 +226,9 @@ const KanbanBoard = () => {
             {/* Bulk actions */}
             {selectedTasks.size > 0 && (
               <div className="flex items-center gap-1.5 ml-2">
-                <Badge className="bg-[#C9A84C]/20 text-[#8B7D3A] border border-[#C9A84C]/30">{selectedTasks.size} selected</Badge>
+                <Badge className="bg-[#B89555]/20 text-[#8B7D3A] border border-[#B89555]/30">{selectedTasks.size} selected</Badge>
                 <Select onValueChange={bulkMove}>
-                  <SelectTrigger className="w-28 h-8 text-xs border-[#C9A84C]/30">
+                  <SelectTrigger className="w-28 h-8 text-xs border-[#B89555]/30">
                     <SelectValue placeholder="Move to..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -240,7 +240,7 @@ const KanbanBoard = () => {
                 </Button>
               </div>
             )}
-            <Button onClick={addColumn} className="bg-gradient-to-r from-[#C9A84C] to-amber-600 hover:from-[#C9A84C]/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-[#C9A84C]/20 h-9 text-xs">
+            <Button onClick={addColumn} className="bg-gradient-to-r from-[#B89555] to-amber-600 hover:from-[#B89555]/90 hover:to-amber-600/90 text-black font-semibold shadow-lg shadow-[#B89555]/20 h-9 text-xs">
               <Plus className="w-3.5 h-3.5 mr-1.5" />
               Add Column
             </Button>
@@ -261,15 +261,15 @@ const KanbanBoard = () => {
                 onDrop={() => handleDrop(column.id)}
               >
                 {/* Column Header */}
-                <div className="flex items-center justify-between mb-4 pb-3 border-b-2 border-[#C9A84C]/30">
+                <div className="flex items-center justify-between mb-4 pb-3 border-b-2 border-[#B89555]/30">
                   <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[#C9A84C] to-amber-600 shrink-0" />
+                    <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[#B89555] to-amber-600 shrink-0" />
                     <Input
                       value={column.title}
                       onChange={(e) => setColumns(columns.map(col => col.id === column.id ? { ...col, title: e.target.value } : col))}
                       className="bg-transparent border-none font-semibold text-lg p-0 h-auto focus-visible:ring-0 text-black flex-1 min-w-0"
                     />
-                    <Badge className="ml-1 bg-[#C9A84C]/10 text-[#8B7D3A] border border-[#C9A84C]/20 shrink-0">{filtered.length}</Badge>
+                    <Badge className="ml-1 bg-[#B89555]/10 text-[#8B7D3A] border border-[#B89555]/20 shrink-0">{filtered.length}</Badge>
                   </div>
                   <Button
                     variant="ghost" size="icon"
@@ -288,7 +288,7 @@ const KanbanBoard = () => {
                       value={inlineTaskText[column.id] || ""}
                       onChange={e => setInlineTaskText(prev => ({ ...prev, [column.id]: e.target.value }))}
                       placeholder={`+ Add task to ${column.title}...`}
-                      className="border-[#C9A84C]/20 bg-white/60 h-8 text-xs placeholder:text-black/30 focus:border-[#C9A84C]/50 focus:bg-white"
+                      className="border-[#B89555]/20 bg-white/60 h-8 text-xs placeholder:text-black/30 focus:border-[#B89555]/50 focus:bg-white"
                       onKeyDown={e => {
                         if (e.key === "Enter") addTaskInline(column.id);
                       }}
@@ -297,7 +297,7 @@ const KanbanBoard = () => {
                     {(inlineTaskText[column.id] || "").trim() && (
                       <Button
                         size="icon"
-                        className="h-8 w-8 bg-gradient-to-r from-[#C9A84C] to-amber-600 text-black shrink-0"
+                        className="h-8 w-8 bg-gradient-to-r from-[#B89555] to-amber-600 text-black shrink-0"
                         onClick={() => addTaskInline(column.id)}
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -316,7 +316,7 @@ const KanbanBoard = () => {
                       <Card
                         key={task.id}
                         className={`border-2 bg-white/80 cursor-grab active:cursor-grabbing hover:shadow-lg transition-all ${
-                          isSelected ? "border-[#C9A84C] ring-2 ring-[#C9A84C]/20" : "border-[#C9A84C]/20 hover:border-[#C9A84C]/40"
+                          isSelected ? "border-[#B89555] ring-2 ring-[#B89555]/20" : "border-[#B89555]/20 hover:border-[#B89555]/40"
                         }`}
                         draggable
                         onDragStart={() => handleDragStart(task, column.id)}
@@ -327,16 +327,16 @@ const KanbanBoard = () => {
                               type="checkbox"
                               checked={isSelected}
                               onChange={() => toggleSelect(task.id)}
-                              className="mt-1 accent-[#C9A84C] shrink-0"
+                              className="mt-1 accent-[#B89555] shrink-0"
                             />
                             <h4 className="font-medium text-black text-sm flex-1 min-w-0 break-words">{task.title}</h4>
                             <Dialog>
                               <DialogTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-[#C9A84C]/10 shrink-0">
+                                <Button variant="ghost" size="icon" className="h-6 w-6 hover:bg-[#B89555]/10 shrink-0">
                                   <MoreVertical className="w-4 h-4 text-black/50" />
                                 </Button>
                               </DialogTrigger>
-                              <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
+                              <DialogContent className="bg-white border-2 border-[#B89555]/30">
                                 <DialogHeader>
                                   <DialogTitle className="text-black">Edit Task</DialogTitle>
                                 </DialogHeader>
@@ -345,13 +345,13 @@ const KanbanBoard = () => {
                                     value={task.title}
                                     onChange={(e) => updateTask(column.id, task.id, { title: e.target.value })}
                                     placeholder="Task title"
-                                    className="border-[#C9A84C]/30"
+                                    className="border-[#B89555]/30"
                                   />
                                   <Textarea
                                     value={task.description}
                                     onChange={(e) => updateTask(column.id, task.id, { description: e.target.value })}
                                     placeholder="Description (supports notes, links, details)"
-                                    className="border-[#C9A84C]/30 min-h-[100px]"
+                                    className="border-[#B89555]/30 min-h-[100px]"
                                   />
                                   <div>
                                     <p className="text-xs font-medium text-black/60 mb-2">Priority</p>
@@ -363,8 +363,8 @@ const KanbanBoard = () => {
                                           variant={task.priority === p ? "default" : "outline"}
                                           onClick={() => updateTask(column.id, task.id, { priority: p })}
                                           className={task.priority === p
-                                            ? "bg-gradient-to-r from-[#C9A84C] to-amber-600 text-black capitalize"
-                                            : "border-[#C9A84C]/30 text-black capitalize hover:bg-[#C9A84C]/10"}
+                                            ? "bg-gradient-to-r from-[#B89555] to-amber-600 text-black capitalize"
+                                            : "border-[#B89555]/30 text-black capitalize hover:bg-[#B89555]/10"}
                                         >
                                           {p}
                                         </Button>
@@ -377,7 +377,7 @@ const KanbanBoard = () => {
                                       type="date"
                                       value={task.dueDate || ""}
                                       onChange={(e) => updateTask(column.id, task.id, { dueDate: e.target.value })}
-                                      className="border-[#C9A84C]/30"
+                                      className="border-[#B89555]/30"
                                     />
                                   </div>
                                   <div>
@@ -386,13 +386,13 @@ const KanbanBoard = () => {
                                       value={task.assignee || ""}
                                       onChange={(e) => updateTask(column.id, task.id, { assignee: e.target.value })}
                                       placeholder="Assign to..."
-                                      className="border-[#C9A84C]/30"
+                                      className="border-[#B89555]/30"
                                     />
                                   </div>
                                   <div className="flex gap-2">
                                     <Button
                                       variant="outline"
-                                      className="flex-1 border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10"
+                                      className="flex-1 border-[#B89555]/30 text-black hover:bg-[#B89555]/10"
                                       onClick={() => duplicateTask(column.id, task)}
                                     >
                                       <Copy className="w-3.5 h-3.5 mr-1.5" /> Duplicate
@@ -420,7 +420,7 @@ const KanbanBoard = () => {
                               {pConfig.label}
                             </Badge>
                             {task.dueDate && (
-                              <Badge className="bg-white border border-[#C9A84C]/20 text-black/60 text-[10px]">
+                              <Badge className="bg-white border border-[#B89555]/20 text-black/60 text-[10px]">
                                 <Calendar className="w-2.5 h-2.5 mr-0.5" />
                                 {new Date(task.dueDate).toLocaleDateString()}
                               </Badge>

@@ -195,7 +195,7 @@ const CRMTasks = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-6">
         <div className="max-w-5xl mx-auto space-y-6">
           <Skeleton className="h-12 w-64" />
           <div className="space-y-3">
@@ -212,7 +212,7 @@ const CRMTasks = () => {
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-xl p-4 shadow-sm hover:shadow-lg hover:border-gold/50 transition-all duration-300 ${
+      className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-xl p-4 shadow-sm hover:shadow-lg hover:border-gold/50 transition-all duration-300 ${
         task.status === 'done' ? 'opacity-60' : ''
       }`}
     >
@@ -272,7 +272,7 @@ const CRMTasks = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Header */}
       <header className="border-b border-gold/20 bg-white/80 backdrop-blur-md sticky top-0 lg:top-[48px] z-50">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -302,7 +302,7 @@ const CRMTasks = () => {
                 Add Task
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30">
+            <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30">
               <DialogHeader>
                 <DialogTitle className="text-black">Add New Task</DialogTitle>
               </DialogHeader>
@@ -369,7 +369,7 @@ const CRMTasks = () => {
               placeholder="Search tasks..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30"
+              className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30"
             />
           </div>
           <div className="flex gap-2 flex-wrap">
@@ -386,7 +386,7 @@ const CRMTasks = () => {
                 onClick={() => setFilterStatus(status.key)}
                 className={filterStatus === status.key 
                   ? "bg-gold text-black" 
-                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/30 text-zinc-700 hover:border-gold"
+                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-zinc-700 hover:border-gold"
                 }
               >
                 {status.label}
@@ -397,7 +397,7 @@ const CRMTasks = () => {
 
         {/* Task Sections */}
         {filteredTasks.length === 0 ? (
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-12 text-center">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-12 text-center">
             <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="h-8 w-8 text-gold" />
             </div>

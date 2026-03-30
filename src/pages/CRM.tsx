@@ -479,7 +479,7 @@ const CRM = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           <Skeleton className="h-12 w-64 bg-gold/20" />
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -495,8 +495,8 @@ const CRM = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] flex items-center justify-center p-6">
-        <Card className="w-full max-w-lg border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center p-6">
+        <Card className="w-full max-w-lg border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_10px_40px_rgba(200,167,102,0.2)]">
           <CardHeader>
             <CardTitle className="text-black">CRM access unavailable</CardTitle>
           </CardHeader>
@@ -566,7 +566,7 @@ const CRM = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] pt-20 lg:pt-24">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] pt-20 lg:pt-24">
       {/* Command Palette */}
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
 
@@ -586,7 +586,7 @@ const CRM = () => {
       </Suspense>
 
       {/* Premium Header - Champagne with Gold border */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="max-w-[1600px] w-full mx-auto px-6 py-3">
           {/* First Line - Role Only */}
           <div className="flex items-center justify-between">
@@ -622,7 +622,7 @@ const CRM = () => {
             {/* Search Bar */}
             <button
               onClick={() => setShowCommandPalette(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 text-zinc-600 hover:border-gold/50 transition-all max-w-xs"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-zinc-600 hover:border-gold/50 transition-all max-w-xs"
             >
               <Search className="h-4 w-4 text-gold" />
               <span className="text-sm">Search leads…</span>
@@ -644,7 +644,7 @@ const CRM = () => {
                 <NotificationBellLazy
                   count={0}
                   onClick={() => setShowNotifications(true)}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30"
                 />
               </Suspense>
               
@@ -688,7 +688,7 @@ const CRM = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* AI Insights Panel */}
                 {showAIInsights && (
-                  <Card className="overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+                  <Card className="overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                     <CardContent className="p-0">
                       <div className="h-[280px]">
                         <Suspense fallback={<Skeleton className="h-full w-full" />}>
@@ -711,10 +711,10 @@ const CRM = () => {
                 </Suspense>
                 
                 {/* Smart Automations */}
-                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
+                <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.2)]">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-black font-bold text-base flex items-center gap-2">
-                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+                      <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
                         <Zap className="h-4 w-4 text-black" />
                       </div>
                       Smart Automations
@@ -746,10 +746,10 @@ const CRM = () => {
               </Suspense>
               
               {/* Leads Update Section with shortcuts */}
-              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-black font-bold text-base flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
                       <Users className="h-4 w-4 text-black" />
                     </div>
                     Leads Update
@@ -835,16 +835,16 @@ const CRM = () => {
 
             {/* View Mode Toggle - Compact */}
             <div className="flex items-center justify-end gap-3">
-              <div className="flex items-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 rounded-lg p-1">
+              <div className="flex items-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode("table")}
-                  className={`p-2 rounded transition-all ${viewMode === "table" ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 text-black" : "text-black hover:bg-gold/10"}`}
+                  className={`p-2 rounded transition-all ${viewMode === "table" ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 text-black" : "text-black hover:bg-gold/10"}`}
                 >
                   <List className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => setViewMode("kanban")}
-                  className={`p-2 rounded transition-all ${viewMode === "kanban" ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 text-black" : "text-black hover:bg-gold/10"}`}
+                  className={`p-2 rounded transition-all ${viewMode === "kanban" ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 text-black" : "text-black hover:bg-gold/10"}`}
                 >
                   <LayoutGrid className="h-4 w-4" />
                 </button>
@@ -853,7 +853,7 @@ const CRM = () => {
 
             {/* Leads Section with Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-2 mb-4 w-full flex flex-wrap gap-1 h-auto">
+              <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-2 mb-4 w-full flex flex-wrap gap-1 h-auto">
                 <TabsTrigger 
                   value="all" 
                   className="tab-trigger-champagne text-black px-5 py-2.5"

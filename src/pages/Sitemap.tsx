@@ -327,7 +327,7 @@ const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?
     <motion.div 
       variants={fadeInUp}
       id={hub.id}
-      className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-5 sm:p-6 hover:border-gold hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] transition-all"
+      className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-5 sm:p-6 hover:border-gold hover:shadow-[0_8px_30px_rgba(200,167,102,0.25)] transition-all"
     >
       {/* Hub Header */}
       <div className="flex items-center gap-3 mb-4 pb-3 border-b border-gold/30">
@@ -386,7 +386,7 @@ const Sitemap = () => {
         canonicalPath="/sitemap"
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         {/* HERO SECTION */}
         <section className="jj-hero-fullscreen relative flex items-center justify-center overflow-hidden" style={{ minHeight: '50vh' }}>
           {/* Video Background */}
@@ -488,7 +488,7 @@ const Sitemap = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-lg hover:border-gold hover:shadow-lg transition-all group"
+                    className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-lg hover:border-gold hover:shadow-lg transition-all group"
                   >
                     <Icon className="w-4 h-4 text-black group-hover:text-gold transition-colors" />
                     <span className="text-black text-xs sm:text-sm font-medium group-hover:text-gold transition-colors whitespace-nowrap">
@@ -559,7 +559,7 @@ const Sitemap = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-lg hover:border-gold hover:shadow-lg transition-all group"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-lg hover:border-gold hover:shadow-lg transition-all group"
                   >
                     <Icon className="w-4 h-4 text-gold" />
                     <span className="text-zinc-700 group-hover:text-black text-sm transition-colors">
@@ -595,7 +595,7 @@ const Sitemap = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0 }}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
                 >
                   <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                     <Headphones className="w-7 h-7 text-gold" />
@@ -615,7 +615,7 @@ const Sitemap = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 }}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
                 >
                   <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                     <Calendar className="w-7 h-7 text-gold" />
@@ -635,7 +635,7 @@ const Sitemap = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 }}
-                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
+                  className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 hover:border-gold hover:shadow-lg transition-all text-center group"
                 >
                   <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                     <Phone className="w-7 h-7 text-gold" />
@@ -659,7 +659,7 @@ const Sitemap = () => {
           <div className="container mx-auto px-4 text-center">
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 text-black rounded-xl hover:border-gold hover:shadow-lg transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black rounded-xl hover:border-gold hover:shadow-lg transition-all"
             >
               <ChevronUp className="w-5 h-5 text-gold" />
               <span className="font-medium">Back to Top</span>

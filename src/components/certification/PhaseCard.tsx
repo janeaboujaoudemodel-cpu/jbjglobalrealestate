@@ -66,10 +66,10 @@ export function PhaseCard({
       <Card className={cn(
         "h-full border transition-all duration-300 overflow-hidden",
         status === 'completed' 
-          ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-emerald-500/40" 
+          ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-emerald-500/40" 
           : status === 'in_progress' || status === 'test_pending'
-            ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/40"
-            : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/20",
+            ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/40"
+            : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20",
         canStart && "hover:border-gold/50 hover:shadow-md"
       )}>
         <CardContent className="p-6 flex flex-col h-full">

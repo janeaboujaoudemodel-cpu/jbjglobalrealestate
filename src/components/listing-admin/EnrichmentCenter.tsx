@@ -236,7 +236,7 @@ const ReellyEnrichmentPanel = () => {
 
       {/* Job progress stats */}
       {job && (job.status === "running" || job.status === "completed" || job.status === "stopped") && (
-        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-4">
+        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-3">
             {isActive && <Loader2 className="w-4 h-4 animate-spin text-gold" />}
             {job.status === "completed" && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
@@ -479,7 +479,7 @@ const ProvidentEnrichmentPanel = () => {
       </div>
 
       {(isRunning || batchCount > 0) && (
-        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border border-gold/20 rounded-lg p-4">
+        <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-3">
             {isRunning && <Loader2 className="w-4 h-4 animate-spin text-gold" />}
             <span className="text-foreground font-semibold text-sm">
@@ -535,7 +535,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
   
   return (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 rounded-xl p-5">
+      <div className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 rounded-xl p-5">
         <h2 className="text-foreground font-bold text-lg flex items-center gap-2">
           <Zap className="w-5 h-5 text-gold" />
           Project Enrichment & Extraction
@@ -547,17 +547,17 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
       </div>
 
       <Tabs defaultValue={defaultTab} className="space-y-4">
-        <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 p-1">
+        <TabsList className="bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 p-1">
           <TabsTrigger
             value="provident"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
           >
             <Database className="w-4 h-4 mr-2" />
             Source Enrichment
           </TabsTrigger>
           <TabsTrigger
             value="audit"
-            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
           >
             <Eye className="w-4 h-4 mr-2" />
             Audit & Diff Viewer
@@ -565,7 +565,7 @@ export const EnrichmentCenter = ({ activeSource = "provident" }: EnrichmentCente
           {activeSource === "reelly" && (
             <TabsTrigger
               value="reelly"
-              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
+              className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:border-gold/40 data-[state=active]:text-foreground"
             >
               <Globe className="w-4 h-4 mr-2" />
               Reelly API Enrichment

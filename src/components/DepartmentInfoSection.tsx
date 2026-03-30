@@ -46,7 +46,7 @@ const ProjectHighlightCard = ({ highlight }: { highlight: ProjectHighlight }) =>
   const StatusIcon = config.icon;
 
   return (
-    <div className="p-4 rounded-lg border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_0_15px_rgba(200,167,102,0.22)] hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all duration-300">
+    <div className="p-4 rounded-lg border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_0_15px_rgba(200,167,102,0.22)] hover:shadow-[0_0_25px_rgba(200,167,102,0.28),0_18px_50px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all duration-300">
       <div className="flex items-start justify-between gap-3 mb-2">
         <h4 className="text-black text-sm font-medium line-clamp-1">{highlight.title}</h4>
         <Badge 
@@ -77,7 +77,7 @@ const DepartmentInfoSection: React.FC<DepartmentInfoSectionProps> = ({ departmen
       {/* OUTER: Active Champagne Layer */}
       <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-2xl p-3 shadow-[0_0_40px_rgba(200,167,102,0.18)]">
         {/* INNER: Pearl Layer */}
-        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-5 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
+        <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-5 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
           {/* Department Summary */}
           <div className="mb-5">
             <div className="flex items-center gap-2 mb-2">

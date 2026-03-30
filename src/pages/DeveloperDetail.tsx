@@ -290,7 +290,7 @@ const DeveloperDetail = () => {
                     }}
                   />
                   {!isDevDescExpanded && developer.description.length > 400 && (
-                    <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F5F0E6] to-transparent pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F7F2EA] to-transparent pointer-events-none" />
                   )}
                 </div>
                 {developer.description.length > 400 && (
@@ -315,7 +315,7 @@ const DeveloperDetail = () => {
                   key={stat.label} 
                   className="rounded-xl border-2 border-gold/40 p-4"
                   style={{
-                    background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)',
+                    background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
                     boxShadow: '0 0 15px rgba(200,167,102,0.22), inset 0 1px 2px rgba(255,255,255,0.4)',
                   }}
                 >
@@ -385,7 +385,7 @@ const DeveloperDetail = () => {
           <div ref={filterSentinelRef} className="h-0" />
 
           {/* Inline filter bar — 2 rows only */}
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-2 sm:p-4 mb-6 overflow-x-auto scrollbar-hide">
             <FilterShortcutBar
               variant="light"
               filters={shortcutFilters}
@@ -436,7 +436,7 @@ const DeveloperDetail = () => {
                     onClick={() => setShowAllProjects(true)}
                     className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold tracking-wide rounded-xl transition-all duration-300 border-2 border-gold/40 hover:border-gold/80 hover:-translate-y-0.5"
                     style={{
-                      background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)',
+                      background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
                       boxShadow: '0 4px 20px rgba(200,167,102,0.2)',
                     }}
                   >

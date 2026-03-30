@@ -34,7 +34,7 @@ const FooterCard = ({ title, links, viewAllHref, viewAllLabel }: {
   viewAllHref?: string;
   viewAllLabel?: string;
 }) => (
-  <div className="group relative bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-none px-6 py-5 hover:border-gold/60 transition-all duration-300 shadow-[0_4px_15px_rgba(200,167,102,0.1)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.2)]">
+  <div className="group relative bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-none px-6 py-5 hover:border-gold/60 transition-all duration-300 shadow-[0_4px_15px_rgba(200,167,102,0.1)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.2)]">
     <h4 className="text-center font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] mb-3 pb-2.5 border-b-2 border-gold/40 text-gold"
       style={{
         fontFamily: "Poppins, sans-serif",
@@ -150,7 +150,7 @@ const FooterCurrencyUnit = () => {
         <div className="relative">
           <button
             onClick={() => { setCurrencyOpen(!currencyOpen); setUnitOpen(false); }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black text-sm font-semibold transition-all hover:border-gold"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black text-sm font-semibold transition-all hover:border-gold"
             style={{
               boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.7), inset 0 -1px 3px rgba(200,167,102,0.2)',
             }}
@@ -160,7 +160,7 @@ const FooterCurrencyUnit = () => {
           </button>
           {currencyOpen && (
             <div 
-              className="absolute bottom-full mb-2 left-0 w-52 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] overflow-hidden z-50 max-h-80 overflow-y-auto"
+              className="absolute bottom-full mb-2 left-0 w-52 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden z-50 max-h-80 overflow-y-auto"
               style={{
                 boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2)',
               }}
@@ -201,8 +201,8 @@ const FooterCurrencyUnit = () => {
               className={cn(
                 "px-4 py-2.5 text-sm font-semibold transition-all",
                 areaUnit === unit
-                  ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black"
-                  : "bg-[#F5EBD7]/40 text-black/70 hover:bg-[#F5EBD7]/70 hover:text-black/90"
+                  ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
+                  : "bg-[#F7F1E6]/40 text-black/70 hover:bg-[#F7F1E6]/70 hover:text-black/90"
               )}
             >
               {unit === 'sqft' ? 'sq ft' : 'sq m'}
@@ -433,9 +433,9 @@ const Footer = () => {
 
   return (
     <>
-      <footer id="site-footer" className="relative overflow-x-hidden bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <footer id="site-footer" className="relative overflow-x-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Dark premium brown background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]" />
       
       {/* Premium Gold Divider at top - 3D layered effect with symmetric spacing */}
       <div className="relative py-4">
@@ -641,7 +641,7 @@ const Footer = () => {
               <div 
                 className="w-full flex flex-col md:flex-row items-center justify-center gap-0 rounded-none overflow-hidden"
                 style={{
-                  background: 'linear-gradient(145deg, hsl(38 35% 12%) 0%, hsl(36 30% 16%) 50%, hsl(34 25% 12%) 100%)',
+                  background: 'linear-gradient(145deg, hsl(32 28% 13%) 0%, hsl(33 27% 15%) 50%, hsl(33 28% 11%) 100%)',
                   border: '1px solid rgba(200,167,102,0.3)',
                 }}
               >

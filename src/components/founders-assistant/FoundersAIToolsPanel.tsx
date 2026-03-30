@@ -173,10 +173,10 @@ const FoundersAIToolsPanel: React.FC = () => {
 
   const renderToolCard = (tool: AITool, index: number) => (
     <motion.div key={tool.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.03 }}>
-      <Card className={`bg-white border-2 border-[#C9A84C]/20 hover:border-[#C9A84C]/40 hover:shadow-[0_0_20px_rgba(200,167,102,0.2)] transition-all h-full ${executingTool === tool.id ? 'ring-2 ring-[#C9A84C]/50' : ''}`}>
+      <Card className={`bg-white border-2 border-[#B89555]/20 hover:border-[#B89555]/40 hover:shadow-[0_0_20px_rgba(200,167,102,0.2)] transition-all h-full ${executingTool === tool.id ? 'ring-2 ring-[#B89555]/50' : ''}`}>
         <CardContent className="p-4 flex flex-col h-full">
           <div className="flex items-start justify-between mb-3">
-            <div className={`p-2.5 rounded-lg ${tool.status === 'connected' ? 'bg-[#C9A84C]/10 text-[#C9A84C] border border-[#C9A84C]/30' : 'bg-zinc-100 text-zinc-500 border border-zinc-200'}`}>
+            <div className={`p-2.5 rounded-lg ${tool.status === 'connected' ? 'bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/30' : 'bg-zinc-100 text-zinc-500 border border-zinc-200'}`}>
               {tool.icon}
             </div>
             <Badge className={`${statusConfig[tool.status].color} border`}>
@@ -186,14 +186,14 @@ const FoundersAIToolsPanel: React.FC = () => {
           </div>
           <h4 className="text-black font-semibold mb-1">{tool.name}</h4>
           <p className="text-sm text-zinc-500 flex-1">{tool.description}</p>
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#C9A84C]/10">
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#B89555]/10">
             <span className="text-xs text-zinc-400">{tool.category}</span>
             <Button
               size="sm"
               onClick={() => handleUseTool(tool)}
               disabled={tool.status === 'coming_soon' || executingTool === tool.id}
               className={tool.status === 'connected'
-                ? 'bg-white text-[#C9A84C] border-2 border-[#C9A84C]/30 hover:bg-transparent hover:border-[#C9A84C]'
+                ? 'bg-white text-[#B89555] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555]'
                 : 'bg-zinc-100 text-zinc-400 border border-zinc-200'
               }
             >
@@ -213,14 +213,14 @@ const FoundersAIToolsPanel: React.FC = () => {
     <div className="space-y-6">
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-white border-2 border-[#C9A84C]/30">
+        <Card className="bg-white border-2 border-[#B89555]/30">
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-[#C9A84C]/10 border border-[#C9A84C]/30">
-                <Wrench className="w-6 h-6 text-[#C9A84C]" />
+              <div className="p-3 rounded-lg bg-[#B89555]/10 border border-[#B89555]/30">
+                <Wrench className="w-6 h-6 text-[#B89555]" />
               </div>
               <div>
-                <p className="text-3xl font-bold text-[#C9A84C]">{connectedCount}</p>
+                <p className="text-3xl font-bold text-[#B89555]">{connectedCount}</p>
                 <p className="text-xs text-zinc-500">Tools Connected</p>
               </div>
             </div>
@@ -257,9 +257,9 @@ const FoundersAIToolsPanel: React.FC = () => {
       {/* My Tools Section */}
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <Sparkles className="w-5 h-5 text-[#C9A84C]" />
+          <Sparkles className="w-5 h-5 text-[#B89555]" />
           <h3 className="text-lg font-semibold text-black">My Tools</h3>
-          <Badge className="bg-[#C9A84C]/10 text-[#C9A84C] border border-[#C9A84C]/30">{MY_TOOLS.length} tools</Badge>
+          <Badge className="bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/30">{MY_TOOLS.length} tools</Badge>
         </div>
         <div className="flex flex-wrap gap-2 mb-4">
           {MY_TOOLS.map(tool => (
@@ -269,12 +269,12 @@ const FoundersAIToolsPanel: React.FC = () => {
               disabled={executingTool === tool.id}
               className={`flex items-center gap-2 transition-all ${
                 executingTool === tool.id 
-                  ? 'bg-[#C9A84C]/20 border-2 border-[#C9A84C] text-[#C9A84C]' 
-                  : 'bg-white text-[#C9A84C] border-2 border-[#C9A84C]/30 hover:bg-transparent hover:border-[#C9A84C]'
+                  ? 'bg-[#B89555]/20 border-2 border-[#B89555] text-[#B89555]' 
+                  : 'bg-white text-[#B89555] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555]'
               }`}
             >
               {executingTool === tool.id ? (
-                <div className="w-4 h-4 border-2 border-[#C9A84C] border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-[#B89555] border-t-transparent rounded-full animate-spin" />
               ) : tool.icon}
               <span className="font-medium">{tool.name}</span>
             </Button>
@@ -285,9 +285,9 @@ const FoundersAIToolsPanel: React.FC = () => {
       {/* Professional Tools Section */}
       <div>
         <div className="flex items-center gap-2 mb-4">
-          <Wrench className="w-5 h-5 text-[#C9A84C]" />
+          <Wrench className="w-5 h-5 text-[#B89555]" />
           <h3 className="text-lg font-semibold text-black">Professional Tools</h3>
-          <Badge className="bg-[#C9A84C]/10 text-[#C9A84C] border border-[#C9A84C]/30">{PROFESSIONAL_TOOLS.length} tools</Badge>
+          <Badge className="bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/30">{PROFESSIONAL_TOOLS.length} tools</Badge>
         </div>
 
         {/* Category Filter */}
@@ -298,8 +298,8 @@ const FoundersAIToolsPanel: React.FC = () => {
               size="sm"
               onClick={() => setSelectedCategory(cat)}
               className={selectedCategory === cat 
-                ? 'bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white border-2 border-[#C9A84C] whitespace-nowrap hover:opacity-90' 
-                : 'bg-white text-[#C9A84C] border-2 border-[#C9A84C]/30 hover:bg-transparent hover:border-[#C9A84C]/50 whitespace-nowrap'
+                ? 'bg-gradient-to-r from-[#B89555] to-[#A68444] text-white border-2 border-[#B89555] whitespace-nowrap hover:opacity-90' 
+                : 'bg-white text-[#B89555] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555]/50 whitespace-nowrap'
               }
             >
               {cat}

@@ -319,7 +319,7 @@ export function ScriptLibrary({
 
       {/* Empty */}
       {!isLoading && scripts.length === 0 && (
-        <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 border-dashed rounded-2xl">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/30 border-dashed rounded-2xl">
           <CardContent className="py-14 flex flex-col items-center gap-3 text-center">
             <div className="w-14 h-14 rounded-full bg-gold/10 border-2 border-gold/30 flex items-center justify-center">
               <BookOpen className="h-6 w-6 text-gold" />
@@ -343,7 +343,7 @@ export function ScriptLibrary({
           {filtered.map(s => (
             <Card
               key={s.id}
-              className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] border-2 border-gold/30 hover:border-gold/60 transition-all group flex flex-col rounded-2xl"
+              className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border-2 border-gold/30 hover:border-gold/60 transition-all group flex flex-col rounded-2xl"
             >
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between gap-2">

@@ -228,7 +228,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
           const Icon = config.icon;
 
           return (
-            <div key={role} className="flex items-center gap-3 p-3 rounded-xl border-2 border-gold/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
+            <div key={role} className="flex items-center gap-3 p-3 rounded-xl border-2 border-gold/20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
               <div className={cn("w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border-2 border-gold/30", !currentUrl && "flex items-center justify-center bg-muted")}>
                 {currentUrl ? (
                   <SafeImage src={currentUrl} alt={config.label} className="w-full h-full object-cover" fallbackSrc="/placeholder.svg" />
@@ -260,7 +260,7 @@ export function ProjectMediaManager({ project, onRefresh }: ProjectMediaManagerP
 
       {/* Image Grid */}
       {images.length === 0 ? (
-        <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-gold/30 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
+        <div className="flex flex-col items-center justify-center p-12 border-2 border-dashed border-gold/30 rounded-xl bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
           <ImageIcon className="w-10 h-10 text-muted-foreground mb-3" />
           <p className="text-sm text-muted-foreground">No images uploaded yet</p>
         </div>

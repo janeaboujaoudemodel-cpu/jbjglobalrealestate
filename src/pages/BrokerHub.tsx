@@ -111,7 +111,7 @@ const BrokerHub = () => {
   const openTickets = supportTickets.filter(t => t.status === 'open' || t.status === 'in_progress').length;
 
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <section className="relative w-full min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Hero */}
       <div className="relative pt-28 pb-16 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-950/30 via-black to-purple-950/20" />

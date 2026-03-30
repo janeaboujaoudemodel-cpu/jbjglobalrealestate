@@ -36,7 +36,7 @@ const NewsletterDetailModal = ({ isOpen, onClose, onComplete, email }: Newslette
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-md z-[10050]">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-w-md z-[10050]">
         <DialogHeader className="text-center space-y-3 pt-2">
           <div className="mx-auto w-16 h-16 rounded-full bg-gold/10 border-2 border-gold/40 flex items-center justify-center">
             <User className="w-8 h-8 text-gold" />

@@ -86,16 +86,16 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
         {settings.enabled && (
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid grid-cols-4 bg-zinc-800">
-              <TabsTrigger value="skin" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black">
+              <TabsTrigger value="skin" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black">
                 <User className="h-3 w-3" />
               </TabsTrigger>
-              <TabsTrigger value="face" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black">
+              <TabsTrigger value="face" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black">
                 <Wand2 className="h-3 w-3" />
               </TabsTrigger>
-              <TabsTrigger value="makeup" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black">
+              <TabsTrigger value="makeup" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black">
                 <Palette className="h-3 w-3" />
               </TabsTrigger>
-              <TabsTrigger value="hair" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black">
+              <TabsTrigger value="hair" className="text-xs data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black">
                 <Shirt className="h-3 w-3" />
               </TabsTrigger>
             </TabsList>

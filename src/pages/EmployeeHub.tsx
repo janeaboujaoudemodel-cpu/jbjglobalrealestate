@@ -339,7 +339,7 @@ const EmployeeHub = () => {
         canonicalPath="/employee-hub"
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         {/* Command Palette */}
         <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
         

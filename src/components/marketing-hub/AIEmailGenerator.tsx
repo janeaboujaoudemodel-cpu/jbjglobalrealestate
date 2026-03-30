@@ -164,7 +164,7 @@ ${generatedEmail.signature}`;
           AI Email Generator
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-black flex items-center gap-2">
             <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600">
@@ -332,7 +332,7 @@ ${generatedEmail.signature}`;
               </div>
 
               {/* Email Body */}
-              <div className="p-4 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-lg border border-gold/20">
+              <div className="p-4 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-lg border border-gold/20">
                 <p className="text-black mb-4">{generatedEmail.greeting}</p>
                 <p className="text-black whitespace-pre-line mb-4">{generatedEmail.body}</p>
                 <p className="text-black mb-4">{generatedEmail.callToAction}</p>

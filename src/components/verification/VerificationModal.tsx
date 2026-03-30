@@ -231,7 +231,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-[hsl(var(--gold)/0.3)]">
+      <DialogContent className="sm:max-w-md bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-[hsl(var(--gold)/0.3)]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-black">
             <ShieldCheck className="w-5 h-5 text-[hsl(var(--gold))]" />

@@ -183,7 +183,7 @@ export default function FoundersAssistant() {
 
   if (authLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <Loader2 className="h-8 w-8 animate-spin text-gold" />
       </div>
     );
@@ -232,7 +232,7 @@ export default function FoundersAssistant() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <CommandPalette isOpen={showCommandPalette} onClose={() => setShowCommandPalette(false)} />
       
       <div className="flex flex-col h-screen">
@@ -356,7 +356,7 @@ export default function FoundersAssistant() {
         </div>
 
         {/* Status cards row — between header and chat */}
-        <div className="flex-shrink-0 px-4 py-2 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] border-b border-gold/20">
+        <div className="flex-shrink-0 px-4 py-2 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] border-b border-gold/20">
           <div className="flex items-center gap-2 overflow-x-auto">
             {statCards.map((s) => (
               <button

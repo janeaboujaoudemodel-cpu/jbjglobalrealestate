@@ -314,7 +314,7 @@ const InquiryFormModal = ({
         }}
       >
         <DialogContent 
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 text-zinc-900 max-w-lg p-0 max-h-[90vh] shadow-2xl shadow-gold/20 overflow-visible"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-zinc-900 max-w-lg p-0 max-h-[90vh] shadow-2xl shadow-gold/20 overflow-visible"
           style={{ overflow: 'visible' }}
           dir={isRTL ? 'rtl' : 'ltr'}
           onInteractOutside={(e) => {

@@ -50,7 +50,7 @@ export function BrokerToolkitGrowth() {
     <section id="section-growth" className="py-8 md:py-10 bg-black">
       <div className="container mx-auto px-3 sm:px-4">
         {/* Active Champagne Layer for Growth Section - matching global design */}
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
+        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -77,7 +77,7 @@ export function BrokerToolkitGrowth() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
                     <Crown className="w-5 h-5 text-gold" />
@@ -86,7 +86,7 @@ export function BrokerToolkitGrowth() {
                   <div className="space-y-4">
                     {LEVELS.map((level, i) => (
                       <div key={i} className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/50 flex items-center justify-center text-black font-bold text-sm shadow-md">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/50 flex items-center justify-center text-black font-bold text-sm shadow-md">
                           {level.level}
                         </div>
                         <div className="flex-1">
@@ -109,7 +109,7 @@ export function BrokerToolkitGrowth() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
+              <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 hover:border-gold hover:shadow-xl hover:shadow-gold/20 h-full">
                 <CardContent className="p-6">
                   <h3 className="text-xl font-semibold text-black mb-6 flex items-center gap-2">
                     <Zap className="w-5 h-5 text-gold" />
@@ -153,7 +153,7 @@ export function BrokerToolkitGrowth() {
                   transition={{ delay: i * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 hover:border-gold/60 hover:shadow-xl hover:shadow-gold/20 transition-all cursor-pointer h-full">
+                  <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 hover:border-gold/60 hover:shadow-xl hover:shadow-gold/20 transition-all cursor-pointer h-full">
                     <CardContent className="p-5 text-center">
                       <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-3">
                         <reward.icon className="w-6 h-6 text-gold" />
@@ -177,7 +177,7 @@ export function BrokerToolkitGrowth() {
             <button 
               className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
               style={{
-                background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)',
+                background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
                 border: '2px solid rgba(200,167,102,0.5)',
                 boxShadow: `
                   0 10px 30px rgba(200,167,102,0.4),

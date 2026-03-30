@@ -250,7 +250,7 @@ export default function ReferralOnboarding() {
 
   return (
     <MainLayout>
-      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] py-8 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] py-8 px-4">
         <div className="max-w-3xl mx-auto">
           {/* Header - Larger logo with breathable spacing */}
           {/* Header - Large monogram only, no duplicate text */}
@@ -280,7 +280,7 @@ export default function ReferralOnboarding() {
                     className={`w-10 h-10 rounded-xl flex items-center justify-center mb-2 transition-all duration-300`}
                     style={{
                       background: currentStep >= step.id 
-                        ? 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F5F0E6 100%)'
+                        ? 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 50%, #F7F2EA 100%)'
                         : 'transparent',
                       border: currentStep >= step.id 
                         ? '2px solid rgba(200,167,102,0.6)'

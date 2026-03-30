@@ -60,8 +60,8 @@ const COLORS = {
   black: rgb(0, 0, 0),
   white: rgb(1, 1, 1),
   gold: rgb(0.66, 0.58, 0.35), // #A8925A
-  champagne: rgb(0.96, 0.94, 0.90), // #F5F0E6
-  lightGold: rgb(0.83, 0.77, 0.66), // #D4C4A8
+  champagne: rgb(0.96, 0.94, 0.90), // #F7F2EA
+  lightGold: rgb(0.83, 0.77, 0.66), // #D8C7A6
   zinc: rgb(0.4, 0.4, 0.4),
   lightZinc: rgb(0.6, 0.6, 0.6),
 };

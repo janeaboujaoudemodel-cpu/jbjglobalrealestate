@@ -18,7 +18,7 @@ const SECTIONS = [
   { id: "education", label: "Education", icon: GraduationCap, activeColor: "from-blue-500 to-blue-600", activeBg: "bg-gradient-to-r from-blue-500 to-blue-600" },
   { id: "support", label: "Support Team", icon: Users, activeColor: "from-pink-500 to-pink-600", activeBg: "bg-gradient-to-r from-pink-500 to-pink-600" },
   { id: "crm", label: "CRM & Leads", icon: Target, activeColor: "from-emerald-600 to-emerald-700", activeBg: "bg-gradient-to-r from-emerald-600 to-emerald-700" },
-  { id: "growth", label: "Growth & Rewards", icon: TrendingUp, activeColor: "from-[#F5EBD7] to-[#E8DCC8]", activeBg: "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]" },
+  { id: "growth", label: "Growth & Rewards", icon: TrendingUp, activeColor: "from-[#F7F1E6] to-[#ECE2D2]", activeBg: "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]" },
 ];
 
 export function BrokerToolkitNavigation({ activeSection, onSectionChange }: BrokerToolkitNavigationProps) {
@@ -49,9 +49,9 @@ export function BrokerToolkitNavigation({ activeSection, onSectionChange }: Brok
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-full whitespace-nowrap transition-all ${
                   isActive
                     ? isGrowth
-                      ? "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black shadow-lg border border-gold/50"
+                      ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black shadow-lg border border-gold/50"
                       : `${section.activeBg} text-white shadow-lg`
-                    : "bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-black text-black hover:border-gold"
+                    : "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-black text-black hover:border-gold"
                 }`}
               >
                 <section.icon className={`w-4 h-4 ${isActive && isGrowth ? "text-black" : isActive ? "" : "text-gold"}`} />

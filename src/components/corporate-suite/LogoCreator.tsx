@@ -328,7 +328,7 @@ export default function LogoCreator() {
       {/* Generate / Regenerate */}
       <Button onClick={() => generate()} disabled={generating || !name.trim()}
         className="w-full h-10 text-sm font-bold gap-2 border border-[hsl(var(--gold))]/60"
-        style={{ background: "linear-gradient(135deg, #1a1a1a, #2d2d2d)", color: "#C9A84C", boxShadow: "0 0 12px rgba(201,168,76,0.25)" }}>
+        style={{ background: "linear-gradient(135deg, #1a1a1a, #2d2d2d)", color: "#B89555", boxShadow: "0 0 12px rgba(201,168,76,0.25)" }}>
         {generating ? <Loader2 size={16} className="animate-spin" /> : <Sparkles size={16} />}
         {generating ? "Generating…" : logo ? "Regenerate" : "Generate Logo"}
       </Button>
@@ -638,7 +638,7 @@ export default function LogoCreator() {
       <StudioShell
         toolName="Logo Creator"
         toolIcon={<ImageIcon size={14} />}
-        toolColor="#C9A84C"
+        toolColor="#B89555"
         sections={sections}
         activeSection={activeSection}
         onSectionChange={setActiveSection}

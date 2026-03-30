@@ -47,7 +47,7 @@ export default function DeveloperHubSidebarNav({ collapsed, onNavigate }: Props)
                 "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200",
                 isActive
                   ? "bg-gold/15 text-gold font-semibold border-l-2 border-gold"
-                  : "text-[#E8DCC8]/70 hover:text-gold hover:bg-gold/10"
+                  : "text-[#ECE2D2]/70 hover:text-gold hover:bg-gold/10"
               )}
               title={collapsed ? item.label : undefined}
             >

@@ -74,7 +74,7 @@ const MarketReport = () => {
 
       {/* Hero Section */}
       <section className="jj-hero-fullscreen relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden bg-black">
-        <div className="absolute inset-x-0 bottom-0 top-20 md:top-24 mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl md:rounded-3xl" />
+        <div className="absolute inset-x-0 bottom-0 top-20 md:top-24 mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl md:rounded-3xl" />
         <div className="absolute top-20 right-0 w-[600px] h-[600px] bg-gold/15 rounded-full blur-[150px]" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gold/10 rounded-full blur-[100px]" />
 
@@ -124,7 +124,7 @@ const MarketReport = () => {
                   <div className="absolute -bottom-4 left-4 right-4 h-8 bg-black/60 blur-xl rounded-full transition-all duration-500 group-hover:blur-2xl group-hover:h-10" />
                 </div>
               </div>
-              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.4 }} className="absolute -bottom-2 -right-4 md:right-8 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black px-4 py-2 rounded-full shadow-lg border border-gold/50">
+              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.4 }} className="absolute -bottom-2 -right-4 md:right-8 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black px-4 py-2 rounded-full shadow-lg border border-gold/50">
                 <span className="text-xs font-bold uppercase tracking-wider">Free Download</span>
               </motion.div>
             </motion.div>
@@ -187,7 +187,7 @@ const MarketReport = () => {
       <section className="py-12 md:py-16 bg-black">
         <div className="jj-layer-2">
           <div className="grid lg:grid-cols-5 gap-10 items-start">
-            <motion.section id="unlock-form" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="lg:col-span-3 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-3xl p-8 md:p-10 shadow-xl">
+            <motion.section id="unlock-form" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.2 }} className="lg:col-span-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-3xl p-8 md:p-10 shadow-xl">
               {canDirectDownload ? (
                 <div className="text-center py-8">
                   <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center mx-auto mb-6">
@@ -258,7 +258,7 @@ const MarketReport = () => {
 
             {/* Sidebar */}
             <motion.aside initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.3 }} className="lg:col-span-2 space-y-6">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-3xl p-8 shadow-lg">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-3xl p-8 shadow-lg">
                 <h2 className="text-black text-xl font-bold mb-6">What You'll Receive</h2>
                 <ul className="space-y-4">
                   {["Structured market overview (educational)", "Developer & community comparison frameworks", "Investment due diligence checklist", "Complimentary AI Home Finder access", "Expert insights from the founder"].map((item, i) => (
@@ -269,7 +269,7 @@ const MarketReport = () => {
                   ))}
                 </ul>
               </div>
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-6 text-center shadow-lg">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6 text-center shadow-lg">
                 <p className="text-zinc-600 text-xs mb-1">Created by <span className="text-black font-semibold">JBJ Global Real Estate</span></p>
                 <p className="text-zinc-700 text-sm">Exclusive for <a href="/about" className="text-gold font-semibold hover:underline">JBJ Global Real Estate</a></p>
                 <p className="text-zinc-500 text-[10px] mt-2 uppercase tracking-widest">Real Estate Brokerage • Dubai, UAE</p>

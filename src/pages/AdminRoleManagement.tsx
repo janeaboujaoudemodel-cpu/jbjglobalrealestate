@@ -210,9 +210,9 @@ const AdminRoleManagement = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] pt-24 lg:pt-28">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] pt-24 lg:pt-28">
       {/* Header */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-[88px] lg:top-[104px] z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-[88px] lg:top-[104px] z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
             <Button
@@ -224,7 +224,7 @@ const AdminRoleManagement = () => {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
                 <Shield className="w-5 h-5 text-black" />
               </div>
               <div>
@@ -241,7 +241,7 @@ const AdminRoleManagement = () => {
       <main className="container mx-auto px-4 py-6">
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Add New Role */}
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-lg">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
             <CardHeader>
               <CardTitle className="text-black flex items-center gap-2">
                 <UserPlus className="w-5 h-5 text-gold" />
@@ -300,7 +300,7 @@ const AdminRoleManagement = () => {
           </Card>
 
           {/* Role Statistics */}
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-lg">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
             <CardHeader>
               <CardTitle className="text-black flex items-center gap-2">
                 <Users className="w-5 h-5 text-gold" />
@@ -329,7 +329,7 @@ const AdminRoleManagement = () => {
         </div>
 
         {/* System Roles Table */}
-        <Card className="mt-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-lg">
+        <Card className="mt-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
           <CardHeader>
             <CardTitle className="text-black flex items-center gap-2">
               <Crown className="w-5 h-5 text-gold" />
@@ -401,7 +401,7 @@ const AdminRoleManagement = () => {
         </Card>
 
         {/* Listing Admins Table */}
-        <Card className="mt-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-lg">
+        <Card className="mt-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-lg">
           <CardHeader>
             <CardTitle className="text-black flex items-center gap-2">
               <Building2 className="w-5 h-5 text-gold" />

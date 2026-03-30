@@ -530,7 +530,7 @@ const PendingImportPreview = () => {
 
   if (checkingAdmin || isLoading) {
     return (
-      <section className="relative w-full min-h-screen py-16 md:py-24 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <section className="relative w-full min-h-screen py-16 md:py-24 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="container mx-auto px-4">
           <Skeleton className="h-8 w-48 bg-gold/20 mb-8" />
           <Skeleton className="aspect-[16/9] w-full rounded-lg bg-gold/10 mb-8" />
@@ -543,7 +543,7 @@ const PendingImportPreview = () => {
 
   if (!hasAccess) {
     return (
-      <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="text-center">
           <h1 className="text-black text-2xl mb-4">Access Denied</h1>
           <Link to="/" className="text-gold hover:underline">
@@ -556,7 +556,7 @@ const PendingImportPreview = () => {
 
   if (!pendingImport) {
     return (
-      <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <section className="relative w-full min-h-screen py-16 md:py-24 flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="text-center">
           <h1 className="text-black text-2xl mb-4">Project not found</h1>
           <Link to="/listing-admin" className="text-gold hover:underline">
@@ -575,7 +575,7 @@ const PendingImportPreview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Admin Bar - sticky at top, no gap */}
       <section className="bg-gradient-to-r from-champagne via-champagne-light to-champagne border-b-2 border-gold/30 py-3 sticky top-0 z-40 shadow-md">
         <div className="container mx-auto px-4 flex items-center justify-between flex-wrap gap-4">

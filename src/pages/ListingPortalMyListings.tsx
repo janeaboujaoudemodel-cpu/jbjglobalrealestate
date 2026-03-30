@@ -157,7 +157,7 @@ const ListingPortalMyListings = () => {
     switch (status) {
       case 'approved': return <CheckCircle className="w-4 h-4 text-emerald-600" />;
       case 'rejected': return <XCircle className="w-4 h-4 text-red-500" />;
-      default: return <Clock className="w-4 h-4 text-[#C9A84C]" />;
+      default: return <Clock className="w-4 h-4 text-[#B89555]" />;
     }
   };
 
@@ -165,7 +165,7 @@ const ListingPortalMyListings = () => {
     switch (status) {
       case 'approved': return 'bg-emerald-100 text-emerald-800 border-emerald-300';
       case 'rejected': return 'bg-red-100 text-red-800 border-red-300';
-      default: return 'bg-[#F5EBD7] text-[#8B7355] border-[#C9A84C]/30';
+      default: return 'bg-[#F7F1E6] text-[#8A7356] border-[#B89555]/30';
     }
   };
 
@@ -178,7 +178,7 @@ const ListingPortalMyListings = () => {
 
   if (!user) {
     return (
-      <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] flex items-center justify-center">
+      <section className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-black text-xl font-bold mb-4">Please sign in</h2>
           <Button onClick={() => navigate('/auth')} className="bg-gold hover:bg-gold/90 text-black">Sign In</Button>
@@ -188,7 +188,7 @@ const ListingPortalMyListings = () => {
   }
 
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <section className="relative w-full min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <div className="relative py-12 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto">

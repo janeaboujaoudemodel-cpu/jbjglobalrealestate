@@ -277,7 +277,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
 
   if (isLoading) {
     return (
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground">
             <Database className="h-5 w-5 text-gold" />
@@ -294,7 +294,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
   }
 
   return (
-    <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30">
+    <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="flex items-center gap-2 text-foreground">
           <Database className="h-5 w-5 text-gold" />
@@ -309,7 +309,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
               size="sm"
               onClick={handleApproveAll}
               disabled={batchProcessing}
-              className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/40 hover:border-gold/60"
+              className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/40 hover:border-gold/60"
             >
               <Check className="h-4 w-4 mr-1" />
               Approve All ({newProjects.length})

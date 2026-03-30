@@ -209,7 +209,7 @@ export const AIMarketAnalyzer = ({
 
   if (variant === 'compact') {
     return (
-      <div className="border border-gold/30 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-hidden">
+      <div className="border border-gold/30 rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden">
         <button
           onClick={fetchAnalysis}
           disabled={isLoading}
@@ -249,7 +249,7 @@ export const AIMarketAnalyzer = ({
 
   // Full variant for detail pages - Auto-loads and includes chat
   return (
-    <div className="border-2 border-gold/30 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-lg overflow-hidden">
+    <div className="border-2 border-gold/30 rounded-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-lg overflow-hidden">
       {/* Header */}
       <div className="p-6 border-b border-gold/20 bg-gradient-to-r from-purple-900/10 to-purple-800/5">
         <div className="flex items-center gap-3">

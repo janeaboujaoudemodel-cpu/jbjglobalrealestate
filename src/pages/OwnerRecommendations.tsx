@@ -123,14 +123,14 @@ const OwnerRecommendations = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Header */}
       <div className="border-b-2 border-gold/30">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-full px-4 py-1 mb-3">
-                <Sparkles className="w-4 h-4 text-[#8B7355]" />
+              <div className="inline-flex items-center gap-2 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-full px-4 py-1 mb-3">
+                <Sparkles className="w-4 h-4 text-[#8A7356]" />
                 <span className="text-black text-sm font-medium">AI Intelligence</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-bold text-black">Global Recommendations</h1>
@@ -169,7 +169,7 @@ const OwnerRecommendations = () => {
               const SrcIcon = cfg?.icon;
               return (
                 <button key={s} onClick={() => setFilterSource(s)}
-                  className={`inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium transition-all ${filterSource === s ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40 shadow-sm" : "text-zinc-600 hover:bg-gold/10"}`}>
+                  className={`inline-flex items-center gap-1.5 whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium transition-all ${filterSource === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black border border-gold/40 shadow-sm" : "text-zinc-600 hover:bg-gold/10"}`}>
                   {SrcIcon && <SrcIcon className="w-3 h-3 flex-shrink-0" />}
                   {s === "all" ? "All Sources" : cfg?.label || s}
                 </button>
@@ -179,7 +179,7 @@ const OwnerRecommendations = () => {
           <div className="flex flex-wrap gap-1 bg-white/60 border border-gold/20 rounded-lg p-1">
             {["all", "pending", "applied", "reverted", "dismissed"].map(s => (
               <button key={s} onClick={() => setFilterStatus(s)}
-                className={`whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${filterStatus === s ? "bg-gradient-to-r from-[#F5EBD7] to-[#D4C4A8] text-black border border-gold/40 shadow-sm" : "text-zinc-600 hover:bg-gold/10"}`}>
+                className={`whitespace-nowrap px-4 py-1.5 rounded-md text-xs font-medium capitalize transition-all ${filterStatus === s ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black border border-gold/40 shadow-sm" : "text-zinc-600 hover:bg-gold/10"}`}>
                 {s === "all" ? "All Status" : s}
               </button>
             ))}

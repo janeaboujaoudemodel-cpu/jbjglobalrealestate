@@ -559,7 +559,7 @@ export default function ProjectDetailLayout({
               fallbackSrc="/placeholder.svg"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#1a1510] via-[#0d0b08] to-black flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-[#18130F] via-[#0d0b08] to-black flex items-center justify-center">
               <BrandedLoader text="Loading project..." />
             </div>
           )}
@@ -688,14 +688,14 @@ export default function ProjectDetailLayout({
         }`}
       >
         {/* Row 1: Filter Shortcut Bar */}
-        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-b border-gold/20 py-2 px-2">
+        <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-b border-gold/20 py-2 px-2">
           <div className="max-w-full overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
             <FilterShortcutBar variant="light" filters={shortcutFilters} onFilterChange={setShortcutFilters} />
           </div>
         </div>
 
         {/* Row 2: Curated Shortcuts — gold bottom border for visibility */}
-        <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D4C4A8] border-b-2 border-gold shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
+        <div className="bg-gradient-to-r from-[#EDE0C8] via-[#E2D4B8] to-[#D8C7A6] border-b-2 border-gold shadow-[0_4px_12px_rgba(200,167,102,0.25)]">
           <div className="container mx-auto px-4">
             <div ref={tabNavRef} className="overflow-x-auto scrollbar-hide" style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch', overscrollBehaviorX: 'contain', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
               <div className="flex items-center gap-1 py-1.5">
@@ -706,7 +706,7 @@ export default function ProjectDetailLayout({
                     onClick={() => handleTabClick(tab.id)}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium whitespace-nowrap min-w-fit transition-all relative ${
                       activeTab === tab.id
-                        ? "bg-gradient-to-br from-[#FDFBF7] via-[#F5EBD7] to-[#E8DCC8] text-black border-2 border-gold font-bold shadow-[0_0_12px_rgba(200,167,102,0.4)]"
+                        ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F1E6] to-[#ECE2D2] text-black border-2 border-gold font-bold shadow-[0_0_12px_rgba(200,167,102,0.4)]"
                         : "text-black/70 hover:text-gold hover:bg-gold/10 border border-transparent"
                     }`}
                   >
@@ -721,7 +721,7 @@ export default function ProjectDetailLayout({
                     setCaptureDocUrl(undefined);
                     setLeadCaptureOpen(true);
                   }}
-                  className="flex items-center gap-1.5 ml-auto px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit transition-all bg-gradient-to-r from-[#F5EBD7] via-[#EDE0C8] to-[#D4C4A8] text-black border-2 border-gold/50 hover:brightness-105"
+                  className="flex items-center gap-1.5 ml-auto px-4 py-1.5 rounded-lg text-xs md:text-sm font-bold whitespace-nowrap min-w-fit transition-all bg-gradient-to-r from-[#F7F1E6] via-[#EDE0C8] to-[#D8C7A6] text-black border-2 border-gold/50 hover:brightness-105"
                   style={{ boxShadow: '0 0 15px rgba(200,167,102,0.3)' }}
                 >
                   <UserPlus className="w-3.5 h-3.5" />
@@ -735,7 +735,7 @@ export default function ProjectDetailLayout({
       </div>
 
       {/* MAIN CONTENT */}
-      <section className="jj-section-champagne" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D4C4A8 100%)' }}>
+      <section className="jj-section-champagne" style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
         <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16" style={{ margin: '0 auto', border: 'none', borderRadius: 0, background: 'transparent' }}>
           {/* Quick Stats Grid - Premium gold border visible */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
@@ -1278,7 +1278,7 @@ projectImageUrl={project.cover_image_url || project.images?.[0]?.url || undefine
       </section>
 
       {/* Recommended Projects — seamless champagne bg continuation */}
-      <div style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D4C4A8 100%)' }}>
+      <div style={{ background: 'linear-gradient(135deg, #EDE0C8 0%, #E2D4B8 50%, #D8C7A6 100%)' }}>
       <RecommendedProjects
         currentProjectId={project.id}
         currentDeveloperId={(project.developer as any)?.id || null}

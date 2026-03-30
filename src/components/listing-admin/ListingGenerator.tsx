@@ -745,7 +745,7 @@ const ListingGenerator = () => {
             className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer ${
               isDragOver
                 ? "border-gold bg-gold/10 scale-[1.01]"
-                : "border-border hover:border-gold/50 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]"
+                : "border-border hover:border-gold/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]"
             }`}
             onClick={() => fileInputRef.current?.click()}
           >
@@ -768,7 +768,7 @@ const ListingGenerator = () => {
 
           {/* Queued Files */}
           {files.length > 0 && (
-            <Card className="border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3]">
+            <Card className="border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-foreground flex items-center gap-2">
                   <FileText className="w-4 h-4 text-gold" />
@@ -1028,7 +1028,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
   return (
     <div className="space-y-6">
       {/* Project Header */}
-      <Card className="border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3]">
+      <Card className="border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6]">
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <div>
@@ -1334,7 +1334,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
       )}
 
       {/* Bottom Save Bar */}
-      <div className="sticky bottom-4 p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#EDE4D3] border-2 border-gold/30 shadow-lg flex items-center justify-between">
+      <div className="sticky bottom-4 p-4 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] border-2 border-gold/30 shadow-lg flex items-center justify-between">
         <div>
           <p className="font-semibold text-foreground">{extracted.name}</p>
           <p className="text-xs text-muted-foreground">

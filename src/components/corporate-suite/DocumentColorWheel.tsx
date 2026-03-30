@@ -25,7 +25,7 @@ const PRESETS = [
   { label: "Navy",    accent: "#1e293b", header: "#f8fafc", text: "#374151", divider: "#1e293b" },
   { label: "Royal Blue", accent: "#1d4ed8", header: "#eff6ff", text: "#1e293b", divider: "#3b82f6" },
   { label: "Gold",    accent: "#92400e", header: "#fffbeb", text: "#1c1917", divider: "#d97706" },
-  { label: "Emerald", accent: "#065f46", header: "#ecfdf5", text: "#1c1917", divider: "#10b981" },
+  { label: "Emerald", accent: "#065f46", header: "#ecfdf5", text: "#1c1917", divider: "#059669" },
   { label: "Rose",    accent: "#9f1239", header: "#fff1f2", text: "#1c1917", divider: "#e11d48" },
   { label: "Purple",  accent: "#6b21a8", header: "#faf5ff", text: "#1c1917", divider: "#a855f7" },
   { label: "Slate",   accent: "#111827", header: "#ffffff", text: "#374151", divider: "#e5e7eb" },

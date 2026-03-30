@@ -67,7 +67,7 @@ const PillarCard = ({
 }) => (
   <motion.div
     variants={fadeIn}
-    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F3EB] to-[#EDE4D3] border border-[#C8A766]/30 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow"
+    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F3EB] to-[#EFE6D6] border border-[#C8A766]/30 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow"
   >
     <div className="flex items-center gap-4 mb-6">
       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C8A766] to-[#B8943F] flex items-center justify-center shadow-sm">
@@ -496,7 +496,7 @@ const ShortTermRentals = () => {
                 <motion.div
                   key={i}
                   variants={fadeIn}
-                  className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] to-[#EDE4D3] border border-[#C8A766]/20 rounded-xl p-5"
+                  className="flex items-center gap-4 bg-gradient-to-br from-[#FDFBF7] to-[#EFE6D6] border border-[#C8A766]/20 rounded-xl p-5"
                 >
                   <ShieldCheck className="w-5 h-5 text-[#C8A766] shrink-0" />
                   <span className="text-[#444] text-sm font-medium">{item}</span>
@@ -574,7 +574,7 @@ const ShortTermRentals = () => {
             />
             <motion.div
               variants={fadeIn}
-              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F3EB] to-[#EDE4D3] border border-[#C8A766]/25 rounded-2xl p-8"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F3EB] to-[#EFE6D6] border border-[#C8A766]/25 rounded-2xl p-8"
             >
               <p className="text-[#444] mb-6">Owners receive access to:</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -873,7 +873,7 @@ const ShortTermRentals = () => {
       {/* ═══════════════════════════════════════════
           14. COMPLIANCE NOTE
       ═══════════════════════════════════════════ */}
-      <section className="bg-[#F5F0E6] py-10">
+      <section className="bg-[#F7F2EA] py-10">
         <div className="container mx-auto px-4">
           <p className="text-center text-[#888] text-xs leading-relaxed max-w-3xl mx-auto">
             Short-term rental operations are conducted subject to applicable tourism authority

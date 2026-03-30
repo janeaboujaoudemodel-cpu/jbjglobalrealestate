@@ -91,7 +91,7 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
             <Button
               variant="ghost"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="w-full flex items-center justify-center gap-2 py-3 text-sm text-black bg-[#F5EBD7]/50 hover:bg-[#E8DCC8]/60 hover:text-black rounded-none font-medium"
+              className="w-full flex items-center justify-center gap-2 py-3 text-sm text-black bg-[#F7F1E6]/50 hover:bg-[#ECE2D2]/60 hover:text-black rounded-none font-medium"
             >
               {isExpanded ? (
                 <>

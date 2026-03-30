@@ -42,7 +42,7 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
   if (!developers || developers.length === 0) return null;
 
   return (
-    <section id="developers-section" className="py-12" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)' }}>
+    <section id="developers-section" className="py-12" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div className="jj-layer-2">
         <div className="flex items-center gap-3 mb-6">
           <Users className="w-6 h-6 text-gold" />

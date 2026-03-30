@@ -278,7 +278,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Build email template with escaped content
     const companyEmailHtml = emailShell("Market Intelligence Desk", `<tr><td class="content-pad" style="padding:32px;">
 <p style="font-size:15px;color:#333;margin:0 0 16px;">A new lead has downloaded the UAE Market Report.</p>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:2px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:20px;">
 <p style="color:#666;font-size:12px;margin:0 0 8px;text-transform:uppercase;letter-spacing:1px;">Lead Summary</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">

@@ -209,7 +209,7 @@ const AIAnalyticsDashboard = () => {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
             <BarChart3 className="w-4 h-4 text-gold" />
             Total Calls
@@ -217,7 +217,7 @@ const AIAnalyticsDashboard = () => {
           <p className="text-black text-2xl font-bold">{stats?.totalCalls || 0}</p>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
             <CheckCircle2 className="w-4 h-4 text-green-600" />
             Success Rate
@@ -227,7 +227,7 @@ const AIAnalyticsDashboard = () => {
           </p>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
             <Clock className="w-4 h-4 text-blue-600" />
             Avg Response
@@ -237,7 +237,7 @@ const AIAnalyticsDashboard = () => {
           </p>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
             <Zap className="w-4 h-4 text-gold" />
             Input Tokens
@@ -247,7 +247,7 @@ const AIAnalyticsDashboard = () => {
           </p>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
             <TrendingUp className="w-4 h-4 text-purple-600" />
             Output Tokens
@@ -257,7 +257,7 @@ const AIAnalyticsDashboard = () => {
           </p>
         </Card>
 
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-4 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <div className="flex items-center gap-2 text-black/60 text-xs mb-2">
             <XCircle className="w-4 h-4 text-red-500" />
             Errors
@@ -271,7 +271,7 @@ const AIAnalyticsDashboard = () => {
       {/* Detailed Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* By Function */}
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <h3 className="text-black font-semibold mb-4 flex items-center gap-2">
             <Brain className="w-4 h-4 text-purple-500" />
             Usage by Function
@@ -303,7 +303,7 @@ const AIAnalyticsDashboard = () => {
         </Card>
 
         {/* By Model */}
-        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+        <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
           <h3 className="text-black font-semibold mb-4 flex items-center gap-2">
             <Zap className="w-4 h-4 text-gold" />
             Usage by Model
@@ -354,7 +354,7 @@ const AIAnalyticsDashboard = () => {
       )}
 
       {/* Recent Logs */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <h3 className="text-black font-semibold mb-4">Recent Logs</h3>
         <ScrollArea className="h-[300px]">
           <table className="w-full text-sm">

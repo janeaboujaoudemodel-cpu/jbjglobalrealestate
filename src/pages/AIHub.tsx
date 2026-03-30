@@ -751,7 +751,7 @@ const AIHub = () => {
                     <span className="text-white group-hover:text-black transition-colors">Sign In / Create Account</span>
                     <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                     {/* Hover fill overlay */}
-                    <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                    <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                   </button>
                 ) : (
                   <button 
@@ -766,7 +766,7 @@ const AIHub = () => {
                     <span className="text-white group-hover:text-black transition-colors">Go to My Dashboard</span>
                     <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                     {/* Hover fill overlay */}
-                    <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                    <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                   </button>
                 )}
                 {/* Explore Free Tools Button */}
@@ -781,14 +781,14 @@ const AIHub = () => {
                   <span className="text-white group-hover:text-black transition-colors">Explore Free Tools</span>
                   <ArrowUpRight className="w-5 h-5 text-gold transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                   {/* Hover fill overlay */}
-                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                 </button>
                 {/* View Premium Plans Button - Using primary champagne gradient */}
                 <button 
                   onClick={() => navigate("/pricing")}
                   className="group relative inline-flex items-center justify-center gap-2 px-10 py-5 text-base font-bold rounded-xl transition-all duration-300 overflow-hidden"
                   style={{
-                    background: 'linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)',
+                    background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)',
                     border: '2px solid rgba(200,167,102,0.6)',
                     boxShadow: '0 4px 15px rgba(200,167,102,0.4), inset 0 1px 2px rgba(255,255,255,0.3)',
                   }}
@@ -811,12 +811,12 @@ const AIHub = () => {
         {/* Quick Benefits Strip - Active Champagne Layer */}
         <section className="py-8 bg-black">
           <div className="container mx-auto px-3 sm:px-4">
-            <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
+            <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-lg">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                 {quickBenefits.map((benefit, idx) => (
                   <motion.div
                     key={idx}
-                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-xl p-4 text-center shadow-sm"
+                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-4 text-center shadow-sm"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -848,7 +848,7 @@ const AIHub = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 rounded-full shadow-[0_0_15px_rgba(200,167,102,0.25)] mb-4">
+                <span className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 rounded-full shadow-[0_0_15px_rgba(200,167,102,0.25)] mb-4">
                   <Sparkles className="w-3.5 h-3.5 text-gold" />
                   <span className="text-black text-xs uppercase tracking-wider font-medium">All Free Tools</span>
                 </span>
@@ -1046,7 +1046,7 @@ const AIHub = () => {
         <section className="py-8 md:py-10 bg-black">
           <div className="container mx-auto px-4">
             <div className="max-w-[900px] mx-auto text-center">
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl p-8 md:p-12">
                 <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
                   {user ? (
                     <>Welcome back, <span className="text-gold">{user.email?.split('@')[0]}</span>!</>

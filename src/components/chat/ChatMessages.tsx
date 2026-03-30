@@ -84,7 +84,7 @@ const ChatMessages = React.memo(({
 
   return (
     <>
-      <ScrollArea className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]" ref={scrollRef}>
+      <ScrollArea className="flex-1 p-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]" ref={scrollRef}>
         <div className="space-y-4">
           {messages.map((message) => (
             <div
@@ -108,8 +108,8 @@ const ChatMessages = React.memo(({
                 <div
                   className={`p-3.5 rounded-2xl shadow-md select-text cursor-text ${
                     message.role === 'user'
-                      ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 rounded-tr-sm'
-                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 rounded-tl-sm'
+                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 rounded-tr-sm'
+                      : 'bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 rounded-tl-sm'
                   }`}
                 >
                   <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium select-text">{message.content}</p>
@@ -142,7 +142,7 @@ const ChatMessages = React.memo(({
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] p-4 rounded-2xl rounded-tl-sm flex items-center gap-1.5 border border-gold/20 shadow-sm">
+                <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-4 rounded-2xl rounded-tl-sm flex items-center gap-1.5 border border-gold/20 shadow-sm">
                   <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                   <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                   <span className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -156,7 +156,7 @@ const ChatMessages = React.memo(({
 
       {/* Submit to Team Panel */}
       {showSubmitPanel && (
-        <div className="border-t border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <div className="border-t border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <div className="p-4 space-y-3">
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-black">
@@ -194,7 +194,7 @@ const ChatMessages = React.memo(({
 
       {/* Action Buttons */}
       {!showSubmitPanel && (
-        <div className="px-4 py-3 border-t border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] flex gap-2">
+        <div className="px-4 py-3 border-t border-gold/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] flex gap-2">
           {isExistingUser && (
             <a
               href={`https://wa.me/${CONTACT_INFO.whatsappNumber}?text=${encodeURIComponent(`Hi, I'm ${userFirstName}. I was chatting with the AI about ${serviceName}.`)}`}
@@ -219,7 +219,7 @@ const ChatMessages = React.memo(({
       )}
 
       {/* Input - Using native input to prevent mobile keyboard dismissal */}
-      <div className="p-4 border-t border-gold/30 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+      <div className="p-4 border-t border-gold/30 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
         <div className="flex gap-3">
           <input
             ref={inputRef}

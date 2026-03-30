@@ -34,7 +34,7 @@ const handler = async (req: Request): Promise<Response> => {
 ${userGreetingRow(firstName)}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">Welcome to <strong>Stay in the Loop</strong> — you are now part of an exclusive real estate intelligence network. We are committed to delivering only strategic value — no spam, ever.</p>
 
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;">
 <tr><td style="padding:20px;">
 <p style="color:#C8A766;margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;">What You Will Receive</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -66,7 +66,7 @@ ${arabicDivider()}
 ${userGreetingRow(firstName, true)}
 <p style="font-size:14px;color:#555;margin:0 0 24px;">مرحباً بك في <strong>ابقَ على اطلاع</strong> — أنت الآن جزء من شبكة استخبارات عقارية حصرية. نحن ملتزمون بتقديم القيمة الاستراتيجية فقط — بدون رسائل مزعجة أبداً.</p>
 
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#f5f0e6);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;background:linear-gradient(135deg,#fdfbf7,#F7F2EA);border:1px solid #C8A766;border-radius:18px;margin-bottom:24px;direction:rtl;">
 <tr><td style="padding:20px;">
 <p style="color:#C8A766;margin:0 0 12px;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;font-weight:bold;">ما ستتلقاه</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">

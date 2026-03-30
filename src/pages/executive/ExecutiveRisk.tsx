@@ -130,7 +130,7 @@ const ExecutiveRisk = () => {
 
   return (
     <ExecutiveAccessGate>
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         <SEOHead
           title="Risk & Compliance | Executive Dashboard | JBJ GLOBAL REAL ESTATE"
           description="Compliance monitoring and risk management dashboard."

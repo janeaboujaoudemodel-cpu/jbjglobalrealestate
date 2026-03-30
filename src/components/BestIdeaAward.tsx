@@ -120,7 +120,7 @@ const BestIdeaAward = () => {
   };
 
   return (
-    <section className="bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Active Champagne Section Layer - using global jj-layer-2 */}
       <div className="jj-layer-2">
         <motion.div
@@ -131,7 +131,7 @@ const BestIdeaAward = () => {
           className=""
         >
           {/* Main Card - Champagne style inside active champagne layer */}
-          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl md:rounded-2xl border border-gold/40 md:border-2 md:border-gold shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
+          <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl md:rounded-2xl border border-gold/40 md:border-2 md:border-gold shadow-[0_8px_30px_rgba(200,167,102,0.35),0_4px_15px_rgba(0,0,0,0.15)] overflow-hidden relative">
             {/* Decorative glow */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-gold/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gold/15 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
@@ -141,7 +141,7 @@ const BestIdeaAward = () => {
                 {/* Left - Info */}
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] rounded-xl flex items-center justify-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl flex items-center justify-center">
                       <Lightbulb className="w-6 h-6 text-gold" />
                     </div>
                     <div>
@@ -160,7 +160,7 @@ const BestIdeaAward = () => {
                   {/* Prize Display - Two Options */}
                   <div className="space-y-3 mb-6">
                     {/* iPad Pro M4 */}
-                    <div className="bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] rounded-xl p-5 relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl p-5 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
                       <div className="relative z-10 flex items-center gap-4">
                         <div className="w-14 h-14 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">
@@ -173,7 +173,7 @@ const BestIdeaAward = () => {
                       </div>
                     </div>
                     {/* iPhone 16 Pro Max */}
-                    <div className="bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] rounded-xl p-5 relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-xl p-5 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent" />
                       <div className="relative z-10 flex items-center gap-4">
                         <div className="w-14 h-14 bg-gradient-to-br from-gold/30 to-gold/10 rounded-xl flex items-center justify-center">
@@ -224,7 +224,7 @@ const BestIdeaAward = () => {
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
                       <Button
-                        className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border-2 border-gold/50 px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group whitespace-nowrap"
+                        className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-2 border-gold/50 px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group whitespace-nowrap"
                         style={{
                           textShadow: 'none',
                           boxShadow: `
@@ -301,7 +301,7 @@ const BestIdeaAward = () => {
 
                           <Button
                             onClick={handleCloseSuccess}
-                            className="bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] text-gold hover:from-[hsl(38,35%,15%)] hover:to-[hsl(34,25%,15%)] border border-gold/30 px-8 py-5"
+                            className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] text-gold hover:from-[hsl(38,35%,15%)] hover:to-[hsl(34,25%,15%)] border border-gold/30 px-8 py-5"
                           >
                             Close & Submit Another Idea
                           </Button>
@@ -398,7 +398,7 @@ const BestIdeaAward = () => {
                           <Button
                             type="submit"
                             disabled={isSubmitting}
-                            className="w-full bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] text-gold hover:from-[hsl(38,35%,15%)] hover:to-[hsl(34,25%,15%)] border border-gold/30 py-6"
+                            className="w-full bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] text-gold hover:from-[hsl(38,35%,15%)] hover:to-[hsl(34,25%,15%)] border border-gold/30 py-6"
                           >
                             {isSubmitting ? (
                               <>Submitting...</>

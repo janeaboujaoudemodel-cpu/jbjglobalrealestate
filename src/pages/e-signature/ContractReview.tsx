@@ -48,7 +48,7 @@ export default function ContractReview() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Premium Page Header — aligned with sidebar logo divider */}
       <div className="border-b border-gold/20">
         <div className="max-w-5xl mx-auto px-6 flex items-end h-[84px] pb-4 gap-4">

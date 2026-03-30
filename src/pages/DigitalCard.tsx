@@ -56,11 +56,11 @@ const CONTACT_INFO = {
 // Luxury gold color - LOCKED (Active Champagne, NO YELLOW)
 const GOLD = {
   primary: "#C8A766",
-  light: "#D4B87A",
+  light: "#E0CFA0",
   dark: "#A8925A",
-  gradient: "linear-gradient(135deg, #C8A766, #D4B87A, #C8A766)",
+  gradient: "linear-gradient(135deg, #C8A766, #E0CFA0, #C8A766)",
   // Active Champagne background for icons (NO YELLOW)
-  activeBackground: "linear-gradient(135deg, #F5EBD7, #E8DCC8, #D4C4A8)",
+  activeBackground: "linear-gradient(135deg, #F7F1E6, #ECE2D2, #D8C7A6)",
 };
 
 // Generate Company vCard
@@ -272,7 +272,7 @@ const DigitalCard = () => {
           {/* Inner Card - Locked Champagne - RESPONSIVE LAYOUT */}
           <div 
             className="rounded-[22px] p-6 sm:p-8 lg:p-10 xl:p-12"
-            style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)" }}
+            style={{ background: "linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)" }}
           >
             {/* Profile Photo - CENTERED INSIDE the card, NOT cropping head */}
             <motion.div
@@ -294,7 +294,7 @@ const DigitalCard = () => {
                   className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full p-[4px]"
                   style={{ background: GOLD.gradient }}
                 >
-                  <div className="w-full h-full rounded-full overflow-hidden" style={{ background: 'linear-gradient(135deg, #EDE4D3, #D4C4A8)' }}>
+                  <div className="w-full h-full rounded-full overflow-hidden" style={{ background: 'linear-gradient(135deg, #EFE6D6, #D8C7A6)' }}>
                     {/* FIXED: objectPosition top to show full head/hairline without cropping */}
                     <img
                       src={janePhoto}
@@ -438,7 +438,7 @@ const DigitalCard = () => {
                   onClick={downloadCompanyVCard}
                   className="flex items-center gap-2 py-3 px-5 rounded-xl text-black font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                   style={{ 
-                    background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)',
+                    background: 'linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)',
                     border: `2px solid ${GOLD.primary}50`,
                   }}
                 >
@@ -489,7 +489,7 @@ const DigitalCard = () => {
                   onClick={downloadPersonalVCard}
                   className="flex items-center gap-2 py-3 px-5 rounded-xl text-black font-semibold shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
                   style={{ 
-                    background: 'linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)',
+                    background: 'linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)',
                     border: `2px solid ${GOLD.primary}50`,
                   }}
                 >
@@ -683,7 +683,7 @@ const DigitalCard = () => {
               exit={{ y: 100, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-md rounded-2xl p-6 shadow-2xl"
-              style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)" }}
+              style={{ background: "linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)" }}
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-bold text-black">Share This Card</h3>
@@ -767,7 +767,7 @@ const DigitalCard = () => {
               exit={{ y: 100, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
               className="w-full max-w-md rounded-2xl p-6 shadow-2xl"
-              style={{ background: "linear-gradient(135deg, #FDFBF7, #F5F0E6, #EDE4D3)" }}
+              style={{ background: "linear-gradient(135deg, #FDFBF7, #F7F2EA, #EFE6D6)" }}
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-bold text-black">Choose a Line</h3>

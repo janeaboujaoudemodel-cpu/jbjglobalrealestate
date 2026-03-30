@@ -540,7 +540,7 @@ Requirements:
       
       <main className="min-h-screen bg-black pt-20 pb-0">
         {/* Layer 2: Active Champagne Hero Section with proper gutters */}
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-t-2xl">
+        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-t-2xl">
           <div className="container mx-auto px-4 py-12">
             <div className="max-w-4xl mx-auto text-center">
               <span className="inline-block px-4 py-1.5 rounded-full bg-black text-gold text-sm font-medium mb-4 border border-gold/30">
@@ -587,7 +587,7 @@ Requirements:
         </div>
 
         {/* Layer 2 continues for form content */}
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 pb-16 pt-8">
+        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 pb-16 pt-8">
           <div className="container mx-auto px-4">
           {/* Progress Steps - Using champagne active color */}
           <div className="max-w-4xl mx-auto mb-8">
@@ -606,7 +606,7 @@ Requirements:
                 >
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-2 border-2 transition-all ${
                     currentStep === step.number 
-                      ? 'bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-black text-black shadow-lg' 
+                      ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-black text-black shadow-lg' 
                       : currentStep > step.number 
                         ? 'bg-white border-gold text-gold'
                         : 'bg-zinc-100 border-zinc-300 text-zinc-500'
@@ -627,7 +627,7 @@ Requirements:
 
           {/* Form Content - White/Champagne/Gold Theme */}
           <div className="max-w-3xl mx-auto">
-            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-xl">
+            <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6 md:p-8 shadow-xl">
               <AnimatePresence mode="wait">
                 {/* Step 1: Seller Details */}
                 {currentStep === 1 && (

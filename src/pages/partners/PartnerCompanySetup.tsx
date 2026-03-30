@@ -252,7 +252,7 @@ const PartnerCompanySetup = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+        <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto">
               <Card className="border-zinc-200 bg-white shadow-sm">

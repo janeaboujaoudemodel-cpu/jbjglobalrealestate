@@ -106,7 +106,7 @@ export const FeedbackPrompt = ({
           exit={{ opacity: 0, y: -20 }}
           className="fixed bottom-6 right-6 z-50 w-[340px]"
         >
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-2xl shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-2xl shadow-xl overflow-hidden">
             {/* Header */}
             <div className="bg-gradient-to-r from-gold/20 to-gold/10 px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-2">

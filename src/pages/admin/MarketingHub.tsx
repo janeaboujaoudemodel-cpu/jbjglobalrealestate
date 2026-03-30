@@ -118,7 +118,7 @@ const MarketingHub: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full" />
       </div>
     );
@@ -214,11 +214,11 @@ const MarketingHub: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="sticky top-0 z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
+        <header className="sticky top-0 z-50 border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
           <div className="flex h-16 items-center justify-between px-4">
             <div className="flex items-center gap-4">
               <Button variant="ghost" size="icon" onClick={() => navigate('/admin')} className="text-black hover:bg-gold/10">
@@ -276,7 +276,7 @@ const MarketingHub: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
-                className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6] shadow-[0_4px_20px_rgba(200,167,102,0.15)]"
+                className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA] shadow-[0_4px_20px_rgba(200,167,102,0.15)]"
               >
                 <div className="flex items-center gap-3">
                   <div className={`p-2.5 rounded-xl ${stat.iconBg} border`}>
@@ -295,18 +295,18 @@ const MarketingHub: React.FC = () => {
           <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
             <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
               <TabsList className="bg-white/80 border-2 border-gold/30">
-                <TabsTrigger value="campaigns" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+                <TabsTrigger value="campaigns" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
                   <Megaphone className="w-3.5 h-3.5 mr-1.5" />
                   Campaigns
                 </TabsTrigger>
-                <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+                <TabsTrigger value="ai-tools" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
                   <Sparkles className="w-3.5 h-3.5 mr-1.5" />
                   AI Tools
                 </TabsTrigger>
-                <TabsTrigger value="templates" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+                <TabsTrigger value="templates" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
                   Templates
                 </TabsTrigger>
-                <TabsTrigger value="subscribers" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black text-black">
+                <TabsTrigger value="subscribers" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black text-black">
                   Subscribers
                 </TabsTrigger>
               </TabsList>
@@ -328,22 +328,22 @@ const MarketingHub: React.FC = () => {
             <TabsContent value="ai-tools" className="m-0">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {[
-              { label: 'AI Email Generator', desc: 'Generate professional emails with AI', icon: Mail, route: '/ai/email-generator', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Suggest Reply', desc: 'Smart reply suggestions for tickets', icon: MessageCircle, route: '/admin/support-tickets', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Assistant', desc: 'Your personal AI business assistant', icon: Bot, route: '/founders-assistant', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Social Media', desc: 'Create social media content', icon: Share2, route: '/ai/social-media', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Description Writer', desc: 'Property descriptions in seconds', icon: PenTool, route: '/ai/description-writer', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Translation Hub', desc: 'Translate content to 15+ languages', icon: Globe, route: '/ai/translation-hub', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Video Tour Script', desc: 'Script video tours for properties', icon: Video, route: '/ai/video-tour-script', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Client Matcher', desc: 'Match clients to properties with AI', icon: Target, route: '/ai/client-matcher', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Lead Qualification', desc: 'Score and qualify leads automatically', icon: TrendingUp, route: '/ai/lead-qualification', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Objection Handler', desc: 'Handle client objections professionally', icon: Shield, route: '/ai/objection-handler', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Follow-up Scheduler', desc: 'Smart follow-up timing', icon: Calendar, route: '/ai/followup-scheduler', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Meeting Summarizer', desc: 'Summarize meetings into action items', icon: ClipboardList, route: '/ai/meeting-summarizer', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Market Report', desc: 'Generate market intelligence reports', icon: BarChart3, route: '/ai/market-report', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'AI Contract Reviewer', desc: 'Review contracts for key terms', icon: FileText, route: '/ai/contract-reviewer', color: 'from-[#C9A84C] to-[#A68A3A]' },
-                  { label: 'AI Investment Report', desc: 'Investment analysis reports', icon: Lightbulb, route: '/ai/investment-report', color: 'from-[#C9A84C] to-[#B8973F]' },
-                  { label: 'All AI Tools', desc: 'Access all 52+ platform tools', icon: Sparkles, route: '/toolkit', color: 'from-[#C9A84C] to-[#A68A3A]' },
+              { label: 'AI Email Generator', desc: 'Generate professional emails with AI', icon: Mail, route: '/ai/email-generator', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Suggest Reply', desc: 'Smart reply suggestions for tickets', icon: MessageCircle, route: '/admin/support-tickets', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Assistant', desc: 'Your personal AI business assistant', icon: Bot, route: '/founders-assistant', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Social Media', desc: 'Create social media content', icon: Share2, route: '/ai/social-media', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Description Writer', desc: 'Property descriptions in seconds', icon: PenTool, route: '/ai/description-writer', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Translation Hub', desc: 'Translate content to 15+ languages', icon: Globe, route: '/ai/translation-hub', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Video Tour Script', desc: 'Script video tours for properties', icon: Video, route: '/ai/video-tour-script', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Client Matcher', desc: 'Match clients to properties with AI', icon: Target, route: '/ai/client-matcher', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Lead Qualification', desc: 'Score and qualify leads automatically', icon: TrendingUp, route: '/ai/lead-qualification', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Objection Handler', desc: 'Handle client objections professionally', icon: Shield, route: '/ai/objection-handler', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Follow-up Scheduler', desc: 'Smart follow-up timing', icon: Calendar, route: '/ai/followup-scheduler', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Meeting Summarizer', desc: 'Summarize meetings into action items', icon: ClipboardList, route: '/ai/meeting-summarizer', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Market Report', desc: 'Generate market intelligence reports', icon: BarChart3, route: '/ai/market-report', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'AI Contract Reviewer', desc: 'Review contracts for key terms', icon: FileText, route: '/ai/contract-reviewer', color: 'from-[#B89555] to-[#A68A3A]' },
+                  { label: 'AI Investment Report', desc: 'Investment analysis reports', icon: Lightbulb, route: '/ai/investment-report', color: 'from-[#B89555] to-[#A68444]' },
+                  { label: 'All AI Tools', desc: 'Access all 52+ platform tools', icon: Sparkles, route: '/toolkit', color: 'from-[#B89555] to-[#A68A3A]' },
                 ].map((tool, idx) => (
                   <motion.div
                     key={tool.route}
@@ -353,7 +353,7 @@ const MarketingHub: React.FC = () => {
                   >
                     <Link
                       to={tool.route}
-                      className="block p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6] hover:border-gold hover:shadow-lg transition-all group"
+                      className="block p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA] hover:border-gold hover:shadow-lg transition-all group"
                     >
           <div className="flex items-start gap-3">
                         <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center shadow-lg shrink-0`}>
@@ -377,7 +377,7 @@ const MarketingHub: React.FC = () => {
                   <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full" />
                 </div>
               ) : filteredCampaigns?.length === 0 ? (
-                <div className="text-center py-12 border-2 border-gold/30 rounded-xl bg-gradient-to-br from-white/80 via-white/60 to-[#F5F0E6]">
+                <div className="text-center py-12 border-2 border-gold/30 rounded-xl bg-gradient-to-br from-white/80 via-white/60 to-[#F7F2EA]">
                   <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gold/20 flex items-center justify-center">
                     <Send className="h-8 w-8 text-gold" />
                   </div>
@@ -494,7 +494,7 @@ const MarketingHub: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.03 }}
-                    className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F5F0E6] hover:border-gold hover:shadow-lg transition-all cursor-pointer group"
+                    className="p-4 rounded-xl border-2 border-gold/30 bg-gradient-to-br from-white/90 via-white/70 to-[#F7F2EA] hover:border-gold hover:shadow-lg transition-all cursor-pointer group"
                     onClick={() => setIsCreating(true)}
                   >
                     <div className="flex items-start justify-between mb-3">
@@ -520,7 +520,7 @@ const MarketingHub: React.FC = () => {
       </div>
 
       {/* Horizontal Quick Actions Bar (replaces right sidebar) */}
-      <div className="sticky bottom-0 z-40 border-t-2 border-[#C9A84C]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_-4px_20px_rgba(200,167,102,0.1)] px-4 py-3">
+      <div className="sticky bottom-0 z-40 border-t-2 border-[#B89555]/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_-4px_20px_rgba(200,167,102,0.1)] px-4 py-3">
         <div className="flex items-center justify-between gap-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
             <Button

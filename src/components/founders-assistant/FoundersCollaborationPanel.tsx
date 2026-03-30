@@ -164,29 +164,29 @@ export default function FoundersCollaborationPanel() {
         <div className="flex flex-wrap gap-2">
           <Dialog open={isTaskDialogOpen} onOpenChange={setIsTaskDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-white text-black border-2 border-[#C9A84C]/30 hover:bg-[#C9A84C]/10">
-                <Zap className="h-4 w-4 mr-2 text-[#C9A84C]" />
+              <Button className="bg-white text-black border-2 border-[#B89555]/30 hover:bg-[#B89555]/10">
+                <Zap className="h-4 w-4 mr-2 text-[#B89555]" />
                 Route Task
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
+            <DialogContent className="bg-white border-2 border-[#B89555]/30">
               <DialogHeader>
                 <DialogTitle className="text-black">Route Task to Department</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
                   <Label className="text-zinc-600">Task Title</Label>
-                  <Input placeholder="e.g., Hire new brokers, Design campaign..." value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} className="bg-zinc-50 border-[#C9A84C]/20 text-black" />
+                  <Input placeholder="e.g., Hire new brokers, Design campaign..." value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} className="bg-zinc-50 border-[#B89555]/20 text-black" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-zinc-600">Description</Label>
-                  <Textarea placeholder="Task details..." value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} className="bg-zinc-50 border-[#C9A84C]/20 text-black min-h-[100px]" />
+                  <Textarea placeholder="Task details..." value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} className="bg-zinc-50 border-[#B89555]/20 text-black min-h-[100px]" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-zinc-600">Priority</Label>
                   <div className="flex gap-2">
                     {(['low', 'medium', 'high', 'critical'] as const).map((p) => (
-                      <Button key={p} size="sm" onClick={() => setNewTask({ ...newTask, priority: p })} className={newTask.priority === p ? 'bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white' : 'bg-white text-black border-2 border-[#C9A84C]/30'}>
+                      <Button key={p} size="sm" onClick={() => setNewTask({ ...newTask, priority: p })} className={newTask.priority === p ? 'bg-gradient-to-r from-[#B89555] to-[#A68444] text-white' : 'bg-white text-black border-2 border-[#B89555]/30'}>
                         {p.charAt(0).toUpperCase() + p.slice(1)}
                       </Button>
                     ))}
@@ -194,7 +194,7 @@ export default function FoundersCollaborationPanel() {
                 </div>
               </div>
               <DialogFooter>
-                <Button onClick={handleRouteTask} disabled={isProcessing} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white">
+                <Button onClick={handleRouteTask} disabled={isProcessing} className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white">
                   {isProcessing ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <ArrowRight className="h-4 w-4 mr-2" />}
                   Route Task
                 </Button>
@@ -204,19 +204,19 @@ export default function FoundersCollaborationPanel() {
           
           <Dialog open={isMeetingDialogOpen} onOpenChange={setIsMeetingDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-white text-black border-2 border-[#C9A84C]/30 hover:bg-[#C9A84C]/10">
-                <Calendar className="h-4 w-4 mr-2 text-[#C9A84C]" />
+              <Button className="bg-white text-black border-2 border-[#B89555]/30 hover:bg-[#B89555]/10">
+                <Calendar className="h-4 w-4 mr-2 text-[#B89555]" />
                 Schedule Meeting
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
+            <DialogContent className="bg-white border-2 border-[#B89555]/30">
               <DialogHeader>
                 <DialogTitle className="text-black">Schedule Cross-Department Meeting</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
                   <Label className="text-zinc-600">Topic</Label>
-                  <Input placeholder="Meeting topic..." value={meetingDetails.topic} onChange={(e) => setMeetingDetails({ ...meetingDetails, topic: e.target.value })} className="bg-zinc-50 border-[#C9A84C]/20 text-black" />
+                  <Input placeholder="Meeting topic..." value={meetingDetails.topic} onChange={(e) => setMeetingDetails({ ...meetingDetails, topic: e.target.value })} className="bg-zinc-50 border-[#B89555]/20 text-black" />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-zinc-600">Departments</Label>
@@ -225,7 +225,7 @@ export default function FoundersCollaborationPanel() {
                       <Button key={dept.id} size="sm" onClick={() => {
                         const deps = meetingDetails.departments.includes(dept.id) ? meetingDetails.departments.filter(d => d !== dept.id) : [...meetingDetails.departments, dept.id];
                         setMeetingDetails({ ...meetingDetails, departments: deps });
-                      }} className={meetingDetails.departments.includes(dept.id) ? 'bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white' : 'bg-white text-black border-2 border-[#C9A84C]/30'}>
+                      }} className={meetingDetails.departments.includes(dept.id) ? 'bg-gradient-to-r from-[#B89555] to-[#A68444] text-white' : 'bg-white text-black border-2 border-[#B89555]/30'}>
                         {dept.shortName}
                       </Button>
                     ))}
@@ -233,11 +233,11 @@ export default function FoundersCollaborationPanel() {
                 </div>
                 <div className="space-y-2">
                   <Label className="text-zinc-600">Date & Time</Label>
-                  <Input type="datetime-local" value={meetingDetails.date} onChange={(e) => setMeetingDetails({ ...meetingDetails, date: e.target.value })} className="bg-zinc-50 border-[#C9A84C]/20 text-black" />
+                  <Input type="datetime-local" value={meetingDetails.date} onChange={(e) => setMeetingDetails({ ...meetingDetails, date: e.target.value })} className="bg-zinc-50 border-[#B89555]/20 text-black" />
                 </div>
               </div>
               <DialogFooter>
-                <Button onClick={handleScheduleMeeting} disabled={isProcessing} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white">
+                <Button onClick={handleScheduleMeeting} disabled={isProcessing} className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white">
                   <Calendar className="h-4 w-4 mr-2" />
                   Schedule
                 </Button>
@@ -245,17 +245,17 @@ export default function FoundersCollaborationPanel() {
             </DialogContent>
           </Dialog>
           
-          <Button className="bg-white text-black border-2 border-[#C9A84C]/30 hover:bg-[#C9A84C]/10" onClick={handleGenerateSummary}>
-            <BarChart3 className="h-4 w-4 mr-2 text-[#C9A84C]" />
+          <Button className="bg-white text-black border-2 border-[#B89555]/30 hover:bg-[#B89555]/10" onClick={handleGenerateSummary}>
+            <BarChart3 className="h-4 w-4 mr-2 text-[#B89555]" />
             Daily Summary
           </Button>
         </div>
       </div>
       
       {dailySummary && (
-        <Card className="bg-white border-2 border-[#C9A84C]/30">
+        <Card className="bg-white border-2 border-[#B89555]/30">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-[#C9A84C] text-lg flex items-center gap-2">
+            <CardTitle className="text-[#B89555] text-lg flex items-center gap-2">
               <Calendar className="h-5 w-5" />
               Daily Company Summary
             </CardTitle>
@@ -270,20 +270,20 @@ export default function FoundersCollaborationPanel() {
       )}
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-white border-2 border-[#C9A84C]/20">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#C9A84C]/30">
+        <TabsList className="bg-white border-2 border-[#B89555]/20">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#B89555]/30">
             <Activity className="h-4 w-4 mr-2" />
             Overview
           </TabsTrigger>
-          <TabsTrigger value="departments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#C9A84C]/30">
+          <TabsTrigger value="departments" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#B89555]/30">
             <Users className="h-4 w-4 mr-2" />
             Departments
           </TabsTrigger>
-          <TabsTrigger value="ai-team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#C9A84C]/30">
+          <TabsTrigger value="ai-team" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#B89555]/30">
             <UserCircle className="h-4 w-4 mr-2" />
             Team
           </TabsTrigger>
-          <TabsTrigger value="activity" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F5EBD7] data-[state=active]:via-[#E8DCC8] data-[state=active]:to-[#D4C4A8] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#C9A84C]/30">
+          <TabsTrigger value="activity" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#F7F1E6] data-[state=active]:via-[#ECE2D2] data-[state=active]:to-[#D8C7A6] data-[state=active]:text-black data-[state=active]:border data-[state=active]:border-[#B89555]/30">
             <MessageSquare className="h-4 w-4 mr-2" />
             Activity Log
           </TabsTrigger>
@@ -309,13 +309,13 @@ export default function FoundersCollaborationPanel() {
                             <p className="text-xs text-zinc-500">{dept.headName}</p>
                           </div>
                         </div>
-                        <Badge variant="outline" className="border-[#C9A84C]/30 text-[#C9A84C]">{subAI?.name}</Badge>
+                        <Badge variant="outline" className="border-[#B89555]/30 text-[#B89555]">{subAI?.name}</Badge>
                       </div>
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-3 gap-2 mb-3">
                         <div className="text-center p-2 bg-zinc-50 rounded-lg border border-zinc-200">
-                          <p className="text-lg font-bold text-[#C9A84C]">{deptStats.activeTasks}</p>
+                          <p className="text-lg font-bold text-[#B89555]">{deptStats.activeTasks}</p>
                           <p className="text-xs text-zinc-500">Active</p>
                         </div>
                         <div className="text-center p-2 bg-green-50 rounded-lg border border-green-200">
@@ -335,7 +335,7 @@ export default function FoundersCollaborationPanel() {
                             {deptStats.escalations} escalation{deptStats.escalations > 1 ? 's' : ''}
                           </Badge>
                         )}
-                        <Button size="sm" variant="ghost" className="ml-auto text-[#C9A84C] hover:bg-[#C9A84C]/10" onClick={() => { setSelectedDepartment(dept.id); setIsMessageDialogOpen(true); }}>
+                        <Button size="sm" variant="ghost" className="ml-auto text-[#B89555] hover:bg-[#B89555]/10" onClick={() => { setSelectedDepartment(dept.id); setIsMessageDialogOpen(true); }}>
                           <Send className="h-4 w-4" />
                         </Button>
                       </div>
@@ -350,7 +350,7 @@ export default function FoundersCollaborationPanel() {
         <TabsContent value="departments" className="mt-4">
           <div className="space-y-4">
             {Object.values(DEPARTMENTS).map((dept) => (
-              <Card key={dept.id} className="bg-white border-2 border-[#C9A84C]/20">
+              <Card key={dept.id} className="bg-white border-2 border-[#B89555]/20">
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg border ${departmentColors[dept.id]}`}>
@@ -370,13 +370,13 @@ export default function FoundersCollaborationPanel() {
                     </div>
                     <div>
                       <p className="text-xs text-zinc-500 mb-2">Assistant</p>
-                      <p className="text-[#C9A84C] font-medium">{DEPARTMENTS[dept.id]?.subAIName || 'Assistant'}</p>
+                      <p className="text-[#B89555] font-medium">{DEPARTMENTS[dept.id]?.subAIName || 'Assistant'}</p>
                     </div>
                     <div>
                       <p className="text-xs text-zinc-500 mb-2">Channels</p>
                       <div className="flex flex-wrap gap-1">
                         {dept.channels.map((ch) => (
-                          <Badge key={ch} variant="outline" className="text-xs border-[#C9A84C]/30 text-zinc-600">#{ch}</Badge>
+                          <Badge key={ch} variant="outline" className="text-xs border-[#B89555]/30 text-zinc-600">#{ch}</Badge>
                         ))}
                       </div>
                     </div>
@@ -403,11 +403,11 @@ export default function FoundersCollaborationPanel() {
             {subAIs.map((ai) => {
               const dept = DEPARTMENTS[ai.department];
               return (
-                <Card key={ai.id} className="bg-white border-2 border-[#C9A84C]/20">
+                <Card key={ai.id} className="bg-white border-2 border-[#B89555]/20">
                   <CardHeader>
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C9A84C]/20 to-[#C9A84C]/5 flex items-center justify-center border border-[#C9A84C]/30">
-                        <UserCircle className="h-5 w-5 text-[#C9A84C]" />
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#B89555]/20 to-[#B89555]/5 flex items-center justify-center border border-[#B89555]/30">
+                        <UserCircle className="h-5 w-5 text-[#B89555]" />
                       </div>
                       <div>
                         <CardTitle className="text-black text-base">{ai.name}</CardTitle>
@@ -432,15 +432,15 @@ export default function FoundersCollaborationPanel() {
                       <p className="text-xs text-zinc-500 mb-1">Capabilities</p>
                       <div className="flex flex-wrap gap-1">
                         {ai.capabilities.slice(0, 3).map((cap, i) => (
-                          <Badge key={i} variant="outline" className="text-xs border-[#C9A84C]/30 text-zinc-600">{cap}</Badge>
+                          <Badge key={i} variant="outline" className="text-xs border-[#B89555]/30 text-zinc-600">{cap}</Badge>
                         ))}
                         {ai.capabilities.length > 3 && (
-                          <Badge variant="outline" className="text-xs border-[#C9A84C]/30 text-zinc-400">+{ai.capabilities.length - 3} more</Badge>
+                          <Badge variant="outline" className="text-xs border-[#B89555]/30 text-zinc-400">+{ai.capabilities.length - 3} more</Badge>
                         )}
                       </div>
                     </div>
                     <div className="flex items-center justify-between pt-2">
-                      <p className="text-xs text-zinc-500">Reports to: <span className="text-[#C9A84C]">Amanda Clarke</span></p>
+                      <p className="text-xs text-zinc-500">Reports to: <span className="text-[#B89555]">Amanda Clarke</span></p>
                       <div className="flex items-center gap-1 text-green-600 text-xs">
                         <CheckCircle2 className="h-3 w-3" /> Active
                       </div>
@@ -453,10 +453,10 @@ export default function FoundersCollaborationPanel() {
         </TabsContent>
         
         <TabsContent value="activity" className="mt-4">
-          <Card className="bg-white border-2 border-[#C9A84C]/20">
+          <Card className="bg-white border-2 border-[#B89555]/20">
             <CardHeader>
               <CardTitle className="text-black flex items-center gap-2">
-                <Activity className="h-5 w-5 text-[#C9A84C]" />
+                <Activity className="h-5 w-5 text-[#B89555]" />
                 Coordination Activity Log
               </CardTitle>
             </CardHeader>
@@ -477,13 +477,13 @@ export default function FoundersCollaborationPanel() {
                           log.type === 'escalation' ? 'bg-red-50 border border-red-200' :
                           log.type === 'ai_communication' ? 'bg-blue-50 border border-blue-200' :
                           log.type === 'report_generated' ? 'bg-purple-50 border border-purple-200' :
-                          'bg-[#C9A84C]/10 border border-[#C9A84C]/20'
+                          'bg-[#B89555]/10 border border-[#B89555]/20'
                         }`}>
                           {log.type === 'task_routed' ? <ArrowRight className="h-4 w-4 text-green-600" /> :
                            log.type === 'escalation' ? <AlertCircle className="h-4 w-4 text-red-600" /> :
                            log.type === 'ai_communication' ? <MessageSquare className="h-4 w-4 text-blue-600" /> :
                            log.type === 'report_generated' ? <BarChart3 className="h-4 w-4 text-purple-600" /> :
-                           <Activity className="h-4 w-4 text-[#C9A84C]" />}
+                           <Activity className="h-4 w-4 text-[#B89555]" />}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
@@ -492,11 +492,11 @@ export default function FoundersCollaborationPanel() {
                           </div>
                           <p className="text-zinc-500 text-xs mt-1">{log.details}</p>
                           <div className="flex items-center gap-2 mt-2">
-                            <Badge variant="outline" className="text-xs border-[#C9A84C]/30 text-zinc-500">{log.actorName}</Badge>
+                            <Badge variant="outline" className="text-xs border-[#B89555]/30 text-zinc-500">{log.actorName}</Badge>
                             {log.targetName && (
                               <>
                                 <ArrowRight className="h-3 w-3 text-zinc-400" />
-                                <Badge variant="outline" className="text-xs border-[#C9A84C]/30 text-zinc-500">{log.targetName}</Badge>
+                                <Badge variant="outline" className="text-xs border-[#B89555]/30 text-zinc-500">{log.targetName}</Badge>
                               </>
                             )}
                           </div>
@@ -519,23 +519,23 @@ export default function FoundersCollaborationPanel() {
       
       {/* Message Dialog */}
       <Dialog open={isMessageDialogOpen} onOpenChange={setIsMessageDialogOpen}>
-        <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
+        <DialogContent className="bg-white border-2 border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="text-black">
               {selectedDepartment ? `Send Message to ${DEPARTMENTS[selectedDepartment]?.name}` : 'Broadcast to All Heads'}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <Textarea placeholder="Type your message..." value={messageContent} onChange={(e) => setMessageContent(e.target.value)} className="bg-zinc-50 border-[#C9A84C]/20 text-black min-h-[120px]" />
+            <Textarea placeholder="Type your message..." value={messageContent} onChange={(e) => setMessageContent(e.target.value)} className="bg-zinc-50 border-[#B89555]/20 text-black min-h-[120px]" />
           </div>
           <DialogFooter className="flex gap-2">
             {selectedDepartment ? (
-              <Button onClick={handleSendMessage} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white">
+              <Button onClick={handleSendMessage} className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white">
                 <Send className="h-4 w-4 mr-2" />
                 Send to {DEPARTMENTS[selectedDepartment]?.shortName}
               </Button>
             ) : (
-              <Button onClick={handleBroadcast} className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] text-white">
+              <Button onClick={handleBroadcast} className="bg-gradient-to-r from-[#B89555] to-[#A68444] text-white">
                 <Send className="h-4 w-4 mr-2" />
                 Broadcast to All
               </Button>

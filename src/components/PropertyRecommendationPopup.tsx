@@ -178,7 +178,7 @@ const PropertyRecommendationPopup = () => {
           exit={{ opacity: 0, y: 80, scale: 0.95 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
         >
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/50 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.15)] overflow-hidden">
+          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/50 rounded-2xl shadow-[0_0_30px_rgba(212,175,55,0.15)] overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-gold/30">
               <div className="flex items-center gap-2">

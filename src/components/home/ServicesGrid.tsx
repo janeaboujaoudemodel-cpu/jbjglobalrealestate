@@ -113,7 +113,7 @@ const ServicesGrid = () => {
       className="min-w-[75vw] sm:min-w-[45vw] lg:min-w-0 snap-start"
     >
       <Link to={service.href} className="group block h-full">
-        <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl border-2 border-gold/30 hover:border-gold p-6 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
+        <div className="h-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl border-2 border-gold/30 hover:border-gold p-6 transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.4)] hover:-translate-y-1">
           {/* Icon */}
           <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
             <service.icon className="w-7 h-7 text-white" />

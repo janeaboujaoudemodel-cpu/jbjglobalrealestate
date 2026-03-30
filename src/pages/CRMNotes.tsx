@@ -168,7 +168,7 @@ const CRMNotes = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] p-6">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] p-6">
         <div className="max-w-6xl mx-auto space-y-6">
           <Skeleton className="h-12 w-64 bg-gold/20" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -182,12 +182,12 @@ const CRMNotes = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Layer 2 - Active Champagne */}
       <div className="mx-0.5 md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8">
-        <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+        <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
           {/* Header - Layer 3 */}
-          <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-0 lg:top-[48px] z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+          <header className="border-b-2 border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-0 lg:top-[48px] z-50 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
             <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <Link to="/crm">
@@ -198,7 +198,7 @@ const CRMNotes = () => {
                 </Link>
                 <div className="h-6 w-px bg-gold/30" />
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/30">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30">
                     <StickyNote className="h-5 w-5 text-gold" />
                   </div>
                   <div>
@@ -228,7 +228,7 @@ const CRMNotes = () => {
           <main className="max-w-6xl mx-auto px-6 py-8 space-y-6">
             {/* Voice Recorder Panel */}
             {showVoiceRecorder && (
-              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-black flex items-center gap-2">
                     <Mic className="h-5 w-5 text-gold" />
@@ -251,13 +251,13 @@ const CRMNotes = () => {
                 placeholder="Search notes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/30 focus:border-gold/50"
+                className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 focus:border-gold/50"
               />
             </div>
 
             {/* Notes Grid */}
             {filteredNotes.length === 0 ? (
-              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
+              <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_8px_30px_rgba(200,167,102,0.18)]">
                 <CardContent className="py-12 text-center">
                   <StickyNote className="h-12 w-12 mx-auto mb-4 text-gold/50" />
                   <p className="text-black font-medium">No notes yet</p>
@@ -310,7 +310,7 @@ const CRMNotes = () => {
                                 variant="ghost" 
                                 size="sm" 
                                 onClick={() => extractTasks(note.id)}
-                                className="h-7 w-7 p-0 text-zinc-600 hover:text-[#C9A84C]"
+                                className="h-7 w-7 p-0 text-zinc-600 hover:text-[#B89555]"
                                 title="Extract tasks from note"
                               >
                                 <ListChecks className="h-3 w-3" />

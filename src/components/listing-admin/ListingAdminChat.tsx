@@ -806,7 +806,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
           {/* Unit Details (per bedroom) */}
           {listing.unitDetails && listing.unitDetails.length > 0 && (
-            <div className="mb-2 p-2 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6] rounded-lg border border-[#C8A766]/20">
+            <div className="mb-2 p-2 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA] rounded-lg border border-[#C8A766]/20">
               <p className="text-[9px] font-bold text-[#C8A766] uppercase tracking-wider mb-1">Unit Breakdown</p>
               <div className="space-y-0.5">
                 {listing.unitDetails.slice(0, 6).map((u, i) => (
@@ -892,7 +892,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
       onDrop={handleDropFiles}
     >
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]" style={{ borderRadius: 0 }}>
+      <div className="flex items-center gap-3 p-4 border-b border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]" style={{ borderRadius: 0 }}>
         <Avatar className="w-10 h-10 border-2 border-gold/30">
           <AvatarImage src={adminPersona?.avatar} alt={adminPersona?.name} />
           <AvatarFallback className="bg-gold/20 text-gold font-semibold">SM</AvatarFallback>
@@ -933,14 +933,14 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               <div className="flex flex-col max-w-[85%]">
                 <div className={`rounded-2xl px-4 py-2.5 select-text cursor-text ${
                   message.role === "user"
-                    ? "bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black border border-gold/30 shadow-md"
+                    ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-gold/30 shadow-md"
                     : message.type === "processing"
                     ? "bg-amber-50 text-black border border-amber-200"
                     : message.type === "success"
                     ? "bg-green-50 text-black border border-green-200"
                     : message.type === "error"
                     ? "bg-red-50 text-black border border-red-200"
-                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-black border border-gold/20 shadow-sm"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border border-gold/20 shadow-sm"
                 }`}>
                   {message.type === "processing" && (
                     <div className="flex items-center gap-2 mb-2 text-amber-600">
@@ -1025,7 +1025,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
                 <AvatarImage src={adminPersona?.avatar} alt={adminPersona?.name} />
                 <AvatarFallback className="bg-gold/20 text-gold text-xs">SM</AvatarFallback>
               </Avatar>
-              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl px-4 py-3 flex items-center gap-2 border border-gold/20">
+              <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl px-4 py-3 flex items-center gap-2 border border-gold/20">
                 <Loader2 className="w-4 h-4 animate-spin text-gold" />
                 <span className="text-sm text-zinc-600">Extracting & processing...</span>
               </div>
@@ -1069,7 +1069,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
       {/* Multi-URL Upload Section */}
       {showBulkUpload && (
-        <div className="p-4 border-t border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] max-h-[300px] overflow-y-auto">
+        <div className="p-4 border-t border-zinc-200 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] max-h-[300px] overflow-y-auto">
           <div className="flex items-center gap-2 mb-3">
             <ListChecks className="w-5 h-5 text-gold" />
             <span className="font-medium text-black text-sm">Batch URL Extraction</span>
@@ -1129,7 +1129,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
       {/* Queued Files Preview */}
       {uploadedFiles.length > 0 && (
-        <div ref={queuedFilesRef} className="px-4 py-3 border-t-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] to-[#F5F0E6]">
+        <div ref={queuedFilesRef} className="px-4 py-3 border-t-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] to-[#F7F2EA]">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center">

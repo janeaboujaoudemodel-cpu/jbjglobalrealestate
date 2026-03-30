@@ -68,26 +68,26 @@ export default function EmailAutomationPanel({ onSelectEmail }: EmailAutomationP
           <Zap className="w-3 h-3" /> Automation
         </p>
         <div className="space-y-2">
-          <div className="flex items-center justify-between bg-white/70 rounded-lg border border-[#C9A84C]/15 px-3 py-2">
+          <div className="flex items-center justify-between bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
             <div className="flex items-center gap-2">
-              <Tag className="w-3 h-3 text-[#C9A84C]" />
+              <Tag className="w-3 h-3 text-[#B89555]" />
               <span className="text-xs text-black">Auto-categorize emails</span>
             </div>
-            <Switch checked={autoCategize} onCheckedChange={setAutoCategize} className="h-4 w-7 data-[state=checked]:bg-[#C9A84C]" />
+            <Switch checked={autoCategize} onCheckedChange={setAutoCategize} className="h-4 w-7 data-[state=checked]:bg-[#B89555]" />
           </div>
-          <div className="flex items-center justify-between bg-white/70 rounded-lg border border-[#C9A84C]/15 px-3 py-2">
+          <div className="flex items-center justify-between bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-3 h-3 text-[#C9A84C]" />
+              <Sparkles className="w-3 h-3 text-[#B89555]" />
               <span className="text-xs text-black">Auto-suggest replies</span>
             </div>
-            <Switch checked={autoSuggest} onCheckedChange={setAutoSuggest} className="h-4 w-7 data-[state=checked]:bg-[#C9A84C]" />
+            <Switch checked={autoSuggest} onCheckedChange={setAutoSuggest} className="h-4 w-7 data-[state=checked]:bg-[#B89555]" />
           </div>
-          <div className="flex items-center justify-between bg-white/70 rounded-lg border border-[#C9A84C]/15 px-3 py-2">
+          <div className="flex items-center justify-between bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
             <div className="flex items-center gap-2">
-              <Tag className="w-3 h-3 text-[#C9A84C]" />
+              <Tag className="w-3 h-3 text-[#B89555]" />
               <span className="text-xs text-black">Smart labels</span>
             </div>
-            <Switch checked={smartLabels} onCheckedChange={setSmartLabels} className="h-4 w-7 data-[state=checked]:bg-[#C9A84C]" />
+            <Switch checked={smartLabels} onCheckedChange={setSmartLabels} className="h-4 w-7 data-[state=checked]:bg-[#B89555]" />
           </div>
         </div>
       </div>
@@ -99,9 +99,9 @@ export default function EmailAutomationPanel({ onSelectEmail }: EmailAutomationP
         </p>
         <div className="space-y-1">
           {templates.map(t => (
-            <div key={t.id} className="flex items-center justify-between bg-white/70 rounded-lg border border-[#C9A84C]/15 px-3 py-2">
+            <div key={t.id} className="flex items-center justify-between bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
               <div className="flex items-center gap-2 min-w-0">
-                <FileText className="w-3 h-3 text-[#C9A84C] flex-shrink-0" />
+                <FileText className="w-3 h-3 text-[#B89555] flex-shrink-0" />
                 <span className="text-xs text-black truncate">{t.name}</span>
                 {t.isActive && (
                   <Badge className="bg-green-100 text-green-700 border-green-300 text-[8px] px-1 h-3.5">Active</Badge>
@@ -119,7 +119,7 @@ export default function EmailAutomationPanel({ onSelectEmail }: EmailAutomationP
           <p className="text-[10px] font-semibold text-black/40 uppercase tracking-wider flex items-center gap-1">
             <BellRing className="w-3 h-3" /> Follow-up Reminders
           </p>
-          <Badge className="bg-[#C9A84C]/10 text-[#C9A84C] border-[#C9A84C]/20 text-[9px] h-4 px-1.5">
+          <Badge className="bg-[#B89555]/10 text-[#B89555] border-[#B89555]/20 text-[9px] h-4 px-1.5">
             {pendingFollowUps.length}
           </Badge>
         </div>
@@ -129,7 +129,7 @@ export default function EmailAutomationPanel({ onSelectEmail }: EmailAutomationP
               {pendingFollowUps.map(f => (
                 <div
                   key={f.id}
-                  className="flex items-center gap-2 bg-white/70 rounded-lg border border-[#C9A84C]/15 px-3 py-2 cursor-pointer hover:bg-[#C9A84C]/5"
+                  className="flex items-center gap-2 bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2 cursor-pointer hover:bg-[#B89555]/5"
                   onClick={() => onSelectEmail?.(f.emailId)}
                 >
                   <Clock className="w-3 h-3 text-amber-500 flex-shrink-0" />

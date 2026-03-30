@@ -17,7 +17,7 @@ interface SubscriptionSuccessModalProps {
 const SubscriptionSuccessModal = ({ isOpen, onClose }: SubscriptionSuccessModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 max-w-md z-[10050]">
+      <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 max-w-md z-[10050]">
         <DialogHeader className="text-center space-y-4 pt-4">
           <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-500/10 border-2 border-emerald-500/50 flex items-center justify-center">
             <CheckCircle className="w-10 h-10 text-emerald-500" />

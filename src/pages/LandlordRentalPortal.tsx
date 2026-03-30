@@ -110,7 +110,7 @@ export default function LandlordRentalPortal() {
   return (
     <div className="min-h-screen">
       {/* Hero Section - Champagne Theme */}
-      <section className="relative py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] overflow-hidden">
+      <section className="relative py-20 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden">
         {/* Decorative Elements */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-gold/10 to-champagne/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-champagne/20 to-gold/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
@@ -159,7 +159,7 @@ export default function LandlordRentalPortal() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {BENEFITS.map((benefit, index) => (
@@ -185,7 +185,7 @@ export default function LandlordRentalPortal() {
       </section>
 
       {/* Main Content */}
-      <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+      <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="bg-white/60 border border-gold/30 mb-8">

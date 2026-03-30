@@ -72,7 +72,7 @@ const CommunityDetail = () => {
         
         <Link
           to="/communities"
-          className="absolute top-6 left-6 flex items-center gap-2 text-black hover:text-gold transition-colors bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] backdrop-blur-sm px-4 py-2 rounded-full border border-gold/40 shadow-md"
+          className="absolute top-6 left-6 flex items-center gap-2 text-black hover:text-gold transition-colors bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] backdrop-blur-sm px-4 py-2 rounded-full border border-gold/40 shadow-md"
         >
           <ChevronLeft className="w-5 h-5" />
           <span className="font-medium">Back to Communities</span>
@@ -172,7 +172,7 @@ const CommunityDetail = () => {
         <div className="mt-8 text-center">
           <Link 
             to="/areas"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 px-6 py-3 rounded-xl shadow-[0_4px_20px_rgba(200,167,102,0.3),0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_25px_rgba(200,167,102,0.5),0_10px_40px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300"
           >
             <span className="text-gold font-semibold">View All Area Guides</span>
             <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">

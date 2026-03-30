@@ -30,7 +30,7 @@ const AIComparisonWidget = () => {
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
       variants={fadeInUp}
-      className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40 rounded-3xl p-8 md:p-10 relative overflow-hidden shadow-[0_0_40px_rgba(200,167,102,0.3)]"
+      className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-3xl p-8 md:p-10 relative overflow-hidden shadow-[0_0_40px_rgba(200,167,102,0.3)]"
     >
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl" />
@@ -57,7 +57,7 @@ const AIComparisonWidget = () => {
               Powered by JBJ Global Real Estate
             </p>
           </div>
-          <div className="hidden md:flex w-16 h-16 bg-gradient-to-br from-[hsl(38,35%,12%)] to-[hsl(34,25%,12%)] rounded-2xl items-center justify-center shadow-lg">
+          <div className="hidden md:flex w-16 h-16 bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] rounded-2xl items-center justify-center shadow-lg">
             <BarChart3 className="w-8 h-8 text-gold" />
           </div>
         </div>
@@ -103,7 +103,7 @@ const AIComparisonWidget = () => {
         {/* CTA - Premium 3D Champagne Button */}
         <Link to="/compare">
           <button 
-            className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full md:w-auto"
+            className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/50 hover:scale-[1.02] transform active:scale-95 group w-full md:w-auto"
             style={{
               boxShadow: `
                 0 10px 30px rgba(200,167,102,0.4),

@@ -32,7 +32,7 @@ const CEOLeadershipShowcase = () => {
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Active Champagne Layer - Wraps the entire section content */}
-        <div className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border border-gold/30">
+        <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 border border-gold/30">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -42,7 +42,7 @@ const CEOLeadershipShowcase = () => {
           >
             {/* Section Header */}
             <motion.div variants={fadeInUp} className="text-center mb-12">
-              <Badge className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] text-gold border-gold/40 px-4 py-1.5 mb-6 shadow-sm">
+              <Badge className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-gold border-gold/40 px-4 py-1.5 mb-6 shadow-sm">
                 <Sparkles className="w-3.5 h-3.5 mr-1.5" />
                 Our Vision
               </Badge>
@@ -102,8 +102,8 @@ const CEOLeadershipShowcase = () => {
               className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
             >
               {/* Card 1: Team Members */}
-              <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
+              <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
                   <Users className="w-6 h-6 text-black" />
                 </div>
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
@@ -113,8 +113,8 @@ const CEOLeadershipShowcase = () => {
               </div>
 
               {/* Card 2: Departments */}
-              <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
+              <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
                   <Building2 className="w-6 h-6 text-black" />
                 </div>
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
@@ -124,8 +124,8 @@ const CEOLeadershipShowcase = () => {
               </div>
 
               {/* Card 3: Languages Spoken */}
-              <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
+              <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
                   <Languages className="w-6 h-6 text-black" />
                 </div>
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
@@ -135,8 +135,8 @@ const CEOLeadershipShowcase = () => {
               </div>
 
               {/* Card 4: Nationalities */}
-              <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
+              <div className="group text-center p-6 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl hover:shadow-[0_15px_40px_rgba(200,167,102,0.35),0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-2 hover:scale-[1.03] transition-all duration-300">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-lg flex items-center justify-center mx-auto mb-3 shadow-md group-hover:shadow-lg transition-shadow">
                   <Globe className="w-6 h-6 text-black" />
                 </div>
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
@@ -149,7 +149,7 @@ const CEOLeadershipShowcase = () => {
             {/* Leadership Quote */}
             <motion.div
               variants={fadeInUp}
-              className="text-center max-w-3xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-xl p-6 md:p-8 border border-gold/30"
+              className="text-center max-w-3xl mx-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl p-6 md:p-8 border border-gold/30"
             >
               <div className="relative">
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl text-gold/40">"</div>

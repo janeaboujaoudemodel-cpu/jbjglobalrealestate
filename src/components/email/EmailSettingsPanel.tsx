@@ -100,9 +100,9 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
       <EmailHubStatusPanel />
 
       {/* Company Email Status */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl border-2 border-[#C9A84C]/20 p-5">
+      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl border-2 border-[#B89555]/20 p-5">
         <div className="flex items-center gap-3 mb-3">
-          <Building2 className="w-5 h-5 text-[#C9A84C]" />
+          <Building2 className="w-5 h-5 text-[#B89555]" />
           <h3 className="font-semibold text-foreground">Company Email (jbj.ae)</h3>
           <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300 text-[10px]">
             <CheckCircle2 className="w-3 h-3 mr-1" /> Connected
@@ -111,16 +111,16 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
         <p className="text-sm text-muted-foreground mb-2">
           Resend API is active for all company email addresses (@jbj.ae). Emails are sent through verified domain with full deliverability.
         </p>
-        <div className="flex items-center gap-2 bg-white/70 rounded-lg border border-[#C9A84C]/15 px-3 py-2">
+        <div className="flex items-center gap-2 bg-white/70 rounded-lg border border-[#B89555]/15 px-3 py-2">
           <Zap className="w-4 h-4 text-emerald-500" />
           <span className="text-xs text-muted-foreground">Domain verified: <strong className="text-foreground">jbj.ae</strong></span>
         </div>
       </div>
 
       {/* Personal Email Setup */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl border-2 border-[#C9A84C]/20 p-5">
+      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl border-2 border-[#B89555]/20 p-5">
         <div className="flex items-center gap-3 mb-3">
-          <User className="w-5 h-5 text-[#C9A84C]" />
+          <User className="w-5 h-5 text-[#B89555]" />
           <h3 className="font-semibold text-foreground">Personal Email</h3>
           {personalKeyStatus === "loading" ? (
             <Badge className="bg-muted text-muted-foreground border-border text-[10px]">
@@ -171,13 +171,13 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
                 <Button
                   onClick={savePersonalApiKey}
                   disabled={isSaving || !personalApiKey.trim()}
-                  className="bg-gradient-to-r from-[#C9A84C] to-[#B8973F] hover:from-[#B8973F] hover:to-[#A78636] text-white"
+                  className="bg-gradient-to-r from-[#B89555] to-[#A68444] hover:from-[#A68444] hover:to-[#957539] text-white"
                 >
                   {isSaving ? "Validating…" : "Submit"}
                 </Button>
               </div>
               <p className="text-[10px] text-muted-foreground mt-1.5">
-                Get your API key from <a href="https://resend.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-[#C9A84C] underline">resend.com/api-keys</a>. 
+                Get your API key from <a href="https://resend.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-[#B89555] underline">resend.com/api-keys</a>. 
                 Your key is securely stored and never exposed client-side.
               </p>
             </div>
@@ -200,7 +200,7 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
                 variant="outline"
                 size="sm"
                 onClick={() => { setPersonalKeyStatus("missing"); }}
-                className="text-xs border-[#C9A84C]/30 text-[#C9A84C]"
+                className="text-xs border-[#B89555]/30 text-[#B89555]"
               >
                 <Key className="w-3 h-3 mr-1" /> Update Key
               </Button>
@@ -219,9 +219,9 @@ const EmailSettingsPanel = ({ onClose }: EmailSettingsPanelProps) => {
       </div>
 
       {/* Send Defaults */}
-      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl border-2 border-[#C9A84C]/20 p-5">
+      <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl border-2 border-[#B89555]/20 p-5">
         <div className="flex items-center gap-3 mb-3">
-          <Mail className="w-5 h-5 text-[#C9A84C]" />
+          <Mail className="w-5 h-5 text-[#B89555]" />
           <h3 className="font-semibold text-foreground">Default Send Preferences</h3>
         </div>
         <div className="space-y-3">

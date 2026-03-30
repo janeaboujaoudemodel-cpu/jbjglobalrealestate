@@ -267,7 +267,7 @@ const SellerGuide = () => {
         description="Complete guide to selling property in Dubai. Learn about pricing, documentation, marketing, and the transfer process with JBJ Global Real Estate. Expert brokerage services for sellers."
       />
       
-      <main className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <main className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         {/* Premium Hero with Background */}
         <section className="relative py-24 md:py-32 lg:py-40 overflow-hidden">
           {/* Background */}
@@ -291,7 +291,7 @@ const SellerGuide = () => {
             <div className="max-w-4xl mx-auto text-center">
               {/* Badge */}
               <motion.div 
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-lg"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 rounded-full px-5 py-2.5 mb-6 shadow-lg"
                 variants={fadeInUp}
               >
                 <Building2 className="w-4 h-4 text-black" />
@@ -334,7 +334,7 @@ const SellerGuide = () => {
                 >
                   <ArrowDown className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                   <span className="text-white group-hover:text-black transition-colors">Start the Guide</span>
-                  <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                  <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                 </button>
                 <Link to="/seller-listing">
                   <button 
@@ -346,7 +346,7 @@ const SellerGuide = () => {
                   >
                     <Building2 className="w-4 h-4 text-gold group-hover:text-black transition-colors" style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} />
                     <span className="text-white group-hover:text-black transition-colors">List Your Property</span>
-                    <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
+                    <span className="absolute inset-0 rounded-lg md:rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" style={{ border: '2px solid rgba(200,167,102,0.6)' }} />
                   </button>
                 </Link>
               </motion.div>

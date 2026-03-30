@@ -729,7 +729,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {/* Menu Panel */}
               <div 
                 className="relative w-full h-full overflow-y-auto overscroll-contain"
-                style={{ background: 'linear-gradient(180deg, #FDFBF7 0%, #F5F0E6 40%, #EDE4D3 100%)' }}
+                style={{ background: 'linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 40%, #EFE6D6 100%)' }}
               >
                 {/* Quick Actions Row */}
                 <div className="flex items-center justify-evenly px-4 py-3 border-b border-gold/20">
@@ -1076,7 +1076,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   <div className="fixed inset-0 z-[10070] flex items-center justify-center bg-black/70 p-4">
                     <div 
                       className="relative max-w-md w-full rounded-2xl p-6 border-2 border-gold/40 shadow-2xl"
-                      style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
+                      style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
                     >
                       <button
                         onClick={() => setShowWalkthrough(false)}
@@ -1390,7 +1390,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {activeMegaMenu === 'search' && (
                   <div
                     className="w-[620px] max-w-[calc(100vw-32px)] rounded-xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] relative"
-                    style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 50%, #D4C4A8 100%)' }}
+                    style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
                   >
                     {/* Gold border overlay */}
                     <div className="absolute inset-0 rounded-xl border-2 border-gold/40 pointer-events-none z-10" />

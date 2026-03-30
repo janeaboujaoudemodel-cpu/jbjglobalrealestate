@@ -421,7 +421,7 @@ const AICalendar = () => {
                 <Plus className="w-3 h-3 mr-1" /> New Project
               </Button>
             </DialogTrigger>
-             <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
+             <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
                <DialogHeader>
                  <DialogTitle className="text-black font-bold">Create New Project</DialogTitle>
                </DialogHeader>
@@ -483,7 +483,7 @@ const AICalendar = () => {
                       <Plus className="w-4 h-4 mr-1" /> Add Event
                     </Button>
                   </DialogTrigger>
-                   <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold max-w-lg shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
+                   <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold max-w-lg shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
                      <DialogHeader>
                        <DialogTitle className="text-black font-bold flex items-center gap-2">
                          <Calendar className="w-5 h-5 text-gold" />
@@ -763,7 +763,7 @@ const AICalendar = () => {
                       <Plus className="w-3 h-3 mr-1" /> Add Note
                     </Button>
                   </DialogTrigger>
-                   <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
+                   <DialogContent className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold shadow-[0_8px_40px_rgba(200,167,102,0.4)]">
                      <DialogHeader>
                        <DialogTitle className="text-black font-bold">
                          {editingNote ? 'Edit Note' : 'Create Note'}

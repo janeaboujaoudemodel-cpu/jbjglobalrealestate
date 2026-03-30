@@ -166,7 +166,7 @@ export function FoundersEscalationsPanel() {
     <div className="space-y-6">
       {/* Header Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <Card className="bg-white border-2 border-[#C9A84C]/30">
+        <Card className="bg-white border-2 border-[#B89555]/30">
           <CardContent className="p-4 text-center">
             <p className="text-xs text-zinc-500">Total</p>
             <p className="text-2xl font-bold text-black">{stats.total}</p>
@@ -211,7 +211,7 @@ export function FoundersEscalationsPanel() {
       </div>
 
       {/* Filters */}
-      <Card className="bg-white border-2 border-[#C9A84C]/20">
+      <Card className="bg-white border-2 border-[#B89555]/20">
         <CardContent className="p-4">
           <div className="flex flex-wrap items-center gap-4">
             <div className="relative flex-1 min-w-[200px]">
@@ -220,12 +220,12 @@ export function FoundersEscalationsPanel() {
                 placeholder="Search escalations..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-zinc-50 border-[#C9A84C]/20 text-black"
+                className="pl-10 bg-zinc-50 border-[#B89555]/20 text-black"
               />
             </div>
 
             <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as FilterStatus)}>
-              <SelectTrigger className="w-[150px] bg-zinc-50 border-[#C9A84C]/20 text-black">
+              <SelectTrigger className="w-[150px] bg-zinc-50 border-[#B89555]/20 text-black">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -237,7 +237,7 @@ export function FoundersEscalationsPanel() {
             </Select>
 
             <Select value={urgencyFilter} onValueChange={(v) => setUrgencyFilter(v as FilterUrgency)}>
-              <SelectTrigger className="w-[150px] bg-zinc-50 border-[#C9A84C]/20 text-black">
+              <SelectTrigger className="w-[150px] bg-zinc-50 border-[#B89555]/20 text-black">
                 <SelectValue placeholder="Urgency" />
               </SelectTrigger>
               <SelectContent>
@@ -254,7 +254,7 @@ export function FoundersEscalationsPanel() {
               size="icon"
               onClick={refreshEscalationQueue}
               disabled={isProcessing}
-              className="border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C]/10"
+              className="border-[#B89555]/30 text-[#B89555] hover:bg-[#B89555]/10"
             >
               <RefreshCw className={`h-4 w-4 ${isProcessing ? 'animate-spin' : ''}`} />
             </Button>
@@ -267,9 +267,9 @@ export function FoundersEscalationsPanel() {
         <div className="space-y-4">
           <AnimatePresence>
             {filteredEscalations.length === 0 ? (
-              <Card className="bg-white border-2 border-[#C9A84C]/20">
+              <Card className="bg-white border-2 border-[#B89555]/20">
                 <CardContent className="p-12 text-center">
-                  <Zap className="h-12 w-12 text-[#C9A84C]/30 mx-auto mb-4" />
+                  <Zap className="h-12 w-12 text-[#B89555]/30 mx-auto mb-4" />
                   <p className="text-zinc-500">No escalations found</p>
                   <p className="text-sm text-zinc-400 mt-1">
                     {statusFilter !== 'all' || urgencyFilter !== 'all' || searchQuery
@@ -294,7 +294,7 @@ export function FoundersEscalationsPanel() {
                           : 'border-amber-300'
                         : event.status === 'resolved'
                         ? 'border-green-200'
-                        : 'border-[#C9A84C]/20'
+                        : 'border-[#B89555]/20'
                     }`}
                   >
                     <CardContent className="p-4">
@@ -360,7 +360,7 @@ export function FoundersEscalationsPanel() {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="mt-4 pt-4 border-t border-[#C9A84C]/10"
+                            className="mt-4 pt-4 border-t border-[#B89555]/10"
                           >
                             <div className="bg-zinc-50 rounded-lg p-4 mb-4 border border-zinc-200">
                               <p className="text-sm text-zinc-500 mb-1">Original Message:</p>
@@ -376,7 +376,7 @@ export function FoundersEscalationsPanel() {
                               </div>
                               <div className="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
                                 <p className="text-xs text-zinc-500">Confidence</p>
-                                <p className="text-lg font-semibold text-[#C9A84C]">
+                                <p className="text-lg font-semibold text-[#B89555]">
                                   {event.emotionAnalysis.confidence}%
                                 </p>
                               </div>
@@ -420,7 +420,7 @@ export function FoundersEscalationsPanel() {
                                   variant="outline"
                                   size="sm"
                                   onClick={() => setSelectedEscalation(event)}
-                                  className="border-[#C9A84C]/30 text-black hover:bg-[#C9A84C]/10"
+                                  className="border-[#B89555]/30 text-black hover:bg-[#B89555]/10"
                                 >
                                   <Eye className="h-4 w-4 mr-1" />
                                   View Full Message
@@ -449,7 +449,7 @@ export function FoundersEscalationsPanel() {
                                   variant="outline"
                                   size="sm"
                                   onClick={() => handleLetAmandaHandle(event)}
-                                  className="border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C]/10"
+                                  className="border-[#B89555]/30 text-[#B89555] hover:bg-[#B89555]/10"
                                 >
                                   <Zap className="h-4 w-4 mr-1" />
                                   Let Amanda Handle
@@ -469,10 +469,10 @@ export function FoundersEscalationsPanel() {
       </ScrollArea>
 
       {/* Customer Happiness Center */}
-      <Card className="bg-white border-2 border-[#C9A84C]/30">
+      <Card className="bg-white border-2 border-[#B89555]/30">
         <CardHeader>
           <CardTitle className="text-black flex items-center gap-2">
-            <Heart className="h-5 w-5 text-[#C9A84C]" />
+            <Heart className="h-5 w-5 text-[#B89555]" />
             Customer Happiness Center
           </CardTitle>
           <CardDescription className="text-zinc-500">
@@ -515,7 +515,7 @@ export function FoundersEscalationsPanel() {
 
       {/* Resolve Dialog */}
       <Dialog open={resolveDialogOpen} onOpenChange={setResolveDialogOpen}>
-        <DialogContent className="bg-white border-2 border-[#C9A84C]/30">
+        <DialogContent className="bg-white border-2 border-[#B89555]/30">
           <DialogHeader>
             <DialogTitle className="text-black">Resolve Escalation</DialogTitle>
             <DialogDescription className="text-zinc-500">
@@ -536,14 +536,14 @@ export function FoundersEscalationsPanel() {
                   value={resolutionNotes}
                   onChange={(e) => setResolutionNotes(e.target.value)}
                   placeholder="Describe how this was resolved..."
-                  className="bg-zinc-50 border-[#C9A84C]/20 text-black min-h-[100px]"
+                  className="bg-zinc-50 border-[#B89555]/20 text-black min-h-[100px]"
                 />
               </div>
             </div>
           )}
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setResolveDialogOpen(false)} className="border-[#C9A84C]/20 text-black">
+            <Button variant="outline" onClick={() => setResolveDialogOpen(false)} className="border-[#B89555]/20 text-black">
               Cancel
             </Button>
             <Button onClick={handleResolve} className="bg-green-600 hover:bg-green-700 text-white">

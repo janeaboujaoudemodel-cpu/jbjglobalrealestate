@@ -105,7 +105,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
   return (
     <div className="grid lg:grid-cols-3 gap-6">
       {/* Employee List */}
-      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <CardHeader>
           <CardTitle className="text-black text-sm flex items-center gap-2">
             <Activity className="w-4 h-4 text-gold" />
@@ -135,7 +135,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
       </Card>
 
       {/* Journey Timeline */}
-      <Card className="lg:col-span-2 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-2 border-gold/40">
+      <Card className="lg:col-span-2 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <CardHeader>
           <CardTitle className="text-black flex items-center gap-2">
             <Calendar className="w-5 h-5 text-gold" />

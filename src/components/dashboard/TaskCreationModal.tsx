@@ -336,7 +336,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl p-0 overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl p-0 overflow-hidden border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] max-h-[90vh] overflow-y-auto">
         <DialogHeader className="p-6 pb-4 border-b border-gold/20">
           <DialogTitle className="text-xl font-bold text-black flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl bg-black flex items-center justify-center">

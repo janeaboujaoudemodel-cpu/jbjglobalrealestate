@@ -96,7 +96,7 @@ const PremiumBrochureCard = ({
           className="absolute w-[380px] h-[260px] rounded-lg"
           style={{
             transform: "translateZ(-8px) translateX(6px) translateY(6px)",
-            background: "linear-gradient(135deg, #E8DCC8 0%, #D4C4A8 100%)",
+            background: "linear-gradient(135deg, #ECE2D2 0%, #D8C7A6 100%)",
             boxShadow: "0 4px 8px rgba(0,0,0,0.15)",
           }}
         />
@@ -104,7 +104,7 @@ const PremiumBrochureCard = ({
           className="absolute w-[380px] h-[260px] rounded-lg"
           style={{
             transform: "translateZ(-4px) translateX(3px) translateY(3px)",
-            background: "linear-gradient(135deg, #F5EBD7 0%, #E8DCC8 100%)",
+            background: "linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 100%)",
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
           }}
         />

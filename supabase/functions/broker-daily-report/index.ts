@@ -32,7 +32,7 @@ function generateReportHtml(brokerStats: BrokerStats[], date: string, capacityAl
     .map(
       (stat) => {
         const capacityUsage = stat.capacity > 0 ? Math.round((stat.active_leads / stat.capacity) * 100) : 0;
-        const capacityColor = capacityUsage > 90 ? "#EF4444" : capacityUsage > 70 ? "#F59E0B" : "#22C55E";
+        const capacityColor = capacityUsage > 90 ? "#DC2626" : capacityUsage > 70 ? "#F59E0B" : "#22C55E";
         return `
       <tr>
         <td style="padding: 12px; border-bottom: 1px solid #333; color: #fff;">

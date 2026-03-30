@@ -22,7 +22,7 @@ const DEPARTMENTS: DepartmentCard[] = [
     description: "HR, IT, Support, All Departments", 
     icon: ShieldAlert, 
     path: "/owner/admin", 
-    color: "text-[#C9A84C]" 
+    color: "text-[#B89555]" 
   },
   { 
     label: "CRM Dashboard", 
@@ -58,7 +58,7 @@ export default function DepartmentShortcuts() {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white/70 border-2 border-[#C9A84C]/30 rounded-xl p-5 shadow-sm">
+    <div className="bg-white/70 border-2 border-[#B89555]/30 rounded-xl p-5 shadow-sm">
       <h3 className="text-sm font-semibold text-black mb-4">Departments & Admin</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
         {DEPARTMENTS.map((dept) => (
@@ -67,26 +67,26 @@ export default function DepartmentShortcuts() {
             onClick={() => navigate(dept.path)}
             className={cn(
               "flex items-center gap-3 p-4 rounded-xl text-left",
-              "bg-[#FDFBF7] border border-[#C9A84C]/20",
-              "hover:border-[#C9A84C]/50 hover:bg-[#C9A84C]/10 hover:shadow-md hover:shadow-[#C9A84C]/10",
+              "bg-[#FDFBF7] border border-[#B89555]/20",
+              "hover:border-[#B89555]/50 hover:bg-[#B89555]/10 hover:shadow-md hover:shadow-[#B89555]/10",
               "transition-all duration-200 cursor-pointer group"
             )}
           >
             <div className={cn(
-              "w-10 h-10 rounded-lg bg-[#C9A84C]/10 flex items-center justify-center flex-shrink-0",
-              "group-hover:bg-[#C9A84C]/20 transition-colors"
+              "w-10 h-10 rounded-lg bg-[#B89555]/10 flex items-center justify-center flex-shrink-0",
+              "group-hover:bg-[#B89555]/20 transition-colors"
             )}>
               <dept.icon className={cn("h-5 w-5", dept.color)} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-black group-hover:text-[#C9A84C] transition-colors">
+              <p className="text-sm font-medium text-black group-hover:text-[#B89555] transition-colors">
                 {dept.label}
               </p>
               <p className="text-xs text-zinc-500 leading-snug">
                 {dept.description}
               </p>
             </div>
-            <ChevronRight className="h-4 w-4 text-zinc-400 group-hover:text-[#C9A84C] transition-colors flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-zinc-400 group-hover:text-[#B89555] transition-colors flex-shrink-0" />
           </button>
         ))}
       </div>

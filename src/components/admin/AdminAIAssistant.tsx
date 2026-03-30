@@ -168,7 +168,7 @@ export const AdminAIAssistant = () => {
   };
 
   return (
-    <Card className="bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] border-2 border-gold/40 shadow-[0_8px_30px_rgba(200,167,102,0.25)] overflow-hidden">
+    <Card className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold/40 shadow-[0_8px_30px_rgba(200,167,102,0.25)] overflow-hidden">
       <CardHeader className="border-b border-gold/30 bg-gradient-to-r from-white/50 to-transparent">
         <CardTitle className="text-black flex items-center gap-2">
           <div className="p-2 rounded-lg bg-gold/30 border border-gold/40">

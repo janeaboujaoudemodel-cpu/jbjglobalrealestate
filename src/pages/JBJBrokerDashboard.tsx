@@ -146,13 +146,13 @@ export default function JBJBrokerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)] pt-24 lg:pt-28">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] pt-24 lg:pt-28">
       {/* Header */}
-      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
+      <header className="border-b-2 border-gold/40 bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] sticky top-20 lg:top-24 z-40 shadow-[0_4px_20px_rgba(200,167,102,0.15)]">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-4">
-              <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8]">
+              <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
                 <Users className="w-5 h-5 text-black" />
               </div>
               <div>
@@ -209,7 +209,7 @@ export default function JBJBrokerDashboard() {
           <Card className="bg-white border border-gold/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8]">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
                   <Users className="h-5 w-5 text-black" />
                 </div>
                 <div>
@@ -225,7 +225,7 @@ export default function JBJBrokerDashboard() {
           <Card className="bg-white border border-gold/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8]">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
                   <CheckCircle className="h-5 w-5 text-green-600" />
                 </div>
                 <div>
@@ -241,7 +241,7 @@ export default function JBJBrokerDashboard() {
           <Card className="bg-white border border-gold/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8]">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
                   <Clock className="h-5 w-5 text-amber-600" />
                 </div>
                 <div>
@@ -257,7 +257,7 @@ export default function JBJBrokerDashboard() {
           <Card className="bg-white border border-gold/20 shadow-sm">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8]">
+                <div className="p-2 rounded-lg bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6]">
                   <AlertCircle className="h-5 w-5 text-gold" />
                 </div>
                 <div>

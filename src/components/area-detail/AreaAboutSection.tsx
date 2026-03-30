@@ -22,7 +22,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
   const isLongDescription = (area.description?.length ?? 0) > 400;
 
   return (
-    <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3]">
+    <section className="py-16 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center gap-3 mb-6">
@@ -55,7 +55,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
                   }}
                 />
                 {!isExpanded && isLongDescription && (
-                  <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F5F0E6] to-transparent pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-[#F7F2EA] to-transparent pointer-events-none" />
                 )}
               </div>
               {isLongDescription && (
@@ -112,7 +112,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
 
           <Button
             onClick={handleScrollToProjects}
-            className="px-8 py-6 text-base bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all"
+            className="px-8 py-6 text-base bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black font-bold border-2 border-gold hover:from-gold hover:to-amber-500 hover:text-black transition-all"
           >
             Properties
             <ArrowDown className="w-5 h-5 ml-2" />

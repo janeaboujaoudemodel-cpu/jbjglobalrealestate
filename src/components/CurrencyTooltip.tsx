@@ -35,7 +35,7 @@ export function CurrencyTooltip() {
       <div
         className="relative rounded-xl border-2 border-gold/50 p-4 shadow-2xl"
         style={{
-          background: "linear-gradient(135deg, #FDFBF7 0%, #F5F0E6 50%, #EDE4D3 100%)",
+          background: "linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)",
         }}
       >
         <button

@@ -81,7 +81,7 @@ const MyDashboardActivity = () => {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#F5EBD7] via-[#EDE4D3] to-[#E0D5C0] flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#F7F1E6] via-[#EFE6D6] to-[#E0D5C0] flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-gold animate-spin" />
       </div>
     );
@@ -102,9 +102,9 @@ const MyDashboardActivity = () => {
         description="View your activity history and engagement on the platform."
       />
       
-      <div className="min-h-screen bg-gradient-to-b from-[#F5EBD7] via-[#EDE4D3] to-[#E0D5C0]">
+      <div className="min-h-screen bg-gradient-to-b from-[#F7F1E6] via-[#EFE6D6] to-[#E0D5C0]">
         <div className="mx-0 my-6 rounded-2xl border-2 border-gold/30 overflow-hidden"
-          style={{ background: 'linear-gradient(145deg, #FDFBF7 0%, #F5EBD7 50%, #EDE4D3 100%)' }}
+          style={{ background: 'linear-gradient(145deg, #FDFBF7 0%, #F7F1E6 50%, #EFE6D6 100%)' }}
         >
           <div className="container mx-auto px-4 py-8 max-w-5xl">
             {/* Back Button */}

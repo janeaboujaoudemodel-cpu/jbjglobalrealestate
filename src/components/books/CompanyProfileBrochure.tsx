@@ -91,7 +91,7 @@ export function CompanyProfileBrochure({
           <h3 className="text-gold text-lg md:text-xl font-bold" style={{ fontFamily: "'Playfair Display', serif" }}>
             JBJ Global Real Estate
           </h3>
-          <p className="text-[#E8DCC8] text-sm font-semibold mb-2">Company Profile</p>
+          <p className="text-[#ECE2D2] text-sm font-semibold mb-2">Company Profile</p>
           <p className="text-zinc-400 text-xs leading-relaxed mb-3 max-w-xs mx-auto">
             Our comprehensive company profile — vision, leadership, portfolio, awards, and investment track record.
           </p>

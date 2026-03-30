@@ -326,7 +326,7 @@ function getBgStyle(mode: BgMode): React.CSSProperties {
       backgroundSize: '16px 16px',
     };
     case 'black': return { backgroundColor: '#111111' };
-    case 'paper': return { backgroundColor: '#f5f0e6' };
+    case 'paper': return { backgroundColor: '#F7F2EA' };
   }
 }
 
@@ -408,7 +408,7 @@ export default function StampExportPage() {
     return s.sort((a, b) => a - b);
   }, [options.sizes, customSize]);
 
-  const bgColorForExport = bgMode === 'black' ? '#111111' : bgMode === 'paper' ? '#f5f0e6' : '#ffffff';
+  const bgColorForExport = bgMode === 'black' ? '#111111' : bgMode === 'paper' ? '#F7F2EA' : '#ffffff';
   const isTransparent = bgMode === 'transparent';
 
   function toggleFormat(f: string) { setOptions(o => ({ ...o, formats: o.formats.includes(f) ? o.formats.filter(x => x !== f) : [...o.formats, f] })); }
@@ -966,7 +966,7 @@ export default function StampExportPage() {
                     { value: 'white' as BgMode, label: 'White', style: { backgroundColor: '#ffffff', border: '1px solid hsl(var(--border))' } },
                     { value: 'transparent' as BgMode, label: 'Transparent', style: { backgroundImage: 'repeating-conic-gradient(#e5e5e5 0% 25%, #fff 0% 50%)', backgroundSize: '8px 8px' } },
                     { value: 'black' as BgMode, label: 'Black', style: { backgroundColor: '#111111' } },
-                    { value: 'paper' as BgMode, label: 'Paper', style: { backgroundColor: '#f5f0e6' } },
+                    { value: 'paper' as BgMode, label: 'Paper', style: { backgroundColor: '#F7F2EA' } },
                   ]).map(bg => (
                     <button key={bg.value} onClick={() => setBgMode(bg.value)}
                       className={`flex flex-col items-center gap-1.5 p-2 rounded-xl border-2 transition-all ${

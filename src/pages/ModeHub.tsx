@@ -47,7 +47,7 @@ const ModeHub = () => {
       <SEOHead title="Mode Hub | Registration Analytics" description="Track user registrations by category." />
       <div className="space-y-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F5EBD7] to-[#D4C4A8] flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] flex items-center justify-center">
             <TrendingUp className="w-5 h-5 text-foreground" />
           </div>
           <div>
@@ -58,7 +58,7 @@ const ModeHub = () => {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6]">
+          <Card className="border-2 border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
             <CardContent className="p-4 text-center">
               <p className="text-xs text-muted-foreground uppercase tracking-wide">Total Users</p>
               {isLoading ? <Skeleton className="h-8 w-16 mx-auto mt-1" /> : <p className="text-2xl font-bold text-foreground mt-1">{totalUsers}</p>}

@@ -138,7 +138,7 @@ const NewsDetail = () => {
 
   if (error || !article) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         <div className="container mx-auto px-4 py-20 text-center">
           <Newspaper className="w-16 h-16 text-zinc-600 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-white mb-2">Article Not Found</h1>
@@ -173,7 +173,7 @@ const NewsDetail = () => {
         title={`${article.title} | JBJ Global Real Estate News`}
         description={article.excerpt}
       />
-      <article className="min-h-screen bg-gradient-to-br from-[hsl(38,35%,12%)] via-[hsl(36,30%,16%)] to-[hsl(34,25%,12%)]">
+      <article className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         {/* Full-Screen Hero Image */}
         <div className="relative h-[80vh] md:h-[90vh] overflow-hidden">
           <img
@@ -235,7 +235,7 @@ const NewsDetail = () => {
 
             {/* Key Stats Banner */}
             {keyStats.length > 0 && (
-              <div className="mb-8 bg-gradient-to-r from-[#F5EBD7] via-[#E8DCC8] to-[#D4C4A8] rounded-xl p-5 border border-gold/30">
+              <div className="mb-8 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] rounded-xl p-5 border border-gold/30">
                 <div className="flex items-center gap-2 mb-4">
                   <BarChart3 className="w-4 h-4 text-gold" />
                   <span className="text-xs font-semibold text-black uppercase tracking-wider">Key Statistics</span>
@@ -253,7 +253,7 @@ const NewsDetail = () => {
 
             {/* Key Takeaways Box */}
             {keyTakeaways.length > 0 && (
-              <div className="mb-8 bg-gradient-to-br from-[#FDFBF7] to-[#F5F0E6] rounded-xl p-5 border border-gold/20">
+              <div className="mb-8 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-5 border border-gold/20">
                 <div className="flex items-center gap-2 mb-4">
                   <Lightbulb className="w-4 h-4 text-gold" />
                   <span className="text-xs font-semibold text-black uppercase tracking-wider">Key Takeaways</span>
@@ -333,7 +333,7 @@ const NewsDetail = () => {
             {/* Dubai Market Intelligence Section */}
             <div className="mt-12 pt-8 border-t border-gold/20">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F5EBD7] via-[#EDE0C8] to-[#E2D4B8] border border-gold/30 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#EDE0C8] to-[#E2D4B8] border border-gold/30 flex items-center justify-center">
                   <TrendingUp className="w-5 h-5 text-black" />
                 </div>
                 <div>

@@ -165,7 +165,7 @@ const ChampagneToolCard = ({
 
 const ProductivitySuite = () => {
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #F5EBD7 0%, #EDE0C8 40%, #DDD0B8 100%)' }}>
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #EDE0C8 40%, #DDD0B8 100%)' }}>
       {/* Hero Section - Champagne premium */}
       <div className="relative py-14 px-4 overflow-hidden">
         <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, rgba(200,167,102,0.12) 0%, transparent 60%)' }} />

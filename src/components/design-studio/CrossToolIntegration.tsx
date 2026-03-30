@@ -118,7 +118,7 @@ export const CrossToolIntegration: React.FC<CrossToolIntegrationProps> = ({
   };
 
   return (
-    <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] border-gold/20 shadow-lg">
+    <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/20 shadow-lg">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
           <Share2 className="w-5 h-5 text-gold" />

@@ -110,14 +110,14 @@ const getStatusConfig = (status: string | null) => {
     case 'action_required': return { label: 'Action Required', bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-300' };
     case 'highlighted': return { label: 'Highlighted', bg: 'bg-amber-100', text: 'text-amber-800', border: 'border-amber-300' };
     case 'open': return { label: 'Open', bg: 'bg-blue-100', text: 'text-blue-800', border: 'border-blue-300' };
-    default: return { label: 'Active', bg: 'bg-[#F5EBD7]', text: 'text-[#8B7355]', border: 'border-[#C9A84C]/40' };
+    default: return { label: 'Active', bg: 'bg-[#F7F1E6]', text: 'text-[#8A7356]', border: 'border-[#B89555]/40' };
   }
 };
 
 const getPriorityConfig = (level: string) => {
   switch (level) {
-    case 'critical': return { icon: AlertTriangle, color: 'text-red-600', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#C9A84C]/40' };
-    case 'high': return { icon: AlertCircle, color: 'text-[#C9A84C]', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#C9A84C]/30' };
+    case 'critical': return { icon: AlertTriangle, color: 'text-red-600', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#B89555]/40' };
+    case 'high': return { icon: AlertCircle, color: 'text-[#B89555]', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-[#B89555]/30' };
     case 'medium': return { icon: Bell, color: 'text-stone-600', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-stone-300' };
     default: return { icon: CheckCircle2, color: 'text-emerald-600', bg: 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8] border-2 border-emerald-300' };
   }
@@ -389,7 +389,7 @@ const AdminChatDashboard = () => {
 
   const renderScoreBar = (score: number, max = 10) => {
     const pct = (score / max) * 100;
-    const color = score >= 8 ? 'bg-emerald-500' : score >= 5 ? 'bg-[#C9A84C]' : 'bg-red-400';
+    const color = score >= 8 ? 'bg-emerald-500' : score >= 5 ? 'bg-[#B89555]' : 'bg-red-400';
     return (
       <div className="flex items-center gap-3">
         <div className="flex-1 h-2 bg-stone-200 rounded-full overflow-hidden">
@@ -402,27 +402,27 @@ const AdminChatDashboard = () => {
 
   // Champagne theme classes
   const cardBg = 'bg-gradient-to-br from-[#FDFBF7] via-[#F8F2E8] to-[#F0E8D8]';
-  const containerBg = 'bg-gradient-to-b from-[#FDFBF7] via-[#F9F3E9] to-[#F5EBD7]';
+  const containerBg = 'bg-gradient-to-b from-[#FDFBF7] via-[#F9F3E9] to-[#F7F1E6]';
 
   return (
     <div className={`min-h-screen ${containerBg} text-stone-900`}>
       {/* Header - Champagne */}
-      <div className="border-b border-[#C9A84C]/25 bg-gradient-to-r from-[#F5EBD7] via-[#FDFBF7] to-[#F5EBD7] sticky top-0 z-30 shadow-sm">
+      <div className="border-b border-[#B89555]/25 bg-gradient-to-r from-[#F7F1E6] via-[#FDFBF7] to-[#F7F1E6] sticky top-0 z-30 shadow-sm">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/admin')} className="text-stone-500 hover:text-[#C9A84C] hover:bg-[#C9A84C]/10">
+              <Button variant="ghost" size="icon" onClick={() => navigate('/admin')} className="text-stone-500 hover:text-[#B89555] hover:bg-[#B89555]/10">
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-[#C9A84C]" />
+                  <Sparkles className="w-5 h-5 text-[#B89555]" />
                   <h1 className="text-xl font-bold text-stone-900">AI Chat Intelligence</h1>
                 </div>
                 <p className="text-xs text-stone-500 mt-0.5">Conversations, transcripts, CV submissions & alerts</p>
               </div>
             </div>
-            <Button onClick={exportToCSV} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 gap-2 shadow-sm">
+            <Button onClick={exportToCSV} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 gap-2 shadow-sm">
               <Download className="w-3.5 h-3.5" /> Export
             </Button>
           </div>
@@ -443,10 +443,10 @@ const AdminChatDashboard = () => {
             <div
               key={stat.label}
               onClick={stat.onClick}
-              className={`${cardBg} border border-[#C9A84C]/20 rounded-xl p-4 hover:border-[#C9A84C]/50 hover:shadow-md transition-all cursor-pointer group`}
+              className={`${cardBg} border border-[#B89555]/20 rounded-xl p-4 hover:border-[#B89555]/50 hover:shadow-md transition-all cursor-pointer group`}
             >
               <div className="flex items-center gap-2 mb-1.5">
-                <stat.icon className="w-4 h-4 text-[#C9A84C]/70 group-hover:text-[#C9A84C] transition-colors" />
+                <stat.icon className="w-4 h-4 text-[#B89555]/70 group-hover:text-[#B89555] transition-colors" />
                 <span className="text-[10px] uppercase tracking-widest text-stone-500 font-medium">{stat.label}</span>
               </div>
               <p className="text-2xl font-bold text-stone-900">{stat.value}</p>
@@ -467,7 +467,7 @@ const AdminChatDashboard = () => {
         )}
 
         {/* Tab Buttons - Champagne active */}
-        <div className="flex gap-1 bg-[#F0E8D8] rounded-xl p-1.5 w-fit border border-[#C9A84C]/20">
+        <div className="flex gap-1 bg-[#F0E8D8] rounded-xl p-1.5 w-fit border border-[#B89555]/20">
           {([
             { id: 'chats' as const, label: 'Chat Transcripts', icon: MessageCircle },
             { id: 'cvs' as const, label: `CV Submissions (${stats.cvCount})`, icon: FileText },
@@ -478,11 +478,11 @@ const AdminChatDashboard = () => {
               onClick={() => setTab(t.id)}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                 tab === t.id
-                  ? 'bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] text-stone-900 shadow-md border border-[#C9A84C]/30'
+                  ? 'bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] text-stone-900 shadow-md border border-[#B89555]/30'
                   : 'text-stone-500 hover:text-stone-700 hover:bg-[#FDFBF7]/50'
               }`}
             >
-              <t.icon className={`w-4 h-4 ${tab === t.id ? 'text-[#C9A84C]' : ''}`} /> {t.label}
+              <t.icon className={`w-4 h-4 ${tab === t.id ? 'text-[#B89555]' : ''}`} /> {t.label}
             </button>
           ))}
         </div>
@@ -497,13 +497,13 @@ const AdminChatDashboard = () => {
                   placeholder="Search by name, email, or phone..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-white border-[#C9A84C]/20 text-stone-900 placeholder:text-stone-400 focus:border-[#C9A84C]/50 focus:ring-[#C9A84C]/20"
+                  className="pl-10 bg-white border-[#B89555]/20 text-stone-900 placeholder:text-stone-400 focus:border-[#B89555]/50 focus:ring-[#B89555]/20"
                 />
               </div>
               <select
                 value={filterService}
                 onChange={(e) => setFilterService(e.target.value)}
-                className="h-10 rounded-lg border border-[#C9A84C]/20 bg-white text-stone-700 pl-3 pr-8 text-sm cursor-pointer hover:border-[#C9A84C]/40 focus:border-[#C9A84C]/50 focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/20"
+                className="h-10 rounded-lg border border-[#B89555]/20 bg-white text-stone-700 pl-3 pr-8 text-sm cursor-pointer hover:border-[#B89555]/40 focus:border-[#B89555]/50 focus:outline-none focus:ring-1 focus:ring-[#B89555]/20"
               >
                 <option value="all">All Services</option>
                 {ALL_SERVICES.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
@@ -511,7 +511,7 @@ const AdminChatDashboard = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="h-10 rounded-lg border border-[#C9A84C]/20 bg-white text-stone-700 pl-3 pr-8 text-sm cursor-pointer hover:border-[#C9A84C]/40 focus:border-[#C9A84C]/50 focus:outline-none focus:ring-1 focus:ring-[#C9A84C]/20"
+                className="h-10 rounded-lg border border-[#B89555]/20 bg-white text-stone-700 pl-3 pr-8 text-sm cursor-pointer hover:border-[#B89555]/40 focus:border-[#B89555]/50 focus:outline-none focus:ring-1 focus:ring-[#B89555]/20"
               >
                 <option value="all">All Statuses</option>
                 <option value="active">Active</option>
@@ -526,7 +526,7 @@ const AdminChatDashboard = () => {
             </div>
 
             {loading ? (
-              <div className="text-center py-16"><Loader2 className="w-8 h-8 animate-spin text-[#C9A84C] mx-auto" /></div>
+              <div className="text-center py-16"><Loader2 className="w-8 h-8 animate-spin text-[#B89555] mx-auto" /></div>
             ) : filteredConversations.length === 0 ? (
               <div className="text-center py-16">
                 <MessageCircle className="w-10 h-10 text-stone-300 mx-auto mb-3" />
@@ -543,11 +543,11 @@ const AdminChatDashboard = () => {
                     <div
                       key={c.id}
                       onClick={() => handleSelectConversation(c)}
-                      className={`${cardBg} hover:shadow-md border border-[#C9A84C]/15 hover:border-[#C9A84C]/40 rounded-xl p-4 cursor-pointer transition-all group`}
+                      className={`${cardBg} hover:shadow-md border border-[#B89555]/15 hover:border-[#B89555]/40 rounded-xl p-4 cursor-pointer transition-all group`}
                     >
                       <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-full bg-[#C9A84C]/10 flex items-center justify-center shrink-0">
-                          <User className="w-5 h-5 text-[#C9A84C]/70 group-hover:text-[#C9A84C] transition-colors" />
+                        <div className="w-10 h-10 rounded-full bg-[#B89555]/10 flex items-center justify-center shrink-0">
+                          <User className="w-5 h-5 text-[#B89555]/70 group-hover:text-[#B89555] transition-colors" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
@@ -556,19 +556,19 @@ const AdminChatDashboard = () => {
                               {sc.label}
                             </span>
                             {c.rating && (
-                              <span className="inline-flex items-center gap-0.5 text-[10px] text-[#C9A84C]">
-                                <Star className="w-3 h-3 fill-[#C9A84C]" /> {c.rating}/5
+                              <span className="inline-flex items-center gap-0.5 text-[10px] text-[#B89555]">
+                                <Star className="w-3 h-3 fill-[#B89555]" /> {c.rating}/5
                               </span>
                             )}
                           </div>
                           <div className="flex items-center gap-3 mt-1 text-xs text-stone-500">
                             {c.user_email && (
-                              <a href={`mailto:${c.user_email}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] underline-offset-2 hover:underline">
+                              <a href={`mailto:${c.user_email}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#B89555] underline-offset-2 hover:underline">
                                 <Mail className="w-3 h-3" /> {c.user_email}
                               </a>
                             )}
                             {c.user_phone && (
-                              <a href={`tel:${c.user_phone}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] underline-offset-2 hover:underline">
+                              <a href={`tel:${c.user_phone}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#B89555] underline-offset-2 hover:underline">
                                 <Phone className="w-3 h-3" /> {c.user_phone}
                               </a>
                             )}
@@ -580,12 +580,12 @@ const AdminChatDashboard = () => {
                             </p>
                           )}
                           {msgCount === 0 && (
-                            <p className="text-xs text-[#C9A84C]/60 mt-2 italic">Transcript available via history log</p>
+                            <p className="text-xs text-[#B89555]/60 mt-2 italic">Transcript available via history log</p>
                           )}
                         </div>
                         <div className="flex flex-col items-end gap-2 shrink-0">
                           <div className="flex items-center gap-1.5">
-                            <SI className="w-3.5 h-3.5 text-[#C9A84C]/50" />
+                            <SI className="w-3.5 h-3.5 text-[#B89555]/50" />
                             <span className="text-[10px] text-stone-500">{getServiceLabel(c.service_type)}</span>
                           </div>
                           <span className="text-[10px] text-stone-500 flex items-center gap-1">
@@ -631,12 +631,12 @@ const AdminChatDashboard = () => {
                       <p className="text-xs text-stone-600 mt-1">{a.alertReason}</p>
                       <div className="flex items-center gap-3 mt-2 text-xs text-stone-500">
                         {a.user_email && (
-                          <a href={`mailto:${a.user_email}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] hover:underline">
+                          <a href={`mailto:${a.user_email}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#B89555] hover:underline">
                             <Mail className="w-3 h-3" /> {a.user_email}
                           </a>
                         )}
                         {a.user_phone && (
-                          <a href={`tel:${a.user_phone}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] hover:underline">
+                          <a href={`tel:${a.user_phone}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#B89555] hover:underline">
                             <Phone className="w-3 h-3" /> {a.user_phone}
                           </a>
                         )}
@@ -663,16 +663,16 @@ const AdminChatDashboard = () => {
                 <div
                   key={cv.id}
                   onClick={() => setSelectedCV(cv)}
-                  className={`${cardBg} border border-[#C9A84C]/15 hover:border-[#C9A84C]/40 rounded-xl p-4 flex items-center gap-4 cursor-pointer transition-all group hover:shadow-md`}
+                  className={`${cardBg} border border-[#B89555]/15 hover:border-[#B89555]/40 rounded-xl p-4 flex items-center gap-4 cursor-pointer transition-all group hover:shadow-md`}
                 >
-                  <div className="w-12 h-12 rounded-full bg-[#C9A84C]/10 flex items-center justify-center shrink-0">
-                    <FileText className="w-6 h-6 text-[#C9A84C]/70" />
+                  <div className="w-12 h-12 rounded-full bg-[#B89555]/10 flex items-center justify-center shrink-0">
+                    <FileText className="w-6 h-6 text-[#B89555]/70" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-stone-900">{cv.full_name}</p>
                     <div className="flex items-center gap-3 mt-0.5 text-xs text-stone-500">
-                      <a href={`mailto:${cv.email}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Mail className="w-3 h-3" /> {cv.email}</a>
-                      {cv.phone && <a href={`tel:${cv.phone}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Phone className="w-3 h-3" /> {cv.phone}</a>}
+                      <a href={`mailto:${cv.email}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#B89555] hover:underline"><Mail className="w-3 h-3" /> {cv.email}</a>
+                      {cv.phone && <a href={`tel:${cv.phone}`} onClick={e => e.stopPropagation()} className="flex items-center gap-1 hover:text-[#B89555] hover:underline"><Phone className="w-3 h-3" /> {cv.phone}</a>}
                     </div>
                     {cv.ai_summary && (
                       <p className="text-xs text-stone-500 mt-1.5 line-clamp-1 italic">{cv.ai_summary}</p>
@@ -680,11 +680,11 @@ const AdminChatDashboard = () => {
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
                     {cv.ai_ranking ? (
-                      <Badge className="bg-[#C9A84C]/10 text-[#8B7355] border-[#C9A84C]/30">
-                        <Star className="w-3 h-3 mr-1 fill-[#C9A84C] text-[#C9A84C]" /> {cv.ai_ranking}/10
+                      <Badge className="bg-[#B89555]/10 text-[#8A7356] border-[#B89555]/30">
+                        <Star className="w-3 h-3 mr-1 fill-[#B89555] text-[#B89555]" /> {cv.ai_ranking}/10
                       </Badge>
                     ) : null}
-                    <Badge className={`${cv.status === 'approved' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : cv.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-[#F5EBD7] text-[#8B7355] border-[#C9A84C]/30'}`}>
+                    <Badge className={`${cv.status === 'approved' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : cv.status === 'rejected' ? 'bg-red-100 text-red-800 border-red-300' : 'bg-[#F7F1E6] text-[#8A7356] border-[#B89555]/30'}`}>
                       {cv.status || 'pending'}
                     </Badge>
                     <span className="text-[10px] text-stone-500">{format(new Date(cv.created_at), 'dd MMM yyyy')}</span>
@@ -699,22 +699,22 @@ const AdminChatDashboard = () => {
       {/* ============ TRANSCRIPT MODAL ============ */}
       {selectedConversation && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); }}>
-          <div className={`${cardBg} border border-[#C9A84C]/25 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col`} onClick={e => e.stopPropagation()}>
+          <div className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col`} onClick={e => e.stopPropagation()}>
             {/* Header */}
-            <div className="p-5 border-b border-[#C9A84C]/15 bg-gradient-to-r from-[#F5EBD7] to-[#FDFBF7] rounded-t-2xl">
+            <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F7F1E6] to-[#FDFBF7] rounded-t-2xl">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#C9A84C]/15 flex items-center justify-center">
-                    <User className="w-5 h-5 text-[#C9A84C]" />
+                  <div className="w-10 h-10 rounded-full bg-[#B89555]/15 flex items-center justify-center">
+                    <User className="w-5 h-5 text-[#B89555]" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-stone-900">{selectedConversation.user_name || 'Anonymous'}</h3>
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                       {selectedConversation.user_email && (
-                        <a href={`mailto:${selectedConversation.user_email}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Mail className="w-3 h-3" /> {selectedConversation.user_email}</a>
+                        <a href={`mailto:${selectedConversation.user_email}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Mail className="w-3 h-3" /> {selectedConversation.user_email}</a>
                       )}
                       {selectedConversation.user_phone && (
-                        <a href={`tel:${selectedConversation.user_phone}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Phone className="w-3 h-3" /> {selectedConversation.user_phone}</a>
+                        <a href={`tel:${selectedConversation.user_phone}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Phone className="w-3 h-3" /> {selectedConversation.user_phone}</a>
                       )}
                     </div>
                   </div>
@@ -737,7 +737,7 @@ const AdminChatDashboard = () => {
                     setConversations(prev => prev.map(c => c.id === selectedConversation.id ? { ...c, status: newStatus } : c));
                     toast.success(`Status updated to ${getStatusConfig(newStatus).label}`);
                   }}
-                  className="h-6 rounded-md border border-[#C9A84C]/20 bg-white text-[10px] text-stone-600 pl-1 pr-5 cursor-pointer hover:border-[#C9A84C]/40"
+                  className="h-6 rounded-md border border-[#B89555]/20 bg-white text-[10px] text-stone-600 pl-1 pr-5 cursor-pointer hover:border-[#B89555]/40"
                   onClick={e => e.stopPropagation()}
                 >
                   <option value="active">Mark Active</option>
@@ -750,15 +750,15 @@ const AdminChatDashboard = () => {
                   <option value="closed">Closed</option>
                 </select>
                 <span className="text-[10px] text-stone-500 flex items-center gap-1">
-                  {(() => { const SI = getServiceIcon(selectedConversation.service_type); return <SI className="w-3 h-3 text-[#C9A84C]/60" />; })()}
+                  {(() => { const SI = getServiceIcon(selectedConversation.service_type); return <SI className="w-3 h-3 text-[#B89555]/60" />; })()}
                   {getServiceLabel(selectedConversation.service_type)}
                 </span>
                 <span className="text-[10px] text-stone-500 flex items-center gap-1">
                   <Calendar className="w-3 h-3" /> {format(new Date(selectedConversation.created_at), 'dd MMM yyyy, h:mm a')}
                 </span>
                 {selectedConversation.rating && (
-                  <span className="text-[10px] text-[#C9A84C] flex items-center gap-0.5">
-                    <Star className="w-3 h-3 fill-[#C9A84C]" /> {selectedConversation.rating}/5
+                  <span className="text-[10px] text-[#B89555] flex items-center gap-0.5">
+                    <Star className="w-3 h-3 fill-[#B89555]" /> {selectedConversation.rating}/5
                   </span>
                 )}
               </div>
@@ -768,9 +768,9 @@ const AdminChatDashboard = () => {
                   size="sm"
                   onClick={() => generateAISummary(selectedConversation, displayMessages)}
                   disabled={aiSummaryLoading || displayMessages.length === 0}
-                  className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 text-xs font-semibold gap-1.5 shadow-sm"
+                  className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 text-xs font-semibold gap-1.5 shadow-sm"
                 >
-                  {aiSummaryLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-[#C9A84C]" />}
+                  {aiSummaryLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-[#B89555]" />}
                   {aiSummaryLoading ? 'Analyzing...' : 'AI Summarize & Analyze'}
                 </Button>
                 {selectedConversation.status === 'active' && !isJoined && (
@@ -792,9 +792,9 @@ const AdminChatDashboard = () => {
 
             {/* AI Summary Panel */}
             {aiSummary && (
-              <div className="mx-5 mt-4 p-4 rounded-xl border border-[#C9A84C]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] space-y-3">
+              <div className="mx-5 mt-4 p-4 rounded-xl border border-[#B89555]/20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] space-y-3">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#C9A84C]" />
+                  <Sparkles className="w-4 h-4 text-[#B89555]" />
                   <h4 className="text-sm font-bold text-stone-900">AI Intelligence Report</h4>
                 </div>
                 <p className="text-sm text-stone-700 leading-relaxed">{aiSummary.summary}</p>
@@ -838,7 +838,7 @@ const AdminChatDashboard = () => {
                     <p className="text-[10px] uppercase tracking-wider text-stone-500 mb-1">Improvement Suggestions</p>
                     <ul className="space-y-1">
                       {aiSummary.improvement_suggestions.map((s, i) => (
-                        <li key={i} className="text-xs text-stone-600 flex items-start gap-1.5"><Zap className="w-3 h-3 text-[#C9A84C] shrink-0 mt-0.5" /> {s}</li>
+                        <li key={i} className="text-xs text-stone-600 flex items-start gap-1.5"><Zap className="w-3 h-3 text-[#B89555] shrink-0 mt-0.5" /> {s}</li>
                       ))}
                     </ul>
                   </div>
@@ -846,11 +846,11 @@ const AdminChatDashboard = () => {
 
                 {/* Suggested Reply */}
                 {aiSummary.suggested_reply && (
-                  <div className="p-3 rounded-lg bg-white border border-[#C9A84C]/20">
+                  <div className="p-3 rounded-lg bg-white border border-[#B89555]/20">
                     <div className="flex items-center justify-between mb-1.5">
                       <p className="text-[10px] uppercase tracking-wider text-stone-500 font-semibold">Suggested Auto-Reply</p>
                       <div className="flex gap-1">
-                        <Button size="sm" variant="ghost" onClick={() => copyToClipboard(aiSummary.suggested_reply)} className="h-6 px-2 text-[10px] text-stone-500 hover:text-[#C9A84C]">
+                        <Button size="sm" variant="ghost" onClick={() => copyToClipboard(aiSummary.suggested_reply)} className="h-6 px-2 text-[10px] text-stone-500 hover:text-[#B89555]">
                           <Copy className="w-3 h-3 mr-1" /> Copy
                         </Button>
                         {selectedConversation.user_phone && (
@@ -885,7 +885,7 @@ const AdminChatDashboard = () => {
             <ScrollArea className="flex-1 min-h-0">
               <div className="p-5 space-y-3">
                 {loadingFallback ? (
-                  <div className="text-center py-8"><Loader2 className="w-6 h-6 animate-spin text-[#C9A84C] mx-auto" /></div>
+                  <div className="text-center py-8"><Loader2 className="w-6 h-6 animate-spin text-[#B89555] mx-auto" /></div>
                 ) : displayMessages.length === 0 ? (
                   <div className="text-center py-12">
                     <AlertCircle className="w-8 h-8 text-stone-300 mx-auto mb-2" />
@@ -896,13 +896,13 @@ const AdminChatDashboard = () => {
                   displayMessages.map((msg, i) => (
                     <div key={i} className={`flex gap-2.5 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                       {msg.role !== 'user' && (
-                        <div className="w-7 h-7 rounded-full bg-[#C9A84C]/15 flex items-center justify-center shrink-0 mt-0.5">
-                          <Bot className="w-3.5 h-3.5 text-[#C9A84C]" />
+                        <div className="w-7 h-7 rounded-full bg-[#B89555]/15 flex items-center justify-center shrink-0 mt-0.5">
+                          <Bot className="w-3.5 h-3.5 text-[#B89555]" />
                         </div>
                       )}
                       <div className={`max-w-[75%] rounded-2xl px-3.5 py-2.5 text-sm ${
                         msg.role === 'user'
-                          ? 'bg-[#C9A84C]/10 text-stone-900 rounded-br-md border border-[#C9A84C]/20'
+                          ? 'bg-[#B89555]/10 text-stone-900 rounded-br-md border border-[#B89555]/20'
                           : 'bg-white text-stone-700 rounded-bl-md border border-stone-200 shadow-sm'
                       }`}>
                         <p className="whitespace-pre-wrap leading-relaxed text-[13px]">{msg.content}</p>
@@ -919,11 +919,11 @@ const AdminChatDashboard = () => {
                   ))
                 )}
                 {(selectedConversation.rating || selectedConversation.rating_feedback) && (
-                  <div className="border-t border-[#C9A84C]/10 pt-3 mt-4">
-                    <div className="bg-[#FDFBF7] rounded-xl p-3 space-y-1 border border-[#C9A84C]/15">
+                  <div className="border-t border-[#B89555]/10 pt-3 mt-4">
+                    <div className="bg-[#FDFBF7] rounded-xl p-3 space-y-1 border border-[#B89555]/15">
                       {selectedConversation.rating && (
                         <div className="flex items-center gap-2">
-                          <Star className="w-3.5 h-3.5 text-[#C9A84C] fill-[#C9A84C]" />
+                          <Star className="w-3.5 h-3.5 text-[#B89555] fill-[#B89555]" />
                           <span className="text-xs text-stone-800 font-medium">Rating: {selectedConversation.rating}/5</span>
                         </div>
                       )}
@@ -962,7 +962,7 @@ const AdminChatDashboard = () => {
               </div>
             )}
 
-            <div className="p-4 border-t border-[#C9A84C]/10 flex items-center justify-between">
+            <div className="p-4 border-t border-[#B89555]/10 flex items-center justify-between">
               <p className="text-[10px] text-stone-500">
                 {displayMessages.length} messages
                 {(selectedConversation.messages?.length || 0) === 0 && displayMessages.length > 0 ? ' (from history log)' : ''}
@@ -973,7 +973,7 @@ const AdminChatDashboard = () => {
                     <UserPlus className="w-3 h-3" /> Join
                   </Button>
                 )}
-                <Button onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); setIsJoined(false); setOwnerReplyInput(''); }} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 text-xs">
+                <Button onClick={() => { setSelectedConversation(null); setFallbackMessages([]); setAiSummary(null); setIsJoined(false); setOwnerReplyInput(''); }} size="sm" className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 text-xs">
                   Close
                 </Button>
               </div>
@@ -985,21 +985,21 @@ const AdminChatDashboard = () => {
       {/* ============ CV VIEWER MODAL ============ */}
       {selectedCV && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-start justify-center p-4 pt-8 overflow-y-auto" onClick={() => setSelectedCV(null)}>
-          <div className={`${cardBg} border border-[#C9A84C]/25 rounded-2xl shadow-2xl max-w-4xl w-full flex flex-col my-4`} onClick={e => e.stopPropagation()}>
+          <div className={`${cardBg} border border-[#B89555]/25 rounded-2xl shadow-2xl max-w-4xl w-full flex flex-col my-4`} onClick={e => e.stopPropagation()}>
             {/* CV Header */}
-            <div className="p-5 border-b border-[#C9A84C]/15 bg-gradient-to-r from-[#F5EBD7] to-[#FDFBF7] rounded-t-2xl">
+            <div className="p-5 border-b border-[#B89555]/15 bg-gradient-to-r from-[#F7F1E6] to-[#FDFBF7] rounded-t-2xl">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-[#C9A84C]/15 flex items-center justify-center">
-                    <User className="w-7 h-7 text-[#C9A84C]" />
+                  <div className="w-14 h-14 rounded-full bg-[#B89555]/15 flex items-center justify-center">
+                    <User className="w-7 h-7 text-[#B89555]" />
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-stone-900">{selectedCV.full_name}</h3>
                     <div className="flex items-center gap-3 mt-1 flex-wrap">
-                      <a href={`mailto:${selectedCV.email}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Mail className="w-3 h-3" /> {selectedCV.email}</a>
-                      {selectedCV.phone && <a href={`tel:${selectedCV.phone}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#C9A84C] hover:underline"><Phone className="w-3 h-3" /> {selectedCV.phone}</a>}
+                      <a href={`mailto:${selectedCV.email}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Mail className="w-3 h-3" /> {selectedCV.email}</a>
+                      {selectedCV.phone && <a href={`tel:${selectedCV.phone}`} className="text-xs text-stone-500 flex items-center gap-1 hover:text-[#B89555] hover:underline"><Phone className="w-3 h-3" /> {selectedCV.phone}</a>}
                       <span className="text-xs text-stone-400 flex items-center gap-1"><Calendar className="w-3 h-3" /> {format(new Date(selectedCV.created_at), 'dd MMM yyyy')}</span>
-                      <Badge className="bg-[#F5EBD7] text-[#8B7355] border-[#C9A84C]/30 text-[10px]">Source: Chat Widget</Badge>
+                      <Badge className="bg-[#F7F1E6] text-[#8A7356] border-[#B89555]/30 text-[10px]">Source: Chat Widget</Badge>
                     </div>
                   </div>
                 </div>
@@ -1011,10 +1011,10 @@ const AdminChatDashboard = () => {
 
             <div className="p-5 space-y-5 overflow-y-auto max-h-[calc(90vh-120px)]">
               {/* AI Analysis Section */}
-              <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/20 rounded-xl p-4 space-y-3">
+              <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/20 rounded-xl p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-[#C9A84C]" />
+                    <Sparkles className="w-4 h-4 text-[#B89555]" />
                     <h4 className="text-sm font-semibold text-stone-900">AI Analysis</h4>
                   </div>
                   {!selectedCV.ai_summary && (
@@ -1022,9 +1022,9 @@ const AdminChatDashboard = () => {
                       size="sm"
                       onClick={() => generateCVSummary(selectedCV)}
                       disabled={cvAiLoading}
-                      className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 text-xs font-semibold gap-1 shadow-sm"
+                      className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 text-xs font-semibold gap-1 shadow-sm"
                     >
-                      {cvAiLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-[#C9A84C]" />}
+                      {cvAiLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-[#B89555]" />}
                       {cvAiLoading ? 'Analyzing...' : 'Generate AI Summary'}
                     </Button>
                   )}
@@ -1048,7 +1048,7 @@ const AdminChatDashboard = () => {
               {selectedCV.cv_url ? (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-semibold text-stone-900 flex items-center gap-2"><FileText className="w-4 h-4 text-[#C9A84C]" /> CV Document</h4>
+                    <h4 className="text-sm font-semibold text-stone-900 flex items-center gap-2"><FileText className="w-4 h-4 text-[#B89555]" /> CV Document</h4>
                     <div className="flex gap-2">
                       <a
                         href={selectedCV.cv_url}
@@ -1083,7 +1083,7 @@ const AdminChatDashboard = () => {
                       </a>
                     </div>
                   </div>
-                  <div className="border border-[#C9A84C]/15 rounded-xl overflow-hidden bg-white">
+                  <div className="border border-[#B89555]/15 rounded-xl overflow-hidden bg-white">
                     {/* Direct PDF embed - no Google Docs viewer to avoid blocking */}
                     <object
                       data={selectedCV.cv_url}
@@ -1091,13 +1091,13 @@ const AdminChatDashboard = () => {
                       className="w-full h-[600px]"
                     >
                       <div className="flex flex-col items-center justify-center h-[600px] bg-[#FDFBF7]">
-                        <FileText className="w-12 h-12 text-[#C9A84C]/50 mb-3" />
+                        <FileText className="w-12 h-12 text-[#B89555]/50 mb-3" />
                         <p className="text-sm text-stone-600 mb-2">PDF preview not available in this browser</p>
                         <a
                           href={selectedCV.cv_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 px-4 py-2 bg-[#C9A84C]/10 hover:bg-[#C9A84C]/20 text-[#8B7355] text-sm font-medium rounded-lg transition-colors border border-[#C9A84C]/30"
+                          className="flex items-center gap-1.5 px-4 py-2 bg-[#B89555]/10 hover:bg-[#B89555]/20 text-[#8A7356] text-sm font-medium rounded-lg transition-colors border border-[#B89555]/30"
                         >
                           <ExternalLink className="w-4 h-4" /> Open CV in New Tab
                         </a>
@@ -1120,8 +1120,8 @@ const AdminChatDashboard = () => {
                 <Button className="bg-red-500 hover:bg-red-600 text-white font-semibold gap-2">
                   <X className="w-4 h-4" /> Reject
                 </Button>
-                <Button className="bg-gradient-to-r from-[#FDFBF7] to-[#F5EBD7] border border-[#C9A84C]/30 text-stone-700 hover:border-[#C9A84C]/60 font-semibold gap-2 shadow-sm">
-                  <Calendar className="w-4 h-4 text-[#C9A84C]" /> Schedule Interview
+                <Button className="bg-gradient-to-r from-[#FDFBF7] to-[#F7F1E6] border border-[#B89555]/30 text-stone-700 hover:border-[#B89555]/60 font-semibold gap-2 shadow-sm">
+                  <Calendar className="w-4 h-4 text-[#B89555]" /> Schedule Interview
                 </Button>
               </div>
             </div>

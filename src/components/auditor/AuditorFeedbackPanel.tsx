@@ -160,7 +160,7 @@ const AuditorFeedbackPanel = ({ isOpen, onClose }: AuditorFeedbackPanelProps) =>
       id="auditor-feedback-panel"
       className="fixed inset-0 z-[10002] flex items-center justify-center bg-black/60 backdrop-blur-sm"
     >
-      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F5F0E6] to-[#EDE4D3] rounded-2xl border-2 border-gold/40 shadow-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl border-2 border-gold/40 shadow-2xl w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-gold/30">
           <h2 className="text-lg font-bold text-black flex items-center gap-2">

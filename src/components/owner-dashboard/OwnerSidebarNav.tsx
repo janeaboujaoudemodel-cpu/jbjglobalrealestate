@@ -157,7 +157,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
       {NAV_SECTIONS.map((section) => (
         <div key={section.label}>
           {!collapsed && (
-            <p className="text-[10px] uppercase tracking-widest text-[#C9A84C] font-semibold px-3 mb-1.5">
+            <p className="text-[10px] uppercase tracking-widest text-[#B89555] font-semibold px-3 mb-1.5">
               {section.label}
             </p>
           )}
@@ -171,11 +171,11 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
                   "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all duration-200",
                   item.premium
                     ? isActivePath(item.path)
-                      ? "bg-gradient-to-r from-[#C9A84C]/20 via-[#E8D5A3]/15 to-[#C9A84C]/20 text-[#C9A84C] border border-[#C9A84C]/40 shadow-[0_0_12px_rgba(201,168,76,0.25)]"
-                      : "bg-gradient-to-r from-[#C9A84C]/8 via-transparent to-[#C9A84C]/8 text-[#C9A84C]/90 border border-[#C9A84C]/15 hover:border-[#C9A84C]/40 hover:shadow-[0_0_12px_rgba(201,168,76,0.2)] hover:from-[#C9A84C]/15 hover:to-[#C9A84C]/15"
+                      ? "bg-gradient-to-r from-[#B89555]/20 via-[#E8D5A3]/15 to-[#B89555]/20 text-[#B89555] border border-[#B89555]/40 shadow-[0_0_12px_rgba(201,168,76,0.25)]"
+                      : "bg-gradient-to-r from-[#B89555]/8 via-transparent to-[#B89555]/8 text-[#B89555]/90 border border-[#B89555]/15 hover:border-[#B89555]/40 hover:shadow-[0_0_12px_rgba(201,168,76,0.2)] hover:from-[#B89555]/15 hover:to-[#B89555]/15"
                     : isActivePath(item.path)
-                      ? "bg-[#C9A84C]/10 text-[#C9A84C] border border-[#C9A84C]/20"
-                      : "text-zinc-700 hover:text-black hover:bg-[#C9A84C]/10"
+                      ? "bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/20"
+                      : "text-zinc-700 hover:text-black hover:bg-[#B89555]/10"
                 )}
                 title={collapsed ? item.label : undefined}
               >
@@ -184,7 +184,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
                   <>
                     <span className={cn("flex-1 text-left truncate", item.premium && "font-semibold")}>{item.label}</span>
                     {item.badge && (
-                      <span className="bg-[#C9A84C]/20 text-[#C9A84C] text-xs px-1.5 py-0.5 rounded-full">
+                      <span className="bg-[#B89555]/20 text-[#B89555] text-xs px-1.5 py-0.5 rounded-full">
                         {item.badge}
                       </span>
                     )}
