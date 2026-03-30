@@ -1,58 +1,63 @@
 
 
-# Fix CRM Access Denied + Email Security + Dual Owner Registration
+# Create Read-Only Auditor Access for Salim Akil
 
-## Problems
+## Overview
+Create a secure, time-limited "auditor" role that grants Salim Akil (salim@be-venture.partners) read-only access to view all pages — including owner-protected areas — without the ability to modify, delete, or create anything. Access auto-expires after 30 days.
 
-1. **Owner gets Access Denied on CRM**: The `verify-owner` edge function checks `user_roles` table, `app_settings.owner_email`, and `OWNER_EMAIL` env var — but `janeaboujaoudemodel@gmail.com` likely has no `owner`/`admin` role in `user_roles`. The function returns `email_mismatch`, AuthContext sets `isOwner = false`, and OwnerGuard redirects to `/403`.
+## Architecture
 
-2. **Email leaked in API responses**: The `verify-owner` edge function returns the user's email in its JSON response (`email: user.email`) for ALL outcomes — including denial. This is a security risk.
-
-3. **Header CRM shortcut visibility**: Currently `showCRM = !!user && (isOwner || mode === 'broker' || ...)`. Since `isOwner` is false, the CRM only shows if `mode` happens to match. It should be strictly tied to `isOwner`.
-
-4. **AccessDenied page**: Already fixed to hide email, but need to confirm no remnants.
-
-## Plan
-
-### 1. Database: Register both owner emails with owner+admin roles
-Insert `owner` and `admin` roles for the user ID associated with `janeaboujaoudemodel@gmail.com` into `user_roles`. Use a migration that looks up the user by email from `auth.users` and inserts if not exists.
-
-```sql
--- Add owner and admin roles for janeaboujaoudemodel@gmail.com
-INSERT INTO public.user_roles (user_id, role)
-SELECT id, 'owner'::app_role FROM auth.users WHERE email = 'janeaboujaoudemodel@gmail.com'
-ON CONFLICT (user_id, role) DO NOTHING;
-
-INSERT INTO public.user_roles (user_id, role)
-SELECT id, 'admin'::app_role FROM auth.users WHERE email = 'janeaboujaoudemodel@gmail.com'
-ON CONFLICT (user_id, role) DO NOTHING;
-
--- Ensure janeaboujaoudenails@gmail.com also has both roles
-INSERT INTO public.user_roles (user_id, role)
-SELECT id, 'owner'::app_role FROM auth.users WHERE email = 'janeaboujaoudenails@gmail.com'
-ON CONFLICT (user_id, role) DO NOTHING;
-
-INSERT INTO public.user_roles (user_id, role)
-SELECT id, 'admin'::app_role FROM auth.users WHERE email = 'janeaboujaoudenails@gmail.com'
-ON CONFLICT (user_id, role) DO NOTHING;
+```text
+┌─────────────────────────────────────────┐
+│           OwnerGuard (updated)          │
+│                                         │
+│  isOwner? ──→ Full RW access            │
+│  isAuditor? ─→ Read-only view access    │
+│  Neither? ───→ /403 Access Denied       │
+└─────────────────────────────────────────┘
 ```
 
-### 2. Edge Function: Remove email from verify-owner responses
-**File: `supabase/functions/verify-owner/index.ts`**
+## Steps
 
-Remove `email: user.email` from ALL response bodies (lines 64, 80, 89, 98). Return only `isOwner`, `source`, and `reason` — never PII.
+### 1. Database: Add `auditor` role to `app_role` enum
+Add the new enum value so it can be assigned in `user_roles`.
 
-### 3. Header: Keep showCRM tied to isOwner
-**File: `src/components/navigation/HorizontalUtilityBar.tsx`**
+### 2. Database: Add `expires_at` column to `user_roles`
+A nullable timestamp column. When set, the role is only valid if `expires_at > now()`. This powers the 30-day auto-expiry.
 
-The current logic `!!user && (isOwner || mode === 'broker' || mode === 'investor_broker')` is correct for visibility. Once the database fix registers the owner, `isOwner` will be `true` and CRM will show and work.
+### 3. Database: Update `has_role()` function
+Modify the existing `has_role` security definer function to also check `expires_at` — a role with a past expiry is treated as non-existent.
 
-### 4. AccessDenied: Confirm no email display
-**File: `src/pages/AccessDenied.tsx`** — Already fixed. Verify no `userEmail` or `user.email` rendering remains.
+### 4. Create the user account
+Sign up Salim Akil (salim@be-venture.partners) with a generated secure password. Create a profile entry with his name. Assign the `auditor` role with `expires_at = now() + 30 days`.
 
-## What stays the same
-- OwnerGuard logic (correct as-is, just needs `isOwner` to resolve `true`)
-- BrokerCRMAccessGate logic
-- AuthContext verification flow
-- All route protection structure
+### 5. Update `OwnerGuard` component
+Allow users with the `auditor` role to pass through (in addition to owners). Add an `isAuditor` context flag.
+
+### 6. Add `isAuditor` to `AuthContext`
+After owner verification, also check if the user has the `auditor` role. Expose `isAuditor` flag.
+
+### 7. Create `useAuditorReadOnly` hook
+A simple hook that returns `true` when the current user is an auditor. Components use this to disable write actions (edit, delete, approve, submit buttons).
+
+### 8. Add read-only enforcement layer
+Create a small `<AuditorReadOnlyBanner />` component that shows a persistent "Read-Only Audit Mode" banner at the top when an auditor is logged in, and a `ReadOnlyGuard` wrapper that disables form submissions and destructive buttons.
+
+### 9. Update RLS policies
+Add SELECT-only policies for the `auditor` role on key tables (CRM, listings, analytics) so the auditor can view data but not insert/update/delete.
+
+## Security safeguards
+- Auditor can only SELECT — no INSERT, UPDATE, DELETE at RLS level
+- 30-day auto-expiry enforced in the `has_role()` function itself (server-side)
+- No access to destructive operations (wipe, bulk approve) even visually
+- You can revoke access anytime by deleting the role from `user_roles`
+- Password will be generated and shared with you privately — Salim will need to change it on first login
+
+## Files to create/modify
+- `supabase/migrations/` — new migration for enum + expires_at + has_role update + RLS
+- `src/contexts/AuthContext.tsx` — add `isAuditor` flag
+- `src/components/OwnerGuard.tsx` — allow auditor passthrough
+- `src/hooks/useAuditorReadOnly.ts` — new hook
+- `src/components/AuditorReadOnlyBanner.tsx` — new component
+- Edge function or direct DB insert for account creation + role assignment
 
