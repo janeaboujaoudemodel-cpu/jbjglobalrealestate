@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks, AlertCircle, Building2 } from 'lucide-react';
+import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks, AlertCircle, Building2, Home, BarChart3, ShieldAlert, UserCog, CalendarDays, Code2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage, SUPPORTED_LANGUAGES } from '@/contexts/LanguageContext';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
