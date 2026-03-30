@@ -33,6 +33,7 @@ export const StandaloneRoutes = () => (
       </Suspense>
     } />
     <Route path="/survey" element={<Navigate to="/ticket-survey" replace />} />
+    <Route path="/external-access" element={<Navigate to="/owner/external-access" replace />} />
     <Route path="/sign/:token" element={
       <Suspense fallback={<PageLoader />}>
         <SignDocument />
