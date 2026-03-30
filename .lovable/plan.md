@@ -1,154 +1,166 @@
 
 
-# TASK 2: Black-and-White Design System Specification
+# TASK 3: Apply Black-and-White Design System Across Entire Front-End
 
-This is a **definition-only** deliverable. Nothing will be applied yet.
-
----
-
-## Design Philosophy
-
-Strict monochrome SaaS aesthetic. Zero color — no gold, blue, champagne, or any hue. Pure black, white, and grayscale. High contrast. Clean, modern, professional.
+## Summary
+The CSS variables in `src/index.css` are already converted to grayscale (Task 2), but **800+ component files** still contain hardcoded color hex values and colored Tailwind classes. This task eliminates all remaining color across the platform.
 
 ---
 
-## 1. Background Layers
+## Execution Strategy
 
-| Token | Value | Usage |
-|---|---|---|
-| `--bg-primary` | `#000000` (pure black) | Main page background, header, footer |
-| `--bg-secondary` | `#0A0A0A` | Alternating sections, subtle differentiation |
-| `--bg-tertiary` | `#111111` | Cards, panels, elevated surfaces |
-| `--bg-surface` | `#1A1A1A` | Dropdowns, popovers, modals |
-| `--bg-inverse` | `#FFFFFF` | Inverted sections (hero CTAs, feature highlights) |
-| `--bg-hover` | `#1F1F1F` | Hover state for cards/rows |
+Due to the massive scale (400+ files with champagne hex, 700+ files with colored utilities, 800+ files with gold references), we use a **layered approach**: fix the core design tokens/components first, then use CSS overrides for the long tail.
 
 ---
 
-## 2. Text System
+## Step 1: Core UI Components (8 files)
 
-| Token | Value | Usage |
-|---|---|---|
-| `--text-primary` | `#FFFFFF` | Headlines, primary content on dark bg |
-| `--text-secondary` | `#A0A0A0` | Subtitles, descriptions, supporting text |
-| `--text-muted` | `#666666` | Metadata, timestamps, labels |
-| `--text-disabled` | `#444444` | Disabled/inactive text |
-| `--text-inverse` | `#000000` | Text on white/light surfaces |
-| `--text-inverse-muted` | `#555555` | Muted text on white/light surfaces |
+### `src/components/ui/button.tsx`
+- Replace all AI-variant colored gradients (`AI_EMERALD`, `AI_PURPLE`, etc.) with grayscale equivalents: `bg-gradient-to-r from-zinc-700 to-zinc-600 hover:from-zinc-600 hover:to-zinc-500 text-white border border-white/20`
+- Replace `BRAND_PRIMARY` champagne gradient with `bg-white text-black border border-white`
+- Replace `BRAND_SECONDARY` gold borders with `border-white/40`
+- Replace `BRAND_HERO` gold icon refs with white
+- Replace `BRAND_DARK` gold refs with white/gray
 
-**Contrast ratios (WCAG AA):**
-- `#FFFFFF` on `#000000` = 21:1
-- `#A0A0A0` on `#000000` = 10:1
-- `#666666` on `#000000` = 5.7:1
-- All pass AA minimum of 4.5:1
+### `src/components/ui/input.tsx`
+- Replace champagne gradient bg with `bg-[#0A0A0A]`
+- Replace `border-gold` with `border-white/20`
+- Replace `focus:ring-gold/50` with `focus:ring-white/50`
+- Keep `text-black` → change to `text-white`
 
----
+### `src/components/ui/select.tsx`
+- `SelectTrigger`: Replace champagne gradient with `bg-[#0A0A0A] border-white/20 text-white`
+- `SelectContent`: Replace `bg-[#FDFBF7]` with `bg-[#111111] border-white/20 text-white`
+- `SelectItem`: Replace hover gold with `hover:bg-white/10`
+- Remove all `text-gold` chevron colors → `text-white/60`
 
-## 3. Borders & Dividers
+### `src/components/ui/card.tsx`
+- `CardDetail`: Change `text-gold` to `text-white`
 
-| Token | Value | Usage |
-|---|---|---|
-| `--border-subtle` | `#1F1F1F` | Card borders, container edges |
-| `--border-default` | `#2A2A2A` | Input borders, section dividers |
-| `--border-strong` | `#444444` | Active/focus borders, emphasized separators |
-| `--border-inverse` | `#E0E0E0` | Borders on white/light surfaces |
-| `--divider` | `#1A1A1A` | Horizontal section dividers |
+### `src/components/ui/hero-button.tsx`
+- Replace `text-gold` arrow with `text-white`
+- Replace `hover:border-gold/80` with `hover:border-white/80`
 
----
+### `src/components/ui/themed-icon.tsx`
+- Replace `text-gold` with `text-white`
 
-## 4. Buttons
+### `src/components/ui/section-divider.tsx`
+- Replace gold gradient lines with white/gray gradient lines
+- Replace champagne variant bg with grayscale
 
-### Primary (white on black — maximum impact)
-- **Default**: `bg: #FFFFFF`, `text: #000000`, `border: none`
-- **Hover**: `bg: #E0E0E0`, `text: #000000`
-- **Active**: `bg: #CCCCCC`, `text: #000000`
-- **Disabled**: `bg: #333333`, `text: #666666`
-
-### Secondary (outlined)
-- **Default**: `bg: transparent`, `text: #FFFFFF`, `border: 1px solid #444444`
-- **Hover**: `bg: #1A1A1A`, `text: #FFFFFF`, `border-color: #666666`
-- **Active**: `bg: #2A2A2A`, `text: #FFFFFF`
-- **Disabled**: `bg: transparent`, `text: #444444`, `border-color: #222222`
-
-### Tertiary (ghost)
-- **Default**: `bg: transparent`, `text: #A0A0A0`, `border: none`
-- **Hover**: `bg: #111111`, `text: #FFFFFF`
-- **Active**: `bg: #1A1A1A`, `text: #FFFFFF`
-- **Disabled**: `text: #333333`
-
-### Destructive
-- **Default**: `bg: #FFFFFF`, `text: #000000` (same as primary — no red)
-- Distinguished by position/context/icon, not color
+### `src/components/FreeAccessBadge.tsx`
+- Replace emerald/gold colors with grayscale equivalents
 
 ---
 
-## 5. Inputs
+## Step 2: Header & Navigation (4 files)
 
-| State | Background | Border | Text | Placeholder |
-|---|---|---|---|---|
-| **Default** | `#0A0A0A` | `1px solid #2A2A2A` | `#FFFFFF` | `#555555` |
-| **Hover** | `#0A0A0A` | `1px solid #444444` | `#FFFFFF` | `#555555` |
-| **Focus** | `#0A0A0A` | `2px solid #FFFFFF` | `#FFFFFF` | `#666666` |
-| **Disabled** | `#0A0A0A` | `1px solid #1A1A1A` | `#444444` | `#333333` |
-| **Error** | `#0A0A0A` | `2px solid #888888` | `#FFFFFF` | `#555555` |
+### `src/components/header/mega-menu-primitives.tsx`
+- Replace inline `background: 'linear-gradient(135deg, #F7F1E6 ...)` with `background: 'linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%)'`
+- Replace `border-gold/40` with `border-white/20`
+- Replace all champagne text/link colors with grayscale
 
----
+### `src/components/GlobalHeader.tsx`
+- Replace any remaining champagne/gold gradient references in header background
+- Replace all `text-gold` icon references with `text-white`
 
-## 6. Icons
-
-| Type | Color | Usage |
-|---|---|---|
-| **Primary** | `#FFFFFF` | Action icons, nav icons on dark bg |
-| **Secondary** | `#666666` | Decorative, supporting icons |
-| **Interactive hover** | `#FFFFFF` (from `#666666`) | Icon hover lift |
-| **On white surface** | `#000000` | Icons on inverse/light surfaces |
-| **Disabled** | `#333333` | Inactive icons |
-
-**Icon containers**: No colored circles. Use `bg: #1A1A1A` rounded containers with white icons, or no container at all.
+### Mega menu files (`MegaMenuBuy`, `MegaMenuSell`, `MegaMenuRent`, `MegaMenuProjects`, `MegaMenuDevelopers`, `MegaMenuAreas`, `MegaMenuInsights`, `MegaMenuMore`, `MegaMenuLanguage`, `MegaMenuAccount`)
+- These inherit from mega-menu-primitives, so most fixes propagate automatically
 
 ---
 
-## 7. States
+## Step 3: Footer (1 file)
 
-| State | Visual Treatment |
-|---|---|
-| **Hover** | Lighten background by 1 step (e.g., `#000` → `#111`), brighten text to `#FFF` |
-| **Active/Pressed** | Lighten background by 2 steps (e.g., `#000` → `#1A1A1A`) |
-| **Disabled** | Reduce opacity to ~40% or use `#333`/`#444` tones |
-| **Selected** | White left-border accent (`3px solid #FFF`) + `bg: #111111` |
-| **Focus ring** | `2px solid #FFFFFF`, offset `2px` |
-| **Loading** | Pulse animation using `#1A1A1A` ↔ `#2A2A2A` |
+### `src/components/Footer.tsx`
+- Replace `FooterCard` champagne gradient with `bg-[#111111] border-white/20`
+- Replace all `text-gold` with `text-white`
+- Replace all `border-gold` with `border-white/20`
+- Replace Poppins font references with Inter (the global font)
+- Replace gold textShadow/boxShadow with grayscale equivalents
 
 ---
 
-## 8. Shadows & Elevation
+## Step 4: Global CSS Override Layer (1 file — `src/index.css`)
 
-| Level | Value |
-|---|---|
-| **None** | Default — flat design, no shadows |
-| **Subtle** | `0 1px 2px rgba(0,0,0,0.5)` — cards only when needed |
-| **Modal** | `0 8px 32px rgba(0,0,0,0.8)` — modals/overlays |
+Add a **catch-all CSS override block** at the end of `src/index.css` that forcibly neutralizes the most common hardcoded color patterns across all 400+ files. This is far more efficient than editing every file individually:
 
-Minimal shadow usage. Separation via background color steps, not shadows.
+```css
+/* GLOBAL MONOCHROME OVERRIDE — catches hardcoded colors in 800+ component files */
+
+/* Champagne gradients → dark surface */
+[class*="from-[#FDFBF7]"],
+[class*="from-[#F7F1E6]"],
+[class*="from-[#F7F2EA]"],
+[class*="from-[#ECE2D2]"],
+[class*="from-[#E8DCC8]"],
+[class*="from-[#EFE6D6]"],
+[class*="from-[#DCCFB5]"],
+[class*="from-[#D8C7A6]"],
+[class*="from-[#D4C4A8]"] {
+  --tw-gradient-from: #1A1A1A !important;
+  --tw-gradient-via: #111111 !important;
+  --tw-gradient-to: #0A0A0A !important;
+  color: white !important;
+}
+
+/* Gold hex text → white */
+[class*="text-[#D4AF37]"],
+[class*="text-[#C8A766]"],
+[class*="text-[#B8860B]"] {
+  color: white !important;
+}
+
+/* White/light backgrounds on cards/containers → dark */
+[class*="bg-white"],
+[class*="bg-[#FDFBF7]"],
+[class*="bg-[#F7F1E6]"],
+[class*="bg-[#F7F2EA]"] {
+  background-color: #111111 !important;
+  color: white !important;
+}
+```
+
+This override block catches the vast majority of the 8000+ hardcoded color instances without touching each file.
 
 ---
 
-## 9. Implementation Map (CSS Variables)
+## Step 5: Tailwind Color Remap (1 file — `tailwind.config.ts`)
 
-All values will be set in `:root` in `src/index.css`, replacing existing gold/champagne/brown variables. The Tailwind config tokens (`background`, `foreground`, `primary`, `card`, etc.) will map to the new grayscale values. No Tailwind config structure changes needed — only CSS variable value swaps.
+Override ALL Tailwind color utilities to grayscale by extending the color palette:
+
+```ts
+// Remap all colored utilities to grayscale
+emerald: { 50: '#f5f5f5', 100: '#e5e5e5', ..., 500: '#737373', 600: '#525252', ... },
+blue: { /* same grayscale */ },
+purple: { /* same */ },
+// etc for all color families
+```
+
+This ensures every `text-emerald-500`, `bg-blue-600/20`, `border-purple-400/30` etc. across all 700+ files automatically becomes grayscale without editing each file.
 
 ---
 
-## 10. Color Usage Rules (Strict)
+## Step 6: Remaining High-Visibility Component Files (batch)
 
-1. **ZERO hue allowed** — no gold, blue, green, red, champagne, brown, or any saturated color
-2. **All values must be pure grayscale** — HSL saturation must be `0%`
-3. **Minimum contrast**: 4.5:1 for body text, 3:1 for large text (WCAG AA)
-4. **Differentiation by luminance only** — sections separated by background darkness steps, not color
-5. **White is the accent** — primary buttons, focus rings, selected states all use white
-6. **Images and user-uploaded media are exempt** — only UI chrome is monochrome
+After the global overrides, fix key components that have inline styles or patterns the CSS overrides can't catch:
+
+- `src/components/home/CTABand.tsx` and `CombinedContactNewsletter.tsx`
+- `src/components/home/` homepage sections
+- `src/components/crm/` CRM components
+- `src/components/investor/` portfolio components
+- Any component using `style={{ color: '#D4AF37' }}` inline
 
 ---
 
-**TASK 2 COMPLETED — DESIGN SYSTEM READY**
+## What Will NOT Change
+- No layout changes
+- No content removal
+- No page/section/feature removal
+- Header and footer remain 100% complete
+- All functionality preserved
+
+## Result
+- Every UI surface renders in strict black, white, and grayscale
+- All contrast meets WCAG AA (4.5:1 minimum)
+- Consistent visual language across all 800+ component files
 
