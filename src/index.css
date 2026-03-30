@@ -659,13 +659,13 @@ All colors MUST be HSL.
   background: hsl(0 0% 60% / 0.8);
 }
 
-  /* Title styling: First word gold, rest black (Guides & Market Intelligence) */
+  /* Title styling: First word white, rest gray */
   .jj-title-split span:first-child {
-    @apply text-gold;
+    @apply text-white;
   }
   
   .jj-title-split span:not(:first-child) {
-    @apply text-black;
+    @apply text-white/60;
   }
 
   /* ============================================================
