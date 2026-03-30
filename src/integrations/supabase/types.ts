@@ -1501,6 +1501,138 @@ export type Database = {
         }
         Relationships: []
       }
+      auditor_feedback: {
+        Row: {
+          auditor_user_id: string
+          created_at: string
+          feedback_type: Database["public"]["Enums"]["auditor_feedback_type"]
+          id: string
+          note_text: string | null
+          owner_response: string | null
+          page_url: string | null
+          prompt_text: string | null
+          screenshot_url: string | null
+          status: Database["public"]["Enums"]["auditor_feedback_status"]
+          voice_message_url: string | null
+        }
+        Insert: {
+          auditor_user_id: string
+          created_at?: string
+          feedback_type?: Database["public"]["Enums"]["auditor_feedback_type"]
+          id?: string
+          note_text?: string | null
+          owner_response?: string | null
+          page_url?: string | null
+          prompt_text?: string | null
+          screenshot_url?: string | null
+          status?: Database["public"]["Enums"]["auditor_feedback_status"]
+          voice_message_url?: string | null
+        }
+        Update: {
+          auditor_user_id?: string
+          created_at?: string
+          feedback_type?: Database["public"]["Enums"]["auditor_feedback_type"]
+          id?: string
+          note_text?: string | null
+          owner_response?: string | null
+          page_url?: string | null
+          prompt_text?: string | null
+          screenshot_url?: string | null
+          status?: Database["public"]["Enums"]["auditor_feedback_status"]
+          voice_message_url?: string | null
+        }
+        Relationships: []
+      }
+      auditor_profiles: {
+        Row: {
+          access_expires_at: string | null
+          created_at: string
+          display_name: string
+          email: string
+          force_password_change: boolean
+          id: string
+          is_suspended: boolean
+          last_login_at: string | null
+          password_changed: boolean
+          password_changed_at: string | null
+          suspended_at: string | null
+          suspended_by: string | null
+          total_logins: number
+          user_id: string
+        }
+        Insert: {
+          access_expires_at?: string | null
+          created_at?: string
+          display_name: string
+          email: string
+          force_password_change?: boolean
+          id?: string
+          is_suspended?: boolean
+          last_login_at?: string | null
+          password_changed?: boolean
+          password_changed_at?: string | null
+          suspended_at?: string | null
+          suspended_by?: string | null
+          total_logins?: number
+          user_id: string
+        }
+        Update: {
+          access_expires_at?: string | null
+          created_at?: string
+          display_name?: string
+          email?: string
+          force_password_change?: boolean
+          id?: string
+          is_suspended?: boolean
+          last_login_at?: string | null
+          password_changed?: boolean
+          password_changed_at?: string | null
+          suspended_at?: string | null
+          suspended_by?: string | null
+          total_logins?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      auditor_sessions: {
+        Row: {
+          actions_log: Json | null
+          auditor_user_id: string
+          created_at: string
+          device_type: string | null
+          id: string
+          ip_hint: string | null
+          pages_visited: Json | null
+          session_end: string | null
+          session_start: string
+          total_time_seconds: number | null
+        }
+        Insert: {
+          actions_log?: Json | null
+          auditor_user_id: string
+          created_at?: string
+          device_type?: string | null
+          id?: string
+          ip_hint?: string | null
+          pages_visited?: Json | null
+          session_end?: string | null
+          session_start?: string
+          total_time_seconds?: number | null
+        }
+        Update: {
+          actions_log?: Json | null
+          auditor_user_id?: string
+          created_at?: string
+          device_type?: string | null
+          id?: string
+          ip_hint?: string | null
+          pages_visited?: Json | null
+          session_end?: string | null
+          session_start?: string
+          total_time_seconds?: number | null
+        }
+        Relationships: []
+      }
       bank_vault_access_logs: {
         Row: {
           access_type: string
@@ -27713,6 +27845,8 @@ export type Database = {
         | "document"
         | "settings"
         | "role"
+      auditor_feedback_status: "new" | "read" | "actioned"
+      auditor_feedback_type: "screenshot_note" | "task" | "message"
       book_access_level:
         | "broker_only"
         | "broker_jbj_only"
@@ -28160,6 +28294,8 @@ export const Constants = {
         "settings",
         "role",
       ],
+      auditor_feedback_status: ["new", "read", "actioned"],
+      auditor_feedback_type: ["screenshot_note", "task", "message"],
       book_access_level: [
         "broker_only",
         "broker_jbj_only",
