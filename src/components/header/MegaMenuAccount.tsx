@@ -519,6 +519,16 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               </div>
             </div>
 
+            {/* Auditor Feedback Inbox for Owner */}
+            {isOwner && (
+              <Suspense fallback={null}>
+                {React.createElement(
+                  React.lazy(() => import("@/components/owner/AuditorFeedbackInbox")),
+                  { onClose }
+                )}
+              </Suspense>
+            )}
+
             {/* ═══ FULL-WIDTH DIVIDER — spans under both columns, under CRM ═══ */}
             <div className="h-[1px] bg-gradient-to-r from-gold/40 via-gold/50 to-gold/40 mt-4 mb-3" />
 
