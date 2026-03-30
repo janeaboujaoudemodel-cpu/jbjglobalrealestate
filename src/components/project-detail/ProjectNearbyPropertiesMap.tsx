@@ -130,9 +130,11 @@ export default function ProjectNearbyPropertiesMap({
         {/* Current project marker (red) */}
         <Marker position={[latitude, longitude]} icon={RedIcon}>
           <Popup>
-            <div className="min-w-[180px] max-w-[260px] p-3">
-              <div className="text-sm font-bold">{currentProjectName}</div>
-              <div className="text-xs text-muted-foreground">{t('map.thisProject')}</div>
+            <div className="min-w-[180px] max-w-[260px]">
+              <div className="p-3">
+                <div className="text-sm font-bold">{currentProjectName}</div>
+                <div className="text-xs text-muted-foreground">{t('map.thisProject')}</div>
+              </div>
             </div>
           </Popup>
         </Marker>
