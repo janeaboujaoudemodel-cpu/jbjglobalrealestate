@@ -555,27 +555,19 @@ All colors MUST be HSL.
   }
 
 /* Icon box - grayscale */
-.jj-icon-box-active {
-  @apply rounded-lg flex items-center justify-center border border-white/10;
-  background: linear-gradient(135deg, #1A1A1A 0%, #111111 50%, #0A0A0A 100%);
-}
+  .jj-icon-box-active {
+    @apply rounded-lg flex items-center justify-center border border-gray-200;
+    background: #F5F5F5;
+  }
 
-.jj-icon-box-active svg {
-  @apply text-white;
-}
+  .jj-icon-box-active svg {
+    @apply text-black;
+  }
 
-/* Icon box */
-.jj-icon-box {
-    @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-white/10;
-    background: linear-gradient(
-      to bottom right,
-      hsl(0 0% 10%),
-      hsl(0 0% 7%),
-      hsl(0 0% 4%)
-    );
-    box-shadow:
-      inset 0 1px 0 hsl(0 0% 100% / 0.05),
-      0 4px 14px hsl(0 0% 0% / 0.3);
+  .jj-icon-box {
+    @apply flex items-center justify-center flex-shrink-0 rounded-xl border border-gray-200;
+    background: #F5F5F5;
+    box-shadow: 0 1px 3px hsl(0 0% 0% / 0.05);
   }
 
   .jj-icon-box-active > svg {
