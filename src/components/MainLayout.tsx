@@ -20,6 +20,7 @@ const GlobalVerticalNav = lazy(() => import("@/components/navigation/GlobalVerti
 const HorizontalUtilityBar = lazy(() => import("@/components/navigation/HorizontalUtilityBar"));
 // GlobalFilterBar is now embedded inside HorizontalUtilityBar
 import CombinedContactNewsletter from "@/components/CombinedContactNewsletter";
+import AuditorReadOnlyBanner from "@/components/AuditorReadOnlyBanner";
 import GlobalContactGating from "@/components/GlobalContactGating";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useOnboardingTour } from "@/hooks/use-onboarding-tour";
