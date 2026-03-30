@@ -774,7 +774,7 @@ All colors MUST be HSL.
   }
 
   .jj-user-card-role {
-    @apply text-sm font-normal text-gold;
+    @apply text-sm font-normal text-white/60;
   }
 
   /* --- CRM Record Card --- */
