@@ -13,38 +13,26 @@ export default {
       },
     },
     extend: {
-      /* ============================================================
-       * GLOBAL TYPOGRAPHY SYSTEM - JBJ GLOBAL REAL ESTATE (LOCKED)
-       * ONE primary font family across the entire platform
-       * ============================================================ */
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       fontSize: {
-        /* H1 - Primary Headline */
         'h1': ['3.5rem', { lineHeight: '1.1', fontWeight: '600', letterSpacing: '-0.02em' }],
         'h1-md': ['3rem', { lineHeight: '1.1', fontWeight: '600', letterSpacing: '-0.02em' }],
         'h1-sm': ['2.25rem', { lineHeight: '1.15', fontWeight: '600', letterSpacing: '-0.01em' }],
-        /* H2 - Section Headline */
         'h2': ['2.5rem', { lineHeight: '1.2', fontWeight: '500', letterSpacing: '-0.01em' }],
         'h2-md': ['2rem', { lineHeight: '1.2', fontWeight: '500', letterSpacing: '-0.01em' }],
         'h2-sm': ['1.5rem', { lineHeight: '1.25', fontWeight: '500' }],
-        /* H3 - Subsection Headline */
         'h3': ['1.5rem', { lineHeight: '1.3', fontWeight: '500' }],
         'h3-sm': ['1.25rem', { lineHeight: '1.3', fontWeight: '500' }],
-        /* H4 - Minor Headline / Labels */
         'h4': ['1.25rem', { lineHeight: '1.4', fontWeight: '400' }],
         'h4-sm': ['1.125rem', { lineHeight: '1.4', fontWeight: '400' }],
-        /* Body Text */
         'body': ['1rem', { lineHeight: '1.6', fontWeight: '400' }],
         'body-lg': ['1.125rem', { lineHeight: '1.6', fontWeight: '400' }],
-        /* Meta / Small Text */
         'meta': ['0.875rem', { lineHeight: '1.5', fontWeight: '400' }],
         'meta-xs': ['0.75rem', { lineHeight: '1.5', fontWeight: '400' }],
-        /* Table Text */
         'table-header': ['0.875rem', { lineHeight: '1.4', fontWeight: '500', letterSpacing: '0.05em' }],
         'table-cell': ['0.875rem', { lineHeight: '1.4', fontWeight: '400' }],
-        /* Label / Tag */
         'label': ['0.75rem', { lineHeight: '1.4', fontWeight: '500', letterSpacing: '0.1em' }],
       },
       colors: {
@@ -99,12 +87,14 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Gold mapped to white/grayscale
         gold: {
           DEFAULT: "hsl(var(--gold))",
           light: "hsl(var(--gold-light))",
           dark: "hsl(var(--gold-dark))",
           foreground: "hsl(var(--gold-foreground))",
         },
+        // Champagne mapped to dark surfaces
         champagne: {
           light: "hsl(var(--champagne-1))",
           DEFAULT: "hsl(var(--champagne-2))",
@@ -132,6 +122,92 @@ export default {
           amber: "hsl(var(--ai-amber))",
           rose: "hsl(var(--ai-rose))",
           glow: "hsl(var(--ai-glow))",
+        },
+        // MONOCHROME OVERRIDE: Remap all color families to grayscale
+        emerald: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        green: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        blue: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        purple: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        violet: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        indigo: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        teal: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        cyan: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        sky: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        orange: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        amber: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        yellow: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        lime: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        rose: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        pink: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        fuchsia: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
+        },
+        red: {
+          50: '#fafafa', 100: '#f5f5f5', 200: '#e5e5e5', 300: '#d4d4d4',
+          400: '#a3a3a3', 500: '#737373', 600: '#525252', 700: '#404040',
+          800: '#262626', 900: '#171717', 950: '#0a0a0a',
         },
       },
       /* ============================================================
