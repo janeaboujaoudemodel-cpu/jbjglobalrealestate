@@ -41,7 +41,7 @@ export const JJLogoImage = ({
         alt="JBJ Global Real Estate"
         width={config.width}
         height={config.height}
-        className="object-contain"
+        className="object-contain mix-blend-multiply"
         style={{ width: config.width, height: config.height }}
       />
       {showText && (
