@@ -1514,19 +1514,19 @@ All colors MUST be HSL.
     content: "";
     width: 34px;
     height: 1px;
-    background: linear-gradient(90deg, transparent, hsl(var(--gold) / 0.85));
+    background: linear-gradient(90deg, transparent, hsl(0 0% 40% / 0.85));
     opacity: 0.9;
   }
 
   .jj-ornament::after {
-    background: linear-gradient(90deg, hsl(var(--gold) / 0.85), transparent);
+    background: linear-gradient(90deg, hsl(0 0% 40% / 0.85), transparent);
   }
 
   .jj-ornament span {
     display: inline-block;
     border-radius: 999px;
-    background: hsl(var(--gold));
-    box-shadow: 0 0 10px hsl(var(--gold) / 0.35);
+    background: hsl(0 0% 60%);
+    box-shadow: 0 0 10px hsl(0 0% 60% / 0.35);
   }
 
   .jj-ornament .dot-lg {
