@@ -188,6 +188,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // If no session, we're done loading
       if (!nextSession?.user) {
         setIsOwner(false);
+        setIsAuditor(false);
         setOwnerError(null);
         setOwnerLoading(false);
         setLoading(false);
