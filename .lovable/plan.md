@@ -1,91 +1,61 @@
 
 
-# Fix Map Card System — Unified Hover + Click Logic
+# Fix Vertical Text in Nearby Projects Map
 
 ## Root Cause
 
-There are TWO independent card systems rendering simultaneously:
-1. **Leaflet `<Popup>`** — opens on marker click (built into react-leaflet), shows a compact card with image/name/price
-2. **Custom `selectedProject` card** — also opens on marker click (absolute positioned at bottom-left), shows a larger detail card
-
-Both fire on the same click event, creating duplicate cards. The Popup is anchored to the marker while the detail card is anchored to the container bottom-left. They visually conflict and the detail card can go behind the sidebar.
-
-## Solution
-
-### 1. Remove Leaflet `<Popup>` from markers entirely
-The `<Popup>` component inside each `<Marker>` (lines 315-337) will be removed. All card display is handled by the single custom card system.
-
-### 2. Hover → Compact preview via `hoveredProject` state
-- Add `hoveredProject` state (separate from `selectedProject`)
-- On marker `mouseover`: set `hoveredProject`
-- On marker `mouseout`: clear `hoveredProject` (only if not the `selectedProject`)
-- Render a small compact card (image, name, developer, price) near the marker's screen position
-
-### 3. Click → Larger detail card via `selectedProject` state
-- On marker `click`: set `selectedProject`, clear `hoveredProject`
-- The existing detail card (lines 409-461) serves this role
-- When a `selectedProject` is active, hover cards are suppressed for that project
-
-### 4. Only one card at a time
-- `hoveredProject` card is hidden when `selectedProject` is set
-- Clicking a new marker replaces `selectedProject`
-- Clicking map background clears both
-
-### 5. Smart positioning (sidebar-aware)
-Both cards use a positioning function that:
-- Gets the marker's pixel position via Leaflet's `latLngToContainerPoint`
-- Checks distance from left edge (sidebar is ~72px wide) → if too close, position card to the RIGHT
-- Checks distance from right edge → if too close, position to LEFT
-- Checks distance from top (header+toolbar ~132px) → if too close, position BELOW
-- Checks distance from bottom → if too close, position ABOVE
-- Card is rendered with `position: absolute` + computed `top`/`left` in the map container div
-
-### 6. Implementation detail
-
-**New helper inside the component:**
-```tsx
-function getCardPosition(map, latlng, cardWidth, cardHeight) {
-  const point = map.latLngToContainerPoint(latlng);
-  const container = map.getContainer().getBoundingClientRect();
-  const sidebarWidth = 72; // vertical sidebar
-  let left = point.x + 16;
-  let top = point.y - cardHeight / 2;
-  // Push right if near left/sidebar
-  if (point.x < sidebarWidth + cardWidth + 20) left = point.x + 16;
-  // Push left if near right edge
-  if (point.x + cardWidth + 20 > container.width) left = point.x - cardWidth - 16;
-  // Clamp top
-  if (top < 8) top = 8;
-  if (top + cardHeight > container.height - 8) top = container.height - cardHeight - 8;
-  return { left, top };
+The global CSS rule in `src/index.css` line 1886:
+```css
+.leaflet-popup-content {
+  width: auto !important;
 }
 ```
 
-**Access the Leaflet map instance** via a child component that calls `useMap()` and exposes it via a ref/callback.
+This overrides Leaflet's default inline `width: 200px` on popup content. This was added to support edge-to-edge images in the main property map popups (which have explicit `min-w-[220px]` containers). But the Nearby Projects map popup contains only a bare `<Link>` with no width container — so the content collapses to single-character width, stacking text vertically.
 
-### 7. Hover card content (compact)
-- 220px wide
-- Small image (80px tall), name, developer, price — one compact block
+The AreaMapSection popups are unaffected because they wrap content in `<div className="min-w-[220px] max-w-[260px]">`.
 
-### 8. Click card content
-- Keep existing detail card (lines 411-460) but position it near the marker instead of fixed bottom-left
-- 384px wide, with image/details/CTA
+## Fix
 
-### 9. State cleanup
-- All existing cleanup effects (viewMode change, filter change, intersection observer) also clear `hoveredProject`
+### 1. `src/components/project-detail/ProjectNearbyPropertiesMap.tsx` — Add width container to popups
 
-## Changes
+Wrap both popup contents (red current-project marker and gold nearby markers) in a container with explicit min-width:
 
-### File: `src/pages/PropertyMap.tsx`
+**Current project popup (line 132-135):**
+```tsx
+<Popup>
+  <div className="min-w-[180px] max-w-[260px] p-3">
+    <div className="text-sm font-bold">{currentProjectName}</div>
+    <div className="text-xs text-muted-foreground">{t('map.thisProject')}</div>
+  </div>
+</Popup>
+```
 
-| Change | Detail |
-|--------|--------|
-| Remove `<Popup>` from markers | Lines 315-337 deleted |
-| Add `hoveredProject` state + `mapRef` | New state + ref to access Leaflet map instance |
-| Add `MapRefGetter` child component | Tiny component using `useMap()` to pass map instance to parent via callback ref |
-| Add marker `mouseover`/`mouseout` handlers | Set/clear `hoveredProject` |
-| Add positioning logic | `getCardPosition()` function computing absolute position from latlng |
-| Replace bottom-left detail card | Position it near the clicked marker using computed coords |
-| Add compact hover card | Rendered when `hoveredProject` is set and `selectedProject` is not the same project |
-| Update cleanup effects | Also clear `hoveredProject` |
+**Nearby project popup (line 141-144):**
+```tsx
+<Popup>
+  <div className="min-w-[200px] max-w-[280px] p-3">
+    {p.cover_image_url && (
+      <img src={p.cover_image_url} alt={p.name} className="w-full h-24 object-cover -mx-3 -mt-3 mb-2" style={{width: 'calc(100% + 24px)'}} />
+    )}
+    <Link to={`/project/${p.slug}`} className="text-sm font-semibold text-blue-600 hover:underline block">
+      {p.name}
+    </Link>
+    {p.price_from && (
+      <p className="text-xs font-semibold text-amber-700 mt-1">
+        From AED {Math.round(Number(p.price_from)).toLocaleString()}
+      </p>
+    )}
+  </div>
+</Popup>
+```
+
+This matches the pattern used in `AreaMapSection.tsx` where popups work correctly.
+
+### 2. Global audit — no other vertical text issues
+
+The `width: auto !important` only affects `.leaflet-popup-content`. All other map popup usages (AreaMapSection, PropertiesMapView) already have explicit width containers or don't use Leaflet popups at all (PropertyMap uses custom cards). No other components are affected.
+
+## Files to modify
+- `src/components/project-detail/ProjectNearbyPropertiesMap.tsx` — add width containers to popup content
 
