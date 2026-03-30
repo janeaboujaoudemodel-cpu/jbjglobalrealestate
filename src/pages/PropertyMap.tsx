@@ -188,7 +188,7 @@ const PropertyMap = () => {
       </div>
 
       {/* Map Container — offset for utility bar (48px) + filter bar (~90px) */}
-      <div className="pt-[140px] h-screen">
+      <div className="pt-[52px] h-screen">
         <MapContainer
           center={center}
           zoom={11}
