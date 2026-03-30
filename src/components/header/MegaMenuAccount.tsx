@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, lazy, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Heart, Sparkles, Users, FolderOpen, LogOut, ChevronRight, LayoutDashboard, Shield, Headphones, Loader2, Bell, DollarSign, Ruler, Check, Globe, Search, Clock, ListChecks, AlertCircle, Building2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
