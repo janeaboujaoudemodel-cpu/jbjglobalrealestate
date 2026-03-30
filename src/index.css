@@ -1013,16 +1013,16 @@ All colors MUST be HSL.
    * ============================================================ */
   .jj-section-champagne {
     @apply bg-gradient-to-br;
-    --tw-gradient-from: #111111;
-    --tw-gradient-via: #0A0A0A;
-    --tw-gradient-to: #000000;
+    --tw-gradient-from: #FAFAFA;
+    --tw-gradient-via: #F5F5F5;
+    --tw-gradient-to: #FFFFFF;
   }
 
   .jj-card-champagne {
-    @apply bg-gradient-to-br border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.03)];
-    --tw-gradient-from: #1A1A1A;
-    --tw-gradient-via: #111111;
-    --tw-gradient-to: #0A0A0A;
+    @apply bg-gradient-to-br border border-gray-200 shadow-sm;
+    --tw-gradient-from: #FFFFFF;
+    --tw-gradient-via: #FAFAFA;
+    --tw-gradient-to: #F5F5F5;
   }
 
   /* ============================================================
