@@ -1,28 +1,43 @@
 
 
-# Fix Sidebar Mega-Menu Panels Hidden Behind Header
+# Fix Duplicate Filter Bar and White Gap on Map Page (+ Audit Other Pages)
 
-## Problem
-When clicking sidebar items like "Buy", "Rent", "Developers" etc. in the vertical sidebar, the mega-menu flyout panels appear with `top: 0` and only `mt-8` (32px) top margin. The horizontal header is 88px tall at `z-[9998]`, so the top ~56px of the mega-menu content is clipped behind the header — making the first items invisible.
+## Problems
 
-## Root Cause
-In `src/components/navigation/PropertiesVerticalNav.tsx` (lines 110-115):
-- The mega-menu container is `fixed` with `top: 0`
-- The inner panel uses `mt-8` (32px) — not enough to clear the 88px header
-- Even though `z-[10000]` is above the header's `z-[9998]`, the visual overlap makes content inaccessible
+1. **White gap on /map**: PropertyMap's fixed filter bar uses `top-[48px]` — but the full header is 88px (48px nav + 40px filter row). The map container then uses `pt-[140px]` which stacks on top of MainLayout's `pt-[88px]`, creating ~228px of dead space.
+
+2. **Duplicate filter bar**: The HorizontalUtilityBar always renders a global FilterShortcutBar (Row 2). PropertyMap also renders its own FilterShortcutBar. Result: two filter rows visible on `/map`.
+
+3. **Same bug on other pages**: `AreaDetail.tsx` and `Developers.tsx` also use fixed portals at `top-[48px]` — these are similarly hidden behind the 88px header.
 
 ## Fix
 
-### File: `src/components/navigation/PropertiesVerticalNav.tsx`
+### 1. PropertyMap.tsx — fix position and remove duplicate
 
-**Change the mega-menu panel positioning** to start below the header:
+- Change fixed filter bar from `top-[48px]` to `top-[88px]` (below the full 88px header)
+- Change map container padding from `pt-[140px]` to `pt-[52px]` (MainLayout already provides 88px, so only need ~52px for the map's own filter bar)
+- Change list panel `top-[140px]` to `top-[52px]` for the same reason
 
-1. **Line 112**: Change `top: 0` to `top: '88px'` so the panel container starts below the header
-2. **Line 115**: Change `mt-8` to `mt-2` since the 88px offset now handles the header clearance
-3. **Line 115**: Adjust `max-h-[60vh]` to `max-h-[calc(100vh-100px)]` to use available vertical space properly
+### 2. HorizontalUtilityBar.tsx — hide global filter row on /map
 
-This ensures all mega-menu items (Buy options, Rent options, Developers, Projects, Areas, Insights) are fully visible below the header.
+- On `/map` route, hide Row 2 (the global FilterShortcutBar) since PropertyMap has its own specialized filter bar with map-specific controls (property count badge, list toggle, `isMapMode`)
 
-### Files affected
-- `src/components/navigation/PropertiesVerticalNav.tsx` — the only file with this sidebar mega-menu pattern
+### 3. AreaDetail.tsx — fix fixed portal position
+
+- Change the fixed filter portal from `top-[48px]` to `top-[88px]`
+
+### 4. Developers.tsx — fix fixed portal position
+
+- Change the fixed filter portal from `top-[48px]` to `top-[88px]`
+
+### 5. DeveloperHubShell.tsx — fix sidebar position
+
+- Change sidebar from `top-[48px]` / `h-[calc(100vh-48px)]` to `top-[88px]` / `h-[calc(100vh-88px)]`
+
+## Files to modify
+- `src/pages/PropertyMap.tsx` — fix top offset + padding
+- `src/components/navigation/HorizontalUtilityBar.tsx` — hide Row 2 on /map
+- `src/pages/AreaDetail.tsx` — fix fixed portal top offset
+- `src/pages/Developers.tsx` — fix fixed portal top offset
+- `src/pages/developer-hub/DeveloperHubShell.tsx` — fix sidebar top offset
 
