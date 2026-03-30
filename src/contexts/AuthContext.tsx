@@ -210,6 +210,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const ownerStatus = await verifyOwner(nextSession);
         if (!mounted) return;
 
+        // Check auditor role for non-owners
+        if (!ownerStatus && nextSession?.user?.id) {
+          try {
+            const { data: hasAuditor } = await supabase.rpc("has_role", {
+              _user_id: nextSession.user.id,
+              _role: "auditor",
+            });
+            if (mounted) setIsAuditor(hasAuditor === true);
+          } catch {
+            if (mounted) setIsAuditor(false);
+          }
+        } else {
+          if (mounted) setIsAuditor(false);
+        }
+
         if (nextSession?.user?.email) {
           console.info("Owner check resolved", {
             email: nextSession.user.email,
