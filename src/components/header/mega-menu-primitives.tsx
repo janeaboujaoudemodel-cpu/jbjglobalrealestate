@@ -283,8 +283,8 @@ export function MegaMenuCard({
 }: MegaMenuCardProps) {
   return (
     <div className={cn(
-      "bg-[#111111]",
-      "rounded-xl border border-white/10 shadow-sm",
+      "bg-gray-50",
+      "rounded-xl border border-gray-200 shadow-sm",
       "transition-all",
       compact ? "p-2.5" : "p-4",
       className
