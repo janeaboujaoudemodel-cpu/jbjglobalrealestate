@@ -81,7 +81,7 @@ const ClientMarketSnapshot = ({
         );
       default:
         return (
-          <Badge variant="outline" className="border-muted-foreground/50 text-muted-foreground bg-muted/20 text-xs">
+          <Badge variant="outline" className="border-blue-400 text-blue-600 bg-blue-50 text-xs">
             Moderate
           </Badge>
         );
