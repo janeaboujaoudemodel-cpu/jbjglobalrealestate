@@ -422,14 +422,7 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* AI HOME FINDER — Premium 3D Section */}
-      <section className="flex items-center justify-center py-16 md:py-24 min-h-[340px] relative overflow-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/4 rounded-full blur-[120px]" />
-          <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-gold/3 rounded-full blur-[80px]" />
-          <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-gold/3 rounded-full blur-[80px]" />
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(hsl(var(--gold) / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--gold) / 0.3) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-        </div>
-        
+      <section className="flex items-center justify-center py-16 md:py-24 min-h-[340px] relative overflow-hidden bg-gray-950">
         <div className="container mx-auto px-4 relative z-10" style={{ perspective: '1200px' }}>
           <div className="flex justify-center">
             <motion.div
@@ -441,51 +434,34 @@ const Index = () => {
               className="text-center relative max-w-2xl"
               style={{ transformStyle: 'preserve-3d' }}
             >
-            <div style={{ animation: 'jbj-float 4s ease-in-out infinite', borderRadius: '1.5rem' }}>
-              {/* Premium multi-layer glow */}
-              <div className="absolute inset-0 -m-8 md:-m-12 rounded-3xl bg-gold/12 blur-[50px]" />
-              <div className="absolute inset-0 -m-4 md:-m-6 rounded-3xl bg-gold/10 blur-2xl" />
-              
-              {/* Card with premium 3D glassmorphism */}
-              <div 
-                className="relative z-10 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/60 transition-all duration-300 hover:shadow-[0_0_80px_hsl(var(--gold)_/_0.3)]"
-                style={{
-                  boxShadow: '0 0 60px hsl(var(--gold) / 0.25), 0 0 120px hsl(var(--gold) / 0.1), 0 30px 80px rgba(0,0,0,0.5), 0 4px 20px rgba(200,167,102,0.15), inset 0 1px 0 hsl(var(--gold) / 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
-                  transform: 'translateZ(20px)',
-                }}
+              <div className="relative z-10 bg-white backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gray-200 transition-all duration-300 hover:shadow-2xl shadow-xl"
+                style={{ transform: 'translateZ(20px)' }}
               >
-                {/* Top shine line */}
-                <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent" />
-                {/* Bottom reflection */}
-                <div className="absolute bottom-0 left-12 right-12 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
-                
-                {/* Gold label badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/10 border border-purple-800/20 text-purple-900 text-xs uppercase tracking-[0.2em] mb-5">
-                  <Sparkles className="w-3 h-3 text-purple-700" />
+                {/* Label badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-100 border border-gray-200 text-gray-700 text-xs uppercase tracking-[0.2em] mb-5">
+                  <Sparkles className="w-3 h-3 text-gray-600" />
                   {t('home.aiPowered', 'AI-Powered')}
                 </div>
                 <Link to="/quiz" className="block group">
                   <div className="flex items-center justify-center gap-3 mb-3">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-400/10 border border-purple-400/30 flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.25)] group-hover:shadow-[0_0_50px_rgba(139,92,246,0.4)] transition-all duration-500">
-                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-purple-500 group-hover:text-purple-400 transition-colors" strokeWidth={1.5} />
+                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center group-hover:bg-gray-200 transition-all duration-500">
+                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-gray-700 group-hover:text-black transition-colors" strokeWidth={1.5} />
                     </div>
                     <h2 
-                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide bg-gradient-to-r from-[#1a1a1a] via-[#2d2319] to-[#1a1a1a] bg-clip-text text-transparent group-hover:from-gold group-hover:via-gold-light group-hover:to-gold transition-all duration-500" 
-                      style={{ fontFamily: "Poppins, sans-serif" }}
+                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-black"
                     >
                       {t('hero.aiFinder')}
                     </h2>
-                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-stone-800 group-hover:text-gold transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-gray-600 group-hover:text-black transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </div>
-                  <p className="text-stone-800 text-sm md:text-base max-w-lg mx-auto">
+                  <p className="text-gray-600 text-sm md:text-base max-w-lg mx-auto">
                     {t('hero.aiFinderDesc')}
                   </p>
-                  <p className="text-stone-500 text-xs mt-3">
+                  <p className="text-gray-400 text-xs mt-3">
                     {t('home.poweredByJBJ', 'Powered by JBJ Global Real Estate')}
                   </p>
                 </Link>
               </div>
-            </div>
             </motion.div>
           </div>
         </div>
