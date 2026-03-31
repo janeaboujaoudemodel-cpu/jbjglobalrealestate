@@ -545,11 +545,7 @@ const Footer = () => {
               </div>
             )}
 
-            {/* Divider before social links */}
-            <div className="relative h-[2px] mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent blur-md" />
-            </div>
+            <div className="h-px bg-gray-200 mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto" />
 
             {/* Single Premium Strip: Social + Write Us + Google + Mode + Currency/Unit */}
             <div className="relative flex flex-col items-center gap-0">
