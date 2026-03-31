@@ -434,7 +434,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <select
                   value={filters.handoverFrom.year}
                   onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, year: e.target.value } })}
-                  className="w-full h-9 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
+                  className="w-full h-9 px-3 bg-white border border-gray-300 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
                   style={{ WebkitAppearance: 'none' }}
                 >
                   {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
