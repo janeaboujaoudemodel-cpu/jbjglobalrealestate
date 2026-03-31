@@ -146,7 +146,7 @@ const BestIdeaAward = () => {
                     </div>
                     <div>
                       <span className="text-xs uppercase tracking-[0.2em] text-gold font-semibold">Monthly Challenge</span>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h2 className="text-2xl md:text-3xl font-bold text-black">
                         Best Idea Award
                       </h2>
                     </div>
