@@ -1,40 +1,44 @@
 
 
-## Logo System Fix Plan
+## Fix Logo Containers: Remove White Background, Keep Correct Data Extraction
 
 ### Problem
-The `getDeveloperLogoUrl` utility correctly extracts `logo_url` from Supabase join arrays. However, there are padding/container inconsistencies across components, and the core data extraction needs verification.
+The logo data extraction (`getDeveloperLogoUrl`) is working correctly. However, a forced `bg-white` was added to all logo containers in the last fix, creating an ugly white box effect. The user wants this removed -- logos should render cleanly over the card image without an artificial white background.
 
-### Root Cause Analysis
-The logo rendering code is actually correct in most places -- it uses `getDeveloperLogoUrl()` which pulls from `logo_url`. The issue is likely:
-1. **FeaturedListings** logo container (line 157): `w-12 h-12` with NO padding class -- logo touches edges
-2. **ProjectCard** logo container (line 208): conditionally applies `p-1` only when no `logo_bg_color` -- inconsistent
-3. **RecommendedProjects** logo container (line 191): uses `p-0.5` -- too small
+### Root Cause
+The DeveloperCard component already has the correct pattern: it conditionally applies white bg only for specific developers that need it (Azizi, Binghatti, etc.) and uses `logo_bg_color` or transparent for others. The other 4 components were given a blanket `bg-white` which is wrong.
 
-### Changes (3 files, logo containers only)
+### Changes (4 files, logo container styling only)
 
 **1. `src/components/home/FeaturedListings.tsx` (line 157)**
-- Add `p-1.5` padding to the logo `div` so the logo never touches edges
-- Change: `w-12 h-12 rounded-lg shadow-lg overflow-hidden bg-white` --> `w-12 h-12 rounded-lg shadow-lg overflow-hidden bg-white p-1.5`
+- Remove `bg-white` from logo container
+- Change to: `w-12 h-12 rounded-lg shadow-lg overflow-hidden p-1.5` (no bg-white)
+- Add subtle backdrop blur for visibility: `bg-black/40 backdrop-blur-sm`
 
-**2. `src/components/ProjectCard.tsx` (lines 206-219)**
-- Remove conditional padding logic; always apply `bg-white shadow-lg p-1.5`
-- Remove `getDeveloperLogoBgColor` conditional -- always use white container with consistent padding
-- Keep `w-12 h-12 rounded-lg` dimensions
+**2. `src/components/ProjectCard.tsx` (line 208)**
+- Remove `bg-white` from logo container
+- Change to: `w-12 h-12 rounded-lg shadow-lg overflow-hidden p-1.5 bg-black/40 backdrop-blur-sm`
 
 **3. `src/components/ReellyProjectCard.tsx` (line 164)**
-- Change `p-1` to `p-1.5` for consistency with other cards
+- Remove `bg-white` from logo container
+- Same pattern: `w-12 h-12 rounded-lg shadow-lg overflow-hidden p-1.5 bg-black/40 backdrop-blur-sm`
 
 **4. `src/components/project-detail/RecommendedProjects.tsx` (line 191)**
-- Change `p-0.5` to `p-1.5` for consistent padding across all logo containers
+- Remove `bg-white` from logo container
+- Change to: `w-10 h-10 rounded-xl overflow-hidden shadow-md border border-gold/40 p-1.5 bg-black/40 backdrop-blur-sm`
 
 ### What stays untouched
-- No color changes, layout changes, or card design changes
-- No database modifications
-- The `getDeveloperLogoUrl` utility remains as-is (it correctly extracts `logo_url`)
-- Fallback behavior (Building2 icon or initial letter) remains unchanged
+- `getDeveloperLogoUrl` utility (correct, no changes)
+- `object-contain` on all logo images (correct)
+- DeveloperCard.tsx (already has correct conditional logic)
+- DeveloperSearchModal.tsx (separate component, already correct)
+- No color, layout, card design, border, or CTA changes
+- No database changes
 
-### Technical Details
-- All logo containers standardized to: `bg-white rounded-lg shadow-lg p-1.5 overflow-hidden` with `object-contain` on the image
-- This ensures equal padding on all 4 sides, centered alignment, no stretching, no cropping
+### Visual Result
+- Logos render over a subtle dark translucent backdrop (same as DeveloperCard's transparent approach)
+- No ugly white box
+- Logos centered with balanced p-1.5 padding
+- object-contain prevents cropping/stretching
+- Premium, clean look
 
