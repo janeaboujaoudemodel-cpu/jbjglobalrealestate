@@ -261,7 +261,7 @@ const FeaturedListings = () => {
         {/* Section Header */}
         <div className="text-center mb-8">
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-300 rounded-full text-xs uppercase tracking-[0.2em] font-semibold mb-4">
-            <Home className="w-3.5 h-3.5 text-gray-600" />
+            <Home className="w-3.5 h-3.5 text-gray-700" />
             <span className="text-black">{t('featured.title', 'Featured Properties')}</span>
           </span>
           <h2
