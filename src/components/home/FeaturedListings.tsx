@@ -202,7 +202,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             </h3>
             {project.developer?.slug ? (
               <span className="text-xs mb-1 block">
-                <span className="text-gray-600 font-medium">by </span>
+                <span className="text-gray-700 font-medium">by </span>
                 <Link
                   to={`/developer/${project.developer.slug}`}
                   onClick={(e) => e.stopPropagation()}
