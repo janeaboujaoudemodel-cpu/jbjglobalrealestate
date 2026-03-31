@@ -274,7 +274,7 @@ const FeaturedListings = () => {
           <div className="flex items-center justify-center gap-3 mt-4">
             <Link
               to="/favorites"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gray-100 border border-gray-300 text-gray-600 hover:border-gray-400 hover:bg-gray-200 transition-all text-sm font-medium"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gray-100 border border-gray-300 text-gray-700 hover:border-gray-400 hover:bg-gray-200 transition-all text-sm font-medium"
             >
               <Heart className="w-4 h-4" />
               {t('featured.myFavorites', 'My Favorites')}
