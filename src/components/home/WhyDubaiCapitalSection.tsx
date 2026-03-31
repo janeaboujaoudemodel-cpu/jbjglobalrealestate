@@ -97,22 +97,22 @@ export default function WhyDubaiCapitalSection() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5 }}
           >
-            <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] font-semibold" style={{ borderColor: 'rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.4)', color: '#e5e7eb' }}>
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border backdrop-blur-md text-[10px] uppercase tracking-[0.2em] font-bold" style={{ borderColor: 'rgba(255,255,255,0.3)', background: 'rgba(0,0,0,0.5)', color: '#FFFFFF' }}>
               <T>Global Investment Hub</T>
             </span>
 
             <h2
-              className="mt-3 text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight"
+              className="mt-4 text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
               style={{ 
-                fontFamily: "Poppins, sans-serif",
-                textShadow: '0 2px 8px rgba(0,0,0,0.5)'
+                color: '#FFFFFF',
+                textShadow: '0 2px 12px rgba(0,0,0,0.6)'
               }}
             >
               <T>Why Dubai Became the Capital of</T>{" "}
-              <span style={{ color: '#93c5fd' }}><T>Global Investors</T></span>
+              <span style={{ color: '#FFFFFF' }}><T>Global Investors</T></span>
             </h2>
 
-            <p className="mt-2.5 text-xs md:text-sm text-white/70 max-w-sm leading-relaxed">
+            <p className="mt-3 text-sm md:text-base max-w-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.85)' }}>
               <T>Strategic location, world-class infrastructure, and long-term government execution make Dubai the most investable city in the region.</T>
             </p>
 
