@@ -186,7 +186,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     <div key={nat.country} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-base">{nat.flag}</span>
-                        <span className="text-black/80 text-sm">{nat.country}</span>
+                        <span className="text-black font-medium text-sm">{nat.country}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="w-20 h-3 bg-black/5 rounded-full overflow-hidden shadow-inner">
