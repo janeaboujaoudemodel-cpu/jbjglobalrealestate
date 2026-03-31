@@ -32,7 +32,7 @@ const ChatSubmitted = ({ userFirstName, onStartNewChat }: ChatSubmittedProps) =>
         <Button
           variant="outline"
           onClick={onStartNewChat}
-          className="w-full border-gold/40 text-zinc-700 hover:bg-gold/10"
+          className="w-full border-gray-300 text-gray-700 hover:bg-gray-100"
         >
           Start New Chat
         </Button>

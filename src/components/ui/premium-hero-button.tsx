@@ -61,19 +61,19 @@ export const PremiumHeroButton = ({
 
   const sharedStyle = {
     boxShadow: isLight
-      ? '0 2px 8px rgba(200,167,102,0.2), 0 1px 3px rgba(0,0,0,0.1)'
+      ? '0 2px 8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06)'
       : 'inset 0 1px 2px rgba(255,255,255,0.15), 0 4px 20px rgba(0,0,0,0.4)',
   };
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
     if (isLight) {
-      e.currentTarget.style.boxShadow = '0 8px 25px rgba(200,167,102,0.4), 0 4px 12px rgba(0,0,0,0.15)';
+      e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08)';
     }
   };
 
   const handleMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
     if (isLight) {
-      e.currentTarget.style.boxShadow = '0 2px 8px rgba(200,167,102,0.2), 0 1px 3px rgba(0,0,0,0.1)';
+      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06)';
     }
   };
 

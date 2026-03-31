@@ -40,7 +40,7 @@ export default function PortfolioNextSteps() {
     <section className="space-y-4">
       <div>
         <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-          <Lightbulb className="w-5 h-5 text-gold" />
+          <Lightbulb className="w-5 h-5 text-gray-600" />
           Next Step Recommendations
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
@@ -50,11 +50,11 @@ export default function PortfolioNextSteps() {
 
       <div className="grid md:grid-cols-3 gap-4">
         {nextSteps.map((step) => (
-          <Card key={step.title} className="border-2 border-gold/30 hover:border-gold transition-colors">
+          <Card key={step.title} className="border-2 border-gray-200 hover:border-gray-400 transition-colors">
             <CardContent className="p-5">
               <div className="flex items-start gap-3 mb-4">
-                <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <step.icon className="w-5 h-5 text-gold" />
+                <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <step.icon className="w-5 h-5 text-gray-600" />
                 </div>
                 <div>
                   <h3 className="font-medium text-foreground mb-1">{step.title}</h3>

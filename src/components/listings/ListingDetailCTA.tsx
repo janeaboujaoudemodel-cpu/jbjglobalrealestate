@@ -78,9 +78,9 @@ export const ListingDetailCTA = ({
       </div>
 
       {/* Email fallback */}
-      <p className="text-center text-sm text-zinc-500 mt-4">
+      <p className="text-center text-sm text-gray-500 mt-4">
         Or email us at{' '}
-        <a href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(listingName)}`} className="text-gold hover:underline">
+        <a href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(listingName)}`} className="text-black font-medium hover:underline">
           {CONTACT_INFO.email}
         </a>
       </p>
