@@ -161,7 +161,7 @@ const ReellyProjectCard = ({
             {/* Developer Logo Overlay - Top Left */}
             {getDeveloperLogoUrl((project as any).developer) && (
               <div
-                className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center bg-white shadow-lg p-1.5"
+                className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center shadow-lg p-1.5 bg-black/40 backdrop-blur-sm"
               >
                 <img 
                   src={getDeveloperLogoUrl((project as any).developer)!} 

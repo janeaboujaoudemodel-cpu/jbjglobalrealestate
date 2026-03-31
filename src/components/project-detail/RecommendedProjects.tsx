@@ -188,7 +188,7 @@ export default function RecommendedProjects({
 
                   {/* Developer Logo — Bottom Left — eager loaded, rounded with no white frame */}
                   {devLogo && (
-                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl overflow-hidden shadow-md border border-gold/40 bg-white p-1.5">
+                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl overflow-hidden shadow-md border border-gold/40 p-1.5 bg-black/40 backdrop-blur-sm">
                       <SafeImage
                         src={devLogo}
                         alt={project.developer?.name || "Developer"}
