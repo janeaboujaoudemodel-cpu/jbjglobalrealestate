@@ -261,10 +261,9 @@ const Index = () => {
               variants={fadeInUp}
               className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1] mb-6"
               style={{
-                background: "linear-gradient(135deg, #FFFFFF 0%, #ECE2D2 40%, #C8A766 100%)",
+                background: "linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 40%, #FFFFFF 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                fontFamily: "Poppins, sans-serif",
               }}
             >
               Your Gateway to Dubai's
