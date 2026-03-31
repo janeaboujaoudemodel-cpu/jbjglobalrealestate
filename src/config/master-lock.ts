@@ -353,6 +353,44 @@ export function getSystemStatus(): typeof SYSTEM_STATUS {
   return SYSTEM_STATUS;
 }
 
+// ============================================
+// J) DEVELOPER LOGO LOCK (IMMUTABLE)
+// ============================================
+
+export const DEVELOPER_LOGO_LOCK = Object.freeze({
+  STATUS: 'GLOBALLY_LOCKED',
+  LOCK_DATE: '2026-03-31',
+
+  RULES: Object.freeze([
+    'logo_url values in the database are READ-ONLY — no overwriting',
+    'No fake initials, generated letters, or placeholder logos',
+    'Logo container styling (bg-white/90, object-contain, padding) is LOCKED',
+    'Only the database source of truth may provide logo_url values',
+    'All Supabase developer joins MUST include logo_url',
+    'Property images must NEVER be used as logo substitutes',
+    'Changes require explicit Founder unlock authorization',
+  ]),
+
+  CONTAINER_SPEC: Object.freeze({
+    LISTING_CARD: 'w-14 h-14',
+    DEVELOPER_CARD_OVERLAY: 'w-16 h-16',
+    RECOMMENDED_CARD: 'w-12 h-12',
+    BACKGROUND: 'bg-white/90',
+    FIT: 'object-contain',
+    BORDER_RADIUS: 'rounded-lg',
+  }),
+
+  FALLBACK: Object.freeze({
+    ALLOWED: 'Building2 icon only',
+    FORBIDDEN: Object.freeze([
+      'initial-letter fallbacks',
+      'generated monograms',
+      'placeholder images',
+      'property photos as logos',
+    ]),
+  }),
+});
+
 // Export master lock object for read-only access
 export const MASTER_LOCK = Object.freeze({
   BRAND: BRAND_LOCK,
@@ -365,6 +403,7 @@ export const MASTER_LOCK = Object.freeze({
   AUDIT: AUDIT_READINESS,
   BEHAVIOR: BEHAVIOR_RULES,
   STATUS: SYSTEM_STATUS,
+  DEVELOPER_LOGOS: DEVELOPER_LOGO_LOCK,
 });
 
 export default MASTER_LOCK;

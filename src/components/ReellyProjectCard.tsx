@@ -160,7 +160,7 @@ const ReellyProjectCard = ({
           <div className="aspect-[16/10] overflow-hidden relative">
             {/* Developer Logo Overlay - Top Left */}
             {getDeveloperLogoUrl((project as any).developer) && (
-              <div className="absolute top-3 left-3 z-15 w-12 h-12 flex items-center justify-center">
+              <div className="absolute top-3 left-3 z-15 w-14 h-14 flex items-center justify-center">
                 <img 
                   src={getDeveloperLogoUrl((project as any).developer)!} 
                   alt={project.developer_name || ''}

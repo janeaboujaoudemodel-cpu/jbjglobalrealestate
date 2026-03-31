@@ -104,7 +104,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
       {/* Logo Overlay - Top Left */}
           <div className="absolute top-3 left-3 z-10">
             {developer.logo_url && !logoError ? (
-              <div className="w-14 h-14 flex items-center justify-center">
+              <div className="w-16 h-16 flex items-center justify-center">
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
