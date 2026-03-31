@@ -309,7 +309,7 @@ const JBJPodcastSection = () => {
                   <div className="flex items-center gap-3">
                     <button
                       onClick={handleSkipBack}
-                      className="w-10 h-10 rounded-full bg-[hsl(32,28%,13%)]/10 hover:bg-[hsl(32,28%,13%)]/20 border border-gold/30 flex items-center justify-center transition-colors"
+                      className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 border border-gray-200 flex items-center justify-center transition-colors"
                     >
                       <SkipBack className="w-5 h-5 text-black" />
                     </button>
