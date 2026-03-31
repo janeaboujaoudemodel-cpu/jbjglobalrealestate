@@ -125,7 +125,7 @@ export const DataSourcesPanel = () => {
             ].map((item) => (
               <div 
                 key={item.text}
-                className="flex items-center gap-2 text-black/70"
+                className="flex items-center gap-2 text-black font-medium"
               >
                 <item.icon className="w-5 h-5 text-emerald-600" />
                 <span className="text-sm">{item.text}</span>

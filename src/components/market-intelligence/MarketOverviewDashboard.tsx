@@ -91,7 +91,7 @@ export const MarketOverviewDashboard = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               <span className="text-gold">Dubai</span> <span className="text-black">Real Estate Dashboard</span>
             </h2>
-            <p className="text-black/70 max-w-2xl mx-auto">
+            <p className="text-black/80 max-w-2xl mx-auto">
               High-level market metrics aggregated from official government Open Data sources.
             </p>
           </motion.div>
