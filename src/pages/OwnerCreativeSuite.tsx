@@ -110,7 +110,7 @@ const OwnerCreativeSuite = () => {
               <span className="text-black text-sm font-semibold tracking-wide">Owner Creative Suite</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-black mb-3">Creative Suite</h1>
-            <p className="text-zinc-600 text-lg">Your unified hub for documents, stamps, signatures, QR codes, business cards, CVs, and templates — all interconnected.</p>
+            <p className="text-gray-600 text-lg">Your unified hub for documents, stamps, signatures, QR codes, business cards, CVs, and templates — all interconnected.</p>
           </div>
         </div>
       </div>

@@ -251,7 +251,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
-                  className="border-t border-zinc-800/50"
+                  className="border-t border-gray-800/50"
                 >
                   <div className="p-4 space-y-2">
                     {module.lessons.map((lesson, lessonIndex) => {
@@ -262,7 +262,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                           key={lesson.id}
                           className={`flex items-center justify-between p-3 rounded-lg ${
                             lessonAccess 
-                              ? "bg-zinc-900/50 hover:bg-zinc-900 cursor-pointer" 
+                              ? "bg-zinc-900/50 hover:bg-gray-900 cursor-pointer" 
                               : "bg-zinc-900/20 opacity-60"
                           }`}
                         >
@@ -285,7 +285,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                             {lessonAccess ? (
                               <PlayCircle className="w-5 h-5 text-gold" />
                             ) : (
-                              <Lock className="w-4 h-4 text-zinc-600" />
+                              <Lock className="w-4 h-4 text-gray-600" />
                             )}
                           </div>
                         </div>

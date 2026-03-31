@@ -162,7 +162,7 @@ export function NewProjectDetector() {
               className="flex flex-col rounded-xl bg-white border border-blue-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow"
             >
               {/* Cover Image */}
-              <div className="relative w-full h-36 bg-zinc-100 flex-shrink-0">
+              <div className="relative w-full h-36 bg-gray-100 flex-shrink-0">
                 {project.cover_image_url ? (
                   <img
                     src={project.cover_image_url}
@@ -193,7 +193,7 @@ export function NewProjectDetector() {
 
               {/* Info */}
               <div className="p-3 flex flex-col gap-1 flex-1">
-                <p className="text-sm font-semibold text-zinc-900 line-clamp-1">{project.name}</p>
+                <p className="text-sm font-semibold text-gray-900 line-clamp-1">{project.name}</p>
                 {project.developer_name && (
                   <p className="text-xs text-gray-500">{project.developer_name}</p>
                 )}

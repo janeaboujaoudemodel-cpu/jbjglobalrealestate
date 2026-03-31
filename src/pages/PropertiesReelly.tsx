@@ -452,7 +452,7 @@ const PropertiesReelly = () => {
                   <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
                 </div>
                 <h3 className="text-xl font-semibold text-black mb-2">No Properties Found</h3>
-                <p className="text-zinc-600 mb-4">Try adjusting your search filters or browse all properties.</p>
+                <p className="text-gray-600 mb-4">Try adjusting your search filters or browse all properties.</p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                   <Button onClick={() => setShortcutFilters(defaultShortcutFilters)} variant="primary" className="h-12 px-8">
                     Browse All Properties
@@ -460,7 +460,7 @@ const PropertiesReelly = () => {
                   <Button onClick={() => refetchProjects()} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10 h-12 px-6">
                     Retry Loading
                   </Button>
-                  <Button asChild variant="outline" className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6">
+                  <Button asChild variant="outline" className="border-gray-300 text-black hover:bg-gray-100 h-12 px-6">
                     <a 
                       href={getWhatsAppUrl("Hi, I'm looking for properties but couldn't find what I need. Can you help?")}
                       target="_blank" 

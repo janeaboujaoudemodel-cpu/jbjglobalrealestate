@@ -224,7 +224,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
               <Key className="w-5 h-5 text-gold" />
               IT Provisioning Queue
             </CardTitle>
-            <CardDescription className="text-zinc-600">
+            <CardDescription className="text-gray-600">
               HR-approved joiners ready for email, credentials, and CRM access
             </CardDescription>
           </div>
@@ -301,7 +301,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
               <Key className="w-5 h-5 text-gold" />
               Provision Employee: {selectedApp?.full_name}
             </DialogTitle>
-            <DialogDescription className="text-zinc-600">
+            <DialogDescription className="text-gray-600">
               Generate email, password, signature, and grant system access
             </DialogDescription>
           </DialogHeader>
@@ -358,7 +358,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                   checked={grantCRM} 
                   onCheckedChange={(v) => setGrantCRM(v as boolean)} 
                 />
-                <label htmlFor="grantCRM" className="text-sm text-zinc-700">
+                <label htmlFor="grantCRM" className="text-sm text-gray-700">
                   Grant CRM access based on role ({selectedApp?.crm_role})
                 </label>
               </div>
@@ -368,7 +368,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                   checked={sendWelcomeEmail} 
                   onCheckedChange={(v) => setSendWelcomeEmail(v as boolean)} 
                 />
-                <label htmlFor="sendWelcome" className="text-sm text-zinc-700">
+                <label htmlFor="sendWelcome" className="text-sm text-gray-700">
                   Send welcome email with credentials
                 </label>
               </div>

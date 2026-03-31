@@ -41,7 +41,7 @@ const PRIORITY_COLORS: Record<string, string> = {
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  general: "bg-zinc-500/20 text-gray-500 border-zinc-500/30",
+  general: "bg-gray-500/20 text-gray-500 border-gray-500/30",
   integration: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   security: "bg-red-500/20 text-red-400 border-red-500/30",
   marketing: "bg-green-500/20 text-green-400 border-green-500/30",
@@ -278,7 +278,7 @@ const CRMTasks = () => {
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/crm">
-              <Button variant="ghost" size="sm" className="text-zinc-600 hover:text-black">
+              <Button variant="ghost" size="sm" className="text-gray-600 hover:text-black">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to CRM
               </Button>
@@ -311,19 +311,19 @@ const CRMTasks = () => {
                   placeholder="Task title..."
                   value={newTask.title}
                   onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                  className="border-zinc-300 focus:border-gold"
+                  className="border-gray-300 focus:border-gold"
                 />
                 <Textarea
                   placeholder="Description (optional)..."
                   value={newTask.description}
                   onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-                  className="border-zinc-300 focus:border-gold"
+                  className="border-gray-300 focus:border-gold"
                 />
                 <div className="grid grid-cols-2 gap-4">
                   <select
                     value={newTask.category}
                     onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
-                    className="h-10 px-3 rounded-md border border-zinc-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                    className="h-10 px-3 rounded-md border border-gray-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                   >
                     <option value="general">General</option>
                     <option value="integration">Integration</option>
@@ -336,7 +336,7 @@ const CRMTasks = () => {
                   <select
                     value={newTask.priority}
                     onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
-                    className="h-10 px-3 rounded-md border border-zinc-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                    className="h-10 px-3 rounded-md border border-gray-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -348,7 +348,7 @@ const CRMTasks = () => {
                   type="date"
                   value={newTask.due_date}
                   onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
-                  className="border-zinc-300 focus:border-gold"
+                  className="border-gray-300 focus:border-gold"
                 />
                 <Button onClick={addTask} className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110">
                   Add Task
@@ -386,7 +386,7 @@ const CRMTasks = () => {
                 onClick={() => setFilterStatus(status.key)}
                 className={filterStatus === status.key 
                   ? "bg-gold text-black" 
-                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-zinc-700 hover:border-gold"
+                  : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-gray-700 hover:border-gold"
                 }
               >
                 {status.label}
@@ -416,7 +416,7 @@ const CRMTasks = () => {
                 <div className="flex items-center gap-2 mb-4">
                   <Circle className="w-4 h-4 text-gray-500" />
                   <h2 className="text-lg font-semibold text-black">To Do</h2>
-                  <Badge className="bg-zinc-100 text-zinc-600">{todoTasks.length}</Badge>
+                  <Badge className="bg-gray-100 text-gray-600">{todoTasks.length}</Badge>
                 </div>
                 <div className="space-y-3">
                   {todoTasks.map(task => (

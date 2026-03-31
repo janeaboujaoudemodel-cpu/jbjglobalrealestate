@@ -187,7 +187,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
               className="overflow-hidden"
             >
               <div className="p-4 border-b border-gold/10">
-                <div className="flex items-center gap-2 text-sm text-zinc-600">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
                   <Sparkles className="w-4 h-4 text-gold" />
                   <span>Currently monitoring: <strong className="text-black">{toolName}</strong></span>
                 </div>
@@ -207,7 +207,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
                       className={`p-3 rounded-lg text-sm ${
                         note.type === 'task' 
                           ? 'bg-blue-50 border border-blue-100 text-blue-800' 
-                          : 'bg-zinc-50 border border-zinc-100 text-zinc-700'
+                          : 'bg-gray-50 border border-gray-100 text-gray-700'
                       }`}
                     >
                       <p>{note.content}</p>
@@ -220,13 +220,13 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
               </ScrollArea>
 
               {/* Input */}
-              <div className="p-4 bg-zinc-50/50 border-t border-gold/10">
+              <div className="p-4 bg-gray-50/50 border-t border-gold/10">
                 <div className="flex gap-2">
                   <Textarea
                     placeholder="Leave a note for Amanda..."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    className="min-h-[60px] bg-white border-zinc-200 text-black text-sm resize-none"
+                    className="min-h-[60px] bg-white border-gray-200 text-black text-sm resize-none"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && !e.shiftKey) {
                         e.preventDefault();
@@ -254,7 +254,7 @@ export const AmandaAssistantWidget: React.FC<AmandaAssistantWidgetProps> = ({
         {/* Quick status bar when collapsed */}
         {!isExpanded && (
           <div className="px-4 py-3 flex items-center justify-between text-sm">
-            <div className="flex items-center gap-2 text-zinc-600">
+            <div className="flex items-center gap-2 text-gray-600">
               <NotebookPen className="w-4 h-4 text-gold" />
               <span>Notes: {notes.length}</span>
             </div>

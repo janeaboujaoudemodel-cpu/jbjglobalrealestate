@@ -59,14 +59,14 @@ export const GuideCard = ({
             <h3 className="text-xl md:text-2xl font-medium text-black">{title}</h3>
           </div>
           {description && (
-            <p className="text-zinc-600 mb-4">{description}</p>
+            <p className="text-gray-600 mb-4">{description}</p>
           )}
           {items && items.length > 0 && (
             <ul className="space-y-2">
               {items.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                  <span className="text-zinc-700 text-sm">{item}</span>
+                  <span className="text-gray-700 text-sm">{item}</span>
                 </li>
               ))}
             </ul>

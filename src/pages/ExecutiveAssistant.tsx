@@ -562,7 +562,7 @@ export default function ExecutiveAssistant() {
                             </div>
                             <div>
                               <p className="font-semibold text-black">{comm.sender_name || comm.sender_identifier}</p>
-                              <p className="text-sm text-zinc-600 line-clamp-2">{comm.subject || comm.content}</p>
+                              <p className="text-sm text-gray-600 line-clamp-2">{comm.subject || comm.content}</p>
                               <p className="text-xs text-gray-500 mt-1">
                                 {new Date(comm.received_at).toLocaleString()}
                               </p>
@@ -665,7 +665,7 @@ export default function ExecutiveAssistant() {
                               <Badge className="bg-green-100 text-green-800 border-green-300">Auto-reply</Badge>
                             )}
                           </div>
-                          <p className="text-sm text-zinc-600 line-clamp-2">{response.response_template}</p>
+                          <p className="text-sm text-gray-600 line-clamp-2">{response.response_template}</p>
                           <p className="text-xs text-gray-500 mt-2">Used {response.use_count} times</p>
                         </div>
                         <Button

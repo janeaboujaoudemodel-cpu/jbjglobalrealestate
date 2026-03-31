@@ -115,7 +115,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
         <CollapsibleTrigger asChild>
           <Button
             variant="ghost"
-            className="w-full flex items-center justify-between p-4 hover:bg-zinc-800/80 rounded-none h-auto"
+            className="w-full flex items-center justify-between p-4 hover:bg-gray-800/80 rounded-none h-auto"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-600 to-amber-600 flex items-center justify-center">
@@ -135,21 +135,21 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
         </CollapsibleTrigger>
         
         <CollapsibleContent>
-          <div className="p-4 pt-0 space-y-4 border-t border-zinc-700">
+          <div className="p-4 pt-0 space-y-4 border-t border-gray-700">
             {/* Client Name */}
             <div>
-              <Label className="text-zinc-200 mb-2 block text-sm font-medium">Client Name</Label>
+              <Label className="text-gray-200 mb-2 block text-sm font-medium">Client Name</Label>
               <Input
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 placeholder="Enter client name"
-                className="bg-zinc-800 border-zinc-600 text-white placeholder:text-gray-400"
+                className="bg-zinc-800 border-gray-600 text-white placeholder:text-gray-400"
               />
             </div>
 
             {/* Audio Upload/Record */}
             <div>
-              <Label className="text-zinc-200 mb-2 block text-sm font-medium">Audio (Optional)</Label>
+              <Label className="text-gray-200 mb-2 block text-sm font-medium">Audio (Optional)</Label>
               <div className="flex flex-wrap gap-2">
                 <Button
                   type="button"
@@ -201,12 +201,12 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
 
             {/* Call Notes */}
             <div>
-              <Label className="text-zinc-200 mb-2 block text-sm font-medium">Call Notes</Label>
+              <Label className="text-gray-200 mb-2 block text-sm font-medium">Call Notes</Label>
               <Textarea
                 value={callNotes}
                 onChange={(e) => setCallNotes(e.target.value)}
                 placeholder="Enter key discussion points..."
-                className="bg-zinc-800 border-zinc-600 text-white placeholder:text-gray-400 min-h-[100px]"
+                className="bg-zinc-800 border-gray-600 text-white placeholder:text-gray-400 min-h-[100px]"
               />
             </div>
 

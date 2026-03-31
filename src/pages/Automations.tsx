@@ -245,7 +245,7 @@ const Automations = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-black">Smart Automations</h1>
-                <p className="text-xs text-zinc-600">Owner: Jane Bou Jaoude — {activeCount} of {rules.length} active</p>
+                <p className="text-xs text-gray-600">Owner: Jane Bou Jaoude — {activeCount} of {rules.length} active</p>
               </div>
             </div>
           </div>
@@ -272,7 +272,7 @@ const Automations = () => {
                     <div className={`p-3 rounded-xl border transition-all ${
                       rule.isActive 
                         ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-gold/40' 
-                        : 'bg-zinc-100 border-zinc-200'
+                        : 'bg-gray-100 border-gray-200'
                     }`}>
                       <rule.icon className={`h-5 w-5 ${rule.isActive ? 'text-black' : 'text-gray-500'}`} />
                     </div>
@@ -285,7 +285,7 @@ const Automations = () => {
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-zinc-600 mt-0.5">{rule.description}</p>
+                      <p className="text-sm text-gray-600 mt-0.5">{rule.description}</p>
                       <div className="flex items-center gap-4 mt-2">
                         <span className="text-xs text-gray-500">
                           <strong className="text-black">Trigger:</strong> {rule.trigger}
@@ -330,7 +330,7 @@ const Automations = () => {
               </div>
               <div>
                 <h3 className="font-semibold text-black">About Smart Automations</h3>
-                <p className="text-sm text-zinc-600 mt-1">
+                <p className="text-sm text-gray-600 mt-1">
                   Automations run in the background to help Jane Bou Jaoude work more efficiently. 
                   All automation triggers are approval-based by default. 
                   AI may suggest workflows but will NOT auto-activate without explicit Owner approval.

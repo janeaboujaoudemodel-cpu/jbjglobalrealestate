@@ -104,10 +104,10 @@ const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: -300, opacity: 0 }}
       transition={{ type: "spring", damping: 25, stiffness: 300 }}
-      className="fixed left-0 top-0 bottom-0 w-72 bg-zinc-950 border-r border-zinc-800 z-50 shadow-2xl"
+      className="fixed left-0 top-0 bottom-0 w-72 bg-zinc-950 border-r border-gray-800 z-50 shadow-2xl"
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-zinc-800">
+      <div className="flex items-center justify-between p-4 border-b border-gray-800">
         <div className="flex items-center gap-2">
           <Wrench className="w-5 h-5 text-gold" />
           <h3 className="font-semibold text-white">CRM Navigation</h3>
@@ -135,7 +135,7 @@ const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
                       "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all group",
                       isActive(tool.href) 
                         ? "bg-gold/20 text-gold border-l-2 border-gold" 
-                        : "text-white/85 hover:text-white hover:bg-zinc-800/50"
+                        : "text-white/85 hover:text-white hover:bg-gray-800/50"
                     )}
                   >
                     <tool.icon className={cn("w-4 h-4", isActive(tool.href) ? "text-gold" : tool.color)} />

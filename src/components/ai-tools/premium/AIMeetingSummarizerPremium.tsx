@@ -596,7 +596,7 @@ const AIMeetingSummarizerPremium = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-1.5">
-                <Label className="text-zinc-700 text-sm flex items-center gap-1.5">
+                <Label className="text-gray-700 text-sm flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5 text-gold" />
                   Meeting Title
                 </Label>
@@ -608,7 +608,7 @@ const AIMeetingSummarizerPremium = () => {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-zinc-700 text-sm flex items-center gap-1.5">
+                <Label className="text-gray-700 text-sm flex items-center gap-1.5">
                   <Video className="h-3.5 w-3.5 text-gold" />
                   Session Type
                 </Label>
@@ -626,7 +626,7 @@ const AIMeetingSummarizerPremium = () => {
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label className="text-zinc-700 text-sm flex items-center gap-1.5">
+                <Label className="text-gray-700 text-sm flex items-center gap-1.5">
                   <Users className="h-3.5 w-3.5 text-gold" />
                   Participants
                 </Label>
@@ -695,27 +695,27 @@ const AIMeetingSummarizerPremium = () => {
                   )}
 
                   {showAddLead && (
-                    <div className="p-3 bg-zinc-50 border border-zinc-200 rounded-lg space-y-2">
-                      <p className="text-zinc-600 text-xs font-medium">No lead found — Add new lead:</p>
+                    <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg space-y-2">
+                      <p className="text-gray-600 text-xs font-medium">No lead found — Add new lead:</p>
                       <div className="grid grid-cols-2 gap-2">
                         <Input
                           placeholder="Full Name"
                           value={newLeadName}
                           onChange={(e) => setNewLeadName(e.target.value)}
-                          className="bg-white border-zinc-300 text-black text-sm"
+                          className="bg-white border-gray-300 text-black text-sm"
                         />
                         <Input
                           placeholder="Phone (optional)"
                           value={newLeadPhone}
                           onChange={(e) => setNewLeadPhone(e.target.value)}
-                          className="bg-white border-zinc-300 text-black text-sm"
+                          className="bg-white border-gray-300 text-black text-sm"
                         />
                       </div>
                       <Button
                         size="sm"
                         onClick={handleCreateNewLead}
                         disabled={creatingLead || !newLeadName.trim()}
-                        className="w-full bg-black hover:bg-zinc-800 text-gold text-xs"
+                        className="w-full bg-black hover:bg-gray-800 text-gold text-xs"
                       >
                         {creatingLead ? <Loader2 className="h-3 w-3 mr-1 animate-spin" /> : <UserPlus className="h-3 w-3 mr-1" />}
                         Create & Link Lead
@@ -768,7 +768,7 @@ const AIMeetingSummarizerPremium = () => {
                   <Button
                     type="button"
                     onClick={startRecording}
-                    className="bg-black hover:bg-zinc-800 text-gold shadow-lg shadow-black/20 px-6"
+                    className="bg-black hover:bg-gray-800 text-gold shadow-lg shadow-black/20 px-6"
                     size="lg"
                   >
                     <Mic className="h-4 w-4 mr-2" /> Start Recording Session
@@ -822,7 +822,7 @@ const AIMeetingSummarizerPremium = () => {
                     <Clock className="h-5 w-5 text-emerald-600" />
                     <div className="flex-1">
                       <p className="text-black font-medium text-sm">Session Recorded</p>
-                      <p className="text-zinc-600 text-xs">Duration: {sessionDuration} · {sessionDate}</p>
+                      <p className="text-gray-600 text-xs">Duration: {sessionDuration} · {sessionDate}</p>
                     </div>
                   </div>
                   
@@ -901,14 +901,14 @@ const AIMeetingSummarizerPremium = () => {
                       size="sm"
                       onClick={handleGenerateResponse}
                       disabled={generatingResponse}
-                      className="bg-black hover:bg-zinc-800 text-gold text-xs"
+                      className="bg-black hover:bg-gray-800 text-gold text-xs"
                     >
                       {generatingResponse ? <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Generating...</> : <><Send className="h-3 w-3 mr-1" /> Generate Response</>}
                     </Button>
                   </div>
                   {generatedResponse && (
                     <div className="bg-white border border-gold/15 p-4 rounded-lg space-y-2">
-                      <p className="text-zinc-700 text-sm whitespace-pre-wrap">{generatedResponse}</p>
+                      <p className="text-gray-700 text-sm whitespace-pre-wrap">{generatedResponse}</p>
                       <Button
                         variant="outline"
                         size="sm"
@@ -929,10 +929,10 @@ const AIMeetingSummarizerPremium = () => {
                 <CardContent className="p-5">
                   <Tabs defaultValue="properties">
                     <TabsList className="bg-white border border-gold/20 w-full">
-                      <TabsTrigger value="properties" className="flex-1 data-[state=active]:bg-black data-[state=active]:text-gold text-zinc-600">
+                      <TabsTrigger value="properties" className="flex-1 data-[state=active]:bg-black data-[state=active]:text-gold text-gray-600">
                         <Home className="h-4 w-4 mr-1" /> Properties
                       </TabsTrigger>
-                      <TabsTrigger value="mortgage" className="flex-1 data-[state=active]:bg-black data-[state=active]:text-gold text-zinc-600">
+                      <TabsTrigger value="mortgage" className="flex-1 data-[state=active]:bg-black data-[state=active]:text-gold text-gray-600">
                         <Calculator className="h-4 w-4 mr-1" /> Mortgage
                       </TabsTrigger>
                     </TabsList>
@@ -943,7 +943,7 @@ const AIMeetingSummarizerPremium = () => {
                         onClick={handlePropertySearch}
                         disabled={searchingProperties}
                         size="sm"
-                        className="bg-black hover:bg-zinc-800 text-gold"
+                        className="bg-black hover:bg-gray-800 text-gold"
                       >
                         {searchingProperties ? <Loader2 className="h-4 w-4 mr-1 animate-spin" /> : <Home className="h-4 w-4 mr-1" />}
                         Find Matching Properties
@@ -973,7 +973,7 @@ const AIMeetingSummarizerPremium = () => {
                           onChange={(e) => setMortgagePrice(e.target.value)}
                           className="bg-white border-gold/30 text-black focus:border-gold text-sm"
                         />
-                        <Button onClick={handleMortgageCalc} size="sm" className="bg-black hover:bg-zinc-800 text-gold">
+                        <Button onClick={handleMortgageCalc} size="sm" className="bg-black hover:bg-gray-800 text-gold">
                           Calculate
                         </Button>
                       </div>
@@ -995,7 +995,7 @@ const AIMeetingSummarizerPremium = () => {
 
             {/* Notes Textarea */}
             <div className="space-y-1.5">
-              <Label className="text-zinc-700 text-sm">Meeting Notes / Transcript *</Label>
+              <Label className="text-gray-700 text-sm">Meeting Notes / Transcript *</Label>
               <Textarea
                 placeholder="Paste meeting notes, or use the recorder above to capture audio..."
                 value={formData.notes}
@@ -1008,7 +1008,7 @@ const AIMeetingSummarizerPremium = () => {
             <Button
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full bg-black hover:bg-zinc-800 text-gold font-semibold py-6 shadow-lg shadow-black/20 text-base"
+              className="w-full bg-black hover:bg-gray-800 text-gold font-semibold py-6 shadow-lg shadow-black/20 text-base"
             >
               {loading ? (
                 <><Loader2 className="h-5 w-5 mr-2 animate-spin" /> Summarizing Meeting...</>
@@ -1041,7 +1041,7 @@ const AIMeetingSummarizerPremium = () => {
                         disabled={creatingTasks || tasksCreated}
                         className={tasksCreated
                           ? "bg-emerald-600 text-white text-xs"
-                          : "bg-black hover:bg-zinc-800 text-gold text-xs"
+                          : "bg-black hover:bg-gray-800 text-gold text-xs"
                         }
                       >
                         {tasksCreated ? <><Check className="h-3 w-3 mr-1" /> Synced + Follow-ups</> : creatingTasks ? <><Loader2 className="h-3 w-3 mr-1 animate-spin" /> Creating...</> : <><Plus className="h-3 w-3 mr-1" /> Create Tasks + Follow-ups</>}
@@ -1051,7 +1051,7 @@ const AIMeetingSummarizerPremium = () => {
                       {response.actionItems.map((item: any, idx: number) => (
                         <li key={idx} className="flex items-start gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-black flex items-center justify-center flex-shrink-0 text-xs text-gold font-semibold">{idx + 1}</span>
-                          <span className="text-zinc-700">{typeof item === "string" ? item : item.task || JSON.stringify(item)}</span>
+                          <span className="text-gray-700">{typeof item === "string" ? item : item.task || JSON.stringify(item)}</span>
                         </li>
                       ))}
                     </ul>
@@ -1076,7 +1076,7 @@ const AIMeetingSummarizerPremium = () => {
                     </div>
                     <ul className="space-y-2">
                       {response.keyDecisions.map((decision: any, idx: number) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm text-zinc-700">
+                        <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
                           <span className="text-emerald-600 font-bold">[OK]</span>
                           {typeof decision === "string" ? decision : decision.decision || JSON.stringify(decision)}
                         </li>
@@ -1097,7 +1097,7 @@ const AIMeetingSummarizerPremium = () => {
                   </div>
                   <ul className="space-y-2">
                     {response.followUps.map((followUp: string, idx: number) => (
-                      <li key={idx} className="text-sm text-zinc-700 flex items-start gap-2">
+                      <li key={idx} className="text-sm text-gray-700 flex items-start gap-2">
                         <Clock className="h-4 w-4 mt-0.5 text-gold flex-shrink-0" />
                         {followUp}
                       </li>
@@ -1120,7 +1120,7 @@ const AIMeetingSummarizerPremium = () => {
                       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
-                  <div className="bg-white border border-gold/15 p-4 rounded-lg text-zinc-700 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                  <div className="bg-white border border-gold/15 p-4 rounded-lg text-gray-700 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                     {response.summary || response.executiveSummary || "No summary generated."}
                   </div>
                 </CardContent>

@@ -137,7 +137,7 @@ const PhotoRedesignForm = ({
           {photos.length < 4 && (
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="aspect-square rounded-xl border-2 border-dashed border-zinc-700 hover:border-blue-500/50 flex flex-col items-center justify-center gap-2 transition-colors"
+              className="aspect-square rounded-xl border-2 border-dashed border-gray-700 hover:border-blue-500/50 flex flex-col items-center justify-center gap-2 transition-colors"
             >
               <Upload className="w-8 h-8 text-white/60" />
               <span className="text-xs text-white/60">Add Photo</span>
@@ -169,7 +169,7 @@ const PhotoRedesignForm = ({
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
                     ? 'bg-blue-500/20 border-blue-500/50 text-white'
-                    : 'bg-zinc-800/50 border-zinc-700 text-white/70 hover:border-zinc-600 hover:text-white/85'
+                    : 'bg-zinc-800/50 border-gray-700 text-white/70 hover:border-gray-600 hover:text-white/85'
                   }
                 `}
               >
@@ -200,7 +200,7 @@ const PhotoRedesignForm = ({
                   p-4 rounded-xl border transition-all
                   ${isSelected
                     ? 'bg-blue-500/20 border-blue-500/50'
-                    : 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600'
+                    : 'bg-zinc-800/50 border-gray-700 hover:border-gray-600'
                   }
                 `}
               >
@@ -208,7 +208,7 @@ const PhotoRedesignForm = ({
                   {palette.colors.map((color, i) => (
                     <div
                       key={i}
-                      className="w-6 h-6 rounded-full border border-zinc-600"
+                      className="w-6 h-6 rounded-full border border-gray-600"
                       style={{ backgroundColor: color }}
                     />
                   ))}
@@ -231,7 +231,7 @@ const PhotoRedesignForm = ({
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe what you'd like to change: remove furniture, add plants, change lighting, update color scheme..."
-          className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 min-h-[100px] focus:border-blue-500/50"
+          className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 min-h-[100px] focus:border-blue-500/50"
           maxLength={1000}
         />
       </div>

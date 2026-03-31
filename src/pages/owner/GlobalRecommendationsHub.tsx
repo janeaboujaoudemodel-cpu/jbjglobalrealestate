@@ -218,8 +218,8 @@ export default function GlobalRecommendationsHub() {
     switch (urgency) {
       case "immediate": return "bg-red-100 text-red-700";
       case "high": return "bg-orange-100 text-orange-700";
-      case "normal": return "bg-zinc-100 text-zinc-700";
-      default: return "bg-zinc-50 text-gray-500";
+      case "normal": return "bg-gray-100 text-gray-700";
+      default: return "bg-gray-50 text-gray-500";
     }
   };
 
@@ -284,7 +284,7 @@ export default function GlobalRecommendationsHub() {
             className={`capitalize ${
                 activeStatus === status
                   ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#B89555]/40 shadow-sm"
-                  : "bg-white text-zinc-600 border border-gold/20 hover:border-gold/40"
+                  : "bg-white text-gray-600 border border-gold/20 hover:border-gold/40"
               }`}
             >
               {status}
@@ -302,7 +302,7 @@ export default function GlobalRecommendationsHub() {
             className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-all ${
               activeSource === section.id
                 ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#B89555]/40 shadow-sm"
-                : "bg-white border border-gold/20 text-zinc-600 hover:border-gold/40"
+                : "bg-white border border-gold/20 text-gray-600 hover:border-gold/40"
             }`}
           >
             <section.icon className="w-4 h-4" />
@@ -381,7 +381,7 @@ export default function GlobalRecommendationsHub() {
                     </div>
 
                     {/* Suggested action */}
-                    <div className="mt-3 p-2.5 bg-zinc-50 rounded-lg border border-zinc-100">
+                    <div className="mt-3 p-2.5 bg-gray-50 rounded-lg border border-gray-100">
                       <p className="text-xs text-black">
                         <span className="font-medium text-gold">Suggested:</span>{" "}
                         {rec.suggestedAction}
@@ -412,7 +412,7 @@ export default function GlobalRecommendationsHub() {
                         <Button
                           size="sm"
                           onClick={() => handleSnooze(rec)}
-                          className="bg-white text-gray-500 border border-zinc-200 hover:bg-zinc-50 text-xs"
+                          className="bg-white text-gray-500 border border-gray-200 hover:bg-gray-50 text-xs"
                         >
                           <Timer className="w-3.5 h-3.5 mr-1" />
                           Snooze
@@ -438,7 +438,7 @@ export default function GlobalRecommendationsHub() {
                       </Button>
                     )}
                     {rec.status === "reverted" && (
-                      <Badge className="bg-zinc-100 text-gray-500 text-xs">Reverted</Badge>
+                      <Badge className="bg-gray-100 text-gray-500 text-xs">Reverted</Badge>
                     )}
                   </div>
                 </div>

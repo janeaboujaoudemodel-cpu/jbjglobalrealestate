@@ -30,7 +30,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className="flex items-center gap-2 w-[190px] h-12 px-3 bg-zinc-900/80 border border-zinc-700/50 text-white rounded-lg text-sm hover:border-gold transition-colors">
+        <button className="flex items-center gap-2 w-[190px] h-12 px-3 bg-zinc-900/80 border border-gray-700/50 text-white rounded-lg text-sm hover:border-gold transition-colors">
           <Building2 className="w-4 h-4 text-white/60 flex-shrink-0" />
           <span className="truncate flex-1 text-left text-sm">
             {selectedDev ? selectedDev.name : "Developer / Project"}
@@ -38,8 +38,8 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
           <ChevronDown className="w-3.5 h-3.5 text-white/60 flex-shrink-0" />
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-[260px] p-0 bg-zinc-900 border border-zinc-700 z-[10200]" side="bottom" align="start" sideOffset={4}>
-        <div className="p-2 border-b border-zinc-800">
+      <PopoverContent className="w-[260px] p-0 bg-zinc-900 border border-gray-700 z-[10200]" side="bottom" align="start" sideOffset={4}>
+        <div className="p-2 border-b border-gray-800">
           <div className="relative">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/60" />
             <input
@@ -47,7 +47,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search developer..."
-              className="w-full h-9 pl-8 pr-3 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white placeholder:text-gray-400 outline-none focus:border-gold"
+              className="w-full h-9 pl-8 pr-3 bg-zinc-800 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-400 outline-none focus:border-gold"
               autoFocus
             />
           </div>
@@ -55,7 +55,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
         <div className="max-h-64 overflow-y-auto p-1">
           <button
             onClick={() => { onChange(null); setOpen(false); setSearch(""); }}
-            className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", !value ? "bg-gold/20 text-gold" : "text-white/85 hover:bg-zinc-800")}
+            className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", !value ? "bg-gold/20 text-gold" : "text-white/85 hover:bg-gray-800")}
           >
             All Developers
           </button>
@@ -63,7 +63,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
             <button
               key={dev.id}
               onClick={() => { onChange(dev.id); setOpen(false); setSearch(""); }}
-              className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", value === dev.id ? "bg-gold/20 text-gold" : "text-white/85 hover:bg-zinc-800")}
+              className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", value === dev.id ? "bg-gold/20 text-gold" : "text-white/85 hover:bg-gray-800")}
             >
               {dev.logo_url ? (
                 <img src={dev.logo_url} alt={dev.name} className="w-5 h-5 object-contain rounded-sm flex-shrink-0 bg-white" />
@@ -127,7 +127,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-9 h-10 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-gray-400 focus:border-gold rounded-lg"
+            className="pl-9 h-10 bg-zinc-900/80 border-gray-700/50 text-white placeholder:text-gray-400 focus:border-gold rounded-lg"
           />
         </div>
         <Button onClick={handleSearch} variant="primary" className="h-10 px-4 rounded-lg">
@@ -139,7 +139,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
 
   return (
     <div
-      className={`bg-zinc-950/90 backdrop-blur-md border border-zinc-800/50 rounded-2xl p-4 md:p-6 w-full ${className}`}
+      className={`bg-zinc-950/90 backdrop-blur-md border border-gray-800/50 rounded-2xl p-4 md:p-6 w-full ${className}`}
     >
       <div className="flex flex-wrap items-center gap-3 md:gap-4 w-full">
         {/* Keyword Search */}
@@ -150,7 +150,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-10 h-12 bg-zinc-900/80 border-zinc-700/50 text-white placeholder:text-gray-400 focus:border-gold rounded-lg"
+            className="pl-10 h-12 bg-zinc-900/80 border-gray-700/50 text-white placeholder:text-gray-400 focus:border-gold rounded-lg"
           />
         </div>
 
@@ -231,7 +231,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
         <Button
           variant="outline"
           onClick={() => navigate("/properties")}
-          className="h-12 px-4 bg-zinc-900/80 border-zinc-700/50 text-white hover:bg-zinc-800 hover:text-white rounded-lg"
+          className="h-12 px-4 bg-zinc-900/80 border-gray-700/50 text-white hover:bg-gray-800 hover:text-white rounded-lg"
         >
           <Filter className="w-4 h-4 mr-2" />
           Filters

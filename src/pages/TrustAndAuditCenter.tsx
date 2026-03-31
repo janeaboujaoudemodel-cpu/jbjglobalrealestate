@@ -140,7 +140,7 @@ const TrustAndAuditCenter = () => {
                       <p.icon className="w-6 h-6 text-[#C8A766]" />
                     </div>
                     <h3 className="text-lg font-bold text-black mb-2" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>{p.title}</h3>
-                    <p className="text-zinc-600 text-[15px] leading-relaxed">{p.description}</p>
+                    <p className="text-gray-600 text-[15px] leading-relaxed">{p.description}</p>
                   </CCard>
                 ))}
               </div>
@@ -154,7 +154,7 @@ const TrustAndAuditCenter = () => {
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><ClipboardCheck className="w-5 h-5 text-[#C8A766]" /></div>
                   <h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Internal Oversight & Process Controls</h2>
                 </div>
-                <div className="text-zinc-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
                   <p>JBJ Global Real Estate maintains structured internal oversight including:</p>
                   <BulletList items={['Transaction documentation tracking','Contract review processes','Developer verification checks','Data logging of advisory tools','AI usage monitoring','Platform access control']} />
                   <p>Operational records are maintained for compliance, accountability, and quality assurance purposes.</p>
@@ -168,10 +168,10 @@ const TrustAndAuditCenter = () => {
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Server className="w-5 h-5 text-[#C8A766]" /></div>
                   <h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Platform Integrity & Data Handling</h2>
                 </div>
-                <div className="text-zinc-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
                   <p>Our digital ecosystem includes:</p>
                   <BulletList items={['Secure database architecture','Role-based access control','Broker authorization layers','User isolation via database policies','AI usage logging','Encrypted API communication']} />
-                  <p className="text-zinc-800 font-medium">Sensitive data is not publicly exposed and is never sold to third parties.</p>
+                  <p className="text-gray-800 font-medium">Sensitive data is not publicly exposed and is never sold to third parties.</p>
                 </div>
               </CCard>
             </div>
@@ -184,7 +184,7 @@ const TrustAndAuditCenter = () => {
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Eye className="w-5 h-5 text-[#C8A766]" /></div>
                   <h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>AI Tool Governance</h2>
                 </div>
-                <div className="text-zinc-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
                   <p>AI-powered features available on this platform are:</p>
                   <BulletList items={['Logged under structured job tracking systems','Monitored for misuse','Restricted based on access level','Designed to avoid storage of personal identifying information']} />
                   <p>AI outputs are advisory insights and not automated execution systems.</p>
@@ -198,7 +198,7 @@ const TrustAndAuditCenter = () => {
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Handshake className="w-5 h-5 text-[#C8A766]" /></div>
                   <h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>External Platform Integrations</h2>
                 </div>
-                <div className="text-zinc-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
                   <p>Where data is integrated from licensed developer sources or external APIs:</p>
                   <BulletList items={['Data accuracy depends on source providers','Updates are synchronized periodically','No unauthorized scraping is performed','Source attribution remains intact']} />
                   <p>We maintain ethical data sourcing practices.</p>
@@ -214,7 +214,7 @@ const TrustAndAuditCenter = () => {
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><ShieldCheck className="w-5 h-5 text-[#C8A766]" /></div>
                   <h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Professional Commitment</h2>
                 </div>
-                <div className="text-zinc-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
                   <p>JBJ Global Real Estate operates with a commitment to:</p>
                   <BulletList items={['Long-term client relationships','Transparent communication','Regulatory alignment','Responsible advisory']} />
                   <p>Trust is foundational to our brand and operational structure.</p>
@@ -228,7 +228,7 @@ const TrustAndAuditCenter = () => {
                   <div className="w-10 h-10 rounded-xl bg-[#C8A766]/20 flex items-center justify-center"><Landmark className="w-5 h-5 text-[#C8A766]" /></div>
                   <h2 className="text-lg font-bold text-black" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Audit Position</h2>
                 </div>
-                <div className="text-zinc-700 leading-relaxed text-[15px] space-y-4">
+                <div className="text-gray-700 leading-relaxed text-[15px] space-y-4">
                   <p>While not a financial auditing firm, JBJ Global Real Estate maintains structured operational controls and internal review processes to ensure service quality and compliance integrity.</p>
                 </div>
               </CCard>
@@ -242,7 +242,7 @@ const TrustAndAuditCenter = () => {
               <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
-                <span className="text-zinc-600">|</span>
+                <span className="text-gray-600">|</span>
                 <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
               </div>
             </div>

@@ -133,13 +133,13 @@ const MarketingHub: React.FC = () => {
 
   const getStatusColor = (status: CampaignStatus) => {
     switch (status) {
-      case 'draft': return 'bg-zinc-200 text-zinc-700';
+      case 'draft': return 'bg-gray-200 text-gray-700';
       case 'scheduled': return 'bg-blue-100 text-blue-700';
       case 'sending': return 'bg-amber-100 text-amber-700';
       case 'sent': return 'bg-green-100 text-green-700';
       case 'paused': return 'bg-orange-100 text-orange-700';
-      case 'archived': return 'bg-zinc-200 text-gray-500';
-      default: return 'bg-zinc-200 text-zinc-700';
+      case 'archived': return 'bg-gray-200 text-gray-500';
+      default: return 'bg-gray-200 text-gray-700';
     }
   };
 
@@ -501,7 +501,7 @@ const MarketingHub: React.FC = () => {
                       <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold/20 to-amber-500/20 flex items-center justify-center border border-gold/30">
                         <template.icon className="w-5 h-5 text-black" />
                       </div>
-                      <Badge className="text-[10px] bg-zinc-100 text-zinc-600 border-zinc-200">{template.category}</Badge>
+                      <Badge className="text-[10px] bg-gray-100 text-gray-600 border-gray-200">{template.category}</Badge>
                     </div>
                     <h4 className="font-semibold text-black group-hover:text-gold transition-colors">{template.name}</h4>
                     <p className="text-sm text-black/60 mt-1 line-clamp-2">{template.description}</p>

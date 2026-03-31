@@ -103,7 +103,7 @@ const ExecutivePerformance = () => {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   nav.active
                     ? "bg-gold text-black"
-                    : "bg-zinc-800 text-white/85 hover:bg-zinc-700"
+                    : "bg-zinc-800 text-white/85 hover:bg-gray-700"
                 }`}
               >
                 {nav.label}
@@ -120,7 +120,7 @@ const ExecutivePerformance = () => {
             <>
               {/* Deal Cycle Duration */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-zinc-900 border-gray-800">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Clock className="w-4 h-4" />
@@ -139,7 +139,7 @@ const ExecutivePerformance = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-zinc-900 border-gray-800">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Clock className="w-4 h-4" />
@@ -160,7 +160,7 @@ const ExecutivePerformance = () => {
               </div>
 
               {/* Conversion by Channel */}
-              <Card className="bg-zinc-900 border-zinc-800 mb-8">
+              <Card className="bg-zinc-900 border-gray-800 mb-8">
                 <CardHeader>
                   <CardTitle className="text-lg text-white flex items-center gap-2">
                     <BarChart3 className="w-5 h-5 text-gold" />
@@ -184,7 +184,7 @@ const ExecutivePerformance = () => {
               </Card>
 
               {/* Intelligence Tool Usage */}
-              <Card className="bg-zinc-900 border-zinc-800 mb-8">
+              <Card className="bg-zinc-900 border-gray-800 mb-8">
                 <CardHeader>
                   <CardTitle className="text-lg text-white flex items-center gap-2">
                     <Zap className="w-5 h-5 text-gold" />
@@ -209,7 +209,7 @@ const ExecutivePerformance = () => {
               </Card>
 
               {/* Bottleneck Analysis */}
-              <Card className="bg-zinc-900 border-zinc-800">
+              <Card className="bg-zinc-900 border-gray-800">
                 <CardHeader>
                   <CardTitle className="text-lg text-white flex items-center gap-2">
                     <AlertTriangle className="w-5 h-5 text-amber-500" />
@@ -258,12 +258,12 @@ const ExecutivePerformance = () => {
               </Card>
 
               {/* Footer */}
-              <div className="mt-12 pt-6 border-t border-zinc-800 text-center">
+              <div className="mt-12 pt-6 border-t border-gray-800 text-center">
                 <p className="text-xs text-white/60">
                   Performance Snapshot • Trends and patterns, not individual broker rankings
                 </p>
                 <FounderContent>
-                  <p className="text-xs text-zinc-600 mt-1">
+                  <p className="text-xs text-gray-600 mt-1">
                     Jane Bou Jaoude, Founder & CEO • JBJ GLOBAL REAL ESTATE
                   </p>
                 </FounderContent>

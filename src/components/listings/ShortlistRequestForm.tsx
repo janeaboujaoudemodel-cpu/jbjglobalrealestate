@@ -128,7 +128,7 @@ export const ShortlistRequestForm = ({
         <h3 className="text-xl font-semibold text-black mb-2">
           Request Received!
         </h3>
-        <p className="text-zinc-600">
+        <p className="text-gray-600">
           Our team will curate a personalized shortlist and reach out within 24 hours.
         </p>
       </motion.div>
@@ -151,7 +151,7 @@ export const ShortlistRequestForm = ({
         <h3 className="text-xl md:text-2xl font-semibold text-black">
           Get a <span className="text-gold">Curated Shortlist</span>
         </h3>
-        <p className="text-zinc-600 text-sm mt-2">
+        <p className="text-gray-600 text-sm mt-2">
           Tell us what you're looking for and we'll send you matching properties.
         </p>
       </div>
@@ -162,7 +162,7 @@ export const ShortlistRequestForm = ({
           placeholder="Full Name *"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
+          className="h-12 bg-white border-gray-300 text-black placeholder:text-gray-400"
           required
         />
         
@@ -171,7 +171,7 @@ export const ShortlistRequestForm = ({
           placeholder="Phone Number *"
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
+          className="h-12 bg-white border-gray-300 text-black placeholder:text-gray-400"
           required
         />
 
@@ -180,13 +180,13 @@ export const ShortlistRequestForm = ({
             placeholder={transactionType === 'buy' ? 'Budget (AED)' : 'Max Rent (AED)'}
             value={formData.budget}
             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-            className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
+            className="h-12 bg-white border-gray-300 text-black placeholder:text-gray-400"
           />
           <Input
             placeholder="Bedrooms (e.g. 2-3)"
             value={formData.bedrooms}
             onChange={(e) => setFormData({ ...formData, bedrooms: e.target.value })}
-            className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
+            className="h-12 bg-white border-gray-300 text-black placeholder:text-gray-400"
           />
         </div>
 
@@ -194,17 +194,17 @@ export const ShortlistRequestForm = ({
           placeholder="Preferred Areas (e.g. Downtown, Marina)"
           value={formData.preferredAreas}
           onChange={(e) => setFormData({ ...formData, preferredAreas: e.target.value })}
-          className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
+          className="h-12 bg-white border-gray-300 text-black placeholder:text-gray-400"
         />
 
         <Select
           value={formData.timeline}
           onValueChange={(value) => setFormData({ ...formData, timeline: value as LeadTimeline })}
         >
-          <SelectTrigger className="h-12 bg-white border-zinc-300 text-gray-500">
+          <SelectTrigger className="h-12 bg-white border-gray-300 text-gray-500">
             <SelectValue placeholder={transactionType === 'buy' ? 'When do you want to buy?' : 'When do you need to move?'} />
           </SelectTrigger>
-          <SelectContent className="bg-white border-zinc-200">
+          <SelectContent className="bg-white border-gray-200">
             {TIMELINE_OPTIONS.map((opt) => (
               <SelectItem key={opt.value} value={opt.value} className="text-black hover:bg-gold/10">
                 {opt.label}
@@ -220,7 +220,7 @@ export const ShortlistRequestForm = ({
               id="privacy"
               checked={formData.privacyAccepted}
               onCheckedChange={(checked) => setFormData({ ...formData, privacyAccepted: !!checked })}
-              className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+              className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
             />
             <label htmlFor="privacy" className="text-black text-sm leading-tight">
               I agree to the <a href="/privacy" className="text-gold underline">Privacy Policy</a> *
@@ -231,7 +231,7 @@ export const ShortlistRequestForm = ({
               id="marketing"
               checked={formData.marketingOptIn}
               onCheckedChange={(checked) => setFormData({ ...formData, marketingOptIn: !!checked })}
-              className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+              className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
             />
             <label htmlFor="marketing" className="text-black text-sm leading-tight">
               Send me property updates and market insights

@@ -111,7 +111,7 @@ const FoundersTeamDirectory: React.FC = () => {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-black">Team Directory</h2>
-                <p className="text-sm text-zinc-600">JBJ Global Real Estate Team</p>
+                <p className="text-sm text-gray-600">JBJ Global Real Estate Team</p>
               </div>
             </div>
             <div className="text-right">
@@ -141,7 +141,7 @@ const FoundersTeamDirectory: React.FC = () => {
                 size="sm"
                 onClick={() => setSelectedDepartment(dept)}
                 className={selectedDepartment === dept 
-                  ? 'bg-black text-white border-2 border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] whitespace-nowrap hover:bg-zinc-900' 
+                  ? 'bg-black text-white border-2 border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] whitespace-nowrap hover:bg-gray-900' 
                   : 'bg-white text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold/50 whitespace-nowrap'
                 }
               >
@@ -164,7 +164,7 @@ const FoundersTeamDirectory: React.FC = () => {
               <Collapsible key={dept} open={isExpanded} onOpenChange={() => toggleDepartment(dept)}>
                 <Card className={`bg-white border-2 ${deptConfig?.color || 'border-gold/20'} shadow-[0_0_15px_rgba(200,167,102,0.1)]`}>
                   <CollapsibleTrigger asChild>
-                    <CardHeader className="cursor-pointer hover:bg-zinc-50 transition-colors py-3">
+                    <CardHeader className="cursor-pointer hover:bg-gray-50 transition-colors py-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           {isExpanded ? (
@@ -232,7 +232,7 @@ const FoundersTeamDirectory: React.FC = () => {
                                 {member.languages && member.languages.length > 0 && (
                                   <div className="flex flex-wrap gap-1 mt-3">
                                     {member.languages.slice(0, 3).map((lang) => (
-                                      <Badge key={lang} variant="outline" className="text-xs border-gold/20 text-zinc-600 bg-zinc-50">
+                                      <Badge key={lang} variant="outline" className="text-xs border-gold/20 text-gray-600 bg-gray-50">
                                         {lang}
                                       </Badge>
                                     ))}
@@ -287,7 +287,7 @@ const FoundersTeamDirectory: React.FC = () => {
         <Card className="bg-white border-2 border-gold/20">
           <CardContent className="p-8 text-center">
             <Search className="w-12 h-12 text-gold/30 mx-auto mb-4" />
-            <p className="text-zinc-600">No team members found</p>
+            <p className="text-gray-600">No team members found</p>
             <p className="text-sm text-gray-500 mt-1">Try adjusting your search or filter</p>
           </CardContent>
         </Card>

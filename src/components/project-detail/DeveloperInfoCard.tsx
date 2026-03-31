@@ -89,7 +89,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               </div>
 
               {/* Quick meta line */}
-              <div className="flex flex-wrap items-center gap-3 mb-5 text-sm text-zinc-600">
+              <div className="flex flex-wrap items-center gap-3 mb-5 text-sm text-gray-600">
                 {developer.specialization && (
                   <span className="px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-xs font-semibold text-black">
                     {developer.specialization}
@@ -145,7 +145,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
               {developer.notable_projects && (
                 <div className="mb-5">
                   <span className="text-xs font-semibold text-gold uppercase tracking-wider">Notable Projects: </span>
-                  <span className="text-sm text-zinc-700">{developer.notable_projects}</span>
+                  <span className="text-sm text-gray-700">{developer.notable_projects}</span>
                 </div>
               )}
 
@@ -163,7 +163,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     }}
                   >
                     <div 
-                      className="text-zinc-700 text-sm leading-relaxed prose prose-sm max-w-none prose-p:mb-2 prose-ul:my-1 prose-li:my-0"
+                      className="text-gray-700 text-sm leading-relaxed prose prose-sm max-w-none prose-p:mb-2 prose-ul:my-1 prose-li:my-0"
                       dangerouslySetInnerHTML={{ 
                         __html: renderMarkdownToHtml(formatReellyDescription(displayDescription || '')) 
                       }}
@@ -196,7 +196,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                     <Sparkles className="w-4 h-4 text-gold" />
                     <span className="text-xs font-semibold text-gold uppercase tracking-wider">About the Developer</span>
                   </div>
-                  <p className="text-zinc-600 text-sm">
+                  <p className="text-gray-600 text-sm">
                     {projectName} is developed by {developer.name}, a trusted name in UAE real estate development.
                   </p>
                 </div>

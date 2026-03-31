@@ -489,7 +489,7 @@ Requirements:
                 Thank you for submitting your property listing. Our team will review your submission and 
                 contact you within 24-48 hours to discuss next steps.
               </p>
-              <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 mb-8 text-left">
+              <div className="bg-zinc-900/50 border border-gray-800 rounded-xl p-6 mb-8 text-left">
                 <h3 className="text-gold font-semibold mb-3">What Happens Next?</h3>
                 <ul className="space-y-2 text-gray-400 text-sm">
                   <li className="flex items-start gap-2">
@@ -549,7 +549,7 @@ Requirements:
               <h1 className="text-3xl md:text-4xl font-bold text-black mb-3">
                 List Your Property <span className="text-gold">for Sale</span>
               </h1>
-              <p className="text-zinc-600 mb-6">
+              <p className="text-gray-600 mb-6">
                 Complete the form below to submit your property listing. Our team will contact you within 24-48 hours.
               </p>
               <FormDraftBar
@@ -609,7 +609,7 @@ Requirements:
                       ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-black text-black shadow-lg' 
                       : currentStep > step.number 
                         ? 'bg-white border-gold text-gold'
-                        : 'bg-zinc-100 border-zinc-300 text-gray-500'
+                        : 'bg-gray-100 border-gray-300 text-gray-500'
                   }`}>
                     {currentStep > step.number ? (
                       <CheckCircle2 className="w-5 h-5" />
@@ -618,7 +618,7 @@ Requirements:
                     )}
                   </div>
                   <span className={`text-xs text-center whitespace-nowrap ${
-                    currentStep === step.number ? 'text-black font-medium' : 'text-zinc-600'
+                    currentStep === step.number ? 'text-black font-medium' : 'text-gray-600'
                   }`}>{step.title}</span>
                 </div>
               ))}
@@ -640,7 +640,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-black mb-2">Seller Details</h2>
-                      <p className="text-zinc-600 text-sm">Tell us about yourself so we can contact you</p>
+                      <p className="text-gray-600 text-sm">Tell us about yourself so we can contact you</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
@@ -649,7 +649,7 @@ Requirements:
                         <Input
                           {...form.register("seller_full_name")}
                           placeholder="Enter your full name"
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gold mt-1 focus:border-gold"
+                          className="bg-gray-50 border-gray-300 text-black placeholder:text-gold mt-1 focus:border-gold"
                           style={{ textShadow: 'none' }}
                         />
                       </div>
@@ -658,7 +658,7 @@ Requirements:
                         <Input
                           {...form.register("seller_phone")}
                           placeholder="+971 50 123 4567"
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gold mt-1 focus:border-gold"
+                          className="bg-gray-50 border-gray-300 text-black placeholder:text-gold mt-1 focus:border-gold"
                           style={{ textShadow: 'none' }}
                         />
                       </div>
@@ -670,7 +670,7 @@ Requirements:
                         {...form.register("seller_email")}
                         type="email"
                         placeholder="your@email.com"
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gold mt-1 focus:border-gold"
+                        className="bg-gray-50 border-gray-300 text-black placeholder:text-gold mt-1 focus:border-gold"
                         style={{ textShadow: 'none' }}
                       />
                     </div>
@@ -682,10 +682,10 @@ Requirements:
                           value={form.watch("preferred_language")} 
                           onValueChange={(v) => form.setValue("preferred_language", v)}
                         >
-                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                          <SelectTrigger className="bg-gray-50 border-gray-300 text-black mt-1">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-zinc-200">
+                          <SelectContent className="bg-white border-gray-200">
                             <SelectItem value="en">English</SelectItem>
                             <SelectItem value="ar">Arabic</SelectItem>
                             <SelectItem value="fr">French</SelectItem>
@@ -700,10 +700,10 @@ Requirements:
                           value={form.watch("preferred_contact_method")} 
                           onValueChange={(v) => form.setValue("preferred_contact_method", v)}
                         >
-                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                          <SelectTrigger className="bg-gray-50 border-gray-300 text-black mt-1">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-zinc-200">
+                          <SelectContent className="bg-white border-gray-200">
                             <SelectItem value="whatsapp">WhatsApp</SelectItem>
                             <SelectItem value="call">Phone Call</SelectItem>
                             <SelectItem value="email">Email</SelectItem>
@@ -732,7 +732,7 @@ Requirements:
                               id={option.value}
                               className="border-gold/50"
                             />
-                            <Label htmlFor={option.value} className="ml-2 text-zinc-700 cursor-pointer">
+                            <Label htmlFor={option.value} className="ml-2 text-gray-700 cursor-pointer">
                               {option.label}
                             </Label>
                           </div>
@@ -753,7 +753,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-black mb-2">Property Details</h2>
-                      <p className="text-zinc-600 text-sm">Tell us about your property</p>
+                      <p className="text-gray-600 text-sm">Tell us about your property</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
@@ -763,10 +763,10 @@ Requirements:
                           value={form.watch("property_type")}
                           onValueChange={(v) => form.setValue("property_type", v)}
                         >
-                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                          <SelectTrigger className="bg-gray-50 border-gray-300 text-black mt-1">
                             <SelectValue placeholder="Select type" />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-zinc-200">
+                          <SelectContent className="bg-white border-gray-200">
                             <SelectItem value="apartment">Apartment</SelectItem>
                             <SelectItem value="villa">Villa</SelectItem>
                             <SelectItem value="townhouse">Townhouse</SelectItem>
@@ -782,7 +782,7 @@ Requirements:
                         <Input
                           {...form.register("property_location")}
                           placeholder="e.g., Downtown Dubai"
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gold mt-1 focus:border-gold"
+                          className="bg-gray-50 border-gray-300 text-black placeholder:text-gold mt-1 focus:border-gold"
                         />
                       </div>
                     </div>
@@ -792,7 +792,7 @@ Requirements:
                       <Input
                         {...form.register("community_building")}
                         placeholder="e.g., Burj Khalifa, Palm Jumeirah"
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1"
+                        className="bg-gray-50 border-gray-300 text-black placeholder:text-gray-400 mt-1"
                       />
                     </div>
 
@@ -803,10 +803,10 @@ Requirements:
                           value={form.watch("bedrooms")?.toString()}
                           onValueChange={(v) => form.setValue("bedrooms", parseInt(v))}
                         >
-                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                          <SelectTrigger className="bg-gray-50 border-gray-300 text-black mt-1">
                             <SelectValue placeholder="Select" />
                           </SelectTrigger>
-                          <SelectContent className="bg-white border-zinc-200">
+                          <SelectContent className="bg-white border-gray-200">
                             <SelectItem value="0">Studio</SelectItem>
                             <SelectItem value="1">1 BR</SelectItem>
                             <SelectItem value="2">2 BR</SelectItem>
@@ -823,7 +823,7 @@ Requirements:
                           type="number"
                           {...form.register("property_size_sqft", { valueAsNumber: true })}
                           placeholder="e.g., 1500"
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1"
+                          className="bg-gray-50 border-gray-300 text-black placeholder:text-gray-400 mt-1"
                         />
                       </div>
                     </div>
@@ -845,11 +845,11 @@ Requirements:
                             <RadioGroupItem
                               value={option.value}
                               id={`status-${option.value}`}
-                              className="border-zinc-400"
+                              className="border-gray-400"
                             />
                             <Label
                               htmlFor={`status-${option.value}`}
-                              className="ml-2 text-zinc-700 cursor-pointer text-sm"
+                              className="ml-2 text-gray-700 cursor-pointer text-sm"
                             >
                               {option.label}
                             </Label>
@@ -863,7 +863,7 @@ Requirements:
                       <Textarea
                         {...form.register("property_notes")}
                         placeholder="Any other details about your property..."
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1 min-h-[100px]"
+                        className="bg-gray-50 border-gray-300 text-black placeholder:text-gray-400 mt-1 min-h-[100px]"
                       />
                     </div>
                   </motion.div>
@@ -880,7 +880,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-black mb-2">Pricing Information</h2>
-                      <p className="text-zinc-600 text-sm">Help us understand your pricing expectations</p>
+                      <p className="text-gray-600 text-sm">Help us understand your pricing expectations</p>
                     </div>
 
                     <div>
@@ -889,7 +889,7 @@ Requirements:
                         type="number"
                         {...form.register("purchase_price", { valueAsNumber: true })}
                         placeholder="Original purchase price"
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1"
+                        className="bg-gray-50 border-gray-300 text-black placeholder:text-gray-400 mt-1"
                       />
                       <p className="text-gray-500 text-xs mt-1">What you paid for the property</p>
                     </div>
@@ -900,7 +900,7 @@ Requirements:
                         type="number"
                         {...form.register("target_selling_price", { valueAsNumber: true })}
                         placeholder="Your desired selling price"
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1"
+                        className="bg-gray-50 border-gray-300 text-black placeholder:text-gray-400 mt-1"
                       />
                     </div>
 
@@ -910,7 +910,7 @@ Requirements:
                         type="number"
                         {...form.register("minimum_acceptable_price", { valueAsNumber: true })}
                         placeholder="Lowest price you'd accept"
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1"
+                        className="bg-gray-50 border-gray-300 text-black placeholder:text-gray-400 mt-1"
                       />
                     </div>
 
@@ -930,11 +930,11 @@ Requirements:
                             <RadioGroupItem
                               value={option.value}
                               id={`urgency-${option.value}`}
-                              className="border-zinc-400"
+                              className="border-gray-400"
                             />
                             <Label
                               htmlFor={`urgency-${option.value}`}
-                              className="ml-2 text-zinc-700 cursor-pointer text-sm"
+                              className="ml-2 text-gray-700 cursor-pointer text-sm"
                             >
                               {option.label}
                             </Label>
@@ -944,12 +944,12 @@ Requirements:
                     </div>
 
                     {/* Property Evaluator Integration */}
-                    <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center gap-3 mb-3">
                         <Calculator className="w-5 h-5 text-gold" />
                         <span className="text-black font-medium">Need help with pricing?</span>
                       </div>
-                      <p className="text-zinc-600 text-sm mb-3">
+                      <p className="text-gray-600 text-sm mb-3">
                         Run our Property Evaluator to get an informational estimate based on market data.
                       </p>
                       <Button
@@ -988,7 +988,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-black mb-2">Condition & Upgrades</h2>
-                      <p className="text-zinc-600 text-sm">Tell us about the property's condition and any improvements</p>
+                      <p className="text-gray-600 text-sm">Tell us about the property's condition and any improvements</p>
                     </div>
 
                     <div className="space-y-4">
@@ -997,7 +997,7 @@ Requirements:
                           id="is_furnished"
                           checked={form.watch("is_furnished")}
                           onCheckedChange={(checked) => form.setValue("is_furnished", checked as boolean)}
-                          className="border-zinc-400"
+                          className="border-gray-400"
                         />
                         <Label htmlFor="is_furnished" className="text-black cursor-pointer">
                           Property is furnished
@@ -1009,7 +1009,7 @@ Requirements:
                           id="has_upgrades"
                           checked={form.watch("has_upgrades")}
                           onCheckedChange={(checked) => form.setValue("has_upgrades", checked as boolean)}
-                          className="border-zinc-400"
+                          className="border-gray-400"
                         />
                         <Label htmlFor="has_upgrades" className="text-black cursor-pointer">
                           Property has upgrades/renovations
@@ -1023,7 +1023,7 @@ Requirements:
                         <Textarea
                           {...form.register("upgrade_details")}
                           placeholder="Describe any upgrades, renovations, or improvements..."
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1 min-h-[100px]"
+                          className="bg-gray-50 border-gray-300 text-black placeholder:text-gray-400 mt-1 min-h-[100px]"
                         />
                       </div>
                     )}
@@ -1035,7 +1035,7 @@ Requirements:
                           value={newHighlight}
                           onChange={(e) => setNewHighlight(e.target.value)}
                           placeholder="e.g., Sea view, Private pool, Smart home"
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400"
+                          className="bg-gray-50 border-gray-300 text-black placeholder:text-gray-400"
                           onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addHighlight())}
                         />
                         <Button 
@@ -1089,7 +1089,7 @@ Requirements:
                       <Textarea
                         {...form.register("listing_description")}
                         placeholder="Describe your property or use AI to generate a professional description..."
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1 min-h-[150px]"
+                        className="bg-gray-50 border-gray-300 text-black placeholder:text-gray-400 mt-1 min-h-[150px]"
                       />
                       <p className="text-gray-500 text-xs mt-1">
                         This description will be used in marketing materials (you can edit it)
@@ -1109,14 +1109,14 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-black mb-2">Media Uploads</h2>
-                      <p className="text-zinc-600 text-sm">Upload photos and videos of your property</p>
+                      <p className="text-gray-600 text-sm">Upload photos and videos of your property</p>
                     </div>
 
                     <div className="space-y-6">
                       {/* Photos */}
                       <div>
                         <Label className="text-black font-medium mb-2 block">Property Photos</Label>
-                        <div className="border-2 border-dashed border-zinc-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-zinc-50">
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gray-50">
                           <input
                             type="file"
                             multiple
@@ -1127,7 +1127,7 @@ Requirements:
                           />
                           <label htmlFor="photo-upload" className="cursor-pointer">
                             <Camera className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                            <p className="text-zinc-600">Click to upload photos</p>
+                            <p className="text-gray-600">Click to upload photos</p>
                             <p className="text-gray-500 text-xs mt-1">JPG, PNG up to 10MB each</p>
                           </label>
                         </div>
@@ -1139,7 +1139,7 @@ Requirements:
                       {/* Videos */}
                       <div>
                         <Label className="text-black font-medium mb-2 block">Property Videos (optional)</Label>
-                        <div className="border-2 border-dashed border-zinc-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-zinc-50">
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gray-50">
                           <input
                             type="file"
                             multiple
@@ -1150,7 +1150,7 @@ Requirements:
                           />
                           <label htmlFor="video-upload" className="cursor-pointer">
                             <Upload className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                            <p className="text-zinc-600">Click to upload videos</p>
+                            <p className="text-gray-600">Click to upload videos</p>
                             <p className="text-gray-500 text-xs mt-1">MP4, MOV up to 100MB each</p>
                           </label>
                         </div>
@@ -1162,7 +1162,7 @@ Requirements:
                       {/* Floor Plans */}
                       <div>
                         <Label className="text-black font-medium mb-2 block">Floor Plans (optional)</Label>
-                        <div className="border-2 border-dashed border-zinc-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-zinc-50">
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gray-50">
                           <input
                             type="file"
                             multiple
@@ -1173,7 +1173,7 @@ Requirements:
                           />
                           <label htmlFor="floorplan-upload" className="cursor-pointer">
                             <FileText className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                            <p className="text-zinc-600">Click to upload floor plans</p>
+                            <p className="text-gray-600">Click to upload floor plans</p>
                             <p className="text-gray-500 text-xs mt-1">PDF, JPG, PNG</p>
                           </label>
                         </div>
@@ -1196,7 +1196,7 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-black mb-2">Documents Vault</h2>
-                      <p className="text-zinc-600 text-sm">Upload required documents securely. These are only visible to you and our team.</p>
+                      <p className="text-gray-600 text-sm">Upload required documents securely. These are only visible to you and our team.</p>
                     </div>
 
                     <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 flex items-start gap-3">
@@ -1217,8 +1217,8 @@ Requirements:
                             </span>
                           )}
                         </Label>
-                        <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors bg-zinc-50 ${
-                          titleDeedFile ? 'border-green-500' : 'border-zinc-300 hover:border-gold'
+                        <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors bg-gray-50 ${
+                          titleDeedFile ? 'border-green-500' : 'border-gray-300 hover:border-gold'
                         }`}>
                           <input
                             type="file"
@@ -1229,7 +1229,7 @@ Requirements:
                           />
                           <label htmlFor="titledeed-upload" className="cursor-pointer">
                             <FileText className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                            <p className="text-zinc-600">Upload Title Deed</p>
+                            <p className="text-gray-600">Upload Title Deed</p>
                           </label>
                         </div>
                         {titleDeedFile && (
@@ -1243,7 +1243,7 @@ Requirements:
                       {/* Passport/Emirates ID */}
                       <div>
                         <Label className="text-black font-medium mb-2 block">Passport / Emirates ID</Label>
-                        <div className="border-2 border-dashed border-zinc-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-zinc-50">
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gray-50">
                           <input
                             type="file"
                             accept="application/pdf,image/*"
@@ -1253,7 +1253,7 @@ Requirements:
                           />
                           <label htmlFor="passport-upload" className="cursor-pointer">
                             <User className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                            <p className="text-zinc-600">Upload ID Document</p>
+                            <p className="text-gray-600">Upload ID Document</p>
                           </label>
                         </div>
                         {passportFile && (
@@ -1275,8 +1275,8 @@ Requirements:
                               </span>
                             )}
                           </Label>
-                          <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors bg-zinc-50 ${
-                            poaFile ? 'border-green-500' : 'border-zinc-300 hover:border-gold'
+                          <div className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors bg-gray-50 ${
+                            poaFile ? 'border-green-500' : 'border-gray-300 hover:border-gold'
                           }`}>
                             <input
                               type="file"
@@ -1287,7 +1287,7 @@ Requirements:
                             />
                             <label htmlFor="poa-upload" className="cursor-pointer">
                               <FileText className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                              <p className="text-zinc-600">Upload POA Document</p>
+                              <p className="text-gray-600">Upload POA Document</p>
                             </label>
                           </div>
                           {poaFile && (
@@ -1302,7 +1302,7 @@ Requirements:
                       {/* Additional Documents */}
                       <div>
                         <Label className="text-black font-medium mb-2 block">Additional Documents (optional)</Label>
-                        <div className="border-2 border-dashed border-zinc-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-zinc-50">
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gold transition-colors bg-gray-50">
                           <input
                             type="file"
                             multiple
@@ -1313,7 +1313,7 @@ Requirements:
                           />
                           <label htmlFor="additional-upload" className="cursor-pointer">
                             <Upload className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                            <p className="text-zinc-600">Upload any other documents</p>
+                            <p className="text-gray-600">Upload any other documents</p>
                           </label>
                         </div>
                         {additionalDocs.length > 0 && (
@@ -1335,12 +1335,12 @@ Requirements:
                   >
                     <div>
                       <h2 className="text-xl font-bold text-black mb-2">Review & Submit</h2>
-                      <p className="text-zinc-600 text-sm">Please review your information before submitting</p>
+                      <p className="text-gray-600 text-sm">Please review your information before submitting</p>
                     </div>
 
                     <div className="space-y-4">
                       {/* Seller Summary */}
-                      <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
+                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                         <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
                           <User className="w-4 h-4" />
                           Seller Details
@@ -1358,7 +1358,7 @@ Requirements:
                       </div>
 
                       {/* Property Summary */}
-                      <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
+                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                         <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
                           <Building2 className="w-4 h-4" />
                           Property Details
@@ -1384,7 +1384,7 @@ Requirements:
                       </div>
 
                       {/* Pricing Summary */}
-                      <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
+                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                         <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
                           <DollarSign className="w-4 h-4" />
                           Pricing
@@ -1398,19 +1398,19 @@ Requirements:
                       </div>
 
                       {/* Files Summary */}
-                      <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-4">
+                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                         <h3 className="text-gold font-semibold mb-3 flex items-center gap-2">
                           <FileText className="w-4 h-4" />
                           Uploaded Files
                         </h3>
                         <div className="text-sm space-y-1">
-                          <p className="text-zinc-600">{photoFiles.length} photos uploaded</p>
-                          <p className="text-zinc-600">{videoFiles.length} videos uploaded</p>
+                          <p className="text-gray-600">{photoFiles.length} photos uploaded</p>
+                          <p className="text-gray-600">{videoFiles.length} videos uploaded</p>
                           <p className={`flex items-center gap-1 ${titleDeedFile ? 'text-green-600' : 'text-red-500'}`}>
                             {titleDeedFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
                             Title Deed {titleDeedFile ? '✓' : '(Required)'}
                           </p>
-                          <p className="text-zinc-600">{passportFile ? "✓" : "✗"} ID Document</p>
+                          <p className="text-gray-600">{passportFile ? "✓" : "✗"} ID Document</p>
                           {form.getValues("seller_type") === 'poa' && (
                             <p className={`flex items-center gap-1 ${poaFile ? 'text-green-600' : 'text-red-500'}`}>
                               {poaFile ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
@@ -1427,7 +1427,7 @@ Requirements:
                         id="submission_confirmed"
                         checked={form.watch("submission_confirmed")}
                         onCheckedChange={(checked) => form.setValue("submission_confirmed", checked as boolean)}
-                        className="mt-1 border-zinc-400"
+                        className="mt-1 border-gray-400"
                       />
                       <Label htmlFor="submission_confirmed" className="text-black cursor-pointer text-sm leading-relaxed">
                         I confirm that all the information provided above is accurate and complete. I understand that 
@@ -1508,7 +1508,7 @@ Requirements:
 
       {/* Property Evaluator Dialog */}
       <Dialog open={showEvaluator} onOpenChange={setShowEvaluator}>
-        <DialogContent className="bg-zinc-900 border-zinc-800 text-white">
+        <DialogContent className="bg-zinc-900 border-gray-800 text-white">
           <DialogHeader>
             <DialogTitle className="text-gold flex items-center gap-2">
               <Calculator className="w-5 h-5" />

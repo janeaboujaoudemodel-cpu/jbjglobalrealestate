@@ -80,7 +80,7 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
               >
                 <Search className="w-4 h-4" />
                 <span className="hidden sm:inline text-sm">Search...</span>
-                <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-zinc-100 rounded text-xs font-medium">
+                <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-gray-100 rounded text-xs font-medium">
                   <Command className="w-3 h-3" />K
                 </kbd>
               </button>
@@ -121,21 +121,21 @@ export const PremiumBackendHeader: React.FC<PremiumBackendHeaderProps> = ({
                       </div>
                       <button
                         onClick={() => navigate('/my-dashboard#tasks')}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-zinc-600 hover:text-gold hover:bg-gold/5 transition-colors"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-gold hover:bg-gold/5 transition-colors"
                       >
                         <Check className="w-4 h-4" />
                         My Tasks
                       </button>
                       <button
                         onClick={() => navigate('/broker-account')}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-zinc-600 hover:text-gold hover:bg-gold/5 transition-colors"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-gold hover:bg-gold/5 transition-colors"
                       >
                         <Settings className="w-4 h-4" />
                         Account Settings
                       </button>
                       <button
                         onClick={handleSignOut}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-zinc-600 hover:text-red-500 hover:bg-red-50 transition-colors"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-red-500 hover:bg-red-50 transition-colors"
                       >
                         <LogOut className="w-4 h-4" />
                         Sign Out

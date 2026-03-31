@@ -172,7 +172,7 @@ const LandlordListForm = () => {
         </section>
 
         {/* What Happens Next */}
-        <section className="py-12 border-t border-zinc-800">
+        <section className="py-12 border-t border-gray-800">
           <div className="container mx-auto px-4">
             <motion.div
               initial="hidden"
@@ -207,7 +207,7 @@ const LandlordListForm = () => {
         </section>
 
         {/* Form Section */}
-        <section className="py-16 border-t border-zinc-800">
+        <section className="py-16 border-t border-gray-800">
           <div className="container mx-auto px-4">
             <motion.div
               initial="hidden"
@@ -269,7 +269,7 @@ const LandlordListForm = () => {
                 </div>
 
                 {/* Property Details */}
-                <div className="space-y-4 pt-4 border-t border-zinc-700">
+                <div className="space-y-4 pt-4 border-t border-gray-700">
                   <h3 className="text-lg font-semibold text-white">Property Details</h3>
                   
                   <div>
@@ -354,7 +354,7 @@ const LandlordListForm = () => {
                 </div>
 
                 {/* Rental Details */}
-                <div className="space-y-4 pt-4 border-t border-zinc-700">
+                <div className="space-y-4 pt-4 border-t border-gray-700">
                   <h3 className="text-lg font-semibold text-white">Rental Details</h3>
                   
                   <div>
@@ -432,7 +432,7 @@ const LandlordListForm = () => {
         </section>
 
         {/* Footer Notice */}
-        <section className="py-8 border-t border-zinc-800">
+        <section className="py-8 border-t border-gray-800">
           <div className="container mx-auto px-4">
             <p className="text-center text-sm text-gray-500 max-w-2xl mx-auto">
               All listings are subject to internal review and compliance checks prior to publication.

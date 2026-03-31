@@ -233,7 +233,7 @@ export default function JBJBrokerMessages() {
               </Button>
               <div>
                 <h1 className="text-black text-xl font-bold">Messages</h1>
-                <span className="text-zinc-600 text-sm">Communicate with your leads</span>
+                <span className="text-gray-600 text-sm">Communicate with your leads</span>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -323,7 +323,7 @@ export default function JBJBrokerMessages() {
                         ? "border-blue-500 text-blue-500"
                         : lead.status === "qualified"
                         ? "border-green-500 text-green-500"
-                        : "border-zinc-500 text-gray-500"
+                        : "border-gray-500 text-gray-500"
                     }
                   >
                     {lead.status}
@@ -348,7 +348,7 @@ export default function JBJBrokerMessages() {
                   </Avatar>
                   <div>
                     <h3 className="font-semibold text-black">{selectedLead.name}</h3>
-                    <p className="text-sm text-zinc-600">
+                    <p className="text-sm text-gray-600">
                       {selectedLead.phone || selectedLead.email}
                     </p>
                   </div>

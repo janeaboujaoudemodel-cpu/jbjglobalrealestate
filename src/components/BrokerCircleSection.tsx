@@ -169,7 +169,7 @@ const BrokerCircleSection = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {SUPPORT_TEAM.map((member, index) => (
               <motion.div key={index} variants={fadeInUp}>
-                <Card className="bg-zinc-900/60 border-zinc-800 hover:border-gold/40 transition-all duration-300 h-full">
+                <Card className="bg-zinc-900/60 border-gray-800 hover:border-gold/40 transition-all duration-300 h-full">
                   <CardContent className="p-5">
                     {/* Icon container with white/gold/champagne pearl fill */}
                     <div className="w-12 h-12 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-xl flex items-center justify-center mb-4 border border-gold/30 shadow-md shadow-gold/20">
@@ -211,7 +211,7 @@ const BrokerCircleSection = () => {
             {AI_TOOLS.map((tool, index) => (
               <motion.div key={index} variants={fadeInUp}>
                 <Link to="/ai-hub">
-                  <Card className="bg-zinc-900/60 border-zinc-800 hover:border-purple-500/40 transition-all duration-300 h-full group">
+                  <Card className="bg-zinc-900/60 border-gray-800 hover:border-purple-500/40 transition-all duration-300 h-full group">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">

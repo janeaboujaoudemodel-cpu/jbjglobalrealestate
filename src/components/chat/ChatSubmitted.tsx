@@ -14,7 +14,7 @@ const ChatSubmitted = ({ userFirstName, onStartNewChat }: ChatSubmittedProps) =>
         <CheckCircle2 className="w-8 h-8 text-gray-700" />
       </div>
       <h4 className="text-black text-lg font-semibold mb-2">Submitted to Our Team!</h4>
-      <p className="text-zinc-600 text-sm text-center mb-6 max-w-[280px]">
+      <p className="text-gray-600 text-sm text-center mb-6 max-w-[280px]">
         Our team will review your inquiry and get back to you within 24 hours.
       </p>
       

@@ -218,7 +218,7 @@ const MeetingConsentSection = ({
         </div>
 
         {/* Agreement text */}
-        <div className="bg-white border border-gold/15 rounded-lg p-3.5 text-zinc-600 text-xs leading-relaxed">
+        <div className="bg-white border border-gold/15 rounded-lg p-3.5 text-gray-600 text-xs leading-relaxed">
           <p className="font-semibold text-black text-xs mb-1.5">Recording Consent Agreement</p>
           {CONSENT_TEXT}
           <p className="text-gray-500 text-[10px] mt-2">
@@ -229,7 +229,7 @@ const MeetingConsentSection = ({
         {/* Client details */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="space-y-1">
-            <Label className="text-zinc-700 text-xs">Client Full Name *</Label>
+            <Label className="text-gray-700 text-xs">Client Full Name *</Label>
             <Input
               value={clientName}
               onChange={(e) => setClientName(e.target.value)}
@@ -238,7 +238,7 @@ const MeetingConsentSection = ({
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-zinc-700 text-xs">Email (optional)</Label>
+            <Label className="text-gray-700 text-xs">Email (optional)</Label>
             <Input
               value={clientEmail}
               onChange={(e) => setClientEmail(e.target.value)}
@@ -247,7 +247,7 @@ const MeetingConsentSection = ({
             />
           </div>
           <div className="space-y-1">
-            <Label className="text-zinc-700 text-xs">Phone (optional)</Label>
+            <Label className="text-gray-700 text-xs">Phone (optional)</Label>
             <Input
               value={clientPhone}
               onChange={(e) => setClientPhone(e.target.value)}
@@ -259,7 +259,7 @@ const MeetingConsentSection = ({
 
         {/* ID Photo Upload */}
         <div className="space-y-1.5">
-          <Label className="text-zinc-700 text-xs flex items-center gap-1.5">
+          <Label className="text-gray-700 text-xs flex items-center gap-1.5">
             <Upload className="h-3 w-3 text-gold" /> Client ID Photo (optional — for identity verification)
           </Label>
           {idPhotoPreview ? (
@@ -283,7 +283,7 @@ const MeetingConsentSection = ({
 
         {/* Signature Pad */}
         <div className="space-y-1.5">
-          <Label className="text-zinc-700 text-xs flex items-center gap-1.5">
+          <Label className="text-gray-700 text-xs flex items-center gap-1.5">
             <PenTool className="h-3 w-3 text-gold" /> Client Signature *
           </Label>
           <div className="relative bg-white border border-gold/30 rounded-lg overflow-hidden">
@@ -317,7 +317,7 @@ const MeetingConsentSection = ({
         <Button
           onClick={handleSubmitConsent}
           disabled={saving || !clientName.trim() || !hasSigned}
-          className="w-full bg-black hover:bg-zinc-800 text-gold font-semibold"
+          className="w-full bg-black hover:bg-gray-800 text-gold font-semibold"
         >
           {saving ? (
             <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Saving Consent...</>

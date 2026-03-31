@@ -190,20 +190,20 @@ export const FAQTableOfContents = ({
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-gradient-to-r from-gold/5 to-transparent">
+      <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-gold/5 to-transparent">
         <div className="flex items-center gap-2">
           <List className="w-5 h-5 text-gold" />
           <h3 className="text-black font-semibold">{title}</h3>
         </div>
         <button
           onClick={() => setIsMinimized(!isMinimized)}
-          className="w-8 h-8 rounded-lg bg-zinc-100 hover:bg-gold/10 flex items-center justify-center transition-colors"
+          className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gold/10 flex items-center justify-center transition-colors"
           aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
         >
           {isMinimized ? (
-            <ChevronDown className="w-4 h-4 text-zinc-600" />
+            <ChevronDown className="w-4 h-4 text-gray-600" />
           ) : (
-            <ChevronUp className="w-4 h-4 text-zinc-600" />
+            <ChevronUp className="w-4 h-4 text-gray-600" />
           )}
         </button>
       </div>
@@ -227,7 +227,7 @@ export const FAQTableOfContents = ({
                 placeholder="Search your question..."
                 value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="pl-10 pr-10 bg-zinc-50 border-zinc-200 focus:border-gold focus:ring-gold/20"
+                className="pl-10 pr-10 bg-gray-50 border-gray-200 focus:border-gold focus:ring-gold/20"
               />
               {searchQuery && (
                 <button
@@ -237,9 +237,9 @@ export const FAQTableOfContents = ({
                     setShowNoResults(false);
                     setShowContactForm(false);
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-zinc-200 hover:bg-zinc-300 flex items-center justify-center transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors"
                 >
-                  <X className="w-3 h-3 text-zinc-600" />
+                  <X className="w-3 h-3 text-gray-600" />
                 </button>
               )}
             </div>
@@ -253,7 +253,7 @@ export const FAQTableOfContents = ({
                     <button
                       key={idx}
                       onClick={() => handleResultClick(result.categoryIndex, result.questionIndex)}
-                      className="w-full text-left text-sm text-zinc-700 hover:text-gold p-2 rounded-md hover:bg-gold/10 transition-colors truncate"
+                      className="w-full text-left text-sm text-gray-700 hover:text-gold p-2 rounded-md hover:bg-gold/10 transition-colors truncate"
                     >
                       {result.question}
                     </button>
@@ -264,7 +264,7 @@ export const FAQTableOfContents = ({
 
             {/* No Results - Show submit option */}
             {showNoResults && !showContactForm && (
-              <div className="mb-4 p-3 bg-zinc-50 rounded-lg border border-zinc-200">
+              <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
                 <div className="flex items-start gap-2 mb-3">
                   <HelpCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                   <div>
@@ -287,28 +287,28 @@ export const FAQTableOfContents = ({
 
             {/* Contact Form for submitting question */}
             {showContactForm && (
-              <div className="mb-4 p-3 bg-zinc-50 rounded-lg border border-zinc-200 space-y-3">
+              <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
                 <p className="text-sm font-medium text-black">Your Contact Details (Optional)</p>
                 <Input
                   type="text"
                   placeholder="Your Name"
                   value={contactInfo.name}
                   onChange={(e) => setContactInfo(prev => ({ ...prev, name: e.target.value }))}
-                  className="bg-white border-zinc-200 text-sm"
+                  className="bg-white border-gray-200 text-sm"
                 />
                 <Input
                   type="email"
                   placeholder="Your Email"
                   value={contactInfo.email}
                   onChange={(e) => setContactInfo(prev => ({ ...prev, email: e.target.value }))}
-                  className="bg-white border-zinc-200 text-sm"
+                  className="bg-white border-gray-200 text-sm"
                 />
                 <Input
                   type="tel"
                   placeholder="Your Phone"
                   value={contactInfo.phone}
                   onChange={(e) => setContactInfo(prev => ({ ...prev, phone: e.target.value }))}
-                  className="bg-white border-zinc-200 text-sm"
+                  className="bg-white border-gray-200 text-sm"
                 />
                 <Button
                   onClick={handleSubmitQuestion}
@@ -340,7 +340,7 @@ export const FAQTableOfContents = ({
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all",
                     activeId === `category-${index}`
                       ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-black font-medium shadow-md border border-gold/40"
-                      : "text-zinc-600 hover:text-black hover:bg-gold/10 border border-transparent hover:border-gold/30"
+                      : "text-gray-600 hover:text-black hover:bg-gold/10 border border-transparent hover:border-gold/30"
                   )}
                 >
                   <category.icon className={cn(

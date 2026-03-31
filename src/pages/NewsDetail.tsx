@@ -94,7 +94,7 @@ function addContentBreathing(html: string): string {
       if ((i + 1) % 3 === 0) {
         // Insert pull quote if available, otherwise separator
         if (pullQuoteIndex < pullQuotes.length) {
-          result.push(`<blockquote class="my-10 py-6 px-8 border-l-4 border-[hsl(var(--gold))] bg-gradient-to-r from-[hsl(var(--gold))]/5 to-transparent rounded-r-xl"><p class="text-lg md:text-xl font-medium text-zinc-800 italic leading-relaxed">"${pullQuotes[pullQuoteIndex]}"</p></blockquote>`);
+          result.push(`<blockquote class="my-10 py-6 px-8 border-l-4 border-[hsl(var(--gold))] bg-gradient-to-r from-[hsl(var(--gold))]/5 to-transparent rounded-r-xl"><p class="text-lg md:text-xl font-medium text-gray-800 italic leading-relaxed">"${pullQuotes[pullQuoteIndex]}"</p></blockquote>`);
           pullQuoteIndex++;
         } else {
           result.push(separator);
@@ -140,7 +140,7 @@ const NewsDetail = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
         <div className="container mx-auto px-4 py-20 text-center">
-          <Newspaper className="w-16 h-16 text-zinc-600 mx-auto mb-4" />
+          <Newspaper className="w-16 h-16 text-gray-600 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-white mb-2">Article Not Found</h1>
           <p className="text-gray-500 mb-6">This article may have been removed or doesn't exist.</p>
           <Link to="/news">
@@ -220,7 +220,7 @@ const NewsDetail = () => {
         <div className="jj-layer-2 !bg-transparent relative z-10">
           <div className="jj-layer-active rounded-2xl p-6 md:p-10 lg:p-14 max-w-4xl mx-auto">
             {/* Meta row */}
-            <div className="flex items-center gap-4 text-sm text-zinc-600 mb-8 pb-6 border-b border-gold/20 flex-wrap">
+            <div className="flex items-center gap-4 text-sm text-gray-600 mb-8 pb-6 border-b border-gold/20 flex-wrap">
               <span className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4" />
                 {formattedDate}
@@ -243,7 +243,7 @@ const NewsDetail = () => {
                   {keyStats.slice(0, 4).map((stat, i) => (
                     <div key={i} className="text-center bg-white/50 rounded-lg p-3 border border-gold/10">
                       <p className="text-xl md:text-2xl font-bold text-gold">{stat.value}</p>
-                      <p className="text-xs text-zinc-600 mt-1">{stat.label}</p>
+                      <p className="text-xs text-gray-600 mt-1">{stat.label}</p>
                     </div>
                   ))}
                 </div>
@@ -263,7 +263,7 @@ const NewsDetail = () => {
                       <div className="w-5 h-5 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0 mt-0.5">
                         <span className="text-[10px] font-bold text-gold">{i + 1}</span>
                       </div>
-                      <p className="text-sm text-zinc-700 leading-relaxed">{point}</p>
+                      <p className="text-sm text-gray-700 leading-relaxed">{point}</p>
                     </div>
                   ))}
                 </div>
@@ -271,23 +271,23 @@ const NewsDetail = () => {
             )}
 
             {/* Excerpt as highlighted quote */}
-            <blockquote className="text-lg md:text-xl text-zinc-700 leading-relaxed mb-8 border-l-4 border-gold/50 pl-6 italic">
+            <blockquote className="text-lg md:text-xl text-gray-700 leading-relaxed mb-8 border-l-4 border-gold/50 pl-6 italic">
               {article.excerpt}
             </blockquote>
 
             {/* Full content with pull quotes and separators */}
             <div
-              className="prose prose-lg max-w-none text-zinc-800 leading-relaxed
+              className="prose prose-lg max-w-none text-gray-800 leading-relaxed
                 prose-headings:text-black prose-headings:font-bold
                 prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h2:border-b prose-h2:border-gold/20 prose-h2:pb-2
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
-                prose-p:text-zinc-700 prose-p:leading-relaxed prose-p:mb-5
+                prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-5
                 prose-strong:text-black
                 prose-a:text-gold prose-a:no-underline hover:prose-a:underline
-                prose-li:text-zinc-700
+                prose-li:text-gray-700
                 prose-img:rounded-xl prose-img:my-8 prose-img:shadow-lg
                 prose-table:border-collapse prose-table:w-full
-                prose-th:bg-champagne-light/50 prose-th:text-left prose-th:p-3 prose-th:text-xs prose-th:font-semibold prose-th:uppercase prose-th:tracking-wider prose-th:text-zinc-600 prose-th:border prose-th:border-gold/20
+                prose-th:bg-champagne-light/50 prose-th:text-left prose-th:p-3 prose-th:text-xs prose-th:font-semibold prose-th:uppercase prose-th:tracking-wider prose-th:text-gray-600 prose-th:border prose-th:border-gold/20
                 prose-td:p-3 prose-td:border prose-td:border-gold/10 prose-td:text-sm"
               dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
@@ -347,19 +347,19 @@ const NewsDetail = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
                   <p className="text-2xl font-bold text-gold">{ytd2026Data.value}</p>
-                  <p className="text-xs text-zinc-600">YTD Value</p>
+                  <p className="text-xs text-gray-600">YTD Value</p>
                 </div>
                 <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
                   <p className="text-2xl font-bold text-gold">{ytd2026Data.transactions.toLocaleString()}+</p>
-                  <p className="text-xs text-zinc-600">Transactions</p>
+                  <p className="text-xs text-gray-600">Transactions</p>
                 </div>
                 <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
                   <p className="text-2xl font-bold text-gold">{ytd2026Data.growth}</p>
-                  <p className="text-xs text-zinc-600">YoY Growth</p>
+                  <p className="text-xs text-gray-600">YoY Growth</p>
                 </div>
                 <div className="text-center bg-white/60 rounded-xl p-4 border border-gold/10">
                   <p className="text-2xl font-bold text-gold">{ytd2026Data.topArea}</p>
-                  <p className="text-xs text-zinc-600">Top Area</p>
+                  <p className="text-xs text-gray-600">Top Area</p>
                 </div>
               </div>
 
@@ -372,14 +372,14 @@ const NewsDetail = () => {
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-zinc-700">Off-plan</span>
+                      <span className="text-sm text-gray-700">Off-plan</span>
                       <span className="text-sm font-bold text-black">~{ytd2026Data.offPlan.toLocaleString()}</span>
                     </div>
-                    <div className="w-full bg-zinc-200 rounded-full h-2">
+                    <div className="w-full bg-gray-200 rounded-full h-2">
                       <div className="bg-gold rounded-full h-2" style={{ width: `${(ytd2026Data.offPlan / (ytd2026Data.offPlan + ytd2026Data.secondary) * 100).toFixed(0)}%` }} />
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-zinc-700">Secondary</span>
+                      <span className="text-sm text-gray-700">Secondary</span>
                       <span className="text-sm font-bold text-black">~{ytd2026Data.secondary.toLocaleString()}</span>
                     </div>
                   </div>
@@ -392,14 +392,14 @@ const NewsDetail = () => {
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-zinc-700">Cash</span>
+                      <span className="text-sm text-gray-700">Cash</span>
                       <span className="text-sm font-bold text-black">~{ytd2026Data.cash.toLocaleString()}</span>
                     </div>
-                    <div className="w-full bg-zinc-200 rounded-full h-2">
+                    <div className="w-full bg-gray-200 rounded-full h-2">
                       <div className="bg-emerald-500 rounded-full h-2" style={{ width: `${(ytd2026Data.cash / (ytd2026Data.cash + ytd2026Data.mortgage) * 100).toFixed(0)}%` }} />
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-zinc-700">Mortgage</span>
+                      <span className="text-sm text-gray-700">Mortgage</span>
                       <span className="text-sm font-bold text-black">~{ytd2026Data.mortgage.toLocaleString()}</span>
                     </div>
                   </div>
@@ -412,7 +412,7 @@ const NewsDetail = () => {
                   </div>
                   <div className="flex flex-col items-center justify-center h-[calc(100%-2rem)]">
                     <p className="text-3xl font-bold text-gold">~{ytd2026Data.gifts.toLocaleString()}</p>
-                    <p className="text-xs text-zinc-600 mt-1">Gift Transfers YTD</p>
+                    <p className="text-xs text-gray-600 mt-1">Gift Transfers YTD</p>
                   </div>
                 </div>
               </div>
@@ -447,7 +447,7 @@ const NewsDetail = () => {
                       <span className="text-lg">{nat.flag}</span>
                       <span className="text-sm font-medium text-black flex-1">{nat.country}</span>
                       <div className="w-20">
-                        <div className="w-full bg-zinc-200 rounded-full h-1.5">
+                        <div className="w-full bg-gray-200 rounded-full h-1.5">
                           <div className="bg-gold rounded-full h-1.5" style={{ width: `${nat.percentage * 4}%` }} />
                         </div>
                       </div>

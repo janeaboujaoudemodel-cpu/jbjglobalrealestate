@@ -296,7 +296,7 @@ export default function ReportAccess() {
           {/* Back Link */}
           <Link
             to="/investor-dashboard"
-            className="inline-flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gold transition-colors mb-8"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Dashboard

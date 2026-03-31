@@ -194,7 +194,7 @@ export default function AIBrokerWorkspace() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
       {/* Header */}
-      <header className="bg-black border-b border-zinc-800 sticky top-0 lg:top-[48px] z-50">
+      <header className="bg-black border-b border-gray-800 sticky top-0 lg:top-[48px] z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -231,7 +231,7 @@ export default function AIBrokerWorkspace() {
                 size="sm"
                 onClick={handleRefresh}
                 disabled={refreshing}
-                className="border-zinc-700 text-gray-300 hover:bg-zinc-800"
+                className="border-gray-700 text-gray-300 hover:bg-gray-800"
               >
                 <RefreshCw className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
               </Button>
@@ -242,7 +242,7 @@ export default function AIBrokerWorkspace() {
 
       <div className="flex">
         {/* Sidebar - Broker Profile */}
-        <aside className="w-64 bg-black border-r border-zinc-800 min-h-[calc(100vh-65px)] p-4">
+        <aside className="w-64 bg-black border-r border-gray-800 min-h-[calc(100vh-65px)] p-4">
           {activeBroker && (
             <div className="space-y-6">
               {/* Broker Card */}
@@ -329,24 +329,24 @@ export default function AIBrokerWorkspace() {
               </div>
 
               {/* Navigation */}
-              <nav className="space-y-1 pt-4 border-t border-zinc-800">
+              <nav className="space-y-1 pt-4 border-t border-gray-800">
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-gray-300 hover:text-white hover:bg-zinc-800"
+                  className="w-full justify-start text-gray-300 hover:text-white hover:bg-gray-800"
                 >
                   <Users className="h-4 w-4 mr-3" />
                   My Leads
                 </Button>
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-gray-300 hover:text-white hover:bg-zinc-800"
+                  className="w-full justify-start text-gray-300 hover:text-white hover:bg-gray-800"
                 >
                   <MessageSquare className="h-4 w-4 mr-3" />
                   Conversations
                 </Button>
                 <Button
                   variant="ghost"
-                  className="w-full justify-start text-gray-300 hover:text-white hover:bg-zinc-800"
+                  className="w-full justify-start text-gray-300 hover:text-white hover:bg-gray-800"
                 >
                   <BarChart3 className="h-4 w-4 mr-3" />
                   Analytics
@@ -360,7 +360,7 @@ export default function AIBrokerWorkspace() {
         <main className="flex-1 p-6 bg-zinc-950">
           <Tabs defaultValue="leads" className="space-y-6">
             <div className="flex items-center justify-between">
-              <TabsList className="bg-zinc-900 border border-zinc-800">
+              <TabsList className="bg-zinc-900 border border-gray-800">
                 <TabsTrigger
                   value="leads"
                   className="data-[state=active]:bg-gold data-[state=active]:text-black"
@@ -391,10 +391,10 @@ export default function AIBrokerWorkspace() {
                     placeholder="Search leads..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 bg-zinc-900 border-zinc-700 text-white w-64"
+                    className="pl-10 bg-zinc-900 border-gray-700 text-white w-64"
                   />
                 </div>
-                <Button variant="outline" className="border-zinc-700 text-gray-300">
+                <Button variant="outline" className="border-gray-700 text-gray-300">
                   <Filter className="h-4 w-4 mr-2" />
                   Filter
                 </Button>

@@ -255,7 +255,7 @@ JBJ Contact Information:
                 {userAssistant.name}
                 <ChevronDown className="w-4 h-4" />
               </button>
-              <p className="text-zinc-600 text-xs">{userAssistant.role}</p>
+              <p className="text-gray-600 text-xs">{userAssistant.role}</p>
             </div>
           </div>
           <button

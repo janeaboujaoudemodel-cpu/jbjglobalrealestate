@@ -103,7 +103,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-zinc-900 border-gray-800">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-gray-400 mb-1">
               <Users className="h-4 w-4" />
@@ -113,7 +113,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-zinc-900 border-gray-800">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-gray-400 mb-1">
               <MessageSquare className="h-4 w-4 text-emerald-500" />
@@ -123,7 +123,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-zinc-900 border-gray-800">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-gray-400 mb-1">
               <Mail className="h-4 w-4 text-blue-500" />
@@ -133,7 +133,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-zinc-900 border-gray-800">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-gray-400 mb-1">
               <Phone className="h-4 w-4 text-purple-500" />
@@ -143,7 +143,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-zinc-900 border-gray-800">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-gray-400 mb-1">
               <TrendingUp className="h-4 w-4 text-gold" />
@@ -155,7 +155,7 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
       </div>
 
       {/* Activity Timeline */}
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-zinc-900 border-gray-800">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
             <Activity className="h-5 w-5 text-gold" />
@@ -174,14 +174,14 @@ export function AIBrokerActivityFeed({ brokerId }: AIBrokerActivityFeedProps) {
                 {stats.map((stat) => (
                   <div
                     key={stat.id}
-                    className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700/50"
+                    className="bg-zinc-800/50 rounded-lg p-4 border border-gray-700/50"
                   >
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-white font-medium">
                         {formatDate(stat.stat_date)}
                       </h3>
                       {stat.avg_response_time_seconds && (
-                        <Badge variant="outline" className="border-zinc-600 text-gray-400">
+                        <Badge variant="outline" className="border-gray-600 text-gray-400">
                           <Clock className="h-3 w-3 mr-1" />
                           Avg: {formatResponseTime(stat.avg_response_time_seconds)}
                         </Badge>

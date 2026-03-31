@@ -198,7 +198,7 @@ const PressKit = () => {
 
       <FounderContent>
       {/* Quick Bio Section - Premium White/Gold Style */}
-      <section className="py-16 border-y border-zinc-800">
+      <section className="py-16 border-y border-gray-800">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -223,11 +223,11 @@ const PressKit = () => {
                 </div>
                 <div className="flex items-center gap-2 bg-black/10 border border-gold/30 rounded-full px-3 py-1">
                   <Shield className="w-3 h-3 text-gold" />
-                  <span className="text-xs text-zinc-600">Protected</span>
+                  <span className="text-xs text-gray-600">Protected</span>
                 </div>
               </div>
               
-              <p className="text-zinc-700 leading-relaxed">
+              <p className="text-gray-700 leading-relaxed">
                 <span className="text-gold font-semibold">Jane Bou Jaoude (جاين بو جودة)</span> is the Founder & CEO of JBJ GLOBAL REAL ESTATE, 
                 a Dubai-based Real Estate brokerage. 
                 Born August 25, 1998, in Lebanon, she founded her first business—Jane's Beauty—at age 16 in 2015 while still studying. 
@@ -261,7 +261,7 @@ const PressKit = () => {
                 </h2>
               </div>
               <div className="bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-lg px-4 py-2 shadow-sm">
-                <p className="text-zinc-700 text-sm">
+                <p className="text-gray-700 text-sm">
                   <Mail className="w-4 h-4 inline mr-2 text-gold" />
                   For media inquiries: <span className="text-gold font-medium">media@JBJ.ae</span>
                 </p>
@@ -411,7 +411,7 @@ const PressKit = () => {
       </section>
 
       {/* Media Contact - Premium champagne Section */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-t border-zinc-200">
+      <section className="py-20 md:py-28 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-t border-gray-200">
         <div className="container mx-auto px-4">
           <motion.div
             initial="hidden"
@@ -433,7 +433,7 @@ const PressKit = () => {
               >
                 Media <span className="text-gold">Contact</span>
               </h2>
-              <p className="text-zinc-600 text-lg mb-10">
+              <p className="text-gray-600 text-lg mb-10">
                 For press inquiries, interview requests, or additional assets, please contact our media relations team.
               </p>
 
@@ -473,7 +473,7 @@ const PressKit = () => {
               <AlertDialogContent className="bg-white border border-gold/30">
                 <AlertDialogHeader>
                   <AlertDialogTitle className="text-black">Contact Options</AlertDialogTitle>
-                  <AlertDialogDescription className="text-zinc-600">
+                  <AlertDialogDescription className="text-gray-600">
                     Choose how you would like to contact JBJ GLOBAL REAL ESTATE.
                   </AlertDialogDescription>
                 </AlertDialogHeader>

@@ -143,7 +143,7 @@ export default function IntegrationWidgets() {
           >
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-sm text-zinc-600">Active Automations</span>
+              <span className="text-sm text-gray-600">Active Automations</span>
             </div>
             <span className="text-sm font-medium text-[#B89555]">
               {loadingAutomations ? '...' : automationsCount}

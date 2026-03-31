@@ -197,7 +197,7 @@ const EmployeeActivityAudit: React.FC<EmployeeActivityAuditProps> = ({ searchQue
                 <Eye className="w-5 h-5 text-gold" />
                 Employee Activity Scores
               </CardTitle>
-              <CardDescription className="text-zinc-600">
+              <CardDescription className="text-gray-600">
                 Real-time performance monitoring
               </CardDescription>
             </div>

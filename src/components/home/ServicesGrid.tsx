@@ -127,7 +127,7 @@ const ServicesGrid = () => {
           </h3>
 
           {/* Description */}
-          <p className="text-sm text-zinc-600 mb-4 leading-relaxed">
+          <p className="text-sm text-gray-600 mb-4 leading-relaxed">
             {service.description}
           </p>
 
@@ -151,7 +151,7 @@ const ServicesGrid = () => {
           >
             {t('services.howCanWeHelp', 'How Can We Help?')}
           </h2>
-          <p className="text-zinc-600 text-sm max-w-md mx-auto">
+          <p className="text-gray-600 text-sm max-w-md mx-auto">
             {t('services.subtitle', 'Whether you\'re buying, selling, renting, or investing—we\'ve got you covered.')}
           </p>
         </div>
@@ -167,7 +167,7 @@ const ServicesGrid = () => {
             className={`absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/95 border-2 border-gold shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollLeft ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             aria-label="Previous service"
           >
-            <ChevronLeft className="w-5 h-5 text-zinc-800 active:text-gold transition-colors" />
+            <ChevronLeft className="w-5 h-5 text-gray-800 active:text-gold transition-colors" />
           </motion.button>
 
           {/* Right Arrow */}
@@ -179,7 +179,7 @@ const ServicesGrid = () => {
             className={`absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/95 border-2 border-gold shadow-lg flex items-center justify-center transition-opacity lg:hidden ${canScrollRight ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             aria-label="Next service"
           >
-            <ChevronRight className="w-5 h-5 text-zinc-800 active:text-gold transition-colors" />
+            <ChevronRight className="w-5 h-5 text-gray-800 active:text-gold transition-colors" />
           </motion.button>
 
           {/* Cards container: horizontal scroll on mobile, grid on desktop */}

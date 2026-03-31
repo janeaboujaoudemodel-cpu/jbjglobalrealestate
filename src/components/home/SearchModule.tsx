@@ -273,7 +273,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {/* Area */}
           <div>
-            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-zinc-600')}>
+            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-gray-600')}>
               <MapPin className="w-3.5 h-3.5 inline mr-1.5" />
               {t('search.area', 'Area')}
             </label>
@@ -293,7 +293,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
 
           {/* Property Type */}
           <div>
-            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-zinc-600')}>
+            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-gray-600')}>
               <Building2 className="w-3.5 h-3.5 inline mr-1.5" />
               {t('search.propertyType', 'Type')}
             </label>
@@ -313,7 +313,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
 
           {/* Bedrooms */}
           <div>
-            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-zinc-600')}>
+            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-gray-600')}>
               <Bed className="w-3.5 h-3.5 inline mr-1.5" />
               {t('search.bedrooms', 'Beds')}
             </label>
@@ -333,7 +333,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
 
           {/* Size Range */}
           <div>
-            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-zinc-600')}>
+            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-gray-600')}>
               <Ruler className="w-3.5 h-3.5 inline mr-1.5" />
               Size ({areaUnit})
             </label>
@@ -353,7 +353,7 @@ const SearchModule = ({ variant = 'hero', className = '' }: SearchModuleProps) =
 
           {/* Price Range */}
           <div>
-            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-zinc-600')}>
+            <label className={cn("text-xs font-semibold mb-2 block", isHero ? 'text-white/80' : 'text-gray-600')}>
               <DollarSign className="w-3.5 h-3.5 inline mr-1.5" />
               Price ({currency})
             </label>

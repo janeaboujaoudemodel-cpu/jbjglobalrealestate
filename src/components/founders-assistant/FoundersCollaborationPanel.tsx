@@ -60,7 +60,7 @@ const departmentColors: Record<string, string> = {
   sales: 'bg-green-50 border-green-200 text-green-700',
   marketing: 'bg-pink-50 border-pink-200 text-pink-700',
   finance: 'bg-amber-50 border-amber-200 text-amber-700',
-  admin: 'bg-zinc-50 border-zinc-200 text-zinc-700',
+  admin: 'bg-gray-50 border-gray-200 text-gray-700',
   it: 'bg-blue-50 border-blue-200 text-blue-700',
 };
 
@@ -175,15 +175,15 @@ export default function FoundersCollaborationPanel() {
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-600">Task Title</Label>
-                  <Input placeholder="e.g., Hire new brokers, Design campaign..." value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} className="bg-zinc-50 border-[#B89555]/20 text-black" />
+                  <Label className="text-gray-600">Task Title</Label>
+                  <Input placeholder="e.g., Hire new brokers, Design campaign..." value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} className="bg-gray-50 border-[#B89555]/20 text-black" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-600">Description</Label>
-                  <Textarea placeholder="Task details..." value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} className="bg-zinc-50 border-[#B89555]/20 text-black min-h-[100px]" />
+                  <Label className="text-gray-600">Description</Label>
+                  <Textarea placeholder="Task details..." value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} className="bg-gray-50 border-[#B89555]/20 text-black min-h-[100px]" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-600">Priority</Label>
+                  <Label className="text-gray-600">Priority</Label>
                   <div className="flex gap-2">
                     {(['low', 'medium', 'high', 'critical'] as const).map((p) => (
                       <Button key={p} size="sm" onClick={() => setNewTask({ ...newTask, priority: p })} className={newTask.priority === p ? 'bg-gradient-to-r from-[#B89555] to-[#A68444] text-white' : 'bg-white text-black border-2 border-[#B89555]/30'}>
@@ -215,11 +215,11 @@ export default function FoundersCollaborationPanel() {
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-600">Topic</Label>
-                  <Input placeholder="Meeting topic..." value={meetingDetails.topic} onChange={(e) => setMeetingDetails({ ...meetingDetails, topic: e.target.value })} className="bg-zinc-50 border-[#B89555]/20 text-black" />
+                  <Label className="text-gray-600">Topic</Label>
+                  <Input placeholder="Meeting topic..." value={meetingDetails.topic} onChange={(e) => setMeetingDetails({ ...meetingDetails, topic: e.target.value })} className="bg-gray-50 border-[#B89555]/20 text-black" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-600">Departments</Label>
+                  <Label className="text-gray-600">Departments</Label>
                   <div className="flex flex-wrap gap-2">
                     {Object.values(DEPARTMENTS).map((dept) => (
                       <Button key={dept.id} size="sm" onClick={() => {
@@ -232,8 +232,8 @@ export default function FoundersCollaborationPanel() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-600">Date & Time</Label>
-                  <Input type="datetime-local" value={meetingDetails.date} onChange={(e) => setMeetingDetails({ ...meetingDetails, date: e.target.value })} className="bg-zinc-50 border-[#B89555]/20 text-black" />
+                  <Label className="text-gray-600">Date & Time</Label>
+                  <Input type="datetime-local" value={meetingDetails.date} onChange={(e) => setMeetingDetails({ ...meetingDetails, date: e.target.value })} className="bg-gray-50 border-[#B89555]/20 text-black" />
                 </div>
               </div>
               <DialogFooter>
@@ -264,7 +264,7 @@ export default function FoundersCollaborationPanel() {
             </Button>
           </CardHeader>
           <CardContent>
-            <pre className="text-black whitespace-pre-wrap text-sm font-mono bg-zinc-50 p-4 rounded-lg border border-zinc-200">{dailySummary}</pre>
+            <pre className="text-black whitespace-pre-wrap text-sm font-mono bg-gray-50 p-4 rounded-lg border border-gray-200">{dailySummary}</pre>
           </CardContent>
         </Card>
       )}
@@ -314,7 +314,7 @@ export default function FoundersCollaborationPanel() {
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-3 gap-2 mb-3">
-                        <div className="text-center p-2 bg-zinc-50 rounded-lg border border-zinc-200">
+                        <div className="text-center p-2 bg-gray-50 rounded-lg border border-gray-200">
                           <p className="text-lg font-bold text-[#B89555]">{deptStats.activeTasks}</p>
                           <p className="text-xs text-gray-500">Active</p>
                         </div>
@@ -376,7 +376,7 @@ export default function FoundersCollaborationPanel() {
                       <p className="text-xs text-gray-500 mb-2">Channels</p>
                       <div className="flex flex-wrap gap-1">
                         {dept.channels.map((ch) => (
-                          <Badge key={ch} variant="outline" className="text-xs border-[#B89555]/30 text-zinc-600">#{ch}</Badge>
+                          <Badge key={ch} variant="outline" className="text-xs border-[#B89555]/30 text-gray-600">#{ch}</Badge>
                         ))}
                       </div>
                     </div>
@@ -386,7 +386,7 @@ export default function FoundersCollaborationPanel() {
                     <p className="text-xs text-gray-500 mb-2">KPIs</p>
                     <div className="flex flex-wrap gap-2">
                       {dept.kpis.map((kpi) => (
-                        <Badge key={kpi.id} className="bg-zinc-50 text-zinc-700 border border-zinc-200">
+                        <Badge key={kpi.id} className="bg-gray-50 text-gray-700 border border-gray-200">
                           {kpi.name}: {kpi.target} {kpi.unit}/{kpi.frequency}
                         </Badge>
                       ))}
@@ -432,7 +432,7 @@ export default function FoundersCollaborationPanel() {
                       <p className="text-xs text-gray-500 mb-1">Capabilities</p>
                       <div className="flex flex-wrap gap-1">
                         {ai.capabilities.slice(0, 3).map((cap, i) => (
-                          <Badge key={i} variant="outline" className="text-xs border-[#B89555]/30 text-zinc-600">{cap}</Badge>
+                          <Badge key={i} variant="outline" className="text-xs border-[#B89555]/30 text-gray-600">{cap}</Badge>
                         ))}
                         {ai.capabilities.length > 3 && (
                           <Badge variant="outline" className="text-xs border-[#B89555]/30 text-gray-500">+{ai.capabilities.length - 3} more</Badge>
@@ -470,7 +470,7 @@ export default function FoundersCollaborationPanel() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}
-                        className="flex items-start gap-3 p-3 bg-zinc-50 rounded-lg border border-zinc-200"
+                        className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
                       >
                         <div className={`p-2 rounded-full ${
                           log.type === 'task_routed' ? 'bg-green-50 border border-green-200' :
@@ -526,7 +526,7 @@ export default function FoundersCollaborationPanel() {
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <Textarea placeholder="Type your message..." value={messageContent} onChange={(e) => setMessageContent(e.target.value)} className="bg-zinc-50 border-[#B89555]/20 text-black min-h-[120px]" />
+            <Textarea placeholder="Type your message..." value={messageContent} onChange={(e) => setMessageContent(e.target.value)} className="bg-gray-50 border-[#B89555]/20 text-black min-h-[120px]" />
           </div>
           <DialogFooter className="flex gap-2">
             {selectedDepartment ? (

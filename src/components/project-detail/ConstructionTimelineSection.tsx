@@ -50,7 +50,7 @@ export default function ConstructionTimelineSection({
 
   // Determine stage based on progress
   const getConstructionStage = (progress: number) => {
-    if (progress === 0) return { label: "Pre-Construction", color: "bg-zinc-500" };
+    if (progress === 0) return { label: "Pre-Construction", color: "bg-gray-500" };
     if (progress < 30) return { label: "Foundation", color: "bg-orange-500" };
     if (progress < 60) return { label: "Superstructure", color: "bg-amber-500" };
     if (progress < 90) return { label: "Finishing", color: "bg-emerald-500" };

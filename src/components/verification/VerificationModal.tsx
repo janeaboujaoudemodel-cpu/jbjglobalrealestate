@@ -246,7 +246,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* Step: Intro */}
           {step === "intro" && (
             <div className="space-y-4 pt-2">
-              <div className="bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.2)] rounded-none p-4 text-sm text-zinc-700 leading-relaxed">
+              <div className="bg-[hsl(var(--gold)/0.1)] border border-[hsl(var(--gold)/0.2)] rounded-none p-4 text-sm text-gray-700 leading-relaxed">
                 <p className="font-medium text-black mb-2">What you'll need:</p>
                 <ul className="space-y-1.5 list-disc list-inside">
                   <li>A clear photo of your government-issued ID (front & back)</li>
@@ -268,7 +268,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* Step: ID Front */}
           {step === "id-front" && (
             <div className="space-y-4 pt-2">
-              <p className="text-sm text-zinc-600">Upload a clear photo of the <strong>front</strong> of your government-issued ID.</p>
+              <p className="text-sm text-gray-600">Upload a clear photo of the <strong>front</strong> of your government-issued ID.</p>
               {renderFileUpload(idFrontPreview, idFrontRef, (f) => handleFileSelect(f, "id-front"), "Upload ID Front", <Upload className="w-8 h-8 text-[hsl(var(--gold))]" />)}
               <div className="flex gap-3">
                 <Button variant="outline" onClick={() => setStep("intro")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-black">Back</Button>
@@ -280,7 +280,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* Step: ID Back */}
           {step === "id-back" && (
             <div className="space-y-4 pt-2">
-              <p className="text-sm text-zinc-600">Upload a clear photo of the <strong>back</strong> of your ID (optional but recommended).</p>
+              <p className="text-sm text-gray-600">Upload a clear photo of the <strong>back</strong> of your ID (optional but recommended).</p>
               {renderFileUpload(idBackPreview, idBackRef, (f) => handleFileSelect(f, "id-back"), "Upload ID Back", <RotateCcw className="w-8 h-8 text-[hsl(var(--gold))]" />)}
               <div className="flex gap-3">
                 <Button variant="outline" onClick={() => setStep("id-front")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-black">Back</Button>
@@ -292,7 +292,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* Step: Selfie Upload */}
           {step === "selfie-upload" && (
             <div className="space-y-4 pt-2">
-              <p className="text-sm text-zinc-600">Take a selfie while holding your ID next to your face.</p>
+              <p className="text-sm text-gray-600">Take a selfie while holding your ID next to your face.</p>
               {renderFileUpload(selfiePreview, selfieInputRef, (f) => handleFileSelect(f, "selfie"), "Upload Selfie with ID", <Camera className="w-8 h-8 text-[hsl(var(--gold))]" />)}
               <div className="flex gap-3">
                 <Button variant="outline" onClick={() => setStep("id-back")} className="flex-1 border-[hsl(var(--gold)/0.3)] text-black">Back</Button>
@@ -304,7 +304,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {/* Step: Liveness Detection */}
           {step === "liveness" && (
             <div className="space-y-4 pt-2">
-              <p className="text-sm text-zinc-600 font-medium">Liveness Verification — follow the instructions below</p>
+              <p className="text-sm text-gray-600 font-medium">Liveness Verification — follow the instructions below</p>
               
               <div className="relative rounded-none overflow-hidden border-2 border-[hsl(var(--gold)/0.3)] bg-black aspect-video">
                 <video ref={videoRef} className="w-full h-full object-cover" muted playsInline />
@@ -353,7 +353,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
           {step === "submitting" && (
             <div className="flex flex-col items-center justify-center py-8 gap-4">
               <Loader2 className="w-10 h-10 text-[hsl(var(--gold))] animate-spin" />
-              <p className="text-sm text-zinc-600 font-medium">Uploading your documents...</p>
+              <p className="text-sm text-gray-600 font-medium">Uploading your documents...</p>
             </div>
           )}
 
@@ -364,7 +364,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                 <CheckCircle2 className="w-8 h-8 text-emerald-500" />
               </div>
               <h3 className="text-lg font-semibold text-black">Verification Submitted!</h3>
-              <p className="text-sm text-zinc-600 max-w-xs">We'll review your documents within 24–48 hours. You'll be notified once verified.</p>
+              <p className="text-sm text-gray-600 max-w-xs">We'll review your documents within 24–48 hours. You'll be notified once verified.</p>
               <Button onClick={() => handleClose(false)} className="mt-2 bg-black text-[hsl(var(--gold))] border border-[hsl(var(--gold)/0.3)] font-semibold">Done</Button>
             </div>
           )}
@@ -376,7 +376,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                 <AlertCircle className="w-8 h-8 text-red-500" />
               </div>
               <h3 className="text-lg font-semibold text-black">Submission Failed</h3>
-              <p className="text-sm text-zinc-600 max-w-xs">{errorMsg}</p>
+              <p className="text-sm text-gray-600 max-w-xs">{errorMsg}</p>
               <Button onClick={() => setStep("selfie-upload")} variant="outline" className="mt-2 border-[hsl(var(--gold)/0.3)] text-black">Try Again</Button>
             </div>
           )}

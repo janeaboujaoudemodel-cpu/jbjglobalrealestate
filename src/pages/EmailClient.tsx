@@ -606,7 +606,7 @@ const EmailClient = () => {
                 <div className="flex items-center gap-3 flex-wrap">
                   <Badge className={cn(
                     "text-xs px-2 py-0.5",
-                    sendViaResend ? "bg-emerald-100 text-emerald-700 border-emerald-300" : "bg-zinc-100 text-zinc-600 border-zinc-300"
+                    sendViaResend ? "bg-emerald-100 text-emerald-700 border-emerald-300" : "bg-gray-100 text-gray-600 border-gray-300"
                   )}>
                     {sendViaResend ? "⚡ Resend API" : "📤 Normal Send"}
                   </Badge>

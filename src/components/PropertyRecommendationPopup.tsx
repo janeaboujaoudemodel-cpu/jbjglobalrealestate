@@ -192,7 +192,7 @@ const PropertyRecommendationPopup = () => {
 
             {topArea && (
               <div className="px-4 pt-3">
-                <p className="text-zinc-600 text-xs">
+                <p className="text-gray-600 text-xs">
                   Based on your interest in <span className="text-gold font-medium capitalize">{topArea}</span>
                 </p>
               </div>

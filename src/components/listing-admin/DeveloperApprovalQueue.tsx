@@ -369,7 +369,7 @@ export const DeveloperApprovalQueue = () => {
                     onClick={() => handleCardClick(developer.slug)}
                   >
                     {/* Feature Image - Fixed height */}
-                    <div className="relative h-[180px] bg-zinc-100 flex-shrink-0">
+                    <div className="relative h-[180px] bg-gray-100 flex-shrink-0">
                       {developer.feature_image_url ? (
                         <img
                           src={developer.feature_image_url}
@@ -417,20 +417,20 @@ export const DeveloperApprovalQueue = () => {
                     <div className="p-4 bg-white flex flex-col flex-grow">
                       {/* Name + arrow - Fixed height */}
                       <div className="flex items-center gap-2 mb-2 h-7 min-h-[28px]">
-                        <h3 className="text-zinc-900 font-semibold text-sm leading-tight truncate flex-1 min-w-0">
+                        <h3 className="text-gray-900 font-semibold text-sm leading-tight truncate flex-1 min-w-0">
                           {developer.name}
                         </h3>
                         <ChevronUp className="w-4 h-4 text-gray-500 rotate-45 flex-shrink-0" />
                       </div>
 
                       {/* Description - Fixed height with line clamp */}
-                      <p className="text-zinc-600 text-xs leading-relaxed mb-4 h-[54px] min-h-[54px] line-clamp-3 overflow-hidden">
+                      <p className="text-gray-600 text-xs leading-relaxed mb-4 h-[54px] min-h-[54px] line-clamp-3 overflow-hidden">
                         {developer.description || "No description available"}
                       </p>
 
                       {/* Action buttons */}
                       <div
-                        className="flex items-center gap-2 pt-3 border-t border-zinc-100 mt-auto"
+                        className="flex items-center gap-2 pt-3 border-t border-gray-100 mt-auto"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <Button
@@ -465,7 +465,7 @@ export const DeveloperApprovalQueue = () => {
                           variant="ghost"
                           onClick={() => window.open(developer.provident_link || "#", "_blank")}
                           disabled={!developer.provident_link}
-                          className="w-8 h-8 p-0 text-gray-500 hover:text-zinc-900"
+                          className="w-8 h-8 p-0 text-gray-500 hover:text-gray-900"
                           title="View Source"
                         >
                           <Pencil className="w-3 h-3" />

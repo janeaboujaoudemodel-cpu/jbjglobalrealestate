@@ -317,7 +317,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all border ${
                     active
                       ? 'bg-gold/15 border-gold/50 text-gold'
-                      : 'bg-zinc-900/60 border-zinc-700 text-white/70 hover:border-zinc-600 hover:text-white/85'
+                      : 'bg-zinc-900/60 border-gray-700 text-white/70 hover:border-gray-600 hover:text-white/85'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -337,7 +337,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 <div className="relative">
                   <Design3DViewer imageUrl={generatedImage} projectName={projectName} />
                   {/* Action buttons */}
-                  <div className="p-4 border-t border-zinc-800 flex gap-3">
+                  <div className="p-4 border-t border-gray-800 flex gap-3">
                     <Button
                       onClick={() => generateDesign()}
                       disabled={isProcessing}
@@ -350,7 +350,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     <Button
                       onClick={() => { setGeneratedImage(null); setGeneratedNotes(''); }}
                       variant="outline"
-                      className="border-zinc-600 text-white/70 hover:bg-zinc-800"
+                      className="border-gray-600 text-white/70 hover:bg-gray-800"
                     >
                       New Design
                     </Button>
@@ -365,7 +365,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   >
                     <X className="w-4 h-4" />
                   </button>
-                  <div className="p-4 border-t border-zinc-800">
+                  <div className="p-4 border-t border-gray-800">
                     <Button
                       onClick={() => generateDesign()}
                       disabled={isProcessing}
@@ -457,7 +457,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             {/* Style Presets (Collapsible) */}
             <Collapsible open={styleOpen} onOpenChange={setStyleOpen}>
               <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl overflow-hidden">
-                <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left hover:bg-zinc-800/30 transition-colors">
+                <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left hover:bg-gray-800/30 transition-colors">
                   <div className="flex items-center gap-2">
                     <Wand2 className="w-4 h-4 text-gold" />
                     <span className="text-sm font-semibold text-white">Design Style</span>
@@ -478,7 +478,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                         className={`p-2.5 rounded-lg border text-left text-xs transition-all ${
                           designStyle === style.id
                             ? 'bg-gold/15 border-gold/50 text-white'
-                            : 'bg-zinc-800/50 border-zinc-700 text-white/70 hover:border-zinc-600'
+                            : 'bg-zinc-800/50 border-gray-700 text-white/70 hover:border-gray-600'
                         }`}
                       >
                         <span className="mr-1.5">{style.emoji}</span>
@@ -493,7 +493,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             {/* Color Palette (Collapsible) */}
             <Collapsible open={paletteOpen} onOpenChange={setPaletteOpen}>
               <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl overflow-hidden">
-                <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left hover:bg-zinc-800/30 transition-colors">
+                <CollapsibleTrigger className="w-full p-4 flex items-center justify-between text-left hover:bg-gray-800/30 transition-colors">
                   <div className="flex items-center gap-2">
                     <div className="w-4 h-4 rounded-full bg-gradient-to-r from-gold via-amber-500 to-amber-400" />
                     <span className="text-sm font-semibold text-white">Color Palette</span>
@@ -514,12 +514,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                         className={`p-3 rounded-lg border transition-all ${
                           colorPalette === palette.id
                             ? 'bg-gold/15 border-gold/50'
-                            : 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600'
+                            : 'bg-zinc-800/50 border-gray-700 hover:border-gray-600'
                         }`}
                       >
                         <div className="flex gap-1 mb-1.5 justify-center">
                           {palette.colors.map((c, i) => (
-                            <div key={i} className="w-5 h-5 rounded-full border border-zinc-600" style={{ backgroundColor: c }} />
+                            <div key={i} className="w-5 h-5 rounded-full border border-gray-600" style={{ backgroundColor: c }} />
                           ))}
                         </div>
                         <span className="text-[10px] text-white/85">{palette.name}</span>
@@ -533,7 +533,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             {/* Inline AI Chat */}
             <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl overflow-hidden flex flex-col" style={{ minHeight: '400px' }}>
               {/* Chat Header */}
-              <div className="p-3 border-b border-zinc-800 flex items-center gap-2">
+              <div className="p-3 border-b border-gray-800 flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gold to-amber-600 flex items-center justify-center">
                   <Bot className="w-4 h-4 text-black" />
                 </div>
@@ -553,7 +553,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       {msg.role === 'user' ? <User className="w-3 h-3 text-gold" /> : <Bot className="w-3 h-3 text-black" />}
                     </div>
                     <div className={`max-w-[85%] rounded-xl p-3 ${
-                      msg.role === 'user' ? 'bg-gold/15 text-white' : 'bg-zinc-800/80 text-zinc-200'
+                      msg.role === 'user' ? 'bg-gold/15 text-white' : 'bg-zinc-800/80 text-gray-200'
                     }`}>
                       {msg.image && (
                         <img src={msg.image} alt="Design" className="rounded-lg mb-2 max-h-[200px] w-auto" />
@@ -566,14 +566,14 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
               </div>
 
               {/* Chat Input */}
-              <div className="p-3 border-t border-zinc-800">
+              <div className="p-3 border-t border-gray-800">
                 <div className="flex gap-2">
                   <Textarea
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Describe changes: 'make the sofa white' or 'add gold accents'..."
-                    className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-gold/50"
+                    className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-gold/50"
                     disabled={isProcessing}
                   />
                   <Button
@@ -599,7 +599,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 value={customNotes}
                 onChange={(e) => setCustomNotes(e.target.value)}
                 placeholder="Floor-to-ceiling windows, marble floors, specific furniture..."
-                className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 min-h-[60px] text-xs focus:border-gold/50"
+                className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 min-h-[60px] text-xs focus:border-gold/50"
                 maxLength={500}
               />
             </div>

@@ -219,7 +219,7 @@ const InvestorServices = () => {
                   <Phone className="w-4 h-4" />
                   Call Now
                 </Button>
-                <Button variant="outline" className="border-zinc-700 text-white/85 hover:bg-zinc-800 px-6 h-11 rounded-lg gap-2" asChild>
+                <Button variant="outline" className="border-gray-700 text-white/85 hover:bg-gray-800 px-6 h-11 rounded-lg gap-2" asChild>
                   <Link to="/contact">
                     Book Consultation
                     <ArrowRight className="w-4 h-4" />

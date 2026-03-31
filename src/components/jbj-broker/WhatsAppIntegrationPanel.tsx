@@ -184,7 +184,7 @@ export function WhatsAppIntegrationPanel({
 
   return (
     <>
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-zinc-900 border-gray-800">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -221,7 +221,7 @@ export function WhatsAppIntegrationPanel({
               {templates.slice(0, 4).map((template) => (
                 <div
                   key={template.id}
-                  className="p-3 rounded-lg bg-zinc-800 border border-zinc-700"
+                  className="p-3 rounded-lg bg-zinc-800 border border-gray-700"
                 >
                   <div className="flex items-center justify-between mb-1">
                     <p className="text-white text-sm font-medium capitalize">
@@ -246,7 +246,7 @@ export function WhatsAppIntegrationPanel({
                     className={`p-2 rounded-lg text-sm ${
                       msg.direction === "outbound"
                         ? "bg-emerald-500/10 border border-emerald-500/20 ml-4"
-                        : "bg-zinc-800 border border-zinc-700 mr-4"
+                        : "bg-zinc-800 border border-gray-700 mr-4"
                     }`}
                   >
                     <p className={msg.direction === "outbound" ? "text-emerald-300" : "text-white"}>
@@ -268,7 +268,7 @@ export function WhatsAppIntegrationPanel({
           )}
 
           {/* Integration Status */}
-          <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700">
+          <div className="p-3 rounded-lg bg-zinc-800/50 border border-gray-700">
             <div className="flex items-center gap-2">
               <AlertCircle className="h-4 w-4 text-amber-400" />
               <span className="text-sm text-gray-400">
@@ -281,7 +281,7 @@ export function WhatsAppIntegrationPanel({
 
       {/* Send Message Dialog */}
       <Dialog open={sendDialogOpen} onOpenChange={setSendDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white max-w-lg">
+        <DialogContent className="bg-zinc-900 border-gray-700 text-white max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <MessageCircle className="h-5 w-5 text-emerald-400" />
@@ -290,7 +290,7 @@ export function WhatsAppIntegrationPanel({
           </DialogHeader>
           
           <div className="space-y-4">
-            <div className="p-3 rounded-lg bg-zinc-800 border border-zinc-700">
+            <div className="p-3 rounded-lg bg-zinc-800 border border-gray-700">
               <p className="text-sm text-gray-400">Sending to:</p>
               <p className="text-white font-medium">{leadName || "Lead"}</p>
               <p className="text-emerald-400 text-sm">{leadPhone}</p>
@@ -299,10 +299,10 @@ export function WhatsAppIntegrationPanel({
             <div>
               <label className="text-sm text-gray-400 mb-2 block">Select Template (Optional)</label>
               <Select value={selectedTemplate} onValueChange={handleTemplateSelect}>
-                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                <SelectTrigger className="bg-zinc-800 border-gray-700 text-white">
                   <SelectValue placeholder="Choose a template..." />
                 </SelectTrigger>
-                <SelectContent className="bg-zinc-800 border-zinc-700">
+                <SelectContent className="bg-zinc-800 border-gray-700">
                   {templates.map((template) => (
                     <SelectItem key={template.id} value={template.id}>
                       {template.template_name} ({template.template_type})
@@ -318,7 +318,7 @@ export function WhatsAppIntegrationPanel({
                 value={customMessage}
                 onChange={(e) => setCustomMessage(e.target.value)}
                 placeholder="Type your message..."
-                className="bg-zinc-800 border-zinc-700 text-white min-h-[120px]"
+                className="bg-zinc-800 border-gray-700 text-white min-h-[120px]"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Messages are filtered for restricted content before sending
@@ -330,7 +330,7 @@ export function WhatsAppIntegrationPanel({
             <Button
               variant="outline"
               onClick={() => setSendDialogOpen(false)}
-              className="border-zinc-700 text-gray-300"
+              className="border-gray-700 text-gray-300"
             >
               Cancel
             </Button>

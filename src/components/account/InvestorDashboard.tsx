@@ -193,7 +193,7 @@ const InvestorDashboard = () => {
       case 'in_progress':
         return 'bg-amber-500/10 text-amber-600 border-amber-500/30';
       default:
-        return 'bg-zinc-500/10 text-zinc-600 border-zinc-500/30';
+        return 'bg-gray-500/10 text-gray-600 border-gray-500/30';
     }
   };
 
@@ -397,7 +397,7 @@ const InvestorDashboard = () => {
                 ) : (
                   <div className="space-y-3">
                     {tickets.slice(0, 3).map((ticket) => (
-                      <div key={ticket.id} className="flex items-center justify-between p-3 rounded-lg bg-zinc-50 border border-zinc-200">
+                      <div key={ticket.id} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-200">
                         <div className="flex items-center gap-3">
                           <MessageCircle className="h-4 w-4 text-gold" />
                           <div>
@@ -409,7 +409,7 @@ const InvestorDashboard = () => {
                       </div>
                     ))}
                     {ideas.slice(0, 2).map((idea) => (
-                      <div key={idea.id} className="flex items-center justify-between p-3 rounded-lg bg-zinc-50 border border-zinc-200">
+                      <div key={idea.id} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-gray-200">
                         <div className="flex items-center gap-3">
                           <Lightbulb className="h-4 w-4 text-gold" />
                           <div>
@@ -452,7 +452,7 @@ const InvestorDashboard = () => {
               ) : (
                 <div className="space-y-3">
                   {tickets.map((ticket) => (
-                    <div key={ticket.id} className="flex items-center justify-between p-4 rounded-xl bg-white border-2 border-zinc-200 hover:border-gold/30 transition-colors">
+                    <div key={ticket.id} className="flex items-center justify-between p-4 rounded-xl bg-white border-2 border-gray-200 hover:border-gold/30 transition-colors">
                       <div className="flex items-center gap-4">
                         <div className="p-2 rounded-lg bg-gold/10">
                           <MessageCircle className="h-5 w-5 text-gold" />
@@ -498,7 +498,7 @@ const InvestorDashboard = () => {
               ) : (
                 <div className="space-y-3">
                   {ideas.map((idea) => (
-                    <div key={idea.id} className="flex items-center justify-between p-4 rounded-xl bg-white border-2 border-zinc-200 hover:border-gold/30 transition-colors">
+                    <div key={idea.id} className="flex items-center justify-between p-4 rounded-xl bg-white border-2 border-gray-200 hover:border-gold/30 transition-colors">
                       <div className="flex items-center gap-4">
                         <div className="p-2 rounded-lg bg-gold/10">
                           <Lightbulb className="h-5 w-5 text-gold" />
@@ -577,15 +577,15 @@ const InvestorDashboard = () => {
                   </>
                 ) : (
                   <>
-                    <div className="flex items-center justify-between py-2 border-b border-zinc-200">
+                    <div className="flex items-center justify-between py-2 border-b border-gray-200">
                       <span className="text-gray-500">Full Name</span>
                       <span className="font-medium text-black">{profile?.full_name || 'Not set'}</span>
                     </div>
-                    <div className="flex items-center justify-between py-2 border-b border-zinc-200">
+                    <div className="flex items-center justify-between py-2 border-b border-gray-200">
                       <span className="text-gray-500">Email</span>
                       <span className="font-medium text-black">{user?.email}</span>
                     </div>
-                    <div className="flex items-center justify-between py-2 border-b border-zinc-200">
+                    <div className="flex items-center justify-between py-2 border-b border-gray-200">
                       <span className="text-gray-500">Phone</span>
                       <span className="font-medium text-black">{profile?.phone || 'Not set'}</span>
                     </div>

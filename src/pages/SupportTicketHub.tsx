@@ -161,7 +161,7 @@ const SupportTicketHub = () => {
   const isSomeSelected = selectedTicketIds.size > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] text-zinc-900">
+    <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] text-gray-900">
       {/* Header */}
       <div className="border-b border-gold/20 bg-gradient-to-b from-zinc-900 to-black">
         <div className="max-w-[1600px] mx-auto px-6 py-6">
@@ -298,7 +298,7 @@ const SupportTicketHub = () => {
                   </SelectItem>
                   <SelectItem value="low">
                     <span className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-zinc-500" />
+                      <span className="w-2 h-2 rounded-full bg-gray-500" />
                       <span className="text-white/70">Low</span>
                     </span>
                   </SelectItem>
@@ -424,7 +424,7 @@ const SupportTicketHub = () => {
                                 ? "bg-gold/15 border-l-4 border-l-gold"
                                 : isSelected
                                 ? "bg-gold/10"
-                                : "hover:bg-zinc-800/50"
+                                : "hover:bg-gray-800/50"
                             )}
                           >
                             <TableCell onClick={(e) => e.stopPropagation()} className="px-2">
@@ -524,7 +524,7 @@ const SupportTicketHub = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-zinc-800 border-zinc-700 text-white hover:bg-zinc-700">
+            <AlertDialogCancel className="bg-zinc-800 border-gray-700 text-white hover:bg-gray-700">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

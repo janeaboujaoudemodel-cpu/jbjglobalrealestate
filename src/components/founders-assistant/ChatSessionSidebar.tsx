@@ -95,7 +95,7 @@ export function ChatSessionSidebar({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 text-gray-500 hover:bg-zinc-100"
+                className="h-6 w-6 text-gray-500 hover:bg-gray-100"
                 onClick={() => { setSelectMode(false); setSelected(new Set()); }}
               >
                 <X className="w-3 h-3" />
@@ -158,7 +158,7 @@ export function ChatSessionSidebar({
               >
                 {selectMode && (
                   <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
-                    selected.has(session.id) ? 'bg-[#B89555] border-[#B89555]' : 'border-zinc-300'
+                    selected.has(session.id) ? 'bg-[#B89555] border-[#B89555]' : 'border-gray-300'
                   }`}>
                     {selected.has(session.id) && (
                       <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -172,7 +172,7 @@ export function ChatSessionSidebar({
                 }`} />
                 <div className="flex-1 min-w-0">
                   <p className={`text-xs font-medium truncate ${
-                    activeSessionId === session.id ? 'text-black' : 'text-zinc-700'
+                    activeSessionId === session.id ? 'text-black' : 'text-gray-700'
                   }`}>
                     {session.title}
                   </p>
@@ -187,7 +187,7 @@ export function ChatSessionSidebar({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity text-gray-500 hover:text-zinc-600"
+                        className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity text-gray-500 hover:text-gray-600"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <MoreVertical className="w-3 h-3" />

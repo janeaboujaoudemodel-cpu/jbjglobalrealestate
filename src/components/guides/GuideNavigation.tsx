@@ -35,7 +35,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
               <Home className="w-7 h-7 text-black" />
             </div>
             <h3 className="text-xl font-bold text-black mb-3">New to UAE Real Estate?</h3>
-            <p className="text-zinc-600 text-sm mb-5 max-w-md mx-auto leading-relaxed">
+            <p className="text-gray-600 text-sm mb-5 max-w-md mx-auto leading-relaxed">
               Start with our Buyer Guide to understand the fundamentals of purchasing property in the UAE.
             </p>
             <Link 
@@ -65,7 +65,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
                   <p className="text-gray-500 text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold">Previous Guide</p>
                   <p className="text-black font-bold group-hover:text-gold transition-colors text-lg md:text-xl lg:text-2xl">{prevGuide.title}</p>
                   {prevGuide.description && (
-                    <p className="text-zinc-600 text-sm mt-1 md:mt-2 hidden md:block">{prevGuide.description}</p>
+                    <p className="text-gray-600 text-sm mt-1 md:mt-2 hidden md:block">{prevGuide.description}</p>
                   )}
                 </div>
               </div>
@@ -84,7 +84,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
                   <p className="text-gold text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold">Next Guide</p>
                   <p className="text-black font-bold group-hover:text-gold transition-colors text-lg md:text-xl lg:text-2xl">{nextGuide.title}</p>
                   {nextGuide.description && (
-                    <p className="text-zinc-600 text-sm mt-1 md:mt-2 hidden md:block">{nextGuide.description}</p>
+                    <p className="text-gray-600 text-sm mt-1 md:mt-2 hidden md:block">{nextGuide.description}</p>
                   )}
                 </div>
                 {/* Active color icon box */}
@@ -100,7 +100,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
 
         {/* All Guides Links */}
         <div className="mt-8 pt-6 border-t border-gold/30">
-          <p className="text-center text-sm text-zinc-600 font-medium uppercase tracking-wider mb-4">All Guides</p>
+          <p className="text-center text-sm text-gray-600 font-medium uppercase tracking-wider mb-4">All Guides</p>
           <div className="flex flex-wrap justify-center gap-3">
             {guides.map((guide) => (
               <Link
@@ -109,7 +109,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
                 className={`px-4 md:px-5 py-2 md:py-2.5 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 border-2 ${
                   guide.path === current
                     ? "bg-gradient-to-br from-[#D8C7A6] via-[#C8B89A] to-[#B8A888] text-black border-gold shadow-[0_6px_20px_rgba(200,167,102,0.35)]"
-                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-zinc-700 hover:text-black border-gold/50 hover:border-gold shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:shadow-[0_8px_25px_rgba(200,167,102,0.35)] hover:-translate-y-0.5"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-gray-700 hover:text-black border-gold/50 hover:border-gold shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:shadow-[0_8px_25px_rgba(200,167,102,0.35)] hover:-translate-y-0.5"
                 }`}
               >
                 {guide.title}

@@ -459,7 +459,7 @@ const Services = () => {
       </section>
 
       {/* Footer Disclaimer */}
-      <section className="bg-black py-8 border-t border-zinc-800">
+      <section className="bg-black py-8 border-t border-gray-800">
         <div className="container mx-auto px-4 text-center">
           <p className="text-white/60 text-sm max-w-3xl mx-auto">
             JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided 

@@ -114,7 +114,7 @@ export const MarketIntelligenceTableOfContents = ({
                 </div>
                 <div>
                   <h4 className="font-semibold text-black text-sm mb-1">Quick Navigation</h4>
-                  <p className="text-zinc-600 text-xs leading-relaxed">
+                  <p className="text-gray-600 text-xs leading-relaxed">
                     Click any section button to jump directly to that part of the page. The active section is highlighted in gold.
                   </p>
                 </div>
@@ -140,20 +140,20 @@ export const MarketIntelligenceTableOfContents = ({
         className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl overflow-hidden shadow-lg max-h-[calc(100vh-200px)] jj-scrollbar-gold"
       >
         {/* Header with minimize button */}
-        <div className="flex items-center justify-between p-4 border-b border-zinc-200 bg-gradient-to-r from-gold/5 to-transparent">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-gold/5 to-transparent">
           <div className="flex items-center gap-2">
             <List className="w-5 h-5 text-gold" />
             <h3 className="text-black font-semibold">{title}</h3>
           </div>
           <button
             onClick={() => setIsMinimized(!isMinimized)}
-            className="w-8 h-8 rounded-lg bg-zinc-100 hover:bg-gold/10 flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gold/10 flex items-center justify-center transition-colors"
             aria-label={isMinimized ? "Expand navigation" : "Minimize navigation"}
           >
             {isMinimized ? (
-              <ChevronDown className="w-4 h-4 text-zinc-600" />
+              <ChevronDown className="w-4 h-4 text-gray-600" />
             ) : (
-              <ChevronUp className="w-4 h-4 text-zinc-600" />
+              <ChevronUp className="w-4 h-4 text-gray-600" />
             )}
           </button>
         </div>
@@ -176,7 +176,7 @@ export const MarketIntelligenceTableOfContents = ({
                     "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-all",
                     activeId === item.id
                       ? "bg-gradient-to-r from-champagne-light via-champagne to-champagne-dark text-black font-medium shadow-md border border-gold/40"
-                      : "text-zinc-600 hover:text-black hover:bg-gold/10 border border-transparent hover:border-gold/30"
+                      : "text-gray-600 hover:text-black hover:bg-gold/10 border border-transparent hover:border-gold/30"
                   )}
                 >
                   <span className={cn(

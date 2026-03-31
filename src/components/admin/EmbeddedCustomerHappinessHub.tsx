@@ -271,7 +271,7 @@ export const EmbeddedCustomerHappinessHub = () => {
       case "in_progress":
         return <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/40"><Clock className="w-3 h-3 mr-1" />In Progress</Badge>;
       default:
-        return <Badge className="bg-zinc-500/20 text-zinc-600 border-zinc-500/40">{status}</Badge>;
+        return <Badge className="bg-gray-500/20 text-gray-600 border-gray-500/40">{status}</Badge>;
     }
   };
 
@@ -462,7 +462,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                             type="checkbox"
                             checked={selectedReviewIds.has(review.id)}
                             onChange={() => toggleReviewSelect(review.id)}
-                            className="mt-1 h-4 w-4 rounded border-zinc-300 text-gold focus:ring-gold"
+                            className="mt-1 h-4 w-4 rounded border-gray-300 text-gold focus:ring-gold"
                           />
                           {/* Content */}
                           <div className="flex-1 cursor-pointer" onClick={() => setSelectedReview(review)}>
@@ -470,10 +470,10 @@ export const EmbeddedCustomerHappinessHub = () => {
                               <span className="font-semibold text-black">{review.full_name}</span>
                               {renderStars(review.rating)}
                               {getStatusBadge(review.status)}
-                              {review.is_anonymous && <Badge className="bg-zinc-100 text-zinc-600 border-zinc-300 text-xs">Anonymous</Badge>}
+                              {review.is_anonymous && <Badge className="bg-gray-100 text-gray-600 border-gray-300 text-xs">Anonymous</Badge>}
                               {review.feature_key && <Badge className="bg-blue-50 text-blue-600 border-blue-200 text-xs">{review.feature_key}</Badge>}
                             </div>
-                            <p className="text-sm text-zinc-600 line-clamp-2">{review.review_text}</p>
+                            <p className="text-sm text-gray-600 line-clamp-2">{review.review_text}</p>
                             {review.improve_text && (
                               <p className="text-xs text-gray-500 mt-1 italic">Suggestion: {review.improve_text}</p>
                             )}
@@ -528,10 +528,10 @@ export const EmbeddedCustomerHappinessHub = () => {
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
                               <span className="font-semibold text-black">{issue.user_name}</span>
-                              <Badge className="bg-zinc-100 text-zinc-700 border-zinc-300">{issue.issue_category}</Badge>
+                              <Badge className="bg-gray-100 text-gray-700 border-gray-300">{issue.issue_category}</Badge>
                               {getStatusBadge(issue.status)}
                             </div>
-                            <p className="text-sm text-zinc-600 line-clamp-2">{issue.issue_description}</p>
+                            <p className="text-sm text-gray-600 line-clamp-2">{issue.issue_description}</p>
                             <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
                               <span>{issue.tool_name}</span>
                               <span>•</span>
@@ -602,7 +602,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                             {idea.idea_title && (
                               <p className="font-medium text-black mb-1">{idea.idea_title}</p>
                             )}
-                            <p className="text-sm text-zinc-600 line-clamp-2">{idea.idea}</p>
+                            <p className="text-sm text-gray-600 line-clamp-2">{idea.idea}</p>
                             <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
                               <span>{new Date(idea.created_at).toLocaleDateString()}</span>
                               {idea.email && <span>{idea.email}</span>}
@@ -637,7 +637,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <div>
                   <p className="font-semibold text-black">{selectedReview.full_name}</p>
                   <p className="text-sm text-gray-500">{selectedReview.email}</p>
-                  {selectedReview.is_anonymous && <Badge className="mt-1 bg-zinc-100 text-zinc-600 border-zinc-300 text-xs">Anonymous</Badge>}
+                  {selectedReview.is_anonymous && <Badge className="mt-1 bg-gray-100 text-gray-600 border-gray-300 text-xs">Anonymous</Badge>}
                 </div>
                 <div className="text-right">
                   {renderStars(selectedReview.rating)}
@@ -648,7 +648,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                 </div>
               </div>
 
-              <div className="p-4 bg-zinc-50 rounded-lg border border-zinc-200">
+              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                 <p className="text-black">{selectedReview.review_text}</p>
               </div>
 
@@ -660,7 +660,7 @@ export const EmbeddedCustomerHappinessHub = () => {
               )}
 
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm text-zinc-600">Would recommend:</span>
+                <span className="text-sm text-gray-600">Would recommend:</span>
                 <Badge className="bg-gold/20 text-gold border-gold/40">{selectedReview.would_recommend}</Badge>
                 {selectedReview.publish_requested && <Badge className="bg-green-50 text-green-600 border-green-200 text-xs">Wants publishing</Badge>}
               </div>
@@ -669,7 +669,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
               {/* Action buttons for any non-approved status */}
               <div>
-                <label className="text-sm text-zinc-600 mb-2 block">Admin Notes (optional)</label>
+                <label className="text-sm text-gray-600 mb-2 block">Admin Notes (optional)</label>
                 <Textarea
                   value={adminNotes}
                   onChange={(e) => setAdminNotes(e.target.value)}
@@ -733,13 +733,13 @@ export const EmbeddedCustomerHappinessHub = () => {
               
               <div>
                 <p className="text-xs text-gray-500 mb-1">Idea</p>
-                <p className="text-black bg-zinc-50 p-3 rounded-lg">{selectedIdea.idea}</p>
+                <p className="text-black bg-gray-50 p-3 rounded-lg">{selectedIdea.idea}</p>
               </div>
               
               {selectedIdea.expected_benefit && (
                 <div>
                   <p className="text-xs text-gray-500 mb-1">Expected Benefit</p>
-                  <p className="text-black bg-zinc-50 p-3 rounded-lg">{selectedIdea.expected_benefit}</p>
+                  <p className="text-black bg-gray-50 p-3 rounded-lg">{selectedIdea.expected_benefit}</p>
                 </div>
               )}
 
@@ -751,7 +751,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       value={adminNotes}
                       onChange={(e) => setAdminNotes(e.target.value)}
                       placeholder="Add notes about this idea..."
-                      className="bg-zinc-50 border-gold/30 text-black"
+                      className="bg-gray-50 border-gold/30 text-black"
                     />
                   </div>
                   <div className="flex gap-3">

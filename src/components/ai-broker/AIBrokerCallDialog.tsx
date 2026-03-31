@@ -135,7 +135,7 @@ export function AIBrokerCallDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-zinc-700 max-w-md">
+      <DialogContent className="bg-zinc-900 border-gray-700 max-w-md">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <Phone className="h-5 w-5 text-purple-500" />
@@ -147,7 +147,7 @@ export function AIBrokerCallDialog({
           {/* Phone Number Display */}
           <div>
             <Label className="text-gray-300">Phone Number</Label>
-            <div className="bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 mt-1 text-white font-mono">
+            <div className="bg-zinc-800 border border-gray-700 rounded-md px-3 py-2 mt-1 text-white font-mono">
               {lead.phone || "N/A"}
             </div>
           </div>
@@ -189,10 +189,10 @@ export function AIBrokerCallDialog({
           <div>
             <Label className="text-gray-300">Call Outcome</Label>
             <Select value={callStatus} onValueChange={setCallStatus}>
-              <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+              <SelectTrigger className="bg-zinc-800 border-gray-700 text-white mt-1">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700">
+              <SelectContent className="bg-zinc-900 border-gray-700">
                 <SelectItem value="completed">Completed</SelectItem>
                 <SelectItem value="no_answer">No Answer</SelectItem>
                 <SelectItem value="busy">Busy</SelectItem>
@@ -209,12 +209,12 @@ export function AIBrokerCallDialog({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Summary of the call discussion..."
-              className="bg-zinc-800 border-zinc-700 text-white mt-1 min-h-[100px]"
+              className="bg-zinc-800 border-gray-700 text-white mt-1 min-h-[100px]"
             />
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-zinc-800">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-800">
             <Button
               variant="secondary"
               onClick={() => onOpenChange(false)}

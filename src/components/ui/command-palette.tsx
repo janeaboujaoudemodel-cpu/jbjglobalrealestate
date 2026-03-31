@@ -206,7 +206,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
             <Mic className="w-3.5 h-3.5 text-gold" />
             <span className="text-xs text-gold font-medium">Voice</span>
           </div>
-          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded bg-zinc-100 text-gray-500 text-xs font-medium">
+          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded bg-gray-100 text-gray-500 text-xs font-medium">
             ESC
           </kbd>
         </div>
@@ -236,12 +236,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                           'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200',
                           isSelected 
                             ? 'bg-gradient-to-r from-gold/10 to-gold/5 text-black' 
-                            : 'hover:bg-gold/5 text-zinc-700'
+                            : 'hover:bg-gold/5 text-gray-700'
                         )}
                       >
                         <div className={cn(
                           'p-2 rounded-lg transition-colors',
-                          isSelected ? 'bg-gold/20 text-gold' : 'bg-zinc-100 text-zinc-600'
+                          isSelected ? 'bg-gold/20 text-gold' : 'bg-gray-100 text-gray-600'
                         )}>
                           {item.icon}
                         </div>
@@ -252,7 +252,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                           )}
                         </div>
                         {item.shortcut && (
-                          <kbd className="px-2 py-1 rounded bg-zinc-100 text-gray-500 text-xs font-medium">
+                          <kbd className="px-2 py-1 rounded bg-gray-100 text-gray-500 text-xs font-medium">
                             {item.shortcut}
                           </kbd>
                         )}
@@ -281,11 +281,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
         <div className="flex items-center justify-between px-4 py-2.5 border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white text-xs text-gray-500">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-zinc-100 font-medium">↑↓</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-gray-100 font-medium">↑↓</kbd>
               Navigate
             </span>
             <span className="flex items-center gap-1">
-              <kbd className="px-1.5 py-0.5 rounded bg-zinc-100 font-medium">↵</kbd>
+              <kbd className="px-1.5 py-0.5 rounded bg-gray-100 font-medium">↵</kbd>
               Select
             </span>
           </div>

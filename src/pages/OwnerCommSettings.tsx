@@ -281,7 +281,7 @@ export default function OwnerCommSettings() {
                               className="flex items-center justify-between p-3 rounded-xl border border-gold/20 bg-white"
                             >
                               <div className="flex items-center gap-3">
-                                <div className={`p-2 rounded-lg bg-zinc-50 ${chType?.color || 'text-gray-500'}`}>
+                                <div className={`p-2 rounded-lg bg-gray-50 ${chType?.color || 'text-gray-500'}`}>
                                   <Icon className="h-5 w-5" />
                                 </div>
                                 <div>
@@ -507,7 +507,7 @@ export default function OwnerCommSettings() {
                   </div>
 
                   <div className="p-4 rounded-xl bg-gold/5 border border-gold/20">
-                    <p className="text-sm text-zinc-600">
+                    <p className="text-sm text-gray-600">
                       <Shield className="h-4 w-4 inline mr-1 text-gold" />
                       Your voice clone is used exclusively for generating voice notes. 
                       It is never used for phone calls or real-time conversations.

@@ -67,7 +67,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           </div>
         )}
 
-        <p className="text-[9px] text-zinc-600 leading-relaxed">
+        <p className="text-[9px] text-gray-600 leading-relaxed">
           Sources: DLD, RERA, DXB Interact. For informational purposes only.{" "}
           <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
         </p>

@@ -39,7 +39,7 @@ export default function AlertsDemo() {
 
       {/* 1 — Brand Intro Splash */}
       <DemoSection title="1. Brand Intro Splash" description="Shown once per session on first visit. Logo animation + auto-play music.">
-        <div className="rounded-xl overflow-hidden border border-zinc-200 relative" style={{ height: 420 }}>
+        <div className="rounded-xl overflow-hidden border border-gray-200 relative" style={{ height: 420 }}>
           <div className="absolute inset-0 bg-black flex flex-col items-center justify-center">
             <div className="animate-in zoom-in-50 fade-in duration-700">
               <img
@@ -66,9 +66,9 @@ export default function AlertsDemo() {
 
       {/* 2 — Owner Tasks Popup */}
       <DemoSection title="2. Owner Tasks Popup" description="Shown to owner on login when pending tasks exist. Once per day.">
-        <div className="rounded-xl overflow-hidden border border-zinc-200 relative flex items-center justify-center bg-black/40 backdrop-blur-sm" style={{ height: 360 }}>
+        <div className="rounded-xl overflow-hidden border border-gray-200 relative flex items-center justify-center bg-black/40 backdrop-blur-sm" style={{ height: 360 }}>
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[hsl(var(--gold))]/50 rounded-2xl shadow-2xl p-6 max-w-md w-[90%] relative">
-            <button className="absolute top-3 right-3 text-gray-500 hover:text-zinc-600"><X className="w-5 h-5" /></button>
+            <button className="absolute top-3 right-3 text-gray-500 hover:text-gray-600"><X className="w-5 h-5" /></button>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/20 to-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))]/40 flex items-center justify-center">
                 <AlertTriangle className="w-6 h-6 text-[hsl(var(--gold))]" />
@@ -83,7 +83,7 @@ export default function AlertsDemo() {
             </div>
             <div className="flex gap-3">
               <Button className="flex-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[#A68444] text-black font-bold rounded-xl">View Tasks <ArrowRight className="w-4 h-4 ml-2" /></Button>
-              <Button variant="outline" className="border-[hsl(var(--gold))]/30 text-zinc-600 rounded-xl">Later</Button>
+              <Button variant="outline" className="border-[hsl(var(--gold))]/30 text-gray-600 rounded-xl">Later</Button>
             </div>
           </div>
         </div>
@@ -91,9 +91,9 @@ export default function AlertsDemo() {
 
       {/* 3 — User Tasks + Ticket Updates Popup */}
       <DemoSection title="3. User Notifications Popup" description="Shown to regular users when they have ticket replies or pending tasks. Once per 24h.">
-        <div className="rounded-xl overflow-hidden border border-zinc-200 relative flex items-center justify-center bg-black/40 backdrop-blur-sm" style={{ height: 460 }}>
+        <div className="rounded-xl overflow-hidden border border-gray-200 relative flex items-center justify-center bg-black/40 backdrop-blur-sm" style={{ height: 460 }}>
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[hsl(var(--gold))]/50 rounded-2xl shadow-2xl p-6 max-w-md w-[90%] relative">
-            <button className="absolute top-3 right-3 text-gray-500 hover:text-zinc-600"><X className="w-5 h-5" /></button>
+            <button className="absolute top-3 right-3 text-gray-500 hover:text-gray-600"><X className="w-5 h-5" /></button>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/20 to-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))]/40 flex items-center justify-center">
                 <Bell className="w-6 h-6 text-[hsl(var(--gold))]" />
@@ -110,14 +110,14 @@ export default function AlertsDemo() {
                 <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
                 <div>
                   <p className="text-black font-semibold text-sm">Ticket #1042 Resolved</p>
-                  <p className="text-zinc-600 text-xs">Your maintenance request has been completed.</p>
+                  <p className="text-gray-600 text-xs">Your maintenance request has been completed.</p>
                 </div>
               </div>
               <div className="bg-green-50 border border-green-200 rounded-xl p-3 flex items-start gap-2.5">
                 <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
                 <div>
                   <p className="text-black font-semibold text-sm">New reply on Ticket #1038</p>
-                  <p className="text-zinc-600 text-xs">Our team has responded to your inquiry.</p>
+                  <p className="text-gray-600 text-xs">Our team has responded to your inquiry.</p>
                 </div>
               </div>
             </div>
@@ -134,7 +134,7 @@ export default function AlertsDemo() {
               <Button className="flex-1 bg-gradient-to-r from-[hsl(var(--gold))] to-[#A68444] text-black font-bold rounded-xl">
                 View Tasks <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
-              <Button variant="outline" className="border-[hsl(var(--gold))]/30 text-zinc-600 rounded-xl">Later</Button>
+              <Button variant="outline" className="border-[hsl(var(--gold))]/30 text-gray-600 rounded-xl">Later</Button>
             </div>
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function AlertsDemo() {
 
       {/* 4 — Global Back Button */}
       <DemoSection title="4. Global Back Button" description="Always visible in the header bar on every page. Navigates back or to home.">
-        <div className="rounded-xl overflow-hidden border border-zinc-200 bg-white p-6 flex items-center gap-4">
+        <div className="rounded-xl overflow-hidden border border-gray-200 bg-white p-6 flex items-center gap-4">
           <p className="text-sm text-gray-500">As it appears in the header →</p>
           <button className="h-7 flex items-center gap-1.5 rounded-md border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))]/60 bg-[hsl(var(--gold))]/5 hover:bg-[hsl(var(--gold))]/15 transition-all px-2 group">
             <ArrowRight className="w-3.5 h-3.5 text-[hsl(var(--gold))] rotate-180" />
@@ -153,7 +153,7 @@ export default function AlertsDemo() {
 
       {/* 5 — Header Notification Bell Badge */}
       <DemoSection title="5. Header Notification Badge" description="Red badge on the bell icon showing total unread count across all notification types.">
-        <div className="rounded-xl overflow-hidden border border-zinc-200 bg-white p-6 flex items-center gap-6">
+        <div className="rounded-xl overflow-hidden border border-gray-200 bg-white p-6 flex items-center gap-6">
           <p className="text-sm text-gray-500">Bell icon with badge →</p>
           <div className="relative">
             <div className="w-9 h-9 rounded-full border border-[hsl(var(--gold))]/30 bg-[hsl(var(--gold))]/5 flex items-center justify-center">

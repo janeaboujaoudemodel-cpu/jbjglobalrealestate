@@ -261,19 +261,19 @@ export default function BrokerAdminAssistant() {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-3">
-                        <Button variant="outline" className="w-full justify-start border-zinc-700 text-white hover:bg-zinc-800">
+                        <Button variant="outline" className="w-full justify-start border-gray-700 text-white hover:bg-gray-800">
                           <UserPlus className="h-4 w-4 mr-3 text-emerald-400" />
                           Start New Broker Onboarding
                         </Button>
-                        <Button variant="outline" className="w-full justify-start border-zinc-700 text-white hover:bg-zinc-800">
+                        <Button variant="outline" className="w-full justify-start border-gray-700 text-white hover:bg-gray-800">
                           <ClipboardCheck className="h-4 w-4 mr-3 text-yellow-400" />
                           Review RERA Renewals
                         </Button>
-                        <Button variant="outline" className="w-full justify-start border-zinc-700 text-white hover:bg-zinc-800">
+                        <Button variant="outline" className="w-full justify-start border-gray-700 text-white hover:bg-gray-800">
                           <FileText className="h-4 w-4 mr-3 text-blue-400" />
                           Generate Compliance Report
                         </Button>
-                        <Button variant="outline" className="w-full justify-start border-zinc-700 text-white hover:bg-zinc-800">
+                        <Button variant="outline" className="w-full justify-start border-gray-700 text-white hover:bg-gray-800">
                           <MessageSquare className="h-4 w-4 mr-3 text-purple-400" />
                           Send Bulk Notification
                         </Button>
@@ -292,7 +292,7 @@ export default function BrokerAdminAssistant() {
                         <ScrollArea className="h-[200px]">
                           <div className="space-y-3">
                             {pendingBrokers.map((broker) => (
-                              <div key={broker.id} className="p-3 bg-zinc-900 rounded-lg border border-zinc-800">
+                              <div key={broker.id} className="p-3 bg-zinc-900 rounded-lg border border-gray-800">
                                 <div className="flex items-center justify-between">
                                   <div>
                                     <p className="text-white font-medium">{broker.name}</p>
@@ -376,7 +376,7 @@ export default function BrokerAdminAssistant() {
                       <p className="text-gray-400">Manage broker onboarding from application to activation. Track progress, documentation, and training completion.</p>
                       <div className="mt-4 space-y-4">
                         {pendingBrokers.map((broker) => (
-                          <div key={broker.id} className="p-4 bg-zinc-900 rounded-lg border border-zinc-800">
+                          <div key={broker.id} className="p-4 bg-zinc-900 rounded-lg border border-gray-800">
                             <div className="flex items-center justify-between mb-2">
                               <h3 className="text-white font-medium">{broker.name}</h3>
                               <Badge variant={broker.status === 'in_progress' ? 'secondary' : 'outline'}>
@@ -388,7 +388,7 @@ export default function BrokerAdminAssistant() {
                               <Button size="sm" className="bg-emerald-600 hover:bg-emerald-700">
                                 Continue Onboarding
                               </Button>
-                              <Button size="sm" variant="outline" className="border-zinc-600">
+                              <Button size="sm" variant="outline" className="border-gray-600">
                                 View Documents
                               </Button>
                             </div>
@@ -421,7 +421,7 @@ export default function BrokerAdminAssistant() {
                         <span>Broker Directory</span>
                         <Input 
                           placeholder="Search brokers..." 
-                          className="w-64 bg-zinc-900 border-zinc-700"
+                          className="w-64 bg-zinc-900 border-gray-700"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                         />

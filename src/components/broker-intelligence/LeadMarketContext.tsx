@@ -88,9 +88,9 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
 
   if (!areaData || !contextNarrative) {
     return (
-      <Card className="bg-zinc-900/50 border-zinc-800">
+      <Card className="bg-zinc-900/50 border-gray-800">
         <CardContent className="p-4 text-center">
-          <Info className="w-6 h-6 text-zinc-600 mx-auto mb-2" />
+          <Info className="w-6 h-6 text-gray-600 mx-auto mb-2" />
           <p className="text-white/60 text-sm">
             {leadArea ? `No market data available for "${leadArea}"` : "Select a location to view market context"}
           </p>
@@ -118,7 +118,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
 
   if (compact) {
     return (
-      <div className="bg-zinc-800/50 rounded-lg p-3 border border-zinc-700/50">
+      <div className="bg-zinc-800/50 rounded-lg p-3 border border-gray-700/50">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <MapPin className="w-4 h-4 text-gold" />
@@ -132,7 +132,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
   }
 
   return (
-    <Card className="bg-zinc-900/50 border-zinc-800">
+    <Card className="bg-zinc-900/50 border-gray-800">
       <CardHeader className="pb-3">
         <CardTitle className="text-white text-base flex items-center gap-2">
           <MapPin className="w-5 h-5 text-gold" />
@@ -185,7 +185,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
         </div>
 
         {/* Disclaimer */}
-        <p className="text-zinc-600 text-xs">
+        <p className="text-gray-600 text-xs">
           Market context based on aggregated Open Data · For internal broker use only
         </p>
       </CardContent>

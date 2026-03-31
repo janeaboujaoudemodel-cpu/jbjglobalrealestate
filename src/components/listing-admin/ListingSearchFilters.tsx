@@ -102,9 +102,9 @@ const ListingSearchFilters = ({
               {developerValue !== "all" && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-3 bg-white border-zinc-200" align="start">
+          <PopoverContent className="w-64 p-3 bg-white border-gray-200" align="start">
             <Select value={developerValue} onValueChange={(v) => { onDeveloperChange(v); setActiveFilter(null); }}>
-              <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black">
+              <SelectTrigger className="bg-gray-50 border-gray-300 text-black">
                 <SelectValue placeholder={t('listingAdmin.selectDeveloper')} />
               </SelectTrigger>
               <SelectContent>
@@ -133,14 +133,14 @@ const ListingSearchFilters = ({
               {searchValue && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-3 bg-white border-zinc-200" align="start">
+          <PopoverContent className="w-64 p-3 bg-white border-gray-200" align="start">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <Input
                 value={searchValue}
                 onChange={(e) => onSearchChange(e.target.value)}
                 placeholder={t('listingAdmin.searchProjects')}
-                className="pl-10 bg-zinc-50 border-zinc-300 text-black"
+                className="pl-10 bg-gray-50 border-gray-300 text-black"
                 autoFocus
               />
             </div>
@@ -161,9 +161,9 @@ const ListingSearchFilters = ({
               {emirateValue !== "all" && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-3 bg-white border-zinc-200" align="start">
+          <PopoverContent className="w-64 p-3 bg-white border-gray-200" align="start">
             <Select value={emirateValue} onValueChange={(v) => { onEmirateChange(v); setActiveFilter(null); }}>
-              <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black">
+              <SelectTrigger className="bg-gray-50 border-gray-300 text-black">
                 <SelectValue placeholder={t('listingAdmin.emirate')} />
               </SelectTrigger>
               <SelectContent>
@@ -191,12 +191,12 @@ const ListingSearchFilters = ({
               {locationValue && <span className="ml-1 text-gold">•</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-64 p-3 bg-white border-zinc-200" align="start">
+          <PopoverContent className="w-64 p-3 bg-white border-gray-200" align="start">
             <Input
               value={locationValue}
               onChange={(e) => onLocationChange(e.target.value)}
               placeholder={t('listingAdmin.searchByArea')}
-              className="bg-zinc-50 border-zinc-300 text-black"
+              className="bg-gray-50 border-gray-300 text-black"
               autoFocus
             />
           </PopoverContent>

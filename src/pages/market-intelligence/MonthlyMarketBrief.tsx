@@ -89,7 +89,7 @@ const MonthlyMarketBrief = () => {
     switch (momentum) {
       case "high": return "bg-emerald-500/20 text-emerald-600 border-emerald-500/30";
       case "medium": return "bg-amber-500/20 text-amber-600 border-amber-500/30";
-      default: return "bg-zinc-500/20 text-zinc-600 border-zinc-500/30";
+      default: return "bg-gray-500/20 text-gray-600 border-gray-500/30";
     }
   };
 
@@ -113,7 +113,7 @@ const MonthlyMarketBrief = () => {
           >
             <Link
               to="/market-intelligence/reports"
-              className="inline-flex items-center gap-2 text-zinc-600 hover:text-black mb-6 transition-colors"
+              className="inline-flex items-center gap-2 text-gray-600 hover:text-black mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Reports
@@ -128,7 +128,7 @@ const MonthlyMarketBrief = () => {
                 <h1 className="text-3xl md:text-4xl font-bold text-black">
                   {data.period}
                 </h1>
-                <p className="text-zinc-600 mt-2 flex items-center gap-2">
+                <p className="text-gray-600 mt-2 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   Published: {new Date(data.publishDate).toLocaleDateString("en-US", { 
                     year: "numeric", 
@@ -157,7 +157,7 @@ const MonthlyMarketBrief = () => {
                 <CardTitle className="text-lg text-black">Executive Summary</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-zinc-700 leading-relaxed">{data.summary}</p>
+                <p className="text-gray-700 leading-relaxed">{data.summary}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -172,7 +172,7 @@ const MonthlyMarketBrief = () => {
           >
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                   <Building className="w-4 h-4" />
                   Transaction Volume
                 </CardTitle>
@@ -193,7 +193,7 @@ const MonthlyMarketBrief = () => {
 
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                   <Key className="w-4 h-4" />
                   RENT Trend
                 </CardTitle>
@@ -213,7 +213,7 @@ const MonthlyMarketBrief = () => {
 
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                   <Home className="w-4 h-4" />
                   Avg. Price/sqft
                 </CardTitle>
@@ -257,7 +257,7 @@ const MonthlyMarketBrief = () => {
                     >
                       <div>
                         <p className="text-black font-medium">{area.name}</p>
-                        <p className="text-sm text-zinc-600">{area.note}</p>
+                        <p className="text-sm text-gray-600">{area.note}</p>
                       </div>
                       <Badge className={getMomentumColor(area.momentum)}>
                         {area.momentum.toUpperCase()}
@@ -279,7 +279,7 @@ const MonthlyMarketBrief = () => {
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardContent className="pt-6">
                 <h3 className="text-sm font-semibold text-black mb-3">Methodology & Disclaimer</h3>
-                <p className="text-sm text-zinc-600 mb-4">
+                <p className="text-sm text-gray-600 mb-4">
                   This report is based on aggregated official government Open Data and descriptive analytics.
                   It is provided for informational purposes only and does not constitute financial, investment, or legal advice.
                 </p>

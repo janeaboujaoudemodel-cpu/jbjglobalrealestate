@@ -524,7 +524,7 @@ export default function OwnerFeatureRegistry() {
                                   <Badge className="bg-green-100 text-green-700 text-[10px] px-1.5">Auto</Badge>
                                 )}
                                 {feature.isManual && (
-                                  <Badge className="bg-zinc-100 text-zinc-700 text-[10px] px-1.5">Manual</Badge>
+                                  <Badge className="bg-gray-100 text-gray-700 text-[10px] px-1.5">Manual</Badge>
                                 )}
                               </div>
                               <p className="text-sm text-gray-500 mt-0.5">{feature.description}</p>
@@ -616,12 +616,12 @@ export default function OwnerFeatureRegistry() {
                         </div>
                         <p className="text-sm text-green-600">Runs automatically in the background (e.g., AI learning, CRM logging). Owner can configure via settings.</p>
                       </div>
-                      <div className="p-4 rounded-lg border border-zinc-200 bg-zinc-50">
+                      <div className="p-4 rounded-lg border border-gray-200 bg-gray-50">
                         <div className="flex items-center gap-2 mb-2">
-                          <Wrench className="h-4 w-4 text-zinc-600" />
-                          <span className="font-medium text-zinc-700">Manual ({manualCount})</span>
+                          <Wrench className="h-4 w-4 text-gray-600" />
+                          <span className="font-medium text-gray-700">Manual ({manualCount})</span>
                         </div>
-                        <p className="text-sm text-zinc-600">Owner-initiated actions only. Nothing happens without explicit Owner interaction.</p>
+                        <p className="text-sm text-gray-600">Owner-initiated actions only. Nothing happens without explicit Owner interaction.</p>
                       </div>
                     </div>
                   </CardContent>
@@ -687,19 +687,19 @@ export default function OwnerFeatureRegistry() {
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <Badge className="bg-purple-100 text-purple-700 text-xs">AI</Badge>
-                <span className="text-zinc-600">AI-powered feature (drafts/suggestions)</span>
+                <span className="text-gray-600">AI-powered feature (drafts/suggestions)</span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-blue-100 text-blue-700 text-xs">Approval</Badge>
-                <span className="text-zinc-600">Requires Owner approval before action</span>
+                <span className="text-gray-600">Requires Owner approval before action</span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-100 text-green-700 text-xs">Auto</Badge>
-                <span className="text-zinc-600">Runs automatically (configurable)</span>
+                <span className="text-gray-600">Runs automatically (configurable)</span>
               </div>
               <div className="flex items-center gap-2">
-                <Badge className="bg-zinc-100 text-zinc-700 text-xs">Manual</Badge>
-                <span className="text-zinc-600">Owner-initiated only</span>
+                <Badge className="bg-gray-100 text-gray-700 text-xs">Manual</Badge>
+                <span className="text-gray-600">Owner-initiated only</span>
               </div>
             </div>
           </div>
@@ -769,7 +769,7 @@ function AuditItem({
 
   return (
     <div className="flex items-center justify-between p-3 rounded-lg bg-white border border-green-200">
-      <span className="text-sm text-zinc-600">{label}</span>
+      <span className="text-sm text-gray-600">{label}</span>
       <div className="flex items-center gap-2">
         <span className="font-semibold text-black">{value}</span>
         {icons[status]}

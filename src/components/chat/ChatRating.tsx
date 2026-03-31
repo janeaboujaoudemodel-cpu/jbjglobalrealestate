@@ -69,7 +69,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                   className={`w-6 h-6 ${
                     star <= (hoveredRating || rating)
                       ? 'text-gold fill-gold'
-                      : 'text-zinc-600'
+                      : 'text-gray-600'
                   }`}
                 />
               </button>
@@ -88,7 +88,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
                   wasHelpful === true
                     ? 'border-green-500 bg-green-500/20 text-green-400'
-                    : 'border-zinc-600 text-gray-500 hover:border-green-500/50'
+                    : 'border-gray-600 text-gray-500 hover:border-green-500/50'
                 }`}
               >
                 <ThumbsUp className="w-4 h-4" />
@@ -99,7 +99,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
                   wasHelpful === false
                     ? 'border-red-500 bg-red-500/20 text-red-400'
-                    : 'border-zinc-600 text-gray-500 hover:border-red-500/50'
+                    : 'border-gray-600 text-gray-500 hover:border-red-500/50'
                 }`}
               >
                 <ThumbsDown className="w-4 h-4" />
@@ -134,7 +134,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
               variant="outline"
               onClick={onSkip}
               size="sm"
-              className="flex-1 border-zinc-600 text-white/85 hover:bg-zinc-800"
+              className="flex-1 border-gray-600 text-white/85 hover:bg-gray-800"
             >
               <X className="w-3 h-3 mr-1" />
               Skip
@@ -174,7 +174,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                     className={`w-5 h-5 ${
                       star <= (hoveredAgentBehavior || agentBehavior)
                         ? 'text-gold fill-gold'
-                        : 'text-zinc-600'
+                        : 'text-gray-600'
                     }`}
                   />
                 </button>
@@ -203,7 +203,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                     className={`w-5 h-5 ${
                       star <= (hoveredResponseSpeed || responseSpeed)
                         ? 'text-gold fill-gold'
-                        : 'text-zinc-600'
+                        : 'text-gray-600'
                     }`}
                   />
                 </button>
@@ -248,7 +248,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
               variant="outline"
               onClick={() => setStep('main')}
               size="sm"
-              className="flex-1 border-zinc-600 text-white/85 hover:bg-zinc-800"
+              className="flex-1 border-gray-600 text-white/85 hover:bg-gray-800"
             >
               Back
             </Button>

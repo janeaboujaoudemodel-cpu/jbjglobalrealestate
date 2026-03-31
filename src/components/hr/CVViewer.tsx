@@ -199,7 +199,7 @@ const CVViewer = ({
               </div>
               <div>
                 <DialogTitle className="text-xl text-black">{candidateName}</DialogTitle>
-                <p className="text-sm text-zinc-600">{candidateData?.position || 'Candidate'}</p>
+                <p className="text-sm text-gray-600">{candidateData?.position || 'Candidate'}</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -240,25 +240,25 @@ const CVViewer = ({
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
                   {candidateData?.email && (
-                    <div className="flex items-center gap-2 text-zinc-600">
+                    <div className="flex items-center gap-2 text-gray-600">
                       <Mail className="h-3 w-3" />
                       <span className="truncate">{candidateData.email}</span>
                     </div>
                   )}
                   {candidateData?.phone && (
-                    <div className="flex items-center gap-2 text-zinc-600">
+                    <div className="flex items-center gap-2 text-gray-600">
                       <Phone className="h-3 w-3" />
                       <span>{candidateData.phone}</span>
                     </div>
                   )}
                   {candidateData?.nationality && (
-                    <div className="flex items-center gap-2 text-zinc-600">
+                    <div className="flex items-center gap-2 text-gray-600">
                       <MapPin className="h-3 w-3" />
                       <span>{candidateData.nationality}</span>
                     </div>
                   )}
                   {candidateData?.uploadDate && (
-                    <div className="flex items-center gap-2 text-zinc-600">
+                    <div className="flex items-center gap-2 text-gray-600">
                       <Calendar className="h-3 w-3" />
                       <span>Applied: {format(candidateData.uploadDate, 'MMM d, yyyy')}</span>
                     </div>
@@ -324,7 +324,7 @@ const CVViewer = ({
                   </CardHeader>
                   <CardContent className="space-y-3 text-sm">
                     <div className="flex items-center justify-between">
-                      <span className="text-zinc-600">Relevance Score</span>
+                      <span className="text-gray-600">Relevance Score</span>
                       <Badge className="bg-purple-600">
                         <Star className="h-3 w-3 mr-1" />
                         {candidateData.aiAnalysis.relevanceScore}%
@@ -332,14 +332,14 @@ const CVViewer = ({
                     </div>
                     
                     <div>
-                      <span className="text-zinc-600 flex items-center gap-1 mb-1">
+                      <span className="text-gray-600 flex items-center gap-1 mb-1">
                         <Briefcase className="h-3 w-3" /> Experience
                       </span>
                       <p className="text-black text-xs">{candidateData.aiAnalysis.experience}</p>
                     </div>
 
                     <div>
-                      <span className="text-zinc-600 flex items-center gap-1 mb-1">
+                      <span className="text-gray-600 flex items-center gap-1 mb-1">
                         <GraduationCap className="h-3 w-3" /> Education
                       </span>
                       <p className="text-black text-xs">{candidateData.aiAnalysis.education}</p>
@@ -347,7 +347,7 @@ const CVViewer = ({
 
                     {candidateData.aiAnalysis.skills.length > 0 && (
                       <div>
-                        <span className="text-zinc-600 mb-1 block">Skills</span>
+                        <span className="text-gray-600 mb-1 block">Skills</span>
                         <div className="flex flex-wrap gap-1">
                           {candidateData.aiAnalysis.skills.slice(0, 5).map((skill, idx) => (
                             <Badge key={idx} variant="outline" className="text-xs border-gold/30 text-gold">
@@ -360,7 +360,7 @@ const CVViewer = ({
 
                     {candidateData.aiAnalysis.certifications.length > 0 && (
                       <div>
-                        <span className="text-zinc-600 flex items-center gap-1 mb-1">
+                        <span className="text-gray-600 flex items-center gap-1 mb-1">
                           <Award className="h-3 w-3" /> Certifications
                         </span>
                         <div className="flex flex-wrap gap-1">
@@ -374,7 +374,7 @@ const CVViewer = ({
                     )}
 
                     <div className="pt-2 border-t border-purple-300/50">
-                      <span className="text-zinc-600 mb-1 block text-xs">AI Recommendation</span>
+                      <span className="text-gray-600 mb-1 block text-xs">AI Recommendation</span>
                       <p className="text-purple-700 text-xs italic">"{candidateData.aiAnalysis.recommendation}"</p>
                     </div>
                   </CardContent>
@@ -399,7 +399,7 @@ const CVViewer = ({
                 {loading ? (
                   <div className="h-full flex items-center justify-center">
                     <Loader2 className="h-8 w-8 animate-spin text-gold" />
-                    <span className="ml-2 text-zinc-600">Loading document...</span>
+                    <span className="ml-2 text-gray-600">Loading document...</span>
                   </div>
                 ) : signedUrl ? (
                   <iframe
@@ -411,7 +411,7 @@ const CVViewer = ({
                   <div className="h-full flex flex-col items-center justify-center text-center">
                     <FileText className="h-16 w-16 text-gray-500 mb-4" />
                     <h3 className="text-lg font-semibold text-black mb-2">CV Not Available</h3>
-                    <p className="text-zinc-600 mb-4">
+                    <p className="text-gray-600 mb-4">
                       {cvUrl ? 'Unable to load CV preview. Try downloading instead.' : 'No CV file has been uploaded.'}
                     </p>
                     {cvUrl && (
@@ -429,33 +429,33 @@ const CVViewer = ({
                   <CardContent className="pt-6">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-zinc-600">Full Name</Label>
+                        <Label className="text-gray-600">Full Name</Label>
                         <p className="text-black">{candidateName}</p>
                       </div>
                       <div>
-                        <Label className="text-zinc-600">Position Applied</Label>
+                        <Label className="text-gray-600">Position Applied</Label>
                         <p className="text-black">{candidateData?.position || 'Not specified'}</p>
                       </div>
                       <div>
-                        <Label className="text-zinc-600">Email</Label>
+                        <Label className="text-gray-600">Email</Label>
                         <p className="text-black">{candidateData?.email || 'N/A'}</p>
                       </div>
                       <div>
-                        <Label className="text-zinc-600">Phone</Label>
+                        <Label className="text-gray-600">Phone</Label>
                         <p className="text-black">{candidateData?.phone || 'N/A'}</p>
                       </div>
                       <div>
-                        <Label className="text-zinc-600">Nationality</Label>
+                        <Label className="text-gray-600">Nationality</Label>
                         <p className="text-black">{candidateData?.nationality || 'N/A'}</p>
                       </div>
                       <div>
-                        <Label className="text-zinc-600">Application Date</Label>
+                        <Label className="text-gray-600">Application Date</Label>
                         <p className="text-black">
                           {candidateData?.uploadDate ? format(candidateData.uploadDate, 'MMMM d, yyyy') : 'N/A'}
                         </p>
                       </div>
                       <div className="col-span-2">
-                        <Label className="text-zinc-600">CV File</Label>
+                        <Label className="text-gray-600">CV File</Label>
                         <p className="text-black flex items-center gap-2">
                           <FileText className="h-4 w-4 text-gold" />
                           {cvFileName || 'No file uploaded'}

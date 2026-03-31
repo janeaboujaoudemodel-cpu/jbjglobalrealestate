@@ -221,10 +221,10 @@ const DesignResultsGallery = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-zinc-900/60 border border-zinc-800 rounded-2xl overflow-hidden"
+        className="bg-zinc-900/60 border border-gray-800 rounded-2xl overflow-hidden"
       >
         {/* Success Header */}
-        <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
+        <div className="p-6 border-b border-gray-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
               <CheckCircle2 className="w-5 h-5 text-green-400" />
@@ -274,7 +274,7 @@ const DesignResultsGallery = ({
         )}
 
         {/* Actions */}
-        <div className="p-6 border-t border-zinc-800 flex flex-wrap gap-3">
+        <div className="p-6 border-t border-gray-800 flex flex-wrap gap-3">
           <Button
             onClick={downloadImage}
             disabled={isDownloading}

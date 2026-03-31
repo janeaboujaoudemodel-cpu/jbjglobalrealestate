@@ -45,7 +45,7 @@ const ChatEmailCheck = ({ onEmailVerified, checkEmailInDatabase }: ChatEmailChec
       {/* Header - centered */}
       <div className="mb-5">
         <h4 className="text-gold text-xl font-bold mb-2">Connect With Our Team</h4>
-        <p className="text-zinc-700 text-sm">Share your details to receive personalized assistance</p>
+        <p className="text-gray-700 text-sm">Share your details to receive personalized assistance</p>
       </div>
 
       {/* Form fields - full width, centered */}

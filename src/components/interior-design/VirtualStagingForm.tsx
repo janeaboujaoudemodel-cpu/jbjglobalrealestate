@@ -136,7 +136,7 @@ const VirtualStagingForm = ({
           {photos.length < 4 && (
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="aspect-square rounded-xl border-2 border-dashed border-zinc-700 hover:border-emerald-500/50 flex flex-col items-center justify-center gap-2 transition-colors"
+              className="aspect-square rounded-xl border-2 border-dashed border-gray-700 hover:border-emerald-500/50 flex flex-col items-center justify-center gap-2 transition-colors"
             >
               <Upload className="w-8 h-8 text-white/60" />
               <span className="text-xs text-white/60">Add Photo</span>
@@ -168,7 +168,7 @@ const VirtualStagingForm = ({
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
                     ? 'bg-emerald-500/20 border-emerald-500/50 text-white'
-                    : 'bg-zinc-800/50 border-zinc-700 text-white/70 hover:border-zinc-600 hover:text-white/85'
+                    : 'bg-zinc-800/50 border-gray-700 text-white/70 hover:border-gray-600 hover:text-white/85'
                   }
                 `}
               >
@@ -198,7 +198,7 @@ const VirtualStagingForm = ({
                   p-4 rounded-xl border text-left transition-all
                   ${isSelected
                     ? 'bg-emerald-500/20 border-emerald-500/50'
-                    : 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600'
+                    : 'bg-zinc-800/50 border-gray-700 hover:border-gray-600'
                   }
                 `}
               >
@@ -223,7 +223,7 @@ const VirtualStagingForm = ({
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe specific furniture you want: L-shaped sofa, marble coffee table, statement artwork, indoor plants..."
-          className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 min-h-[100px] focus:border-emerald-500/50"
+          className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 min-h-[100px] focus:border-emerald-500/50"
           maxLength={1000}
         />
       </div>

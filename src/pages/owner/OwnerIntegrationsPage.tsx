@@ -37,7 +37,7 @@ const OwnerIntegrationsPage = () => {
       case 'connected':
         return <Badge className="bg-green-100 text-green-700 border-green-200"><Check className="w-3 h-3 mr-1" />Connected</Badge>;
       case 'not_connected':
-        return <Badge className="bg-zinc-100 text-zinc-600 border-zinc-200"><X className="w-3 h-3 mr-1" />Not Connected</Badge>;
+        return <Badge className="bg-gray-100 text-gray-600 border-gray-200"><X className="w-3 h-3 mr-1" />Not Connected</Badge>;
       case 'error':
         return <Badge className="bg-red-100 text-red-700 border-red-200"><AlertTriangle className="w-3 h-3 mr-1" />Error</Badge>;
       case 'draft':
@@ -70,7 +70,7 @@ const OwnerIntegrationsPage = () => {
               <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
               <div>
                 <h3 className="font-semibold text-amber-700">Integration Status Notice</h3>
-                <p className="text-sm text-zinc-600 mt-1">
+                <p className="text-sm text-gray-600 mt-1">
                   All integrations are currently in <strong>Draft / Not Active</strong> status. 
                   No external connections have been configured. These will be activated once 
                   API credentials and OAuth flows are set up.
@@ -103,11 +103,11 @@ const OwnerIntegrationsPage = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Auth Method</span>
-                    <span className="text-sm text-zinc-600">{integration.authMethod || 'Not configured'}</span>
+                    <span className="text-sm text-gray-600">{integration.authMethod || 'Not configured'}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">Last Sync</span>
-                    <span className="text-sm text-zinc-600">{integration.lastSync || 'Never'}</span>
+                    <span className="text-sm text-gray-600">{integration.lastSync || 'Never'}</span>
                   </div>
                   <div className="pt-3 border-t border-[#B89555]/10">
                     <div className="flex gap-4">
@@ -122,10 +122,10 @@ const OwnerIntegrationsPage = () => {
                     </div>
                   </div>
                   <div className="pt-3 flex gap-2">
-                    <Button variant="outline" size="sm" className="flex-1 border-[#B89555]/30 text-zinc-600 hover:text-black hover:bg-[#B89555]/10" disabled>
+                    <Button variant="outline" size="sm" className="flex-1 border-[#B89555]/30 text-gray-600 hover:text-black hover:bg-[#B89555]/10" disabled>
                       <Settings className="w-4 h-4 mr-1" />Configure
                     </Button>
-                    <Button variant="outline" size="sm" className="border-[#B89555]/30 text-zinc-600 hover:text-black hover:bg-[#B89555]/10" disabled>
+                    <Button variant="outline" size="sm" className="border-[#B89555]/30 text-gray-600 hover:text-black hover:bg-[#B89555]/10" disabled>
                       <RefreshCw className="w-4 h-4" />
                     </Button>
                   </div>

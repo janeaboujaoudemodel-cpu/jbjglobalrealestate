@@ -56,7 +56,7 @@ const categories = [
   { value: 'closing', label: 'Closing', color: 'bg-gold' },
   { value: 'nurture', label: 'Nurture', color: 'bg-pink-500' },
   { value: 'support', label: 'Support', color: 'bg-cyan-500' },
-  { value: 'custom', label: 'Custom', color: 'bg-zinc-500' },
+  { value: 'custom', label: 'Custom', color: 'bg-gray-500' },
 ];
 
 const variables = [
@@ -393,9 +393,9 @@ export default function OwnerTemplates() {
               {[1, 2, 3, 4, 5, 6].map(i => (
                 <Card key={i} className="border-2 border-gold/20 animate-pulse">
                   <CardContent className="p-4">
-                    <div className="h-4 bg-zinc-200 rounded w-3/4 mb-2" />
-                    <div className="h-3 bg-zinc-100 rounded w-full mb-1" />
-                    <div className="h-3 bg-zinc-100 rounded w-2/3" />
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+                    <div className="h-3 bg-gray-100 rounded w-full mb-1" />
+                    <div className="h-3 bg-gray-100 rounded w-2/3" />
                   </CardContent>
                 </Card>
               ))}
@@ -461,7 +461,7 @@ export default function OwnerTemplates() {
                           </div>
                         </div>
 
-                        <p className="text-sm text-zinc-600 line-clamp-3 mb-3">
+                        <p className="text-sm text-gray-600 line-clamp-3 mb-3">
                           {template.content}
                         </p>
 

@@ -133,7 +133,7 @@ export function BrokerActivityMonitor() {
 
   if (loading) {
     return (
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-zinc-900 border-gray-800">
         <CardContent className="p-8 text-center">
           <RefreshCw className="h-8 w-8 text-gold animate-spin mx-auto" />
           <p className="text-gray-400 mt-4">Loading activity monitor...</p>
@@ -143,7 +143,7 @@ export function BrokerActivityMonitor() {
   }
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
+    <Card className="bg-zinc-900 border-gray-800">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -163,7 +163,7 @@ export function BrokerActivityMonitor() {
               size="sm"
               onClick={refreshStats}
               disabled={refreshing}
-              className="border-zinc-700 text-gray-300"
+              className="border-gray-700 text-gray-300"
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
               Refresh
@@ -182,22 +182,22 @@ export function BrokerActivityMonitor() {
       <CardContent className="space-y-6">
         {/* Today's Overview */}
         <div className="grid grid-cols-4 gap-4">
-          <div className="p-4 rounded-lg bg-zinc-800 border border-zinc-700 text-center">
+          <div className="p-4 rounded-lg bg-zinc-800 border border-gray-700 text-center">
             <Users className="h-6 w-6 text-blue-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalLeads}</div>
             <div className="text-xs text-gray-400">Leads Contacted</div>
           </div>
-          <div className="p-4 rounded-lg bg-zinc-800 border border-zinc-700 text-center">
+          <div className="p-4 rounded-lg bg-zinc-800 border border-gray-700 text-center">
             <MessageSquare className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalMessages}</div>
             <div className="text-xs text-gray-400">Messages Sent</div>
           </div>
-          <div className="p-4 rounded-lg bg-zinc-800 border border-zinc-700 text-center">
+          <div className="p-4 rounded-lg bg-zinc-800 border border-gray-700 text-center">
             <Phone className="h-6 w-6 text-purple-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalCalls}</div>
             <div className="text-xs text-gray-400">Calls Made</div>
           </div>
-          <div className="p-4 rounded-lg bg-zinc-800 border border-zinc-700 text-center">
+          <div className="p-4 rounded-lg bg-zinc-800 border border-gray-700 text-center">
             <TrendingUp className="h-6 w-6 text-gold mx-auto mb-2" />
             <div className="text-2xl font-bold text-gold">{todayTotals.avgConversion}%</div>
             <div className="text-xs text-gray-400">Conversion Rate</div>
@@ -211,7 +211,7 @@ export function BrokerActivityMonitor() {
           {stats.map((stat) => (
             <div
               key={stat.brokerId}
-              className="p-4 rounded-lg bg-zinc-800 border border-zinc-700"
+              className="p-4 rounded-lg bg-zinc-800 border border-gray-700"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3">

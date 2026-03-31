@@ -203,7 +203,7 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
           <div className="text-center py-6">
             <CheckCircle className="h-10 w-10 text-emerald-500 mx-auto mb-2" />
             <p className="text-sm font-medium text-black">All caught up!</p>
-            <p className="text-xs text-zinc-600 mt-1">No pending reminders or overdue tasks</p>
+            <p className="text-xs text-gray-600 mt-1">No pending reminders or overdue tasks</p>
           </div>
         ) : (
           <div className="space-y-2">
@@ -230,14 +230,14 @@ const SmartReminders = ({ userId, limit = 5 }: SmartRemindersProps) => {
                     </span>
                     {getPriorityBadge(reminder.priority)}
                   </div>
-                  <p className="text-sm text-zinc-700 truncate">
+                  <p className="text-sm text-gray-700 truncate">
                     {reminder.message}
                   </p>
                   <p className={cn(
                     "text-xs mt-1",
                     isPast(reminder.dueAt) && !isToday(reminder.dueAt)
                       ? "text-red-600 font-medium"
-                      : "text-zinc-600"
+                      : "text-gray-600"
                   )}>
                     {formatDueDate(reminder.dueAt)}
                   </p>

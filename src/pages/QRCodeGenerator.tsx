@@ -78,7 +78,7 @@ const QRCodeGenerator = () => {
               <span className="text-black text-sm font-medium">QR Code Generator</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">QR Code Generator</h1>
-            <p className="text-zinc-600">Generate custom QR codes for URLs, contacts, WiFi, and more</p>
+            <p className="text-gray-600">Generate custom QR codes for URLs, contacts, WiFi, and more</p>
           </div>
         </div>
       </div>
@@ -93,7 +93,7 @@ const QRCodeGenerator = () => {
                 <div className="grid grid-cols-3 gap-2 mt-2">
                   {QR_TYPES.map(t => (
                     <button key={t.id} onClick={() => { setQrType(t.id); setQrData(""); }}
-                      className={`flex items-center gap-1.5 p-2.5 rounded-lg text-xs font-medium border transition-all ${qrType === t.id ? 'bg-black text-white border-black' : 'bg-white text-zinc-700 border-gold/30 hover:bg-gold/10'}`}>
+                      className={`flex items-center gap-1.5 p-2.5 rounded-lg text-xs font-medium border transition-all ${qrType === t.id ? 'bg-black text-white border-black' : 'bg-white text-gray-700 border-gold/30 hover:bg-gold/10'}`}>
                       <t.icon className="h-3.5 w-3.5" />{t.label}
                     </button>
                   ))}
@@ -142,7 +142,7 @@ const QRCodeGenerator = () => {
               )}
             </div>
             <div className="flex gap-3">
-              <Button onClick={handleDownload} disabled={!qrData} className="flex-1 bg-black text-white hover:bg-zinc-800">
+              <Button onClick={handleDownload} disabled={!qrData} className="flex-1 bg-black text-white hover:bg-gray-800">
                 <Download className="h-4 w-4 mr-2" /> Download PNG
               </Button>
               <Button onClick={handleCopy} disabled={!qrData} variant="outline" className="flex-1 border-gold/30">

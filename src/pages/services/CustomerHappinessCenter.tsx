@@ -176,7 +176,7 @@ const CustomerHappinessCenter = () => {
               What This Center Does
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-zinc-700 leading-relaxed text-center">
+              <p className="text-gray-700 leading-relaxed text-center">
                 The Happiness Center exists to ensure support requests don't get lost. Every request becomes a tracked ticket with clear routing and accountability.
               </p>
             </motion.div>
@@ -213,7 +213,7 @@ const CustomerHappinessCenter = () => {
                   <Mail className="w-7 h-7 text-gold" />
                 </div>
                 <div className="text-left">
-                  <p className="text-sm text-zinc-600">Happiness Center Email</p>
+                  <p className="text-sm text-gray-600">Happiness Center Email</p>
                   <a 
                     href="mailto:HAPPINESS@JBJ.AE" 
                     className="text-gold font-semibold text-lg hover:underline"
@@ -229,7 +229,7 @@ const CustomerHappinessCenter = () => {
                   <MessageCircle className="w-7 h-7 text-white" />
                 </div>
                 <div className="text-left">
-                  <p className="text-sm text-zinc-600">WhatsApp Support</p>
+                  <p className="text-sm text-gray-600">WhatsApp Support</p>
                   <a 
                     href={whatsappUrl}
                     target="_blank"
@@ -241,7 +241,7 @@ const CustomerHappinessCenter = () => {
                 </div>
               </div>
 
-              <p className="text-zinc-600 text-center mt-4">
+              <p className="text-gray-600 text-center mt-4">
                 For urgent routing, email the Happiness Center with your ticket ID in the subject line.
               </p>
             </motion.div>
@@ -273,7 +273,7 @@ const CustomerHappinessCenter = () => {
                     <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
                       <item.icon className="w-5 h-5 text-gold" />
                     </div>
-                    <span className="text-zinc-700">{item.text}</span>
+                    <span className="text-gray-700">{item.text}</span>
                   </li>
                 ))}
               </ul>
@@ -310,7 +310,7 @@ const CustomerHappinessCenter = () => {
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-black font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-zinc-600">
+                    <AccordionContent className="px-6 pb-4 text-gray-600">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -339,7 +339,7 @@ const CustomerHappinessCenter = () => {
               >
                 Get Support in One Workflow
               </h2>
-              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+              <p className="text-gray-600 mb-8 max-w-xl mx-auto">
                 Create a ticket to get routed and tracked properly.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

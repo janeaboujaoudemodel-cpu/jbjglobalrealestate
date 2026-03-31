@@ -237,18 +237,18 @@ const BrokerResources = () => {
                       </div>
                       <div className="flex-1">
                         <h3 className="text-xl md:text-2xl font-medium text-black mb-3">{section.title}</h3>
-                        <p className="text-zinc-600 mb-4">{section.description}</p>
+                        <p className="text-gray-600 mb-4">{section.description}</p>
                         <div className="bg-black/5 rounded-xl p-4 mb-4">
                           <ul className="space-y-2">
                             {section.items.map((item, idx) => (
                               <li key={idx} className="flex items-start gap-3">
                                 <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                                <span className="text-zinc-700 text-sm">{item}</span>
+                                <span className="text-gray-700 text-sm">{item}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
-                        <p className="text-sm text-zinc-600 italic">{section.footer}</p>
+                        <p className="text-sm text-gray-600 italic">{section.footer}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -283,12 +283,12 @@ const BrokerResources = () => {
                 <motion.div
                   key={index}
                   variants={fadeInUp}
-                  className="flex items-center gap-4 p-5 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-gold/50 transition-all"
+                  className="flex items-center gap-4 p-5 bg-zinc-900/50 border border-gray-800 rounded-xl hover:border-gold/50 transition-all"
                 >
                   <div className="w-10 h-10 bg-gold/10 border border-gold/30 rounded-lg flex items-center justify-center flex-shrink-0">
                     <item.icon className="w-5 h-5 text-gold" />
                   </div>
-                  <span className="text-zinc-200 font-medium">{item.label}</span>
+                  <span className="text-gray-200 font-medium">{item.label}</span>
                 </motion.div>
               ))}
             </div>
@@ -311,7 +311,7 @@ const BrokerResources = () => {
               
               <motion.p 
                 variants={fadeInUp}
-                className="text-center text-zinc-700 max-w-2xl mx-auto mb-8"
+                className="text-center text-gray-700 max-w-2xl mx-auto mb-8"
               >
                 Professional brokerage performance depends on:
               </motion.p>
@@ -324,14 +324,14 @@ const BrokerResources = () => {
                     className="jj-card-inner rounded-xl p-6 text-center flex flex-col items-center justify-center"
                   >
                     <CheckCircle2 className="w-6 h-6 text-gold mb-3" />
-                    <span className="text-zinc-800 font-medium">{reason}</span>
+                    <span className="text-gray-800 font-medium">{reason}</span>
                   </motion.div>
                 ))}
               </div>
               
               <motion.p 
                 variants={fadeInUp}
-                className="text-center text-zinc-700 mt-8"
+                className="text-center text-gray-700 mt-8"
               >
                 These resources are built to support those standards consistently.
               </motion.p>

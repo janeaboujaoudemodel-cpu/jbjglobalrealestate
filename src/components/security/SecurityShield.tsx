@@ -243,7 +243,7 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
               This incident has been logged and may be reported to UAE authorities for investigation.
             </p>
             
-            <div className="bg-zinc-800 rounded-lg p-4 mt-4 border border-zinc-700">
+            <div className="bg-zinc-800 rounded-lg p-4 mt-4 border border-gray-700">
               <p className="text-xs text-white/70 flex items-center gap-2 mb-2">
                 <Lock className="w-4 h-4" />
                 <strong>Recorded Evidence:</strong>
@@ -269,7 +269,7 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
             I Understand - Reload Page
           </button>
           
-          <p className="text-xs text-zinc-600 mt-4">
+          <p className="text-xs text-gray-600 mt-4">
             If you believe this is an error, contact legal@jbj.ae with Incident ID: {violation?.incidentId}
           </p>
         </div>

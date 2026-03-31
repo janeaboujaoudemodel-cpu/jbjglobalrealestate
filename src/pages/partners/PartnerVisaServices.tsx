@@ -255,7 +255,7 @@ const PartnerVisaServices = () => {
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <div className="max-w-2xl mx-auto">
-              <Card className="border-zinc-200 bg-white shadow-sm">
+              <Card className="border-gray-200 bg-white shadow-sm">
                 <CardHeader className="text-center">
                   <div className="w-16 h-16 bg-black rounded-full flex items-center justify-center mx-auto mb-4">
                     <Users className="w-8 h-8 text-gold" />
@@ -263,19 +263,19 @@ const PartnerVisaServices = () => {
                   <CardTitle className="text-2xl text-black">Request Partner Introduction</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <p className="text-center text-zinc-600">
+                  <p className="text-center text-gray-600">
                     Interested in UAE residency through property investment? We'll connect you with a 
                     licensed immigration consultant who can assess your eligibility and guide you through the process.
                   </p>
 
                   {/* Consent Checkbox */}
-                  <div className="flex items-start gap-3 p-4 bg-zinc-50 rounded-lg border border-zinc-200">
+                  <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <Checkbox 
                       id="visa-consent" 
                       checked={consentChecked}
                       onCheckedChange={(checked) => setConsentChecked(checked as boolean)}
                     />
-                    <Label htmlFor="visa-consent" className="text-sm text-zinc-600 cursor-pointer">
+                    <Label htmlFor="visa-consent" className="text-sm text-gray-600 cursor-pointer">
                       I understand this service is provided by an independent licensed immigration consultant. 
                       JBJ GLOBAL REAL ESTATE facilitates introductions only and does not provide visa services directly.
                     </Label>

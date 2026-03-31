@@ -44,7 +44,7 @@ export function ToolSuiteHeader({
             <Button 
               variant="ghost" 
               size="sm" 
-              className="hover:bg-zinc-800 border border-zinc-700 hover:border-zinc-600"
+              className="hover:bg-gray-800 border border-gray-700 hover:border-gray-600"
               style={{ 
                 color: '#a1a1aa', // zinc-400
                 backgroundColor: 'transparent'

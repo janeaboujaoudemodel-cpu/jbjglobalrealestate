@@ -272,7 +272,7 @@ const AICompetitorAnalysisPremium = () => {
             </div>
 
             {/* Disclaimer */}
-            <div className="bg-zinc-800/50 border border-zinc-700 rounded-2xl p-6">
+            <div className="bg-zinc-800/50 border border-gray-700 rounded-2xl p-6">
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-6 h-6 text-white/70 flex-shrink-0" />
                 <div>

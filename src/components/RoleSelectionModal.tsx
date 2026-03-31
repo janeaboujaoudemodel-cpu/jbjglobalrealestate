@@ -280,7 +280,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
       <DialogContent 
-        className="bg-white border-0 text-zinc-900 max-w-2xl p-0 overflow-hidden shadow-2xl rounded-2xl"
+        className="bg-white border-0 text-gray-900 max-w-2xl p-0 overflow-hidden shadow-2xl rounded-2xl"
         onPointerDownOutside={(e) => e.preventDefault()}
         onEscapeKeyDown={(e) => e.preventDefault()}
       >
@@ -367,7 +367,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                 <Button
                   onClick={handleConfirmRole}
                   disabled={!selectedRole}
-                  className="w-full py-6 bg-black hover:bg-zinc-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20 disabled:opacity-50"
+                  className="w-full py-6 bg-black hover:bg-gray-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20 disabled:opacity-50"
                 >
                   Continue
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -526,15 +526,15 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                     {selectedRole === 'visitor' && (
                       <>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
-                          <div className="w-6 h-6 rounded-full bg-zinc-500/20 flex items-center justify-center text-xs font-bold text-zinc-600">1</div>
+                          <div className="w-6 h-6 rounded-full bg-gray-500/20 flex items-center justify-center text-xs font-bold text-gray-600">1</div>
                           <span>Explore <strong>Properties & Market Data</strong></span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
-                          <div className="w-6 h-6 rounded-full bg-zinc-500/20 flex items-center justify-center text-xs font-bold text-zinc-600">2</div>
+                          <div className="w-6 h-6 rounded-full bg-gray-500/20 flex items-center justify-center text-xs font-bold text-gray-600">2</div>
                           <span>Learn About <strong>UAE Real Estate Market</strong></span>
                         </div>
                         <div className="flex items-center gap-3 text-sm text-gray-600">
-                          <div className="w-6 h-6 rounded-full bg-zinc-500/20 flex items-center justify-center text-xs font-bold text-zinc-600">3</div>
+                          <div className="w-6 h-6 rounded-full bg-gray-500/20 flex items-center justify-center text-xs font-bold text-gray-600">3</div>
                           <span>Access <strong>Tools Anytime</strong> from the Menu</span>
                         </div>
                       </>
@@ -550,7 +550,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
 
                 <Button
                   onClick={handleCloseWelcome}
-                  className="w-full py-6 bg-black hover:bg-zinc-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20"
+                  className="w-full py-6 bg-black hover:bg-gray-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20"
                 >
                   <Home className="w-5 h-5 mr-2" />
                   Start Exploring
@@ -615,7 +615,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
 
                 <Button
                   onClick={handleEmployeeWelcomeClose}
-                  className="w-full py-6 bg-black hover:bg-zinc-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20"
+                  className="w-full py-6 bg-black hover:bg-gray-900 text-gold font-semibold text-base shadow-xl rounded-xl group border border-gold/20"
                 >
                   <Briefcase className="w-5 h-5 mr-2" />
                   Go to My CRM Dashboard

@@ -310,7 +310,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                       handleTakeTour();
                     }}
                     type="button"
-                    className="w-full py-5 sm:py-6 bg-black hover:bg-zinc-900 text-gold font-semibold text-base shadow-xl rounded-xl group relative overflow-hidden border border-gold/20"
+                    className="w-full py-5 sm:py-6 bg-black hover:bg-gray-900 text-gold font-semibold text-base shadow-xl rounded-xl group relative overflow-hidden border border-gold/20"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
                     <Compass className="w-5 h-5 mr-3 relative z-10" />
@@ -439,7 +439,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                         handleComplete();
                       }
                     }}
-                    className="flex-1 py-4 sm:py-5 bg-black hover:bg-zinc-900 text-gold font-semibold rounded-xl group border border-gold/20"
+                    className="flex-1 py-4 sm:py-5 bg-black hover:bg-gray-900 text-gold font-semibold rounded-xl group border border-gold/20"
                   >
                     {currentStep < tourSteps.length - 1 ? (
                       <>
@@ -517,7 +517,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                 <div className="space-y-2">
                   <Button
                     onClick={handleComplete}
-                    className="w-full py-4 sm:py-5 bg-black hover:bg-zinc-900 text-gold font-semibold rounded-xl group border border-gold/20"
+                    className="w-full py-4 sm:py-5 bg-black hover:bg-gray-900 text-gold font-semibold rounded-xl group border border-gold/20"
                   >
                     Start Exploring
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />

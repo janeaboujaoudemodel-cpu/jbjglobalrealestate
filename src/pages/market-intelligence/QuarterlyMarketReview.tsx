@@ -165,7 +165,7 @@ const QuarterlyMarketReview = () => {
       case "balanced": return "bg-emerald-500/20 text-emerald-600 border-emerald-500/30";
       case "supply_pressure": return "bg-amber-500/20 text-amber-600 border-amber-500/30";
       case "demand_pressure": return "bg-blue-500/20 text-blue-600 border-blue-500/30";
-      default: return "bg-zinc-500/20 text-zinc-600 border-zinc-500/30";
+      default: return "bg-gray-500/20 text-gray-600 border-gray-500/30";
     }
   };
 
@@ -189,7 +189,7 @@ const QuarterlyMarketReview = () => {
           >
             <Link
               to="/market-intelligence/reports"
-              className="inline-flex items-center gap-2 text-zinc-600 hover:text-black mb-6 transition-colors"
+              className="inline-flex items-center gap-2 text-gray-600 hover:text-black mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Reports
@@ -203,7 +203,7 @@ const QuarterlyMarketReview = () => {
                 <h1 className="text-3xl md:text-4xl font-bold text-black">
                   {data.period}
                 </h1>
-                <p className="text-zinc-600 mt-2 flex items-center gap-2">
+                <p className="text-gray-600 mt-2 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   Published: {new Date(data.publishDate).toLocaleDateString("en-US", { 
                     year: "numeric", 
@@ -232,7 +232,7 @@ const QuarterlyMarketReview = () => {
                 <CardTitle className="text-lg text-black">Executive Summary</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-zinc-700 leading-relaxed">{data.executiveSummary}</p>
+                <p className="text-gray-700 leading-relaxed">{data.executiveSummary}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -252,7 +252,7 @@ const QuarterlyMarketReview = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                  <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                     <Building className="w-4 h-4" />
                     BUY Segment
                   </CardTitle>
@@ -270,7 +270,7 @@ const QuarterlyMarketReview = () => {
 
               <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                  <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                     <Home className="w-4 h-4" />
                     SELL Segment
                   </CardTitle>
@@ -288,7 +288,7 @@ const QuarterlyMarketReview = () => {
 
               <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                  <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                     <Key className="w-4 h-4" />
                     RENT Segment
                   </CardTitle>
@@ -327,7 +327,7 @@ const QuarterlyMarketReview = () => {
                     {data.supplyDemand.status.replace("_", " ").toUpperCase()}
                   </Badge>
                 </div>
-                <p className="text-zinc-700">{data.supplyDemand.description}</p>
+                <p className="text-gray-700">{data.supplyDemand.description}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -352,15 +352,15 @@ const QuarterlyMarketReview = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
                         <p className="text-gray-500 mb-1">BUY Activity</p>
-                        <p className="text-zinc-700">{area.buyActivity}</p>
+                        <p className="text-gray-700">{area.buyActivity}</p>
                       </div>
                       <div>
                         <p className="text-gray-500 mb-1">RENT Activity</p>
-                        <p className="text-zinc-700">{area.rentActivity}</p>
+                        <p className="text-gray-700">{area.rentActivity}</p>
                       </div>
                       <div>
                         <p className="text-gray-500 mb-1">Outlook</p>
-                        <p className="text-zinc-700">{area.outlook}</p>
+                        <p className="text-gray-700">{area.outlook}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -379,7 +379,7 @@ const QuarterlyMarketReview = () => {
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardContent className="pt-6">
                 <h3 className="text-sm font-semibold text-black mb-3">Methodology & Disclaimer</h3>
-                <p className="text-sm text-zinc-600 mb-4">
+                <p className="text-sm text-gray-600 mb-4">
                   This report is based on aggregated official government Open Data and descriptive analytics.
                   It is provided for informational purposes only and does not constitute financial, investment, or legal advice.
                 </p>

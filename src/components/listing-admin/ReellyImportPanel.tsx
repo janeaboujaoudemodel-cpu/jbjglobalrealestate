@@ -753,7 +753,7 @@ export function ReellyImportPanel() {
           {/* ── 1. API Connection + Sync ── */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
-              <h3 className="font-semibold text-zinc-900 mb-3 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                 <Database className="w-4 h-4 text-emerald-600" /> API Connection
               </h3>
               <Button onClick={handleTestApiConnection} disabled={isTestingApi} className="w-full bg-emerald-600 hover:bg-emerald-700">
@@ -768,7 +768,7 @@ export function ReellyImportPanel() {
             </div>
 
             <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
-              <h3 className="font-semibold text-zinc-900 mb-3 flex items-center gap-2">
+              <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                 <CloudDownload className="w-4 h-4 text-emerald-600" /> Project Sync
               </h3>
               <div className="space-y-2">
@@ -787,7 +787,7 @@ export function ReellyImportPanel() {
             <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
               <div className="flex items-center gap-3 mb-3">
                 <RefreshCw className="h-5 w-5 text-emerald-600 animate-spin" />
-                <span className="font-medium text-zinc-900">Syncing projects from Reelly API...</span>
+                <span className="font-medium text-gray-900">Syncing projects from Reelly API...</span>
               </div>
               <Progress value={syncPercent} className="h-2" />
               {syncProgress && syncStartTime ? (() => {
@@ -808,7 +808,7 @@ export function ReellyImportPanel() {
           {/* Sync results */}
           {syncResult && (
             <div className="bg-white/80 rounded-xl p-4 border border-emerald-200">
-              <h3 className="font-semibold text-zinc-900 mb-3">Sync Results</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">Sync Results</h3>
               {syncResult.success ? (
                 <>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -824,8 +824,8 @@ export function ReellyImportPanel() {
                       <p className="text-xl font-bold text-cyan-600">{syncResult.updated || 0}</p>
                       <p className="text-xs text-gray-500">Updated</p>
                     </div>
-                    <div className="bg-zinc-50 rounded-lg p-3 text-center">
-                      <p className="text-xl font-bold text-zinc-600">{syncResult.skipped || 0}</p>
+                    <div className="bg-gray-50 rounded-lg p-3 text-center">
+                      <p className="text-xl font-bold text-gray-600">{syncResult.skipped || 0}</p>
                       <p className="text-xs text-gray-500">Skipped</p>
                     </div>
                   </div>
@@ -897,7 +897,7 @@ export function ReellyImportPanel() {
                   ].map((s, i) => (
                     <div key={i} className={`bg-${s.color}-50 rounded-lg p-3 text-center`}>
                       <p className={`text-xl font-bold text-${s.color}-700`}>{s.value.toLocaleString()}</p>
-                      <p className="text-xs text-zinc-600">{s.label}</p>
+                      <p className="text-xs text-gray-600">{s.label}</p>
                     </div>
                   ))}
                 </div>
@@ -907,7 +907,7 @@ export function ReellyImportPanel() {
             {backfillResult && (
               <div className={`bg-white/80 rounded-xl p-4 border ${backfillResult.success ? 'border-emerald-200' : 'border-red-200'}`}>
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-semibold text-zinc-900">Backfill Results</h4>
+                  <h4 className="font-semibold text-gray-900">Backfill Results</h4>
                   {backfillProjectList.length > 0 && (
                     <Button variant="ghost" size="sm" onClick={() => { setBackfillResult(null); setBackfillProjectList([]); supabase.from("sync_jobs").delete().eq("job_type", "reelly_backfill").then(() => {}); }} className="text-xs text-gray-500 hover:text-red-600">
                       <Trash2 className="h-3 w-3 mr-1" /> Clear
@@ -961,7 +961,7 @@ export function ReellyImportPanel() {
                 value={quickExtractId}
                 onChange={e => setQuickExtractId(e.target.value)}
                 placeholder="e.g. 3003, 1261, 2945"
-                className="flex-1 rounded-lg border border-emerald-300 px-3 py-2 text-sm text-zinc-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                className="flex-1 rounded-lg border border-emerald-300 px-3 py-2 text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 onKeyDown={e => { if (e.key === "Enter") handleQuickExtract(); }}
               />
               <Button
@@ -1008,8 +1008,8 @@ export function ReellyImportPanel() {
                   <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-900">{devSyncResult.processed || 0}</p><p className="text-xs text-emerald-600">Processed</p></div>
                   <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{devSyncResult.inserted || 0}</p><p className="text-xs text-emerald-600">New</p></div>
                   <div className="bg-blue-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-blue-700">{devSyncResult.updated || 0}</p><p className="text-xs text-blue-600">Updated</p></div>
-                  <div className="bg-zinc-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-zinc-700">{devSyncResult.skipped || 0}</p><p className="text-xs text-zinc-600">Skipped</p></div>
-                  <div className={`rounded-lg p-3 text-center ${(devSyncResult.errors || 0) > 0 ? 'bg-red-50' : 'bg-zinc-50'}`}><p className={`text-xl font-bold ${(devSyncResult.errors || 0) > 0 ? 'text-red-600' : 'text-gray-500'}`}>{devSyncResult.errors || 0}</p><p className="text-xs text-gray-500">Errors</p></div>
+                  <div className="bg-gray-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-gray-700">{devSyncResult.skipped || 0}</p><p className="text-xs text-gray-600">Skipped</p></div>
+                  <div className={`rounded-lg p-3 text-center ${(devSyncResult.errors || 0) > 0 ? 'bg-red-50' : 'bg-gray-50'}`}><p className={`text-xl font-bold ${(devSyncResult.errors || 0) > 0 ? 'text-red-600' : 'text-gray-500'}`}>{devSyncResult.errors || 0}</p><p className="text-xs text-gray-500">Errors</p></div>
                 </div>
               </div>
             )}
@@ -1032,7 +1032,7 @@ export function ReellyImportPanel() {
                 <div className="grid grid-cols-3 gap-3">
                   <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-900">{areasSyncResult.total_available || 0}</p><p className="text-xs text-emerald-600">Found</p></div>
                   <div className="bg-emerald-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-emerald-700">{areasSyncResult.inserted || 0}</p><p className="text-xs text-emerald-600">New</p></div>
-                  <div className="bg-zinc-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-zinc-700">{areasSyncResult.skipped || 0}</p><p className="text-xs text-zinc-600">Existing</p></div>
+                  <div className="bg-gray-50 rounded-lg p-3 text-center"><p className="text-xl font-bold text-gray-700">{areasSyncResult.skipped || 0}</p><p className="text-xs text-gray-600">Existing</p></div>
                 </div>
               </div>
             )}
@@ -1048,7 +1048,7 @@ export function ReellyImportPanel() {
             </h3>
             <p className="text-sm text-emerald-700 mb-3">Step 1: Test a single project enrichment. Step 2: Run bulk extraction after confirming quality.</p>
             <div className="flex gap-2 mb-2">
-              <input type="text" placeholder="Enter project slug" value={enrichTestSlug} onChange={(e) => setEnrichTestSlug(e.target.value)} className="flex-1 px-3 py-2 border border-zinc-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+              <input type="text" placeholder="Enter project slug" value={enrichTestSlug} onChange={(e) => setEnrichTestSlug(e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
               <Button variant="outline" size="sm" className="text-xs whitespace-nowrap" onClick={async () => {
                 try {
                   const { data } = await supabase.from("projects").select("slug").not("reelly_id", "is", null).not("cover_image_url", "is", null).limit(50);
@@ -1152,7 +1152,7 @@ export function ReellyImportPanel() {
                           <div className="pt-1 border-t">
                             <p className="text-[9px] text-gray-500 mb-0.5">Documents:</p>
                             {data.document_names.map((name, i) => (
-                              <span key={i} className="text-[9px] text-zinc-600 block">📎 {name}</span>
+                              <span key={i} className="text-[9px] text-gray-600 block">📎 {name}</span>
                             ))}
                           </div>
                         )}
@@ -1279,7 +1279,7 @@ export function ReellyImportPanel() {
             {/* Clear Stuck Jobs */}
             <div className="flex items-center justify-between p-4 bg-white rounded-lg border">
               <div>
-                <h4 className="font-medium text-zinc-900">Clear Stuck Jobs</h4>
+                <h4 className="font-medium text-gray-900">Clear Stuck Jobs</h4>
                 <p className="text-sm text-gray-500">Remove paused sync jobs that cannot be resumed</p>
               </div>
               <Button onClick={handleClearStuckJobs} variant="outline" size="sm" className="text-amber-700 border-amber-300 hover:bg-amber-50">
@@ -1305,7 +1305,7 @@ export function ReellyImportPanel() {
 
             {/* Data Integrity / Restore */}
             <div className="p-4 bg-white rounded-lg border">
-              <h4 className="font-medium text-zinc-900 flex items-center gap-2 mb-2">
+              <h4 className="font-medium text-gray-900 flex items-center gap-2 mb-2">
                 <Shield className="w-4 h-4 text-slate-500" /> Data Integrity / Restore to Reelly-Only
               </h4>
               <p className="text-sm text-gray-500 mb-3">View Provident enrichment stats and optionally restore to Reelly-only state.</p>
@@ -1352,7 +1352,7 @@ export function ReellyImportPanel() {
           <DialogHeader>
             <DialogTitle>Reelly projects processed in this sync</DialogTitle>
           </DialogHeader>
-          <div className="text-sm text-zinc-600">
+          <div className="text-sm text-gray-600">
             {isRecentLoading ? (
               <div className="flex items-center gap-2"><RefreshCw className="h-4 w-4 animate-spin" />Loading…</div>
             ) : recentImports.length === 0 ? <div>No items found for this run.</div> : (
@@ -1360,7 +1360,7 @@ export function ReellyImportPanel() {
                 {recentImports.map((p) => (
                   <div key={p.id} className="flex items-center justify-between gap-3 border rounded-lg p-2">
                     <div className="min-w-0">
-                      <div className="font-medium text-zinc-900 truncate">{p.name}</div>
+                      <div className="font-medium text-gray-900 truncate">{p.name}</div>
                       <div className="text-xs text-gray-500 truncate">{p.slug}</div>
                     </div>
                     <Badge variant="outline">{p.status || "pending"}</Badge>
@@ -1392,13 +1392,13 @@ export function ReellyImportPanel() {
             {backfillProjectList
               .filter(p => backfillListFilter === "all" ? true : backfillListFilter === "success" ? p.status === "success" : p.status !== "success")
               .map((p, i) => (
-                <div key={i} className="flex items-center justify-between gap-3 border rounded-lg p-2 hover:bg-zinc-50">
+                <div key={i} className="flex items-center justify-between gap-3 border rounded-lg p-2 hover:bg-gray-50">
                   <div className="min-w-0">
                     {p.slug ? (
-                      <a href={`/project/${p.slug}`} target="_blank" rel="noopener noreferrer" className="font-medium text-zinc-900 truncate text-sm hover:text-blue-600 hover:underline flex items-center gap-1">
+                      <a href={`/project/${p.slug}`} target="_blank" rel="noopener noreferrer" className="font-medium text-gray-900 truncate text-sm hover:text-blue-600 hover:underline flex items-center gap-1">
                         {p.name} <ExternalLink className="h-3 w-3 flex-shrink-0 opacity-50" />
                       </a>
-                    ) : <div className="font-medium text-zinc-900 truncate text-sm">{p.name}</div>}
+                    ) : <div className="font-medium text-gray-900 truncate text-sm">{p.name}</div>}
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {p.status === "success" ? (
@@ -1431,7 +1431,7 @@ export function ReellyImportPanel() {
             </Alert>
             <div className="flex items-center gap-2">
               <Checkbox id="confirm-destructive" checked={destructiveConfirmed} onCheckedChange={(checked) => setDestructiveConfirmed(checked === true)} />
-              <label htmlFor="confirm-destructive" className="text-sm text-zinc-700">I understand this will delete data and cannot be undone</label>
+              <label htmlFor="confirm-destructive" className="text-sm text-gray-700">I understand this will delete data and cannot be undone</label>
             </div>
           </div>
           <DialogFooter>

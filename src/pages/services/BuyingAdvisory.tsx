@@ -291,7 +291,7 @@ const BuyingAdvisory = () => {
               variants={fadeInUp}
               className="jj-card-inner"
             >
-              <p className="text-lg text-zinc-700 leading-relaxed">
+              <p className="text-lg text-gray-700 leading-relaxed">
                 JBJ Global Real Estate provides structured, licensed buying
                 advisory services for individuals and investors seeking to
                 purchase residential or investment properties in the UAE. Our
@@ -333,7 +333,7 @@ const BuyingAdvisory = () => {
                     <h3 className="font-semibold text-black mb-2">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-zinc-600">{item.description}</p>
+                    <p className="text-sm text-gray-600">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -374,7 +374,7 @@ const BuyingAdvisory = () => {
                     {primaryMarketFeatures.map((feature, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start gap-3 text-zinc-700"
+                        className="flex items-start gap-3 text-gray-700"
                       >
                         <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                         <span>{feature}</span>
@@ -399,7 +399,7 @@ const BuyingAdvisory = () => {
                     {secondaryMarketFeatures.map((feature, idx) => (
                       <li
                         key={idx}
-                        className="flex items-start gap-3 text-zinc-700"
+                        className="flex items-start gap-3 text-gray-700"
                       >
                         <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                         <span>{feature}</span>
@@ -487,19 +487,19 @@ const BuyingAdvisory = () => {
                 <h3 className="text-xl font-bold text-black">Fee Structure</h3>
               </div>
               <ul className="space-y-4">
-                <li className="flex items-start gap-3 text-zinc-700">
+                <li className="flex items-start gap-3 text-gray-700">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span><strong>Primary market:</strong> No buyer fees — developer-paid commission</span>
                 </li>
-                <li className="flex items-start gap-3 text-zinc-700">
+                <li className="flex items-start gap-3 text-gray-700">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span><strong>Secondary market:</strong> Commission disclosed at engagement</span>
                 </li>
-                <li className="flex items-start gap-3 text-zinc-700">
+                <li className="flex items-start gap-3 text-gray-700">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span>Fee structures comply with UAE brokerage regulations</span>
                 </li>
-                <li className="flex items-start gap-3 text-zinc-700">
+                <li className="flex items-start gap-3 text-gray-700">
                   <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                   <span>No hidden charges or undisclosed markups</span>
                 </li>
@@ -533,7 +533,7 @@ const BuyingAdvisory = () => {
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-lg text-zinc-700 leading-relaxed"
+              className="text-lg text-gray-700 leading-relaxed"
             >
               JBJ Global Real Estate operates under a UAE brokerage license
               (RERA/DLD registration). All advisory and transaction support
@@ -584,7 +584,7 @@ const BuyingAdvisory = () => {
                   {comparisonData.map((row, index) => (
                     <tr key={index}>
                       <td className="px-6 py-4 text-black font-medium">{row.aspect}</td>
-                      <td className="px-6 py-4 text-zinc-600">{row.guide}</td>
+                      <td className="px-6 py-4 text-gray-600">{row.guide}</td>
                       <td className="px-6 py-4 text-gold font-semibold">
                         {row.advisory}
                       </td>
@@ -630,7 +630,7 @@ const BuyingAdvisory = () => {
                     <AccordionTrigger className="px-6 py-4 text-left font-semibold text-black hover:text-gold hover:no-underline">
                       {faq.question}
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-zinc-600">
+                    <AccordionContent className="px-6 pb-4 text-gray-600">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -660,7 +660,7 @@ const BuyingAdvisory = () => {
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-zinc-700 text-lg mb-8"
+              className="text-gray-700 text-lg mb-8"
             >
               Let our experienced team guide you through the entire buying
               process with expert market analysis and negotiation support.

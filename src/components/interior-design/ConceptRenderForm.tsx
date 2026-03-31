@@ -79,7 +79,7 @@ const ConceptRenderForm = ({
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
                     ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white'
-                    : 'bg-zinc-800/50 border-zinc-700 text-white/70 hover:border-zinc-600 hover:text-white/85'
+                    : 'bg-zinc-800/50 border-gray-700 text-white/70 hover:border-gray-600 hover:text-white/85'
                   }
                 `}
               >
@@ -110,7 +110,7 @@ const ConceptRenderForm = ({
                   p-4 rounded-xl border transition-all
                   ${isSelected
                     ? 'bg-fuchsia-500/20 border-fuchsia-500/50'
-                    : 'bg-zinc-800/50 border-zinc-700 hover:border-zinc-600'
+                    : 'bg-zinc-800/50 border-gray-700 hover:border-gray-600'
                   }
                 `}
               >
@@ -118,7 +118,7 @@ const ConceptRenderForm = ({
                   {palette.colors.map((color, i) => (
                     <div
                       key={i}
-                      className="w-6 h-6 rounded-full border border-zinc-600"
+                      className="w-6 h-6 rounded-full border border-gray-600"
                       style={{ backgroundColor: color }}
                     />
                   ))}
@@ -148,7 +148,7 @@ const ConceptRenderForm = ({
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
                     ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white'
-                    : 'bg-zinc-800/50 border-zinc-700 text-white/70 hover:border-zinc-600 hover:text-white/85'
+                    : 'bg-zinc-800/50 border-gray-700 text-white/70 hover:border-gray-600 hover:text-white/85'
                   }
                 `}
               >
@@ -171,7 +171,7 @@ const ConceptRenderForm = ({
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe any specific features you want: floor-to-ceiling windows, marble floors, gold accents, specific furniture pieces, lighting preferences..."
-          className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 min-h-[120px] focus:border-fuchsia-500/50"
+          className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 min-h-[120px] focus:border-fuchsia-500/50"
           maxLength={1000}
         />
         <p className="text-xs text-white/60 mt-2 text-right">

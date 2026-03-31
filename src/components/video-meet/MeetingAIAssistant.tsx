@@ -223,7 +223,7 @@ export function MeetingAIAssistant({
       {!isMinimized && (
         <>
           {meetingContext && (
-            <div className="px-4 py-2 bg-zinc-800/50 border-b border-zinc-700 text-xs">
+            <div className="px-4 py-2 bg-zinc-800/50 border-b border-gray-700 text-xs">
               <div className="flex items-center gap-2 text-gray-400">
                 <EyeOff className="w-3 h-3" />
                 <span>Private — only you see this</span>
@@ -245,7 +245,7 @@ export function MeetingAIAssistant({
                     { icon: FileText, label: 'Summarize meeting', prompt: 'Summarize our meeting' },
                   ].map(({ icon: Icon, label, prompt }) => (
                     <button key={label} onClick={() => setInput(prompt)}
-                      className="w-full p-2 text-left text-xs text-gray-400 bg-zinc-800 rounded-lg hover:bg-zinc-700 flex items-center gap-2">
+                      className="w-full p-2 text-left text-xs text-gray-400 bg-zinc-800 rounded-lg hover:bg-gray-700 flex items-center gap-2">
                       <Icon className="w-3 h-3 text-gold" />
                       {label}
                     </button>
@@ -279,11 +279,11 @@ export function MeetingAIAssistant({
             )}
           </ScrollArea>
 
-          <div className="p-3 border-t border-zinc-700">
+          <div className="p-3 border-t border-gray-700">
             <div className="flex gap-2">
               <Input value={input} onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                placeholder="Ask AI privately..." className="bg-zinc-800 border-zinc-700 text-white text-sm" />
+                placeholder="Ask AI privately..." className="bg-zinc-800 border-gray-700 text-white text-sm" />
               <Button size="icon" onClick={sendMessage} disabled={isLoading || !input.trim()} className="bg-gold hover:bg-gold/90 text-black">
                 <Send className="w-4 h-4" />
               </Button>

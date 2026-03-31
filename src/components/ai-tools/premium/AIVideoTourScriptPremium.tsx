@@ -181,7 +181,7 @@ ${response.script}
                       className={`p-2 rounded-lg border text-center transition-all ${
                         formData.targetAudience === audience.value
                           ? "bg-pink-500/20 border-pink-500/50 text-white"
-                          : "bg-zinc-800 border-zinc-700 text-white/70 hover:border-zinc-600"
+                          : "bg-zinc-800 border-gray-700 text-white/70 hover:border-gray-600"
                       }`}
                     >
                       <span className="text-xs font-medium">{audience.label}</span>

@@ -198,11 +198,11 @@ export default function Studio() {
               <Home className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Projects</span>
             </Link>
-            <Link to="/studio/settings" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-zinc-600 hover:bg-gold/10 border border-transparent hover:border-gold/30 transition-all">
+            <Link to="/studio/settings" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-gray-600 hover:bg-gold/10 border border-transparent hover:border-gold/30 transition-all">
               <Settings className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Settings</span>
             </Link>
-            <Link to="/toolkit" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-zinc-600 hover:bg-gold/10 transition-all">
+            <Link to="/toolkit" className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-gray-600 hover:bg-gold/10 transition-all">
               <Zap className="w-3.5 h-3.5" />
               <span className="hidden md:inline">AI Tools Hub</span>
             </Link>
@@ -330,7 +330,7 @@ export default function Studio() {
                     <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 bg-gold/15 border border-gold/30">
                       <Icon className="w-4 h-4 text-gold" />
                     </div>
-                    <span className="text-xs text-zinc-600 group-hover:text-black transition-colors font-medium leading-snug flex-1">{tool.label}</span>
+                    <span className="text-xs text-gray-600 group-hover:text-black transition-colors font-medium leading-snug flex-1">{tool.label}</span>
                     <ChevronRight className="w-3 h-3 shrink-0 text-gray-500" />
                   </Link>
                 );
@@ -471,9 +471,9 @@ function ProjectMenu({ projectId, onRename, onDuplicate, onShare, onDelete }: {
         <MoreVertical className="w-4 h-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="border border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">
-        <DropdownMenuItem onClick={onRename} className="text-zinc-700 focus:text-black focus:bg-gold/10 text-xs"><Pencil className="w-3.5 h-3.5 mr-2" />Rename</DropdownMenuItem>
-        <DropdownMenuItem onClick={onDuplicate} className="text-zinc-700 focus:text-black focus:bg-gold/10 text-xs"><Copy className="w-3.5 h-3.5 mr-2" />Duplicate</DropdownMenuItem>
-        <DropdownMenuItem onClick={onShare} className="text-zinc-700 focus:text-black focus:bg-gold/10 text-xs"><Share2 className="w-3.5 h-3.5 mr-2" />Share</DropdownMenuItem>
+        <DropdownMenuItem onClick={onRename} className="text-gray-700 focus:text-black focus:bg-gold/10 text-xs"><Pencil className="w-3.5 h-3.5 mr-2" />Rename</DropdownMenuItem>
+        <DropdownMenuItem onClick={onDuplicate} className="text-gray-700 focus:text-black focus:bg-gold/10 text-xs"><Copy className="w-3.5 h-3.5 mr-2" />Duplicate</DropdownMenuItem>
+        <DropdownMenuItem onClick={onShare} className="text-gray-700 focus:text-black focus:bg-gold/10 text-xs"><Share2 className="w-3.5 h-3.5 mr-2" />Share</DropdownMenuItem>
         <DropdownMenuSeparator className="bg-gold/20" />
         <DropdownMenuItem onClick={onDelete} className="text-red-600 focus:text-red-700 focus:bg-red-50 text-xs"><Trash2 className="w-3.5 h-3.5 mr-2" />Delete</DropdownMenuItem>
       </DropdownMenuContent>

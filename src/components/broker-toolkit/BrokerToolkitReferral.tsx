@@ -31,7 +31,7 @@ export function BrokerToolkitReferral() {
             <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
               Make Money by Joining <span className="text-gold">JBJ Global Real Estate Circle</span>
             </h2>
-            <p className="text-zinc-600 max-w-3xl mx-auto">
+            <p className="text-gray-600 max-w-3xl mx-auto">
               From anywhere in the world, you can become a broker with us, or you can become a referral partner and start earning commission on every successful deal.
             </p>
           </motion.div>
@@ -45,7 +45,7 @@ export function BrokerToolkitReferral() {
                   </div>
                   <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3 w-fit">For JBJ Employees</Badge>
                   <h3 className="text-black text-xl font-bold mb-2">JBJ Academy</h3>
-                  <p className="text-zinc-600 mb-4 flex-1">Professional training, video tutorials, and internal certifications for JBJ Global Real Estate employees.</p>
+                  <p className="text-gray-600 mb-4 flex-1">Professional training, video tutorials, and internal certifications for JBJ Global Real Estate employees.</p>
                   <Link to="/broker-toolkit" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
                     Access Academy <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -61,7 +61,7 @@ export function BrokerToolkitReferral() {
                   </div>
                   <Badge className="bg-purple-500/20 text-purple-600 border-purple-500/30 mb-3 w-fit">For Job Seekers</Badge>
                   <h3 className="text-black text-xl font-bold mb-2">JBJ Employment Hub</h3>
-                  <p className="text-zinc-600 mb-4 flex-1">Join our team as a licensed broker. We provide training, tools, leads, and support to help you succeed.</p>
+                  <p className="text-gray-600 mb-4 flex-1">Join our team as a licensed broker. We provide training, tools, leads, and support to help you succeed.</p>
                   <Link to="/join" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
                     Apply Now <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -79,7 +79,7 @@ export function BrokerToolkitReferral() {
                     <Globe className="w-3 h-3 mr-1" /> Open to Everyone Worldwide
                   </Badge>
                   <h3 className="text-black text-xl font-bold mb-2">JBJ Referral Program</h3>
-                  <p className="text-zinc-600 mb-4 flex-1">Earn 5% or 2.5% commission on successful referrals. No license required — anyone from any country can join!</p>
+                  <p className="text-gray-600 mb-4 flex-1">Earn 5% or 2.5% commission on successful referrals. No license required — anyone from any country can join!</p>
                   <Link to="/referral-onboarding" className="inline-flex items-center gap-2 text-gold font-semibold hover:gap-3 transition-all mt-auto">
                     Start Earning <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -130,12 +130,12 @@ export function BrokerToolkitReferral() {
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6">
                     <Badge className="bg-blue-500/20 text-blue-600 border-blue-500/30 mb-3">Passive Referral — 2.5%</Badge>
                     <h4 className="text-black font-bold text-lg mb-2">Share Contact Details Only</h4>
-                    <p className="text-zinc-600 text-sm">Simply provide us with your contact's details. We'll reach out discreetly without mentioning your name.</p>
+                    <p className="text-gray-600 text-sm">Simply provide us with your contact's details. We'll reach out discreetly without mentioning your name.</p>
                   </div>
                   <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6">
                     <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 mb-3">Active Referral — 5%</Badge>
                     <h4 className="text-black font-bold text-lg mb-2">Facilitate the Introduction</h4>
-                    <p className="text-zinc-600 text-sm">Introduce your contact directly to us. Help convince them to invest — earn double!</p>
+                    <p className="text-gray-600 text-sm">Introduce your contact directly to us. Help convince them to invest — earn double!</p>
                   </div>
                 </div>
 

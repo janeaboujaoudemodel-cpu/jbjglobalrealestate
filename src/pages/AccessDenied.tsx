@@ -86,7 +86,7 @@ const AccessDenied = () => {
 
         {/* User status — email hidden for security */}
         {user && (
-          <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 mb-6">
+          <div className="bg-zinc-900/50 border border-gray-800 rounded-xl p-4 mb-6">
             <p className="text-white/70 text-sm">You are signed in but do not have access to this page.</p>
           </div>
         )}
@@ -155,7 +155,7 @@ const AccessDenied = () => {
         </div>
 
         {/* Footer */}
-        <p className="text-zinc-600 text-xs mt-12">
+        <p className="text-gray-600 text-xs mt-12">
           © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
         </p>
       </div>

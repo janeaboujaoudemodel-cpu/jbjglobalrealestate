@@ -62,7 +62,7 @@ export const EmergencyMirrorPanel = () => {
         <AlertTriangle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
         <div>
           <p className="text-black font-semibold text-sm">Emergency Data Mirror — Use Before API Key Expires</p>
-          <p className="text-zinc-600 text-xs mt-1">
+          <p className="text-gray-600 text-xs mt-1">
             This tool extracts ALL missing data from the Reelly API (bedrooms, prices, images, documents, amenities) and mirrors everything to local storage. 
             Run this immediately to ensure all project data is preserved before the API key is disconnected.
           </p>
@@ -120,7 +120,7 @@ export const EmergencyMirrorPanel = () => {
           )}
 
           {status && status.needs_bedrooms > 0 && (
-            <p className="text-zinc-600 text-sm">
+            <p className="text-gray-600 text-sm">
               Estimated <span className="text-black font-semibold">{status.estimated_batches_needed}</span> orchestrator calls needed 
               ({Math.ceil(status.estimated_batches_needed / 10)} runs of this tool) to fully enrich all projects.
             </p>
@@ -141,7 +141,7 @@ export const EmergencyMirrorPanel = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-zinc-600 text-sm">
+          <p className="text-gray-600 text-sm">
             This will fire up to <strong className="text-black">100 projects</strong> per run with full image mirroring enabled. 
             Run this multiple times to process all projects. Each run takes ~10 minutes to complete in the background.
           </p>
@@ -161,7 +161,7 @@ export const EmergencyMirrorPanel = () => {
           {lastResult && (
             <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] border border-gold/20 rounded-lg p-4 space-y-2">
               <p className="text-emerald-700 text-sm font-semibold">Mirror Dispatched Successfully</p>
-              <div className="text-zinc-600 text-xs space-y-1">
+              <div className="text-gray-600 text-xs space-y-1">
                 <p>Projects queued: <span className="text-black font-medium">{lastResult.projects_queued}</span></p>
                 <p>Batches fired: <span className="text-black font-medium">{lastResult.batches_fired}</span></p>
                 {lastResult.status_before && (

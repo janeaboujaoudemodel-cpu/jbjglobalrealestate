@@ -185,8 +185,8 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
     switch (status) {
       case 'completed': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
       case 'in_progress': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'draft': return 'bg-zinc-500/20 text-white/70 border-zinc-500/30';
-      default: return 'bg-zinc-500/20 text-white/70 border-zinc-500/30';
+      case 'draft': return 'bg-gray-500/20 text-white/70 border-gray-500/30';
+      default: return 'bg-gray-500/20 text-white/70 border-gray-500/30';
     }
   };
 
@@ -212,14 +212,14 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search projects..."
-            className="pl-10 bg-zinc-800 border-zinc-700 text-white"
+            className="pl-10 bg-zinc-800 border-gray-700 text-white"
           />
         </div>
         <Button
           variant="outline"
           size="icon"
           onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-          className="border-zinc-700 text-white/70"
+          className="border-gray-700 text-white/70"
         >
           {viewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
         </Button>
@@ -235,7 +235,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
               className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                 selectedCategory === cat.id
                   ? 'bg-gold text-black'
-                  : 'bg-zinc-800 text-white/70 hover:bg-zinc-700'
+                  : 'bg-zinc-800 text-white/70 hover:bg-gray-700'
               }`}
             >
               {cat.label}
@@ -251,7 +251,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
         </div>
       ) : filteredProjects.length === 0 ? (
         <div className="text-center py-12">
-          <FolderOpen className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
+          <FolderOpen className="w-16 h-16 text-gray-700 mx-auto mb-4" />
           <h4 className="text-white font-medium mb-2">No projects found</h4>
           <p className="text-white/60 text-sm mb-4">
             {searchQuery ? 'Try a different search term' : 'Create your first design project'}
@@ -275,7 +275,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                   className={`group rounded-lg border-2 transition-all cursor-pointer ${
                     selectedProjectId === project.id
                       ? 'border-gold bg-gold/10'
-                      : 'border-zinc-800 bg-zinc-800/50 hover:border-zinc-700'
+                      : 'border-gray-800 bg-zinc-800/50 hover:border-gray-700'
                   } ${viewMode === 'grid' ? 'p-3' : 'p-4'}`}
                   onClick={() => onSelectProject(project)}
                 >
@@ -291,7 +291,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <FolderOpen className="w-8 h-8 text-zinc-600" />
+                            <FolderOpen className="w-8 h-8 text-gray-600" />
                           </div>
                         )}
                         <DropdownMenu>
@@ -305,7 +305,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                               <MoreVertical className="w-3 h-3 text-white" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent className="bg-zinc-900 border-zinc-800">
+                          <DropdownMenuContent className="bg-zinc-900 border-gray-800">
                             <DropdownMenuItem onClick={() => handleDuplicateProject(project)} className="text-white/85">
                               <Copy className="w-4 h-4 mr-2" /> Duplicate
                             </DropdownMenuItem>
@@ -339,7 +339,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <FolderOpen className="w-5 h-5 text-zinc-600" />
+                            <FolderOpen className="w-5 h-5 text-gray-600" />
                           </div>
                         )}
                       </div>
@@ -359,7 +359,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                             <MoreVertical className="w-4 h-4 text-white/70" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="bg-zinc-900 border-zinc-800">
+                        <DropdownMenuContent className="bg-zinc-900 border-gray-800">
                           <DropdownMenuItem onClick={() => handleDuplicateProject(project)} className="text-white/85">
                             <Copy className="w-4 h-4 mr-2" /> Duplicate
                           </DropdownMenuItem>

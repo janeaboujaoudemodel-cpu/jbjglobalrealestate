@@ -106,21 +106,21 @@ const FoundersVideoMeetPanel: React.FC = () => {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-600">Meeting Title</Label>
+                  <Label className="text-gray-600">Meeting Title</Label>
                   <Input value={meetingTitle} onChange={(e) => setMeetingTitle(e.target.value)} placeholder="e.g., Property Viewing with Mr. Ahmed" className="bg-white border-[#B89555]/30 text-black" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-600">Participants (emails, comma-separated)</Label>
+                  <Label className="text-gray-600">Participants (emails, comma-separated)</Label>
                   <Input value={participants} onChange={(e) => setParticipants(e.target.value)} placeholder="e.g., client@email.com" className="bg-white border-[#B89555]/30 text-black" />
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-600">Date (optional)</Label>
+                  <Label className="text-gray-600">Date (optional)</Label>
                   <Input type="date" value={meetingDate} onChange={(e) => setMeetingDate(e.target.value)} className="bg-white border-[#B89555]/30 text-black" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-600">Time</Label>
+                  <Label className="text-gray-600">Time</Label>
                   <Input type="time" value={meetingTime} onChange={(e) => setMeetingTime(e.target.value)} className="bg-white border-[#B89555]/30 text-black" />
                 </div>
               </div>
@@ -128,7 +128,7 @@ const FoundersVideoMeetPanel: React.FC = () => {
                 <Button onClick={handleCreateMeeting} disabled={isGenerating || !meetingTitle} className="bg-gradient-to-r from-[#B89555] to-[#A68444] hover:opacity-90 text-white">
                   {isGenerating ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Creating...</> : <><Video className="w-4 h-4 mr-2" />Create Meeting</>}
                 </Button>
-                <Button variant="outline" onClick={() => setIsCreating(false)} className="border-[#B89555]/30 text-zinc-600 hover:text-black">Cancel</Button>
+                <Button variant="outline" onClick={() => setIsCreating(false)} className="border-[#B89555]/30 text-gray-600 hover:text-black">Cancel</Button>
               </div>
 
               {generatedLink && (

@@ -98,7 +98,7 @@ export function SettingsDropdown({
         </div>
         
         {/* Divider */}
-        <div className={cn("border-t", isDark ? "border-zinc-700" : "border-gold/20")} />
+        <div className={cn("border-t", isDark ? "border-gray-700" : "border-gold/20")} />
         
         {/* Currency */}
         <div className="p-4 space-y-3">
@@ -130,7 +130,7 @@ export function SettingsDropdown({
         </div>
         
         {/* Divider */}
-        <div className={cn("border-t", isDark ? "border-zinc-700" : "border-gold/20")} />
+        <div className={cn("border-t", isDark ? "border-gray-700" : "border-gold/20")} />
         
         {/* Display Mode */}
         <div className="p-4 space-y-3">
@@ -160,7 +160,7 @@ export function SettingsDropdown({
                   "w-5 h-5 rounded-full border-2 flex items-center justify-center",
                   displayMode === mode.value
                     ? "border-gold bg-gold"
-                    : isDark ? "border-zinc-500" : "border-gold/40"
+                    : isDark ? "border-gray-500" : "border-gold/40"
                 )}>
                   {displayMode === mode.value && (
                     <Check className="w-3 h-3 text-black" />
@@ -188,7 +188,7 @@ export function SettingsDropdown({
         {/* Apply Button */}
         <div className={cn(
           "p-3 border-t",
-          isDark ? "border-zinc-700 bg-[#151515]" : "border-gold/20 bg-champagne-light/50"
+          isDark ? "border-gray-700 bg-[#151515]" : "border-gold/20 bg-champagne-light/50"
         )}>
           <Button
             onClick={() => setOpen(false)}

@@ -205,7 +205,7 @@ const RealEstateSuite = () => {
                       "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all",
                       isActive
                         ? `${colors.active} border ${colors.border}`
-                        : `${colors.inactive} border border-transparent hover:border-zinc-700`
+                        : `${colors.inactive} border border-transparent hover:border-gray-700`
                     )}
                   >
                     <Icon className="w-4 h-4" />
@@ -218,7 +218,7 @@ const RealEstateSuite = () => {
         </div>
 
         {/* Tool Selector - Sub-tabs within section */}
-        <div className="bg-zinc-950 border-b border-zinc-800">
+        <div className="bg-zinc-950 border-b border-gray-800">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex gap-2 py-3 overflow-x-auto scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
               {currentSection.tools.map((tool) => {
@@ -232,7 +232,7 @@ const RealEstateSuite = () => {
                       "flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all whitespace-nowrap min-w-fit",
                       isActive
                         ? `${currentColors.active} border ${currentColors.border}`
-                        : "text-white/60 hover:text-white/85 border border-zinc-800 hover:border-zinc-700"
+                        : "text-white/60 hover:text-white/85 border border-gray-800 hover:border-gray-700"
                     )}
                   >
                     <Icon className="w-4 h-4" />

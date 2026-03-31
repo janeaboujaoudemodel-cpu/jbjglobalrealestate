@@ -388,7 +388,7 @@ const SellerGuide = () => {
                     <item.icon className="w-6 h-6 text-gold" />
                   </div>
                   <h3 className="text-lg font-bold text-black mb-2">{item.title}</h3>
-                  <p className="text-zinc-600 text-sm">{item.description}</p>
+                  <p className="text-gray-600 text-sm">{item.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -418,10 +418,10 @@ const SellerGuide = () => {
                           <span className="px-2 py-0.5 bg-gold/10 text-gold font-bold text-xs rounded">Step {step.number}</span>
                           <h3 className="text-xl font-bold text-black">{step.title}</h3>
                         </div>
-                        <p className="text-zinc-600 mb-4">{step.description}</p>
+                        <p className="text-gray-600 mb-4">{step.description}</p>
                         <ul className="grid md:grid-cols-2 gap-2 mb-4">
                           {step.items.map((item, i) => (
-                            <li key={i} className="flex items-start gap-2 text-zinc-700 text-sm">
+                            <li key={i} className="flex items-start gap-2 text-gray-700 text-sm">
                               <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
                               <span>{item}</span>
                             </li>
@@ -468,14 +468,14 @@ const SellerGuide = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-black">Agency Commission</h3>
-                    <p className="text-zinc-600">Standard market rate: {agencyCommission.rate}</p>
+                    <p className="text-gray-600">Standard market rate: {agencyCommission.rate}</p>
                   </div>
                 </div>
-                <p className="text-zinc-700 mb-4">{agencyCommission.paidBy}</p>
+                <p className="text-gray-700 mb-4">{agencyCommission.paidBy}</p>
                 <p className="text-black font-semibold mb-3">This covers:</p>
                 <ul className="grid md:grid-cols-2 gap-2">
                   {agencyCommission.covers.map((item, index) => (
-                    <li key={index} className="flex items-start gap-2 text-zinc-700 text-sm">
+                    <li key={index} className="flex items-start gap-2 text-gray-700 text-sm">
                       <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
                       <span>{item}</span>
                     </li>
@@ -495,7 +495,7 @@ const SellerGuide = () => {
                   {governmentFees.map((fee, index) => (
                     <div key={index} className="jj-card-inner rounded-lg p-4">
                       <p className="text-black font-medium">{fee.title}</p>
-                      <p className="text-zinc-600 text-sm">{fee.description}</p>
+                      <p className="text-gray-600 text-sm">{fee.description}</p>
                     </div>
                   ))}
                 </div>
@@ -519,10 +519,10 @@ const SellerGuide = () => {
                   </div>
                   <h3 className="text-xl font-bold text-black">Selling Mortgaged Properties</h3>
                 </div>
-                <p className="text-zinc-700 mb-4">If your property has an existing mortgage:</p>
+                <p className="text-gray-700 mb-4">If your property has an existing mortgage:</p>
                 <ul className="space-y-3 mb-4">
                   {mortgagedPropertySteps.map((step, index) => (
-                    <li key={index} className="flex items-start gap-3 text-zinc-700">
+                    <li key={index} className="flex items-start gap-3 text-gray-700">
                       <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                       <span>{step}</span>
                     </li>
@@ -549,10 +549,10 @@ const SellerGuide = () => {
                   </div>
                   <h3 className="text-xl font-bold text-black">Selling Off-Plan Properties (Resale)</h3>
                 </div>
-                <p className="text-zinc-700 mb-4">Off-plan resale depends on:</p>
+                <p className="text-gray-700 mb-4">Off-plan resale depends on:</p>
                 <ul className="space-y-3 mb-4">
                   {offPlanResaleConditions.map((condition, index) => (
-                    <li key={index} className="flex items-start gap-3 text-zinc-700">
+                    <li key={index} className="flex items-start gap-3 text-gray-700">
                       <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
                       <span>{condition}</span>
                     </li>
@@ -575,13 +575,13 @@ const SellerGuide = () => {
                   className="jj-card-inner p-6 hover:border-gold hover:shadow-xl hover:shadow-gold/20 transition-all"
                 >
                   <h4 className="text-black font-semibold mb-2">{item.title}</h4>
-                  <p className="text-zinc-600 text-sm">{item.description}</p>
+                  <p className="text-gray-600 text-sm">{item.description}</p>
                 </div>
               ))}
             </div>
 
             <div className="jj-card-inner rounded-xl p-6">
-              <p className="text-zinc-700 text-sm leading-relaxed">
+              <p className="text-gray-700 text-sm leading-relaxed">
                 <span className="text-black font-semibold">JBJ Global Real Estate</span> is licensed for buying, selling, and renting property in Dubai. Legal and banking services are coordinated through licensed third-party partners where required.
               </p>
             </div>
@@ -598,12 +598,12 @@ const SellerGuide = () => {
                   <AccordionItem 
                     key={index} 
                     value={`faq-${index}`}
-                    className="border-b border-zinc-200 last:border-0"
+                    className="border-b border-gray-200 last:border-0"
                   >
                     <AccordionTrigger className="text-black text-left font-medium hover:text-gold hover:no-underline py-5">
                       {faq.question}
                     </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 pb-5">
+                    <AccordionContent className="text-gray-600 pb-5">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -630,7 +630,7 @@ const SellerGuide = () => {
                 <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
                   <span className="text-gold">Next</span> Step
                 </h2>
-                <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+                <p className="text-gray-600 mb-8 max-w-xl mx-auto">
                   If you are considering selling your property, the next step is a structured pricing and market review to determine the correct exit strategy.
                 </p>
                 <div className="flex flex-wrap justify-center gap-4 mb-8">
@@ -655,21 +655,21 @@ const SellerGuide = () => {
                     href={getWhatsAppUrl("Hi, I'd like to discuss selling my property in Dubai.")}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
+                    className="flex items-center gap-2 text-gray-600 hover:text-gold transition-colors"
                   >
                     <MessageCircle className="w-4 h-4 text-green-500" />
                     WhatsApp: {CONTACT_INFO.phone}
                   </a>
                   <a 
                     href={getCallUrl()}
-                    className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
+                    className="flex items-center gap-2 text-gray-600 hover:text-gold transition-colors"
                   >
                     <Phone className="w-4 h-4 text-blue-500" />
                     Call: {CONTACT_INFO.phone}
                   </a>
                   <a 
                     href={getEmailUrl()}
-                    className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
+                    className="flex items-center gap-2 text-gray-600 hover:text-gold transition-colors"
                   >
                     <Mail className="w-4 h-4 text-orange-500" />
                     {CONTACT_INFO.email}
@@ -689,7 +689,7 @@ const SellerGuide = () => {
                   <Shield className="w-4 h-4 text-gold" />
                   Important Disclaimer
                 </h4>
-                <div className="text-zinc-600 text-sm space-y-2">
+                <div className="text-gray-600 text-sm space-y-2">
                   <p>
                     This guide is provided for general educational and informational purposes only. It does not constitute legal, 
                     mortgage, or professional advice. JBJ Global Real Estate is a licensed 

@@ -67,7 +67,7 @@ const ChatLeadForm = ({
           <UserCircle className="w-7 h-7 text-gold" />
         </div>
         <h4 className="text-black text-lg font-semibold mb-1"><T>Quick intro!</T></h4>
-        <p className="text-zinc-600 text-sm"><T>So I can personalize your experience</T></p>
+        <p className="text-gray-600 text-sm"><T>So I can personalize your experience</T></p>
       </div>
 
       <div className="space-y-3">
@@ -203,7 +203,7 @@ const ChatLeadForm = ({
             onChange={(e) => updateField('birthday', e.target.value)}
             className="bg-white border-2 border-gold/40 text-black h-9 text-sm focus:border-gold"
           />
-          <p className="text-zinc-600 text-[10px] mt-0.5">🎁 <T>We'll send you exclusive birthday offers!</T></p>
+          <p className="text-gray-600 text-[10px] mt-0.5">🎁 <T>We'll send you exclusive birthday offers!</T></p>
         </div>
 
         {/* Consent Checkboxes */}

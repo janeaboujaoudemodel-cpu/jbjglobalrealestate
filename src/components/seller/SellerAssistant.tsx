@@ -184,7 +184,7 @@ Help the user complete their listing form and answer questions about the selling
           </div>
           <div>
             <h3 className="text-black font-semibold text-sm">JBJ Seller Assistant</h3>
-            <p className="text-zinc-600 text-xs">Here to help you list your property</p>
+            <p className="text-gray-600 text-xs">Here to help you list your property</p>
           </div>
         </div>
         <Button
@@ -205,7 +205,7 @@ Help the user complete their listing form and answer questions about the selling
             variant="outline"
             size="sm"
             onClick={action.action}
-            className="border-gold/40 text-zinc-700 hover:text-gold hover:border-gold whitespace-nowrap text-xs bg-white"
+            className="border-gold/40 text-gray-700 hover:text-gold hover:border-gold whitespace-nowrap text-xs bg-white"
           >
             <action.icon className={`w-3 h-3 mr-1 ${action.iconClass}`} />
             {action.label}
@@ -225,7 +225,7 @@ Help the user complete their listing form and answer questions about the selling
                 className={`max-w-[85%] rounded-lg px-4 py-2.5 ${
                   message.role === "user"
                     ? "bg-gold text-black"
-                    : "bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA] text-zinc-800 border border-gold/30"
+                    : "bg-gradient-to-br from-[#FDFBF7] via-white to-[#F7F2EA] text-gray-800 border border-gold/30"
                 }`}
               >
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -244,7 +244,7 @@ Help the user complete their listing form and answer questions about the selling
 
       {/* Suggested Questions - Champagne BG */}
       <div className="px-4 py-2 border-t border-gold/30 bg-gradient-to-r from-[#FDFBF7] via-white to-[#F7F2EA]">
-        <p className="text-zinc-600 text-xs mb-2 flex items-center gap-1">
+        <p className="text-gray-600 text-xs mb-2 flex items-center gap-1">
           <Lightbulb className="w-3 h-3 text-gold" />
           Suggested questions:
         </p>
@@ -254,7 +254,7 @@ Help the user complete their listing form and answer questions about the selling
               key={index}
               onClick={() => sendMessage(question)}
               disabled={isLoading}
-              className="text-xs px-3 py-1.5 bg-white text-zinc-700 border border-gold/30 rounded-full hover:bg-gold/10 hover:text-gold hover:border-gold transition-colors disabled:opacity-50"
+              className="text-xs px-3 py-1.5 bg-white text-gray-700 border border-gold/30 rounded-full hover:bg-gold/10 hover:text-gold hover:border-gold transition-colors disabled:opacity-50"
             >
               {question}
             </button>

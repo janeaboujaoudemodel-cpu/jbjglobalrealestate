@@ -134,7 +134,7 @@ const LeadCapturePopup = () => {
               <h3 className="text-xl font-bold text-black">
                 {headline}
               </h3>
-              <p className="text-sm text-zinc-600 mt-1">
+              <p className="text-sm text-gray-600 mt-1">
                 {subtitle}
               </p>
             </div>

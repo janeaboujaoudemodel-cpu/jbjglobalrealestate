@@ -389,7 +389,7 @@ const AdminCRM = () => {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge className={broker.crm_role === "owner_admin" ? "bg-gold/10 text-gold border-gold/30" : "bg-zinc-100 text-zinc-600"}>
+                          <Badge className={broker.crm_role === "owner_admin" ? "bg-gold/10 text-gold border-gold/30" : "bg-gray-100 text-gray-600"}>
                             {broker.crm_role}
                           </Badge>
                         </TableCell>

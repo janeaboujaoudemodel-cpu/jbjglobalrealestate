@@ -224,7 +224,7 @@ const ComplaintProcedures = () => {
               What Qualifies as a Complaint
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-zinc-700 leading-relaxed">
+              <p className="text-gray-700 leading-relaxed">
                 A complaint is any formal issue related to service quality, communication breakdown, process deviation, or misconduct concerns that requires structured review and resolution.
               </p>
             </motion.div>
@@ -267,7 +267,7 @@ const ComplaintProcedures = () => {
                           <step.icon className="w-6 h-6 text-gold shrink-0 mt-1" />
                           <div>
                             <h3 className="font-semibold text-black">{step.title}</h3>
-                            <p className="text-sm text-zinc-600 mt-1">{step.description}</p>
+                            <p className="text-sm text-gray-600 mt-1">{step.description}</p>
                           </div>
                         </div>
                       </div>
@@ -304,7 +304,7 @@ const ComplaintProcedures = () => {
                     <div className="w-12 h-12 rounded-lg bg-black flex items-center justify-center shrink-0">
                       <item.icon className="w-6 h-6 text-gold" />
                     </div>
-                    <span className="text-zinc-700">{item.text}</span>
+                    <span className="text-gray-700">{item.text}</span>
                   </div>
                 ))}
               </div>
@@ -330,14 +330,14 @@ const ComplaintProcedures = () => {
             >
               How to Submit
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-8">
               Good Complaint Format
             </motion.p>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-zinc-600 mb-6 font-medium">Include:</p>
+              <p className="text-gray-600 mb-6 font-medium">Include:</p>
               <ul className="space-y-4">
                 {goodComplaintFormat.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
+                  <li key={idx} className="flex items-start gap-3 text-gray-700">
                     <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -376,7 +376,7 @@ const ComplaintProcedures = () => {
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-black font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-zinc-600">
+                    <AccordionContent className="px-6 pb-4 text-gray-600">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -405,7 +405,7 @@ const ComplaintProcedures = () => {
               >
                 Submit a Complaint with Clarity
               </h2>
-              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+              <p className="text-gray-600 mb-8 max-w-xl mx-auto">
                 Use the form to log the issue and receive a trackable ticket ID.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -420,7 +420,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                     Online
                   </Badge>
                 </h3>
-                <p className="text-zinc-600 text-xs">Your Personal Executive Assistant</p>
+                <p className="text-gray-600 text-xs">Your Personal Executive Assistant</p>
               </div>
             </>
           )}
@@ -429,7 +429,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <Button
             variant="ghost"
             size="sm"
-            className="text-xs text-zinc-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
+            className="text-xs text-gray-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
             onClick={handleNewChat}
           >
             <Plus className="w-3.5 h-3.5" />
@@ -438,7 +438,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <Button
             variant="ghost"
             size="sm"
-            className="text-xs text-zinc-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
+            className="text-xs text-gray-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8 gap-1.5"
             onClick={() => setShowHistoryDialog(true)}
           >
             <History className="w-3.5 h-3.5" />
@@ -452,7 +452,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <Button
             variant="ghost"
             size="sm"
-            className="text-xs text-zinc-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8"
+            className="text-xs text-gray-600 hover:text-[hsl(var(--gold))] hover:bg-[hsl(var(--gold))]/10 h-8"
             onClick={handleSummarize}
             disabled={isSummarizing || localMessages.length < 3}
             title="Summarize & save chat"
@@ -545,7 +545,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 max-w-4xl mx-auto">
             <div className="flex items-center gap-2 mb-3">
               <Lightbulb className="w-4 h-4 text-[hsl(var(--gold))]" />
-              <span className="text-xs text-zinc-600 font-medium">Quick Actions & Suggested Prompts</span>
+              <span className="text-xs text-gray-600 font-medium">Quick Actions & Suggested Prompts</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {SUGGESTED_AI_PROMPTS.map((prompt, i) => (
@@ -575,7 +575,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
         {showCommands && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
             className="border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-3">
-            <p className="text-xs text-zinc-600 mb-2 flex items-center gap-2">
+            <p className="text-xs text-gray-600 mb-2 flex items-center gap-2">
               <Command className="w-3 h-3 text-[hsl(var(--gold))]" />
               Available Commands
             </p>
@@ -597,7 +597,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
         {showMentions && filteredMembers.length > 0 && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
             className="border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] p-3 max-h-48 overflow-y-auto">
-            <p className="text-xs text-zinc-600 mb-2 flex items-center gap-2">
+            <p className="text-xs text-gray-600 mb-2 flex items-center gap-2">
               <AtSign className="w-3 h-3 text-[hsl(var(--gold))]" />
               Mention Team Member
             </p>
@@ -624,7 +624,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
       {/* Pending files */}
       {pendingFiles.length > 0 && (
         <div className="px-4 py-2 border-t-2 border-[hsl(var(--gold))]/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-          <p className="text-xs text-zinc-600 mb-2 flex items-center gap-2">
+          <p className="text-xs text-gray-600 mb-2 flex items-center gap-2">
             <Upload className="w-3 h-3 text-[hsl(var(--gold))]" /> Files ready to send ({pendingFiles.length})
           </p>
           <div className="flex flex-wrap gap-2">
@@ -668,7 +668,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
           </Button>
         </div>
-        <p className="text-zinc-600 text-xs text-center mt-3 opacity-80">
+        <p className="text-gray-600 text-xs text-center mt-3 opacity-80">
           Use <span className="text-[hsl(var(--gold))] font-semibold">@name</span> to mention | <span className="text-[hsl(var(--gold))] font-semibold">/command</span> for actions | <span className="text-[hsl(var(--gold))] font-semibold">Attach files</span> (no size limit)
         </p>
       </div>
@@ -736,7 +736,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   >
                     {selectMode && (
                       <div className={`w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 ${
-                        selectedForDelete.has(session.id) ? 'bg-[hsl(var(--gold))] border-[hsl(var(--gold))]' : 'border-zinc-300'
+                        selectedForDelete.has(session.id) ? 'bg-[hsl(var(--gold))] border-[hsl(var(--gold))]' : 'border-gray-300'
                       }`}>
                         {selectedForDelete.has(session.id) && (
                           <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">

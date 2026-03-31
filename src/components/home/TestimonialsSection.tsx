@@ -74,7 +74,7 @@ const TestimonialsSection = () => {
           >
             {t('testimonials.title', 'What Our Clients Say')}
           </h2>
-          <p className="text-zinc-600 text-sm">
+          <p className="text-gray-600 text-sm">
             {t('testimonials.subtitle', 'Real experiences from real clients')}
           </p>
         </div>

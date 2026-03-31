@@ -247,7 +247,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
             {step === 'verification' && 'Verify Your Email'}
             {step === 'complete' && 'Welcome!'}
           </DialogTitle>
-          <DialogDescription className="text-zinc-600">
+          <DialogDescription className="text-gray-600">
             {step === 'form' && 'One-time registration to unlock all features and personalized services.'}
             {step === 'verification' && 'Enter the verification code sent to your email.'}
             {step === 'complete' && 'You now have full access to all our features!'}
@@ -368,7 +368,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
               </Select>
             </div>
 
-            <p className="text-xs text-zinc-600 mt-4">
+            <p className="text-xs text-gray-600 mt-4">
               By continuing, you confirm you have reviewed our Terms of Service and Privacy Policy. 
               Your information is handled confidentially and used solely to support your inquiry and experience.
             </p>
@@ -431,7 +431,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
               <CheckCircle className="h-10 w-10 text-gold" />
             </div>
             <h3 className="text-xl font-semibold text-black mb-2">Welcome, {formData.fullName}!</h3>
-            <p className="text-zinc-600">
+            <p className="text-gray-600">
               You now have full access to all our features and personalized services.
             </p>
           </div>

@@ -106,7 +106,7 @@ export function EscalationAlertButton({
           {pendingEscalations.length === 0 ? (
             <div className="p-8 text-center">
               <CheckCircle className="h-12 w-12 text-green-500/40 mx-auto mb-3" />
-              <p className="text-zinc-600 font-medium">No pending escalations</p>
+              <p className="text-gray-600 font-medium">No pending escalations</p>
               <p className="text-sm text-gray-500">All systems running smoothly</p>
             </div>
           ) : (

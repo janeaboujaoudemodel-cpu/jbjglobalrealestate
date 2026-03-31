@@ -350,7 +350,7 @@ export const PremiumBadge: React.FC<PremiumBadgeProps> = ({
   className
 }) => {
   const variants = {
-    default: 'bg-zinc-100 text-zinc-700 border-zinc-200',
+    default: 'bg-gray-100 text-gray-700 border-gray-200',
     gold: 'bg-gradient-to-r from-gold/20 to-gold/10 text-gold border-gold/30',
     success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     warning: 'bg-amber-50 text-amber-700 border-amber-200',
@@ -392,9 +392,9 @@ export const PremiumDivider: React.FC<PremiumDividerProps> = ({
   if (label) {
     return (
       <div className={cn('flex items-center gap-4', className)}>
-        <div className={cn('flex-1 h-px', gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-zinc-200')} />
+        <div className={cn('flex-1 h-px', gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-gray-200')} />
         <span className="text-xs uppercase tracking-wider text-gold font-medium">{label}</span>
-        <div className={cn('flex-1 h-px', gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-zinc-200')} />
+        <div className={cn('flex-1 h-px', gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-gray-200')} />
       </div>
     );
   }
@@ -402,7 +402,7 @@ export const PremiumDivider: React.FC<PremiumDividerProps> = ({
   return (
     <div className={cn(
       'h-px',
-      gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-zinc-200',
+      gold ? 'bg-gradient-to-r from-transparent via-gold/30 to-transparent' : 'bg-gray-200',
       className
     )} />
   );
@@ -518,7 +518,7 @@ export const QuickActionButton: React.FC<QuickActionButtonProps> = ({
   const variants = {
     primary: 'bg-gradient-to-r from-gold to-gold/80 text-black hover:brightness-110 shadow-lg shadow-gold/20 border-0',
     secondary: 'bg-white border-2 border-gold/30 text-black hover:border-gold/50 hover:bg-gold/5',
-    ghost: 'bg-transparent text-zinc-600 hover:text-gold hover:bg-gold/10 border-0',
+    ghost: 'bg-transparent text-gray-600 hover:text-gold hover:bg-gold/10 border-0',
   };
 
   const sizes = {
@@ -672,7 +672,7 @@ export const PremiumSearchBox: React.FC<PremiumSearchBoxProps> = ({
         )}
       />
       {showCommand && (
-        <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden md:inline-flex items-center gap-0.5 px-2 py-1 bg-zinc-100 rounded text-xs font-medium text-gray-500">
+        <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden md:inline-flex items-center gap-0.5 px-2 py-1 bg-gray-100 rounded text-xs font-medium text-gray-500">
           <Command className="w-3 h-3" />K
         </kbd>
       )}

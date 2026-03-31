@@ -238,7 +238,7 @@ export const ProjectAIAnalyzer = ({
           </div>
           <div className="bg-white/70 border border-gold/20 rounded-xl p-8 text-center">
             <Shield className="w-10 h-10 text-gold/40 mx-auto mb-3" />
-            <p className="text-zinc-600 font-medium">Insufficient Data for Analysis</p>
+            <p className="text-gray-600 font-medium">Insufficient Data for Analysis</p>
             <p className="text-gray-500 text-sm mt-1">This project requires a developer, description, or pricing data before AI analysis can be generated.</p>
           </div>
         </div>
@@ -300,12 +300,12 @@ export const ProjectAIAnalyzer = ({
                   }}
                 />
                 <div className="text-center space-y-2">
-                  <p className="text-sm font-medium text-zinc-600">
+                  <p className="text-sm font-medium text-gray-600">
                     JBJ AI is analyzing <span className="text-gold font-semibold">{projectName}</span>
                   </p>
                   <p className="text-xs text-gray-500">Pulling market data, price trends & investment signals…</p>
                 </div>
-                <div className="w-48 h-px overflow-hidden rounded-full bg-zinc-200">
+                <div className="w-48 h-px overflow-hidden rounded-full bg-gray-200">
                   <div
                     className="h-full bg-gradient-to-r from-transparent via-gold to-transparent"
                     style={{ animation: "shimmer-slide 1.8s ease-in-out infinite", width: "60%" }}
@@ -335,7 +335,7 @@ export const ProjectAIAnalyzer = ({
                   <h3 className="font-bold text-black text-lg">Area Overview</h3>
                 </div>
                 {sections?.overview ? (
-                  <p className="text-zinc-700 text-sm leading-relaxed">{cleanMarkdown(sections.overview)}</p>
+                  <p className="text-gray-700 text-sm leading-relaxed">{cleanMarkdown(sections.overview)}</p>
                 ) : (
                   <p className="text-gray-500 text-sm italic">Area overview data not available.</p>
                 )}
@@ -412,7 +412,7 @@ export const ProjectAIAnalyzer = ({
                     )}
                   </>
                 ) : (
-                  <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
                     {sections?.pricePerSqft ? cleanMarkdown(sections.pricePerSqft) : <span className="text-gray-500 italic">Price data not available.</span>}
                   </div>
                 )}
@@ -432,7 +432,7 @@ export const ProjectAIAnalyzer = ({
                         <span className="text-3xl font-bold text-gold">{absorptionRate}%</span>
                         <span className="text-sm text-gray-500 mb-0.5">absorption rate</span>
                       </div>
-                      <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-zinc-100">
+                      <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
                         <div
                           className="h-full rounded-full transition-all"
                           style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #B8860B, #D4AF37)` }}
@@ -450,7 +450,7 @@ export const ProjectAIAnalyzer = ({
                     )}
                   </>
                 ) : (
-                  <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
                     {sections?.supplyDemand ? cleanMarkdown(sections.supplyDemand) : <span className="text-gray-500 italic">Supply/demand data not available.</span>}
                   </div>
                 )}
@@ -489,7 +489,7 @@ export const ProjectAIAnalyzer = ({
                     )}
                   </>
                 ) : (
-                  <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
                     {sections?.investment ? cleanMarkdown(sections.investment) : <span className="text-gray-500 italic">Investment data not available.</span>}
                   </div>
                 )}
@@ -502,7 +502,7 @@ export const ProjectAIAnalyzer = ({
                   <h3 className="font-bold text-black text-lg">Developer Landscape</h3>
                 </div>
                 {sections?.developers ? (
-                  <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
                     {cleanMarkdown(sections.developers)}
                   </div>
                 ) : (

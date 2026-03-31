@@ -133,7 +133,7 @@ const AICallSummarizerPremium = () => {
     if (s === "positive") return "text-emerald-400 bg-emerald-500/20 border-emerald-500/30";
     if (s === "negative") return "text-red-400 bg-red-500/20 border-red-500/30";
     if (s === "mixed") return "text-amber-400 bg-amber-500/20 border-amber-500/30";
-    return "text-gray-500 bg-zinc-500/20 border-zinc-500/30";
+    return "text-gray-500 bg-gray-500/20 border-gray-500/30";
   };
 
   return (

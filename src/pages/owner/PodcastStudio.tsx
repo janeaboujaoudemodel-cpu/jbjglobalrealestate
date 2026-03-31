@@ -302,7 +302,7 @@ const PodcastStudio = () => {
               ? "bg-green-50 text-green-700 border border-green-200"
               : apiStatus === "error"
                 ? "bg-red-50 text-red-700 border border-red-200"
-                : "bg-zinc-100 text-zinc-600 border border-zinc-200"}>
+                : "bg-gray-100 text-gray-600 border border-gray-200"}>
               {apiStatus === "connected" ? (
                 <><CheckCircle2 className="w-3 h-3 mr-1" /> Connected</>
               ) : apiStatus === "error" ? (
@@ -601,7 +601,7 @@ const PodcastStudio = () => {
                             ep.status === "ready" ? "bg-green-50 text-green-700 border border-green-200" :
                             ep.status === "generating" ? "bg-amber-50 text-amber-700 border border-amber-200" :
                             ep.status === "error" ? "bg-red-50 text-red-700 border border-red-200" :
-                            "bg-zinc-100 text-zinc-600 border border-zinc-200"
+                            "bg-gray-100 text-gray-600 border border-gray-200"
                           }>
                             {ep.status === "ready" ? "Ready" : ep.status === "generating" ? "Generating" : ep.status === "error" ? "Error" : "Draft"}
                           </Badge>

@@ -365,7 +365,7 @@ const AICalendar = () => {
     viewing: 'bg-emerald-500',
     call: 'bg-purple-500',
     reminder: 'bg-yellow-500',
-    other: 'bg-zinc-500'
+    other: 'bg-gray-500'
   };
 
   return (
@@ -427,7 +427,7 @@ const AICalendar = () => {
                </DialogHeader>
                <div className="space-y-4">
                  <div>
-                   <Label className="text-zinc-700">Project Name</Label>
+                   <Label className="text-gray-700">Project Name</Label>
                    <Input
                      value={newProjectName}
                      onChange={(e) => setNewProjectName(e.target.value)}
@@ -492,7 +492,7 @@ const AICalendar = () => {
                      </DialogHeader>
                      <div className="space-y-4 max-h-[60vh] overflow-y-auto">
                        <div>
-                         <Label className="text-zinc-700">Title *</Label>
+                         <Label className="text-gray-700">Title *</Label>
                          <Input
                            value={eventForm.title}
                            onChange={(e) => setEventForm(prev => ({ ...prev, title: e.target.value }))}
@@ -502,7 +502,7 @@ const AICalendar = () => {
                       </div>
                        <div className="grid grid-cols-2 gap-4">
                          <div>
-                           <Label className="text-zinc-700">Date</Label>
+                           <Label className="text-gray-700">Date</Label>
                            <Input
                              type="date"
                              value={eventForm.date}
@@ -511,7 +511,7 @@ const AICalendar = () => {
                            />
                          </div>
                          <div>
-                           <Label className="text-zinc-700">Time</Label>
+                           <Label className="text-gray-700">Time</Label>
                            <Input
                              type="time"
                              value={eventForm.time}
@@ -522,7 +522,7 @@ const AICalendar = () => {
                        </div>
                        <div className="grid grid-cols-2 gap-4">
                          <div>
-                           <Label className="text-zinc-700">Duration (mins)</Label>
+                           <Label className="text-gray-700">Duration (mins)</Label>
                            <Input
                              type="number"
                              value={eventForm.duration}
@@ -531,7 +531,7 @@ const AICalendar = () => {
                            />
                          </div>
                          <div>
-                           <Label className="text-zinc-700">Type</Label>
+                           <Label className="text-gray-700">Type</Label>
                            <Select value={eventForm.type} onValueChange={(v: CalendarEvent['type']) => setEventForm(prev => ({ ...prev, type: v }))}>
                              <SelectTrigger className="bg-white border-2 border-gold/40 focus:border-gold text-black">
                                <SelectValue />
@@ -547,7 +547,7 @@ const AICalendar = () => {
                          </div>
                        </div>
                        <div>
-                         <Label className="text-zinc-700">Location</Label>
+                         <Label className="text-gray-700">Location</Label>
                          <Input
                            value={eventForm.location}
                            onChange={(e) => setEventForm(prev => ({ ...prev, location: e.target.value }))}
@@ -556,7 +556,7 @@ const AICalendar = () => {
                          />
                       </div>
                        <div>
-                         <Label className="text-zinc-700">Attendees (comma-separated emails)</Label>
+                         <Label className="text-gray-700">Attendees (comma-separated emails)</Label>
                          <Input
                            value={eventForm.attendees}
                            onChange={(e) => setEventForm(prev => ({ ...prev, attendees: e.target.value }))}
@@ -565,7 +565,7 @@ const AICalendar = () => {
                          />
                       </div>
                        <div>
-                         <Label className="text-zinc-700">Description</Label>
+                         <Label className="text-gray-700">Description</Label>
                          <Textarea
                            value={eventForm.description}
                            onChange={(e) => setEventForm(prev => ({ ...prev, description: e.target.value }))}
@@ -574,11 +574,11 @@ const AICalendar = () => {
                          />
                        </div>
                        <div className="space-y-3 p-4 bg-white/60 rounded-lg border border-gold/20">
-                         <p className="text-sm text-zinc-600 font-medium">Reminders</p>
+                         <p className="text-sm text-gray-600 font-medium">Reminders</p>
                          <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Mail className="w-4 h-4 text-blue-400" />
-                            <span className="text-sm text-zinc-700">Email Reminder</span>
+                            <span className="text-sm text-gray-700">Email Reminder</span>
                           </div>
                           <Switch
                             checked={eventForm.emailReminder}
@@ -588,7 +588,7 @@ const AICalendar = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Phone className="w-4 h-4 text-green-400" />
-                            <span className="text-sm text-zinc-700">Phone Notification</span>
+                            <span className="text-sm text-gray-700">Phone Notification</span>
                           </div>
                           <Switch
                             checked={eventForm.phoneReminder}
@@ -637,8 +637,8 @@ const AICalendar = () => {
                         onClick={() => setSelectedDate(date)}
                         className={`aspect-square p-1 rounded-lg cursor-pointer transition-all ${
                           isSelected ? 'bg-blue-600/30 border border-blue-500' :
-                          isToday ? 'bg-zinc-800 border border-zinc-600' :
-                          'hover:bg-zinc-800/50'
+                          isToday ? 'bg-zinc-800 border border-gray-600' :
+                          'hover:bg-gray-800/50'
                         }`}
                       >
                         <p className={`text-xs ${isToday ? 'text-blue-400 font-bold' : 'text-gray-500'}`}>
@@ -663,7 +663,7 @@ const AICalendar = () => {
                 </div>
 
                 {/* Selected Day Events */}
-                <div className="mt-6 pt-6 border-t border-zinc-800">
+                <div className="mt-6 pt-6 border-t border-gray-800">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-white font-medium">
                       Events for {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
@@ -771,7 +771,7 @@ const AICalendar = () => {
                      </DialogHeader>
                      <div className="space-y-4">
                        <div>
-                         <Label className="text-zinc-700">Title</Label>
+                         <Label className="text-gray-700">Title</Label>
                          <Input
                            value={noteForm.title}
                            onChange={(e) => setNoteForm(prev => ({ ...prev, title: e.target.value }))}
@@ -780,7 +780,7 @@ const AICalendar = () => {
                          />
                        </div>
                        <div>
-                         <Label className="text-zinc-700">Content</Label>
+                         <Label className="text-gray-700">Content</Label>
                          <Textarea
                            value={noteForm.content}
                            onChange={(e) => setNoteForm(prev => ({ ...prev, content: e.target.value }))}
@@ -813,7 +813,7 @@ const AICalendar = () => {
                         </div>
                       </div>
                       <p className="text-gray-500 text-xs mt-1 line-clamp-3">{note.content}</p>
-                      <p className="text-zinc-600 text-[10px] mt-2">{note.updatedAt.toLocaleDateString()}</p>
+                      <p className="text-gray-600 text-[10px] mt-2">{note.updatedAt.toLocaleDateString()}</p>
                     </div>
                   ))
                 )}

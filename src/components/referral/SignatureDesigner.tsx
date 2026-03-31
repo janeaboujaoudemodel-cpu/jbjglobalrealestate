@@ -208,7 +208,7 @@ export default function SignatureDesigner({ onSelectSignature, onSaveSignature }
             <Button
               onClick={handleSaveSignature}
               disabled={isSaving}
-              className="w-full bg-black hover:bg-zinc-900 text-gold"
+              className="w-full bg-black hover:bg-gray-900 text-gold"
             >
               {isSaving ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />

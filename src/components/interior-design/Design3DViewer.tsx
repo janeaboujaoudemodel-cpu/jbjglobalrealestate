@@ -68,7 +68,7 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
             size="sm"
             variant="outline"
             onClick={resetRotation}
-            className="bg-black/60 border-zinc-600 text-white/85 hover:bg-zinc-700"
+            className="bg-black/60 border-gray-600 text-white/85 hover:bg-gray-700"
           >
             <RotateCcw className="w-4 h-4" />
           </Button>
@@ -77,7 +77,7 @@ const Design3DViewer = ({ imageUrl, projectName }: Design3DViewerProps) => {
           size="sm"
           variant="outline"
           onClick={handleDownload}
-          className="bg-black/60 border-zinc-600 text-white/85 hover:bg-zinc-700"
+          className="bg-black/60 border-gray-600 text-white/85 hover:bg-gray-700"
         >
           <Download className="w-4 h-4" />
         </Button>

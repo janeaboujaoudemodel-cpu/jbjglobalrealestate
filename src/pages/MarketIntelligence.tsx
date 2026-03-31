@@ -218,7 +218,7 @@ const MarketIntelligence = () => {
               <h3 className="text-black text-xl font-bold mb-4">
                 <span className="text-gold">Compliance</span> & Transparency
               </h3>
-              <p className="text-zinc-600 text-sm leading-relaxed whitespace-pre-line">
+              <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
                 {MARKET_DISCLAIMER}
               </p>
             </div>

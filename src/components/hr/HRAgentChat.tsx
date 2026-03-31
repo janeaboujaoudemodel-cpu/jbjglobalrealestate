@@ -135,7 +135,7 @@ export default function HRAgentChat() {
         <CardContent className="flex items-center justify-center py-20">
           <div className="text-center space-y-4">
             <Loader2 className="w-12 h-12 animate-spin text-gold mx-auto" />
-            <p className="text-zinc-600">Connecting to Jessica...</p>
+            <p className="text-gray-600">Connecting to Jessica...</p>
           </div>
         </CardContent>
       </Card>
@@ -152,7 +152,7 @@ export default function HRAgentChat() {
             </div>
             <div>
               <CardTitle className="text-lg text-black">Jessica</CardTitle>
-              <p className="text-sm text-zinc-600">Available 24/7 to support you</p>
+              <p className="text-sm text-gray-600">Available 24/7 to support you</p>
             </div>
           </div>
           <Badge className={`${currentStageBadge.color} text-white flex items-center gap-1`}>

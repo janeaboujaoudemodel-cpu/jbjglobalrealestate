@@ -144,7 +144,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           {/* Description - Fixed 2 lines */}
           <div className="flex-1 min-h-[40px]">
             {developer.description ? (
-              <p className="text-zinc-600 text-xs line-clamp-2">
+              <p className="text-gray-600 text-xs line-clamp-2">
                 {developer.description}
               </p>
             ) : (
@@ -155,7 +155,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           </div>
 
           {/* Stats Row */}
-          <div className="flex items-center gap-3 text-zinc-700 text-xs mt-3 pt-3 border-t border-gold/20">
+          <div className="flex items-center gap-3 text-gray-700 text-xs mt-3 pt-3 border-t border-gold/20">
             {projectCount > 0 ? (
               <div className="flex items-center gap-1">
                 <Building2 className="w-3.5 h-3.5 text-gold" />

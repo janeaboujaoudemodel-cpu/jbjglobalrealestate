@@ -422,7 +422,7 @@ const CVManagementCenter = () => {
                   
                   {/* Tags Row */}
                   <div className="flex items-center gap-2 mt-4 flex-wrap">
-                    <Badge className="bg-zinc-700 text-zinc-200 font-medium border-0">
+                    <Badge className="bg-zinc-700 text-gray-200 font-medium border-0">
                       Source: {cv.source || cv.uploadedBy}
                     </Badge>
                     <Badge className="bg-gold/20 text-gold border-gold/30 font-semibold">
@@ -430,12 +430,12 @@ const CVManagementCenter = () => {
                       Ranking: {cv.ranking}/10
                     </Badge>
                     {cv.languages && cv.languages.length > 0 && (
-                      <Badge variant="outline" className="text-gray-400 border-zinc-600">
+                      <Badge variant="outline" className="text-gray-400 border-gray-600">
                         Languages: {cv.languages.join(', ')}
                       </Badge>
                     )}
                     {cv.gender && (
-                      <Badge variant="outline" className="text-gray-400 border-zinc-600 capitalize">
+                      <Badge variant="outline" className="text-gray-400 border-gray-600 capitalize">
                         <User className="h-3 w-3 mr-1" />
                         {cv.gender}
                       </Badge>

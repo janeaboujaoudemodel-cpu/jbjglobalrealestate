@@ -321,7 +321,7 @@ const BrokerCertification = () => {
                       <item.icon className="w-7 h-7 text-gold" />
                     </div>
                     <h3 className="font-semibold text-black mb-2">{item.title}</h3>
-                    <p className="text-sm text-zinc-600">{item.description}</p>
+                    <p className="text-sm text-gray-600">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -354,7 +354,7 @@ const BrokerCertification = () => {
                     <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
                       <item.icon className="w-5 h-5 text-gold" />
                     </div>
-                    <span className="text-zinc-700 pt-2">{item.text}</span>
+                    <span className="text-gray-700 pt-2">{item.text}</span>
                   </li>
                 ))}
               </ul>
@@ -379,7 +379,7 @@ const BrokerCertification = () => {
             >
               Program Modules
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-12 max-w-2xl mx-auto">
+            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
               Use "Book/Module" style cards — content is not downloadable
             </motion.p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
@@ -408,7 +408,7 @@ const BrokerCertification = () => {
                           <p className="text-xs text-white/60 uppercase tracking-wider mb-2 font-medium">You Learn:</p>
                           <ul className="space-y-2">
                             {module.topics.map((topic, idx) => (
-                              <li key={idx} className="flex items-start gap-2 text-sm text-zinc-700">
+                              <li key={idx} className="flex items-start gap-2 text-sm text-gray-700">
                                 <CheckCircle2 className="w-4 h-4 text-gold shrink-0 mt-0.5" />
                                 <span>{topic}</span>
                               </li>
@@ -418,7 +418,7 @@ const BrokerCertification = () => {
                         
                         <div className="bg-black/10 rounded-lg p-3 border border-gold/20">
                           <p className="text-xs text-white/60 uppercase tracking-wider mb-1 font-medium">Completion Check:</p>
-                          <p className="text-sm text-zinc-700">{module.completionCheck}</p>
+                          <p className="text-sm text-gray-700">{module.completionCheck}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -447,7 +447,7 @@ const BrokerCertification = () => {
             >
               Certificate Preview
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-8">
               On-screen preview only — certificate is not downloadable publicly
             </motion.p>
             <motion.div variants={fadeInUp}>
@@ -564,18 +564,18 @@ const BrokerCertification = () => {
             >
               Admin Issuance Workflow
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-8">
               Back-office administration capabilities
             </motion.p>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-zinc-600 mb-6 font-medium">Admin can:</p>
+              <p className="text-gray-600 mb-6 font-medium">Admin can:</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {adminWorkflow.map((item, index) => (
                   <div key={index} className="flex items-center gap-3 bg-black/5 rounded-lg p-4">
                     <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
                       <item.icon className="w-5 h-5 text-gold" />
                     </div>
-                    <span className="text-zinc-700 text-sm">{item.text}</span>
+                    <span className="text-gray-700 text-sm">{item.text}</span>
                   </div>
                 ))}
               </div>
@@ -612,7 +612,7 @@ const BrokerCertification = () => {
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-black font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-zinc-600">
+                    <AccordionContent className="px-6 pb-4 text-gray-600">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -641,7 +641,7 @@ const BrokerCertification = () => {
               >
                 Join the Standards Program
               </h2>
-              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+              <p className="text-gray-600 mb-8 max-w-xl mx-auto">
                 Request enrollment and receive the program pathway and requirements.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

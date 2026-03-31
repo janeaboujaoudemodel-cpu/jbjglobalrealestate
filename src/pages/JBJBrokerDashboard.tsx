@@ -159,7 +159,7 @@ export default function JBJBrokerDashboard() {
                 <h1 className="text-black text-xl font-bold tracking-wide">
                   My Leads
                 </h1>
-                <p className="text-zinc-600 text-sm">
+                <p className="text-gray-600 text-sm">
                   Manage and contact your assigned leads
                 </p>
               </div>

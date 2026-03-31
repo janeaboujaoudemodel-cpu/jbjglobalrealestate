@@ -76,7 +76,7 @@ const ContentSection = ({
               <span className="text-black ml-2">{restWords}</span>
             </h2>
           </div>
-          <div className="text-zinc-700 leading-relaxed space-y-4">
+          <div className="text-gray-700 leading-relaxed space-y-4">
             {children}
           </div>
           {links && links.length > 0 && (
@@ -188,7 +188,7 @@ const MarketOverview = () => {
                   <span className="text-black ml-2">This Page</span>
                 </h2>
               </div>
-              <div className="text-zinc-700 leading-relaxed">
+              <div className="text-gray-700 leading-relaxed">
                 <p>
                   This page is descriptive, not predictive. It explains how the market works today and how official data should be read.
                 </p>
@@ -210,7 +210,7 @@ const MarketOverview = () => {
                   <span className="text-black ml-2">Structure & Regulation</span>
                 </h2>
               </div>
-              <div className="text-zinc-700 leading-relaxed space-y-4">
+              <div className="text-gray-700 leading-relaxed space-y-4">
                 <p>
                   All real estate transactions, rental registrations, and ownership records in Dubai are governed and recorded by the Dubai Land Department (DLD). Regulatory oversight, rent controls, service charge approvals, and brokerage licensing fall under RERA.
                 </p>
@@ -318,7 +318,7 @@ const MarketOverview = () => {
             We do not base guidance on unverified dashboards, social media claims, or guaranteed-return statements. Market interpretation is grounded in officially published information and location-specific evaluation.
           </p>
           <div className="mt-6 p-4 bg-black/5 rounded-xl border border-gold/20">
-            <p className="text-sm text-zinc-600 italic">
+            <p className="text-sm text-gray-600 italic">
               This Market Overview serves as the foundation for deeper analysis in Area Intelligence, where performance is examined at a location and project level using the same official sources.
             </p>
           </div>
@@ -363,7 +363,7 @@ const MarketOverview = () => {
                 {" "}
                 <span className="text-black font-medium text-lg">{MARKET_OVERVIEW_STATS.dataSource}</span>
               </p>
-              <p className="text-zinc-600 text-sm mt-1">
+              <p className="text-gray-600 text-sm mt-1">
                 Last Updated: {MARKET_OVERVIEW_STATS.reportDate}
               </p>
             </div>
@@ -385,16 +385,16 @@ const MarketOverview = () => {
                   </CardHeader>
                   <CardContent>
                     <p className="text-black text-2xl font-bold">{quarter.transactions.toLocaleString()}</p>
-                    <p className="text-zinc-600 text-xs">Transactions</p>
+                    <p className="text-gray-600 text-xs">Transactions</p>
                     <div className="mt-3 pt-3 border-t border-gold/20">
-                      <p className="text-zinc-700 text-sm">AED {quarter.avgPrice}/sqft</p>
-                      <div className="w-full bg-zinc-200 rounded-full h-1.5 mt-2">
+                      <p className="text-gray-700 text-sm">AED {quarter.avgPrice}/sqft</p>
+                      <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
                         <div 
                           className="bg-gradient-to-r from-gold to-gold-light h-1.5 rounded-full" 
                           style={{ width: `${quarter.index}%` }}
                         />
                       </div>
-                      <p className="text-zinc-600 text-xs mt-1">Index: {quarter.index}</p>
+                      <p className="text-gray-600 text-xs mt-1">Index: {quarter.index}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -450,7 +450,7 @@ const MarketOverview = () => {
                   <Database className="w-5 h-5 text-gold" />
                   <Shield className="w-5 h-5 text-gold" />
                 </div>
-                <p className="text-zinc-600 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
+                <p className="text-gray-600 text-sm whitespace-pre-line">{MARKET_DISCLAIMER}</p>
               </div>
             </div>
           </div>

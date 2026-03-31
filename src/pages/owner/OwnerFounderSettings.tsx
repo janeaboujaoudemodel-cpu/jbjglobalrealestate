@@ -41,7 +41,7 @@ const OwnerFounderSettings = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-gray-600">
             Record, edit, and manage podcast episodes with integrated voice synthesis. Choose from premium voices, accents, and languages for professional audio production.
           </p>
           <div className="flex flex-wrap gap-2">
@@ -81,7 +81,7 @@ const OwnerFounderSettings = () => {
               </div>
               <span className="font-semibold text-black text-sm">Founder Visibility</span>
             </div>
-            <p className="text-sm text-zinc-600 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               Controls all founder-related content across the website including biography, headshots, video footage, Press Kit page, and Company Profile page. The Digital Business Card remains always visible.
             </p>
             <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -96,7 +96,7 @@ const OwnerFounderSettings = () => {
               </div>
               <span className="font-semibold text-black text-sm">Podcast Visibility</span>
             </div>
-            <p className="text-sm text-zinc-600 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               Controls the JBJ Podcast section on the homepage. When hidden, only the owner can see it for testing purposes. Toggle to public when ready to launch episodes to all visitors.
             </p>
             <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -111,7 +111,7 @@ const OwnerFounderSettings = () => {
               </div>
               <span className="font-semibold text-black text-sm">Podcast Studio</span>
             </div>
-            <p className="text-sm text-zinc-600 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               Access the full podcast recording studio with ElevenLabs voice integration. Record episodes, choose voices, control accents, and manage your podcast production workflow.
             </p>
             <div className="flex items-center gap-2 text-xs text-gray-500">

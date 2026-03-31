@@ -313,7 +313,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                     <X className="h-3 w-3" />
                   </Button>
                 </div>
-                <p className="text-sm text-zinc-600 mb-3">{aiDraft}</p>
+                <p className="text-sm text-gray-600 mb-3">{aiDraft}</p>
                 <div className="flex items-center gap-2">
                   <Button
                     variant="primary"
@@ -398,7 +398,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
               </div>
             </div>
             <p className="text-[10px] text-gray-500 mt-2 text-center">
-              Press <kbd className="px-1 py-0.5 bg-zinc-100 rounded text-[10px]">Enter</kbd> to send • <kbd className="px-1 py-0.5 bg-zinc-100 rounded text-[10px]">Shift+Enter</kbd> for new line
+              Press <kbd className="px-1 py-0.5 bg-gray-100 rounded text-[10px]">Enter</kbd> to send • <kbd className="px-1 py-0.5 bg-gray-100 rounded text-[10px]">Shift+Enter</kbd> for new line
             </p>
           </div>
         </TabsContent>

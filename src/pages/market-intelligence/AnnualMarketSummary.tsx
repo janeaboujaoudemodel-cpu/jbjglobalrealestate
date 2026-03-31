@@ -123,7 +123,7 @@ const AnnualMarketSummary = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-zinc-900 mb-4">Report Not Found</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Report Not Found</h1>
           <Link to="/market-intelligence/reports" className="text-gold hover:underline">
             Return to Reports
           </Link>
@@ -152,7 +152,7 @@ const AnnualMarketSummary = () => {
           >
             <Link
               to="/market-intelligence/reports"
-              className="inline-flex items-center gap-2 text-zinc-600 hover:text-black mb-6 transition-colors"
+              className="inline-flex items-center gap-2 text-gray-600 hover:text-black mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Reports
@@ -166,7 +166,7 @@ const AnnualMarketSummary = () => {
                 <h1 className="text-3xl md:text-4xl font-bold text-black">
                   {data.year} Year in Review
                 </h1>
-                <p className="text-zinc-600 mt-2 flex items-center gap-2">
+                <p className="text-gray-600 mt-2 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
                   Published: {new Date(data.publishDate).toLocaleDateString("en-US", { 
                     year: "numeric", 
@@ -195,7 +195,7 @@ const AnnualMarketSummary = () => {
                 <CardTitle className="text-lg text-black">Executive Summary</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-zinc-700 leading-relaxed">{data.executiveSummary}</p>
+                <p className="text-gray-700 leading-relaxed">{data.executiveSummary}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -218,7 +218,7 @@ const AnnualMarketSummary = () => {
               <CardContent>
                 <ul className="space-y-3">
                   {data.yearInReview.map((point, index) => (
-                    <li key={index} className="flex gap-3 text-zinc-700">
+                    <li key={index} className="flex gap-3 text-gray-700">
                       <span className="text-gold">•</span>
                       <span>{point}</span>
                     </li>
@@ -238,7 +238,7 @@ const AnnualMarketSummary = () => {
           >
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                   <Building className="w-4 h-4" />
                   BUY Transactions
                 </CardTitle>
@@ -253,7 +253,7 @@ const AnnualMarketSummary = () => {
 
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                   <Home className="w-4 h-4" />
                   SELL Transactions
                 </CardTitle>
@@ -268,7 +268,7 @@ const AnnualMarketSummary = () => {
 
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-zinc-600 flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-gray-600 flex items-center gap-2">
                   <Key className="w-4 h-4" />
                   RENT Transactions
                 </CardTitle>
@@ -300,7 +300,7 @@ const AnnualMarketSummary = () => {
               <CardContent>
                 <ul className="space-y-3">
                   {data.structuralShifts.map((shift, index) => (
-                    <li key={index} className="flex gap-3 text-zinc-700">
+                    <li key={index} className="flex gap-3 text-gray-700">
                       <span className="text-gold">•</span>
                       <span>{shift}</span>
                     </li>
@@ -326,7 +326,7 @@ const AnnualMarketSummary = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-zinc-700 leading-relaxed">{data.rentBehavior}</p>
+                <p className="text-gray-700 leading-relaxed">{data.rentBehavior}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -344,7 +344,7 @@ const AnnualMarketSummary = () => {
                 <CardTitle className="text-sm font-medium text-black">Regulatory Context</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-zinc-600">{data.regulatoryContext}</p>
+                <p className="text-sm text-gray-600">{data.regulatoryContext}</p>
               </CardContent>
             </Card>
 
@@ -353,7 +353,7 @@ const AnnualMarketSummary = () => {
                 <CardTitle className="text-sm font-medium text-black">Demographic Context</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-zinc-600">{data.demographicContext}</p>
+                <p className="text-sm text-gray-600">{data.demographicContext}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -375,7 +375,7 @@ const AnnualMarketSummary = () => {
                 <Card key={index} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
                   <CardContent className="pt-4">
                     <h3 className="text-lg font-semibold text-black mb-2">{area.name}</h3>
-                    <p className="text-zinc-600">{area.narrative}</p>
+                    <p className="text-gray-600">{area.narrative}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -392,7 +392,7 @@ const AnnualMarketSummary = () => {
             <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <CardContent className="pt-6">
                 <h3 className="text-sm font-semibold text-black mb-3">Methodology & Disclaimer</h3>
-                <p className="text-sm text-zinc-600 mb-4">
+                <p className="text-sm text-gray-600 mb-4">
                   This report is based on aggregated official government Open Data and descriptive analytics.
                   It is provided for informational purposes only and does not constitute financial, investment, or legal advice.
                   This document contains historical information only and no forward-looking statements.

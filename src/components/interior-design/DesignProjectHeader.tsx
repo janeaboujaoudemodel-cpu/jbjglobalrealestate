@@ -143,7 +143,7 @@ const DesignProjectHeader = ({
               value={projectName}
               onChange={(e) => onProjectNameChange(e.target.value)}
               placeholder="e.g., Downtown Apartment Redesign"
-              className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 focus:border-zinc-400"
+              className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-gray-400"
             />
           </div>
 
@@ -180,7 +180,7 @@ const DesignProjectHeader = ({
                       flex items-center gap-2 p-3 rounded-xl border transition-all
                       ${isSelected
                         ? `${colors.selectedBg} ${colors.selectedBorder} ${colors.selectedText}`
-                        : 'bg-zinc-800/50 border-zinc-700 text-white/70 hover:border-zinc-600 hover:text-white/85'
+                        : 'bg-zinc-800/50 border-gray-700 text-white/70 hover:border-gray-600 hover:text-white/85'
                       }
                     `}
                   >
@@ -204,7 +204,7 @@ const DesignProjectHeader = ({
                 value={propertySize}
                 onChange={(e) => onPropertySizeChange(e.target.value)}
                 placeholder="e.g., 1500"
-                className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 focus:border-zinc-400 flex-1"
+                className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-gray-400 flex-1"
               />
               <Button
                 type="button"

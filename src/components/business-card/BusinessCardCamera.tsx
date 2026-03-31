@@ -381,7 +381,7 @@ const BusinessCardCamera = ({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className={`flex items-center gap-2 p-3 rounded-lg bg-zinc-900/50 border border-zinc-800 ${getStatusColor()}`}
+            className={`flex items-center gap-2 p-3 rounded-lg bg-zinc-900/50 border border-gray-800 ${getStatusColor()}`}
           >
             {getStatusIcon()}
             <span className="text-sm font-medium">{statusMessage}</span>
@@ -505,7 +505,7 @@ const BusinessCardCamera = ({
             
             {/* Auto-detect indicator */}
             <div className="absolute top-4 right-4 flex items-center gap-2 bg-black/70 backdrop-blur-sm rounded-full px-3 py-1.5">
-              <div className={`w-2 h-2 rounded-full ${autoDetectEnabled ? 'bg-green-500 animate-pulse' : 'bg-zinc-500'}`} />
+              <div className={`w-2 h-2 rounded-full ${autoDetectEnabled ? 'bg-green-500 animate-pulse' : 'bg-gray-500'}`} />
               <span className="text-xs text-white font-medium">
                 {autoDetectEnabled ? 'Auto-Detect ON' : 'Manual Mode'}
               </span>

@@ -188,14 +188,14 @@ const FoundersDraftsPanel: React.FC = () => {
                         className={`text-xs border ${
                           draft.status === 'sent' 
                             ? 'border-green-200 text-green-600 bg-green-50' 
-                            : 'border-gold/30 text-gray-500 bg-zinc-50'
+                            : 'border-gold/30 text-gray-500 bg-gray-50'
                         }`}
                       >
                         {draft.status === 'sent' ? 'Sent' : 'Draft'}
                       </Badge>
                     </div>
                     {draft.subject && (
-                      <p className="text-sm text-zinc-600 mt-2 truncate">{draft.subject}</p>
+                      <p className="text-sm text-gray-600 mt-2 truncate">{draft.subject}</p>
                     )}
                     <p className="text-xs text-gray-500 mt-2 line-clamp-2">{draft.content}</p>
                     <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
@@ -254,7 +254,7 @@ const FoundersDraftsPanel: React.FC = () => {
               {selectedDraft.subject && (
                 <div>
                   <label className="text-xs text-gray-500 mb-1 block">Subject</label>
-                  <p className="text-black bg-zinc-50 p-3 rounded-lg border-2 border-gold/20">
+                  <p className="text-black bg-gray-50 p-3 rounded-lg border-2 border-gold/20">
                     {selectedDraft.subject}
                   </p>
                 </div>

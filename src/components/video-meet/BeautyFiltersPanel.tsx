@@ -63,7 +63,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
   };
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800 w-80">
+    <Card className="bg-zinc-900 border-gray-800 w-80">
       <CardHeader className="pb-2 flex flex-row items-center justify-between">
         <CardTitle className="text-white text-lg flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-gold" />
@@ -233,7 +233,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                       className={`p-2 rounded-lg text-xs text-center border transition-all ${
                         settings.makeupPreset === preset.id 
                           ? 'border-gold bg-gold/20 text-white' 
-                          : 'border-zinc-700 hover:border-zinc-600 text-white/85'
+                          : 'border-gray-700 hover:border-gray-600 text-white/85'
                       }`}
                     >
                       {preset.name}
@@ -252,7 +252,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                       className={`w-8 h-8 rounded-full border-2 transition-all ${
                         settings.lipColor === color.id 
                           ? 'border-gold scale-110' 
-                          : 'border-zinc-600 hover:border-zinc-400'
+                          : 'border-gray-600 hover:border-gray-400'
                       }`}
                       style={{ backgroundColor: color.color === 'transparent' ? '#3f3f46' : color.color }}
                       title={color.name}
@@ -274,7 +274,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                       className={`w-8 h-8 rounded-full border-2 transition-all ${
                         settings.hairColor === color.id 
                           ? 'border-gold scale-110' 
-                          : 'border-zinc-600 hover:border-zinc-400'
+                          : 'border-gray-600 hover:border-gray-400'
                       }`}
                       style={{ backgroundColor: color.color === 'transparent' ? '#3f3f46' : color.color }}
                       title={color.name}
@@ -284,7 +284,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
               </div>
 
               {isOwnerOrBroker && (
-                <div className="pt-4 border-t border-zinc-700">
+                <div className="pt-4 border-t border-gray-700">
                   <p className="text-xs text-gold mb-2">✨ Owner/Broker Exclusive</p>
                   <Button variant="outline" className="w-full border-gold/50 text-gold hover:bg-gold/10">
                     <Wand2 className="h-4 w-4 mr-2" />

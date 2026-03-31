@@ -127,7 +127,7 @@ const ListingAdminManager = () => {
 
   if (isLoading) {
     return (
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-zinc-900 border-gray-800">
         <CardContent className="p-8 flex items-center justify-center">
           <Loader2 className="w-6 h-6 animate-spin text-gold" />
         </CardContent>
@@ -136,8 +136,8 @@ const ListingAdminManager = () => {
   }
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
-      <CardHeader className="border-b border-zinc-800">
+    <Card className="bg-zinc-900 border-gray-800">
+      <CardHeader className="border-b border-gray-800">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-gold/20 rounded-lg flex items-center justify-center">
@@ -157,7 +157,7 @@ const ListingAdminManager = () => {
                 Add Listing Admin
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-zinc-900 border-zinc-800">
+            <DialogContent className="bg-zinc-900 border-gray-800">
               <DialogHeader>
                 <DialogTitle className="text-white">Add Listing Admin</DialogTitle>
               </DialogHeader>
@@ -169,13 +169,13 @@ const ListingAdminManager = () => {
                       value={searchEmail}
                       onChange={(e) => setSearchEmail(e.target.value)}
                       placeholder="Enter email address..."
-                      className="bg-zinc-800 border-zinc-700 text-white"
+                      className="bg-zinc-800 border-gray-700 text-white"
                       onKeyDown={(e) => e.key === "Enter" && handleSearchUser()}
                     />
                     <Button
                       onClick={handleSearchUser}
                       disabled={isSearching}
-                      className="bg-zinc-700 hover:bg-zinc-600"
+                      className="bg-zinc-700 hover:bg-gray-600"
                     >
                       {isSearching ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -211,7 +211,7 @@ const ListingAdminManager = () => {
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
                         placeholder="Name to display in the system"
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                        className="bg-zinc-800 border-gray-700 text-white mt-1"
                       />
                     </div>
 
@@ -221,7 +221,7 @@ const ListingAdminManager = () => {
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                         placeholder="Any notes about this admin..."
-                        className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                        className="bg-zinc-800 border-gray-700 text-white mt-1"
                       />
                     </div>
 
@@ -281,7 +281,7 @@ const ListingAdminManager = () => {
                           Active
                         </Badge>
                       ) : (
-                        <Badge className="bg-zinc-700 text-white/70 border-zinc-600 text-xs">
+                        <Badge className="bg-zinc-700 text-white/70 border-gray-600 text-xs">
                           Inactive
                         </Badge>
                       )}

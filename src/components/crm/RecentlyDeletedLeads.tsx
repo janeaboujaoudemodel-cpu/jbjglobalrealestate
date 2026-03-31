@@ -193,8 +193,8 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
                 {filtered.map((lead) => (
                   <TableRow key={lead.id} className="hover:bg-gold/5">
                     <TableCell className="font-medium text-black">{lead.full_name}</TableCell>
-                    <TableCell className="text-zinc-600 text-sm">{lead.email_lower || "—"}</TableCell>
-                    <TableCell className="text-zinc-600 text-sm">{lead.phone_e164 || "—"}</TableCell>
+                    <TableCell className="text-gray-600 text-sm">{lead.email_lower || "—"}</TableCell>
+                    <TableCell className="text-gray-600 text-sm">{lead.phone_e164 || "—"}</TableCell>
                     <TableCell>
                       {lead.source && (
                         <Badge variant="secondary" className="text-xs bg-gold/10 border-gold/20">

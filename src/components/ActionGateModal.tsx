@@ -132,7 +132,7 @@ const ActionGateModal = () => {
           </div>
 
           {/* Footer */}
-          <p className="text-center text-zinc-600 text-[10px] mt-6">
+          <p className="text-center text-gray-600 text-[10px] mt-6">
             Your activity earns loyalty points redeemable on purchases & subscriptions
           </p>
         </div>

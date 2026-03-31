@@ -93,7 +93,7 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
               <span className="text-black text-sm font-medium">Job Offer Template</span>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">Job Offer Generator</h1>
-            <p className="text-zinc-600">Generate professional job offers with auto-filled company info, stamps, and signatures</p>
+            <p className="text-gray-600">Generate professional job offers with auto-filled company info, stamps, and signatures</p>
           </div>
         </div>
       </div>
@@ -129,7 +129,7 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
                 <div className="flex-1 flex items-end"><div className="w-full h-3 rounded" style={{ background: `linear-gradient(90deg,${headerColor1},${headerColor2})` }} /></div>
               </div>
               <div><Label className="font-semibold text-black">Additional Prompt</Label><Textarea value={additionalPrompt} onChange={(e) => setAdditionalPrompt(e.target.value)} placeholder="e.g. Include relocation package, mention 30-day probation..." rows={3} /></div>
-              <Button onClick={generateOffer} disabled={generating} className="w-full bg-black text-white hover:bg-zinc-800">
+              <Button onClick={generateOffer} disabled={generating} className="w-full bg-black text-white hover:bg-gray-800">
                 {generating ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" /> Generating...</> : <><Wand2 className="h-4 w-4 mr-2" /> Generate Job Offer</>}
               </Button>
             </div>
@@ -154,7 +154,7 @@ Make it professional and ready to print. Include placeholders for [SIGNATURE] an
             </div>
             {generatedHtml && (
               <div className="flex gap-3 mt-4">
-                <Button onClick={handlePrint} className="flex-1 bg-black text-white hover:bg-zinc-800"><Download className="h-4 w-4 mr-2" /> Print / Save PDF</Button>
+                <Button onClick={handlePrint} className="flex-1 bg-black text-white hover:bg-gray-800"><Download className="h-4 w-4 mr-2" /> Print / Save PDF</Button>
                 <Button variant="outline" className="border-gold/30" onClick={() => {
                   const content = previewRef.current?.innerText || "";
                   navigator.clipboard.writeText(content);

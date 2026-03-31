@@ -1012,7 +1012,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 setSourceGroup(val);
                 if (val !== 'custom') setCustomSourceLabel('');
               }}
-              className="w-full h-11 px-3 rounded-md border border-zinc-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+              className="w-full h-11 px-3 rounded-md border border-gray-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
               style={{ backgroundColor: '#09090b', color: '#ffffff' }}
             >
               <option value="" disabled style={{ backgroundColor: '#09090b', color: '#888888' }}>
@@ -1187,7 +1187,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                       <select
                         value={selectedBrokerId}
                         onChange={(e) => setSelectedBrokerId(e.target.value)}
-                        className="w-full h-11 px-3 rounded-md border border-zinc-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                        className="w-full h-11 px-3 rounded-md border border-gray-700 bg-zinc-950 text-white font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                         style={{ backgroundColor: '#09090b', color: '#ffffff' }}
                         disabled={loadingBrokers}
                       >
@@ -1304,7 +1304,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 <p className="text-lg font-bold text-amber-400">{analyzedData.flagged.length}</p>
                 <p className="text-xs text-amber-300">Flagged</p>
               </div>
-              <div className="p-3 bg-zinc-500/10 border border-zinc-500/30 rounded-lg text-center">
+              <div className="p-3 bg-gray-500/10 border border-gray-500/30 rounded-lg text-center">
                 <AlertCircle className="h-5 w-5 text-gray-500 mx-auto mb-1" />
                 <p className="text-lg font-bold text-gray-500">{analyzedData.skipped.length}</p>
                 <p className="text-xs text-gray-400">Duplicates</p>
@@ -1467,7 +1467,7 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                   <p className="text-xl font-bold text-amber-400">{result.flagged}</p>
                   <p className="text-xs text-amber-300">Flagged</p>
                 </div>
-                <div className="p-3 bg-zinc-500/10 rounded-lg">
+                <div className="p-3 bg-gray-500/10 rounded-lg">
                   <p className="text-xl font-bold text-gray-500">{result.duplicates}</p>
                   <p className="text-xs text-gray-400">Skipped</p>
                 </div>

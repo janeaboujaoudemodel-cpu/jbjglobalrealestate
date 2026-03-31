@@ -21,7 +21,7 @@ const actionColors: Record<string, string> = {
   update: "bg-blue-100 text-blue-700",
   delete: "bg-red-100 text-red-700",
   status_change: "bg-amber-100 text-amber-700",
-  view: "bg-zinc-100 text-zinc-600",
+  view: "bg-gray-100 text-gray-600",
   export: "bg-purple-100 text-purple-700",
 };
 
@@ -72,7 +72,7 @@ export default function LeadAuditHistory({ leadId }: { leadId: string }) {
                 </div>
                 <div className="flex-1 min-w-0 space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <Badge className={`text-[10px] ${actionColors[entry.action] || "bg-zinc-100 text-zinc-600"}`}>
+                    <Badge className={`text-[10px] ${actionColors[entry.action] || "bg-gray-100 text-gray-600"}`}>
                       {entry.action.toUpperCase()}
                     </Badge>
                     <span className="text-xs text-muted-foreground">{entry.entity_type}</span>
@@ -87,7 +87,7 @@ export default function LeadAuditHistory({ leadId }: { leadId: string }) {
                         if (oldVal === newVal) return null;
                         return (
                           <div key={key} className="flex items-center gap-1.5 flex-wrap">
-                            <span className="font-medium text-zinc-600">{key}:</span>
+                            <span className="font-medium text-gray-600">{key}:</span>
                             <span className="text-red-500 line-through">{String(oldVal ?? "—")}</span>
                             <ArrowRight className="h-3 w-3 text-gray-500 shrink-0" />
                             <span className="text-emerald-600">{String(newVal ?? "—")}</span>

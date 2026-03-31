@@ -212,7 +212,7 @@ const AIObjectionHandlerPremium = () => {
                       <p className="text-xl font-bold text-rose-400">{response.confidenceScore}%</p>
                     </Card>
                     {response.difficulty && (
-                      <Card className="bg-zinc-900/50 border-zinc-800 p-4">
+                      <Card className="bg-zinc-900/50 border-gray-800 p-4">
                         <p className="text-xs text-white/70">Objection Difficulty</p>
                         <p className="text-xl font-bold text-white capitalize">{response.difficulty}</p>
                       </Card>

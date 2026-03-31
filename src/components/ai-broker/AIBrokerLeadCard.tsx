@@ -91,11 +91,11 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
 
   return (
     <>
-      <Card className="bg-zinc-900 border-zinc-800 hover:border-zinc-700 transition-all duration-200 hover:shadow-lg">
+      <Card className="bg-zinc-900 border-gray-800 hover:border-gray-700 transition-all duration-200 hover:shadow-lg">
         <CardContent className="p-4">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10 border border-zinc-700">
+              <Avatar className="h-10 w-10 border border-gray-700">
                 <AvatarFallback className="bg-zinc-800 text-gold text-sm">
                   {getInitials(lead.full_name)}
                 </AvatarFallback>
@@ -115,7 +115,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
                   <MoreVertical className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-700">
+              <DropdownMenuContent align="end" className="bg-zinc-900 border-gray-700">
                 <DropdownMenuItem className="text-gray-300 focus:bg-zinc-800">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   View Details
@@ -166,7 +166,7 @@ export function AIBrokerLeadCard({ lead, brokerId, brokerName }: AIBrokerLeadCar
               onClick={handleCallClick}
               disabled={!lead.phone}
               variant="outline"
-              className="border-zinc-700 text-gray-300 hover:bg-zinc-800"
+              className="border-gray-700 text-gray-300 hover:bg-gray-800"
             >
               <Phone className="h-4 w-4" />
             </Button>

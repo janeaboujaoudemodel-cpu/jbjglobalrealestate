@@ -73,7 +73,7 @@ export const ModeSelectionModal = () => {
         toast.success(
           <div className="flex flex-col gap-1">
             <span className="font-semibold">Mode selected!</span>
-            <span className="text-sm text-zinc-600">
+            <span className="text-sm text-gray-600">
               You can change your mode anytime from your profile menu →
             </span>
           </div>,
@@ -121,7 +121,7 @@ export const ModeSelectionModal = () => {
           <DialogTitle className="text-xl sm:text-2xl font-bold text-center text-black">
             Welcome to JBJ Global
           </DialogTitle>
-          <p className="text-center text-zinc-600 text-sm mt-2">
+          <p className="text-center text-gray-600 text-sm mt-2">
             {isLoggedIn
               ? 'Please select your role to continue. You can change this anytime.'
               : 'Select your role to get started. Register for full access.'}
@@ -166,7 +166,7 @@ export const ModeSelectionModal = () => {
                         <CheckCircle2 className="w-5 h-5 text-gold" />
                       )}
                     </div>
-                    <p className="text-sm text-zinc-600 mt-1">
+                    <p className="text-sm text-gray-600 mt-1">
                       {option.description}
                     </p>
                   </div>

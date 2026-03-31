@@ -52,7 +52,7 @@ const MarketReport = () => {
         <div className="fixed inset-0 z-[60] bg-black/85 backdrop-blur-sm">
           <div className="container mx-auto px-4 py-6 h-full flex items-center justify-center">
             <div className="w-full max-w-6xl h-[88vh] bg-zinc-950 border border-gold/30 rounded-2xl overflow-hidden shadow-2xl">
-              <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-zinc-800">
+              <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-gray-800">
                 <div className="min-w-0">
                   <p className="text-xs text-white/70">JBJ Global Real Estate</p>
                   <h2 className="text-white font-semibold truncate">UAE Real Estate Market Intelligence 2026</h2>
@@ -61,7 +61,7 @@ const MarketReport = () => {
                   <Button variant="outline" size="sm" onClick={() => bookFrameRef.current?.contentWindow?.print()} className="border-gold/30 text-gold hover:bg-gold/10">
                     <Printer className="w-4 h-4 mr-2" />Save as PDF
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => { setShowBookPreview(false); setBookHtml(null); }} className="border-zinc-700 text-zinc-200 hover:bg-zinc-900">
+                  <Button variant="outline" size="sm" onClick={() => { setShowBookPreview(false); setBookHtml(null); }} className="border-gray-700 text-gray-200 hover:bg-gray-900">
                     <X className="w-4 h-4 mr-2" />Close
                   </Button>
                 </div>
@@ -112,7 +112,7 @@ const MarketReport = () => {
                         UAE Real Estate<span className="block text-gold">Market Intelligence</span>
                       </h3>
                       <FounderContent fallback={null}><p className="text-white/60 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p></FounderContent>
-                      <div className="mt-6 pt-4 border-t border-zinc-800"><p className="text-white/70 text-[10px] tracking-[0.3em] uppercase">JBJ Global Real Estate</p></div>
+                      <div className="mt-6 pt-4 border-t border-gray-800"><p className="text-white/70 text-[10px] tracking-[0.3em] uppercase">JBJ Global Real Estate</p></div>
                     </div>
                     <div className="absolute right-0 top-0 bottom-0 w-3">
                       <div className="h-full bg-gradient-to-l from-zinc-100/10 via-zinc-200/15 to-transparent" style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 95%, 0 5%)' }} />
@@ -147,7 +147,7 @@ const MarketReport = () => {
                   { icon: Star, text: "AI Matchmaker Access" },
                   { icon: BookOpen, text: "Expert Insights" },
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3 text-zinc-700 text-sm">
+                  <div key={i} className="flex items-center gap-3 text-gray-700 text-sm">
                     <div className="w-8 h-8 rounded-lg bg-gold/20 border border-gold/30 flex items-center justify-center">
                       <item.icon className="w-4 h-4 text-gold" />
                     </div>
@@ -164,7 +164,7 @@ const MarketReport = () => {
       </section>
 
       <FounderContent fallback={null}>
-        <section className="py-16 border-y border-zinc-800/50 bg-gradient-to-r from-gold/5 via-transparent to-gold/5">
+        <section className="py-16 border-y border-gray-800/50 bg-gradient-to-r from-gold/5 via-transparent to-gold/5">
           <div className="container mx-auto px-4">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }} className="max-w-4xl mx-auto text-center">
               <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-gold/50 mx-auto mb-6 bg-white">
@@ -207,22 +207,22 @@ const MarketReport = () => {
                     </div>
                     <div>
                       <h2 className="text-black text-2xl font-bold">Unlock Your Book</h2>
-                      <p className="text-zinc-600 mt-1">Complete the form below to unlock instant access to the UAE Market Intelligence book.</p>
+                      <p className="text-gray-600 mt-1">Complete the form below to unlock instant access to the UAE Market Intelligence book.</p>
                     </div>
                   </div>
                   <div className="space-y-5">
                     <div>
-                      <Label className="text-zinc-700 text-sm font-medium">Full Name *</Label>
-                      <Input value={form.fullName} onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))} placeholder="Enter your full name" className="mt-2 bg-zinc-50 border-zinc-300 text-black h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20" />
+                      <Label className="text-gray-700 text-sm font-medium">Full Name *</Label>
+                      <Input value={form.fullName} onChange={(e) => setForm((p) => ({ ...p, fullName: e.target.value }))} placeholder="Enter your full name" className="mt-2 bg-gray-50 border-gray-300 text-black h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20" />
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
                         <Label className="text-black text-sm font-medium">Email <span className="text-gold">*</span></Label>
-                        <Input type="email" value={form.email} onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} placeholder="your@email.com" className="mt-2 bg-zinc-50 border-zinc-300 text-black placeholder:text-gold h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20" />
+                        <Input type="email" value={form.email} onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} placeholder="your@email.com" className="mt-2 bg-gray-50 border-gray-300 text-black placeholder:text-gold h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20" />
                       </div>
                       <div>
                         <Label className="text-black text-sm font-medium">Phone <span className="text-gold">*</span></Label>
-                        <Input type="tel" value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} placeholder="+971 50 123 4567" className="mt-2 bg-zinc-50 border-zinc-300 text-black placeholder:text-gold h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20" />
+                        <Input type="tel" value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} placeholder="+971 50 123 4567" className="mt-2 bg-gray-50 border-gray-300 text-black placeholder:text-gold h-12 rounded-xl focus:border-gold/50 focus:ring-gold/20" />
                       </div>
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
@@ -249,7 +249,7 @@ const MarketReport = () => {
                       )}
                     </Button>
                   </div>
-                  <p className="text-zinc-600 text-xs leading-relaxed text-center mt-4">
+                  <p className="text-gray-600 text-xs leading-relaxed text-center mt-4">
                     By downloading, you agree your details may be used to contact you about UAE real estate opportunities.
                   </p>
                 </>
@@ -264,14 +264,14 @@ const MarketReport = () => {
                   {["Structured market overview (educational)", "Developer & community comparison frameworks", "Investment due diligence checklist", "Complimentary AI Home Finder access", "Expert insights from the founder"].map((item, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-700 text-sm">{item}</span>
+                      <span className="text-gray-700 text-sm">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
               <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 rounded-2xl p-6 text-center shadow-lg">
-                <p className="text-zinc-600 text-xs mb-1">Created by <span className="text-black font-semibold">JBJ Global Real Estate</span></p>
-                <p className="text-zinc-700 text-sm">Exclusive for <a href="/about" className="text-gold font-semibold hover:underline">JBJ Global Real Estate</a></p>
+                <p className="text-gray-600 text-xs mb-1">Created by <span className="text-black font-semibold">JBJ Global Real Estate</span></p>
+                <p className="text-gray-700 text-sm">Exclusive for <a href="/about" className="text-gold font-semibold hover:underline">JBJ Global Real Estate</a></p>
                 <p className="text-white/60 text-[10px] mt-2 uppercase tracking-widest">Real Estate Brokerage • Dubai, UAE</p>
               </div>
             </motion.aside>

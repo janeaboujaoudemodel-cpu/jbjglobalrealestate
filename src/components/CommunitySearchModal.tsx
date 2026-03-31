@@ -22,7 +22,7 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-zinc-950 border-zinc-800 text-white sm:max-w-2xl">
+      <DialogContent className="bg-zinc-950 border-gray-800 text-white sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold flex items-center gap-3">
             <MapPin className="w-6 h-6 text-gold" />
@@ -37,7 +37,7 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
             placeholder="Search communities..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-12 h-12 bg-zinc-900 border-zinc-800 text-white placeholder:text-gray-400 focus:border-gold rounded-xl"
+            className="pl-12 h-12 bg-zinc-900 border-gray-800 text-white placeholder:text-gray-400 focus:border-gold rounded-xl"
           />
           {searchQuery && (
             <button
@@ -58,7 +58,7 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
             </div>
           ) : filteredCommunities?.length === 0 ? (
             <div className="text-center py-12">
-              <MapPin className="w-12 h-12 text-zinc-700 mx-auto mb-3" />
+              <MapPin className="w-12 h-12 text-gray-700 mx-auto mb-3" />
               <p className="text-white/60">No communities found</p>
             </div>
           ) : (
@@ -68,7 +68,7 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
                   key={community.id}
                   to={`/community/${community.slug}`}
                   onClick={onClose}
-                  className="flex items-center gap-4 p-4 bg-zinc-900/50 hover:bg-zinc-800 border border-zinc-800 hover:border-gold/50 rounded-xl transition-all group"
+                  className="flex items-center gap-4 p-4 bg-zinc-900/50 hover:bg-gray-800 border border-gray-800 hover:border-gold/50 rounded-xl transition-all group"
                 >
                   <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center overflow-hidden flex-shrink-0">
                     {community.image_url ? (

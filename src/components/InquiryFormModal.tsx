@@ -314,7 +314,7 @@ const InquiryFormModal = ({
         }}
       >
         <DialogContent 
-          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-zinc-900 max-w-lg p-0 max-h-[90vh] shadow-2xl shadow-gold/20 overflow-visible"
+          className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-gray-900 max-w-lg p-0 max-h-[90vh] shadow-2xl shadow-gold/20 overflow-visible"
           style={{ overflow: 'visible' }}
           dir={isRTL ? 'rtl' : 'ltr'}
           onInteractOutside={(e) => {
@@ -354,7 +354,7 @@ const InquiryFormModal = ({
                   setEmailVerified(false);
                   setPendingFormData(null);
                 }}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 flex items-center justify-center text-zinc-600 hover:text-black transition-colors"
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 hover:text-black transition-colors"
                 aria-label="Close"
               >
                 ✕
@@ -363,7 +363,7 @@ const InquiryFormModal = ({
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-black mb-3">Welcome to the Community!</h3>
-              <p className="text-zinc-600 mb-6">You've successfully registered. We'll be in touch via WhatsApp shortly.</p>
+              <p className="text-gray-600 mb-6">You've successfully registered. We'll be in touch via WhatsApp shortly.</p>
               
               {/* Manual close button */}
               <Button
@@ -398,7 +398,7 @@ const InquiryFormModal = ({
                 >
                   {propertyName ? `Inquire About ${propertyName}` : 'Join Our Community'}
                 </DialogTitle>
-                <p className="text-zinc-600 text-sm text-center mt-2">Register to receive exclusive updates and property insights</p>
+                <p className="text-gray-600 text-sm text-center mt-2">Register to receive exclusive updates and property insights</p>
               </DialogHeader>
 
               <Form {...form}>
@@ -409,7 +409,7 @@ const InquiryFormModal = ({
                     name="role"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-zinc-700 text-sm">I am a... *</FormLabel>
+                        <FormLabel className="text-gray-700 text-sm">I am a... *</FormLabel>
                         <div className="grid grid-cols-3 gap-2">
                           <button
                             type="button"
@@ -422,7 +422,7 @@ const InquiryFormModal = ({
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
                               field.value === 'buyer' 
                                 ? 'border-gold bg-gold/10 text-gold' 
-                                : 'border-zinc-200 bg-zinc-50 text-zinc-600 hover:border-zinc-300'
+                                : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'
                             }`}
                           >
                             <Target className="w-5 h-5" />
@@ -437,7 +437,7 @@ const InquiryFormModal = ({
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
                               field.value === 'broker' 
                                 ? 'border-gold bg-gold/10 text-gold' 
-                                : 'border-zinc-200 bg-zinc-50 text-zinc-600 hover:border-zinc-300'
+                                : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'
                             }`}
                           >
                             <Briefcase className="w-5 h-5" />
@@ -452,7 +452,7 @@ const InquiryFormModal = ({
                             className={`p-3 rounded-lg border transition-all duration-200 flex flex-col items-center gap-1 ${
                               field.value === 'visitor' 
                                 ? 'border-gold bg-gold/10 text-gold' 
-                                : 'border-zinc-200 bg-zinc-50 text-zinc-600 hover:border-zinc-300'
+                                : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'
                             }`}
                           >
                             <Users className="w-5 h-5" />
@@ -471,7 +471,7 @@ const InquiryFormModal = ({
                       name="buyerType"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-zinc-700 text-sm">Looking to... *</FormLabel>
+                          <FormLabel className="text-gray-700 text-sm">Looking to... *</FormLabel>
                           <div className="grid grid-cols-2 gap-2">
                             <button
                               type="button"
@@ -479,7 +479,7 @@ const InquiryFormModal = ({
                               className={`p-3 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
                                 field.value === 'homeowner' 
                                   ? 'border-gold bg-gold/10 text-gold' 
-                                  : 'border-zinc-200 bg-zinc-50 text-zinc-600 hover:border-zinc-300'
+                                  : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'
                               }`}
                             >
                               <Home className="w-4 h-4" />
@@ -491,7 +491,7 @@ const InquiryFormModal = ({
                               className={`p-3 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
                                 field.value === 'investor' 
                                   ? 'border-gold bg-gold/10 text-gold' 
-                                  : 'border-zinc-200 bg-zinc-50 text-zinc-600 hover:border-zinc-300'
+                                  : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-gray-300'
                               }`}
                             >
                               <TrendingUp className="w-4 h-4" />
@@ -509,7 +509,7 @@ const InquiryFormModal = ({
                     name="fullName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-zinc-700 text-sm">{t('inquiry.fullName')} *</FormLabel>
+                        <FormLabel className="text-gray-700 text-sm">{t('inquiry.fullName')} *</FormLabel>
                         <FormControl>
                           <Input 
                             {...field} 
@@ -528,7 +528,7 @@ const InquiryFormModal = ({
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-zinc-700 text-sm flex items-center gap-2">
+                        <FormLabel className="text-gray-700 text-sm flex items-center gap-2">
                           {t('inquiry.email')} *
                           {emailStatus === 'valid' && <CheckCircle2 className="w-4 h-4 text-green-500" />}
                           {emailStatus === 'invalid' && <XCircle className="w-4 h-4 text-red-500" />}
@@ -563,7 +563,7 @@ const InquiryFormModal = ({
                     name="phone"
                     render={({ field, fieldState }) => (
                       <FormItem>
-                        <FormLabel className="text-zinc-700 text-sm">{t('inquiry.phone')} *</FormLabel>
+                        <FormLabel className="text-gray-700 text-sm">{t('inquiry.phone')} *</FormLabel>
                         <FormControl>
                           <PhoneInput 
                             value={field.value}
@@ -593,7 +593,7 @@ const InquiryFormModal = ({
                       name="nationality"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-zinc-700 text-sm">{t('inquiry.nationality')} *</FormLabel>
+                          <FormLabel className="text-gray-700 text-sm">{t('inquiry.nationality')} *</FormLabel>
                           <FormControl>
                             <SearchableSelect
                               value={field.value}
@@ -615,7 +615,7 @@ const InquiryFormModal = ({
                       name="language"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-zinc-700 text-sm">{t('inquiry.language')} *</FormLabel>
+                          <FormLabel className="text-gray-700 text-sm">{t('inquiry.language')} *</FormLabel>
                           <FormControl>
                             <SearchableSelect
                               value={field.value}
@@ -639,7 +639,7 @@ const InquiryFormModal = ({
                       name="preferredContact"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-zinc-700 text-sm">Preferred Contact Method *</FormLabel>
+                          <FormLabel className="text-gray-700 text-sm">Preferred Contact Method *</FormLabel>
                           <FormControl>
                             <SearchableSelect
                               value={field.value}
@@ -661,7 +661,7 @@ const InquiryFormModal = ({
                         name="buyingService"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-zinc-700 text-sm">Service Needed *</FormLabel>
+                            <FormLabel className="text-gray-700 text-sm">Service Needed *</FormLabel>
                             <FormControl>
                               <SearchableSelect
                                 value={field.value || ''}
@@ -684,11 +684,11 @@ const InquiryFormModal = ({
                     name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-zinc-700 text-sm">{t('inquiry.message')}</FormLabel>
+                        <FormLabel className="text-gray-700 text-sm">{t('inquiry.message')}</FormLabel>
                         <FormControl>
                           <Textarea 
                             {...field} 
-                            className="min-h-[80px] bg-white border-zinc-200 text-black placeholder:text-gray-400 focus:border-gold rounded-lg resize-none"
+                            className="min-h-[80px] bg-white border-gray-200 text-black placeholder:text-gray-400 focus:border-gold rounded-lg resize-none"
                             placeholder="Tell us about your requirements..."
                           />
                         </FormControl>
@@ -716,9 +716,9 @@ const InquiryFormModal = ({
                   </Button>
 
                   {/* Security & Privacy Notice */}
-                  <div className="flex items-start gap-2 p-3 rounded-lg bg-zinc-50 border border-zinc-200 mt-3">
+                  <div className="flex items-start gap-2 p-3 rounded-lg bg-gray-50 border border-gray-200 mt-3">
                     <Shield className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                    <p className="text-zinc-600 text-xs leading-relaxed">
+                    <p className="text-gray-600 text-xs leading-relaxed">
                       Your information is securely stored in the JBJ Global Real Estate system for service and quality purposes. We never share your data with third parties.
                     </p>
                   </div>

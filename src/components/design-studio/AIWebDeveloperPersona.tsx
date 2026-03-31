@@ -196,7 +196,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                   AI Web Developer
                 </Badge>
               </div>
-              <p className="text-zinc-600 mb-4">
+              <p className="text-gray-600 mb-4">
                 Full-stack web development specialist with expertise in modern frameworks, 
                 responsive design, and performance optimization. Works exclusively under 
                 Owner/Assistant approval with full version control.
@@ -205,7 +205,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
               {/* Capabilities */}
               <div className="flex flex-wrap gap-2 mb-3">
                 {CAPABILITIES.map((cap) => (
-                  <Badge key={cap.label} variant="outline" className="bg-white/80 border-zinc-200">
+                  <Badge key={cap.label} variant="outline" className="bg-white/80 border-gray-200">
                     <cap.icon className={`w-3 h-3 mr-1 ${cap.color}`} />
                     {cap.label}
                   </Badge>
@@ -243,7 +243,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
               <FileCode className="w-5 h-5 text-gold" />
               Development Tasks
-              <Badge className="ml-auto bg-zinc-100 text-zinc-600">
+              <Badge className="ml-auto bg-gray-100 text-gray-600">
                 {tasks.filter(t => t.status !== 'completed').length} Active
               </Badge>
             </CardTitle>
@@ -258,7 +258,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
-                      className="p-4 bg-white rounded-xl border border-zinc-200 shadow-sm"
+                      className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm"
                     >
                       <div className="flex items-start justify-between gap-3 mb-2">
                         <h4 className="font-medium text-black">{task.title}</h4>
@@ -308,14 +308,14 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
 
             {/* Assign New Task */}
             {canAssignTasks && (
-              <div className="mt-4 pt-4 border-t border-zinc-200">
-                <Label className="text-sm text-zinc-600 mb-2 block">Assign New Task</Label>
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <Label className="text-sm text-gray-600 mb-2 block">Assign New Task</Label>
                 <div className="flex gap-2">
                   <Textarea
                     value={newTaskDescription}
                     onChange={(e) => setNewTaskDescription(e.target.value)}
                     placeholder="Describe what you want to build or change..."
-                    className="min-h-[80px] bg-white border-zinc-200"
+                    className="min-h-[80px] bg-white border-gray-200"
                   />
                 </div>
                 <Button 
@@ -337,7 +337,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             <CardTitle className="text-lg font-semibold text-black flex items-center gap-2">
               <GitBranch className="w-5 h-5 text-gold" />
               Version History
-              <Badge className="ml-auto bg-zinc-100 text-zinc-600">
+              <Badge className="ml-auto bg-gray-100 text-gray-600">
                 {versions.length} Versions
               </Badge>
             </CardTitle>
@@ -351,7 +351,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="p-4 bg-white rounded-xl border border-zinc-200 shadow-sm"
+                    className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm"
                   >
                     <div className="flex items-start justify-between gap-3 mb-2">
                       <div className="flex items-center gap-2">
@@ -420,7 +420,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             ].map((tool) => (
               <div
                 key={tool.name}
-                className="p-3 bg-white rounded-xl border border-zinc-200 flex items-center gap-3 hover:border-gold/50 hover:shadow-md transition-all cursor-pointer"
+                className="p-3 bg-white rounded-xl border border-gray-200 flex items-center gap-3 hover:border-gold/50 hover:shadow-md transition-all cursor-pointer"
               >
                 <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${tool.color} flex items-center justify-center`}>
                   <tool.icon className="w-5 h-5 text-white" />

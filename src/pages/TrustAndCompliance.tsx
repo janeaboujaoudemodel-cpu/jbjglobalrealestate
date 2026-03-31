@@ -38,7 +38,7 @@ const TrustAndCompliance = () => {
           <li><strong className="text-black">Consumer Protection Frameworks</strong> — Adherence to fair trading practices.</li>
           <li><strong className="text-black">Data Protection Compliance</strong> — Alignment with UAE Federal Decree-Law No. 45 of 2021.</li>
         </ul>
-        <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-zinc-600 text-sm">Final regulatory authority rests with the relevant UAE government bodies.</p></div>
+        <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-gray-600 text-sm">Final regulatory authority rests with the relevant UAE government bodies.</p></div>
       </>
     )},
     { id: "due-diligence", num: 2, title: "Due Diligence Standards", content: (
@@ -70,7 +70,7 @@ const TrustAndCompliance = () => {
       <>
         <p>We work with a vetted network of licensed professionals:</p>
         <ul className="list-disc pl-6 space-y-2 mt-4"><li>Licensed real estate developers</li><li>Qualified legal advisors</li><li>Certified valuation experts</li><li>Government-approved immigration partners</li></ul>
-        <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-zinc-600 text-sm">Partner services are provided by independent licensed professionals who contract directly with clients.</p></div>
+        <div className="mt-4 bg-[#C8A766]/10 border border-[#C8A766]/20 rounded-lg p-4"><p className="text-gray-600 text-sm">Partner services are provided by independent licensed professionals who contract directly with clients.</p></div>
       </>
     )},
     { id: "audit-monitoring", num: 6, title: "Continuous Audit & Monitoring", content: (
@@ -142,7 +142,7 @@ const TrustAndCompliance = () => {
               <div key={s.id}>
                 <section id={s.id} className="scroll-mt-8">
                   <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">{s.num}.</span>{s.title}</h2>
-                  <CCard className="space-y-4 text-zinc-700 leading-relaxed">{s.content}</CCard>
+                  <CCard className="space-y-4 text-gray-700 leading-relaxed">{s.content}</CCard>
                 </section>
                 {i < sections.length - 1 && <GoldDivider />}
               </div>
@@ -151,7 +151,7 @@ const TrustAndCompliance = () => {
               <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
-                <span className="text-zinc-600">|</span>
+                <span className="text-gray-600">|</span>
                 <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
               </div>
             </div>

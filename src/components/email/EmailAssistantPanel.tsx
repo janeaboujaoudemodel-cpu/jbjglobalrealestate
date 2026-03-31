@@ -29,7 +29,7 @@ const PRIORITY_CONFIG: Record<string, { color: string; icon: React.ReactNode; la
   urgent: { color: "bg-red-100 text-red-700 border-red-300", icon: <AlertTriangle className="w-3 h-3" />, label: "Urgent" },
   high: { color: "bg-amber-100 text-amber-700 border-amber-300", icon: <Zap className="w-3 h-3" />, label: "High" },
   normal: { color: "bg-blue-100 text-blue-700 border-blue-300", icon: <Clock className="w-3 h-3" />, label: "Normal" },
-  low: { color: "bg-zinc-100 text-zinc-600 border-zinc-300", icon: <CheckCircle2 className="w-3 h-3" />, label: "Low" },
+  low: { color: "bg-gray-100 text-gray-600 border-gray-300", icon: <CheckCircle2 className="w-3 h-3" />, label: "Low" },
 };
 
 export default function EmailAssistantPanel({

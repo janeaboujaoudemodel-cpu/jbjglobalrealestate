@@ -120,7 +120,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
         <div className="min-h-screen bg-black flex items-center justify-center">
           <div className="text-center px-6">
             <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
-            <p className="text-zinc-200 font-medium">Verifying access…</p>
+            <p className="text-gray-200 font-medium">Verifying access…</p>
             <p className="text-white/70 text-sm mt-2">Please wait a moment.</p>
           </div>
         </div>
@@ -148,7 +148,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
             </Button>
             <Button
               onClick={() => signOut()}
-              className="bg-white hover:bg-zinc-100 text-black border-2 border-white font-semibold"
+              className="bg-white hover:bg-gray-100 text-black border-2 border-white font-semibold"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
@@ -179,7 +179,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
         <div className="min-h-screen bg-black flex items-center justify-center">
           <div className="text-center px-6">
             <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
-            <p className="text-zinc-200 font-medium">Verifying access…</p>
+            <p className="text-gray-200 font-medium">Verifying access…</p>
             <p className="text-white/70 text-sm mt-2">Retrying ({autoRetryCount.current + 1}/3)…</p>
           </div>
         </div>
@@ -208,7 +208,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
             </Button>
             <Button
               onClick={() => signOut()}
-              className="bg-white hover:bg-zinc-100 text-black border-2 border-white font-semibold"
+              className="bg-white hover:bg-gray-100 text-black border-2 border-white font-semibold"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out
@@ -231,7 +231,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
         <div className="min-h-screen bg-black flex items-center justify-center">
           <div className="text-center px-6">
             <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
-            <p className="text-zinc-200 font-medium">Checking access status…</p>
+            <p className="text-gray-200 font-medium">Checking access status…</p>
           </div>
         </div>
       );
@@ -250,7 +250,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
             </p>
             <Button
               onClick={() => signOut()}
-              className="bg-white hover:bg-zinc-100 text-black border-2 border-white font-semibold"
+              className="bg-white hover:bg-gray-100 text-black border-2 border-white font-semibold"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out

@@ -524,7 +524,7 @@ function TaskItem({
         )}
       </div>
       {task.priority && (
-        <Badge variant="outline" className={`text-xs ${task.priority === 'high' ? 'border-red-300 text-red-600' : 'border-zinc-300'}`}>
+        <Badge variant="outline" className={`text-xs ${task.priority === 'high' ? 'border-red-300 text-red-600' : 'border-gray-300'}`}>
           {task.priority}
         </Badge>
       )}
@@ -546,7 +546,7 @@ function ThreadItem({ thread, onClick }: { thread: AgendaThread; onClick: () => 
       className="flex items-center gap-3 p-3 rounded-lg border border-gold/20 bg-white hover:bg-gold/5 cursor-pointer transition-colors"
       onClick={onClick}
     >
-      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${channelColors[thread.channel_type] || 'bg-zinc-100 text-zinc-600'}`}>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${channelColors[thread.channel_type] || 'bg-gray-100 text-gray-600'}`}>
         <MessageSquare className="h-4 w-4" />
       </div>
       <div className="flex-1 min-w-0">
@@ -600,7 +600,7 @@ function TasksSkeleton() {
   return (
     <div className="space-y-2">
       {[1, 2, 3].map(i => (
-        <Skeleton key={i} className="h-14 bg-zinc-100" />
+        <Skeleton key={i} className="h-14 bg-gray-100" />
       ))}
     </div>
   );
@@ -610,7 +610,7 @@ function ThreadsSkeleton() {
   return (
     <div className="space-y-2">
       {[1, 2, 3].map(i => (
-        <Skeleton key={i} className="h-16 bg-zinc-100" />
+        <Skeleton key={i} className="h-16 bg-gray-100" />
       ))}
     </div>
   );
@@ -620,7 +620,7 @@ function LeadsSkeleton() {
   return (
     <div className="space-y-2">
       {[1, 2, 3].map(i => (
-        <Skeleton key={i} className="h-14 bg-zinc-100" />
+        <Skeleton key={i} className="h-14 bg-gray-100" />
       ))}
     </div>
   );

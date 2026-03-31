@@ -240,7 +240,7 @@ export function EmbeddedEmployeeHub() {
                     </div>
                   )}
                   
-                  <p className="text-zinc-600 text-[10px] line-clamp-2 mt-2">{member.bio}</p>
+                  <p className="text-gray-600 text-[10px] line-clamp-2 mt-2">{member.bio}</p>
                   
                   {member.joinDate && (
                     <div className="flex items-center gap-1 mt-1.5 text-[10px] text-gray-500">
@@ -251,14 +251,14 @@ export function EmbeddedEmployeeHub() {
                   
                   <div className="flex flex-wrap gap-1 mt-2">
                     {member.languages?.slice(0, 2).map((lang) => (
-                      <Badge key={lang} variant="outline" className="text-[10px] border-gold/30 text-zinc-600 bg-gold/5 px-1.5 py-0">
+                      <Badge key={lang} variant="outline" className="text-[10px] border-gold/30 text-gray-600 bg-gold/5 px-1.5 py-0">
                         {lang}
                       </Badge>
                     ))}
                   </div>
                   
                   <div className="flex items-center justify-between mt-2 pt-2 border-t border-gold/20">
-                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-zinc-300 text-gray-500 bg-white'}`}>
+                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-gray-300 text-gray-500 bg-white'}`}>
                       {member.status === 'online' ? '● Online' : '○ Away'}
                     </Badge>
                     

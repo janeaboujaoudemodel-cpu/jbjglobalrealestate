@@ -347,7 +347,7 @@ export function EmbeddedSupportTickets() {
             {isLoading ? (
               <CardContent className="p-6 space-y-4">
                 {[...Array(5)].map((_, i) => (
-                  <Skeleton key={i} className="h-16 w-full bg-zinc-200" />
+                  <Skeleton key={i} className="h-16 w-full bg-gray-200" />
                 ))}
               </CardContent>
             ) : error ? (

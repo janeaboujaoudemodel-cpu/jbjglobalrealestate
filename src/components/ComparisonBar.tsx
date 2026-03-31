@@ -89,7 +89,7 @@ const ComparisonBar = () => {
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <button className="flex items-center gap-3 px-6 py-3 bg-white text-zinc-900 rounded-full shadow-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all duration-300 group">
+            <button className="flex items-center gap-3 px-6 py-3 bg-white text-gray-900 rounded-full shadow-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] transition-all duration-300 group">
               <div className="flex items-center gap-1">
                 {shortlistedProjects?.slice(0, 3).map((project, index) => (
                   <div
@@ -105,7 +105,7 @@ const ComparisonBar = () => {
                   </div>
                 ))}
                 {shortlist.length > 3 && (
-                  <div className="w-8 h-8 rounded-full bg-zinc-200 -ml-2 flex items-center justify-center text-xs font-bold">
+                  <div className="w-8 h-8 rounded-full bg-gray-200 -ml-2 flex items-center justify-center text-xs font-bold">
                     +{shortlist.length - 3}
                   </div>
                 )}
@@ -121,9 +121,9 @@ const ComparisonBar = () => {
           
           <SheetContent 
             side="bottom" 
-            className="h-[90vh] bg-zinc-950 border-t border-zinc-800 rounded-t-3xl"
+            className="h-[90vh] bg-zinc-950 border-t border-gray-800 rounded-t-3xl"
           >
-            <SheetHeader className="pb-4 border-b border-zinc-800">
+            <SheetHeader className="pb-4 border-b border-gray-800">
               <SheetTitle className="text-white text-2xl flex items-center gap-3">
                 <Scale className="w-6 h-6 text-gold" />
                 Property Shortlist & Comparison
@@ -147,7 +147,7 @@ const ComparisonBar = () => {
                       <div
                         key={project.id}
                         className={`relative bg-zinc-900 rounded-2xl overflow-hidden border transition-all ${
-                          badgeInfo ? badgeInfo.color.replace('text-', 'border-').replace('/50', '/30') : 'border-zinc-800'
+                          badgeInfo ? badgeInfo.color.replace('text-', 'border-').replace('/50', '/30') : 'border-gray-800'
                         }`}
                       >
                         {/* Badge Selector */}
@@ -162,29 +162,29 @@ const ComparisonBar = () => {
                                 {badgeInfo ? badgeInfo.label : <Trophy className="w-3 h-3" />}
                               </button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="bg-zinc-900 border-zinc-800">
+                            <DropdownMenuContent className="bg-zinc-900 border-gray-800">
                               <DropdownMenuItem 
                                 onClick={() => handleSetBadge(project.id, 'top1')}
-                                className="text-yellow-400 hover:bg-zinc-800 cursor-pointer"
+                                className="text-yellow-400 hover:bg-gray-800 cursor-pointer"
                               >
                                 Set as Top 1 — Gold
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => handleSetBadge(project.id, 'top2')}
-                                className="text-orange-400 hover:bg-zinc-800 cursor-pointer"
+                                className="text-orange-400 hover:bg-gray-800 cursor-pointer"
                               >
                                 Set as Top 2 — Silver
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => handleSetBadge(project.id, 'top3')}
-                                className="text-gray-300 hover:bg-zinc-800 cursor-pointer"
+                                className="text-gray-300 hover:bg-gray-800 cursor-pointer"
                               >
                                 Set as Top 3 — Bronze
                               </DropdownMenuItem>
                               {badge && (
                                 <DropdownMenuItem 
                                   onClick={() => handleSetBadge(project.id, null)}
-                                  className="text-white/70 hover:bg-zinc-800 cursor-pointer"
+                                  className="text-white/70 hover:bg-gray-800 cursor-pointer"
                                 >
                                   Remove Badge
                                 </DropdownMenuItem>
@@ -252,7 +252,7 @@ const ComparisonBar = () => {
             </div>
 
             {/* Action buttons */}
-            <div className="absolute bottom-0 left-0 right-0 p-6 bg-zinc-950 border-t border-zinc-800">
+            <div className="absolute bottom-0 left-0 right-0 p-6 bg-zinc-950 border-t border-gray-800">
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link to="/compare" className="flex-1" onClick={() => setIsOpen(false)}>
                   <Button 
@@ -265,7 +265,7 @@ const ComparisonBar = () => {
                 </Link>
                 <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="flex-1">
                   <Button 
-                    className="w-full bg-white text-zinc-900 hover:bg-zinc-100 h-12 text-base font-semibold"
+                    className="w-full bg-white text-gray-900 hover:bg-gray-100 h-12 text-base font-semibold"
                   >
                     <Users className="w-5 h-5 mr-2" />
                     Expert Consultation

@@ -76,7 +76,7 @@ export default function AddNoteDialog({ leadId, leadName, trigger }: AddNoteDial
         )}
       </DialogTrigger>
       <DialogContent 
-        className="bg-zinc-900 border-zinc-800 text-white"
+        className="bg-zinc-900 border-gray-800 text-white"
         onClick={(e) => e.stopPropagation()}
       >
         <DialogHeader>
@@ -87,7 +87,7 @@ export default function AddNoteDialog({ leadId, leadName, trigger }: AddNoteDial
             placeholder="Enter your note..."
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="min-h-[120px] bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400"
+            className="min-h-[120px] bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400"
             autoFocus
           />
           <div className="flex justify-end gap-2">

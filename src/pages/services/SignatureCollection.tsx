@@ -213,7 +213,7 @@ const SignatureCollection = () => {
               What This Page Is For
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-zinc-700 text-lg leading-relaxed">
+              <p className="text-gray-700 text-lg leading-relaxed">
                 This page is for signature requests tied to JBJ workflows where authorization, traceability, and document control matter.
               </p>
             </motion.div>
@@ -238,7 +238,7 @@ const SignatureCollection = () => {
             >
               Submit Signature Request
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-8">
               Submit your request with the document attached. You will receive a request ID and status timeline.
             </motion.p>
             
@@ -247,7 +247,7 @@ const SignatureCollection = () => {
               <div className="jj-card-inner !bg-black/5 border border-gold/20">
                 <div className="flex flex-col gap-3">
                   {formHelperItems.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-3 text-sm text-zinc-700">
+                    <div key={idx} className="flex items-center gap-3 text-sm text-gray-700">
                       <item.icon className="w-4 h-4 text-gold shrink-0" />
                       <span>{item.text}</span>
                     </div>
@@ -389,7 +389,7 @@ const SignatureCollection = () => {
                         <step.icon className="w-5 h-5 text-gold" />
                       </div>
                       <h3 className="font-semibold text-black mb-2">{step.label}</h3>
-                      <p className="text-sm text-zinc-600">{step.description}</p>
+                      <p className="text-sm text-gray-600">{step.description}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -416,7 +416,7 @@ const SignatureCollection = () => {
             >
               Track a Request
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 text-center mb-8">
+            <motion.p variants={fadeInUp} className="text-gray-600 text-center mb-8">
               Enter your request ID and email to view the current status and any required actions.
             </motion.p>
             <motion.div variants={fadeInUp}>
@@ -487,7 +487,7 @@ const SignatureCollection = () => {
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 pl-8">
+                    <AccordionContent className="text-gray-600 pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -515,7 +515,7 @@ const SignatureCollection = () => {
             >
               Submit a signature request
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
+            <motion.p variants={fadeInUp} className="text-gray-600 mb-8">
               Upload your document and track status end-to-end.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

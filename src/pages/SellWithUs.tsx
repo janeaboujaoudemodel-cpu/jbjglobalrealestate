@@ -168,7 +168,7 @@ const SellWithUs = () => {
                 <Button 
                   size="lg" 
                   onClick={() => scrollTo(valuationRef)}
-                  className="bg-white text-black hover:bg-zinc-100 font-semibold px-8 py-6 text-base rounded-xl shadow-[0_0_40px_rgba(255,255,255,0.1)]"
+                  className="bg-white text-black hover:bg-gray-100 font-semibold px-8 py-6 text-base rounded-xl shadow-[0_0_40px_rgba(255,255,255,0.1)]"
                 >
                   <Sparkles className="mr-2 h-5 w-5" />
                   Get Instant AI Valuation
@@ -290,7 +290,7 @@ const SellWithUs = () => {
                         <Label className="text-gray-400 text-sm mb-1.5 block">Property Type</Label>
                         <Select value={valType} onValueChange={setValType}>
                           <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue /></SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-zinc-700">
+                          <SelectContent className="bg-zinc-900 border-gray-700">
                             <SelectItem value="studio" className="text-white">Studio</SelectItem>
                             <SelectItem value="apartment" className="text-white">Apartment</SelectItem>
                             <SelectItem value="penthouse" className="text-white">Penthouse</SelectItem>
@@ -309,7 +309,7 @@ const SellWithUs = () => {
                         <Label className="text-gray-400 text-sm mb-1.5 block">Bedrooms</Label>
                         <Select value={valBedrooms} onValueChange={setValBedrooms}>
                           <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue /></SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-zinc-700">
+                          <SelectContent className="bg-zinc-900 border-gray-700">
                             {['0', '1', '2', '3', '4', '5'].map(b => (
                               <SelectItem key={b} value={b} className="text-white">{b === '0' ? 'Studio' : `${b} BR`}</SelectItem>
                             ))}
@@ -328,16 +328,16 @@ const SellWithUs = () => {
                     <div className="space-y-1">
                       <div className="flex items-center justify-center gap-3">
                         <span className="text-xl text-gray-500">AED {valResult.estimatedValue?.low?.toLocaleString()}</span>
-                        <span className="text-zinc-700">—</span>
+                        <span className="text-gray-700">—</span>
                         <span className="text-4xl font-bold text-white">AED {valResult.estimatedValue?.mid?.toLocaleString()}</span>
-                        <span className="text-zinc-700">—</span>
+                        <span className="text-gray-700">—</span>
                         <span className="text-xl text-gray-500">AED {valResult.estimatedValue?.high?.toLocaleString()}</span>
                       </div>
                       <p className="text-gray-500 text-sm">AED {valResult.estimatedValue?.pricePerSqFt?.toLocaleString()} per sq ft</p>
                     </div>
                     <p className="text-sm text-gray-500 leading-relaxed max-w-lg mx-auto">{valResult.marketInsights}</p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-                      <Button asChild className="bg-white text-black hover:bg-zinc-100 font-medium rounded-xl">
+                      <Button asChild className="bg-white text-black hover:bg-gray-100 font-medium rounded-xl">
                         <Link to="/property-evaluator">
                           Get Detailed Report <ChevronRight className="w-4 h-4 ml-1" />
                         </Link>
@@ -346,7 +346,7 @@ const SellWithUs = () => {
                         Try Another Property
                       </Button>
                     </div>
-                    {valResult.sources && <p className="text-xs text-zinc-600">{valResult.sources}</p>}
+                    {valResult.sources && <p className="text-xs text-gray-600">{valResult.sources}</p>}
                   </div>
                 )}
               </motion.div>
@@ -381,7 +381,7 @@ const SellWithUs = () => {
                         <Label className="text-gray-400 text-sm mb-1.5 block">Property Type *</Label>
                         <Select value={listType} onValueChange={setListType}>
                           <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue placeholder="Select type" /></SelectTrigger>
-                          <SelectContent className="bg-zinc-900 border-zinc-700">
+                          <SelectContent className="bg-zinc-900 border-gray-700">
                             <SelectItem value="apartment" className="text-white">Apartment</SelectItem>
                             <SelectItem value="villa" className="text-white">Villa</SelectItem>
                             <SelectItem value="townhouse" className="text-white">Townhouse</SelectItem>
@@ -399,7 +399,7 @@ const SellWithUs = () => {
                       <Label className="text-gray-400 text-sm mb-1.5 block">Email (optional)</Label>
                       <Input type="email" value={listEmail} onChange={(e) => setListEmail(e.target.value)} placeholder="your@email.com" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-400" />
                     </div>
-                    <Button onClick={handleListingSubmit} className="w-full bg-white text-black hover:bg-zinc-100 font-semibold py-6 rounded-xl">
+                    <Button onClick={handleListingSubmit} className="w-full bg-white text-black hover:bg-gray-100 font-semibold py-6 rounded-xl">
                       Submit Listing Request <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                     <p className="text-xs text-gray-500 text-center">
@@ -461,7 +461,7 @@ const SellWithUs = () => {
                   <MessageCircle className="w-10 h-10 text-white/40 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-white mb-2">Speak to a Selling Advisor</h3>
                   <p className="text-gray-500 text-sm mb-6">Get personalized guidance from our licensed team</p>
-                  <Button asChild className="bg-white text-black hover:bg-zinc-100 font-medium rounded-xl w-full">
+                  <Button asChild className="bg-white text-black hover:bg-gray-100 font-medium rounded-xl w-full">
                     <a href={getWhatsAppUrl("Hello, I'd like to speak with a Selling Advisor.")} target="_blank" rel="noopener noreferrer">
                       <MessageCircle className="mr-2 h-4 w-4" /> WhatsApp Us
                     </a>

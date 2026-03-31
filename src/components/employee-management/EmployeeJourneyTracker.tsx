@@ -91,7 +91,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
       case 'department_change': return 'bg-blue-500/20 text-blue-700 border-blue-500/30';
       case 'probation_passed': return 'bg-emerald-500/20 text-emerald-700 border-emerald-500/30';
       case 'warning_issued': return 'bg-red-500/20 text-red-700 border-red-500/30';
-      default: return 'bg-zinc-500/20 text-zinc-700 border-zinc-500/30';
+      default: return 'bg-gray-500/20 text-gray-700 border-gray-500/30';
     }
   };
 
@@ -184,7 +184,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                         )}
                         
                         {event.notes && (
-                          <p className="text-sm text-zinc-600 mt-2">{event.notes}</p>
+                          <p className="text-sm text-gray-600 mt-2">{event.notes}</p>
                         )}
                       </div>
                     </div>
