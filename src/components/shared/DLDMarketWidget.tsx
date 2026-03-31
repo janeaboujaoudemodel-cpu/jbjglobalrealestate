@@ -35,7 +35,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <TrendingUp className="w-4 h-4 text-gold" />
             Dubai Market Pulse
           </h3>
-          <span className="text-[10px] text-white/60">As of {today}</span>
+          <span className="text-[10px] text-white/80">As of {today}</span>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
