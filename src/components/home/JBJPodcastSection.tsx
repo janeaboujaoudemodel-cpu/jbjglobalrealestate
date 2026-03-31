@@ -269,7 +269,7 @@ const JBJPodcastSection = () => {
                 <h3 className="text-xl md:text-2xl font-bold text-black leading-tight">
                   <T>{selectedEpisode.title}</T>
                 </h3>
-                <p className="text-sm text-gold mt-1">
+                <p className="text-sm text-gray-500 mt-1">
                   <T>Featuring</T>: {selectedEpisode.characters.join(" • ")}
                 </p>
 
