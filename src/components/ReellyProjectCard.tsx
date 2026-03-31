@@ -9,6 +9,7 @@ import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
+import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerLogo";
  
 interface ReellyProjectCardProps {
   project: ReellyProject;
