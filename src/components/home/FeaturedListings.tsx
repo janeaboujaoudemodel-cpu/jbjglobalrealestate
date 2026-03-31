@@ -123,7 +123,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
   const isAboveFold = index < 4;
   const imageUrl = project.cover_image_url || project.images?.[0]?.image_url;
   const devName = project.developer_name || '';
-  const rawLogoUrl = (project.developer as any)?.logo_url;
+  const rawLogoUrl = getDeveloperLogoUrl(project.developer);
   const logoUrl = devName.toLowerCase().includes('binghatti')
     ? '/developers/logos/binghatti-logo.webp'
     : rawLogoUrl;
