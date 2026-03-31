@@ -492,42 +492,9 @@ const Footer = () => {
               boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
             }}
           >
-            {/* Outer Gold Border Ring */}
-            <div className="absolute inset-0 rounded-none border border-gray-200 pointer-events-none" />
-            <div className="absolute inset-[3px] rounded-none border border-gray-100 pointer-events-none" />
-            
-            {/* Animated Shimmer Sweep */}
-            <div 
-              className="absolute inset-0 rounded-none pointer-events-none opacity-60"
-              style={{
-                background: 'none',
-              }}
-            />
+            <div className="absolute inset-0 border border-gray-200 pointer-events-none" />
           
-          {/* Edge-to-edge: no corner accents needed */}
-          
-          {/* Inner Content Container with padding */}
           <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
-            {/* Decorative Top Emblem */}
-            <div className="flex justify-center mb-4 sm:mb-6">
-              <div 
-                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center relative"
-                style={{
-                  background: 'rgba(0,0,0,0.04)',
-                  boxShadow: '0 2px 8px -2px rgba(0,0,0,0.06)',
-                  border: '1px solid rgba(0,0,0,0.08)',
-                }}
-              >
-                <div className="absolute inset-0 rounded-xl sm:rounded-2xl hidden pointer-events-none" />
-                <span 
-                  className="text-2xl sm:text-3xl md:text-4xl font-bold relative"
-                  style={{
-                    color: '#111111',
-                    
-                  }}
-                >✦</span>
-              </div>
-            </div>
             
             {/* Licensed Badge - ULTRA Enhanced */}
             <div className="relative flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-5 flex-wrap px-1">
