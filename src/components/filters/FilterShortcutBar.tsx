@@ -326,7 +326,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     value={filters.priceMax}
                     onChange={(e) => update({ priceMax: e.target.value.replace(/[^0-9]/g, '') })}
                     placeholder="Any"
-                    className="w-full h-9 px-3 pr-12 bg-white border border-gold/30 rounded-lg text-sm text-black"
+                    className="w-full h-9 px-3 pr-12 bg-white border border-gray-300 rounded-lg text-sm text-black"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-black/40 font-medium">AED</span>
                 </div>
