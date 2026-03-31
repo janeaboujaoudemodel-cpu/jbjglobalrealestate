@@ -115,24 +115,26 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Transaction Split Bars */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div className="bg-white/70 rounded-xl p-5 border border-gold/20">
+            <div className="bg-white/70 rounded-xl p-5 border border-gray-200">
               <p className="text-black/50 text-xs uppercase tracking-wider mb-3">Off-Plan vs Secondary</p>
-              <div className="h-3 bg-black/10 rounded-full overflow-hidden mb-2">
-                <div className="h-full bg-gradient-to-r from-gold to-amber-500 rounded-full" style={{ width: `${offPlanPct}%` }} />
+              <div className="h-4 bg-gray-200 rounded-full overflow-hidden mb-2 flex">
+                <div className="h-full bg-emerald-500 rounded-l-full" style={{ width: `${offPlanPct}%` }} />
+                <div className="h-full bg-red-400 flex-1 rounded-r-full" />
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-gold font-medium">{offPlanPct}% Off-Plan ({ytd2026.offPlan.toLocaleString()})</span>
-                <span className="text-black/50">{100 - offPlanPct}% Secondary ({ytd2026.secondary.toLocaleString()})</span>
+                <span className="text-emerald-600 font-semibold">● {offPlanPct}% Off-Plan ({ytd2026.offPlan.toLocaleString()})</span>
+                <span className="text-red-500 font-semibold">● {100 - offPlanPct}% Secondary ({ytd2026.secondary.toLocaleString()})</span>
               </div>
             </div>
-            <div className="bg-white/70 rounded-xl p-5 border border-gold/20">
+            <div className="bg-white/70 rounded-xl p-5 border border-gray-200">
               <p className="text-black/50 text-xs uppercase tracking-wider mb-3">Cash vs Mortgage</p>
-              <div className="h-3 bg-black/10 rounded-full overflow-hidden mb-2">
-                <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full" style={{ width: `${cashPct}%` }} />
+              <div className="h-4 bg-gray-200 rounded-full overflow-hidden mb-2 flex">
+                <div className="h-full bg-blue-500 rounded-l-full" style={{ width: `${cashPct}%` }} />
+                <div className="h-full bg-amber-400 flex-1 rounded-r-full" />
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-emerald-600 font-medium">{cashPct}% Cash ({ytd2026.cash.toLocaleString()})</span>
-                <span className="text-black/50">{100 - cashPct}% Mortgage ({ytd2026.mortgage.toLocaleString()})</span>
+                <span className="text-blue-600 font-semibold">● {cashPct}% Cash ({ytd2026.cash.toLocaleString()})</span>
+                <span className="text-amber-600 font-semibold">● {100 - cashPct}% Mortgage ({ytd2026.mortgage.toLocaleString()})</span>
               </div>
             </div>
           </div>
