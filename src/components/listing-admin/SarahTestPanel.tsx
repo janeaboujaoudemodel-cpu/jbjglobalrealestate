@@ -140,15 +140,15 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
   return (
     <div className="space-y-6">
       {/* Test Header */}
-      <Card className="bg-zinc-50 border-zinc-200">
+      <Card className="bg-gray-50 border-gray-200">
         <CardHeader className="pb-2">
-          <CardTitle className="flex items-center gap-2 text-zinc-800">
+          <CardTitle className="flex items-center gap-2 text-gray-800">
             <FlaskConical className="w-5 h-5" />
             Sarah Extraction Test
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-zinc-600 mb-4">
+          <p className="text-sm text-gray-600 mb-4">
             Paste a project URL. Sarah will extract the full listing (images + PDFs) and queue it for your approval.
           </p>
           
@@ -163,7 +163,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
               <Button
                 onClick={() => runTest()}
                 disabled={isLoading}
-                className="bg-zinc-900 hover:bg-zinc-800 text-white"
+                className="bg-zinc-900 hover:bg-gray-800 text-white"
               >
                 {isLoading ? (
                   <>
@@ -202,7 +202,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                 <button
                   key={i}
                   onClick={() => setTestUrl(url)}
-                  className="text-xs px-2 py-0.5 rounded bg-zinc-200 hover:bg-zinc-300 text-zinc-700 capitalize"
+                  className="text-xs px-2 py-0.5 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 capitalize"
                 >
                   {name}
                 </button>
@@ -239,10 +239,10 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                 
                 <div className="flex items-center gap-4">
                   <div className="text-right text-sm">
-                    <div className="text-zinc-600">API Calls: {testResult.apiCallsMade}</div>
-                    <div className="text-zinc-600">Cost: {testResult.totalApiCost}</div>
+                    <div className="text-gray-600">API Calls: {testResult.apiCallsMade}</div>
+                    <div className="text-gray-600">Cost: {testResult.totalApiCost}</div>
                     {testResult.duration_ms && (
-                      <div className="text-zinc-600">Time: {(testResult.duration_ms / 1000).toFixed(1)}s</div>
+                      <div className="text-gray-600">Time: {(testResult.duration_ms / 1000).toFixed(1)}s</div>
                     )}
                   </div>
                   
@@ -289,10 +289,10 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
 
           {/* Extracted Project Data */}
           {testResult.project && (
-            <Card className="border-zinc-200">
+            <Card className="border-gray-200">
               <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-zinc-800 text-base">
-                  <Sparkles className="w-5 h-5 text-zinc-600" />
+                <CardTitle className="flex items-center gap-2 text-gray-800 text-base">
+                  <Sparkles className="w-5 h-5 text-gray-600" />
                   Extracted Project Data
                 </CardTitle>
               </CardHeader>
@@ -303,7 +303,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                     href={testUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-zinc-700 hover:underline"
+                    className="inline-flex items-center gap-1 text-gray-700 hover:underline"
                   >
                     Open source page
                     <ExternalLink className="w-4 h-4" />
@@ -360,7 +360,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                 {testResult.project.description && (
                   <div className="mt-4 pt-4 border-t">
                     <div className="text-xs text-gray-500 uppercase mb-1">Description</div>
-                    <p className="text-sm text-zinc-700 line-clamp-3">
+                    <p className="text-sm text-gray-700 line-clamp-3">
                       {testResult.project.description}
                     </p>
                   </div>
@@ -371,10 +371,10 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
 
           {/* Extracted Images */}
           {testResult.images.length > 0 && (
-            <Card className="border-zinc-200">
+            <Card className="border-gray-200">
               <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-zinc-800 text-base">
-                  <Image className="w-5 h-5 text-zinc-600" />
+                <CardTitle className="flex items-center gap-2 text-gray-800 text-base">
+                  <Image className="w-5 h-5 text-gray-600" />
                   Extracted Images ({testResult.images.length})
                 </CardTitle>
               </CardHeader>
@@ -392,7 +392,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                         <img
                           src={url}
                           alt={`Project image ${i + 1}`}
-                          className="w-32 h-24 object-cover rounded-lg border border-zinc-200 hover:border-zinc-400 transition-colors"
+                          className="w-32 h-24 object-cover rounded-lg border border-gray-200 hover:border-gray-400 transition-colors"
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = '/placeholder.svg';
                           }}
@@ -403,7 +403,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                       </a>
                     ))}
                     {testResult.images.length > 10 && (
-                      <div className="flex-shrink-0 w-32 h-24 rounded-lg border border-dashed border-zinc-300 flex items-center justify-center bg-zinc-50">
+                      <div className="flex-shrink-0 w-32 h-24 rounded-lg border border-dashed border-gray-300 flex items-center justify-center bg-gray-50">
                         <span className="text-sm text-gray-500">+{testResult.images.length - 10} more</span>
                       </div>
                     )}
@@ -414,16 +414,16 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
           )}
 
           {/* Extracted Documents */}
-          <Card className="border-zinc-200">
+          <Card className="border-gray-200">
             <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-zinc-800 text-base">
-                <FileText className="w-5 h-5 text-zinc-600" />
+              <CardTitle className="flex items-center gap-2 text-gray-800 text-base">
+                <FileText className="w-5 h-5 text-gray-600" />
                 Extracted Documents
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className={`p-4 rounded-lg border ${testResult.documents.brochure ? 'bg-emerald-50 border-emerald-200' : 'bg-zinc-50 border-zinc-200'}`}>
+                <div className={`p-4 rounded-lg border ${testResult.documents.brochure ? 'bg-emerald-50 border-emerald-200' : 'bg-gray-50 border-gray-200'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.brochure ? (
                       <FilledCheckCircle className="w-5 h-5" />
@@ -445,7 +445,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                   )}
                 </div>
 
-                <div className={`p-4 rounded-lg border ${testResult.documents.paymentPlan ? 'bg-emerald-50 border-emerald-200' : 'bg-zinc-50 border-zinc-200'}`}>
+                <div className={`p-4 rounded-lg border ${testResult.documents.paymentPlan ? 'bg-emerald-50 border-emerald-200' : 'bg-gray-50 border-gray-200'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.paymentPlan ? (
                       <FilledCheckCircle className="w-5 h-5" />
@@ -467,7 +467,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                   )}
                 </div>
 
-                <div className={`p-4 rounded-lg border ${testResult.documents.floorPlans.length > 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-zinc-50 border-zinc-200'}`}>
+                <div className={`p-4 rounded-lg border ${testResult.documents.floorPlans.length > 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-gray-50 border-gray-200'}`}>
                   <div className="flex items-center gap-2 mb-2">
                     {testResult.documents.floorPlans.length > 0 ? (
                       <FilledCheckCircle className="w-5 h-5" />
@@ -499,9 +499,9 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
 
           {/* Next step helper */}
           {(onRunPageOneTest || onGoToFullSync) && (
-            <Card className="border-zinc-200 bg-white">
+            <Card className="border-gray-200 bg-white">
               <CardContent className="py-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-                <div className="text-sm text-zinc-700">
+                <div className="text-sm text-gray-700">
                   Next step: run <strong>Test Page 1 Only</strong> to write real extracted projects into the approval queue.
                 </div>
                 <div className="flex gap-2">

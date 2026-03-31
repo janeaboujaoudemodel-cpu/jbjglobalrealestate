@@ -250,7 +250,7 @@ export function EnhancedAssignModal({
       <Button
         variant="outline"
         onClick={() => setStep("employees")}
-        className="w-full h-20 justify-start gap-4 border-zinc-700 hover:bg-zinc-800 hover:border-gold/50"
+        className="w-full h-20 justify-start gap-4 border-gray-700 hover:bg-gray-800 hover:border-gold/50"
       >
         <div className="p-3 rounded-lg bg-blue-500/20">
           <Users className="h-6 w-6 text-blue-400" />
@@ -264,7 +264,7 @@ export function EnhancedAssignModal({
       <Button
         variant="outline"
         onClick={() => setStep("brokers")}
-        className="w-full h-20 justify-start gap-4 border-zinc-700 hover:bg-zinc-800 hover:border-gold/50"
+        className="w-full h-20 justify-start gap-4 border-gray-700 hover:bg-gray-800 hover:border-gold/50"
       >
         <div className="p-3 rounded-lg bg-gold/20">
           <Bot className="h-6 w-6 text-gold" />
@@ -298,7 +298,7 @@ export function EnhancedAssignModal({
             placeholder="Search employees..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-zinc-800 border-zinc-700 text-white"
+            className="pl-10 bg-zinc-800 border-gray-700 text-white"
           />
         </div>
 
@@ -321,9 +321,9 @@ export function EnhancedAssignModal({
                       type: "employee",
                     })
                   }
-                  className="w-full p-3 rounded-lg bg-zinc-800 border border-zinc-700 hover:border-gold/50 flex items-center gap-3 transition-all text-left"
+                  className="w-full p-3 rounded-lg bg-zinc-800 border border-gray-700 hover:border-gold/50 flex items-center gap-3 transition-all text-left"
                 >
-                  <Avatar className="h-10 w-10 border border-zinc-600">
+                  <Avatar className="h-10 w-10 border border-gray-600">
                     <AvatarFallback className="bg-blue-500/20 text-blue-400">
                       {getInitials(employee.display_name)}
                     </AvatarFallback>
@@ -334,7 +334,7 @@ export function EnhancedAssignModal({
                     </p>
                   </div>
                   {employee.crm_role && (
-                    <Badge variant="outline" className="border-zinc-600 text-gray-400">
+                    <Badge variant="outline" className="border-gray-600 text-gray-400">
                       {employee.crm_role}
                     </Badge>
                   )}
@@ -368,7 +368,7 @@ export function EnhancedAssignModal({
             placeholder="Search brokers..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-zinc-800 border-zinc-700 text-white"
+            className="pl-10 bg-zinc-800 border-gray-700 text-white"
           />
         </div>
 
@@ -406,8 +406,8 @@ export function EnhancedAssignModal({
                             disabled={isAtCapacity}
                             className={`w-full p-3 rounded-lg border flex items-center gap-3 transition-all text-left ${
                               isAtCapacity
-                                ? "bg-zinc-800/50 border-zinc-700 opacity-50 cursor-not-allowed"
-                                : "bg-zinc-800 border-zinc-700 hover:border-gold/50"
+                                ? "bg-zinc-800/50 border-gray-700 opacity-50 cursor-not-allowed"
+                                : "bg-zinc-800 border-gray-700 hover:border-gold/50"
                             }`}
                           >
                             <Avatar className="h-10 w-10 border border-gold/30">
@@ -468,8 +468,8 @@ export function EnhancedAssignModal({
                             disabled={isAtCapacity}
                             className={`w-full p-3 rounded-lg border flex items-center gap-3 transition-all text-left ${
                               isAtCapacity
-                                ? "bg-zinc-800/50 border-zinc-700 opacity-50 cursor-not-allowed"
-                                : "bg-zinc-800 border-zinc-700 hover:border-emerald-500/50"
+                                ? "bg-zinc-800/50 border-gray-700 opacity-50 cursor-not-allowed"
+                                : "bg-zinc-800 border-gray-700 hover:border-emerald-500/50"
                             }`}
                           >
                             <Avatar className="h-10 w-10 border border-emerald-500/30">
@@ -518,7 +518,7 @@ export function EnhancedAssignModal({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white max-w-md">
+        <DialogContent className="bg-zinc-900 border-gray-700 text-white max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <UserPlus className="h-5 w-5 text-gold" />
@@ -534,7 +534,7 @@ export function EnhancedAssignModal({
 
       {/* Confirmation Dialog */}
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-        <AlertDialogContent className="bg-zinc-900 border-zinc-700">
+        <AlertDialogContent className="bg-zinc-900 border-gray-700">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-white flex items-center gap-2">
               <CheckCircle className="h-5 w-5 text-gold" />
@@ -547,7 +547,7 @@ export function EnhancedAssignModal({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="border-zinc-700 text-gray-300 hover:bg-zinc-800">
+            <AlertDialogCancel className="border-gray-700 text-gray-300 hover:bg-gray-800">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

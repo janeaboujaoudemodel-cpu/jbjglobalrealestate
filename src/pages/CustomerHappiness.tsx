@@ -520,7 +520,7 @@ const FeedbackForm = () => {
         <span className="text-black group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit"}</span>
         <span className="text-gold group-hover:text-black transition-colors">Review</span>
       </button>
-      <p className="text-xs text-zinc-600 text-center">
+      <p className="text-xs text-gray-600 text-center">
         Reviews are moderated before being published on our website.
       </p>
     </form>
@@ -708,7 +708,7 @@ const IssueReportForm = () => {
           />
           <label htmlFor="screenshot-upload" className="cursor-pointer">
             <Upload className="w-8 h-8 text-gold mx-auto mb-2" />
-            <p className="text-zinc-600 text-sm">
+            <p className="text-gray-600 text-sm">
               {screenshot ? screenshot.name : "Click to upload a screenshot"}
             </p>
           </label>
@@ -944,7 +944,7 @@ const IdeaBoxForm = () => {
         <span className="text-black group-hover:text-gold transition-colors">{isSubmitting ? "Submitting..." : "Submit Idea &"}</span>
         <span className="text-gold group-hover:text-black transition-colors">Enter Draw</span>
       </button>
-      <p className="text-xs text-zinc-600 text-center">
+      <p className="text-xs text-gray-600 text-center">
         By submitting, you agree to enter the monthly draw. Winners will be notified via email.
       </p>
     </form>
@@ -1053,7 +1053,7 @@ const CustomerHappiness = () => {
                       </div>
                       <div>
                         <CardTitle className="text-black">Create Support Ticket</CardTitle>
-                        <CardDescription className="text-zinc-600">
+                        <CardDescription className="text-gray-600">
                           Need help? Our team typically responds within 24 hours.
                         </CardDescription>
                       </div>
@@ -1074,7 +1074,7 @@ const CustomerHappiness = () => {
                       </div>
                       <div>
                         <CardTitle className="text-black">Write a Review</CardTitle>
-                        <CardDescription className="text-zinc-600">
+                        <CardDescription className="text-gray-600">
                           Share your experience! Approved reviews will be featured on our website.
                         </CardDescription>
                       </div>
@@ -1095,7 +1095,7 @@ const CustomerHappiness = () => {
                       </div>
                       <div>
                         <CardTitle className="text-black">Report an Issue</CardTitle>
-                        <CardDescription className="text-zinc-600">
+                        <CardDescription className="text-gray-600">
                           Found a bug or something not working? Help us fix it!
                         </CardDescription>
                       </div>
@@ -1116,7 +1116,7 @@ const CustomerHappiness = () => {
                       </div>
                       <div>
                         <CardTitle className="text-black">Idea Box — We Value Your Creativity!</CardTitle>
-                        <CardDescription className="text-zinc-600">
+                        <CardDescription className="text-gray-600">
                           Share your innovative ideas and win amazing prizes!
                         </CardDescription>
                       </div>
@@ -1153,7 +1153,7 @@ const CustomerHappiness = () => {
                       <Phone className="w-7 h-7 text-blue-500" />
                     </div>
                     <p className="text-black font-semibold mb-1">Call Us</p>
-                    <a href="tel:+971565911000" className="text-zinc-600 hover:text-blue-500 transition-colors font-medium">
+                    <a href="tel:+971565911000" className="text-gray-600 hover:text-blue-500 transition-colors font-medium">
                       +971 56 591 1000
                     </a>
                   </CardContent>
@@ -1165,7 +1165,7 @@ const CustomerHappiness = () => {
                       <Mail className="w-7 h-7 text-purple-500" />
                     </div>
                     <p className="text-black font-semibold mb-1">Email Us</p>
-                    <a href="mailto:CONTACT@JBJ.AE" className="text-zinc-600 hover:text-purple-500 transition-colors font-medium">
+                    <a href="mailto:CONTACT@JBJ.AE" className="text-gray-600 hover:text-purple-500 transition-colors font-medium">
                       CONTACT@JBJ.AE
                     </a>
                   </CardContent>
@@ -1177,7 +1177,7 @@ const CustomerHappiness = () => {
                       <Calendar className="w-7 h-7 text-gold" />
                     </div>
                     <p className="text-black font-semibold mb-1">Office Hours</p>
-                    <p className="text-zinc-600 font-medium">Mon–Sun: 9AM–9PM</p>
+                    <p className="text-gray-600 font-medium">Mon–Sun: 9AM–9PM</p>
                   </CardContent>
                 </Card>
               </div>

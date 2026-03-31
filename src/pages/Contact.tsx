@@ -354,15 +354,15 @@ END:VCARD`;
                 <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
                   Thank You for Your Inquiry
                 </h2>
-                <p className="text-zinc-600 text-lg mb-6">
+                <p className="text-gray-600 text-lg mb-6">
                   We have received your consultation request and will be in touch soon.
                 </p>
                 <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-6 text-left max-w-md mx-auto">
                   <h3 className="text-gold font-semibold mb-3 text-sm uppercase tracking-wider">Contact Information</h3>
                   <div className="space-y-2 text-sm">
-                    <p className="text-black"><span className="text-zinc-600">Phone:</span> {CONTACT_INFO.phone}</p>
-                    <p className="text-black"><span className="text-zinc-600">Email:</span> {CONTACT_INFO.email}</p>
-                    <p className="text-black"><span className="text-zinc-600">WhatsApp:</span> {CONTACT_INFO.phone}</p>
+                    <p className="text-black"><span className="text-gray-600">Phone:</span> {CONTACT_INFO.phone}</p>
+                    <p className="text-black"><span className="text-gray-600">Email:</span> {CONTACT_INFO.email}</p>
+                    <p className="text-black"><span className="text-gray-600">WhatsApp:</span> {CONTACT_INFO.phone}</p>
                   </div>
                 </div>
                 <Button 
@@ -383,7 +383,7 @@ END:VCARD`;
                   <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
                     Request a Consultation
                   </h2>
-                  <p className="text-zinc-600 text-sm">
+                  <p className="text-gray-600 text-sm">
                     If you would like to speak with our team regarding buying, selling, renting, investment guidance, market intelligence, or partner introductions, request a consultation through this form. Consultations focus on real estate brokerage guidance and structured introductions within our licensed scope.
                   </p>
                 </div>
@@ -443,7 +443,7 @@ END:VCARD`;
                             
                             return (
                               <FormItem>
-                                <FormLabel className="text-zinc-700 text-sm font-medium">Phone Number *</FormLabel>
+                                <FormLabel className="text-gray-700 text-sm font-medium">Phone Number *</FormLabel>
                                 <div className="flex gap-2">
                                   <FormControl>
                                     <PhoneInput
@@ -476,7 +476,7 @@ END:VCARD`;
                           name="nationality"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-zinc-700 text-sm font-medium">Nationality *</FormLabel>
+                              <FormLabel className="text-gray-700 text-sm font-medium">Nationality *</FormLabel>
                               <FormControl>
                                 <SearchableSelect
                                   value={field.value}
@@ -497,7 +497,7 @@ END:VCARD`;
                           name="language"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-zinc-700 text-sm font-medium">Preferred Language *</FormLabel>
+                              <FormLabel className="text-gray-700 text-sm font-medium">Preferred Language *</FormLabel>
                               <FormControl>
                                 <SearchableSelect
                                   value={field.value}
@@ -519,7 +519,7 @@ END:VCARD`;
                         name="currentLocation"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-zinc-700 text-sm font-medium">Current Location (Country & City) *</FormLabel>
+                            <FormLabel className="text-gray-700 text-sm font-medium">Current Location (Country & City) *</FormLabel>
                             <FormControl>
                               <Input 
                                 {...field} 
@@ -534,7 +534,7 @@ END:VCARD`;
                     </div>
 
                     {/* Service Selection */}
-                    <div className="h-px bg-zinc-200 my-6" />
+                    <div className="h-px bg-gray-200 my-6" />
                     
                     <div className="space-y-4">
                       <FormField
@@ -542,7 +542,7 @@ END:VCARD`;
                         name="serviceNeeded"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-zinc-700 text-sm font-medium">Service Needed *</FormLabel>
+                            <FormLabel className="text-gray-700 text-sm font-medium">Service Needed *</FormLabel>
                             <Select onValueChange={field.onChange} value={field.value}>
                               <FormControl>
                                 <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black">
@@ -551,7 +551,7 @@ END:VCARD`;
                               </FormControl>
                               <SelectContent>
                                 {SERVICE_OPTIONS.map((option) => (
-                                  <SelectItem key={option.value} value={option.value} className="text-black hover:bg-zinc-100">
+                                  <SelectItem key={option.value} value={option.value} className="text-black hover:bg-gray-100">
                                     {option.label}
                                   </SelectItem>
                                 ))}
@@ -568,7 +568,7 @@ END:VCARD`;
                           name="budgetRange"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-zinc-700 text-sm font-medium">Budget Range (Optional)</FormLabel>
+                              <FormLabel className="text-gray-700 text-sm font-medium">Budget Range (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
                                    <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black">
@@ -577,7 +577,7 @@ END:VCARD`;
                                 </FormControl>
                                 <SelectContent>
                                   {BUDGET_OPTIONS.map((option) => (
-                                    <SelectItem key={option.value} value={option.value} className="text-black hover:bg-zinc-100">
+                                    <SelectItem key={option.value} value={option.value} className="text-black hover:bg-gray-100">
                                       {option.label}
                                     </SelectItem>
                                   ))}
@@ -592,7 +592,7 @@ END:VCARD`;
                           name="timeline"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel className="text-zinc-700 text-sm font-medium">Timeline (Optional)</FormLabel>
+                              <FormLabel className="text-gray-700 text-sm font-medium">Timeline (Optional)</FormLabel>
                               <Select onValueChange={field.onChange} value={field.value}>
                                 <FormControl>
                                    <SelectTrigger className="h-12 border-2 border-gold/40 hover:border-gold focus:border-gold rounded-lg bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black">
@@ -601,7 +601,7 @@ END:VCARD`;
                                 </FormControl>
                                 <SelectContent>
                                   {TIMELINE_OPTIONS.map((option) => (
-                                    <SelectItem key={option.value} value={option.value} className="text-black hover:bg-zinc-100">
+                                    <SelectItem key={option.value} value={option.value} className="text-black hover:bg-gray-100">
                                       {option.label}
                                     </SelectItem>
                                   ))}
@@ -618,7 +618,7 @@ END:VCARD`;
                         name="referralCode"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-zinc-700 text-sm font-medium">Referral Code (Optional)</FormLabel>
+                            <FormLabel className="text-gray-700 text-sm font-medium">Referral Code (Optional)</FormLabel>
                             <FormControl>
                               <Input 
                                 {...field} 
@@ -640,7 +640,7 @@ END:VCARD`;
                         name="message"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-zinc-700 text-sm font-medium">Additional Message (Optional)</FormLabel>
+                            <FormLabel className="text-gray-700 text-sm font-medium">Additional Message (Optional)</FormLabel>
                             <FormControl>
                               <Textarea 
                                 {...field} 
@@ -655,7 +655,7 @@ END:VCARD`;
                     </div>
 
                     {/* Checkboxes */}
-                    <div className="h-px bg-zinc-200 my-6" />
+                    <div className="h-px bg-gray-200 my-6" />
 
                     <div className="space-y-4">
                       <FormField
@@ -667,11 +667,11 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-zinc-700 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-gray-700 text-sm font-normal cursor-pointer">
                                 I confirm the information provided is accurate. *
                               </FormLabel>
                               <FormMessage className="text-red-500 text-xs" />
@@ -689,11 +689,11 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-zinc-700 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-gray-700 text-sm font-normal cursor-pointer">
                                 I agree to the{" "}
                                 <Link to="/terms" className="text-gold hover:underline">Terms of Service</Link>
                                 {" "}and{" "}
@@ -714,11 +714,11 @@ END:VCARD`;
                               <Checkbox 
                                 checked={field.value} 
                                 onCheckedChange={field.onChange}
-                                className="border-zinc-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
+                                className="border-gray-400 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel className="text-zinc-700 text-sm font-normal cursor-pointer">
+                              <FormLabel className="text-gray-700 text-sm font-normal cursor-pointer">
                                 I would like to receive updates and market insights. (Optional)
                               </FormLabel>
                             </div>
@@ -782,7 +782,7 @@ END:VCARD`;
             <span className="text-black">Prefer to Reach Us</span>{" "}
             <span className="text-gold">Directly?</span>
           </h2>
-          <p className="text-center text-zinc-600 text-sm mb-6 max-w-2xl mx-auto">
+          <p className="text-center text-gray-600 text-sm mb-6 max-w-2xl mx-auto">
             For general inquiries, consultations, or non-technical requests, you may contact us through the channels below.
           </p>
           {/* Cards are the 3rd layer - champagne pearl styling */}
@@ -840,7 +840,7 @@ END:VCARD`;
                 </h3>
               </div>
               
-              <p className="text-zinc-700 text-sm leading-relaxed">
+              <p className="text-gray-700 text-sm leading-relaxed">
                 JBJ Global Real Estate is a licensed real estate brokerage in Dubai for buying, selling, and renting properties. We do not provide legal, mortgage, or immigration services directly. Where required, we may introduce independent, licensed partners. Any engagement with partner services is contracted directly between the client and the partner under the partner's own licence and terms.
               </p>
             </div>
@@ -861,7 +861,7 @@ END:VCARD`;
               <h3 className="text-black font-semibold text-lg mb-2">
                 Appointments
               </h3>
-              <p className="text-zinc-700 text-sm leading-relaxed">
+              <p className="text-gray-700 text-sm leading-relaxed">
                 If an in-person meeting is required, availability is confirmed by appointment only after initial contact or ticket submission.
               </p>
             </div>
@@ -876,7 +876,7 @@ END:VCARD`;
           {/* Inner Pearl Layer */}
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6 md:p-8 shadow-[0_0_15px_rgba(200,167,102,0.22)]">
             <div className="max-w-3xl mx-auto text-center">
-              <p className="text-zinc-700 text-base leading-relaxed">
+              <p className="text-gray-700 text-base leading-relaxed">
                 At JBJ Global Real Estate, communication is handled with structure, discretion, and accountability. We look forward to assisting you.
               </p>
             </div>
@@ -886,7 +886,7 @@ END:VCARD`;
 
       {/* Phone Actions Dialog */}
       <Dialog open={phoneActionsOpen} onOpenChange={setPhoneActionsOpen}>
-        <DialogContent className="max-w-sm bg-white border-zinc-200">
+        <DialogContent className="max-w-sm bg-white border-gray-200">
           <DialogHeader>
             <DialogTitle className="text-black text-lg font-semibold">Contact Options</DialogTitle>
           </DialogHeader>
@@ -908,7 +908,7 @@ END:VCARD`;
             <Button 
               onClick={() => handlePhoneAction('save')}
               variant="outline"
-              className="w-full h-12 border-zinc-300 text-zinc-700 hover:bg-zinc-50 justify-start gap-3"
+              className="w-full h-12 border-gray-300 text-gray-700 hover:bg-gray-50 justify-start gap-3"
             >
               <Download className="w-5 h-5" />
               Save Contact
@@ -916,7 +916,7 @@ END:VCARD`;
             <Button 
               onClick={() => handlePhoneAction('share')}
               variant="outline"
-              className="w-full h-12 border-zinc-300 text-zinc-700 hover:bg-zinc-50 justify-start gap-3"
+              className="w-full h-12 border-gray-300 text-gray-700 hover:bg-gray-50 justify-start gap-3"
             >
               <Share2 className="w-5 h-5" />
               Share Contact

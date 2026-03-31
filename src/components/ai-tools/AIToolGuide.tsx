@@ -70,7 +70,7 @@ const AIToolGuide = ({ description, steps, benefits, accentColor }: AIToolGuideP
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <div className="mt-4 pt-4 border-t border-zinc-700/50 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="mt-4 pt-4 border-t border-gray-700/50 grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Steps */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">

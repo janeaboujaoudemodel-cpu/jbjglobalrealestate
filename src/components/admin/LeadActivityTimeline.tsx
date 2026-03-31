@@ -50,7 +50,7 @@ const EVENT_CONFIG: Record<
   time_on_page: {
     icon: Clock,
     color: "text-white/70",
-    bg: "bg-zinc-700/30 border-zinc-600/30",
+    bg: "bg-zinc-700/30 border-gray-600/30",
     label: "Time on page",
   },
   tool_use: {
@@ -86,7 +86,7 @@ const EVENT_CONFIG: Record<
   click: {
     icon: MousePointer,
     color: "text-white/85",
-    bg: "bg-zinc-700/30 border-zinc-600/30",
+    bg: "bg-zinc-700/30 border-gray-600/30",
     label: "Clicked",
   },
   form_submission: {
@@ -106,7 +106,7 @@ const EVENT_CONFIG: Record<
 const DEFAULT_EVENT = {
   icon: Activity,
   color: "text-white/70",
-  bg: "bg-zinc-700/30 border-zinc-600/30",
+  bg: "bg-zinc-700/30 border-gray-600/30",
   label: "Activity",
 };
 
@@ -230,7 +230,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
           >
             <p className="text-2xl font-bold">{stat.value}</p>
             <p className="text-xs text-white/70 mt-0.5">{stat.label}</p>
-            <p className="text-[10px] text-zinc-600">{stat.sub}</p>
+            <p className="text-[10px] text-gray-600">{stat.sub}</p>
           </div>
         ))}
       </div>
@@ -255,9 +255,9 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
         </div>
       ) : events.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 text-white/60 gap-2">
-          <Activity className="w-8 h-8 text-zinc-700" />
+          <Activity className="w-8 h-8 text-gray-700" />
           <p className="text-sm">No activity recorded yet for this lead.</p>
-          <p className="text-xs text-zinc-600">Activity is tracked after form submission.</p>
+          <p className="text-xs text-gray-600">Activity is tracked after form submission.</p>
         </div>
       ) : (
         <ScrollArea className="h-[380px] pr-2">
@@ -284,7 +284,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
 
                     {/* Content */}
                     <div
-                      className={`flex-1 bg-zinc-900/60 border border-zinc-800 rounded-lg px-3 py-2 ${
+                      className={`flex-1 bg-zinc-900/60 border border-gray-800 rounded-lg px-3 py-2 ${
                         isLast ? "" : "mb-0"
                       }`}
                     >
@@ -294,7 +294,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
                           {detail && (
                             <Badge
                               variant="outline"
-                              className="text-[10px] px-1.5 py-0 border-zinc-700 text-white/85 font-normal"
+                              className="text-[10px] px-1.5 py-0 border-gray-700 text-white/85 font-normal"
                             >
                               {detail}
                             </Badge>

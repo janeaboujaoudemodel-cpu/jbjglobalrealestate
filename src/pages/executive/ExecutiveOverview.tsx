@@ -84,7 +84,7 @@ const ExecutiveOverview = () => {
       case "medium":
         return "bg-amber-500/20 text-amber-400 border-amber-500/30";
       default:
-        return "bg-zinc-500/20 text-white/70 border-zinc-500/30";
+        return "bg-gray-500/20 text-white/70 border-gray-500/30";
     }
   };
 
@@ -129,7 +129,7 @@ const ExecutiveOverview = () => {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   nav.active
                     ? "bg-gold text-black"
-                    : "bg-zinc-800 text-white/85 hover:bg-zinc-700"
+                    : "bg-zinc-800 text-white/85 hover:bg-gray-700"
                 }`}
               >
                 {nav.label}
@@ -146,7 +146,7 @@ const ExecutiveOverview = () => {
             <>
               {/* Active Deals by Stage */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-zinc-900 border-gray-800">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Building className="w-4 h-4" />
@@ -161,7 +161,7 @@ const ExecutiveOverview = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-zinc-900 border-gray-800">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Home className="w-4 h-4" />
@@ -176,7 +176,7 @@ const ExecutiveOverview = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-zinc-900 border-gray-800">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Key className="w-4 h-4" />
@@ -194,7 +194,7 @@ const ExecutiveOverview = () => {
 
               {/* Velocity & Quality */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-zinc-900 border-gray-800">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70">
                       Weekly Velocity
@@ -209,7 +209,7 @@ const ExecutiveOverview = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-zinc-900 border-gray-800">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70">
                       Monthly Velocity
@@ -223,7 +223,7 @@ const ExecutiveOverview = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-zinc-900 border-gray-800">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70">
                       Lead Quality Trend
@@ -240,7 +240,7 @@ const ExecutiveOverview = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-zinc-900 border-zinc-800">
+                <Card className="bg-zinc-900 border-gray-800">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-sm font-medium text-white/70">
                       Total Active Pipeline
@@ -256,7 +256,7 @@ const ExecutiveOverview = () => {
               </div>
 
               {/* Area Momentum Summary */}
-              <Card className="bg-zinc-900 border-zinc-800 mb-8">
+              <Card className="bg-zinc-900 border-gray-800 mb-8">
                 <CardHeader>
                   <CardTitle className="text-lg text-white flex items-center gap-2">
                     <Target className="w-5 h-5 text-gold" />
@@ -287,7 +287,7 @@ const ExecutiveOverview = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Link
                   to="/internal/executive/market-signals"
-                  className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 hover:border-gold/50 transition-colors group"
+                  className="bg-zinc-900 border border-gray-800 rounded-lg p-6 hover:border-gold/50 transition-colors group"
                 >
                   <div className="flex items-center justify-between">
                     <div>
@@ -304,7 +304,7 @@ const ExecutiveOverview = () => {
 
                 <Link
                   to="/internal/executive/risk"
-                  className="bg-zinc-900 border border-zinc-800 rounded-lg p-6 hover:border-gold/50 transition-colors group"
+                  className="bg-zinc-900 border border-gray-800 rounded-lg p-6 hover:border-gold/50 transition-colors group"
                 >
                   <div className="flex items-center justify-between">
                     <div>
@@ -321,12 +321,12 @@ const ExecutiveOverview = () => {
               </div>
 
               {/* Footer Attribution */}
-              <div className="mt-12 pt-6 border-t border-zinc-800 text-center">
+              <div className="mt-12 pt-6 border-t border-gray-800 text-center">
                 <p className="text-xs text-white/60">
                   Executive Dashboard • Data sourced from CRM (anonymized) and Open Data (aggregated) • 
                   AI insights are descriptive only, not predictive
                 </p>
-                <p className="text-xs text-zinc-600 mt-1">
+                <p className="text-xs text-gray-600 mt-1">
                   All access logged and auditable • Jane Bou Jaoude Founder & CEO JBJ Global Real Estate
                 </p>
               </div>

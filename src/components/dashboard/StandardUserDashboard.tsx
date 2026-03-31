@@ -196,7 +196,7 @@ const StandardUserDashboard = () => {
                   className={`bg-zinc-900/50 border-2 transition-all duration-300 cursor-pointer group ${
                     isSelected 
                       ? 'border-gold bg-gold/5 shadow-lg shadow-gold/20' 
-                      : 'border-zinc-800 hover:border-zinc-700'
+                      : 'border-gray-800 hover:border-gray-700'
                   } ${isSubmitting && !isSelected ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <CardHeader>
@@ -229,7 +229,7 @@ const StandardUserDashboard = () => {
                       ))}
                     </ul>
                     
-                    <div className="mt-4 pt-4 border-t border-zinc-800">
+                    <div className="mt-4 pt-4 border-t border-gray-800">
                       <span className={`text-sm flex items-center gap-2 ${isSelected ? 'text-gold' : 'text-gray-500 group-hover:text-gold'} transition-colors`}>
                         {isLoading ? 'Setting up...' : 'Select this role'} 
                         <ArrowRight className={`w-4 h-4 transition-transform ${!isLoading && 'group-hover:translate-x-1'}`} />

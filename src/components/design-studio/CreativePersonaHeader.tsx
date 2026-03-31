@@ -111,7 +111,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
               </Badge>
             </div>
             
-            <p className="text-zinc-600 text-sm mt-1 line-clamp-2">
+            <p className="text-gray-600 text-sm mt-1 line-clamp-2">
               {persona.bio}
             </p>
 
@@ -204,7 +204,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
                 placeholder={`Tell ${persona.name} what you want to create... Be specific about colors, style, and purpose.`}
                 value={ideaText}
                 onChange={(e) => setIdeaText(e.target.value)}
-                className="min-h-[100px] bg-zinc-50 border-rose-100 focus:border-rose-300 text-black"
+                className="min-h-[100px] bg-gray-50 border-rose-100 focus:border-rose-300 text-black"
               />
               
               <div className="flex justify-end gap-2 mt-3">

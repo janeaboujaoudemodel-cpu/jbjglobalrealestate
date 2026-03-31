@@ -825,7 +825,7 @@ const AIHub = () => {
                       <benefit.icon className="w-6 h-6 text-gold" />
                     </div>
                     <h3 className="text-black font-semibold text-sm mb-1">{benefit.title}</h3>
-                    <p className="text-zinc-600 text-xs">{benefit.desc}</p>
+                    <p className="text-gray-600 text-xs">{benefit.desc}</p>
                   </motion.div>
                 ))}
               </div>
@@ -867,7 +867,7 @@ const AIHub = () => {
                     value={toolSearch}
                     onChange={(e) => setToolSearch(e.target.value)}
                     placeholder="Search tools..."
-                    className="w-full px-4 py-3 rounded-xl bg-black/60 border border-zinc-600 text-white placeholder:text-gray-400 focus:border-gold/50 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl bg-black/60 border border-gray-600 text-white placeholder:text-gray-400 focus:border-gold/50 focus:outline-none transition-colors"
                   />
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -1053,7 +1053,7 @@ const AIHub = () => {
                     <>Start Using <span className="text-gold">All Free Tools</span></>
                   )}
                 </h2>
-                <p className="text-zinc-600 mb-6 max-w-lg mx-auto">
+                <p className="text-gray-600 mb-6 max-w-lg mx-auto">
                   30+ free tools for property analysis, corporate documents, creative design, and productivity.
                 </p>
                 {user ? (

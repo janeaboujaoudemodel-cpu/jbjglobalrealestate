@@ -275,7 +275,7 @@ export function PipelineAnalyticsPanel() {
                 </div>
                 <Progress 
                   value={pipeline.conversionRate} 
-                  className="h-2 bg-zinc-200"
+                  className="h-2 bg-gray-200"
                 />
               </div>
 
@@ -290,7 +290,7 @@ export function PipelineAnalyticsPanel() {
                 </div>
                 <Progress 
                   value={pipeline.slaComplianceRate} 
-                  className="h-2 bg-zinc-200"
+                  className="h-2 bg-gray-200"
                 />
               </div>
 

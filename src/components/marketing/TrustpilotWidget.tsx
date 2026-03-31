@@ -13,7 +13,7 @@ export const TrustpilotWidget = ({ className = '' }: TrustpilotWidgetProps) => {
       href={trustpilotUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center gap-3 bg-zinc-800/50 hover:bg-zinc-800 border border-zinc-700/50 rounded-xl px-4 py-3 transition-all group ${className}`}
+      className={`inline-flex items-center gap-3 bg-zinc-800/50 hover:bg-gray-800 border border-gray-700/50 rounded-xl px-4 py-3 transition-all group ${className}`}
     >
       <div className="flex items-center gap-1">
         {[1, 2, 3, 4, 5].map((i) => (

@@ -144,7 +144,7 @@ const AIInsights = () => {
       {/* Internal Disclaimer */}
       <section className="py-6 border-b border-zinc-900">
         <div className="container mx-auto px-4">
-          <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 flex items-start gap-3">
+          <div className="bg-zinc-900/50 border border-gray-800 rounded-xl p-4 flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
             <div>
               <p className="text-white/70 text-sm">
@@ -161,7 +161,7 @@ const AIInsights = () => {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
-            <TabsList className="bg-zinc-900/50 border border-zinc-800 p-1 w-full md:w-auto flex flex-wrap">
+            <TabsList className="bg-zinc-900/50 border border-gray-800 p-1 w-full md:w-auto flex flex-wrap">
               {narrativeTypes.map((type) => (
                 <TabsTrigger
                   key={type.id}
@@ -180,7 +180,7 @@ const AIInsights = () => {
 
               return (
                 <TabsContent key={type.id} value={type.id}>
-                  <Card className="bg-zinc-900/50 border-zinc-800">
+                  <Card className="bg-zinc-900/50 border-gray-800">
                     <CardHeader>
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-4">
@@ -218,7 +218,7 @@ const AIInsights = () => {
                             <MessageSquare className="w-3 h-3" />
                             Generated {new Date(insight.generatedAt).toLocaleString()}
                           </div>
-                          <div className="p-6 bg-zinc-800/50 rounded-xl border border-zinc-700">
+                          <div className="p-6 bg-zinc-800/50 rounded-xl border border-gray-700">
                             <div className="prose prose-invert prose-sm max-w-none">
                               <div className="text-white/85 text-sm leading-relaxed whitespace-pre-wrap">
                                 {insight.content}
@@ -233,7 +233,7 @@ const AIInsights = () => {
                         </div>
                       ) : (
                         <div className="text-center py-12">
-                          <Brain className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
+                          <Brain className="w-12 h-12 text-gray-700 mx-auto mb-4" />
                           <p className="text-white/60 text-sm">
                             Click "Generate" to create AI-powered execution intelligence for this category.
                           </p>
@@ -253,7 +253,7 @@ const AIInsights = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-white text-xl font-bold mb-6">Execution Intelligence Summary</h2>
           <div className="grid md:grid-cols-3 gap-4">
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border-gray-800">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <TrendingUp className="w-5 h-5 text-emerald-400" />
@@ -263,7 +263,7 @@ const AIInsights = () => {
                 <p className="text-white/60 text-xs mt-2">Based on recent inquiry velocity</p>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border-gray-800">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Users className="w-5 h-5 text-amber-400" />
@@ -273,7 +273,7 @@ const AIInsights = () => {
                 <p className="text-white/60 text-xs mt-2">Priority segments this week</p>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border-gray-800">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Target className="w-5 h-5 text-blue-400" />

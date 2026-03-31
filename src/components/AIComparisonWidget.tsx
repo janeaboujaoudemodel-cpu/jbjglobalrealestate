@@ -49,7 +49,7 @@ const AIComparisonWidget = () => {
             >
               AI Property Comparison
             </h3>
-            <p className="text-zinc-600 max-w-md">
+            <p className="text-gray-600 max-w-md">
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
             <p className="text-gray-500 text-sm mt-2">
@@ -80,7 +80,7 @@ const AIComparisonWidget = () => {
         </div>
 
         {/* Sample comparison preview */}
-        <div className="bg-zinc-100 border border-gold/20 rounded-xl p-4 mb-6">
+        <div className="bg-gray-100 border border-gold/20 rounded-xl p-4 mb-6">
           <div className="grid grid-cols-3 gap-2 text-xs text-gray-500 mb-3">
             <span>Project</span>
             <span className="text-center">Price/sqft</span>
@@ -91,9 +91,9 @@ const AIComparisonWidget = () => {
             { name: "Sobha Verde", price: "AED 2,280", roi: "7.2%" },
             { name: "Damac Lagoons", price: "AED 1,050", roi: "5.6%" },
           ].map((item, i) => (
-            <div key={i} className="grid grid-cols-3 gap-2 py-2 border-t border-zinc-200 text-sm">
+            <div key={i} className="grid grid-cols-3 gap-2 py-2 border-t border-gray-200 text-sm">
               <span className="text-black font-medium">{item.name}</span>
-              <span className="text-center text-zinc-600">{item.price}</span>
+              <span className="text-center text-gray-600">{item.price}</span>
               <span className="text-right text-green-600 font-medium">{item.roi}</span>
             </div>
           ))}

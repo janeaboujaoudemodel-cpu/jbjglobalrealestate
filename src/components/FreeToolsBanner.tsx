@@ -134,7 +134,7 @@ export default function FreeToolsBanner() {
                 className={`absolute top-4 right-4 z-10 p-1 rounded-full transition-all duration-300 ${
                   canClose 
                     ? "text-gray-500 hover:text-white hover:bg-white/10 cursor-pointer" 
-                    : "text-zinc-600 cursor-not-allowed opacity-50"
+                    : "text-gray-600 cursor-not-allowed opacity-50"
                 }`}
                 aria-label="Close"
               >
@@ -187,7 +187,7 @@ export default function FreeToolsBanner() {
                 </h3>
 
                 {/* Description */}
-                <p className="text-zinc-200 text-sm md:text-base mb-6 leading-relaxed">
+                <p className="text-gray-200 text-sm md:text-base mb-6 leading-relaxed">
                   Software that costs thousands yearly — now{" "}
                   <span className="text-emerald-400 font-semibold">completely free</span>{" "}
                   for JBJ Global Real Estate members. Access AI assistants, tools, and more.

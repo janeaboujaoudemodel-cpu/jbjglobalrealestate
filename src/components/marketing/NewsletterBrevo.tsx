@@ -166,7 +166,7 @@ export const NewsletterBrevo = ({
               placeholder="Your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="flex-1 bg-zinc-900/50 border-zinc-700 text-white placeholder:text-gray-400 focus:border-gold/50 focus:ring-gold/20 h-12"
+              className="flex-1 bg-zinc-900/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-gold/50 focus:ring-gold/20 h-12"
               disabled={isSubmitting}
             />
             <Input
@@ -174,7 +174,7 @@ export const NewsletterBrevo = ({
               placeholder="Your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 bg-zinc-900/50 border-zinc-700 text-white placeholder:text-gray-400 focus:border-gold/50 focus:ring-gold/20 h-12"
+              className="flex-1 bg-zinc-900/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-gold/50 focus:ring-gold/20 h-12"
               required
               disabled={isSubmitting}
             />
@@ -215,7 +215,7 @@ export const NewsletterBrevo = ({
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="bg-zinc-900/50 border-zinc-700 text-white placeholder:text-gray-400 focus:border-gold/50 focus:ring-gold/20"
+          className="bg-zinc-900/50 border-gray-700 text-white placeholder:text-gray-400 focus:border-gold/50 focus:ring-gold/20"
           required
           disabled={isSubmitting}
         />

@@ -544,7 +544,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 : 'text-white hover:text-gray-900 bg-transparent'
               : isActiveCheck?.() 
                 ? 'text-black bg-gray-200' 
-                : 'text-zinc-800 hover:text-black hover:bg-gray-50'
+                : 'text-gray-800 hover:text-black hover:bg-gray-50'
           }`}
           style={{ letterSpacing: '0.01em' }}
         >
@@ -564,7 +564,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         <div className="flex flex-col gap-2 px-3">
           {links.map((link) => (
             <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gray-50 rounded-xl">
-              <Link to={link.href} className="flex items-center gap-4 text-zinc-800 hover:text-black hover:bg-gray-50 py-3 px-4 transition-all w-full group rounded-xl">
+              <Link to={link.href} className="flex items-center gap-4 text-gray-800 hover:text-black hover:bg-gray-50 py-3 px-4 transition-all w-full group rounded-xl">
                 <div 
                   className="w-9 h-9 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center transition-all group-hover:bg-gray-200 group-hover:border-gray-300"
                   style={{
@@ -1079,7 +1079,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         onClick={() => setShowWalkthrough(false)}
                         className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors"
                       >
-                        <span className="text-zinc-600 text-xl">×</span>
+                        <span className="text-gray-600 text-xl">×</span>
                       </button>
                       <div className="flex justify-center mb-4">
                         <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain" />
@@ -1087,26 +1087,26 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       <h3 className="text-black font-bold text-xl text-center mb-3">
                         Welcome to JBJ Global Real Estate
                       </h3>
-                      <p className="text-zinc-600 text-sm text-center mb-6 leading-relaxed">
+                      <p className="text-gray-600 text-sm text-center mb-6 leading-relaxed">
                         Navigate our platform with ease. Use the menu sections above to explore properties, services, guides, and more.
                       </p>
                       <div className="space-y-3 mb-6">
                         <div className="flex items-start gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-black font-bold text-xs shrink-0">1</span>
-                          <span className="text-zinc-700"><strong>Buy & Rent</strong> – Browse properties for sale or rent</span>
+                          <span className="text-gray-700"><strong>Buy & Rent</strong> – Browse properties for sale or rent</span>
                         </div>
                         <div className="flex items-start gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-black font-bold text-xs shrink-0">2</span>
-                          <span className="text-zinc-700"><strong>Services</strong> – Explore our brokerage services</span>
+                          <span className="text-gray-700"><strong>Services</strong> – Explore our brokerage services</span>
                         </div>
                         <div className="flex items-start gap-3 text-sm">
                           <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-black font-bold text-xs shrink-0">3</span>
-                          <span className="text-zinc-700"><strong>Contact</strong> – Reach us via WhatsApp, call, or email</span>
+                          <span className="text-gray-700"><strong>Contact</strong> – Reach us via WhatsApp, call, or email</span>
                         </div>
                       </div>
                       <button
                         onClick={() => { setShowWalkthrough(false); localStorage.setItem('jj_mobile_walkthrough_done', 'true'); }}
-                        className="w-full py-3 bg-black text-white font-semibold rounded-xl hover:bg-zinc-900 transition-colors"
+                        className="w-full py-3 bg-black text-white font-semibold rounded-xl hover:bg-gray-900 transition-colors"
                       >
                         Got it!
                       </button>
@@ -1143,7 +1143,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'buy' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'buy' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
+                      : activeMegaMenu === 'buy' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Buy
@@ -1158,7 +1158,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'sell' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'sell' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
+                      : activeMegaMenu === 'sell' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Sell
@@ -1173,7 +1173,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'rent' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'rent' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
+                      : activeMegaMenu === 'rent' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Rent
@@ -1188,7 +1188,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'projects' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'projects' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
+                      : activeMegaMenu === 'projects' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Projects
@@ -1203,7 +1203,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'areas' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'areas' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
+                      : activeMegaMenu === 'areas' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Areas
@@ -1218,7 +1218,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'developers' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'developers' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
+                      : activeMegaMenu === 'developers' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Developers
@@ -1233,7 +1233,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
                       ? activeMegaMenu === 'insights' ? 'text-black' : 'text-white hover:text-gray-900'
-                      : activeMegaMenu === 'insights' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
+                      : activeMegaMenu === 'insights' ? 'text-black bg-gray-200' : 'text-gray-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Insights

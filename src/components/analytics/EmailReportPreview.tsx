@@ -153,7 +153,7 @@ export function EmailReportPreview({
               <div className="p-6 text-foreground">
                 {/* Hero Section */}
                 <div className="text-center mb-8">
-                  <h1 className="text-2xl font-bold text-zinc-900 mb-2">
+                  <h1 className="text-2xl font-bold text-gray-900 mb-2">
                     {reportName}
                   </h1>
                   <p className="text-muted-foreground">
@@ -194,13 +194,13 @@ export function EmailReportPreview({
 
                 {/* Top Tools */}
                 <div className="mb-6">
-                  <h2 className="text-lg font-semibold text-zinc-900 mb-3">Top Tools</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 mb-3">Top Tools</h2>
                   <div className="space-y-2">
                     {reportData?.topTools.map((tool, idx) => (
                       <div key={tool.name} className="flex items-center justify-between py-2 border-b last:border-0">
                         <div className="flex items-center gap-2">
                           <span className="text-muted-foreground">{idx + 1}.</span>
-                          <span className="text-zinc-800">{tool.name}</span>
+                          <span className="text-gray-800">{tool.name}</span>
                         </div>
                         <Badge variant="secondary">{tool.count} uses</Badge>
                       </div>
@@ -213,13 +213,13 @@ export function EmailReportPreview({
 
                 {/* Top Pages */}
                 <div className="mb-6">
-                  <h2 className="text-lg font-semibold text-zinc-900 mb-3">Top Pages</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 mb-3">Top Pages</h2>
                   <div className="space-y-2">
                     {reportData?.topPages.map((page, idx) => (
                       <div key={page.path} className="flex items-center justify-between py-2 border-b last:border-0">
                         <div className="flex items-center gap-2">
                           <span className="text-muted-foreground">{idx + 1}.</span>
-                          <span className="text-zinc-800 truncate max-w-[300px]">{page.path}</span>
+                          <span className="text-gray-800 truncate max-w-[300px]">{page.path}</span>
                         </div>
                         <Badge variant="secondary">{page.views} views</Badge>
                       </div>

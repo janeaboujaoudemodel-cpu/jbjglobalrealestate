@@ -164,7 +164,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="bg-zinc-900 border border-zinc-800 text-white sm:max-w-md">
+      <DialogContent className="bg-zinc-900 border border-gray-800 text-white sm:max-w-md">
         {/* Gold accent line */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
 
@@ -210,7 +210,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
                     value={digit}
                     onChange={(e) => handleInputChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
-                    className={`w-12 h-14 text-center text-2xl font-bold bg-zinc-800 border-zinc-700 text-white focus:border-gold rounded-lg ${
+                    className={`w-12 h-14 text-center text-2xl font-bold bg-zinc-800 border-gray-700 text-white focus:border-gold rounded-lg ${
                       error ? 'border-red-500' : ''
                     }`}
                     autoFocus={index === 0}

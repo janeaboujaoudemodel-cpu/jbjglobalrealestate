@@ -228,7 +228,7 @@ const ExploreServicesCard = () => {
         <h3 className="text-2xl md:text-3xl font-bold text-black">
           Explore Our Services
         </h3>
-        <p className="text-sm md:text-base text-zinc-600 mt-1">Premium real estate solutions tailored to your needs</p>
+        <p className="text-sm md:text-base text-gray-600 mt-1">Premium real estate solutions tailored to your needs</p>
       </div>
 
       {/* Slideshow - Persistent image stack (no AnimatePresence) */}

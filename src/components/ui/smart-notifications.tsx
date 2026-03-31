@@ -202,7 +202,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-1.5 rounded-lg text-gray-500 hover:text-black hover:bg-zinc-100 transition-colors"
+                  className="p-1.5 rounded-lg text-gray-500 hover:text-black hover:bg-gray-100 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -222,7 +222,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                       'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
                       filter === f.value
                         ? 'bg-gold text-white'
-                        : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     )}
                   >
                     {f.label}
@@ -268,7 +268,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
 
                 {filteredNotifications.length === 0 && (
                   <div className="py-12 text-center">
-                    <Bell className="w-12 h-12 mx-auto text-zinc-200 mb-4" />
+                    <Bell className="w-12 h-12 mx-auto text-gray-200 mb-4" />
                     <p className="text-gray-500">No notifications</p>
                     <p className="text-sm text-gray-500 mt-1">You're all caught up!</p>
                   </div>
@@ -305,7 +305,7 @@ const NotificationItem: React.FC<{ notification: Notification }> = ({ notificati
       className={cn(
         'p-3 rounded-xl mb-2 transition-all cursor-pointer',
         notification.read 
-          ? 'bg-zinc-50 hover:bg-zinc-100' 
+          ? 'bg-gray-50 hover:bg-gray-100' 
           : 'bg-white border border-gold/20 hover:border-gold/40 shadow-sm'
       )}
     >
@@ -320,7 +320,7 @@ const NotificationItem: React.FC<{ notification: Notification }> = ({ notificati
           <div className="flex items-start justify-between gap-2">
             <h4 className={cn(
               'text-sm truncate',
-              notification.read ? 'text-zinc-600' : 'font-medium text-black'
+              notification.read ? 'text-gray-600' : 'font-medium text-black'
             )}>
               {notification.title}
             </h4>
@@ -359,7 +359,7 @@ export const NotificationBell: React.FC<{
     <button
       onClick={onClick}
       className={cn(
-        'relative p-2 rounded-xl bg-white border border-gold/20 text-zinc-600 hover:text-gold hover:border-gold/40 transition-all',
+        'relative p-2 rounded-xl bg-white border border-gold/20 text-gray-600 hover:text-gold hover:border-gold/40 transition-all',
         className
       )}
     >

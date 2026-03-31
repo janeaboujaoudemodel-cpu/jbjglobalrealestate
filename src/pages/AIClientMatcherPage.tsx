@@ -335,7 +335,7 @@ export default function AIClientMatcherPage() {
                   {result.clientProfile.priorityFactors && (
                     <div className="flex flex-wrap gap-2">
                       {result.clientProfile.priorityFactors.map((factor, i) => (
-                        <Badge key={i} variant="outline" className="border-zinc-600 text-white/85">
+                        <Badge key={i} variant="outline" className="border-gray-600 text-white/85">
                           {factor}
                         </Badge>
                       ))}

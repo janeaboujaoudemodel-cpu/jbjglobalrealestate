@@ -47,14 +47,14 @@ function getProjectStatus(project: UnifiedProject) {
   if (project.is_published && enrichment.status === "needs-data") return { label: "Needs Work", color: "bg-red-100 text-red-800 border-red-300" };
   if (project.is_published) return { label: "Published", color: "bg-blue-100 text-blue-800 border-blue-300" };
   if ((project as any).status === "pending") return { label: "Pending", color: "bg-amber-100 text-amber-800 border-amber-300" };
-  return { label: "Draft", color: "bg-zinc-100 text-zinc-700 border-zinc-300" };
+  return { label: "Draft", color: "bg-gray-100 text-gray-700 border-gray-300" };
 }
 
 function getSourceBadge(project: UnifiedProject) {
   const src = project.import_source || project.source || "manual";
   if (src === "provident" || src?.includes("provident")) return { label: "PROVIDENT", color: "bg-violet-100 text-violet-800 border-violet-300" };
   if (src === "reelly" || src?.includes("reelly")) return { label: "REELLY API", color: "bg-sky-100 text-sky-800 border-sky-300" };
-  return { label: "MANUAL", color: "bg-zinc-100 text-zinc-700 border-zinc-300" };
+  return { label: "MANUAL", color: "bg-gray-100 text-gray-700 border-gray-300" };
 }
 
 export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: ProjectDetailAdminProps) {

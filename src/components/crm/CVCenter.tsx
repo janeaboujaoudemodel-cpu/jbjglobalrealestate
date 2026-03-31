@@ -41,7 +41,7 @@ const DEPARTMENT_CATEGORIES = [
 ];
 
 const STATUS_TABS = [
-  { id: 'all', label: 'All', icon: FileText, count: 0, color: 'bg-zinc-500' },
+  { id: 'all', label: 'All', icon: FileText, count: 0, color: 'bg-gray-500' },
   { id: 'pending', label: 'Pending', icon: Clock, count: 0, color: 'bg-amber-500' },
   { id: 'approved', label: 'Accepted', icon: CheckCircle, count: 0, color: 'bg-green-500' },
   { id: 'rejected', label: 'Rejected', icon: XCircle, count: 0, color: 'bg-red-500' },
@@ -673,7 +673,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const getScoreColor = (score: number) => 
     score >= 7 ? 'text-emerald-600 bg-emerald-50 border-emerald-200' :
     score >= 4 ? 'text-amber-600 bg-amber-50 border-amber-200' :
-    'text-gray-500 bg-zinc-50 border-zinc-200';
+    'text-gray-500 bg-gray-50 border-gray-200';
 
   const getRecommendationColor = (rec: string) =>
     rec === 'Strongly Recommend' ? 'text-emerald-600 border-emerald-300 bg-emerald-50' :
@@ -1000,7 +1000,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                   </span>
                                 )}
                                 {DEPARTMENT_CATEGORIES.find(c => c.id === cv.department_category) && cv.department_category !== 'general' && (
-                                  <span className="flex items-center gap-1 text-crm-text bg-zinc-100 border border-zinc-200 rounded-full px-2.5 py-0.5 font-medium">
+                                  <span className="flex items-center gap-1 text-crm-text bg-gray-100 border border-gray-200 rounded-full px-2.5 py-0.5 font-medium">
                                     <Building2 className="h-3.5 w-3.5 text-crm-text-muted" /> {DEPARTMENT_CATEGORIES.find(c => c.id === cv.department_category)?.label}
                                   </span>
                                 )}
@@ -1049,7 +1049,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                               )}
 
                               {hasUnreadableSummary && (
-                                <p className="text-sm text-crm-text bg-zinc-50 border border-zinc-200 rounded-md px-3 py-2 mb-2">
+                                <p className="text-sm text-crm-text bg-gray-50 border border-gray-200 rounded-md px-3 py-2 mb-2">
                                   <Sparkles className="h-3.5 w-3.5 inline mr-1 text-gray-500" />
                                   AI summary is being regenerated for better readability.
                                 </p>
@@ -1099,7 +1099,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                 Re-Analyze
                               </Button>
                             )}
-                            <Button size="sm" onClick={() => handleViewCV(cv)} className="bg-zinc-800 hover:bg-zinc-700 text-white font-bold shadow-lg px-4 py-2">
+                            <Button size="sm" onClick={() => handleViewCV(cv)} className="bg-zinc-800 hover:bg-gray-700 text-white font-bold shadow-lg px-4 py-2">
                               <Eye className="h-4 w-4 mr-1.5" /> View CV
                             </Button>
                             <Button size="sm" onClick={() => openContactActions(cv)} className="bg-gold hover:bg-gold-dark text-white font-bold px-4 py-2">
@@ -1174,7 +1174,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
                                         <item.icon className="h-3.5 w-3.5 text-crm-text-muted" />
                                         <span className="text-xs font-medium text-crm-text-muted">{item.label}</span>
                                       </div>
-                                      <div className="bg-zinc-200 rounded-full h-2 mb-1">
+                                      <div className="bg-gray-200 rounded-full h-2 mb-1">
                                         <div
                                           className={`h-2 rounded-full ${item.value >= item.max * 0.7 ? 'bg-emerald-500' : item.value >= item.max * 0.4 ? 'bg-amber-500' : 'bg-red-400'}`}
                                           style={{ width: `${(item.value / item.max) * 100}%` }}
@@ -1362,7 +1362,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
           <p id="contact-actions-desc" className="sr-only">Choose how to contact this candidate</p>
           {selectedCV && (
             <div className="space-y-3">
-              <div className="p-3 rounded-lg bg-zinc-50 border text-sm">
+              <div className="p-3 rounded-lg bg-gray-50 border text-sm">
                 <p className="font-semibold text-crm-text">{selectedCV.full_name}</p>
                 <p className="text-crm-text-muted">{selectedCV.email}</p>
                 <p className="text-crm-text-muted">{selectedCV.phone_e164 || 'No phone number available'}</p>
@@ -1414,7 +1414,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
           <p id="contact-desc" className="sr-only">Describe the message, let AI rewrite it, approve, then send automatically.</p>
           {selectedCV && (
             <div className="space-y-4">
-              <div className="flex items-center gap-3 p-3 rounded-lg bg-zinc-50 border">
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 border">
                 <Avatar className="h-10 w-10 border border-gold/30">
                   <AvatarFallback className="bg-gold/10 text-gold font-bold">{selectedCV.full_name.charAt(0)}</AvatarFallback>
                 </Avatar>

@@ -267,15 +267,15 @@ const CompanyCommunicationHub = () => {
   const statusColors = {
     online: 'bg-green-500',
     away: 'bg-yellow-500',
-    offline: 'bg-zinc-500',
+    offline: 'bg-gray-500',
   };
 
   return (
-    <div className="h-[calc(100vh-120px)] bg-zinc-950 text-white flex rounded-xl overflow-hidden border border-zinc-800">
+    <div className="h-[calc(100vh-120px)] bg-zinc-950 text-white flex rounded-xl overflow-hidden border border-gray-800">
       {/* Sidebar */}
-      <div className="w-72 bg-zinc-900 border-r border-zinc-800 flex flex-col">
+      <div className="w-72 bg-zinc-900 border-r border-gray-800 flex flex-col">
         {/* Workspace Header */}
-        <div className="p-4 border-b border-zinc-800">
+        <div className="p-4 border-b border-gray-800">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-gold rounded-lg flex items-center justify-center text-black font-bold text-sm">
@@ -300,13 +300,13 @@ const CompanyCommunicationHub = () => {
               placeholder="Search messages..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9 bg-zinc-800 border-zinc-700 text-sm h-9"
+              className="pl-9 bg-zinc-800 border-gray-700 text-sm h-9"
             />
           </div>
         </div>
 
         {/* Translation Settings */}
-        <div className="px-3 py-2 border-b border-zinc-800">
+        <div className="px-3 py-2 border-b border-gray-800">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Globe className="w-4 h-4 text-white/70" />
@@ -319,7 +319,7 @@ const CompanyCommunicationHub = () => {
                   <ChevronDown className="w-3 h-3 ml-1" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-zinc-800 border-zinc-700">
+              <DropdownMenuContent align="end" className="bg-zinc-800 border-gray-700">
                 <DropdownMenuItem 
                   onClick={() => setTranslation({ enabled: false, targetLanguage: 'en' })}
                   className="text-xs"
@@ -365,7 +365,7 @@ const CompanyCommunicationHub = () => {
                 className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-sm transition-colors ${
                   activeChannel === channel.id && !activeDM
                     ? 'bg-gold/20 text-gold' 
-                    : 'text-white/70 hover:bg-zinc-800 hover:text-white'
+                    : 'text-white/70 hover:bg-gray-800 hover:text-white'
                 }`}
                 onClick={() => handleChannelSwitch(channel.id)}
               >
@@ -400,7 +400,7 @@ const CompanyCommunicationHub = () => {
                 className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm transition-colors ${
                   activeDM === member.id
                     ? 'bg-gold/20 text-gold'
-                    : 'text-white/70 hover:bg-zinc-800 hover:text-white'
+                    : 'text-white/70 hover:bg-gray-800 hover:text-white'
                 }`}
                 onClick={() => handleDMSwitch(member.id)}
               >
@@ -428,7 +428,7 @@ const CompanyCommunicationHub = () => {
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col min-h-0">
         {/* Channel/DM Header */}
-        <div className="h-14 border-b border-zinc-800 px-4 flex items-center justify-between flex-shrink-0">
+        <div className="h-14 border-b border-gray-800 px-4 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-2">
             {activeDM ? (
               <>
@@ -477,10 +477,10 @@ const CompanyCommunicationHub = () => {
               <Video className="w-4 h-4 mr-1" />
               Video
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-zinc-800">
+            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-gray-800">
               <Users className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-zinc-800">
+            <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-gray-800">
               <Bell className="w-4 h-4" />
             </Button>
           </div>
@@ -502,7 +502,7 @@ const CompanyCommunicationHub = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="group flex gap-3 hover:bg-zinc-900/50 rounded-lg p-2 -mx-2"
+                    className="group flex gap-3 hover:bg-gray-900/50 rounded-lg p-2 -mx-2"
                   >
                     <Avatar className="h-9 w-9 mt-0.5 flex-shrink-0">
                       <AvatarImage src={sender?.avatar} alt={sender?.name} />
@@ -533,7 +533,7 @@ const CompanyCommunicationHub = () => {
                               className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-sm transition-colors ${
                                 reaction.userIds.includes(currentUser.id)
                                   ? 'bg-gold/20 border border-gold/50'
-                                  : 'bg-zinc-800 hover:bg-zinc-700'
+                                  : 'bg-zinc-800 hover:bg-gray-700'
                               }`}
                               onClick={() => addReaction(message.id, reaction.emoji)}
                             >
@@ -546,17 +546,17 @@ const CompanyCommunicationHub = () => {
 
                       {/* Quick Actions */}
                       <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 -mt-8">
-                        <div className="flex gap-1 bg-zinc-800 rounded-lg p-1 shadow-lg border border-zinc-700">
+                        <div className="flex gap-1 bg-zinc-800 rounded-lg p-1 shadow-lg border border-gray-700">
                           {['👍', '❤️', '😂', '🎉', '🔥'].map((emoji) => (
                             <button
                               key={emoji}
-                              className="hover:bg-zinc-700 rounded px-1.5 py-0.5 text-sm"
+                              className="hover:bg-gray-700 rounded px-1.5 py-0.5 text-sm"
                               onClick={() => addReaction(message.id, emoji)}
                             >
                               {emoji}
                             </button>
                           ))}
-                          <button className="hover:bg-zinc-700 rounded px-1.5 py-0.5">
+                          <button className="hover:bg-gray-700 rounded px-1.5 py-0.5">
                             <MoreVertical className="w-4 h-4" />
                           </button>
                         </div>
@@ -576,15 +576,15 @@ const CompanyCommunicationHub = () => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="mx-4 mb-2 bg-zinc-800 rounded-lg border border-zinc-700 shadow-xl max-h-64 overflow-y-auto"
+              className="mx-4 mb-2 bg-zinc-800 rounded-lg border border-gray-700 shadow-xl max-h-64 overflow-y-auto"
             >
-              <div className="sticky top-0 bg-zinc-800 px-3 py-2 border-b border-zinc-700">
+              <div className="sticky top-0 bg-zinc-800 px-3 py-2 border-b border-gray-700">
                 <p className="text-xs text-white/70">{filteredMembers.length} team members</p>
               </div>
               {filteredMembers.map((member) => (
                 <button
                   key={member.id}
-                  className="w-full flex items-center gap-3 px-3 py-2 hover:bg-zinc-700 transition-colors"
+                  className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-700 transition-colors"
                   onClick={() => insertMention(member)}
                 >
                   <Avatar className="h-8 w-8">
@@ -607,7 +607,7 @@ const CompanyCommunicationHub = () => {
         </AnimatePresence>
 
         {/* Message Input */}
-        <div className="p-4 border-t border-zinc-800 flex-shrink-0">
+        <div className="p-4 border-t border-gray-800 flex-shrink-0">
           <div className="flex items-center gap-2 bg-zinc-800 rounded-lg px-3 py-2">
             <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
               <Plus className="w-4 h-4" />
@@ -655,8 +655,8 @@ const CompanyCommunicationHub = () => {
       </div>
 
       {/* Members Sidebar */}
-      <div className="w-60 bg-zinc-900 border-l border-zinc-800 hidden xl:flex flex-col">
-        <div className="p-4 border-b border-zinc-800">
+      <div className="w-60 bg-zinc-900 border-l border-gray-800 hidden xl:flex flex-col">
+        <div className="p-4 border-b border-gray-800">
           <h3 className="text-sm font-semibold text-white/70">
             {activeDM ? 'User Info' : `Members — ${activeChannelData?.members.length || 0}`}
           </h3>
@@ -702,7 +702,7 @@ const CompanyCommunicationHub = () => {
                 const member = getTeamMemberById(memberId);
                 if (!member) return null;
                 return (
-                  <div key={member.id} className="flex items-center gap-2 p-1.5 rounded hover:bg-zinc-800 transition-colors">
+                  <div key={member.id} className="flex items-center gap-2 p-1.5 rounded hover:bg-gray-800 transition-colors">
                     <div className="relative">
                       <Avatar className="h-8 w-8">
                         <AvatarImage src={member.avatar} alt={member.name} />

@@ -258,7 +258,7 @@ const AILeadQualificationPremium = () => {
                             className={`h-5 w-5 ${
                               star <= Math.round(response.qualificationScore / 20)
                                 ? "text-amber-400 fill-amber-400"
-                                : "text-zinc-600"
+                                : "text-gray-600"
                             }`}
                           />
                         ))}

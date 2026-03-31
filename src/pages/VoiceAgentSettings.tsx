@@ -75,7 +75,7 @@ const VoiceAgentSettings = () => {
               <Input
                 value={settings.agentName}
                 onChange={(e) => setSettings(s => ({ ...s, agentName: e.target.value }))}
-                className="bg-zinc-800 border-zinc-700 text-white"
+                className="bg-zinc-800 border-gray-700 text-white"
               />
             </div>
 
@@ -84,7 +84,7 @@ const VoiceAgentSettings = () => {
               <Textarea
                 value={settings.greeting}
                 onChange={(e) => setSettings(s => ({ ...s, greeting: e.target.value }))}
-                className="bg-zinc-800 border-zinc-700 text-white min-h-[100px]"
+                className="bg-zinc-800 border-gray-700 text-white min-h-[100px]"
               />
             </div>
           </div>
@@ -152,7 +152,7 @@ const VoiceAgentSettings = () => {
                 value={settings.businessCardName}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardName: e.target.value }))}
                 placeholder="Enter your full name"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400"
+                className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400"
               />
             </div>
 
@@ -162,7 +162,7 @@ const VoiceAgentSettings = () => {
                 value={settings.businessCardTitle}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardTitle: e.target.value }))}
                 placeholder="e.g., Senior Property Consultant"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400"
+                className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400"
               />
             </div>
 
@@ -172,7 +172,7 @@ const VoiceAgentSettings = () => {
                 value={settings.businessCardPhone}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardPhone: e.target.value }))}
                 placeholder="+971 XX XXX XXXX"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400"
+                className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400"
               />
             </div>
 
@@ -182,7 +182,7 @@ const VoiceAgentSettings = () => {
                 value={settings.businessCardEmail}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardEmail: e.target.value }))}
                 placeholder="your.email@jbjglobal.com"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400"
+                className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400"
               />
             </div>
 
@@ -191,7 +191,7 @@ const VoiceAgentSettings = () => {
               <Input
                 value={settings.businessCardCompany}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardCompany: e.target.value }))}
-                className="bg-zinc-800 border-zinc-700 text-white"
+                className="bg-zinc-800 border-gray-700 text-white"
               />
             </div>
           </div>

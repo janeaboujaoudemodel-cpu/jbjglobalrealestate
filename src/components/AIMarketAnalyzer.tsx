@@ -344,7 +344,7 @@ export const AIMarketAnalyzer = ({
               <Brain className="w-4 h-4 text-purple-600" />
               Executive Summary
             </h4>
-            <p className="text-zinc-700 leading-relaxed">{insights.summary}</p>
+            <p className="text-gray-700 leading-relaxed">{insights.summary}</p>
           </div>
 
           {/* Insights & Risks */}
@@ -396,7 +396,7 @@ export const AIMarketAnalyzer = ({
                     handleChatSubmit();
                   }}
                   disabled={isChatLoading}
-                  className="text-xs px-3 py-1.5 rounded-full border border-gold/40 text-zinc-700 hover:border-gold hover:bg-gold/10 transition-colors"
+                  className="text-xs px-3 py-1.5 rounded-full border border-gold/40 text-gray-700 hover:border-gold hover:bg-gold/10 transition-colors"
                 >
                   {q}
                 </button>
@@ -414,7 +414,7 @@ export const AIMarketAnalyzer = ({
                     <div className={`max-w-[80%] p-3 rounded-xl text-sm ${
                       msg.role === 'user' 
                         ? 'bg-purple-600 text-white' 
-                        : 'bg-white border border-gold/20 text-zinc-700'
+                        : 'bg-white border border-gold/20 text-gray-700'
                     }`}>
                       {msg.content}
                     </div>
@@ -451,7 +451,7 @@ export const AIMarketAnalyzer = ({
           </div>
 
           {/* Disclaimer */}
-          <div className="p-4 bg-zinc-100/50 rounded-xl border border-zinc-200">
+          <div className="p-4 bg-gray-100/50 rounded-xl border border-gray-200">
             <div className="flex items-start gap-3">
               <Shield className="w-5 h-5 text-gray-500 mt-0.5 flex-shrink-0" />
               <div>

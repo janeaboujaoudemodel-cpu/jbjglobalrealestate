@@ -68,7 +68,7 @@ const OwnerDashboardShell = () => {
       <div className="p-3 border-t border-[#B89555]/30 flex-shrink-0 space-y-1 bg-[#FDFBF7]">
         <button
           onClick={() => { navigate("/"); setMobileOpen(false); }}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-zinc-600 hover:text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:text-[#B89555] hover:bg-[#B89555]/10 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#B89555]/40"
           aria-label="Return to main site"
         >
           <Home className="w-5 h-5 flex-shrink-0" />
@@ -76,7 +76,7 @@ const OwnerDashboardShell = () => {
         </button>
         <button
           onClick={handleSignOut}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-zinc-600 hover:text-red-600 hover:bg-red-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500/40"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-600 hover:text-red-600 hover:bg-red-50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500/40"
           aria-label="Sign out"
         >
           <LogOut className="w-5 h-5 flex-shrink-0" />
@@ -131,7 +131,7 @@ const OwnerDashboardShell = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => setMobileOpen(true)}
-                className="text-zinc-600 hover:text-[#B89555] hover:bg-[#B89555]/10 focus:ring-2 focus:ring-[#B89555]/40 flex-shrink-0"
+                className="text-gray-600 hover:text-[#B89555] hover:bg-[#B89555]/10 focus:ring-2 focus:ring-[#B89555]/40 flex-shrink-0"
                 aria-label="Open navigation menu"
               >
                 <Menu className="w-5 h-5" />

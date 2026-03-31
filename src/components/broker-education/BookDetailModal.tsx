@@ -23,7 +23,7 @@ const LEARNING_PATH_COLORS: Record<string, { badge: string; accent: string }> = 
   'Advanced (Restricted)': { badge: 'bg-red-500/20 text-red-700 border-red-500/30', accent: 'text-red-600' },
 };
 
-const DEFAULT_PATH_COLORS = { badge: 'bg-zinc-500/20 text-zinc-700 border-zinc-500/30', accent: 'text-zinc-600' };
+const DEFAULT_PATH_COLORS = { badge: 'bg-gray-500/20 text-gray-700 border-gray-500/30', accent: 'text-gray-600' };
 
 export function BookDetailModal({ book, isOpen, onClose, isLocked = false }: BookDetailModalProps) {
   const { modules, loading } = useBookModules(book?.id || null);

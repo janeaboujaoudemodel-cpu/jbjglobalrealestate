@@ -92,7 +92,7 @@ const CommunityDetail = () => {
               <p className="text-gold text-lg mb-4 font-medium">{community.location}</p>
             )}
             {community.description && (
-              <p className="text-zinc-700 text-lg max-w-3xl">{community.description}</p>
+              <p className="text-gray-700 text-lg max-w-3xl">{community.description}</p>
             )}
           </div>
         </div>
@@ -114,7 +114,7 @@ const CommunityDetail = () => {
             />
 
             {hasFiltersApplied && (
-              <p className="text-zinc-600 mb-6">
+              <p className="text-gray-600 mb-6">
                 Found <span className="text-gold font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
               </p>
             )}
@@ -133,7 +133,7 @@ const CommunityDetail = () => {
               </div>
             ) : (
               <div className="text-center py-12 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-lg border-2 border-gold/30">
-                <p className="text-zinc-700 mb-2">
+                <p className="text-gray-700 mb-2">
                   {hasFiltersApplied
                     ? "No projects match your filters"
                     : "No projects available in this community yet."}
@@ -162,7 +162,7 @@ const CommunityDetail = () => {
               </div>
               <div>
                 <h3 className="text-gold font-semibold mb-1">Information provided is for general guidance only</h3>
-                <p className="text-zinc-700 text-sm">This community guide provides educational information about {community.name}. For specific property inquiries, please contact our team.</p>
+                <p className="text-gray-700 text-sm">This community guide provides educational information about {community.name}. For specific property inquiries, please contact our team.</p>
               </div>
             </div>
           </div>

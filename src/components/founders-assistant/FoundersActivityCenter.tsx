@@ -272,7 +272,7 @@ const FoundersActivityCenter: React.FC = () => {
             size="sm"
             onClick={() => setFilter(f)}
             className={filter === f 
-              ? 'bg-black text-white border-2 border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] whitespace-nowrap hover:bg-zinc-900' 
+              ? 'bg-black text-white border-2 border-gold/50 shadow-[0_0_15px_rgba(200,167,102,0.3)] whitespace-nowrap hover:bg-gray-900' 
               : 'bg-white text-gold border-2 border-gold/30 hover:bg-transparent hover:border-gold/50 whitespace-nowrap'
             }
           >
@@ -354,7 +354,7 @@ const FoundersActivityCenter: React.FC = () => {
                               </p>
                               <div className="flex items-center gap-2 mt-2">
                                 {activity.actor && (
-                                  <Badge variant="outline" className="text-xs border-gold/30 text-zinc-600">
+                                  <Badge variant="outline" className="text-xs border-gold/30 text-gray-600">
                                     <User className="w-3 h-3 mr-1" />
                                     {activity.actor}
                                   </Badge>

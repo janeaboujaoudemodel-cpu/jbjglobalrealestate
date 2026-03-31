@@ -446,7 +446,7 @@ const SupportTicketBox = () => {
                     </div>
                   </div>
 
-                  <p className="text-zinc-700 mb-6 leading-relaxed">
+                  <p className="text-gray-700 mb-6 leading-relaxed">
                     Experiencing an issue with our services? Create a support ticket and our team will 
                     assist you promptly. You can attach screenshots or screen recordings to help us 
                     understand the problem better.
@@ -572,7 +572,7 @@ const SupportTicketBox = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.4 }}
-                                className="text-zinc-600 mb-6"
+                                className="text-gray-600 mb-6"
                               >
                                 We're sorry you're experiencing issues. Our team is on it!
                               </motion.p>
@@ -585,9 +585,9 @@ const SupportTicketBox = () => {
                                  className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl px-5 py-4 mb-4"
                                >
                                  <div className="flex items-center justify-center gap-3 flex-wrap">
-                                   <span className="text-sm text-zinc-600">Your Ticket Number</span>
+                                   <span className="text-sm text-gray-600">Your Ticket Number</span>
                                    <span className="text-sm text-gray-500">|</span>
-                                   <span className="text-sm text-zinc-600" dir="rtl">رقم التذكرة</span>
+                                   <span className="text-sm text-gray-600" dir="rtl">رقم التذكرة</span>
                                    <span className="text-sm text-gray-500">—</span>
                                    <span className="text-xl font-bold text-gold tracking-wider font-mono">{ticketNumber}</span>
                                    <button
@@ -796,7 +796,7 @@ const SupportTicketBox = () => {
                                           {attachments.map((file, idx) => (
                                             <div key={idx} className="flex items-center gap-2 text-xs">
                                               {getUploadStatusIcon(idx)}
-                                              <span className="text-zinc-600 truncate flex-1 text-left">{file.name}</span>
+                                              <span className="text-gray-600 truncate flex-1 text-left">{file.name}</span>
                                             </div>
                                           ))}
                                         </div>
@@ -828,7 +828,7 @@ const SupportTicketBox = () => {
                             {/* Contact Info */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <div>
-                                <Label className="text-zinc-700 flex items-center gap-2">
+                                <Label className="text-gray-700 flex items-center gap-2">
                                   <User className="w-4 h-4 text-gold" />
                                   Full Name *
                                 </Label>
@@ -841,7 +841,7 @@ const SupportTicketBox = () => {
                                 />
                               </div>
                               <div>
-                                <Label className="text-zinc-700 flex items-center gap-2">
+                                <Label className="text-gray-700 flex items-center gap-2">
                                   <Mail className="w-4 h-4 text-gold" />
                                   Email *
                                 </Label>
@@ -857,7 +857,7 @@ const SupportTicketBox = () => {
                             </div>
 
                             <div>
-                              <Label className="text-zinc-700 flex items-center gap-2">
+                              <Label className="text-gray-700 flex items-center gap-2">
                                 <Phone className="w-4 h-4 text-gold" />
                                 Phone Number (Optional)
                               </Label>
@@ -872,7 +872,7 @@ const SupportTicketBox = () => {
 
                             {/* Service Category */}
                             <div>
-                              <Label className="text-zinc-700 flex items-center gap-2">
+                              <Label className="text-gray-700 flex items-center gap-2">
                                 <AlertCircle className="w-4 h-4 text-red-500" />
                                 Service with Issue *
                               </Label>
@@ -926,7 +926,7 @@ const SupportTicketBox = () => {
                                 animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}
                               >
-                                <Label className="text-zinc-700 flex items-center gap-2">
+                                <Label className="text-gray-700 flex items-center gap-2">
                                   <FileText className="w-4 h-4 text-gold" />
                                   Please Specify Your Issue *
                                 </Label>
@@ -945,7 +945,7 @@ const SupportTicketBox = () => {
 
                             {/* Subject with Voice Note */}
                             <div>
-                              <Label className="text-zinc-700 flex items-center gap-2">
+                              <Label className="text-gray-700 flex items-center gap-2">
                                 <FileText className="w-4 h-4 text-gold" />
                                 Subject *
                               </Label>
@@ -974,7 +974,7 @@ const SupportTicketBox = () => {
 
                             {/* Priority Selection */}
                             <div>
-                              <Label className="text-zinc-700 flex items-center gap-2">
+                              <Label className="text-gray-700 flex items-center gap-2">
                                 <AlertCircle className="w-4 h-4 text-orange-500" />
                                 Priority Level
                               </Label>
@@ -1001,7 +1001,7 @@ const SupportTicketBox = () => {
 
                             {/* Description with Voice Note */}
                             <div>
-                              <Label className="text-zinc-700 flex items-center justify-between">
+                              <Label className="text-gray-700 flex items-center justify-between">
                                 <span>Detailed Description *</span>
                                 <VoiceNoteRecorder
                                   onTranscript={(text) => handleVoiceTranscript(text, 'description')}
@@ -1032,11 +1032,11 @@ const SupportTicketBox = () => {
 
                             {/* File Upload */}
                             <div>
-                              <Label className="text-zinc-700 flex items-center gap-2">
+                              <Label className="text-gray-700 flex items-center gap-2">
                                 <Upload className="w-4 h-4 text-gold" />
                                 Attachments (Optional)
                               </Label>
-                              <div className="mt-1 border-2 border-dashed border-zinc-300 rounded-lg p-4 text-center hover:border-gold transition-colors">
+                              <div className="mt-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gold transition-colors">
                                 <input
                                   type="file"
                                   id="file-upload"
@@ -1050,7 +1050,7 @@ const SupportTicketBox = () => {
                                   className="cursor-pointer flex flex-col items-center gap-2"
                                 >
                                   <Upload className="w-8 h-8 text-gray-500" />
-                                  <span className="text-sm text-zinc-600">
+                                  <span className="text-sm text-gray-600">
                                     Click to upload screenshots, videos, or documents
                                   </span>
                                   <span className="text-xs text-gray-500">
@@ -1073,18 +1073,18 @@ const SupportTicketBox = () => {
                                             ? 'bg-red-50 border border-red-200' 
                                             : uploadStatuses[index] === 'done'
                                             ? 'bg-green-50 border border-green-200'
-                                            : 'bg-zinc-50'
+                                            : 'bg-gray-50'
                                         }`}
                                       >
                                         <div className="flex items-center gap-2 min-w-0">
                                           {/* Thumbnail preview for images */}
                                           {previewUrl ? (
-                                            <img src={previewUrl} alt={file.name} className="w-10 h-10 rounded object-cover border border-zinc-200 flex-shrink-0" />
+                                            <img src={previewUrl} alt={file.name} className="w-10 h-10 rounded object-cover border border-gray-200 flex-shrink-0" />
                                           ) : (
                                             getFileIcon(file)
                                           )}
                                           <div className="min-w-0">
-                                            <span className="text-sm text-zinc-700 truncate block max-w-[140px]">
+                                            <span className="text-sm text-gray-700 truncate block max-w-[140px]">
                                               {file.name}
                                             </span>
                                             <span className="text-xs text-gray-500">

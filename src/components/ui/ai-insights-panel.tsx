@@ -124,7 +124,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
             </div>
             <div>
               <h3 className="font-semibold text-black">AI Insights</h3>
-              <p className="text-xs text-zinc-600">Real-time intelligence</p>
+              <p className="text-xs text-gray-600">Real-time intelligence</p>
             </div>
           </div>
           <div className="flex items-center gap-1">
@@ -161,7 +161,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
               {stat.icon}
               {stat.value}
             </div>
-            <div className="text-[10px] text-zinc-600 uppercase tracking-wider">{stat.label}</div>
+            <div className="text-[10px] text-gray-600 uppercase tracking-wider">{stat.label}</div>
           </div>
         ))}
       </div>

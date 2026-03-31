@@ -241,7 +241,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
               Create
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-zinc-900 border-zinc-800 max-w-lg">
+          <DialogContent className="bg-zinc-900 border-gray-800 max-w-lg">
             <DialogHeader>
               <DialogTitle className="text-white">Create Color Palette</DialogTitle>
             </DialogHeader>
@@ -252,7 +252,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                   value={newPaletteName}
                   onChange={(e) => setNewPaletteName(e.target.value)}
                   placeholder="e.g., Luxury Property Campaign"
-                  className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                  className="bg-zinc-800 border-gray-700 text-white mt-1"
                 />
               </div>
               <div>
@@ -261,7 +261,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                   value={newPaletteDescription}
                   onChange={(e) => setNewPaletteDescription(e.target.value)}
                   placeholder="Optional description"
-                  className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                  className="bg-zinc-800 border-gray-700 text-white mt-1"
                 />
               </div>
               
@@ -287,12 +287,12 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                         value={color.name}
                         onChange={(e) => updateColorInNewPalette(index, 'name', e.target.value)}
                         placeholder="Color name"
-                        className="flex-1 bg-zinc-800 border-zinc-700 text-white text-sm"
+                        className="flex-1 bg-zinc-800 border-gray-700 text-white text-sm"
                       />
                       <Input
                         value={color.hex}
                         onChange={(e) => updateColorInNewPalette(index, 'hex', e.target.value)}
-                        className="w-24 bg-zinc-800 border-zinc-700 text-white text-sm font-mono"
+                        className="w-24 bg-zinc-800 border-gray-700 text-white text-sm font-mono"
                       />
                       {newPaletteColors.length > 2 && (
                         <Button size="icon" variant="ghost" onClick={() => removeColorFromNewPalette(index)} className="text-red-400 hover:text-red-300">
@@ -363,9 +363,9 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
         </div>
       ) : palettes.length === 0 ? (
         <div className="text-center py-6">
-          <FolderOpen className="w-10 h-10 text-zinc-600 mx-auto mb-2" />
+          <FolderOpen className="w-10 h-10 text-gray-600 mx-auto mb-2" />
           <p className="text-white/60 text-sm">No custom palettes yet</p>
-          <p className="text-zinc-600 text-xs">Create your first palette above</p>
+          <p className="text-gray-600 text-xs">Create your first palette above</p>
         </div>
       ) : (
         <ScrollArea className="h-[250px]">
@@ -378,7 +378,7 @@ export const ColorPaletteManager: React.FC<ColorPaletteManagerProps> = ({
                 className={`p-3 rounded-lg border-2 transition-all cursor-pointer ${
                   selectedPaletteId === palette.id
                     ? 'border-gold bg-gold/10'
-                    : 'border-zinc-800 bg-zinc-800/50 hover:border-zinc-700'
+                    : 'border-gray-800 bg-zinc-800/50 hover:border-gray-700'
                 }`}
                 onClick={() => onSelectPalette?.(palette)}
               >

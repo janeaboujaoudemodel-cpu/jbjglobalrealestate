@@ -114,7 +114,7 @@ const EducationHub = () => {
         <section className="py-16 md:py-24">
           <div className="jj-layer-2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 rounded-2xl">
             <GuideSectionHeader icon={BookOpen} title="Books Library" />
-            <p className="text-zinc-600 mb-10 max-w-2xl text-sm md:text-base">
+            <p className="text-gray-600 mb-10 max-w-2xl text-sm md:text-base">
               Our professional training library covers every aspect of Dubai real estate — from foundational knowledge to advanced advisory techniques. Each book is structured as a guided learning path with modular chapters.
             </p>
             <motion.div
@@ -131,7 +131,7 @@ const EducationHub = () => {
                       <book.icon className="w-6 h-6 text-gold" />
                     </div>
                     <h3 className="text-xl font-semibold text-black mb-2">{book.title}</h3>
-                    <p className="text-zinc-600 text-sm flex-1">{book.description}</p>
+                    <p className="text-gray-600 text-sm flex-1">{book.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -152,7 +152,7 @@ const EducationHub = () => {
         <section className="py-16 md:py-24">
           <div className="jj-layer-2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 rounded-2xl">
             <GuideSectionHeader icon={GraduationCap} title="Guides Library" />
-            <p className="text-zinc-600 mb-10 max-w-2xl text-sm md:text-base">
+            <p className="text-gray-600 mb-10 max-w-2xl text-sm md:text-base">
               Expert-written guides for every stage of the property journey — whether you're buying, selling, renting, or exploring Golden Visa eligibility. Clear, actionable, and tailored to the Dubai market.
             </p>
             <motion.div
@@ -169,7 +169,7 @@ const EducationHub = () => {
                       <guide.icon className="w-6 h-6 text-gold" />
                     </div>
                     <h3 className="text-lg font-semibold text-black mb-2">{guide.title}</h3>
-                    <p className="text-zinc-600 text-sm flex-1">{guide.description}</p>
+                    <p className="text-gray-600 text-sm flex-1">{guide.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -190,7 +190,7 @@ const EducationHub = () => {
         <section className="py-16 md:py-24">
           <div className="jj-layer-2 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 rounded-2xl">
             <GuideSectionHeader icon={BarChart3} title="Market Intelligence" />
-            <p className="text-zinc-600 mb-10 max-w-2xl text-sm md:text-base">
+            <p className="text-gray-600 mb-10 max-w-2xl text-sm md:text-base">
               Data-driven insights to inform your investment decisions. Our market reports combine institutional-grade analytics with on-the-ground expertise across Dubai's key submarkets.
             </p>
             <motion.div
@@ -207,7 +207,7 @@ const EducationHub = () => {
                       <report.icon className="w-6 h-6 text-gold" />
                     </div>
                     <h3 className="text-xl font-semibold text-black mb-2">{report.title}</h3>
-                    <p className="text-zinc-600 text-sm flex-1">{report.description}</p>
+                    <p className="text-gray-600 text-sm flex-1">{report.description}</p>
                   </div>
                 </motion.div>
               ))}

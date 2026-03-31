@@ -347,28 +347,28 @@ export default function BrokerSubscriptionsDashboard() {
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Users className="w-5 h-5 text-gold" />
-            <span className="text-zinc-600 text-sm">Total Subscriptions</span>
+            <span className="text-gray-600 text-sm">Total Subscriptions</span>
           </div>
           <p className="text-black text-3xl font-bold">{totalSubscriptions}</p>
         </Card>
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Shield className="w-5 h-5 text-green-600" />
-            <span className="text-zinc-600 text-sm">Active</span>
+            <span className="text-gray-600 text-sm">Active</span>
           </div>
           <p className="text-black text-3xl font-bold">{activeSubscriptions}</p>
         </Card>
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <Calendar className="w-5 h-5 text-blue-600" />
-            <span className="text-zinc-600 text-sm">On Trial</span>
+            <span className="text-gray-600 text-sm">On Trial</span>
           </div>
           <p className="text-black text-3xl font-bold">{trialSubscriptions}</p>
         </Card>
         <Card className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 p-6 shadow-lg">
           <div className="flex items-center gap-3 mb-2">
             <CreditCard className="w-5 h-5 text-gold" />
-            <span className="text-zinc-600 text-sm">Active Revenue</span>
+            <span className="text-gray-600 text-sm">Active Revenue</span>
           </div>
           <p className="text-black text-3xl font-bold">${totalRevenue.toLocaleString()}</p>
         </Card>
@@ -449,7 +449,7 @@ export default function BrokerSubscriptionsDashboard() {
                 </TableRow>
               ) : (
                 filteredSubscriptions.map((sub) => (
-                  <TableRow key={sub.id} className="border-t border-zinc-800 hover:bg-zinc-950/50">
+                  <TableRow key={sub.id} className="border-t border-gray-800 hover:bg-gray-950/50">
                     <TableCell>
                       <div>
                         <p className="text-white font-medium">{sub.full_name || "—"}</p>
@@ -523,7 +523,7 @@ export default function BrokerSubscriptionsDashboard() {
 
       {/* Detail Dialog */}
       <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white max-w-2xl">
+        <DialogContent className="bg-zinc-900 border-gray-700 text-white max-w-2xl">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold text-gold">
               Broker Subscription Details
@@ -558,7 +558,7 @@ export default function BrokerSubscriptionsDashboard() {
                 </div>
               </div>
 
-              <div className="border-t border-zinc-700 pt-4">
+              <div className="border-t border-gray-700 pt-4">
                 <h4 className="text-sm font-medium text-gray-400 mb-3">Subscription Details</h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
@@ -590,7 +590,7 @@ export default function BrokerSubscriptionsDashboard() {
                 </div>
               </div>
 
-              <div className="border-t border-zinc-700 pt-4">
+              <div className="border-t border-gray-700 pt-4">
                 <h4 className="text-sm font-medium text-gray-400 mb-3">Usage Statistics</h4>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="bg-zinc-800 rounded-lg p-4 text-center">
@@ -610,7 +610,7 @@ export default function BrokerSubscriptionsDashboard() {
                 </div>
               </div>
 
-              <div className="border-t border-zinc-700 pt-4">
+              <div className="border-t border-gray-700 pt-4">
                 <p className="text-xs text-gray-500">
                   Subscription ID: <code className="text-gray-400">{selectedSubscription.id}</code>
                 </p>

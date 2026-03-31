@@ -517,7 +517,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
     const isLight = variant === 'light';
     const buttonStyles = isLight 
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black hover:border-gold focus:border-gold"
-      : "bg-zinc-900 border-2 border-gold/50 text-white hover:bg-zinc-800 hover:text-white hover:border-gold focus:border-gold";
+      : "bg-zinc-900 border-2 border-gold/50 text-white hover:bg-gray-800 hover:text-white hover:border-gold focus:border-gold";
     const inputStyles = isLight
       ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-400 focus:border-gold hover:border-gold"
       : "bg-zinc-900 border-2 border-gold/50 text-white placeholder:text-gray-400 focus:border-gold hover:border-gold";
@@ -534,10 +534,10 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       ? "text-black hover:bg-gold/20 data-[selected=true]:bg-gold/30 data-[selected=true]:text-black"
       : "text-black hover:bg-gold/20 data-[selected=true]:bg-gold/30 data-[selected=true]:text-black";
     const commandEmptyStyles = isLight
-      ? "text-zinc-600"
-      : "text-zinc-600";
+      ? "text-gray-600"
+      : "text-gray-600";
     const helperTextStyles = isLight
-      ? "text-zinc-600"
+      ? "text-gray-600"
       : "text-white/60";
     const countryNameStyles = isLight
       ? "text-gold font-medium"

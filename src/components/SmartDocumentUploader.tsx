@@ -218,7 +218,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
                   {matchResult.matchedKeywords.map((kw) => (
                     <span
                       key={kw}
-                      className="px-2 py-0.5 bg-gold/10 text-zinc-600 text-xs rounded border border-gold/20"
+                      className="px-2 py-0.5 bg-gold/10 text-gray-600 text-xs rounded border border-gold/20"
                     >
                       {kw}
                     </span>
@@ -231,7 +231,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
           {/* Manual Project Selection */}
           {(!matchResult || matchResult.confidence === "low") && (
             <div className="space-y-2">
-              <Label className="text-zinc-600">Select Project Manually</Label>
+              <Label className="text-gray-600">Select Project Manually</Label>
               <Select value={manualProjectId} onValueChange={setManualProjectId}>
                 <SelectTrigger className="bg-white border-2 border-gold/30 text-black">
                   <SelectValue placeholder="Choose project..." />

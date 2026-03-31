@@ -413,7 +413,7 @@ const AreaGuides = () => {
 
                           <div className="flex-1 min-h-[40px]">
                             {area.description ? (
-                              <p className="text-zinc-600 text-xs line-clamp-2">
+                              <p className="text-gray-600 text-xs line-clamp-2">
                                 {area.description
                                   .replace(/!\[.*?\]\(.*?\)/g, "")
                                   .replace(/provident\s*(estate)?/gi, "")
@@ -429,7 +429,7 @@ const AreaGuides = () => {
                           </div>
 
                           {/* Stats Row */}
-                          <div className="flex items-center gap-3 text-zinc-700 text-xs mt-3 pt-3 border-t border-gold/20">
+                          <div className="flex items-center gap-3 text-gray-700 text-xs mt-3 pt-3 border-t border-gold/20">
                             {(area.property_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
                                 <Building2 className="w-3.5 h-3.5 text-gold" />
@@ -522,7 +522,7 @@ const AreaGuides = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
             Can't Find What You're Looking For?
           </h2>
-          <p className="text-zinc-600 mb-6 max-w-xl mx-auto">
+          <p className="text-gray-600 mb-6 max-w-xl mx-auto">
             Our team can help you discover the perfect area based on your lifestyle and investment goals.
           </p>
           <Link

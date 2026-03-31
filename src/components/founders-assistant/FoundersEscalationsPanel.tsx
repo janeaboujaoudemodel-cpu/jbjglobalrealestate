@@ -157,7 +157,7 @@ export function FoundersEscalationsPanel() {
       case 'critical': return <Badge className="bg-red-100 text-red-700 border border-red-200 whitespace-nowrap">Critical</Badge>;
       case 'high': return <Badge className="bg-orange-100 text-orange-700 border border-orange-200 whitespace-nowrap">High</Badge>;
       case 'normal': return <Badge className="bg-green-100 text-green-700 border border-green-200 whitespace-nowrap">Normal</Badge>;
-      case 'low': return <Badge className="bg-zinc-100 text-zinc-600 border border-zinc-200 whitespace-nowrap">Low</Badge>;
+      case 'low': return <Badge className="bg-gray-100 text-gray-600 border border-gray-200 whitespace-nowrap">Low</Badge>;
       default: return null;
     }
   };
@@ -220,12 +220,12 @@ export function FoundersEscalationsPanel() {
                 placeholder="Search escalations..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-zinc-50 border-[#B89555]/20 text-black"
+                className="pl-10 bg-gray-50 border-[#B89555]/20 text-black"
               />
             </div>
 
             <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as FilterStatus)}>
-              <SelectTrigger className="w-[150px] bg-zinc-50 border-[#B89555]/20 text-black">
+              <SelectTrigger className="w-[150px] bg-gray-50 border-[#B89555]/20 text-black">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -237,7 +237,7 @@ export function FoundersEscalationsPanel() {
             </Select>
 
             <Select value={urgencyFilter} onValueChange={(v) => setUrgencyFilter(v as FilterUrgency)}>
-              <SelectTrigger className="w-[150px] bg-zinc-50 border-[#B89555]/20 text-black">
+              <SelectTrigger className="w-[150px] bg-gray-50 border-[#B89555]/20 text-black">
                 <SelectValue placeholder="Urgency" />
               </SelectTrigger>
               <SelectContent>
@@ -302,7 +302,7 @@ export function FoundersEscalationsPanel() {
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex items-start gap-3">
                           <div className={`p-2 rounded-lg ${
-                            event.emotionAnalysis.urgency === 'critical' ? 'bg-red-50 animate-pulse' : 'bg-zinc-50'
+                            event.emotionAnalysis.urgency === 'critical' ? 'bg-red-50 animate-pulse' : 'bg-gray-50'
                           }`}>
                             {getEmotionLucideIcon(event.emotionAnalysis.emotion)}
                           </div>
@@ -312,7 +312,7 @@ export function FoundersEscalationsPanel() {
                               <span className="font-semibold text-black">
                                 {event.senderName || 'Unknown Sender'}
                               </span>
-                              <Badge variant="outline" className="text-xs text-gray-500 border-zinc-200">
+                              <Badge variant="outline" className="text-xs text-gray-500 border-gray-200">
                                 {getChannelIcon(event.sourceChannel)}
                                 <span className="ml-1 capitalize">{event.sourceChannel}</span>
                               </Badge>
@@ -320,7 +320,7 @@ export function FoundersEscalationsPanel() {
                               {getStatusBadge(event.status)}
                             </div>
 
-                            <p className="text-sm text-zinc-600 mt-2 line-clamp-2">
+                            <p className="text-sm text-gray-600 mt-2 line-clamp-2">
                               &ldquo;{event.originalMessage}&rdquo;
                             </p>
 
@@ -362,32 +362,32 @@ export function FoundersEscalationsPanel() {
                             exit={{ opacity: 0, height: 0 }}
                             className="mt-4 pt-4 border-t border-[#B89555]/10"
                           >
-                            <div className="bg-zinc-50 rounded-lg p-4 mb-4 border border-zinc-200">
+                            <div className="bg-gray-50 rounded-lg p-4 mb-4 border border-gray-200">
                               <p className="text-sm text-gray-500 mb-1">Original Message:</p>
                               <p className="text-black">{event.originalMessage}</p>
                             </div>
 
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                              <div className="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
+                              <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
                                 <p className="text-xs text-gray-500">Emotion</p>
                                 <p className="text-lg font-semibold text-black capitalize">
                                   {event.emotionAnalysis.emotion}
                                 </p>
                               </div>
-                              <div className="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
+                              <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
                                 <p className="text-xs text-gray-500">Confidence</p>
                                 <p className="text-lg font-semibold text-[#B89555]">
                                   {event.emotionAnalysis.confidence}%
                                 </p>
                               </div>
-                              <div className="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
+                              <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
                                 <p className="text-xs text-gray-500">Sentiment</p>
                                 <p className="text-lg font-semibold text-black">
                                   {event.emotionAnalysis.sentiment > 0 ? '+' : ''}
                                   {(event.emotionAnalysis.sentiment * 100).toFixed(0)}%
                                 </p>
                               </div>
-                              <div className="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
+                              <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
                                 <p className="text-xs text-gray-500">Keywords</p>
                                 <p className="text-sm text-black truncate">
                                   {event.emotionAnalysis.keywords.slice(0, 3).join(', ')}
@@ -488,9 +488,9 @@ export function FoundersEscalationsPanel() {
               </p>
               <p className="text-xs text-gray-500">Positive</p>
             </div>
-            <div className="bg-zinc-50 rounded-lg p-4 border border-zinc-200 text-center">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200 text-center">
               <Bell className="h-6 w-6 text-gray-500 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-zinc-700">
+              <p className="text-2xl font-bold text-gray-700">
                 {allEscalations.filter(e => e.emotionAnalysis.sentiment === 0).length}
               </p>
               <p className="text-xs text-gray-500">Neutral</p>
@@ -525,7 +525,7 @@ export function FoundersEscalationsPanel() {
 
           {selectedEscalation && (
             <div className="space-y-4">
-              <div className="bg-zinc-50 rounded-lg p-3 border border-zinc-200">
+              <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
                 <p className="text-sm text-gray-500 mb-1">Original Message:</p>
                 <p className="text-black text-sm">{selectedEscalation.originalMessage}</p>
               </div>
@@ -536,7 +536,7 @@ export function FoundersEscalationsPanel() {
                   value={resolutionNotes}
                   onChange={(e) => setResolutionNotes(e.target.value)}
                   placeholder="Describe how this was resolved..."
-                  className="bg-zinc-50 border-[#B89555]/20 text-black min-h-[100px]"
+                  className="bg-gray-50 border-[#B89555]/20 text-black min-h-[100px]"
                 />
               </div>
             </div>

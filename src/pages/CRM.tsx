@@ -501,7 +501,7 @@ const CRM = () => {
             <CardTitle className="text-black">CRM access unavailable</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-zinc-600">
+            <p className="text-sm text-gray-600">
               We couldn't load your CRM profile for this session. Please refresh the page. If it keeps happening, sign out and sign in again.
             </p>
             <div className="flex flex-col sm:flex-row gap-2">
@@ -622,7 +622,7 @@ const CRM = () => {
             {/* Search Bar */}
             <button
               onClick={() => setShowCommandPalette(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-zinc-600 hover:border-gold/50 transition-all max-w-xs"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 text-gray-600 hover:border-gold/50 transition-all max-w-xs"
             >
               <Search className="h-4 w-4 text-gold" />
               <span className="text-sm">Search leads…</span>

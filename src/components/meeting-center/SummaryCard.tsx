@@ -73,11 +73,11 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
           </span>
         </div>
 
-        <p className="text-zinc-700 line-clamp-2">{item.summary}</p>
+        <p className="text-gray-700 line-clamp-2">{item.summary}</p>
 
         {/* Action Items Preview */}
         {item.actionItems.length > 0 && (
-          <div className="mt-3 flex items-center gap-2 text-sm text-zinc-600">
+          <div className="mt-3 flex items-center gap-2 text-sm text-gray-600">
             <ArrowRight className="w-3 h-3" />
             <span>{item.actionItems.length} action item{item.actionItems.length !== 1 ? 's' : ''}</span>
           </div>
@@ -111,17 +111,17 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
             <div className="p-4 md:p-6 pt-4 space-y-4 bg-[#FDFBF7]">
               {/* Full Summary */}
               <div>
-                <h4 className="text-sm font-medium text-zinc-600 mb-2">Summary</h4>
-                <p className="text-zinc-800">{item.summary}</p>
+                <h4 className="text-sm font-medium text-gray-600 mb-2">Summary</h4>
+                <p className="text-gray-800">{item.summary}</p>
               </div>
 
               {/* Action Items */}
               {item.actionItems.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-medium text-zinc-600 mb-2">Action Items</h4>
+                  <h4 className="text-sm font-medium text-gray-600 mb-2">Action Items</h4>
                   <ul className="space-y-1">
                     {item.actionItems.map((action, i) => (
-                      <li key={i} className="text-sm text-zinc-700 flex items-start gap-2">
+                      <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
                         <ArrowRight className={`w-3 h-3 ${config.textColor} mt-1 flex-shrink-0`} />
                         {action}
                       </li>
@@ -133,8 +133,8 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
               {/* Voice AI specific data */}
               {item.type === 'voice-ai' && item.rawData?.duration_seconds && (
                 <div>
-                  <h4 className="text-sm font-medium text-zinc-600 mb-2">Call Duration</h4>
-                  <p className="text-zinc-800">
+                  <h4 className="text-sm font-medium text-gray-600 mb-2">Call Duration</h4>
+                  <p className="text-gray-800">
                     {Math.floor(Number(item.rawData.duration_seconds) / 60)} min {Number(item.rawData.duration_seconds) % 60} sec
                   </p>
                 </div>

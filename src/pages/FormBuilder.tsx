@@ -193,7 +193,7 @@ const FormBuilder = () => {
                 key={star}
                 type="button"
                 onClick={() => onChange(star)}
-                className={`text-2xl ${value >= star ? "text-yellow-400" : "text-zinc-600"}`}
+                className={`text-2xl ${value >= star ? "text-yellow-400" : "text-gray-600"}`}
               >
                 ★
               </button>
@@ -208,7 +208,7 @@ const FormBuilder = () => {
   return (
     <div className="min-h-screen bg-zinc-950 text-white">
       {/* Header */}
-      <div className="border-b border-zinc-800 px-6 py-4 flex items-center justify-between">
+      <div className="border-b border-gray-800 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <FileText className="w-6 h-6 text-emerald-500" />
           <Input
@@ -246,7 +246,7 @@ const FormBuilder = () => {
         {view === "edit" && (
           <>
             {/* Field Types Sidebar */}
-            <div className="w-64 border-r border-zinc-800 p-4">
+            <div className="w-64 border-r border-gray-800 p-4">
               <h3 className="text-sm font-semibold text-white/70 mb-4">Add Field</h3>
               <div className="space-y-2">
                 {fieldTypes.map(({ type, icon: Icon, label }) => (
@@ -265,7 +265,7 @@ const FormBuilder = () => {
 
             {/* Form Editor */}
             <div className="flex-1 p-8 max-w-3xl mx-auto">
-              <Card className="bg-zinc-900 border-zinc-800 mb-6">
+              <Card className="bg-zinc-900 border-gray-800 mb-6">
                 <CardContent className="pt-6">
                   <Input
                     value={formTitle}
@@ -290,10 +290,10 @@ const FormBuilder = () => {
               ) : (
                 <div className="space-y-4">
                   {fields.map((field) => (
-                    <Card key={field.id} className="bg-zinc-900 border-zinc-800">
+                    <Card key={field.id} className="bg-zinc-900 border-gray-800">
                       <CardContent className="pt-6">
                         <div className="flex items-start gap-4">
-                          <GripVertical className="w-5 h-5 text-zinc-600 cursor-grab mt-2" />
+                          <GripVertical className="w-5 h-5 text-gray-600 cursor-grab mt-2" />
                           <div className="flex-1 space-y-4">
                             <Input
                               value={field.label}
@@ -344,7 +344,7 @@ const FormBuilder = () => {
                               </div>
                             )}
 
-                            <div className="flex items-center justify-between pt-4 border-t border-zinc-800">
+                            <div className="flex items-center justify-between pt-4 border-t border-gray-800">
                               <div className="flex items-center gap-2">
                                 <Switch
                                   checked={field.required}
@@ -374,7 +374,7 @@ const FormBuilder = () => {
 
         {view === "preview" && (
           <div className="flex-1 p-8 max-w-2xl mx-auto">
-            <Card className="bg-zinc-900 border-zinc-800">
+            <Card className="bg-zinc-900 border-gray-800">
               <CardHeader>
                 <CardTitle className="text-2xl">{formTitle}</CardTitle>
                 <p className="text-white/70">{formDescription}</p>
@@ -422,7 +422,7 @@ const FormBuilder = () => {
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="border-b border-zinc-800">
+                    <tr className="border-b border-gray-800">
                       <th className="text-left p-3 text-sm text-white/70">Submitted</th>
                       {fields.map((f) => (
                         <th key={f.id} className="text-left p-3 text-sm text-white/70">{f.label}</th>
@@ -431,7 +431,7 @@ const FormBuilder = () => {
                   </thead>
                   <tbody>
                     {responses.map((response) => (
-                      <tr key={response.id} className="border-b border-zinc-800">
+                      <tr key={response.id} className="border-b border-gray-800">
                         <td className="p-3 text-sm">{new Date(response.submittedAt).toLocaleString()}</td>
                         {fields.map((f) => (
                           <td key={f.id} className="p-3 text-sm">{String(response.data[f.id] || "-")}</td>

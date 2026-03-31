@@ -474,7 +474,7 @@ const Compare = () => {
     return (
       <span className="text-gold">
         {"★".repeat(rating)}
-        <span className="text-zinc-600">{"☆".repeat(5 - rating)}</span>
+        <span className="text-gray-600">{"☆".repeat(5 - rating)}</span>
       </span>
     );
   };
@@ -586,7 +586,7 @@ const Compare = () => {
                 { icon: Star, label: "Smart", sub: "Ratings" },
                 { icon: Award, label: "Expert", sub: "Recommendations" },
               ].map((f) => (
-                <div key={f.label} className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-center">
+                <div key={f.label} className="bg-zinc-900/50 border border-gray-800 rounded-xl p-4 text-center">
                   <f.icon className="w-6 h-6 text-gold mx-auto mb-2" />
                   <p className="text-white text-sm font-medium">{f.label}</p>
                   <p className="text-white/60 text-xs">{f.sub}</p>
@@ -734,7 +734,7 @@ const Compare = () => {
                       const body = encodeURIComponent(`Dear Investor,\n\nPlease find the AI-powered property comparison analysis:\n\n${projectLines}\n\nFor full details and AI recommendations, view the comparison:\n${window.location.href}\n\nBest regards,\nJBJ Global Real Estate\n+971 56 591 1000\nContact@JBJ.ae | www.JBJ.ae`);
                       window.location.href = `mailto:?subject=${subject}&body=${body}`;
                     }}
-                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-zinc-800 hover:bg-zinc-700 text-white group"
+                    className="relative inline-flex items-center justify-center gap-2 px-8 py-5 text-base font-bold rounded-xl transition-all duration-300 bg-zinc-800 hover:bg-gray-700 text-white group"
                   >
                     <Mail className="w-5 h-5" />
                     Share via Email
@@ -757,11 +757,11 @@ const Compare = () => {
           </div>
 
           {/* Basic Comparison Table */}
-          <div ref={tableRef} className="overflow-x-auto bg-zinc-900 rounded-2xl border border-zinc-800">
+          <div ref={tableRef} className="overflow-x-auto bg-zinc-900 rounded-2xl border border-gray-800">
             <table className="w-full">
               <thead>
                 <tr>
-                  <th className="text-left py-4 px-4 text-white/60 font-medium border-b border-zinc-800 sticky left-0 bg-zinc-900 z-10">
+                  <th className="text-left py-4 px-4 text-white/60 font-medium border-b border-gray-800 sticky left-0 bg-zinc-900 z-10">
                     Feature
                   </th>
                     {projects.map((project) => {
@@ -770,7 +770,7 @@ const Compare = () => {
                       return (
                         <th
                           key={project.id}
-                          className="text-left py-4 px-4 border-b border-zinc-800"
+                          className="text-left py-4 px-4 border-b border-gray-800"
                           style={{ width: `${100 / (projects.length + 1)}%`, minWidth: '220px' }}
                         >
                           <div className="flex flex-col gap-2">
@@ -847,7 +847,7 @@ const Compare = () => {
                     return "See project page";
                   }},
                 ].map((row) => (
-                  <tr key={row.label} className="border-b border-zinc-800/50 even:bg-zinc-800/20 odd:bg-zinc-900/40 hover:bg-zinc-800/30">
+                  <tr key={row.label} className="border-b border-gray-800/50 even:bg-zinc-800/20 odd:bg-zinc-900/40 hover:bg-gray-800/30">
                     <td className="py-4 px-4 text-white/70 sticky left-0 bg-zinc-900 font-medium">
                       {row.label}
                     </td>
@@ -887,7 +887,7 @@ const Compare = () => {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {aiAnalysis.ratings.map((rating, index) => (
-                    <div key={index} className="bg-zinc-900 rounded-xl border border-zinc-800 p-5">
+                    <div key={index} className="bg-zinc-900 rounded-xl border border-gray-800 p-5">
                       <div className="flex justify-between items-start mb-3">
                         <h4 className="text-white font-semibold">{rating.projectName}</h4>
                         <div className="flex items-center gap-2">
@@ -1002,7 +1002,7 @@ const Compare = () => {
                 <div className="w-full max-w-sm h-2 bg-zinc-800 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-gold via-[#ECE2D2] to-gold rounded-full animate-[shimmer_2s_ease-in-out_infinite]" style={{ width: '75%', backgroundSize: '200% 100%' }} />
                 </div>
-                <p className="text-zinc-600 text-xs mt-3">This may take 15-30 seconds</p>
+                <p className="text-gray-600 text-xs mt-3">This may take 15-30 seconds</p>
               </div>
             </div>
           ) : (
@@ -1056,21 +1056,21 @@ const Compare = () => {
                   placeholder="Your Name"
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="bg-zinc-800 border-zinc-700 text-white"
+                  className="bg-zinc-800 border-gray-700 text-white"
                 />
                 <Input
                   type="email"
                   placeholder="Email Address"
                   value={formData.email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  className="bg-zinc-800 border-zinc-700 text-white"
+                  className="bg-zinc-800 border-gray-700 text-white"
                 />
                 <Input
                   type="tel"
                   placeholder="Phone Number"
                   value={formData.phone}
                   onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  className="bg-zinc-800 border-zinc-700 text-white"
+                  className="bg-zinc-800 border-gray-700 text-white"
                 />
                 <div className="flex gap-3">
                   <Button
@@ -1107,7 +1107,7 @@ const Compare = () => {
                 </Button>
                 <a href="tel:+971565911000" className="w-full">
                   <Button
-                    className="w-full bg-zinc-800 border-2 border-gold/40 text-white font-semibold hover:bg-zinc-700"
+                    className="w-full bg-zinc-800 border-2 border-gold/40 text-white font-semibold hover:bg-gray-700"
                   >
                     <Phone className="w-4 h-4 mr-2" />
                     Call Now
@@ -1115,7 +1115,7 @@ const Compare = () => {
                 </a>
                 <a href={INQUIRY_FORM_URL} target="_blank" rel="noopener noreferrer" className="w-full">
                   <Button
-                    className="w-full bg-zinc-800 border-2 border-gold/40 text-white font-semibold hover:bg-zinc-700"
+                    className="w-full bg-zinc-800 border-2 border-gold/40 text-white font-semibold hover:bg-gray-700"
                   >
                     <BadgeCheck className="w-4 h-4 mr-2" />
                     Inquiry Form
@@ -1145,7 +1145,7 @@ const Compare = () => {
         </div>{/* end border wrapper */}
 
         {/* Footer Branding */}
-        <div className="text-center text-zinc-600 text-sm py-6">
+        <div className="text-center text-gray-600 text-sm py-6">
           Powered & Made by <span className="text-gold">JBJ Global Real Estate</span> — Real Estate Brokerage
         </div>
         <LegalDisclaimer variant="compact" className="pb-4" />

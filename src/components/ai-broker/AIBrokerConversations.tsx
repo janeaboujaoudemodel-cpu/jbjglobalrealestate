@@ -84,7 +84,7 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
       case "phone":
         return "border-purple-500/30 text-purple-400";
       default:
-        return "border-zinc-500/30 text-white/70";
+        return "border-gray-500/30 text-white/70";
     }
   };
 
@@ -113,7 +113,7 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
 
   if (conversations.length === 0) {
     return (
-      <Card className="bg-zinc-900 border-zinc-800 border-dashed">
+      <Card className="bg-zinc-900 border-gray-800 border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-16">
           <MessageSquare className="h-16 w-16 text-gray-600 mb-4" />
           <h3 className="text-white text-lg font-medium mb-2">No Conversations Yet</h3>
@@ -129,14 +129,14 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Conversation List */}
       <div className="lg:col-span-1">
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-zinc-900 border-gray-800">
           <CardContent className="p-0">
             <ScrollArea className="h-[600px]">
               {conversations.map((conv) => (
                 <button
                   key={conv.id}
                   onClick={() => setSelectedConversation(conv.id)}
-                  className={`w-full p-4 text-left border-b border-zinc-800 hover:bg-zinc-800/50 transition-colors ${
+                  className={`w-full p-4 text-left border-b border-gray-800 hover:bg-gray-800/50 transition-colors ${
                     selectedConversation === conv.id ? "bg-zinc-800" : ""
                   }`}
                 >
@@ -172,7 +172,7 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
         {selectedConversation ? (
           <ConversationDetail conversationId={selectedConversation} />
         ) : (
-          <Card className="bg-zinc-900 border-zinc-800 h-[600px]">
+          <Card className="bg-zinc-900 border-gray-800 h-[600px]">
             <CardContent className="flex flex-col items-center justify-center h-full">
               <ChevronRight className="h-12 w-12 text-gray-600 mb-4" />
               <p className="text-gray-400">Select a conversation to view details</p>
@@ -216,7 +216,7 @@ function ConversationDetail({ conversationId }: ConversationDetailProps) {
 
   if (loading) {
     return (
-      <Card className="bg-zinc-900 border-zinc-800 h-[600px]">
+      <Card className="bg-zinc-900 border-gray-800 h-[600px]">
         <CardContent className="flex items-center justify-center h-full">
           <Loader2 className="h-8 w-8 animate-spin text-gold" />
         </CardContent>
@@ -225,7 +225,7 @@ function ConversationDetail({ conversationId }: ConversationDetailProps) {
   }
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800 h-[600px] flex flex-col">
+    <Card className="bg-zinc-900 border-gray-800 h-[600px] flex flex-col">
       <CardContent className="flex-1 p-4 overflow-hidden">
         <ScrollArea className="h-full">
           <div className="space-y-4">

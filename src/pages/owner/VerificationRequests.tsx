@@ -169,7 +169,7 @@ const VerificationRequests = () => {
               className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition-all ${
                 filter === f
                   ? "bg-gold/20 text-gold border border-gold/30"
-                  : "bg-zinc-100 text-zinc-600 border border-transparent hover:bg-zinc-200"
+                  : "bg-gray-100 text-gray-600 border border-transparent hover:bg-gray-200"
               }`}
             >
               {f}
@@ -210,7 +210,7 @@ const VerificationRequests = () => {
                   <th className="text-right px-4 py-3 font-semibold">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 bg-white">
+              <tbody className="divide-y divide-gray-100 bg-white">
                 {filtered.map((v) => (
                   <tr key={v.id} className="hover:bg-gold/5 transition-colors">
                     <td className="px-4 py-3 font-medium text-black">{v.full_name || "—"}</td>

@@ -190,7 +190,7 @@ export function PartnerApplicationPortal() {
                             <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center border-2 transition-all ${
                               isCompleted
                                 ? "bg-gradient-to-br from-gold to-amber-500 border-gold text-white"
-                                : "bg-white border-zinc-200 text-gray-400"
+                                : "bg-white border-gray-200 text-gray-400"
                             }`}>
                               <StageIcon className="w-4 h-4" />
                             </div>
@@ -199,7 +199,7 @@ export function PartnerApplicationPortal() {
                             </span>
                           </div>
                           {idx < STAGES.length - 1 && (
-                            <div className={`w-6 md:w-10 h-0.5 mt-[-16px] ${idx < currentIdx ? "bg-gold" : "bg-zinc-200"}`} />
+                            <div className={`w-6 md:w-10 h-0.5 mt-[-16px] ${idx < currentIdx ? "bg-gold" : "bg-gray-200"}`} />
                           )}
                         </div>
                       );
@@ -345,7 +345,7 @@ export function PartnerApplicationPortal() {
               onChange={(e) => setFormData({ ...formData, compliance: e.target.checked })}
               className="mt-1 accent-gold w-4 h-4"
             />
-            <span className="text-sm text-zinc-600">I confirm my company operates within regulatory compliance.</span>
+            <span className="text-sm text-gray-600">I confirm my company operates within regulatory compliance.</span>
           </label>
 
           <div className="flex gap-3">

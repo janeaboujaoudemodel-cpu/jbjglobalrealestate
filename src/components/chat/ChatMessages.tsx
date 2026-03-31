@@ -183,7 +183,7 @@ const ChatMessages = React.memo(({
               <Button
                 variant="outline"
                 onClick={() => setShowSubmitPanel(false)}
-                className="border-gold/30 text-zinc-600"
+                className="border-gold/30 text-gray-600"
               >
                 <T>Cancel</T>
               </Button>

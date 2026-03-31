@@ -553,7 +553,7 @@ const ListingPortalSubmit = () => {
             <h1 className="text-3xl font-bold text-black mb-4">
               {isOwner ? 'Listing Approved & Published!' : 'Listing Submitted for Approval!'}
             </h1>
-            <p className="text-zinc-600 mb-8">
+            <p className="text-gray-600 mb-8">
               {isOwner 
                 ? 'Your listing has been approved and is now live on the portal.'
                 : 'Your listing has been submitted for review. You will receive notifications as it progresses through approval stages.'}
@@ -599,7 +599,7 @@ const ListingPortalSubmit = () => {
       <div className="relative py-12 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div ref={creatorRef} className="max-w-3xl mx-auto">
-            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-zinc-600 hover:text-black mb-4">
+            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-gray-600 hover:text-black mb-4">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
             </Button>
 
@@ -611,7 +611,7 @@ const ListingPortalSubmit = () => {
               <h1 className="text-2xl md:text-3xl font-bold text-black mb-2">
                 Smart Listing Creator
               </h1>
-              <p className="text-zinc-600 text-sm">
+              <p className="text-gray-600 text-sm">
                 Upload your documents and let AI create a professional listing for you
               </p>
             </div>
@@ -688,7 +688,7 @@ const ListingPortalSubmit = () => {
                                 className={`relative p-4 rounded-2xl border-2 text-left transition-all w-[calc(33.333%-0.5rem)] min-w-[160px] ${
                                   isSelected
                                     ? 'bg-gold/10 border-gold/50 text-black shadow-lg shadow-gold/15'
-                                    : 'bg-white/60 border-gold/15 text-zinc-600 hover:border-gold/30'
+                                    : 'bg-white/60 border-gold/15 text-gray-600 hover:border-gold/30'
                                 }`}
                               >
                                 {isSelected && (
@@ -836,7 +836,7 @@ const ListingPortalSubmit = () => {
                 >
                   <BrandedLoader variant="light" text="AI is analyzing..." className="min-h-0 py-8" />
                   <h2 className="text-black text-xl font-bold mb-2 mt-4">AI is analyzing your documents...</h2>
-                  <p className="text-zinc-600 text-sm mb-6">
+                  <p className="text-gray-600 text-sm mb-6">
                     Extracting property details, images, floor plans, and generating your listing
                   </p>
                   <div className="flex flex-wrap gap-2 justify-center">
@@ -937,7 +937,7 @@ const ListingPortalSubmit = () => {
 
                             {pricePrediction.marketInsights && (
                               <div className="bg-white/80 border border-gold/20 rounded-xl p-4">
-                                <p className="text-zinc-600 text-sm">{pricePrediction.marketInsights}</p>
+                                <p className="text-gray-600 text-sm">{pricePrediction.marketInsights}</p>
                               </div>
                             )}
                           </div>
@@ -992,7 +992,7 @@ const ListingPortalSubmit = () => {
                             <p className="text-black text-sm font-medium">
                               AI Confidence: {extractedData.confidence_score}%
                             </p>
-                            <p className="text-zinc-600 text-xs">
+                            <p className="text-gray-600 text-xs">
                               {extractedData.confidence_score >= 80 
                                 ? 'High confidence — review and continue' 
                                 : 'Please review and edit the details below'}
@@ -1002,7 +1002,7 @@ const ListingPortalSubmit = () => {
                             size="sm"
                             variant="ghost"
                             onClick={() => { setPhase('upload'); }}
-                            className="text-zinc-600 hover:text-black"
+                            className="text-gray-600 hover:text-black"
                           >
                             <RefreshCw className="w-4 h-4 mr-1" /> Re-extract
                           </Button>
@@ -1031,7 +1031,7 @@ const ListingPortalSubmit = () => {
                             <p className="text-gray-500 text-sm flex items-center gap-1 mb-3">
                               <MapPin className="w-3.5 h-3.5" /> {form.location || form.emirate}
                             </p>
-                            <div className="flex items-center gap-4 text-zinc-600 text-sm mb-3">
+                            <div className="flex items-center gap-4 text-gray-600 text-sm mb-3">
                               {form.bedrooms && <span className="flex items-center gap-1"><Bed className="w-3.5 h-3.5" /> {form.bedrooms} BR</span>}
                               {form.bathrooms && <span className="flex items-center gap-1"><Bath className="w-3.5 h-3.5" /> {form.bathrooms} BA</span>}
                               {form.area_sqft && <span className="flex items-center gap-1"><Maximize className="w-3.5 h-3.5" /> {parseInt(form.area_sqft).toLocaleString()} sqft</span>}
@@ -1065,7 +1065,7 @@ const ListingPortalSubmit = () => {
                         <h3 className="text-black font-semibold mb-1">Listing Details</h3>
                         
                         <div>
-                          <label className="text-xs text-zinc-600 mb-1 block">Title *</label>
+                          <label className="text-xs text-gray-600 mb-1 block">Title *</label>
                           <Input
                             value={form.title}
                             onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
@@ -1075,7 +1075,7 @@ const ListingPortalSubmit = () => {
                         </div>
 
                         <div>
-                          <label className="text-xs text-zinc-600 mb-1 block">Description</label>
+                          <label className="text-xs text-gray-600 mb-1 block">Description</label>
                           <Textarea
                             value={form.description}
                             onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
@@ -1086,7 +1086,7 @@ const ListingPortalSubmit = () => {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Category</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Category</label>
                             <Select value={form.listing_category} onValueChange={v => setForm(f => ({ ...f, listing_category: v }))}>
                               <SelectTrigger className="bg-white border-gold/30 text-black">
                                 <SelectValue />
@@ -1097,7 +1097,7 @@ const ListingPortalSubmit = () => {
                             </Select>
                           </div>
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Property Type</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Property Type</label>
                             <Select value={form.property_type} onValueChange={v => setForm(f => ({ ...f, property_type: v }))}>
                               <SelectTrigger className="bg-white border-gold/30 text-black">
                                 <SelectValue placeholder="Select" />
@@ -1111,7 +1111,7 @@ const ListingPortalSubmit = () => {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Developer</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Developer</label>
                             <Input
                               value={form.developer_name}
                               onChange={e => setForm(f => ({ ...f, developer_name: e.target.value }))}
@@ -1120,7 +1120,7 @@ const ListingPortalSubmit = () => {
                             />
                           </div>
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Project / Building</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Project / Building</label>
                             <Input
                               value={form.project_name}
                               onChange={e => setForm(f => ({ ...f, project_name: e.target.value }))}
@@ -1132,7 +1132,7 @@ const ListingPortalSubmit = () => {
 
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Emirate</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Emirate</label>
                             <Select value={form.emirate} onValueChange={v => setForm(f => ({ ...f, emirate: v }))}>
                               <SelectTrigger className="bg-white border-gold/30 text-black">
                                 <SelectValue />
@@ -1143,7 +1143,7 @@ const ListingPortalSubmit = () => {
                             </Select>
                           </div>
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Location / Area</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Location / Area</label>
                             <Input
                               value={form.location}
                               onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
@@ -1155,26 +1155,26 @@ const ListingPortalSubmit = () => {
 
                         <div className="grid grid-cols-4 gap-3">
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Price (AED)</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Price (AED)</label>
                             <Input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} className="bg-white border-gold/30 text-black" />
                           </div>
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Bedrooms</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Bedrooms</label>
                             <Input type="number" value={form.bedrooms} onChange={e => setForm(f => ({ ...f, bedrooms: e.target.value }))} className="bg-white border-gold/30 text-black" />
                           </div>
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Bathrooms</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Bathrooms</label>
                             <Input type="number" value={form.bathrooms} onChange={e => setForm(f => ({ ...f, bathrooms: e.target.value }))} className="bg-white border-gold/30 text-black" />
                           </div>
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Area (sqft)</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Area (sqft)</label>
                             <Input type="number" value={form.area_sqft} onChange={e => setForm(f => ({ ...f, area_sqft: e.target.value }))} className="bg-white border-gold/30 text-black" />
                           </div>
                         </div>
 
                         <div className="grid grid-cols-3 gap-3">
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Furnishing</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Furnishing</label>
                             <Select value={form.furnishing} onValueChange={v => setForm(f => ({ ...f, furnishing: v }))}>
                               <SelectTrigger className="bg-white border-gold/30 text-black">
                                 <SelectValue placeholder="Select" />
@@ -1185,11 +1185,11 @@ const ListingPortalSubmit = () => {
                             </Select>
                           </div>
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Handover</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Handover</label>
                             <Input value={form.handover_date} onChange={e => setForm(f => ({ ...f, handover_date: e.target.value }))} placeholder="e.g. Q4 2026" className="bg-white border-gold/30 text-black" />
                           </div>
                           <div>
-                            <label className="text-xs text-zinc-600 mb-1 block">Payment Plan</label>
+                            <label className="text-xs text-gray-600 mb-1 block">Payment Plan</label>
                             <Input value={form.payment_plan} onChange={e => setForm(f => ({ ...f, payment_plan: e.target.value }))} placeholder="e.g. 60/40" className="bg-white border-gold/30 text-black" />
                           </div>
                         </div>
@@ -1221,7 +1221,7 @@ const ListingPortalSubmit = () => {
                           <h3 className="text-black font-semibold mb-3">Amenities</h3>
                           <div className="flex flex-wrap gap-2">
                             {form.amenities.map((a, i) => (
-                              <Badge key={i} className="bg-white border-gold/20 text-zinc-700 px-3 py-1">
+                              <Badge key={i} className="bg-white border-gold/20 text-gray-700 px-3 py-1">
                                 {a}
                                 <button onClick={() => setForm(prev => ({ ...prev, amenities: prev.amenities.filter((_, idx) => idx !== i) }))} className="ml-2">
                                   <X className="w-3 h-3" />
@@ -1373,7 +1373,7 @@ const ListingPortalSubmit = () => {
                             <CheckCircle2 className="w-6 h-6 text-emerald-600" />
                             <div>
                               <p className="text-black font-semibold text-sm">Owner Auto-Approval</p>
-                              <p className="text-zinc-600 text-xs">As the Owner, your listing will be approved and published immediately upon submission.</p>
+                              <p className="text-gray-600 text-xs">As the Owner, your listing will be approved and published immediately upon submission.</p>
                             </div>
                           </div>
                         </div>

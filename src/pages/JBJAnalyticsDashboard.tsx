@@ -305,7 +305,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
               <h1 className="text-black text-3xl font-bold">
                 JBJ Analytics Dashboard
               </h1>
-              <p className="text-zinc-600 mt-1">Monitor platform performance and user activity</p>
+              <p className="text-gray-600 mt-1">Monitor platform performance and user activity</p>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 rounded-lg p-1">
@@ -316,7 +316,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                     className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                       dateRange === range 
                         ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black shadow-md border border-gold/40' 
-                        : 'text-zinc-600 hover:text-black hover:bg-gold/10'
+                        : 'text-gray-600 hover:text-black hover:bg-gold/10'
                     }`}
                   >
                     {range === 'today' ? 'Today' : range === 'week' ? '7 Days' : '30 Days'}
@@ -348,7 +348,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                     <div className="p-1.5 rounded-lg bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/30">
                       <stat.icon className="w-4 h-4 text-[#8A7356]" />
                     </div>
-                    <span className="text-zinc-600 text-xs font-medium">{stat.label}</span>
+                    <span className="text-gray-600 text-xs font-medium">{stat.label}</span>
                   </div>
                   <p className="text-black text-2xl font-bold">{stat.value.toLocaleString()}</p>
                   <p className={`text-xs font-medium ${stat.change >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
@@ -464,7 +464,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-1">
                             <span className="text-black font-medium">{tool.tool_name}</span>
-                            <span className="text-zinc-600 text-sm">{tool.usage_count} uses</span>
+                            <span className="text-gray-600 text-sm">{tool.usage_count} uses</span>
                           </div>
                           <div className="h-2 bg-gold/20 rounded-full overflow-hidden">
                             <div 
@@ -506,7 +506,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                           <div className="flex items-start justify-between mb-3">
                             <div>
                               <h4 className="text-black font-medium">{issue.tool_name}</h4>
-                              <p className="text-zinc-600 text-sm">
+                              <p className="text-gray-600 text-sm">
                                 {issue.user_name || 'Anonymous'} • {issue.user_email || 'No email'}
                               </p>
                             </div>
@@ -514,13 +514,13 @@ const JBJAnalyticsDashboard: React.FC = () => {
                               className={
                                 issue.status === 'pending' ? 'bg-amber-100 text-amber-700 border-amber-300' :
                                 issue.status === 'resolved' ? 'bg-emerald-100 text-emerald-700 border-emerald-300' :
-                                'bg-zinc-100 text-zinc-600 border-zinc-300'
+                                'bg-gray-100 text-gray-600 border-gray-300'
                               }
                             >
                               {issue.status}
                             </Badge>
                           </div>
-                          <p className="text-zinc-700 text-sm mb-3">{issue.issue_description}</p>
+                          <p className="text-gray-700 text-sm mb-3">{issue.issue_description}</p>
                           <div className="flex items-center justify-between">
                             <span className="text-gray-500 text-xs">
                               {format(new Date(issue.created_at), 'MMM d, yyyy h:mm a')}

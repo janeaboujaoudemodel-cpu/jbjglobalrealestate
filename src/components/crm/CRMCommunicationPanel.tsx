@@ -278,7 +278,7 @@ const CRMCommunicationPanel = () => {
     switch (status) {
       case 'online': return 'bg-green-500';
       case 'away': return 'bg-amber-500';
-      default: return 'bg-zinc-500';
+      default: return 'bg-gray-500';
     }
   };
 
@@ -327,7 +327,7 @@ const CRMCommunicationPanel = () => {
           <TabsContent value="chat" className="m-0">
             <div className="flex h-[280px]">
               {/* Channels Sidebar */}
-              <div className="w-1/3 border-r border-zinc-200 p-2">
+              <div className="w-1/3 border-r border-gray-200 p-2">
                 <p className="text-[10px] text-gray-500 uppercase tracking-wide mb-2 px-1">Channels</p>
                 <div className="space-y-1">
                 {channels.map(channel => {
@@ -337,12 +337,12 @@ const CRMCommunicationPanel = () => {
                         key={channel.id}
                         onClick={() => setSelectedChannel(channel.id)}
                         className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs hover:bg-[#B89555]/10 transition-colors ${
-                          selectedChannel === channel.id ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#B89555]/40' : 'text-zinc-600'
+                          selectedChannel === channel.id ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border border-[#B89555]/40' : 'text-gray-600'
                         }`}
                       >
                         <span className="flex items-center gap-1.5">
                           <Hash className="h-3 w-3" />
-                          <span className={unreadCount > 0 ? 'font-semibold text-zinc-900' : ''}>
+                          <span className={unreadCount > 0 ? 'font-semibold text-gray-900' : ''}>
                             {channel.name}
                           </span>
                         </span>
@@ -363,11 +363,11 @@ const CRMCommunicationPanel = () => {
               {/* Messages Area */}
               <div className="flex-1 flex flex-col relative">
                 {/* Channel Header with member management */}
-                <div className="px-3 py-2 border-b border-zinc-200 flex items-center justify-between bg-zinc-50">
+                <div className="px-3 py-2 border-b border-gray-200 flex items-center justify-between bg-gray-50">
                   <div className="flex items-center gap-2">
                     <Hash className="h-3 w-3 text-gray-500" />
-                    <span className="text-xs font-medium text-zinc-800">{currentChannel?.name}</span>
-                    <Badge variant="secondary" className="text-[9px] bg-zinc-200 text-zinc-600">
+                    <span className="text-xs font-medium text-gray-800">{currentChannel?.name}</span>
+                    <Badge variant="secondary" className="text-[9px] bg-gray-200 text-gray-600">
                       {channelMembers.length} members
                     </Badge>
                   </div>
@@ -392,17 +392,17 @@ const CRMCommunicationPanel = () => {
                     {currentMessages.map(msg => (
                       <div key={msg.id} className={`flex gap-2 ${msg.isMe ? 'flex-row-reverse' : ''}`}>
                         <Avatar className="h-6 w-6">
-                          <AvatarFallback className="text-[10px] bg-zinc-200 text-zinc-700">
+                          <AvatarFallback className="text-[10px] bg-gray-200 text-gray-700">
                             {msg.sender[0]}
                           </AvatarFallback>
                         </Avatar>
                         <div className={`max-w-[70%] ${msg.isMe ? 'text-right' : ''}`}>
                           <div className="flex items-center gap-2 mb-0.5">
-                            <span className="text-[10px] font-medium text-zinc-800">{msg.sender}</span>
+                            <span className="text-[10px] font-medium text-gray-800">{msg.sender}</span>
                             <span className="text-[9px] text-gray-500">{msg.timestamp}</span>
                           </div>
                           <p className={`text-xs p-2 rounded-lg ${
-                            msg.isMe ? 'bg-gold/20 text-zinc-800' : 'bg-zinc-100 text-zinc-800'
+                            msg.isMe ? 'bg-gold/20 text-gray-800' : 'bg-gray-100 text-gray-800'
                           }`}>
                             {msg.message}
                           </p>
@@ -427,12 +427,12 @@ const CRMCommunicationPanel = () => {
                 
                 {/* Mention suggestions */}
                 {showMentions && (
-                  <div className="absolute bottom-14 left-2 right-2 bg-white border border-zinc-200 rounded-lg shadow-lg z-10">
+                  <div className="absolute bottom-14 left-2 right-2 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                     {mentionSuggestions.map(member => (
                       <button
                         key={member.id}
                         onClick={() => insertMention(member)}
-                        className="w-full flex items-center gap-2 px-3 py-2 hover:bg-zinc-100 text-left text-xs"
+                        className="w-full flex items-center gap-2 px-3 py-2 hover:bg-gray-100 text-left text-xs"
                       >
                         <Avatar className="h-5 w-5">
                           <AvatarImage src={member.avatar} alt={member.name} />
@@ -440,7 +440,7 @@ const CRMCommunicationPanel = () => {
                             {member.name.split(' ').map(n => n[0]).join('')}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="text-zinc-800">{member.name}</span>
+                        <span className="text-gray-800">{member.name}</span>
                         <span className="text-gray-500 ml-auto">{member.role}</span>
                       </button>
                     ))}
@@ -448,7 +448,7 @@ const CRMCommunicationPanel = () => {
                 )}
                 
                 {/* Message Input */}
-                <div className="p-2 border-t border-zinc-200">
+                <div className="p-2 border-t border-gray-200">
                   <div className="flex gap-2">
                     <input
                       type="file"
@@ -462,7 +462,7 @@ const CRMCommunicationPanel = () => {
                         e.target.value = "";
                       }}
                     />
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-zinc-800" onClick={() => fileInputRef.current?.click()}>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-gray-800" onClick={() => fileInputRef.current?.click()}>
                       <Paperclip className="h-4 w-4" />
                     </Button>
                     <Input
@@ -471,7 +471,7 @@ const CRMCommunicationPanel = () => {
                       onChange={handleInputChange}
                       onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
                       placeholder="Type a message... Use @ to mention"
-                      className="h-8 text-xs bg-white border-zinc-200 text-zinc-800"
+                      className="h-8 text-xs bg-white border-gray-200 text-gray-800"
                     />
                     <Button 
                       size="icon" 
@@ -515,7 +515,7 @@ const CRMCommunicationPanel = () => {
                       <div className="space-y-2">
                         {deptMembers.map((member) => (
                           <HoverCard key={member.id} openDelay={200}>
-                            <div className="flex items-center justify-between p-2.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 transition-colors">
+                            <div className="flex items-center justify-between p-2.5 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
                               <HoverCardTrigger asChild>
                                 <div className="flex items-center gap-3 cursor-default">
                                   <div className="relative">
@@ -528,7 +528,7 @@ const CRMCommunicationPanel = () => {
                                     <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white ${getStatusColor(member.status)}`} />
                                   </div>
                                   <div>
-                                    <p className="text-sm font-medium text-zinc-800">{member.name}</p>
+                                    <p className="text-sm font-medium text-gray-800">{member.name}</p>
                                     <p className="text-[10px] text-gray-500">{member.role}</p>
                                   </div>
                                 </div>
@@ -561,10 +561,10 @@ const CRMCommunicationPanel = () => {
 
                             <HoverCardContent side="right" className="w-80">
                               <div className="space-y-2">
-                                <p className="text-sm font-semibold text-zinc-900">{member.name}</p>
-                                <p className="text-xs text-zinc-600">{member.role}</p>
+                                <p className="text-sm font-semibold text-gray-900">{member.name}</p>
+                                <p className="text-xs text-gray-600">{member.role}</p>
 
-                                <div className="pt-2 border-t border-zinc-200 space-y-1 text-xs text-zinc-700">
+                                <div className="pt-2 border-t border-gray-200 space-y-1 text-xs text-gray-700">
                                   <div className="flex justify-between gap-3">
                                     <span className="text-gray-500">Reports to</span>
                                     <span className="text-right">{member.reportsTo || '—'}</span>
@@ -611,15 +611,15 @@ const CRMCommunicationPanel = () => {
               
               <div className="text-center py-6 text-gray-500">
                 <Video className="h-10 w-10 mx-auto mb-2 opacity-30" />
-                <p className="text-sm font-medium text-zinc-600">No scheduled meetings</p>
+                <p className="text-sm font-medium text-gray-600">No scheduled meetings</p>
                 <p className="text-xs text-gray-500">Start a meeting or schedule one for later</p>
               </div>
               
-              <div className="border-t border-zinc-200 pt-3">
+              <div className="border-t border-gray-200 pt-3">
                 <p className="text-xs text-gray-500 mb-2">Quick Actions</p>
                 <div className="grid grid-cols-2 gap-2">
                   <Link to="/video-meeting">
-                    <Button variant="outline" size="sm" className="w-full text-xs h-8 border-zinc-200 text-zinc-700">
+                    <Button variant="outline" size="sm" className="w-full text-xs h-8 border-gray-200 text-gray-700">
                       <ExternalLink className="h-3 w-3 mr-1" />
                       Open Meeting Room
                     </Button>
@@ -627,7 +627,7 @@ const CRMCommunicationPanel = () => {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full text-xs h-8 border-zinc-200 text-zinc-700"
+                    className="w-full text-xs h-8 border-gray-200 text-gray-700"
                     onClick={() => toast.info("Schedule meeting feature coming soon")}
                   >
                     Schedule for Later
@@ -645,15 +645,15 @@ const CRMCommunicationPanel = () => {
                 {RECENT_FILES.map(file => (
                   <div 
                     key={file.id}
-                    className="flex items-center justify-between p-2.5 rounded-lg bg-zinc-50 hover:bg-zinc-100 transition-colors cursor-pointer"
+                    className="flex items-center justify-between p-2.5 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer"
                     onClick={() => toast.info(`Opening ${file.name}...`)}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-white border border-zinc-200">
+                      <div className="p-2 rounded-lg bg-white border border-gray-200">
                         <FileText className="h-4 w-4 text-gray-500" />
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-zinc-800">{file.name}</p>
+                        <p className="text-sm font-medium text-gray-800">{file.name}</p>
                         <p className="text-[10px] text-gray-500">{file.size} • {file.date}</p>
                       </div>
                     </div>
@@ -661,7 +661,7 @@ const CRMCommunicationPanel = () => {
                   </div>
                 ))}
                 
-                <Button variant="outline" className="w-full mt-3 border-dashed border-zinc-300 text-zinc-600">
+                <Button variant="outline" className="w-full mt-3 border-dashed border-gray-300 text-gray-600">
                   <Paperclip className="h-4 w-4 mr-2" />
                   Upload New File
                 </Button>
@@ -690,14 +690,14 @@ const CRMCommunicationPanel = () => {
               <ScrollArea className="h-40">
                 <div className="space-y-2">
                   {channelMembers.map(member => (
-                    <div key={member.id} className="flex items-center justify-between p-2 rounded-lg bg-zinc-50">
+                    <div key={member.id} className="flex items-center justify-between p-2 rounded-lg bg-gray-50">
                       <div className="flex items-center gap-2">
                         <Avatar className="h-6 w-6">
                           <AvatarFallback className="text-[10px] bg-gold/20 text-gold">
                             {member.name.split(' ').map(n => n[0]).join('')}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="text-sm text-zinc-800">{member.name}</span>
+                        <span className="text-sm text-gray-800">{member.name}</span>
                       </div>
                       <Button
                         variant="ghost"
@@ -718,14 +718,14 @@ const CRMCommunicationPanel = () => {
               <p className="text-xs text-gray-500 mb-2">Add Members</p>
               <div className="space-y-2">
                 {ALL_TEAM_MEMBERS.filter(m => !currentChannel?.members.includes(m.id)).map(member => (
-                  <div key={member.id} className="flex items-center justify-between p-2 rounded-lg border border-zinc-200">
+                  <div key={member.id} className="flex items-center justify-between p-2 rounded-lg border border-gray-200">
                     <div className="flex items-center gap-2">
                       <Avatar className="h-6 w-6">
-                        <AvatarFallback className="text-[10px] bg-zinc-200 text-zinc-600">
+                        <AvatarFallback className="text-[10px] bg-gray-200 text-gray-600">
                           {member.name.split(' ').map(n => n[0]).join('')}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="text-sm text-zinc-800">{member.name}</span>
+                      <span className="text-sm text-gray-800">{member.name}</span>
                     </div>
                     <Button
                       variant="ghost"
@@ -758,7 +758,7 @@ const CRMCommunicationPanel = () => {
                 {callTarget?.name.split(' ').map(n => n[0]).join('')}
               </AvatarFallback>
             </Avatar>
-            <p className="text-lg font-semibold text-zinc-800">{callTarget?.name}</p>
+            <p className="text-lg font-semibold text-gray-800">{callTarget?.name}</p>
             <p className="text-sm text-gray-500">{callTarget?.role}</p>
             <p className="text-xs text-gray-500 mt-4 animate-pulse">
               {callType === 'video' ? 'Starting video call...' : 'Calling...'}

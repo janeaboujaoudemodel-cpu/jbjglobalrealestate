@@ -110,7 +110,7 @@ const VisitorDashboard = () => {
               const Icon = action.icon;
               return (
                 <Link key={action.title} to={action.href}>
-                  <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/50 transition-all duration-300 h-full group cursor-pointer">
+                  <Card className="bg-zinc-900/50 border-gray-800 hover:border-gold/50 transition-all duration-300 h-full group cursor-pointer">
                     <CardHeader>
                       <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${action.bgGradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                         <Icon className={`w-7 h-7 ${action.color}`} />
@@ -141,9 +141,9 @@ const VisitorDashboard = () => {
                 const Icon = item.icon;
                 return (
                   <Link key={item.title} to={item.href}>
-                    <Card className="bg-zinc-900/30 border-zinc-800 hover:border-zinc-700 transition-all group cursor-pointer">
+                    <Card className="bg-zinc-900/30 border-gray-800 hover:border-gray-700 transition-all group cursor-pointer">
                       <CardContent className="flex items-center gap-4 p-5">
-                        <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center group-hover:bg-zinc-700 transition-colors">
+                        <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center group-hover:bg-gray-700 transition-colors">
                           <Icon className="w-6 h-6 text-white/70 group-hover:text-gold transition-colors" />
                         </div>
                         <div>
@@ -180,7 +180,7 @@ const VisitorDashboard = () => {
                     </Button>
                   </Link>
                   <Link to="/auth">
-                    <Button variant="outline" className="border-zinc-700 text-white hover:bg-zinc-800">
+                    <Button variant="outline" className="border-gray-700 text-white hover:bg-gray-800">
                       <LogIn className="w-4 h-4 mr-2" />
                       Log In
                     </Button>

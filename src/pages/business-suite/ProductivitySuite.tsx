@@ -150,10 +150,10 @@ const ChampagneToolCard = ({
       <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradientFrom} ${gradientTo} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-md`}>
         <Icon className="w-6 h-6 text-white" />
       </div>
-      <h3 className={`text-base font-bold ${colorClass} mb-2 text-zinc-900 group-hover:text-gold transition-colors`}>
+      <h3 className={`text-base font-bold ${colorClass} mb-2 text-gray-900 group-hover:text-gold transition-colors`}>
         {title}
       </h3>
-      <p className="text-sm text-zinc-600 leading-relaxed flex-grow">
+      <p className="text-sm text-gray-600 leading-relaxed flex-grow">
         {description}
       </p>
       <div className="mt-4 text-sm font-semibold text-gold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
@@ -174,14 +174,14 @@ const ProductivitySuite = () => {
         <div className="relative max-w-6xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border-2 border-gold/50 bg-white/60 backdrop-blur-sm mb-6 shadow-sm">
             <Sparkles className="w-4 h-4 text-gold" />
-            <span className="text-zinc-800 font-semibold text-sm tracking-wide">JBJ Royal Tools Hub</span>
+            <span className="text-gray-800 font-semibold text-sm tracking-wide">JBJ Royal Tools Hub</span>
           </div>
           
-          <h1 className="text-3xl md:text-5xl font-bold text-zinc-900 mb-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
             Corporate & <span style={{ background: 'linear-gradient(135deg, #C8A766 0%, #D4AF37 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Productivity</span> Suite
           </h1>
           
-          <p className="text-base md:text-lg text-zinc-600 max-w-2xl mx-auto mb-8">
+          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto mb-8">
             Everything you need to create, brand, sign, and manage — stamps, business cards, logos, 
             resumes, cover letters, and more. All in one premium hub.
           </p>
@@ -204,7 +204,7 @@ const ProductivitySuite = () => {
       <div className="max-w-7xl mx-auto px-4 pb-12">
         <div className="flex items-center gap-4 mb-8">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-          <span className="text-xs font-bold text-zinc-700 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-gold/40 bg-white/50">Corporate Identity & Documents</span>
+          <span className="text-xs font-bold text-gray-700 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-gold/40 bg-white/50">Corporate Identity & Documents</span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -218,7 +218,7 @@ const ProductivitySuite = () => {
       <div className="max-w-7xl mx-auto px-4 pb-20">
         <div className="flex items-center gap-4 mb-8">
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
-          <span className="text-xs font-bold text-zinc-700 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-cyan-400/40 bg-white/50">Productivity</span>
+          <span className="text-xs font-bold text-gray-700 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-cyan-400/40 bg-white/50">Productivity</span>
           <div className="h-px flex-1 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">

@@ -146,7 +146,7 @@ const OwnerSafetyPage = () => {
                 {['Read and categorize incoming messages', 'Draft text and voice reply suggestions', 'Score and prioritize leads', 'Create task and follow-up suggestions', 'Log interactions to CRM (with approval)'].map(text => (
                   <div key={text} className="flex items-start gap-3 text-sm">
                     <Check className="w-4 h-4 text-green-600 mt-0.5" />
-                    <span className="text-zinc-700">{text}</span>
+                    <span className="text-gray-700">{text}</span>
                   </div>
                 ))}
               </CardContent>
@@ -163,7 +163,7 @@ const OwnerSafetyPage = () => {
                 {['Send messages without explicit owner approval', 'Make calls or initiate communications', 'Delete or modify existing data', 'Access financial or payment systems', 'Take any action autonomously'].map(text => (
                   <div key={text} className="flex items-start gap-3 text-sm">
                     <X className="w-4 h-4 text-red-500 mt-0.5" />
-                    <span className="text-zinc-700">{text}</span>
+                    <span className="text-gray-700">{text}</span>
                   </div>
                 ))}
               </CardContent>
@@ -176,7 +176,7 @@ const OwnerSafetyPage = () => {
               <Eye className="w-5 h-5 text-purple-600 mt-0.5" />
               <div>
                 <h3 className="font-semibold text-purple-700">Approval-First Hybrid Mode</h3>
-                <p className="text-sm text-zinc-600 mt-1">
+                <p className="text-sm text-gray-600 mt-1">
                   The AI operates in <strong>Hybrid Mode</strong>. It can read, draft, and suggest, 
                   but <strong>NEVER sends messages or takes actions without explicit manual approval</strong> from the Owner.
                   Features marked with a badge require individual approval for each action.

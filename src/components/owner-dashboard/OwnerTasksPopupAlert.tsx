@@ -59,7 +59,7 @@ export function OwnerTasksPopupAlert() {
       <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 rounded-2xl shadow-2xl shadow-[#B89555]/20 p-6 md:p-8 max-w-md w-[90vw] relative">
         <button
           onClick={handleDismiss}
-          className="absolute top-3 right-3 text-gray-500 hover:text-zinc-600 transition-colors"
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-600 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
@@ -90,7 +90,7 @@ export function OwnerTasksPopupAlert() {
           <Button
             variant="outline"
             onClick={handleDismiss}
-            className="border-[#B89555]/30 text-zinc-600 hover:bg-[#B89555]/10 rounded-xl"
+            className="border-[#B89555]/30 text-gray-600 hover:bg-[#B89555]/10 rounded-xl"
           >
             Later
           </Button>

@@ -116,7 +116,7 @@ const ListingPortal = () => {
                 List Your Property with{" "}
                 <span className="text-gold">JBJ</span>
               </h1>
-              <p className="text-zinc-600 mb-2">
+              <p className="text-gray-600 mb-2">
                 Submit your property for sale or rent — manually or with AI assistance.
               </p>
               <p className="text-gray-500 text-sm">
@@ -144,19 +144,19 @@ const ListingPortal = () => {
                           <ClipboardCheck className="w-7 h-7 text-gold" />
                         </div>
                         <h2 className="text-xl font-bold text-black mb-2">Manual Listing</h2>
-                        <p className="text-zinc-600 text-sm mb-4 leading-relaxed">
+                        <p className="text-gray-600 text-sm mb-4 leading-relaxed">
                           Fill in your property details step by step. Upload photos, documents, and set your price manually with full control.
                         </p>
                         <ul className="space-y-2 mb-6">
-                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                          <li className="flex items-center gap-2 text-gray-700 text-sm">
                             <FileText className="w-4 h-4 text-gold" />
                             Step-by-step guided form
                           </li>
-                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                          <li className="flex items-center gap-2 text-gray-700 text-sm">
                             <Upload className="w-4 h-4 text-gold" />
                             Upload photos & documents
                           </li>
-                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                          <li className="flex items-center gap-2 text-gray-700 text-sm">
                             <Star className="w-4 h-4 text-gold" />
                             AI description generator included
                           </li>
@@ -186,19 +186,19 @@ const ListingPortal = () => {
                           <Wand2 className="w-7 h-7 text-gold" />
                         </div>
                         <h2 className="text-xl font-bold text-black mb-2">List with AI</h2>
-                        <p className="text-zinc-600 text-sm mb-4 leading-relaxed">
+                        <p className="text-gray-600 text-sm mb-4 leading-relaxed">
                           Upload brochures, photos, or documents and let AI extract all property details automatically.
                         </p>
                         <ul className="space-y-2 mb-6">
-                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                          <li className="flex items-center gap-2 text-gray-700 text-sm">
                             <Wand2 className="w-4 h-4 text-gold" />
                             AI extracts all property data
                           </li>
-                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                          <li className="flex items-center gap-2 text-gray-700 text-sm">
                             <Eye className="w-4 h-4 text-gold" />
                             Review & edit before submitting
                           </li>
-                          <li className="flex items-center gap-2 text-zinc-700 text-sm">
+                          <li className="flex items-center gap-2 text-gray-700 text-sm">
                             <Sparkles className="w-4 h-4 text-gold" />
                             Supports brochures, PDFs & images
                           </li>
@@ -243,7 +243,7 @@ const ListingPortal = () => {
                           <DollarSign className="w-8 h-8 text-gold" />
                         </div>
                         <h3 className="text-xl font-bold text-black mb-2">List for Sale</h3>
-                        <p className="text-zinc-600 text-sm mb-4">
+                        <p className="text-gray-600 text-sm mb-4">
                           Sell your property at the best market price with professional listing support.
                         </p>
                         <div className="flex items-center justify-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
@@ -262,7 +262,7 @@ const ListingPortal = () => {
                           <Home className="w-8 h-8 text-gold" />
                         </div>
                         <h3 className="text-xl font-bold text-black mb-2">List for Rent</h3>
-                        <p className="text-zinc-600 text-sm mb-4">
+                        <p className="text-gray-600 text-sm mb-4">
                           Find reliable tenants for your property with our rental listing service.
                         </p>
                         <div className="flex items-center justify-center gap-2 text-gold font-semibold text-sm group-hover:gap-3 transition-all">
@@ -319,7 +319,7 @@ const ListingPortal = () => {
                       className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm border transition-all ${
                         typeFilter === f.id
                           ? 'bg-gold/20 border-gold/50 text-gold'
-                          : 'bg-white border-gold/20 text-zinc-600 hover:border-gold/40'
+                          : 'bg-white border-gold/20 text-gray-600 hover:border-gold/40'
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -339,7 +339,7 @@ const ListingPortal = () => {
                       className={`flex-1 flex items-center justify-center gap-1.5 px-4 py-2 rounded-full text-sm border transition-all ${
                         typeFilter === f.id
                           ? 'bg-gold/20 border-gold/50 text-gold'
-                          : 'bg-white border-gold/20 text-zinc-600 hover:border-gold/40'
+                          : 'bg-white border-gold/20 text-gray-600 hover:border-gold/40'
                       }`}
                     >
                       <Icon className="w-3.5 h-3.5" />
@@ -401,7 +401,7 @@ const ListingPortal = () => {
                           {listing.is_featured && (
                             <Badge className="absolute top-3 left-3 bg-gold text-black text-xs border-0">Featured</Badge>
                           )}
-                          <Badge className="absolute top-3 right-3 bg-white/90 text-zinc-700 text-xs border-gold/20">
+                          <Badge className="absolute top-3 right-3 bg-white/90 text-gray-700 text-xs border-gold/20">
                             {listing.listing_type === 'sale' ? 'For Sale' : listing.listing_type === 'yearly_rent' ? 'Rent' : listing.listing_type.replace('_', ' ')}
                           </Badge>
                         </div>

@@ -640,11 +640,11 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
             placeholder="Search notes..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-zinc-50 border-gold/20 text-black"
+            className="pl-10 bg-gray-50 border-gold/20 text-black"
           />
         </div>
         <Select value={selectedProject} onValueChange={setSelectedProject}>
-          <SelectTrigger className="w-full md:w-[200px] bg-zinc-50 border-gold/20 text-black">
+          <SelectTrigger className="w-full md:w-[200px] bg-gray-50 border-gold/20 text-black">
             <SelectValue placeholder="All Projects" />
           </SelectTrigger>
           <SelectContent>
@@ -796,7 +796,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
               </DialogHeader>
               
               <Tabs defaultValue="content" className="mt-4">
-                <TabsList className="bg-zinc-50 border border-[#B89555]/20">
+                <TabsList className="bg-gray-50 border border-[#B89555]/20">
                   <TabsTrigger value="content">Content</TabsTrigger>
                   <TabsTrigger value="summary">Summary</TabsTrigger>
                   <TabsTrigger value="actions">Action Items</TabsTrigger>
@@ -804,7 +804,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                 
                 <TabsContent value="content" className="mt-4">
                   <div className="prose max-w-none">
-                    <p className="text-zinc-700 whitespace-pre-wrap">{activeNote.content}</p>
+                    <p className="text-gray-700 whitespace-pre-wrap">{activeNote.content}</p>
                   </div>
                 </TabsContent>
                 
@@ -816,7 +816,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                           <Sparkles className="w-4 h-4 text-[#B89555]" />
                           <span className="text-[#B89555] font-medium">Generated Summary</span>
                         </div>
-                        <p className="text-zinc-700 whitespace-pre-wrap">{activeNote.ai_summary}</p>
+                        <p className="text-gray-700 whitespace-pre-wrap">{activeNote.ai_summary}</p>
                       </div>
                     </div>
                   ) : (
@@ -828,9 +828,9 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                   {activeNote.ai_action_items && activeNote.ai_action_items.length > 0 ? (
                     <div className="space-y-2">
                       {activeNote.ai_action_items.map((item: any, i: number) => (
-                        <div key={i} className="flex items-start gap-3 p-3 bg-zinc-50 rounded-lg border border-zinc-200">
+                        <div key={i} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                           <CheckCircle className={`w-5 h-5 mt-0.5 ${item.completed ? 'text-green-600' : 'text-gray-500'}`} />
-                          <span className={`text-zinc-700 ${item.completed ? 'line-through opacity-50' : ''}`}>
+                          <span className={`text-gray-700 ${item.completed ? 'line-through opacity-50' : ''}`}>
                             {item.text}
                           </span>
                         </div>
@@ -875,17 +875,17 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
           
           <div className="space-y-4 mt-4">
             <div className="space-y-2">
-              <Label className="text-zinc-600">Title</Label>
-              <Input value={newNote.title} onChange={(e) => setNewNote(prev => ({ ...prev, title: e.target.value }))} placeholder="Note title..." className="bg-zinc-50 border-[#B89555]/20 text-black" />
+              <Label className="text-gray-600">Title</Label>
+              <Input value={newNote.title} onChange={(e) => setNewNote(prev => ({ ...prev, title: e.target.value }))} placeholder="Note title..." className="bg-gray-50 border-[#B89555]/20 text-black" />
             </div>
             <div className="space-y-2">
-              <Label className="text-zinc-600">Content</Label>
-              <Textarea value={newNote.content} onChange={(e) => setNewNote(prev => ({ ...prev, content: e.target.value }))} placeholder="Write your note here..." className="bg-zinc-50 border-[#B89555]/20 text-black min-h-[200px]" />
+              <Label className="text-gray-600">Content</Label>
+              <Textarea value={newNote.content} onChange={(e) => setNewNote(prev => ({ ...prev, content: e.target.value }))} placeholder="Write your note here..." className="bg-gray-50 border-[#B89555]/20 text-black min-h-[200px]" />
             </div>
             <div className="space-y-2">
-              <Label className="text-zinc-600">Project (optional)</Label>
+              <Label className="text-gray-600">Project (optional)</Label>
               <Select value={newNote.project_id} onValueChange={(v) => setNewNote(prev => ({ ...prev, project_id: v }))}>
-                <SelectTrigger className="bg-zinc-50 border-[#B89555]/20 text-black">
+                <SelectTrigger className="bg-gray-50 border-[#B89555]/20 text-black">
                   <SelectValue placeholder="Select project" />
                 </SelectTrigger>
                 <SelectContent>
@@ -917,15 +917,15 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
           </DialogHeader>
           <div className="space-y-4 mt-4">
             <div className="space-y-2">
-              <Label className="text-zinc-600">Project Name</Label>
-              <Input value={newProject.name} onChange={(e) => setNewProject(prev => ({ ...prev, name: e.target.value }))} placeholder="e.g., Client Meetings Q1" className="bg-zinc-50 border-[#B89555]/20 text-black" />
+              <Label className="text-gray-600">Project Name</Label>
+              <Input value={newProject.name} onChange={(e) => setNewProject(prev => ({ ...prev, name: e.target.value }))} placeholder="e.g., Client Meetings Q1" className="bg-gray-50 border-[#B89555]/20 text-black" />
             </div>
             <div className="space-y-2">
-              <Label className="text-zinc-600">Description (optional)</Label>
-              <Textarea value={newProject.description} onChange={(e) => setNewProject(prev => ({ ...prev, description: e.target.value }))} placeholder="Project description..." className="bg-zinc-50 border-[#B89555]/20 text-black" />
+              <Label className="text-gray-600">Description (optional)</Label>
+              <Textarea value={newProject.description} onChange={(e) => setNewProject(prev => ({ ...prev, description: e.target.value }))} placeholder="Project description..." className="bg-gray-50 border-[#B89555]/20 text-black" />
             </div>
             <div className="space-y-2">
-              <Label className="text-zinc-600">Color</Label>
+              <Label className="text-gray-600">Color</Label>
               <div className="flex gap-2">
                 {['#A8925A', '#DC2626', '#3B82F6', '#059669', '#8B5CF6', '#F59E0B'].map(color => (
                   <button key={color} onClick={() => setNewProject(prev => ({ ...prev, color }))} className={`w-8 h-8 rounded-full transition-transform ${newProject.color === color ? 'ring-2 ring-[#B89555] ring-offset-2 scale-110' : ''}`} style={{ backgroundColor: color }} />

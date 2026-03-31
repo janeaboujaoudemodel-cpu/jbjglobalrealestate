@@ -172,7 +172,7 @@ const CRMLeadModal = ({ open, onClose, onSuccess, userId }: CRMLeadModalProps) =
       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
         <DialogHeader className="pt-2">
           <DialogTitle className="text-black">Add New Lead</DialogTitle>
-          <DialogDescription className="text-zinc-600">
+          <DialogDescription className="text-gray-600">
             Create a new lead in "My Own Leads" (Source: Manual Entry)
           </DialogDescription>
         </DialogHeader>

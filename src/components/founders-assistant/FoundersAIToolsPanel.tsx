@@ -81,7 +81,7 @@ const ALL_CATEGORIES = ['All', 'Communication', 'Lead & Sales', 'Property Intell
 const statusConfig = {
   connected: { label: 'Connected', color: 'bg-green-50 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
   available: { label: 'Available', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: <Clock className="w-3 h-3" /> },
-  coming_soon: { label: 'Coming Soon', color: 'bg-zinc-100 text-gray-500 border-zinc-200', icon: <AlertCircle className="w-3 h-3" /> },
+  coming_soon: { label: 'Coming Soon', color: 'bg-gray-100 text-gray-500 border-gray-200', icon: <AlertCircle className="w-3 h-3" /> },
 };
 
 const FoundersAIToolsPanel: React.FC = () => {
@@ -176,7 +176,7 @@ const FoundersAIToolsPanel: React.FC = () => {
       <Card className={`bg-white border-2 border-[#B89555]/20 hover:border-[#B89555]/40 hover:shadow-[0_0_20px_rgba(200,167,102,0.2)] transition-all h-full ${executingTool === tool.id ? 'ring-2 ring-[#B89555]/50' : ''}`}>
         <CardContent className="p-4 flex flex-col h-full">
           <div className="flex items-start justify-between mb-3">
-            <div className={`p-2.5 rounded-lg ${tool.status === 'connected' ? 'bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/30' : 'bg-zinc-100 text-gray-500 border border-zinc-200'}`}>
+            <div className={`p-2.5 rounded-lg ${tool.status === 'connected' ? 'bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/30' : 'bg-gray-100 text-gray-500 border border-gray-200'}`}>
               {tool.icon}
             </div>
             <Badge className={`${statusConfig[tool.status].color} border`}>
@@ -194,7 +194,7 @@ const FoundersAIToolsPanel: React.FC = () => {
               disabled={tool.status === 'coming_soon' || executingTool === tool.id}
               className={tool.status === 'connected'
                 ? 'bg-white text-[#B89555] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555]'
-                : 'bg-zinc-100 text-gray-500 border border-zinc-200'
+                : 'bg-gray-100 text-gray-500 border border-gray-200'
               }
             >
               {executingTool === tool.id ? (

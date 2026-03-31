@@ -275,7 +275,7 @@ const InquiryManagementHub: React.FC = () => {
               ) : isError ? (
                 <div className="text-center py-20">
                   <AlertTriangle className="w-12 h-12 mx-auto text-red-400 mb-3" />
-                  <p className="text-zinc-600">Could not load inquiries.</p>
+                  <p className="text-gray-600">Could not load inquiries.</p>
                   <p className="text-xs text-gray-500 mt-1">{error instanceof Error ? error.message : 'Please try again.'}</p>
                 </div>
               ) : filtered.length === 0 ? (
@@ -399,12 +399,12 @@ const InquiryManagementHub: React.FC = () => {
                     <div>
                       <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Contact</p>
                       <p className="font-semibold text-black">{selectedInquiry.full_name}</p>
-                      <div className="flex items-center gap-1.5 mt-1 text-sm text-zinc-600">
+                      <div className="flex items-center gap-1.5 mt-1 text-sm text-gray-600">
                         <Mail className="w-3.5 h-3.5" />
                         <a href={`mailto:${selectedInquiry.email}`} className="hover:text-gold">{selectedInquiry.email}</a>
                       </div>
                       {selectedInquiry.phone && (
-                        <div className="flex items-center gap-1.5 mt-1 text-sm text-zinc-600">
+                        <div className="flex items-center gap-1.5 mt-1 text-sm text-gray-600">
                           <Phone className="w-3.5 h-3.5" />
                           <span>{selectedInquiry.phone}</span>
                         </div>

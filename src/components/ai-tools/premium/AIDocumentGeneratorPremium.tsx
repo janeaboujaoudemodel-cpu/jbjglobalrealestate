@@ -281,7 +281,7 @@ const AIDocumentGeneratorPremium = () => {
   const renderField = (field: FieldConfig) => {
     const value = typeFields[field.key] || "";
     const baseInputClass =
-      "bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors placeholder:text-zinc-600";
+      "bg-zinc-900/50 border-lime-500/30 text-white hover:border-lime-500/50 focus:border-lime-400 transition-colors placeholder:text-gray-600";
 
     if (field.type === "input") {
       return (
@@ -334,7 +334,7 @@ const AIDocumentGeneratorPremium = () => {
               className={`px-3 py-1.5 rounded-full text-xs border transition-all ${
                 value === opt
                   ? "bg-lime-500/20 border-lime-500 text-lime-400"
-                  : "bg-zinc-800 border-zinc-700 text-white/70 hover:border-zinc-500"
+                  : "bg-zinc-800 border-gray-700 text-white/70 hover:border-gray-500"
               }`}
             >
               {opt}
@@ -378,7 +378,7 @@ const AIDocumentGeneratorPremium = () => {
                       {copied === "sms" ? <Check className="h-4 w-4 text-lime-400" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
-                  <div className="bg-zinc-800/60 p-3 rounded-lg text-zinc-200 text-sm">
+                  <div className="bg-zinc-800/60 p-3 rounded-lg text-gray-200 text-sm">
                     {response.smsVersion}
                   </div>
                 </CardContent>
@@ -399,7 +399,7 @@ const AIDocumentGeneratorPremium = () => {
                       {copied === "wa" ? <Check className="h-4 w-4 text-lime-400" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
-                  <div className="bg-zinc-800/60 p-3 rounded-lg text-zinc-200 text-sm">
+                  <div className="bg-zinc-800/60 p-3 rounded-lg text-gray-200 text-sm">
                     {response.whatsappVersion}
                   </div>
                 </CardContent>
@@ -598,7 +598,7 @@ const AIDocumentGeneratorPremium = () => {
                       className={`p-3 rounded-lg border text-left transition-all ${
                         documentType === typeKey
                           ? "bg-lime-500/20 border-lime-500/60 text-white"
-                          : "bg-zinc-800 border-zinc-700 text-white/70 hover:border-zinc-600"
+                          : "bg-zinc-800 border-gray-700 text-white/70 hover:border-gray-600"
                       }`}
                     >
                       <TypeIcon className="h-4 w-4 mb-1" />
@@ -702,7 +702,7 @@ const AIDocumentGeneratorPremium = () => {
         {/* ── Brand Assets Section ── */}
         <Collapsible open={brandAssetsOpen} onOpenChange={setBrandAssetsOpen}>
           <CollapsibleTrigger asChild>
-            <button className="w-full flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 border border-zinc-700 hover:border-lime-500/30 transition-all">
+            <button className="w-full flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 border border-gray-700 hover:border-lime-500/30 transition-all">
               <div className="flex items-center gap-2 text-white/85">
                 <Package className="h-4 w-4 text-lime-400" />
                 <span className="text-sm font-medium">Brand Assets</span>
@@ -714,14 +714,14 @@ const AIDocumentGeneratorPremium = () => {
             </button>
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-3">
-            <div className="rounded-lg bg-zinc-800/30 border border-zinc-700/50 p-4 space-y-3">
+            <div className="rounded-lg bg-zinc-800/30 border border-gray-700/50 p-4 space-y-3">
               <p className="text-xs text-white/60">Select a saved logo, stamp, or signature to include in your document.</p>
               {loadingAssets ? (
                 <div className="flex justify-center py-6">
                   <Loader2 size={18} className="animate-spin text-white/60" />
                 </div>
               ) : brandAssets.length === 0 ? (
-                <p className="text-xs text-zinc-600 text-center py-4">No brand assets saved yet.</p>
+                <p className="text-xs text-gray-600 text-center py-4">No brand assets saved yet.</p>
               ) : (
                 <div className="grid grid-cols-4 gap-2">
                   {brandAssets.slice(0, 8).map((asset: any) => (
@@ -731,7 +731,7 @@ const AIDocumentGeneratorPremium = () => {
                       className={`rounded-lg border-2 p-2 transition-all ${
                         selectedAsset?.id === asset.id
                           ? 'border-lime-500 bg-lime-500/10'
-                          : 'border-zinc-700 hover:border-zinc-600'
+                          : 'border-gray-700 hover:border-gray-600'
                       }`}
                     >
                       <div className="aspect-square flex items-center justify-center bg-white rounded mb-1">

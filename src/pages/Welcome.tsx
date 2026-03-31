@@ -77,7 +77,7 @@ export default function Welcome() {
       toast.success(
         <div className="flex flex-col gap-1">
           <span className="font-semibold">Welcome to JBJ Global!</span>
-          <span className="text-sm text-zinc-600">
+          <span className="text-sm text-gray-600">
             Your {CATEGORIES.find(c => c.id === selected)?.label} experience is ready.
           </span>
         </div>,
@@ -119,7 +119,7 @@ export default function Welcome() {
           <h1 className="text-3xl font-bold text-black mb-2">
             Welcome to <span className="text-gold">JBJ Global</span>
           </h1>
-          <p className="text-zinc-600 text-sm">
+          <p className="text-gray-600 text-sm">
             {user.email && (
               <span>Signed in as <span className="font-medium text-black">{user.email}</span> · </span>
             )}
@@ -166,7 +166,7 @@ export default function Welcome() {
                 {/* Features */}
                 <div className="space-y-1">
                   {cat.features.map((f) => (
-                    <div key={f} className="flex items-center gap-2 text-xs text-zinc-600">
+                    <div key={f} className="flex items-center gap-2 text-xs text-gray-600">
                       <Sparkles className="w-3 h-3 text-gold/50 flex-shrink-0" />
                       <span>{f}</span>
                     </div>

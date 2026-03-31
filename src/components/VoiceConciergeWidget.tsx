@@ -250,7 +250,7 @@ const VoiceConciergeWidget = () => {
       {/* Close/minimize button - clicking X turns it into phone icon */}
       <button
         onClick={handleMinimize}
-        className="absolute -top-2 -right-2 w-6 h-6 bg-zinc-800 hover:bg-zinc-700 text-white/70 hover:text-white rounded-full shadow-md flex items-center justify-center transition-colors z-10"
+        className="absolute -top-2 -right-2 w-6 h-6 bg-zinc-800 hover:bg-gray-700 text-white/70 hover:text-white rounded-full shadow-md flex items-center justify-center transition-colors z-10"
         aria-label="Minimize voice concierge"
       >
         <X className="w-3.5 h-3.5" />

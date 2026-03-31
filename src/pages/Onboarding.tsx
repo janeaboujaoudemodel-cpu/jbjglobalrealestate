@@ -227,7 +227,7 @@ export default function Onboarding() {
             <div className="jj-layer-active rounded-2xl p-6">
               <div className="jj-card-inner border-2 border-gold rounded-xl p-8 text-center">
                 <h2 className="text-2xl font-bold text-black mb-4">No Application Found</h2>
-                <p className="text-zinc-600 mb-6">You haven't submitted an application yet.</p>
+                <p className="text-gray-600 mb-6">You haven't submitted an application yet.</p>
                 <Button asChild variant="primary">
                   <Link to="/join">Apply Now</Link>
                 </Button>
@@ -258,7 +258,7 @@ export default function Onboarding() {
                 <div className="mt-2 mb-6">{getStatusBadge(application.status)}</div>
                 {application.status === "pending" ? (
                   <>
-                    <p className="text-zinc-600 mb-4">
+                    <p className="text-gray-600 mb-4">
                       Thank you for your application, {application.full_name}. Our team is reviewing your submission and will get back to you soon.
                     </p>
                     <p className="text-sm text-white/60">
@@ -267,13 +267,13 @@ export default function Onboarding() {
                   </>
                 ) : (
                   <>
-                    <p className="text-zinc-600 mb-4">
+                    <p className="text-gray-600 mb-4">
                       Unfortunately, your application was not approved at this time.
                     </p>
                     {application.rejection_reason && (
                       <div className="jj-card-inner border border-gold/20 p-4 rounded-lg text-left mb-4">
                         <p className="text-sm font-medium text-black mb-1">Reason:</p>
-                        <p className="text-sm text-zinc-600">{application.rejection_reason}</p>
+                        <p className="text-sm text-gray-600">{application.rejection_reason}</p>
                       </div>
                     )}
                     <p className="text-sm text-white/60">
@@ -308,7 +308,7 @@ export default function Onboarding() {
           <h1 className="text-3xl font-bold text-black mb-2">
             Welcome, <span className="text-gold">{application.full_name}!</span>
           </h1>
-          <p className="text-zinc-600">
+          <p className="text-gray-600">
             Complete your training modules and quizzes to become a certified broker partner.
           </p>
           <div className="mt-2">{getStatusBadge(application.status)}</div>
@@ -322,7 +322,7 @@ export default function Onboarding() {
                 style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
                 <Building2 className="h-5 w-5 text-black" />
               </div>
-              <span className="text-sm font-medium text-zinc-600">Company Knowledge</span>
+              <span className="text-sm font-medium text-gray-600">Company Knowledge</span>
             </div>
             <div className="text-2xl font-bold text-gold">
               {companyProgress.avgScore.toFixed(0)}%
@@ -339,7 +339,7 @@ export default function Onboarding() {
                 style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
                 <Briefcase className="h-5 w-5 text-black" />
               </div>
-              <span className="text-sm font-medium text-zinc-600">Real Estate Basics</span>
+              <span className="text-sm font-medium text-gray-600">Real Estate Basics</span>
             </div>
             <div className="text-2xl font-bold text-gold">
               {realEstateProgress.avgScore.toFixed(0)}%
@@ -356,7 +356,7 @@ export default function Onboarding() {
                 style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}>
                 <Trophy className="h-5 w-5 text-black" />
               </div>
-              <span className="text-sm font-medium text-zinc-600">Combined Score</span>
+              <span className="text-sm font-medium text-gray-600">Combined Score</span>
             </div>
             <div className="text-2xl font-bold text-gold">
               {combinedAvg.toFixed(0)}%
@@ -386,7 +386,7 @@ export default function Onboarding() {
               {companyModules.length === 0 ? (
                 <div className="jj-card-inner border-2 border-gold rounded-xl p-12 text-center">
                   <BookOpen className="h-12 w-12 text-gold mx-auto mb-4" />
-                  <p className="text-zinc-600">No modules available yet. Check back soon!</p>
+                  <p className="text-gray-600">No modules available yet. Check back soon!</p>
                 </div>
               ) : (
                 companyModules.map((module) => {
@@ -407,7 +407,7 @@ export default function Onboarding() {
                           <div>
                             <h3 className="font-medium text-black">{module.title}</h3>
                             {bestAttempt ? (
-                              <p className="text-sm text-zinc-600">
+                              <p className="text-sm text-gray-600">
                                 Best score: {bestAttempt.score.toFixed(0)}%
                                 {bestAttempt.passed ? " ✓ Passed" : " (needs " + passThresholds.company + "% to pass)"}
                               </p>
@@ -433,7 +433,7 @@ export default function Onboarding() {
               {realEstateModules.length === 0 ? (
                 <div className="jj-card-inner border-2 border-gold rounded-xl p-12 text-center">
                   <BookOpen className="h-12 w-12 text-gold mx-auto mb-4" />
-                  <p className="text-zinc-600">No modules available yet. Check back soon!</p>
+                  <p className="text-gray-600">No modules available yet. Check back soon!</p>
                 </div>
               ) : (
                 realEstateModules.map((module) => {
@@ -454,7 +454,7 @@ export default function Onboarding() {
                           <div>
                             <h3 className="font-medium text-black">{module.title}</h3>
                             {bestAttempt ? (
-                              <p className="text-sm text-zinc-600">
+                              <p className="text-sm text-gray-600">
                                 Best score: {bestAttempt.score.toFixed(0)}%
                                 {bestAttempt.passed ? " ✓ Passed" : " (needs " + passThresholds.realEstate + "% to pass)"}
                               </p>
@@ -484,7 +484,7 @@ export default function Onboarding() {
             <div className="jj-card-inner border-2 border-gold rounded-xl p-8 text-center">
               <GraduationCap className="h-16 w-16 text-gold mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-black mb-2">Congratulations!</h3>
-              <p className="text-zinc-600 mb-6">You have completed your training and earned your certificate.</p>
+              <p className="text-gray-600 mb-6">You have completed your training and earned your certificate.</p>
               <CertificateGenerator isEligible={true} existingCertificate={certificate} />
             </div>
           </div>

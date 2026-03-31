@@ -173,7 +173,7 @@ export function FoundersEmotionAnalyticsPanel() {
               <CardContent>
                 <div className="space-y-3">
                   {topTriggers.map(({ trigger, count }, index) => (
-                    <motion.div key={trigger} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }} className="flex items-center justify-between p-3 rounded-lg bg-zinc-50 border border-[#B89555]/10">
+                    <motion.div key={trigger} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1 }} className="flex items-center justify-between p-3 rounded-lg bg-gray-50 border border-[#B89555]/10">
                       <div className="flex items-center gap-3"><span className="text-lg font-bold text-[#B89555]">#{index + 1}</span><span className="text-black text-sm">{trigger}</span></div>
                       <Badge variant="outline" className="border-[#B89555]/30 text-[#B89555]">{count}x</Badge>
                     </motion.div>
@@ -190,7 +190,7 @@ export function FoundersEmotionAnalyticsPanel() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {channelStats.map((ch) => (
-                  <div key={ch.channel} className="p-4 rounded-lg bg-zinc-50 border border-[#B89555]/10">
+                  <div key={ch.channel} className="p-4 rounded-lg bg-gray-50 border border-[#B89555]/10">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
                         {ch.channel === 'WhatsApp' && <MessageSquare className="h-5 w-5 text-green-600" />}
@@ -199,7 +199,7 @@ export function FoundersEmotionAnalyticsPanel() {
                         {ch.channel === 'Phone' && <Phone className="h-5 w-5 text-amber-600" />}
                         <span className="font-semibold text-black">{ch.channel}</span>
                       </div>
-                      <Badge variant="outline" className="text-gray-500 border-zinc-300">{ch.total} total</Badge>
+                      <Badge variant="outline" className="text-gray-500 border-gray-300">{ch.total} total</Badge>
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2"><span className="text-xs text-gray-500 w-16">Positive</span><Progress value={(ch.positive / ch.total) * 100} className="h-2 flex-1" /><span className="text-xs text-green-600 w-8">{Math.round((ch.positive / ch.total) * 100)}%</span></div>
@@ -219,7 +219,7 @@ export function FoundersEmotionAnalyticsPanel() {
             <CardContent>
               <div className="space-y-4">
                 {teamSentiment.map((team) => (
-                  <div key={team.teamName} className="p-4 rounded-lg bg-zinc-50 border border-[#B89555]/10">
+                  <div key={team.teamName} className="p-4 rounded-lg bg-gray-50 border border-[#B89555]/10">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         {getSentimentIcon(team.sentiment)}

@@ -18,12 +18,12 @@ interface ApprovalTimelineProps {
 
 const STEP_STYLES = {
   pending: {
-    border: "border-zinc-400/30",
-    bg: "bg-zinc-500/10",
+    border: "border-gray-400/30",
+    bg: "bg-gray-500/10",
     icon: Clock,
     iconColor: "text-gray-500",
     label: "Pending",
-    badgeClass: "bg-zinc-500/10 text-gray-500 border-zinc-500/30",
+    badgeClass: "bg-gray-500/10 text-gray-500 border-gray-500/30",
   },
   in_review: {
     border: "border-amber-400/40",

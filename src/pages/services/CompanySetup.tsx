@@ -177,7 +177,7 @@ const CompanySetup = () => {
               Why This Matters for Investors
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner">
-              <p className="text-zinc-700 text-lg leading-relaxed">
+              <p className="text-gray-700 text-lg leading-relaxed">
                 Some investors structure ownership, operations, or tenancy through corporate entities. This page provides a clean pathway to get set up correctly with licensed professionals.
               </p>
             </motion.div>
@@ -205,7 +205,7 @@ const CompanySetup = () => {
               <motion.div variants={fadeInUp} className="jj-card-inner">
                 <ul className="space-y-4">
                   {whatWeProvide.map((item, idx) => (
-                    <li key={idx} className="flex items-start gap-4 text-zinc-700">
+                    <li key={idx} className="flex items-start gap-4 text-gray-700">
                       <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
                         <item.icon className="w-5 h-5 text-gold" />
                       </div>
@@ -283,7 +283,7 @@ const CompanySetup = () => {
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <ul className="space-y-4">
                 {typicalDocuments.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
+                  <li key={idx} className="flex items-start gap-3 text-gray-700">
                     <FolderOpen className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -325,7 +325,7 @@ const CompanySetup = () => {
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 pl-8">
+                    <AccordionContent className="text-gray-600 pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -353,7 +353,7 @@ const CompanySetup = () => {
             >
               Start company setup with a clear workflow
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
+            <motion.p variants={fadeInUp} className="text-gray-600 mb-8">
               Submit your intent and timeline to receive a structured checklist and next steps.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

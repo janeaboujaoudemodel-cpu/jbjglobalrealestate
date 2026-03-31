@@ -131,7 +131,7 @@ export function EmiratesMultiSelect({
                   >
                     <div className={cn(
                       "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                      isDark ? "border-zinc-600" : "border-gold/40",
+                      isDark ? "border-gray-600" : "border-gold/40",
                       isSelected && "bg-gold border-gold"
                     )}>
                       {isSelected && <Check className="w-3 h-3 text-black" />}
@@ -149,7 +149,7 @@ export function EmiratesMultiSelect({
           {/* Divider */}
           <div className={cn(
             "mx-3 border-t",
-            isDark ? "border-zinc-700" : "border-gold/20"
+            isDark ? "border-gray-700" : "border-gold/20"
           )} />
           
           {/* International Section */}
@@ -187,7 +187,7 @@ export function EmiratesMultiSelect({
                   >
                     <div className={cn(
                       "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                      isDark ? "border-zinc-600" : "border-gold/40",
+                      isDark ? "border-gray-600" : "border-gold/40",
                       isSelected && "bg-gold border-gold"
                     )}>
                       {isSelected && <Check className="w-3 h-3 text-black" />}
@@ -206,7 +206,7 @@ export function EmiratesMultiSelect({
         {/* Footer */}
         <div className={cn(
           "p-2 border-t flex items-center justify-between",
-          isDark ? "border-zinc-700 bg-[#151515]" : "border-gold/20 bg-champagne-light/50"
+          isDark ? "border-gray-700 bg-[#151515]" : "border-gold/20 bg-champagne-light/50"
         )}>
           <span className={cn(
             "text-xs",

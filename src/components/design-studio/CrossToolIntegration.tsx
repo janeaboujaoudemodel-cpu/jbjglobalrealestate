@@ -138,7 +138,7 @@ export const CrossToolIntegration: React.FC<CrossToolIntegrationProps> = ({
               transition={{ delay: index * 0.1 }}
             >
               <Link to={tool.path}>
-                <div className="group flex items-center gap-4 p-4 rounded-xl bg-white border border-zinc-200 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 transition-all duration-300">
+                <div className="group flex items-center gap-4 p-4 rounded-xl bg-white border border-gray-200 hover:border-gold/50 hover:shadow-lg hover:shadow-gold/10 transition-all duration-300">
                   <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
                     <tool.icon className="w-6 h-6 text-white" />
                   </div>
@@ -156,7 +156,7 @@ export const CrossToolIntegration: React.FC<CrossToolIntegrationProps> = ({
                         <Badge 
                           key={cap} 
                           variant="outline" 
-                          className="text-xs bg-zinc-50 border-zinc-200 text-zinc-600"
+                          className="text-xs bg-gray-50 border-gray-200 text-gray-600"
                         >
                           {cap}
                         </Badge>

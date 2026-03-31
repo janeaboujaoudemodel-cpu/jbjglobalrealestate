@@ -185,7 +185,7 @@ const CVRankingCard = ({
                 variant="outline"
                 size="sm"
                 onClick={() => onView(candidate.id)}
-                className="text-zinc-900 bg-white border-zinc-300 hover:bg-zinc-100 font-medium shadow-sm"
+                className="text-gray-900 bg-white border-gray-300 hover:bg-gray-100 font-medium shadow-sm"
               >
                 <Eye className="h-4 w-4 mr-1" />
                 Review
@@ -194,7 +194,7 @@ const CVRankingCard = ({
                 variant="outline"
                 size="sm"
                 onClick={() => onDownload(candidate.id)}
-                className="text-zinc-900 bg-amber-100 border-amber-400 hover:bg-amber-200 font-medium shadow-sm"
+                className="text-gray-900 bg-amber-100 border-amber-400 hover:bg-amber-200 font-medium shadow-sm"
               >
                 <Download className="h-4 w-4 mr-1" />
                 CV

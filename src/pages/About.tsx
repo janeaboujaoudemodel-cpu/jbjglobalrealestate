@@ -81,7 +81,7 @@ const SectionHeadline = ({ children, className = "" }: { children: React.ReactNo
 // Content text wrapper for readability - now defaults to dark text on pearl background
 const ContentText = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div 
-    className={`max-w-[680px] space-y-4 text-zinc-700 ${className}`}
+    className={`max-w-[680px] space-y-4 text-gray-700 ${className}`}
     style={{ fontSize: '17px', lineHeight: 1.75 }}
   >
     {children}
@@ -106,7 +106,7 @@ const FeatureCard = ({
       <Icon className="w-7 h-7 text-gold" />
     </div>
     <h3 className="text-black text-xl font-semibold mb-3">{title}</h3>
-    <p className="text-zinc-600 text-base leading-relaxed">{description}</p>
+    <p className="text-gray-600 text-base leading-relaxed">{description}</p>
   </motion.div>
 );
 
@@ -576,7 +576,7 @@ const About = () => {
                     Not Sure Where to Start?
                   </motion.h2>
                   <motion.p 
-                    className="text-zinc-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
+                    className="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
                     variants={fadeInUp}
                   >
                     Whether you are buying, renting, investing, or simply seeking clarity — our role is to guide you with precision, not pressure.

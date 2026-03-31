@@ -378,7 +378,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs font-semibold text-gold/80 uppercase tracking-wider">Recent Searches</p>
-                    <button onClick={handleClearRecent} className="text-xs text-gray-500 hover:text-zinc-700 transition-colors">Clear</button>
+                    <button onClick={handleClearRecent} className="text-xs text-gray-500 hover:text-gray-700 transition-colors">Clear</button>
                   </div>
                   <div className="space-y-1">
                     {recentSearches.map((search, i) => (
@@ -627,7 +627,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
 
               {/* Footer hint */}
               <div className="p-4 border-t border-gold/30 bg-white/50 flex-shrink-0">
-                <p className="text-zinc-600 text-sm text-center">
+                <p className="text-gray-600 text-sm text-center">
                   <kbd className="px-2 py-1 bg-black/10 rounded text-black font-mono text-xs">Enter</kbd> to select first result 
                   <span className="mx-3">•</span>
                   <kbd className="px-2 py-1 bg-black/10 rounded text-black font-mono text-xs">Esc</kbd> to close

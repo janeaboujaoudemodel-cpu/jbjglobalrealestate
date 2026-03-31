@@ -243,18 +243,18 @@ const LandlordGuide = () => {
             <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
               <span className="text-gold">Understanding</span> the Rental Market
             </h2>
-            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Dubai's rental market is regulated and data-driven. Rental values vary by area, building quality, unit size, furnishing level, and cheque structure.
             </p>
           </div>
 
           <div className="jj-box-active p-6 md:p-8">
-            <p className="text-zinc-700 mb-6 font-medium">Key points:</p>
+            <p className="text-gray-700 mb-6 font-medium">Key points:</p>
             <ul className="space-y-3">
               {rentalMarketPoints.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-zinc-700">{item}</span>
+                  <span className="text-gray-700">{item}</span>
                 </li>
               ))}
             </ul>
@@ -269,18 +269,18 @@ const LandlordGuide = () => {
             <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
               <span className="text-gold">Preparing</span> Your Property for Rent
             </h2>
-            <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               A well-prepared unit rents faster and attracts higher-quality tenants.
             </p>
           </div>
 
           <div className="jj-box-active p-6 md:p-8">
-            <p className="text-zinc-700 mb-6 font-medium">Checklist:</p>
+            <p className="text-gray-700 mb-6 font-medium">Checklist:</p>
             <ul className="space-y-3">
               {propertyPreparationChecklist.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                  <span className="text-zinc-700">{item}</span>
+                  <span className="text-gray-700">{item}</span>
                 </li>
               ))}
             </ul>
@@ -296,22 +296,22 @@ const LandlordGuide = () => {
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 3: <span className="text-gold">Rental Pricing</span> & Strategy
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Correct pricing reduces vacancy and protects yield.
               </p>
             </div>
 
             <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">What affects rent:</p>
+              <p className="text-gray-700 mb-6 font-medium">What affects rent:</p>
               <ul className="space-y-3 mb-6">
                 {pricingFactors.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              <p className="text-sm text-gray-600 italic border-t border-gold/30 pt-4">
                 JBJ provides rental pricing guidance based on live market data and comparable listings — not guesswork.
               </p>
             </div>
@@ -327,18 +327,18 @@ const LandlordGuide = () => {
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 4: <span className="text-gold">Marketing</span> & Exposure
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Your property should be marketed where qualified tenants search.
               </p>
             </div>
 
             <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Marketing includes:</p>
+              <p className="text-gray-700 mb-6 font-medium">Marketing includes:</p>
               <ul className="space-y-3">
                 {marketingIncludes.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -355,22 +355,22 @@ const LandlordGuide = () => {
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 5: <span className="text-gold">Tenant Screening</span> (Critical Step)
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Choosing the right tenant protects your asset.
               </p>
             </div>
 
             <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">What is verified:</p>
+              <p className="text-gray-700 mb-6 font-medium">What is verified:</p>
               <ul className="space-y-3 mb-6">
                 {tenantScreeningPoints.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              <p className="text-sm text-gray-600 italic border-t border-gold/30 pt-4">
                 JBJ focuses on risk reduction, not just speed.
               </p>
             </div>
@@ -386,18 +386,18 @@ const LandlordGuide = () => {
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 6: <span className="text-gold">Legal Framework</span> & Ejari
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Dubai tenancy contracts must comply with local regulations.
               </p>
             </div>
 
             <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Key legal points:</p>
+              <p className="text-gray-700 mb-6 font-medium">Key legal points:</p>
               <ul className="space-y-3">
                 {legalPoints.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -414,22 +414,22 @@ const LandlordGuide = () => {
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 7: <span className="text-gold">Costs</span> Landlords Should Expect
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Understanding costs avoids surprises.
               </p>
             </div>
 
             <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Typical costs:</p>
+              <p className="text-gray-700 mb-6 font-medium">Typical costs:</p>
               <ul className="space-y-3 mb-6">
                 {landlordCosts.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <Banknote className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              <p className="text-sm text-gray-600 italic border-t border-gold/30 pt-4">
                 JBJ does not charge hidden fees.
               </p>
             </div>
@@ -445,18 +445,18 @@ const LandlordGuide = () => {
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 8: <span className="text-gold">Handover</span> & Move-In
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Once terms are agreed:
               </p>
             </div>
 
             <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Process includes:</p>
+              <p className="text-gray-700 mb-6 font-medium">Process includes:</p>
               <ul className="space-y-3">
                 {handoverProcess.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <Key className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -473,18 +473,18 @@ const LandlordGuide = () => {
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 9: <span className="text-gold">Renewals</span>, Rent Increases & Notices
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 Landlord rights and obligations are regulated.
               </p>
             </div>
 
             <div className="jj-box-active p-6 md:p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Important rules:</p>
+              <p className="text-gray-700 mb-6 font-medium">Important rules:</p>
               <ul className="space-y-3">
                 {renewalRules.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <Calendar className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -501,22 +501,22 @@ const LandlordGuide = () => {
               <h2 className="text-3xl md:text-4xl font-light text-black mb-4">
                 Section 10: How <span className="text-gold">JBJ Global Real Estate</span> Supports Landlords
               </h2>
-              <p className="text-lg text-zinc-600 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                 JBJ is licensed for Rent, Buy & Sell and operates with a landlord-first approach.
               </p>
             </div>
 
             <div className="jj-box-active p-8">
-              <p className="text-zinc-700 mb-6 font-medium">Our role includes:</p>
+              <p className="text-gray-700 mb-6 font-medium">Our role includes:</p>
               <ul className="space-y-3 mb-6">
                 {jbjSupport.map((item, index) => (
                   <li key={index} className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                    <span className="text-zinc-700">{item}</span>
+                    <span className="text-gray-700">{item}</span>
                   </li>
                 ))}
               </ul>
-              <p className="text-sm text-zinc-600 italic border-t border-gold/30 pt-4">
+              <p className="text-sm text-gray-600 italic border-t border-gold/30 pt-4">
                 We act to protect your property, income, and legal position.
               </p>
             </div>
@@ -541,7 +541,7 @@ const LandlordGuide = () => {
                   className="jj-box-active p-6 hover:border-gold transition-colors"
                 >
                   <h3 className="text-lg font-medium text-black mb-3">{faq.question}</h3>
-                  <p className="text-zinc-600">{faq.answer}</p>
+                  <p className="text-gray-600">{faq.answer}</p>
                 </div>
               ))}
             </div>

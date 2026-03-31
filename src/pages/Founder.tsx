@@ -233,7 +233,7 @@ const Founder = () => {
                   <span className="text-gold">Jaoude</span>
                 </h2>
                 
-                <p className="text-zinc-600 text-lg mb-2">جاين بو جودة</p>
+                <p className="text-gray-600 text-lg mb-2">جاين بو جودة</p>
                 
                 <p className="text-gold text-sm uppercase tracking-[0.3em] mb-6 font-medium">
                   Founder & Chief Executive Officer
@@ -244,7 +244,7 @@ const Founder = () => {
                   <p className="text-lg md:text-xl font-light text-black">
                     Jane Bou Jaoude is the Founder and Chief Executive Officer of JBJ Global Real Estate, a Dubai mainland licensed real estate brokerage authorized to BUY, SELL, and RENT properties across the UAE.
                   </p>
-                  <p className="text-base text-zinc-700">
+                  <p className="text-base text-gray-700">
                     As Founder & CEO, she oversees the company's strategic direction, regulatory compliance, operational governance, partner relationships, and market positioning. All brokerage activities, advisory frameworks, and platform standards operate under executive oversight to ensure professionalism, transparency, and client protection.
                   </p>
                 </div>
@@ -300,7 +300,7 @@ const Founder = () => {
                 >
                   Executive <span className="text-gold">Leadership</span>
                 </h2>
-                <p className="text-zinc-600 text-lg mt-6 max-w-3xl mx-auto">
+                <p className="text-gray-600 text-lg mt-6 max-w-3xl mx-auto">
                   The executive leadership team supports the operational, advisory, and administrative functions of JBJ Global Real Estate under centralized governance.
                 </p>
               </motion.div>
@@ -328,7 +328,7 @@ const Founder = () => {
                     <p className="text-gold text-xs uppercase tracking-wider mb-4">
                       {member.role}
                     </p>
-                    <p className="text-zinc-600 text-sm leading-relaxed">
+                    <p className="text-gray-600 text-sm leading-relaxed">
                       {member.responsibility}
                     </p>
                   </motion.div>
@@ -373,29 +373,29 @@ const Founder = () => {
                       <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
                         <FileCheck className="w-4 h-4 text-gold" />
                       </div>
-                      <p className="text-zinc-700">Clear decision-making authority</p>
+                      <p className="text-gray-700">Clear decision-making authority</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
                         <Shield className="w-4 h-4 text-gold" />
                       </div>
-                      <p className="text-zinc-700">Compliance with UAE real estate regulations</p>
+                      <p className="text-gray-700">Compliance with UAE real estate regulations</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
                         <Scale className="w-4 h-4 text-gold" />
                       </div>
-                      <p className="text-zinc-700">Controlled advisory and brokerage processes</p>
+                      <p className="text-gray-700">Controlled advisory and brokerage processes</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center flex-shrink-0">
                         <Users className="w-4 h-4 text-gold" />
                       </div>
-                      <p className="text-zinc-700">Transparent internal accountability</p>
+                      <p className="text-gray-700">Transparent internal accountability</p>
                     </div>
                   </div>
                   
-                  <p className="text-zinc-600 border-t border-gold/20 pt-6">
+                  <p className="text-gray-600 border-t border-gold/20 pt-6">
                     Executive oversight applies to brokerage operations, platform tools, client engagement workflows, and partner introductions.
                   </p>
                 </div>
@@ -444,7 +444,7 @@ const Founder = () => {
                     JBJ Global Real Estate is a Dubai mainland licensed real estate brokerage authorized to conduct BUY, SELL, and RENT activities.
                   </p>
                   
-                  <p className="text-zinc-600">
+                  <p className="text-gray-600">
                     Legal, mortgage, visa, and other regulated services are provided through independent licensed partners. JBJ Global Real Estate facilitates introductions only and does not provide regulated services outside its brokerage license.
                   </p>
                 </div>
@@ -478,7 +478,7 @@ const Founder = () => {
                 </motion.div>
                 
                 <motion.p 
-                  className="text-zinc-700 text-base sm:text-lg md:text-xl max-w-3xl mx-auto mb-6 sm:mb-10 leading-relaxed"
+                  className="text-gray-700 text-base sm:text-lg md:text-xl max-w-3xl mx-auto mb-6 sm:mb-10 leading-relaxed"
                   variants={fadeInUp}
                 >
                   Leadership at JBJ Global Real Estate is structured to support long-term stability, professional standards, and informed client decision-making across all brokerage activities.

@@ -60,7 +60,7 @@ interface FoundersTaskDashboardProps {
 }
 
 const priorityColors: Record<string, string> = {
-  low: 'bg-zinc-100 text-zinc-600 border-zinc-200',
+  low: 'bg-gray-100 text-gray-600 border-gray-200',
   medium: 'bg-blue-50 text-blue-600 border-blue-200',
   high: 'bg-orange-50 text-orange-600 border-orange-200',
   urgent: 'bg-red-50 text-red-600 border-red-200',
@@ -308,7 +308,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
             onClick={() => setFilter(f as typeof filter)}
             className={filter === f 
               ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border-2 border-[#B89555]/50 shadow-md font-semibold' 
-              : 'bg-white text-zinc-700 border-2 border-[#B89555]/30 hover:bg-[#B89555]/5 hover:border-[#B89555]/50'
+              : 'bg-white text-gray-700 border-2 border-[#B89555]/30 hover:bg-[#B89555]/5 hover:border-[#B89555]/50'
             }
           >
             {f === 'all' && `All Tasks (${stats.total})`}
@@ -385,7 +385,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                                 <span className="text-gray-500">Progress</span>
                                 <span className={config.color}>{taskProgress}%</span>
                               </div>
-                              <Progress value={taskProgress} className="h-1.5 bg-zinc-100" />
+                              <Progress value={taskProgress} className="h-1.5 bg-gray-100" />
                             </div>
 
                             {task.description && (

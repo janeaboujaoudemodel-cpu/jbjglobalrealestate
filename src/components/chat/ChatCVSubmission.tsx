@@ -191,7 +191,7 @@ const ChatCVSubmission = ({
         <h4 className="text-black text-lg font-semibold mb-2">
           <T>CV Submitted Successfully!</T>
         </h4>
-        <p className="text-zinc-600 text-sm">
+        <p className="text-gray-600 text-sm">
           <T>Thank you for your interest in joining JBJ Global. Our HR team will review your application and contact you soon.</T>
         </p>
       </div>
@@ -215,7 +215,7 @@ const ChatCVSubmission = ({
           <FileText className="w-7 h-7 text-blue-500" />
         </div>
         <h4 className="text-black text-lg font-semibold mb-1"><T>Submit Your CV</T></h4>
-        <p className="text-zinc-600 text-sm"><T>Join our growing team at JBJ Global</T></p>
+        <p className="text-gray-600 text-sm"><T>Join our growing team at JBJ Global</T></p>
       </div>
 
       <div className="space-y-3">

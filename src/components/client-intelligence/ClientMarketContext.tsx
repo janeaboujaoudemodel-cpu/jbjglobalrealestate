@@ -116,7 +116,7 @@ const ClientMarketContext = ({
                 <TooltipTrigger>
             <Info className="w-4 h-4 text-gold" />
                 </TooltipTrigger>
-                <TooltipContent className="max-w-xs bg-zinc-800 border-zinc-700">
+                <TooltipContent className="max-w-xs bg-zinc-800 border-gray-700">
                   <p className="text-xs text-white">
                     Insights based on aggregated official data. Provided for informational purposes only.
                   </p>
@@ -124,7 +124,7 @@ const ClientMarketContext = ({
               </Tooltip>
             </TooltipProvider>
           </CardTitle>
-          <div className="flex items-center gap-1 text-xs text-gray-500 bg-zinc-100 px-2 py-1 rounded-full">
+          <div className="flex items-center gap-1 text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
             <Clock className="w-3 h-3 text-gold" />
             <span className="font-medium">Updated {lastUpdated}</span>
           </div>
@@ -133,7 +133,7 @@ const ClientMarketContext = ({
       <CardContent className="space-y-4">
         {/* Trend & Demand Summary */}
         <div className="flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-2 bg-zinc-50 px-3 py-2 rounded-lg">
+          <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg">
             {getTrendIcon()}
             <span className="text-sm text-black font-medium">{getTrendLabel()}</span>
           </div>
@@ -141,12 +141,12 @@ const ClientMarketContext = ({
         </div>
 
         {/* Plain-English Context */}
-        <p className="text-sm text-zinc-600 leading-relaxed">
+        <p className="text-sm text-gray-600 leading-relaxed">
           {getContextNarrative()}
         </p>
 
         {/* Mandatory Disclaimer */}
-        <p className="text-[10px] text-gray-500 border-t border-zinc-200 pt-3">
+        <p className="text-[10px] text-gray-500 border-t border-gray-200 pt-3">
           Insights are based on aggregated official data and are provided for informational purposes only.
           This does not constitute financial, investment, or legal advice.{" "}
           <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

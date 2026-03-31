@@ -139,7 +139,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
   const warningAlerts = alerts.filter((a) => a.severity === "warning");
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800">
+    <Card className="bg-zinc-900 border-gray-800">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -168,7 +168,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
               size="sm"
               onClick={sendCapacityAlert}
               disabled={loading || alerts.length === 0}
-              className="border-zinc-700 text-gray-300 hover:bg-zinc-800"
+              className="border-gray-700 text-gray-300 hover:bg-gray-800"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -284,7 +284,7 @@ export function CapacityAutomation({ brokers, onReassign }: CapacityAutomationPr
         )}
 
         {/* Default Capacity Info */}
-        <div className="mt-4 p-4 bg-zinc-800/50 rounded-lg border border-zinc-700">
+        <div className="mt-4 p-4 bg-zinc-800/50 rounded-lg border border-gray-700">
           <div className="flex items-center gap-2 text-gray-400 text-sm">
             <Settings className="h-4 w-4" />
             <span>

@@ -91,7 +91,7 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
             ))}
           </div>
           
-          <div className="flex items-start space-x-3 pt-4 border-t border-zinc-700/50">
+          <div className="flex items-start space-x-3 pt-4 border-t border-gray-700/50">
             <Checkbox 
               id="privacy-consent" 
               checked={agreed}
@@ -110,7 +110,7 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
         <CardFooter className="flex flex-col sm:flex-row gap-3 pt-4">
           <Button 
             variant="outline" 
-            className="w-full sm:w-auto border-zinc-600 text-white/85 hover:bg-zinc-800 hover:text-white"
+            className="w-full sm:w-auto border-gray-600 text-white/85 hover:bg-gray-800 hover:text-white"
             onClick={onDecline}
           >
             <XCircle className="h-4 w-4 mr-2" />

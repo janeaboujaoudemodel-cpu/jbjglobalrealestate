@@ -123,7 +123,7 @@ export function AIBrokerStatsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-zinc-700 sm:max-w-4xl">
+      <DialogContent className="bg-zinc-900 border-gray-700 sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle className="text-white text-xl">
             Analytics: {brokerName}
@@ -136,7 +136,7 @@ export function AIBrokerStatsDialog({
           </div>
         ) : (
           <Tabs defaultValue="overview" className="mt-4">
-            <TabsList className="bg-zinc-800 border-zinc-700">
+            <TabsList className="bg-zinc-800 border-gray-700">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="activity">Activity</TabsTrigger>
               <TabsTrigger value="performance">Performance</TabsTrigger>

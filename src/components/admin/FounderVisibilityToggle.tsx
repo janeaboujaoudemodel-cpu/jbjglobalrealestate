@@ -82,7 +82,7 @@ export const FounderVisibilityToggle = () => {
             </div>
             <div>
               <CardTitle className="text-black text-lg">Founder Visibility Control</CardTitle>
-              <CardDescription className="text-zinc-600">
+              <CardDescription className="text-gray-600">
                 Global toggle for all founder-related content
               </CardDescription>
             </div>
@@ -173,7 +173,7 @@ export const FounderVisibilityToggle = () => {
                 </>
               )}
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-zinc-600">
+            <AlertDialogDescription className="text-gray-600">
               {pendingValue ? (
                 <>
                   This will <strong>restore all founder-related content</strong> across the entire website, including:
@@ -201,7 +201,7 @@ export const FounderVisibilityToggle = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleCancel} className="border-zinc-300">
+            <AlertDialogCancel onClick={handleCancel} className="border-gray-300">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

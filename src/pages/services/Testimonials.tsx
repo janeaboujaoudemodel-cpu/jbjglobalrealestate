@@ -212,7 +212,7 @@ const Testimonials = () => {
       <Card className="jj-card-inner h-full">
         <CardContent className="p-6">
           <Quote className="w-8 h-8 text-gold/30 mb-4" />
-          <p className="text-zinc-700 mb-6 italic">
+          <p className="text-gray-700 mb-6 italic">
             "{testimonial.content}"
           </p>
           <div className="flex items-center justify-between">
@@ -326,7 +326,7 @@ const Testimonials = () => {
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-zinc-600 text-center max-w-3xl mx-auto mb-12"
+              className="text-gray-600 text-center max-w-3xl mx-auto mb-12"
             >
               A selection of verified client experiences across buying, selling, rentals, and advisory support. Testimonials may be anonymized upon request.
             </motion.p>
@@ -420,7 +420,7 @@ const Testimonials = () => {
             </motion.h2>
             <motion.p
               variants={fadeInUp}
-              className="text-zinc-600 text-center max-w-2xl mx-auto mb-12"
+              className="text-gray-600 text-center max-w-2xl mx-auto mb-12"
             >
               Video testimonials appear here.
             </motion.p>
@@ -428,7 +428,7 @@ const Testimonials = () => {
               {videoTestimonials.map((video, index) => (
                 <motion.div key={index} variants={fadeInUp}>
                   <Card className="jj-card-inner overflow-hidden">
-                    <div className="aspect-video bg-zinc-200 flex items-center justify-center">
+                    <div className="aspect-video bg-gray-200 flex items-center justify-center">
                       <div className="text-center">
                         <Video className="w-12 h-12 text-gold mx-auto mb-2" />
                         <p className="text-sm text-white/60">Video Coming Soon</p>
@@ -436,7 +436,7 @@ const Testimonials = () => {
                     </div>
                     <CardContent className="p-4">
                       <h3 className="font-semibold text-black">{video.title}</h3>
-                      <p className="text-sm text-zinc-600">{video.client}</p>
+                      <p className="text-sm text-gray-600">{video.client}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -547,7 +547,7 @@ const Testimonials = () => {
                           setFormData({ ...formData, consentToPublish: checked as boolean })
                         }
                       />
-                      <Label htmlFor="consent" className="text-sm text-zinc-700 leading-relaxed">
+                      <Label htmlFor="consent" className="text-sm text-gray-700 leading-relaxed">
                         I confirm this testimonial reflects my genuine experience and I allow JBJ Global Real Estate to publish it on the website. I understand personal details can be anonymized upon request. *
                       </Label>
                     </div>
@@ -587,7 +587,7 @@ const Testimonials = () => {
                   <Lock className="w-7 h-7 text-gold" />
                 </div>
                 <div>
-                  <p className="text-zinc-700 leading-relaxed">
+                  <p className="text-gray-700 leading-relaxed">
                     We verify submissions for authenticity and remove sensitive data. If you request anonymization, your testimonial can be published without identifying details.
                   </p>
                 </div>
@@ -625,7 +625,7 @@ const Testimonials = () => {
                     <AccordionTrigger className="px-6 py-4 text-left hover:no-underline hover:bg-gold/10">
                       <span className="text-black font-medium">{faq.question}</span>
                     </AccordionTrigger>
-                    <AccordionContent className="px-6 pb-4 text-zinc-600">
+                    <AccordionContent className="px-6 pb-4 text-gray-600">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -654,7 +654,7 @@ const Testimonials = () => {
               >
                 Share Your Experience
               </h2>
-              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+              <p className="text-gray-600 mb-8 max-w-xl mx-auto">
                 Submit a testimonial and help future clients choose with confidence.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -159,7 +159,7 @@ const EmployeeCard = ({
             </div>
           )}
           
-          <p className="text-zinc-600 text-xs line-clamp-2 mt-3">{member.bio}</p>
+          <p className="text-gray-600 text-xs line-clamp-2 mt-3">{member.bio}</p>
           
           {/* Join Date */}
           {member.joinDate && (
@@ -171,7 +171,7 @@ const EmployeeCard = ({
           
           <div className="flex flex-wrap gap-1 mt-3">
             {member.languages?.slice(0, 3).map((lang) => (
-              <Badge key={lang} variant="outline" className="text-xs border-gold/30 text-zinc-600 bg-gold/5">
+              <Badge key={lang} variant="outline" className="text-xs border-gold/30 text-gray-600 bg-gold/5">
                 {lang}
               </Badge>
             ))}
@@ -179,7 +179,7 @@ const EmployeeCard = ({
           
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-gold/20">
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className={`text-xs ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-zinc-300 text-gray-500 bg-white'}`}>
+              <Badge variant="outline" className={`text-xs ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-gray-300 text-gray-500 bg-white'}`}>
                 {member.status === 'online' ? '● Online' : '○ Away'}
               </Badge>
               {member.nationality && (

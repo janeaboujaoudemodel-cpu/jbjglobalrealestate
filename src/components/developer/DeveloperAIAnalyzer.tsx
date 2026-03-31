@@ -105,7 +105,7 @@ function PricePerSqftChart({ text }: { text: string }) {
       </div>
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
-          {bullets.map((b, i) => <p key={i} className="text-zinc-600 text-xs leading-relaxed">{b}</p>)}
+          {bullets.map((b, i) => <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>)}
         </div>
       )}
       <p className="text-gray-500 text-[10px] mt-3 italic">* Developer-level price/sqft varies by area and project type. For area-specific trends, visit individual area pages.</p>
@@ -176,12 +176,12 @@ function SupplyDemandChart({ text }: { text: string }) {
         </ResponsiveContainer>
       </div>
       <div className="flex items-center gap-4 mb-4 text-xs">
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#C8A766' }} /><span className="text-zinc-600">Supply (New Units)</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-emerald-500" /><span className="text-zinc-600">Demand (Absorption)</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#C8A766' }} /><span className="text-gray-600">Supply (New Units)</span></div>
+        <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-emerald-500" /><span className="text-gray-600">Demand (Absorption)</span></div>
       </div>
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
-          {bullets.map((b, i) => <p key={i} className="text-zinc-600 text-xs leading-relaxed">{b}</p>)}
+          {bullets.map((b, i) => <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>)}
         </div>
       )}
     </div>
@@ -236,12 +236,12 @@ function InvestmentMetricsChart({ text }: { text: string }) {
       </div>
       <div className="flex items-center gap-3 flex-wrap text-xs mb-3">
         {yieldMetrics.map((m) => (
-          <span key={m.name} className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: m.fill }} /><span className="text-zinc-600">{m.name}</span></span>
+          <span key={m.name} className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: m.fill }} /><span className="text-gray-600">{m.name}</span></span>
         ))}
       </div>
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
-          {bullets.map((b, i) => <p key={i} className="text-zinc-600 text-xs leading-relaxed">{b}</p>)}
+          {bullets.map((b, i) => <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>)}
         </div>
       )}
     </div>
@@ -284,7 +284,7 @@ function PortfolioStrengthCard({ text }: { text: string }) {
         ))}
       </div>
       {devEntries.length === 0 && (
-        <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">{text}</div>
+        <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">{text}</div>
       )}
     </div>
   );
@@ -460,28 +460,28 @@ export const DeveloperAIAnalyzer = ({
             <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <CalendarDays className="w-4 h-4 text-gold mx-auto mb-1" />
               <div className="text-2xl font-bold text-gold">{foundedYear}</div>
-              <div className="text-zinc-600 text-xs mt-1">Founded</div>
+              <div className="text-gray-600 text-xs mt-1">Founded</div>
             </div>
           )}
           {projectCount && (
             <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <Home className="w-4 h-4 text-gold mx-auto mb-1" />
               <div className="text-2xl font-bold text-gold">{projectCount}</div>
-              <div className="text-zinc-600 text-xs mt-1">Projects</div>
+              <div className="text-gray-600 text-xs mt-1">Projects</div>
             </div>
           )}
           {completedProjects && (
             <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <Landmark className="w-4 h-4 text-gold mx-auto mb-1" />
               <div className="text-2xl font-bold text-gold">{completedProjects.toLocaleString()}+</div>
-              <div className="text-zinc-600 text-xs mt-1">Units Delivered</div>
+              <div className="text-gray-600 text-xs mt-1">Units Delivered</div>
             </div>
           )}
           {activeProjects && (
             <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <Building2 className="w-4 h-4 text-gold mx-auto mb-1" />
               <div className="text-2xl font-bold text-gold">{activeProjects}</div>
-              <div className="text-zinc-600 text-xs mt-1">Active Projects</div>
+              <div className="text-gray-600 text-xs mt-1">Active Projects</div>
             </div>
           )}
         </div>
@@ -602,7 +602,7 @@ export const DeveloperAIAnalyzer = ({
 
                     {/* Overview Text + Portfolio Donut */}
                     <div className="flex gap-6 items-start">
-                      <p className="text-zinc-700 text-sm leading-relaxed flex-1">{cleanMarkdown(sections.overview)}</p>
+                      <p className="text-gray-700 text-sm leading-relaxed flex-1">{cleanMarkdown(sections.overview)}</p>
                       
                       {/* Mini Portfolio Distribution Donut */}
                       <div className="flex-shrink-0 w-36 hidden md:block">

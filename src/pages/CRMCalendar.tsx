@@ -119,22 +119,22 @@ const CRMCalendar = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-zinc-200 bg-white sticky top-0 lg:top-[48px] z-50">
+      <header className="border-b border-gray-200 bg-white sticky top-0 lg:top-[48px] z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link to="/crm">
-              <Button variant="ghost" size="sm" className="text-zinc-600 hover:text-zinc-900">
+              <Button variant="ghost" size="sm" className="text-gray-600 hover:text-gray-900">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to CRM
               </Button>
             </Link>
-            <div className="h-6 w-px bg-zinc-200" />
+            <div className="h-6 w-px bg-gray-200" />
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-lg bg-purple-500/20">
                 <CalendarIcon className="h-5 w-5 text-purple-500" />
               </div>
               <div>
-                <h1 className="text-lg font-bold text-zinc-900">Calendar</h1>
+                <h1 className="text-lg font-bold text-gray-900">Calendar</h1>
                 <p className="text-xs text-gray-500">{events.length} events this month</p>
               </div>
             </div>
@@ -150,9 +150,9 @@ const CRMCalendar = () => {
       <main className="max-w-6xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Calendar */}
-          <Card className="lg:col-span-2 border-zinc-200 bg-white">
+          <Card className="lg:col-span-2 border-gray-200 bg-white">
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-lg font-bold text-zinc-900">
+              <CardTitle className="text-lg font-bold text-gray-900">
                 {format(currentMonth, 'MMMM yyyy')}
               </CardTitle>
               <div className="flex gap-2">
@@ -209,11 +209,11 @@ const CRMCalendar = () => {
                           ? 'border-gold bg-gold/5' 
                           : isSelected 
                             ? 'border-blue-500 bg-blue-50' 
-                            : 'border-transparent hover:bg-zinc-50'
+                            : 'border-transparent hover:bg-gray-50'
                       }`}
                     >
                       <span className={`text-sm font-medium ${
-                        isToday(day) ? 'text-gold' : 'text-zinc-900'
+                        isToday(day) ? 'text-gold' : 'text-gray-900'
                       }`}>
                         {format(day, 'd')}
                       </span>
@@ -238,9 +238,9 @@ const CRMCalendar = () => {
           </Card>
 
           {/* Sidebar - Selected Day Events */}
-          <Card className="border-zinc-200 bg-white">
+          <Card className="border-gray-200 bg-white">
             <CardHeader>
-              <CardTitle className="text-base font-bold text-zinc-900">
+              <CardTitle className="text-base font-bold text-gray-900">
                 {selectedDate ? format(selectedDate, 'EEEE, MMMM d') : 'Select a day'}
               </CardTitle>
             </CardHeader>
@@ -254,13 +254,13 @@ const CRMCalendar = () => {
                 todayEvents.map(event => {
                   const Icon = getEventIcon(event.type);
                   return (
-                    <div key={event.id} className="p-3 rounded-lg bg-zinc-50 border border-zinc-100">
+                    <div key={event.id} className="p-3 rounded-lg bg-gray-50 border border-gray-100">
                       <div className="flex items-start gap-3">
                         <div className={`p-2 rounded-lg ${getEventColor(event.type)}/20`}>
                           <Icon className={`h-4 w-4 ${getEventColor(event.type).replace('bg-', 'text-')}`} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium text-zinc-900 truncate">{event.title}</p>
+                          <p className="font-medium text-gray-900 truncate">{event.title}</p>
                           <p className="text-xs text-gray-500">{event.time}</p>
                           {event.leadName && (
                             <Badge variant="outline" className="mt-1 text-xs">

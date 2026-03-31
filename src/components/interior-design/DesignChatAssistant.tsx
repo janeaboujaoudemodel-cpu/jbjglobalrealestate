@@ -135,7 +135,7 @@ What would you like to create today?`,
     <div className="w-full">
       <div className="bg-zinc-900/60 border border-orange-500/30 rounded-2xl overflow-hidden">
         {/* Header */}
-        <div className="p-4 border-b border-zinc-800 flex items-center gap-3">
+        <div className="p-4 border-b border-gray-800 flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
             <Bot className="w-5 h-5 text-white" />
           </div>
@@ -169,7 +169,7 @@ What would you like to create today?`,
                 max-w-[80%] rounded-2xl p-4
                 ${message.role === 'user' 
                   ? 'bg-orange-500/20 text-white' 
-                  : 'bg-zinc-800/80 text-zinc-200'
+                  : 'bg-zinc-800/80 text-gray-200'
                 }
               `}>
                 {message.image && (
@@ -195,7 +195,7 @@ What would you like to create today?`,
                 <button
                   key={index}
                   onClick={() => setInput(prompt)}
-                  className="text-xs bg-zinc-800 hover:bg-zinc-700 text-white/85 px-3 py-1.5 rounded-full transition-colors"
+                  className="text-xs bg-zinc-800 hover:bg-gray-700 text-white/85 px-3 py-1.5 rounded-full transition-colors"
                 >
                   {prompt.slice(0, 50)}...
                 </button>
@@ -211,7 +211,7 @@ What would you like to create today?`,
               <img 
                 src={photos[0]} 
                 alt="Upload preview" 
-                className="h-20 w-auto rounded-lg border border-zinc-700"
+                className="h-20 w-auto rounded-lg border border-gray-700"
               />
               <button
                 onClick={() => setPhotos([])}
@@ -224,7 +224,7 @@ What would you like to create today?`,
         )}
 
         {/* Input */}
-        <div className="p-4 border-t border-zinc-800">
+        <div className="p-4 border-t border-gray-800">
           <input
             type="file"
             ref={fileInputRef}
@@ -249,7 +249,7 @@ What would you like to create today?`,
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Describe your dream interior..."
-              className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 min-h-[44px] max-h-[120px] resize-none flex-1 focus:border-orange-500/50"
+              className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 min-h-[44px] max-h-[120px] resize-none flex-1 focus:border-orange-500/50"
               disabled={isProcessing}
             />
             

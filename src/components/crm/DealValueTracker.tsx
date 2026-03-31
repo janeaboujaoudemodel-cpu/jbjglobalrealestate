@@ -145,7 +145,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
   if (loading) {
     return (
       <Card className="border-border bg-white">
-        <CardContent className="py-8 text-center text-zinc-600">
+        <CardContent className="py-8 text-center text-gray-600">
           Calculating pipeline...
         </CardContent>
       </Card>
@@ -162,7 +162,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         <Card className="border-border bg-white">
           <CardContent className="py-8 text-center">
             <Briefcase className="h-12 w-12 mx-auto mb-4 text-gray-500" />
-            <p className="text-zinc-800 font-semibold mb-1">No active data yet</p>
+            <p className="text-gray-800 font-semibold mb-1">No active data yet</p>
             <p className="text-gray-500 text-sm">Start adding leads to see your pipeline metrics.</p>
           </CardContent>
         </Card>
@@ -171,7 +171,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
       {/* Main Stats Row - evenly aligned with consistent height */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Pipeline Value */}
-        <Card className="border-zinc-200 bg-white shadow-lg h-full">
+        <Card className="border-gray-200 bg-white shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 rounded-xl bg-gold/20">
@@ -181,7 +181,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
                 Pipeline
               </Badge>
             </div>
-            <p className="text-2xl md:text-3xl font-bold text-zinc-900 tracking-tight flex-1">
+            <p className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight flex-1">
               {hasNoData ? "—" : `${stats.totalPipeline} leads`}
             </p>
             <p className="text-xs text-gray-500 mt-2">Active in pipeline</p>
@@ -189,7 +189,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         </Card>
 
         {/* Forecasted */}
-        <Card className="border-zinc-200 bg-white shadow-lg h-full">
+        <Card className="border-gray-200 bg-white shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 rounded-xl bg-emerald-500/20">
@@ -207,7 +207,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         </Card>
 
         {/* Conversion */}
-        <Card className="border-zinc-200 bg-white shadow-lg h-full">
+        <Card className="border-gray-200 bg-white shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 rounded-xl bg-amber-500/20">
@@ -225,7 +225,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         </Card>
 
         {/* Won Deals */}
-        <Card className="border-zinc-200 bg-white shadow-lg h-full">
+        <Card className="border-gray-200 bg-white shadow-lg h-full">
           <CardContent className="p-5 h-full flex flex-col">
             <div className="flex items-center justify-between mb-4">
               <div className="p-3 rounded-xl bg-green-500/20">
@@ -245,9 +245,9 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
       </div>
 
       {/* Stage Breakdown */}
-      <Card className="border-zinc-200 bg-white">
+      <Card className="border-gray-200 bg-white">
         <CardHeader className="pb-2">
-          <CardTitle className="text-zinc-900 font-bold text-base flex items-center gap-2">
+          <CardTitle className="text-gray-900 font-bold text-base flex items-center gap-2">
             <DollarSign className="h-4 w-4" />
             Pipeline by Stage
           </CardTitle>
@@ -266,14 +266,14 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2">
                         <span className={`w-2 h-2 rounded-full ${getStageColor(stage.stage)}`} />
-                        <span className="text-sm font-medium text-zinc-800 capitalize">
+                        <span className="text-sm font-medium text-gray-800 capitalize">
                           {stage.stage.replace(/_/g, " ")}
                         </span>
-                        <Badge variant="secondary" className="text-xs bg-zinc-100 text-zinc-700">
+                        <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-700">
                           {stage.count} leads
                         </Badge>
                       </div>
-                      <span className="text-sm font-bold text-zinc-900">
+                      <span className="text-sm font-bold text-gray-900">
                         {stage.count} leads
                       </span>
                     </div>

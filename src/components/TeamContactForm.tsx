@@ -129,7 +129,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
               <DialogTitle className="text-xl font-bold text-black">
                 Contact Us
               </DialogTitle>
-              <DialogDescription className="text-zinc-600">
+              <DialogDescription className="text-gray-600">
                 Fill in your details and our team will get back to you shortly.
               </DialogDescription>
             </div>

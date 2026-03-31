@@ -194,7 +194,7 @@ export default function BrokerTraining() {
               </div>
             </div>
 
-            <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 min-w-[200px]">
+            <div className="bg-zinc-900/50 border border-gray-800 rounded-xl p-4 min-w-[200px]">
               <div className="flex items-center gap-3 mb-2">
                 <Award className="w-5 h-5 text-gold" />
                 <span className="text-white font-medium">Your Progress</span>
@@ -218,7 +218,7 @@ export default function BrokerTraining() {
                 transition={{ delay: index * 0.1 }}
               >
                 <Card 
-                  className={`bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all cursor-pointer ${
+                  className={`bg-zinc-900/50 border-gray-800 hover:border-gold/30 transition-all cursor-pointer ${
                     selectedModule?.id === module.id ? "border-gold/50" : ""
                   }`}
                   onClick={() => setSelectedModule(module)}

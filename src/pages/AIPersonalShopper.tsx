@@ -254,7 +254,7 @@ const AIPersonalShopper = () => {
 
       <div className="container mx-auto px-4 py-6">
         {/* Action Bar */}
-        <div className="mb-4 flex flex-wrap items-center gap-3 p-3 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+        <div className="mb-4 flex flex-wrap items-center gap-3 p-3 bg-zinc-900/50 border border-gray-800 rounded-xl">
           <div className="flex items-center gap-2">
             <FolderOpen className="w-5 h-5 text-emerald-400" />
             <span className="text-white font-medium text-sm">
@@ -278,7 +278,7 @@ const AIPersonalShopper = () => {
                     <Save className="w-3 h-3 mr-1" /> Save Plan
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-zinc-900 border-zinc-700">
+                <DialogContent className="bg-zinc-900 border-gray-700">
                   <DialogHeader>
                     <DialogTitle className="text-white">Save Trip Plan</DialogTitle>
                   </DialogHeader>
@@ -289,7 +289,7 @@ const AIPersonalShopper = () => {
                         value={planName}
                         onChange={(e) => setPlanName(e.target.value)}
                         placeholder="My Dubai Investment Trip"
-                        className="bg-zinc-800 border-zinc-700 text-white"
+                        className="bg-zinc-800 border-gray-700 text-white"
                       />
                     </div>
                     <Button onClick={savePlan} variant="primary" className="w-full">
@@ -305,7 +305,7 @@ const AIPersonalShopper = () => {
                     <Mail className="w-3 h-3 mr-1" /> Submit to Team
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="bg-zinc-900 border-zinc-700">
+                <DialogContent className="bg-zinc-900 border-gray-700">
                   <DialogHeader>
                     <DialogTitle className="text-white">Submit Your Trip Plan</DialogTitle>
                   </DialogHeader>
@@ -319,7 +319,7 @@ const AIPersonalShopper = () => {
                         value={inquiryForm.name}
                         onChange={(e) => setInquiryForm(prev => ({ ...prev, name: e.target.value }))}
                         placeholder="John Smith"
-                        className="bg-zinc-800 border-zinc-700 text-white"
+                        className="bg-zinc-800 border-gray-700 text-white"
                       />
                     </div>
                     <div>
@@ -329,7 +329,7 @@ const AIPersonalShopper = () => {
                         value={inquiryForm.email}
                         onChange={(e) => setInquiryForm(prev => ({ ...prev, email: e.target.value }))}
                         placeholder="john@example.com"
-                        className="bg-zinc-800 border-zinc-700 text-white"
+                        className="bg-zinc-800 border-gray-700 text-white"
                       />
                     </div>
                     <div>
@@ -338,7 +338,7 @@ const AIPersonalShopper = () => {
                         value={inquiryForm.phone}
                         onChange={(e) => setInquiryForm(prev => ({ ...prev, phone: e.target.value }))}
                         placeholder="+1 234 567 8900"
-                        className="bg-zinc-800 border-zinc-700 text-white"
+                        className="bg-zinc-800 border-gray-700 text-white"
                       />
                     </div>
                     <Button onClick={submitInquiry} variant="primary" className="w-full">
@@ -355,10 +355,10 @@ const AIPersonalShopper = () => {
               const plan = savedPlans.find(p => p.id === id);
               if (plan) loadPlan(plan);
             }}>
-              <SelectTrigger className="w-36 bg-zinc-800 border-zinc-700 text-sm text-white">
+              <SelectTrigger className="w-36 bg-zinc-800 border-gray-700 text-sm text-white">
                 <SelectValue placeholder="Load Plan" />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-800 border-zinc-700">
+              <SelectContent className="bg-zinc-800 border-gray-700">
                 {savedPlans.map(p => (
                   <SelectItem key={p.id} value={p.id} className="text-white">
                     {p.name}
@@ -372,7 +372,7 @@ const AIPersonalShopper = () => {
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Quick Prompts Sidebar */}
           <div className="lg:col-span-1 space-y-4">
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border-gray-800">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white text-sm flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-emerald-400" />
@@ -386,7 +386,7 @@ const AIPersonalShopper = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => useQuickPrompt(prompt.prompt)}
-                    className="w-full p-3 text-left bg-zinc-800/50 hover:bg-zinc-800 border border-zinc-700 hover:border-emerald-500/50 rounded-lg transition-all group"
+                    className="w-full p-3 text-left bg-zinc-800/50 hover:bg-gray-800 border border-gray-700 hover:border-emerald-500/50 rounded-lg transition-all group"
                   >
                     <div className="flex items-center gap-2 mb-1">
                       <prompt.icon className="w-4 h-4 text-emerald-400" />
@@ -401,7 +401,7 @@ const AIPersonalShopper = () => {
             </Card>
 
             {/* What I Can Do */}
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border-gray-800">
               <CardHeader className="pb-3">
                 <CardTitle className="text-white text-sm">What I Can Plan</CardTitle>
               </CardHeader>
@@ -425,8 +425,8 @@ const AIPersonalShopper = () => {
 
           {/* Chat Area */}
           <div className="lg:col-span-3">
-            <Card className="bg-zinc-900/50 border-zinc-800 h-[600px] flex flex-col">
-              <CardHeader className="border-b border-zinc-800 pb-3">
+            <Card className="bg-zinc-900/50 border-gray-800 h-[600px] flex flex-col">
+              <CardHeader className="border-b border-gray-800 pb-3">
                 <CardTitle className="text-white flex items-center gap-2">
                   <MessageSquare className="w-5 h-5 text-emerald-400" />
                   Plan Your UAE Journey
@@ -480,7 +480,7 @@ const AIPersonalShopper = () => {
                             className={`max-w-[85%] p-4 rounded-2xl ${
                               message.role === 'user'
                                 ? 'bg-emerald-600 text-white'
-                                : 'bg-zinc-800 text-zinc-100 border border-zinc-700'
+                                : 'bg-zinc-800 text-gray-100 border border-gray-700'
                             }`}
                           >
                             {message.role === 'assistant' && (
@@ -503,7 +503,7 @@ const AIPersonalShopper = () => {
                         animate={{ opacity: 1 }}
                         className="flex justify-start"
                       >
-                        <div className="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl">
+                        <div className="bg-zinc-800 border border-gray-700 p-4 rounded-2xl">
                           <div className="flex items-center gap-2 text-emerald-400">
                             <Loader2 className="w-4 h-4 animate-spin" />
                             <span className="text-sm">Creating your personalized plan...</span>
@@ -517,7 +517,7 @@ const AIPersonalShopper = () => {
               </ScrollArea>
 
               {/* Input Area */}
-              <div className="p-4 border-t border-zinc-800">
+              <div className="p-4 border-t border-gray-800">
                 <div className="flex gap-2">
                   <Textarea
                     value={inputMessage}
@@ -529,7 +529,7 @@ const AIPersonalShopper = () => {
                       }
                     }}
                     placeholder="Describe your ideal UAE trip... (e.g., I'm visiting Dubai for 7 days as a property investor looking at luxury penthouses...)"
-                    className="flex-1 bg-zinc-800 border-zinc-700 text-white resize-none min-h-[60px]"
+                    className="flex-1 bg-zinc-800 border-gray-700 text-white resize-none min-h-[60px]"
                     rows={2}
                   />
                   <Button

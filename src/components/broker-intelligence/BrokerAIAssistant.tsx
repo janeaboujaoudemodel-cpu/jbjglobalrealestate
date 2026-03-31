@@ -81,7 +81,7 @@ export function BrokerAIAssistant() {
   };
 
   return (
-    <Card className="bg-zinc-900/50 border-zinc-800">
+    <Card className="bg-zinc-900/50 border-gray-800">
       <CardHeader className="pb-3">
         <CardTitle className="text-white text-lg flex items-center gap-2">
           <Bot className="w-5 h-5 text-gold" />
@@ -148,7 +148,7 @@ export function BrokerAIAssistant() {
               placeholder="Add context about the client's inquiry (optional)..."
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400 min-h-[80px]"
+              className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 min-h-[80px]"
             />
           </TabsContent>
 
@@ -157,7 +157,7 @@ export function BrokerAIAssistant() {
               placeholder="What objection has the client raised? e.g., 'The prices seem too high'"
               value={clientObjection}
               onChange={(e) => setClientObjection(e.target.value)}
-              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400 min-h-[80px]"
+              className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 min-h-[80px]"
             />
           </TabsContent>
 
@@ -172,7 +172,7 @@ export function BrokerAIAssistant() {
               placeholder="Describe the meeting context, e.g., 'First meeting with investor looking for rental yield'"
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400 min-h-[80px]"
+              className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 min-h-[80px]"
             />
           </TabsContent>
         </Tabs>
@@ -199,11 +199,11 @@ export function BrokerAIAssistant() {
 
         {/* Response */}
         {aiResponse && (
-          <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700/50 mt-4">
+          <div className="bg-zinc-800/50 rounded-lg p-4 border border-gray-700/50 mt-4">
             <div className="flex items-center gap-2 mb-3">
               <Bot className="w-4 h-4 text-gold" />
               <span className="text-gold text-sm font-medium">AI Response</span>
-              <Badge variant="outline" className="text-white/70 border-zinc-600 text-xs ml-auto">
+              <Badge variant="outline" className="text-white/70 border-gray-600 text-xs ml-auto">
                 {new Date(aiResponse.timestamp).toLocaleTimeString()}
               </Badge>
             </div>
@@ -214,7 +214,7 @@ export function BrokerAIAssistant() {
               </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-zinc-700/50 flex items-start gap-2">
+            <div className="mt-4 pt-3 border-t border-gray-700/50 flex items-start gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
               <p className="text-white/60 text-xs">{aiResponse.disclaimer}</p>
             </div>
@@ -224,7 +224,7 @@ export function BrokerAIAssistant() {
         {/* Compliance Reminder */}
         <div className="bg-zinc-800/30 rounded-lg p-3 flex items-start gap-2">
           <Shield className="w-4 h-4 text-white/60 shrink-0 mt-0.5" />
-          <p className="text-zinc-600 text-xs">
+          <p className="text-gray-600 text-xs">
             AI guidance is descriptive only. Never use predictions, guarantees, or investment advice language with clients.
           </p>
         </div>

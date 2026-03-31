@@ -108,7 +108,7 @@ const ChatShortcuts = ({ onSelectShortcut, userFirstName: userFullName }: ChatSh
         <h4 className="text-black text-lg font-semibold mb-1">
           <T>{`Hi ${userFullName}! 👋`}</T>
         </h4>
-        <p className="text-zinc-600 text-sm">
+        <p className="text-gray-600 text-sm">
           <T>What would you like help with today?</T>
         </p>
       </div>

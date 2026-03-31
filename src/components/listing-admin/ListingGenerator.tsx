@@ -720,7 +720,7 @@ const ListingGenerator = () => {
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
               step === s ? "bg-gold text-black" :
               (["input", "processing", "preview"].indexOf(step) > i) ? "bg-gold/30 text-gold" :
-              "bg-zinc-200 text-gray-500"
+              "bg-gray-200 text-gray-500"
             }`}>
               {i + 1}
             </div>
@@ -885,7 +885,7 @@ const ListingGenerator = () => {
             </p>
             <p className="text-sm font-medium text-gold">{elapsedSeconds}s elapsed</p>
           </div>
-          <div className="w-64 h-2 bg-zinc-200 rounded-full overflow-hidden">
+          <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
               className="h-full bg-gold rounded-full transition-all duration-1000"
               style={{ width: `${Math.min(95, (elapsedSeconds / 60) * 100)}%` }}

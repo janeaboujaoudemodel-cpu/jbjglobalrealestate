@@ -105,7 +105,7 @@ const ChatHistory = ({
             value={historySearch}
             onChange={(e) => setHistorySearch(e.target.value)}
             placeholder="Search conversations..."
-            className="pl-9 bg-white/5 border-zinc-700 text-white placeholder:text-gray-400 h-9 text-sm"
+            className="pl-9 bg-white/5 border-gray-700 text-white placeholder:text-gray-400 h-9 text-sm"
           />
           {historySearch && (
             <button
@@ -141,7 +141,7 @@ const ChatHistory = ({
               <button
                 key={conv.id}
                 onClick={() => onContinueConversation(conv)}
-                className="w-full p-3 bg-white/5 hover:bg-white/10 border border-zinc-700 hover:border-gold/30 rounded-lg text-left transition-all duration-200 group"
+                className="w-full p-3 bg-white/5 hover:bg-white/10 border border-gray-700 hover:border-gold/30 rounded-lg text-left transition-all duration-200 group"
               >
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -167,7 +167,7 @@ const ChatHistory = ({
                       }`}>
                         {conv.status === 'submitted_to_team' ? <T>With Team</T> : <T>{conv.status}</T>}
                       </span>
-                      <span className="text-zinc-600 text-[10px]">
+                      <span className="text-gray-600 text-[10px]">
                         {conv.messages?.length || 0} <T>messages</T>
                       </span>
                     </div>
@@ -183,10 +183,10 @@ const ChatHistory = ({
       ) : (
         <div className="text-center py-6">
           <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-zinc-800 flex items-center justify-center">
-            <MessageCircle className="w-6 h-6 text-zinc-600" />
+            <MessageCircle className="w-6 h-6 text-gray-600" />
           </div>
           <p className="text-gray-500 text-sm"><T>No previous conversations</T></p>
-          <p className="text-zinc-600 text-xs mt-1"><T>Start a new chat above!</T></p>
+          <p className="text-gray-600 text-xs mt-1"><T>Start a new chat above!</T></p>
         </div>
       )}
     </div>

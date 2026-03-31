@@ -286,7 +286,7 @@ const RentGuide = () => {
                   <item.icon className="w-6 h-6" />
                 </div>
                 <h3 className="font-medium text-black mb-2">{item.title}</h3>
-                <p className="text-sm text-zinc-600">{item.desc}</p>
+                <p className="text-sm text-gray-600">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -313,7 +313,7 @@ const RentGuide = () => {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
                       <step.icon className="w-5 h-5 text-gold" />
-                      <h3 className="text-xl md:text-2xl font-medium text-zinc-900">
+                      <h3 className="text-xl md:text-2xl font-medium text-gray-900">
                         {step.title}
                       </h3>
                     </div>
@@ -322,7 +322,7 @@ const RentGuide = () => {
                       {step.items.map((item, itemIndex) => (
                         <li key={itemIndex} className="flex items-start gap-3">
                           <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
-                          <span className="text-zinc-600 text-sm">{item}</span>
+                          <span className="text-gray-600 text-sm">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -349,7 +349,7 @@ const RentGuide = () => {
                   <structure.icon className="w-5 h-5" />
                 </div>
                 <h3 className="text-lg font-medium text-black mb-2">{structure.title}</h3>
-                <p className="text-sm text-zinc-600">{structure.description}</p>
+                <p className="text-sm text-gray-600">{structure.description}</p>
               </div>
             ))}
           </div>
@@ -373,7 +373,7 @@ const RentGuide = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-black mb-1">{cost.title}</h3>
-                    <p className="text-sm text-zinc-600">{cost.description}</p>
+                    <p className="text-sm text-gray-600">{cost.description}</p>
                   </div>
                 </div>
               </div>
@@ -403,7 +403,7 @@ const RentGuide = () => {
                   {support.points.map((point, pointIndex) => (
                     <li key={pointIndex} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-700 text-sm">{point}</span>
+                      <span className="text-gray-700 text-sm">{point}</span>
                     </li>
                   ))}
                 </ul>
@@ -418,7 +418,7 @@ const RentGuide = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-10">
             <h2 className="text-2xl md:text-3xl font-semibold text-black mb-4">Related Guides</h2>
-            <p className="text-zinc-600">Explore more resources for tenants and landlords</p>
+            <p className="text-gray-600">Explore more resources for tenants and landlords</p>
           </div>
           <div className="flex flex-wrap justify-center gap-4">
             <Link 

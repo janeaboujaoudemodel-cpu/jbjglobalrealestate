@@ -37,7 +37,7 @@ const ToolCard: React.FC<ToolCardProps> = ({ tool }) => {
         >
           {tool.name}
         </h4>
-        <p className="text-sm text-zinc-600 mb-4 leading-relaxed flex-grow">
+        <p className="text-sm text-gray-600 mb-4 leading-relaxed flex-grow">
           {tool.description}
         </p>
         <Button variant="primary" size="sm" className="mt-auto w-full justify-center">
@@ -101,20 +101,20 @@ export default function RoyalToolsHub() {
               JBJ Royal Tools Hub
             </h1>
             
-            <p className="text-zinc-600 text-sm md:text-base max-w-2xl mb-6">
+            <p className="text-gray-600 text-sm md:text-base max-w-2xl mb-6">
               Professional-grade tools for images, videos, documents, and AI-powered analytics — all designed for real estate professionals.
             </p>
             
             <div className="flex flex-wrap gap-4 md:gap-6">
-              <div className="flex items-center gap-2 text-zinc-700">
+              <div className="flex items-center gap-2 text-gray-700">
                 <CheckCircle2 className="h-4 w-4 text-gold" />
                 <span className="text-sm">Free Media Tools</span>
               </div>
-              <div className="flex items-center gap-2 text-zinc-700">
+              <div className="flex items-center gap-2 text-gray-700">
                 <Shield className="h-4 w-4 text-gold" />
                 <span className="text-sm">Privacy First</span>
               </div>
-              <div className="flex items-center gap-2 text-zinc-700">
+              <div className="flex items-center gap-2 text-gray-700">
                 <Clock className="h-4 w-4 text-gold" />
                 <span className="text-sm">No Login Required</span>
               </div>
@@ -140,7 +140,7 @@ export default function RoyalToolsHub() {
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                 selectedCategory === 'all' 
                   ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold text-black shadow-md' 
-                  : 'bg-white/30 border border-gold/30 text-zinc-600 hover:border-gold/60'
+                  : 'bg-white/30 border border-gold/30 text-gray-600 hover:border-gold/60'
               }`}
             >
               All Tools
@@ -152,7 +152,7 @@ export default function RoyalToolsHub() {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                   selectedCategory === cat 
                     ? 'bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold text-black shadow-md' 
-                    : 'bg-white/30 border border-gold/30 text-zinc-600 hover:border-gold/60'
+                    : 'bg-white/30 border border-gold/30 text-gray-600 hover:border-gold/60'
                 }`}
               >
                 {categoryLabels[cat]}
@@ -165,7 +165,7 @@ export default function RoyalToolsHub() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           {filteredTools.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-zinc-600 text-lg">No tools found matching your criteria.</p>
+              <p className="text-gray-600 text-lg">No tools found matching your criteria.</p>
               <Button
                 variant="outline"
                 className="mt-4 border-gold/50 text-gold hover:bg-gold/10"
@@ -220,7 +220,7 @@ export default function RoyalToolsHub() {
               Fair Usage & Privacy
             </h3>
             
-            <div className="grid md:grid-cols-2 gap-6 text-sm text-zinc-600">
+            <div className="grid md:grid-cols-2 gap-6 text-sm text-gray-600">
               <div>
                 <h4 className="text-black font-medium mb-2">Media Tool Limits</h4>
                 <ul className="space-y-1">

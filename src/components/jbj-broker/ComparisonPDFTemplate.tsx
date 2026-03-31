@@ -140,7 +140,7 @@ export function ComparisonPDFTemplate({
 
   return (
     <>
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-zinc-900 border-gray-800">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -168,7 +168,7 @@ export function ComparisonPDFTemplate({
                 {selectedProperties.map((property) => (
                   <div
                     key={property.id}
-                    className="p-3 rounded-lg bg-zinc-800 border border-zinc-700 relative group"
+                    className="p-3 rounded-lg bg-zinc-800 border border-gray-700 relative group"
                   >
                     <button
                       onClick={() => removeProperty(property.id)}
@@ -192,7 +192,7 @@ export function ComparisonPDFTemplate({
               {availableProperties.map((property) => (
                 <div
                   key={property.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50 hover:bg-zinc-800 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg bg-zinc-800/50 border border-gray-700/50 hover:bg-gray-800 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <Building2 className="h-4 w-4 text-gray-400" />
@@ -216,11 +216,11 @@ export function ComparisonPDFTemplate({
           </div>
 
           {/* Actions */}
-          <div className="flex gap-2 pt-4 border-t border-zinc-800">
+          <div className="flex gap-2 pt-4 border-t border-gray-800">
             <Button
               onClick={generatePDF}
               disabled={selectedProperties.length < 2 || generating}
-              className="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white"
+              className="flex-1 bg-zinc-800 hover:bg-gray-700 text-white"
             >
               <Download className="h-4 w-4 mr-2" />
               {generating ? "Generating..." : "Download PDF"}
@@ -239,7 +239,7 @@ export function ComparisonPDFTemplate({
 
       {/* Send Email Dialog */}
       <Dialog open={sendDialogOpen} onOpenChange={setSendDialogOpen}>
-        <DialogContent className="bg-zinc-900 border-zinc-700 text-white">
+        <DialogContent className="bg-zinc-900 border-gray-700 text-white">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Mail className="h-5 w-5 text-gold" />
@@ -248,7 +248,7 @@ export function ComparisonPDFTemplate({
           </DialogHeader>
           
           <div className="space-y-4">
-            <div className="p-3 rounded-lg bg-zinc-800 border border-zinc-700">
+            <div className="p-3 rounded-lg bg-zinc-800 border border-gray-700">
               <p className="text-sm text-gray-400">Sending to:</p>
               <p className="text-white font-medium">{leadName || "Lead"}</p>
               <p className="text-gray-400 text-sm">{leadEmail}</p>
@@ -259,7 +259,7 @@ export function ComparisonPDFTemplate({
               <Input
                 value={emailSubject}
                 onChange={(e) => setEmailSubject(e.target.value)}
-                className="bg-zinc-800 border-zinc-700 text-white"
+                className="bg-zinc-800 border-gray-700 text-white"
               />
             </div>
             
@@ -269,7 +269,7 @@ export function ComparisonPDFTemplate({
                 value={emailMessage}
                 onChange={(e) => setEmailMessage(e.target.value)}
                 placeholder="Add a personal note to accompany the comparison..."
-                className="bg-zinc-800 border-zinc-700 text-white min-h-[100px]"
+                className="bg-zinc-800 border-gray-700 text-white min-h-[100px]"
               />
             </div>
 
@@ -289,7 +289,7 @@ export function ComparisonPDFTemplate({
             <Button
               variant="outline"
               onClick={() => setSendDialogOpen(false)}
-              className="border-zinc-700 text-gray-300"
+              className="border-gray-700 text-gray-300"
             >
               Cancel
             </Button>

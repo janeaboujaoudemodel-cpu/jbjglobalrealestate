@@ -493,7 +493,7 @@ ${COMPANY_CONTACTS.email}`;
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full bg-zinc-50 border-2 border-gold/20 grid grid-cols-4">
+          <TabsList className="w-full bg-gray-50 border-2 border-gold/20 grid grid-cols-4">
             <TabsTrigger value="assistant" className="data-[state=active]:bg-gold data-[state=active]:text-black text-black">
               <Sparkles className="h-4 w-4 mr-1" />
               Assistant

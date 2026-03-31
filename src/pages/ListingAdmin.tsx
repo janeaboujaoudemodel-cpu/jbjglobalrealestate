@@ -675,7 +675,7 @@ const ListingAdmin = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate(-1)}
-                className="text-zinc-700 hover:text-zinc-900 hover:bg-zinc-100"
+                className="text-gray-700 hover:text-gray-900 hover:bg-gray-100"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
@@ -684,7 +684,7 @@ const ListingAdmin = () => {
                   <Building2 className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-zinc-900 text-xl font-bold">
+                  <h1 className="text-gray-900 text-xl font-bold">
                     {t('listingAdmin.title')}
                   </h1>
                   <span className="text-gray-500 text-sm">{t('listingAdmin.propertyManager')}</span>
@@ -911,7 +911,7 @@ const ListingAdmin = () => {
                     // Compute source + enrichment inline
                     const src = (project as any).import_source || project.source || "manual";
                     const srcLabel = src?.includes("provident") ? "PROVIDENT" : src?.includes("reelly") ? "REELLY" : "MANUAL";
-                    const srcColor = src?.includes("provident") ? "bg-violet-100 text-violet-700 border-violet-200" : src?.includes("reelly") ? "bg-sky-100 text-sky-700 border-sky-200" : "bg-zinc-100 text-zinc-600 border-zinc-200";
+                    const srcColor = src?.includes("provident") ? "bg-violet-100 text-violet-700 border-violet-200" : src?.includes("reelly") ? "bg-sky-100 text-sky-700 border-sky-200" : "bg-gray-100 text-gray-600 border-gray-200";
                     const hasDesc = !!project.description && project.description.length > 20;
                     const hasImages = (project.images?.length ?? 0) >= 3;
                     const hasAmenities = Array.isArray(project.amenities) && project.amenities.length > 0;
@@ -1070,7 +1070,7 @@ const ListingAdmin = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => window.open(`/project/${selectedProject?.slug}`, "_blank")}
-                        className="text-zinc-600 hover:text-black"
+                        className="text-gray-600 hover:text-black"
                       >
                         <ExternalLink className="w-4 h-4 mr-1" />
                         {t('listingAdmin.view')}
@@ -1085,7 +1085,7 @@ const ListingAdmin = () => {
                         setSelectedProject(null);
                         setActiveView('projects');
                       }}
-                      className="text-zinc-600 hover:text-black"
+                      className="text-gray-600 hover:text-black"
                     >
                       <X className="w-4 h-4" />
                     </Button>
@@ -1095,19 +1095,19 @@ const ListingAdmin = () => {
               <CardContent className="p-6 max-h-[calc(100vh-300px)] overflow-y-auto">
                 <Tabs defaultValue="details" className="space-y-6">
                   <TabsList className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-[#B89555]/30">
-                    <TabsTrigger value="details" className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black">
+                    <TabsTrigger value="details" className="tab-trigger-champagne text-gray-600 data-[state=active]:text-black">
                       {t('listingAdmin.details')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="documents" 
-                      className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+                      className="tab-trigger-champagne text-gray-600 data-[state=active]:text-black"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.documents')}
                     </TabsTrigger>
                     <TabsTrigger 
                       value="images" 
-                      className="tab-trigger-champagne text-zinc-600 data-[state=active]:text-black"
+                      className="tab-trigger-champagne text-gray-600 data-[state=active]:text-black"
                       disabled={isCreating}
                     >
                       {t('listingAdmin.images')}
@@ -1118,7 +1118,7 @@ const ListingAdmin = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* Name */}
                       <div className="md:col-span-2">
-                        <Label className="text-zinc-600">{t('listingAdmin.projectName')} *</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.projectName')} *</Label>
                         <Input
                           value={formData.name}
                           onChange={(e) => {
@@ -1129,7 +1129,7 @@ const ListingAdmin = () => {
                             });
                           }}
                           placeholder="e.g., Sobha Hartland II"
-                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                          className="bg-gray-50 border-gray-300 text-black mt-1"
                         />
                         {/* Duplicate detection when creating */}
                         {isCreating && formData.name.length >= 3 && (
@@ -1149,14 +1149,14 @@ const ListingAdmin = () => {
 
                       {/* Developer */}
                       <div>
-                        <Label className="text-zinc-600">{t('listingAdmin.developer')} *</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.developer')} *</Label>
                         <Select
                           value={formData.developer_id}
                           onValueChange={(value) =>
                             setFormData({ ...formData, developer_id: value })
                           }
                         >
-                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                          <SelectTrigger className="bg-gray-50 border-gray-300 text-black mt-1">
                             <SelectValue placeholder={t('listingAdmin.selectDeveloper')} />
                           </SelectTrigger>
                           <SelectContent>
@@ -1171,14 +1171,14 @@ const ListingAdmin = () => {
 
                       {/* Community */}
                       <div>
-                        <Label className="text-zinc-600">{t('listingAdmin.community')}</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.community')}</Label>
                         <Select
                           value={formData.community_id}
                           onValueChange={(value) =>
                             setFormData({ ...formData, community_id: value })
                           }
                         >
-                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                          <SelectTrigger className="bg-gray-50 border-gray-300 text-black mt-1">
                             <SelectValue placeholder={t('listingAdmin.selectCommunity')} />
                           </SelectTrigger>
                           <SelectContent>
@@ -1193,27 +1193,27 @@ const ListingAdmin = () => {
 
                       {/* Location */}
                       <div>
-                        <Label className="text-zinc-600">{t('listingAdmin.location')}</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.location')}</Label>
                         <Input
                           value={formData.location}
                           onChange={(e) =>
                             setFormData({ ...formData, location: e.target.value })
                           }
                           placeholder="e.g., MBR City, Dubai"
-                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                          className="bg-gray-50 border-gray-300 text-black mt-1"
                         />
                       </div>
 
                       {/* Emirate */}
                       <div>
-                        <Label className="text-zinc-600">{t('listingAdmin.emirate')}</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.emirate')}</Label>
                         <Select
                           value={formData.emirate}
                           onValueChange={(value) =>
                             setFormData({ ...formData, emirate: value })
                           }
                         >
-                          <SelectTrigger className="bg-zinc-50 border-zinc-300 text-black mt-1">
+                          <SelectTrigger className="bg-gray-50 border-gray-300 text-black mt-1">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -1228,7 +1228,7 @@ const ListingAdmin = () => {
 
                       {/* Price Range */}
                       <div>
-                        <Label className="text-zinc-600">{t('listingAdmin.priceFrom')}</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.priceFrom')}</Label>
                         <Input
                           type="number"
                           value={formData.price_from}
@@ -1236,12 +1236,12 @@ const ListingAdmin = () => {
                             setFormData({ ...formData, price_from: e.target.value })
                           }
                           placeholder="e.g., 1500000"
-                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                          className="bg-gray-50 border-gray-300 text-black mt-1"
                         />
                       </div>
 
                       <div>
-                        <Label className="text-zinc-600">{t('listingAdmin.priceTo')}</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.priceTo')}</Label>
                         <Input
                           type="number"
                           value={formData.price_to}
@@ -1249,13 +1249,13 @@ const ListingAdmin = () => {
                             setFormData({ ...formData, price_to: e.target.value })
                           }
                           placeholder="e.g., 5000000"
-                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                          className="bg-gray-50 border-gray-300 text-black mt-1"
                         />
                       </div>
 
                       {/* Bedrooms */}
                       <div>
-                        <Label className="text-zinc-600">{t('listingAdmin.bedroomsMin')}</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.bedroomsMin')}</Label>
                         <Input
                           type="number"
                           value={formData.bedrooms_min}
@@ -1263,12 +1263,12 @@ const ListingAdmin = () => {
                             setFormData({ ...formData, bedrooms_min: e.target.value })
                           }
                           placeholder="e.g., 1"
-                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                          className="bg-gray-50 border-gray-300 text-black mt-1"
                         />
                       </div>
 
                       <div>
-                        <Label className="text-zinc-600">{t('listingAdmin.bedroomsMax')}</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.bedroomsMax')}</Label>
                         <Input
                           type="number"
                           value={formData.bedrooms_max}
@@ -1276,58 +1276,58 @@ const ListingAdmin = () => {
                             setFormData({ ...formData, bedrooms_max: e.target.value })
                           }
                           placeholder="e.g., 4"
-                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                          className="bg-gray-50 border-gray-300 text-black mt-1"
                         />
                       </div>
 
                       {/* Handover & Service Charge */}
                       <div>
-                        <Label className="text-zinc-600">{t('listingAdmin.handoverDate')}</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.handoverDate')}</Label>
                         <Input
                           value={formData.handover_date}
                           onChange={(e) =>
                             setFormData({ ...formData, handover_date: e.target.value })
                           }
                           placeholder="e.g., Q4 2026"
-                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                          className="bg-gray-50 border-gray-300 text-black mt-1"
                         />
                       </div>
 
                       <div>
-                        <Label className="text-zinc-600">{t('listingAdmin.serviceCharge')}</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.serviceCharge')}</Label>
                         <Input
                           value={formData.service_charge}
                           onChange={(e) =>
                             setFormData({ ...formData, service_charge: e.target.value })
                           }
                           placeholder="e.g., 15 AED/sqft"
-                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                          className="bg-gray-50 border-gray-300 text-black mt-1"
                         />
                       </div>
 
                       {/* Payment Plan */}
                       <div className="md:col-span-2">
-                        <Label className="text-zinc-600">{t('listingAdmin.paymentPlan')}</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.paymentPlan')}</Label>
                         <Input
                           value={formData.payment_plan}
                           onChange={(e) =>
                             setFormData({ ...formData, payment_plan: e.target.value })
                           }
                           placeholder="e.g., 60/40 or 10/90"
-                          className="bg-zinc-50 border-zinc-300 text-black mt-1"
+                          className="bg-gray-50 border-gray-300 text-black mt-1"
                         />
                       </div>
 
                       {/* Description */}
                       <div className="md:col-span-2">
-                        <Label className="text-zinc-600">{t('listingAdmin.description')}</Label>
+                        <Label className="text-gray-600">{t('listingAdmin.description')}</Label>
                         <Textarea
                           value={formData.description}
                           onChange={(e) =>
                             setFormData({ ...formData, description: e.target.value })
                           }
                           placeholder="Enter project description..."
-                          className="bg-zinc-50 border-zinc-300 text-black mt-1 min-h-[120px]"
+                          className="bg-gray-50 border-gray-300 text-black mt-1 min-h-[120px]"
                         />
                       </div>
 
@@ -1371,7 +1371,7 @@ const ListingAdmin = () => {
                     </div>
 
                     {/* Save/Delete Actions */}
-                    <div className="flex items-center justify-between pt-4 border-t border-zinc-200">
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                       <div className="flex gap-2">
                         <Button
                           onClick={handleSaveProject}
@@ -1407,7 +1407,7 @@ const ListingAdmin = () => {
                     {/* Document Upload */}
                     <div className="flex items-center gap-4">
                       <Select value={selectedDocType} onValueChange={setSelectedDocType}>
-                        <SelectTrigger className="w-48 bg-zinc-50 border-zinc-300 text-black">
+                        <SelectTrigger className="w-48 bg-gray-50 border-gray-300 text-black">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -1445,10 +1445,10 @@ const ListingAdmin = () => {
                       {projectDocuments.map((doc) => (
                         <div
                           key={doc.id}
-                          className="flex items-center justify-between p-3 bg-zinc-50 rounded-lg border border-zinc-200"
+                          className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200"
                         >
                           <div className="flex items-center gap-3">
-                            <File className="w-5 h-5 text-zinc-600" />
+                            <File className="w-5 h-5 text-gray-600" />
                             <div>
                               <p className="text-black text-sm font-medium">{doc.file_name}</p>
                               <p className="text-gray-500 text-xs">

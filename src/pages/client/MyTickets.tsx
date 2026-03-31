@@ -291,7 +291,7 @@ const MyTickets = () => {
             {/* Original Description */}
             <div className="bg-[#FDFBF7] rounded-lg p-3 border border-gold/10">
               <p className="text-[10px] text-gold uppercase tracking-wide mb-1 font-semibold">Your Message</p>
-              <p className="text-zinc-700 text-sm whitespace-pre-wrap">{selectedTicket.description}</p>
+              <p className="text-gray-700 text-sm whitespace-pre-wrap">{selectedTicket.description}</p>
             </div>
 
             {/* Messages */}
@@ -308,7 +308,7 @@ const MyTickets = () => {
                 <p className="text-[10px] uppercase tracking-wide mb-1 font-semibold text-gold">
                   {msg.sender_type === "staff" ? "📩 Staff Reply" : "You"}
                 </p>
-                <p className="text-zinc-700 text-sm whitespace-pre-wrap">{msg.message}</p>
+                <p className="text-gray-700 text-sm whitespace-pre-wrap">{msg.message}</p>
                 <p className="text-xs text-gray-500 mt-1">
                   {format(new Date(msg.created_at), "MMM d, h:mm a")}
                 </p>
@@ -398,7 +398,7 @@ const MyTickets = () => {
             <h1 className="text-3xl md:text-4xl font-bold text-black mb-2">
               My Support Tickets
             </h1>
-            <p className="text-zinc-600">
+            <p className="text-gray-600">
               {user
                 ? "View, track, and reply to your support tickets"
                 : "Enter your details to track your support ticket"}
@@ -415,7 +415,7 @@ const MyTickets = () => {
 
               <div className="space-y-4">
                 <div>
-                  <Label className="text-zinc-700">Email Address</Label>
+                  <Label className="text-gray-700">Email Address</Label>
                   <div className="relative mt-1">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <Input
@@ -429,7 +429,7 @@ const MyTickets = () => {
                 </div>
 
                 <div>
-                  <Label className="text-zinc-700">Ticket Number</Label>
+                  <Label className="text-gray-700">Ticket Number</Label>
                   <div className="relative mt-1">
                     <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <Input
@@ -591,7 +591,7 @@ const MyTickets = () => {
                                 {msg.support_tickets?.ticket_number || ""}
                               </span>
                             </div>
-                            <p className="text-sm text-zinc-600 line-clamp-2">{msg.message}</p>
+                            <p className="text-sm text-gray-600 line-clamp-2">{msg.message}</p>
                             <p className="text-xs text-gray-500 mt-1">
                               {format(new Date(msg.created_at), "MMM d, yyyy h:mm a")}
                             </p>

@@ -712,7 +712,7 @@ const ProjectFilters = ({
                       className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all w-full ${
                         filters.premiumOnly
                           ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border-2 border-gold shadow-sm"
-                          : "bg-white/80 text-zinc-600 border border-gold/20 hover:border-gold/40"
+                          : "bg-white/80 text-gray-600 border border-gold/20 hover:border-gold/40"
                       }`}
                     >
                       <Star className={`w-5 h-5 ${filters.premiumOnly ? "fill-black text-black" : "text-gold"}`} />
@@ -1060,7 +1060,7 @@ const QuickFilterChip = forwardRef<HTMLButtonElement, {
     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
       active
         ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border-2 border-gold shadow-sm"
-        : "bg-white/90 text-zinc-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
+        : "bg-white/90 text-gray-700 border border-gold/30 hover:border-gold/50 hover:bg-white"
     }`}
   >
     {label}
@@ -1080,7 +1080,7 @@ const FilterPill = ({
     {label}
     <button
       onClick={onRemove}
-      className="ml-1 hover:bg-zinc-700 rounded-full p-0.5"
+      className="ml-1 hover:bg-gray-700 rounded-full p-0.5"
     >
       <X className="w-3 h-3" />
     </button>

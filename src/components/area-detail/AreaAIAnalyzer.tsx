@@ -85,7 +85,7 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-zinc-600 text-xs leading-relaxed">{b}</p>
+            <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>
           ))}
         </div>
       )}
@@ -139,7 +139,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
         {yieldMetrics.map((m) => (
           <span key={m.name} className="flex items-center gap-1">
             <div className="w-3 h-3 rounded" style={{ backgroundColor: m.fill }} />
-            <span className="text-zinc-600">{m.name}</span>
+            <span className="text-gray-600">{m.name}</span>
           </span>
         ))}
       </div>
@@ -147,7 +147,7 @@ function InvestmentMetricsChart({ text }: { text: string }) {
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-zinc-600 text-xs leading-relaxed">{b}</p>
+            <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>
           ))}
         </div>
       )}
@@ -283,11 +283,11 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
       <div className="flex items-center gap-4 mb-4 text-xs">
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#C8A766' }} />
-          <span className="text-zinc-600">Supply (New Units)</span>
+          <span className="text-gray-600">Supply (New Units)</span>
         </div>
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-full bg-emerald-500" />
-          <span className="text-zinc-600">Demand (Absorption)</span>
+          <span className="text-gray-600">Demand (Absorption)</span>
         </div>
       </div>
 
@@ -295,7 +295,7 @@ function SupplyDemandChart({ text, areaName }: { text: string; areaName: string 
       {bullets.length > 0 && (
         <div className="border-t border-gold/10 pt-3 space-y-1.5">
           {bullets.map((b, i) => (
-            <p key={i} className="text-zinc-600 text-xs leading-relaxed">{b}</p>
+            <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>
           ))}
         </div>
       )}
@@ -348,7 +348,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
       </div>
 
       {devEntries.length === 0 && (
-        <div className="text-zinc-700 text-sm leading-relaxed whitespace-pre-line">
+        <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
           {text}
         </div>
       )}
@@ -482,22 +482,22 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <div className="text-2xl font-bold text-gold">{stats.totalProjects}</div>
-              <div className="text-zinc-600 text-xs mt-1">Active Projects</div>
+              <div className="text-gray-600 text-xs mt-1">Active Projects</div>
             </div>
             <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
               <div className="text-2xl font-bold text-gold">{stats.developers.length}</div>
-              <div className="text-zinc-600 text-xs mt-1">Developers</div>
+              <div className="text-gray-600 text-xs mt-1">Developers</div>
             </div>
             {stats.avgPrice && (
               <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
                 <div className="text-2xl font-bold text-gold">AED {(stats.avgPrice / 1000000).toFixed(1)}M</div>
-                <div className="text-zinc-600 text-xs mt-1">Avg. Starting Price</div>
+                <div className="text-gray-600 text-xs mt-1">Avg. Starting Price</div>
               </div>
             )}
             {stats.pricePerSqft && (
               <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
                 <div className="text-2xl font-bold text-gold">AED {stats.pricePerSqft.toLocaleString()}</div>
-                <div className="text-zinc-600 text-xs mt-1">Est. Price/sqft</div>
+                <div className="text-gray-600 text-xs mt-1">Est. Price/sqft</div>
               </div>
             )}
           </div>
@@ -546,7 +546,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                         <span className="text-gray-500 text-xs">{areaName} Community Profile</span>
                       </div>
                     </div>
-                    <p className="text-zinc-700 text-sm leading-relaxed mb-5">{cleanMarkdown(sections.overview)}</p>
+                    <p className="text-gray-700 text-sm leading-relaxed mb-5">{cleanMarkdown(sections.overview)}</p>
                     
                     {/* Quick insight stats row */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -593,7 +593,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                               status.toLowerCase().includes('under') || status.toLowerCase().includes('construct') ? 'bg-amber-500' : 
                               status.toLowerCase().includes('ready') || status.toLowerCase().includes('complet') ? 'bg-blue-500' : 'bg-zinc-400'
                             }`} />
-                            <span className="text-xs text-zinc-600">{status} <span className="font-semibold text-black">({count as number})</span></span>
+                            <span className="text-xs text-gray-600">{status} <span className="font-semibold text-black">({count as number})</span></span>
                           </div>
                         ))}
                       </div>

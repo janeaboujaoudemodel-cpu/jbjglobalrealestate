@@ -229,7 +229,7 @@ const FAQ = () => {
                             <AccordionTrigger className="px-6 py-5 text-black text-left hover:text-gold hover:no-underline text-base font-medium">
                               {faq.question}
                             </AccordionTrigger>
-                            <AccordionContent className="px-6 pb-5 text-zinc-700 leading-relaxed">
+                            <AccordionContent className="px-6 pb-5 text-gray-700 leading-relaxed">
                               {faq.answer}
                             </AccordionContent>
                           </AccordionItem>
@@ -257,7 +257,7 @@ const FAQ = () => {
               <Shield className="w-7 h-7" />
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">Still Have Questions?</h2>
-            <p className="text-zinc-700 mb-8 max-w-xl mx-auto leading-relaxed">
+            <p className="text-gray-700 mb-8 max-w-xl mx-auto leading-relaxed">
               Our team is here to help. Whether you're exploring options or ready to proceed, we’re happy to provide guidance tailored to your situation.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
@@ -286,7 +286,7 @@ const FAQ = () => {
       <section className="py-10 bg-black border-t border-gold/20">
         <div className="jj-layer-2">
           <div className="jj-card-inner max-w-4xl mx-auto">
-            <p className="text-center text-zinc-700 text-sm leading-relaxed">
+            <p className="text-center text-gray-700 text-sm leading-relaxed">
               <span className="text-black font-semibold">Disclaimer:</span> This FAQ is provided for general informational purposes only. It does not constitute legal, financial, or professional advice. Regulations and requirements may change. Consult qualified professionals for advice specific to your situation.
             </p>
           </div>

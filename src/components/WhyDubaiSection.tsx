@@ -16,7 +16,7 @@ const WhyDubaiSection = () => {
           >
             Why Invest in the <span className="text-gold">UAE</span>?
           </h2>
-          <p className="text-zinc-600 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             The UAE offers unparalleled opportunities for property investors with world-class infrastructure and tax-free returns
           </p>
         </div>
@@ -63,7 +63,7 @@ const WhyDubaiSection = () => {
                 <item.icon className="w-6 h-6 text-gold" />
               </div>
               <h3 className="text-black text-lg font-semibold mb-2">{item.title}</h3>
-              <p className="text-zinc-600 text-sm leading-relaxed">{item.description}</p>
+              <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
             </div>
           ))}
         </div>

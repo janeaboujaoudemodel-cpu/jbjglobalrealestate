@@ -77,7 +77,7 @@ const InternalDashboard = () => {
       <section className="py-8 border-b border-zinc-900">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border-gray-800">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <Activity className="w-5 h-5 text-emerald-400" />
@@ -90,7 +90,7 @@ const InternalDashboard = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border-gray-800">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <Zap className="w-5 h-5 text-gold" />
@@ -103,7 +103,7 @@ const InternalDashboard = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border-gray-800">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <Target className="w-5 h-5 text-blue-400" />
@@ -116,7 +116,7 @@ const InternalDashboard = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-zinc-900/50 border-zinc-800">
+            <Card className="bg-zinc-900/50 border-gray-800">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <AlertTriangle className="w-5 h-5 text-amber-400" />
@@ -140,7 +140,7 @@ const InternalDashboard = () => {
           
           <div className="grid gap-4">
             {rentPressureSignals.map((signal) => (
-              <Card key={signal.area} className="bg-zinc-900/50 border-zinc-800">
+              <Card key={signal.area} className="bg-zinc-900/50 border-gray-800">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between flex-wrap gap-4">
                     <div className="flex items-center gap-4">
@@ -189,7 +189,7 @@ const InternalDashboard = () => {
           <h2 className="text-white text-xl font-bold mb-6">Internal Tools</h2>
           <div className="grid md:grid-cols-3 gap-4">
             <Link to="/internal/market-intelligence/brokers">
-              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+              <Card className="bg-zinc-900/50 border-gray-800 hover:border-gold/30 transition-all">
                 <CardContent className="p-6">
                   <h3 className="text-white font-bold mb-2">Broker Intelligence</h3>
                   <p className="text-white/60 text-sm">Conversion signals and performance data</p>
@@ -197,7 +197,7 @@ const InternalDashboard = () => {
               </Card>
             </Link>
             <Link to="/internal/market-intelligence/ai-insights">
-              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+              <Card className="bg-zinc-900/50 border-gray-800 hover:border-gold/30 transition-all">
                 <CardContent className="p-6">
                   <h3 className="text-white font-bold mb-2">AI Market Narratives</h3>
                   <p className="text-white/60 text-sm">AI-generated execution insights</p>
@@ -205,7 +205,7 @@ const InternalDashboard = () => {
               </Card>
             </Link>
             <Link to="/internal/market-intelligence/data-ops">
-              <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
+              <Card className="bg-zinc-900/50 border-gray-800 hover:border-gold/30 transition-all">
                 <CardContent className="p-6">
                   <h3 className="text-white font-bold mb-2">Data Operations</h3>
                   <p className="text-white/60 text-sm">Dataset management and audit logs</p>

@@ -42,7 +42,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string
 };
 
 const CategoryBadge = ({ category }: { category: string }) => {
-  const colors = CATEGORY_COLORS[category] || { bg: 'bg-zinc-100', text: 'text-zinc-700', border: 'border-zinc-200' };
+  const colors = CATEGORY_COLORS[category] || { bg: 'bg-gray-100', text: 'text-gray-700', border: 'border-gray-200' };
   return (
     <span className={`text-xs ${colors.text} ${colors.bg} px-3 py-1 rounded-full border ${colors.border} font-medium`}>
       {category}
@@ -169,23 +169,23 @@ const News = () => {
           <span className="text-[10px] text-gray-500">{dateLabel}</span>
           <div className="space-y-2 mt-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-zinc-700">Off-plan</span>
+              <span className="text-sm text-gray-700">Off-plan</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-black">{isDaily ? `~${offPlan}` : `~${offPlan.toLocaleString()}`}</span>
                 <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">{offPlanPct}%</span>
               </div>
             </div>
-            <div className="w-full bg-zinc-200 rounded-full h-2">
+            <div className="w-full bg-gray-200 rounded-full h-2">
               <div className="bg-gold rounded-full h-2" style={{ width: `${offPlanPct}%` }} />
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-zinc-700">Secondary</span>
+              <span className="text-sm text-gray-700">Secondary</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-black">{isDaily ? `~${secondary}` : `~${secondary.toLocaleString()}`}</span>
-                <span className="text-xs text-gray-500 font-medium bg-zinc-100 px-1.5 py-0.5 rounded">{secondaryPct}%</span>
+                <span className="text-xs text-gray-500 font-medium bg-gray-100 px-1.5 py-0.5 rounded">{secondaryPct}%</span>
               </div>
             </div>
-            <div className="w-full bg-zinc-200 rounded-full h-2">
+            <div className="w-full bg-gray-200 rounded-full h-2">
               <div className="bg-zinc-400 rounded-full h-2" style={{ width: `${secondaryPct}%` }} />
             </div>
           </div>
@@ -200,23 +200,23 @@ const News = () => {
           <span className="text-[10px] text-gray-500">{dateLabel}</span>
           <div className="space-y-2 mt-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-zinc-700">Cash</span>
+              <span className="text-sm text-gray-700">Cash</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-black">{isDaily ? `~${cash}` : `~${cash.toLocaleString()}`}</span>
                 <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-1.5 py-0.5 rounded">{cashPct}%</span>
               </div>
             </div>
-            <div className="w-full bg-zinc-200 rounded-full h-2">
+            <div className="w-full bg-gray-200 rounded-full h-2">
               <div className="bg-emerald-500 rounded-full h-2" style={{ width: `${cashPct}%` }} />
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-zinc-700">Mortgage</span>
+              <span className="text-sm text-gray-700">Mortgage</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-black">{isDaily ? `~${mortgage}` : `~${mortgage.toLocaleString()}`}</span>
-                <span className="text-xs text-gray-500 font-medium bg-zinc-100 px-1.5 py-0.5 rounded">{mortgagePct}%</span>
+                <span className="text-xs text-gray-500 font-medium bg-gray-100 px-1.5 py-0.5 rounded">{mortgagePct}%</span>
               </div>
             </div>
-            <div className="w-full bg-zinc-200 rounded-full h-2">
+            <div className="w-full bg-gray-200 rounded-full h-2">
               <div className="bg-zinc-400 rounded-full h-2" style={{ width: `${mortgagePct}%` }} />
             </div>
           </div>
@@ -231,7 +231,7 @@ const News = () => {
           <span className="text-[10px] text-gray-500">{dateLabel}</span>
           <div className="flex flex-col items-center justify-center h-[calc(100%-2.5rem)] mt-2">
             <p className="text-4xl font-bold text-gold">~{isDaily ? gifts : gifts.toLocaleString()}</p>
-            <p className="text-sm text-zinc-600 mt-1">{isDaily ? "Daily Avg Gift Transfers" : "Gift Transfers"}</p>
+            <p className="text-sm text-gray-600 mt-1">{isDaily ? "Daily Avg Gift Transfers" : "Gift Transfers"}</p>
             <p className="text-xs text-gray-500 mt-2">{giftPct}% of total volume</p>
           </div>
         </div>
@@ -253,7 +253,7 @@ const News = () => {
         </thead>
         <tbody>
           {areas.map((area, i) => (
-            <tr key={area.area} className="border-b border-zinc-100 last:border-0 hover:bg-champagne-light/30 transition-colors">
+            <tr key={area.area} className="border-b border-gray-100 last:border-0 hover:bg-champagne-light/30 transition-colors">
               <td className="py-3 px-2 text-gray-500 font-medium">{i + 1}</td>
               <td className="py-3 px-2 text-black font-medium">{area.area}</td>
               <td className="py-3 px-2 text-right text-gold font-bold">{area.transactions.toLocaleString()}</td>
@@ -538,19 +538,19 @@ const News = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.value}</p>
-                        <p className="text-sm text-zinc-700">YTD Transaction Value</p>
+                        <p className="text-sm text-gray-700">YTD Transaction Value</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.transactions.toLocaleString()}+</p>
-                        <p className="text-sm text-zinc-700">YTD Transactions</p>
+                        <p className="text-sm text-gray-700">YTD Transactions</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.growth}</p>
-                        <p className="text-sm text-zinc-700">YoY Volume Growth</p>
+                        <p className="text-sm text-gray-700">YoY Volume Growth</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.topArea}</p>
-                        <p className="text-sm text-zinc-700">Top Performing Area</p>
+                        <p className="text-sm text-gray-700">Top Performing Area</p>
                       </div>
                     </div>
 
@@ -575,19 +575,19 @@ const News = () => {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{daily2026.valuePerDay}</p>
-                        <p className="text-sm text-zinc-700">Avg Daily Value</p>
+                        <p className="text-sm text-gray-700">Avg Daily Value</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">~{daily2026.transactions}</p>
-                        <p className="text-sm text-zinc-700">Avg Daily Transactions</p>
+                        <p className="text-sm text-gray-700">Avg Daily Transactions</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{daysElapsed2026}</p>
-                        <p className="text-sm text-zinc-700">Days Elapsed in 2026</p>
+                        <p className="text-sm text-gray-700">Days Elapsed in 2026</p>
                       </div>
                       <div className="text-center">
                         <p className="text-3xl md:text-4xl font-bold text-gold mb-1">{ytd2026.topArea}</p>
-                        <p className="text-sm text-zinc-700">Top Performing Area</p>
+                        <p className="text-sm text-gray-700">Top Performing Area</p>
                       </div>
                     </div>
 
@@ -609,7 +609,7 @@ const News = () => {
                   </TabsContent>
                 </Tabs>
 
-                <p className="text-xs text-zinc-600 mt-6 text-center">
+                <p className="text-xs text-gray-600 mt-6 text-center">
                   Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}
                 </p>
               </div>
@@ -658,7 +658,7 @@ const News = () => {
                       <span className="text-lg">{nat.flag}</span>
                       <span className="text-sm font-medium text-black flex-1">{nat.country}</span>
                       <div className="flex-1 max-w-[200px]">
-                        <div className="w-full bg-zinc-200 rounded-full h-2">
+                        <div className="w-full bg-gray-200 rounded-full h-2">
                           <div className="bg-gold rounded-full h-2 transition-all" style={{ width: `${nat.percentage * 4}%` }} />
                         </div>
                       </div>
@@ -698,19 +698,19 @@ const News = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">AED 761B</p>
-                    <p className="text-sm text-zinc-700">Total Transaction Value</p>
+                    <p className="text-sm text-gray-700">Total Transaction Value</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">226,000+</p>
-                    <p className="text-sm text-zinc-700">Total Transactions</p>
+                    <p className="text-sm text-gray-700">Total Transactions</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">+36%</p>
-                    <p className="text-sm text-zinc-700">YoY Growth vs 2024</p>
+                    <p className="text-sm text-gray-700">YoY Growth vs 2024</p>
                   </div>
                   <div className="text-center">
                     <p className="text-2xl md:text-3xl font-bold text-gold mb-1">Record Year</p>
-                    <p className="text-sm text-zinc-700">Highest Ever Recorded</p>
+                    <p className="text-sm text-gray-700">Highest Ever Recorded</p>
                   </div>
                 </div>
 
@@ -730,7 +730,7 @@ const News = () => {
                   />
                 </div>
 
-                <p className="text-xs text-zinc-600 mt-6 text-center">
+                <p className="text-xs text-gray-600 mt-6 text-center">
                   Source: Dubai Land Department (DLD) · Full Year 2025 Closed Figures
                 </p>
               </div>
@@ -772,7 +772,7 @@ const News = () => {
                   <div>
                     <h3 className="text-black font-semibold text-lg mb-1">Victoria Hayes</h3>
                     <p className="text-gold text-sm mb-3">Senior News Reporter, JBJ Global Real Estate</p>
-                    <p className="text-zinc-700 text-sm mb-3">
+                    <p className="text-gray-700 text-sm mb-3">
                       Victoria curates the latest real estate news from official UAE government sources 
                       including Dubai Media Office, Dubai Land Department, Abu Dhabi Media Office, and Ministry of Economy. 
                       With over 12 years of experience in financial journalism, she ensures you stay informed of the latest market developments.

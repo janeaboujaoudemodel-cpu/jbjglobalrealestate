@@ -1086,7 +1086,7 @@ const Properties = () => {
                   <Button
                     variant="ghost"
                     onClick={clearFilters}
-                    className="text-zinc-600 hover:text-black"
+                    className="text-gray-600 hover:text-black"
                   >
                     Clear All
                   </Button>
@@ -1192,7 +1192,7 @@ const Properties = () => {
                   <div className="col-span-2 text-center py-20">
                     <Search className="w-10 h-10 text-gold mx-auto mb-4" />
                     <h3 className="text-xl font-semibold text-black mb-2">We Couldn't Find an Exact Match</h3>
-                    <p className="text-zinc-600 mb-4">Try adjusting your filters to discover available properties</p>
+                    <p className="text-gray-600 mb-4">Try adjusting your filters to discover available properties</p>
                     <Button onClick={clearFilters} variant="outline" className="border-gold/40 text-black hover:bg-gold/10">
                       <X className="w-4 h-4 mr-2" />
                       Clear All Filters
@@ -1251,7 +1251,7 @@ const Properties = () => {
                   <Button
                     variant="ghost"
                     onClick={clearFilters}
-                    className="text-zinc-600 hover:text-black"
+                    className="text-gray-600 hover:text-black"
                   >
                     <X className="w-4 h-4 mr-2" />
                     Clear all filters
@@ -1308,7 +1308,7 @@ const Properties = () => {
                         <h3 className="text-2xl font-semibold text-black mb-3">
                           No Listings Yet for {developers.find(d => d.id === appliedFilters.developerId)?.name}
                         </h3>
-                        <p className="text-zinc-600 mb-6 max-w-md mx-auto">
+                        <p className="text-gray-600 mb-6 max-w-md mx-auto">
                           We're currently adding properties from this developer to our portfolio. 
                           Register your interest to be notified when listings become available.
                         </p>
@@ -1329,7 +1329,7 @@ const Properties = () => {
                               window.scrollTo({ top: 0, behavior: 'smooth' });
                             }} 
                             variant="outline" 
-                            className="border-zinc-300 text-black hover:bg-zinc-100 h-12 px-6 cursor-pointer"
+                            className="border-gray-300 text-black hover:bg-gray-100 h-12 px-6 cursor-pointer"
                           >
                             Browse All Properties
                           </Button>
@@ -1343,7 +1343,7 @@ const Properties = () => {
                         <h3 className="text-2xl font-bold text-black mb-3">
                           We Couldn't Find an Exact Match
                         </h3>
-                        <p className="text-zinc-600 mb-6 max-w-lg mx-auto">
+                        <p className="text-gray-600 mb-6 max-w-lg mx-auto">
                           No properties matched your current filters. Try adjusting your search, or explore our curated selection below.
                         </p>
                         <Button
@@ -1409,11 +1409,11 @@ const Properties = () => {
                   >
                     Confused About Where to <span className="text-gold">Buy or Invest</span> in Dubai?
                   </h2>
-                  <p className="text-zinc-600 mb-6">
+                  <p className="text-gray-600 mb-6">
                     Our experienced advisors help you navigate Dubai's dynamic real estate market. 
                     Get personalized recommendations based on your goals, budget, and timeline.
                   </p>
-                  <ul className="space-y-2 text-sm text-zinc-600 mb-6">
+                  <ul className="space-y-2 text-sm text-gray-600 mb-6">
                     <li className="flex items-center gap-2 justify-center md:justify-start">
                       <span className="w-1.5 h-1.5 rounded-full bg-gold" />
                       Flexible payment plans tailored to your investment timeline

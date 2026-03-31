@@ -57,7 +57,7 @@ const ProjectHighlightCard = ({ highlight }: { highlight: ProjectHighlight }) =>
           {highlight.status}
         </Badge>
       </div>
-      <p className="text-zinc-600 text-xs line-clamp-2">{highlight.description}</p>
+      <p className="text-gray-600 text-xs line-clamp-2">{highlight.description}</p>
     </div>
   );
 };
@@ -84,7 +84,7 @@ const DepartmentInfoSection: React.FC<DepartmentInfoSectionProps> = ({ departmen
               <Sparkles className="w-4 h-4 text-gold" />
               <span className="text-gold text-xs font-medium uppercase tracking-wider">Overview</span>
             </div>
-            <p className="text-zinc-700 text-sm leading-relaxed">{metadata.summary}</p>
+            <p className="text-gray-700 text-sm leading-relaxed">{metadata.summary}</p>
           </div>
 
           {/* Tech Stack */}

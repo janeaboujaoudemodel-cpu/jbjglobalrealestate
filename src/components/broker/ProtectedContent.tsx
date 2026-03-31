@@ -61,7 +61,7 @@ export default function ProtectedContent({
   if (!user) {
     return (
       <div className={`relative ${className}`}>
-        <div className="absolute inset-0 backdrop-blur-lg bg-zinc-900/80 flex flex-col items-center justify-center p-8 text-center rounded-xl border border-zinc-700">
+        <div className="absolute inset-0 backdrop-blur-lg bg-zinc-900/80 flex flex-col items-center justify-center p-8 text-center rounded-xl border border-gray-700">
           <Lock className="w-12 h-12 text-gold mb-4" />
           <h3 className="text-xl font-semibold text-white mb-2">Sign In Required</h3>
           <p className="text-white/70 mb-6 max-w-md">

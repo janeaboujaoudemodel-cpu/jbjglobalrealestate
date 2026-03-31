@@ -80,7 +80,7 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
                   <div className="w-8 h-8 bg-gold/20 rounded flex items-center justify-center text-gold font-bold text-xs">
                     {dev.name.charAt(0)}
                   </div>
-                  <span className="text-sm font-medium text-zinc-700">{dev.name}</span>
+                  <span className="text-sm font-medium text-gray-700">{dev.name}</span>
                 </div>
               )}
             </motion.div>

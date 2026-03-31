@@ -43,7 +43,7 @@ const TASK_TYPE_CONFIG = {
   equipment_setup: { label: 'Equipment Setup', color: 'bg-green-500' },
   system_update: { label: 'System Update', color: 'bg-cyan-500' },
   security_audit: { label: 'Security Audit', color: 'bg-red-500' },
-  other: { label: 'Other', color: 'bg-zinc-500' }
+  other: { label: 'Other', color: 'bg-gray-500' }
 };
 
 const STATUS_CONFIG = {
@@ -51,7 +51,7 @@ const STATUS_CONFIG = {
   in_progress: { label: 'In Progress', color: 'bg-blue-500', icon: Play },
   pending_review: { label: 'Pending Review', color: 'bg-purple-500', icon: Clock },
   completed: { label: 'Completed', color: 'bg-green-500', icon: CheckCircle },
-  cancelled: { label: 'Cancelled', color: 'bg-zinc-500', icon: X }
+  cancelled: { label: 'Cancelled', color: 'bg-gray-500', icon: X }
 };
 
 const PRIORITY_CONFIG = {

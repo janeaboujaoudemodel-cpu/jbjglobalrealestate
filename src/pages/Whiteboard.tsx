@@ -287,7 +287,7 @@ const Whiteboard = () => {
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
       {/* Header */}
-      <div className="border-b border-zinc-800 px-4 py-3 flex items-center justify-between">
+      <div className="border-b border-gray-800 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Palette className="w-6 h-6 text-cyan-500" />
           <Input
@@ -322,7 +322,7 @@ const Whiteboard = () => {
 
       <div className="flex flex-1">
         {/* Toolbar */}
-        <div className="w-16 border-r border-zinc-800 p-2 flex flex-col gap-2">
+        <div className="w-16 border-r border-gray-800 p-2 flex flex-col gap-2">
           {tools.map((t) => (
             <Button
               key={t.id}
@@ -335,7 +335,7 @@ const Whiteboard = () => {
             </Button>
           ))}
           
-          <div className="border-t border-zinc-700 my-2 pt-2">
+          <div className="border-t border-gray-700 my-2 pt-2">
             <div className="flex flex-wrap gap-1 justify-center">
               {colorOptions.map((c) => (
                 <button

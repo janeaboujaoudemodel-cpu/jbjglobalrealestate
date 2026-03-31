@@ -30,7 +30,7 @@ const StatusBadge = ({ status }: { status: string }) => {
     approved: { color: 'bg-blue-500/20 text-blue-600 border-blue-500/30', icon: CheckCircle },
     paid: { color: 'bg-emerald-500/20 text-emerald-600 border-emerald-500/30', icon: CheckCircle },
     cancelled: { color: 'bg-red-500/20 text-red-600 border-red-500/30', icon: XCircle },
-  }[status] || { color: 'bg-zinc-200 text-zinc-600', icon: Clock };
+  }[status] || { color: 'bg-gray-200 text-gray-600', icon: Clock };
   const Icon = config.icon;
   return <Badge className={`${config.color} capitalize`}><Icon className="h-3 w-3 mr-1" />{status}</Badge>;
 };
@@ -58,7 +58,7 @@ export function EmployeeSalaryCommissionPanel() {
     <div className="space-y-6">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-white border-zinc-200">
+        <Card className="bg-white border-gray-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -71,7 +71,7 @@ export function EmployeeSalaryCommissionPanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-zinc-200">
+        <Card className="bg-white border-gray-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -84,7 +84,7 @@ export function EmployeeSalaryCommissionPanel() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white border-zinc-200">
+        <Card className="bg-white border-gray-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -101,9 +101,9 @@ export function EmployeeSalaryCommissionPanel() {
 
       {/* Filters */}
       <div className="flex flex-col md:flex-row gap-4 items-center">
-        <Input placeholder="Search by employee..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-md bg-white border-zinc-200" />
+        <Input placeholder="Search by employee..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-md bg-white border-gray-200" />
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-40 bg-white border-zinc-200"><SelectValue placeholder="All" /></SelectTrigger>
+          <SelectTrigger className="w-40 bg-white border-gray-200"><SelectValue placeholder="All" /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Statuses</SelectItem>
             <SelectItem value="pending">Pending</SelectItem>
@@ -111,12 +111,12 @@ export function EmployeeSalaryCommissionPanel() {
             <SelectItem value="paid">Paid</SelectItem>
           </SelectContent>
         </Select>
-        <Button variant="outline" className="border-zinc-200"><Download className="h-4 w-4 mr-2" />Export</Button>
+        <Button variant="outline" className="border-gray-200"><Download className="h-4 w-4 mr-2" />Export</Button>
       </div>
 
       {/* Tabs */}
       <Tabs defaultValue="commissions" className="space-y-4">
-        <TabsList className="bg-zinc-100 border border-zinc-200">
+        <TabsList className="bg-gray-100 border border-gray-200">
           <TabsTrigger value="commissions" className="data-[state=active]:bg-white"><TrendingUp className="h-4 w-4 mr-2" />Commissions</TabsTrigger>
           <TabsTrigger value="salaries" className="data-[state=active]:bg-white"><Wallet className="h-4 w-4 mr-2" />Salaries</TabsTrigger>
           <TabsTrigger value="payments" className="data-[state=active]:bg-white"><CreditCard className="h-4 w-4 mr-2" />Payments</TabsTrigger>
@@ -124,29 +124,29 @@ export function EmployeeSalaryCommissionPanel() {
         </TabsList>
 
         <TabsContent value="commissions">
-          <Card className="bg-white border-zinc-200">
+          <Card className="bg-white border-gray-200">
             <CardHeader><CardTitle className="text-black flex items-center gap-2"><TrendingUp className="h-5 w-5 text-gold" />Commission Tracker</CardTitle></CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
-                  <TableRow className="border-zinc-200">
-                    <TableHead className="text-zinc-600">Employee</TableHead>
-                    <TableHead className="text-zinc-600">Deal</TableHead>
-                    <TableHead className="text-zinc-600 text-right">Amount</TableHead>
-                    <TableHead className="text-zinc-600">Date</TableHead>
-                    <TableHead className="text-zinc-600">Status</TableHead>
-                    <TableHead className="text-zinc-600">Actions</TableHead>
+                  <TableRow className="border-gray-200">
+                    <TableHead className="text-gray-600">Employee</TableHead>
+                    <TableHead className="text-gray-600">Deal</TableHead>
+                    <TableHead className="text-gray-600 text-right">Amount</TableHead>
+                    <TableHead className="text-gray-600">Date</TableHead>
+                    <TableHead className="text-gray-600">Status</TableHead>
+                    <TableHead className="text-gray-600">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredCommissions.length === 0 ? (
                     <TableRow><TableCell colSpan={6} className="text-center text-gray-500 py-8">No commission records</TableCell></TableRow>
                   ) : filteredCommissions.map((c) => (
-                    <TableRow key={c.id} className="border-zinc-100 hover:bg-zinc-50">
+                    <TableRow key={c.id} className="border-gray-100 hover:bg-gray-50">
                       <TableCell className="font-medium text-black">{c.employee_name}</TableCell>
-                      <TableCell className="text-zinc-600">{c.deal_reference || '-'}</TableCell>
+                      <TableCell className="text-gray-600">{c.deal_reference || '-'}</TableCell>
                       <TableCell className="text-right font-bold text-emerald-600">{formatCurrency(c.commission_amount || 0, c.currency || 'AED')}</TableCell>
-                      <TableCell className="text-zinc-600">{c.deal_closed_date ? format(new Date(c.deal_closed_date), 'MMM dd, yyyy') : '-'}</TableCell>
+                      <TableCell className="text-gray-600">{c.deal_closed_date ? format(new Date(c.deal_closed_date), 'MMM dd, yyyy') : '-'}</TableCell>
                       <TableCell><StatusBadge status={c.status || 'pending'} /></TableCell>
                       <TableCell>
                         {c.status === 'pending' && <Button size="sm" variant="outline" onClick={() => approveCommission(c.id)} className="text-blue-600 border-blue-200">Approve</Button>}
@@ -161,27 +161,27 @@ export function EmployeeSalaryCommissionPanel() {
         </TabsContent>
 
         <TabsContent value="salaries">
-          <Card className="bg-white border-zinc-200">
+          <Card className="bg-white border-gray-200">
             <CardHeader><CardTitle className="text-black flex items-center gap-2"><Wallet className="h-5 w-5 text-gold" />Salary Structure</CardTitle></CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
-                  <TableRow className="border-zinc-200">
-                    <TableHead className="text-zinc-600">Employee</TableHead>
-                    <TableHead className="text-zinc-600">Department</TableHead>
-                    <TableHead className="text-zinc-600 text-right">Base Salary</TableHead>
-                    <TableHead className="text-zinc-600">Effective Date</TableHead>
+                  <TableRow className="border-gray-200">
+                    <TableHead className="text-gray-600">Employee</TableHead>
+                    <TableHead className="text-gray-600">Department</TableHead>
+                    <TableHead className="text-gray-600 text-right">Base Salary</TableHead>
+                    <TableHead className="text-gray-600">Effective Date</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {salaries.length === 0 ? (
                     <TableRow><TableCell colSpan={4} className="text-center text-gray-500 py-8">No salary records</TableCell></TableRow>
                   ) : salaries.map((s) => (
-                    <TableRow key={s.id} className="border-zinc-100 hover:bg-zinc-50">
+                    <TableRow key={s.id} className="border-gray-100 hover:bg-gray-50">
                       <TableCell className="font-medium text-black">{s.employee_name}</TableCell>
-                      <TableCell><Badge variant="outline" className="border-zinc-300 text-zinc-600">{s.department}</Badge></TableCell>
+                      <TableCell><Badge variant="outline" className="border-gray-300 text-gray-600">{s.department}</Badge></TableCell>
                       <TableCell className="text-right font-bold text-black">{formatCurrency(s.base_salary || 0, s.currency || 'AED')}</TableCell>
-                      <TableCell className="text-zinc-600">{s.effective_date ? format(new Date(s.effective_date), 'MMM dd, yyyy') : '-'}</TableCell>
+                      <TableCell className="text-gray-600">{s.effective_date ? format(new Date(s.effective_date), 'MMM dd, yyyy') : '-'}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -191,29 +191,29 @@ export function EmployeeSalaryCommissionPanel() {
         </TabsContent>
 
         <TabsContent value="payments">
-          <Card className="bg-white border-zinc-200">
+          <Card className="bg-white border-gray-200">
             <CardHeader><CardTitle className="text-black flex items-center gap-2"><CreditCard className="h-5 w-5 text-gold" />Payment History</CardTitle></CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
-                  <TableRow className="border-zinc-200">
-                    <TableHead className="text-zinc-600">Employee</TableHead>
-                    <TableHead className="text-zinc-600">Type</TableHead>
-                    <TableHead className="text-zinc-600 text-right">Amount</TableHead>
-                    <TableHead className="text-zinc-600">Date</TableHead>
-                    <TableHead className="text-zinc-600">Method</TableHead>
+                  <TableRow className="border-gray-200">
+                    <TableHead className="text-gray-600">Employee</TableHead>
+                    <TableHead className="text-gray-600">Type</TableHead>
+                    <TableHead className="text-gray-600 text-right">Amount</TableHead>
+                    <TableHead className="text-gray-600">Date</TableHead>
+                    <TableHead className="text-gray-600">Method</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {payments.length === 0 ? (
                     <TableRow><TableCell colSpan={5} className="text-center text-gray-500 py-8">No payment records</TableCell></TableRow>
                   ) : payments.map((p) => (
-                    <TableRow key={p.id} className="border-zinc-100 hover:bg-zinc-50">
+                    <TableRow key={p.id} className="border-gray-100 hover:bg-gray-50">
                       <TableCell className="font-medium text-black">{p.employee_name}</TableCell>
-                      <TableCell><Badge variant="outline" className="border-zinc-300 text-zinc-600 capitalize">{p.payment_type}</Badge></TableCell>
+                      <TableCell><Badge variant="outline" className="border-gray-300 text-gray-600 capitalize">{p.payment_type}</Badge></TableCell>
                       <TableCell className="text-right font-bold text-black">{formatCurrency(p.amount || 0, p.currency || 'AED')}</TableCell>
-                      <TableCell className="text-zinc-600">{p.payment_date ? format(new Date(p.payment_date), 'MMM dd, yyyy') : '-'}</TableCell>
-                      <TableCell className="text-zinc-600">{p.payment_method || '-'}</TableCell>
+                      <TableCell className="text-gray-600">{p.payment_date ? format(new Date(p.payment_date), 'MMM dd, yyyy') : '-'}</TableCell>
+                      <TableCell className="text-gray-600">{p.payment_method || '-'}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -223,27 +223,27 @@ export function EmployeeSalaryCommissionPanel() {
         </TabsContent>
 
         <TabsContent value="summary">
-          <Card className="bg-white border-zinc-200">
+          <Card className="bg-white border-gray-200">
             <CardHeader><CardTitle className="text-black flex items-center gap-2"><Users className="h-5 w-5 text-gold" />Earnings Summary</CardTitle></CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
-                  <TableRow className="border-zinc-200">
-                    <TableHead className="text-zinc-600">Employee</TableHead>
-                    <TableHead className="text-zinc-600">Department</TableHead>
-                    <TableHead className="text-zinc-600 text-right">Salary</TableHead>
-                    <TableHead className="text-zinc-600 text-right">Commission</TableHead>
-                    <TableHead className="text-zinc-600 text-right">Bonus</TableHead>
-                    <TableHead className="text-zinc-600 text-right">Net Earnings</TableHead>
+                  <TableRow className="border-gray-200">
+                    <TableHead className="text-gray-600">Employee</TableHead>
+                    <TableHead className="text-gray-600">Department</TableHead>
+                    <TableHead className="text-gray-600 text-right">Salary</TableHead>
+                    <TableHead className="text-gray-600 text-right">Commission</TableHead>
+                    <TableHead className="text-gray-600 text-right">Bonus</TableHead>
+                    <TableHead className="text-gray-600 text-right">Net Earnings</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {summaries.length === 0 ? (
                     <TableRow><TableCell colSpan={6} className="text-center text-gray-500 py-8">No earnings data</TableCell></TableRow>
                   ) : summaries.map((s) => (
-                    <TableRow key={s.id} className="border-zinc-100 hover:bg-zinc-50">
+                    <TableRow key={s.id} className="border-gray-100 hover:bg-gray-50">
                       <TableCell className="font-medium text-black">{s.employee_name}</TableCell>
-                      <TableCell><Badge variant="outline" className="border-zinc-300 text-zinc-600">{s.department}</Badge></TableCell>
+                      <TableCell><Badge variant="outline" className="border-gray-300 text-gray-600">{s.department}</Badge></TableCell>
                       <TableCell className="text-right text-black">{formatCurrency(s.total_salary || 0, s.currency || 'AED')}</TableCell>
                       <TableCell className="text-right text-emerald-600">{formatCurrency(s.total_commission || 0, s.currency || 'AED')}</TableCell>
                       <TableCell className="text-right text-blue-600">{formatCurrency(s.total_bonus || 0, s.currency || 'AED')}</TableCell>

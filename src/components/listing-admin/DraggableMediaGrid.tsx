@@ -72,7 +72,7 @@ const DraggableMediaGrid = ({ items, onReorder, onDelete, type }: DraggableMedia
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-zinc-300 rounded-xl bg-zinc-50">
+      <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
         {type === "images" ? (
           <ImageIcon className="w-8 h-8 text-gray-500 mb-2" />
         ) : (

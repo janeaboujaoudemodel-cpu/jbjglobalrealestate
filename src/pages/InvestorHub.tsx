@@ -42,7 +42,7 @@ const aiTools = [
 
 const tierConfig = [
   { min: 0, max: 4999, name: 'Bronze', color: 'from-amber-700 to-amber-900', text: 'text-amber-300' },
-  { min: 5000, max: 14999, name: 'Silver', color: 'from-zinc-400 to-zinc-600', text: 'text-zinc-200' },
+  { min: 5000, max: 14999, name: 'Silver', color: 'from-zinc-400 to-zinc-600', text: 'text-gray-200' },
   { min: 15000, max: 29999, name: 'Gold', color: 'from-yellow-500 to-amber-600', text: 'text-yellow-200' },
   { min: 30000, max: 49999, name: 'Platinum', color: 'from-cyan-400 to-blue-600', text: 'text-cyan-200' },
   { min: 50000, max: Infinity, name: 'Diamond', color: 'from-purple-400 to-fuchsia-600', text: 'text-purple-200' },
@@ -199,7 +199,7 @@ const InvestorHub = () => {
                 <button
                   key={tool.title}
                   onClick={() => navigate(tool.href)}
-                  className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-4 text-left hover:border-fuchsia-500/40 transition-all group"
+                  className="bg-zinc-900/60 border border-gray-800 rounded-xl p-4 text-left hover:border-fuchsia-500/40 transition-all group"
                 >
                   <Icon className="w-5 h-5 text-fuchsia-400 mb-2" />
                   <h3 className="text-white font-medium text-sm">{tool.title}</h3>
@@ -223,11 +223,11 @@ const InvestorHub = () => {
               <Ticket className="w-5 h-5 text-fuchsia-400" />
               Support Tickets
             </h2>
-            <Card className="bg-zinc-900/60 border border-zinc-800">
+            <Card className="bg-zinc-900/60 border border-gray-800">
               <CardContent className="p-6">
                 {supportTickets.length === 0 ? (
                   <div className="text-center py-8">
-                    <Ticket className="w-8 h-8 text-zinc-600 mx-auto mb-3" />
+                    <Ticket className="w-8 h-8 text-gray-600 mx-auto mb-3" />
                     <p className="text-white/60">No support tickets</p>
                     <Button
                       className="mt-4 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
@@ -252,7 +252,7 @@ const InvestorHub = () => {
                       <button
                         key={ticket.id}
                         onClick={() => navigate(`/support?ticket=${ticket.id}`)}
-                        className="w-full flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg hover:bg-zinc-800 transition-colors text-left"
+                        className="w-full flex items-center justify-between p-3 bg-zinc-800/50 rounded-lg hover:bg-gray-800 transition-colors text-left"
                       >
                         <div>
                           <p className="text-sm text-white">{ticket.subject}</p>
@@ -289,7 +289,7 @@ const InvestorHub = () => {
                   { label: 'SPA / Contracts', icon: FileText },
                   { label: 'Other Documents', icon: Award },
                 ].map(doc => (
-                  <div key={doc.label} className="p-4 bg-zinc-800/50 rounded-xl text-center border border-zinc-700/50 hover:border-fuchsia-500/30 transition-colors cursor-pointer">
+                  <div key={doc.label} className="p-4 bg-zinc-800/50 rounded-xl text-center border border-gray-700/50 hover:border-fuchsia-500/30 transition-colors cursor-pointer">
                     <doc.icon className="w-8 h-8 mx-auto text-fuchsia-400 mb-2" />
                     <p className="text-xs text-white/70">{doc.label}</p>
                   </div>

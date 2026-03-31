@@ -109,7 +109,7 @@ function AIScriptWriterButton({ onScriptGenerated, language = 'en' }: { onScript
           <Button variant="ghost" size="sm" onClick={() => setOpen(false)} className="text-white/60 h-6 w-6 p-0">×</Button>
         </div>
         <Textarea value={prompt} onChange={e => setPrompt(e.target.value)} placeholder="Describe what the script should be about..."
-          className="bg-[#1a1708] border-gold/20 text-white placeholder:text-zinc-600 min-h-[60px]" rows={3} />
+          className="bg-[#1a1708] border-gold/20 text-white placeholder:text-gray-600 min-h-[60px]" rows={3} />
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label className="text-white/70 text-xs">Tone</Label>
@@ -264,8 +264,8 @@ function VoiceStudioPanel() {
               <div className="relative">
                 <Textarea value={script} onChange={e => setScript(e.target.value.slice(0, 5000))}
                   placeholder="Type or generate your script..."
-                  className="bg-[#1a1708] border-gold/20 text-white placeholder:text-zinc-600 min-h-[150px]" rows={6} />
-                <span className="absolute bottom-2 right-3 text-[10px] text-zinc-600">{script.length}/5000</span>
+                  className="bg-[#1a1708] border-gold/20 text-white placeholder:text-gray-600 min-h-[150px]" rows={6} />
+                <span className="absolute bottom-2 right-3 text-[10px] text-gray-600">{script.length}/5000</span>
               </div>
 
               {script && (
@@ -621,7 +621,7 @@ function AudioEnhancePanel() {
                 }`}>
                 <m.icon className={`w-4 h-4 mb-1 ${enhanceMode === m.value ? 'text-gold' : 'text-white/60'}`} />
                 <p className={`text-xs font-semibold ${enhanceMode === m.value ? 'text-gold' : 'text-white/70'}`}>{m.label}</p>
-                <p className="text-[10px] text-zinc-600 mt-0.5">{m.desc}</p>
+                <p className="text-[10px] text-gray-600 mt-0.5">{m.desc}</p>
               </button>
             ))}
           </div>
@@ -950,7 +950,7 @@ function VoiceCloningPanel() {
           <div className="space-y-3">
             <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 2: Clone Voice</Label>
             <Input value={voiceName} onChange={e => setVoiceName(e.target.value)} placeholder="Voice name..."
-              className="bg-[#1a1708] border-gold/20 text-white placeholder:text-zinc-600" />
+              className="bg-[#1a1708] border-gold/20 text-white placeholder:text-gray-600" />
             <Button onClick={cloneVoice} disabled={cloning || recordings.length === 0}
               className="w-full bg-gradient-to-r from-gold via-amber-500 to-gold text-black font-bold hover:brightness-110">
               {cloning ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Cloning...</> : <><MicVocal className="w-4 h-4 mr-2" />Clone Voice</>}
@@ -963,7 +963,7 @@ function VoiceCloningPanel() {
               <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 3: Generate with Cloned Voice</Label>
               <p className="text-[10px] text-emerald-400">✓ Voice ID: {clonedVoiceId}</p>
               <Textarea value={ttsText} onChange={e => setTtsText(e.target.value)} placeholder="Enter text to speak..."
-                className="bg-[#1a1708] border-gold/20 text-white placeholder:text-zinc-600" rows={3} />
+                className="bg-[#1a1708] border-gold/20 text-white placeholder:text-gray-600" rows={3} />
               <Button onClick={generateTTS} disabled={ttsGenerating || !ttsText.trim()}
                 className="w-full bg-gold text-black hover:bg-gold/90 font-semibold">
                 {ttsGenerating ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Generating...</> : <><Play className="w-4 h-4 mr-2" />Generate</>}

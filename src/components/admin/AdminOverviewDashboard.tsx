@@ -425,7 +425,7 @@ export const AdminOverviewDashboard = () => {
           </CardHeader>
           <CardContent className="p-0">
             <ScrollArea className="h-[320px]">
-              <div className="divide-y divide-zinc-100">
+              <div className="divide-y divide-gray-100">
                 {recentActivities.length === 0 ? (
                   <div className="p-6 text-center text-gray-500">
                     <Activity className="w-8 h-8 mx-auto mb-2 opacity-50" />
@@ -437,7 +437,7 @@ export const AdminOverviewDashboard = () => {
                       key={activity.id}
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="flex items-start gap-3 p-4 hover:bg-zinc-50 transition-colors"
+                      className="flex items-start gap-3 p-4 hover:bg-gray-50 transition-colors"
                     >
                       <div className={`p-2 rounded-lg ${getSeverityColor(activity.severity)}`}>
                         {getActivityIcon(activity.type)}

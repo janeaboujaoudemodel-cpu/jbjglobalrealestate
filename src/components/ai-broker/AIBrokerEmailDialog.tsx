@@ -172,7 +172,7 @@ export function AIBrokerEmailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-zinc-700 max-w-2xl">
+      <DialogContent className="bg-zinc-900 border-gray-700 max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-white">
             Send Email to {lead.full_name}
@@ -208,7 +208,7 @@ export function AIBrokerEmailDialog({
             <Input
               value={lead.email || ""}
               disabled
-              className="bg-zinc-800 border-zinc-700 text-gray-400 mt-1"
+              className="bg-zinc-800 border-gray-700 text-gray-400 mt-1"
             />
           </div>
 
@@ -218,7 +218,7 @@ export function AIBrokerEmailDialog({
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Enter email subject..."
-              className="bg-zinc-800 border-zinc-700 text-white mt-1"
+              className="bg-zinc-800 border-gray-700 text-white mt-1"
             />
           </div>
 
@@ -228,15 +228,15 @@ export function AIBrokerEmailDialog({
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Enter your message..."
-              className="bg-zinc-800 border-zinc-700 text-white mt-1 min-h-[200px]"
+              className="bg-zinc-800 border-gray-700 text-white mt-1 min-h-[200px]"
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-zinc-800">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-800">
             <Button
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="border-zinc-700 text-gray-300"
+              className="border-gray-700 text-gray-300"
             >
               Cancel
             </Button>

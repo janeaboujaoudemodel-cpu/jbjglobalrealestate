@@ -413,7 +413,7 @@ jbj.ae
                         className={`p-4 rounded-xl border transition-all ${
                           propertyType === type.id
                             ? "border-teal-500 bg-teal-500/20 text-teal-300"
-                            : "border-zinc-700 bg-zinc-800/50 text-white/70 hover:border-zinc-600"
+                            : "border-gray-700 bg-zinc-800/50 text-white/70 hover:border-gray-600"
                         }`}
                       >
                         <type.icon className="w-6 h-6 mx-auto mb-2" />
@@ -430,7 +430,7 @@ jbj.ae
                     value={propertyName}
                     onChange={(e) => setPropertyName(e.target.value)}
                     placeholder="e.g., My Dubai Marina Apartment"
-                    className="bg-zinc-800/50 border-zinc-700 text-white mt-2"
+                    className="bg-zinc-800/50 border-gray-700 text-white mt-2"
                   />
                 </div>
 
@@ -448,7 +448,7 @@ jbj.ae
                         className={`px-4 py-2 rounded-lg border transition-all ${
                           unitPreference === unit.id
                             ? "border-teal-500 bg-teal-500/20 text-teal-300"
-                            : "border-zinc-700 bg-zinc-800/50 text-white/70 hover:border-zinc-600"
+                            : "border-gray-700 bg-zinc-800/50 text-white/70 hover:border-gray-600"
                         }`}
                       >
                         {unit.label}
@@ -529,7 +529,7 @@ jbj.ae
                   <Button 
                     onClick={() => setStep(1)}
                     variant="outline"
-                    className="border-zinc-700 text-white/85"
+                    className="border-gray-700 text-white/85"
                   >
                     Back
                   </Button>
@@ -569,7 +569,7 @@ jbj.ae
                       className={`relative p-4 rounded-xl border transition-all ${
                         room.isComplete 
                           ? "border-teal-500 bg-teal-500/10" 
-                          : "border-zinc-700 bg-zinc-800/50"
+                          : "border-gray-700 bg-zinc-800/50"
                       }`}
                     >
                       <button
@@ -598,7 +598,7 @@ jbj.ae
                       const name = prompt("Enter room/area name:");
                       if (name) addCustomRoom(name);
                     }}
-                    className="p-4 rounded-xl border-2 border-dashed border-zinc-700 hover:border-teal-500/50 bg-zinc-800/30 hover:bg-zinc-800/50 transition-all flex flex-col items-center justify-center gap-2 min-h-[100px]"
+                    className="p-4 rounded-xl border-2 border-dashed border-gray-700 hover:border-teal-500/50 bg-zinc-800/30 hover:bg-gray-800/50 transition-all flex flex-col items-center justify-center gap-2 min-h-[100px]"
                   >
                     <Plus className="w-6 h-6 text-white/60" />
                     <span className="text-white/70 text-sm">Add Custom Room</span>
@@ -609,7 +609,7 @@ jbj.ae
                   <Button 
                     onClick={() => setStep(2)}
                     variant="outline"
-                    className="border-zinc-700 text-white/85"
+                    className="border-gray-700 text-white/85"
                   >
                     Back
                   </Button>
@@ -655,7 +655,7 @@ jbj.ae
                       className={`p-4 rounded-xl border transition-all ${
                         room.isComplete 
                           ? "border-teal-500/50 bg-teal-500/5" 
-                          : "border-zinc-700 bg-zinc-800/30"
+                          : "border-gray-700 bg-zinc-800/30"
                       }`}
                     >
                       <div className="flex items-center justify-between mb-4">
@@ -675,7 +675,7 @@ jbj.ae
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                               room.mediaType === "photo"
                                 ? "bg-teal-500 text-white"
-                                : "bg-zinc-800 text-white/70 hover:bg-zinc-700"
+                                : "bg-zinc-800 text-white/70 hover:bg-gray-700"
                             }`}
                           >
                             <Camera className="w-3 h-3 inline mr-1" />
@@ -686,7 +686,7 @@ jbj.ae
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                               room.mediaType === "video"
                                 ? "bg-teal-500 text-white"
-                                : "bg-zinc-800 text-white/70 hover:bg-zinc-700"
+                                : "bg-zinc-800 text-white/70 hover:bg-gray-700"
                             }`}
                           >
                             <Video className="w-3 h-3 inline mr-1" />
@@ -709,7 +709,7 @@ jbj.ae
                         {room.files.length === 0 ? (
                           <label 
                             htmlFor={`upload-${room.id}`}
-                            className="block w-full border-2 border-dashed border-zinc-700 hover:border-teal-500/50 rounded-lg p-4 text-center cursor-pointer transition-all hover:bg-zinc-800/30"
+                            className="block w-full border-2 border-dashed border-gray-700 hover:border-teal-500/50 rounded-lg p-4 text-center cursor-pointer transition-all hover:bg-gray-800/30"
                           >
                             {room.mediaType === "photo" ? (
                               <>
@@ -772,7 +772,7 @@ jbj.ae
                   <Button 
                     onClick={() => setStep(3)}
                     variant="outline"
-                    className="border-zinc-700 text-white/85"
+                    className="border-gray-700 text-white/85"
                     disabled={isProcessing}
                   >
                     Back
@@ -799,7 +799,7 @@ jbj.ae
             animate={{ opacity: 1, y: 0 }}
           >
             <Card className="!border-teal-500/30 !border bg-zinc-900/50">
-              <CardHeader className="border-b border-zinc-800">
+              <CardHeader className="border-b border-gray-800">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white flex items-center gap-2">
                     <CheckCircle2 className="w-6 h-6 text-teal-400" />
@@ -835,7 +835,7 @@ jbj.ae
 
                 {/* AI Notes */}
                 {result.notes && (
-                  <div className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-4">
+                  <div className="bg-zinc-800/50 border border-gray-700 rounded-xl p-4">
                     <div className="flex items-start gap-3">
                       <Info className="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" />
                       <div>

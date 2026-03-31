@@ -110,7 +110,7 @@ const PreJoinForm = ({
 
         <div className="grid lg:grid-cols-2 gap-6">
           {/* Video Preview */}
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-zinc-900/50 border-gray-800">
             <CardHeader className="pb-2">
               <CardTitle className="text-white text-lg">Camera Preview</CardTitle>
             </CardHeader>
@@ -168,7 +168,7 @@ const PreJoinForm = ({
           </Card>
 
           {/* Join Form */}
-          <Card className="bg-zinc-900/50 border-zinc-800">
+          <Card className="bg-zinc-900/50 border-gray-800">
             <CardHeader className="pb-2">
               <CardTitle className="text-white text-lg flex items-center gap-2">
                 <User className="w-5 h-5 text-gold" />
@@ -185,7 +185,7 @@ const PreJoinForm = ({
                     value={formData.firstName}
                     onChange={(e) => updateField('firstName', e.target.value)}
                     placeholder="First"
-                    className={`bg-zinc-800 border-zinc-700 text-white h-9 ${errors.firstName ? 'border-red-500' : ''}`}
+                    className={`bg-zinc-800 border-gray-700 text-white h-9 ${errors.firstName ? 'border-red-500' : ''}`}
                   />
                   {errors.firstName && <p className="text-red-400 text-xs mt-0.5">{errors.firstName}</p>}
                 </div>
@@ -195,7 +195,7 @@ const PreJoinForm = ({
                     value={formData.lastName}
                     onChange={(e) => updateField('lastName', e.target.value)}
                     placeholder="Last"
-                    className={`bg-zinc-800 border-zinc-700 text-white h-9 ${errors.lastName ? 'border-red-500' : ''}`}
+                    className={`bg-zinc-800 border-gray-700 text-white h-9 ${errors.lastName ? 'border-red-500' : ''}`}
                   />
                   {errors.lastName && <p className="text-red-400 text-xs mt-0.5">{errors.lastName}</p>}
                 </div>
@@ -212,7 +212,7 @@ const PreJoinForm = ({
                   value={formData.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   placeholder="your@email.com"
-                  className={`bg-zinc-800 border-zinc-700 text-white h-9 ${errors.email ? 'border-red-500' : ''}`}
+                  className={`bg-zinc-800 border-gray-700 text-white h-9 ${errors.email ? 'border-red-500' : ''}`}
                 />
                 {errors.email && <p className="text-red-400 text-xs mt-0.5">{errors.email}</p>}
               </div>
@@ -228,7 +228,7 @@ const PreJoinForm = ({
                   value={formData.phone}
                   onChange={(e) => updateField('phone', e.target.value)}
                   placeholder="+971 50 123 4567"
-                  className={`bg-zinc-800 border-zinc-700 text-white h-9 ${errors.phone ? 'border-red-500' : ''}`}
+                  className={`bg-zinc-800 border-gray-700 text-white h-9 ${errors.phone ? 'border-red-500' : ''}`}
                 />
                 {errors.phone && <p className="text-red-400 text-xs mt-0.5">{errors.phone}</p>}
               </div>
@@ -243,7 +243,7 @@ const PreJoinForm = ({
                   value={formData.nationality}
                   onChange={(e) => updateField('nationality', e.target.value)}
                   placeholder="e.g., British"
-                  className={`bg-zinc-800 border-zinc-700 text-white h-9 ${errors.nationality ? 'border-red-500' : ''}`}
+                  className={`bg-zinc-800 border-gray-700 text-white h-9 ${errors.nationality ? 'border-red-500' : ''}`}
                 />
                 {errors.nationality && <p className="text-red-400 text-xs mt-0.5">{errors.nationality}</p>}
               </div>

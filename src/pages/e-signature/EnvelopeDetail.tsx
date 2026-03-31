@@ -33,18 +33,18 @@ type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 
 type AuditAction = 'created' | 'sent' | 'viewed' | 'signed' | 'declined' | 'reminder_sent' | 'downloaded' | 'voided' | 'expired' | 'completed';
 
 const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  draft: { label: "Draft", color: "bg-zinc-100 text-zinc-700 border border-zinc-200", icon: <FileSignature className="w-4 h-4" /> },
+  draft: { label: "Draft", color: "bg-gray-100 text-gray-700 border border-gray-200", icon: <FileSignature className="w-4 h-4" /> },
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200", icon: <Send className="w-4 h-4" /> },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200", icon: <Eye className="w-4 h-4" /> },
   partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
   completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200", icon: <CheckCircle2 className="w-4 h-4" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200", icon: <XCircle className="w-4 h-4" /> },
-  expired: { label: "Expired", color: "bg-zinc-100 text-gray-500 border border-zinc-200", icon: <Clock className="w-4 h-4" /> },
-  voided: { label: "Voided", color: "bg-zinc-100 text-gray-500 border border-zinc-200", icon: <XCircle className="w-4 h-4" /> },
+  expired: { label: "Expired", color: "bg-gray-100 text-gray-500 border border-gray-200", icon: <Clock className="w-4 h-4" /> },
+  voided: { label: "Voided", color: "bg-gray-100 text-gray-500 border border-gray-200", icon: <XCircle className="w-4 h-4" /> },
 };
 
 const recipientStatusConfig: Record<RecipientStatus, { label: string; color: string }> = {
-  pending: { label: "Pending", color: "bg-zinc-100 text-zinc-700 border border-zinc-200" },
+  pending: { label: "Pending", color: "bg-gray-100 text-gray-700 border border-gray-200" },
   sent: { label: "Sent", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   delivered: { label: "Delivered", color: "bg-blue-50 text-blue-700 border border-blue-200" },
   viewed: { label: "Viewed", color: "bg-amber-50 text-amber-700 border border-amber-200" },
@@ -181,13 +181,13 @@ export default function EnvelopeDetail() {
               <Button 
                 variant="ghost" 
                 onClick={() => navigate("/e-signature")}
-                className="h-10 w-10 p-0 rounded-lg bg-black/5 hover:bg-black/10 text-zinc-800"
+                className="h-10 w-10 p-0 rounded-lg bg-black/5 hover:bg-black/10 text-gray-800"
               >
                 <ArrowLeft className="w-5 h-5" />
               </Button>
               <div>
                 <div className="flex items-center gap-3">
-                  <h1 className="text-2xl font-bold text-zinc-900">{envelope.name}</h1>
+                  <h1 className="text-2xl font-bold text-gray-900">{envelope.name}</h1>
                   <Badge className={`${config.color} flex items-center gap-1`}>
                     {config.icon}
                     {config.label}
@@ -205,7 +205,7 @@ export default function EnvelopeDetail() {
                   variant="outline"
                   onClick={handleSendReminder}
                   disabled={remindingId !== null}
-                  className="border-[#C8A766]/30 text-zinc-800 hover:bg-[#C8A766]/10"
+                  className="border-[#C8A766]/30 text-gray-800 hover:bg-[#C8A766]/10"
                 >
                   {remindingId === "all" ? (
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -239,7 +239,7 @@ export default function EnvelopeDetail() {
                         },
                       },
                     })}
-                    className="border-[#C8A766]/30 text-zinc-800 hover:bg-[#C8A766]/10"
+                    className="border-[#C8A766]/30 text-gray-800 hover:bg-[#C8A766]/10"
                   >
                     <Mail className="w-4 h-4 mr-2" />
                     Send via Email
@@ -250,7 +250,7 @@ export default function EnvelopeDetail() {
                 <Button 
                   variant="outline"
                   onClick={() => handleDownload(envelope.document_url, envelope.document_filename)}
-                  className="border-[#C8A766]/30 text-zinc-800 hover:bg-[#C8A766]/10"
+                  className="border-[#C8A766]/30 text-gray-800 hover:bg-[#C8A766]/10"
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Download Original
@@ -265,7 +265,7 @@ export default function EnvelopeDetail() {
               {/* Recipients */}
               <Card className="bg-white/80 backdrop-blur-sm border-2 border-[#C8A766]/20 shadow-lg">
                 <CardHeader>
-                  <CardTitle className="flex items-center justify-between text-zinc-900">
+                  <CardTitle className="flex items-center justify-between text-gray-900">
                     <span className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-lg bg-[#C8A766]/10 flex items-center justify-center">
                         <User className="w-4 h-4 text-[#C8A766]" />
@@ -296,7 +296,7 @@ export default function EnvelopeDetail() {
                               <User className="w-5 h-5 text-[#C8A766]" />
                             </div>
                             <div className="min-w-0">
-                              <p className="font-medium text-zinc-900">{recipient.name}</p>
+                              <p className="font-medium text-gray-900">{recipient.name}</p>
                               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-500">
                                 <span className="flex items-center gap-1">
                                   <Mail className="w-3 h-3 shrink-0" />
@@ -350,7 +350,7 @@ export default function EnvelopeDetail() {
               {/* Audit Trail */}
               <Card className="bg-white/80 backdrop-blur-sm border-2 border-[#C8A766]/20 shadow-lg">
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-zinc-900">
+                  <CardTitle className="flex items-center gap-2 text-gray-900">
                     <div className="w-8 h-8 rounded-lg bg-[#C8A766]/10 flex items-center justify-center">
                       <Shield className="w-4 h-4 text-[#C8A766]" />
                     </div>
@@ -370,7 +370,7 @@ export default function EnvelopeDetail() {
                             {aConfig.icon}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-sm text-zinc-900">{log.description}</p>
+                            <p className="font-medium text-sm text-gray-900">{log.description}</p>
                             <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-3 h-3" />
@@ -402,7 +402,7 @@ export default function EnvelopeDetail() {
               {/* Document Info */}
               <Card className="bg-white/80 backdrop-blur-sm border-2 border-[#C8A766]/20 shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-base text-zinc-900 flex items-center gap-2">
+                  <CardTitle className="text-base text-gray-900 flex items-center gap-2">
                     <div className="w-7 h-7 rounded-lg bg-[#C8A766]/10 flex items-center justify-center">
                       <FileSignature className="w-3.5 h-3.5 text-[#C8A766]" />
                     </div>
@@ -412,29 +412,29 @@ export default function EnvelopeDetail() {
                 <CardContent className="space-y-4">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500">File Name</span>
-                    <span className="font-medium truncate max-w-[150px] text-zinc-900" title={envelope.document_filename}>
+                    <span className="font-medium truncate max-w-[150px] text-gray-900" title={envelope.document_filename}>
                       {envelope.document_filename}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500">Created</span>
-                    <span className="text-zinc-900">{format(new Date(envelope.created_at), "MMM d, yyyy")}</span>
+                    <span className="text-gray-900">{format(new Date(envelope.created_at), "MMM d, yyyy")}</span>
                   </div>
                   {envelope.expires_at && (
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-500">Expires</span>
-                      <span className="text-zinc-900">{formatDistanceToNow(new Date(envelope.expires_at), { addSuffix: true })}</span>
+                      <span className="text-gray-900">{formatDistanceToNow(new Date(envelope.expires_at), { addSuffix: true })}</span>
                     </div>
                   )}
                   {envelope.completed_at && (
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-500">Completed</span>
-                      <span className="text-zinc-900">{format(new Date(envelope.completed_at), "MMM d, yyyy")}</span>
+                      <span className="text-gray-900">{format(new Date(envelope.completed_at), "MMM d, yyyy")}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-500">Reminders Sent</span>
-                    <span className="text-zinc-900">{envelope.reminders_sent || 0}</span>
+                    <span className="text-gray-900">{envelope.reminders_sent || 0}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -443,7 +443,7 @@ export default function EnvelopeDetail() {
               {signedDoc?.certificate_data && (
                 <Card className="bg-white/80 backdrop-blur-sm border-2 border-emerald-300/40 shadow-lg">
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-base flex items-center gap-2 text-zinc-900">
+                    <CardTitle className="text-base flex items-center gap-2 text-gray-900">
                       <div className="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center">
                         <Shield className="w-3.5 h-3.5 text-emerald-600" />
                       </div>
@@ -459,7 +459,7 @@ export default function EnvelopeDetail() {
                       {(signedDoc.certificate_data as any)?.signers?.map((s: any, i: number) => (
                         <div key={i} className="flex items-center gap-2 text-xs text-gray-500">
                           <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
-                          <span className="font-medium text-zinc-900">{s.name}</span>
+                          <span className="font-medium text-gray-900">{s.name}</span>
                           {s.signed_at && (
                             <span className="ml-auto shrink-0">
                               {format(new Date(s.signed_at), "MMM d, HH:mm")}

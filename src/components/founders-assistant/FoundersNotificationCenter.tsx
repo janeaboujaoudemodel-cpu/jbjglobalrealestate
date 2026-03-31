@@ -54,7 +54,7 @@ const categoryConfig: Record<string, { color: string; bgColor: string; borderCol
   routine: { color: 'text-green-600', bgColor: 'bg-green-50', borderColor: 'border-green-200' },
   recruitment: { color: 'text-blue-600', bgColor: 'bg-blue-50', borderColor: 'border-blue-200' },
   flagged: { color: 'text-amber-600', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
-  spam: { color: 'text-gray-500', bgColor: 'bg-zinc-50', borderColor: 'border-zinc-200' },
+  spam: { color: 'text-gray-500', bgColor: 'bg-gray-50', borderColor: 'border-gray-200' },
 };
 
 const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({ 
@@ -226,7 +226,7 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                   className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
                     activeTab === tab 
                       ? 'bg-gradient-to-r from-[#B89555] to-[#A68444] text-white shadow-md' 
-                      : 'text-zinc-600 hover:text-black hover:bg-[#B89555]/10'
+                      : 'text-gray-600 hover:text-black hover:bg-[#B89555]/10'
                   }`}
                 >
                   <div className="flex items-center justify-center gap-1.5">
@@ -285,7 +285,7 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                           {/* Content */}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-2">
-                              <p className={`font-medium text-sm truncate ${notification.is_read ? 'text-zinc-600' : 'text-black'}`}>
+                              <p className={`font-medium text-sm truncate ${notification.is_read ? 'text-gray-600' : 'text-black'}`}>
                                 {notification.sender_name || notification.sender_identifier}
                               </p>
                               <div className="flex items-center gap-2 flex-shrink-0">
@@ -298,7 +298,7 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                               </div>
                             </div>
                             {notification.subject && (
-                              <p className={`text-sm truncate mt-1 ${notification.is_read ? 'text-gray-500' : 'text-zinc-700'}`}>
+                              <p className={`text-sm truncate mt-1 ${notification.is_read ? 'text-gray-500' : 'text-gray-700'}`}>
                                 {notification.subject}
                               </p>
                             )}

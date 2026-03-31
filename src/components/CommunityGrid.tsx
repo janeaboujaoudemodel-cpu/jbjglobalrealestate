@@ -60,7 +60,7 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
                 {community.name}
               </h3>
               {community.location && (
-                <p className="text-zinc-200 text-sm flex items-center gap-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
+                <p className="text-gray-200 text-sm flex items-center gap-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
                   <MapPin className="w-3 h-3 text-gold" />
                   {community.location}
                 </p>

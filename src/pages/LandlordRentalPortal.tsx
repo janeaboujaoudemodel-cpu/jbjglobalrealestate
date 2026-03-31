@@ -175,7 +175,7 @@ export default function LandlordRentalPortal() {
                       <benefit.icon className="h-6 w-6 text-gold" />
                     </div>
                     <h3 className="font-semibold mb-2 text-black">{benefit.title}</h3>
-                    <p className="text-sm text-zinc-600">{benefit.description}</p>
+                    <p className="text-sm text-gray-600">{benefit.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -216,7 +216,7 @@ export default function LandlordRentalPortal() {
                 <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-black">Why List With Us?</CardTitle>
-                    <CardDescription className="text-zinc-600">
+                    <CardDescription className="text-gray-600">
                       JBJ Global Real Estate offers unparalleled exposure and service
                     </CardDescription>
                   </CardHeader>
@@ -240,7 +240,7 @@ export default function LandlordRentalPortal() {
                 <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-black">Approval Process</CardTitle>
-                    <CardDescription className="text-zinc-600">
+                    <CardDescription className="text-gray-600">
                       Our quality assurance workflow
                     </CardDescription>
                   </CardHeader>
@@ -253,7 +253,7 @@ export default function LandlordRentalPortal() {
                           </div>
                           <div>
                             <h4 className="font-medium text-black">{step.title}</h4>
-                            <p className="text-sm text-zinc-600">{step.description}</p>
+                            <p className="text-sm text-gray-600">{step.description}</p>
                           </div>
                         </div>
                       ))}
@@ -279,7 +279,7 @@ export default function LandlordRentalPortal() {
               <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                 <CardHeader>
                   <CardTitle className="text-black">Complete Landlord Guide</CardTitle>
-                  <CardDescription className="text-zinc-600">
+                  <CardDescription className="text-gray-600">
                     Everything you need to know about listing your rental property
                   </CardDescription>
                 </CardHeader>
@@ -301,7 +301,7 @@ export default function LandlordRentalPortal() {
                         </div>
                         <div className="flex-1 pb-8">
                           <h3 className="text-lg font-semibold text-black mb-2">{step.title}</h3>
-                          <p className="text-zinc-600">{step.description}</p>
+                          <p className="text-gray-600">{step.description}</p>
                         </div>
                       </div>
                     </motion.div>
@@ -330,7 +330,7 @@ export default function LandlordRentalPortal() {
                     <h3 className="text-xl font-semibold text-black mb-2">
                       Sign In to List Your Property
                     </h3>
-                    <p className="text-zinc-600 mb-6">
+                    <p className="text-gray-600 mb-6">
                       Create an account or sign in to submit your rental listing
                     </p>
                     <Button
@@ -345,7 +345,7 @@ export default function LandlordRentalPortal() {
                 <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-black">Submit Your Rental Listing</CardTitle>
-                    <CardDescription className="text-zinc-600">
+                    <CardDescription className="text-gray-600">
                       Complete the form below to list your property for rent
                     </CardDescription>
                   </CardHeader>
@@ -362,7 +362,7 @@ export default function LandlordRentalPortal() {
                 {isLoading ? (
                   <div className="text-center py-12">
                     <div className="animate-spin h-8 w-8 border-4 border-gold border-t-transparent rounded-full mx-auto" />
-                    <p className="text-zinc-600 mt-4">Loading your listings...</p>
+                    <p className="text-gray-600 mt-4">Loading your listings...</p>
                   </div>
                 ) : listings.length === 0 ? (
                   <Card className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl shadow-sm">
@@ -371,7 +371,7 @@ export default function LandlordRentalPortal() {
                       <h3 className="text-xl font-semibold text-black mb-2">
                         No Listings Yet
                       </h3>
-                      <p className="text-zinc-600 mb-6">
+                      <p className="text-gray-600 mb-6">
                         You haven't submitted any rental listings yet
                       </p>
                       <Button
@@ -397,7 +397,7 @@ export default function LandlordRentalPortal() {
                                     <h3 className="text-lg font-semibold text-black">
                                       {listing.property_title}
                                     </h3>
-                                    <p className="text-zinc-600 text-sm">
+                                    <p className="text-gray-600 text-sm">
                                       {listing.community}, {listing.emirate}
                                     </p>
                                   </div>

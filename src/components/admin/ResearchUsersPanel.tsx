@@ -181,7 +181,7 @@ export default function ResearchUsersPanel() {
           </div>
           <div>
             <h2 className="text-xl font-bold text-black">JBJ Global Research Users</h2>
-            <p className="text-sm text-zinc-600">{filtered.length} users found</p>
+            <p className="text-sm text-gray-600">{filtered.length} users found</p>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -264,27 +264,27 @@ export default function ResearchUsersPanel() {
                   filtered.map((u) => (
                     <TableRow key={u.id} className="hover:bg-gold/5 border-b border-gold/10">
                       <TableCell className="text-black text-sm">{u.email}</TableCell>
-                      <TableCell className="text-zinc-700 text-sm">{u.full_name || "—"}</TableCell>
+                      <TableCell className="text-gray-700 text-sm">{u.full_name || "—"}</TableCell>
                       <TableCell>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${u.subscribed ? "bg-emerald-100 text-emerald-700" : "bg-zinc-100 text-zinc-600"}`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${u.subscribed ? "bg-emerald-100 text-emerald-700" : "bg-gray-100 text-gray-600"}`}>
                           {u.subscribed ? "Yes" : "No"}
                         </span>
                       </TableCell>
-                      <TableCell className="text-zinc-700 text-sm">{u.segment_tag || "—"}</TableCell>
+                      <TableCell className="text-gray-700 text-sm">{u.segment_tag || "—"}</TableCell>
                       <TableCell>
                         <span className={`text-xs px-2 py-0.5 rounded-full ${
                           u.intent_score === "high" ? "bg-amber-100 text-amber-700" :
                           u.intent_score === "medium" ? "bg-blue-100 text-blue-700" :
-                          "bg-zinc-100 text-zinc-600"
+                          "bg-gray-100 text-gray-600"
                         }`}>
                           {u.intent_score || "—"}
                         </span>
                       </TableCell>
-                      <TableCell className="text-zinc-700 text-sm">{u.engagement_score ?? "—"}</TableCell>
-                      <TableCell className="text-zinc-700 text-sm">{u.sessions_count ?? "—"}</TableCell>
-                      <TableCell className="text-zinc-700 text-sm max-w-[150px] truncate">{u.top_areas || "—"}</TableCell>
-                      <TableCell className="text-zinc-700 text-sm">{u.avg_budget_estimate || "—"}</TableCell>
-                      <TableCell className="text-zinc-600 text-xs">
+                      <TableCell className="text-gray-700 text-sm">{u.engagement_score ?? "—"}</TableCell>
+                      <TableCell className="text-gray-700 text-sm">{u.sessions_count ?? "—"}</TableCell>
+                      <TableCell className="text-gray-700 text-sm max-w-[150px] truncate">{u.top_areas || "—"}</TableCell>
+                      <TableCell className="text-gray-700 text-sm">{u.avg_budget_estimate || "—"}</TableCell>
+                      <TableCell className="text-gray-600 text-xs">
                         {u.last_active_at ? new Date(u.last_active_at).toLocaleDateString() : "—"}
                       </TableCell>
                     </TableRow>

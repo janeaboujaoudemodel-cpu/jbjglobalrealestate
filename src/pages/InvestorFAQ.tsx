@@ -252,7 +252,7 @@ const InvestorFAQ = () => {
                           <AccordionTrigger className="text-black text-left hover:text-gold hover:no-underline py-5 text-base font-medium">
                             {faq.question}
                           </AccordionTrigger>
-                          <AccordionContent className="text-zinc-600 pb-5 leading-relaxed whitespace-pre-line">
+                          <AccordionContent className="text-gray-600 pb-5 leading-relaxed whitespace-pre-line">
                             {faq.answer}
                           </AccordionContent>
                         </AccordionItem>
@@ -283,7 +283,7 @@ const InvestorFAQ = () => {
               <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
                 Still Have Questions?
               </h2>
-              <p className="text-zinc-600 mb-8 max-w-xl mx-auto leading-relaxed">
+              <p className="text-gray-600 mb-8 max-w-xl mx-auto leading-relaxed">
                 Our team is here to help. Whether you're exploring investment options or ready to proceed, 
                 we're happy to provide guidance tailored to your situation.
               </p>
@@ -317,7 +317,7 @@ const InvestorFAQ = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-6">
-              <p className="text-center text-zinc-600 text-sm leading-relaxed">
+              <p className="text-center text-gray-600 text-sm leading-relaxed">
                 <span className="text-black font-medium">Disclaimer:</span> All content is educational 
                 and informational in nature. It does not constitute financial guarantees or investment promises. 
                 Decisions should reflect individual objectives and risk tolerance.

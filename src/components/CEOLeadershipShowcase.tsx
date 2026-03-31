@@ -58,7 +58,7 @@ const CEOLeadershipShowcase = () => {
                   Excellence in Every Detail
                 </span>
               </h2>
-              <p className="text-zinc-700 max-w-2xl mx-auto">
+              <p className="text-gray-700 max-w-2xl mx-auto">
                 At JBJ GLOBAL REAL ESTATE, we're committed to delivering exceptional
                 service through a world-class team of professionals.
               </p>
@@ -109,7 +109,7 @@ const CEOLeadershipShowcase = () => {
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
                   <AnimatedCounter end={metrics.totalMembers} suffix="+" duration={2500} />
                 </p>
-                <p className="text-zinc-700 text-sm font-medium">Team Members</p>
+                <p className="text-gray-700 text-sm font-medium">Team Members</p>
               </div>
 
               {/* Card 2: Departments */}
@@ -120,7 +120,7 @@ const CEOLeadershipShowcase = () => {
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
                   <AnimatedCounter end={metrics.totalDepartments} duration={2000} />
                 </p>
-                <p className="text-zinc-700 text-sm font-medium">Departments</p>
+                <p className="text-gray-700 text-sm font-medium">Departments</p>
               </div>
 
               {/* Card 3: Languages Spoken */}
@@ -131,7 +131,7 @@ const CEOLeadershipShowcase = () => {
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
                   <AnimatedCounter end={metrics.totalLanguages} suffix="+" duration={2200} />
                 </p>
-                <p className="text-zinc-700 text-sm font-medium">Languages Spoken</p>
+                <p className="text-gray-700 text-sm font-medium">Languages Spoken</p>
               </div>
 
               {/* Card 4: Nationalities */}
@@ -142,7 +142,7 @@ const CEOLeadershipShowcase = () => {
                 <p className="text-2xl font-bold text-gold mb-1 group-hover:scale-105 transition-transform">
                   <AnimatedCounter end={metrics.totalNationalities} suffix="+" duration={2300} />
                 </p>
-                <p className="text-zinc-700 text-sm font-medium">Nationalities</p>
+                <p className="text-gray-700 text-sm font-medium">Nationalities</p>
               </div>
             </motion.div>
 
@@ -153,12 +153,12 @@ const CEOLeadershipShowcase = () => {
             >
               <div className="relative">
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 text-6xl text-gold/40">"</div>
-                <p className="text-xl md:text-2xl text-zinc-700 italic leading-relaxed pt-8">
+                <p className="text-xl md:text-2xl text-gray-700 italic leading-relaxed pt-8">
                   Innovation and excellence are not just goals—they are the foundation
                   of everything we build. At JBJ Global Real Estate, we're crafting futures and shaping skylines.
                 </p>
                 <p className="mt-6 text-gold font-semibold">— Jane Bou Jaoude</p>
-                <p className="text-zinc-600 text-sm">Founder & CEO</p>
+                <p className="text-gray-600 text-sm">Founder & CEO</p>
               </div>
             </motion.div>
           </motion.div>

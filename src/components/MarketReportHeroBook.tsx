@@ -112,7 +112,7 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
                   <p className="text-white/60 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p>
                 </FounderContent>
 
-                <div className="mt-6 pt-4 border-t border-zinc-800">
+                <div className="mt-6 pt-4 border-t border-gray-800">
                   <p className="text-white/70 text-[10px] tracking-[0.3em] uppercase">JBJ Global Real Estate</p>
                 </div>
               </div>

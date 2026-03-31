@@ -1046,7 +1046,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   size="sm"
                   variant="outline"
                   onClick={selectAll}
-                  className="border-zinc-300 text-zinc-700"
+                  className="border-gray-300 text-gray-700"
                 >
                   {selectedIds.size === imports.length ? "Deselect All" : "Select All"}
                 </Button>
@@ -1396,7 +1396,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 return validImages.length > 0 ? (
                 <>
                 <div className="relative">
-                  <div className="aspect-video bg-zinc-100 rounded-lg overflow-hidden">
+                  <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
                     <img
                       src={validImages[safeIndex]?.url}
                       alt={selectedImport.name}
@@ -1563,7 +1563,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               {selectedImport.description && (
                 <div>
                   <h4 className="font-medium mb-2">Description</h4>
-                  <p className="text-sm text-zinc-600 line-clamp-4">
+                  <p className="text-sm text-gray-600 line-clamp-4">
                     {sanitizeForDisplay(selectedImport.description)}
                   </p>
                 </div>
@@ -1572,7 +1572,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
               {selectedImport.payment_plan && (
                 <div>
                   <h4 className="font-medium mb-2">Payment Plan</h4>
-                  <p className="text-sm text-zinc-600">{selectedImport.payment_plan}</p>
+                  <p className="text-sm text-gray-600">{selectedImport.payment_plan}</p>
                 </div>
               )}
 
@@ -1590,7 +1590,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                         href={doc.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-3 py-2 bg-zinc-100 rounded hover:bg-zinc-200 transition-colors text-sm"
+                        className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors text-sm"
                       >
                         <FileText className="h-4 w-4 text-gray-500" />
                         {doc.name || doc.type}

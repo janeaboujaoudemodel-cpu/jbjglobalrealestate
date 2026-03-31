@@ -87,7 +87,7 @@ const Methodology = () => {
                   <p className="text-black leading-relaxed">
                     This section explains how market data is selected, verified, and presented across JBJ Global Real Estate's Market Intelligence pages. The objective is transparency, consistency, and regulatory alignment.
                   </p>
-                  <p className="text-zinc-700 leading-relaxed mt-4">
+                  <p className="text-gray-700 leading-relaxed mt-4">
                     All methodology is fixed and repeatable. The same standards apply to every market overview, area intelligence page, and market report.
                   </p>
                 </div>
@@ -134,7 +134,7 @@ const Methodology = () => {
                       <span>Clear scope and definition</span>
                     </li>
                   </ul>
-                  <p className="text-zinc-700 leading-relaxed mt-4 pt-4 border-t border-gold/30">
+                  <p className="text-gray-700 leading-relaxed mt-4 pt-4 border-t border-gold/30">
                     No assumptions, estimates, or third-party projections are included.
                   </p>
                 </div>
@@ -167,7 +167,7 @@ const Methodology = () => {
                   <div className="space-y-5">
                     <div className="border-l-4 border-gold pl-4">
                       <h3 className="font-semibold text-black">Dubai Land Department (DLD) – Open Data</h3>
-                      <p className="text-zinc-600 text-sm mt-1">Registered sales transactions, rental contracts, and property records</p>
+                      <p className="text-gray-600 text-sm mt-1">Registered sales transactions, rental contracts, and property records</p>
                       <a 
                         href="https://dubailand.gov.ae/en/open-data/real-estate-data/" 
                         target="_blank" 
@@ -180,7 +180,7 @@ const Methodology = () => {
                     
                     <div className="border-l-4 border-gold pl-4">
                       <h3 className="font-semibold text-black">Dubai Land Department – Research & Reports</h3>
-                      <p className="text-zinc-600 text-sm mt-1">Official market studies and sector publications</p>
+                      <p className="text-gray-600 text-sm mt-1">Official market studies and sector publications</p>
                       <a 
                         href="https://dubailand.gov.ae/en/open-data/research/" 
                         target="_blank" 
@@ -193,7 +193,7 @@ const Methodology = () => {
                     
                     <div className="border-l-4 border-gold pl-4">
                       <h3 className="font-semibold text-black">RERA Rental Index</h3>
-                      <p className="text-zinc-600 text-sm mt-1">Legally recognized rental benchmarks and adjustment limits</p>
+                      <p className="text-gray-600 text-sm mt-1">Legally recognized rental benchmarks and adjustment limits</p>
                       <a 
                         href="https://dubailand.gov.ae/en/eservices/rental-index/" 
                         target="_blank" 
@@ -206,7 +206,7 @@ const Methodology = () => {
                     
                     <div className="border-l-4 border-gold pl-4">
                       <h3 className="font-semibold text-black">RERA Service Charge Index</h3>
-                      <p className="text-zinc-600 text-sm mt-1">Approved annual service charges by project</p>
+                      <p className="text-gray-600 text-sm mt-1">Approved annual service charges by project</p>
                       <a 
                         href="https://dubailand.gov.ae/en/eservices/service-charge-index-overview/" 
                         target="_blank" 
@@ -219,7 +219,7 @@ const Methodology = () => {
                     
                     <div className="border-l-4 border-gold pl-4">
                       <h3 className="font-semibold text-black">Dubai Government Strategic Publications</h3>
-                      <p className="text-zinc-600 text-sm mt-1">Economic frameworks and development agendas</p>
+                      <p className="text-gray-600 text-sm mt-1">Economic frameworks and development agendas</p>
                       <a 
                         href="https://www.protocol.dubai.ae/en/" 
                         target="_blank" 
@@ -278,7 +278,7 @@ const Methodology = () => {
                       <span className="text-black pt-1">Used exactly as published, without reinterpretation</span>
                     </li>
                   </ol>
-                  <p className="text-zinc-700 leading-relaxed mt-6 pt-4 border-t border-gold/30">
+                  <p className="text-gray-700 leading-relaxed mt-6 pt-4 border-t border-gold/30">
                     If data cannot be verified from an official source, it is excluded.
                   </p>
                 </div>
@@ -325,7 +325,7 @@ const Methodology = () => {
                       <span>No guaranteed outcomes or implied returns</span>
                     </li>
                   </ul>
-                  <p className="text-zinc-700 leading-relaxed mt-4 pt-4 border-t border-red-200">
+                  <p className="text-gray-700 leading-relaxed mt-4 pt-4 border-t border-red-200">
                     Charts, summaries, and explanations reflect recorded activity, not future expectations.
                   </p>
                 </div>
@@ -415,7 +415,7 @@ const Methodology = () => {
                   <p className="text-black leading-relaxed">
                     JBJ Global Real Estate maintains full alignment with UAE real estate laws and data publication standards.
                   </p>
-                  <p className="text-zinc-600 leading-relaxed mt-6 pt-4 border-t border-gold/30 italic">
+                  <p className="text-gray-600 leading-relaxed mt-6 pt-4 border-t border-gold/30 italic">
                     This methodology applies uniformly across all Market Intelligence content and is locked unless official data standards change.
                   </p>
                 </div>

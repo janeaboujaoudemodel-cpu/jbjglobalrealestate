@@ -377,7 +377,7 @@ const ListingPortalMyListings = () => {
               <AlertTriangle className="w-5 h-5 text-amber-500" />
               Delete Listing?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-zinc-600">
+            <AlertDialogDescription className="text-gray-600">
               Are you sure you want to delete this listing? You can restore it anytime from the "Recently Deleted" tab.
             </AlertDialogDescription>
           </AlertDialogHeader>

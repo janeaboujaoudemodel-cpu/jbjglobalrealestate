@@ -48,8 +48,8 @@ const LEARNING_PATH_COLORS: Record<string, { bg: string; text: string; border: s
 
 const DEFAULT_PATH_COLOR = { 
   bg: 'from-zinc-900 via-zinc-800 to-zinc-950', 
-  text: 'text-zinc-200', 
-  border: 'border-zinc-400/40',
+  text: 'text-gray-200', 
+  border: 'border-gray-400/40',
   glow: 'rgba(161, 161, 170, 0.3)'
 };
 
@@ -190,7 +190,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
               </p>
 
               {/* Footer */}
-              <div className="pt-3 border-t border-zinc-700 mt-auto">
+              <div className="pt-3 border-t border-gray-700 mt-auto">
                 {effectivelyLocked ? (
                   <div className="space-y-2">
                     <p className="text-gold/60 text-[10px] leading-tight">

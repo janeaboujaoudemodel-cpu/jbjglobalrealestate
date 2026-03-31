@@ -161,7 +161,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
               New Character
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-zinc-900 border-zinc-800 max-w-lg">
+          <DialogContent className="bg-zinc-900 border-gray-800 max-w-lg">
             <DialogHeader>
               <DialogTitle className="text-white flex items-center gap-2">
                 <Mic className="w-5 h-5 text-gold" />
@@ -177,7 +177,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="e.g., Alex the Host"
-                  className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                  className="bg-zinc-800 border-gray-700 text-white mt-1"
                 />
               </div>
 
@@ -188,10 +188,10 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   value={formData.nationality} 
                   onValueChange={(value) => setFormData(prev => ({ ...prev, nationality: value }))}
                 >
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+                  <SelectTrigger className="bg-zinc-800 border-gray-700 text-white mt-1">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-zinc-800 border-zinc-700">
+                  <SelectContent className="bg-zinc-800 border-gray-700">
                     {NATIONALITIES.map(nat => (
                       <SelectItem key={nat} value={nat} className="text-white hover:bg-gold/20">
                         {nat}
@@ -212,7 +212,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                       className={`cursor-pointer transition-all ${
                         formData.languages.includes(lang)
                           ? 'bg-gold/20 border-gold text-gold'
-                          : 'border-zinc-700 text-white/70 hover:border-gold/50'
+                          : 'border-gray-700 text-white/70 hover:border-gold/50'
                       }`}
                       onClick={() => {
                         setFormData(prev => ({
@@ -240,7 +240,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                       className={`p-3 rounded-lg border-2 text-left transition-all ${
                         formData.voiceId === voice.id
                           ? 'border-gold bg-gold/10'
-                          : 'border-zinc-700 bg-zinc-800 hover:border-zinc-600'
+                          : 'border-gray-700 bg-zinc-800 hover:border-gray-600'
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -259,7 +259,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                         </Button>
                       </div>
                       <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="outline" className="text-xs border-zinc-600 text-white/70">
+                        <Badge variant="outline" className="text-xs border-gray-600 text-white/70">
                           {voice.gender}
                         </Badge>
                         <span className="text-xs text-white/60">{voice.accent}</span>
@@ -282,7 +282,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                         className={`p-3 rounded-lg border-2 text-left transition-all ${
                           formData.persona === preset.id
                             ? 'border-gold bg-gold/10'
-                            : 'border-zinc-700 bg-zinc-800 hover:border-zinc-600'
+                            : 'border-gray-700 bg-zinc-800 hover:border-gray-600'
                         }`}
                       >
                         <div className="flex items-center gap-2">
@@ -303,7 +303,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Additional character notes..."
-                  className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                  className="bg-zinc-800 border-gray-700 text-white mt-1"
                 />
               </div>
 
@@ -322,10 +322,10 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
 
       {/* Characters List */}
       {characters.length === 0 ? (
-        <div className="text-center py-8 border-2 border-dashed border-zinc-700 rounded-lg">
-          <Users className="w-10 h-10 text-zinc-600 mx-auto mb-2" />
+        <div className="text-center py-8 border-2 border-dashed border-gray-700 rounded-lg">
+          <Users className="w-10 h-10 text-gray-600 mx-auto mb-2" />
           <p className="text-white/60 text-sm">No characters created yet</p>
-          <p className="text-zinc-600 text-xs">Create characters for multi-voice scripts</p>
+          <p className="text-gray-600 text-xs">Create characters for multi-voice scripts</p>
         </div>
       ) : (
         <ScrollArea className="h-[200px]">
@@ -342,7 +342,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   className={`p-3 rounded-lg border-2 transition-all cursor-pointer ${
                     isSelected
                       ? 'border-gold bg-gold/10'
-                      : 'border-zinc-800 bg-zinc-800/50 hover:border-zinc-700'
+                      : 'border-gray-800 bg-zinc-800/50 hover:border-gray-700'
                   }`}
                   onClick={() => onSelectCharacter?.(character.id)}
                 >
@@ -390,12 +390,12 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   {character.languages.length > 0 && (
                     <div className="flex gap-1 mt-2">
                       {character.languages.slice(0, 3).map(lang => (
-                        <Badge key={lang} variant="outline" className="text-xs border-zinc-700 text-white/70">
+                        <Badge key={lang} variant="outline" className="text-xs border-gray-700 text-white/70">
                           {lang}
                         </Badge>
                       ))}
                       {character.languages.length > 3 && (
-                        <Badge variant="outline" className="text-xs border-zinc-700 text-white/70">
+                        <Badge variant="outline" className="text-xs border-gray-700 text-white/70">
                           +{character.languages.length - 3}
                         </Badge>
                       )}

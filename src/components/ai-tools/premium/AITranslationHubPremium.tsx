@@ -243,7 +243,7 @@ const AITranslationHubPremium = () => {
                     key="translation"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className={`bg-zinc-800 border border-zinc-700 rounded-md p-4 min-h-[200px] text-white ${
+                    className={`bg-zinc-800 border border-gray-700 rounded-md p-4 min-h-[200px] text-white ${
                       isRTL(targetLanguage) ? "text-right" : ""
                     }`}
                     dir={isRTL(targetLanguage) ? "rtl" : "ltr"}
@@ -251,7 +251,7 @@ const AITranslationHubPremium = () => {
                     {response.translation}
                   </motion.div>
                 ) : (
-                  <div className="bg-zinc-800/50 border border-zinc-700/50 rounded-md p-4 min-h-[200px] flex items-center justify-center">
+                  <div className="bg-zinc-800/50 border border-gray-700/50 rounded-md p-4 min-h-[200px] flex items-center justify-center">
                     <div className="text-center text-white/60">
                       <Globe className="h-8 w-8 mx-auto mb-2 opacity-50" />
                       <p className="text-sm">Translation will appear here</p>

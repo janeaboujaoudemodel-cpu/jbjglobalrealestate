@@ -175,7 +175,7 @@ export default function OwnerSidebarNav({ collapsed, onNavigate }: OwnerSidebarN
                       : "bg-gradient-to-r from-[#B89555]/8 via-transparent to-[#B89555]/8 text-[#B89555]/90 border border-[#B89555]/15 hover:border-[#B89555]/40 hover:shadow-[0_0_12px_rgba(201,168,76,0.2)] hover:from-[#B89555]/15 hover:to-[#B89555]/15"
                     : isActivePath(item.path)
                       ? "bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/20"
-                      : "text-zinc-700 hover:text-black hover:bg-[#B89555]/10"
+                      : "text-gray-700 hover:text-black hover:bg-[#B89555]/10"
                 )}
                 title={collapsed ? item.label : undefined}
               >

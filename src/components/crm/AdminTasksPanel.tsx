@@ -47,7 +47,7 @@ const PRIORITY_COLORS: Record<string, string> = {
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  general: "bg-zinc-500/20 text-gray-500 border-zinc-500/30",
+  general: "bg-gray-500/20 text-gray-500 border-gray-500/30",
   integration: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   security: "bg-red-500/20 text-red-400 border-red-500/30",
   marketing: "bg-green-500/20 text-green-400 border-green-500/30",
@@ -236,19 +236,19 @@ export function AdminTasksPanel() {
                 placeholder="Task title..."
                 value={newTask.title}
                 onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                className="border-zinc-300 focus:border-gold"
+                className="border-gray-300 focus:border-gold"
               />
               <Textarea
                 placeholder="Description (optional)..."
                 value={newTask.description}
                 onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-                className="border-zinc-300 focus:border-gold"
+                className="border-gray-300 focus:border-gold"
               />
               <div className="grid grid-cols-2 gap-4">
                 <select
                   value={newTask.category}
                   onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
-                  className="h-10 px-3 rounded-md border border-zinc-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  className="h-10 px-3 rounded-md border border-gray-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                 >
                   <option value="general">General</option>
                   <option value="integration">Integration</option>
@@ -260,7 +260,7 @@ export function AdminTasksPanel() {
                 <select
                   value={newTask.priority}
                   onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
-                  className="h-10 px-3 rounded-md border border-zinc-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
+                  className="h-10 px-3 rounded-md border border-gray-300 bg-white text-black font-medium focus:outline-none focus:ring-2 focus:ring-gold/50"
                 >
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -272,7 +272,7 @@ export function AdminTasksPanel() {
                 type="date"
                 value={newTask.due_date}
                 onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
-                className="border-zinc-300 focus:border-gold"
+                className="border-gray-300 focus:border-gold"
               />
               <Button onClick={addTask} className="w-full bg-gradient-to-r from-gold to-gold-dark text-black font-semibold hover:brightness-110">
                 Add Task
@@ -297,7 +297,7 @@ export function AdminTasksPanel() {
               key={task.id}
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white border border-zinc-200 rounded-xl p-3 hover:border-gold/50 hover:shadow-md transition-all"
+              className="bg-white border border-gray-200 rounded-xl p-3 hover:border-gold/50 hover:shadow-md transition-all"
             >
               <div className="flex items-start gap-3">
                 <button
@@ -345,7 +345,7 @@ export function AdminTasksPanel() {
             {completedTasks.slice(0, 3).map((task) => (
               <div
                 key={task.id}
-                className="flex items-center gap-3 p-2 rounded-lg bg-zinc-50 opacity-60 mb-2"
+                className="flex items-center gap-3 p-2 rounded-lg bg-gray-50 opacity-60 mb-2"
               >
                 <button
                   onClick={() => toggleTaskStatus(task)}

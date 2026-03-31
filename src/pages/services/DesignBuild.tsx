@@ -236,13 +236,13 @@ const DesignBuild = () => {
                     >
                       {service.title}
                     </h3>
-                    <p className="text-zinc-600 text-sm mb-6">
+                    <p className="text-gray-600 text-sm mb-6">
                       {service.description}
                     </p>
 
                     <ul className="space-y-2 mb-6">
                       {service.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-zinc-700 text-sm">
+                        <li key={idx} className="flex items-center gap-2 text-gray-700 text-sm">
                           <div className="w-1.5 h-1.5 rounded-full bg-gold" />
                           {feature}
                         </li>
@@ -311,7 +311,7 @@ const DesignBuild = () => {
                           </h3>
                         </div>
                       </div>
-                      <p className="text-zinc-600 mb-6">{tool.description}</p>
+                      <p className="text-gray-600 mb-6">{tool.description}</p>
                       <Button className="w-full bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-2 border-gold/60 shadow-[0_8px_30px_rgba(200,167,102,0.3),0_4px_15px_rgba(0,0,0,0.1)] hover:bg-black hover:text-gold hover:border-gold hover:shadow-[0_8px_40px_rgba(200,167,102,0.5)] font-semibold transition-all duration-300">
                         {tool.cta}
                         <ArrowUpRight className="w-4 h-4 ml-2" />
@@ -347,7 +347,7 @@ const DesignBuild = () => {
                 >
                   Ready to Transform <span className="text-gold">Your Space?</span>
                 </h2>
-                <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+                <p className="text-gray-600 mb-8 max-w-xl mx-auto">
                   Book a consultation with our licensed partners now. Our expert network is ready to bring your vision to life.
                 </p>
                 <div className="flex flex-wrap gap-4 justify-center">

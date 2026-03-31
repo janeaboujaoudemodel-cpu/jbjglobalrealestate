@@ -105,7 +105,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
             </p>
 
             {/* Department and details - allow text wrapping, no truncation */}
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-zinc-600 text-xs mb-2">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-gray-600 text-xs mb-2">
               <span className="whitespace-normal">{member.department}</span>
               {typeof member.yearsExperience === "number" && (
                 <>
@@ -123,7 +123,7 @@ const TeamMemberCard = ({ member, onReadMore, isInternalUser, onDirectClick }: T
 
             {/* Short Bio */}
             {member.bio && (
-              <p className="text-zinc-600 text-xs line-clamp-2 mb-3">
+              <p className="text-gray-600 text-xs line-clamp-2 mb-3">
                 {member.bio}
               </p>
             )}
@@ -401,7 +401,7 @@ const MeetTheTeam: React.FC = () => {
                             <h2 className="text-black text-2xl font-semibold">
                             {deptName}
                           </h2>
-                          <p className="text-zinc-600 text-sm">
+                          <p className="text-gray-600 text-sm">
                             {total} member{total > 1 ? "s" : ""}
                           </p>
                         </div>
@@ -424,7 +424,7 @@ const MeetTheTeam: React.FC = () => {
                                 <h3 className="text-black text-lg font-semibold">
                                   {category}
                                 </h3>
-                                <p className="text-zinc-600 text-sm">
+                                <p className="text-gray-600 text-sm">
                                   {categoryMembers.length} member
                                   {categoryMembers.length > 1 ? "s" : ""}
                                 </p>
@@ -478,7 +478,7 @@ const MeetTheTeam: React.FC = () => {
                         <h2 className="text-black text-2xl font-semibold">
                           {deptName}
                         </h2>
-                        <p className="text-zinc-600 text-sm">
+                        <p className="text-gray-600 text-sm">
                           {visibleMembers.length} member{visibleMembers.length > 1 ? "s" : ""}
                         </p>
                       </div>
@@ -537,7 +537,7 @@ const MeetTheTeam: React.FC = () => {
                     Ready to Work With Our Experts?
                   </motion.h3>
                   <motion.p 
-                    className="text-zinc-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
+                    className="text-gray-600 text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-6 sm:mb-10 leading-relaxed"
                     variants={fadeInUp}
                   >
                     Whether you're looking to buy, sell, or invest in luxury real estate, we're here to help.

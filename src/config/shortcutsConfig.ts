@@ -192,8 +192,8 @@ export const SHORTCUT_GROUPS: ShortcutGroup[] = [
   {
     label: "Account",
     colorBorder: "border-l-zinc-400",
-    colorText: "text-zinc-600",
-    colorBg: "bg-zinc-50",
+    colorText: "text-gray-600",
+    colorBg: "bg-gray-50",
     visibility: ['authenticated'],
     items: [
       { label: 'My Profile', icon: User, href: '/profile' },

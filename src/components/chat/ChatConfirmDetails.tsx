@@ -43,7 +43,7 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
 
       <div className="mb-4">
         <h4 className="text-[#1a1a1a] text-lg font-bold mb-1">Welcome Back!</h4>
-        <p className="text-zinc-600 text-sm">Please confirm your details to continue</p>
+        <p className="text-gray-600 text-sm">Please confirm your details to continue</p>
       </div>
 
       <div className="w-full bg-white/80 rounded-xl border border-[#C8A766]/30 p-4 space-y-3">
@@ -125,7 +125,7 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
             <Button
               variant="ghost"
               onClick={() => setIsEditing(true)}
-              className="w-full h-10 text-zinc-600 hover:text-black hover:bg-black/5 text-sm"
+              className="w-full h-10 text-gray-600 hover:text-black hover:bg-black/5 text-sm"
             >
               <Edit3 className="w-3.5 h-3.5 mr-1.5" />
               Update My Details
@@ -152,7 +152,7 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
                 setEditPhone(phone);
                 setIsEditing(false);
               }}
-              className="w-full h-10 text-zinc-600 hover:text-black hover:bg-black/5 text-sm"
+              className="w-full h-10 text-gray-600 hover:text-black hover:bg-black/5 text-sm"
             >
               Cancel
             </Button>

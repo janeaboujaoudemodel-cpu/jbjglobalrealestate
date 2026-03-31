@@ -47,7 +47,7 @@ const MeetingCenter = () => {
             Meeting <span className="text-gold">Center</span>
           </h1>
           
-          <p className="text-lg text-zinc-600 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
             Central hub for all your meeting summaries, call notes, and voice AI interactions. 
             Track action items and client communications in one place.
           </p>

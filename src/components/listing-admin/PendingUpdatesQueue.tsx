@@ -380,8 +380,8 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
 
             {/* Migration Log */}
             {migrationLog.length > 0 && (
-              <div className="bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden">
-                <div className="px-4 py-2 border-b border-zinc-800">
+              <div className="bg-zinc-950 border border-gray-800 rounded-xl overflow-hidden">
+                <div className="px-4 py-2 border-b border-gray-800">
                   <span className="text-gray-400 text-xs font-semibold">Migration Log</span>
                 </div>
                 <div className="max-h-48 overflow-y-auto p-3 font-mono text-xs space-y-0.5">
@@ -401,7 +401,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
             {/* New Project Discoveries */}
             {newProjects.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-zinc-700 mb-3 flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
                   <Building className="h-4 w-4 text-gold" />
                   New Project Discoveries
                   <Badge className="bg-gold/20 text-gold border border-gold/30 text-xs">{newProjects.length}</Badge>
@@ -521,16 +521,16 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
             {/* Field Updates (if any) */}
             {fieldUpdates.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold text-zinc-700 mb-3">
+                <h3 className="text-sm font-semibold text-gray-700 mb-3">
                   Field Updates
-                  <Badge className="ml-2 bg-zinc-100 text-zinc-600 text-xs">{fieldUpdates.length}</Badge>
+                  <Badge className="ml-2 bg-gray-100 text-gray-600 text-xs">{fieldUpdates.length}</Badge>
                 </h3>
                 <ScrollArea className="h-[300px] pr-2">
                   <div className="space-y-3">
                     {fieldUpdates.map((update) => (
                       <div key={update.id} className="border border-gold/20 rounded-lg p-4 bg-white/50">
                         <div className="flex items-start justify-between mb-2">
-                          <span className="font-medium text-zinc-900 text-sm">
+                          <span className="font-medium text-gray-900 text-sm">
                             {update.field_name.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
                           </span>
                           <div className="flex items-center gap-1 text-xs text-gray-500">
@@ -541,13 +541,13 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                         <div className="grid grid-cols-2 gap-3 mb-3">
                           <div>
                             <p className="text-[10px] text-gray-500 mb-1">Current</p>
-                            <div className="bg-white border border-zinc-200 rounded p-2 text-xs text-zinc-900">
+                            <div className="bg-white border border-gray-200 rounded p-2 text-xs text-gray-900">
                               {update.current_value || <span className="text-gray-500 italic">Empty</span>}
                             </div>
                           </div>
                           <div>
                             <p className="text-[10px] text-gray-500 mb-1">Proposed</p>
-                            <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-xs text-zinc-900">
+                            <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-xs text-gray-900">
                               {update.proposed_value}
                             </div>
                           </div>

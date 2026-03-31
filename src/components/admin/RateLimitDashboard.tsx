@@ -393,7 +393,7 @@ export const RateLimitDashboard = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-24 h-2 bg-zinc-200 rounded-full overflow-hidden">
+                          <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
                             <div 
                               className={`h-full rounded-full transition-all ${
                                 percentage >= 100 ? "bg-red-500" :

@@ -152,7 +152,7 @@ const BestIdeaAward = () => {
                     </div>
                   </div>
                   
-                  <p className="text-zinc-700 mb-6 leading-relaxed">
+                  <p className="text-gray-700 mb-6 leading-relaxed">
                     Have a brilliant idea that could improve our business, services, or customer experience? 
                     Share it with us and enter the monthly draw to win!
                   </p>
@@ -256,22 +256,22 @@ const BestIdeaAward = () => {
                           
                           {!formData.isAnonymous && (
                             <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-5 mb-5">
-                              <p className="text-sm text-zinc-600 mb-2">Your Draw Ticket Number</p>
+                              <p className="text-sm text-gray-600 mb-2">Your Draw Ticket Number</p>
                               <p className="text-xl font-bold text-gold tracking-wider mb-2">{drawTicketNumber}</p>
                               <p className="text-xs text-gray-500">This ticket is linked to your account</p>
                             </div>
                           )}
 
-                          <div className="bg-zinc-50 rounded-xl p-5 mb-5 text-left">
-                            <p className="text-zinc-700 mb-3">
+                          <div className="bg-gray-50 rounded-xl p-5 mb-5 text-left">
+                            <p className="text-gray-700 mb-3">
                               <span className="text-gold font-semibold">We deeply appreciate</span> your creativity and the time you took to share your idea with us.
                             </p>
                             {!formData.isAnonymous ? (
                               <>
-                                <p className="text-zinc-600 text-sm mb-2">
+                                <p className="text-gray-600 text-sm mb-2">
                                   Your idea has been linked to your contact details. In case you are the winner, we will contact you accordingly.
                                 </p>
-                                <p className="text-zinc-600 text-sm">
+                                <p className="text-gray-600 text-sm">
                                   <Sparkles className="w-4 h-4 inline text-gold mr-1" />
                                   <span className="text-gold font-medium">Submit another unique idea</span> to get additional draw tickets!
                                 </p>
@@ -293,7 +293,7 @@ const BestIdeaAward = () => {
                       ) : (
                         <form onSubmit={handleSubmit} className="space-y-4 py-4">
                           {/* Anonymous Toggle */}
-                          <div className="flex items-center justify-between p-4 bg-zinc-50 rounded-lg border border-zinc-200">
+                          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
                             <div className="flex items-center gap-3">
                               {formData.isAnonymous ? (
                                 <EyeOff className="w-5 h-5 text-gray-500" />
@@ -325,7 +325,7 @@ const BestIdeaAward = () => {
                               className="space-y-4"
                             >
                               <div>
-                                <Label className="text-zinc-700 flex items-center gap-2">
+                                <Label className="text-gray-700 flex items-center gap-2">
                                   <User className="w-4 h-4 text-gold" />
                                   Full Name *
                                 </Label>
@@ -333,11 +333,11 @@ const BestIdeaAward = () => {
                                   placeholder="John Doe"
                                   value={formData.fullName}
                                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                  className="mt-1 border-zinc-300 focus:border-gold"
+                                className="mt-1 border-gray-300 focus:border-gold"
                                 />
                               </div>
                               <div>
-                                <Label className="text-zinc-700 flex items-center gap-2">
+                                <Label className="text-gray-700 flex items-center gap-2">
                                   <Mail className="w-4 h-4 text-gold" />
                                   Email *
                                 </Label>
@@ -346,11 +346,11 @@ const BestIdeaAward = () => {
                                   placeholder="john@example.com"
                                   value={formData.email}
                                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                  className="mt-1 border-zinc-300 focus:border-gold"
+                                className="mt-1 border-gray-300 focus:border-gold"
                                 />
                               </div>
                               <div>
-                                <Label className="text-zinc-700 flex items-center gap-2">
+                                <Label className="text-gray-700 flex items-center gap-2">
                                   <Phone className="w-4 h-4 text-gold" />
                                   Phone Number *
                                 </Label>
@@ -359,7 +359,7 @@ const BestIdeaAward = () => {
                                   placeholder="+971 50 123 4567"
                                   value={formData.phone}
                                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                  className="mt-1 border-zinc-300 focus:border-gold"
+                                  className="mt-1 border-gray-300 focus:border-gold"
                                 />
                               </div>
                             </motion.div>
@@ -367,7 +367,7 @@ const BestIdeaAward = () => {
 
                           {/* Idea Field */}
                           <div>
-                            <Label className="text-zinc-700 flex items-center gap-2">
+                            <Label className="text-gray-700 flex items-center gap-2">
                               <Lightbulb className="w-4 h-4 text-gold" />
                               Your Idea *
                             </Label>
@@ -375,7 +375,7 @@ const BestIdeaAward = () => {
                               placeholder="Describe your idea in detail... How can we improve our services, processes, or customer experience?"
                               value={formData.idea}
                               onChange={(e) => setFormData({ ...formData, idea: e.target.value })}
-                              className="mt-1 min-h-[120px] border-zinc-300 focus:border-gold"
+                              className="mt-1 min-h-[120px] border-gray-300 focus:border-gold"
                             />
                           </div>
 

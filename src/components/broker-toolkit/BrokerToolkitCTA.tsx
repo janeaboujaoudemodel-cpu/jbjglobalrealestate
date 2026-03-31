@@ -38,7 +38,7 @@ export function BrokerToolkitCTA() {
               <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
                 Ready to Join the <span className="text-gold">JBJ Broker Circle?</span>
               </h2>
-              <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+              <p className="text-gray-600 mb-8 max-w-xl mx-auto">
                 Get free access to all AI tools, 24 training modules, dedicated HR support, 
                 a personal property coach, and start earning rewards today.
               </p>
@@ -98,7 +98,7 @@ export function BrokerToolkitCTA() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a
                   href="tel:+971565911000"
-                  className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
+                  className="flex items-center gap-2 text-gray-600 hover:text-gold transition-colors"
                 >
                   <Phone className="w-5 h-5 text-blue-500" />
                   +971 56 591 1000
@@ -108,7 +108,7 @@ export function BrokerToolkitCTA() {
                   href="https://wa.me/971565911000?text=Hi%2C%20I%27m%20interested%20in%20joining%20the%20Broker%20Circle"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
+                  className="flex items-center gap-2 text-gray-600 hover:text-gold transition-colors"
                 >
                   <MessageCircle className="w-5 h-5 text-green-500" />
                   WhatsApp
@@ -116,7 +116,7 @@ export function BrokerToolkitCTA() {
                 <span className="text-gray-400 hidden sm:block">|</span>
                 <a
                   href="mailto:CONTACT@JBJ.AE"
-                  className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"
+                  className="flex items-center gap-2 text-gray-600 hover:text-gold transition-colors"
                 >
                   <Mail className="w-5 h-5 text-gold" />
                   CONTACT@JBJ.AE

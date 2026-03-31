@@ -194,7 +194,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
   return (
     <div className="space-y-8">
       {/* Search Section */}
-      <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
+      <div className="bg-zinc-900/50 border border-gray-800 rounded-xl p-6">
         <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
           <Search className="w-5 h-5 text-gold" />
           Search Properties
@@ -205,7 +205,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by project name..."
-            className="bg-zinc-800 border-zinc-700 text-white"
+            className="bg-zinc-800 border-gray-700 text-white"
           />
           {isSearching && (
             <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 animate-spin text-gold" />
@@ -214,12 +214,12 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
 
         {/* Search Results */}
         {searchResults.length > 0 && (
-          <div className="mt-4 border border-zinc-700 rounded-lg overflow-hidden">
+          <div className="mt-4 border border-gray-700 rounded-lg overflow-hidden">
             {searchResults.map((project) => (
               <button
                 key={project.id}
                 onClick={() => addProject(project)}
-                className="w-full flex items-center justify-between p-4 hover:bg-zinc-800 transition-colors border-b border-zinc-700 last:border-0 text-left"
+                className="w-full flex items-center justify-between p-4 hover:bg-gray-800 transition-colors border-b border-gray-700 last:border-0 text-left"
               >
                 <div>
                   <p className="text-white font-medium">{project.name}</p>
@@ -239,7 +239,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
 
       {/* Selected Projects */}
       {selectedProjects.length > 0 && (
-        <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
+        <div className="bg-zinc-900/50 border border-gray-800 rounded-xl p-6">
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <FileText className="w-5 h-5 text-gold" />
             Selected Properties ({selectedProjects.length}/5)
@@ -252,7 +252,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="flex items-center justify-between p-4 bg-zinc-800/50 border border-zinc-700 rounded-lg"
+                className="flex items-center justify-between p-4 bg-zinc-800/50 border border-gray-700 rounded-lg"
               >
                 <div className="flex items-center gap-3">
                   <Badge className="bg-gold/20 text-gold">{index + 1}</Badge>
@@ -269,7 +269,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
                   </span>
                   <button
                     onClick={() => removeProject(project.id)}
-                    className="p-1 hover:bg-zinc-700 rounded transition-colors"
+                    className="p-1 hover:bg-gray-700 rounded transition-colors"
                   >
                     <X className="w-4 h-4 text-white/70" />
                   </button>
@@ -281,7 +281,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
       )}
 
       {/* PDF Options */}
-      <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
+      <div className="bg-zinc-900/50 border border-gray-800 rounded-xl p-6">
         <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
           <Settings className="w-5 h-5 text-gold" />
           PDF Options
@@ -357,7 +357,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
-          className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6"
+          className="bg-zinc-900/50 border border-gray-800 rounded-xl p-6"
         >
           <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <User className="w-5 h-5 text-gold" />
@@ -371,7 +371,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
                 value={brokerInfo.name}
                 onChange={(e) => setBrokerInfo(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="Enter your name"
-                className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                className="bg-zinc-800 border-gray-700 text-white mt-1"
               />
             </div>
 
@@ -381,7 +381,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
                 value={brokerInfo.company}
                 onChange={(e) => setBrokerInfo(prev => ({ ...prev, company: e.target.value }))}
                 placeholder="Your brokerage company"
-                className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                className="bg-zinc-800 border-gray-700 text-white mt-1"
               />
             </div>
 
@@ -391,7 +391,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
                 value={brokerInfo.phone}
                 onChange={(e) => setBrokerInfo(prev => ({ ...prev, phone: e.target.value }))}
                 placeholder="+971 XX XXX XXXX"
-                className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                className="bg-zinc-800 border-gray-700 text-white mt-1"
               />
             </div>
 
@@ -401,7 +401,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
                 value={brokerInfo.email}
                 onChange={(e) => setBrokerInfo(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="your@email.com"
-                className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                className="bg-zinc-800 border-gray-700 text-white mt-1"
               />
             </div>
 
@@ -411,7 +411,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
                 value={brokerInfo.photoUrl}
                 onChange={(e) => setBrokerInfo(prev => ({ ...prev, photoUrl: e.target.value }))}
                 placeholder="https://example.com/photo.jpg"
-                className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                className="bg-zinc-800 border-gray-700 text-white mt-1"
               />
             </div>
 
@@ -421,7 +421,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
                 value={brokerInfo.logoUrl}
                 onChange={(e) => setBrokerInfo(prev => ({ ...prev, logoUrl: e.target.value }))}
                 placeholder="https://example.com/logo.png"
-                className="bg-zinc-800 border-zinc-700 text-white mt-1"
+                className="bg-zinc-800 border-gray-700 text-white mt-1"
               />
             </div>
           </div>

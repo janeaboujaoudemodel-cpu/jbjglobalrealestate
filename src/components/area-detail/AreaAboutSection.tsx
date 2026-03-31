@@ -41,7 +41,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
             <div className="mb-8">
               <div className={`relative ${!isExpanded && isLongDescription ? 'max-h-40 overflow-hidden' : ''}`}>
                 <div 
-                  className="text-zinc-700 text-base md:text-lg leading-relaxed prose prose-sm max-w-none prose-p:mb-3"
+                  className="text-gray-700 text-base md:text-lg leading-relaxed prose prose-sm max-w-none prose-p:mb-3"
                   dangerouslySetInnerHTML={{ 
                     __html: renderMarkdownToHtml(formatReellyDescription(
                       area.description
@@ -72,7 +72,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
               )}
             </div>
           ) : (
-            <p className="text-zinc-700 text-base md:text-lg leading-relaxed mb-8">
+            <p className="text-gray-700 text-base md:text-lg leading-relaxed mb-8">
               {area.name} is a premier residential and commercial district located in {area.emirate}. 
               Known for its world-class infrastructure and vibrant community, this area offers a diverse 
               range of properties from luxury apartments to exclusive villas. With excellent connectivity, 

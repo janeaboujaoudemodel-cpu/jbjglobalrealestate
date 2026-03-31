@@ -228,7 +228,7 @@ const InvestmentAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-zinc-600 max-w-2xl mx-auto mb-12"
+              className="text-center text-gray-600 max-w-2xl mx-auto mb-12"
             >
               Our advisory scope focuses on property investment guidance, not financial product sales.
             </motion.p>
@@ -246,16 +246,16 @@ const InvestmentAdvisory = () => {
                     </div>
                     <div className="flex-1">
                       <h3 className="text-xl md:text-2xl font-medium text-black mb-3">{service.title}</h3>
-                      <p className="text-zinc-600 mb-4">{service.description}</p>
+                      <p className="text-gray-600 mb-4">{service.description}</p>
                       <ul className="space-y-2 mb-4">
                         {service.items.map((item, idx) => (
                           <li key={idx} className="flex items-start gap-3">
                             <CheckCircle2 className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
-                            <span className="text-zinc-700 text-sm">{item}</span>
+                            <span className="text-gray-700 text-sm">{item}</span>
                           </li>
                         ))}
                       </ul>
-                      <p className="text-sm text-zinc-600 italic">{service.footer}</p>
+                      <p className="text-sm text-gray-600 italic">{service.footer}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -290,7 +290,7 @@ const InvestmentAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-zinc-600 max-w-2xl mx-auto mb-8"
+              className="text-center text-gray-600 max-w-2xl mx-auto mb-8"
             >
               To maintain transparency and compliance:
             </motion.p>
@@ -303,7 +303,7 @@ const InvestmentAdvisory = () => {
                   className="flex items-center gap-4 jj-card-inner !p-4"
                 >
                   <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-                  <span className="text-zinc-700">{item}</span>
+                  <span className="text-gray-700">{item}</span>
                 </motion.div>
               ))}
             </div>
@@ -338,7 +338,7 @@ const InvestmentAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-zinc-600 max-w-2xl mx-auto mb-12"
+              className="text-center text-gray-600 max-w-2xl mx-auto mb-12"
             >
               Our Investment Advisory is suitable for:
             </motion.p>
@@ -353,7 +353,7 @@ const InvestmentAdvisory = () => {
                   <div className="w-10 h-10 bg-black border border-gold rounded-lg flex items-center justify-center flex-shrink-0">
                     <item.icon className="w-5 h-5 text-gold" />
                   </div>
-                  <span className="text-zinc-800 font-medium">{item.label}</span>
+                  <span className="text-gray-800 font-medium">{item.label}</span>
                 </motion.div>
               ))}
             </div>
@@ -392,7 +392,7 @@ const InvestmentAdvisory = () => {
                   className="flex items-center gap-4 jj-card-inner !p-4"
                 >
                   <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0" />
-                  <span className="text-zinc-800">{reason}</span>
+                  <span className="text-gray-800">{reason}</span>
                 </motion.div>
               ))}
             </div>
@@ -420,7 +420,7 @@ const InvestmentAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-lg text-zinc-700 mb-10"
+              className="text-lg text-gray-700 mb-10"
             >
               If you are considering investing in UAE real estate and want structured, informed guidance, our advisory team is ready to assist.
             </motion.p>

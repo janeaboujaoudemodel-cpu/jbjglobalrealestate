@@ -371,7 +371,7 @@ const AdvancedBrokerToolkit = () => {
 
   const renderTrainingCard = (item: typeof TRAINING_DEVELOPMENT[0], index: number) => (
     <motion.div key={index} variants={fadeInUp}>
-      <Card className={`bg-zinc-900/60 border-zinc-800 hover:border-gold transition-all duration-300 h-full shadow-lg ${item.glowColor} hover:shadow-xl hover:shadow-gold/30 cursor-pointer group`}>
+      <Card className={`bg-zinc-900/60 border-gray-800 hover:border-gold transition-all duration-300 h-full shadow-lg ${item.glowColor} hover:shadow-xl hover:shadow-gold/30 cursor-pointer group`}>
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 ${item.bgColor} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -390,7 +390,7 @@ const AdvancedBrokerToolkit = () => {
   const renderToolCard = (tool: typeof TOOLS_OPERATIONS[0], index: number) => (
     <motion.div key={index} variants={fadeInUp}>
       <Link to={tool.link}>
-        <Card className={`bg-zinc-900/60 border-zinc-800 hover:border-gold transition-all duration-300 h-full shadow-lg ${tool.glowColor} hover:shadow-xl hover:shadow-gold/30 group cursor-pointer`}>
+        <Card className={`bg-zinc-900/60 border-gray-800 hover:border-gold transition-all duration-300 h-full shadow-lg ${tool.glowColor} hover:shadow-xl hover:shadow-gold/30 group cursor-pointer`}>
           <CardContent className="p-4">
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 ${tool.bgColor} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -444,28 +444,28 @@ const AdvancedBrokerToolkit = () => {
           <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-transparent h-auto mb-8">
             <TabsTrigger 
               value="support" 
-              className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold data-[state=active]:border-gold/40 border border-zinc-700 bg-zinc-900/50 py-3"
+              className="data-[state=active]:bg-gold/20 data-[state=active]:text-gold data-[state=active]:border-gold/40 border border-gray-700 bg-zinc-900/50 py-3"
             >
               <Users className="h-4 w-4 mr-2" />
               Professional Support
             </TabsTrigger>
             <TabsTrigger 
               value="media" 
-              className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400 data-[state=active]:border-purple-500/40 border border-zinc-700 bg-zinc-900/50 py-3"
+              className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400 data-[state=active]:border-purple-500/40 border border-gray-700 bg-zinc-900/50 py-3"
             >
               <Camera className="h-4 w-4 mr-2" />
               Media & Marketing
             </TabsTrigger>
             <TabsTrigger 
               value="training" 
-              className="data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400 data-[state=active]:border-green-500/40 border border-zinc-700 bg-zinc-900/50 py-3"
+              className="data-[state=active]:bg-green-500/20 data-[state=active]:text-green-400 data-[state=active]:border-green-500/40 border border-gray-700 bg-zinc-900/50 py-3"
             >
               <GraduationCap className="h-4 w-4 mr-2" />
               Training
             </TabsTrigger>
             <TabsTrigger 
               value="tools" 
-              className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 data-[state=active]:border-blue-500/40 border border-zinc-700 bg-zinc-900/50 py-3"
+              className="data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 data-[state=active]:border-blue-500/40 border border-gray-700 bg-zinc-900/50 py-3"
             >
               <Briefcase className="h-4 w-4 mr-2" />
               Tools & Operations

@@ -83,7 +83,7 @@ export const PodcastVisibilityToggle = () => {
             </div>
             <div>
               <CardTitle className="text-black text-lg">JBJ Podcast Visibility</CardTitle>
-              <CardDescription className="text-zinc-600">
+              <CardDescription className="text-gray-600">
                 Control podcast section visibility on homepage
               </CardDescription>
             </div>
@@ -173,7 +173,7 @@ export const PodcastVisibilityToggle = () => {
                 </>
               )}
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-zinc-600">
+            <AlertDialogDescription className="text-gray-600">
               {pendingValue ? (
                 <>
                   This will make the <strong>JBJ Podcast section visible</strong> to all website visitors:
@@ -199,7 +199,7 @@ export const PodcastVisibilityToggle = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleCancel} className="border-zinc-300">
+            <AlertDialogCancel onClick={handleCancel} className="border-gray-300">
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction

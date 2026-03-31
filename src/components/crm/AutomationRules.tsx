@@ -189,7 +189,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
           <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 text-xs">
             {activeCount} Active
           </Badge>
-          <Badge variant="secondary" className="bg-zinc-100 text-zinc-600 text-xs">
+          <Badge variant="secondary" className="bg-gray-100 text-gray-600 text-xs">
             {rules.length} Total
           </Badge>
         </div>
@@ -202,16 +202,16 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
             className={`flex items-start gap-3 p-3 rounded-xl border transition-all ${
               rule.is_active
                 ? "bg-white border-gold/30 shadow-sm"
-                : "bg-zinc-50 border-zinc-200 opacity-60"
+                : "bg-gray-50 border-gray-200 opacity-60"
             }`}
           >
-            <div className="p-2 rounded-lg bg-zinc-100 border border-zinc-200">
+            <div className="p-2 rounded-lg bg-gray-100 border border-gray-200">
               {getIcon(rule.action_type)}
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <h4 className="text-sm font-semibold text-zinc-800">{rule.name}</h4>
+                <h4 className="text-sm font-semibold text-gray-800">{rule.name}</h4>
               </div>
               {rule.description && (
                 <p className="text-xs text-gray-500 mb-2">{rule.description}</p>
@@ -246,7 +246,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
 
       <Button
         variant="outline"
-        className="w-full border-dashed border-zinc-300 text-zinc-600 hover:bg-zinc-50 text-xs"
+        className="w-full border-dashed border-gray-300 text-gray-600 hover:bg-gray-50 text-xs"
         disabled={!isOwner}
         onClick={() => setShowCreate(true)}
       >
@@ -265,7 +265,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div>
-              <label className="text-xs font-medium text-zinc-600 mb-1 block">Rule Name *</label>
+              <label className="text-xs font-medium text-gray-600 mb-1 block">Rule Name *</label>
               <Input
                 placeholder="e.g. VIP Lead Alert"
                 value={newRule.name}
@@ -273,7 +273,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-zinc-600 mb-1 block">Description</label>
+              <label className="text-xs font-medium text-gray-600 mb-1 block">Description</label>
               <Textarea
                 placeholder="What does this rule do?"
                 value={newRule.description}
@@ -282,7 +282,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-zinc-600 mb-1 block">Trigger Event *</label>
+              <label className="text-xs font-medium text-gray-600 mb-1 block">Trigger Event *</label>
               <Select value={newRule.trigger_event} onValueChange={(v) => setNewRule(prev => ({ ...prev, trigger_event: v }))}>
                 <SelectTrigger><SelectValue placeholder="Select trigger" /></SelectTrigger>
                 <SelectContent>
@@ -291,7 +291,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
               </Select>
             </div>
             <div>
-              <label className="text-xs font-medium text-zinc-600 mb-1 block">Action *</label>
+              <label className="text-xs font-medium text-gray-600 mb-1 block">Action *</label>
               <Select value={newRule.action_type} onValueChange={(v) => setNewRule(prev => ({ ...prev, action_type: v }))}>
                 <SelectTrigger><SelectValue placeholder="Select action" /></SelectTrigger>
                 <SelectContent>

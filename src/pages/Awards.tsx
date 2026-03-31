@@ -89,7 +89,7 @@ const Awards = () => {
               >
                 Recognized for <span className="text-gold">Excellence</span>
               </h1>
-              <p className="text-zinc-700 text-lg max-w-2xl leading-relaxed">
+              <p className="text-gray-700 text-lg max-w-2xl leading-relaxed">
                 Our commitment to exceptional service and outstanding results has earned us 
                 recognition from the industry's most prestigious organizations.
               </p>
@@ -136,7 +136,7 @@ const Awards = () => {
                 >
                   Awards & <span className="text-gold">Achievements</span>
                 </h2>
-                <p className="text-zinc-600 text-base mt-4 max-w-xl mx-auto">
+                <p className="text-gray-600 text-base mt-4 max-w-xl mx-auto">
                   A decade of excellence recognized by Dubai's leading developers and industry bodies.
                 </p>
               </div>
@@ -187,7 +187,7 @@ const Awards = () => {
                   >
                     Experience Award-Winning <span className="text-gold">Service</span>
                   </h2>
-                  <p className="text-zinc-600 mb-8 max-w-xl mx-auto">
+                  <p className="text-gray-600 mb-8 max-w-xl mx-auto">
                     Join the thousands of satisfied clients who have trusted JBJ Global Real Estate 
                     with their property decisions.
                   </p>

@@ -60,7 +60,7 @@ const AIBackgroundGenerator = ({
   };
 
   return (
-    <Card className="bg-zinc-900 border-zinc-800 w-96">
+    <Card className="bg-zinc-900 border-gray-800 w-96">
       <CardHeader className="pb-2 flex flex-row items-center justify-between">
         <CardTitle className="text-white text-lg flex items-center gap-2">
           <Image className="w-5 h-5 text-gold" />
@@ -82,7 +82,7 @@ const AIBackgroundGenerator = ({
                 className={`relative aspect-video rounded-lg border-2 transition-all overflow-hidden ${
                   selectedBackground === bg.id 
                     ? 'border-gold ring-2 ring-gold/50' 
-                    : 'border-zinc-700 hover:border-zinc-500'
+                    : 'border-gray-700 hover:border-gray-500'
                 }`}
               >
                 {bg.type === 'none' ? (
@@ -114,7 +114,7 @@ const AIBackgroundGenerator = ({
         </div>
 
         {/* AI Background Generator */}
-        <div className="pt-4 border-t border-zinc-700">
+        <div className="pt-4 border-t border-gray-700">
           <Label className="text-white/85 text-sm mb-2 flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-gold" />
             AI Background Generator
@@ -123,7 +123,7 @@ const AIBackgroundGenerator = ({
             value={aiPrompt}
             onChange={(e) => setAiPrompt(e.target.value)}
             placeholder="Describe your ideal background...&#10;e.g., 'A modern glass office with Dubai skyline view at sunset'"
-            className="bg-zinc-800 border-zinc-700 text-white min-h-[80px] text-sm resize-none"
+            className="bg-zinc-800 border-gray-700 text-white min-h-[80px] text-sm resize-none"
           />
           <Button
             onClick={handleGenerateBackground}
@@ -156,7 +156,7 @@ const AIBackgroundGenerator = ({
                   className={`relative aspect-video rounded-lg border-2 transition-all overflow-hidden ${
                     selectedBackground === bg 
                       ? 'border-gold ring-2 ring-gold/50' 
-                      : 'border-zinc-700 hover:border-zinc-500'
+                      : 'border-gray-700 hover:border-gray-500'
                   }`}
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">

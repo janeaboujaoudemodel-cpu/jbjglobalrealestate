@@ -81,7 +81,7 @@ export default function DeliveryChecklistTab() {
       {/* Completion bar */}
       <div className="bg-white/70 border border-[#B89555]/20 rounded-lg p-4">
         <div className="flex justify-between text-sm mb-2">
-          <span className="text-zinc-600">Overall Completion</span>
+          <span className="text-gray-600">Overall Completion</span>
           <span className="text-[#B89555] font-semibold">{Math.round((stats.done / stats.total) * 100)}%</span>
         </div>
         <div className="w-full h-3 bg-[#B89555]/10 rounded-full overflow-hidden">
@@ -137,7 +137,7 @@ export default function DeliveryChecklistTab() {
                     <div className="flex items-center gap-2 flex-wrap mb-1">
                       <span className="text-black font-medium">{item.title}</span>
                       <Badge className={cfg.badgeClass}>{cfg.label}</Badge>
-                      <Badge className="bg-[#B89555]/10 text-zinc-600 border-[#B89555]/20 text-[10px]">
+                      <Badge className="bg-[#B89555]/10 text-gray-600 border-[#B89555]/20 text-[10px]">
                         {item.scope.replace('_', ' ')}
                       </Badge>
                     </div>

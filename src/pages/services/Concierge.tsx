@@ -195,7 +195,7 @@ const Concierge = () => {
               What Concierge Means Here
             </motion.h2>
             <motion.div variants={fadeInUp} className="jj-card-inner text-center">
-              <p className="text-zinc-700 text-lg leading-relaxed">
+              <p className="text-gray-700 text-lg leading-relaxed">
                 Concierge support is designed for clients who want smoother execution—less chasing, more structure, and clearer outcomes.
               </p>
             </motion.div>
@@ -228,7 +228,7 @@ const Concierge = () => {
                       <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center shrink-0">
                         <item.icon className="w-5 h-5 text-gold" />
                       </div>
-                      <span className="text-zinc-700 pt-2">{item.text}</span>
+                      <span className="text-gray-700 pt-2">{item.text}</span>
                     </div>
                   </div>
                 </motion.div>
@@ -302,7 +302,7 @@ const Concierge = () => {
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <ul className="space-y-4">
                 {serviceStandards.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-zinc-700">
+                  <li key={idx} className="flex items-start gap-3 text-gray-700">
                     <CheckCircle2 className="w-5 h-5 text-gold shrink-0 mt-0.5" />
                     <span>{item}</span>
                   </li>
@@ -344,7 +344,7 @@ const Concierge = () => {
                         {faq.question}
                       </div>
                     </AccordionTrigger>
-                    <AccordionContent className="text-zinc-600 pl-8">
+                    <AccordionContent className="text-gray-600 pl-8">
                       {faq.answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -372,7 +372,7 @@ const Concierge = () => {
             >
               Let us handle the coordination
             </motion.h2>
-            <motion.p variants={fadeInUp} className="text-zinc-600 mb-8">
+            <motion.p variants={fadeInUp} className="text-gray-600 mb-8">
               Submit one request and we'll structure the execution plan.
             </motion.p>
             <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 justify-center">

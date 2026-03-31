@@ -51,7 +51,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
         <h4 className="text-black text-lg font-semibold mb-2">
           <T>Thank You!</T>
         </h4>
-        <p className="text-zinc-600 text-sm mb-4">
+        <p className="text-gray-600 text-sm mb-4">
           <T>Your feedback helps us improve our service</T>
         </p>
         <Button
@@ -74,7 +74,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
         <h4 className="text-black text-lg font-semibold mb-2 text-center">
           <T>How was your chat experience?</T>
         </h4>
-        <p className="text-zinc-600 text-sm text-center mb-6">
+        <p className="text-gray-600 text-sm text-center mb-6">
           <T>Your feedback helps us serve you better</T>
         </p>
 
@@ -91,12 +91,12 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
 
           <button
             onClick={() => handleSelectType('neutral')}
-            className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 transition-all"
+            className="flex flex-col items-center gap-2 p-4 rounded-xl border-2 border-gray-200 hover:border-gray-400 hover:bg-gray-50 transition-all"
           >
-            <div className="w-12 h-12 rounded-full bg-zinc-100 flex items-center justify-center">
-              <Minus className="w-6 h-6 text-zinc-600" />
+            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+              <Minus className="w-6 h-6 text-gray-600" />
             </div>
-            <span className="text-sm font-medium text-zinc-700"><T>Neutral</T></span>
+            <span className="text-sm font-medium text-gray-700"><T>Neutral</T></span>
           </button>
 
           <button
@@ -127,7 +127,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
         <h4 className="text-black text-lg font-semibold mb-2">
           <T>Tell us more</T>
         </h4>
-        <p className="text-zinc-600 text-sm">
+        <p className="text-gray-600 text-sm">
           <T>Rate your experience</T>
         </p>
       </div>

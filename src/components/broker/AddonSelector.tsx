@@ -179,7 +179,7 @@ export default function AddonSelector({
                         ? "border-green-500/30 bg-green-500/5 cursor-default"
                         : isSelected
                         ? "border-gold/50 bg-gold/5 cursor-pointer"
-                        : "border-zinc-700 hover:border-zinc-600 cursor-pointer"
+                        : "border-gray-700 hover:border-gray-600 cursor-pointer"
                     }`}
                     onClick={() => !isIncluded && toggleAddon(addon.id)}
                   >
@@ -187,7 +187,7 @@ export default function AddonSelector({
                       <Checkbox
                         checked={isSelected}
                         onCheckedChange={() => toggleAddon(addon.id)}
-                        className="border-zinc-600"
+                        className="border-gray-600"
                       />
                     )}
                     {isIncluded && (
@@ -220,7 +220,7 @@ export default function AddonSelector({
       })}
 
       {calculateTotal() > 0 && (
-        <div className="border-t border-zinc-700 pt-4 mt-4">
+        <div className="border-t border-gray-700 pt-4 mt-4">
           <div className="flex items-center justify-between text-lg">
             <span className="text-gray-500">Add-ons Total:</span>
             <span className="text-gold font-bold">

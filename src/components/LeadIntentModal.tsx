@@ -167,20 +167,20 @@ export default function LeadIntentModal() {
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="w-full max-w-lg bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden relative"
+            className="w-full max-w-lg bg-zinc-900 border border-gray-800 rounded-2xl overflow-hidden relative"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
             <button
               onClick={handleSkip}
-              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 text-white/70 hover:text-white transition-colors"
+              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-gray-700 text-white/70 hover:text-white transition-colors"
               aria-label="Close"
             >
               <X className="w-4 h-4" />
             </button>
             
             {/* Header */}
-            <div className="p-6 text-center border-b border-zinc-800 bg-gradient-to-b from-zinc-800/50 to-transparent">
+            <div className="p-6 text-center border-b border-gray-800 bg-gradient-to-b from-zinc-800/50 to-transparent">
               <div className="flex justify-center mb-4">
                 <JJLogoImage variant="light" size="sm" />
               </div>
@@ -203,7 +203,7 @@ export default function LeadIntentModal() {
                     className={`w-full p-4 rounded-xl border transition-all text-left flex items-start gap-4 ${
                       isSelected
                         ? "border-gold bg-gold/10"
-                        : "border-zinc-700 bg-zinc-800/50 hover:border-zinc-600"
+                        : "border-gray-700 bg-zinc-800/50 hover:border-gray-600"
                     }`}
                   >
                     <div
@@ -233,7 +233,7 @@ export default function LeadIntentModal() {
                 <Checkbox
                   checked={marketingConsent}
                   onCheckedChange={(checked) => setMarketingConsent(checked === true)}
-                  className="mt-0.5 border-zinc-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold"
+                  className="mt-0.5 border-gray-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold"
                 />
                 <span className="text-white/70 text-sm leading-relaxed">
                   I agree to receive updates, property alerts, and marketing communications from JBJ Global Real Estate. 
@@ -243,12 +243,12 @@ export default function LeadIntentModal() {
             </div>
 
             {/* Actions */}
-            <div className="p-6 border-t border-zinc-800">
+            <div className="p-6 border-t border-gray-800">
               <div className="flex flex-col sm:flex-row gap-3 mb-3">
                 <Button
                   variant="ghost"
                   onClick={handleSkip}
-                  className="text-white/70 hover:text-white hover:bg-zinc-800"
+                  className="text-white/70 hover:text-white hover:bg-gray-800"
                 >
                   Skip for now
                 </Button>

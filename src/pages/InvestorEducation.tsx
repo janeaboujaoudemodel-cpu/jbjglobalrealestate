@@ -181,10 +181,10 @@ const InvestorEducation = () => {
                     <span className="text-gold">Overview</span>
                   </h2>
                 </div>
-                <p className="text-zinc-700 text-lg leading-relaxed mb-6">
+                <p className="text-gray-700 text-lg leading-relaxed mb-6">
                   Real estate investment in the UAE operates within a regulated, transparent framework supported by government planning, long-term infrastructure development, and clear ownership laws.
                 </p>
-                <p className="text-zinc-700 leading-relaxed">
+                <p className="text-gray-700 leading-relaxed">
                   At JBJ Global Real Estate, investment education is a core responsibility — not a sales approach. Our role is to help investors understand how the market works, how opportunities should be evaluated, and how informed decisions are made based on data, not promises.
                 </p>
               </div>
@@ -206,7 +206,7 @@ const InvestorEducation = () => {
                     <span className="text-gold">How</span> Real Estate Investment Works
                   </h2>
                 </div>
-                <p className="text-zinc-700 mb-6">
+                <p className="text-gray-700 mb-6">
                   Real estate investment is based on three primary factors:
                 </p>
                 <div className="space-y-4 mb-6">
@@ -215,11 +215,11 @@ const InvestorEducation = () => {
                       <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0">
                         <span className="text-gold font-bold">{index + 1}</span>
                       </div>
-                      <span className="text-zinc-700 font-medium">{factor}</span>
+                      <span className="text-gray-700 font-medium">{factor}</span>
                     </div>
                   ))}
                 </div>
-                <p className="text-zinc-600 text-sm italic">
+                <p className="text-gray-600 text-sm italic">
                   Every investment decision should begin with clarity around purpose: capital appreciation, rental income, portfolio diversification, or long-term asset holding.
                 </p>
               </div>
@@ -251,19 +251,19 @@ const InvestorEducation = () => {
                     </div>
                     <h3 className="text-xl font-semibold text-black">Off-Plan Properties</h3>
                   </div>
-                  <p className="text-zinc-700 mb-6">
+                  <p className="text-gray-700 mb-6">
                     Off-plan investments involve purchasing property directly from a developer before completion. These are commonly used for long-term strategies and offer:
                   </p>
                   <ul className="space-y-3 mb-6">
                     {offPlanBenefits.map((point, index) => (
                       <li key={index} className="flex items-start gap-3">
                         <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                        <span className="text-zinc-700">{point}</span>
+                        <span className="text-gray-700">{point}</span>
                       </li>
                     ))}
                   </ul>
                   <div className="p-4 bg-white/60 border border-gold/20 rounded-xl">
-                    <p className="text-zinc-700 text-sm">
+                    <p className="text-gray-700 text-sm">
                       <strong>Important:</strong> For off-plan purchases, buyers do not pay any agency fees. Licensed brokerages are compensated directly by developers. Our role is to analyze projects across the market, compare developers, locations, pricing, and timelines, and guide investors toward options aligned with their objectives — without cost to the buyer.
                     </p>
                   </div>
@@ -277,19 +277,19 @@ const InvestorEducation = () => {
                     </div>
                     <h3 className="text-xl font-semibold text-black">Ready Properties</h3>
                   </div>
-                  <p className="text-zinc-700 mb-6">
+                  <p className="text-gray-700 mb-6">
                     Ready properties are completed assets suitable for immediate use or rental. They are commonly chosen for:
                   </p>
                   <ul className="space-y-3 mb-6">
                     {readyBenefits.map((point, index) => (
                       <li key={index} className="flex items-start gap-3">
                         <CheckCircle2 className="w-5 h-5 text-gold flex-shrink-0 mt-0.5" />
-                        <span className="text-zinc-700">{point}</span>
+                        <span className="text-gray-700">{point}</span>
                       </li>
                     ))}
                   </ul>
                   <div className="p-4 bg-white/60 border border-gold/20 rounded-xl">
-                    <p className="text-zinc-700 text-sm">
+                    <p className="text-gray-700 text-sm">
                       For ready property purchases, standard agency fees apply in accordance with Dubai regulations. These fees are disclosed clearly before any transaction proceeds.
                     </p>
                   </div>
@@ -312,7 +312,7 @@ const InvestorEducation = () => {
                 <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
                   <span className="text-gold">Investment</span> Objectives
                 </h2>
-                <p className="text-zinc-600 max-w-2xl mx-auto">
+                <p className="text-gray-600 max-w-2xl mx-auto">
                   Every investor enters the market with a different objective. Understanding the objective is essential before selecting a location, property type, or developer.
                 </p>
               </div>
@@ -330,7 +330,7 @@ const InvestorEducation = () => {
                       </div>
                       <h3 className="text-xl font-semibold text-black">{objective.title}</h3>
                     </div>
-                    <p className="text-zinc-600 leading-relaxed">{objective.description}</p>
+                    <p className="text-gray-600 leading-relaxed">{objective.description}</p>
                   </div>
                 ))}
               </div>
@@ -352,18 +352,18 @@ const InvestorEducation = () => {
                     <span className="text-gold">Market Analysis</span> & Data-Based Evaluation
                   </h2>
                 </div>
-                <p className="text-zinc-700 mb-6">
+                <p className="text-gray-700 mb-6">
                   At JBJ Global Real Estate, investment guidance is based on:
                 </p>
                 <div className="space-y-3 mb-6">
                   {marketAnalysisFactors.map((factor, index) => (
                     <div key={index} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-zinc-700">{factor}</span>
+                      <span className="text-gray-700">{factor}</span>
                     </div>
                   ))}
                 </div>
-                <p className="text-zinc-600 text-sm italic">
+                <p className="text-gray-600 text-sm italic">
                   We do not rely on speculative guarantees or promotional claims. All evaluations are grounded in verifiable market information and historical performance.
                 </p>
               </div>
@@ -385,7 +385,7 @@ const InvestorEducation = () => {
                     <span className="text-gold">Risk</span> Awareness
                   </h2>
                 </div>
-                <p className="text-zinc-700 text-lg leading-relaxed mb-6">
+                <p className="text-gray-700 text-lg leading-relaxed mb-6">
                   No real estate investment is risk-free. Market cycles, supply levels, construction timelines, and economic conditions all affect outcomes.
                 </p>
                 <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl mb-6">
@@ -393,7 +393,7 @@ const InvestorEducation = () => {
                     There is no such thing as guaranteed returns in real estate.
                   </p>
                 </div>
-                <p className="text-zinc-600">
+                <p className="text-gray-600">
                   Our responsibility is to explain potential risks clearly, highlight market realities, and support investors in making informed decisions — not to promise outcomes.
                 </p>
               </div>
@@ -415,18 +415,18 @@ const InvestorEducation = () => {
                     <span className="text-gold">Role of</span> JBJ Global Real Estate
                   </h2>
                 </div>
-                <p className="text-zinc-700 mb-6">
+                <p className="text-gray-700 mb-6">
                   We act as advisors and market guides throughout the investment process:
                 </p>
                 <div className="space-y-3 mb-6">
                   {jbjRole.map((item, index) => (
                     <div key={index} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-zinc-700">{item}</span>
+                      <span className="text-gray-700">{item}</span>
                     </div>
                   ))}
                 </div>
-                <p className="text-zinc-600 text-sm italic">
+                <p className="text-gray-600 text-sm italic">
                   Investment decisions always remain with the client. Our role is to provide clarity, structure, and protection through experience and data.
                 </p>
               </div>
@@ -448,10 +448,10 @@ const InvestorEducation = () => {
                     <span className="text-gold">Long-Term</span> Perspective
                   </h2>
                 </div>
-                <p className="text-zinc-700 text-lg leading-relaxed mb-6">
+                <p className="text-gray-700 text-lg leading-relaxed mb-6">
                   Successful real estate investment is built on patience, understanding market cycles, and aligning decisions with realistic expectations. Education is the foundation of sustainable investment outcomes.
                 </p>
-                <p className="text-zinc-600">
+                <p className="text-gray-600">
                   This guide is designed to give investors the knowledge required to approach the UAE real estate market with confidence and clarity.
                 </p>
               </div>

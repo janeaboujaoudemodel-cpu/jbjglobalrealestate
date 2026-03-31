@@ -32,7 +32,7 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
               className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all border-2 ${
                 isDeveloperActive
                   ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-gold/60 shadow-lg"
-                  : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-zinc-600 hover:text-black hover:border-gold/40 border-gold/20"
+                  : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-gray-600 hover:text-black hover:border-gold/40 border-gold/20"
               }`}
             >
               <div className={`w-6 h-6 rounded-md flex items-center justify-center ${
@@ -50,7 +50,7 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
               className={`inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all border-2 ${
                 isCommunityActive
                   ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-gold/60 shadow-lg"
-                  : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-zinc-600 hover:text-black hover:border-gold/40 border-gold/20"
+                  : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-gray-600 hover:text-black hover:border-gold/40 border-gold/20"
               }`}
             >
               <div className={`w-6 h-6 rounded-md flex items-center justify-center ${

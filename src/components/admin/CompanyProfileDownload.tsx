@@ -40,7 +40,7 @@ export const CompanyProfileDownload = () => {
           </div>
           <div>
             <CardTitle className="text-black text-lg">Company Profile PDF</CardTitle>
-            <CardDescription className="text-zinc-600">
+            <CardDescription className="text-gray-600">
               Download the official 18-page company profile
             </CardDescription>
           </div>
@@ -48,7 +48,7 @@ export const CompanyProfileDownload = () => {
       </CardHeader>
       <CardContent>
         <Button
-          className="w-full bg-black hover:bg-zinc-800 text-white"
+          className="w-full bg-black hover:bg-gray-800 text-white"
           onClick={handleDownload}
           disabled={isGenerating}
         >

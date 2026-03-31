@@ -182,7 +182,7 @@ const TicketSurvey = () => {
             <CheckCircle className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-black mb-2">Thank You!</h2>
-          <p className="text-zinc-600 mb-4">Your feedback helps us improve our service.</p>
+          <p className="text-gray-600 mb-4">Your feedback helps us improve our service.</p>
           <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-4 border border-[#C8A766]">
             <Gift className="w-6 h-6 text-[#C8A766] mx-auto mb-2" />
             <p className="text-lg font-bold text-[#C8A766]">+{pointsAwarded} Points Earned!</p>
@@ -198,7 +198,7 @@ const TicketSurvey = () => {
       <div className="max-w-lg mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-black mb-2">{surveyCopy.title}</h1>
-          <p className="text-zinc-600">
+          <p className="text-gray-600">
             Context: <span className="font-semibold text-[#C8A766]">{surveyCopy.badge}</span>
             {ticketNumber ? <span> · Ticket: <span className="font-mono text-[#C8A766] font-bold">{ticketNumber}</span></span> : null}
           </p>
@@ -220,7 +220,7 @@ const TicketSurvey = () => {
                 className={`flex-1 py-3 rounded-xl border-2 font-semibold transition-all ${
                   wouldRecommend === true
                     ? "bg-gradient-to-br from-[#C8A766] to-[#B8956E] text-white border-[#C8A766]"
-                    : "bg-white text-black border-zinc-200 hover:border-[#C8A766]"
+                    : "bg-white text-black border-gray-200 hover:border-[#C8A766]"
                 }`}
               >
                 Yes
@@ -230,8 +230,8 @@ const TicketSurvey = () => {
                 onClick={() => setWouldRecommend(false)}
                 className={`flex-1 py-3 rounded-xl border-2 font-semibold transition-all ${
                   wouldRecommend === false
-                    ? "bg-zinc-800 text-white border-zinc-800"
-                    : "bg-white text-black border-zinc-200 hover:border-zinc-400"
+                    ? "bg-zinc-800 text-white border-gray-800"
+                    : "bg-white text-black border-gray-200 hover:border-gray-400"
                 }`}
               >
                 No

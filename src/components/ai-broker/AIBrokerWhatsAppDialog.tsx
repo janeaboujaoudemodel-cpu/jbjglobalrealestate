@@ -232,7 +232,7 @@ export function AIBrokerWhatsAppDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-zinc-900 border-zinc-700 max-w-lg">
+      <DialogContent className="bg-zinc-900 border-gray-700 max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-white flex items-center gap-2">
             <MessageSquare className="h-5 w-5 text-emerald-500" />
@@ -251,10 +251,10 @@ export function AIBrokerWhatsAppDialog({
           <div>
             <Label className="text-gray-300">Use Template (Optional)</Label>
             <Select value={selectedTemplate} onValueChange={handleTemplateSelect}>
-              <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
+              <SelectTrigger className="bg-zinc-800 border-gray-700 text-white mt-1">
                 <SelectValue placeholder="Select a template..." />
               </SelectTrigger>
-              <SelectContent className="bg-zinc-900 border-zinc-700">
+              <SelectContent className="bg-zinc-900 border-gray-700">
                 {templates.map((template) => (
                   <SelectItem key={template.id} value={template.id}>
                     {template.template_name}
@@ -266,7 +266,7 @@ export function AIBrokerWhatsAppDialog({
 
           <div>
             <Label className="text-gray-300">Phone</Label>
-            <div className="bg-zinc-800 border border-zinc-700 rounded-md px-3 py-2 mt-1 text-gray-400">
+            <div className="bg-zinc-800 border border-gray-700 rounded-md px-3 py-2 mt-1 text-gray-400">
               {lead.phone || "N/A"}
             </div>
           </div>
@@ -277,15 +277,15 @@ export function AIBrokerWhatsAppDialog({
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Enter your message..."
-              className="bg-zinc-800 border-zinc-700 text-white mt-1 min-h-[150px]"
+              className="bg-zinc-800 border-gray-700 text-white mt-1 min-h-[150px]"
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-zinc-800">
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-800">
             <Button
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="border-zinc-700 text-gray-300"
+              className="border-gray-700 text-gray-300"
             >
               Cancel
             </Button>
