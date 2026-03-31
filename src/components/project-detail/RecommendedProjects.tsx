@@ -138,7 +138,7 @@ export default function RecommendedProjects({
               : [];
             const paymentLabel = percentages.length > 0 ? percentages.join('/') : null;
             const saleStatus = (project as any).sale_status || "On Sale";
-            const devLogo = (project.developer as any)?.logo_url;
+            const devLogo = getDeveloperLogoUrl(project.developer);
             const description = (project as any).description;
 
             // Location fallback
