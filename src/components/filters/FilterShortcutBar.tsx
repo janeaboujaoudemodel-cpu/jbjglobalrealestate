@@ -371,7 +371,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-black/60">{t('filter.maxPreHandover')}</span>
-                  <span className="text-xs font-bold text-black bg-white/80 px-2 py-0.5 rounded border border-gold/30">{filters.paymentPlanMax}%</span>
+                  <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded border border-gray-300">{filters.paymentPlanMax}%</span>
                 </div>
                 <Slider
                   value={[filters.paymentPlanMax]}
