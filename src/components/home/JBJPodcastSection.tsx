@@ -213,7 +213,7 @@ const JBJPodcastSection = () => {
                   
                   {/* Episode Badge - Top Left - Using proper gold, no yellow */}
                   <div className="absolute top-3 left-3">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[hsl(32,28%,13%)]/60 backdrop-blur-sm border border-gold/40 text-gold rounded-full text-xs font-bold uppercase tracking-wider">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-black/60 backdrop-blur-sm border border-gray-500 text-white rounded-full text-xs font-bold uppercase tracking-wider">
                       <Mic className="w-3 h-3" />
                       <T>Episode</T> {selectedEpisode.id}
                     </span>
