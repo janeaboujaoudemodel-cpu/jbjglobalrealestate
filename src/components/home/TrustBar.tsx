@@ -1,6 +1,6 @@
 /**
  * TrustBar Component - Premium Trust Indicators
- * 8 champagne-gold 3D cards in 4x2 grid
+ * Clean monochrome cards in 4x2 grid
  */
 
 import { motion } from "framer-motion";
@@ -76,64 +76,40 @@ const TrustBar = () => {
           transition={{ delay: 0.15 + index * 0.05, duration: 0.25 }}
           className="group relative"
         >
-          {/* Premium 3D champagne-gold card */}
           <div 
             className={`flex items-center gap-2 md:gap-3 px-3 py-2 md:px-5 md:py-3 rounded-xl transition-all duration-300 cursor-default h-full overflow-hidden ${
               item.highlight 
-                ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/60 md:border-2' 
-                : 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 md:border-2 hover:border-gold/70'
+                ? 'bg-white border-2 border-gray-300 shadow-md' 
+                : 'bg-white border border-gray-200 hover:border-gray-300 shadow-sm'
             }`}
-            style={{
-              boxShadow: item.highlight
-                ? `
-                    0 10px 30px rgba(200,167,102,0.4),
-                    0 6px 15px rgba(0,0,0,0.2),
-                    inset 0 2px 4px rgba(255,255,255,0.9),
-                    inset 0 -2px 4px rgba(200,167,102,0.2),
-                    0 0 20px rgba(200,167,102,0.35)
-                  `
-                : `
-                    0 8px 24px rgba(200,167,102,0.35),
-                    0 4px 12px rgba(0,0,0,0.15),
-                    inset 0 2px 4px rgba(255,255,255,0.85),
-                    inset 0 -2px 4px rgba(200,167,102,0.15)
-                  `,
-            }}
           >
-            {/* Icon with premium styling */}
+            {/* Icon */}
             <div 
               className={`w-8 h-8 md:w-11 md:h-11 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
                 item.highlight 
-                  ? 'bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] shadow-lg' 
-                  : 'bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)]/90 group-hover:from-[hsl(38,35%,14%)] group-hover:to-[hsl(34,25%,14%)] shadow-md'
+                  ? 'bg-black shadow-lg' 
+                  : 'bg-gray-100 group-hover:bg-gray-200 shadow-sm'
               }`}
             >
               <item.icon 
-                className="w-4 h-4 md:w-5 md:h-5 text-gold transition-colors duration-300" 
+                className={`w-4 h-4 md:w-5 md:h-5 transition-colors duration-300 ${
+                  item.highlight ? 'text-white' : 'text-gray-700'
+                }`}
               />
             </div>
             
             {/* Text content */}
             <div className="flex flex-col min-w-0 flex-1">
-              <span 
-                className="text-xs md:text-[15px] font-bold tracking-wide leading-tight text-black transition-colors duration-300 break-words"
-              >
+              <span className="text-xs md:text-[15px] font-bold tracking-wide leading-tight text-black transition-colors duration-300 break-words">
                 {item.text}
               </span>
               {item.subtext && (
-                <span className="text-[10px] md:text-xs text-black/50 font-medium tracking-wide transition-colors duration-300 break-words">
+                <span className="text-[10px] md:text-xs text-gray-500 font-medium tracking-wide transition-colors duration-300 break-words">
                   {item.subtext}
                 </span>
               )}
             </div>
           </div>
-          
-          {/* Enhanced glow for highlighted item */}
-          {item.highlight && (
-            <div 
-              className="absolute -inset-1 bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 rounded-xl blur-xl opacity-70 group-hover:opacity-90 transition-opacity duration-300 -z-10" 
-            />
-          )}
         </motion.div>
       ))}
     </motion.div>

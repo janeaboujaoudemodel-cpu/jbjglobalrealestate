@@ -65,7 +65,7 @@ const TestimonialsSection = () => {
   const currentTestimonial = testimonials[currentIndex];
 
   return (
-    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <section className="bg-white">
       <div className="jj-layer-2">
         {/* Section Header */}
         <div className="text-center mb-10">
@@ -82,11 +82,11 @@ const TestimonialsSection = () => {
 
         {/* Testimonial Card */}
         <div className="max-w-3xl mx-auto">
-          <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl border border-gold/30 p-8 md:p-12 shadow-sm">
+          <div className="relative bg-white rounded-2xl border border-gray-200 p-8 md:p-12 shadow-sm">
             {/* Quote Icon */}
             <div className="absolute -top-4 left-8">
-              <div className="w-10 h-10 rounded-full bg-gold flex items-center justify-center shadow-lg">
-                <Quote className="w-5 h-5 text-black" />
+              <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center shadow-lg">
+                <Quote className="w-5 h-5 text-white" />
               </div>
             </div>
 
@@ -103,7 +103,7 @@ const TestimonialsSection = () => {
                 {/* Rating */}
                 <div className="flex items-center justify-center gap-1 mb-4">
                   {Array.from({ length: currentTestimonial.rating }).map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-gold fill-gold" />
+                    <Star key={i} className="w-5 h-5 text-black fill-black" />
                   ))}
                 </div>
 
@@ -128,13 +128,13 @@ const TestimonialsSection = () => {
             <div className="absolute left-4 right-4 top-1/2 -translate-y-1/2 flex items-center justify-between pointer-events-none">
               <button
                 onClick={goToPrev}
-                className="w-10 h-10 rounded-full bg-white/80 hover:bg-gold border border-gold/30 flex items-center justify-center shadow-md transition-colors pointer-events-auto"
+                className="w-10 h-10 rounded-full bg-white hover:bg-gray-100 border border-gray-200 flex items-center justify-center shadow-md transition-colors pointer-events-auto"
               >
                 <ChevronLeft className="w-5 h-5 text-black" />
               </button>
               <button
                 onClick={goToNext}
-                className="w-10 h-10 rounded-full bg-white/80 hover:bg-gold border border-gold/30 flex items-center justify-center shadow-md transition-colors pointer-events-auto"
+                className="w-10 h-10 rounded-full bg-white hover:bg-gray-100 border border-gray-200 flex items-center justify-center shadow-md transition-colors pointer-events-auto"
               >
                 <ChevronRight className="w-5 h-5 text-black" />
               </button>
