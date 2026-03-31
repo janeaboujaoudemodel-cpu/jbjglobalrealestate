@@ -2091,7 +2091,9 @@ svg[class*="text-muted"],
   [class*="bg-slate-5"], [class*="bg-neutral-5"], [class*="bg-stone-5"],
   [class*="bg-gradient-to"][class*="from-gold/"],
   [class*="bg-gold/"], [class*="from-gold/"],
-  [class*="bg-gray-100"], [class*="bg-zinc-100"]
+  [class*="bg-gray-100"], [class*="bg-zinc-100"],
+  .jj-layer-2, .jj-layer-1,
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
 ) :is(
   [class*="text-zinc-"], [class*="text-gray-"], [class*="text-slate-"],
   [class*="text-stone-"], [class*="text-neutral-"],
