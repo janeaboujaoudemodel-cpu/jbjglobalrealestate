@@ -203,15 +203,15 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         {/* Image with Carousel - LANDSCAPE aspect ratio (16:10 - Premium Hybrid) */}
         <div className="aspect-[16/10] overflow-hidden relative">
           {/* Developer Logo Overlay - Top Left */}
-          {(project.developer as any)?.logo_url && (
+          {getDeveloperLogoUrl(project.developer) && (
             <div
               className={`absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center ${
-                (project.developer as any)?.logo_bg_color ? 'shadow-lg' : ''
+                getDeveloperLogoBgColor(project.developer) ? 'shadow-lg' : 'bg-white shadow-lg p-1'
               }`}
-              style={{ backgroundColor: (project.developer as any)?.logo_bg_color || 'transparent' }}
+              style={{ backgroundColor: getDeveloperLogoBgColor(project.developer) || '#FFFFFF' }}
             >
               <img 
-                src={(project.developer as any).logo_url} 
+                src={getDeveloperLogoUrl(project.developer)!} 
                 alt={project.developer?.name}
                 className="w-full h-full object-contain"
               />
