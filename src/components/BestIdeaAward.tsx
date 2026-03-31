@@ -359,7 +359,7 @@ const BestIdeaAward = () => {
                                   placeholder="+971 50 123 4567"
                                   value={formData.phone}
                                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                  className="mt-1 border-zinc-300 focus:border-gold"
+                                  className="mt-1 border-gray-300 focus:border-gold"
                                 />
                               </div>
                             </motion.div>
