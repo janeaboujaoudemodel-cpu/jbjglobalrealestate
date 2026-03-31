@@ -60,7 +60,7 @@ const StatCard = ({
             </div>
           </div>
           <div className="mt-4">
-            <p className="text-black/60 text-sm mb-1">{title}</p>
+            <p className="text-black font-medium text-sm mb-1">{title}</p>
             <p className={`${accentColor} text-2xl font-bold truncate`}>
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
