@@ -152,7 +152,7 @@ const BestIdeaAward = () => {
                     </div>
                   </div>
                   
-                  <p className="text-zinc-700 mb-6 leading-relaxed">
+                  <p className="text-gray-700 mb-6 leading-relaxed">
                     Have a brilliant idea that could improve our business, services, or customer experience? 
                     Share it with us and enter the monthly draw to win!
                   </p>
