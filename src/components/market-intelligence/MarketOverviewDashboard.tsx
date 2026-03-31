@@ -35,7 +35,8 @@ const StatCard = ({
   change, 
   icon: Icon, 
   suffix = "",
-  prefix = ""
+  prefix = "",
+  accentColor = "text-black"
 }: { 
   title: string; 
   value: string | number; 
@@ -43,6 +44,7 @@ const StatCard = ({
   icon: React.ElementType;
   suffix?: string;
   prefix?: string;
+  accentColor?: string;
 }) => {
   const isPositive = change >= 0;
   
@@ -52,14 +54,14 @@ const StatCard = ({
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
-            <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-emerald-600' : 'text-red-600'}`}>
+            <div className={`flex items-center gap-1 text-sm font-bold px-2 py-0.5 rounded-full ${isPositive ? 'text-emerald-700 bg-emerald-50' : 'text-red-700 bg-red-50'}`}>
               {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
               <span>{isPositive ? '+' : ''}{change}%</span>
             </div>
           </div>
           <div className="mt-4">
             <p className="text-black/60 text-sm mb-1">{title}</p>
-            <p className="text-black text-2xl font-bold truncate">
+            <p className={`${accentColor} text-2xl font-bold truncate`}>
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
           </div>
@@ -101,6 +103,7 @@ export const MarketOverviewDashboard = () => {
               value={MARKET_OVERVIEW_STATS.totalTransactions}
               change={MARKET_OVERVIEW_STATS.totalTransactionsChange}
               icon={Building2}
+              accentColor="text-emerald-600"
             />
             <StatCard
               title="Avg. Price/Sqft"
@@ -108,6 +111,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.avgPriceChange}
               icon={DollarSign}
               prefix="AED "
+              accentColor="text-blue-600"
             />
             <StatCard
               title="Avg. Rental Yield"
@@ -115,6 +119,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.yieldChange}
               icon={Percent}
               suffix="%"
+              accentColor="text-amber-600"
             />
             <StatCard
               title="Days on Market"
@@ -122,6 +127,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.domChange}
               icon={Clock}
               suffix=" days"
+              accentColor="text-purple-600"
             />
           </div>
 
@@ -138,23 +144,31 @@ export const MarketOverviewDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {QUARTERLY_TRENDS.map((quarter, idx) => (
-                      <div key={quarter.quarter} className="flex items-center gap-4">
-                        <span className="text-black/60 text-sm w-20">{quarter.quarter}</span>
-                        <div className="flex-1 h-8 bg-white/50 rounded-lg overflow-hidden relative">
-                          <motion.div
-                            className="h-full bg-gradient-to-r from-gold/80 to-gold"
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${(quarter.transactions / 40000) * 100}%` }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, delay: idx * 0.1 }}
-                          />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-black text-xs font-medium">
-                            {quarter.transactions.toLocaleString()}
-                          </span>
+                    {QUARTERLY_TRENDS.map((quarter, idx) => {
+                      const qColors = [
+                        'from-emerald-500 to-emerald-400',
+                        'from-blue-500 to-blue-400',
+                        'from-amber-500 to-amber-400',
+                        'from-purple-500 to-purple-400',
+                      ];
+                      return (
+                        <div key={quarter.quarter} className="flex items-center gap-4">
+                          <span className="text-black/70 text-sm w-20 font-medium">{quarter.quarter}</span>
+                          <div className="flex-1 h-8 bg-black/5 rounded-lg overflow-hidden relative shadow-inner">
+                            <motion.div
+                              className={`h-full bg-gradient-to-r ${qColors[idx % qColors.length]}`}
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${(quarter.transactions / 40000) * 100}%` }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.8, delay: idx * 0.1 }}
+                            />
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-black text-xs font-bold">
+                              {quarter.transactions.toLocaleString()}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                   <p className="text-black/50 text-xs mt-4">
                     Source: Dubai Government Open Data

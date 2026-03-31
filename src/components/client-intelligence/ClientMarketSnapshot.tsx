@@ -163,16 +163,20 @@ const ClientMarketSnapshot = ({
         {/* Supply/Demand Balance */}
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Supply Level</span>
-            <span className="text-foreground">{supplyLevel}%</span>
+            <span className="text-blue-700 font-medium">Supply Level</span>
+            <span className="text-blue-700 font-bold">{supplyLevel}%</span>
           </div>
-          <Progress value={supplyLevel} className="h-2" />
+          <div className="h-2.5 bg-blue-100 rounded-full overflow-hidden shadow-inner">
+            <div className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full transition-all" style={{ width: `${supplyLevel}%` }} />
+          </div>
           
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Demand Level</span>
-            <span className="text-foreground">{demandLevel}%</span>
+            <span className="text-emerald-700 font-medium">Demand Level</span>
+            <span className="text-emerald-700 font-bold">{demandLevel}%</span>
           </div>
-          <Progress value={demandLevel} className="h-2" />
+          <div className="h-2.5 bg-emerald-100 rounded-full overflow-hidden shadow-inner">
+            <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all" style={{ width: `${demandLevel}%` }} />
+          </div>
         </div>
 
         {/* What This Means - Collapsible */}
