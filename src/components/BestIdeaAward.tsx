@@ -285,7 +285,7 @@ const BestIdeaAward = () => {
 
                           <Button
                             onClick={handleCloseSuccess}
-                            className="bg-gradient-to-br from-[hsl(32,28%,13%)] to-[hsl(33,28%,11%)] text-gold hover:from-[hsl(38,35%,15%)] hover:to-[hsl(34,25%,15%)] border border-gold/30 px-8 py-5"
+                            className="bg-black text-white hover:bg-gray-800 border-2 border-black px-8 py-5 font-bold shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
                           >
                             Close & Submit Another Idea
                           </Button>
