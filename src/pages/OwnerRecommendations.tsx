@@ -149,13 +149,13 @@ const OwnerRecommendations = () => {
           {[
             { label: "Pending", count: counts.pending, icon: AlertTriangle, color: "text-amber-600" },
             { label: "Applied", count: counts.applied, icon: CheckCircle2, color: "text-emerald-600" },
-            { label: "Reverted", count: counts.reverted, icon: RotateCcw, color: "text-gray-500" },
+            { label: "Reverted", count: counts.reverted, icon: RotateCcw, color: "text-gray-600" },
           ].map(s => (
             <div key={s.label} className="bg-white/80 border border-gold/20 rounded-xl p-4 flex items-center gap-3">
               <s.icon className={`h-6 w-6 ${s.color}`} />
               <div>
                 <p className="text-2xl font-bold text-black">{s.count}</p>
-                <p className="text-xs text-gray-500">{s.label}</p>
+                <p className="text-xs text-gray-600">{s.label}</p>
               </div>
             </div>
           ))}
@@ -195,7 +195,7 @@ const OwnerRecommendations = () => {
           <div className="text-center py-20 bg-white/60 border border-gold/20 rounded-2xl">
             <Sparkles className="h-12 w-12 mx-auto mb-4 text-gold/40" />
             <p className="text-lg font-semibold text-black">No Recommendations Yet</p>
-            <p className="text-sm text-gray-500 mt-1">Click "Generate New Recommendations" to get AI-powered insights</p>
+            <p className="text-sm text-gray-600 mt-1">Click "Generate New Recommendations" to get AI-powered insights</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -215,9 +215,9 @@ const OwnerRecommendations = () => {
                         <Badge className={`text-[10px] ${IMPACT_COLORS[rec.impact_level]}`}>{rec.impact_level}</Badge>
                         <Badge variant="outline" className="text-[10px] capitalize">{rec.status}</Badge>
                       </div>
-                      <p className="text-xs text-gray-500 line-clamp-2">{rec.description}</p>
+                      <p className="text-xs text-gray-600 line-clamp-2">{rec.description}</p>
                     </div>
-                    <Eye className={`h-4 w-4 text-gray-500 flex-shrink-0 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
+                    <Eye className={`h-4 w-4 text-gray-600 flex-shrink-0 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
                   </div>
 
                   {isExpanded && (

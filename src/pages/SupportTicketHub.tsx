@@ -233,7 +233,7 @@ const SupportTicketHub = () => {
                 value={filters.search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search by ticket #, email, name, or subject..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg bg-zinc-800 border border-gold/30 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+                className="w-full h-10 pl-10 pr-4 rounded-lg bg-zinc-800 border border-gold/30 text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
               />
             </div>
 

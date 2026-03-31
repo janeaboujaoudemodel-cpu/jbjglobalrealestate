@@ -49,31 +49,31 @@ export default function DeliveryChecklistTab() {
         <Card className="bg-white/70 border-[#B89555]/20">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-black">{stats.total}</div>
-            <div className="text-xs text-gray-500">Total Items</div>
+            <div className="text-xs text-gray-600">Total Items</div>
           </CardContent>
         </Card>
         <Card className="bg-white/70 border-green-200">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-green-600">{stats.done}</div>
-            <div className="text-xs text-gray-500">Done</div>
+            <div className="text-xs text-gray-600">Done</div>
           </CardContent>
         </Card>
         <Card className="bg-white/70 border-amber-200">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-amber-600">{stats.partial}</div>
-            <div className="text-xs text-gray-500">Partial</div>
+            <div className="text-xs text-gray-600">Partial</div>
           </CardContent>
         </Card>
         <Card className="bg-white/70 border-red-200">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-red-600">{stats.missing}</div>
-            <div className="text-xs text-gray-500">Missing</div>
+            <div className="text-xs text-gray-600">Missing</div>
           </CardContent>
         </Card>
         <Card className="bg-white/70 border-blue-200">
           <CardContent className="p-4 text-center">
             <div className="text-2xl font-bold text-blue-600">{stats.needsVerification}</div>
-            <div className="text-xs text-gray-500">Needs Verification</div>
+            <div className="text-xs text-gray-600">Needs Verification</div>
           </CardContent>
         </Card>
       </div>
@@ -141,7 +141,7 @@ export default function DeliveryChecklistTab() {
                         {item.scope.replace('_', ' ')}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-500 mb-2">{item.requirement}</p>
+                    <p className="text-sm text-gray-600 mb-2">{item.requirement}</p>
                     {item.notes && (
                       <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1 mb-2">
                         Note: {item.notes}
@@ -150,7 +150,7 @@ export default function DeliveryChecklistTab() {
                     {item.evidence && item.evidence.length > 0 && (
                       <div className="flex flex-wrap gap-1">
                         {item.evidence.map((e, i) => (
-                          <span key={i} className="text-[10px] text-gray-500 bg-[#B89555]/5 border border-[#B89555]/10 px-2 py-0.5 rounded font-mono">
+                          <span key={i} className="text-[10px] text-gray-600 bg-[#B89555]/5 border border-[#B89555]/10 px-2 py-0.5 rounded font-mono">
                             {e}
                           </span>
                         ))}
@@ -165,7 +165,7 @@ export default function DeliveryChecklistTab() {
       </div>
 
       {filtered.length === 0 && (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-gray-600">
           No items match the current filters.
         </div>
       )}

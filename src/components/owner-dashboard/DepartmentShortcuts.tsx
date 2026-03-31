@@ -82,11 +82,11 @@ export default function DepartmentShortcuts() {
               <p className="text-sm font-medium text-black group-hover:text-[#B89555] transition-colors">
                 {dept.label}
               </p>
-              <p className="text-xs text-gray-500 leading-snug">
+              <p className="text-xs text-gray-600 leading-snug">
                 {dept.description}
               </p>
             </div>
-            <ChevronRight className="h-4 w-4 text-gray-500 group-hover:text-[#B89555] transition-colors flex-shrink-0" />
+            <ChevronRight className="h-4 w-4 text-gray-600 group-hover:text-[#B89555] transition-colors flex-shrink-0" />
           </button>
         ))}
       </div>

@@ -263,7 +263,7 @@ const ReellyEnrichmentPanel = () => {
       {job?.log && job.log.length > 0 && (
         <Card className="bg-zinc-950 border border-gray-800">
           <CardHeader className="pb-2">
-            <CardTitle className="text-gray-400 text-sm flex items-center gap-2">
+            <CardTitle className="text-gray-600 text-sm flex items-center gap-2">
               <Layers className="w-4 h-4" />
               Live Enrichment Log
             </CardTitle>
@@ -276,7 +276,7 @@ const ReellyEnrichmentPanel = () => {
                   entry.msg.includes("[OK]") ? "text-emerald-400" :
                   entry.msg.includes("[COMPLETE]") ? "text-yellow-300" :
                   entry.msg.includes("[WARN]") ? "text-amber-400" :
-                  "text-gray-500"
+                  "text-gray-600"
                 }`}>
                   <span className="text-gray-600">[{new Date(entry.time).toLocaleTimeString()}]</span> {entry.msg}
                 </div>
@@ -499,7 +499,7 @@ const ProvidentEnrichmentPanel = () => {
       {log.length > 0 && (
         <Card className="bg-zinc-950 border border-gray-800">
           <CardHeader className="pb-2">
-            <CardTitle className="text-gray-400 text-sm flex items-center gap-2">
+            <CardTitle className="text-gray-600 text-sm flex items-center gap-2">
               <Layers className="w-4 h-4" />
               Provident Enrichment Log
             </CardTitle>
@@ -513,7 +513,7 @@ const ProvidentEnrichmentPanel = () => {
                   line.includes("[START]") ? "text-yellow-300" :
                   line.includes("[WARN]") ? "text-amber-400" :
                   line.includes("[BATCH]") ? "text-blue-400" :
-                  "text-gray-500"
+                  "text-gray-600"
                 }`}>{line}</div>
               ))}
               <div ref={logEndRef} />

@@ -62,7 +62,7 @@ export const GuideNavigation = ({ current, guides, showStartHere = false }: Guid
                   <ArrowLeft className="w-5 h-5 md:w-7 md:h-7 text-black" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-gray-500 text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold">Previous Guide</p>
+                  <p className="text-gray-600 text-xs md:text-sm uppercase tracking-wider mb-1 md:mb-2 font-semibold">Previous Guide</p>
                   <p className="text-black font-bold group-hover:text-gold transition-colors text-lg md:text-xl lg:text-2xl">{prevGuide.title}</p>
                   {prevGuide.description && (
                     <p className="text-gray-600 text-sm mt-1 md:mt-2 hidden md:block">{prevGuide.description}</p>

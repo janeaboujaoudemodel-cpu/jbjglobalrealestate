@@ -101,7 +101,7 @@ export function EmbeddedEmployeeHub() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-500 text-xs">Team Members</p>
+                  <p className="text-gray-600 text-xs">Team Members</p>
                   <p className="text-2xl font-bold text-gold">{totalEmployees}</p>
                 </div>
                 <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
@@ -114,7 +114,7 @@ export function EmbeddedEmployeeHub() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-500 text-xs">Online Now</p>
+                  <p className="text-gray-600 text-xs">Online Now</p>
                   <p className="text-2xl font-bold text-green-600">{onlineCount}</p>
                 </div>
                 <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
@@ -127,7 +127,7 @@ export function EmbeddedEmployeeHub() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-500 text-xs">Departments</p>
+                  <p className="text-gray-600 text-xs">Departments</p>
                   <p className="text-2xl font-bold text-blue-600">{departmentCount}</p>
                 </div>
                 <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -140,7 +140,7 @@ export function EmbeddedEmployeeHub() {
             <CardContent className="pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-gray-500 text-xs">Top Performers</p>
+                  <p className="text-gray-600 text-xs">Top Performers</p>
                   <p className="text-2xl font-bold text-amber-600">{Object.keys(topPerformers).length}</p>
                 </div>
                 <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center">
@@ -161,7 +161,7 @@ export function EmbeddedEmployeeHub() {
                   placeholder="Search by name, role, department, or language..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-gray-400 h-10"
+                  className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-gray-600 h-10"
                 />
               </div>
               <div className="flex gap-2 flex-wrap">
@@ -227,7 +227,7 @@ export function EmbeddedEmployeeHub() {
                     <div className="flex-1 min-w-0">
                       <h3 className="text-black font-bold text-sm truncate">{member.name}</h3>
                       <p className="text-gold text-xs font-semibold truncate">{member.role}</p>
-                      <p className="text-gray-500 text-[10px] truncate">{member.department}</p>
+                      <p className="text-gray-600 text-[10px] truncate">{member.department}</p>
                     </div>
                   </div>
                   
@@ -243,7 +243,7 @@ export function EmbeddedEmployeeHub() {
                   <p className="text-gray-600 text-[10px] line-clamp-2 mt-2">{member.bio}</p>
                   
                   {member.joinDate && (
-                    <div className="flex items-center gap-1 mt-1.5 text-[10px] text-gray-500">
+                    <div className="flex items-center gap-1 mt-1.5 text-[10px] text-gray-600">
                       <Calendar className="h-2.5 w-2.5" />
                       <span>Joined: {joinDateFormatted}</span>
                     </div>
@@ -258,7 +258,7 @@ export function EmbeddedEmployeeHub() {
                   </div>
                   
                   <div className="flex items-center justify-between mt-2 pt-2 border-t border-gold/20">
-                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-gray-300 text-gray-500 bg-white'}`}>
+                    <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-gray-300 text-gray-600 bg-white'}`}>
                       {member.status === 'online' ? '● Online' : '○ Away'}
                     </Badge>
                     
@@ -289,8 +289,8 @@ export function EmbeddedEmployeeHub() {
 
         {filteredMembers.length === 0 && (
           <div className="text-center py-12">
-            <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500">No employees found matching your search.</p>
+            <Users className="w-12 h-12 text-gray-600 mx-auto mb-4" />
+            <p className="text-gray-600">No employees found matching your search.</p>
           </div>
         )}
       </TabsContent>

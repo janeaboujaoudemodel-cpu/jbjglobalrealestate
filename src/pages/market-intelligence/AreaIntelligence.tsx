@@ -35,7 +35,7 @@ const AreaIntelligence = () => {
       case 'bearish':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Bearish</Badge>;
       default:
-        return <Badge className="bg-gray-500/20 text-gray-500 border-gray-500/30">Neutral</Badge>;
+        return <Badge className="bg-gray-500/20 text-gray-600 border-gray-500/30">Neutral</Badge>;
     }
   };
 
@@ -380,7 +380,7 @@ const AreaIntelligence = () => {
                       </p>
                     </div>
                     <div className="mt-6 p-4 bg-black rounded-xl">
-                      <p className="text-gray-400 text-sm">
+                      <p className="text-gray-600 text-sm">
                         Area Intelligence feeds directly into <Link to="/market-intelligence/reports" className="text-gold hover:underline">Market Reports</Link>, where trends are summarized at a broader market level using the same official datasets.
                       </p>
                     </div>
@@ -437,21 +437,21 @@ const AreaIntelligence = () => {
                                         {area.yoyChange > 0 ? '+' : ''}{area.yoyChange}%
                                       </span>
                                     </div>
-                                    <p className="text-gray-500 text-xs">YoY</p>
+                                    <p className="text-gray-600 text-xs">YoY</p>
                                   </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4 mb-4">
                                   <div className="bg-white/60 border border-gold/20 rounded-lg p-2">
-                                    <p className="text-gray-500 text-xs">Price Index</p>
+                                    <p className="text-gray-600 text-xs">Price Index</p>
                                     <p className="text-black font-semibold">{area.priceIndex}</p>
                                   </div>
                                   <div className="bg-white/60 border border-gold/20 rounded-lg p-2">
-                                    <p className="text-gray-500 text-xs">Rental Index</p>
+                                    <p className="text-gray-600 text-xs">Rental Index</p>
                                     <p className="text-black font-semibold">{area.rentalIndex}</p>
                                   </div>
                                   <div>
-                                    <p className="text-gray-500 text-xs">Demand</p>
+                                    <p className="text-gray-600 text-xs">Demand</p>
                                     <div className="w-full bg-black/10 rounded-full h-1.5 mt-1">
                                       <div 
                                         className="bg-emerald-500 h-1.5 rounded-full" 
@@ -460,7 +460,7 @@ const AreaIntelligence = () => {
                                     </div>
                                   </div>
                                   <div>
-                                    <p className="text-gray-500 text-xs">Supply</p>
+                                    <p className="text-gray-600 text-xs">Supply</p>
                                     <div className="w-full bg-black/10 rounded-full h-1.5 mt-1">
                                       <div 
                                         className="bg-gold h-1.5 rounded-full" 

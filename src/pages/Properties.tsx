@@ -503,7 +503,7 @@ const Properties = () => {
             </h1>
             
             {/* Subtitle */}
-            <p className="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
+            <p className="text-gray-600 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
               Exclusive investment-grade properties with trusted advisory.
             </p>
           </motion.div>
@@ -622,7 +622,7 @@ const Properties = () => {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSearch();
               }}
-              className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-400 focus:border-gold rounded-lg text-base shadow-sm w-full"
+              className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-600 focus:border-gold rounded-lg text-base shadow-sm w-full"
             />
 
           </div>
@@ -941,14 +941,14 @@ const Properties = () => {
                           placeholder="Min"
                           value={filters.sizeMin || ""}
                           onChange={(e) => updateFilter("sizeMin", parseInt(e.target.value) || 0)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-400"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-600"
                         />
                         <Input
                           type="number"
                           placeholder="Max"
                           value={filters.sizeMax < 50000 ? filters.sizeMax : ""}
                           onChange={(e) => updateFilter("sizeMax", parseInt(e.target.value) || 50000)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-400"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-600"
                         />
                       </div>
                     </div>
@@ -962,14 +962,14 @@ const Properties = () => {
                           placeholder="Min"
                           value={filters.priceMin > 0 ? filters.priceMin.toLocaleString() : ""}
                           onChange={(e) => updateFilter("priceMin", parseInt(e.target.value.replace(/,/g, '')) || 0)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-400"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-600"
                         />
                         <Input
                           type="text"
                           placeholder="Max"
                           value={filters.priceMax < 500000000 ? filters.priceMax.toLocaleString() : ""}
                           onChange={(e) => updateFilter("priceMax", parseInt(e.target.value.replace(/,/g, '')) || 500000000)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-400"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-600"
                         />
                       </div>
                     </div>

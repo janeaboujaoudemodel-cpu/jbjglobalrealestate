@@ -64,7 +64,7 @@ export function DisplayModeToggle({
               isActive
                 ? "bg-gold text-black font-medium shadow-sm"
                 : isDark
-                  ? "text-gray-500 hover:text-white hover:bg-[#2a2a2a]"
+                  ? "text-gray-600 hover:text-white hover:bg-[#2a2a2a]"
                   : "text-black/60 hover:text-black hover:bg-champagne-light"
             )}
           >
@@ -114,7 +114,7 @@ export function DisplayModeIconToggle({
           value === 'investor'
             ? "bg-gold text-black"
             : isDark
-              ? "text-gray-500 hover:text-white"
+              ? "text-gray-600 hover:text-white"
               : "text-black/60 hover:text-black"
         )}
         title="Investor View — See investment-focused content like ROI, yields & capital growth"
@@ -128,7 +128,7 @@ export function DisplayModeIconToggle({
           value === 'broker'
             ? "bg-gold text-black"
             : isDark
-              ? "text-gray-500 hover:text-white"
+              ? "text-gray-600 hover:text-white"
               : "text-black/60 hover:text-black"
         )}
         title="Broker View — See broker tools, commissions & deal registration"

@@ -103,7 +103,7 @@ export function EmiratesMultiSelect({
               className={cn(
                 "flex items-center justify-between w-full px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded",
                 isDark 
-                  ? "text-gray-500 hover:bg-[#2a2a2a]"
+                  ? "text-gray-600 hover:bg-[#2a2a2a]"
                   : "text-black/50 hover:bg-champagne-light"
               )}
             >
@@ -159,7 +159,7 @@ export function EmiratesMultiSelect({
               className={cn(
                 "flex items-center justify-between w-full px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded",
                 isDark 
-                  ? "text-gray-500 hover:bg-[#2a2a2a]"
+                  ? "text-gray-600 hover:bg-[#2a2a2a]"
                   : "text-black/50 hover:bg-champagne-light"
               )}
             >
@@ -210,7 +210,7 @@ export function EmiratesMultiSelect({
         )}>
           <span className={cn(
             "text-xs",
-            isDark ? "text-gray-500" : "text-black/60"
+            isDark ? "text-gray-600" : "text-black/60"
           )}>
             {selectedCount} selected
           </span>
@@ -221,7 +221,7 @@ export function EmiratesMultiSelect({
               className={cn(
                 "text-xs px-2 py-1 rounded transition-colors",
                 isDark 
-                  ? "text-gray-500 hover:text-white hover:bg-[#2a2a2a]"
+                  ? "text-gray-600 hover:text-white hover:bg-[#2a2a2a]"
                   : "text-black/60 hover:text-black hover:bg-champagne"
               )}
             >

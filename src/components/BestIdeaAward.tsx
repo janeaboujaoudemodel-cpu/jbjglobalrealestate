@@ -258,7 +258,7 @@ const BestIdeaAward = () => {
                             <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-5 mb-5">
                               <p className="text-sm text-gray-600 mb-2">Your Draw Ticket Number</p>
                               <p className="text-xl font-bold text-gold tracking-wider mb-2">{drawTicketNumber}</p>
-                              <p className="text-xs text-gray-500">This ticket is linked to your account</p>
+                              <p className="text-xs text-gray-600">This ticket is linked to your account</p>
                             </div>
                           )}
 
@@ -277,7 +277,7 @@ const BestIdeaAward = () => {
                                 </p>
                               </>
                             ) : (
-                              <p className="text-gray-500 text-sm">
+                              <p className="text-gray-600 text-sm">
                                 Note: Anonymous submissions don't enter the draw, but your idea will still be considered.
                               </p>
                             )}
@@ -296,13 +296,13 @@ const BestIdeaAward = () => {
                           <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
                             <div className="flex items-center gap-3">
                               {formData.isAnonymous ? (
-                                <EyeOff className="w-5 h-5 text-gray-500" />
+                                <EyeOff className="w-5 h-5 text-gray-600" />
                               ) : (
                                 <Eye className="w-5 h-5 text-gold" />
                               )}
                               <div>
                                 <Label className="text-sm font-medium text-black">Post Anonymously</Label>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-gray-600">
                                   {formData.isAnonymous 
                                     ? "Your details won't be visible, but you won't enter the draw"
                                     : "Enter your details to join the iPad draw"

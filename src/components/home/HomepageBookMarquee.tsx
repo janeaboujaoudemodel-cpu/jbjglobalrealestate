@@ -57,7 +57,7 @@ function BookMarqueeStrip({ books }: { books: BookData[] }) {
             <div className="relative w-24 h-36 md:w-32 md:h-44 mx-auto rounded-md overflow-hidden border border-gray-200 shadow-sm transition-transform duration-300 group-hover:scale-105">
               <BookCoverFace book={book} size="thumb" bare />
             </div>
-            <p className="text-center text-[10px] md:text-xs text-gray-500 mt-2 truncate px-1 group-hover:text-black transition-colors">
+            <p className="text-center text-[10px] md:text-xs text-gray-600 mt-2 truncate px-1 group-hover:text-black transition-colors">
               {book.title}
             </p>
           </Link>
@@ -81,7 +81,7 @@ export default function HomepageBookMarquee() {
               <h2 className="text-black text-lg md:text-xl font-bold">
                 Explore Our Guides & Reports
               </h2>
-              <p className="text-gray-500 text-xs">Free educational resources for investors</p>
+              <p className="text-gray-600 text-xs">Free educational resources for investors</p>
             </div>
           </div>
           <Link

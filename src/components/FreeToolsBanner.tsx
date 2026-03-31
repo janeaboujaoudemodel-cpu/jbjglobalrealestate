@@ -133,7 +133,7 @@ export default function FreeToolsBanner() {
                 disabled={!canClose}
                 className={`absolute top-4 right-4 z-10 p-1 rounded-full transition-all duration-300 ${
                   canClose 
-                    ? "text-gray-500 hover:text-white hover:bg-white/10 cursor-pointer" 
+                    ? "text-gray-600 hover:text-white hover:bg-white/10 cursor-pointer" 
                     : "text-gray-600 cursor-not-allowed opacity-50"
                 }`}
                 aria-label="Close"

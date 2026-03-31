@@ -399,23 +399,23 @@ const CVManagementCenter = () => {
                   {/* Details Grid */}
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
                     <div>
-                      <p className="text-gray-500 text-xs uppercase tracking-wide font-medium mb-1">Email</p>
+                      <p className="text-gray-600 text-xs uppercase tracking-wide font-medium mb-1">Email</p>
                       <p className="text-white font-medium">{cv.email}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500 text-xs uppercase tracking-wide font-medium mb-1">Phone</p>
+                      <p className="text-gray-600 text-xs uppercase tracking-wide font-medium mb-1">Phone</p>
                       <p className="text-white font-medium">{cv.phone || '—'}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500 text-xs uppercase tracking-wide font-medium mb-1">Experience</p>
+                      <p className="text-gray-600 text-xs uppercase tracking-wide font-medium mb-1">Experience</p>
                       <p className="text-white font-medium">{cv.experience}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500 text-xs uppercase tracking-wide font-medium mb-1">Education</p>
+                      <p className="text-gray-600 text-xs uppercase tracking-wide font-medium mb-1">Education</p>
                       <p className="text-white font-medium">{cv.education}</p>
                     </div>
                     <div>
-                      <p className="text-gray-500 text-xs uppercase tracking-wide font-medium mb-1">Upload Date</p>
+                      <p className="text-gray-600 text-xs uppercase tracking-wide font-medium mb-1">Upload Date</p>
                       <p className="text-white font-medium">{cv.uploadDate}</p>
                     </div>
                   </div>
@@ -430,12 +430,12 @@ const CVManagementCenter = () => {
                       Ranking: {cv.ranking}/10
                     </Badge>
                     {cv.languages && cv.languages.length > 0 && (
-                      <Badge variant="outline" className="text-gray-400 border-gray-600">
+                      <Badge variant="outline" className="text-gray-600 border-gray-600">
                         Languages: {cv.languages.join(', ')}
                       </Badge>
                     )}
                     {cv.gender && (
-                      <Badge variant="outline" className="text-gray-400 border-gray-600 capitalize">
+                      <Badge variant="outline" className="text-gray-600 border-gray-600 capitalize">
                         <User className="h-3 w-3 mr-1" />
                         {cv.gender}
                       </Badge>

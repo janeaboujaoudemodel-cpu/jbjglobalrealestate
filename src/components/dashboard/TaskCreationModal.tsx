@@ -354,7 +354,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="What needs to be done?"
-              className="h-11 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-400"
+              className="h-11 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600"
               autoFocus
             />
           </div>
@@ -383,7 +383,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Add details, notes, or instructions..."
-              className="min-h-[100px] bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-400 resize-y"
+              className="min-h-[100px] bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600 resize-y"
             />
           </div>
 
@@ -403,7 +403,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                       "px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all",
                       priority === p.value
                         ? cn(p.color, "ring-1 ring-offset-1 ring-gold/40")
-                        : "bg-white/60 border-gold/20 text-gray-500 hover:border-gold/40"
+                        : "bg-white/60 border-gold/20 text-gray-600 hover:border-gold/40"
                     )}
                   >
                     {p.label}
@@ -441,7 +441,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                   onBlur={handleDateBlur}
                   onKeyDown={(e) => { if (e.key === "Enter") handleDateBlur(); }}
                   placeholder="DD/MM/YYYY"
-                  className="h-10 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-400 flex-1"
+                  className="h-10 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600 flex-1"
                 />
                 <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <PopoverTrigger asChild>
@@ -477,7 +477,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                 value={clientContact}
                 onChange={(e) => setClientContact(e.target.value)}
                 placeholder="+971 50 123 4567"
-                className="h-10 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-400"
+                className="h-10 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600"
               />
             </div>
           </div>
@@ -504,7 +504,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                     "px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all",
                     leadMode === mode
                       ? "bg-gold/20 border-gold text-black"
-                      : "bg-white/60 border-gold/20 text-gray-500 hover:border-gold/40"
+                      : "bg-white/60 border-gold/20 text-gray-600 hover:border-gold/40"
                   )}
                 >
                   {mode === "none" ? "No Lead" : mode === "select" ? "Select Lead" : "Add New Lead"}
@@ -520,7 +520,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                     value={leadSearch}
                     onChange={(e) => setLeadSearch(e.target.value)}
                     placeholder="Search by name, phone, or email..."
-                    className="h-10 pl-9 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-400"
+                    className="h-10 pl-9 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600"
                   />
                 </div>
                 {selectedLeadId && (
@@ -528,7 +528,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                     <Users className="w-4 h-4 text-gold" />
                     <span className="text-sm text-black font-medium">{selectedLeadName}</span>
                     <button type="button" onClick={() => { setSelectedLeadId(null); setSelectedLeadName(""); }} className="ml-auto">
-                      <X className="w-3.5 h-3.5 text-gray-500 hover:text-red-500" />
+                      <X className="w-3.5 h-3.5 text-gray-600 hover:text-red-500" />
                     </button>
                   </div>
                 )}
@@ -547,34 +547,34 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                         className="w-full text-left px-3 py-2 hover:bg-gold/10 border-b border-gold/10 last:border-0 text-sm"
                       >
                         <span className="font-medium text-black">{lead.full_name || "—"}</span>
-                        {lead.phone_raw && <span className="text-gray-500 ml-2">{lead.phone_raw}</span>}
-                        {lead.email_normalized && <span className="text-gray-500 ml-2 text-xs">{lead.email_normalized}</span>}
+                        {lead.phone_raw && <span className="text-gray-600 ml-2">{lead.phone_raw}</span>}
+                        {lead.email_normalized && <span className="text-gray-600 ml-2 text-xs">{lead.email_normalized}</span>}
                       </button>
                     ))}
                   </div>
                 )}
-                {leadSearching && <p className="text-xs text-gray-500">Searching...</p>}
+                {leadSearching && <p className="text-xs text-gray-600">Searching...</p>}
               </div>
             )}
 
             {leadMode === "new" && (
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <Label className="text-xs text-gray-500">Lead Name *</Label>
+                  <Label className="text-xs text-gray-600">Lead Name *</Label>
                   <Input
                     value={newLeadName}
                     onChange={(e) => setNewLeadName(e.target.value)}
                     placeholder="Full name"
-                    className="h-9 bg-white/80 border-gold/30 text-black placeholder:text-gray-400 text-sm"
+                    className="h-9 bg-white/80 border-gold/30 text-black placeholder:text-gray-600 text-sm"
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs text-gray-500">Phone</Label>
+                  <Label className="text-xs text-gray-600">Phone</Label>
                   <Input
                     value={newLeadPhone}
                     onChange={(e) => setNewLeadPhone(e.target.value)}
                     placeholder="+971 50 123 4567"
-                    className="h-9 bg-white/80 border-gold/30 text-black placeholder:text-gray-400 text-sm"
+                    className="h-9 bg-white/80 border-gold/30 text-black placeholder:text-gray-600 text-sm"
                   />
                 </div>
                 <p className="col-span-2 text-xs text-gold/70 flex items-center gap-1">
@@ -593,7 +593,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
               value={referenceUrl}
               onChange={(e) => setReferenceUrl(e.target.value)}
               placeholder="https://..."
-              className="h-10 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-400"
+              className="h-10 bg-white/80 border-gold/30 focus:border-gold text-black placeholder:text-gray-600"
             />
           </div>
 
@@ -620,7 +620,7 @@ export default function TaskCreationModal({ open, onOpenChange }: TaskCreationMo
                   <span className="text-sm">Uploading...</span>
                 </div>
               ) : (
-                <div className="text-gray-500 text-sm">
+                <div className="text-gray-600 text-sm">
                   <Upload className="w-5 h-5 mx-auto mb-1 text-gold/60" />
                   Click to upload documents (PDF, images, spreadsheets)
                 </div>

@@ -71,11 +71,11 @@ const STATUS_COLORS: { [key: string]: string } = {
   trial: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   pending: "bg-amber-500/20 text-amber-400 border-amber-500/30",
   cancelled: "bg-red-500/20 text-red-400 border-red-500/30",
-  expired: "bg-gray-500/20 text-gray-400 border-gray-500/30",
+  expired: "bg-gray-500/20 text-gray-600 border-gray-500/30",
 };
 
 const TIER_COLORS: { [key: string]: string } = {
-  starter: "bg-zinc-700 text-gray-400",
+  starter: "bg-zinc-700 text-gray-600",
   professional: "bg-gold/20 text-gold",
   enterprise: "bg-purple-500/20 text-purple-400",
 };
@@ -443,7 +443,7 @@ export default function BrokerSubscriptionsDashboard() {
             <TableBody>
               {filteredSubscriptions.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center text-gray-500 py-10">
+                  <TableCell colSpan={8} className="text-center text-gray-600 py-10">
                     No subscriptions found
                   </TableCell>
                 </TableRow>
@@ -453,17 +453,17 @@ export default function BrokerSubscriptionsDashboard() {
                     <TableCell>
                       <div>
                         <p className="text-white font-medium">{sub.full_name || "—"}</p>
-                        <p className="text-gray-500 text-xs">{sub.user_role || "broker"}</p>
+                        <p className="text-gray-600 text-xs">{sub.user_role || "broker"}</p>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-gray-300 text-sm">
+                        <div className="flex items-center gap-2 text-gray-600 text-sm">
                           <Mail className="w-3 h-3" />
                           <span className="truncate max-w-40">{sub.email}</span>
                         </div>
                         {sub.phone && (
-                          <div className="flex items-center gap-2 text-gray-400 text-xs">
+                          <div className="flex items-center gap-2 text-gray-600 text-xs">
                             <Phone className="w-3 h-3" />
                             {sub.phone}
                           </div>
@@ -472,12 +472,12 @@ export default function BrokerSubscriptionsDashboard() {
                     </TableCell>
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-gray-300 text-sm">
+                        <div className="flex items-center gap-2 text-gray-600 text-sm">
                           <Building2 className="w-3 h-3" />
                           <span className="truncate max-w-32">{sub.company_name || "—"}</span>
                         </div>
                         {sub.rera_number && (
-                          <p className="text-gray-500 text-xs">RERA: {sub.rera_number}</p>
+                          <p className="text-gray-600 text-xs">RERA: {sub.rera_number}</p>
                         )}
                       </div>
                     </TableCell>
@@ -492,13 +492,13 @@ export default function BrokerSubscriptionsDashboard() {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="text-gray-400 text-xs space-y-1">
+                      <div className="text-gray-600 text-xs space-y-1">
                         <p>AI: {sub.ai_credits_used}/{sub.ai_credits_limit || "∞"}</p>
                         <p>PDFs: {sub.pdf_downloads}</p>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <p className="text-gray-400 text-sm">
+                      <p className="text-gray-600 text-sm">
                         {format(new Date(sub.created_at), "MMM d, yyyy")}
                       </p>
                     </TableCell>
@@ -533,54 +533,54 @@ export default function BrokerSubscriptionsDashboard() {
             <div className="space-y-6 mt-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <p className="text-gray-500 text-xs uppercase">Full Name</p>
+                  <p className="text-gray-600 text-xs uppercase">Full Name</p>
                   <p className="text-white">{selectedSubscription.full_name || "—"}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-gray-500 text-xs uppercase">Email</p>
+                  <p className="text-gray-600 text-xs uppercase">Email</p>
                   <p className="text-white">{selectedSubscription.email}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-gray-500 text-xs uppercase">Phone</p>
+                  <p className="text-gray-600 text-xs uppercase">Phone</p>
                   <p className="text-white">{selectedSubscription.phone || "—"}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-gray-500 text-xs uppercase">Company</p>
+                  <p className="text-gray-600 text-xs uppercase">Company</p>
                   <p className="text-white">{selectedSubscription.company_name || "—"}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-gray-500 text-xs uppercase">RERA Number</p>
+                  <p className="text-gray-600 text-xs uppercase">RERA Number</p>
                   <p className="text-white">{selectedSubscription.rera_number || "—"}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-gray-500 text-xs uppercase">User Role</p>
+                  <p className="text-gray-600 text-xs uppercase">User Role</p>
                   <p className="text-white capitalize">{selectedSubscription.user_role || "broker"}</p>
                 </div>
               </div>
 
               <div className="border-t border-gray-700 pt-4">
-                <h4 className="text-sm font-medium text-gray-400 mb-3">Subscription Details</h4>
+                <h4 className="text-sm font-medium text-gray-600 mb-3">Subscription Details</h4>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <p className="text-gray-500 text-xs uppercase">Tier</p>
+                    <p className="text-gray-600 text-xs uppercase">Tier</p>
                     <Badge className={TIER_COLORS[selectedSubscription.tier] || "bg-zinc-700"}>
                       {selectedSubscription.tier}
                     </Badge>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-gray-500 text-xs uppercase">Status</p>
+                    <p className="text-gray-600 text-xs uppercase">Status</p>
                     <Badge className={STATUS_COLORS[selectedSubscription.status] || "bg-zinc-700"}>
                       {selectedSubscription.status}
                     </Badge>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-gray-500 text-xs uppercase">Price</p>
+                    <p className="text-gray-600 text-xs uppercase">Price</p>
                     <p className="text-white">
                       ${selectedSubscription.price_usd} {selectedSubscription.currency}
                     </p>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-gray-500 text-xs uppercase">Expires</p>
+                    <p className="text-gray-600 text-xs uppercase">Expires</p>
                     <p className="text-white">
                       {selectedSubscription.expires_at
                         ? format(new Date(selectedSubscription.expires_at), "PPP")
@@ -591,33 +591,33 @@ export default function BrokerSubscriptionsDashboard() {
               </div>
 
               <div className="border-t border-gray-700 pt-4">
-                <h4 className="text-sm font-medium text-gray-400 mb-3">Usage Statistics</h4>
+                <h4 className="text-sm font-medium text-gray-600 mb-3">Usage Statistics</h4>
                 <div className="grid grid-cols-3 gap-4">
                   <div className="bg-zinc-800 rounded-lg p-4 text-center">
                     <p className="text-2xl font-bold text-white">{selectedSubscription.ai_credits_used}</p>
-                    <p className="text-xs text-gray-500">AI Credits Used</p>
+                    <p className="text-xs text-gray-600">AI Credits Used</p>
                   </div>
                   <div className="bg-zinc-800 rounded-lg p-4 text-center">
                     <p className="text-2xl font-bold text-white">
                       {selectedSubscription.ai_credits_limit || "∞"}
                     </p>
-                    <p className="text-xs text-gray-500">Credit Limit</p>
+                    <p className="text-xs text-gray-600">Credit Limit</p>
                   </div>
                   <div className="bg-zinc-800 rounded-lg p-4 text-center">
                     <p className="text-2xl font-bold text-white">{selectedSubscription.pdf_downloads}</p>
-                    <p className="text-xs text-gray-500">PDF Downloads</p>
+                    <p className="text-xs text-gray-600">PDF Downloads</p>
                   </div>
                 </div>
               </div>
 
               <div className="border-t border-gray-700 pt-4">
-                <p className="text-xs text-gray-500">
-                  Subscription ID: <code className="text-gray-400">{selectedSubscription.id}</code>
+                <p className="text-xs text-gray-600">
+                  Subscription ID: <code className="text-gray-600">{selectedSubscription.id}</code>
                 </p>
-                <p className="text-xs text-gray-500">
-                  User ID: <code className="text-gray-400">{selectedSubscription.user_id}</code>
+                <p className="text-xs text-gray-600">
+                  User ID: <code className="text-gray-600">{selectedSubscription.user_id}</code>
                 </p>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs text-gray-600 mt-2">
                   Created: {format(new Date(selectedSubscription.created_at), "PPpp")}
                 </p>
               </div>

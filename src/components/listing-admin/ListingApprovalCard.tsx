@@ -165,12 +165,12 @@ export function ListingApprovalCard({
               rel="noopener noreferrer"
               className="flex-shrink-0 p-1 hover:bg-gray-100 rounded"
             >
-              <ExternalLink className="w-4 h-4 text-gray-500" />
+              <ExternalLink className="w-4 h-4 text-gray-600" />
             </a>
           )}
         </CardTitle>
         {sourceName && (
-          <p className="text-xs text-gray-500">Source: {sourceName}</p>
+          <p className="text-xs text-gray-600">Source: {sourceName}</p>
         )}
       </CardHeader>
 
@@ -179,21 +179,21 @@ export function ListingApprovalCard({
         <div className="grid grid-cols-2 gap-3 text-sm">
           {project.developer_name && (
             <div className="flex items-center gap-2 text-gray-700">
-              <Building2 className="w-4 h-4 text-gray-500" />
+              <Building2 className="w-4 h-4 text-gray-600" />
               <span className="truncate">{project.developer_name}</span>
             </div>
           )}
           
           {project.location && (
             <div className="flex items-center gap-2 text-gray-700">
-              <MapPin className="w-4 h-4 text-gray-500" />
+              <MapPin className="w-4 h-4 text-gray-600" />
               <span className="truncate">{project.location}</span>
             </div>
           )}
           
           {(project.price_from || project.price_text) && (
             <div className="flex items-center gap-2 text-gray-700">
-              <DollarSign className="w-4 h-4 text-gray-500" />
+              <DollarSign className="w-4 h-4 text-gray-600" />
               <span className="truncate font-medium text-gold">
                 {project.price_from ? formatPrice(project.price_from) : project.price_text}
               </span>
@@ -202,14 +202,14 @@ export function ListingApprovalCard({
           
           {project.bedrooms && (
             <div className="flex items-center gap-2 text-gray-700">
-              <Bed className="w-4 h-4 text-gray-500" />
+              <Bed className="w-4 h-4 text-gray-600" />
               <span className="truncate">{project.bedrooms}</span>
             </div>
           )}
           
           {project.handover_display && (
             <div className="flex items-center gap-2 text-gray-700 col-span-2">
-              <Calendar className="w-4 h-4 text-gray-500" />
+              <Calendar className="w-4 h-4 text-gray-600" />
               <span className="truncate">Handover: {project.handover_display}</span>
             </div>
           )}

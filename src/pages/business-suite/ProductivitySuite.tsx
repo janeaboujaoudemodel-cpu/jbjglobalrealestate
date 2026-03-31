@@ -186,12 +186,12 @@ const ProductivitySuite = () => {
             resumes, cover letters, and more. All in one premium hub.
           </p>
           
-          <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
+          <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-gold rounded-full" />
               {corporateTools.length + productivityTools.length} Tools Included
             </span>
-            <span className="text-gray-400">|</span>
+            <span className="text-gray-600">|</span>
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-emerald-500 rounded-full" />
               Free Access

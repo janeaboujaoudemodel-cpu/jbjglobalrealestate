@@ -137,7 +137,7 @@ export function DocuSignIntegration() {
                 placeholder="Full name"
                 value={recipientName}
                 onChange={(e) => setRecipientName(e.target.value)}
-                className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-400"
+                className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-600"
               />
             </div>
 
@@ -151,7 +151,7 @@ export function DocuSignIntegration() {
                 placeholder="email@example.com"
                 value={recipientEmail}
                 onChange={(e) => setRecipientEmail(e.target.value)}
-                className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-400"
+                className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-600"
               />
             </div>
           </div>
@@ -165,7 +165,7 @@ export function DocuSignIntegration() {
               placeholder="e.g., JBJ-2024-001"
               value={propertyRef}
               onChange={(e) => setPropertyRef(e.target.value)}
-              className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-400"
+              className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-600"
             />
           </div>
 

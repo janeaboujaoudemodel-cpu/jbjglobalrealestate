@@ -80,7 +80,7 @@ const ResalePropertiesSection = () => {
                               loading="lazy"
                             />
                           ) : (
-                            <Building2 className="w-10 h-10 text-gray-400" />
+                            <Building2 className="w-10 h-10 text-gray-600" />
                           )}
                           {listing.handover_status && (
                             <Badge className="absolute top-2 left-2 bg-black text-white text-[10px] font-semibold">
@@ -95,24 +95,24 @@ const ResalePropertiesSection = () => {
                             {listing.title}
                           </h3>
                           {listing.project_name && (
-                            <p className="text-xs text-gray-500 mb-2 line-clamp-1">{listing.project_name}</p>
+                            <p className="text-xs text-gray-600 mb-2 line-clamp-1">{listing.project_name}</p>
                           )}
                           <div className="flex items-center gap-2.5 text-xs text-gray-600 mb-2.5 flex-wrap">
                             {listing.area_name && (
                               <span className="flex items-center gap-1">
-                                <MapPin className="w-3 h-3 text-gray-500" />
+                                <MapPin className="w-3 h-3 text-gray-600" />
                                 {listing.area_name}
                               </span>
                             )}
                             {listing.bedrooms != null && (
                               <span className="flex items-center gap-1">
-                                <BedDouble className="w-3 h-3 text-gray-500" />
+                                <BedDouble className="w-3 h-3 text-gray-600" />
                                 {listing.bedrooms === 0 ? "Studio" : `${listing.bedrooms} BR`}
                               </span>
                             )}
                             {listing.size_sqft && (
                               <span className="flex items-center gap-1">
-                                <Maximize className="w-3 h-3 text-gray-500" />
+                                <Maximize className="w-3 h-3 text-gray-600" />
                                 {Number(listing.size_sqft).toLocaleString()} sqft
                               </span>
                             )}

@@ -237,7 +237,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
                   <div className="text-xl md:text-2xl font-bold text-black truncate">
                     {loading ? "..." : card.value}
                   </div>
-                  <p className="text-xs text-gray-500 mt-1 truncate">
+                  <p className="text-xs text-gray-600 mt-1 truncate">
                     {loading ? "" : card.subValue}
                   </p>
                 </div>
@@ -261,7 +261,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
             <CardTitle className="text-base font-semibold text-black flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-blue-500" />
               Weekly Activity
-              <span className="text-xs font-normal text-gray-500 ml-2">Your weekly activity summary</span>
+              <span className="text-xs font-normal text-gray-600 ml-2">Your weekly activity summary</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -357,7 +357,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
               </div>
               <div>
                 <p className="text-2xl font-bold text-gray-900">{stats.avgResponseTime}h</p>
-                <p className="text-xs text-gray-500">Avg Response</p>
+                <p className="text-xs text-gray-600">Avg Response</p>
               </div>
             </div>
           </CardContent>
@@ -370,7 +370,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
               </div>
               <div>
                 <p className="text-2xl font-bold text-black">{stats.followupsCreated}</p>
-                <p className="text-xs text-gray-500">Follow-ups</p>
+                <p className="text-xs text-gray-600">Follow-ups</p>
               </div>
             </div>
           </CardContent>
@@ -383,7 +383,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
               </div>
               <div>
                 <p className="text-2xl font-bold text-black">{stats.followupsCompleted}</p>
-                <p className="text-xs text-gray-500">Completed</p>
+                <p className="text-xs text-gray-600">Completed</p>
               </div>
             </div>
           </CardContent>
@@ -396,7 +396,7 @@ const CRMEnhancedDashboard = ({ userId, hasOwnerAccess }: EnhancedDashboardProps
               </div>
               <div>
                 <p className="text-2xl font-bold text-black">{stats.pipelineCounts['closed_won'] || 0}</p>
-                <p className="text-xs text-gray-500">Deals Won</p>
+                <p className="text-xs text-gray-600">Deals Won</p>
               </div>
             </div>
           </CardContent>

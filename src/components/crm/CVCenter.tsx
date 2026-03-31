@@ -35,9 +35,9 @@ const DEPARTMENT_CATEGORIES = [
   { id: 'digital_marketing', label: 'Digital Marketing', icon: Globe2, color: 'text-cyan-400' },
   { id: 'finance', label: 'Finance', icon: Calculator, color: 'text-green-400' },
   { id: 'hr', label: 'HR', icon: User, color: 'text-indigo-400' },
-  { id: 'admin', label: 'Admin', icon: Building2, color: 'text-gray-400' },
+  { id: 'admin', label: 'Admin', icon: Building2, color: 'text-gray-600' },
   { id: 'tech', label: 'Tech / IT', icon: Code, color: 'text-emerald-400' },
-  { id: 'general', label: 'Other', icon: FileText, color: 'text-gray-500' },
+  { id: 'general', label: 'Other', icon: FileText, color: 'text-gray-600' },
 ];
 
 const STATUS_TABS = [
@@ -673,7 +673,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
   const getScoreColor = (score: number) => 
     score >= 7 ? 'text-emerald-600 bg-emerald-50 border-emerald-200' :
     score >= 4 ? 'text-amber-600 bg-amber-50 border-amber-200' :
-    'text-gray-500 bg-gray-50 border-gray-200';
+    'text-gray-600 bg-gray-50 border-gray-200';
 
   const getRecommendationColor = (rec: string) =>
     rec === 'Strongly Recommend' ? 'text-emerald-600 border-emerald-300 bg-emerald-50' :
@@ -1050,7 +1050,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
 
                               {hasUnreadableSummary && (
                                 <p className="text-sm text-crm-text bg-gray-50 border border-gray-200 rounded-md px-3 py-2 mb-2">
-                                  <Sparkles className="h-3.5 w-3.5 inline mr-1 text-gray-500" />
+                                  <Sparkles className="h-3.5 w-3.5 inline mr-1 text-gray-600" />
                                   AI summary is being regenerated for better readability.
                                 </p>
                               )}

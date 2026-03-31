@@ -215,7 +215,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
               {/* Languages */}
               <div className="flex items-center gap-2">
                 <Languages className="w-4 h-4 text-gold" />
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-600">
                   {LANGUAGES.join(' • ')}
                 </span>
               </div>
@@ -227,7 +227,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                 <span className="text-sm text-green-600 font-medium">Online</span>
               </div>
-              <div className="flex items-center gap-2 text-xs text-gray-500">
+              <div className="flex items-center gap-2 text-xs text-gray-600">
                 <Lock className="w-3 h-3" />
                 Approval-Only Mode
               </div>
@@ -264,9 +264,9 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                         <h4 className="font-medium text-black">{task.title}</h4>
                         {getStatusBadge(task.status)}
                       </div>
-                      <p className="text-sm text-gray-500 mb-3">{task.description}</p>
+                      <p className="text-sm text-gray-600 mb-3">{task.description}</p>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-600">
                           Assigned by: {task.assignedBy === 'owner' ? 'Founder' : 'Assistant'}
                         </span>
                         
@@ -361,11 +361,11 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
                           <Badge className="bg-green-500/20 text-green-600">Current</Badge>
                         )}
                       </div>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-gray-600">
                         {version.date.toLocaleDateString()}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-500 mb-3">{version.description}</p>
+                    <p className="text-sm text-gray-600 mb-3">{version.description}</p>
                     {index > 0 && isOwner && (
                       <Button 
                         size="sm" 
@@ -406,7 +406,7 @@ export const AIWebDeveloperPersona: React.FC<AIWebDeveloperPersonaProps> = ({
             <Layers className="w-5 h-5 text-gold" />
             Connected AI Tools
           </CardTitle>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-600">
             Marcus works collaboratively with all creative and content tools
           </p>
         </CardHeader>

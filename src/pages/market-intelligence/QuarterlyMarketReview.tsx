@@ -157,7 +157,7 @@ const QuarterlyMarketReview = () => {
   const getChangeIndicator = (change: number) => {
     if (change > 0) return <span className="text-emerald-600">+{change}%</span>;
     if (change < 0) return <span className="text-red-600">{change}%</span>;
-    return <span className="text-gray-500">0%</span>;
+    return <span className="text-gray-600">0%</span>;
   };
 
   const getSupplyDemandColor = (status: string) => {
@@ -264,7 +264,7 @@ const QuarterlyMarketReview = () => {
                     </span>
                     {getChangeIndicator(data.buySegment.change)}
                   </div>
-                  <p className="text-xs text-gray-500">{data.buySegment.insight}</p>
+                  <p className="text-xs text-gray-600">{data.buySegment.insight}</p>
                 </CardContent>
               </Card>
 
@@ -282,7 +282,7 @@ const QuarterlyMarketReview = () => {
                     </span>
                     {getChangeIndicator(data.sellSegment.change)}
                   </div>
-                  <p className="text-xs text-gray-500">{data.sellSegment.insight}</p>
+                  <p className="text-xs text-gray-600">{data.sellSegment.insight}</p>
                 </CardContent>
               </Card>
 
@@ -300,7 +300,7 @@ const QuarterlyMarketReview = () => {
                     </span>
                     {getChangeIndicator(data.rentSegment.change)}
                   </div>
-                  <p className="text-xs text-gray-500">{data.rentSegment.insight}</p>
+                  <p className="text-xs text-gray-600">{data.rentSegment.insight}</p>
                 </CardContent>
               </Card>
             </div>
@@ -351,15 +351,15 @@ const QuarterlyMarketReview = () => {
                     <h3 className="text-lg font-semibold text-black mb-3">{area.name}</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                       <div>
-                        <p className="text-gray-500 mb-1">BUY Activity</p>
+                        <p className="text-gray-600 mb-1">BUY Activity</p>
                         <p className="text-gray-700">{area.buyActivity}</p>
                       </div>
                       <div>
-                        <p className="text-gray-500 mb-1">RENT Activity</p>
+                        <p className="text-gray-600 mb-1">RENT Activity</p>
                         <p className="text-gray-700">{area.rentActivity}</p>
                       </div>
                       <div>
-                        <p className="text-gray-500 mb-1">Outlook</p>
+                        <p className="text-gray-600 mb-1">Outlook</p>
                         <p className="text-gray-700">{area.outlook}</p>
                       </div>
                     </div>
@@ -383,7 +383,7 @@ const QuarterlyMarketReview = () => {
                   This report is based on aggregated official government Open Data and descriptive analytics.
                   It is provided for informational purposes only and does not constitute financial, investment, or legal advice.
                 </p>
-                <div className="flex flex-wrap gap-4 text-xs text-gray-500">
+                <div className="flex flex-wrap gap-4 text-xs text-gray-600">
                   <span>Data Sources: Dubai Land Department Open Data</span>
                   <span>•</span>
                   <span>Update Frequency: Quarterly</span>
@@ -393,7 +393,7 @@ const QuarterlyMarketReview = () => {
                   </Link>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gold/30">
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-600">
                     JBJ GLOBAL REAL ESTATE
                     <FounderContent>
                       <> • Jane Bou Jaoude, Founder & CEO</>

@@ -58,7 +58,7 @@ export function PaymentPlanSlider({
             className={cn(
               "h-7 px-2 text-xs gap-1",
               isDark 
-                ? "text-gray-500 hover:text-white hover:bg-[#2a2a2a]"
+                ? "text-gray-600 hover:text-white hover:bg-[#2a2a2a]"
                 : "text-black/60 hover:text-black hover:bg-champagne-light"
             )}
           >
@@ -70,10 +70,10 @@ export function PaymentPlanSlider({
       
       {/* Labels */}
       <div className="flex justify-between text-xs">
-        <span className={isDark ? "text-gray-500" : "text-black/60"}>
+        <span className={isDark ? "text-gray-600" : "text-black/60"}>
           Pre-Handover
         </span>
-        <span className={isDark ? "text-gray-500" : "text-black/60"}>
+        <span className={isDark ? "text-gray-600" : "text-black/60"}>
           Post-Handover
         </span>
       </div>
@@ -121,7 +121,7 @@ export function PaymentPlanSlider({
           htmlFor="post-handover" 
           className={cn(
             "text-sm cursor-pointer",
-            isDark ? "text-gray-400" : "text-black/80"
+            isDark ? "text-gray-600" : "text-black/80"
           )}
         >
           Only show projects with post-handover payments
@@ -150,7 +150,7 @@ export function PaymentPlanCompact({
   return (
     <div className={cn("space-y-2", className)}>
       <div className="flex items-center justify-between text-xs">
-        <span className={isDark ? "text-gray-500" : "text-black/60"}>
+        <span className={isDark ? "text-gray-600" : "text-black/60"}>
           Payment Plan: {value[0]}% - {value[1]}%
         </span>
       </div>

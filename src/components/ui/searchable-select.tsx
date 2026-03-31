@@ -88,7 +88,7 @@ export function SearchableSelect({
           className={cn(
             "w-full justify-between h-12 rounded-lg",
             !triggerClassName && "bg-white border-gold/30 text-black hover:bg-white hover:border-gold/60 hover:text-black",
-            !value && "text-gray-500",
+            !value && "text-gray-600",
             triggerClassName
           )}
         >
@@ -118,7 +118,7 @@ export function SearchableSelect({
               placeholder={searchPlaceholder}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="h-10 pl-9 bg-white border-gold/30 text-black placeholder:text-gray-400 focus:border-gold rounded-md"
+              className="h-10 pl-9 bg-white border-gold/30 text-black placeholder:text-gray-600 focus:border-gold rounded-md"
             />
           </div>
         </div>
@@ -135,7 +135,7 @@ export function SearchableSelect({
           }}
         >
           {filteredOptions.length === 0 ? (
-            <div className="py-6 text-center text-sm text-gray-500">
+            <div className="py-6 text-center text-sm text-gray-600">
               No results found
             </div>
           ) : (

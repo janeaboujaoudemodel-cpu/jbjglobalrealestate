@@ -98,7 +98,7 @@ export function HandoverDateRange({
             <div className="space-y-1.5">
               <label className={cn(
                 "text-xs",
-                isDark ? "text-gray-500" : "text-black/60"
+                isDark ? "text-gray-600" : "text-black/60"
               )}>
                 From
               </label>
@@ -135,7 +135,7 @@ export function HandoverDateRange({
             <div className="space-y-1.5">
               <label className={cn(
                 "text-xs",
-                isDark ? "text-gray-500" : "text-black/60"
+                isDark ? "text-gray-600" : "text-black/60"
               )}>
                 To
               </label>
@@ -178,7 +178,7 @@ export function HandoverDateRange({
               className={cn(
                 "w-full",
                 isDark 
-                  ? "text-gray-500 hover:text-white hover:bg-[#2a2a2a]"
+                  ? "text-gray-600 hover:text-white hover:bg-[#2a2a2a]"
                   : "text-black/60 hover:text-black hover:bg-champagne-light"
               )}
             >
@@ -235,7 +235,7 @@ export function HandoverDateInline({
         </SelectContent>
       </Select>
       
-      <span className={isDark ? "text-gray-500" : "text-black/40"}>–</span>
+      <span className={isDark ? "text-gray-600" : "text-black/40"}>–</span>
       
       <Select
         value={toYear?.toString() ?? "any"}

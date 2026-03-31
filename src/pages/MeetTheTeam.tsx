@@ -328,7 +328,7 @@ const MeetTheTeam: React.FC = () => {
                 </motion.h1>
 
                 <motion.p
-                  className="text-gray-400 text-lg max-w-2xl mx-auto mb-4"
+                  className="text-gray-600 text-lg max-w-2xl mx-auto mb-4"
                   variants={fadeInUp}
                 >
                   A world-class team of professionals dedicated to delivering
@@ -337,7 +337,7 @@ const MeetTheTeam: React.FC = () => {
 
                 {/* Company Summary */}
                 <motion.p
-                  className="text-gray-500 text-sm max-w-3xl mx-auto mb-6 italic"
+                  className="text-gray-600 text-sm max-w-3xl mx-auto mb-6 italic"
                   variants={fadeInUp}
                 >
                   {companySummary}

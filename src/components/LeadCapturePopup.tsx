@@ -217,7 +217,7 @@ const LeadCapturePopup = () => {
                 {isSubmitting ? "Submitting..." : "Get Full Access"}
               </Button>
 
-              <p className="text-[10px] text-gray-500 text-center">
+              <p className="text-[10px] text-gray-600 text-center">
                 By submitting, you agree to our Privacy Policy.
               </p>
             </form>

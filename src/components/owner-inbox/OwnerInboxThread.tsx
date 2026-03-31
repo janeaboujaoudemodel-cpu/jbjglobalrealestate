@@ -172,7 +172,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
               <h3 className="font-semibold text-black">
                 {thread.contact_name || thread.contact_identifier}
               </h3>
-              <p className="text-xs text-gray-500">{thread.contact_identifier}</p>
+              <p className="text-xs text-gray-600">{thread.contact_identifier}</p>
             </div>
           </div>
 
@@ -233,7 +233,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
             ) : messages.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
                 <Clock className="h-12 w-12 text-gold/30 mb-4" />
-                <p className="text-gray-500">No messages yet</p>
+                <p className="text-gray-600">No messages yet</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -266,13 +266,13 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                           <div className="h-1 flex-1 bg-gold/20 rounded-full">
                             <div className="h-full w-1/3 bg-gold rounded-full" />
                           </div>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-600">
                             {message.voice_duration_seconds || 0}s
                           </span>
                         </div>
                       )}
                       <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                      <div className="flex items-center justify-between mt-2 text-[10px] text-gray-500">
+                      <div className="flex items-center justify-between mt-2 text-[10px] text-gray-600">
                         <span>
                           {format(new Date(message.created_at), 'HH:mm')}
                         </span>
@@ -397,7 +397,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 </Button>
               </div>
             </div>
-            <p className="text-[10px] text-gray-500 mt-2 text-center">
+            <p className="text-[10px] text-gray-600 mt-2 text-center">
               Press <kbd className="px-1 py-0.5 bg-gray-100 rounded text-[10px]">Enter</kbd> to send • <kbd className="px-1 py-0.5 bg-gray-100 rounded text-[10px]">Shift+Enter</kbd> for new line
             </p>
           </div>
@@ -412,7 +412,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-black">{thread.lead.full_name}</h3>
-                  <p className="text-sm text-gray-500">CRM Lead</p>
+                  <p className="text-sm text-gray-600">CRM Lead</p>
                 </div>
               </div>
               <Button variant="outline" className="w-full border-gold/30">
@@ -422,8 +422,8 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
           ) : (
             <div className="flex flex-col items-center justify-center h-full text-center">
               <LinkIcon className="h-12 w-12 text-gold/30 mb-4" />
-              <p className="text-gray-500 font-medium">Not linked to a lead</p>
-              <p className="text-gray-500 text-sm mt-1">Link this conversation to an existing lead or create a new one</p>
+              <p className="text-gray-600 font-medium">Not linked to a lead</p>
+              <p className="text-gray-600 text-sm mt-1">Link this conversation to an existing lead or create a new one</p>
               <div className="flex gap-2 mt-4">
                 <Button variant="outline" className="border-gold/30">
                   Link to Lead
@@ -439,7 +439,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
         <TabsContent value="activity" className="flex-1 m-0 p-4 data-[state=inactive]:hidden">
           <div className="flex flex-col items-center justify-center h-full text-center">
             <FileText className="h-12 w-12 text-gold/30 mb-4" />
-            <p className="text-gray-500">Activity timeline coming soon</p>
+            <p className="text-gray-600">Activity timeline coming soon</p>
           </div>
         </TabsContent>
 
@@ -459,7 +459,7 @@ export default function OwnerInboxThread({ thread, onStatusChange, onClose }: Ow
                 >
                   <div>
                     <p className="font-medium text-sm">{template.name}</p>
-                    <p className="text-xs text-gray-500 truncate">{template.content.substring(0, 50)}...</p>
+                    <p className="text-xs text-gray-600 truncate">{template.content.substring(0, 50)}...</p>
                   </div>
                 </Button>
               ))}

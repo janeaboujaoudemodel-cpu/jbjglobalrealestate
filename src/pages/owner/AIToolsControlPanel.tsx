@@ -577,7 +577,7 @@ function FixCard({
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-medium text-white">{rec.title}</span>
             {rec.impact_level && (
-              <Badge className={`text-[10px] ${rec.impact_level === "high" ? "bg-red-500/20 text-red-300 border-red-500/40" : rec.impact_level === "medium" ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-gray-500/20 text-gray-400 border-gray-500/40"}`}>
+              <Badge className={`text-[10px] ${rec.impact_level === "high" ? "bg-red-500/20 text-red-300 border-red-500/40" : rec.impact_level === "medium" ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-gray-500/20 text-gray-600 border-gray-500/40"}`}>
                 {rec.impact_level}
               </Badge>
             )}

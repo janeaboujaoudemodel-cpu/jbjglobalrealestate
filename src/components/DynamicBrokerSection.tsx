@@ -212,7 +212,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
           </h2>
 
           {/* Subtitle */}
-          <p className="text-gray-500 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
+          <p className="text-gray-600 text-lg md:text-xl mb-10 max-w-2xl mx-auto">
             {content.subtitle}
           </p>
 
@@ -235,7 +235,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
 
           {/* User type selector (small pills) */}
           <div className="mt-12 flex flex-wrap items-center justify-center gap-2">
-            <span className="text-gray-500 text-sm mr-2">I am a:</span>
+            <span className="text-gray-600 text-sm mr-2">I am a:</span>
             {(Object.keys(CONTENT_BY_USER_TYPE) as UserType[]).map((type) => (
               <button
                 key={type}
@@ -246,7 +246,7 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
                 className={`px-3 py-1.5 text-xs rounded-full transition-all ${
                   userType === type
                     ? 'bg-gold text-black font-semibold'
-                    : 'bg-[hsl(38,35%,18%)] text-gray-500 hover:bg-[hsl(38,35%,22%)] hover:text-white'
+                    : 'bg-[hsl(38,35%,18%)] text-gray-600 hover:bg-[hsl(38,35%,22%)] hover:text-white'
                 }`}
               >
                 {type.charAt(0).toUpperCase() + type.slice(1)}

@@ -119,7 +119,7 @@ const ListingPortal = () => {
               <p className="text-gray-600 mb-2">
                 Submit your property for sale or rent — manually or with AI assistance.
               </p>
-              <p className="text-gray-500 text-sm">
+              <p className="text-gray-600 text-sm">
                 All listings are reviewed by our team and AI scoring before going live.
               </p>
             </motion.div>
@@ -220,7 +220,7 @@ const ListingPortal = () => {
                   <div className="relative p-4">
                     <button
                       onClick={() => setSelectedMethod(null)}
-                      className="flex items-center gap-2 text-gray-500 hover:text-gold text-sm mb-6 transition-colors"
+                      className="flex items-center gap-2 text-gray-600 hover:text-gold text-sm mb-6 transition-colors"
                     >
                       <ArrowRight className="w-4 h-4 rotate-180" />
                       Back to listing method
@@ -228,7 +228,7 @@ const ListingPortal = () => {
                     <h2 className="text-xl font-bold text-black text-center mb-2">
                       What would you like to list for?
                     </h2>
-                    <p className="text-gray-500 text-sm text-center mb-8">
+                    <p className="text-gray-600 text-sm text-center mb-8">
                       Choose whether you're listing your property for sale or for rent
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -293,18 +293,18 @@ const ListingPortal = () => {
         <div className="container mx-auto px-4 pb-20">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-black mb-2">Browse Listed Properties</h2>
-            <p className="text-gray-500 text-sm">Approved listings across the UAE</p>
+            <p className="text-gray-600 text-sm">Approved listings across the UAE</p>
           </div>
 
           {/* Search & Filters */}
           <div className="max-w-5xl mx-auto mb-8 space-y-4">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search by title or location..."
-                className="pl-12 bg-white border-gold/30 text-black placeholder:text-gray-400 h-12"
+                className="pl-12 bg-white border-gold/30 text-black placeholder:text-gray-600 h-12"
               />
             </div>
             <div className="space-y-2">
@@ -360,13 +360,13 @@ const ListingPortal = () => {
                 {loading ? (
                   <div className="text-center py-20">
                     <div className="w-8 h-8 border-2 border-gold/30 border-t-gold rounded-full animate-spin mx-auto mb-4" />
-                    <p className="text-gray-500">Loading listings...</p>
+                    <p className="text-gray-600">Loading listings...</p>
                   </div>
                 ) : filtered.length === 0 ? (
                   <div className="text-center py-20 bg-white/60 border border-gold/20 rounded-2xl">
-                    <Building className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+                    <Building className="w-12 h-12 text-gray-600 mx-auto mb-4" />
                     <h3 className="text-black font-semibold mb-2">No listings yet</h3>
-                    <p className="text-gray-500 text-sm mb-4">Be the first to submit a property listing!</p>
+                    <p className="text-gray-600 text-sm mb-4">Be the first to submit a property listing!</p>
                     <div className="flex gap-3 justify-center">
                       <Button
                         onClick={() => navigate('/seller-listing')}
@@ -395,7 +395,7 @@ const ListingPortal = () => {
                             <img src={listing.images[0]} alt={listing.title} className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center">
-                              <Building className="w-12 h-12 text-gray-500" />
+                              <Building className="w-12 h-12 text-gray-600" />
                             </div>
                           )}
                           {listing.is_featured && (
@@ -408,14 +408,14 @@ const ListingPortal = () => {
                         <div className="p-4">
                           <h3 className="text-black font-semibold text-sm mb-1 line-clamp-1">{listing.title}</h3>
                           {listing.location && (
-                            <p className="text-gray-500 text-xs flex items-center gap-1 mb-2">
+                            <p className="text-gray-600 text-xs flex items-center gap-1 mb-2">
                               <MapPin className="w-3 h-3" /> {listing.location}
                             </p>
                           )}
                           <p className="text-gold font-bold text-lg mb-3">
                             {formatPrice(listing.price, listing.currency)}
                           </p>
-                          <div className="flex gap-4 text-gray-500 text-xs">
+                          <div className="flex gap-4 text-gray-600 text-xs">
                             {listing.bedrooms > 0 && (
                               <span className="flex items-center gap-1"><Bed className="w-3.5 h-3.5" /> {listing.bedrooms}</span>
                             )}

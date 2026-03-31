@@ -63,7 +63,7 @@ const TrustAndCompliance = () => {
       <>
         <p>Your data is handled with the highest standards:</p>
         <ul className="list-disc pl-6 space-y-2 mt-4"><li>Encrypted communication channels</li><li>Controlled access to personal and financial data</li><li>Role-based permissions</li><li>No resale or commercial exploitation of personal data</li></ul>
-        <p className="text-sm text-gray-500 mt-4">For full details, refer to our <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>.</p>
+        <p className="text-sm text-gray-600 mt-4">For full details, refer to our <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>.</p>
       </>
     )},
     { id: "professional-network", num: 5, title: "Professional Network", content: (
@@ -113,7 +113,7 @@ const TrustAndCompliance = () => {
               <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
                 Institutional Standards. Transparent Operations. Verified Processes.
               </p>
-              <p className="text-gray-400 text-base md:text-lg max-w-3xl leading-relaxed">
+              <p className="text-gray-600 text-base md:text-lg max-w-3xl leading-relaxed">
                 We operate with full commitment to transparency, regulatory alignment, and professional standards.
               </p>
             </motion.div>
@@ -127,7 +127,7 @@ const TrustAndCompliance = () => {
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Contents</p>
               <nav className="space-y-1 border-l border-[#C8A766]/20">
                 {tocItems.map(({ id, label }) => (
-                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-gray-500 hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
+                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-gray-600 hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
                 ))}
               </nav>
             </div>
@@ -136,7 +136,7 @@ const TrustAndCompliance = () => {
           <main className="flex-1 min-w-0">
             <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80">
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
-              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-gray-500 hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
+              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-gray-600 hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
             </div>
             {sections.map((s, i) => (
               <div key={s.id}>
@@ -148,7 +148,7 @@ const TrustAndCompliance = () => {
               </div>
             ))}
             <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
-              <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+              <p className="text-gray-600 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
                 <span className="text-gray-600">|</span>

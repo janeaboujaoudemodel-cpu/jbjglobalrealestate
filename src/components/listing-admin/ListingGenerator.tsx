@@ -720,7 +720,7 @@ const ListingGenerator = () => {
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
               step === s ? "bg-gold text-black" :
               (["input", "processing", "preview"].indexOf(step) > i) ? "bg-gold/30 text-gold" :
-              "bg-gray-200 text-gray-500"
+              "bg-gray-200 text-gray-600"
             }`}>
               {i + 1}
             </div>

@@ -203,7 +203,7 @@ const AreaGuides = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10"
+            className="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto mb-10"
           >
             Discover the UAE's most prestigious communities across all seven emirates
           </motion.p>
@@ -422,7 +422,7 @@ const AreaGuides = () => {
                                   .trim()}
                               </p>
                             ) : (
-                              <p className="text-gray-500 text-xs italic">
+                              <p className="text-gray-600 text-xs italic">
                                 Explore properties in {area.name}
                               </p>
                             )}
@@ -438,7 +438,7 @@ const AreaGuides = () => {
                             )}
                             {(area.developer_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
-                                <span className="text-gray-500">{area.developer_count} Developers</span>
+                                <span className="text-gray-600">{area.developer_count} Developers</span>
                               </div>
                             )}
                             {area.is_trending && (
@@ -454,7 +454,7 @@ const AreaGuides = () => {
                               </div>
                             )}
                             {(area.property_count ?? 0) === 0 && (area.developer_count ?? 0) === 0 && !area.is_trending && (
-                              <span className="text-gray-500 text-xs">View area details</span>
+                              <span className="text-gray-600 text-xs">View area details</span>
                             )}
                           </div>
                         </div>

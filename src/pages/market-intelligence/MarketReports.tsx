@@ -378,7 +378,7 @@ const MarketReportsPage = () => {
                           <p className="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">{report.description}</p>
 
                           <div className="flex items-center justify-between pt-4 border-t border-gold/30">
-                            <div className="flex items-center gap-2 text-gray-500 text-xs">
+                            <div className="flex items-center gap-2 text-gray-600 text-xs">
                               <Calendar className="w-3 h-3" />
                               {new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </div>

@@ -274,7 +274,7 @@ const Automations = () => {
                         ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-gold/40' 
                         : 'bg-gray-100 border-gray-200'
                     }`}>
-                      <rule.icon className={`h-5 w-5 ${rule.isActive ? 'text-black' : 'text-gray-500'}`} />
+                      <rule.icon className={`h-5 w-5 ${rule.isActive ? 'text-black' : 'text-gray-600'}`} />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
@@ -287,14 +287,14 @@ const Automations = () => {
                       </div>
                       <p className="text-sm text-gray-600 mt-0.5">{rule.description}</p>
                       <div className="flex items-center gap-4 mt-2">
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-600">
                           <strong className="text-black">Trigger:</strong> {rule.trigger}
                         </span>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-600">
                           <strong className="text-black">Action:</strong> {rule.action}
                         </span>
                         {rule.frequency && (
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-600">
                             <strong className="text-black">Frequency:</strong> {rule.frequency}
                           </span>
                         )}
@@ -305,7 +305,7 @@ const Automations = () => {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      className="text-gray-500 hover:text-gold hover:bg-gold/10"
+                      className="text-gray-600 hover:text-gold hover:bg-gold/10"
                       onClick={() => toast.info(`Settings for "${rule.name}" - Configuration panel coming soon`)}
                     >
                       <Settings className="h-4 w-4" />

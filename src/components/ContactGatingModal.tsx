@@ -418,7 +418,7 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
 
             <button 
               onClick={() => setStep('form')}
-              className="w-full text-sm text-gray-500 hover:text-gray-700"
+              className="w-full text-sm text-gray-600 hover:text-gray-700"
             >
               ← Back to form
             </button>

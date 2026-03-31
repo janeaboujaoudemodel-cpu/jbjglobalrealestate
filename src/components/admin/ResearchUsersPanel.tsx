@@ -200,12 +200,12 @@ export default function ResearchUsersPanel() {
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-[200px]">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
           <Input
             placeholder="Search by email, name, phone..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 bg-white/80 border-gold/40 text-black placeholder:text-gray-400"
+            className="pl-9 bg-white/80 border-gold/40 text-black placeholder:text-gray-600"
           />
         </div>
         <Select value={segmentFilter} onValueChange={setSegmentFilter}>
@@ -252,11 +252,11 @@ export default function ResearchUsersPanel() {
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center text-gray-500 py-12">Loading...</TableCell>
+                    <TableCell colSpan={10} className="text-center text-gray-600 py-12">Loading...</TableCell>
                   </TableRow>
                 ) : filtered.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={10} className="text-center text-gray-500 py-12">
+                    <TableCell colSpan={10} className="text-center text-gray-600 py-12">
                       No user summaries yet. Run the profile summarization job to populate data.
                     </TableCell>
                   </TableRow>

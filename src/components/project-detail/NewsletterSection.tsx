@@ -117,7 +117,7 @@ export function NewsletterSection() {
                           <Input 
                             placeholder="Full Name *"
                             {...field}
-                            className="bg-zinc-900 border-2 border-gold/50 hover:border-gold focus:border-gold h-12 text-white placeholder:text-gray-400 pl-10"
+                            className="bg-zinc-900 border-2 border-gold/50 hover:border-gold focus:border-gold h-12 text-white placeholder:text-gray-600 pl-10"
                           />
                         </div>
                       </FormControl>
@@ -139,7 +139,7 @@ export function NewsletterSection() {
                             type="email"
                             placeholder="Email Address *"
                             {...field}
-                            className="bg-zinc-900 border-2 border-gold/50 hover:border-gold focus:border-gold h-12 text-white placeholder:text-gray-400 pl-10"
+                            className="bg-zinc-900 border-2 border-gold/50 hover:border-gold focus:border-gold h-12 text-white placeholder:text-gray-600 pl-10"
                           />
                         </div>
                       </FormControl>

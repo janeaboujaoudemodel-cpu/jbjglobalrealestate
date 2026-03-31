@@ -44,7 +44,7 @@ const ChatAgentJoining = ({ agent, userFirstName, onAgentReady }: ChatAgentJoini
           className="text-center mb-8"
         >
           <h3 className="text-gold text-lg font-semibold">JBJ GLOBAL REAL ESTATE</h3>
-          <p className="text-gray-500 text-sm"><T>Chat Support</T></p>
+          <p className="text-gray-600 text-sm"><T>Chat Support</T></p>
         </motion.div>
 
         {/* Status Message */}

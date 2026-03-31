@@ -1480,9 +1480,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 <div className="space-y-3">
                   {selectedImport.developer_name && (
                     <div className="flex items-center gap-2">
-                      <Building2 className="h-4 w-4 text-gray-500" />
+                      <Building2 className="h-4 w-4 text-gray-600" />
                       <span className="text-sm">
-                        <span className="text-gray-500">Developer:</span>{' '}
+                        <span className="text-gray-600">Developer:</span>{' '}
                         <span className="font-medium">{selectedImport.developer_name}</span>
                       </span>
                     </div>
@@ -1490,9 +1490,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                   
                   {selectedImport.location && (
                     <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-gray-500" />
+                      <MapPin className="h-4 w-4 text-gray-600" />
                       <span className="text-sm">
-                        <span className="text-gray-500">Location:</span>{' '}
+                        <span className="text-gray-600">Location:</span>{' '}
                         <span className="font-medium">{selectedImport.location}</span>
                       </span>
                     </div>
@@ -1500,9 +1500,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
                   {selectedImport.handover_date && (
                     <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-gray-500" />
+                      <Calendar className="h-4 w-4 text-gray-600" />
                       <span className="text-sm">
-                        <span className="text-gray-500">Handover:</span>{' '}
+                        <span className="text-gray-600">Handover:</span>{' '}
                         <span className="font-medium">{selectedImport.handover_date}</span>
                       </span>
                     </div>
@@ -1510,9 +1510,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
                   {(selectedImport.bedrooms_min || selectedImport.bedrooms_max) && (
                     <div className="flex items-center gap-2">
-                      <Bed className="h-4 w-4 text-gray-500" />
+                      <Bed className="h-4 w-4 text-gray-600" />
                       <span className="text-sm">
-                        <span className="text-gray-500">Bedrooms:</span>{' '}
+                        <span className="text-gray-600">Bedrooms:</span>{' '}
                         <span className="font-medium">
                           {selectedImport.bedrooms_min === selectedImport.bedrooms_max
                             ? selectedImport.bedrooms_min
@@ -1526,9 +1526,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                 <div className="space-y-3">
                   {selectedImport.price_from && (
                     <div className="flex items-center gap-2">
-                      <DollarSign className="h-4 w-4 text-gray-500" />
+                      <DollarSign className="h-4 w-4 text-gray-600" />
                       <span className="text-sm">
-                        <span className="text-gray-500">Price From:</span>{' '}
+                        <span className="text-gray-600">Price From:</span>{' '}
                         <span className="font-medium">{formatPrice(selectedImport.price_from)}</span>
                       </span>
                     </div>
@@ -1536,9 +1536,9 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
 
                   {selectedImport.size_min && (
                     <div className="flex items-center gap-2">
-                      <Ruler className="h-4 w-4 text-gray-500" />
+                      <Ruler className="h-4 w-4 text-gray-600" />
                       <span className="text-sm">
-                        <span className="text-gray-500">Size:</span>{' '}
+                        <span className="text-gray-600">Size:</span>{' '}
                         <span className="font-medium">
                           {selectedImport.size_min?.toLocaleString()} - {selectedImport.size_max?.toLocaleString()} sq ft
                         </span>
@@ -1592,7 +1592,7 @@ export function ProjectApprovalQueue({ onRefresh, jobId }: ProjectApprovalQueueP
                         rel="noopener noreferrer"
                         className="flex items-center gap-2 px-3 py-2 bg-gray-100 rounded hover:bg-gray-200 transition-colors text-sm"
                       >
-                        <FileText className="h-4 w-4 text-gray-500" />
+                        <FileText className="h-4 w-4 text-gray-600" />
                         {doc.name || doc.type}
                       </a>
                     ))}

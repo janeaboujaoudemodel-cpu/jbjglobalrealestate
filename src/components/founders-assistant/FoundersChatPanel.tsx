@@ -586,7 +586,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   <cmd.icon className="w-4 h-4 text-[hsl(var(--gold))] mt-0.5" />
                   <div>
                     <p className="text-sm text-black group-hover:text-[hsl(var(--gold))] transition-colors">{cmd.label}</p>
-                    <p className="text-xs text-gray-500">{cmd.description}</p>
+                    <p className="text-xs text-gray-600">{cmd.description}</p>
                   </div>
                 </button>
               ))}
@@ -611,7 +611,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   </div>
                   <div className="text-left flex-1">
                     <p className="text-sm text-black">{member.name}</p>
-                    <p className="text-xs text-gray-500">{member.role}</p>
+                    <p className="text-xs text-gray-600">{member.role}</p>
                   </div>
                   {member.isAI && <Sparkles className="w-4 h-4 text-[hsl(var(--gold))] flex-shrink-0" />}
                 </button>
@@ -632,8 +632,8 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
               <div key={file.id} className="flex items-center gap-2 bg-white border border-[hsl(var(--gold))]/30 rounded-lg px-3 py-1.5 text-xs shadow-sm">
                 {getFileIcon(file.type)}
                 <span className="text-black truncate max-w-[120px]">{file.name}</span>
-                <span className="text-gray-500">{formatFileSize(file.size)}</span>
-                <button onClick={() => removePendingFile(file.id)} className="text-gray-500 hover:text-red-500 transition-colors">
+                <span className="text-gray-600">{formatFileSize(file.size)}</span>
+                <button onClick={() => removePendingFile(file.id)} className="text-gray-600 hover:text-red-500 transition-colors">
                   <X className="w-3 h-3" />
                 </button>
               </div>
@@ -656,10 +656,10 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
           <div className="relative flex-1">
             <Input ref={inputRef} value={input} onChange={handleInputChange} onKeyPress={handleKeyPress}
               placeholder="Type your message or command..."
-              className="flex-1 bg-white border-2 border-[hsl(var(--gold))]/30 text-black placeholder:text-gray-400 focus:border-[hsl(var(--gold))] pr-10 h-11"
+              className="flex-1 bg-white border-2 border-[hsl(var(--gold))]/30 text-black placeholder:text-gray-600 focus:border-[hsl(var(--gold))] pr-10 h-11"
               disabled={isLoading} />
             <button onClick={() => setShowCommands(!showCommands)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[hsl(var(--gold))] transition-colors" title="Show commands">
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-[hsl(var(--gold))] transition-colors" title="Show commands">
               <Command className="w-4 h-4" />
             </button>
           </div>
@@ -694,7 +694,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                   </>
                 ) : (
                   <>
-                    <Button variant="ghost" size="sm" className="h-7 text-xs text-gray-500" onClick={() => setSelectMode(true)}>
+                    <Button variant="ghost" size="sm" className="h-7 text-xs text-gray-600" onClick={() => setSelectMode(true)}>
                       <CheckSquare className="w-3 h-3 mr-1" /> Select
                     </Button>
                     {sessions.length > 0 && (
@@ -712,8 +712,8 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
             {sessions.length === 0 ? (
               <div className="text-center py-12">
                 <MessageSquare className="w-10 h-10 text-[hsl(var(--gold))]/30 mx-auto mb-3" />
-                <p className="text-sm text-gray-500">No chat history yet</p>
-                <p className="text-xs text-gray-500 mt-1">Start a conversation with Amanda</p>
+                <p className="text-sm text-gray-600">No chat history yet</p>
+                <p className="text-xs text-gray-600 mt-1">Start a conversation with Amanda</p>
               </div>
             ) : (
               <div className="space-y-2 pb-4">
@@ -746,11 +746,11 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                       </div>
                     )}
                     <MessageSquare className={`w-4 h-4 flex-shrink-0 ${
-                      activeSessionId === session.id ? 'text-[hsl(var(--gold))]' : 'text-gray-500'
+                      activeSessionId === session.id ? 'text-[hsl(var(--gold))]' : 'text-gray-600'
                     }`} />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-black truncate">{session.title}</p>
-                      <p className="text-[10px] text-gray-500 flex items-center gap-1 mt-0.5">
+                      <p className="text-[10px] text-gray-600 flex items-center gap-1 mt-0.5">
                         <Clock className="w-2.5 h-2.5" />
                         {formatDistanceToNow(new Date(session.updated_at), { addSuffix: true })}
                         {session.message_count > 0 && (
@@ -762,7 +762,7 @@ const FoundersChatPanel: React.FC<FoundersChatPanelProps> = ({ userName, fullScr
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-7 w-7 text-gray-500 hover:text-red-500 flex-shrink-0"
+                        className="h-7 w-7 text-gray-600 hover:text-red-500 flex-shrink-0"
                         onClick={(e) => { e.stopPropagation(); deleteSession(session.id); }}
                       >
                         <Trash2 className="w-3.5 h-3.5" />

@@ -44,7 +44,7 @@ function LandingPreview({ data }: { data: LPData }) {
       <div className="px-6 py-10 text-center" style={{ background: `${data.primaryColor}18` }}>
         <h1 className="text-2xl font-black" style={{ color: data.primaryColor }}>{data.businessName || "Your Business Name"}</h1>
         <p className="text-base text-gray-600 mt-2 max-w-sm mx-auto">{data.tagline || "Your compelling tagline goes here"}</p>
-        <p className="text-xs text-gray-500 mt-3 max-w-md mx-auto">{data.description || "A brief description of your business and what makes you unique."}</p>
+        <p className="text-xs text-gray-600 mt-3 max-w-md mx-auto">{data.description || "A brief description of your business and what makes you unique."}</p>
         <button className="mt-4 px-5 py-2 rounded-full text-white text-xs font-semibold" style={{ background: data.primaryColor }}>
           Get In Touch →
         </button>
@@ -64,7 +64,7 @@ function LandingPreview({ data }: { data: LPData }) {
 
       {/* Contact */}
       <div className="px-6 py-5 border-t border-gray-100">
-        <div className="flex flex-wrap gap-3 text-xs text-gray-500 justify-center">
+        <div className="flex flex-wrap gap-3 text-xs text-gray-600 justify-center">
           {data.phone && <span>Phone: {data.phone}</span>}
           {data.email && <span>Email: {data.email}</span>}
           {data.address && <span>Address: {data.address}</span>}

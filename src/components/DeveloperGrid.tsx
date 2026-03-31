@@ -82,7 +82,7 @@ const DeveloperGrid = () => {
       />
 
       {hasFiltersApplied && (
-        <p className="text-gray-400 mb-8">
+        <p className="text-gray-600 mb-8">
           Found <span className="text-white font-semibold">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? "s" : ""}
         </p>
       )}
@@ -116,7 +116,7 @@ const DeveloperGrid = () => {
 
               {/* Developer Description */}
               {developer.description && (
-                <p className="text-gray-400 text-lg max-w-4xl mb-6 leading-relaxed">
+                <p className="text-gray-600 text-lg max-w-4xl mb-6 leading-relaxed">
                   {developer.description}
                 </p>
               )}
@@ -124,31 +124,31 @@ const DeveloperGrid = () => {
               {/* Developer Stats */}
               <div className="flex flex-wrap gap-6 text-sm">
                 {developer.founded_year && (
-                  <div className="flex items-center gap-2 text-gray-500">
+                  <div className="flex items-center gap-2 text-gray-600">
                     <Calendar className="w-4 h-4 text-gold" />
                     <span>Est. {developer.founded_year}</span>
                   </div>
                 )}
                 {developer.completed_projects && (
-                  <div className="flex items-center gap-2 text-gray-500">
+                  <div className="flex items-center gap-2 text-gray-600">
                     <Building2 className="w-4 h-4 text-gold" />
                     <span>{developer.completed_projects.toLocaleString()}+ Units Delivered</span>
                   </div>
                 )}
                 {developer.offplan_projects && (
-                  <div className="flex items-center gap-2 text-gray-500">
+                  <div className="flex items-center gap-2 text-gray-600">
                     <Briefcase className="w-4 h-4 text-gold" />
                     <span>{developer.offplan_projects} Active Projects</span>
                   </div>
                 )}
                 {developer.portfolio_worth && (
-                  <div className="flex items-center gap-2 text-gray-500">
+                  <div className="flex items-center gap-2 text-gray-600">
                     <DollarSign className="w-4 h-4 text-gold" />
                     <span>Portfolio: {formatPortfolioWorth(developer.portfolio_worth)}</span>
                   </div>
                 )}
                 {developer.headquarters && (
-                  <div className="flex items-center gap-2 text-gray-500">
+                  <div className="flex items-center gap-2 text-gray-600">
                     <span className="text-gold">📍</span>
                     <span>{(() => {
                       const parts = developer.headquarters.split(',').map((s: string) => s.trim());
@@ -218,7 +218,7 @@ const DeveloperGrid = () => {
                       </p>
                     )}
                     {project.bedrooms_min && (
-                      <p className="text-gray-500 text-sm mb-3">
+                      <p className="text-gray-600 text-sm mb-3">
                         {project.bedrooms_min === project.bedrooms_max
                           ? `${project.bedrooms_min} Bedrooms`
                           : `${project.bedrooms_min}-${project.bedrooms_max} Bedrooms`}
@@ -253,7 +253,7 @@ const DeveloperGrid = () => {
 
         {(!projectsByDeveloper || projectsByDeveloper.length === 0) && (
           <div className="text-center py-20 bg-zinc-900 rounded-lg">
-            <p className="text-gray-400 text-lg mb-2">
+            <p className="text-gray-600 text-lg mb-2">
               {hasFiltersApplied ? "No projects match your filters" : "No projects available yet"}
             </p>
             {hasFiltersApplied && (

@@ -128,7 +128,7 @@ const OwnerDashboard = () => {
       case 'sold':
         return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Sold</Badge>;
       default:
-        return <Badge className="bg-gray-500/20 text-gray-500 border-gray-500/30">{status}</Badge>;
+        return <Badge className="bg-gray-500/20 text-gray-600 border-gray-500/30">{status}</Badge>;
     }
   };
 

@@ -168,7 +168,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
       {isAnalyzing && (
         <div className="flex items-center gap-3 p-4 bg-white rounded-lg border border-gold/20">
           <Loader2 className="w-5 h-5 text-gold animate-spin" />
-          <span className="text-gray-500">Analyzing document...</span>
+          <span className="text-gray-600">Analyzing document...</span>
         </div>
       )}
 
@@ -210,7 +210,7 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
               <div className="flex items-center gap-2 text-black">
                 <ArrowRight className="w-4 h-4 text-gold" />
                 <span className="font-medium">{matchResult.projectName}</span>
-                <span className="text-gray-500">by {matchResult.developerName}</span>
+                <span className="text-gray-600">by {matchResult.developerName}</span>
               </div>
 
               {matchResult.matchedKeywords.length > 0 && (
@@ -287,10 +287,10 @@ export function SmartDocumentUploader({ projects, onUploadComplete }: SmartDocum
 
       {/* Empty State */}
       {!selectedFile && (
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-gray-600">
           <Upload className="w-12 h-12 mx-auto mb-2 text-gold/40" />
-          <p className="text-gray-500">Select a document to automatically detect the project</p>
-          <p className="text-sm mt-1 text-gray-500">Duplicates will be blocked</p>
+          <p className="text-gray-600">Select a document to automatically detect the project</p>
+          <p className="text-sm mt-1 text-gray-600">Duplicates will be blocked</p>
         </div>
       )}
     </div>

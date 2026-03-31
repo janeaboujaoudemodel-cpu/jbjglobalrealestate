@@ -88,25 +88,25 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {project.price_from && (
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-gray-500 text-sm">Starting Price</p>
+                <p className="text-gray-600 text-sm">Starting Price</p>
                 <p className="text-lg font-semibold text-primary">{formatPrice(project.price_from)}</p>
               </div>
             )}
             {project.handover_date && (
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-gray-500 text-sm">Handover</p>
+                <p className="text-gray-600 text-sm">Handover</p>
                 <p className="text-lg font-semibold text-black">{project.handover_date}</p>
               </div>
             )}
             {project.payment_plan && (
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-gray-500 text-sm">Payment Plan</p>
+                <p className="text-gray-600 text-sm">Payment Plan</p>
                 <p className="text-lg font-semibold text-black">{project.payment_plan}</p>
               </div>
             )}
             {project.bedrooms_min && (
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-gray-500 text-sm">Bedrooms</p>
+                <p className="text-gray-600 text-sm">Bedrooms</p>
                 <p className="text-lg font-semibold text-black">
                   {project.bedrooms_min === project.bedrooms_max 
                     ? `${project.bedrooms_min} BR` 
@@ -164,7 +164,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
                   </div>
                   {doc.file_url.endsWith('.pdf') ? (
                     <div className="aspect-[4/3] bg-gray-100 rounded flex items-center justify-center">
-                      <FileText className="w-12 h-12 text-gray-500" />
+                      <FileText className="w-12 h-12 text-gray-600" />
                     </div>
                   ) : (
                     <img 
@@ -177,7 +177,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">Floor plans coming soon.</p>
+            <p className="text-gray-600">Floor plans coming soon.</p>
           )}
         </div>
       </TabsContent>
@@ -198,7 +198,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500">Amenities information coming soon.</p>
+            <p className="text-gray-600">Amenities information coming soon.</p>
           )}
         </div>
       </TabsContent>
@@ -245,7 +245,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
                     <FileText className="w-5 h-5 text-primary" />
                     <span className="font-medium text-black">{doc.file_name || 'Payment Plan Document'}</span>
                   </div>
-                  <Download className="w-5 h-5 text-gray-500" />
+                  <Download className="w-5 h-5 text-gray-600" />
                 </a>
               ))}
             </div>
@@ -280,8 +280,8 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
             </div>
           ) : (
             <div className="bg-white p-6 rounded-lg border border-gray-200 text-center">
-              <FileText className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-              <p className="text-gray-500">Brochure coming soon. Contact us for more information.</p>
+              <FileText className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+              <p className="text-gray-600">Brochure coming soon. Contact us for more information.</p>
             </div>
           )}
         </div>

@@ -231,7 +231,7 @@ const PhotoRedesignForm = ({
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe what you'd like to change: remove furniture, add plants, change lighting, update color scheme..."
-          className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 min-h-[100px] focus:border-blue-500/50"
+          className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-600 min-h-[100px] focus:border-blue-500/50"
           maxLength={1000}
         />
       </div>

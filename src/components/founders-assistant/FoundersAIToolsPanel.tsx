@@ -81,7 +81,7 @@ const ALL_CATEGORIES = ['All', 'Communication', 'Lead & Sales', 'Property Intell
 const statusConfig = {
   connected: { label: 'Connected', color: 'bg-green-50 text-green-700 border-green-200', icon: <CheckCircle className="w-3 h-3" /> },
   available: { label: 'Available', color: 'bg-blue-50 text-blue-700 border-blue-200', icon: <Clock className="w-3 h-3" /> },
-  coming_soon: { label: 'Coming Soon', color: 'bg-gray-100 text-gray-500 border-gray-200', icon: <AlertCircle className="w-3 h-3" /> },
+  coming_soon: { label: 'Coming Soon', color: 'bg-gray-100 text-gray-600 border-gray-200', icon: <AlertCircle className="w-3 h-3" /> },
 };
 
 const FoundersAIToolsPanel: React.FC = () => {
@@ -176,7 +176,7 @@ const FoundersAIToolsPanel: React.FC = () => {
       <Card className={`bg-white border-2 border-[#B89555]/20 hover:border-[#B89555]/40 hover:shadow-[0_0_20px_rgba(200,167,102,0.2)] transition-all h-full ${executingTool === tool.id ? 'ring-2 ring-[#B89555]/50' : ''}`}>
         <CardContent className="p-4 flex flex-col h-full">
           <div className="flex items-start justify-between mb-3">
-            <div className={`p-2.5 rounded-lg ${tool.status === 'connected' ? 'bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/30' : 'bg-gray-100 text-gray-500 border border-gray-200'}`}>
+            <div className={`p-2.5 rounded-lg ${tool.status === 'connected' ? 'bg-[#B89555]/10 text-[#B89555] border border-[#B89555]/30' : 'bg-gray-100 text-gray-600 border border-gray-200'}`}>
               {tool.icon}
             </div>
             <Badge className={`${statusConfig[tool.status].color} border`}>
@@ -185,16 +185,16 @@ const FoundersAIToolsPanel: React.FC = () => {
             </Badge>
           </div>
           <h4 className="text-black font-semibold mb-1">{tool.name}</h4>
-          <p className="text-sm text-gray-500 flex-1">{tool.description}</p>
+          <p className="text-sm text-gray-600 flex-1">{tool.description}</p>
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#B89555]/10">
-            <span className="text-xs text-gray-500">{tool.category}</span>
+            <span className="text-xs text-gray-600">{tool.category}</span>
             <Button
               size="sm"
               onClick={() => handleUseTool(tool)}
               disabled={tool.status === 'coming_soon' || executingTool === tool.id}
               className={tool.status === 'connected'
                 ? 'bg-white text-[#B89555] border-2 border-[#B89555]/30 hover:bg-transparent hover:border-[#B89555]'
-                : 'bg-gray-100 text-gray-500 border border-gray-200'
+                : 'bg-gray-100 text-gray-600 border border-gray-200'
               }
             >
               {executingTool === tool.id ? (
@@ -221,7 +221,7 @@ const FoundersAIToolsPanel: React.FC = () => {
               </div>
               <div>
                 <p className="text-3xl font-bold text-[#B89555]">{connectedCount}</p>
-                <p className="text-xs text-gray-500">Tools Connected</p>
+                <p className="text-xs text-gray-600">Tools Connected</p>
               </div>
             </div>
           </CardContent>
@@ -234,7 +234,7 @@ const FoundersAIToolsPanel: React.FC = () => {
               </div>
               <div>
                 <p className="text-3xl font-bold text-green-600">{usageStats.totalExecutions}</p>
-                <p className="text-xs text-gray-500">Total Executions</p>
+                <p className="text-xs text-gray-600">Total Executions</p>
               </div>
             </div>
           </CardContent>
@@ -247,7 +247,7 @@ const FoundersAIToolsPanel: React.FC = () => {
               </div>
               <div>
                 <p className="text-3xl font-bold text-blue-600">{usageStats.totalExecutions > 0 ? `${usageStats.avgSuccessRate}%` : '--'}</p>
-                <p className="text-xs text-gray-500">Avg Success Rate</p>
+                <p className="text-xs text-gray-600">Avg Success Rate</p>
               </div>
             </div>
           </CardContent>
@@ -312,7 +312,7 @@ const FoundersAIToolsPanel: React.FC = () => {
           <div className="space-y-6">
             {Object.entries(groupedTools).map(([category, tools]) => (
               <div key={category}>
-                <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">{category}</h4>
+                <h4 className="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-3">{category}</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {tools.map((tool, index) => renderToolCard(tool, index))}
                 </div>

@@ -13,7 +13,7 @@ const CompanyComm = () => {
       >
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-white mb-2">Company Communication</h1>
-          <p className="text-gray-500">Connect with your team across all departments</p>
+          <p className="text-gray-600">Connect with your team across all departments</p>
         </div>
         
         <CompanyCommunicationHub />

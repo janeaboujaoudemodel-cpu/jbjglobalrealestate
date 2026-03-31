@@ -136,7 +136,7 @@ export function BrokerActivityMonitor() {
       <Card className="bg-zinc-900 border-gray-800">
         <CardContent className="p-8 text-center">
           <RefreshCw className="h-8 w-8 text-gold animate-spin mx-auto" />
-          <p className="text-gray-400 mt-4">Loading activity monitor...</p>
+          <p className="text-gray-600 mt-4">Loading activity monitor...</p>
         </CardContent>
       </Card>
     );
@@ -152,7 +152,7 @@ export function BrokerActivityMonitor() {
             </div>
             <div>
               <CardTitle className="text-white">Broker Activity Monitor</CardTitle>
-              <p className="text-gray-400 text-sm mt-1">
+              <p className="text-gray-600 text-sm mt-1">
                 Real-time performance tracking
               </p>
             </div>
@@ -163,7 +163,7 @@ export function BrokerActivityMonitor() {
               size="sm"
               onClick={refreshStats}
               disabled={refreshing}
-              className="border-gray-700 text-gray-300"
+              className="border-gray-700 text-gray-600"
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
               Refresh
@@ -185,28 +185,28 @@ export function BrokerActivityMonitor() {
           <div className="p-4 rounded-lg bg-zinc-800 border border-gray-700 text-center">
             <Users className="h-6 w-6 text-blue-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalLeads}</div>
-            <div className="text-xs text-gray-400">Leads Contacted</div>
+            <div className="text-xs text-gray-600">Leads Contacted</div>
           </div>
           <div className="p-4 rounded-lg bg-zinc-800 border border-gray-700 text-center">
             <MessageSquare className="h-6 w-6 text-emerald-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalMessages}</div>
-            <div className="text-xs text-gray-400">Messages Sent</div>
+            <div className="text-xs text-gray-600">Messages Sent</div>
           </div>
           <div className="p-4 rounded-lg bg-zinc-800 border border-gray-700 text-center">
             <Phone className="h-6 w-6 text-purple-400 mx-auto mb-2" />
             <div className="text-2xl font-bold text-white">{todayTotals.totalCalls}</div>
-            <div className="text-xs text-gray-400">Calls Made</div>
+            <div className="text-xs text-gray-600">Calls Made</div>
           </div>
           <div className="p-4 rounded-lg bg-zinc-800 border border-gray-700 text-center">
             <TrendingUp className="h-6 w-6 text-gold mx-auto mb-2" />
             <div className="text-2xl font-bold text-gold">{todayTotals.avgConversion}%</div>
-            <div className="text-xs text-gray-400">Conversion Rate</div>
+            <div className="text-xs text-gray-600">Conversion Rate</div>
           </div>
         </div>
 
         {/* Individual Broker Stats */}
         <div className="space-y-3">
-          <h4 className="text-sm font-medium text-gray-400">Broker Performance</h4>
+          <h4 className="text-sm font-medium text-gray-600">Broker Performance</h4>
           
           {stats.map((stat) => (
             <div
@@ -233,7 +233,7 @@ export function BrokerActivityMonitor() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-gray-400">
+                <div className="flex items-center gap-2 text-gray-600">
                   <Clock className="h-4 w-4" />
                   <span className="text-sm">Avg: {formatTime(stat.avgResponseTime)}</span>
                 </div>
@@ -242,26 +242,26 @@ export function BrokerActivityMonitor() {
               <div className="grid grid-cols-4 gap-4 text-center">
                 <div>
                   <div className="text-lg font-semibold text-white">{stat.leadsContacted}</div>
-                  <div className="text-xs text-gray-400">Leads</div>
+                  <div className="text-xs text-gray-600">Leads</div>
                 </div>
                 <div>
                   <div className="text-lg font-semibold text-white">{stat.messagesSent}</div>
-                  <div className="text-xs text-gray-400">Messages</div>
+                  <div className="text-xs text-gray-600">Messages</div>
                 </div>
                 <div>
                   <div className="text-lg font-semibold text-white">{stat.callsMade}</div>
-                  <div className="text-xs text-gray-400">Calls</div>
+                  <div className="text-xs text-gray-600">Calls</div>
                 </div>
                 <div>
                   <div className="text-lg font-semibold text-gold">{stat.conversionRate}%</div>
-                  <div className="text-xs text-gray-400">Conversion</div>
+                  <div className="text-xs text-gray-600">Conversion</div>
                 </div>
               </div>
             </div>
           ))}
 
           {stats.length === 0 && (
-            <div className="text-center py-8 text-gray-400">
+            <div className="text-center py-8 text-gray-600">
               No active brokers found
             </div>
           )}

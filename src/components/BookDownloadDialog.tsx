@@ -139,7 +139,7 @@ export default function BookDownloadDialog({
             <p className="text-black/60 text-sm">
               Your copy of <span className="font-semibold text-black">{bookTitle}</span> is being prepared. Redirecting you now...
             </p>
-            <div className="flex items-center justify-center gap-2 text-gray-500">
+            <div className="flex items-center justify-center gap-2 text-gray-600">
               <Loader2 className="w-4 h-4 animate-spin" />
               <span className="text-xs">Preparing book...</span>
             </div>
@@ -153,7 +153,7 @@ export default function BookDownloadDialog({
                 <DialogTitle className="text-lg font-bold text-white tracking-tight">Free Download</DialogTitle>
               </div>
               <p className="text-gold text-sm font-semibold">{bookTitle}</p>
-              <p className="text-gray-500 text-xs mt-1">2026 Edition • By JBJ Global Real Estate</p>
+              <p className="text-gray-600 text-xs mt-1">2026 Edition • By JBJ Global Real Estate</p>
             </div>
 
             {/* Form */}

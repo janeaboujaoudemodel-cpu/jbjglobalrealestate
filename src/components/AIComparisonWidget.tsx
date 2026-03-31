@@ -52,7 +52,7 @@ const AIComparisonWidget = () => {
             <p className="text-gray-600 max-w-md">
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
-            <p className="text-gray-500 text-sm mt-2">
+            <p className="text-gray-600 text-sm mt-2">
               Powered by JBJ Global Real Estate
             </p>
           </div>
@@ -73,7 +73,7 @@ const AIComparisonWidget = () => {
               </div>
               <div>
                 <p className="text-black font-medium text-sm">{feature.label}</p>
-                <p className="text-gray-500 text-xs">{feature.description}</p>
+                <p className="text-gray-600 text-xs">{feature.description}</p>
               </div>
             </div>
           ))}
@@ -81,7 +81,7 @@ const AIComparisonWidget = () => {
 
         {/* Sample comparison preview */}
         <div className="bg-gray-100 border border-gold/20 rounded-xl p-4 mb-6">
-          <div className="grid grid-cols-3 gap-2 text-xs text-gray-500 mb-3">
+          <div className="grid grid-cols-3 gap-2 text-xs text-gray-600 mb-3">
             <span>Project</span>
             <span className="text-center">Price/sqft</span>
             <span className="text-right">Yield Est.</span>

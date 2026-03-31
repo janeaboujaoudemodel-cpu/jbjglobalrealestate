@@ -95,7 +95,7 @@ export default function IntegrationWidgets() {
                 onClick={() => navigate('/crm/calendar')}
               >
                 <p className="text-sm text-black truncate flex-1">{event.title}</p>
-                <span className="text-xs text-gray-500 ml-2">
+                <span className="text-xs text-gray-600 ml-2">
                   {event.due_at ? formatEventDate(event.due_at) : 'No date'}
                 </span>
               </div>
@@ -104,7 +104,7 @@ export default function IntegrationWidgets() {
         ) : (
           <div className="text-center py-6">
             <Calendar className="h-8 w-8 text-[#B89555]/40 mx-auto mb-2" />
-            <p className="text-xs text-gray-500">No upcoming events</p>
+            <p className="text-xs text-gray-600">No upcoming events</p>
           </div>
         )}
       </div>

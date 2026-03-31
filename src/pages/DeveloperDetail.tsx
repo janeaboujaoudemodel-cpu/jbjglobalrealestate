@@ -270,7 +270,7 @@ const DeveloperDetail = () => {
                 loading="eager"
               />
             ) : (
-              <Building2 className="w-10 h-10 text-gray-500" />
+              <Building2 className="w-10 h-10 text-gray-600" />
             )}
           </div>
 

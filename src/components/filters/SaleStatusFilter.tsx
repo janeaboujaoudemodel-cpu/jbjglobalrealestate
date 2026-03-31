@@ -145,7 +145,7 @@ export function SaleStatusFilter({
               className={cn(
                 "w-full text-center text-sm py-1.5 rounded transition-colors",
                 isDark 
-                  ? "text-gray-500 hover:text-white hover:bg-[#2a2a2a]"
+                  ? "text-gray-600 hover:text-white hover:bg-[#2a2a2a]"
                   : "text-black/60 hover:text-black hover:bg-champagne-light"
               )}
             >

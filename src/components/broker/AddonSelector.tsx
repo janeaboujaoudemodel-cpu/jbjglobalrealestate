@@ -148,7 +148,7 @@ export default function AddonSelector({
     <div className="space-y-6">
       <div className="text-center mb-4">
         <h3 className="text-lg font-semibold text-white mb-2">Customize Your Package</h3>
-        <p className="text-gray-500 text-sm">
+        <p className="text-gray-600 text-sm">
           Add individual tools or courses to your plan. Items included in your tier are marked.
         </p>
       </div>
@@ -193,7 +193,7 @@ export default function AddonSelector({
                     {isIncluded && (
                       <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
                     )}
-                    <AddonIcon className={`w-5 h-5 ${isIncluded ? "text-green-400" : "text-gray-500"}`} />
+                    <AddonIcon className={`w-5 h-5 ${isIncluded ? "text-green-400" : "text-gray-600"}`} />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className={`text-sm font-medium truncate ${isIncluded ? "text-green-300" : "text-white"}`}>
@@ -222,7 +222,7 @@ export default function AddonSelector({
       {calculateTotal() > 0 && (
         <div className="border-t border-gray-700 pt-4 mt-4">
           <div className="flex items-center justify-between text-lg">
-            <span className="text-gray-500">Add-ons Total:</span>
+            <span className="text-gray-600">Add-ons Total:</span>
             <span className="text-gold font-bold">
               +{getCurrencySymbol()}{calculateTotal()}
             </span>

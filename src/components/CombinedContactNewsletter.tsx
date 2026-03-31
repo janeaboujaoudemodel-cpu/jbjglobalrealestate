@@ -54,7 +54,7 @@ const CombinedContactNewsletter = ({
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.1em] text-black">
               {title}
             </h2>
-            <p className="text-gray-500 text-sm md:text-base max-w-xl mx-auto">
+            <p className="text-gray-600 text-sm md:text-base max-w-xl mx-auto">
               {subtitle}
             </p>
           </div>
@@ -73,7 +73,7 @@ const CombinedContactNewsletter = ({
                   <card.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${card.iconColor}`} />
                 </div>
                 <div className="text-left sm:text-center">
-                  <p className="text-xs uppercase tracking-wider text-gray-400 font-medium mb-0.5">{card.label}</p>
+                  <p className="text-xs uppercase tracking-wider text-gray-600 font-medium mb-0.5">{card.label}</p>
                   <p className="text-sm font-semibold text-black group-hover:text-gray-700 transition-colors">{card.value}</p>
                 </div>
               </a>
@@ -83,7 +83,7 @@ const CombinedContactNewsletter = ({
           {/* Divider */}
           <div className="flex items-center gap-4 max-w-2xl mx-auto mb-8">
             <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-gray-300 text-sm">✦</span>
+            <span className="text-gray-600 text-sm">✦</span>
             <div className="flex-1 h-px bg-gray-200" />
           </div>
 
@@ -92,7 +92,7 @@ const CombinedContactNewsletter = ({
             <h3 className="text-xl md:text-2xl font-bold mb-3 uppercase tracking-[0.12em] text-black">
               ✦ Stay in the Loop ✦
             </h3>
-            <p className="text-gray-500 text-sm md:text-base mb-5">
+            <p className="text-gray-600 text-sm md:text-base mb-5">
               Be the first to access new listings, market updates, and personalized brokerage guidance.
             </p>
             <NewsletterBrevo variant="compact" source="combined_cta" />

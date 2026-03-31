@@ -92,7 +92,7 @@ const DivisionAccordion = ({
           <Link
             key={item.label}
             to={item.href}
-            className="block text-gray-500 hover:text-black transition-colors text-sm"
+            className="block text-gray-600 hover:text-black transition-colors text-sm"
           >
             {item.label}
           </Link>
@@ -141,7 +141,7 @@ const FooterCurrencyUnit = () => {
 
   return (
     <div className="flex items-center gap-3">
-      <p className="text-gray-500 text-[10px] uppercase tracking-wider whitespace-nowrap">Currency</p>
+      <p className="text-gray-600 text-[10px] uppercase tracking-wider whitespace-nowrap">Currency</p>
       <div className="flex items-center gap-2">
         {/* Currency Dropdown */}
         <div className="relative">
@@ -153,7 +153,7 @@ const FooterCurrencyUnit = () => {
             }}
           >
             <span>{currentCur?.flag} {activeCurrency}</span>
-            <ChevronDown className={cn("w-4 h-4 text-gray-400 transition-transform", currencyOpen && "rotate-180")} />
+            <ChevronDown className={cn("w-4 h-4 text-gray-600 transition-transform", currencyOpen && "rotate-180")} />
           </button>
           {currencyOpen && (
             <div 
@@ -175,7 +175,7 @@ const FooterCurrencyUnit = () => {
                 >
                   <span>{cur.flag}</span>
                   <span>{cur.code}</span>
-                  <span className="text-gray-400 text-xs ml-auto">{cur.name}</span>
+                  <span className="text-gray-600 text-xs ml-auto">{cur.name}</span>
                 </button>
               ))}
             </div>
@@ -199,7 +199,7 @@ const FooterCurrencyUnit = () => {
                 "px-4 py-2.5 text-sm font-semibold transition-all",
                 areaUnit === unit
                   ? "bg-gray-100 text-black"
-                  : "bg-white text-gray-500 hover:bg-gray-50 hover:text-black"
+                  : "bg-white text-gray-600 hover:bg-gray-50 hover:text-black"
               )}
             >
               {unit === 'sqft' ? 'sq ft' : 'sq m'}
@@ -509,7 +509,7 @@ const Footer = () => {
               </p>
               <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gray-400 rounded-full" />
             </div>
-            <p className="relative text-gray-500 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 md:mb-10 text-center px-2 max-w-2xl mx-auto">
+            <p className="relative text-gray-600 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 md:mb-10 text-center px-2 max-w-2xl mx-auto">
               Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
             </p>
 
@@ -534,7 +534,7 @@ const Footer = () => {
                   >
                     ✦ Stay in the Loop ✦
                   </h3>
-                  <p className="text-center text-gray-500 text-sm md:text-base mb-6 max-w-xl mx-auto">
+                  <p className="text-center text-gray-600 text-sm md:text-base mb-6 max-w-xl mx-auto">
                     Be the first to access new listings, market updates, and personalized brokerage guidance.
                   </p>
                   <div className="max-w-lg mx-auto">
@@ -569,7 +569,7 @@ const Footer = () => {
                       <Mail className="w-4 h-4 text-black" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-gray-500 text-[10px] uppercase tracking-[0.15em] font-semibold whitespace-nowrap mb-0.5">Write Us</p>
+                      <p className="text-gray-600 text-[10px] uppercase tracking-[0.15em] font-semibold whitespace-nowrap mb-0.5">Write Us</p>
                       <p className="text-black text-sm font-bold truncate">{CONTACT_INFO.email}</p>
                     </div>
                   </a>
@@ -581,7 +581,7 @@ const Footer = () => {
 
                   {/* Mode */}
                   <div className="flex items-center gap-3 px-6 py-5 border-b md:border-b-0 md:border-r border-gray-200 whitespace-nowrap">
-                    <p className="text-gray-500 text-[10px] uppercase tracking-[0.15em] font-semibold whitespace-nowrap">Mode</p>
+                    <p className="text-gray-600 text-[10px] uppercase tracking-[0.15em] font-semibold whitespace-nowrap">Mode</p>
                     <ModeSwitcher variant="header" showForUnselected={true} />
                   </div>
 
@@ -766,7 +766,7 @@ const Footer = () => {
               </p>
               
               {/* English Legal Line */}
-              <p className="text-gray-500 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 font-medium max-w-3xl mx-auto">
+              <p className="text-gray-600 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 font-medium max-w-3xl mx-auto">
                 Licensed Real Estate Brokerage — Buy, Sell, Rent (Dubai Mainland). Operated by <Link to="/about" className="text-gray-700 hover:underline font-semibold">JBJ Global Real Estate L.L.C S.O.C.</Link>
                 <FounderContent fallback={null}>
                   {" "}Owned & led by <Link to="/founder" className="text-gray-700 hover:underline font-semibold">Jane Bou Jaoude (جاين بو جودة)</Link>, Founder & CEO.
@@ -774,16 +774,16 @@ const Footer = () => {
               </p>
               
               {/* Arabic Disclaimer */}
-              <p className="text-gray-500 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 max-w-3xl mx-auto" dir="rtl">
+              <p className="text-gray-600 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 max-w-3xl mx-auto" dir="rtl">
                 جي بي جي للعقارات هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار. للخدمات القانونية أو التمويل العقاري أو التأشيرات أو الخدمات المؤسسية، يمكننا ربطك بشركاء مستقلين ومرخصين. يتم التعاقد مباشرة بين العميل والشريك وفق ترخيصه وشروطه الخاصة.
               </p>
               
               {/* Arabic Legal Line */}
-              <p className="text-gray-500 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 max-w-3xl mx-auto" dir="rtl">
+              <p className="text-gray-600 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 max-w-3xl mx-auto" dir="rtl">
                 وساطة عقارية مرخصة للبيع والشراء والإيجار في دبي (البر الرئيسي). يتم تشغيل الموقع من قبل JBJ Global Real Estate L.L.C S.O.C.
               </p>
               
-              <p className="text-gray-500 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-5 sm:mb-6 max-w-3xl mx-auto">
+              <p className="text-gray-600 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-5 sm:mb-6 max-w-3xl mx-auto">
                 All website content, branding, designs, and software are protected intellectual property of 
                 <FounderContent fallback={<Link to="/about" className="text-gray-700 hover:underline font-semibold"> JBJ Global Real Estate</Link>}>
                   <Link to="/founder" className="text-gray-700 hover:underline font-semibold"> Jane Bou Jaoude (جاين بو جودة)</Link> and <Link to="/about" className="text-gray-700 hover:underline font-semibold">JBJ Global Real Estate</Link>

@@ -82,7 +82,7 @@ const MonthlyMarketBrief = () => {
   const getTrendIcon = (change: number) => {
     if (change > 0) return <TrendingUp className="w-4 h-4 text-emerald-600" />;
     if (change < 0) return <TrendingDown className="w-4 h-4 text-red-600" />;
-    return <Activity className="w-4 h-4 text-gray-500" />;
+    return <Activity className="w-4 h-4 text-gray-600" />;
   };
 
   const getMomentumColor = (momentum: "high" | "medium" | "low") => {
@@ -184,7 +184,7 @@ const MonthlyMarketBrief = () => {
                   </span>
                   {getTrendIcon(data.transactionVolume.change)}
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-600 mt-1">
                   {data.transactionVolume.change > 0 ? "+" : ""}
                   {data.transactionVolume.change}% vs. previous month
                 </p>
@@ -202,12 +202,12 @@ const MonthlyMarketBrief = () => {
                 <div className="flex items-center gap-2">
                   {data.rentTrend.direction === "up" && <TrendingUp className="w-5 h-5 text-emerald-600" />}
                   {data.rentTrend.direction === "down" && <TrendingDown className="w-5 h-5 text-red-600" />}
-                  {data.rentTrend.direction === "stable" && <Activity className="w-5 h-5 text-gray-500" />}
+                  {data.rentTrend.direction === "stable" && <Activity className="w-5 h-5 text-gray-600" />}
                   <span className="text-lg font-semibold text-black capitalize">
                     {data.rentTrend.direction}
                   </span>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">{data.rentTrend.description}</p>
+                <p className="text-xs text-gray-600 mt-1">{data.rentTrend.description}</p>
               </CardContent>
             </Card>
 
@@ -225,7 +225,7 @@ const MonthlyMarketBrief = () => {
                   </span>
                   {getTrendIcon(data.avgPricePerSqft.change)}
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-600 mt-1">
                   {data.avgPricePerSqft.change > 0 ? "+" : ""}
                   {data.avgPricePerSqft.change}% vs. previous month
                 </p>
@@ -283,7 +283,7 @@ const MonthlyMarketBrief = () => {
                   This report is based on aggregated official government Open Data and descriptive analytics.
                   It is provided for informational purposes only and does not constitute financial, investment, or legal advice.
                 </p>
-                <div className="flex flex-wrap gap-4 text-xs text-gray-500">
+                <div className="flex flex-wrap gap-4 text-xs text-gray-600">
                   <span>Data Sources: Dubai Land Department Open Data</span>
                   <span>•</span>
                   <span>Update Frequency: Monthly</span>
@@ -293,7 +293,7 @@ const MonthlyMarketBrief = () => {
                   </Link>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gold/30">
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-600">
                     JBJ GLOBAL REAL ESTATE • Jane Bou Jaoude, Founder & CEO
                   </p>
                 </div>

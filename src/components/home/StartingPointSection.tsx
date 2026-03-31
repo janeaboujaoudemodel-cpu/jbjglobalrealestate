@@ -102,7 +102,7 @@ const StartingPointSection = () => {
                   </div>
                   <div className="text-center">
                     <h4 className="text-black group-hover:text-gray-700 text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
-                    <p className="text-gray-500 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
+                    <p className="text-gray-600 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
                   </div>
                 </div>
               </div>

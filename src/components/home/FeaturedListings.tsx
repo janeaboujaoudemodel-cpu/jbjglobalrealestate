@@ -146,7 +146,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <Building2 className="w-10 h-10 text-gray-400" />
+                <Building2 className="w-10 h-10 text-gray-600" />
               </div>
             )}
 
@@ -188,7 +188,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             <div className="min-h-[20px] mb-2">
               {(project.area_name || project.location) ? (
                 <div className="flex items-center gap-1.5 text-gray-600 text-xs">
-                  <MapPin className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" />
+                  <MapPin className="w-3.5 h-3.5 text-gray-600 flex-shrink-0" />
                   <span className="truncate">{project.area_name || project.location}</span>
                 </div>
               ) : (
@@ -215,7 +215,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             ) : null}
 
             {(project as any).description && (
-              <p className="text-gray-500 text-xs line-clamp-2 mb-2">{(project as any).description}</p>
+              <p className="text-gray-600 text-xs line-clamp-2 mb-2">{(project as any).description}</p>
             )}
 
             <hr className="border-gray-200 my-2" />
@@ -306,7 +306,7 @@ const FeaturedListings = () => {
               ))}
           {!isLoading && (!projects || projects.length === 0) && (
             <div className="col-span-full text-center py-12">
-              <Building2 className="w-10 h-10 text-gray-400 mx-auto mb-3" />
+              <Building2 className="w-10 h-10 text-gray-600 mx-auto mb-3" />
               <p className="text-gray-600 text-sm">Featured projects coming soon</p>
             </div>
           )}

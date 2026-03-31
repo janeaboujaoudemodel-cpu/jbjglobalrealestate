@@ -71,7 +71,7 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
       case "phone":
         return <Phone className="h-4 w-4 text-purple-500" />;
       default:
-        return <MessageSquare className="h-4 w-4 text-gray-500" />;
+        return <MessageSquare className="h-4 w-4 text-gray-600" />;
     }
   };
 
@@ -117,7 +117,7 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
         <CardContent className="flex flex-col items-center justify-center py-16">
           <MessageSquare className="h-16 w-16 text-gray-600 mb-4" />
           <h3 className="text-white text-lg font-medium mb-2">No Conversations Yet</h3>
-          <p className="text-gray-400 text-center">
+          <p className="text-gray-600 text-center">
             Start contacting leads to see conversations here
           </p>
         </CardContent>
@@ -152,10 +152,10 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">
+                    <span className="text-gray-600">
                       {conv.message_count || 0} messages
                     </span>
-                    <span className="text-gray-500 flex items-center gap-1">
+                    <span className="text-gray-600 flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {formatTime(conv.last_message_at)}
                     </span>
@@ -175,7 +175,7 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
           <Card className="bg-zinc-900 border-gray-800 h-[600px]">
             <CardContent className="flex flex-col items-center justify-center h-full">
               <ChevronRight className="h-12 w-12 text-gray-600 mb-4" />
-              <p className="text-gray-400">Select a conversation to view details</p>
+              <p className="text-gray-600">Select a conversation to view details</p>
             </CardContent>
           </Card>
         )}
@@ -246,7 +246,7 @@ function ConversationDetail({ conversationId }: ConversationDetailProps) {
                   <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                   <p
                     className={`text-xs mt-1 ${
-                      msg.direction === "outbound" ? "text-black/60" : "text-gray-400"
+                      msg.direction === "outbound" ? "text-black/60" : "text-gray-600"
                     }`}
                   >
                     {new Date(msg.created_at).toLocaleTimeString()}
@@ -257,7 +257,7 @@ function ConversationDetail({ conversationId }: ConversationDetailProps) {
 
             {messages.length === 0 && (
               <div className="text-center py-8">
-                <p className="text-gray-400">No messages in this conversation</p>
+                <p className="text-gray-600">No messages in this conversation</p>
               </div>
             )}
           </div>

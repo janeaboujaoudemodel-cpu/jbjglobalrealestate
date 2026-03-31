@@ -392,7 +392,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               <Button type="button" variant="outline" onClick={async () => { try { await signOut(); toast.success("Signed out."); setEmail(""); setPassword(""); setConfirmPassword(""); setMode("signin"); } catch { toast.error("Could not sign out."); } }} className="w-full h-12 border-gray-300 text-black hover:bg-gray-50 hover:border-gold/50 rounded-xl transition-all duration-300">Sign Out</Button>
             </div>
           </div>
-          <p className="text-center text-gray-400 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+          <p className="text-center text-gray-600 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
         </div>
       </div>
     );
@@ -414,20 +414,20 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               We've sent a verification email to
             </p>
             <p className="text-black font-medium text-sm mb-6">{email}</p>
-            <p className="text-gray-500 text-sm mb-8">
+            <p className="text-gray-600 text-sm mb-8">
               Click the link in the email to verify your account. The link expires in 24 hours.
             </p>
             <div className="space-y-3">
               <Button type="button" onClick={() => { setMode("signin"); }} className="w-full h-12 bg-gradient-to-r from-gold to-gold-dark hover:opacity-90 text-black font-semibold rounded-xl shadow-lg shadow-gold/20">
                 Back to Sign In
               </Button>
-              <p className="text-gray-400 text-xs">
+              <p className="text-gray-600 text-xs">
                 Didn't receive the email? Check your spam folder or{" "}
                 <button type="button" onClick={() => { setMode("signup"); }} className="text-gold hover:underline">try again</button>.
               </p>
             </div>
           </div>
-          <p className="text-center text-gray-400 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+          <p className="text-center text-gray-600 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
         </div>
       </div>
     );
@@ -474,7 +474,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 setOtpCode("");
                 setErrors({});
               }}
-              className="flex items-center gap-2 text-gray-500 hover:text-gold mb-6 transition-colors"
+              className="flex items-center gap-2 text-gray-600 hover:text-gold mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               <span className="text-sm">Back</span>
@@ -518,7 +518,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
               <div className="relative mb-6">
                 <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
-                <div className="relative flex justify-center text-sm"><span className="px-4 bg-white text-gray-400">or continue with email</span></div>
+                <div className="relative flex justify-center text-sm"><span className="px-4 bg-white text-gray-600">or continue with email</span></div>
               </div>
             </>
           )}
@@ -554,7 +554,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                   type="button"
                   onClick={handleResendCode}
                   disabled={resendCooldown > 0}
-                  className={`text-sm transition-colors ${resendCooldown > 0 ? "text-gray-400 cursor-not-allowed" : "text-gold hover:text-gold-dark hover:underline"}`}
+                  className={`text-sm transition-colors ${resendCooldown > 0 ? "text-gray-600 cursor-not-allowed" : "text-gold hover:text-gold-dark hover:underline"}`}
                 >
                   {resendCooldown > 0 ? `Resend code in ${resendCooldown}s` : "Resend code"}
                 </button>
@@ -568,8 +568,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-black font-medium">Email Address</Label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input id="email" name="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <Input id="email" name="email" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-600 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
                   </div>
                   {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                 </div>
@@ -580,9 +580,9 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 <div className="space-y-2">
                   <Label htmlFor="password" className="text-black font-medium">Password</Label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input id="password" name="password" type={showPassword ? "text" : "password"} autoComplete={mode === "signin" ? "current-password" : "new-password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="pl-12 pr-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gold transition-colors">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <Input id="password" name="password" type={showPassword ? "text" : "password"} autoComplete={mode === "signin" ? "current-password" : "new-password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="pl-12 pr-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-600 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gold transition-colors">
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
@@ -596,9 +596,9 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                   <div className="space-y-2">
                     <Label htmlFor="password" className="text-black font-medium">New Password</Label>
                     <div className="relative">
-                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <Input id="password" name="new-password" type={showPassword ? "text" : "password"} autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="pl-12 pr-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
-                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gold transition-colors">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+                      <Input id="password" name="new-password" type={showPassword ? "text" : "password"} autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="pl-12 pr-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-600 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
+                      <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gold transition-colors">
                         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                       </button>
                     </div>
@@ -607,8 +607,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                   <div className="space-y-2">
                     <Label htmlFor="confirmPassword" className="text-black font-medium">Confirm New Password</Label>
                     <div className="relative">
-                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <Input id="confirmPassword" name="confirmPassword" type={showPassword ? "text" : "password"} autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+                      <Input id="confirmPassword" name="confirmPassword" type={showPassword ? "text" : "password"} autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-600 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
                     </div>
                     {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
                   </div>
@@ -620,8 +620,8 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
                 <div className="space-y-2">
                   <Label htmlFor="confirmPassword" className="text-black font-medium">Confirm Password</Label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input id="confirmPassword" name="confirmPassword" type={showPassword ? "text" : "password"} autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <Input id="confirmPassword" name="confirmPassword" type={showPassword ? "text" : "password"} autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" className="pl-12 h-12 bg-gray-50 border-gray-200 text-black placeholder:text-gray-600 focus:border-gold focus:ring-gold/20 rounded-xl transition-all duration-300" />
                   </div>
                   {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword}</p>}
                 </div>
@@ -630,7 +630,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
               {/* Forgot password link */}
               {mode === "signin" && (
                 <div className="flex items-center justify-between">
-                  <button type="button" onClick={() => setMode("otp-login")} className="text-sm text-gray-500 hover:text-gold transition-colors flex items-center gap-1">
+                  <button type="button" onClick={() => setMode("otp-login")} className="text-sm text-gray-600 hover:text-gold transition-colors flex items-center gap-1">
                     <KeyRound className="w-3.5 h-3.5" /> Sign in with code
                   </button>
                   <button type="button" onClick={() => setMode("forgot")} className="text-sm text-gold hover:text-gold-dark hover:underline transition-colors">
@@ -671,7 +671,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
 
         </div>
 
-        <p className="text-center text-gray-400 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
+        <p className="text-center text-gray-600 text-xs mt-8">© {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.</p>
       </div>
 
       {/* Account Reactivation Dialog */}

@@ -64,7 +64,7 @@ const AuditorForcePasswordChange = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="New password (min 8 characters)"
-              className="pl-10 pr-10 bg-zinc-900 border-gray-700 text-white placeholder:text-gray-400"
+              className="pl-10 pr-10 bg-zinc-900 border-gray-700 text-white placeholder:text-gray-600"
               required
               minLength={8}
             />
@@ -84,7 +84,7 @@ const AuditorForcePasswordChange = ({
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm new password"
-              className="pl-10 bg-zinc-900 border-gray-700 text-white placeholder:text-gray-400"
+              className="pl-10 bg-zinc-900 border-gray-700 text-white placeholder:text-gray-600"
               required
             />
           </div>

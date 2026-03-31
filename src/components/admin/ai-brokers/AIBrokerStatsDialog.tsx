@@ -146,7 +146,7 @@ export function AIBrokerStatsDialog({
               {/* Summary Cards */}
               <div className="grid grid-cols-4 gap-4">
                 <div className="bg-zinc-800/50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 text-gray-400 mb-2">
+                  <div className="flex items-center gap-2 text-gray-600 mb-2">
                     <Users className="h-4 w-4" />
                     <span className="text-sm">Leads Contacted</span>
                   </div>
@@ -155,7 +155,7 @@ export function AIBrokerStatsDialog({
                   </p>
                 </div>
                 <div className="bg-zinc-800/50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 text-gray-400 mb-2">
+                  <div className="flex items-center gap-2 text-gray-600 mb-2">
                     <TrendingUp className="h-4 w-4" />
                     <span className="text-sm">Conversions</span>
                   </div>
@@ -165,7 +165,7 @@ export function AIBrokerStatsDialog({
                   <p className="text-emerald-500 text-sm">{conversionRate}% rate</p>
                 </div>
                 <div className="bg-zinc-800/50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 text-gray-400 mb-2">
+                  <div className="flex items-center gap-2 text-gray-600 mb-2">
                     <MessageSquare className="h-4 w-4" />
                     <span className="text-sm">Messages Sent</span>
                   </div>
@@ -174,7 +174,7 @@ export function AIBrokerStatsDialog({
                   </p>
                 </div>
                 <div className="bg-zinc-800/50 rounded-lg p-4">
-                  <div className="flex items-center gap-2 text-gray-400 mb-2">
+                  <div className="flex items-center gap-2 text-gray-600 mb-2">
                     <Mail className="h-4 w-4" />
                     <span className="text-sm">Emails Sent</span>
                   </div>

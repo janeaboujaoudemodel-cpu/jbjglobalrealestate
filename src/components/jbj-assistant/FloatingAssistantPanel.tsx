@@ -298,7 +298,7 @@ JBJ Contact Information:
                   </Avatar>
                   <div className="text-left">
                     <p className="text-black text-sm font-medium">{agent.name}</p>
-                    <p className="text-gray-500 text-xs">{agent.title}</p>
+                    <p className="text-gray-600 text-xs">{agent.title}</p>
                   </div>
                 </button>
               ))}
@@ -345,7 +345,7 @@ JBJ Contact Information:
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Type your message..."
-              className="flex-1 bg-white border-2 border-gold/30 text-black placeholder:text-gray-400 focus:border-gold"
+              className="flex-1 bg-white border-2 border-gold/30 text-black placeholder:text-gray-600 focus:border-gold"
               disabled={isLoading}
             />
             <Button
@@ -356,7 +356,7 @@ JBJ Contact Information:
               <Send className="w-4 h-4" />
             </Button>
           </div>
-          <p className="text-gray-500 text-xs text-center mt-2">
+          <p className="text-gray-600 text-xs text-center mt-2">
             Powered by JBJ AI • Available 24/7
           </p>
         </div>

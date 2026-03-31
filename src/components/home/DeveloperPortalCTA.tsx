@@ -122,7 +122,7 @@ const DeveloperPortalCTA = () => {
                       <action.icon className="w-5 h-5 text-gray-700" />
                     </div>
                     <span className="text-black text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
-                    <span className="text-gray-500 text-[10px] text-center leading-tight">{action.desc}</span>
+                    <span className="text-gray-600 text-[10px] text-center leading-tight">{action.desc}</span>
                   </div>
                 </Link>
               ))}
@@ -179,7 +179,7 @@ const DeveloperPortalCTA = () => {
                       <action.icon className="w-5 h-5 text-gray-700" />
                     </div>
                     <span className="text-black text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
-                    <span className="text-gray-500 text-[10px] text-center leading-tight">{action.desc}</span>
+                    <span className="text-gray-600 text-[10px] text-center leading-tight">{action.desc}</span>
                   </div>
                 </Link>
               ))}

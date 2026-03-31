@@ -59,7 +59,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search developers by name or headquarters..."
-            className="pl-10 bg-zinc-900 border-gray-700 text-white placeholder:text-gray-400 focus:border-gold h-12"
+            className="pl-10 bg-zinc-900 border-gray-700 text-white placeholder:text-gray-600 focus:border-gold h-12"
             autoFocus
           />
         </div>

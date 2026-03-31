@@ -147,7 +147,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
                     </Badge>
                   )}
                 </div>
-                <ChevronDown className="h-4 w-4 text-gray-500" />
+                <ChevronDown className="h-4 w-4 text-gray-600" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -160,7 +160,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
                   <div className="flex items-center gap-2">
                     <span>{lang.flag}</span>
                     <span>{lang.name}</span>
-                    <span className="text-gray-500 text-xs">({lang.native})</span>
+                    <span className="text-gray-600 text-xs">({lang.native})</span>
                   </div>
                   {lang.translator && (
                     <Globe className="h-3 w-3 text-amber-500" />
