@@ -2076,35 +2076,58 @@ svg[class*="text-muted"],
 }
 
 /* ============================================================
- * GLOBAL CONTRAST FIX — Low-contrast text enforcement
- * The site uses a white-dominant monochrome design. Light text
- * colors (zinc/gray/slate 100–400) are boosted to readable
- * levels on white/light surfaces. Dark containers (bg-black,
- * bg-gray-900, bg-gray-950, and the dark HSL hero gradients)
- * are exempted so light text remains valid there.
+ * GLOBAL CONTRAST FIX — Base-layer text enforcement
+ * Forces high-contrast text across the entire site.
+ * Light text utilities (zinc/gray/slate 100–500, muted) are
+ * boosted to #374151 (gray-700) for WCAG AA compliance on
+ * white/light surfaces. Dark containers are exempted below.
  * ============================================================ */
 
-/* ── Step 1: Boost faded text to readable dark on light surfaces ── */
+@layer base {
+  /* Default readable text color */
+  html, body, #root {
+    color: #111827;
+  }
 
-/* Zinc family */
-.text-zinc-100, .text-zinc-200, .text-zinc-300, .text-zinc-400,
+  /* Light surfaces enforce dark text inheritance */
+  .bg-white, .bg-zinc-50, .bg-gray-50, .bg-slate-50, .bg-neutral-50 {
+    color: #111827;
+  }
+  .bg-white :is(h1,h2,h3,h4,h5,h6,p,span,li,a,label,strong,small,time,td,th),
+  .bg-zinc-50 :is(h1,h2,h3,h4,h5,h6,p,span,li,a,label,strong,small,time,td,th),
+  .bg-gray-50 :is(h1,h2,h3,h4,h5,h6,p,span,li,a,label,strong,small,time,td,th),
+  .bg-slate-50 :is(h1,h2,h3,h4,h5,h6,p,span,li,a,label,strong,small,time,td,th) {
+    color: inherit;
+  }
+}
+
+/* ── Boost all faded text utilities to readable dark ── */
+
+/* Zinc family (100–500) */
+.text-zinc-100, .text-zinc-200, .text-zinc-300, .text-zinc-400, .text-zinc-500,
 [class~="text-zinc-100"], [class~="text-zinc-200"],
-[class~="text-zinc-300"], [class~="text-zinc-400"] {
-  color: #525252 !important;
+[class~="text-zinc-300"], [class~="text-zinc-400"], [class~="text-zinc-500"] {
+  color: #374151 !important;
 }
 
-/* Gray family */
-.text-gray-100, .text-gray-200, .text-gray-300, .text-gray-400,
+/* Gray family (100–500) */
+.text-gray-100, .text-gray-200, .text-gray-300, .text-gray-400, .text-gray-500,
 [class~="text-gray-100"], [class~="text-gray-200"],
-[class~="text-gray-300"], [class~="text-gray-400"] {
-  color: #525252 !important;
+[class~="text-gray-300"], [class~="text-gray-400"], [class~="text-gray-500"] {
+  color: #374151 !important;
 }
 
-/* Slate family */
-.text-slate-100, .text-slate-200, .text-slate-300, .text-slate-400,
+/* Slate family (100–500) */
+.text-slate-100, .text-slate-200, .text-slate-300, .text-slate-400, .text-slate-500,
 [class~="text-slate-100"], [class~="text-slate-200"],
-[class~="text-slate-300"], [class~="text-slate-400"] {
-  color: #525252 !important;
+[class~="text-slate-300"], [class~="text-slate-400"], [class~="text-slate-500"] {
+  color: #374151 !important;
+}
+
+/* Muted text tokens */
+.text-muted, .text-muted-foreground,
+[class~="text-muted"], [class~="text-muted-foreground"] {
+  color: #374151 !important;
 }
 
 /* ── Step 2: Dark containers — restore light text ──
