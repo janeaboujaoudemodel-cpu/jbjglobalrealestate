@@ -185,7 +185,7 @@ const BestIdeaAward = () => {
                         </div>
                       </div>
                     </div>
-                    <p className="text-zinc-500 text-xs italic text-center">Prize depends on the winning idea</p>
+                    <p className="text-xs italic text-center" style={{ color: '#6b7280' }}>Prize depends on the winning idea</p>
                   </div>
 
                   {/* Winner's Recognition */}
