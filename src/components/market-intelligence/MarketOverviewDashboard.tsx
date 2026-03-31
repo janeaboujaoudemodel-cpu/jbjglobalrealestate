@@ -117,6 +117,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.yieldChange}
               icon={Percent}
               suffix="%"
+              accentColor="text-amber-600"
             />
             <StatCard
               title="Days on Market"
@@ -124,6 +125,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.domChange}
               icon={Clock}
               suffix=" days"
+              accentColor="text-purple-600"
             />
           </div>
 
