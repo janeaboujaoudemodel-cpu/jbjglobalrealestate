@@ -108,7 +108,7 @@ export function ToolkitShowcaseCard() {
                     <div className="h-full flex flex-col bg-white rounded-xl border border-gray-200 hover:border-gray-400 p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                       {/* Icon */}
                       <div className="w-12 h-12 rounded-xl border border-gray-200 bg-gray-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <tool.icon className="w-6 h-6 text-gray-600" />
+                        <tool.icon className="w-6 h-6 text-gray-800" />
                       </div>
 
                       {/* Title */}
