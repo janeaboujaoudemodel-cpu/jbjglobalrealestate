@@ -422,7 +422,10 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* AI HOME FINDER — Premium 3D Section */}
-      <section className="flex items-center justify-center py-16 md:py-24 min-h-[340px] relative overflow-hidden bg-gray-950">
+      <section className="flex items-center justify-center py-16 md:py-24 min-h-[340px] relative overflow-hidden bg-gradient-to-br from-[hsl(270,40%,8%)] via-[hsl(270,35%,12%)] to-[hsl(280,30%,6%)]">
+        {/* Subtle purple glow orbs */}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 bg-violet-400/8 rounded-full blur-3xl pointer-events-none" />
         <div className="container mx-auto px-4 relative z-10" style={{ perspective: '1200px' }}>
           <div className="flex justify-center">
             <motion.div
@@ -434,30 +437,30 @@ const Index = () => {
               className="text-center relative max-w-2xl"
               style={{ transformStyle: 'preserve-3d' }}
             >
-              <div className="relative z-10 bg-white backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gray-200 transition-all duration-300 hover:shadow-2xl shadow-xl"
+              <div className="relative z-10 bg-gradient-to-br from-[hsl(270,30%,16%)] via-[hsl(270,25%,14%)] to-[hsl(280,20%,10%)] backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-purple-500/20 transition-all duration-300 hover:shadow-[0_20px_60px_rgba(139,92,246,0.25)] shadow-[0_10px_40px_rgba(139,92,246,0.15)]"
                 style={{ transform: 'translateZ(20px)' }}
               >
                 {/* Label badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-100 border border-gray-200 text-gray-700 text-xs uppercase tracking-[0.2em] mb-5">
-                  <Sparkles className="w-3 h-3 text-gray-600" />
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/15 border border-purple-400/30 text-purple-300 text-xs uppercase tracking-[0.2em] mb-5">
+                  <Sparkles className="w-3 h-3 text-purple-400" />
                   {t('home.aiPowered', 'AI-Powered')}
                 </div>
                 <Link to="/quiz" className="block group">
                   <div className="flex items-center justify-center gap-3 mb-3">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center group-hover:bg-gray-200 transition-all duration-500">
-                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-gray-700 group-hover:text-black transition-colors" strokeWidth={1.5} />
+                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-purple-500/15 border border-purple-400/25 flex items-center justify-center group-hover:bg-purple-500/25 transition-all duration-500">
+                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-purple-300 group-hover:text-purple-200 transition-colors" strokeWidth={1.5} />
                     </div>
                     <h2 
-                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-black"
+                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-white"
                     >
                       {t('hero.aiFinder')}
                     </h2>
-                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-gray-600 group-hover:text-black transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-purple-400 group-hover:text-purple-300 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </div>
-                  <p className="text-gray-600 text-sm md:text-base max-w-lg mx-auto">
+                  <p className="text-purple-200/70 text-sm md:text-base max-w-lg mx-auto">
                     {t('hero.aiFinderDesc')}
                   </p>
-                  <p className="text-gray-400 text-xs mt-3">
+                  <p className="text-purple-300/40 text-xs mt-3">
                     {t('home.poweredByJBJ', 'Powered by JBJ Global Real Estate')}
                   </p>
                 </Link>
