@@ -313,7 +313,7 @@ const Index = () => {
               className="flex flex-col items-center gap-1"
             >
               <span className="text-[9px] uppercase tracking-[0.2em] text-zinc-500">Explore</span>
-              <ChevronDown className="w-4 h-4 text-[hsl(var(--gold)/0.5)] animate-bounce" />
+              <ChevronDown className="w-4 h-4 text-white/40 animate-bounce" />
             </motion.div>
           </div>
         </motion.div>
