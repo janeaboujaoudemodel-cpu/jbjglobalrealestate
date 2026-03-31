@@ -426,6 +426,41 @@ export const UI_CONTRAST_LOCK = Object.freeze({
   ]),
 });
 
+// ============================================
+// L) DATA COLOR LOCK (IMMUTABLE)
+// ============================================
+
+export const DATA_COLOR_LOCK = Object.freeze({
+  STATUS: 'GLOBALLY_LOCKED',
+  LOCK_DATE: '2026-03-31',
+
+  RULES: Object.freeze([
+    'Gray is FORBIDDEN for any data value, metric label, or chart element',
+    'Positive values / growth MUST use emerald (green)',
+    'Negative values / decline / issues MUST use red — always',
+    'Off-Plan = emerald, Secondary = red, Cash = blue, Mortgage = amber',
+    'Each data category MUST use a distinct semantic color',
+    'Issues and alerts are ALWAYS highlighted in red',
+    'All metric labels must be text-black or text-black/80 with font-medium minimum',
+    'Use src/lib/dataColors.ts as the single source of truth',
+  ]),
+
+  COLOR_MAP: Object.freeze({
+    OFF_PLAN: 'emerald-500',
+    SECONDARY: 'red-500',
+    CASH: 'blue-500',
+    MORTGAGE: 'amber-500',
+    GROWTH: 'emerald-600',
+    DECLINE: 'red-600',
+    ISSUE: 'red-600',
+    ROI: 'emerald-600',
+    YIELD: 'blue-600',
+    RENTAL: 'blue-500',
+    PRICE: 'emerald-700',
+    VOLUME: 'purple-600',
+  }),
+});
+
 // Export master lock object for read-only access
 export const MASTER_LOCK = Object.freeze({
   BRAND: BRAND_LOCK,
