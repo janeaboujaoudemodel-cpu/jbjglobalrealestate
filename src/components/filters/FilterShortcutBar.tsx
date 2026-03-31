@@ -350,7 +350,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </div>
             <Button
               onClick={() => {}}
-              className="w-full h-9 bg-gradient-to-r from-gold to-gold-dark text-black font-bold text-xs rounded-lg hover:brightness-110"
+              className="w-full h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800"
             >
               {t('filter.applyFilter')}
             </Button>
