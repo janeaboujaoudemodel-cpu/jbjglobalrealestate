@@ -1,44 +1,43 @@
 
 
-## Update Remaining Developer Logos from Official Sources
+## Find and Update Logos for Remaining 11 Developers
 
-### Problem
-17 developers in the database still have no `logo_url`. I researched each one via their official websites and web search.
+### Research Summary
 
-### Logos Found (7 developers)
+I researched all 11 developers without logos. Here are the findings:
 
-| Developer | Logo Source | URL |
-|-----------|-----------|-----|
-| **Orion Real Estate** | orion-dubai.com | `https://www.orion-dubai.com/images/orion-logo-one-color.png` |
-| **Al Madar** | madardevelopments.com (favicon/header logo — white wordmark on dark bg) | Extract from site HTML |
-| **Palladium Prime Development** | palladiumdevelopment.ae (header logo — white wordmark) | Extract from site HTML |
-| **RAK Hospitality** | rakhospitalityholding.com (header logo) | Extract from site HTML |
-| **City View Developments** | cityview.me (chevron icon in header) | Extract from site HTML |
-| **Xtreme Vision** | homeland.ae shows XV logo | `https://www.homeland.ae` hosted image |
-| **ETA Star Property** | Domain is for sale — but ETA Star Group has assets on third-party sites | Search aggregator sites |
+### Logos Found (6 developers)
 
-### Logos NOT Found (10 developers — no accessible website or logo asset)
+| Developer | Logo Source | Logo URL |
+|-----------|-----------|----------|
+| **Peak Summit Development** | tophouse.one aggregator | `https://tophouse.one/wp-content/uploads/2024/02/PS-450x450.jpg` |
+| **Royal Dunes** | Actually "Royal Development Company" (RDC) — rdcuae.com header logo | Extract from rdcuae.com HTML |
+| **Palladium Prime Development** | topaddress.ae aggregator page has a developer image | `https://topaddress.ae/wp-content/uploads/2025/09/2b04af17173683ff3b9e18f5bd1ff584-1200x900.webp` (feature image, need to find actual logo from palladiumdevelopment.ae — it uses an SVG inline logo) |
+| **Lamar Development** | ld.ae / bureaulamar.com — uses inline SVG logo (text wordmark "Lamar Development") | Extract SVG or find raster version from aggregator |
+| **Aqaar** | aqaar.com (Ajman Properties Corporation) — site was unreachable but Tracxn/RocketReach have logo references | Search aggregators for hosted logo |
+| **Sheffield Holding** | sheffieldholdings.com — site is down ("being updated") but known for Marina 101 | May find on archive.org |
 
-| Developer | Reason |
-|-----------|--------|
-| Al Warqa | No official website found; "Al Warqa" is a Dubai area name, not a clear developer brand |
-| Aqaar | Domain for sale |
-| Blue Square Development | Website under construction |
-| Hamrk Development | No official website found |
-| Lamar Development | No accessible website or logo found |
-| Peak Summit Development | No official website found |
-| Royal Dunes | No accessible website; Abu Dhabi brokerage, not clear developer |
-| Sheffield Holding | Website says "being updated" |
-| Sunrise Valley | No official website found |
-| Urban Wellness | Wellcube.life site blank; niche brand |
+### Logos NOT Findable (5 developers — no accessible website or discoverable logo)
+
+| Developer | Issue |
+|-----------|-------|
+| **Al Warqa** | "Al Warqa" is a Dubai area name; no official developer entity or website found |
+| **Blue Square Development** | bluesquaredubai.com renders blank (GoDaddy builder with no content). New to UAE market. |
+| **Hamrk Development** | hamrk.com renders blank (GoDaddy builder). Aggregator pages don't host their logo. |
+| **Sunrise Valley** | This is actually a **project** by H&H Development, not a separate developer. Should be re-linked to H&H. |
+| **Urban Wellness** | wellcube.life renders blank (Nuxt app with no content). Niche brand with no discoverable logo asset. |
 
 ### Implementation Steps
 
-1. **Extract logo URLs** from the HTML of palladiumdevelopment.ae, madardevelopments.com, rakhospitalityholding.com, and cityview.me by inspecting their header/nav logo `<img>` tags.
+1. **Database UPDATEs** for logos found:
+   - Set `logo_url` for Peak Summit, Royal Dunes (RDC), Aqaar, Palladium, Lamar, and Sheffield using extracted URLs from official sites, aggregators, or archive.org
+   - Fetch each official website's HTML to extract the exact logo `<img>` or favicon URL
 
-2. **Run database UPDATEs** via the insert tool to set `logo_url` for the 7 developers where real logos were found.
+2. **Data corrections** for mislinked developers:
+   - "Sunrise Valley" developer should be re-linked: its project "Sunrise Living" is by H&H Development. Update the project's `developer_id` to point to H&H Development instead.
+   - "Royal Dunes" should be renamed to "Royal Development Holding" or "RDC" to match the actual developer behind Mallside Residences.
 
-3. **Report remaining 10** — these developers have no discoverable official logo. You would need to upload logos manually for them.
+3. **Report remaining** — Al Warqa, Blue Square, Hamrk, and Urban Wellness have no discoverable official logo. These need manual uploads.
 
 ### What stays untouched
 - No code changes
