@@ -1062,7 +1062,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
       {/* ━━━ LOGO HEADER (88px) — restored, matches horizontal header height ━━━ */}
       <div className="h-[88px] shrink-0 flex flex-row items-center justify-between px-2.5 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-gold/20">
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-1" style={{ fontFamily: "Poppins, sans-serif" }}>
-          <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0 mix-blend-multiply" />
+          <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0" />
           <div className="flex flex-col mt-1">
             <span className="text-[11px] font-extrabold text-black/85 tracking-[0.13em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>
             <span className="text-[9px] font-bold text-black/50 tracking-[0.16em] leading-tight mt-0.5 whitespace-nowrap">REAL ESTATE</span>
@@ -1267,7 +1267,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {/* Logo header (88px) — collapsed: just icon */}
           <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-gold/20">
             <Link to="/">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain mix-blend-multiply" />
+              <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain" />
             </Link>
           </div>
           {/* Section icons — darker body matching header center */}
