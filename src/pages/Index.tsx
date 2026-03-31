@@ -168,8 +168,8 @@ const Index = () => {
               className="absolute inset-0 z-[1] flex flex-col items-center justify-center pointer-events-none"
             >
               {/* Gold accent orbs */}
-              <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px]" />
-              <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-gold/8 rounded-full blur-[120px]" />
+              <div className="absolute top-1/4 left-10 w-64 h-64 bg-white/5 rounded-full blur-[100px]" />
+              <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-white/5 rounded-full blur-[120px]" />
               
               {/* Logo — transparent monogram, no background */}
               <img 
