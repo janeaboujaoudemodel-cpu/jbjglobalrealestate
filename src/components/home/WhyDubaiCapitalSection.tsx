@@ -109,7 +109,7 @@ export default function WhyDubaiCapitalSection() {
               }}
             >
               <T>Why Dubai Became the Capital of</T>{" "}
-              <span className="text-gold"><T>Global Investors</T></span>
+              <span style={{ color: '#93c5fd' }}><T>Global Investors</T></span>
             </h2>
 
             <p className="mt-2.5 text-xs md:text-sm text-white/70 max-w-sm leading-relaxed">
