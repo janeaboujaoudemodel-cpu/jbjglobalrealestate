@@ -259,7 +259,7 @@ export function useProjectsPaginated(
           .from("projects")
           .select(`
             *,
-            developer:developers(id, name, slug),
+            developer:developers(id, name, slug, logo_url),
             community:communities(id, name, slug)
           `)
           .or("is_published.is.null,is_published.eq.false")
