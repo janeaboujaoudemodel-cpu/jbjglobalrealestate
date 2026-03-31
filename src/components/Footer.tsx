@@ -763,22 +763,7 @@ const Footer = () => {
               boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
             }}
           >
-          {/* Outer Gold Border Ring - Enhanced */}
-          <div className="absolute inset-0 rounded-none border border-gray-200 pointer-events-none" />
-          <div className="absolute inset-[3px] rounded-none border border-gray-100 pointer-events-none" />
-          
-          {/* Animated Shimmer Sweep */}
-          <div 
-            className="absolute inset-0 rounded-none pointer-events-none opacity-50"
-            style={{
-              background: 'none',
-            }}
-          />
-          
-          {/* Top Radial Glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-20 hidden pointer-events-none" />
-          
-          {/* Edge-to-edge: no corner accents needed */}
+          <div className="absolute inset-0 border border-gray-200 pointer-events-none" />
 
           <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
             {/* Legal Disclaimer Section */}
