@@ -140,7 +140,7 @@ const ClientMarketSnapshot = ({
         {/* Key Metrics Grid */}
         <div className="grid grid-cols-3 gap-4">
           <div className="space-y-1">
-            <span className="text-xs text-muted-foreground uppercase tracking-wide">BUY Trend</span>
+            <span className="text-xs text-black/80 font-medium uppercase tracking-wide">BUY Trend</span>
             <div className="flex items-center gap-2">
               {getTrendIcon(buyTrend)}
               <span className="text-sm text-foreground capitalize">{buyTrend}</span>
