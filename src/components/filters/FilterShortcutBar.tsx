@@ -751,7 +751,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
         </button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-72 p-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[10200] shadow-xl"
+        className="w-72 p-3 bg-white border border-gray-200 z-[10200] shadow-xl"
         side="bottom"
         align="end"
         sideOffset={6}
