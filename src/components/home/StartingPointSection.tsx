@@ -61,8 +61,8 @@ const StartingPointSection = () => {
         {/* Header badge */}
         <div className="text-center mb-6 md:mb-8">
           <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gray-100 border border-gray-300 rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold">
-            <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-gray-600" />
-            <span className="text-black">{t('hero.findStartingPoint')}</span>
+            <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-gray-700" />
+            <span className="text-gray-900">{t('hero.findStartingPoint')}</span>
           </span>
         </div>
 
