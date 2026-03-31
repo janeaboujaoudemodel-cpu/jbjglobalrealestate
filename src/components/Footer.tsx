@@ -447,14 +447,13 @@ const Footer = () => {
       <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20">
         {/* NOW BELOW THE 3D CARD: Logo + Company Name Section - COMES FIRST */}
         <div className="flex flex-col items-center justify-center text-center w-full relative pt-4 pb-8">
-          {/* Dark luxury brown background for monogram section */}
-          <div className="absolute inset-0 bg-white pointer-events-none" />
+          {/* Clean background — no white frame */}
           
           <Link to="/" className="inline-block group">
             <img 
               src={jbjMonogramNobuffer} 
               alt="JBJ Global Real Estate" 
-              className="h-32 sm:h-40 md:h-48 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.08)] transition-all duration-500 group-hover:scale-[1.02] mix-blend-multiply"
+              className="h-32 sm:h-40 md:h-48 w-auto object-contain mx-auto mb-4 sm:mb-6 transition-all duration-500 group-hover:scale-[1.02]"
             />
           </Link>
           
