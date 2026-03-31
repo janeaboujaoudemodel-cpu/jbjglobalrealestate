@@ -619,8 +619,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           className={cn(
             pillBase, "px-3 py-1.5",
             filters.hideSoldOut
-              ? "bg-red-50 border-2 border-red-500 text-red-600 font-bold shadow-md"
-              : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-red-300/50 text-red-600/80 hover:border-red-400"
+              ? "bg-black text-white border border-black font-bold shadow-sm"
+              : "bg-white border border-gray-300 text-gray-600 hover:border-gray-400"
           )}
         >
           {t('filter.hideSold')}
