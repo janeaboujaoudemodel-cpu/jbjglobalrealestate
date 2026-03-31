@@ -232,16 +232,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const pillBase = "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-[13px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[200px] flex-shrink-0";
   const pillInactive = isDark
     ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
-    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 text-black hover:border-gold/60";
+    : "bg-white border border-gray-300 text-black hover:border-gray-400 hover:bg-gray-50";
   const pillActive = isDark
     ? "bg-white text-black border border-white shadow-lg"
-    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black font-bold shadow-md";
+    : "bg-black text-white border border-black font-bold shadow-sm";
 
-  const popoverClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[10200] shadow-xl";
+  const popoverClass = "bg-white border border-gray-200 z-[10200] shadow-xl";
 
   const togglePillBase = "px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer";
-  const togglePillOff = "border-gold/30 text-black/70 bg-white/60 hover:bg-white";
-  const togglePillOn = "border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black font-bold";
+  const togglePillOff = "border-gray-300 text-gray-700 bg-white hover:bg-gray-50";
+  const togglePillOn = "border-black bg-black text-white font-bold";
 
   const handleSaveFilter = (name: string) => {
     const saved = JSON.parse(localStorage.getItem('jbj-saved-filters') || '[]');
@@ -251,7 +251,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
   const CountBadge = ({ count }: { count: number }) =>
     count > 0 ? (
-      <span className="ml-1 w-5 h-5 rounded-full bg-gradient-to-r from-[#D8C7A6] to-[#C8A766] text-white text-[10px] font-bold flex items-center justify-center">
+      <span className="ml-1 w-5 h-5 rounded-full bg-black text-white text-[10px] font-bold flex items-center justify-center">
         +{count}
       </span>
     ) : null;
