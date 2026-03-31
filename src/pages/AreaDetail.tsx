@@ -342,7 +342,7 @@ const AreaDetail = () => {
                         />
                       ) : (
                         <div className="absolute inset-0 bg-gradient-to-br from-[#FDFBF7] via-[#ECE2D2] to-[#D8C7A6] flex items-center justify-center">
-                          <span className="text-6xl font-black text-black select-none" style={{ opacity: 0.1, fontFamily: "Poppins, sans-serif" }}>JBJ</span>
+                          <span className="text-6xl font-black text-black select-none" style={{ opacity: 0.1 }}>JBJ</span>
                         </div>
                       )}
 
