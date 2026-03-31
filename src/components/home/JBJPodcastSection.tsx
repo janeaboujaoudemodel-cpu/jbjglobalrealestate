@@ -316,14 +316,14 @@ const JBJPodcastSection = () => {
                     <button
                       onClick={handlePlayPause}
                       disabled={playback.status === "loading"}
-                      className="w-14 h-14 rounded-full border-2 border-gold bg-transparent flex items-center justify-center transition-colors shadow-lg disabled:opacity-50 group"
+                      className="w-14 h-14 rounded-full border-2 border-black bg-transparent flex items-center justify-center transition-colors shadow-lg disabled:opacity-50 group"
                     >
                       {playback.status === "loading" ? (
-                        <Loader2 className="w-6 h-6 text-gold group-hover:text-black animate-spin" />
+                        <Loader2 className="w-6 h-6 text-black animate-spin" />
                       ) : playback.status === "playing" ? (
-                        <Pause className="w-6 h-6 text-gold group-hover:text-black" />
+                        <Pause className="w-6 h-6 text-black" />
                       ) : (
-                        <Play className="w-6 h-6 text-gold group-hover:text-black ml-0.5" />
+                        <Play className="w-6 h-6 text-black ml-0.5" />
                       )}
                     </button>
                     <button
