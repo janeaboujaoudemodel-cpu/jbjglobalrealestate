@@ -397,10 +397,10 @@ const JBJPodcastSection = () => {
               viewport={{ once: true }}
               className="lg:col-span-1"
             >
-              <div className="jj-card-inner rounded-2xl border border-gold/30 overflow-hidden h-full">
-                <div className="p-4 border-b border-gold/20">
+              <div className="jj-card-inner rounded-2xl border border-gray-200 overflow-hidden h-full">
+                <div className="p-4 border-b border-gray-200">
                   <h3 className="text-lg font-semibold text-black"><T>All Episodes</T></h3>
-                  <p className="text-sm text-black/60"><T>20 episodes available</T></p>
+                  <p className="text-sm text-gray-500"><T>20 episodes available</T></p>
                 </div>
 
                 <ScrollArea className="h-[400px] lg:h-[480px]">
