@@ -415,8 +415,8 @@ const JBJPodcastSection = () => {
                         }}
                         className={`w-full p-3 rounded-xl text-left transition-all mb-1 ${
                           selectedEpisode.id === episode.id
-                            ? "bg-gold/10 border border-gold/40"
-                            : "bg-pearl/60 hover:bg-pearl border border-transparent"
+                            ? "bg-gray-100 border border-gray-300"
+                            : "bg-white hover:bg-gray-50 border border-transparent"
                         }`}
                       >
                         <div className="flex items-start gap-3">
