@@ -450,37 +450,12 @@ const Footer = () => {
           {/* Dark luxury brown background for monogram section */}
           <div className="absolute inset-0 bg-white pointer-events-none" />
           
-          <Link to="/" className="inline-block group relative">
-            {/* 3D Logo with multi-layer shadow depth */}
-            <div className="relative transform-gpu transition-all duration-700 group-hover:scale-[1.03] group-hover:-translate-y-1">
-              {/* Deep shadow layer 3 - furthest */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="" 
-                aria-hidden="true"
-                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.08] blur-[3px] translate-y-4 translate-x-2 pointer-events-none"
-              />
-              {/* Shadow layer 2 */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="" 
-                aria-hidden="true"
-                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.12] blur-[2px] translate-y-2 translate-x-1 pointer-events-none"
-              />
-              {/* Shadow layer 1 - closest */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="" 
-                aria-hidden="true"
-                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.15] blur-[1px] translate-y-1 translate-x-0.5 pointer-events-none"
-              />
-              {/* Main logo with subtle lift */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="JBJ Global Real Estate" 
-                className="relative h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.1)] transition-all duration-500 group-hover:drop-shadow-[0_4px_8px_rgba(0,0,0,0.15)]"
-              />
-            </div>
+          <Link to="/" className="inline-block group">
+            <img 
+              src={jbjMonogramNobuffer} 
+              alt="JBJ Global Real Estate" 
+              className="h-32 sm:h-40 md:h-48 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.08)] transition-all duration-500 group-hover:scale-[1.02]"
+            />
           </Link>
           
           {/* Company Name with Enhanced Readability */}
