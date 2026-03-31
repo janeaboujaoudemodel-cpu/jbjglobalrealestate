@@ -261,19 +261,19 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
             <h3 className="text-white font-semibold text-sm">{employee.name}</h3>
             <div className="flex items-center gap-1">
               <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-zinc-500 text-xs">Online</span>
+              <span className="text-white/60 text-xs">Online</span>
             </div>
           </div>
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white">
+          <Button variant="ghost" size="icon" className="text-white/70 hover:text-white">
             <Phone className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white">
+          <Button variant="ghost" size="icon" className="text-white/70 hover:text-white">
             <Video className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" onClick={onClose} className="text-zinc-400 hover:text-white">
+          <Button variant="ghost" size="icon" onClick={onClose} className="text-white/70 hover:text-white">
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -284,9 +284,9 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
         <div className="flex items-center justify-between">
           <div>
             <p className="text-gold text-xs font-medium">{employee.role}</p>
-            <p className="text-zinc-500 text-xs">{employee.department}</p>
+            <p className="text-white/60 text-xs">{employee.department}</p>
           </div>
-          <Badge variant="outline" className="text-xs border-zinc-700 text-zinc-400">
+          <Badge variant="outline" className="text-xs border-zinc-700 text-white/70">
             {employee.languages?.slice(0, 2).join(', ')}
           </Badge>
         </div>
@@ -316,7 +316,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
                     message.role === 'user' ? 'justify-end' : 'justify-start'
                   }`}>
                     <span className={`text-xs ${
-                      message.role === 'user' ? 'text-black/60' : 'text-zinc-500'
+                      message.role === 'user' ? 'text-black/60' : 'text-white/60'
                     }`}>
                       {formatTime(message.timestamp)}
                     </span>
@@ -355,7 +355,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
       {/* Input Area */}
       <div className="p-4 border-t border-zinc-800 bg-zinc-900">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white shrink-0">
+          <Button variant="ghost" size="icon" className="text-white/70 hover:text-white shrink-0">
             <Paperclip className="h-4 w-4" />
           </Button>
           
@@ -372,7 +372,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
             <Button 
               variant="ghost" 
               size="icon" 
-              className="absolute right-1 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white h-7 w-7"
+              className="absolute right-1 top-1/2 -translate-y-1/2 text-white/70 hover:text-white h-7 w-7"
             >
               <Smile className="h-4 w-4" />
             </Button>
@@ -383,7 +383,7 @@ const EmployeeChatPanel: React.FC<EmployeeChatPanelProps> = ({
             disabled={isLoading}
             variant="ghost"
             size="icon"
-            className="shrink-0 text-zinc-400 hover:text-white"
+            className="shrink-0 text-white/70 hover:text-white"
           />
           
           <Button

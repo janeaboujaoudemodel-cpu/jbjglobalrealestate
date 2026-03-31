@@ -164,7 +164,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
                       {project.name}
                     </Link>
                     {project.developer_name && (
-                      <p className="text-[11px] text-zinc-500">{t('map.by')} {project.developer_name}</p>
+                      <p className="text-[11px] text-gray-500">{t('map.by')} {project.developer_name}</p>
                     )}
                     {project.price_from ? (
                       <p className="text-xs font-semibold text-amber-700 mt-1">
@@ -173,7 +173,7 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
                     ) : (
                       <p className="text-xs font-semibold text-amber-700 mt-1">{t('map.priceOnRequest')}</p>
                     )}
-                    <div className="flex items-center gap-2 mt-1 text-[11px] text-zinc-500">
+                    <div className="flex items-center gap-2 mt-1 text-[11px] text-gray-500">
                       {(project.bedrooms_min != null || project.bedrooms_max != null) && (
                         <span>
                           {project.bedrooms_min === 0 ? 'Studio' : `${project.bedrooms_min ?? '?'}`}

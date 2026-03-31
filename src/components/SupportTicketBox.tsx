@@ -460,7 +460,7 @@ const SupportTicketBox = () => {
                         <AlertCircle className="w-5 h-5 text-gold" />
                         <span className="text-gold font-semibold">Our Commitment</span>
                       </div>
-                      <ul className="space-y-2 text-sm text-zinc-300">
+                      <ul className="space-y-2 text-sm text-gray-400">
                         <li className="flex items-center gap-2">
                           <span className="text-gold">✓</span>
                           Response within 24 hours
@@ -481,7 +481,7 @@ const SupportTicketBox = () => {
                     </div>
                   </div>
 
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-gray-500">
                     All tickets are reviewed by our support team and forwarded to the relevant department.
                   </p>
                 </div>
@@ -586,9 +586,9 @@ const SupportTicketBox = () => {
                                >
                                  <div className="flex items-center justify-center gap-3 flex-wrap">
                                    <span className="text-sm text-zinc-600">Your Ticket Number</span>
-                                   <span className="text-sm text-zinc-400">|</span>
+                                   <span className="text-sm text-gray-500">|</span>
                                    <span className="text-sm text-zinc-600" dir="rtl">رقم التذكرة</span>
-                                   <span className="text-sm text-zinc-400">—</span>
+                                   <span className="text-sm text-gray-500">—</span>
                                    <span className="text-xl font-bold text-gold tracking-wider font-mono">{ticketNumber}</span>
                                    <button
                                      onClick={copyTicketNumber}
@@ -617,19 +617,19 @@ const SupportTicketBox = () => {
                                  </p>
                                  <div className="space-y-2 text-xs">
                                    <div className="flex justify-between">
-                                     <span className="text-zinc-500">Ticket #</span>
+                                     <span className="text-gray-500">Ticket #</span>
                                      <span className="text-black font-semibold">{ticketNumber}</span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-zinc-500">Category</span>
+                                     <span className="text-gray-500">Category</span>
                                      <span className="text-black font-medium">{formData.serviceCategory}</span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-zinc-500">Subject</span>
+                                     <span className="text-gray-500">Subject</span>
                                      <span className="text-black font-medium truncate max-w-[180px]">{formData.subject}</span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-zinc-500">Priority</span>
+                                     <span className="text-gray-500">Priority</span>
                                      <span className={`font-medium ${
                                        formData.priority === 'critical' ? 'text-red-500' :
                                        formData.priority === 'high' ? 'text-orange-500' :
@@ -639,12 +639,12 @@ const SupportTicketBox = () => {
                                      </span>
                                    </div>
                                    <div className="flex justify-between">
-                                     <span className="text-zinc-500">Submitted</span>
+                                     <span className="text-gray-500">Submitted</span>
                                      <span className="text-black font-medium">{new Date().toLocaleDateString()}</span>
                                    </div>
                                    {attachments.length > 0 && (
                                      <div className="flex justify-between">
-                                       <span className="text-zinc-500">Attachments</span>
+                                       <span className="text-gray-500">Attachments</span>
                                        <span className="text-black font-medium">{attachments.length} file(s)</span>
                                      </div>
                                    )}
@@ -671,7 +671,7 @@ const SupportTicketBox = () => {
                                  className="mb-4"
                                >
                                  {emailWasSent || emailResent ? (
-                                   <p className="text-sm text-zinc-500 flex items-center justify-center gap-2">
+                                   <p className="text-sm text-gray-500 flex items-center justify-center gap-2">
                                      <MailCheck className="w-4 h-4 text-green-500" />
                                      Confirmation email {emailResent ? "resent" : "sent"} to <strong>{formData.email}</strong>
                                    </p>
@@ -810,7 +810,7 @@ const SupportTicketBox = () => {
                                       >
                                         {STEP_MESSAGES[submissionStep]}
                                       </motion.p>
-                                      <p className="text-sm text-zinc-500 mt-2">Please wait...</p>
+                                      <p className="text-sm text-gray-500 mt-2">Please wait...</p>
                                       
                                       {/* Animated progress bar */}
                                       <div className="w-full mt-4 h-1.5 bg-gold/20 rounded-full overflow-hidden">
@@ -913,7 +913,7 @@ const SupportTicketBox = () => {
                                   <MessageCircle className="w-4 h-4 text-gold" />
                                   Inquiry Details
                                 </p>
-                                <p className="text-xs text-zinc-500">
+                                <p className="text-xs text-gray-500">
                                   This inquiry will be tracked in the Inquiry Management Hub for follow-up.
                                 </p>
                               </motion.div>
@@ -937,7 +937,7 @@ const SupportTicketBox = () => {
                                   className="mt-1 bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
                                   required
                                 />
-                                <p className="text-xs text-zinc-500 mt-1">
+                                <p className="text-xs text-gray-500 mt-1">
                                   This helps us route your ticket to the right team.
                                 </p>
                               </motion.div>
@@ -967,7 +967,7 @@ const SupportTicketBox = () => {
                                   }}
                                 />
                               </div>
-                              <p className="text-xs text-zinc-400 mt-1 flex items-center gap-1">
+                              <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
                                 <Mic className="w-3 h-3" /> 🎙️ Speak in any language — auto-translated
                               </p>
                             </div>
@@ -989,12 +989,12 @@ const SupportTicketBox = () => {
                                   {PRIORITY_LEVELS.map((level) => (
                                     <SelectItem key={level.value} value={level.value}>
                                       <span className={`font-medium ${level.color}`}>{level.label}</span>
-                                      <span className="text-zinc-400 text-xs ml-2">- {level.description}</span>
+                                      <span className="text-gray-500 text-xs ml-2">- {level.description}</span>
                                     </SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
-                              <p className="text-xs text-zinc-400 mt-1">
+                              <p className="text-xs text-gray-500 mt-1">
                                 Our AI will verify and adjust priority based on issue analysis.
                               </p>
                             </div>
@@ -1023,7 +1023,7 @@ const SupportTicketBox = () => {
                                 className="mt-1 min-h-[120px] bg-white border-2 border-gold/40 focus:border-gold text-black rounded-lg"
                                 required
                               />
-                              <p className="text-xs text-zinc-400 mt-1 flex items-center gap-1">
+                              <p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
                                 <Mic className="w-3 h-3" /> 🎙️ Speak in any language — auto-translated to English
                               </p>
                             </div>
@@ -1049,11 +1049,11 @@ const SupportTicketBox = () => {
                                   htmlFor="file-upload"
                                   className="cursor-pointer flex flex-col items-center gap-2"
                                 >
-                                  <Upload className="w-8 h-8 text-zinc-400" />
+                                  <Upload className="w-8 h-8 text-gray-500" />
                                   <span className="text-sm text-zinc-600">
                                     Click to upload screenshots, videos, or documents
                                   </span>
-                                  <span className="text-xs text-zinc-400">
+                                  <span className="text-xs text-gray-500">
                                     Max 10MB per file, up to 5 files
                                   </span>
                                 </label>
@@ -1087,7 +1087,7 @@ const SupportTicketBox = () => {
                                             <span className="text-sm text-zinc-700 truncate block max-w-[140px]">
                                               {file.name}
                                             </span>
-                                            <span className="text-xs text-zinc-400">
+                                            <span className="text-xs text-gray-500">
                                               {(file.size / 1024 / 1024).toFixed(2)}MB
                                             </span>
                                           </div>
@@ -1125,8 +1125,8 @@ const SupportTicketBox = () => {
                                                     <source src={URL.createObjectURL(file)} type={file.type} />
                                                   </video>
                                                 ) : (
-                                                  <div className="text-center py-10 text-zinc-500">
-                                                    <FileText className="w-12 h-12 mx-auto mb-3 text-zinc-300" />
+                                                  <div className="text-center py-10 text-gray-500">
+                                                    <FileText className="w-12 h-12 mx-auto mb-3 text-gray-400" />
                                                     <p className="text-sm">Preview not available for this file type</p>
                                                     <p className="text-xs mt-1">{file.type || 'Unknown type'} • {(file.size / 1024 / 1024).toFixed(2)}MB</p>
                                                   </div>
@@ -1251,7 +1251,7 @@ const SupportTicketBox = () => {
                     </DialogContent>
                   </Dialog>
 
-                  <p className="text-sm text-zinc-500 mt-4">
+                  <p className="text-sm text-gray-500 mt-4">
                     Email:{" "}
                     <a
                       href={`mailto:${CONTACT_INFO.supportEmail}`}

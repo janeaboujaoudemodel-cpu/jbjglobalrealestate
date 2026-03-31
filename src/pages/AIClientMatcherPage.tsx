@@ -157,7 +157,7 @@ export default function AIClientMatcherPage() {
             {/* Budget Range */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-zinc-300">Min Budget (AED)</Label>
+                <Label className="text-white/85">Min Budget (AED)</Label>
                 <Input
                   type="number"
                   value={budgetMin}
@@ -167,7 +167,7 @@ export default function AIClientMatcherPage() {
                 />
               </div>
               <div>
-                <Label className="text-zinc-300">Max Budget (AED)</Label>
+                <Label className="text-white/85">Max Budget (AED)</Label>
                 <Input
                   type="number"
                   value={budgetMax}
@@ -180,7 +180,7 @@ export default function AIClientMatcherPage() {
 
             {/* Locations */}
             <div>
-              <Label className="text-zinc-300 mb-2 block">Preferred Locations</Label>
+              <Label className="text-white/85 mb-2 block">Preferred Locations</Label>
               <div className="flex flex-wrap gap-2">
                 {dubaiAreas.map(area => (
                   <Badge
@@ -189,7 +189,7 @@ export default function AIClientMatcherPage() {
                     className={`cursor-pointer ${
                       locations.includes(area) 
                         ? "bg-purple-500 text-black hover:bg-purple-400" 
-                        : "border-purple-500/30 text-zinc-300 hover:bg-purple-500/20"
+                        : "border-purple-500/30 text-white/85 hover:bg-purple-500/20"
                     }`}
                     onClick={() => toggleLocation(area)}
                   >
@@ -201,7 +201,7 @@ export default function AIClientMatcherPage() {
 
             {/* Property Types */}
             <div>
-              <Label className="text-zinc-300 mb-2 block">Property Types</Label>
+              <Label className="text-white/85 mb-2 block">Property Types</Label>
               <div className="flex flex-wrap gap-2">
                 {propertyTypeOptions.map(type => (
                   <Badge
@@ -210,7 +210,7 @@ export default function AIClientMatcherPage() {
                     className={`cursor-pointer ${
                       propertyTypes.includes(type) 
                         ? "bg-purple-500 text-black hover:bg-purple-400" 
-                        : "border-purple-500/30 text-zinc-300 hover:bg-purple-500/20"
+                        : "border-purple-500/30 text-white/85 hover:bg-purple-500/20"
                     }`}
                     onClick={() => togglePropertyType(type)}
                   >
@@ -223,7 +223,7 @@ export default function AIClientMatcherPage() {
             {/* Bedrooms */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-zinc-300">Min Bedrooms</Label>
+                <Label className="text-white/85">Min Bedrooms</Label>
                 <Select value={bedroomsMin} onValueChange={setBedroomsMin}>
                   <SelectTrigger className="bg-zinc-800 border-purple-500/30 text-white">
                     <SelectValue />
@@ -236,7 +236,7 @@ export default function AIClientMatcherPage() {
                 </Select>
               </div>
               <div>
-                <Label className="text-zinc-300">Max Bedrooms</Label>
+                <Label className="text-white/85">Max Bedrooms</Label>
                 <Select value={bedroomsMax} onValueChange={setBedroomsMax}>
                   <SelectTrigger className="bg-zinc-800 border-purple-500/30 text-white">
                     <SelectValue />
@@ -252,7 +252,7 @@ export default function AIClientMatcherPage() {
 
             {/* Features */}
             <div>
-              <Label className="text-zinc-300">Must-Have Features (comma-separated)</Label>
+              <Label className="text-white/85">Must-Have Features (comma-separated)</Label>
               <Textarea
                 value={features}
                 onChange={(e) => setFeatures(e.target.value)}
@@ -264,7 +264,7 @@ export default function AIClientMatcherPage() {
             {/* Investment Goal & Timeline */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-zinc-300">Investment Goal</Label>
+                <Label className="text-white/85">Investment Goal</Label>
                 <Select value={investmentGoal} onValueChange={setInvestmentGoal}>
                   <SelectTrigger className="bg-zinc-800 border-purple-500/30 text-white">
                     <SelectValue />
@@ -278,7 +278,7 @@ export default function AIClientMatcherPage() {
                 </Select>
               </div>
               <div>
-                <Label className="text-zinc-300">Timeline</Label>
+                <Label className="text-white/85">Timeline</Label>
                 <Select value={timeline} onValueChange={setTimeline}>
                   <SelectTrigger className="bg-zinc-800 border-purple-500/30 text-white">
                     <SelectValue />
@@ -326,7 +326,7 @@ export default function AIClientMatcherPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-zinc-300">{result.clientProfile.summary}</p>
+                  <p className="text-white/85">{result.clientProfile.summary}</p>
                   <div className="flex items-center gap-2">
                     <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30">
                       {result.clientProfile.buyerType}
@@ -335,7 +335,7 @@ export default function AIClientMatcherPage() {
                   {result.clientProfile.priorityFactors && (
                     <div className="flex flex-wrap gap-2">
                       {result.clientProfile.priorityFactors.map((factor, i) => (
-                        <Badge key={i} variant="outline" className="border-zinc-600 text-zinc-300">
+                        <Badge key={i} variant="outline" className="border-zinc-600 text-white/85">
                           {factor}
                         </Badge>
                       ))}
@@ -362,7 +362,7 @@ export default function AIClientMatcherPage() {
                           <h4 className="text-white font-semibold">{area.area}</h4>
                           <Badge className="bg-purple-500 text-black">{area.matchScore}% Match</Badge>
                         </div>
-                        <p className="text-zinc-400 text-sm mb-2">{area.reason}</p>
+                        <p className="text-white/70 text-sm mb-2">{area.reason}</p>
                         <p className="text-purple-300 text-sm">{area.priceRange}</p>
                       </div>
                     ))}
@@ -387,19 +387,19 @@ export default function AIClientMatcherPage() {
                         <h4 className="text-white font-semibold mb-2">{prop.type}</h4>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
                           <div>
-                            <span className="text-zinc-500">Size:</span>
-                            <span className="text-zinc-300 ml-1">{prop.idealSize}</span>
+                            <span className="text-white/60">Size:</span>
+                            <span className="text-white/85 ml-1">{prop.idealSize}</span>
                           </div>
                           <div>
-                            <span className="text-zinc-500">Price:</span>
-                            <span className="text-zinc-300 ml-1">{prop.targetPrice}</span>
+                            <span className="text-white/60">Price:</span>
+                            <span className="text-white/85 ml-1">{prop.targetPrice}</span>
                           </div>
                           <div>
-                            <span className="text-zinc-500">Potential:</span>
+                            <span className="text-white/60">Potential:</span>
                             <span className="text-purple-300 ml-1">{prop.investmentPotential}</span>
                           </div>
                           <div>
-                            <span className="text-zinc-500">Yield:</span>
+                            <span className="text-white/60">Yield:</span>
                             <span className="text-green-400 ml-1">{prop.rentalYield}</span>
                           </div>
                         </div>
@@ -422,7 +422,7 @@ export default function AIClientMatcherPage() {
                 <CardContent>
                   <ol className="space-y-2">
                     {result.nextSteps.map((step, i) => (
-                      <li key={i} className="flex items-start gap-3 text-zinc-300">
+                      <li key={i} className="flex items-start gap-3 text-white/85">
                         <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-sm">
                           {i + 1}
                         </span>
@@ -440,7 +440,7 @@ export default function AIClientMatcherPage() {
         {!result && !loading && (
           <div className="bg-zinc-900/50 border border-purple-500/20 rounded-xl py-12 text-center">
             <Users className="w-12 h-12 text-purple-400/50 mx-auto mb-4" />
-            <p className="text-zinc-400">Enter client preferences above to get AI-powered property matches</p>
+            <p className="text-white/70">Enter client preferences above to get AI-powered property matches</p>
           </div>
         )}
       </div>

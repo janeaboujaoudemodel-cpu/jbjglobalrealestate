@@ -349,7 +349,7 @@ export const DeveloperApprovalQueue = () => {
             <Loader2 className="w-8 h-8 animate-spin text-gold" />
           </div>
         ) : pendingDevelopers.length === 0 ? (
-          <div className="text-center py-12 text-zinc-500">
+          <div className="text-center py-12 text-gray-500">
             <CheckCircle2 className="w-12 h-12 mx-auto mb-4 text-green-500/50" />
             <p>No pending developers to review</p>
             <p className="text-sm mt-2">Click "Extract from Source" to fetch new developers</p>
@@ -384,7 +384,7 @@ export const DeveloperApprovalQueue = () => {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-200 to-zinc-300">
-                          <Building2 className="w-16 h-16 text-zinc-400" />
+                          <Building2 className="w-16 h-16 text-gray-500" />
                         </div>
                       )}
 
@@ -401,7 +401,7 @@ export const DeveloperApprovalQueue = () => {
                             }}
                           />
                         ) : (
-                          <span className="text-xs text-zinc-400">No logo</span>
+                          <span className="text-xs text-gray-500">No logo</span>
                         )}
                       </div>
 
@@ -420,7 +420,7 @@ export const DeveloperApprovalQueue = () => {
                         <h3 className="text-zinc-900 font-semibold text-sm leading-tight truncate flex-1 min-w-0">
                           {developer.name}
                         </h3>
-                        <ChevronUp className="w-4 h-4 text-zinc-400 rotate-45 flex-shrink-0" />
+                        <ChevronUp className="w-4 h-4 text-gray-500 rotate-45 flex-shrink-0" />
                       </div>
 
                       {/* Description - Fixed height with line clamp */}
@@ -465,7 +465,7 @@ export const DeveloperApprovalQueue = () => {
                           variant="ghost"
                           onClick={() => window.open(developer.provident_link || "#", "_blank")}
                           disabled={!developer.provident_link}
-                          className="w-8 h-8 p-0 text-zinc-500 hover:text-zinc-900"
+                          className="w-8 h-8 p-0 text-gray-500 hover:text-zinc-900"
                           title="View Source"
                         >
                           <Pencil className="w-3 h-3" />

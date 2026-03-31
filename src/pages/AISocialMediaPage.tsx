@@ -146,7 +146,7 @@ export default function AISocialMediaPage() {
           <CardContent className="space-y-4">
             {/* Platform Selection */}
             <div>
-              <Label className="text-zinc-300 mb-2 block">Platform</Label>
+              <Label className="text-white/85 mb-2 block">Platform</Label>
               <div className="flex flex-wrap gap-2">
                 {platforms.map(p => {
                   const Icon = p.icon;
@@ -157,7 +157,7 @@ export default function AISocialMediaPage() {
                       className={`cursor-pointer flex items-center gap-1 ${
                         platform === p.value 
                           ? "bg-pink-500 text-black hover:bg-pink-400" 
-                          : "border-pink-500/30 text-zinc-300 hover:bg-pink-500/20"
+                          : "border-pink-500/30 text-white/85 hover:bg-pink-500/20"
                       }`}
                       onClick={() => setPlatform(p.value)}
                     >
@@ -171,7 +171,7 @@ export default function AISocialMediaPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-zinc-300">Content Type</Label>
+                <Label className="text-white/85">Content Type</Label>
                 <Select value={contentType} onValueChange={setContentType}>
                   <SelectTriggerDark className="border-pink-500/30 hover:border-pink-500/50">
                     <SelectValue />
@@ -184,7 +184,7 @@ export default function AISocialMediaPage() {
                 </Select>
               </div>
               <div>
-                <Label className="text-zinc-300">Tone</Label>
+                <Label className="text-white/85">Tone</Label>
                 <Select value={tone} onValueChange={setTone}>
                   <SelectTriggerDark className="border-pink-500/30 hover:border-pink-500/50">
                     <SelectValue />
@@ -201,7 +201,7 @@ export default function AISocialMediaPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-zinc-300">Property Title</Label>
+                <Label className="text-white/85">Property Title</Label>
                 <Input
                   value={propertyTitle}
                   onChange={(e) => setPropertyTitle(e.target.value)}
@@ -210,7 +210,7 @@ export default function AISocialMediaPage() {
                 />
               </div>
               <div>
-                <Label className="text-zinc-300">Location</Label>
+                <Label className="text-white/85">Location</Label>
                 <Input
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
@@ -222,7 +222,7 @@ export default function AISocialMediaPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-zinc-300">Price</Label>
+                <Label className="text-white/85">Price</Label>
                 <Input
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
@@ -231,7 +231,7 @@ export default function AISocialMediaPage() {
                 />
               </div>
               <div>
-                <Label className="text-zinc-300">Bedrooms</Label>
+                <Label className="text-white/85">Bedrooms</Label>
                 <Input
                   type="number"
                   value={bedrooms}
@@ -243,7 +243,7 @@ export default function AISocialMediaPage() {
             </div>
 
             <div>
-              <Label className="text-zinc-300">Key Features (comma-separated)</Label>
+              <Label className="text-white/85">Key Features (comma-separated)</Label>
               <Input
                 value={features}
                 onChange={(e) => setFeatures(e.target.value)}
@@ -253,7 +253,7 @@ export default function AISocialMediaPage() {
             </div>
 
             <div>
-              <Label className="text-zinc-300">Highlights / Key Message</Label>
+              <Label className="text-white/85">Highlights / Key Message</Label>
               <Textarea
                 value={highlights}
                 onChange={(e) => setHighlights(e.target.value)}
@@ -310,7 +310,7 @@ export default function AISocialMediaPage() {
                 )}
                 
                 {result.mainPost && (
-                  <p className="text-zinc-300 whitespace-pre-wrap">{result.mainPost}</p>
+                  <p className="text-white/85 whitespace-pre-wrap">{result.mainPost}</p>
                 )}
 
                 {result.callToAction && (
@@ -326,7 +326,7 @@ export default function AISocialMediaPage() {
                 )}
 
                 {result.bestTimeToPost && (
-                  <p className="text-zinc-500 text-sm">Best time to post: {result.bestTimeToPost}</p>
+                  <p className="text-white/60 text-sm">Best time to post: {result.bestTimeToPost}</p>
                 )}
               </CardContent>
             </Card>
@@ -345,7 +345,7 @@ export default function AISocialMediaPage() {
                     {Object.entries(result.storyContent).map(([key, value]) => (
                       <div key={key} className="bg-zinc-800/50 rounded-lg p-4 border border-pink-500/20 text-center">
                         <Label className="text-pink-400 text-xs uppercase">{key}</Label>
-                        <p className="text-zinc-300 text-sm mt-2">{value}</p>
+                        <p className="text-white/85 text-sm mt-2">{value}</p>
                       </div>
                     ))}
                   </div>
@@ -360,7 +360,7 @@ export default function AISocialMediaPage() {
                   <CardTitle className="text-white text-sm">Suggested Image</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-zinc-400 text-sm">{result.imagePrompt}</p>
+                  <p className="text-white/70 text-sm">{result.imagePrompt}</p>
                 </CardContent>
               </Card>
             )}
@@ -377,7 +377,7 @@ export default function AISocialMediaPage() {
                 <CardContent>
                   <ul className="space-y-2">
                     {result.engagementTips.map((tip, i) => (
-                      <li key={i} className="flex items-start gap-2 text-zinc-300 text-sm">
+                      <li key={i} className="flex items-start gap-2 text-white/85 text-sm">
                         <span className="text-pink-400">•</span>
                         {tip}
                       </li>
@@ -393,7 +393,7 @@ export default function AISocialMediaPage() {
         {!result && !loading && (
           <div className="bg-zinc-900/50 border border-pink-500/20 rounded-xl py-12 text-center">
             <Share2 className="w-12 h-12 text-pink-400/50 mx-auto mb-4" />
-            <p className="text-zinc-400">Configure your post above to generate engaging social content</p>
+            <p className="text-white/70">Configure your post above to generate engaging social content</p>
           </div>
         )}
       </div>

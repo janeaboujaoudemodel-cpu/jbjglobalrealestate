@@ -166,7 +166,7 @@ const News = () => {
             <Building2 className="w-4 h-4 text-gold" />
             <span className="text-xs font-semibold text-black uppercase tracking-wide">Transaction Type</span>
           </div>
-          <span className="text-[10px] text-zinc-400">{dateLabel}</span>
+          <span className="text-[10px] text-gray-500">{dateLabel}</span>
           <div className="space-y-2 mt-2">
             <div className="flex justify-between items-center">
               <span className="text-sm text-zinc-700">Off-plan</span>
@@ -182,7 +182,7 @@ const News = () => {
               <span className="text-sm text-zinc-700">Secondary</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-black">{isDaily ? `~${secondary}` : `~${secondary.toLocaleString()}`}</span>
-                <span className="text-xs text-zinc-500 font-medium bg-zinc-100 px-1.5 py-0.5 rounded">{secondaryPct}%</span>
+                <span className="text-xs text-gray-500 font-medium bg-zinc-100 px-1.5 py-0.5 rounded">{secondaryPct}%</span>
               </div>
             </div>
             <div className="w-full bg-zinc-200 rounded-full h-2">
@@ -197,7 +197,7 @@ const News = () => {
             <Banknote className="w-4 h-4 text-gold" />
             <span className="text-xs font-semibold text-black uppercase tracking-wide">Payment Method</span>
           </div>
-          <span className="text-[10px] text-zinc-400">{dateLabel}</span>
+          <span className="text-[10px] text-gray-500">{dateLabel}</span>
           <div className="space-y-2 mt-2">
             <div className="flex justify-between items-center">
               <span className="text-sm text-zinc-700">Cash</span>
@@ -213,7 +213,7 @@ const News = () => {
               <span className="text-sm text-zinc-700">Mortgage</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-black">{isDaily ? `~${mortgage}` : `~${mortgage.toLocaleString()}`}</span>
-                <span className="text-xs text-zinc-500 font-medium bg-zinc-100 px-1.5 py-0.5 rounded">{mortgagePct}%</span>
+                <span className="text-xs text-gray-500 font-medium bg-zinc-100 px-1.5 py-0.5 rounded">{mortgagePct}%</span>
               </div>
             </div>
             <div className="w-full bg-zinc-200 rounded-full h-2">
@@ -228,11 +228,11 @@ const News = () => {
             <Gift className="w-4 h-4 text-gold" />
             <span className="text-xs font-semibold text-black uppercase tracking-wide">Gift Transactions</span>
           </div>
-          <span className="text-[10px] text-zinc-400">{dateLabel}</span>
+          <span className="text-[10px] text-gray-500">{dateLabel}</span>
           <div className="flex flex-col items-center justify-center h-[calc(100%-2.5rem)] mt-2">
             <p className="text-4xl font-bold text-gold">~{isDaily ? gifts : gifts.toLocaleString()}</p>
             <p className="text-sm text-zinc-600 mt-1">{isDaily ? "Daily Avg Gift Transfers" : "Gift Transfers"}</p>
-            <p className="text-xs text-zinc-500 mt-2">{giftPct}% of total volume</p>
+            <p className="text-xs text-gray-500 mt-2">{giftPct}% of total volume</p>
           </div>
         </div>
       </div>
@@ -245,16 +245,16 @@ const News = () => {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-gold/20">
-            <th className="text-left py-3 px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">#</th>
-            <th className="text-left py-3 px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Area</th>
-            <th className="text-right py-3 px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Transactions</th>
-            <th className="text-right py-3 px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">YoY Change</th>
+            <th className="text-left py-3 px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">#</th>
+            <th className="text-left py-3 px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Area</th>
+            <th className="text-right py-3 px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Transactions</th>
+            <th className="text-right py-3 px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">YoY Change</th>
           </tr>
         </thead>
         <tbody>
           {areas.map((area, i) => (
             <tr key={area.area} className="border-b border-zinc-100 last:border-0 hover:bg-champagne-light/30 transition-colors">
-              <td className="py-3 px-2 text-zinc-400 font-medium">{i + 1}</td>
+              <td className="py-3 px-2 text-gray-500 font-medium">{i + 1}</td>
               <td className="py-3 px-2 text-black font-medium">{area.area}</td>
               <td className="py-3 px-2 text-right text-gold font-bold">{area.transactions.toLocaleString()}</td>
               <td className="py-3 px-2 text-right">
@@ -363,7 +363,7 @@ const News = () => {
                               fallback.className = 'w-full h-full min-h-[250px] bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-3';
                               const cat = filteredNews[0]?.category || 'News';
                               const src = filteredNews[0]?.source || '';
-                              fallback.innerHTML = `<div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gold/80 text-sm font-semibold uppercase tracking-wider">${cat}</span><span class="text-zinc-500 text-xs">${src}</span>`;
+                              fallback.innerHTML = `<div class="w-16 h-16 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gold/80 text-sm font-semibold uppercase tracking-wider">${cat}</span><span class="text-gray-500 text-xs">${src}</span>`;
                               parent.insertBefore(fallback, e.currentTarget);
                             }
                           }}
@@ -438,7 +438,7 @@ const News = () => {
                           fallback.className = 'w-full h-full bg-gradient-to-br from-[hsl(43,45%,90%)] via-[hsl(40,30%,96%)] to-[hsl(39,25%,93%)] flex flex-col items-center justify-center gap-2 p-4';
                           const cat = article.category || 'News';
                           const src = article.source || '';
-                          fallback.innerHTML = `<div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gold/80 text-xs font-semibold uppercase tracking-wider">${cat}</span><span class="text-zinc-500 text-[10px]">${src}</span>`;
+                          fallback.innerHTML = `<div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-gold"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></div><span class="text-gold/80 text-xs font-semibold uppercase tracking-wider">${cat}</span><span class="text-gray-500 text-[10px]">${src}</span>`;
                           parent.insertBefore(fallback, e.currentTarget);
                         }
                       }}
@@ -463,7 +463,7 @@ const News = () => {
                       <Calendar className="w-3 h-3" />
                       {new Date(article.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                     </span>
-                    <span className="text-zinc-400">•</span>
+                    <span className="text-gray-500">•</span>
                     <span className="flex items-center gap-1">
                       <Landmark className="w-3 h-3" />
                       {article.source}
@@ -515,7 +515,7 @@ const News = () => {
                       <h3 className="text-xl font-bold text-black">
                         Key Market Statistics — 2026
                       </h3>
-                      <p className="text-xs text-zinc-500 mt-0.5">Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}</p>
                     </div>
                   </div>
                   <Badge className="bg-emerald-500 text-white border-0 px-3 py-1 text-xs font-bold animate-pulse">
@@ -628,7 +628,7 @@ const News = () => {
                     <h3 className="text-lg font-bold text-black">
                       Top 10 Areas by Transaction Volume
                     </h3>
-                    <p className="text-xs text-zinc-500">2026 YTD · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-gray-500">2026 YTD · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
                 <AreasTable areas={topAreas2026} yearLabel="2026" />
@@ -648,13 +648,13 @@ const News = () => {
                     <h3 className="text-lg font-bold text-black">
                       Top Buyer Nationalities
                     </h3>
-                    <p className="text-xs text-zinc-500">2026 YTD · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-gray-500">2026 YTD · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
                 <div className="space-y-3">
                   {topNationalities.map((nat, i) => (
                     <div key={nat.country} className="flex items-center gap-3">
-                      <span className="text-zinc-400 font-medium text-sm w-5 text-right">{i + 1}</span>
+                      <span className="text-gray-500 font-medium text-sm w-5 text-right">{i + 1}</span>
                       <span className="text-lg">{nat.flag}</span>
                       <span className="text-sm font-medium text-black flex-1">{nat.country}</span>
                       <div className="flex-1 max-w-[200px]">
@@ -663,7 +663,7 @@ const News = () => {
                         </div>
                       </div>
                       <span className="text-sm font-bold text-gold w-14 text-right">{nat.percentage}%</span>
-                      <span className="text-xs text-zinc-500 w-16 text-right">{nat.transactions.toLocaleString()}</span>
+                      <span className="text-xs text-gray-500 w-16 text-right">{nat.transactions.toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
@@ -673,7 +673,7 @@ const News = () => {
 
           {/* Premium Separator */}
           <div className="mt-8 text-center">
-            <p className="text-zinc-500 text-sm italic tracking-wide">
+            <p className="text-gray-500 text-sm italic tracking-wide">
               Looking back at last year's performance?
             </p>
           </div>
@@ -690,7 +690,7 @@ const News = () => {
                     <h3 className="text-lg font-bold text-black">
                       2025 Full Year Recap
                     </h3>
-                    <p className="text-xs text-zinc-500">January 1, 2025 – January 1, 2026 · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-gray-500">January 1, 2025 – January 1, 2026 · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
 
@@ -749,7 +749,7 @@ const News = () => {
                     <h3 className="text-lg font-bold text-black">
                       Top 10 Areas by Transaction Volume
                     </h3>
-                    <p className="text-xs text-zinc-500">Full Year 2025 · Dubai Land Department (DLD)</p>
+                    <p className="text-xs text-gray-500">Full Year 2025 · Dubai Land Department (DLD)</p>
                   </div>
                 </div>
                 <AreasTable areas={topAreas2025} yearLabel="2025" />

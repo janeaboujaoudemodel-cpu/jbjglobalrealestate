@@ -123,7 +123,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
               </div>
               <div className="text-left">
                 <h3 className="font-semibold text-white">Add Call Summary</h3>
-                <p className="text-sm text-zinc-300">Summarize a phone call with AI</p>
+                <p className="text-sm text-white/85">Summarize a phone call with AI</p>
               </div>
             </div>
             {isOpen ? (
@@ -143,7 +143,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
                 placeholder="Enter client name"
-                className="bg-zinc-800 border-zinc-600 text-white placeholder:text-zinc-400"
+                className="bg-zinc-800 border-zinc-600 text-white placeholder:text-gray-400"
               />
             </div>
 
@@ -206,7 +206,7 @@ const InlineCallSummarizer = ({ onSuccess }: InlineCallSummarizerProps) => {
                 value={callNotes}
                 onChange={(e) => setCallNotes(e.target.value)}
                 placeholder="Enter key discussion points..."
-                className="bg-zinc-800 border-zinc-600 text-white placeholder:text-zinc-400 min-h-[100px]"
+                className="bg-zinc-800 border-zinc-600 text-white placeholder:text-gray-400 min-h-[100px]"
               />
             </div>
 

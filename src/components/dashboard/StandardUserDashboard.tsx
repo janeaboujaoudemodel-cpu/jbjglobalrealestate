@@ -83,7 +83,7 @@ const ROLES: RoleOption[] = [
     title: 'I am just Exploring',
     subtitle: 'Browse the platform first',
     icon: Eye,
-    color: 'text-zinc-400',
+    color: 'text-gray-500',
     bgGradient: 'from-zinc-400/20 to-zinc-500/10',
     benefits: [
       'Browse Properties',
@@ -177,7 +177,7 @@ const StandardUserDashboard = () => {
             <h1 className="text-3xl md:text-4xl font-bold mb-4">
               How would you like to use <span className="text-gold">JBJ Global Real Estate</span>?
             </h1>
-            <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
               Select your role to customize your experience. You can change this anytime in your profile settings.
             </p>
           </motion.div>
@@ -215,14 +215,14 @@ const StandardUserDashboard = () => {
                     <CardTitle className={`text-xl mt-4 ${isSelected ? 'text-gold' : 'text-white group-hover:text-gold'} transition-colors`}>
                       {role.title}
                     </CardTitle>
-                    <CardDescription className="text-zinc-400">
+                    <CardDescription className="text-gray-500">
                       {role.subtitle}
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2">
                       {role.benefits.map((benefit, idx) => (
-                        <li key={idx} className="flex items-center gap-2 text-sm text-zinc-400">
+                        <li key={idx} className="flex items-center gap-2 text-sm text-gray-500">
                           <div className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-gold' : 'bg-zinc-600'}`} />
                           {benefit}
                         </li>
@@ -230,7 +230,7 @@ const StandardUserDashboard = () => {
                     </ul>
                     
                     <div className="mt-4 pt-4 border-t border-zinc-800">
-                      <span className={`text-sm flex items-center gap-2 ${isSelected ? 'text-gold' : 'text-zinc-500 group-hover:text-gold'} transition-colors`}>
+                      <span className={`text-sm flex items-center gap-2 ${isSelected ? 'text-gold' : 'text-gray-500 group-hover:text-gold'} transition-colors`}>
                         {isLoading ? 'Setting up...' : 'Select this role'} 
                         <ArrowRight className={`w-4 h-4 transition-transform ${!isLoading && 'group-hover:translate-x-1'}`} />
                       </span>
@@ -242,7 +242,7 @@ const StandardUserDashboard = () => {
           </motion.div>
 
           {/* Note */}
-          <motion.p variants={fadeInUp} className="text-center text-sm text-zinc-500">
+          <motion.p variants={fadeInUp} className="text-center text-sm text-gray-500">
             Selection is immediate. No approval required for Investor, Owner, or Broker Partner roles.
           </motion.p>
         </motion.div>

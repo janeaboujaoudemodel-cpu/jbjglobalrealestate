@@ -144,11 +144,11 @@ const ExecutiveRisk = () => {
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
                 Risk & Compliance Monitor
               </h1>
-              <p className="text-zinc-400">
+              <p className="text-white/70">
                 Early warning system and audit readiness status
               </p>
             </div>
-            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-zinc-500">
+            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-white/60">
               <Clock className="w-4 h-4" />
               <span>Last updated: {new Date(lastUpdated).toLocaleString()}</span>
             </div>
@@ -169,7 +169,7 @@ const ExecutiveRisk = () => {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   nav.active
                     ? "bg-gold text-black"
-                    : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                    : "bg-zinc-800 text-white/85 hover:bg-zinc-700"
                 }`}
               >
                 {nav.label}
@@ -180,7 +180,7 @@ const ExecutiveRisk = () => {
           {loading ? (
             <div className="text-center py-12">
               <Shield className="w-8 h-8 text-gold animate-pulse mx-auto mb-4" />
-              <p className="text-zinc-400">Loading compliance data...</p>
+              <p className="text-white/70">Loading compliance data...</p>
             </div>
           ) : (
             <>
@@ -188,7 +188,7 @@ const ExecutiveRisk = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Database className="w-4 h-4" />
                       Data Integrity
                     </CardTitle>
@@ -205,7 +205,7 @@ const ExecutiveRisk = () => {
 
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Lock className="w-4 h-4" />
                       RLS Policies
                     </CardTitle>
@@ -222,7 +222,7 @@ const ExecutiveRisk = () => {
 
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Eye className="w-4 h-4" />
                       Audit Logging
                     </CardTitle>
@@ -239,7 +239,7 @@ const ExecutiveRisk = () => {
 
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <FileText className="w-4 h-4" />
                       Last Audit
                     </CardTitle>
@@ -264,7 +264,7 @@ const ExecutiveRisk = () => {
                   {alerts.length === 0 ? (
                     <div className="text-center py-8">
                       <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto mb-3" />
-                      <p className="text-zinc-400">No active compliance alerts</p>
+                      <p className="text-white/70">No active compliance alerts</p>
                     </div>
                   ) : (
                     <div className="space-y-3">
@@ -291,7 +291,7 @@ const ExecutiveRisk = () => {
                               <Badge className={getSeverityColor(alert.severity)}>
                                 {alert.severity.toUpperCase()}
                               </Badge>
-                              <Badge variant="outline" className="border-zinc-700 text-zinc-400">
+                              <Badge variant="outline" className="border-zinc-700 text-white/70">
                                 {alert.type}
                               </Badge>
                               {alert.resolved && (
@@ -300,8 +300,8 @@ const ExecutiveRisk = () => {
                                 </Badge>
                               )}
                             </div>
-                            <p className="text-zinc-300 text-sm">{alert.message}</p>
-                            <p className="text-zinc-500 text-xs mt-1">
+                            <p className="text-white/85 text-sm">{alert.message}</p>
+                            <p className="text-white/60 text-xs mt-1">
                               {new Date(alert.timestamp).toLocaleString()}
                             </p>
                           </div>
@@ -326,7 +326,7 @@ const ExecutiveRisk = () => {
                         <CheckCircle className="w-4 h-4" />
                         Active Filters
                       </h4>
-                      <ul className="text-sm text-zinc-300 space-y-1">
+                      <ul className="text-sm text-white/85 space-y-1">
                         <li>• Investment advice detection</li>
                         <li>• ROI/guarantee language blocking</li>
                         <li>• Prediction claim filtering</li>
@@ -335,22 +335,22 @@ const ExecutiveRisk = () => {
                     </div>
 
                     <div className="bg-zinc-800 rounded-lg p-4">
-                      <h4 className="text-zinc-300 font-medium mb-2">Filter Statistics (30 days)</h4>
+                      <h4 className="text-white/85 font-medium mb-2">Filter Statistics (30 days)</h4>
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
-                          <span className="text-zinc-400">Messages scanned</span>
+                          <span className="text-white/70">Messages scanned</span>
                           <span className="text-white">12,847</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-zinc-400">Flagged content</span>
+                          <span className="text-white/70">Flagged content</span>
                           <span className="text-amber-400">23</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-zinc-400">Auto-corrected</span>
+                          <span className="text-white/70">Auto-corrected</span>
                           <span className="text-emerald-400">18</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-zinc-400">Escalated for review</span>
+                          <span className="text-white/70">Escalated for review</span>
                           <span className="text-blue-400">5</span>
                         </div>
                       </div>
@@ -372,17 +372,17 @@ const ExecutiveRisk = () => {
                     <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 text-center">
                       <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                       <p className="text-emerald-400 font-medium">Data Attribution</p>
-                      <p className="text-xs text-zinc-400 mt-1">All sources logged</p>
+                      <p className="text-xs text-white/70 mt-1">All sources logged</p>
                     </div>
                     <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 text-center">
                       <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                       <p className="text-emerald-400 font-medium">Access Logging</p>
-                      <p className="text-xs text-zinc-400 mt-1">All access tracked</p>
+                      <p className="text-xs text-white/70 mt-1">All access tracked</p>
                     </div>
                     <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 text-center">
                       <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                       <p className="text-emerald-400 font-medium">AI Explainability</p>
-                      <p className="text-xs text-zinc-400 mt-1">Insights are logged</p>
+                      <p className="text-xs text-white/70 mt-1">Insights are logged</p>
                     </div>
                   </div>
                 </CardContent>
@@ -390,7 +390,7 @@ const ExecutiveRisk = () => {
 
               {/* Footer */}
               <div className="mt-12 pt-6 border-t border-zinc-800 text-center">
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-white/60">
                   Risk & Compliance Monitor • All events logged and auditable
                 </p>
                 <p className="text-xs text-gold mt-0.5">JBJ Global Real Estate</p>

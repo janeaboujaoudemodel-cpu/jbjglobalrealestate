@@ -185,7 +185,7 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
               </h3>
 
               {/* Description */}
-              <p className="text-zinc-400 text-xs line-clamp-2 flex-1">
+              <p className="text-white/70 text-xs line-clamp-2 flex-1">
                 {book.description}
               </p>
 

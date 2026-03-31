@@ -300,7 +300,7 @@ const Index = () => {
                 >
                   <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/80 mx-auto mb-1.5" />
                   <h3 className="text-[10px] sm:text-xs font-semibold text-white mb-0.5">{pillar.title}</h3>
-                  <p className="text-[8px] sm:text-[10px] text-zinc-400 leading-tight">{pillar.desc}</p>
+                  <p className="text-[8px] sm:text-[10px] text-gray-500 leading-tight">{pillar.desc}</p>
                 </div>
               ))}
             </motion.div>
@@ -312,7 +312,7 @@ const Index = () => {
               transition={{ delay: 1.2, duration: 0.5 }}
               className="flex flex-col items-center gap-1"
             >
-              <span className="text-[9px] uppercase tracking-[0.2em] text-zinc-500">Explore</span>
+              <span className="text-[9px] uppercase tracking-[0.2em] text-gray-500">Explore</span>
               <ChevronDown className="w-4 h-4 text-white/40 animate-bounce" />
             </motion.div>
           </div>

@@ -199,7 +199,7 @@ DISCLAIMER: ${result.disclaimer}
             </div>
             AI Property Analyzer
           </CardTitle>
-          <p className="text-zinc-400 text-sm mt-2">
+          <p className="text-white/70 text-sm mt-2">
             Deep market analysis powered by government data sources
           </p>
         </CardHeader>
@@ -207,7 +207,7 @@ DISCLAIMER: ${result.disclaimer}
           {/* Area Selection */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label className="text-zinc-300">Select Area</Label>
+              <Label className="text-white/85">Select Area</Label>
               <Select value={area} onValueChange={setArea}>
                 <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
                   <SelectValue placeholder="Choose an area" />
@@ -226,7 +226,7 @@ DISCLAIMER: ${result.disclaimer}
             </div>
 
             <div>
-              <Label className="text-zinc-300">Property Type</Label>
+              <Label className="text-white/85">Property Type</Label>
               <Select value={propertyType} onValueChange={setPropertyType}>
                 <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
                   <SelectValue />
@@ -245,7 +245,7 @@ DISCLAIMER: ${result.disclaimer}
           {/* Custom Area Input */}
           {area === "custom" && (
             <div>
-              <Label className="text-zinc-300">Custom Area Name</Label>
+              <Label className="text-white/85">Custom Area Name</Label>
               <Input
                 placeholder="Enter area name (e.g., Al Quoz Industrial)"
                 value={customArea}
@@ -257,7 +257,7 @@ DISCLAIMER: ${result.disclaimer}
 
           {/* Compare With */}
           <div>
-            <Label className="text-zinc-300">Compare With (Optional - max 3)</Label>
+            <Label className="text-white/85">Compare With (Optional - max 3)</Label>
             <div className="flex flex-wrap gap-2 mt-2">
               {compareWith.map((a) => (
                 <Badge 
@@ -270,7 +270,7 @@ DISCLAIMER: ${result.disclaimer}
               ))}
               {compareWith.length < 3 && (
                 <Select onValueChange={addCompareArea}>
-                  <SelectTrigger className="w-auto bg-zinc-800 border-zinc-700 text-zinc-400 text-sm h-7 px-2">
+                  <SelectTrigger className="w-auto bg-zinc-800 border-zinc-700 text-white/70 text-sm h-7 px-2">
                     <span>+ Add area</span>
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700 max-h-40">
@@ -288,7 +288,7 @@ DISCLAIMER: ${result.disclaimer}
           {/* Report Options */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-zinc-800">
             <div>
-              <Label className="text-zinc-300">Measurement Unit</Label>
+              <Label className="text-white/85">Measurement Unit</Label>
               <Select value={measurementUnit} onValueChange={(v: "sqft" | "sqm" | "both") => setMeasurementUnit(v)}>
                 <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
                   <SelectValue />
@@ -302,7 +302,7 @@ DISCLAIMER: ${result.disclaimer}
             </div>
 
             <div>
-              <Label className="text-zinc-300">Currency</Label>
+              <Label className="text-white/85">Currency</Label>
               <Select value={currency} onValueChange={setCurrency}>
                 <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
                   <SelectValue>
@@ -318,7 +318,7 @@ DISCLAIMER: ${result.disclaimer}
                       <span className="flex items-center gap-2">
                         <span>{c.flag}</span>
                         <span className="font-medium">{c.code}</span>
-                        <span className="text-zinc-400 text-xs">— {c.name}</span>
+                        <span className="text-white/70 text-xs">— {c.name}</span>
                       </span>
                     </SelectItem>
                   ))}
@@ -327,7 +327,7 @@ DISCLAIMER: ${result.disclaimer}
             </div>
 
             <div>
-              <Label className="text-zinc-300">Report Language</Label>
+              <Label className="text-white/85">Report Language</Label>
               <Select value={language} onValueChange={(v: "en" | "ar" | "ru" | "zh" | "hi") => setLanguage(v)}>
                 <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white mt-1">
                   <SelectValue />
@@ -364,7 +364,7 @@ DISCLAIMER: ${result.disclaimer}
           {/* Data Sources */}
           <div className="flex flex-wrap gap-2 justify-center pt-2">
             {["Dubai Land Dept", "DXB Interact", "Property Finder", "RERA"].map((source) => (
-              <Badge key={source} variant="outline" className="text-zinc-500 border-zinc-700 text-xs">
+              <Badge key={source} variant="outline" className="text-white/60 border-zinc-700 text-xs">
                 {source}
               </Badge>
             ))}
@@ -390,7 +390,7 @@ DISCLAIMER: ${result.disclaimer}
                       <MapPin className="w-6 h-6 text-gold" />
                       {result.area}
                     </h2>
-                    <p className="text-zinc-400 text-sm mt-1">
+                    <p className="text-white/70 text-sm mt-1">
                       {result.propertyType.charAt(0).toUpperCase() + result.propertyType.slice(1)} Analysis • 
                       Generated {new Date(result.generatedAt).toLocaleString()}
                     </p>
@@ -400,7 +400,7 @@ DISCLAIMER: ${result.disclaimer}
                       variant="outline"
                       size="sm"
                       onClick={copyToClipboard}
-                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                      className="border-zinc-700 text-white/85 hover:bg-zinc-800"
                     >
                       {copied ? <Check className="w-4 h-4 mr-1" /> : <Copy className="w-4 h-4 mr-1" />}
                       {copied ? "Copied" : "Copy"}
@@ -409,7 +409,7 @@ DISCLAIMER: ${result.disclaimer}
                       variant="outline"
                       size="sm"
                       onClick={downloadReport}
-                      className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                      className="border-zinc-700 text-white/85 hover:bg-zinc-800"
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
@@ -428,7 +428,7 @@ DISCLAIMER: ${result.disclaimer}
                     Area Overview
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-zinc-300 whitespace-pre-wrap">
+                <AccordionContent className="text-white/85 whitespace-pre-wrap">
                   {result.sections.areaOverview || "Not available"}
                 </AccordionContent>
               </AccordionItem>
@@ -440,7 +440,7 @@ DISCLAIMER: ${result.disclaimer}
                     Price Analysis
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-zinc-300 whitespace-pre-wrap">
+                <AccordionContent className="text-white/85 whitespace-pre-wrap">
                   {result.sections.priceAnalysis || "Not available"}
                 </AccordionContent>
               </AccordionItem>
@@ -452,7 +452,7 @@ DISCLAIMER: ${result.disclaimer}
                     Developer Landscape
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-zinc-300 whitespace-pre-wrap">
+                <AccordionContent className="text-white/85 whitespace-pre-wrap">
                   {result.sections.developerLandscape || "Not available"}
                 </AccordionContent>
               </AccordionItem>
@@ -464,7 +464,7 @@ DISCLAIMER: ${result.disclaimer}
                     Transaction Data
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-zinc-300 whitespace-pre-wrap">
+                <AccordionContent className="text-white/85 whitespace-pre-wrap">
                   {result.sections.transactionData || "Not available"}
                 </AccordionContent>
               </AccordionItem>
@@ -476,7 +476,7 @@ DISCLAIMER: ${result.disclaimer}
                     Investment Metrics
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-zinc-300 whitespace-pre-wrap">
+                <AccordionContent className="text-white/85 whitespace-pre-wrap">
                   {result.sections.investmentMetrics || "Not available"}
                 </AccordionContent>
               </AccordionItem>
@@ -488,7 +488,7 @@ DISCLAIMER: ${result.disclaimer}
                     Market Timing
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-zinc-300 whitespace-pre-wrap">
+                <AccordionContent className="text-white/85 whitespace-pre-wrap">
                   {result.sections.marketTiming || "Not available"}
                 </AccordionContent>
               </AccordionItem>
@@ -500,7 +500,7 @@ DISCLAIMER: ${result.disclaimer}
                     Risk Factors
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-zinc-300 whitespace-pre-wrap">
+                <AccordionContent className="text-white/85 whitespace-pre-wrap">
                   {result.sections.riskFactors || "Not available"}
                 </AccordionContent>
               </AccordionItem>
@@ -512,7 +512,7 @@ DISCLAIMER: ${result.disclaimer}
                     Recommendation
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="text-zinc-300 whitespace-pre-wrap">
+                <AccordionContent className="text-white/85 whitespace-pre-wrap">
                   {result.sections.recommendation || "Not available"}
                 </AccordionContent>
               </AccordionItem>
@@ -525,7 +525,7 @@ DISCLAIMER: ${result.disclaimer}
                       Area Comparison
                     </span>
                   </AccordionTrigger>
-                  <AccordionContent className="text-zinc-300 whitespace-pre-wrap">
+                  <AccordionContent className="text-white/85 whitespace-pre-wrap">
                     {result.sections.comparison}
                   </AccordionContent>
                 </AccordionItem>
@@ -535,13 +535,13 @@ DISCLAIMER: ${result.disclaimer}
             {/* Disclaimer */}
             <Card className="bg-zinc-900/30 border-zinc-800">
               <CardContent className="p-4">
-                <p className="text-xs text-zinc-500 flex items-start gap-2">
+                <p className="text-xs text-white/60 flex items-start gap-2">
                   <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                   {result.disclaimer}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {result.sources.map((source) => (
-                    <Badge key={source} variant="outline" className="text-zinc-500 border-zinc-700 text-xs">
+                    <Badge key={source} variant="outline" className="text-white/60 border-zinc-700 text-xs">
                       {source}
                     </Badge>
                   ))}

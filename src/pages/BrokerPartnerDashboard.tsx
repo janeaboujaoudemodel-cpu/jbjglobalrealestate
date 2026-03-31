@@ -130,7 +130,7 @@ const BrokerPartnerDashboard = () => {
                 External Partner
               </Badge>
               <h1 className="text-3xl font-bold mb-2">Broker Partner Dashboard</h1>
-              <p className="text-zinc-400">Access property tools, reports, and resources for your clients</p>
+              <p className="text-white/70">Access property tools, reports, and resources for your clients</p>
             </div>
             
             <DropdownMenu>
@@ -144,7 +144,7 @@ const BrokerPartnerDashboard = () => {
                   </Avatar>
                   <div className="text-left hidden md:block">
                     <p className="text-sm font-medium">{profileName}</p>
-                    <p className="text-xs text-zinc-400">Broker Partner</p>
+                    <p className="text-xs text-white/70">Broker Partner</p>
                   </div>
                 </Button>
               </DropdownMenuTrigger>
@@ -174,7 +174,7 @@ const BrokerPartnerDashboard = () => {
                 <h3 className="text-lg font-semibold mb-4">Quick Property Search</h3>
                 <form onSubmit={handleSearch} className="flex gap-4">
                   <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70" />
                     <Input
                       placeholder="Search properties by location, developer, or keyword..."
                       value={searchQuery}
@@ -204,7 +204,7 @@ const BrokerPartnerDashboard = () => {
                         </div>
                         <div>
                           <p className="font-medium group-hover:text-purple-400 transition-colors">{tool.name}</p>
-                          <p className="text-xs text-zinc-500">{tool.description}</p>
+                          <p className="text-xs text-white/60">{tool.description}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -247,15 +247,15 @@ const BrokerPartnerDashboard = () => {
                             </div>
                             <div>
                               <h4 className="font-medium">{list.clientName}</h4>
-                              <p className="text-sm text-zinc-400">{list.properties} properties • {list.budget}</p>
+                              <p className="text-sm text-white/70">{list.properties} properties • {list.budget}</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
-                            <span className="text-xs text-zinc-500 hidden md:block">{list.lastUpdated}</span>
+                            <span className="text-xs text-white/60 hidden md:block">{list.lastUpdated}</span>
                             <Badge className={list.status === 'active' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'}>
                               {list.status === 'active' ? 'Active' : 'Follow-up'}
                             </Badge>
-                            <ChevronRight className="w-5 h-5 text-zinc-500" />
+                            <ChevronRight className="w-5 h-5 text-white/60" />
                           </div>
                         </div>
                       ))}
@@ -263,7 +263,7 @@ const BrokerPartnerDashboard = () => {
                       {MOCK_SHORTLIST.length === 0 && (
                         <div className="text-center py-8">
                           <Users className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                          <p className="text-zinc-400 mb-4">No client shortlists yet</p>
+                          <p className="text-white/70 mb-4">No client shortlists yet</p>
                           <Link to="/favorites">
                             <Button className="bg-purple-600 hover:bg-purple-700">
                               Create First Shortlist
@@ -299,7 +299,7 @@ const BrokerPartnerDashboard = () => {
                             </div>
                             <div>
                               <h4 className="font-medium text-sm">{report.name}</h4>
-                              <p className="text-xs text-zinc-500">{report.type} • {report.date}</p>
+                              <p className="text-xs text-white/60">{report.type} • {report.date}</p>
                             </div>
                           </div>
                           <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300">
@@ -334,19 +334,19 @@ const BrokerPartnerDashboard = () => {
                     <div className="space-y-2">
                       <Link to="/broker-resources">
                         <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-800 transition-colors cursor-pointer">
-                          <FileText className="w-5 h-5 text-zinc-400" />
+                          <FileText className="w-5 h-5 text-white/70" />
                           <span className="text-sm">Marketing Materials</span>
                         </div>
                       </Link>
                       <Link to="/areas">
                         <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-800 transition-colors cursor-pointer">
-                          <MapPin className="w-5 h-5 text-zinc-400" />
+                          <MapPin className="w-5 h-5 text-white/70" />
                           <span className="text-sm">Area Guides</span>
                         </div>
                       </Link>
                       <Link to="/developers">
                         <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-zinc-800 transition-colors cursor-pointer">
-                          <Building2 className="w-5 h-5 text-zinc-400" />
+                          <Building2 className="w-5 h-5 text-white/70" />
                           <span className="text-sm">Developer Directory</span>
                         </div>
                       </Link>
@@ -370,17 +370,17 @@ const BrokerPartnerDashboard = () => {
                       <Link to="/broker-education">
                         <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20 hover:border-purple-500/40 transition-colors cursor-pointer">
                           <p className="font-medium text-sm mb-1">Course Library</p>
-                          <p className="text-xs text-zinc-500">Access broker training materials</p>
+                          <p className="text-xs text-white/60">Access broker training materials</p>
                         </div>
                       </Link>
                       <Link to="/broker-faq">
                         <div className="p-3 rounded-lg bg-zinc-800/50 hover:bg-zinc-800 transition-colors cursor-pointer">
                           <p className="font-medium text-sm mb-1">Broker FAQ</p>
-                          <p className="text-xs text-zinc-500">Common questions answered</p>
+                          <p className="text-xs text-white/60">Common questions answered</p>
                         </div>
                       </Link>
                     </div>
-                    <p className="text-xs text-zinc-500 mt-4">
+                    <p className="text-xs text-white/60 mt-4">
                       <Star className="w-3 h-3 inline mr-1" />
                       Read-only access for external partners
                     </p>
@@ -394,7 +394,7 @@ const BrokerPartnerDashboard = () => {
                   <CardContent className="p-6 text-center">
                     <Briefcase className="w-10 h-10 text-purple-400 mx-auto mb-3" />
                     <h3 className="font-semibold mb-2">Partner with JBJ</h3>
-                    <p className="text-sm text-zinc-400 mb-4">
+                    <p className="text-sm text-white/70 mb-4">
                       Interested in deeper collaboration? Contact our partnership team.
                     </p>
                     <Button className="w-full bg-purple-600 hover:bg-purple-700" asChild>

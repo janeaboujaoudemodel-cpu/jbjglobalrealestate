@@ -136,7 +136,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <BarChart3 className="w-6 h-6" />
                 </div>
-                <p className="text-zinc-500 text-sm mb-1">Price Index</p>
+                <p className="text-white/60 text-sm mb-1">Price Index</p>
                 <p className="text-black text-3xl font-bold">{area.priceIndex}</p>
               </CardContent>
             </Card>
@@ -145,7 +145,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Home className="w-6 h-6" />
                 </div>
-                <p className="text-zinc-500 text-sm mb-1">Rental Index</p>
+                <p className="text-white/60 text-sm mb-1">Rental Index</p>
                 <p className="text-black text-3xl font-bold">{area.rentalIndex}</p>
               </CardContent>
             </Card>
@@ -154,7 +154,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Users className="w-6 h-6" />
                 </div>
-                <p className="text-zinc-500 text-sm mb-1">Demand Score</p>
+                <p className="text-white/60 text-sm mb-1">Demand Score</p>
                 <p className="text-black text-3xl font-bold">{area.demandScore}%</p>
               </CardContent>
             </Card>
@@ -163,7 +163,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Building2 className="w-6 h-6" />
                 </div>
-                <p className="text-zinc-500 text-sm mb-1">Supply Score</p>
+                <p className="text-white/60 text-sm mb-1">Supply Score</p>
                 <p className="text-black text-3xl font-bold">{area.supplyScore}%</p>
               </CardContent>
             </Card>

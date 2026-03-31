@@ -75,7 +75,7 @@ const AIObjectionHandlerPremium = () => {
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
+                  <Label className="text-white/85 flex items-center gap-2">
                     <AlertTriangle className="h-4 w-4 text-rose-400" />
                     Buyer Objection *
                   </Label>
@@ -90,7 +90,7 @@ const AIObjectionHandlerPremium = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-zinc-300">Property Type</Label>
+                    <Label className="text-white/85">Property Type</Label>
                     <Select value={propertyType} onValueChange={setPropertyType}>
                       <SelectTriggerDark className="border-rose-500/30 hover:border-rose-500/50">
                         <SelectValue />
@@ -107,7 +107,7 @@ const AIObjectionHandlerPremium = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-zinc-300">Lead Profile</Label>
+                    <Label className="text-white/85">Lead Profile</Label>
                     <Select value={leadProfile} onValueChange={setLeadProfile}>
                       <SelectTriggerDark className="border-rose-500/30 hover:border-rose-500/50">
                         <SelectValue />
@@ -125,7 +125,7 @@ const AIObjectionHandlerPremium = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Additional Context (optional)</Label>
+                  <Label className="text-white/85">Additional Context (optional)</Label>
                   <Textarea
                     placeholder="Any additional context about the conversation or lead..."
                     value={context}
@@ -161,17 +161,17 @@ const AIObjectionHandlerPremium = () => {
         <div className="grid grid-cols-3 gap-3">
             <Card className="bg-rose-900/20 border-rose-500/30 p-4 text-center">
               <Heart className="h-5 w-5 mx-auto mb-2 text-rose-400" />
-              <p className="text-xs text-zinc-500">Empathy</p>
+              <p className="text-xs text-white/60">Empathy</p>
               <p className="text-sm font-semibold text-white">First</p>
             </Card>
             <Card className="bg-rose-900/20 border-rose-500/30 p-4 text-center">
               <Target className="h-5 w-5 mx-auto mb-2 text-rose-400" />
-              <p className="text-xs text-zinc-500">Value</p>
+              <p className="text-xs text-white/60">Value</p>
               <p className="text-sm font-semibold text-white">Focused</p>
             </Card>
             <Card className="bg-rose-900/20 border-rose-500/30 p-4 text-center">
               <Shield className="h-5 w-5 mx-auto mb-2 text-rose-400" />
-              <p className="text-xs text-zinc-500">Trust</p>
+              <p className="text-xs text-white/60">Trust</p>
               <p className="text-sm font-semibold text-white">Building</p>
             </Card>
         </div>
@@ -195,7 +195,7 @@ const AIObjectionHandlerPremium = () => {
                     <Card className="bg-rose-500/10 border-rose-500/30 p-4">
                       <div className="flex items-center gap-2">
                         <Target className="h-5 w-5 text-rose-400" />
-                        <span className="text-sm text-zinc-400">Objection Type:</span>
+                        <span className="text-sm text-white/70">Objection Type:</span>
                         <Badge className="bg-rose-500/20 text-rose-400 border-rose-500/30">
                           {response.category}
                         </Badge>
@@ -208,12 +208,12 @@ const AIObjectionHandlerPremium = () => {
                 {response.confidenceScore && (
                   <div className="grid grid-cols-2 gap-3">
                     <Card className="bg-rose-900/20 border-rose-500/30 p-4">
-                      <p className="text-xs text-zinc-400">Response Confidence</p>
+                      <p className="text-xs text-white/70">Response Confidence</p>
                       <p className="text-xl font-bold text-rose-400">{response.confidenceScore}%</p>
                     </Card>
                     {response.difficulty && (
                       <Card className="bg-zinc-900/50 border-zinc-800 p-4">
-                        <p className="text-xs text-zinc-400">Objection Difficulty</p>
+                        <p className="text-xs text-white/70">Objection Difficulty</p>
                         <p className="text-xl font-bold text-white capitalize">{response.difficulty}</p>
                       </Card>
                     )}
@@ -229,7 +229,7 @@ const AIObjectionHandlerPremium = () => {
                     </h4>
                     <ul className="space-y-2">
                       {response.keyPoints.map((point: string, i: number) => (
-                        <li key={i} className="text-sm text-zinc-300 flex items-start gap-2">
+                        <li key={i} className="text-sm text-white/85 flex items-start gap-2">
                           <span className="w-5 h-5 rounded-full bg-rose-500/20 flex items-center justify-center flex-shrink-0 text-xs text-rose-400">
                             {i + 1}
                           </span>
@@ -249,7 +249,7 @@ const AIObjectionHandlerPremium = () => {
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </Button>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
+                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
                       {response.response}
                     </div>
                   </CardContent>
@@ -261,8 +261,8 @@ const AIObjectionHandlerPremium = () => {
                     <h4 className="font-semibold text-white mb-3">Alternative Approaches</h4>
                     <div className="space-y-2">
                       {response.alternatives.map((alt: string, i: number) => (
-                        <div key={i} className="bg-zinc-800/50 p-3 rounded-lg text-sm text-zinc-300">
-                          <span className="text-xs text-zinc-500">Option {i + 1}:</span>
+                        <div key={i} className="bg-zinc-800/50 p-3 rounded-lg text-sm text-white/85">
+                          <span className="text-xs text-white/60">Option {i + 1}:</span>
                           <p className="mt-1">{alt}</p>
                         </div>
                       ))}
@@ -280,8 +280,8 @@ const AIObjectionHandlerPremium = () => {
               <div className="p-6 rounded-full bg-rose-500/10 mb-4">
                 <MessageSquareReply className="h-12 w-12 text-rose-400/50" />
               </div>
-              <h3 className="text-lg font-semibold text-zinc-400">Ready to Respond</h3>
-              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+              <h3 className="text-lg font-semibold text-white/70">Ready to Respond</h3>
+              <p className="text-sm text-white/60 mt-2 max-w-sm">
                 Enter a buyer objection to get AI-powered response suggestions with empathy-first approach
               </p>
             </motion.div>

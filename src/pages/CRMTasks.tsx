@@ -41,7 +41,7 @@ const PRIORITY_COLORS: Record<string, string> = {
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
-  general: "bg-zinc-500/20 text-zinc-400 border-zinc-500/30",
+  general: "bg-zinc-500/20 text-gray-500 border-zinc-500/30",
   integration: "bg-purple-500/20 text-purple-400 border-purple-500/30",
   security: "bg-red-500/20 text-red-400 border-red-500/30",
   marketing: "bg-green-500/20 text-green-400 border-green-500/30",
@@ -233,14 +233,14 @@ const CRMTasks = () => {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <span className={`font-medium text-black ${
-              task.status === 'done' ? 'line-through text-zinc-500' : ''
+              task.status === 'done' ? 'line-through text-gray-500' : ''
             }`}>
               {task.title}
             </span>
           </div>
           
           {task.description && (
-            <p className="text-sm text-zinc-500 mb-2">{task.description}</p>
+            <p className="text-sm text-gray-500 mb-2">{task.description}</p>
           )}
           
           <div className="flex items-center gap-2 flex-wrap">
@@ -253,7 +253,7 @@ const CRMTasks = () => {
               {task.priority}
             </Badge>
             {task.due_date && (
-              <span className="text-xs text-zinc-500 flex items-center gap-1">
+              <span className="text-xs text-gray-500 flex items-center gap-1">
                 <Calendar className="h-3 w-3" />
                 {format(new Date(task.due_date), 'MMM d, yyyy')}
               </span>
@@ -263,7 +263,7 @@ const CRMTasks = () => {
         
         <button
           onClick={() => deleteTask(task.id)}
-          className="text-zinc-400 hover:text-red-500 transition-colors p-1"
+          className="text-gray-500 hover:text-red-500 transition-colors p-1"
         >
           <Trash2 className="w-4 h-4" />
         </button>
@@ -290,7 +290,7 @@ const CRMTasks = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-black">My Tasks</h1>
-                <p className="text-xs text-zinc-500">{todoCount} pending · {inProgressCount} in progress · {doneCount} done</p>
+                <p className="text-xs text-gray-500">{todoCount} pending · {inProgressCount} in progress · {doneCount} done</p>
               </div>
             </div>
           </div>
@@ -364,7 +364,7 @@ const CRMTasks = () => {
         {/* Filters */}
         <div className="flex items-center gap-4 flex-wrap">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
             <Input
               placeholder="Search tasks..."
               value={searchQuery}
@@ -402,7 +402,7 @@ const CRMTasks = () => {
               <CheckCircle2 className="h-8 w-8 text-gold" />
             </div>
             <p className="text-black font-medium text-lg">No tasks found</p>
-            <p className="text-zinc-500 mt-1">
+            <p className="text-gray-500 mt-1">
               {searchQuery || filterStatus !== 'all' 
                 ? "Try adjusting your filters" 
                 : "Add your first task to get started"}
@@ -414,7 +414,7 @@ const CRMTasks = () => {
             {todoTasks.length > 0 && (
               <div>
                 <div className="flex items-center gap-2 mb-4">
-                  <Circle className="w-4 h-4 text-zinc-400" />
+                  <Circle className="w-4 h-4 text-gray-500" />
                   <h2 className="text-lg font-semibold text-black">To Do</h2>
                   <Badge className="bg-zinc-100 text-zinc-600">{todoTasks.length}</Badge>
                 </div>

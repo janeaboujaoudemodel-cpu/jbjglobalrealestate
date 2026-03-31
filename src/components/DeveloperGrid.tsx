@@ -218,7 +218,7 @@ const DeveloperGrid = () => {
                       </p>
                     )}
                     {project.bedrooms_min && (
-                      <p className="text-zinc-500 text-sm mb-3">
+                      <p className="text-gray-500 text-sm mb-3">
                         {project.bedrooms_min === project.bedrooms_max
                           ? `${project.bedrooms_min} Bedrooms`
                           : `${project.bedrooms_min}-${project.bedrooms_max} Bedrooms`}

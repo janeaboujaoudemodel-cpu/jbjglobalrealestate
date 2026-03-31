@@ -145,7 +145,7 @@ const ListingAdminManager = () => {
             </div>
             <div>
               <CardTitle className="text-white">Listing Admins</CardTitle>
-              <p className="text-zinc-500 text-sm">
+              <p className="text-white/60 text-sm">
                 Staff who can add & manage property listings
               </p>
             </div>
@@ -163,7 +163,7 @@ const ListingAdminManager = () => {
               </DialogHeader>
               <div className="space-y-4 pt-4">
                 <div>
-                  <Label className="text-zinc-400">Search by Email</Label>
+                  <Label className="text-white/70">Search by Email</Label>
                   <div className="flex gap-2 mt-1">
                     <Input
                       value={searchEmail}
@@ -184,7 +184,7 @@ const ListingAdminManager = () => {
                       )}
                     </Button>
                   </div>
-                  <p className="text-zinc-500 text-xs mt-1">
+                  <p className="text-white/60 text-xs mt-1">
                     User must have an account first
                   </p>
                 </div>
@@ -206,7 +206,7 @@ const ListingAdminManager = () => {
                     </div>
 
                     <div>
-                      <Label className="text-zinc-400">Display Name</Label>
+                      <Label className="text-white/70">Display Name</Label>
                       <Input
                         value={displayName}
                         onChange={(e) => setDisplayName(e.target.value)}
@@ -216,7 +216,7 @@ const ListingAdminManager = () => {
                     </div>
 
                     <div>
-                      <Label className="text-zinc-400">Notes (optional)</Label>
+                      <Label className="text-white/70">Notes (optional)</Label>
                       <Textarea
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
@@ -251,7 +251,7 @@ const ListingAdminManager = () => {
       </CardHeader>
       <CardContent className="p-4">
         {listingAdmins.length === 0 ? (
-          <div className="text-center py-12 text-zinc-500">
+          <div className="text-center py-12 text-white/60">
             <Building2 className="w-12 h-12 mx-auto mb-4 opacity-50" />
             <p>No Listing Admins yet</p>
             <p className="text-sm">Add staff members who will manage property listings</p>
@@ -268,7 +268,7 @@ const ListingAdminManager = () => {
                     className={`w-10 h-10 rounded-full flex items-center justify-center ${
                       admin.is_active
                         ? "bg-gold/20 text-gold"
-                        : "bg-zinc-700 text-zinc-500"
+                        : "bg-zinc-700 text-white/60"
                     }`}
                   >
                     <User className="w-5 h-5" />
@@ -281,12 +281,12 @@ const ListingAdminManager = () => {
                           Active
                         </Badge>
                       ) : (
-                        <Badge className="bg-zinc-700 text-zinc-400 border-zinc-600 text-xs">
+                        <Badge className="bg-zinc-700 text-white/70 border-zinc-600 text-xs">
                           Inactive
                         </Badge>
                       )}
                     </div>
-                    <p className="text-zinc-500 text-sm flex items-center gap-1">
+                    <p className="text-white/60 text-sm flex items-center gap-1">
                       <Mail className="w-3 h-3" />
                       {admin.email}
                     </p>
@@ -297,7 +297,7 @@ const ListingAdminManager = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => window.open("/listing-admin", "_blank")}
-                    className="text-zinc-400 hover:text-white"
+                    className="text-white/70 hover:text-white"
                     title="Open Listing Management"
                   >
                     <ExternalLink className="w-4 h-4" />

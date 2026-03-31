@@ -62,7 +62,7 @@ export function EmployeeSalaryCommissionPanel() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-sm">Monthly Payroll</p>
+                <p className="text-gray-500 text-sm">Monthly Payroll</p>
                 <p className="text-2xl font-bold text-black">{formatCurrency(totalSalaries)}</p>
               </div>
               <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
@@ -75,7 +75,7 @@ export function EmployeeSalaryCommissionPanel() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-sm">Pending Commissions</p>
+                <p className="text-gray-500 text-sm">Pending Commissions</p>
                 <p className="text-2xl font-bold text-amber-600">{formatCurrency(totalPending)}</p>
               </div>
               <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
@@ -88,7 +88,7 @@ export function EmployeeSalaryCommissionPanel() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-sm">Commissions Paid</p>
+                <p className="text-gray-500 text-sm">Commissions Paid</p>
                 <p className="text-2xl font-bold text-emerald-600">{formatCurrency(totalPaid)}</p>
               </div>
               <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
@@ -140,7 +140,7 @@ export function EmployeeSalaryCommissionPanel() {
                 </TableHeader>
                 <TableBody>
                   {filteredCommissions.length === 0 ? (
-                    <TableRow><TableCell colSpan={6} className="text-center text-zinc-500 py-8">No commission records</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={6} className="text-center text-gray-500 py-8">No commission records</TableCell></TableRow>
                   ) : filteredCommissions.map((c) => (
                     <TableRow key={c.id} className="border-zinc-100 hover:bg-zinc-50">
                       <TableCell className="font-medium text-black">{c.employee_name}</TableCell>
@@ -175,7 +175,7 @@ export function EmployeeSalaryCommissionPanel() {
                 </TableHeader>
                 <TableBody>
                   {salaries.length === 0 ? (
-                    <TableRow><TableCell colSpan={4} className="text-center text-zinc-500 py-8">No salary records</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={4} className="text-center text-gray-500 py-8">No salary records</TableCell></TableRow>
                   ) : salaries.map((s) => (
                     <TableRow key={s.id} className="border-zinc-100 hover:bg-zinc-50">
                       <TableCell className="font-medium text-black">{s.employee_name}</TableCell>
@@ -206,7 +206,7 @@ export function EmployeeSalaryCommissionPanel() {
                 </TableHeader>
                 <TableBody>
                   {payments.length === 0 ? (
-                    <TableRow><TableCell colSpan={5} className="text-center text-zinc-500 py-8">No payment records</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={5} className="text-center text-gray-500 py-8">No payment records</TableCell></TableRow>
                   ) : payments.map((p) => (
                     <TableRow key={p.id} className="border-zinc-100 hover:bg-zinc-50">
                       <TableCell className="font-medium text-black">{p.employee_name}</TableCell>
@@ -239,7 +239,7 @@ export function EmployeeSalaryCommissionPanel() {
                 </TableHeader>
                 <TableBody>
                   {summaries.length === 0 ? (
-                    <TableRow><TableCell colSpan={6} className="text-center text-zinc-500 py-8">No earnings data</TableCell></TableRow>
+                    <TableRow><TableCell colSpan={6} className="text-center text-gray-500 py-8">No earnings data</TableCell></TableRow>
                   ) : summaries.map((s) => (
                     <TableRow key={s.id} className="border-zinc-100 hover:bg-zinc-50">
                       <TableCell className="font-medium text-black">{s.employee_name}</TableCell>

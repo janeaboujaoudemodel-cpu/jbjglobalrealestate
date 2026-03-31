@@ -281,7 +281,7 @@ export const EmbeddedCustomerHappinessHub = () => {
         {[1, 2, 3, 4, 5].map((star) => (
           <Star
             key={star}
-            className={`w-4 h-4 ${star <= rating ? "fill-gold text-gold" : "text-zinc-400"}`}
+            className={`w-4 h-4 ${star <= rating ? "fill-gold text-gold" : "text-gray-500"}`}
           />
         ))}
       </div>
@@ -302,7 +302,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <Ticket className="w-5 h-5 text-emerald-500" />
               </div>
               <div>
-                <p className="text-xs text-zinc-500">Support Tickets</p>
+                <p className="text-xs text-gray-500">Support Tickets</p>
                 <p className="text-xl font-bold text-black">View Tab</p>
               </div>
             </div>
@@ -318,7 +318,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <MessageSquareHeart className="w-5 h-5 text-pink-500" />
               </div>
               <div>
-                <p className="text-xs text-zinc-500">Pending Reviews</p>
+                <p className="text-xs text-gray-500">Pending Reviews</p>
                 <p className="text-xl font-bold text-black">{pendingReviews}</p>
               </div>
             </div>
@@ -334,7 +334,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <AlertCircle className="w-5 h-5 text-red-500" />
               </div>
               <div>
-                <p className="text-xs text-zinc-500">Open Issues</p>
+                <p className="text-xs text-gray-500">Open Issues</p>
                 <p className="text-xl font-bold text-black">{openIssues}</p>
               </div>
             </div>
@@ -350,7 +350,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                 <Lightbulb className="w-5 h-5 text-purple-500" />
               </div>
               <div>
-                <p className="text-xs text-zinc-500">Pending Ideas</p>
+                <p className="text-xs text-gray-500">Pending Ideas</p>
                 <p className="text-xl font-bold text-black">{pendingIdeas}</p>
               </div>
             </div>
@@ -475,9 +475,9 @@ export const EmbeddedCustomerHappinessHub = () => {
                             </div>
                             <p className="text-sm text-zinc-600 line-clamp-2">{review.review_text}</p>
                             {review.improve_text && (
-                              <p className="text-xs text-zinc-500 mt-1 italic">Suggestion: {review.improve_text}</p>
+                              <p className="text-xs text-gray-500 mt-1 italic">Suggestion: {review.improve_text}</p>
                             )}
-                            <div className="flex items-center gap-4 mt-2 text-xs text-zinc-500">
+                            <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
                               <span>{review.service_type}</span>
                               <span>•</span>
                               <span>{new Date(review.created_at).toLocaleDateString()}</span>
@@ -491,7 +491,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       </div>
                     ))}
                     {filteredReviews.length === 0 && (
-                      <p className="text-center text-zinc-500 py-8">No reviews match this filter</p>
+                      <p className="text-center text-gray-500 py-8">No reviews match this filter</p>
                     )}
                   </div>
                 </ScrollArea>
@@ -532,7 +532,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                               {getStatusBadge(issue.status)}
                             </div>
                             <p className="text-sm text-zinc-600 line-clamp-2">{issue.issue_description}</p>
-                            <div className="flex items-center gap-4 mt-2 text-xs text-zinc-500">
+                            <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
                               <span>{issue.tool_name}</span>
                               <span>•</span>
                               <span>{new Date(issue.created_at).toLocaleDateString()}</span>
@@ -542,7 +542,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       </div>
                     ))}
                     {(!issues || issues.length === 0) && (
-                      <p className="text-center text-zinc-500 py-8">No issue reports yet</p>
+                      <p className="text-center text-gray-500 py-8">No issue reports yet</p>
                     )}
                   </div>
                 </ScrollArea>
@@ -603,7 +603,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                               <p className="font-medium text-black mb-1">{idea.idea_title}</p>
                             )}
                             <p className="text-sm text-zinc-600 line-clamp-2">{idea.idea}</p>
-                            <div className="flex items-center gap-4 mt-2 text-xs text-zinc-500">
+                            <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
                               <span>{new Date(idea.created_at).toLocaleDateString()}</span>
                               {idea.email && <span>{idea.email}</span>}
                             </div>
@@ -615,7 +615,7 @@ export const EmbeddedCustomerHappinessHub = () => {
                       </div>
                     ))}
                     {(!ideas || ideas.length === 0) && (
-                      <p className="text-center text-zinc-500 py-8">No ideas submitted yet</p>
+                      <p className="text-center text-gray-500 py-8">No ideas submitted yet</p>
                     )}
                   </div>
                 </ScrollArea>
@@ -636,12 +636,12 @@ export const EmbeddedCustomerHappinessHub = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-black">{selectedReview.full_name}</p>
-                  <p className="text-sm text-zinc-500">{selectedReview.email}</p>
+                  <p className="text-sm text-gray-500">{selectedReview.email}</p>
                   {selectedReview.is_anonymous && <Badge className="mt-1 bg-zinc-100 text-zinc-600 border-zinc-300 text-xs">Anonymous</Badge>}
                 </div>
                 <div className="text-right">
                   {renderStars(selectedReview.rating)}
-                  <p className="text-xs text-zinc-500 mt-1">{selectedReview.service_type}</p>
+                  <p className="text-xs text-gray-500 mt-1">{selectedReview.service_type}</p>
                   {selectedReview.feature_key && (
                     <Badge className="mt-1 bg-blue-50 text-blue-600 border-blue-200 text-xs">{selectedReview.feature_key}</Badge>
                   )}
@@ -654,7 +654,7 @@ export const EmbeddedCustomerHappinessHub = () => {
 
               {selectedReview.improve_text && (
                 <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-                  <p className="text-xs text-zinc-500 mb-1">Improvement suggestion</p>
+                  <p className="text-xs text-gray-500 mb-1">Improvement suggestion</p>
                   <p className="text-sm text-black">{selectedReview.improve_text}</p>
                 </div>
               )}
@@ -718,7 +718,7 @@ export const EmbeddedCustomerHappinessHub = () => {
             <div className="space-y-4">
               <div>
                 <p className="font-semibold text-black">{selectedIdea.is_anonymous ? "Anonymous" : selectedIdea.full_name}</p>
-                {selectedIdea.email && <p className="text-sm text-zinc-500">{selectedIdea.email}</p>}
+                {selectedIdea.email && <p className="text-sm text-gray-500">{selectedIdea.email}</p>}
                 {selectedIdea.idea_category && (
                   <Badge className="mt-2 bg-purple-100 text-purple-700 border-purple-300">{selectedIdea.idea_category}</Badge>
                 )}
@@ -726,19 +726,19 @@ export const EmbeddedCustomerHappinessHub = () => {
               
               {selectedIdea.idea_title && (
                 <div>
-                  <p className="text-xs text-zinc-500 mb-1">Title</p>
+                  <p className="text-xs text-gray-500 mb-1">Title</p>
                   <p className="font-medium text-black">{selectedIdea.idea_title}</p>
                 </div>
               )}
               
               <div>
-                <p className="text-xs text-zinc-500 mb-1">Idea</p>
+                <p className="text-xs text-gray-500 mb-1">Idea</p>
                 <p className="text-black bg-zinc-50 p-3 rounded-lg">{selectedIdea.idea}</p>
               </div>
               
               {selectedIdea.expected_benefit && (
                 <div>
-                  <p className="text-xs text-zinc-500 mb-1">Expected Benefit</p>
+                  <p className="text-xs text-gray-500 mb-1">Expected Benefit</p>
                   <p className="text-black bg-zinc-50 p-3 rounded-lg">{selectedIdea.expected_benefit}</p>
                 </div>
               )}
@@ -746,7 +746,7 @@ export const EmbeddedCustomerHappinessHub = () => {
               {selectedIdea.status === "pending" && (
                 <>
                   <div>
-                    <p className="text-xs text-zinc-500 mb-1">Admin Notes</p>
+                    <p className="text-xs text-gray-500 mb-1">Admin Notes</p>
                     <Textarea
                       value={adminNotes}
                       onChange={(e) => setAdminNotes(e.target.value)}

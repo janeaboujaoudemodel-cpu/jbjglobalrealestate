@@ -52,7 +52,7 @@ export const GoogleMyBusinessLink = ({
         href={GMB_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className={`inline-flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors ${className}`}
+        className={`inline-flex items-center gap-2 text-white/70 hover:text-gold transition-colors ${className}`}
       >
         <MapPin className="w-4 h-4" />
         <span>View on Google Maps</span>
@@ -98,7 +98,7 @@ export const GoogleMyBusinessLink = ({
             />
           ))}
         </div>
-        <p className="text-zinc-300 text-sm font-medium group-hover:text-gold transition-colors">
+        <p className="text-white/85 text-sm font-medium group-hover:text-gold transition-colors">
           Google Business Profile
         </p>
       </div>

@@ -394,7 +394,7 @@ const AICalendar = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               AI Notes & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400">Calendar</span>
             </h1>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-gray-500 max-w-2xl mx-auto">
               Manage your meetings, notes, and schedules. Automatic email and phone reminders for all your events.
             </p>
             <p className="text-xs text-gold mt-2">Powered by JBJ Global Real Estate</p>
@@ -596,7 +596,7 @@ const AICalendar = () => {
                           />
                         </div>
                          <div>
-                           <Label className="text-xs text-zinc-500">Remind before (minutes)</Label>
+                           <Label className="text-xs text-gray-500">Remind before (minutes)</Label>
                            <Select value={eventForm.reminderTime.toString()} onValueChange={(v) => setEventForm(prev => ({ ...prev, reminderTime: parseInt(v) }))}>
                              <SelectTrigger className="bg-white border-2 border-gold/40 text-black">
                               <SelectValue />
@@ -621,7 +621,7 @@ const AICalendar = () => {
                 {/* Calendar Grid */}
                 <div className="grid grid-cols-7 gap-1 mb-2">
                   {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                    <div key={day} className="text-center text-xs text-zinc-500 py-2">{day}</div>
+                    <div key={day} className="text-center text-xs text-gray-500 py-2">{day}</div>
                   ))}
                 </div>
                 <div className="grid grid-cols-7 gap-1">
@@ -641,7 +641,7 @@ const AICalendar = () => {
                           'hover:bg-zinc-800/50'
                         }`}
                       >
-                        <p className={`text-xs ${isToday ? 'text-blue-400 font-bold' : 'text-zinc-400'}`}>
+                        <p className={`text-xs ${isToday ? 'text-blue-400 font-bold' : 'text-gray-500'}`}>
                           {date.getDate()}
                         </p>
                         <div className="space-y-0.5 mt-1">
@@ -654,7 +654,7 @@ const AICalendar = () => {
                             </div>
                           ))}
                           {dayEvents.length > 2 && (
-                            <p className="text-[10px] text-zinc-500">+{dayEvents.length - 2} more</p>
+                            <p className="text-[10px] text-gray-500">+{dayEvents.length - 2} more</p>
                           )}
                         </div>
                       </div>
@@ -694,7 +694,7 @@ const AICalendar = () => {
                     </div>
                   </div>
                   {getEventsForDate(selectedDate).length === 0 ? (
-                    <p className="text-zinc-500 text-sm">No events scheduled. Click "Add Event" to create one.</p>
+                    <p className="text-gray-500 text-sm">No events scheduled. Click "Add Event" to create one.</p>
                   ) : (
                     <div className="space-y-3">
                       {getEventsForDate(selectedDate).map(event => (
@@ -704,7 +704,7 @@ const AICalendar = () => {
                             <div className="flex items-start justify-between">
                               <div>
                                 <h4 className="text-white font-medium">{event.title}</h4>
-                                <div className="flex items-center gap-3 mt-1 text-xs text-zinc-400">
+                                <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
                                   <span className="flex items-center gap-1">
                                     <Clock className="w-3 h-3" /> {event.time}
                                   </span>
@@ -725,7 +725,7 @@ const AICalendar = () => {
                               </div>
                             </div>
                             {event.attendees.length > 0 && (
-                              <div className="flex items-center gap-1 mt-2 text-xs text-zinc-500">
+                              <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
                                 <Users className="w-3 h-3" />
                                 {event.attendees.join(', ')}
                               </div>
@@ -797,7 +797,7 @@ const AICalendar = () => {
               </CardHeader>
               <CardContent className="space-y-3 max-h-96 overflow-y-auto">
                 {notes.length === 0 ? (
-                  <p className="text-zinc-500 text-sm">No notes yet</p>
+                  <p className="text-gray-500 text-sm">No notes yet</p>
                 ) : (
                   notes.map(note => (
                     <div key={note.id} className="p-3 bg-zinc-800/50 rounded-lg group">
@@ -812,7 +812,7 @@ const AICalendar = () => {
                           </Button>
                         </div>
                       </div>
-                      <p className="text-zinc-400 text-xs mt-1 line-clamp-3">{note.content}</p>
+                      <p className="text-gray-500 text-xs mt-1 line-clamp-3">{note.content}</p>
                       <p className="text-zinc-600 text-[10px] mt-2">{note.updatedAt.toLocaleDateString()}</p>
                     </div>
                   ))
@@ -835,12 +835,12 @@ const AICalendar = () => {
                       <div className={`w-2 h-2 rounded-full ${eventTypeColors[event.type]}`} />
                       <div className="flex-1 min-w-0">
                         <p className="text-white text-sm truncate">{event.title}</p>
-                        <p className="text-zinc-500 text-xs">{new Date(event.date).toLocaleDateString()} at {event.time}</p>
+                        <p className="text-gray-500 text-xs">{new Date(event.date).toLocaleDateString()} at {event.time}</p>
                       </div>
                     </div>
                   ))}
                 {events.filter(e => new Date(e.date) >= new Date()).length === 0 && (
-                  <p className="text-zinc-500 text-sm">No upcoming events</p>
+                  <p className="text-gray-500 text-sm">No upcoming events</p>
                 )}
               </CardContent>
             </Card>

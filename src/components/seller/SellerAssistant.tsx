@@ -191,7 +191,7 @@ Help the user complete their listing form and answer questions about the selling
           variant="ghost"
           size="icon"
           onClick={onClose}
-          className="text-zinc-500 hover:text-black hover:bg-white/50"
+          className="text-gray-500 hover:text-black hover:bg-white/50"
         >
           <X className="w-4 h-4" />
         </Button>
@@ -276,7 +276,7 @@ Help the user complete their listing form and answer questions about the selling
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask me anything about selling..."
-              className="bg-white border-gold/30 text-black placeholder:text-zinc-400 pr-10 focus:border-gold"
+              className="bg-white border-gold/30 text-black placeholder:text-gray-400 pr-10 focus:border-gold"
               disabled={isLoading}
             />
             <div className="absolute right-1 top-1/2 -translate-y-1/2">
@@ -301,7 +301,7 @@ Help the user complete their listing form and answer questions about the selling
             )}
           </Button>
         </form>
-        <p className="text-zinc-500 text-xs mt-2 text-center">
+        <p className="text-gray-500 text-xs mt-2 text-center">
           AI responses are informational only. For advice, contact our team.
         </p>
       </div>

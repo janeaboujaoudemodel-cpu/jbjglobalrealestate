@@ -141,7 +141,7 @@ What would you like to create today?`,
           </div>
           <div>
             <h3 className="font-semibold text-white">Design Assistant</h3>
-            <p className="text-xs text-zinc-500">Describe your dream space</p>
+            <p className="text-xs text-white/60">Describe your dream space</p>
           </div>
         </div>
 
@@ -189,13 +189,13 @@ What would you like to create today?`,
         {/* Example Prompts */}
         {messages.length === 1 && (
           <div className="px-4 pb-4">
-            <p className="text-xs text-zinc-500 mb-2">Try one of these:</p>
+            <p className="text-xs text-white/60 mb-2">Try one of these:</p>
             <div className="flex flex-wrap gap-2">
               {EXAMPLE_PROMPTS.slice(0, 2).map((prompt, index) => (
                 <button
                   key={index}
                   onClick={() => setInput(prompt)}
-                  className="text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-3 py-1.5 rounded-full transition-colors"
+                  className="text-xs bg-zinc-800 hover:bg-zinc-700 text-white/85 px-3 py-1.5 rounded-full transition-colors"
                 >
                   {prompt.slice(0, 50)}...
                 </button>
@@ -249,7 +249,7 @@ What would you like to create today?`,
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Describe your dream interior..."
-              className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[44px] max-h-[120px] resize-none flex-1 focus:border-orange-500/50"
+              className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 min-h-[44px] max-h-[120px] resize-none flex-1 focus:border-orange-500/50"
               disabled={isProcessing}
             />
             

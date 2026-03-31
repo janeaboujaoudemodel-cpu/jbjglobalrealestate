@@ -335,7 +335,7 @@ const EmployeeManagementHub: React.FC = () => {
                   placeholder="Search employees..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black w-64 placeholder:text-zinc-500"
+                  className="pl-10 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black w-64 placeholder:text-gray-400"
                 />
               </div>
             </div>
@@ -366,19 +366,19 @@ const EmployeeManagementHub: React.FC = () => {
                             </div>
                             <div>
                               <p className="font-medium text-black">{item.full_name}</p>
-                              <p className="text-xs text-zinc-500">{item.department}</p>
+                              <p className="text-xs text-gray-500">{item.department}</p>
                             </div>
                           </div>
                           <div className="text-right">
                             {getStatusBadge(item.status)}
-                            <p className="text-xs text-zinc-500 mt-1">
+                            <p className="text-xs text-gray-500 mt-1">
                               {new Date(item.updated_at).toLocaleDateString()}
                             </p>
                           </div>
                         </div>
                       ))}
                       {recentActivity.length === 0 && (
-                        <p className="text-center text-zinc-500 py-8">No recent activity</p>
+                        <p className="text-center text-gray-500 py-8">No recent activity</p>
                       )}
                     </div>
                   </ScrollArea>

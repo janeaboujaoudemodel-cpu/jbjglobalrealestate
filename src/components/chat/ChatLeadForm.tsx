@@ -79,7 +79,7 @@ const ChatLeadForm = ({
               value={userInfo.firstName}
               onChange={(e) => updateField('firstName', e.target.value)}
               placeholder="First"
-              className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.firstName ? 'border-red-500' : ''}`}
+              className={`bg-white border-2 border-gold/40 text-black placeholder:text-gray-400 h-9 text-sm focus:border-gold ${formErrors.firstName ? 'border-red-500' : ''}`}
             />
             {formErrors.firstName && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.firstName}</T></p>}
           </div>
@@ -89,7 +89,7 @@ const ChatLeadForm = ({
               value={userInfo.lastName}
               onChange={(e) => updateField('lastName', e.target.value)}
               placeholder="Last"
-              className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.lastName ? 'border-red-500' : ''}`}
+              className={`bg-white border-2 border-gold/40 text-black placeholder:text-gray-400 h-9 text-sm focus:border-gold ${formErrors.lastName ? 'border-red-500' : ''}`}
             />
             {formErrors.lastName && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.lastName}</T></p>}
           </div>
@@ -106,7 +106,7 @@ const ChatLeadForm = ({
             value={userInfo.email}
             onChange={(e) => updateField('email', e.target.value)}
             placeholder="your@email.com"
-            className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.email ? 'border-red-500' : ''}`}
+            className={`bg-white border-2 border-gold/40 text-black placeholder:text-gray-400 h-9 text-sm focus:border-gold ${formErrors.email ? 'border-red-500' : ''}`}
           />
           {formErrors.email && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.email}</T></p>}
         </div>
@@ -122,7 +122,7 @@ const ChatLeadForm = ({
             value={userInfo.phone}
             onChange={(e) => updateField('phone', e.target.value)}
             placeholder="+971 50 123 4567"
-            className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.phone ? 'border-red-500' : ''}`}
+            className={`bg-white border-2 border-gold/40 text-black placeholder:text-gray-400 h-9 text-sm focus:border-gold ${formErrors.phone ? 'border-red-500' : ''}`}
           />
           {formErrors.phone && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.phone}</T></p>}
         </div>
@@ -138,7 +138,7 @@ const ChatLeadForm = ({
               value={userInfo.nationality}
               onChange={(e) => updateField('nationality', e.target.value)}
               placeholder="e.g., British"
-              className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.nationality ? 'border-red-500' : ''}`}
+              className={`bg-white border-2 border-gold/40 text-black placeholder:text-gray-400 h-9 text-sm focus:border-gold ${formErrors.nationality ? 'border-red-500' : ''}`}
             />
             {formErrors.nationality && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.nationality}</T></p>}
           </div>
@@ -151,7 +151,7 @@ const ChatLeadForm = ({
               value={userInfo.currentLocation}
               onChange={(e) => updateField('currentLocation', e.target.value)}
               placeholder="City, Country"
-              className={`bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 h-9 text-sm focus:border-gold ${formErrors.currentLocation ? 'border-red-500' : ''}`}
+              className={`bg-white border-2 border-gold/40 text-black placeholder:text-gray-400 h-9 text-sm focus:border-gold ${formErrors.currentLocation ? 'border-red-500' : ''}`}
             />
             {formErrors.currentLocation && <p className="text-red-500 text-xs mt-0.5"><T>{formErrors.currentLocation}</T></p>}
           </div>

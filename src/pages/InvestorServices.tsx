@@ -198,7 +198,7 @@ const InvestorServices = () => {
               
               <motion.p
                 variants={fadeInUp}
-                className="text-base md:text-lg text-zinc-400 max-w-2xl mx-auto mb-8"
+                className="text-base md:text-lg text-white/70 max-w-2xl mx-auto mb-8"
               >
                 Structured investment guidance for individuals and institutions seeking exposure to Dubai's real estate market.
               </motion.p>
@@ -219,7 +219,7 @@ const InvestorServices = () => {
                   <Phone className="w-4 h-4" />
                   Call Now
                 </Button>
-                <Button variant="outline" className="border-zinc-700 text-zinc-300 hover:bg-zinc-800 px-6 h-11 rounded-lg gap-2" asChild>
+                <Button variant="outline" className="border-zinc-700 text-white/85 hover:bg-zinc-800 px-6 h-11 rounded-lg gap-2" asChild>
                   <Link to="/contact">
                     Book Consultation
                     <ArrowRight className="w-4 h-4" />

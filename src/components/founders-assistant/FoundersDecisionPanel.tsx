@@ -125,7 +125,7 @@ export function FoundersDecisionPanel() {
           </div>
           <div>
             <h2 className="text-2xl font-bold text-black">Business Intelligence</h2>
-            <p className="text-zinc-500 text-sm">
+            <p className="text-gray-500 text-sm">
               Real-time insights, predictions & strategic recommendations
             </p>
           </div>
@@ -165,7 +165,7 @@ export function FoundersDecisionPanel() {
                 <Sparkles className="h-5 w-5 text-gold" />
                 AI Daily Summary
               </CardTitle>
-              <Button variant="ghost" size="sm" onClick={() => setShowSummary(false)} className="text-zinc-500 hover:text-black">
+              <Button variant="ghost" size="sm" onClick={() => setShowSummary(false)} className="text-gray-500 hover:text-black">
                 ✕
               </Button>
             </div>
@@ -188,7 +188,7 @@ export function FoundersDecisionPanel() {
                 placeholder="Ask Amanda anything... (e.g., 'Who's my top broker?' or 'How can I improve revenue?')"
                 value={queryInput}
                 onChange={(e) => setQueryInput(e.target.value)}
-                className="pl-10 bg-zinc-50 border-zinc-200 text-black placeholder:text-zinc-400"
+                className="pl-10 bg-zinc-50 border-zinc-200 text-black placeholder:text-gray-400"
               />
             </div>
             <Button type="submit" disabled={isQuerying} className="bg-black text-gold hover:bg-zinc-900 border border-gold/30">

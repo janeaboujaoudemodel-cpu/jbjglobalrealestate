@@ -135,7 +135,7 @@ const DesignProjectHeader = ({
         <div className="grid gap-5">
           {/* Project Name */}
           <div className="space-y-2">
-            <Label htmlFor="project-name" className="text-zinc-300">
+            <Label htmlFor="project-name" className="text-white/85">
               Project Name <span className="text-red-400">*</span>
             </Label>
             <Input
@@ -143,13 +143,13 @@ const DesignProjectHeader = ({
               value={projectName}
               onChange={(e) => onProjectNameChange(e.target.value)}
               placeholder="e.g., Downtown Apartment Redesign"
-              className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 focus:border-zinc-400"
+              className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 focus:border-zinc-400"
             />
           </div>
 
           {/* Room/Area Name */}
           <div className="space-y-2">
-            <Label htmlFor="room-name" className="text-zinc-300">
+            <Label htmlFor="room-name" className="text-white/85">
               Room / Area Name
             </Label>
             <Select value={roomName} onValueChange={onRoomNameChange}>
@@ -166,7 +166,7 @@ const DesignProjectHeader = ({
 
           {/* Property Type */}
           <div className="space-y-2">
-            <Label className="text-zinc-300">Property Type</Label>
+            <Label className="text-white/85">Property Type</Label>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {propertyTypes.map((type) => {
                 const Icon = type.icon;
@@ -180,7 +180,7 @@ const DesignProjectHeader = ({
                       flex items-center gap-2 p-3 rounded-xl border transition-all
                       ${isSelected
                         ? `${colors.selectedBg} ${colors.selectedBorder} ${colors.selectedText}`
-                        : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300'
+                        : 'bg-zinc-800/50 border-zinc-700 text-white/70 hover:border-zinc-600 hover:text-white/85'
                       }
                     `}
                   >
@@ -194,7 +194,7 @@ const DesignProjectHeader = ({
 
           {/* Property Size with Measure Button */}
           <div className="space-y-2">
-            <Label htmlFor="property-size" className="text-zinc-300 flex items-center gap-2">
+            <Label htmlFor="property-size" className="text-white/85 flex items-center gap-2">
               <MapPin className="w-4 h-4" />
               Property Size (sqft)
             </Label>
@@ -204,7 +204,7 @@ const DesignProjectHeader = ({
                 value={propertySize}
                 onChange={(e) => onPropertySizeChange(e.target.value)}
                 placeholder="e.g., 1500"
-                className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 focus:border-zinc-400 flex-1"
+                className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 focus:border-zinc-400 flex-1"
               />
               <Button
                 type="button"
@@ -215,7 +215,7 @@ const DesignProjectHeader = ({
                 Measure
               </Button>
             </div>
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-white/60">
               Use our AI Measurement tool to calculate your space dimensions
             </p>
           </div>

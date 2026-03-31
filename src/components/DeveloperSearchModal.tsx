@@ -36,7 +36,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
     if (!rank) return null;
     if (rank <= 3) return { icon: Crown, label: "Elite", color: "text-gold bg-gold/10 border-gold/30" };
     if (rank <= 10) return { icon: Award, label: "Premier", color: "text-amber-400 bg-amber-400/10 border-amber-400/30" };
-    if (rank <= 20) return { icon: Star, label: "Established", color: "text-zinc-300 bg-zinc-300/10 border-zinc-300/30" };
+    if (rank <= 20) return { icon: Star, label: "Established", color: "text-white/85 bg-zinc-300/10 border-zinc-300/30" };
     return null;
   };
 
@@ -48,27 +48,27 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
             <Building2 className="w-6 h-6 text-gold" />
             Search by Developer
           </DialogTitle>
-          <p className="text-zinc-400 text-sm mt-1">
+          <p className="text-white/70 text-sm mt-1">
             Browse {developers?.length || 0} premium UAE property developers ranked by market standing
           </p>
         </DialogHeader>
 
         <div className="relative mb-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/60" />
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search developers by name or headquarters..."
-            className="pl-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-gold h-12"
+            className="pl-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-gray-400 focus:border-gold h-12"
             autoFocus
           />
         </div>
 
         <div className="overflow-y-auto max-h-[55vh] space-y-2 pr-1">
           {isLoading ? (
-            <div className="text-center py-12 text-zinc-500">Loading developers...</div>
+            <div className="text-center py-12 text-white/60">Loading developers...</div>
           ) : filteredDevelopers.length === 0 ? (
-            <div className="text-center py-12 text-zinc-500">No developers found</div>
+            <div className="text-center py-12 text-white/60">No developers found</div>
           ) : (
             filteredDevelopers.map((developer, index) => {
               const tier = getTierBadge(developer.rank);
@@ -96,7 +96,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                     {developer.logo_url ? (
                       <img src={developer.logo_url} alt={developer.name} className="w-full h-full object-contain" />
                     ) : (
-                      <Building2 className={`w-7 h-7 ${isTopTier ? "text-gold" : "text-zinc-500"}`} />
+                      <Building2 className={`w-7 h-7 ${isTopTier ? "text-gold" : "text-white/60"}`} />
                     )}
                   </div>
                   
@@ -113,7 +113,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3 text-sm text-zinc-400">
+                    <div className="flex items-center gap-3 text-sm text-white/70">
                       {developer.headquarters && (
                         <span>📍 {developer.headquarters}</span>
                       )}

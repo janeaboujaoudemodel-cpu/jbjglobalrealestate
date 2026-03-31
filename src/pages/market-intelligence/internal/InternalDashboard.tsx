@@ -67,7 +67,7 @@ const InternalDashboard = () => {
               <h1 className="text-white text-3xl font-bold">
                 Internal Market Dashboard
               </h1>
-              <p className="text-zinc-500">Real-time signals for competitive advantage</p>
+              <p className="text-white/60">Real-time signals for competitive advantage</p>
             </div>
           </div>
         </div>
@@ -82,7 +82,7 @@ const InternalDashboard = () => {
                 <div className="flex items-center gap-3">
                   <Activity className="w-5 h-5 text-emerald-400" />
                   <div>
-                    <p className="text-zinc-500 text-xs">High Pressure Areas</p>
+                    <p className="text-white/60 text-xs">High Pressure Areas</p>
                     <p className="text-white text-xl font-bold">
                       {rentPressureSignals.filter(s => s.rentalPressure === 'high').length}
                     </p>
@@ -95,7 +95,7 @@ const InternalDashboard = () => {
                 <div className="flex items-center gap-3">
                   <Zap className="w-5 h-5 text-gold" />
                   <div>
-                    <p className="text-zinc-500 text-xs">Accelerating Markets</p>
+                    <p className="text-white/60 text-xs">Accelerating Markets</p>
                     <p className="text-white text-xl font-bold">
                       {rentPressureSignals.filter(s => s.velocity === 'accelerating').length}
                     </p>
@@ -108,7 +108,7 @@ const InternalDashboard = () => {
                 <div className="flex items-center gap-3">
                   <Target className="w-5 h-5 text-blue-400" />
                   <div>
-                    <p className="text-zinc-500 text-xs">Avg Absorption</p>
+                    <p className="text-white/60 text-xs">Avg Absorption</p>
                     <p className="text-white text-xl font-bold">
                       {Math.round(rentPressureSignals.reduce((a, b) => a + b.absorption, 0) / rentPressureSignals.length)}%
                     </p>
@@ -121,7 +121,7 @@ const InternalDashboard = () => {
                 <div className="flex items-center gap-3">
                   <AlertTriangle className="w-5 h-5 text-amber-400" />
                   <div>
-                    <p className="text-zinc-500 text-xs">Avg Days on Market</p>
+                    <p className="text-white/60 text-xs">Avg Days on Market</p>
                     <p className="text-white text-xl font-bold">
                       {Math.round(rentPressureSignals.reduce((a, b) => a + b.daysOnMarket, 0) / rentPressureSignals.length)}
                     </p>
@@ -152,7 +152,7 @@ const InternalDashboard = () => {
 
                     <div className="flex items-center gap-8">
                       <div className="text-center">
-                        <p className="text-zinc-500 text-xs">Velocity</p>
+                        <p className="text-white/60 text-xs">Velocity</p>
                         <div className="flex items-center gap-1">
                           {signal.velocity === 'accelerating' ? (
                             <TrendingUp className="w-4 h-4 text-emerald-400" />
@@ -166,12 +166,12 @@ const InternalDashboard = () => {
                       </div>
 
                       <div className="text-center">
-                        <p className="text-zinc-500 text-xs">Absorption</p>
+                        <p className="text-white/60 text-xs">Absorption</p>
                         <p className="text-white font-semibold">{signal.absorption}%</p>
                       </div>
 
                       <div className="text-center">
-                        <p className="text-zinc-500 text-xs">Avg DOM</p>
+                        <p className="text-white/60 text-xs">Avg DOM</p>
                         <p className="text-white font-semibold">{signal.daysOnMarket} days</p>
                       </div>
                     </div>
@@ -192,7 +192,7 @@ const InternalDashboard = () => {
               <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
                 <CardContent className="p-6">
                   <h3 className="text-white font-bold mb-2">Broker Intelligence</h3>
-                  <p className="text-zinc-500 text-sm">Conversion signals and performance data</p>
+                  <p className="text-white/60 text-sm">Conversion signals and performance data</p>
                 </CardContent>
               </Card>
             </Link>
@@ -200,7 +200,7 @@ const InternalDashboard = () => {
               <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
                 <CardContent className="p-6">
                   <h3 className="text-white font-bold mb-2">AI Market Narratives</h3>
-                  <p className="text-zinc-500 text-sm">AI-generated execution insights</p>
+                  <p className="text-white/60 text-sm">AI-generated execution insights</p>
                 </CardContent>
               </Card>
             </Link>
@@ -208,7 +208,7 @@ const InternalDashboard = () => {
               <Card className="bg-zinc-900/50 border-zinc-800 hover:border-gold/30 transition-all">
                 <CardContent className="p-6">
                   <h3 className="text-white font-bold mb-2">Data Operations</h3>
-                  <p className="text-zinc-500 text-sm">Dataset management and audit logs</p>
+                  <p className="text-white/60 text-sm">Dataset management and audit logs</p>
                 </CardContent>
               </Card>
             </Link>

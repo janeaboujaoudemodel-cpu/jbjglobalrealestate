@@ -173,7 +173,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
           </div>
           <div>
             <h2 className="text-xl font-bold text-white">Guides & Resources</h2>
-            <p className="text-zinc-400">
+            <p className="text-white/70">
               {subscription.tier === "enterprise" 
                 ? "You have access to all courses and future releases"
                 : subscription.tier === "professional"
@@ -213,14 +213,14 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                     <div className="flex items-center gap-3 mb-1">
                       <h3 className="text-lg font-semibold text-white">{module.title}</h3>
                       {!hasAccess && (
-                        <Badge className="bg-zinc-800 text-zinc-400">
+                        <Badge className="bg-zinc-800 text-white/70">
                           <Lock className="w-3 h-3 mr-1" />
                           {module.tier.charAt(0).toUpperCase() + module.tier.slice(1)}
                         </Badge>
                       )}
                     </div>
-                    <p className="text-zinc-400 text-sm">{module.description}</p>
-                    <div className="flex items-center gap-4 mt-2 text-xs text-zinc-500">
+                    <p className="text-white/70 text-sm">{module.description}</p>
+                    <div className="flex items-center gap-4 mt-2 text-xs text-white/60">
                       <span className="flex items-center gap-1">
                         <BookOpen className="w-3 h-3" />
                         {module.lessons.length} Lessons
@@ -237,12 +237,12 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                   {hasAccess && (
                     <div className="hidden md:block w-32">
                       <Progress value={progress} className="h-2" />
-                      <p className="text-xs text-zinc-500 mt-1 text-right">
+                      <p className="text-xs text-white/60 mt-1 text-right">
                         {completedLessons}/{module.lessons.length} completed
                       </p>
                     </div>
                   )}
-                  <ChevronRight className={`w-5 h-5 text-zinc-400 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
+                  <ChevronRight className={`w-5 h-5 text-white/70 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
                 </div>
               </button>
 
@@ -267,12 +267,12 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-sm text-zinc-400">
+                            <div className="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center text-sm text-white/70">
                               {lessonIndex + 1}
                             </div>
                             <div>
                               <p className="text-white text-sm font-medium">{lesson.title}</p>
-                              <p className="text-zinc-500 text-xs">{lesson.duration}</p>
+                              <p className="text-white/60 text-xs">{lesson.duration}</p>
                             </div>
                           </div>
                           
@@ -304,7 +304,7 @@ export default function BrokerCourses({ subscription }: BrokerCoursesProps) {
         <div className="bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent border border-purple-500/30 rounded-xl p-6 text-center">
           <GraduationCap className="w-12 h-12 text-purple-400 mx-auto mb-4" />
           <h3 className="text-xl font-bold text-white mb-2">Unlock All Courses</h3>
-          <p className="text-zinc-400 mb-6">
+          <p className="text-white/70 mb-6">
             Upgrade to Enterprise for unlimited access to all courses, including new releases.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

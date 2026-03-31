@@ -116,7 +116,7 @@ const TestimonialsSection = () => {
                   <p className="text-black font-semibold text-base">
                     {currentTestimonial.name}
                   </p>
-                  <p className="text-zinc-500 text-sm">
+                  <p className="text-gray-500 text-sm">
                     {currentTestimonial.area}
                   </p>
                 </div>

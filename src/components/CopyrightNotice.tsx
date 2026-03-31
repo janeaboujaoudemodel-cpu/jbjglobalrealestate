@@ -15,7 +15,7 @@ const CopyrightNotice = ({ variant = "inline", className = "" }: CopyrightNotice
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-center gap-3 text-center">
             <Shield className="w-5 h-5 text-gold flex-shrink-0" />
-            <p className="text-zinc-400 text-xs md:text-sm">
+            <p className="text-white/70 text-xs md:text-sm">
               <span className="text-gold font-semibold">© {currentYear} JBJ Global Real Estate.</span>{" "}
               All rights reserved. This platform, including all AI tools, designs, and intellectual property, 
               is exclusively owned by <span className="text-white">JBJ Global Real Estate</span>.
@@ -39,7 +39,7 @@ const CopyrightNotice = ({ variant = "inline", className = "" }: CopyrightNotice
             <Shield className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-gold text-xs font-semibold mb-1">Protected Content</p>
-              <p className="text-zinc-500 text-[10px] leading-relaxed">
+              <p className="text-white/60 text-[10px] leading-relaxed">
                 © {currentYear} JBJ Global Real Estate. All intellectual property rights reserved.
               </p>
             </div>
@@ -53,7 +53,7 @@ const CopyrightNotice = ({ variant = "inline", className = "" }: CopyrightNotice
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <Shield className="w-4 h-4 text-gold flex-shrink-0" />
-      <p className="text-zinc-500 text-xs">
+      <p className="text-white/60 text-xs">
         © {currentYear} JBJ Global Real Estate. All Rights Reserved.
       </p>
     </div>

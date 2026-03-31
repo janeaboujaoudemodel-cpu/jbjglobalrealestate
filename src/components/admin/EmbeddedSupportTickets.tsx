@@ -158,7 +158,7 @@ export function EmbeddedSupportTickets() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Total Tickets</p>
+                <p className="text-gray-500 text-xs">Total Tickets</p>
                 <p className="text-2xl font-bold text-black">{ticketCounts.total}</p>
               </div>
               <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
@@ -174,7 +174,7 @@ export function EmbeddedSupportTickets() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Open</p>
+                <p className="text-gray-500 text-xs">Open</p>
                 <p className="text-2xl font-bold text-yellow-600">{ticketCounts.open}</p>
               </div>
               <div className="w-10 h-10 bg-yellow-500/10 rounded-lg flex items-center justify-center">
@@ -190,7 +190,7 @@ export function EmbeddedSupportTickets() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">In Progress</p>
+                <p className="text-gray-500 text-xs">In Progress</p>
                 <p className="text-2xl font-bold text-blue-600">{ticketCounts.inProgress}</p>
               </div>
               <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -206,7 +206,7 @@ export function EmbeddedSupportTickets() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Resolved</p>
+                <p className="text-gray-500 text-xs">Resolved</p>
                 <p className="text-2xl font-bold text-green-600">{ticketCounts.resolved}</p>
               </div>
               <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
@@ -223,7 +223,7 @@ export function EmbeddedSupportTickets() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Reopened</p>
+                <p className="text-gray-500 text-xs">Reopened</p>
                 <p className="text-2xl font-bold text-orange-600">{ticketCounts.reopened}</p>
               </div>
               <div className="w-10 h-10 bg-orange-500/10 rounded-lg flex items-center justify-center">
@@ -245,7 +245,7 @@ export function EmbeddedSupportTickets() {
                 value={filters.search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search by ticket #, email, name, or subject..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg bg-white border-2 border-gold/30 text-black placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+                className="w-full h-10 pl-10 pr-4 rounded-lg bg-white border-2 border-gold/30 text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
               />
             </div>
 
@@ -426,7 +426,7 @@ export function EmbeddedSupportTickets() {
                               <p className="font-medium text-black text-xs truncate max-w-[150px]">
                                 {ticket.full_name}
                               </p>
-                              <p className="text-zinc-500 text-[10px] truncate max-w-[150px]">
+                              <p className="text-gray-500 text-[10px] truncate max-w-[150px]">
                                 {ticket.email}
                               </p>
                             </div>

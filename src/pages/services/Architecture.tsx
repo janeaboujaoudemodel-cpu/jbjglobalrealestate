@@ -138,7 +138,7 @@ const Architecture = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-400 text-lg md:text-xl max-w-2xl mb-8"
+            className="text-white/70 text-lg md:text-xl max-w-2xl mb-8"
             variants={fadeInUp}
           >
             Partner with licensed architects to bring your vision to life. 

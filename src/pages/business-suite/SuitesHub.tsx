@@ -109,7 +109,7 @@ const SuitesHub = () => {
           <div className="relative max-w-6xl mx-auto px-4 text-center">
             <Link
               to="/toolkit"
-              className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors mb-8 text-sm"
+              className="inline-flex items-center gap-2 text-white/70 hover:text-gold transition-colors mb-8 text-sm"
             >
               <ArrowRight className="w-4 h-4 rotate-180" />
               Back to Toolkit
@@ -127,7 +127,7 @@ const SuitesHub = () => {
               <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
                 All <span className="bg-gradient-to-r from-gold via-amber-400 to-gold bg-clip-text text-transparent">Suites</span>
               </h1>
-              <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+              <p className="text-white/70 text-lg max-w-2xl mx-auto">
                 Organized collections of AI tools grouped by function. Each suite brings together everything you need in one place.
               </p>
             </motion.div>
@@ -168,7 +168,7 @@ const SuitesHub = () => {
                       </div>
 
                       {/* Description */}
-                      <p className="text-zinc-400 text-sm leading-relaxed mb-5">
+                      <p className="text-white/70 text-sm leading-relaxed mb-5">
                         {suite.description}
                       </p>
 

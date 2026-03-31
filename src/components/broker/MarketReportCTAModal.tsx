@@ -94,7 +94,7 @@ export default function MarketReportCTAModal({
         </DialogHeader>
 
         <div className="space-y-4 py-4">
-          <p className="text-center text-sm text-zinc-500 mb-4">
+          <p className="text-center text-sm text-gray-500 mb-4">
             Choose the path that fits your goals:
           </p>
 
@@ -127,7 +127,7 @@ export default function MarketReportCTAModal({
                     )}
                   </div>
                   <p className="text-gold text-sm font-medium">{option.subtitle}</p>
-                  <p className="text-zinc-500 text-sm mt-1">{option.description}</p>
+                  <p className="text-gray-500 text-sm mt-1">{option.description}</p>
                   <div className="flex flex-wrap gap-2 mt-3">
                     {option.benefits.map((benefit, i) => (
                       <Badge 
@@ -149,7 +149,7 @@ export default function MarketReportCTAModal({
           <Button
             variant="ghost"
             onClick={handleSkip}
-            className="text-zinc-500 hover:text-zinc-700"
+            className="text-gray-500 hover:text-zinc-700"
           >
             Maybe Later
           </Button>
@@ -165,9 +165,9 @@ export default function MarketReportCTAModal({
 
         <div className="text-center mt-4">
           <FounderContent fallback={null}>
-            <p className="text-zinc-300 text-xs font-medium">Jane Bou Jaoude</p>
+            <p className="text-gray-400 text-xs font-medium">Jane Bou Jaoude</p>
             <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
-            <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
+            <p className="text-gray-500 text-xs mt-0.5">JBJ Global Real Estate</p>
           </FounderContent>
         </div>
       </DialogContent>

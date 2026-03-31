@@ -155,7 +155,7 @@ const RequestValuation = () => {
           <div className="max-w-5xl mx-auto px-6 overflow-x-auto scrollbar-hide">
             <div className="flex gap-6 py-3 min-w-max">
               {anchors.map(a => (
-                <a key={a.id} href={`#${a.id}`} className="text-sm text-zinc-500 hover:text-[#C8A766] transition-colors whitespace-nowrap font-medium">
+                <a key={a.id} href={`#${a.id}`} className="text-sm text-gray-500 hover:text-[#C8A766] transition-colors whitespace-nowrap font-medium">
                   {a.label}
                 </a>
               ))}
@@ -181,9 +181,9 @@ const RequestValuation = () => {
             {/* Comparison Table */}
             <div className="grid md:grid-cols-2 gap-5">
               <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-6">
-                <h3 className="font-serif font-bold text-zinc-400 text-lg mb-4">Informal Estimate</h3>
+                <h3 className="font-serif font-bold text-gray-500 text-lg mb-4">Informal Estimate</h3>
                 {comparisonRows.map((r, i) => (
-                  <p key={i} className="text-zinc-500 text-sm py-2 border-b border-zinc-100 last:border-0">{r.informal}</p>
+                  <p key={i} className="text-gray-500 text-sm py-2 border-b border-zinc-100 last:border-0">{r.informal}</p>
                 ))}
               </div>
               <div className="bg-white border-2 border-[#C8A766]/30 rounded-2xl p-6 shadow-sm">
@@ -356,7 +356,7 @@ const RequestValuation = () => {
             <div className="grid sm:grid-cols-2 gap-5">
               {outputRows.map(r => (
                 <div key={r.label} className="bg-white/80 border border-[#C8A766]/20 rounded-2xl p-6 shadow-sm text-center">
-                  <p className="text-sm text-zinc-500 mb-2">{r.label}</p>
+                  <p className="text-sm text-gray-500 mb-2">{r.label}</p>
                   <p className="text-xl font-serif font-bold text-zinc-900">{r.value}</p>
                 </div>
               ))}
@@ -377,7 +377,7 @@ const RequestValuation = () => {
 
           {/* ─── COMPLIANCE NOTE ─── */}
           <div className="mt-8 bg-[#C8A766]/5 border border-[#C8A766]/15 rounded-xl p-5">
-            <p className="text-sm text-zinc-500 leading-relaxed flex items-start gap-3">
+            <p className="text-sm text-gray-500 leading-relaxed flex items-start gap-3">
               <Shield className="w-5 h-5 text-[#C8A766] shrink-0 mt-0.5" />
               Valuation services are conducted within the scope of licensed brokerage advisory and do not constitute certified bank appraisal unless specifically requested through authorized partners.
             </p>
@@ -402,7 +402,7 @@ const RequestValuation = () => {
 
           {/* Footer note */}
           <div className="pt-10 text-center">
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-gray-500">
               This page may be updated periodically to reflect market developments.
             </p>
           </div>

@@ -127,7 +127,7 @@ const WelcomeModal = () => {
               >
                 Welcome to JBJ Global Real Estate
               </h3>
-              <p className="text-zinc-400 text-sm md:text-base leading-relaxed max-w-sm mx-auto">
+              <p className="text-white/70 text-sm md:text-base leading-relaxed max-w-sm mx-auto">
                 Your Gateway to{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-[hsl(40_50%_55%)] to-gold font-semibold">
                   Exclusive Real Estate Opportunities
@@ -175,7 +175,7 @@ const WelcomeModal = () => {
             </div>
 
             {/* Loyalty hint */}
-            <p className="text-center text-zinc-500 text-xs mt-6 leading-relaxed">
+            <p className="text-center text-white/60 text-xs mt-6 leading-relaxed">
               Sign in to earn loyalty points on every activity —<br />
               redeemable on purchases & subscriptions
             </p>

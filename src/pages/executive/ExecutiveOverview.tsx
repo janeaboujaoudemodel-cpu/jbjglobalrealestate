@@ -73,7 +73,7 @@ const ExecutiveOverview = () => {
       case "down":
         return <TrendingDown className="w-4 h-4 text-red-500" />;
       default:
-        return <Activity className="w-4 h-4 text-zinc-400" />;
+        return <Activity className="w-4 h-4 text-white/70" />;
     }
   };
 
@@ -84,7 +84,7 @@ const ExecutiveOverview = () => {
       case "medium":
         return "bg-amber-500/20 text-amber-400 border-amber-500/30";
       default:
-        return "bg-zinc-500/20 text-zinc-400 border-zinc-500/30";
+        return "bg-zinc-500/20 text-white/70 border-zinc-500/30";
     }
   };
 
@@ -104,11 +104,11 @@ const ExecutiveOverview = () => {
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
                 Executive Overview
               </h1>
-              <p className="text-zinc-400">
+              <p className="text-white/70">
                 One-glance understanding of business health across BUY · SELL · RENT
               </p>
             </div>
-            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-zinc-500">
+            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-white/60">
               <Clock className="w-4 h-4" />
               <span>Last updated: {lastUpdated ? new Date(lastUpdated).toLocaleString() : "Loading..."}</span>
             </div>
@@ -129,7 +129,7 @@ const ExecutiveOverview = () => {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   nav.active
                     ? "bg-gold text-black"
-                    : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                    : "bg-zinc-800 text-white/85 hover:bg-zinc-700"
                 }`}
               >
                 {nav.label}
@@ -140,7 +140,7 @@ const ExecutiveOverview = () => {
           {loading ? (
             <div className="text-center py-12">
               <Activity className="w-8 h-8 text-gold animate-pulse mx-auto mb-4" />
-              <p className="text-zinc-400">Loading executive metrics...</p>
+              <p className="text-white/70">Loading executive metrics...</p>
             </div>
           ) : (
             <>
@@ -148,7 +148,7 @@ const ExecutiveOverview = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Building className="w-4 h-4" />
                       BUY Deals (Active)
                     </CardTitle>
@@ -157,13 +157,13 @@ const ExecutiveOverview = () => {
                     <div className="text-3xl font-bold text-white">
                       {metrics.activeDeals.buy}
                     </div>
-                    <p className="text-xs text-zinc-500 mt-1">Qualified pipeline</p>
+                    <p className="text-xs text-white/60 mt-1">Qualified pipeline</p>
                   </CardContent>
                 </Card>
 
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Home className="w-4 h-4" />
                       SELL Deals (Active)
                     </CardTitle>
@@ -172,13 +172,13 @@ const ExecutiveOverview = () => {
                     <div className="text-3xl font-bold text-white">
                       {metrics.activeDeals.sell}
                     </div>
-                    <p className="text-xs text-zinc-500 mt-1">Qualified pipeline</p>
+                    <p className="text-xs text-white/60 mt-1">Qualified pipeline</p>
                   </CardContent>
                 </Card>
 
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Key className="w-4 h-4" />
                       RENT Deals (Active)
                     </CardTitle>
@@ -187,7 +187,7 @@ const ExecutiveOverview = () => {
                     <div className="text-3xl font-bold text-white">
                       {metrics.activeDeals.rent}
                     </div>
-                    <p className="text-xs text-zinc-500 mt-1">Qualified pipeline</p>
+                    <p className="text-xs text-white/60 mt-1">Qualified pipeline</p>
                   </CardContent>
                 </Card>
               </div>
@@ -196,7 +196,7 @@ const ExecutiveOverview = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400">
+                    <CardTitle className="text-sm font-medium text-white/70">
                       Weekly Velocity
                     </CardTitle>
                   </CardHeader>
@@ -205,13 +205,13 @@ const ExecutiveOverview = () => {
                       {metrics.weeklyVelocity}
                       {getTrendIcon(metrics.leadQualityTrend)}
                     </div>
-                    <p className="text-xs text-zinc-500 mt-1">New leads this week</p>
+                    <p className="text-xs text-white/60 mt-1">New leads this week</p>
                   </CardContent>
                 </Card>
 
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400">
+                    <CardTitle className="text-sm font-medium text-white/70">
                       Monthly Velocity
                     </CardTitle>
                   </CardHeader>
@@ -219,13 +219,13 @@ const ExecutiveOverview = () => {
                     <div className="text-2xl font-bold text-white">
                       {metrics.monthlyVelocity}
                     </div>
-                    <p className="text-xs text-zinc-500 mt-1">New leads (30 days)</p>
+                    <p className="text-xs text-white/60 mt-1">New leads (30 days)</p>
                   </CardContent>
                 </Card>
 
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400">
+                    <CardTitle className="text-sm font-medium text-white/70">
                       Lead Quality Trend
                     </CardTitle>
                   </CardHeader>
@@ -236,13 +236,13 @@ const ExecutiveOverview = () => {
                         {metrics.leadQualityTrend}
                       </span>
                     </div>
-                    <p className="text-xs text-zinc-500 mt-1">vs. previous period</p>
+                    <p className="text-xs text-white/60 mt-1">vs. previous period</p>
                   </CardContent>
                 </Card>
 
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400">
+                    <CardTitle className="text-sm font-medium text-white/70">
                       Total Active Pipeline
                     </CardTitle>
                   </CardHeader>
@@ -250,7 +250,7 @@ const ExecutiveOverview = () => {
                     <div className="text-2xl font-bold text-gold">
                       {metrics.activeDeals.buy + metrics.activeDeals.sell + metrics.activeDeals.rent}
                     </div>
-                    <p className="text-xs text-zinc-500 mt-1">All qualified deals</p>
+                    <p className="text-xs text-white/60 mt-1">All qualified deals</p>
                   </CardContent>
                 </Card>
               </div>
@@ -277,7 +277,7 @@ const ExecutiveOverview = () => {
                       </div>
                     ))}
                   </div>
-                  <p className="text-xs text-zinc-500 mt-4">
+                  <p className="text-xs text-white/60 mt-4">
                     Momentum indicators are directional summaries based on aggregated Open Data. Not predictive.
                   </p>
                 </CardContent>
@@ -294,11 +294,11 @@ const ExecutiveOverview = () => {
                       <h3 className="text-lg font-semibold text-white mb-1">
                         Market Signals
                       </h3>
-                      <p className="text-sm text-zinc-400">
+                      <p className="text-sm text-white/70">
                         Supply vs demand pressure, RENT absorption velocity
                       </p>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-zinc-500 group-hover:text-gold transition-colors" />
+                    <ArrowRight className="w-5 h-5 text-white/60 group-hover:text-gold transition-colors" />
                   </div>
                 </Link>
 
@@ -311,18 +311,18 @@ const ExecutiveOverview = () => {
                       <h3 className="text-lg font-semibold text-white mb-1">
                         Risk & Compliance
                       </h3>
-                      <p className="text-sm text-zinc-400">
+                      <p className="text-sm text-white/70">
                         Compliance alerts, language risk flags, audit status
                       </p>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-zinc-500 group-hover:text-gold transition-colors" />
+                    <ArrowRight className="w-5 h-5 text-white/60 group-hover:text-gold transition-colors" />
                   </div>
                 </Link>
               </div>
 
               {/* Footer Attribution */}
               <div className="mt-12 pt-6 border-t border-zinc-800 text-center">
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-white/60">
                   Executive Dashboard • Data sourced from CRM (anonymized) and Open Data (aggregated) • 
                   AI insights are descriptive only, not predictive
                 </p>

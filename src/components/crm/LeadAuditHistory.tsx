@@ -68,7 +68,7 @@ export default function LeadAuditHistory({ leadId }: { leadId: string }) {
             {entries.map((entry) => (
               <div key={entry.id} className="flex gap-3 p-3 border rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
                 <div className="p-2 bg-muted rounded-full h-fit shrink-0">
-                  <Clock className="h-4 w-4 text-zinc-500" />
+                  <Clock className="h-4 w-4 text-gray-500" />
                 </div>
                 <div className="flex-1 min-w-0 space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -89,7 +89,7 @@ export default function LeadAuditHistory({ leadId }: { leadId: string }) {
                           <div key={key} className="flex items-center gap-1.5 flex-wrap">
                             <span className="font-medium text-zinc-600">{key}:</span>
                             <span className="text-red-500 line-through">{String(oldVal ?? "—")}</span>
-                            <ArrowRight className="h-3 w-3 text-zinc-400 shrink-0" />
+                            <ArrowRight className="h-3 w-3 text-gray-500 shrink-0" />
                             <span className="text-emerald-600">{String(newVal ?? "—")}</span>
                           </div>
                         );

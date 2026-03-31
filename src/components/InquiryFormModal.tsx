@@ -516,7 +516,7 @@ const InquiryFormModal = ({
                         <FormControl>
                           <Input 
                             {...field} 
-                            className="h-12 bg-white border-2 border-gold/50 hover:border-gold text-black placeholder:text-zinc-400 focus:border-gold rounded-lg"
+                            className="h-12 bg-white border-2 border-gold/50 hover:border-gold text-black placeholder:text-gray-400 focus:border-gold rounded-lg"
                             placeholder="John Doe"
                           />
                         </FormControl>
@@ -547,7 +547,7 @@ const InquiryFormModal = ({
                               // Reset verification if email changes
                               if (emailVerified) setEmailVerified(false);
                             }}
-                            className={`h-12 bg-white text-black placeholder:text-zinc-400 rounded-lg w-full border-2 ${
+                            className={`h-12 bg-white text-black placeholder:text-gray-400 rounded-lg w-full border-2 ${
                               emailStatus === 'valid' ? 'border-green-500/60 focus:border-green-500' :
                               emailStatus === 'invalid' ? 'border-red-500/60 focus:border-red-500' :
                               'border-gold/50 hover:border-gold focus:border-gold'
@@ -691,7 +691,7 @@ const InquiryFormModal = ({
                         <FormControl>
                           <Textarea 
                             {...field} 
-                            className="min-h-[80px] bg-white border-zinc-200 text-black placeholder:text-zinc-400 focus:border-gold rounded-lg resize-none"
+                            className="min-h-[80px] bg-white border-zinc-200 text-black placeholder:text-gray-400 focus:border-gold rounded-lg resize-none"
                             placeholder="Tell us about your requirements..."
                           />
                         </FormControl>
@@ -727,7 +727,7 @@ const InquiryFormModal = ({
                   </div>
 
                   {/* Registration note */}
-                  <p className="text-zinc-500 text-xs text-center pt-2">
+                  <p className="text-gray-500 text-xs text-center pt-2">
                     By registering, you'll join our exclusive community and receive updates via WhatsApp.
                   </p>
                 </form>

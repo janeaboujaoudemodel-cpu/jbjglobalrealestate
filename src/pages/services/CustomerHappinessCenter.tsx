@@ -104,7 +104,7 @@ const CustomerHappinessCenter = () => {
                 <Heart className="w-12 h-12 text-gold/60" />
               </div>
               <p className="text-gold/60 text-sm tracking-widest uppercase">Support That Actually Works</p>
-              <p className="text-zinc-500 text-xs mt-2">Video placeholder only</p>
+              <p className="text-white/60 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
@@ -132,7 +132,7 @@ const CustomerHappinessCenter = () => {
               Customer Happiness Center
             </h1>
             
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Fast routing, clear answers, and structured support—built around ticket tracking and professional resolution.
             </p>
             

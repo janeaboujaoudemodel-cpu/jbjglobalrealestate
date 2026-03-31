@@ -92,7 +92,7 @@ const DocumentStudio = () => {
               Document <span className="text-gold">Studio</span>
             </h1>
           </div>
-          <p className="text-zinc-400 ml-[52px]">
+          <p className="text-gray-500 ml-[52px]">
             Generate professional documents, marketing content, CVs, and presentations — all in one place.
           </p>
         </div>

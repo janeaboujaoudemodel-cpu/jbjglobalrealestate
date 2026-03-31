@@ -322,7 +322,7 @@ const JBJDesignStudio: React.FC = () => {
                 <h1 className="text-white text-2xl font-bold">
                   JBJ AI Graphic Designer
                 </h1>
-                <p className="text-zinc-400 text-sm">Create professional designs with AI assistance</p>
+                <p className="text-white/70 text-sm">Create professional designs with AI assistance</p>
               </div>
             </div>
             
@@ -371,7 +371,7 @@ const JBJDesignStudio: React.FC = () => {
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 whitespace-nowrap ${
                       selectedCategory === cat.id 
                         ? `bg-gradient-to-r ${cat.color} text-white shadow-lg` 
-                        : 'bg-zinc-900 text-zinc-400 hover:bg-zinc-800 hover:text-white border border-zinc-800'
+                        : 'bg-zinc-900 text-white/70 hover:bg-zinc-800 hover:text-white border border-zinc-800'
                     }`}
                   >
                     <cat.icon className="w-4 h-4" />
@@ -395,7 +395,7 @@ const JBJDesignStudio: React.FC = () => {
                     {selectedCategory === 'email-signature' ? (
                       <div className="space-y-4">
                         <div>
-                          <Label className="text-zinc-400 text-sm">Full Name *</Label>
+                          <Label className="text-white/70 text-sm">Full Name *</Label>
                           <Input
                             value={signatureData.name}
                             onChange={(e) => setSignatureData(prev => ({ ...prev, name: e.target.value }))}
@@ -404,7 +404,7 @@ const JBJDesignStudio: React.FC = () => {
                           />
                         </div>
                         <div>
-                          <Label className="text-zinc-400 text-sm">Title</Label>
+                          <Label className="text-white/70 text-sm">Title</Label>
                           <Input
                             value={signatureData.title}
                             onChange={(e) => setSignatureData(prev => ({ ...prev, title: e.target.value }))}
@@ -413,7 +413,7 @@ const JBJDesignStudio: React.FC = () => {
                           />
                         </div>
                         <div>
-                          <Label className="text-zinc-400 text-sm">Email *</Label>
+                          <Label className="text-white/70 text-sm">Email *</Label>
                           <Input
                             value={signatureData.email}
                             onChange={(e) => setSignatureData(prev => ({ ...prev, email: e.target.value }))}
@@ -422,7 +422,7 @@ const JBJDesignStudio: React.FC = () => {
                           />
                         </div>
                         <div>
-                          <Label className="text-zinc-400 text-sm">Phone</Label>
+                          <Label className="text-white/70 text-sm">Phone</Label>
                           <Input
                             value={signatureData.phone}
                             onChange={(e) => setSignatureData(prev => ({ ...prev, phone: e.target.value }))}
@@ -459,10 +459,10 @@ const JBJDesignStudio: React.FC = () => {
                               }`}
                             >
                               <div className="aspect-video bg-zinc-700 rounded mb-2 flex items-center justify-center min-h-[60px]">
-                                <Layers className="w-6 h-6 text-zinc-500" />
+                                <Layers className="w-6 h-6 text-white/60" />
                               </div>
                               <p className="text-white text-xs font-medium truncate">{template.name}</p>
-                              <p className="text-zinc-500 text-[10px]">{template.size}</p>
+                              <p className="text-white/60 text-[10px]">{template.size}</p>
                             </motion.button>
                           ))}
                         </div>
@@ -473,10 +473,10 @@ const JBJDesignStudio: React.FC = () => {
                     {selectedPalette && (
                       <div className="mt-4 pt-4 border-t border-zinc-800">
                         <div className="flex items-center justify-between mb-2">
-                          <h4 className="text-zinc-400 text-xs font-medium">Active Palette</h4>
+                          <h4 className="text-white/70 text-xs font-medium">Active Palette</h4>
                           <button 
                             onClick={() => setSelectedPalette(null)}
-                            className="text-zinc-500 hover:text-zinc-400"
+                            className="text-white/60 hover:text-white/70"
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -518,8 +518,8 @@ const JBJDesignStudio: React.FC = () => {
                             <Wand2 className="w-10 h-10 text-purple-400" />
                           </div>
                           <h3 className="text-white font-semibold mb-2">{selectedTemplate.name}</h3>
-                          <p className="text-zinc-500 text-sm mb-4">Size: {selectedTemplate.size}</p>
-                          <p className="text-zinc-400 text-sm max-w-sm mx-auto">
+                          <p className="text-white/60 text-sm mb-4">Size: {selectedTemplate.size}</p>
+                          <p className="text-white/70 text-sm max-w-sm mx-auto">
                             Describe what you want to create in the AI Assistant panel.
                           </p>
                         </div>
@@ -528,8 +528,8 @@ const JBJDesignStudio: React.FC = () => {
                           <div className="w-20 h-20 rounded-2xl bg-zinc-800 border border-zinc-700 flex items-center justify-center mx-auto mb-4">
                             <ImagePlus className="w-10 h-10 text-zinc-600" />
                           </div>
-                          <h3 className="text-zinc-400 font-medium mb-2">Select a Template</h3>
-                          <p className="text-zinc-500 text-sm">Choose a template from the left panel to get started</p>
+                          <h3 className="text-white/70 font-medium mb-2">Select a Template</h3>
+                          <p className="text-white/60 text-sm">Choose a template from the left panel to get started</p>
                         </div>
                       )}
 
@@ -542,7 +542,7 @@ const JBJDesignStudio: React.FC = () => {
                           <div className="text-center">
                             <Loader2 className="w-12 h-12 text-gold animate-spin mx-auto mb-4" />
                             <p className="text-white font-medium">AI is creating your design...</p>
-                            <p className="text-zinc-400 text-sm">This may take a few seconds</p>
+                            <p className="text-white/70 text-sm">This may take a few seconds</p>
                           </div>
                         </motion.div>
                       )}
@@ -562,7 +562,7 @@ const JBJDesignStudio: React.FC = () => {
                           <DialogTrigger asChild>
                             <Button 
                               variant="outline"
-                              className="flex-1 border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                              className="flex-1 border-zinc-700 text-white/85 hover:bg-zinc-800"
                             >
                               <Globe className="w-4 h-4 mr-2" />
                               Upload to Website
@@ -573,14 +573,14 @@ const JBJDesignStudio: React.FC = () => {
                               <DialogTitle className="text-white">Upload to Website</DialogTitle>
                             </DialogHeader>
                             <div className="space-y-4 pt-4">
-                              <p className="text-zinc-400 text-sm">
+                              <p className="text-white/70 text-sm">
                                 Describe where you want this design to appear on the website. Your assistant will process the request.
                               </p>
                               <textarea
                                 value={websiteUploadPrompt}
                                 onChange={(e) => setWebsiteUploadPrompt(e.target.value)}
                                 placeholder="e.g., Replace the book in the 'Download Free Market Report' section on the homepage with this new design. Make it 3D style."
-                                className="w-full h-32 px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-500 resize-none"
+                                className="w-full h-32 px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder:text-gray-400 resize-none"
                               />
                               <Button
                                 onClick={handleUploadToWebsite}
@@ -598,7 +598,7 @@ const JBJDesignStudio: React.FC = () => {
                             setGeneratedImage(null);
                           }}
                           variant="outline"
-                          className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                          className="border-zinc-700 text-white/85 hover:bg-zinc-800"
                         >
                           <RefreshCw className="w-4 h-4" />
                         </Button>
@@ -685,7 +685,7 @@ const JBJDesignStudio: React.FC = () => {
                     <Users className="w-10 h-10 text-purple-400" />
                   </div>
                   <h3 className="text-white text-xl font-semibold mb-2">Design Team</h3>
-                  <p className="text-zinc-400 max-w-md mx-auto mb-6">
+                  <p className="text-white/70 max-w-md mx-auto mb-6">
                     Meet your AI design team members who work together to create stunning visuals for JBJ Global Real Estate.
                   </p>
                   
@@ -697,7 +697,7 @@ const JBJDesignStudio: React.FC = () => {
                       </div>
                       <h4 className="text-white font-medium">Maya Chen</h4>
                       <p className="text-gold text-sm">Lead AI Designer</p>
-                      <p className="text-zinc-500 text-xs mt-2">Specializes in luxury real estate marketing and premium brand aesthetics</p>
+                      <p className="text-white/60 text-xs mt-2">Specializes in luxury real estate marketing and premium brand aesthetics</p>
                     </div>
 
                     {/* Brand Manager Persona */}
@@ -707,7 +707,7 @@ const JBJDesignStudio: React.FC = () => {
                       </div>
                       <h4 className="text-white font-medium">Victoria Reynolds</h4>
                       <p className="text-gold text-sm">Brand Director</p>
-                      <p className="text-zinc-500 text-xs mt-2">Ensures all designs align with JBJ's premium brand standards</p>
+                      <p className="text-white/60 text-xs mt-2">Ensures all designs align with JBJ's premium brand standards</p>
                     </div>
 
                     {/* Content Designer Persona */}
@@ -717,7 +717,7 @@ const JBJDesignStudio: React.FC = () => {
                       </div>
                       <h4 className="text-white font-medium">James Porter</h4>
                       <p className="text-gold text-sm">Content Designer</p>
-                      <p className="text-zinc-500 text-xs mt-2">Creates books, reports, and long-form visual content</p>
+                      <p className="text-white/60 text-xs mt-2">Creates books, reports, and long-form visual content</p>
                     </div>
                   </div>
                 </div>

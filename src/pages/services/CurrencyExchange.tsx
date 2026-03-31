@@ -133,7 +133,7 @@ const CurrencyExchange = () => {
               Currency Exchange Support
             </h1>
             
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Coordination support for cross-border buyers transferring funds—structured documentation, clean routing, and partner introductions when needed.
             </p>
             
@@ -159,7 +159,7 @@ const CurrencyExchange = () => {
                     <Play className="w-6 h-6 text-gold ml-1" />
                   </div>
                   <p className="text-gold text-sm font-medium">Cross-Border Buying Made Easier</p>
-                  <p className="text-zinc-500 text-xs mt-1">Video Coming Soon</p>
+                  <p className="text-white/60 text-xs mt-1">Video Coming Soon</p>
                 </div>
               </div>
             </motion.div>
@@ -259,7 +259,7 @@ const CurrencyExchange = () => {
             <motion.div variants={fadeInUp} className="jj-card-inner">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center shrink-0">
-                  <AlertCircle className="w-6 h-6 text-zinc-400" />
+                  <AlertCircle className="w-6 h-6 text-white/70" />
                 </div>
                 <p className="text-zinc-700 leading-relaxed">
                   We do not provide banking services or regulated financial advice. Where required, we introduce clients to properly licensed providers who operate under their own terms and compliance requirements.

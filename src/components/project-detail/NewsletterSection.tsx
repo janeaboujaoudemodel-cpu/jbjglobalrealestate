@@ -113,11 +113,11 @@ export function NewsletterSection() {
                     <FormItem>
                       <FormControl>
                         <div className="relative">
-                          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                          <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
                           <Input 
                             placeholder="Full Name *"
                             {...field}
-                            className="bg-zinc-900 border-2 border-gold/50 hover:border-gold focus:border-gold h-12 text-white placeholder:text-zinc-400 pl-10"
+                            className="bg-zinc-900 border-2 border-gold/50 hover:border-gold focus:border-gold h-12 text-white placeholder:text-gray-400 pl-10"
                           />
                         </div>
                       </FormControl>
@@ -134,12 +134,12 @@ export function NewsletterSection() {
                     <FormItem>
                       <FormControl>
                         <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/70" />
                           <Input 
                             type="email"
                             placeholder="Email Address *"
                             {...field}
-                            className="bg-zinc-900 border-2 border-gold/50 hover:border-gold focus:border-gold h-12 text-white placeholder:text-zinc-400 pl-10"
+                            className="bg-zinc-900 border-2 border-gold/50 hover:border-gold focus:border-gold h-12 text-white placeholder:text-gray-400 pl-10"
                           />
                         </div>
                       </FormControl>

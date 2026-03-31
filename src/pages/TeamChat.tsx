@@ -780,21 +780,21 @@ const TeamChat = () => {
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-black font-medium">Owner Copy</Label>
-                <p className="text-xs text-zinc-500">Receive copies of all broker DMs</p>
+                <p className="text-xs text-gray-500">Receive copies of all broker DMs</p>
               </div>
               <Switch checked={settings.ownerCopyEnabled} onCheckedChange={(v) => setSettings(s => ({ ...s, ownerCopyEnabled: v }))} />
             </div>
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-black font-medium">Notifications</Label>
-                <p className="text-xs text-zinc-500">Push notifications for new messages</p>
+                <p className="text-xs text-gray-500">Push notifications for new messages</p>
               </div>
               <Switch checked={settings.notificationsEnabled} onCheckedChange={(v) => setSettings(s => ({ ...s, notificationsEnabled: v }))} />
             </div>
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-black font-medium">Sound Alerts</Label>
-                <p className="text-xs text-zinc-500">Play sound for new messages</p>
+                <p className="text-xs text-gray-500">Play sound for new messages</p>
               </div>
               <Switch checked={settings.soundEnabled} onCheckedChange={(v) => setSettings(s => ({ ...s, soundEnabled: v }))} />
             </div>
@@ -837,7 +837,7 @@ const TeamChat = () => {
                       {member.name}
                       {member.id === 'amanda-clarke' && <Sparkles className="w-3 h-3 text-[#B89555]" />}
                     </p>
-                    <p className="text-xs text-zinc-500 truncate">{member.role} · {member.department}</p>
+                    <p className="text-xs text-gray-500 truncate">{member.role} · {member.department}</p>
                   </div>
                   <div className={cn("ml-auto w-2.5 h-2.5 rounded-full shrink-0", statusColors[memberStatuses[member.id] || 'offline'])} />
                 </button>

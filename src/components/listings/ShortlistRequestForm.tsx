@@ -162,7 +162,7 @@ export const ShortlistRequestForm = ({
           placeholder="Full Name *"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="h-12 bg-white border-zinc-300 text-black placeholder:text-zinc-400"
+          className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
           required
         />
         
@@ -171,7 +171,7 @@ export const ShortlistRequestForm = ({
           placeholder="Phone Number *"
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          className="h-12 bg-white border-zinc-300 text-black placeholder:text-zinc-400"
+          className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
           required
         />
 
@@ -180,13 +180,13 @@ export const ShortlistRequestForm = ({
             placeholder={transactionType === 'buy' ? 'Budget (AED)' : 'Max Rent (AED)'}
             value={formData.budget}
             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-            className="h-12 bg-white border-zinc-300 text-black placeholder:text-zinc-400"
+            className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
           />
           <Input
             placeholder="Bedrooms (e.g. 2-3)"
             value={formData.bedrooms}
             onChange={(e) => setFormData({ ...formData, bedrooms: e.target.value })}
-            className="h-12 bg-white border-zinc-300 text-black placeholder:text-zinc-400"
+            className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
           />
         </div>
 
@@ -194,14 +194,14 @@ export const ShortlistRequestForm = ({
           placeholder="Preferred Areas (e.g. Downtown, Marina)"
           value={formData.preferredAreas}
           onChange={(e) => setFormData({ ...formData, preferredAreas: e.target.value })}
-          className="h-12 bg-white border-zinc-300 text-black placeholder:text-zinc-400"
+          className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
         />
 
         <Select
           value={formData.timeline}
           onValueChange={(value) => setFormData({ ...formData, timeline: value as LeadTimeline })}
         >
-          <SelectTrigger className="h-12 bg-white border-zinc-300 text-zinc-400">
+          <SelectTrigger className="h-12 bg-white border-zinc-300 text-gray-500">
             <SelectValue placeholder={transactionType === 'buy' ? 'When do you want to buy?' : 'When do you need to move?'} />
           </SelectTrigger>
           <SelectContent className="bg-white border-zinc-200">

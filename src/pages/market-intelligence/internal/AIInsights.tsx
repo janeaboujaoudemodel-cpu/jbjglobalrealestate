@@ -135,7 +135,7 @@ const AIInsights = () => {
               <h1 className="text-white text-3xl font-bold">
                 AI Market Narratives
               </h1>
-              <p className="text-zinc-500">Internal execution intelligence — descriptive, not predictive</p>
+              <p className="text-white/60">Internal execution intelligence — descriptive, not predictive</p>
             </div>
           </div>
         </div>
@@ -147,7 +147,7 @@ const AIInsights = () => {
           <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
             <div>
-              <p className="text-zinc-400 text-sm">
+              <p className="text-white/70 text-sm">
                 <strong className="text-white">Internal Use Only:</strong> These AI-generated narratives are for broker execution support. 
                 They are <span className="text-amber-400">descriptive and advisory, not predictive</span>. 
                 They do not constitute financial advice and must not be shared externally.
@@ -189,7 +189,7 @@ const AIInsights = () => {
                           </div>
                           <div>
                             <CardTitle className="text-white text-xl">{type.title}</CardTitle>
-                            <p className="text-zinc-500 text-sm mt-1">{type.description}</p>
+                            <p className="text-white/60 text-sm mt-1">{type.description}</p>
                           </div>
                         </div>
                         <Button
@@ -214,19 +214,19 @@ const AIInsights = () => {
                     <CardContent>
                       {insight ? (
                         <div className="space-y-4">
-                          <div className="flex items-center gap-2 text-xs text-zinc-500">
+                          <div className="flex items-center gap-2 text-xs text-white/60">
                             <MessageSquare className="w-3 h-3" />
                             Generated {new Date(insight.generatedAt).toLocaleString()}
                           </div>
                           <div className="p-6 bg-zinc-800/50 rounded-xl border border-zinc-700">
                             <div className="prose prose-invert prose-sm max-w-none">
-                              <div className="text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap">
+                              <div className="text-white/85 text-sm leading-relaxed whitespace-pre-wrap">
                                 {insight.content}
                               </div>
                             </div>
                           </div>
                           <div className={`${colors.bg} ${colors.border} border rounded-lg p-3`}>
-                            <p className="text-zinc-400 text-xs italic">
+                            <p className="text-white/70 text-xs italic">
                               Internal AI insights are descriptive analytics intended to support brokerage execution, not predictive forecasts.
                             </p>
                           </div>
@@ -234,7 +234,7 @@ const AIInsights = () => {
                       ) : (
                         <div className="text-center py-12">
                           <Brain className="w-12 h-12 text-zinc-700 mx-auto mb-4" />
-                          <p className="text-zinc-500 text-sm">
+                          <p className="text-white/60 text-sm">
                             Click "Generate" to create AI-powered execution intelligence for this category.
                           </p>
                         </div>
@@ -257,30 +257,30 @@ const AIInsights = () => {
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <TrendingUp className="w-5 h-5 text-emerald-400" />
-                  <span className="text-zinc-400 text-sm">Hot Areas</span>
+                  <span className="text-white/70 text-sm">Hot Areas</span>
                 </div>
                 <p className="text-white font-semibold">Palm Jumeirah, Dubai Hills, Creek Harbour</p>
-                <p className="text-zinc-500 text-xs mt-2">Based on recent inquiry velocity</p>
+                <p className="text-white/60 text-xs mt-2">Based on recent inquiry velocity</p>
               </CardContent>
             </Card>
             <Card className="bg-zinc-900/50 border-zinc-800">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Users className="w-5 h-5 text-amber-400" />
-                  <span className="text-zinc-400 text-sm">Client Focus</span>
+                  <span className="text-white/70 text-sm">Client Focus</span>
                 </div>
                 <p className="text-white font-semibold">HNWI Beachfront, Corporate Rentals</p>
-                <p className="text-zinc-500 text-xs mt-2">Priority segments this week</p>
+                <p className="text-white/60 text-xs mt-2">Priority segments this week</p>
               </CardContent>
             </Card>
             <Card className="bg-zinc-900/50 border-zinc-800">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-3">
                   <Target className="w-5 h-5 text-blue-400" />
-                  <span className="text-zinc-400 text-sm">Action Priority</span>
+                  <span className="text-white/70 text-sm">Action Priority</span>
                 </div>
                 <p className="text-white font-semibold">Follow up on pending viewings</p>
-                <p className="text-zinc-500 text-xs mt-2">12 high-intent leads in pipeline</p>
+                <p className="text-white/60 text-xs mt-2">12 high-intent leads in pipeline</p>
               </CardContent>
             </Card>
           </div>

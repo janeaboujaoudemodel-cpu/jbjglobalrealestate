@@ -87,7 +87,7 @@ const AIContractReviewerPremium = () => {
             <Shield className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-sm font-semibold text-red-400 mb-1">Legal Disclaimer</p>
-              <p className="text-sm text-zinc-300">
+              <p className="text-sm text-white/85">
                 This AI review is for <strong>informational purposes only</strong> and does not constitute legal advice. 
                 Always consult a qualified legal professional before signing any contract.
               </p>
@@ -124,7 +124,7 @@ const AIContractReviewerPremium = () => {
 
               {/* Contract Type */}
               <div className="space-y-2">
-                <Label className="text-zinc-300">Contract Type</Label>
+                <Label className="text-white/85">Contract Type</Label>
               <Select value={contractType} onValueChange={setContractType}>
                 <SelectTriggerDark className="border-red-500/30 hover:border-red-500/50">
                   <SelectValue />
@@ -141,14 +141,14 @@ const AIContractReviewerPremium = () => {
 
               {/* Contract Text */}
               <div className="space-y-2">
-                <Label className="text-zinc-300">Contract Text *</Label>
+                <Label className="text-white/85">Contract Text *</Label>
                 <Textarea
                   placeholder="Paste your contract text here for review..."
                   value={contractText}
                   onChange={(e) => setContractText(e.target.value)}
                   className="bg-zinc-900/50 border-red-500/30 text-white hover:border-red-500/50 focus:border-red-400 transition-colors min-h-[300px] font-mono text-sm"
                 />
-                <p className="text-xs text-zinc-500">{contractText.length} characters</p>
+                <p className="text-xs text-white/60">{contractText.length} characters</p>
               </div>
 
               <Button
@@ -196,7 +196,7 @@ const AIContractReviewerPremium = () => {
                             <div className="flex items-center gap-3">
                               <RiskIcon className={`h-8 w-8 ${risk.text}`} />
                               <div>
-                                <p className="text-xs text-zinc-400">Overall Risk Level</p>
+                                <p className="text-xs text-white/70">Overall Risk Level</p>
                                 <p className={`text-2xl font-bold capitalize ${risk.text}`}>
                                   {response.riskLevel}
                                 </p>
@@ -221,7 +221,7 @@ const AIContractReviewerPremium = () => {
                         {response.keyTerms.map((term: any, idx: number) => (
                           <li key={idx} className="flex items-start gap-2 text-sm bg-zinc-800/50 p-2 rounded">
                             <CheckCircle className="h-4 w-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                            <span className="text-zinc-300">
+                            <span className="text-white/85">
                               <strong className="text-white">{term.term}:</strong> {term.value}
                             </span>
                           </li>
@@ -245,7 +245,7 @@ const AIContractReviewerPremium = () => {
                             <span className="w-5 h-5 rounded-full bg-amber-500/30 flex items-center justify-center flex-shrink-0 text-xs text-amber-400 font-bold">
                               {idx + 1}
                             </span>
-                            <span className="text-zinc-300">{concern}</span>
+                            <span className="text-white/85">{concern}</span>
                           </li>
                         ))}
                       </ul>
@@ -265,13 +265,13 @@ const AIContractReviewerPremium = () => {
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </Button>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                       {response.review}
                     </div>
                   </CardContent>
                 </Card>
 
-                <p className="text-xs text-zinc-500 text-center">
+                <p className="text-xs text-white/60 text-center">
                   * AI-generated review for informational purposes only. Consult a legal professional for advice.
                 </p>
               </motion.div>
@@ -285,8 +285,8 @@ const AIContractReviewerPremium = () => {
               <div className="p-6 rounded-full bg-red-500/10 mb-4">
                 <FileSearch className="h-12 w-12 text-red-400/50" />
               </div>
-              <h3 className="text-lg font-semibold text-zinc-400">Ready to Review</h3>
-              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+              <h3 className="text-lg font-semibold text-white/70">Ready to Review</h3>
+              <p className="text-sm text-white/60 mt-2 max-w-sm">
                 Paste your contract text to get AI-powered analysis with risk assessment and key term identification
               </p>
             </motion.div>

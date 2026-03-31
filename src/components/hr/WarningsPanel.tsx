@@ -281,7 +281,7 @@ export function WarningsPanel() {
         </CardHeader>
         <CardContent>
           {warnings.length === 0 ? (
-            <div className="text-center py-12 text-zinc-500">
+            <div className="text-center py-12 text-gray-500">
               <CheckCircle className="h-12 w-12 mx-auto mb-4 text-emerald-400" />
               <p>No warnings on record.</p>
             </div>
@@ -303,10 +303,10 @@ export function WarningsPanel() {
                   <TableRow key={warning.id} className="border-gold/20 hover:bg-gold/5">
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-zinc-500" />
+                        <User className="h-4 w-4 text-gray-500" />
                         <div>
                           <p className="font-medium text-black">{warning.employee_name}</p>
-                          <p className="text-xs text-zinc-500">{warning.department}</p>
+                          <p className="text-xs text-gray-500">{warning.department}</p>
                         </div>
                       </div>
                     </TableCell>
@@ -334,7 +334,7 @@ export function WarningsPanel() {
                           </span>
                         </div>
                       ) : (
-                        <span className="text-zinc-500 text-sm">Pending</span>
+                        <span className="text-gray-500 text-sm">Pending</span>
                       )}
                     </TableCell>
                   </TableRow>

@@ -488,7 +488,7 @@ const Compare = () => {
     const color = score >= 8 ? '#22C55E' : score >= 6 ? '#F59E0B' : '#DC2626';
     return (
       <div className="flex items-center gap-2">
-        <span className="text-[10px] text-zinc-500 w-20 shrink-0 text-right">{label}</span>
+        <span className="text-[10px] text-white/60 w-20 shrink-0 text-right">{label}</span>
         <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
           <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: color }} />
         </div>
@@ -500,7 +500,7 @@ const Compare = () => {
   if (isLoading) {
     return (
       <section className="min-h-screen bg-zinc-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-zinc-400 animate-spin" />
+        <Loader2 className="w-8 h-8 text-white/70 animate-spin" />
       </section>
     );
   }
@@ -516,7 +516,7 @@ const Compare = () => {
           {/* Back link */}
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors mb-12"
+            className="inline-flex items-center gap-2 text-white/70 hover:text-gold transition-colors mb-12"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Previous Page</span>
@@ -537,15 +537,15 @@ const Compare = () => {
               </span>
             </h1>
             
-            <p className="text-zinc-300 text-lg md:text-xl mb-4 max-w-2xl mx-auto">
+            <p className="text-white/85 text-lg md:text-xl mb-4 max-w-2xl mx-auto">
               Thank you for exploring our exclusive AI-powered property comparison tool.
               Get detailed insights, ROI projections, and expert recommendations.
             </p>
             <FounderContent>
               <div className="text-center mb-12">
-                <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
+                <p className="text-white/85 text-sm font-medium">Jane Bou Jaoude</p>
                 <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
-                <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
+                <p className="text-white/60 text-xs mt-0.5">JBJ Global Real Estate</p>
               </div>
             </FounderContent>
 
@@ -571,7 +571,7 @@ const Compare = () => {
                         {item.step}
                       </div>
                       <h3 className="text-white font-semibold text-lg mb-2">{item.title}</h3>
-                      <p className="text-zinc-400 text-sm">{item.desc}</p>
+                      <p className="text-white/70 text-sm">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -589,7 +589,7 @@ const Compare = () => {
                 <div key={f.label} className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 text-center">
                   <f.icon className="w-6 h-6 text-gold mx-auto mb-2" />
                   <p className="text-white text-sm font-medium">{f.label}</p>
-                  <p className="text-zinc-500 text-xs">{f.sub}</p>
+                  <p className="text-white/60 text-xs">{f.sub}</p>
                 </div>
               ))}
             </div>
@@ -613,7 +613,7 @@ const Compare = () => {
               </button>
             </Link>
             
-            <p className="text-zinc-500 text-sm mt-6">
+            <p className="text-white/60 text-sm mt-6">
               Need help? Our team is available 24/7 to assist you.
             </p>
           </div>
@@ -633,7 +633,7 @@ const Compare = () => {
         <div className="container mx-auto px-4 relative z-10">
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-white/70 hover:text-gold transition-colors mb-8"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Previous Page</span>
@@ -648,14 +648,14 @@ const Compare = () => {
             <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#ECE2D2]">Property Comparison</span>
             </h1>
-            <p className="text-zinc-300 text-lg md:text-xl mb-4 max-w-2xl">
+            <p className="text-white/85 text-lg md:text-xl mb-4 max-w-2xl">
               Compare projects dynamically with AI-powered analysis including valuation, ROI, and market insights.
             </p>
             <FounderContent>
               <div className="mt-2">
-                <p className="text-zinc-300 text-sm font-medium">Jane Bou Jaoude</p>
+                <p className="text-white/85 text-sm font-medium">Jane Bou Jaoude</p>
                 <p className="text-gold text-xs mt-0.5">Founder & CEO</p>
-                <p className="text-zinc-500 text-xs mt-0.5">JBJ Global Real Estate</p>
+                <p className="text-white/60 text-xs mt-0.5">JBJ Global Real Estate</p>
               </div>
             </FounderContent>
 
@@ -751,7 +751,7 @@ const Compare = () => {
         {/* Champagne/gold border wrapper */}
         <div className="rounded-2xl border-2 border-[#C8A766]/40 shadow-[0_0_40px_rgba(200,167,102,0.08)] p-6 bg-zinc-950/60 backdrop-blur-sm flex flex-col gap-8">
           {/* Properties Count */}
-          <div className="flex items-center gap-2 text-zinc-400">
+          <div className="flex items-center gap-2 text-white/70">
             <span className="text-lg font-medium text-white">{projects.length}</span>
             <span>properties in comparison</span>
           </div>
@@ -761,7 +761,7 @@ const Compare = () => {
             <table className="w-full">
               <thead>
                 <tr>
-                  <th className="text-left py-4 px-4 text-zinc-500 font-medium border-b border-zinc-800 sticky left-0 bg-zinc-900 z-10">
+                  <th className="text-left py-4 px-4 text-white/60 font-medium border-b border-zinc-800 sticky left-0 bg-zinc-900 z-10">
                     Feature
                   </th>
                     {projects.map((project) => {
@@ -785,7 +785,7 @@ const Compare = () => {
                                 </span>
                               )}
                               <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold ${
-                                isFav ? 'bg-red-500/15 text-red-400' : 'bg-zinc-800 text-zinc-500'
+                                isFav ? 'bg-red-500/15 text-red-400' : 'bg-zinc-800 text-white/60'
                               }`}>
                                 <Heart className="w-2.5 h-2.5" fill={isFav ? "currentColor" : "none"} />
                                 {isFav ? 'In Favorites' : 'Not Saved'}
@@ -799,7 +799,7 @@ const Compare = () => {
                               />
                             </div>
                             <h3 className="text-white font-semibold">{project.name}</h3>
-                            <p className="text-zinc-500 text-sm truncate">{project.developer?.name}</p>
+                            <p className="text-white/60 text-sm truncate">{project.developer?.name}</p>
                         </div>
                       </th>
                     );
@@ -848,7 +848,7 @@ const Compare = () => {
                   }},
                 ].map((row) => (
                   <tr key={row.label} className="border-b border-zinc-800/50 even:bg-zinc-800/20 odd:bg-zinc-900/40 hover:bg-zinc-800/30">
-                    <td className="py-4 px-4 text-zinc-400 sticky left-0 bg-zinc-900 font-medium">
+                    <td className="py-4 px-4 text-white/70 sticky left-0 bg-zinc-900 font-medium">
                       {row.label}
                     </td>
                     {projects.map((project) => (
@@ -876,7 +876,7 @@ const Compare = () => {
                     <p className="text-gold text-sm">AI-Generated Analysis</p>
                   </div>
                 </div>
-                <p className="text-zinc-300 leading-relaxed">{aiAnalysis.summary}</p>
+                <p className="text-white/85 leading-relaxed">{aiAnalysis.summary}</p>
               </div>
 
               {/* Ratings Cards */}
@@ -892,7 +892,7 @@ const Compare = () => {
                         <h4 className="text-white font-semibold">{rating.projectName}</h4>
                         <div className="flex items-center gap-2">
                           <span className="text-2xl font-bold" style={{ color: '#B8943E' }}>{toScore(rating.overallRating)}</span>
-                          <span className="text-zinc-500 text-xs">/10</span>
+                          <span className="text-white/60 text-xs">/10</span>
                         </div>
                       </div>
                       
@@ -915,7 +915,7 @@ const Compare = () => {
                           <div className="text-green-400 text-xs font-semibold mb-2 flex items-center gap-1">
                             <ThumbsUp className="w-3 h-3" /> Pros
                           </div>
-                          <ul className="text-xs text-zinc-400 space-y-1">
+                          <ul className="text-xs text-white/70 space-y-1">
                             {rating.pros?.slice(0, 3).map((pro, i) => (
                               <li key={i}>• {pro}</li>
                             ))}
@@ -925,7 +925,7 @@ const Compare = () => {
                           <div className="text-red-400 text-xs font-semibold mb-2 flex items-center gap-1">
                             <ThumbsDown className="w-3 h-3" /> Cons
                           </div>
-                          <ul className="text-xs text-zinc-400 space-y-1">
+                          <ul className="text-xs text-white/70 space-y-1">
                             {rating.cons?.slice(0, 3).map((con, i) => (
                               <li key={i}>• {con}</li>
                             ))}
@@ -946,7 +946,7 @@ const Compare = () => {
                     <p className="text-gold text-lg">{aiAnalysis.recommendation.topChoice}</p>
                   </div>
                 </div>
-                <p className="text-zinc-300 mb-6">{aiAnalysis.recommendation.reasoning}</p>
+                <p className="text-white/85 mb-6">{aiAnalysis.recommendation.reasoning}</p>
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                   {[
@@ -969,7 +969,7 @@ const Compare = () => {
                     <Zap className="w-4 h-4" />
                     <span className="font-semibold">Investment Advice</span>
                   </div>
-                  <p className="text-zinc-300 text-sm">{aiAnalysis.recommendation.investmentAdvice}</p>
+                  <p className="text-white/85 text-sm">{aiAnalysis.recommendation.investmentAdvice}</p>
                 </div>
 
                 {aiAnalysis.recommendation.riskFactors?.length > 0 && (
@@ -978,7 +978,7 @@ const Compare = () => {
                       <AlertTriangle className="w-4 h-4" />
                       <span className="font-semibold">Risk Factors to Consider</span>
                     </div>
-                    <ul className="text-zinc-400 text-sm space-y-1">
+                    <ul className="text-white/70 text-sm space-y-1">
                       {aiAnalysis.recommendation.riskFactors.map((risk, i) => (
                         <li key={i}>• {risk}</li>
                       ))}
@@ -996,7 +996,7 @@ const Compare = () => {
                   <div className="absolute inset-0 rounded-full border-2 border-gold/40 animate-ping" />
                 </div>
                 <h3 className="text-white text-2xl font-bold mb-2">Analyzing Property Intelligence...</h3>
-                <p className="text-zinc-400 max-w-md mx-auto mb-6">
+                <p className="text-white/70 max-w-md mx-auto mb-6">
                   Our AI is comparing locations, pricing, ROI potential, developer track records, and generating investment recommendations.
                 </p>
                 <div className="w-full max-w-sm h-2 bg-zinc-800 rounded-full overflow-hidden">
@@ -1011,7 +1011,7 @@ const Compare = () => {
                 <Sparkles className="w-8 h-8 text-black" />
               </div>
               <h3 className="text-white text-2xl font-bold mb-2">AI Analysis Ready</h3>
-              <p className="text-zinc-400 max-w-md mx-auto mb-6">
+              <p className="text-white/70 max-w-md mx-auto mb-6">
                 Click <strong className="text-gold">Start Comparing</strong> above to generate a detailed AI comparison with ratings, investment advice, and recommendations.
               </p>
               <Button
@@ -1027,7 +1027,7 @@ const Compare = () => {
                 )}
               </Button>
               {projects.length < 2 && (
-                <p className="text-zinc-500 text-sm mt-4">Add at least 2 properties to enable AI comparison</p>
+                <p className="text-white/60 text-sm mt-4">Add at least 2 properties to enable AI comparison</p>
               )}
             </div>
           )}
@@ -1048,7 +1048,7 @@ const Compare = () => {
               <div className="text-center py-8">
                 <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
                 <h4 className="text-white text-lg font-semibold mb-2">Request Sent!</h4>
-                <p className="text-zinc-400">Our advisor will contact you within 24 hours.</p>
+                <p className="text-white/70">Our advisor will contact you within 24 hours.</p>
               </div>
             ) : showRequestForm ? (
               <div className="space-y-4">
@@ -1133,7 +1133,7 @@ const Compare = () => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-white">Deep Area Analysis</h2>
-                <p className="text-zinc-400 text-sm">Analyze specific areas with government data sources</p>
+                <p className="text-white/70 text-sm">Analyze specific areas with government data sources</p>
               </div>
             </div>
             <AIPropertyAnalyzer />

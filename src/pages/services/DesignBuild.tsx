@@ -136,7 +136,7 @@ const DesignBuild = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            className="text-white/85 text-lg md:text-xl max-w-2xl mx-auto mb-8"
             variants={fadeInUp}
           >
             From concept to completion, our licensed partners deliver architectural excellence, interior sophistication, and premium fit-out solutions.
@@ -171,7 +171,7 @@ const DesignBuild = () => {
               <span className="text-sm font-medium uppercase tracking-wider">Through Our Licensed Partners</span>
             </div>
             <div className="h-4 w-px bg-gold/30 hidden md:block" />
-            <span className="text-zinc-400 text-sm">Architecture • Interior Design • Fit-Out & Renovation</span>
+            <span className="text-white/70 text-sm">Architecture • Interior Design • Fit-Out & Renovation</span>
           </div>
         </div>
       </section>
@@ -191,7 +191,7 @@ const DesignBuild = () => {
             >
               Comprehensive Design Solutions
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-white/70 max-w-2xl mx-auto">
               Through our network of licensed partners, access world-class design and construction services
             </p>
           </motion.div>
@@ -281,7 +281,7 @@ const DesignBuild = () => {
             >
               Go Premium <span className="text-gold">On Your Own</span>
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-white/70 max-w-2xl mx-auto">
               Design and measure your space with AI before consulting with our partners
             </p>
           </motion.div>

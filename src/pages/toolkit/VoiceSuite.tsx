@@ -106,13 +106,13 @@ function AIScriptWriterButton({ onScriptGenerated, language = 'en' }: { onScript
       <CardContent className="p-4 space-y-3">
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold text-gold flex items-center gap-1.5"><Wand2 className="w-4 h-4" /> AI Script Writer</p>
-          <Button variant="ghost" size="sm" onClick={() => setOpen(false)} className="text-zinc-500 h-6 w-6 p-0">×</Button>
+          <Button variant="ghost" size="sm" onClick={() => setOpen(false)} className="text-white/60 h-6 w-6 p-0">×</Button>
         </div>
         <Textarea value={prompt} onChange={e => setPrompt(e.target.value)} placeholder="Describe what the script should be about..."
           className="bg-[#1a1708] border-gold/20 text-white placeholder:text-zinc-600 min-h-[60px]" rows={3} />
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <Label className="text-zinc-400 text-xs">Tone</Label>
+            <Label className="text-white/70 text-xs">Tone</Label>
             <Select value={tone} onValueChange={setTone}>
               <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white h-8 text-xs"><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -123,7 +123,7 @@ function AIScriptWriterButton({ onScriptGenerated, language = 'en' }: { onScript
             </Select>
           </div>
           <div>
-            <Label className="text-zinc-400 text-xs">Duration (s)</Label>
+            <Label className="text-white/70 text-xs">Duration (s)</Label>
             <Input type="number" value={duration} onChange={e => setDuration(Number(e.target.value))} min={10} max={300}
               className="bg-[#1a1708] border-gold/20 text-white h-8 text-xs" />
           </div>
@@ -269,7 +269,7 @@ function VoiceStudioPanel() {
               </div>
 
               {script && (
-                <div className="text-xs text-zinc-500 flex gap-4">
+                <div className="text-xs text-white/60 flex gap-4">
                   <span>{script.split(/\s+/).filter(Boolean).length} words</span>
                   <span>~{estimateDuration(script)}s</span>
                 </div>
@@ -282,7 +282,7 @@ function VoiceStudioPanel() {
                   {playing ? <Pause className="w-3.5 h-3.5 mr-1" /> : <Play className="w-3.5 h-3.5 mr-1" />}
                   {playing ? 'Stop' : 'Preview'}
                 </Button>
-                <Button onClick={() => downloadScriptAsText(script, 'Voice Studio')} variant="ghost" size="sm" className="text-zinc-400 hover:text-white">
+                <Button onClick={() => downloadScriptAsText(script, 'Voice Studio')} variant="ghost" size="sm" className="text-white/70 hover:text-white">
                   <Copy className="w-3.5 h-3.5 mr-1" /> Copy Script
                 </Button>
               </div>
@@ -321,7 +321,7 @@ function VoiceStudioPanel() {
                         <SelectItem key={v.id} value={v.id}>
                           <span className="flex items-center gap-2">
                             <span>{v.name}</span>
-                            <span className="text-zinc-500 text-[10px]">{v.gender} · {v.accent}</span>
+                            <span className="text-white/60 text-[10px]">{v.gender} · {v.accent}</span>
                           </span>
                         </SelectItem>
                       ))}
@@ -329,15 +329,15 @@ function VoiceStudioPanel() {
                   </Select>
 
                   <div className="space-y-2">
-                    <div className="flex justify-between"><Label className="text-zinc-400 text-xs">Stability</Label><span className="text-[10px] text-gold">{stability[0].toFixed(2)}</span></div>
+                    <div className="flex justify-between"><Label className="text-white/70 text-xs">Stability</Label><span className="text-[10px] text-gold">{stability[0].toFixed(2)}</span></div>
                     <Slider value={stability} onValueChange={setStability} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
                   </div>
                   <div className="space-y-2">
-                    <div className="flex justify-between"><Label className="text-zinc-400 text-xs">Similarity</Label><span className="text-[10px] text-gold">{similarity[0].toFixed(2)}</span></div>
+                    <div className="flex justify-between"><Label className="text-white/70 text-xs">Similarity</Label><span className="text-[10px] text-gold">{similarity[0].toFixed(2)}</span></div>
                     <Slider value={similarity} onValueChange={setSimilarity} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
                   </div>
                   <div className="space-y-2">
-                    <div className="flex justify-between"><Label className="text-zinc-400 text-xs">Style</Label><span className="text-[10px] text-gold">{style[0].toFixed(2)}</span></div>
+                    <div className="flex justify-between"><Label className="text-white/70 text-xs">Style</Label><span className="text-[10px] text-gold">{style[0].toFixed(2)}</span></div>
                     <Slider value={style} onValueChange={setStyle} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
                   </div>
                 </>
@@ -364,15 +364,15 @@ function VoiceStudioPanel() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-zinc-400 text-xs">Speed</Label><span className="text-[10px] text-gold">{speed[0].toFixed(1)}x</span></div>
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Speed</Label><span className="text-[10px] text-gold">{speed[0].toFixed(1)}x</span></div>
                 <Slider value={speed} onValueChange={setSpeed} min={0.5} max={2} step={0.1} className="[&_[role=slider]]:bg-gold" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-zinc-400 text-xs">Pitch</Label><span className="text-[10px] text-gold">{pitch[0].toFixed(1)}</span></div>
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Pitch</Label><span className="text-[10px] text-gold">{pitch[0].toFixed(1)}</span></div>
                 <Slider value={pitch} onValueChange={setPitch} min={0.5} max={2} step={0.1} className="[&_[role=slider]]:bg-gold" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-zinc-400 text-xs">Volume</Label><span className="text-[10px] text-gold">{Math.round(volume[0] * 100)}%</span></div>
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Volume</Label><span className="text-[10px] text-gold">{Math.round(volume[0] * 100)}%</span></div>
                 <Slider value={volume} onValueChange={setVolume} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
               </div>
             </CardContent>
@@ -387,7 +387,7 @@ function VoiceStudioPanel() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div>
-                <Label className="text-zinc-400 text-xs">Language</Label>
+                <Label className="text-white/70 text-xs">Language</Label>
                 <Select value={language} onValueChange={setLanguage}>
                   <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-8"><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -398,7 +398,7 @@ function VoiceStudioPanel() {
                 </Select>
               </div>
               <div>
-                <Label className="text-zinc-400 text-xs">Format</Label>
+                <Label className="text-white/70 text-xs">Format</Label>
                 <Select value={outputFormat} onValueChange={setOutputFormat}>
                   <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-8"><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -513,7 +513,7 @@ function VoiceToTextPanel() {
 
           <div className="flex gap-4 items-end">
             <div className="flex-1">
-              <Label className="text-zinc-400 text-xs">Language</Label>
+              <Label className="text-white/70 text-xs">Language</Label>
               <Select value={language} onValueChange={setLanguage}>
                 <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -530,7 +530,7 @@ function VoiceToTextPanel() {
 
           {transcription && (
             <div className="space-y-2">
-              <Label className="text-zinc-400 text-xs">Transcription</Label>
+              <Label className="text-white/70 text-xs">Transcription</Label>
               <Textarea value={transcription} readOnly rows={6} className="bg-[#1a1708] border-gold/20 text-white" />
               <Button variant="outline" className="border-gold/30 text-gold hover:bg-gold/10"
                 onClick={() => { navigator.clipboard.writeText(transcription); toast.success('Copied!'); }}>
@@ -619,8 +619,8 @@ function AudioEnhancePanel() {
                     ? 'bg-gold/10 border-gold/40 shadow-[0_0_15px_rgba(212,175,55,0.1)]'
                     : 'bg-[#1a1708]/50 border-gold/10 hover:border-gold/25'
                 }`}>
-                <m.icon className={`w-4 h-4 mb-1 ${enhanceMode === m.value ? 'text-gold' : 'text-zinc-500'}`} />
-                <p className={`text-xs font-semibold ${enhanceMode === m.value ? 'text-gold' : 'text-zinc-400'}`}>{m.label}</p>
+                <m.icon className={`w-4 h-4 mb-1 ${enhanceMode === m.value ? 'text-gold' : 'text-white/60'}`} />
+                <p className={`text-xs font-semibold ${enhanceMode === m.value ? 'text-gold' : 'text-white/70'}`}>{m.label}</p>
                 <p className="text-[10px] text-zinc-600 mt-0.5">{m.desc}</p>
               </button>
             ))}
@@ -789,19 +789,19 @@ function AudioEffectsPanel() {
           {audioFile && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto">
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-zinc-400 text-xs">Reverb</Label><span className="text-[10px] text-gold">{reverb[0].toFixed(1)}</span></div>
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Reverb</Label><span className="text-[10px] text-gold">{reverb[0].toFixed(1)}</span></div>
                 <Slider value={reverb} onValueChange={setReverb} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-zinc-400 text-xs">Echo</Label><span className="text-[10px] text-gold">{echo[0].toFixed(1)}</span></div>
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Echo</Label><span className="text-[10px] text-gold">{echo[0].toFixed(1)}</span></div>
                 <Slider value={echo} onValueChange={setEcho} min={0} max={1} step={0.05} className="[&_[role=slider]]:bg-gold" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-zinc-400 text-xs">Pitch (semitones)</Label><span className="text-[10px] text-gold">{pitchShift[0] > 0 ? '+' : ''}{pitchShift[0]}</span></div>
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Pitch (semitones)</Label><span className="text-[10px] text-gold">{pitchShift[0] > 0 ? '+' : ''}{pitchShift[0]}</span></div>
                 <Slider value={pitchShift} onValueChange={setPitchShift} min={-12} max={12} step={1} className="[&_[role=slider]]:bg-gold" />
               </div>
               <div className="space-y-2">
-                <div className="flex justify-between"><Label className="text-zinc-400 text-xs">Speed</Label><span className="text-[10px] text-gold">{speedChange[0].toFixed(1)}x</span></div>
+                <div className="flex justify-between"><Label className="text-white/70 text-xs">Speed</Label><span className="text-[10px] text-gold">{speedChange[0].toFixed(1)}x</span></div>
                 <Slider value={speedChange} onValueChange={setSpeedChange} min={0.5} max={2} step={0.1} className="[&_[role=slider]]:bg-gold" />
               </div>
             </div>
@@ -930,17 +930,17 @@ function VoiceCloningPanel() {
         <CardContent className="space-y-5">
           {/* Step 1: Record samples */}
           <div className="space-y-3">
-            <Label className="text-zinc-400 text-xs font-semibold tracking-wider uppercase">Step 1: Record Voice Samples</Label>
+            <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 1: Record Voice Samples</Label>
             <div className="flex gap-2 flex-wrap">
               <Button onClick={isRecording ? stopRecording : startRecording}
                 className={isRecording ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-gold text-black hover:bg-gold/90'}>
                 {isRecording ? <><Square className="w-4 h-4 mr-2" />Stop</> : <><Mic className="w-4 h-4 mr-2" />Record Sample</>}
               </Button>
-              <span className="text-xs text-zinc-500 self-center">{recordings.length} sample{recordings.length !== 1 ? 's' : ''} recorded</span>
+              <span className="text-xs text-white/60 self-center">{recordings.length} sample{recordings.length !== 1 ? 's' : ''} recorded</span>
             </div>
             {recordingUrls.map((url, i) => (
               <div key={i} className="flex items-center gap-2">
-                <span className="text-xs text-zinc-500">#{i + 1}</span>
+                <span className="text-xs text-white/60">#{i + 1}</span>
                 <audio controls src={url} className="h-8 flex-1" />
               </div>
             ))}
@@ -948,7 +948,7 @@ function VoiceCloningPanel() {
 
           {/* Step 2: Name & Clone */}
           <div className="space-y-3">
-            <Label className="text-zinc-400 text-xs font-semibold tracking-wider uppercase">Step 2: Clone Voice</Label>
+            <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 2: Clone Voice</Label>
             <Input value={voiceName} onChange={e => setVoiceName(e.target.value)} placeholder="Voice name..."
               className="bg-[#1a1708] border-gold/20 text-white placeholder:text-zinc-600" />
             <Button onClick={cloneVoice} disabled={cloning || recordings.length === 0}
@@ -960,7 +960,7 @@ function VoiceCloningPanel() {
           {/* Step 3: Use cloned voice */}
           {clonedVoiceId && (
             <div className="space-y-3 border-t border-gold/10 pt-4">
-              <Label className="text-zinc-400 text-xs font-semibold tracking-wider uppercase">Step 3: Generate with Cloned Voice</Label>
+              <Label className="text-white/70 text-xs font-semibold tracking-wider uppercase">Step 3: Generate with Cloned Voice</Label>
               <p className="text-[10px] text-emerald-400">✓ Voice ID: {clonedVoiceId}</p>
               <Textarea value={ttsText} onChange={e => setTtsText(e.target.value)} placeholder="Enter text to speak..."
                 className="bg-[#1a1708] border-gold/20 text-white placeholder:text-zinc-600" rows={3} />
@@ -1046,14 +1046,14 @@ function AudioTranslationPanel() {
 
           <div className="grid grid-cols-2 gap-4 max-w-xl mx-auto">
             <div>
-              <Label className="text-zinc-400 text-xs">From</Label>
+              <Label className="text-white/70 text-xs">From</Label>
               <Select value={sourceLang} onValueChange={setSourceLang}>
                 <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
                 <SelectContent>{LANGUAGES.map(([c,n]) => <SelectItem key={c} value={c}>{n}</SelectItem>)}</SelectContent>
               </Select>
             </div>
             <div>
-              <Label className="text-zinc-400 text-xs">To</Label>
+              <Label className="text-white/70 text-xs">To</Label>
               <Select value={targetLang} onValueChange={setTargetLang}>
                 <SelectTrigger className="bg-[#1a1708] border-gold/20 text-white text-xs h-9"><SelectValue /></SelectTrigger>
                 <SelectContent>{LANGUAGES.map(([c,n]) => <SelectItem key={c} value={c}>{n}</SelectItem>)}</SelectContent>
@@ -1070,7 +1070,7 @@ function AudioTranslationPanel() {
 
           {translatedText && (
             <div className="space-y-2 max-w-xl mx-auto">
-              <Label className="text-zinc-400 text-xs">Translated Text</Label>
+              <Label className="text-white/70 text-xs">Translated Text</Label>
               <Textarea value={translatedText} readOnly rows={6} className="bg-[#1a1708] border-gold/20 text-white" />
               <Button variant="outline" className="border-gold/30 text-gold hover:bg-gold/10"
                 onClick={() => { navigator.clipboard.writeText(translatedText); toast.success('Copied!'); }}>
@@ -1136,7 +1136,7 @@ function audioBufferToWav(buffer: AudioBuffer): Blob {
 export default function VoiceSuite() {
   const { isOwner } = useAuth();
 
-  const TAB_CLASS = "relative px-3 md:px-5 py-3.5 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-zinc-500 hover:text-zinc-300 transition-colors flex items-center gap-1.5 whitespace-nowrap text-xs font-medium";
+  const TAB_CLASS = "relative px-3 md:px-5 py-3.5 rounded-none border-b-2 border-transparent data-[state=active]:border-gold data-[state=active]:text-gold text-white/60 hover:text-white/85 transition-colors flex items-center gap-1.5 whitespace-nowrap text-xs font-medium";
 
   return (
     <>
@@ -1151,7 +1151,7 @@ export default function VoiceSuite() {
           <div className="max-w-7xl mx-auto px-4 py-5">
             <div className="flex items-center gap-3 mb-3">
               <Link to="/toolkit">
-                <Button variant="ghost" size="sm" className="text-zinc-500 hover:text-gold hover:bg-gold/5 border border-gold/10 hover:border-gold/30 text-xs h-7">
+                <Button variant="ghost" size="sm" className="text-white/60 hover:text-gold hover:bg-gold/5 border border-gold/10 hover:border-gold/30 text-xs h-7">
                   <ArrowLeft className="w-3.5 h-3.5 mr-1.5" /> Royal Tools Hub
                 </Button>
               </Link>
@@ -1164,7 +1164,7 @@ export default function VoiceSuite() {
                 <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">
                   Voice & Audio <span className="text-gold">Suite</span>
                 </h1>
-                <p className="text-zinc-500 text-xs">Premium TTS, transcription, enhancement, effects & translation</p>
+                <p className="text-white/60 text-xs">Premium TTS, transcription, enhancement, effects & translation</p>
               </div>
             </div>
           </div>

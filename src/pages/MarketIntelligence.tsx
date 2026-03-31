@@ -147,7 +147,7 @@ const MarketIntelligence = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto mb-8"
             variants={fadeInUp}
           >
             Data-driven insights powered by official government Open Data. 
@@ -171,15 +171,15 @@ const MarketIntelligence = () => {
             className="flex flex-wrap justify-center gap-6 mt-12"
             variants={fadeInUp}
           >
-            <div className="flex items-center gap-2 text-zinc-500">
+            <div className="flex items-center gap-2 text-white/60">
               <Database className="w-5 h-5 text-gold" />
               <span className="text-sm">Government Open Data</span>
             </div>
-            <div className="flex items-center gap-2 text-zinc-500">
+            <div className="flex items-center gap-2 text-white/60">
               <Shield className="w-5 h-5 text-gold" />
               <span className="text-sm">Analytics Only</span>
             </div>
-            <div className="flex items-center gap-2 text-zinc-500">
+            <div className="flex items-center gap-2 text-white/60">
               <BarChart3 className="w-5 h-5 text-gold" />
               <span className="text-sm">No Listings</span>
             </div>

@@ -64,7 +64,7 @@ export function BrokerToolkitHero() {
           </h1>
           
           {/* Sub-headline - What they get */}
-          <p className="text-xl md:text-2xl text-zinc-300 mb-10 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-gray-400 mb-10 max-w-2xl mx-auto">
             AI Tools, Training, CRM, Leads & Rewards — All Free
           </p>
 

@@ -195,7 +195,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
           
           {/* Suggested URLs */}
           <div className="flex flex-wrap gap-1.5">
-            <span className="text-xs text-zinc-500">Quick test:</span>
+            <span className="text-xs text-gray-500">Quick test:</span>
             {suggestedUrls.map((url, i) => {
               const name = url.split('/').filter(Boolean).pop()?.replace(/-/g, ' ');
               return (
@@ -298,7 +298,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between text-sm mb-4">
-                  <span className="text-zinc-500">Provenance (source)</span>
+                  <span className="text-gray-500">Provenance (source)</span>
                   <a
                     href={testUrl}
                     target="_blank"
@@ -312,23 +312,23 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
 
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div>
-                    <div className="text-xs text-zinc-500 uppercase">Name</div>
+                    <div className="text-xs text-gray-500 uppercase">Name</div>
                     <div className="font-medium">{testResult.project.name}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-zinc-500 uppercase">Developer</div>
+                    <div className="text-xs text-gray-500 uppercase">Developer</div>
                     <div className="font-medium">{testResult.project.developer}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-zinc-500 uppercase">Location</div>
+                    <div className="text-xs text-gray-500 uppercase">Location</div>
                     <div className="font-medium">{testResult.project.location}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-zinc-500 uppercase">Price From</div>
+                    <div className="text-xs text-gray-500 uppercase">Price From</div>
                     <div className="font-medium text-emerald-600">{formatPrice(testResult.project.price_from)}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-zinc-500 uppercase">Bedrooms</div>
+                    <div className="text-xs text-gray-500 uppercase">Bedrooms</div>
                     <div className="font-medium">
                       {testResult.project.bedrooms_min 
                         ? `${testResult.project.bedrooms_min}${testResult.project.bedrooms_max && testResult.project.bedrooms_max !== testResult.project.bedrooms_min ? `-${testResult.project.bedrooms_max}` : ''} BR`
@@ -336,30 +336,30 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                     </div>
                   </div>
                   <div>
-                    <div className="text-xs text-zinc-500 uppercase">Handover</div>
+                    <div className="text-xs text-gray-500 uppercase">Handover</div>
                     <div className="font-medium">{testResult.project.handover_date || 'N/A'}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-zinc-500 uppercase">Status</div>
+                    <div className="text-xs text-gray-500 uppercase">Status</div>
                     <Badge variant="outline" className="bg-blue-50 text-blue-700">
                       {testResult.project.status}
                     </Badge>
                   </div>
                   <div>
-                    <div className="text-xs text-zinc-500 uppercase">Label</div>
+                    <div className="text-xs text-gray-500 uppercase">Label</div>
                     <Badge variant="outline" className="bg-purple-50 text-purple-700">
                       {testResult.project.status_label || 'None'}
                     </Badge>
                   </div>
                   <div>
-                    <div className="text-xs text-zinc-500 uppercase">Property Type</div>
+                    <div className="text-xs text-gray-500 uppercase">Property Type</div>
                     <div className="font-medium">{testResult.project.property_type || 'N/A'}</div>
                   </div>
                 </div>
                 
                 {testResult.project.description && (
                   <div className="mt-4 pt-4 border-t">
-                    <div className="text-xs text-zinc-500 uppercase mb-1">Description</div>
+                    <div className="text-xs text-gray-500 uppercase mb-1">Description</div>
                     <p className="text-sm text-zinc-700 line-clamp-3">
                       {testResult.project.description}
                     </p>
@@ -404,7 +404,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                     ))}
                     {testResult.images.length > 10 && (
                       <div className="flex-shrink-0 w-32 h-24 rounded-lg border border-dashed border-zinc-300 flex items-center justify-center bg-zinc-50">
-                        <span className="text-sm text-zinc-500">+{testResult.images.length - 10} more</span>
+                        <span className="text-sm text-gray-500">+{testResult.images.length - 10} more</span>
                       </div>
                     )}
                   </div>
@@ -428,7 +428,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                     {testResult.documents.brochure ? (
                       <FilledCheckCircle className="w-5 h-5" />
                     ) : (
-                      <XCircle className="w-5 h-5 text-zinc-400" />
+                      <XCircle className="w-5 h-5 text-gray-500" />
                     )}
                     <span className="font-medium">Brochure</span>
                   </div>
@@ -450,7 +450,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                     {testResult.documents.paymentPlan ? (
                       <FilledCheckCircle className="w-5 h-5" />
                     ) : (
-                      <XCircle className="w-5 h-5 text-zinc-400" />
+                      <XCircle className="w-5 h-5 text-gray-500" />
                     )}
                     <span className="font-medium">Payment Plan</span>
                   </div>
@@ -472,7 +472,7 @@ export const SarahTestPanel = ({ onRunPageOneTest, onGoToFullSync, onGoToApprova
                     {testResult.documents.floorPlans.length > 0 ? (
                       <FilledCheckCircle className="w-5 h-5" />
                     ) : (
-                      <XCircle className="w-5 h-5 text-zinc-400" />
+                      <XCircle className="w-5 h-5 text-gray-500" />
                     )}
                     <span className="font-medium">Floor Plans ({testResult.documents.floorPlans.length})</span>
                   </div>

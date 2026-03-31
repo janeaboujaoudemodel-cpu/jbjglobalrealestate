@@ -104,7 +104,7 @@ export function DocuSignIntegration() {
         <CardContent className="space-y-4">
           {/* Template Selection */}
           <div className="space-y-2">
-            <Label className="text-zinc-300">Contract Template</Label>
+            <Label className="text-white/85">Contract Template</Label>
             <Select value={selectedTemplate} onValueChange={setSelectedTemplate}>
               <SelectTriggerDark>
                 <SelectValue placeholder="Select a template" />
@@ -121,7 +121,7 @@ export function DocuSignIntegration() {
               </SelectContentDark>
             </Select>
             {selectedTemplate && (
-              <p className="text-zinc-500 text-xs">
+              <p className="text-white/60 text-xs">
                 {CONTRACT_TEMPLATES.find(t => t.id === selectedTemplate)?.description}
               </p>
             )}
@@ -129,21 +129,21 @@ export function DocuSignIntegration() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-zinc-300 flex items-center gap-2">
-                <User className="w-4 h-4 text-zinc-500" />
+              <Label className="text-white/85 flex items-center gap-2">
+                <User className="w-4 h-4 text-white/60" />
                 Recipient Name *
               </Label>
               <Input
                 placeholder="Full name"
                 value={recipientName}
                 onChange={(e) => setRecipientName(e.target.value)}
-                className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500"
+                className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-gray-400"
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-zinc-300 flex items-center gap-2">
-                <Mail className="w-4 h-4 text-zinc-500" />
+              <Label className="text-white/85 flex items-center gap-2">
+                <Mail className="w-4 h-4 text-white/60" />
                 Recipient Email *
               </Label>
               <Input
@@ -151,21 +151,21 @@ export function DocuSignIntegration() {
                 placeholder="email@example.com"
                 value={recipientEmail}
                 onChange={(e) => setRecipientEmail(e.target.value)}
-                className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500"
+                className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-gray-400"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label className="text-zinc-300 flex items-center gap-2">
-              <Building2 className="w-4 h-4 text-zinc-500" />
+            <Label className="text-white/85 flex items-center gap-2">
+              <Building2 className="w-4 h-4 text-white/60" />
               Property Reference (Optional)
             </Label>
             <Input
               placeholder="e.g., JBJ-2024-001"
               value={propertyRef}
               onChange={(e) => setPropertyRef(e.target.value)}
-              className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500"
+              className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-gray-400"
             />
           </div>
 
@@ -190,7 +190,7 @@ export function DocuSignIntegration() {
         </CardHeader>
         <CardContent className="space-y-3">
           {pendingSignatures.length === 0 ? (
-            <div className="text-center py-8 text-zinc-500">
+            <div className="text-center py-8 text-white/60">
               <FileSignature className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p>No pending signatures</p>
             </div>
@@ -203,14 +203,14 @@ export function DocuSignIntegration() {
                 <div className="flex items-start justify-between mb-2">
                   <div>
                     <p className="text-white font-medium text-sm">{sig.recipientName}</p>
-                    <p className="text-zinc-500 text-xs">{sig.recipientEmail}</p>
+                    <p className="text-white/60 text-xs">{sig.recipientEmail}</p>
                   </div>
                   {getStatusBadge(sig.status)}
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-zinc-500" />
-                    <span className="text-zinc-400 text-xs">{sig.template}</span>
+                    <FileText className="w-4 h-4 text-white/60" />
+                    <span className="text-white/70 text-xs">{sig.template}</span>
                   </div>
                   <span className="text-zinc-600 text-xs">
                     {new Date(sig.sentAt).toLocaleDateString()}

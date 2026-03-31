@@ -121,7 +121,7 @@ export default function AIInvestmentReportPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label className="text-zinc-300">Area / Community</Label>
+              <Label className="text-white/85">Area / Community</Label>
               <Input
                 value={area}
                 onChange={(e) => setArea(e.target.value)}
@@ -132,7 +132,7 @@ export default function AIInvestmentReportPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-zinc-300">Property Type</Label>
+                <Label className="text-white/85">Property Type</Label>
                 <Select value={propertyType} onValueChange={setPropertyType}>
                   <SelectTrigger className="bg-zinc-800 border-emerald-500/30 text-white">
                     <SelectValue />
@@ -147,7 +147,7 @@ export default function AIInvestmentReportPage() {
                 </Select>
               </div>
               <div>
-                <Label className="text-zinc-300">Investment Focus</Label>
+                <Label className="text-white/85">Investment Focus</Label>
                 <Select value={investmentType} onValueChange={setInvestmentType}>
                   <SelectTrigger className="bg-zinc-800 border-emerald-500/30 text-white">
                     <SelectValue />
@@ -164,7 +164,7 @@ export default function AIInvestmentReportPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-zinc-300">Investment Timeframe</Label>
+                <Label className="text-white/85">Investment Timeframe</Label>
                 <Select value={timeframe} onValueChange={setTimeframe}>
                   <SelectTrigger className="bg-zinc-800 border-emerald-500/30 text-white">
                     <SelectValue />
@@ -178,7 +178,7 @@ export default function AIInvestmentReportPage() {
                 </Select>
               </div>
               <div>
-                <Label className="text-zinc-300">Budget (AED)</Label>
+                <Label className="text-white/85">Budget (AED)</Label>
                 <Input
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
@@ -221,7 +221,7 @@ export default function AIInvestmentReportPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-zinc-300">{result.executiveSummary}</p>
+                  <p className="text-white/85">{result.executiveSummary}</p>
                 </CardContent>
               </Card>
             )}
@@ -235,20 +235,20 @@ export default function AIInvestmentReportPage() {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-3 gap-4">
                     <div className="bg-zinc-800/50 rounded-lg p-4 text-center">
-                      <Label className="text-zinc-500 text-xs uppercase">State</Label>
+                      <Label className="text-white/60 text-xs uppercase">State</Label>
                       <p className="text-emerald-400 font-semibold">{result.marketOverview.currentState}</p>
                     </div>
                     <div className="bg-zinc-800/50 rounded-lg p-4 text-center">
-                      <Label className="text-zinc-500 text-xs uppercase">Sentiment</Label>
+                      <Label className="text-white/60 text-xs uppercase">Sentiment</Label>
                       <p className="text-emerald-400 font-semibold">{result.marketOverview.sentiment}</p>
                     </div>
                     <div className="bg-zinc-800/50 rounded-lg p-4 text-center">
-                      <Label className="text-zinc-500 text-xs uppercase">Trend</Label>
+                      <Label className="text-white/60 text-xs uppercase">Trend</Label>
                       <p className="text-emerald-400 font-semibold">{result.priceAnalysis?.trend}</p>
                     </div>
                   </div>
                   {result.marketOverview.description && (
-                    <p className="text-zinc-400 text-sm">{result.marketOverview.description}</p>
+                    <p className="text-white/70 text-sm">{result.marketOverview.description}</p>
                   )}
                 </CardContent>
               </Card>
@@ -271,7 +271,7 @@ export default function AIInvestmentReportPage() {
                           <h4 className="text-white font-semibold">{spot.area}</h4>
                           <span className="text-emerald-400 font-medium">{spot.expectedGrowth}</span>
                         </div>
-                        <p className="text-zinc-400 text-sm">{spot.reason}</p>
+                        <p className="text-white/70 text-sm">{spot.reason}</p>
                       </div>
                     ))}
                   </div>
@@ -288,12 +288,12 @@ export default function AIInvestmentReportPage() {
                 <CardContent>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-zinc-800/50 rounded-lg p-4">
-                      <Label className="text-zinc-500 text-xs uppercase">Short Term (3-6 months)</Label>
-                      <p className="text-zinc-300 mt-1">{result.forecast.shortTerm}</p>
+                      <Label className="text-white/60 text-xs uppercase">Short Term (3-6 months)</Label>
+                      <p className="text-white/85 mt-1">{result.forecast.shortTerm}</p>
                     </div>
                     <div className="bg-zinc-800/50 rounded-lg p-4">
-                      <Label className="text-zinc-500 text-xs uppercase">Medium Term (6-12 months)</Label>
-                      <p className="text-zinc-300 mt-1">{result.forecast.mediumTerm}</p>
+                      <Label className="text-white/60 text-xs uppercase">Medium Term (6-12 months)</Label>
+                      <p className="text-white/85 mt-1">{result.forecast.mediumTerm}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -309,7 +309,7 @@ export default function AIInvestmentReportPage() {
                 <CardContent>
                   <ul className="space-y-2">
                     {result.recommendations.map((rec, i) => (
-                      <li key={i} className="flex items-start gap-2 text-zinc-300">
+                      <li key={i} className="flex items-start gap-2 text-white/85">
                         <span className="text-emerald-400 mt-1">✓</span>
                         {rec}
                       </li>
@@ -325,7 +325,7 @@ export default function AIInvestmentReportPage() {
         {!result && !loading && (
           <div className="bg-zinc-900/50 border border-emerald-500/20 rounded-xl py-12 text-center">
             <TrendingUp className="w-12 h-12 text-emerald-400/50 mx-auto mb-4" />
-            <p className="text-zinc-400">Enter investment parameters above to generate your report</p>
+            <p className="text-white/70">Enter investment parameters above to generate your report</p>
           </div>
         )}
       </div>

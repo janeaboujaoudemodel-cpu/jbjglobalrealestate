@@ -173,7 +173,7 @@ const MobileMenuWalkthrough = ({ isOpen, onComplete, onClose }: MobileMenuWalkth
                 <div className="flex items-center justify-between">
                   <button
                     onClick={handleSkip}
-                    className="text-xs text-zinc-500 hover:text-gold transition-colors"
+                    className="text-xs text-white/60 hover:text-gold transition-colors"
                   >
                     Skip tour
                   </button>

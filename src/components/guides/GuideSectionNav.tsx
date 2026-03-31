@@ -26,7 +26,7 @@ export const GuideSectionNav = ({ sections, activeSection }: GuideSectionNavProp
       animate={{ opacity: 1, y: 0 }}
       className="bg-zinc-900/80 backdrop-blur-sm border border-zinc-800 rounded-xl p-4 sticky top-20 z-10"
     >
-      <p className="text-zinc-500 text-xs uppercase tracking-wider mb-3 font-medium">Quick Navigation</p>
+      <p className="text-white/60 text-xs uppercase tracking-wider mb-3 font-medium">Quick Navigation</p>
       <div className="flex flex-wrap gap-2">
         {sections.map((section) => (
           <button
@@ -35,7 +35,7 @@ export const GuideSectionNav = ({ sections, activeSection }: GuideSectionNavProp
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-all ${
               activeSection === section.id
                 ? "bg-gold/20 text-gold border border-gold/30"
-                : "bg-zinc-800/50 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-transparent"
+                : "bg-zinc-800/50 text-white/70 hover:text-white hover:bg-zinc-800 border border-transparent"
             }`}
           >
             <section.icon className="w-4 h-4" />

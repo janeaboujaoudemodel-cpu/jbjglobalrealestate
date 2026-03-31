@@ -190,7 +190,7 @@ ${generatedEmail.signature}`;
                   }`}
                 >
                   <p className="text-black text-sm font-medium">{type.name}</p>
-                  <p className="text-xs text-zinc-500">{type.description}</p>
+                  <p className="text-xs text-gray-500">{type.description}</p>
                 </button>
               ))}
             </div>
@@ -317,11 +317,11 @@ ${generatedEmail.signature}`;
 
               {/* Subject Line */}
               <div className="mb-4">
-                <Label className="text-zinc-500 text-xs">SUBJECT</Label>
+                <Label className="text-gray-500 text-xs">SUBJECT</Label>
                 <p className="text-black font-medium">{generatedEmail.subject}</p>
                 {generatedEmail.alternativeSubjects && generatedEmail.alternativeSubjects.length > 0 && (
                   <div className="flex gap-2 mt-2 flex-wrap">
-                    <span className="text-xs text-zinc-500">Alternatives:</span>
+                    <span className="text-xs text-gray-500">Alternatives:</span>
                     {generatedEmail.alternativeSubjects.map((alt, i) => (
                       <Badge key={i} variant="outline" className="text-xs border-gold/40 text-black">
                         {alt}

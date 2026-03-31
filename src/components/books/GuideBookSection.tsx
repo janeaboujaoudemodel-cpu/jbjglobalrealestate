@@ -85,7 +85,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
                 {book.title}
               </h2>
             </div>
-            <p className="text-sm text-zinc-500 mb-6 flex items-center gap-2">
+            <p className="text-sm text-white/60 mb-6 flex items-center gap-2">
               <Clock className="w-4 h-4" />
               {book.tableOfContents.length} chapters &middot; ~{totalTime} min total reading time
             </p>
@@ -120,7 +120,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
 
                     {/* Duration */}
                     {chapter.duration && (
-                      <span className="flex items-center gap-1 text-zinc-400 text-xs flex-shrink-0">
+                      <span className="flex items-center gap-1 text-white/70 text-xs flex-shrink-0">
                         <Clock className="w-3 h-3" />
                         {chapter.duration}
                       </span>
@@ -128,7 +128,7 @@ export function GuideBookSection({ book, sectionIds }: GuideBookSectionProps) {
 
                     {/* Arrow */}
                     {isClickable && (
-                      <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-[#C8A766] transition-colors flex-shrink-0" />
+                      <ChevronRight className="w-4 h-4 text-white/70 group-hover:text-[#C8A766] transition-colors flex-shrink-0" />
                     )}
                   </Tag>
                 );

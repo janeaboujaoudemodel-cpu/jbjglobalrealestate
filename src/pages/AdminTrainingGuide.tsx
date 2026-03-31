@@ -50,7 +50,7 @@ const AdminTrainingGuide = () => {
           <CardContent className="p-8 text-center">
             <AlertTriangle className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
             <h2 className="text-white text-xl font-semibold mb-2">Access Restricted</h2>
-            <p className="text-zinc-400">This training guide is only available to Listing Admins.</p>
+            <p className="text-white/70">This training guide is only available to Listing Admins.</p>
           </CardContent>
         </Card>
       </div>
@@ -67,7 +67,7 @@ const AdminTrainingGuide = () => {
               variant="ghost"
               size="icon"
               onClick={() => navigate("/listing-admin")}
-              className="text-zinc-400 hover:text-white"
+              className="text-white/70 hover:text-white"
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
@@ -75,7 +75,7 @@ const AdminTrainingGuide = () => {
               <h1 className="text-white text-xl font-bold">
                 Listing Training Guide
               </h1>
-              <p className="text-zinc-500 text-sm">Complete property listing & verification guide</p>
+              <p className="text-white/60 text-sm">Complete property listing & verification guide</p>
             </div>
           </div>
           <Badge className="bg-gold/20 text-gold border-gold/30">
@@ -114,7 +114,7 @@ const AdminTrainingGuide = () => {
                   Welcome to Listing Administration
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-zinc-300 space-y-4">
+              <CardContent className="text-white/85 space-y-4">
                 <p>
                   As a Listing Admin, you are responsible for maintaining the quality and accuracy of all property listings 
                   on the JBJ Global Real Estate platform. This guide will teach you how to:
@@ -143,7 +143,7 @@ const AdminTrainingGuide = () => {
                     <ShieldCheck className="w-4 h-4" />
                     Quality Standards
                   </h4>
-                  <p className="text-zinc-400 text-sm">
+                  <p className="text-white/70 text-sm">
                     All listings must follow JBJ Global Real Estate standards. Use "home-owner" terminology (not investor), 
                     never include investment-advisory language, and ensure all property data is accurate and verified.
                   </p>
@@ -168,7 +168,7 @@ const AdminTrainingGuide = () => {
                     <Home className="w-5 h-5" />
                     <span className="font-semibold">Listing Management</span>
                   </div>
-                  <span className="text-zinc-400 text-sm text-left">Add and manage property listings</span>
+                  <span className="text-white/70 text-sm text-left">Add and manage property listings</span>
                 </Button>
 
                 <Button
@@ -180,7 +180,7 @@ const AdminTrainingGuide = () => {
                     <Building2 className="w-5 h-5" />
                     <span className="font-semibold">Developer Management</span>
                   </div>
-                  <span className="text-zinc-400 text-sm text-left">Manage developer profiles</span>
+                  <span className="text-white/70 text-sm text-left">Manage developer profiles</span>
                 </Button>
               </CardContent>
             </Card>
@@ -203,7 +203,7 @@ const AdminTrainingGuide = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Go to Listing Management</h4>
-                      <p className="text-zinc-400 text-sm">
+                      <p className="text-white/70 text-sm">
                         Navigate to <code className="bg-zinc-800 px-2 py-0.5 rounded">/listing-admin</code> and click 
                         "Add New Project" button.
                       </p>
@@ -216,7 +216,7 @@ const AdminTrainingGuide = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Fill in Basic Information</h4>
-                      <ul className="text-zinc-400 text-sm space-y-1 mt-2">
+                      <ul className="text-white/70 text-sm space-y-1 mt-2">
                         <li>• <strong>Name:</strong> Exact project name as per developer</li>
                         <li>• <strong>Developer:</strong> Select the correct developer from dropdown</li>
                         <li>• <strong>Location:</strong> Area/community name (e.g., "Business Bay")</li>
@@ -232,7 +232,7 @@ const AdminTrainingGuide = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Set Pricing & Unit Details</h4>
-                      <ul className="text-zinc-400 text-sm space-y-1 mt-2">
+                      <ul className="text-white/70 text-sm space-y-1 mt-2">
                         <li>• <strong>Price From:</strong> Starting price in AED (e.g., 1500000)</li>
                         <li>• <strong>Price To:</strong> Maximum price in AED</li>
                         <li>• <strong>Bedrooms:</strong> Min and Max bedroom count</li>
@@ -248,7 +248,7 @@ const AdminTrainingGuide = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Save & Upload Documents</h4>
-                      <p className="text-zinc-400 text-sm">
+                      <p className="text-white/70 text-sm">
                         Click Save to create the project, then upload brochures, floor plans, and images 
                         using the document upload section.
                       </p>
@@ -261,7 +261,7 @@ const AdminTrainingGuide = () => {
                     <AlertTriangle className="w-4 h-4" />
                     Important: Never Do This
                   </h4>
-                  <ul className="text-zinc-400 text-sm space-y-1">
+                  <ul className="text-white/70 text-sm space-y-1">
                     <li>• Never use investment promises like "guaranteed returns" or "high ROI"</li>
                     <li>• Never list inaccurate or unverified pricing</li>
                     <li>• Never use images that don't belong to the project</li>
@@ -289,10 +289,10 @@ const AdminTrainingGuide = () => {
                       <Calendar className="w-5 h-5 text-gold" />
                       <h4 className="text-white font-semibold">Off-Plan</h4>
                     </div>
-                    <p className="text-zinc-400 text-sm mb-2">
+                    <p className="text-white/70 text-sm mb-2">
                       Properties under construction or not yet built. Requires handover date.
                     </p>
-                    <ul className="text-xs text-zinc-500 space-y-1">
+                    <ul className="text-xs text-white/60 space-y-1">
                       <li>• Set handover date (future date)</li>
                       <li>• Include payment plan details</li>
                       <li>• Upload project brochure</li>
@@ -305,10 +305,10 @@ const AdminTrainingGuide = () => {
                       <CheckCircle2 className="w-5 h-5 text-green-500" />
                       <h4 className="text-white font-semibold">Ready to Move</h4>
                     </div>
-                    <p className="text-zinc-400 text-sm mb-2">
+                    <p className="text-white/70 text-sm mb-2">
                       Completed properties available for immediate occupancy.
                     </p>
-                    <ul className="text-xs text-zinc-500 space-y-1">
+                    <ul className="text-xs text-white/60 space-y-1">
                       <li>• Leave handover date empty or past date</li>
                       <li>• Include actual unit photos</li>
                       <li>• Verify availability status</li>
@@ -321,10 +321,10 @@ const AdminTrainingGuide = () => {
                       <Home className="w-5 h-5 text-blue-500" />
                       <h4 className="text-white font-semibold">Secondary / Resale</h4>
                     </div>
-                    <p className="text-zinc-400 text-sm mb-2">
+                    <p className="text-white/70 text-sm mb-2">
                       Properties listed by existing owners (homeowners).
                     </p>
-                    <ul className="text-xs text-zinc-500 space-y-1">
+                    <ul className="text-xs text-white/60 space-y-1">
                       <li>• Verify Title Deed</li>
                       <li>• Confirm owner identity (ID/Passport)</li>
                       <li>• Use actual property photos only</li>
@@ -337,10 +337,10 @@ const AdminTrainingGuide = () => {
                       <Building2 className="w-5 h-5 text-purple-500" />
                       <h4 className="text-white font-semibold">Commercial</h4>
                     </div>
-                    <p className="text-zinc-400 text-sm mb-2">
+                    <p className="text-white/70 text-sm mb-2">
                       Office spaces, retail, warehouses, hotels.
                     </p>
-                    <ul className="text-xs text-zinc-500 space-y-1">
+                    <ul className="text-xs text-white/60 space-y-1">
                       <li>• Specify commercial type</li>
                       <li>• Include service charge info</li>
                       <li>• Note any restrictions</li>
@@ -353,10 +353,10 @@ const AdminTrainingGuide = () => {
                       <DollarSign className="w-5 h-5 text-orange-500" />
                       <h4 className="text-white font-semibold">Rental</h4>
                     </div>
-                    <p className="text-zinc-400 text-sm mb-2">
+                    <p className="text-white/70 text-sm mb-2">
                       Properties available for lease (yearly or monthly).
                     </p>
-                    <ul className="text-xs text-zinc-500 space-y-1">
+                    <ul className="text-xs text-white/60 space-y-1">
                       <li>• Specify annual rent price</li>
                       <li>• Note payment terms (1-4 cheques)</li>
                       <li>• Include furnished status</li>
@@ -369,10 +369,10 @@ const AdminTrainingGuide = () => {
                       <MapPin className="w-5 h-5 text-amber-500" />
                       <h4 className="text-white font-semibold">Land / Plot</h4>
                     </div>
-                    <p className="text-zinc-400 text-sm mb-2">
+                    <p className="text-white/70 text-sm mb-2">
                       Vacant land for development or investment.
                     </p>
-                    <ul className="text-xs text-zinc-500 space-y-1">
+                    <ul className="text-xs text-white/60 space-y-1">
                       <li>• Specify plot size in sqft</li>
                       <li>• Note zoning/permitted use</li>
                       <li>• Include location coordinates if available</li>
@@ -389,7 +389,7 @@ const AdminTrainingGuide = () => {
                   Premium Listings
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-zinc-300">
+              <CardContent className="text-white/85">
                 <p className="mb-4">
                   Mark a property as "Premium" when it meets these criteria:
                 </p>
@@ -411,7 +411,7 @@ const AdminTrainingGuide = () => {
                     <span>Featured by management for promotion</span>
                   </li>
                 </ul>
-                <p className="text-zinc-500 text-sm mt-4">
+                <p className="text-white/60 text-sm mt-4">
                   Premium listings display with a Crown icon and receive priority visibility on the website.
                 </p>
               </CardContent>
@@ -431,27 +431,27 @@ const AdminTrainingGuide = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-4 bg-zinc-800/50 rounded-lg">
                     <h4 className="text-white font-semibold mb-2">Brochure</h4>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-white/70 text-sm">
                       Official project brochure from developer. PDF format preferred. 
                       Should include project overview, amenities, and location info.
                     </p>
                   </div>
                   <div className="p-4 bg-zinc-800/50 rounded-lg">
                     <h4 className="text-white font-semibold mb-2">Floor Plan</h4>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-white/70 text-sm">
                       Unit layouts showing room dimensions. Upload multiple for different unit types 
                       (Studio, 1BR, 2BR, etc.).
                     </p>
                   </div>
                   <div className="p-4 bg-zinc-800/50 rounded-lg">
                     <h4 className="text-white font-semibold mb-2">Factsheet</h4>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-white/70 text-sm">
                       Quick reference document with key project details, pricing, and specifications.
                     </p>
                   </div>
                   <div className="p-4 bg-zinc-800/50 rounded-lg">
                     <h4 className="text-white font-semibold mb-2">Payment Plan</h4>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-white/70 text-sm">
                       Official payment schedule from developer showing installment breakdown.
                     </p>
                   </div>
@@ -467,33 +467,33 @@ const AdminTrainingGuide = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <ul className="text-zinc-300 space-y-3">
+                <ul className="text-white/85 space-y-3">
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Use high-quality images</span>
-                      <p className="text-zinc-500 text-sm">Minimum 1920x1080 pixels, well-lit and clear</p>
+                      <p className="text-white/60 text-sm">Minimum 1920x1080 pixels, well-lit and clear</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Include exterior and interior shots</span>
-                      <p className="text-zinc-500 text-sm">Building facade, lobby, amenities, and unit interiors</p>
+                      <p className="text-white/60 text-sm">Building facade, lobby, amenities, and unit interiors</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">First image is primary</span>
-                      <p className="text-zinc-500 text-sm">Upload the best exterior/hero image first - it will be the thumbnail</p>
+                      <p className="text-white/60 text-sm">Upload the best exterior/hero image first - it will be the thumbnail</p>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <AlertTriangle className="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" />
                     <div>
                       <span className="font-medium">Only use authorized images</span>
-                      <p className="text-zinc-500 text-sm">Images must be from developer or with permission. No stock photos for actual units.</p>
+                      <p className="text-white/60 text-sm">Images must be from developer or with permission. No stock photos for actual units.</p>
                     </div>
                   </li>
                 </ul>
@@ -511,7 +511,7 @@ const AdminTrainingGuide = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <p className="text-zinc-300">
+                <p className="text-white/85">
                   When a homeowner submits their property through "List Your Property", follow these verification steps:
                 </p>
 
@@ -522,7 +522,7 @@ const AdminTrainingGuide = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Check Title Deed</h4>
-                      <p className="text-zinc-400 text-sm">
+                      <p className="text-white/70 text-sm">
                         Verify the Title Deed matches the property address and the owner's name. 
                         Check that it's a valid Dubai Land Department document.
                       </p>
@@ -535,7 +535,7 @@ const AdminTrainingGuide = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Verify Owner Identity</h4>
-                      <p className="text-zinc-400 text-sm">
+                      <p className="text-white/70 text-sm">
                         Confirm the submitted ID/Passport matches the name on the Title Deed. 
                         Cross-reference contact details.
                       </p>
@@ -548,7 +548,7 @@ const AdminTrainingGuide = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Review Property Details</h4>
-                      <p className="text-zinc-400 text-sm">
+                      <p className="text-white/70 text-sm">
                         Verify the listed details (size, bedrooms, price) match the Title Deed and 
                         are reasonable for the area.
                       </p>
@@ -561,7 +561,7 @@ const AdminTrainingGuide = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Confirm via WhatsApp</h4>
-                      <p className="text-zinc-400 text-sm">
+                      <p className="text-white/70 text-sm">
                         Send a confirmation message to the homeowner via WhatsApp. Confirm their intent to list 
                         and any additional requirements.
                       </p>
@@ -574,7 +574,7 @@ const AdminTrainingGuide = () => {
                     </div>
                     <div>
                       <h4 className="text-white font-semibold mb-1">Approve & Publish</h4>
-                      <p className="text-zinc-400 text-sm">
+                      <p className="text-white/70 text-sm">
                         Once verified, create the listing in Listing Admin using the client's details. 
                         Mark it appropriately as a Secondary/Resale listing.
                       </p>
@@ -587,7 +587,7 @@ const AdminTrainingGuide = () => {
                     <AlertTriangle className="w-4 h-4" />
                     Red Flags - Do Not Approve
                   </h4>
-                  <ul className="text-zinc-400 text-sm space-y-1">
+                  <ul className="text-white/70 text-sm space-y-1">
                     <li>• Title Deed name doesn't match ID</li>
                     <li>• Documents appear altered or low quality</li>
                     <li>• Owner cannot be reached for verification</li>
@@ -606,7 +606,7 @@ const AdminTrainingGuide = () => {
                   </div>
                   <div>
                     <h3 className="text-white font-semibold mb-1">Ready to Start?</h3>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-white/70 text-sm">
                       Go to Listing Management to begin adding and managing property listings.
                     </p>
                   </div>

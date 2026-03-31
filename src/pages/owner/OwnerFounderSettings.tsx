@@ -19,7 +19,7 @@ const OwnerFounderSettings = () => {
           </div>
           <div>
             <h1 className="text-xl font-bold text-black">Founder & Podcast Controls</h1>
-            <p className="text-sm text-zinc-500">Manage visibility toggles and podcast recording studio</p>
+            <p className="text-sm text-gray-500">Manage visibility toggles and podcast recording studio</p>
           </div>
         </div>
       </div>
@@ -84,7 +84,7 @@ const OwnerFounderSettings = () => {
             <p className="text-sm text-zinc-600 leading-relaxed">
               Controls all founder-related content across the website including biography, headshots, video footage, Press Kit page, and Company Profile page. The Digital Business Card remains always visible.
             </p>
-            <div className="flex items-center gap-2 text-xs text-zinc-500">
+            <div className="flex items-center gap-2 text-xs text-gray-500">
               <Eye className="w-3.5 h-3.5" />
               <span>Affects: Homepage, About, Press Kit, Company Profile</span>
             </div>
@@ -99,7 +99,7 @@ const OwnerFounderSettings = () => {
             <p className="text-sm text-zinc-600 leading-relaxed">
               Controls the JBJ Podcast section on the homepage. When hidden, only the owner can see it for testing purposes. Toggle to public when ready to launch episodes to all visitors.
             </p>
-            <div className="flex items-center gap-2 text-xs text-zinc-500">
+            <div className="flex items-center gap-2 text-xs text-gray-500">
               <EyeOff className="w-3.5 h-3.5" />
               <span>Owner-only preview mode available when hidden</span>
             </div>
@@ -114,7 +114,7 @@ const OwnerFounderSettings = () => {
             <p className="text-sm text-zinc-600 leading-relaxed">
               Access the full podcast recording studio with ElevenLabs voice integration. Record episodes, choose voices, control accents, and manage your podcast production workflow.
             </p>
-            <div className="flex items-center gap-2 text-xs text-zinc-500">
+            <div className="flex items-center gap-2 text-xs text-gray-500">
               <Mic className="w-3.5 h-3.5" />
               <span>Integrated with ElevenLabs voice API</span>
             </div>

@@ -254,7 +254,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <User className="w-8 h-8 text-zinc-500" />
+                      <User className="w-8 h-8 text-white/60" />
                     </div>
                   )}
                   
@@ -322,7 +322,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-zinc-700">
-                    <User className="w-10 h-10 text-zinc-500" />
+                    <User className="w-10 h-10 text-white/60" />
                   </div>
                 )}
               </div>
@@ -364,10 +364,10 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             LIVE
           </Badge>
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-zinc-400" />
+            <Clock className="w-4 h-4 text-white/70" />
             <span className="text-white font-mono">{formatDuration(meetingDuration)}</span>
           </div>
-          <Badge variant="outline" className="border-zinc-600 text-zinc-400">
+          <Badge variant="outline" className="border-zinc-600 text-white/70">
             <Lock className="w-3 h-3 mr-1" />
             {roomCode}
           </Badge>
@@ -377,7 +377,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
           {is4KEnabled && (
             <Badge className="bg-gold/20 text-gold border border-gold/30">4K</Badge>
           )}
-          <Badge variant="outline" className="border-zinc-600 text-zinc-400">
+          <Badge variant="outline" className="border-zinc-600 text-white/70">
             <Users className="w-3 h-3 mr-1" />
             {participants.length}
           </Badge>
@@ -459,14 +459,14 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                       variant="ghost" 
                       size="icon" 
                       onClick={() => setShowOutfitChanger(false)}
-                      className="h-8 w-8 text-zinc-400 hover:text-white"
+                      className="h-8 w-8 text-white/70 hover:text-white"
                     >
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
 
                   <div>
-                    <Label className="text-zinc-300 text-sm mb-2 block">
+                    <Label className="text-white/85 text-sm mb-2 block">
                       Describe your desired outfit
                     </Label>
                     <textarea
@@ -502,7 +502,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
                         setCurrentOutfit(null);
                         toast.info('Outfit removed');
                       }}
-                      className="w-full border-zinc-700 text-zinc-400"
+                      className="w-full border-zinc-700 text-white/70"
                     >
                       Remove Current Outfit
                     </Button>
@@ -674,7 +674,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-white">4K Video Quality</Label>
-                <p className="text-xs text-zinc-400">High resolution camera output</p>
+                <p className="text-xs text-white/70">High resolution camera output</p>
               </div>
               <Switch
                 checked={is4KEnabled}
@@ -686,7 +686,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-white">Camera Tracking</Label>
-                <p className="text-xs text-zinc-400">Auto-follow as you move</p>
+                <p className="text-xs text-white/70">Auto-follow as you move</p>
               </div>
               <Switch
                 checked={isCameraTracking}
@@ -698,7 +698,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <Label className="text-white">Speaker Output</Label>
-                <p className="text-xs text-zinc-400">High-quality audio playback</p>
+                <p className="text-xs text-white/70">High-quality audio playback</p>
               </div>
               <Switch
                 checked={isSpeakerOn}
@@ -709,7 +709,7 @@ export const JBJMeetRoom: React.FC<JBJMeetRoomProps> = ({
             {/* Microphone Quality */}
             <div>
               <Label className="text-white mb-2 block">Microphone Enhancement</Label>
-              <p className="text-xs text-zinc-400 mb-2">Professional studio-quality audio</p>
+              <p className="text-xs text-white/70 mb-2">Professional studio-quality audio</p>
               <Badge className="bg-green-500/20 text-green-400">
                 <Volume2 className="w-3 h-3 mr-1" />
                 Active - Studio Quality

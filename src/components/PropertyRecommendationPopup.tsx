@@ -185,7 +185,7 @@ const PropertyRecommendationPopup = () => {
                 <Sparkles className="w-4 h-4 text-gold" />
                 <span className="text-black text-sm font-semibold">Recommended for You</span>
               </div>
-              <button onClick={handleClose} className="text-zinc-400 hover:text-black transition-colors">
+              <button onClick={handleClose} className="text-gray-500 hover:text-black transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -223,14 +223,14 @@ const PropertyRecommendationPopup = () => {
                   <div className="flex-1 min-w-0">
                     <p className="text-black text-sm font-medium truncate group-hover:text-gold transition-colors">{project.name}</p>
                     {project.area_name && (
-                      <p className="text-zinc-500 text-xs flex items-center gap-1 mt-0.5">
+                      <p className="text-gray-500 text-xs flex items-center gap-1 mt-0.5">
                         <MapPin className="w-3 h-3" />
                         {project.area_name}
                       </p>
                     )}
                     <p className="text-gold text-xs font-semibold mt-0.5">{formatPrice(project.price_from)}</p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-zinc-400 group-hover:text-gold transition-colors flex-shrink-0" />
+                  <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-gold transition-colors flex-shrink-0" />
                 </button>
               ))}
             </div>

@@ -39,8 +39,8 @@ const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon:
   partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border border-orange-200", icon: <Clock className="w-4 h-4" /> },
   completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border border-emerald-200", icon: <CheckCircle2 className="w-4 h-4" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border border-red-200", icon: <XCircle className="w-4 h-4" /> },
-  expired: { label: "Expired", color: "bg-zinc-100 text-zinc-500 border border-zinc-200", icon: <Clock className="w-4 h-4" /> },
-  voided: { label: "Voided", color: "bg-zinc-100 text-zinc-500 border border-zinc-200", icon: <XCircle className="w-4 h-4" /> },
+  expired: { label: "Expired", color: "bg-zinc-100 text-gray-500 border border-zinc-200", icon: <Clock className="w-4 h-4" /> },
+  voided: { label: "Voided", color: "bg-zinc-100 text-gray-500 border border-zinc-200", icon: <XCircle className="w-4 h-4" /> },
 };
 
 const recipientStatusConfig: Record<RecipientStatus, { label: string; color: string }> = {
@@ -154,7 +154,7 @@ export default function EnvelopeDetail() {
         <div className="max-w-5xl mx-auto text-center py-12">
           <FileSignature className="w-16 h-16 text-[#C8A766]/40 mx-auto mb-4" />
           <h2 className="text-2xl font-bold mb-2 text-white">Envelope Not Found</h2>
-          <p className="text-zinc-400 mb-4">
+          <p className="text-gray-500 mb-4">
             This envelope may have been deleted or you don't have access.
           </p>
           <Link to="/e-signature">
@@ -194,7 +194,7 @@ export default function EnvelopeDetail() {
                   </Badge>
                 </div>
                 {envelope.description && (
-                  <p className="text-zinc-500 mt-1">{envelope.description}</p>
+                  <p className="text-gray-500 mt-1">{envelope.description}</p>
                 )}
               </div>
             </div>
@@ -273,7 +273,7 @@ export default function EnvelopeDetail() {
                       Recipients
                     </span>
                     {["sent", "viewed", "partially_signed"].includes(envelope.status) && (
-                      <span className="text-xs font-normal text-zinc-500">
+                      <span className="text-xs font-normal text-gray-500">
                         {envelope.reminders_sent || 0} reminder{(envelope.reminders_sent || 0) !== 1 ? "s" : ""} sent
                       </span>
                     )}
@@ -297,7 +297,7 @@ export default function EnvelopeDetail() {
                             </div>
                             <div className="min-w-0">
                               <p className="font-medium text-zinc-900">{recipient.name}</p>
-                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-zinc-500">
+                              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-500">
                                 <span className="flex items-center gap-1">
                                   <Mail className="w-3 h-3 shrink-0" />
                                   <span className="truncate max-w-[200px]">{recipient.email}</span>
@@ -371,7 +371,7 @@ export default function EnvelopeDetail() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="font-medium text-sm text-zinc-900">{log.description}</p>
-                            <div className="flex items-center gap-3 text-xs text-zinc-500 mt-1">
+                            <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-3 h-3" />
                                 {format(new Date(log.created_at), "MMM d, yyyy 'at' h:mm a")}
@@ -388,7 +388,7 @@ export default function EnvelopeDetail() {
                       );
                     })}
                     {(!auditLogs || auditLogs.length === 0) && (
-                      <p className="text-zinc-400 text-center py-4">
+                      <p className="text-gray-500 text-center py-4">
                         No activity recorded yet
                       </p>
                     )}
@@ -411,29 +411,29 @@ export default function EnvelopeDetail() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-zinc-500">File Name</span>
+                    <span className="text-gray-500">File Name</span>
                     <span className="font-medium truncate max-w-[150px] text-zinc-900" title={envelope.document_filename}>
                       {envelope.document_filename}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-zinc-500">Created</span>
+                    <span className="text-gray-500">Created</span>
                     <span className="text-zinc-900">{format(new Date(envelope.created_at), "MMM d, yyyy")}</span>
                   </div>
                   {envelope.expires_at && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-zinc-500">Expires</span>
+                      <span className="text-gray-500">Expires</span>
                       <span className="text-zinc-900">{formatDistanceToNow(new Date(envelope.expires_at), { addSuffix: true })}</span>
                     </div>
                   )}
                   {envelope.completed_at && (
                     <div className="flex justify-between text-sm">
-                      <span className="text-zinc-500">Completed</span>
+                      <span className="text-gray-500">Completed</span>
                       <span className="text-zinc-900">{format(new Date(envelope.completed_at), "MMM d, yyyy")}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-sm">
-                    <span className="text-zinc-500">Reminders Sent</span>
+                    <span className="text-gray-500">Reminders Sent</span>
                     <span className="text-zinc-900">{envelope.reminders_sent || 0}</span>
                   </div>
                 </CardContent>
@@ -451,13 +451,13 @@ export default function EnvelopeDetail() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <p className="text-sm text-zinc-500">
+                    <p className="text-sm text-gray-500">
                       This document has been electronically signed. The audit certificate contains timestamps, IP addresses, and signature images for every signer.
                     </p>
 
                     <div className="space-y-1.5">
                       {(signedDoc.certificate_data as any)?.signers?.map((s: any, i: number) => (
-                        <div key={i} className="flex items-center gap-2 text-xs text-zinc-500">
+                        <div key={i} className="flex items-center gap-2 text-xs text-gray-500">
                           <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
                           <span className="font-medium text-zinc-900">{s.name}</span>
                           {s.signed_at && (
@@ -479,7 +479,7 @@ export default function EnvelopeDetail() {
                         Download Audit Certificate
                       </Button>
                     ) : (
-                      <p className="text-xs text-zinc-400 italic">
+                      <p className="text-xs text-gray-500 italic">
                         Certificate PDF is being generated…
                       </p>
                     )}

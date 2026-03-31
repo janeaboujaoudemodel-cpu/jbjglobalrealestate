@@ -185,8 +185,8 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
     switch (status) {
       case 'completed': return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
       case 'in_progress': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      case 'draft': return 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
-      default: return 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
+      case 'draft': return 'bg-zinc-500/20 text-white/70 border-zinc-500/30';
+      default: return 'bg-zinc-500/20 text-white/70 border-zinc-500/30';
     }
   };
 
@@ -207,7 +207,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
       {/* Search & Filters */}
       <div className="flex gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -219,7 +219,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
           variant="outline"
           size="icon"
           onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
-          className="border-zinc-700 text-zinc-400"
+          className="border-zinc-700 text-white/70"
         >
           {viewMode === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
         </Button>
@@ -235,7 +235,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
               className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${
                 selectedCategory === cat.id
                   ? 'bg-gold text-black'
-                  : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                  : 'bg-zinc-800 text-white/70 hover:bg-zinc-700'
               }`}
             >
               {cat.label}
@@ -253,7 +253,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
         <div className="text-center py-12">
           <FolderOpen className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
           <h4 className="text-white font-medium mb-2">No projects found</h4>
-          <p className="text-zinc-500 text-sm mb-4">
+          <p className="text-white/60 text-sm mb-4">
             {searchQuery ? 'Try a different search term' : 'Create your first design project'}
           </p>
           <Button onClick={onCreateNew} className="bg-gold hover:bg-gold/90 text-black">
@@ -306,10 +306,10 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent className="bg-zinc-900 border-zinc-800">
-                            <DropdownMenuItem onClick={() => handleDuplicateProject(project)} className="text-zinc-300">
+                            <DropdownMenuItem onClick={() => handleDuplicateProject(project)} className="text-white/85">
                               <Copy className="w-4 h-4 mr-2" /> Duplicate
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleArchiveProject(project.id)} className="text-zinc-300">
+                            <DropdownMenuItem onClick={() => handleArchiveProject(project.id)} className="text-white/85">
                               <Archive className="w-4 h-4 mr-2" /> Archive
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleDeleteProject(project.id)} className="text-red-400">
@@ -323,7 +323,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                         <Badge className={`text-[10px] ${getStatusColor(project.status)}`}>
                           {project.status}
                         </Badge>
-                        <span className="text-zinc-500 text-[10px]">
+                        <span className="text-white/60 text-[10px]">
                           {formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}
                         </span>
                       </div>
@@ -345,25 +345,25 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="text-white font-medium truncate">{project.name}</h4>
-                        <p className="text-zinc-500 text-sm truncate">{project.template_type || project.category}</p>
+                        <p className="text-white/60 text-sm truncate">{project.template_type || project.category}</p>
                       </div>
                       <Badge className={`${getStatusColor(project.status)}`}>
                         {project.status}
                       </Badge>
-                      <span className="text-zinc-500 text-xs whitespace-nowrap">
+                      <span className="text-white/60 text-xs whitespace-nowrap">
                         {formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}
                       </span>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button size="icon" variant="ghost" className="w-8 h-8" onClick={(e) => e.stopPropagation()}>
-                            <MoreVertical className="w-4 h-4 text-zinc-400" />
+                            <MoreVertical className="w-4 h-4 text-white/70" />
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="bg-zinc-900 border-zinc-800">
-                          <DropdownMenuItem onClick={() => handleDuplicateProject(project)} className="text-zinc-300">
+                          <DropdownMenuItem onClick={() => handleDuplicateProject(project)} className="text-white/85">
                             <Copy className="w-4 h-4 mr-2" /> Duplicate
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleArchiveProject(project.id)} className="text-zinc-300">
+                          <DropdownMenuItem onClick={() => handleArchiveProject(project.id)} className="text-white/85">
                             <Archive className="w-4 h-4 mr-2" /> Archive
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleDeleteProject(project.id)} className="text-red-400">
@@ -384,7 +384,7 @@ export const DesignProjectManager: React.FC<DesignProjectManagerProps> = ({
       <div className="flex items-center justify-center">
         <button
           onClick={() => setShowArchived(!showArchived)}
-          className="text-zinc-500 text-xs hover:text-zinc-400 transition-colors"
+          className="text-white/60 text-xs hover:text-white/70 transition-colors"
         >
           {showArchived ? 'Hide archived projects' : 'Show archived projects'}
         </button>

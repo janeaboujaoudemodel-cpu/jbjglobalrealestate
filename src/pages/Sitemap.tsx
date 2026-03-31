@@ -447,7 +447,7 @@ const Sitemap = () => {
 
               {/* Subtext */}
               <motion.p
-                className="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto mb-6"
+                className="text-white/70 text-base sm:text-lg max-w-2xl mx-auto mb-6"
                 variants={fadeInUp}
               >
                 Your complete directory to all pages, tools, services, and resources across our platform.
@@ -469,7 +469,7 @@ const Sitemap = () => {
               {/* Last Updated */}
               <motion.p 
                 variants={fadeInUp}
-                className="text-zinc-500 text-xs"
+                className="text-white/60 text-xs"
               >
                 Last Updated: {lastUpdated}
               </motion.p>

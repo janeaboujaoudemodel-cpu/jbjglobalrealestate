@@ -142,7 +142,7 @@ const NewsDetail = () => {
         <div className="container mx-auto px-4 py-20 text-center">
           <Newspaper className="w-16 h-16 text-zinc-600 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-white mb-2">Article Not Found</h1>
-          <p className="text-zinc-400 mb-6">This article may have been removed or doesn't exist.</p>
+          <p className="text-gray-500 mb-6">This article may have been removed or doesn't exist.</p>
           <Link to="/news">
             <Button variant="primary">Back to News</Button>
           </Link>
@@ -225,7 +225,7 @@ const NewsDetail = () => {
                 <Calendar className="w-4 h-4" />
                 {formattedDate}
               </span>
-              <span className="text-zinc-400">•</span>
+              <span className="text-gray-500">•</span>
               <span className="flex items-center gap-1.5">
                 <Landmark className="w-4 h-4 text-gold" />
                 {article.source}
@@ -339,7 +339,7 @@ const NewsDetail = () => {
                   <h3 className="text-lg font-bold text-black">
                     Dubai Market Intelligence
                   </h3>
-                  <p className="text-xs text-zinc-500">Source: Dubai Land Department (DLD) · 2026 YTD</p>
+                  <p className="text-xs text-gray-500">Source: Dubai Land Department (DLD) · 2026 YTD</p>
                 </div>
               </div>
 
@@ -426,7 +426,7 @@ const NewsDetail = () => {
                 <div className="space-y-2">
                   {topAreas2026Data.slice(0, 10).map((area, i) => (
                     <div key={area.area} className="flex items-center gap-3">
-                      <span className="text-zinc-400 font-medium text-sm w-4 text-right">{i + 1}</span>
+                      <span className="text-gray-500 font-medium text-sm w-4 text-right">{i + 1}</span>
                       <span className="text-sm font-medium text-black flex-1">{area.area}</span>
                       <span className="text-sm font-bold text-gold">{area.transactions.toLocaleString()}</span>
                       <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded-full">{area.change}</span>
@@ -461,7 +461,7 @@ const NewsDetail = () => {
             {/* Source Attribution */}
             <div className="mt-12 pt-8 border-t border-gold/20">
               <div className="jj-card-inner rounded-xl p-6">
-                <p className="text-sm text-zinc-500 mb-2">Source</p>
+                <p className="text-sm text-gray-500 mb-2">Source</p>
                 <p className="text-black font-medium text-lg">{article.source}</p>
                 {article.source_url && (
                   <a

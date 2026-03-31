@@ -362,7 +362,7 @@ const MarketReportsPage = () => {
                         <CardContent className="p-6 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-4">
                             {getTypeBadge(report.type)}
-                            <span className="text-zinc-500 text-xs bg-black/5 px-2 py-1 rounded">{report.pages} pages</span>
+                            <span className="text-white/60 text-xs bg-black/5 px-2 py-1 rounded">{report.pages} pages</span>
                           </div>
 
                           <h3 
@@ -380,7 +380,7 @@ const MarketReportsPage = () => {
                           <p className="text-zinc-600 text-sm mb-6 flex-grow leading-relaxed">{report.description}</p>
 
                           <div className="flex items-center justify-between pt-4 border-t border-gold/30">
-                            <div className="flex items-center gap-2 text-zinc-500 text-xs">
+                            <div className="flex items-center gap-2 text-gray-500 text-xs">
                               <Calendar className="w-3 h-3" />
                               {new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </div>

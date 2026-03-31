@@ -144,7 +144,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                 placeholder="Your full name"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/30"
                 required
               />
             </div>
@@ -155,7 +155,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.email}
                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                 placeholder="your@email.com"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/30"
                 required
               />
             </div>
@@ -168,7 +168,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.phone}
                 onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
                 placeholder="+971 50 XXX XXXX"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/30"
               />
             </div>
             <div className="space-y-2">
@@ -210,7 +210,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
                 value={formData.currentLocation}
                 onChange={(e) => setFormData(prev => ({ ...prev, currentLocation: e.target.value }))}
                 placeholder="City, Country"
-                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-zinc-500 focus:border-gold focus:ring-gold/30"
+                className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-gray-400 focus:border-gold focus:ring-gold/30"
               />
             </div>
           </div>
@@ -237,7 +237,7 @@ const TeamContactForm = ({ member, isOpen, onClose }: TeamContactFormProps) => {
               value={formData.inquiry}
               onChange={(e) => setFormData(prev => ({ ...prev, inquiry: e.target.value }))}
               placeholder="Tell us about your requirements, budget, preferred areas, or any questions..."
-              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-zinc-500 min-h-[100px] resize-none focus:border-gold focus:ring-gold/30"
+              className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30 text-black placeholder:text-gray-400 min-h-[100px] resize-none focus:border-gold focus:ring-gold/30"
             />
           </div>
 

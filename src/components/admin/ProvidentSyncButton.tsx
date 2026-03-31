@@ -238,11 +238,11 @@ export const ProvidentSyncButton = () => {
         {/* Current project count */}
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div className="flex items-center justify-between">
-            <span className="text-zinc-400">Projects in database:</span>
+            <span className="text-white/70">Projects in database:</span>
             <span className="text-white font-semibold">{projectCount ?? "..."}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-zinc-400">Pending approval:</span>
+            <span className="text-white/70">Pending approval:</span>
             <span className="text-amber-400 font-semibold">{pendingCount ?? "..."}</span>
           </div>
         </div>
@@ -271,7 +271,7 @@ export const ProvidentSyncButton = () => {
             <Button
               onClick={() => syncSinglePage(1)}
               variant="outline"
-              className="border-zinc-700 text-zinc-300 hover:text-white"
+              className="border-zinc-700 text-white/85 hover:text-white"
             >
               Test Page 1 Only
             </Button>
@@ -303,7 +303,7 @@ export const ProvidentSyncButton = () => {
             onClick={repairImages}
             disabled={isRepairing || isSyncing}
             variant="outline"
-            className="border-zinc-700 text-zinc-300 hover:text-white"
+            className="border-zinc-700 text-white/85 hover:text-white"
           >
             {isRepairing ? (
               <>
@@ -320,7 +320,7 @@ export const ProvidentSyncButton = () => {
         {isSyncing && (
           <div className="space-y-2">
             <Progress value={progress} className="h-2" />
-            <p className="text-xs text-zinc-500 text-center">
+            <p className="text-xs text-white/60 text-center">
               Page {currentPage} of {totalPages} ({Math.round(progress)}%)
             </p>
           </div>
@@ -331,19 +331,19 @@ export const ProvidentSyncButton = () => {
           <div className="grid grid-cols-4 gap-2 text-center">
             <div className="bg-zinc-800 rounded p-2">
               <div className="text-lg font-bold text-blue-400">{stats.extracted}</div>
-              <div className="text-xs text-zinc-500">Extracted</div>
+              <div className="text-xs text-white/60">Extracted</div>
             </div>
             <div className="bg-zinc-800 rounded p-2">
               <div className="text-lg font-bold text-emerald-400">{stats.created}</div>
-              <div className="text-xs text-zinc-500">Created</div>
+              <div className="text-xs text-white/60">Created</div>
             </div>
             <div className="bg-zinc-800 rounded p-2">
               <div className="text-lg font-bold text-amber-400">{stats.updated}</div>
-              <div className="text-xs text-zinc-500">Updated</div>
+              <div className="text-xs text-white/60">Updated</div>
             </div>
             <div className="bg-zinc-800 rounded p-2">
               <div className="text-lg font-bold text-purple-400">{stats.images}</div>
-              <div className="text-xs text-zinc-500">Images</div>
+              <div className="text-xs text-white/60">Images</div>
             </div>
           </div>
         )}
@@ -351,7 +351,7 @@ export const ProvidentSyncButton = () => {
         {/* Total stats during sync */}
         {isSyncing && currentPage > 1 && (
           <div className="border-t border-zinc-800 pt-3">
-            <p className="text-xs text-zinc-500 mb-2">Total Progress:</p>
+            <p className="text-xs text-white/60 mb-2">Total Progress:</p>
             <div className="flex gap-4 text-sm">
               <span className="text-emerald-400">+{totalStats.created} new</span>
               <span className="text-amber-400">{totalStats.updated} updated</span>

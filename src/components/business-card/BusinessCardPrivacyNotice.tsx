@@ -67,7 +67,7 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
             </div>
           </div>
           <CardTitle className="text-2xl text-white">Privacy & Data Protection</CardTitle>
-          <CardDescription className="text-base text-zinc-400">
+          <CardDescription className="text-base text-white/70">
             Before using the AI Business Card Scanner, please review how we protect your data
           </CardDescription>
         </CardHeader>
@@ -83,7 +83,7 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
                 </div>
                 <div>
                   <h4 className="font-semibold text-sm text-white">{point.title}</h4>
-                  <p className="text-sm text-zinc-400 mt-1">
+                  <p className="text-sm text-white/70 mt-1">
                     {point.description}
                   </p>
                 </div>
@@ -100,7 +100,7 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
             />
             <label 
               htmlFor="privacy-consent" 
-              className="text-sm leading-relaxed cursor-pointer text-zinc-300"
+              className="text-sm leading-relaxed cursor-pointer text-white/85"
             >
               I understand and agree to the privacy terms.
             </label>
@@ -110,7 +110,7 @@ const BusinessCardPrivacyNotice = ({ onAccept, onDecline }: BusinessCardPrivacyN
         <CardFooter className="flex flex-col sm:flex-row gap-3 pt-4">
           <Button 
             variant="outline" 
-            className="w-full sm:w-auto border-zinc-600 text-zinc-300 hover:bg-zinc-800 hover:text-white"
+            className="w-full sm:w-auto border-zinc-600 text-white/85 hover:bg-zinc-800 hover:text-white"
             onClick={onDecline}
           >
             <XCircle className="h-4 w-4 mr-2" />

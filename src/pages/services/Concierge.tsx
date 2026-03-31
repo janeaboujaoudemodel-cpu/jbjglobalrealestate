@@ -133,7 +133,7 @@ const Concierge = () => {
               Concierge Convenience Services
             </h1>
             
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Time-saving operational support around your property journey—appointments, coordination, and structured follow-through.
             </p>
             
@@ -159,7 +159,7 @@ const Concierge = () => {
                     <Play className="w-6 h-6 text-gold ml-1" />
                   </div>
                   <p className="text-gold text-sm font-medium">A Premium Support Layer for Busy Clients</p>
-                  <p className="text-zinc-500 text-xs mt-1">Video Coming Soon</p>
+                  <p className="text-white/60 text-xs mt-1">Video Coming Soon</p>
                 </div>
               </div>
             </motion.div>

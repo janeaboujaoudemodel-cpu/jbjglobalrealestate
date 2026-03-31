@@ -129,7 +129,7 @@ const BrokerHub = () => {
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-3">
               Welcome{user?.email ? `, ${user.email.split('@')[0]}` : ''}
             </h1>
-            <p className="text-zinc-400 text-lg">
+            <p className="text-white/70 text-lg">
               Your command center for training, education, listings, CRM, and broker operations.
             </p>
             {/* Favorites & Shortlist */}
@@ -172,7 +172,7 @@ const BrokerHub = () => {
                     <Icon className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-white font-semibold text-sm mb-1 relative z-10">{card.title}</h3>
-                  <p className="text-zinc-500 text-xs relative z-10">{card.desc}</p>
+                  <p className="text-white/60 text-xs relative z-10">{card.desc}</p>
                   <ArrowRight className="w-4 h-4 text-fuchsia-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity relative z-10" />
                 </motion.button>
               );
@@ -201,28 +201,28 @@ const BrokerHub = () => {
                     <CardContent className="p-4 text-center">
                       <Phone className="w-6 h-6 text-blue-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{callLogs.length}</p>
-                      <p className="text-xs text-zinc-500">Total Calls</p>
+                      <p className="text-xs text-white/60">Total Calls</p>
                     </CardContent>
                   </Card>
                   <Card className="bg-zinc-900/60 border-zinc-800">
                     <CardContent className="p-4 text-center">
                       <MessageCircle className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{chatLogs.length}</p>
-                      <p className="text-xs text-zinc-500">Total Chats</p>
+                      <p className="text-xs text-white/60">Total Chats</p>
                     </CardContent>
                   </Card>
                   <Card className="bg-zinc-900/60 border-zinc-800">
                     <CardContent className="p-4 text-center">
                       <Target className="w-6 h-6 text-purple-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{weekCalls + weekChats}</p>
-                      <p className="text-xs text-zinc-500">This Week</p>
+                      <p className="text-xs text-white/60">This Week</p>
                     </CardContent>
                   </Card>
                   <Card className="bg-zinc-900/60 border-zinc-800">
                     <CardContent className="p-4 text-center">
                       <TrendingUp className="w-6 h-6 text-amber-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{monthCalls + monthChats}</p>
-                      <p className="text-xs text-zinc-500">This Month</p>
+                      <p className="text-xs text-white/60">This Month</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -232,7 +232,7 @@ const BrokerHub = () => {
                 <Card className="bg-zinc-900/60 border-zinc-800">
                   <CardContent className="p-6 space-y-4">
                     <div className="flex justify-between text-sm mb-2">
-                      <span className="text-zinc-400">Completed Courses</span>
+                      <span className="text-white/70">Completed Courses</span>
                       <span className="text-white font-medium">{completedModules}/{totalModules}</span>
                     </div>
                     <Progress value={progressPercent} className="h-3" />
@@ -242,10 +242,10 @@ const BrokerHub = () => {
                         return (
                           <div key={mod.id} className="flex items-center justify-between p-2 rounded-lg bg-zinc-800/50">
                             <div className="flex items-center gap-2">
-                              {done ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-zinc-500" />}
-                              <span className="text-sm text-zinc-300">{mod.title}</span>
+                              {done ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-white/60" />}
+                              <span className="text-sm text-white/85">{mod.title}</span>
                             </div>
-                            <Badge className={done ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-zinc-700/50 text-zinc-400 border-zinc-600'}>
+                            <Badge className={done ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' : 'bg-zinc-700/50 text-white/70 border-zinc-600'}>
                               {done ? 'Done' : `${mod.duration_minutes}m`}
                             </Badge>
                           </div>
@@ -263,7 +263,7 @@ const BrokerHub = () => {
                 <Card className="bg-zinc-900/60 border-zinc-800">
                   <CardContent className="p-6">
                     {callLogs.length === 0 ? (
-                      <p className="text-center text-zinc-500 py-8">No call logs yet</p>
+                      <p className="text-center text-white/60 py-8">No call logs yet</p>
                     ) : (
                       <div className="space-y-2 max-h-80 overflow-y-auto">
                         {callLogs.slice(0, 10).map((call: any) => (
@@ -272,10 +272,10 @@ const BrokerHub = () => {
                               <Phone className="w-4 h-4 text-blue-400" />
                               <div>
                                 <p className="text-sm text-white">{call.phone_number}</p>
-                                <p className="text-xs text-zinc-500">{format(new Date(call.created_at), 'MMM d, HH:mm')}</p>
+                                <p className="text-xs text-white/60">{format(new Date(call.created_at), 'MMM d, HH:mm')}</p>
                               </div>
                             </div>
-                            <Badge className="bg-zinc-700/50 text-zinc-300 border-zinc-600 text-xs">{call.call_status || 'completed'}</Badge>
+                            <Badge className="bg-zinc-700/50 text-white/85 border-zinc-600 text-xs">{call.call_status || 'completed'}</Badge>
                           </div>
                         ))}
                       </div>
@@ -288,7 +288,7 @@ const BrokerHub = () => {
                 <Card className="bg-zinc-900/60 border-zinc-800">
                   <CardContent className="p-6">
                     {chatLogs.length === 0 ? (
-                      <p className="text-center text-zinc-500 py-8">No chat logs yet</p>
+                      <p className="text-center text-white/60 py-8">No chat logs yet</p>
                     ) : (
                       <div className="space-y-2 max-h-80 overflow-y-auto">
                         {chatLogs.slice(0, 10).map((chat: any) => (
@@ -297,10 +297,10 @@ const BrokerHub = () => {
                               <MessageCircle className="w-4 h-4 text-emerald-400" />
                               <div>
                                 <p className="text-sm text-white">{chat.platform || 'WhatsApp'} - {chat.contact_number}</p>
-                                <p className="text-xs text-zinc-500">{chat.message_count} messages</p>
+                                <p className="text-xs text-white/60">{chat.message_count} messages</p>
                               </div>
                             </div>
-                            <span className="text-xs text-zinc-500">{format(new Date(chat.created_at), 'MMM d')}</span>
+                            <span className="text-xs text-white/60">{format(new Date(chat.created_at), 'MMM d')}</span>
                           </div>
                         ))}
                       </div>
@@ -315,7 +315,7 @@ const BrokerHub = () => {
                     {supportTickets.length === 0 ? (
                       <div className="text-center py-8">
                         <Ticket className="w-8 h-8 text-zinc-600 mx-auto mb-3" />
-                        <p className="text-zinc-500">No support tickets</p>
+                        <p className="text-white/60">No support tickets</p>
                         <Button
                           className="mt-4 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
                           onClick={() => navigate('/support')}
@@ -326,7 +326,7 @@ const BrokerHub = () => {
                     ) : (
                       <div className="space-y-2">
                         <div className="flex justify-between items-center mb-4">
-                          <p className="text-sm text-zinc-400">{openTickets} open ticket{openTickets !== 1 ? 's' : ''}</p>
+                          <p className="text-sm text-white/70">{openTickets} open ticket{openTickets !== 1 ? 's' : ''}</p>
                           <Button
                             size="sm"
                             className="bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
@@ -343,7 +343,7 @@ const BrokerHub = () => {
                           >
                             <div>
                               <p className="text-sm text-white">{ticket.subject}</p>
-                              <p className="text-xs text-zinc-500">#{ticket.ticket_number} · {format(new Date(ticket.created_at), 'MMM d')}</p>
+                              <p className="text-xs text-white/60">#{ticket.ticket_number} · {format(new Date(ticket.created_at), 'MMM d')}</p>
                             </div>
                             <Badge className={
                               ticket.status === 'open' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' :
@@ -380,7 +380,7 @@ const BrokerHub = () => {
                 ].map(doc => (
                   <div key={doc.label} className="p-4 bg-zinc-800/50 rounded-xl text-center border border-zinc-700/50 hover:border-fuchsia-500/30 transition-colors cursor-pointer">
                     <doc.icon className="w-8 h-8 mx-auto text-fuchsia-400 mb-2" />
-                    <p className="text-xs text-zinc-400">{doc.label}</p>
+                    <p className="text-xs text-white/70">{doc.label}</p>
                   </div>
                 ))}
               </div>
@@ -409,7 +409,7 @@ const BrokerHub = () => {
                 </div>
                 <div className="flex-1 text-center md:text-left">
                   <h3 className="text-lg font-bold text-white mb-2">JBJ Certified Broker</h3>
-                  <p className="text-zinc-400 text-sm mb-4">
+                  <p className="text-white/70 text-sm mb-4">
                     Complete our professional certification program to earn the JBJ Certified Broker badge. 
                     Demonstrate your expertise in Dubai real estate, legal compliance, and premium client service.
                   </p>
@@ -445,7 +445,7 @@ const BrokerHub = () => {
                 >
                   <Icon className="w-5 h-5 text-fuchsia-400 mb-2" />
                   <h3 className="text-white font-medium text-sm">{tool.title}</h3>
-                  <p className="text-zinc-500 text-xs mt-1">{tool.desc}</p>
+                  <p className="text-white/60 text-xs mt-1">{tool.desc}</p>
                 </button>
               );
             })}
@@ -462,7 +462,7 @@ const BrokerHub = () => {
         <div className="bg-gradient-to-r from-indigo-900/30 to-fuchsia-900/30 border border-fuchsia-500/20 rounded-2xl p-8 text-center">
           <Sparkles className="w-8 h-8 text-fuchsia-400 mx-auto mb-3" />
           <h3 className="text-xl font-bold text-white mb-2">Explore All AI Tools</h3>
-          <p className="text-zinc-400 text-sm mb-4">Access 30+ free AI tools including creative suites, corporate tools, and productivity apps.</p>
+          <p className="text-white/70 text-sm mb-4">Access 30+ free AI tools including creative suites, corporate tools, and productivity apps.</p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-medium">
               Go to JBJ Royal Tools Hub
@@ -505,7 +505,7 @@ const BrokerHub = () => {
         <div className="container mx-auto px-4 text-center">
           <div className="bg-gradient-to-r from-fuchsia-950/40 to-purple-950/40 border border-fuchsia-500/20 rounded-2xl p-8">
             <h3 className="text-xl font-bold text-white mb-2">Access All AI Tools</h3>
-            <p className="text-zinc-400 text-sm mb-4">Browse the complete collection of 30+ AI-powered tools.</p>
+            <p className="text-white/70 text-sm mb-4">Browse the complete collection of 30+ AI-powered tools.</p>
             <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white border-0 font-medium">
               Go to JBJ Royal Tools Hub
               <ArrowRight className="w-4 h-4 ml-2" />

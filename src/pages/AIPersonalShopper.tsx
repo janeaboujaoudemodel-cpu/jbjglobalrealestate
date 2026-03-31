@@ -243,7 +243,7 @@ const AIPersonalShopper = () => {
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
               Your Personal <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">UAE Concierge</span>
             </h1>
-            <p className="text-zinc-400 max-w-2xl mx-auto text-sm md:text-base">
+            <p className="text-white/70 max-w-2xl mx-auto text-sm md:text-base">
               Tell me about your trip to UAE and I'll create a complete personalized itinerary — 
               property viewings, hotels, activities, dining, and everything in between.
             </p>
@@ -284,7 +284,7 @@ const AIPersonalShopper = () => {
                   </DialogHeader>
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-zinc-400">Plan Name</Label>
+                      <Label className="text-white/70">Plan Name</Label>
                       <Input
                         value={planName}
                         onChange={(e) => setPlanName(e.target.value)}
@@ -309,12 +309,12 @@ const AIPersonalShopper = () => {
                   <DialogHeader>
                     <DialogTitle className="text-white">Submit Your Trip Plan</DialogTitle>
                   </DialogHeader>
-                  <p className="text-zinc-400 text-sm">
+                  <p className="text-white/70 text-sm">
                     Our concierge team will review your plan and contact you to finalize all arrangements.
                   </p>
                   <div className="space-y-4 mt-4">
                     <div>
-                      <Label className="text-zinc-400">Full Name</Label>
+                      <Label className="text-white/70">Full Name</Label>
                       <Input
                         value={inquiryForm.name}
                         onChange={(e) => setInquiryForm(prev => ({ ...prev, name: e.target.value }))}
@@ -323,7 +323,7 @@ const AIPersonalShopper = () => {
                       />
                     </div>
                     <div>
-                      <Label className="text-zinc-400">Email *</Label>
+                      <Label className="text-white/70">Email *</Label>
                       <Input
                         type="email"
                         value={inquiryForm.email}
@@ -333,7 +333,7 @@ const AIPersonalShopper = () => {
                       />
                     </div>
                     <div>
-                      <Label className="text-zinc-400">Phone (WhatsApp preferred)</Label>
+                      <Label className="text-white/70">Phone (WhatsApp preferred)</Label>
                       <Input
                         value={inquiryForm.phone}
                         onChange={(e) => setInquiryForm(prev => ({ ...prev, phone: e.target.value }))}
@@ -392,7 +392,7 @@ const AIPersonalShopper = () => {
                       <prompt.icon className="w-4 h-4 text-emerald-400" />
                       <span className="text-white text-sm font-medium">{prompt.title}</span>
                     </div>
-                    <p className="text-zinc-500 text-xs line-clamp-2 group-hover:text-zinc-400">
+                    <p className="text-white/60 text-xs line-clamp-2 group-hover:text-white/70">
                       {prompt.prompt.substring(0, 80)}...
                     </p>
                   </motion.button>
@@ -414,7 +414,7 @@ const AIPersonalShopper = () => {
                   { icon: Calendar, text: "Daily Itineraries" },
                   { icon: Compass, text: "Activities & Experiences" }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 text-zinc-400 text-sm">
+                  <div key={i} className="flex items-center gap-2 text-white/70 text-sm">
                     <item.icon className="w-4 h-4 text-emerald-400" />
                     {item.text}
                   </div>
@@ -445,7 +445,7 @@ const AIPersonalShopper = () => {
                         <Plane className="w-10 h-10 text-white" />
                       </div>
                       <h3 className="text-xl font-semibold text-white">Welcome to Your Personal Concierge</h3>
-                      <p className="text-zinc-400 max-w-md">
+                      <p className="text-white/70 max-w-md">
                         Tell me about your upcoming trip to the UAE. Whether you're an investor, 
                         relocating family, or luxury traveler — I'll create a complete personalized itinerary for you.
                       </p>
@@ -544,7 +544,7 @@ const AIPersonalShopper = () => {
                     )}
                   </Button>
                 </div>
-                <p className="text-xs text-zinc-500 mt-2 text-center">
+                <p className="text-xs text-white/60 mt-2 text-center">
                   Press Enter to send • Your plan can be saved and submitted to our concierge team
                 </p>
               </div>

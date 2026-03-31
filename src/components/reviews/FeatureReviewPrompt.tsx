@@ -134,7 +134,7 @@ export function FeatureReviewPrompt({
               >
                 <Star
                   className={`h-10 w-10 transition-colors ${
-                    star <= (hoverRating || rating) ? "fill-gold text-gold" : "text-zinc-300"
+                    star <= (hoverRating || rating) ? "fill-gold text-gold" : "text-gray-400"
                   }`}
                 />
               </button>
@@ -189,7 +189,7 @@ export function FeatureReviewPrompt({
             </div>
           </div>
 
-          <p className="text-xs text-zinc-400">Reviews are moderated before publishing. You earn 2 points when your review is approved.</p>
+          <p className="text-xs text-gray-500">Reviews are moderated before publishing. You earn 2 points when your review is approved.</p>
 
           <Button onClick={handleSubmit} disabled={submitting || !rating} className="w-full bg-gold hover:bg-gold/90 text-black font-bold">
             {submitting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}

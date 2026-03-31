@@ -126,12 +126,12 @@ export default function RoyalToolsHub() {
         <div className="max-w-7xl mx-auto px-4 py-6 border-b border-gold/20">
           <div className="flex flex-wrap gap-2 items-center justify-center">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search..."
-                className="pl-9 pr-3 py-2 h-9 w-40 md:w-48 rounded-full bg-white/50 border-gold/30 text-black text-sm placeholder:text-zinc-500"
+                className="pl-9 pr-3 py-2 h-9 w-40 md:w-48 rounded-full bg-white/50 border-gold/30 text-black text-sm placeholder:text-gray-400"
               />
             </div>
 
@@ -243,7 +243,7 @@ export default function RoyalToolsHub() {
             </div>
             
             <div className="mt-6 pt-6 border-t border-gold/30">
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-gray-500">
                 By using these tools, you confirm you own the content or have permission to edit it. 
                 The platform operator is not responsible for misuse of these tools.
               </p>

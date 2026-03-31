@@ -27,7 +27,7 @@ export const TrustpilotWidget = ({ className = '' }: TrustpilotWidgetProps) => {
         <p className="text-white text-sm font-medium group-hover:text-gold transition-colors">
           Excellent on Trustpilot
         </p>
-        <p className="text-zinc-500 text-xs">Read our reviews</p>
+        <p className="text-white/60 text-xs">Read our reviews</p>
       </div>
       <svg
         className="w-20 h-6 ml-2"

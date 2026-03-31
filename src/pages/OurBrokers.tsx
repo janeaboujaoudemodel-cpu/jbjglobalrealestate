@@ -47,11 +47,11 @@ const BrokerCard = ({ broker }: { broker: Broker }) => {
                   </Badge>
                 )}
               </div>
-              <p className="text-zinc-500 text-sm">{broker.nationality}</p>
+              <p className="text-white/60 text-sm">{broker.nationality}</p>
             </div>
           </div>
 
-          <p className="text-zinc-400 text-xs line-clamp-2 mb-3">{broker.bio}</p>
+          <p className="text-white/70 text-xs line-clamp-2 mb-3">{broker.bio}</p>
 
           <div className="flex flex-wrap gap-1 mb-2">
             {broker.specializations.slice(0, 2).map((spec) => (
@@ -70,7 +70,7 @@ const BrokerCard = ({ broker }: { broker: Broker }) => {
               <Badge
                 key={lang}
                 variant="outline"
-                className="text-xs border-zinc-700 text-zinc-400"
+                className="text-xs border-zinc-700 text-white/70"
               >
                 {lang}
               </Badge>
@@ -141,7 +141,7 @@ const OurBrokers = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               Our <span className="text-gold">Brokers</span>
             </h1>
-            <p className="text-zinc-400 max-w-2xl mx-auto mb-8">
+            <p className="text-white/70 max-w-2xl mx-auto mb-8">
               Explore our team by experience level and specialization.
             </p>
 
@@ -159,7 +159,7 @@ const OurBrokers = () => {
                 size="sm"
                 onClick={() => setTier("senior")}
                 className={
-                  tier === "senior" ? "bg-gold text-black" : "border-zinc-700 text-zinc-400"
+                  tier === "senior" ? "bg-gold text-black" : "border-zinc-700 text-white/70"
                 }
               >
                 Senior ({seniorCount})
@@ -169,7 +169,7 @@ const OurBrokers = () => {
                 size="sm"
                 onClick={() => setTier("broker")}
                 className={
-                  tier === "broker" ? "bg-gold text-black" : "border-zinc-700 text-zinc-400"
+                  tier === "broker" ? "bg-gold text-black" : "border-zinc-700 text-white/70"
                 }
               >
                 Brokers ({allBrokers.length - seniorCount})
@@ -183,7 +183,7 @@ const OurBrokers = () => {
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row gap-4 items-center">
               <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
                 <Input
                   placeholder="Search by name or specialization..."
                   value={search}
@@ -213,7 +213,7 @@ const OurBrokers = () => {
                     className={
                       nationality === nat
                         ? "bg-gold text-black"
-                        : "border-zinc-700 text-zinc-400"
+                        : "border-zinc-700 text-white/70"
                     }
                   >
                     {nat}
@@ -227,7 +227,7 @@ const OurBrokers = () => {
         {/* Brokers Grid */}
         <section className="py-12">
           <div className="container mx-auto px-4">
-            <p className="text-zinc-500 mb-6">
+            <p className="text-white/60 mb-6">
               {filteredBrokers.length} broker{filteredBrokers.length === 1 ? "" : "s"} found
             </p>
             <motion.div

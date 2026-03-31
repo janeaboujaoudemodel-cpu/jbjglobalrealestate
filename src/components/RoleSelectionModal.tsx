@@ -91,7 +91,7 @@ const ROLES: RoleOption[] = [
     title: 'Just Browsing',
     subtitle: 'Explore our platform first',
     icon: Eye,
-    color: 'text-zinc-400',
+    color: 'text-gray-500',
     bgGradient: 'from-zinc-400/20 to-zinc-500/10',
     benefits: [
       'Browse Properties',

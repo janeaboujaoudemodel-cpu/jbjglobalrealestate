@@ -116,7 +116,7 @@ const AIFollowupSchedulerPremium = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-zinc-300 flex items-center gap-2">
+                <Label className="text-white/85 flex items-center gap-2">
                   <Target className="h-4 w-4 text-cyan-400" />
                   Lead Name *
                 </Label>
@@ -129,7 +129,7 @@ const AIFollowupSchedulerPremium = () => {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300 flex items-center gap-2">
+                <Label className="text-white/85 flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-cyan-400" />
                   Last Interaction Date
                 </Label>
@@ -142,7 +142,7 @@ const AIFollowupSchedulerPremium = () => {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Last Interaction Type</Label>
+                <Label className="text-white/85">Last Interaction Type</Label>
                 <Select value={formData.interactionType} onValueChange={(v) => handleChange("interactionType", v)}>
                   <SelectTriggerDark className="border-cyan-500/30 hover:border-cyan-500/50">
                     <SelectValue />
@@ -171,7 +171,7 @@ const AIFollowupSchedulerPremium = () => {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Lead Status</Label>
+                <Label className="text-white/85">Lead Status</Label>
                 <Select value={formData.leadStatus} onValueChange={(v) => handleChange("leadStatus", v)}>
                   <SelectTriggerDark className="border-cyan-500/30 hover:border-cyan-500/50">
                     <SelectValue />
@@ -188,7 +188,7 @@ const AIFollowupSchedulerPremium = () => {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-zinc-300">Context & Notes</Label>
+              <Label className="text-white/85">Context & Notes</Label>
               <Textarea
                 placeholder="What happened in the last interaction? Any specific interests or concerns?"
                 value={formData.notes}
@@ -255,7 +255,7 @@ const AIFollowupSchedulerPremium = () => {
                         <Calendar className="h-7 w-7 text-cyan-400" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm text-zinc-400">Next Follow-up</p>
+                        <p className="text-sm text-white/70">Next Follow-up</p>
                         <p className="text-xl font-bold text-white">{response.nextFollowup}</p>
                         {response.channel && (
                           <div className="flex items-center gap-2 mt-2">
@@ -279,13 +279,13 @@ const AIFollowupSchedulerPremium = () => {
                   <div className="grid grid-cols-2 gap-3">
                     {response.optimalTiming.bestDays && (
                       <div className="bg-zinc-800/50 p-3 rounded-lg">
-                        <p className="text-xs text-zinc-500">Best Days</p>
+                        <p className="text-xs text-white/60">Best Days</p>
                         <p className="text-sm text-white">{response.optimalTiming.bestDays.join(', ')}</p>
                       </div>
                     )}
                     {response.optimalTiming.bestHours && (
                       <div className="bg-zinc-800/50 p-3 rounded-lg">
-                        <p className="text-xs text-zinc-500">Best Hours</p>
+                        <p className="text-xs text-white/60">Best Hours</p>
                         <p className="text-sm text-white">{response.optimalTiming.bestHours}</p>
                       </div>
                     )}
@@ -302,7 +302,7 @@ const AIFollowupSchedulerPremium = () => {
                   </h4>
                   <div className="space-y-2">
                     {response.suggestedMessages.map((msg: string, i: number) => (
-                      <div key={i} className="bg-zinc-800/50 p-3 rounded-lg text-sm text-zinc-300 flex items-start gap-2">
+                      <div key={i} className="bg-zinc-800/50 p-3 rounded-lg text-sm text-white/85 flex items-start gap-2">
                         <ChevronRight className="h-4 w-4 mt-0.5 flex-shrink-0 text-cyan-400" />
                         {msg}
                       </div>
@@ -318,7 +318,7 @@ const AIFollowupSchedulerPremium = () => {
                     <AlertCircle className="h-5 w-5 text-red-400" />
                     <span className="font-semibold text-red-400">Urgency Alert</span>
                   </div>
-                  <p className="text-sm text-zinc-300 mt-2">{response.urgencyAlert}</p>
+                  <p className="text-sm text-white/85 mt-2">{response.urgencyAlert}</p>
                 </Card>
               )}
 
@@ -331,7 +331,7 @@ const AIFollowupSchedulerPremium = () => {
                       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
-                  <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                  <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                     {response.schedule || response.recommendations}
                   </div>
                 </CardContent>
@@ -347,8 +347,8 @@ const AIFollowupSchedulerPremium = () => {
               <div className="p-6 rounded-full bg-cyan-500/10 mb-4">
                 <CalendarClock className="h-12 w-12 text-cyan-400/50" />
               </div>
-              <h3 className="text-lg font-semibold text-zinc-400">Ready to Schedule</h3>
-              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+              <h3 className="text-lg font-semibold text-white/70">Ready to Schedule</h3>
+              <p className="text-sm text-white/60 mt-2 max-w-sm">
                 Enter lead details to get AI-powered follow-up scheduling with optimal timing recommendations
               </p>
             </motion.div>

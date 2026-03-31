@@ -197,15 +197,15 @@ export const PremiumStatCard: React.FC<PremiumStatCardProps> = ({
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-sm font-medium text-zinc-500 mb-1">{title}</p>
+          <p className="text-sm font-medium text-gray-500 mb-1">{title}</p>
           <p className={cn('text-3xl font-bold', colors.text)}>{value}</p>
           {subtitle && (
-            <p className="text-xs text-zinc-400 mt-1">{subtitle}</p>
+            <p className="text-xs text-gray-500 mt-1">{subtitle}</p>
           )}
           {trend && trendValue && (
             <div className={cn(
               'flex items-center gap-1 mt-2 text-xs font-medium',
-              trend === 'up' ? 'text-emerald-600' : trend === 'down' ? 'text-red-500' : 'text-zinc-500'
+              trend === 'up' ? 'text-emerald-600' : trend === 'down' ? 'text-red-500' : 'text-gray-500'
             )}>
               <TrendIcon className="w-3 h-3" />
               <span>{trendValue}</span>
@@ -274,7 +274,7 @@ export const PremiumText: React.FC<PremiumTextProps> = ({
 }) => {
   const variants = {
     default: 'text-black',
-    muted: 'text-zinc-500',
+    muted: 'text-gray-500',
     gold: 'text-gold font-medium',
     label: 'text-xs uppercase tracking-wider text-gold font-semibold',
   };
@@ -307,7 +307,7 @@ export const PremiumStat: React.FC<PremiumStatProps> = ({
   const changeColors = {
     positive: 'text-emerald-600',
     negative: 'text-red-500',
-    neutral: 'text-zinc-500',
+    neutral: 'text-gray-500',
   };
 
   return (
@@ -588,7 +588,7 @@ export const PremiumPageHeader: React.FC<PremiumPageHeaderProps> = ({
                 )}
               </div>
               {subtitle && (
-                <p className="text-sm text-zinc-500 mt-0.5">{subtitle}</p>
+                <p className="text-sm text-gray-500 mt-0.5">{subtitle}</p>
               )}
             </div>
           </div>
@@ -630,7 +630,7 @@ export const PremiumSectionHeader: React.FC<PremiumSectionHeaderProps> = ({
         <div>
           <h2 className="text-xl font-bold text-black">{title}</h2>
           {subtitle && (
-            <p className="text-sm text-zinc-500">{subtitle}</p>
+            <p className="text-sm text-gray-500">{subtitle}</p>
           )}
         </div>
       </div>
@@ -657,7 +657,7 @@ export const PremiumSearchBox: React.FC<PremiumSearchBoxProps> = ({
 }) => {
   return (
     <div className={cn('relative', className)}>
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
       <input
         type="text"
         value={value}
@@ -666,13 +666,13 @@ export const PremiumSearchBox: React.FC<PremiumSearchBoxProps> = ({
         className={cn(
           'w-full pl-10 pr-12 py-2.5 rounded-xl',
           'bg-white border-2 border-gold/20',
-          'text-black placeholder:text-zinc-400',
+          'text-black placeholder:text-gray-400',
           'focus:outline-none focus:border-gold/40 focus:ring-2 focus:ring-gold/10',
           'transition-all duration-200'
         )}
       />
       {showCommand && (
-        <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden md:inline-flex items-center gap-0.5 px-2 py-1 bg-zinc-100 rounded text-xs font-medium text-zinc-500">
+        <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden md:inline-flex items-center gap-0.5 px-2 py-1 bg-zinc-100 rounded text-xs font-medium text-gray-500">
           <Command className="w-3 h-3" />K
         </kbd>
       )}

@@ -173,7 +173,7 @@ export default function LeadIntentModal() {
             {/* Close button */}
             <button
               onClick={handleSkip}
-              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white transition-colors"
+              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 hover:bg-zinc-700 text-white/70 hover:text-white transition-colors"
               aria-label="Close"
             >
               <X className="w-4 h-4" />
@@ -187,7 +187,7 @@ export default function LeadIntentModal() {
               <h2 className="text-white text-2xl font-bold mb-2">
                 What brings you to JBJ?
               </h2>
-              <p className="text-zinc-400 text-sm">
+              <p className="text-white/70 text-sm">
                 Help us personalize your experience by selecting your interests
               </p>
             </div>
@@ -208,7 +208,7 @@ export default function LeadIntentModal() {
                   >
                     <div
                       className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                        isSelected ? "bg-gold text-black" : "bg-zinc-700 text-zinc-300"
+                        isSelected ? "bg-gold text-black" : "bg-zinc-700 text-white/85"
                       }`}
                     >
                       <option.icon className="w-5 h-5" />
@@ -220,7 +220,7 @@ export default function LeadIntentModal() {
                         </span>
                         {isSelected && <Check className="w-5 h-5 text-gold" />}
                       </div>
-                      <p className="text-zinc-500 text-sm mt-0.5">{option.description}</p>
+                      <p className="text-white/60 text-sm mt-0.5">{option.description}</p>
                     </div>
                   </button>
                 );
@@ -235,7 +235,7 @@ export default function LeadIntentModal() {
                   onCheckedChange={(checked) => setMarketingConsent(checked === true)}
                   className="mt-0.5 border-zinc-600 data-[state=checked]:bg-gold data-[state=checked]:border-gold"
                 />
-                <span className="text-zinc-400 text-sm leading-relaxed">
+                <span className="text-white/70 text-sm leading-relaxed">
                   I agree to receive updates, property alerts, and marketing communications from JBJ Global Real Estate. 
                   You can unsubscribe at any time.
                 </span>
@@ -248,7 +248,7 @@ export default function LeadIntentModal() {
                 <Button
                   variant="ghost"
                   onClick={handleSkip}
-                  className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+                  className="text-white/70 hover:text-white hover:bg-zinc-800"
                 >
                   Skip for now
                 </Button>
@@ -261,7 +261,7 @@ export default function LeadIntentModal() {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </div>
-              <p className="text-zinc-500 text-xs text-center">
+              <p className="text-white/60 text-xs text-center">
                 You can update your preferences anytime from your profile.
               </p>
             </div>

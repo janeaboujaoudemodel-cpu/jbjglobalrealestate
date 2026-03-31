@@ -424,7 +424,7 @@ const BuyerGuide = () => {
                           {step.title}
                         </h3>
                       </div>
-                      <p className="text-zinc-500 mb-4">{step.description}</p>
+                      <p className="text-white/60 mb-4">{step.description}</p>
                       
                       {step.items && (
                         <ul className="grid md:grid-cols-2 gap-3">

@@ -145,7 +145,7 @@ const Founder = () => {
               <p className="text-white text-lg md:text-xl lg:text-2xl mb-1 font-semibold tracking-wide">
                 Executive Governance of JBJ Global Real Estate
               </p>
-              <p className="text-zinc-400 text-sm md:text-base mb-6 max-w-2xl">
+              <p className="text-white/70 text-sm md:text-base mb-6 max-w-2xl">
                 JBJ Global Real Estate operates under a clearly defined leadership and governance structure to ensure accountability, regulatory compliance, and operational excellence across all brokerage activities.
               </p>
             </motion.div>
@@ -166,7 +166,7 @@ const Founder = () => {
       {/* DIVIDER */}
       <section className="relative bg-black py-10 md:py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center gap-2 text-zinc-400">
+          <div className="flex flex-col items-center gap-2 text-white/70">
             <span className="text-xs uppercase tracking-[0.3em]">Leadership</span>
             <div className="w-px h-12 bg-gradient-to-b from-gold to-transparent" />
           </div>
@@ -323,7 +323,7 @@ const Founder = () => {
                       {member.name}
                     </h4>
                     {member.nameAr && (
-                      <p className="text-zinc-500 text-sm mb-2">{member.nameAr}</p>
+                      <p className="text-white/60 text-sm mb-2">{member.nameAr}</p>
                     )}
                     <p className="text-gold text-xs uppercase tracking-wider mb-4">
                       {member.role}

@@ -1218,7 +1218,7 @@ const CompanyProfile = () => {
                   <item.icon className="w-5 h-5" />
                 </div>
                 <div>
-                   <p className="text-zinc-400 text-xs uppercase">{item.label}</p>
+                   <p className="text-white/70 text-xs uppercase">{item.label}</p>
                   <p className="text-white">{item.value}</p>
                 </div>
               </div>
@@ -1228,7 +1228,7 @@ const CompanyProfile = () => {
                 <Clock className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-zinc-400 text-xs uppercase">Working Hours</p>
+                <p className="text-white/70 text-xs uppercase">Working Hours</p>
                 <p className="text-white">{PROFILE_CONTENT.companySnapshot.workingHours}</p>
               </div>
             </div>

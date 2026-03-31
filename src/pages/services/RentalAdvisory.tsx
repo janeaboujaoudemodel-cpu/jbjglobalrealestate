@@ -160,7 +160,7 @@ const RentalAdvisory = () => {
               Rental Advisory Services
             </h1>
             
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Maximize rental performance and minimize risk. Expert guidance from pricing strategy to tenant placement.
             </p>
             
@@ -415,25 +415,25 @@ const RentalAdvisory = () => {
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             <Link
               to="/landlord-guide"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Landlord Guide
             </Link>
             <Link
               to="/tenant-guide"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Tenant Guide
             </Link>
             <Link
               to="/market-intelligence"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Market Intelligence
             </Link>
             <Link
               to="/contact"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Contact Us
             </Link>

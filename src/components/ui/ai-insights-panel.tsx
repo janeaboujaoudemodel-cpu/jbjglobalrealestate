@@ -131,7 +131,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
             <button
               onClick={onRefresh}
               className={cn(
-                'p-2 rounded-lg text-zinc-500 hover:text-gold hover:bg-gold/10 transition-colors',
+                'p-2 rounded-lg text-gray-500 hover:text-gold hover:bg-gold/10 transition-colors',
                 isLoading && 'animate-spin'
               )}
             >
@@ -140,7 +140,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
             {onToggleCollapse && (
               <button
                 onClick={onToggleCollapse}
-                className="p-2 rounded-lg text-zinc-500 hover:text-gold hover:bg-gold/10 transition-colors"
+                className="p-2 rounded-lg text-gray-500 hover:text-gold hover:bg-gold/10 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>

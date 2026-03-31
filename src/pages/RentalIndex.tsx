@@ -176,7 +176,7 @@ const RentalIndex = () => {
               Dubai <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-400">Rental Index</span> Evaluator
             </h1>
             
-            <p className="text-zinc-400 text-lg md:text-xl mb-4">
+            <p className="text-white/70 text-lg md:text-xl mb-4">
               Get AI-powered rental estimates for any Dubai property. Understand current market rates, trends, and investment potential.
             </p>
             
@@ -211,7 +211,7 @@ const RentalIndex = () => {
               <div className="grid md:grid-cols-2 gap-6 mb-8">
                 {/* Community */}
                 <div>
-                  <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+                  <Label className="text-white/85 text-sm font-medium mb-2 block">
                     <MapPin className="w-4 h-4 inline mr-1 text-emerald-400" />
                     Community / Area <span className="text-emerald-400">*</span>
                   </Label>
@@ -229,7 +229,7 @@ const RentalIndex = () => {
 
                 {/* Property Type */}
                 <div>
-                  <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+                  <Label className="text-white/85 text-sm font-medium mb-2 block">
                     <Home className="w-4 h-4 inline mr-1 text-emerald-400" />
                     Property Type <span className="text-emerald-400">*</span>
                   </Label>
@@ -247,7 +247,7 @@ const RentalIndex = () => {
 
                 {/* Size */}
                 <div>
-                  <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+                  <Label className="text-white/85 text-sm font-medium mb-2 block">
                     <Building className="w-4 h-4 inline mr-1 text-emerald-400" />
                     Size (sq.ft) - Optional
                   </Label>
@@ -262,7 +262,7 @@ const RentalIndex = () => {
 
                 {/* Furnished */}
                 <div>
-                  <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+                  <Label className="text-white/85 text-sm font-medium mb-2 block">
                     Furnished Status - Optional
                   </Label>
                   <Select value={furnished} onValueChange={setFurnished}>
@@ -317,19 +317,19 @@ const RentalIndex = () => {
 
                   <div className="grid md:grid-cols-3 gap-6 mb-8">
                     <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
-                      <p className="text-zinc-400 text-sm mb-2">Minimum</p>
+                      <p className="text-white/70 text-sm mb-2">Minimum</p>
                       <p className="text-emerald-400 text-3xl font-bold">{formatCurrency(analysis.estimatedRentMin)}</p>
-                      <p className="text-zinc-500 text-xs mt-1">/year</p>
+                      <p className="text-white/60 text-xs mt-1">/year</p>
                     </div>
                     <div className="bg-emerald-500/20 border border-emerald-400/50 rounded-2xl p-6 text-center">
                       <p className="text-emerald-400 text-sm mb-2 font-medium">Average</p>
                       <p className="text-white text-4xl font-bold">{formatCurrency(analysis.averageRent)}</p>
-                      <p className="text-zinc-400 text-xs mt-1">/year</p>
+                      <p className="text-white/70 text-xs mt-1">/year</p>
                     </div>
                     <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
-                      <p className="text-zinc-400 text-sm mb-2">Maximum</p>
+                      <p className="text-white/70 text-sm mb-2">Maximum</p>
                       <p className="text-emerald-400 text-3xl font-bold">{formatCurrency(analysis.estimatedRentMax)}</p>
-                      <p className="text-zinc-500 text-xs mt-1">/year</p>
+                      <p className="text-white/60 text-xs mt-1">/year</p>
                     </div>
                   </div>
 
@@ -373,7 +373,7 @@ const RentalIndex = () => {
                       {analysis.insights.map((insight, i) => (
                         <li key={i} className="flex items-start gap-3">
                           <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                          <span className="text-zinc-300 text-sm">{insight}</span>
+                          <span className="text-white/85 text-sm">{insight}</span>
                         </li>
                       ))}
                     </ul>
@@ -383,13 +383,13 @@ const RentalIndex = () => {
                 {/* Disclaimer - Neutral dark styling */}
                 <div className="bg-zinc-800/50 border border-zinc-700 rounded-2xl p-6">
                   <div className="flex items-start gap-3">
-                    <AlertCircle className="w-6 h-6 text-zinc-400 flex-shrink-0" />
+                    <AlertCircle className="w-6 h-6 text-white/70 flex-shrink-0" />
                     <div>
-                      <h4 className="text-zinc-300 font-semibold mb-2">Important Disclaimer</h4>
-                      <p className="text-zinc-400 text-sm leading-relaxed">
+                      <h4 className="text-white/85 font-semibold mb-2">Important Disclaimer</h4>
+                      <p className="text-white/70 text-sm leading-relaxed">
                         {analysis.disclaimer}
                       </p>
-                      <p className="text-zinc-500 text-xs mt-3">
+                      <p className="text-white/60 text-xs mt-3">
                         For more accurate and updated information, we recommend verifying with official government sources such as the Dubai Land Department (DLD), RERA, and DXB Interact. Rental values can vary based on specific building, view, condition, and market timing.
                       </p>
                     </div>
@@ -398,7 +398,7 @@ const RentalIndex = () => {
 
                 {/* CTA - Emerald Theme */}
                 <div className="bg-zinc-900/60 border border-emerald-500/30 rounded-2xl p-6 text-center">
-                  <p className="text-zinc-400 text-sm mb-4">
+                  <p className="text-white/70 text-sm mb-4">
                     Need expert guidance on your rental investment?
                   </p>
                   <div className="flex flex-wrap justify-center gap-3">
@@ -437,7 +437,7 @@ const RentalIndex = () => {
               <div className="bg-zinc-900/40 border border-emerald-500/30 rounded-2xl p-6">
                 <Info className="w-6 h-6 text-emerald-400 mb-4" />
                 <h3 className="text-white font-semibold mb-2">How It Works</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">
+                <p className="text-white/70 text-sm leading-relaxed">
                   Our AI analyzes current rental trends, historical data, and market conditions to provide estimates. 
                   The tool considers location, property type, size, and amenities to calculate rental ranges.
                 </p>
@@ -445,7 +445,7 @@ const RentalIndex = () => {
               <div className="bg-zinc-900/40 border border-emerald-500/30 rounded-2xl p-6">
                 <TrendingUp className="w-6 h-6 text-emerald-400 mb-4" />
                 <h3 className="text-white font-semibold mb-2">Data Sources</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">
+                <p className="text-white/70 text-sm leading-relaxed">
                   Estimates are based on aggregated market data. For official records, please refer to Dubai Land Department (DLD) and RERA.
                 </p>
               </div>

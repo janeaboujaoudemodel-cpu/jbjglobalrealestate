@@ -105,7 +105,7 @@ const AIPricePredictorPremium = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {/* Location */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               <MapPin className="w-4 h-4 inline mr-1 text-blue-400" />
               Location / Area <span className="text-blue-400">*</span>
             </Label>
@@ -119,7 +119,7 @@ const AIPricePredictorPremium = () => {
 
           {/* Property Type */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               <Building className="w-4 h-4 inline mr-1 text-blue-400" />
               Property Type
             </Label>
@@ -139,7 +139,7 @@ const AIPricePredictorPremium = () => {
 
           {/* Bedrooms */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               Bedrooms
             </Label>
             <Select value={formData.bedrooms} onValueChange={(v) => handleChange("bedrooms", v)}>
@@ -159,7 +159,7 @@ const AIPricePredictorPremium = () => {
 
           {/* Size */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               <Ruler className="w-4 h-4 inline mr-1 text-blue-400" />
               Size (sq ft)
             </Label>
@@ -173,7 +173,7 @@ const AIPricePredictorPremium = () => {
 
           {/* Developer */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               Developer (optional)
             </Label>
             <Input
@@ -186,7 +186,7 @@ const AIPricePredictorPremium = () => {
 
           {/* Completion Year */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               <Calendar className="w-4 h-4 inline mr-1 text-blue-400" />
               Completion Year
             </Label>
@@ -201,7 +201,7 @@ const AIPricePredictorPremium = () => {
 
         {/* Current Price - Full Width */}
         <div className="mb-8">
-          <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+          <Label className="text-white/85 text-sm font-medium mb-2 block">
             <DollarSign className="w-4 h-4 inline mr-1 text-blue-400" />
             Current Listed Price (AED) - Optional
           </Label>
@@ -263,14 +263,14 @@ const AIPricePredictorPremium = () => {
                     AED {Number(response.estimatedPrice).toLocaleString()}
                   </p>
                   {response.pricePerSqFt && (
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-white/70 text-sm">
                       AED {Number(response.pricePerSqFt).toLocaleString()} per sq ft
                     </p>
                   )}
                   {response.priceRange && (
                     <div className="mt-4 pt-4 border-t border-blue-500/20">
-                      <p className="text-xs text-zinc-500">Price Range</p>
-                      <p className="text-sm text-zinc-300">
+                      <p className="text-xs text-white/60">Price Range</p>
+                      <p className="text-sm text-white/85">
                         AED {response.priceRange.min?.toLocaleString()} - {response.priceRange.max?.toLocaleString()}
                       </p>
                     </div>
@@ -306,7 +306,7 @@ const AIPricePredictorPremium = () => {
                     {response.comparison === 'overpriced' && <AlertTriangle className="h-5 w-5 mb-2 text-red-400" />}
                     {response.comparison === 'underpriced' && <CheckCircle className="h-5 w-5 mb-2 text-emerald-400" />}
                     {response.comparison === 'fairly-priced' && <Target className="h-5 w-5 mb-2 text-amber-400" />}
-                    <p className="text-xs uppercase tracking-wider mb-1 text-zinc-400">Valuation</p>
+                    <p className="text-xs uppercase tracking-wider mb-1 text-white/70">Valuation</p>
                     <p className={`text-lg font-bold capitalize ${
                       response.comparison === 'overpriced' ? 'text-red-400' :
                       response.comparison === 'underpriced' ? 'text-emerald-400' : 'text-amber-400'
@@ -322,11 +322,11 @@ const AIPricePredictorPremium = () => {
                     <Sparkles className="w-5 h-5 text-blue-400" />
                     <h4 className="text-white font-semibold">Full Analysis</h4>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={copyToClipboard} className="text-zinc-400 hover:text-white">
+                  <Button variant="ghost" size="sm" onClick={copyToClipboard} className="text-white/70 hover:text-white">
                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </div>
-                <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                   {response.prediction}
                 </div>
               </div>
@@ -335,10 +335,10 @@ const AIPricePredictorPremium = () => {
             {/* Disclaimer */}
             <div className="bg-zinc-800/50 border border-zinc-700 rounded-2xl p-6">
               <div className="flex items-start gap-3">
-                <AlertTriangle className="w-6 h-6 text-zinc-400 flex-shrink-0" />
+                <AlertTriangle className="w-6 h-6 text-white/70 flex-shrink-0" />
                 <div>
-                  <h4 className="text-zinc-300 font-semibold mb-2">Important Disclaimer</h4>
-                  <p className="text-zinc-400 text-sm leading-relaxed">
+                  <h4 className="text-white/85 font-semibold mb-2">Important Disclaimer</h4>
+                  <p className="text-white/70 text-sm leading-relaxed">
                     This is an AI-generated estimate for informational purposes only. For legal or mortgage matters, please consult licensed professionals.
                     Actual property values may vary based on specific conditions, market timing, and other factors.
                   </p>

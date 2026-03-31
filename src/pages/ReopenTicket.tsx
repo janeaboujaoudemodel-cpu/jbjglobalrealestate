@@ -63,7 +63,7 @@ const ReopenTicket = () => {
                 <Loader2 className="w-10 h-10 text-gold animate-spin" />
               </div>
               <h1 className="text-2xl font-bold text-white mb-3">Reopening Ticket...</h1>
-              <p className="text-zinc-400">Please wait while we process your request.</p>
+              <p className="text-white/70">Please wait while we process your request.</p>
             </>
           )}
 
@@ -76,8 +76,8 @@ const ReopenTicket = () => {
               <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 mb-4">
                 <p className="text-gold font-mono font-bold text-lg">{ticketNumber}</p>
               </div>
-              <p className="text-zinc-300 mb-6">{message}</p>
-              <p className="text-zinc-400 text-sm mb-6">
+              <p className="text-white/85 mb-6">{message}</p>
+              <p className="text-white/70 text-sm mb-6">
                 Our team has been notified and will respond as soon as possible.
               </p>
             </>
@@ -92,7 +92,7 @@ const ReopenTicket = () => {
               <div className="bg-gold/10 border border-gold/30 rounded-lg p-4 mb-4">
                 <p className="text-gold font-mono font-bold text-lg">{ticketNumber}</p>
               </div>
-              <p className="text-zinc-300 mb-6">{message}</p>
+              <p className="text-white/85 mb-6">{message}</p>
             </>
           )}
 
@@ -102,8 +102,8 @@ const ReopenTicket = () => {
                 <AlertCircle className="w-10 h-10 text-red-400" />
               </div>
               <h1 className="text-2xl font-bold text-white mb-3">Unable to Reopen</h1>
-              <p className="text-zinc-300 mb-6">{message}</p>
-              <p className="text-zinc-400 text-sm mb-6">
+              <p className="text-white/85 mb-6">{message}</p>
+              <p className="text-white/70 text-sm mb-6">
                 Please contact our support team directly for assistance.
               </p>
             </>
@@ -133,7 +133,7 @@ const ReopenTicket = () => {
           </div>
         </div>
 
-        <p className="text-center text-zinc-500 text-sm mt-6">
+        <p className="text-center text-white/60 text-sm mt-6">
           JBJ Global Real Estate Support
         </p>
       </div>

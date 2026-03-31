@@ -142,7 +142,7 @@ const FitOut = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-base md:text-lg max-w-2xl mb-10"
+            className="text-white/85 text-base md:text-lg max-w-2xl mb-10"
             variants={fadeInUp}
           >
             Quality fit-out and renovation services by licensed contractors. 

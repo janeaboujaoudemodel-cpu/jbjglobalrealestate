@@ -388,7 +388,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   {dailyVisitors.length === 0 ? (
-                    <p className="text-zinc-500 text-center py-8">No visitor data for this period</p>
+                    <p className="text-gray-500 text-center py-8">No visitor data for this period</p>
                   ) : (
                     <ResponsiveContainer width="100%" height={320}>
                       <AreaChart data={dailyVisitors}>
@@ -421,7 +421,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                       <Users className="w-5 h-5 text-gold" />
                     </div>
                     <p className="text-2xl font-bold text-black">{dailyVisitors.reduce((s, d) => s + d.visitors, 0)}</p>
-                    <p className="text-xs text-zinc-500">Total Unique Visitors</p>
+                    <p className="text-xs text-gray-500">Total Unique Visitors</p>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
@@ -430,7 +430,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                       <Eye className="w-5 h-5 text-gold" />
                     </div>
                     <p className="text-2xl font-bold text-black">{dailyVisitors.reduce((s, d) => s + d.pageViews, 0)}</p>
-                    <p className="text-xs text-zinc-500">Total Page Views</p>
+                    <p className="text-xs text-gray-500">Total Page Views</p>
                   </CardContent>
                 </Card>
                 <Card className="border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
@@ -441,7 +441,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                     <p className="text-2xl font-bold text-black">
                       {dailyVisitors.length > 0 ? Math.round(dailyVisitors.reduce((s, d) => s + d.visitors, 0) / dailyVisitors.length) : 0}
                     </p>
-                    <p className="text-xs text-zinc-500">Avg. Daily Visitors</p>
+                    <p className="text-xs text-gray-500">Avg. Daily Visitors</p>
                   </CardContent>
                 </Card>
               </div>
@@ -456,11 +456,11 @@ const JBJAnalyticsDashboard: React.FC = () => {
               <CardContent>
                 <div className="space-y-4">
                   {toolUsage.length === 0 ? (
-                    <p className="text-zinc-500 text-center py-8">No usage data for this period</p>
+                    <p className="text-gray-500 text-center py-8">No usage data for this period</p>
                   ) : (
                     toolUsage.map((tool, idx) => (
                       <div key={tool.tool_name} className="flex items-center gap-4">
-                        <span className="text-zinc-500 w-6 font-medium">{idx + 1}</span>
+                        <span className="text-gray-500 w-6 font-medium">{idx + 1}</span>
                         <div className="flex-1">
                           <div className="flex items-center justify-between mb-1">
                             <span className="text-black font-medium">{tool.tool_name}</span>
@@ -473,7 +473,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                             />
                           </div>
                         </div>
-                        <span className="text-zinc-500 text-sm">{tool.unique_users} users</span>
+                        <span className="text-gray-500 text-sm">{tool.unique_users} users</span>
                       </div>
                     ))
                   )}
@@ -496,7 +496,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                 <ScrollArea className="h-[500px]">
                   <div className="space-y-4">
                     {issueReports.length === 0 ? (
-                      <p className="text-zinc-500 text-center py-8">No issue reports</p>
+                      <p className="text-gray-500 text-center py-8">No issue reports</p>
                     ) : (
                       issueReports.map(issue => (
                         <div 
@@ -522,7 +522,7 @@ const JBJAnalyticsDashboard: React.FC = () => {
                           </div>
                           <p className="text-zinc-700 text-sm mb-3">{issue.issue_description}</p>
                           <div className="flex items-center justify-between">
-                            <span className="text-zinc-500 text-xs">
+                            <span className="text-gray-500 text-xs">
                               {format(new Date(issue.created_at), 'MMM d, yyyy h:mm a')}
                             </span>
                             <div className="flex gap-2">

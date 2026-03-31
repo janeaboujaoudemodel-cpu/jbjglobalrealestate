@@ -82,7 +82,7 @@ const ActionGateModal = () => {
             {headline}
           </h2>
 
-          <p className="text-center text-zinc-400 text-sm mb-6">
+          <p className="text-center text-white/70 text-sm mb-6">
             Create a free account to unlock premium features and start earning rewards
           </p>
 
@@ -98,7 +98,7 @@ const ActionGateModal = () => {
                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center mt-0.5">
                   <b.icon className="w-4 h-4 text-gold" />
                 </div>
-                <p className="text-sm text-zinc-300 leading-relaxed">{b.text}</p>
+                <p className="text-sm text-white/85 leading-relaxed">{b.text}</p>
               </div>
             ))}
           </div>
@@ -125,7 +125,7 @@ const ActionGateModal = () => {
 
             <button
               onClick={closeGate}
-              className="w-full text-center text-zinc-500 hover:text-zinc-400 text-xs mt-2 transition-colors"
+              className="w-full text-center text-white/60 hover:text-white/70 text-xs mt-2 transition-colors"
             >
               Continue Browsing
             </button>

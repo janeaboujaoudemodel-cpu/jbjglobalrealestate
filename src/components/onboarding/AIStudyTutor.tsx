@@ -192,7 +192,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
                       await navigator.clipboard.writeText(message.content);
                       toast.success(t('chat.messageCopied') || 'Message copied');
                     }}
-                    className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-400 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                    className={`flex items-center gap-1 mt-1 text-[10px] text-gray-500 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                       message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                     }`}
                   >
@@ -231,13 +231,13 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
         {/* Suggested Questions */}
         {messages.length <= 1 && (
           <div className="px-4 py-2 border-t border-zinc-800">
-            <p className="text-xs text-zinc-500 mb-2">Try asking:</p>
+            <p className="text-xs text-gray-500 mb-2">Try asking:</p>
             <div className="flex flex-wrap gap-1.5">
               {suggestedQuestions.map((q, i) => (
                 <button
                   key={i}
                   onClick={() => setInput(q)}
-                  className="text-xs bg-zinc-800 hover:bg-zinc-700 text-zinc-300 px-2.5 py-1 rounded-full transition-colors"
+                  className="text-xs bg-zinc-800 hover:bg-zinc-700 text-white/85 px-2.5 py-1 rounded-full transition-colors"
                 >
                   {q}
                 </button>
@@ -254,7 +254,7 @@ export function AIStudyTutor({ moduleId, moduleName }: AIStudyTutorProps) {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask about the training..."
-              className="flex-1 bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-purple-500"
+              className="flex-1 bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400 focus:border-purple-500"
               disabled={isLoading}
             />
             <Button

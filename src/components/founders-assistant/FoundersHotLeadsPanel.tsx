@@ -180,7 +180,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
             </div>
             <div>
               <h4 className="text-black font-semibold">Your Personal Hot Leads</h4>
-              <p className="text-sm text-zinc-500 mt-1">
+              <p className="text-sm text-gray-500 mt-1">
                 These are YOUR assigned VIP leads. Follow up within 3 days to maintain ownership.
                 Leads inactive for 72+ hours may be reassigned automatically.
               </p>
@@ -195,28 +195,28 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
           <CardContent className="p-4 text-center">
             <Flame className="w-6 h-6 text-gold mx-auto mb-2" />
             <p className="text-2xl font-bold text-gold">{leads.length}</p>
-            <p className="text-xs text-zinc-500">Total Hot Leads</p>
+            <p className="text-xs text-gray-500">Total Hot Leads</p>
           </CardContent>
         </Card>
         <Card className="bg-white border-2 border-red-500/30 shadow-[0_4px_20px_rgba(239,68,68,0.1)]">
           <CardContent className="p-4 text-center">
             <AlertTriangle className="w-6 h-6 text-red-600 mx-auto mb-2" />
             <p className="text-2xl font-bold text-red-600">{criticalLeads}</p>
-            <p className="text-xs text-zinc-500">Critical (72h+)</p>
+            <p className="text-xs text-gray-500">Critical (72h+)</p>
           </CardContent>
         </Card>
         <Card className="bg-white border-2 border-orange-500/30 shadow-[0_4px_20px_rgba(249,115,22,0.1)]">
           <CardContent className="p-4 text-center">
             <Timer className="w-6 h-6 text-orange-600 mx-auto mb-2" />
             <p className="text-2xl font-bold text-orange-600">{highPriorityLeads}</p>
-            <p className="text-xs text-zinc-500">High Priority</p>
+            <p className="text-xs text-gray-500">High Priority</p>
           </CardContent>
         </Card>
         <Card className="bg-white border-2 border-green-500/30 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
           <CardContent className="p-4 text-center">
             <User className="w-6 h-6 text-green-600 mx-auto mb-2" />
             <p className="text-2xl font-bold text-green-600">{activeLeads}</p>
-            <p className="text-xs text-zinc-500">Active</p>
+            <p className="text-xs text-gray-500">Active</p>
           </CardContent>
         </Card>
       </div>
@@ -228,7 +228,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
             <Flame className="w-5 h-5 text-orange-500" />
             Hot Leads Queue
           </h3>
-          <p className="text-sm text-zinc-500">Sorted by urgency - Most critical first</p>
+          <p className="text-sm text-gray-500">Sorted by urgency - Most critical first</p>
         </div>
         <Button
           size="sm"
@@ -270,8 +270,8 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
               <CardContent className="p-8 text-center">
                 <Flame className="w-16 h-16 text-gold/30 mx-auto mb-4" />
                 <h4 className="text-black font-semibold mb-2">No Hot Leads</h4>
-                <p className="text-zinc-500">No hot leads at the moment</p>
-                <p className="text-sm text-zinc-400 mt-1">Great job staying on top of your leads!</p>
+                <p className="text-gray-500">No hot leads at the moment</p>
+                <p className="text-sm text-gray-500 mt-1">Great job staying on top of your leads!</p>
               </CardContent>
             </Card>
           ) : (
@@ -333,8 +333,8 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                                   {urgency.level.toUpperCase()}
                                 </Badge>
                               </div>
-                              <p className="text-sm text-zinc-500 mt-1">{urgency.message}</p>
-                              <div className="flex items-center gap-4 mt-2 text-sm text-zinc-400 flex-wrap">
+                              <p className="text-sm text-gray-500 mt-1">{urgency.message}</p>
+                              <div className="flex items-center gap-4 mt-2 text-sm text-gray-500 flex-wrap">
                                 {lead.source && (
                                   <span className="flex items-center gap-1">
                                     <Building className="w-3 h-3" />
@@ -354,7 +354,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                         {urgency.level !== 'low' && (
                           <div className="mb-3">
                             <div className="flex items-center justify-between text-xs mb-1">
-                              <span className="text-zinc-400">Time until reassignment risk</span>
+                              <span className="text-gray-500">Time until reassignment risk</span>
                               <span className={
                                 urgency.level === 'critical' ? 'text-red-600' :
                                 urgency.level === 'high' ? 'text-orange-600' :
@@ -407,7 +407,7 @@ const FoundersHotLeadsPanel: React.FC<FoundersHotLeadsPanelProps> = ({ onLeadCli
                             </Button>
                           )}
                           <div className="flex-1" />
-                          <ChevronRight className="w-5 h-5 text-zinc-400" />
+                          <ChevronRight className="w-5 h-5 text-gray-500" />
                         </div>
                       </CardContent>
                     </Card>

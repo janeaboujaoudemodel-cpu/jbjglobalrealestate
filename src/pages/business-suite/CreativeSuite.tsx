@@ -130,12 +130,12 @@ const CreativeSuite = () => {
             Create professional marketing materials in minutes.
           </p>
           
-          <div className="flex items-center justify-center gap-6 text-sm text-zinc-500">
+          <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-pink-400 rounded-full" />
               10 Tools Included
             </span>
-            <span className="text-zinc-300">|</span>
+            <span className="text-gray-400">|</span>
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-gold rounded-full" />
               Powered by AI

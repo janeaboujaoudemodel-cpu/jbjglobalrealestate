@@ -32,7 +32,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
             </h2>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-zinc-500 mb-6">
+          <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
             <MapPin className="w-4 h-4 text-gold" />
             <span>{area.emirate}, UAE</span>
           </div>
@@ -88,7 +88,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
                 <Building2 className="w-5 h-5 text-gold flex-shrink-0" />
                 <div>
                   <div className="text-lg font-bold text-black">{area.property_count}</div>
-                  <div className="text-xs text-zinc-500">Active Projects</div>
+                  <div className="text-xs text-gray-500">Active Projects</div>
                 </div>
               </div>
             )}
@@ -97,7 +97,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
                 <Building2 className="w-5 h-5 text-gold flex-shrink-0" />
                 <div>
                   <div className="text-lg font-bold text-black">{area.developer_count}</div>
-                  <div className="text-xs text-zinc-500">Developers</div>
+                  <div className="text-xs text-gray-500">Developers</div>
                 </div>
               </div>
             )}
@@ -105,7 +105,7 @@ export const AreaAboutSection = ({ area }: AreaAboutSectionProps) => {
               <MapPin className="w-5 h-5 text-gold flex-shrink-0" />
               <div>
                 <div className="text-lg font-bold text-black">{area.emirate}</div>
-                <div className="text-xs text-zinc-500">Emirate</div>
+                <div className="text-xs text-gray-500">Emirate</div>
               </div>
             </div>
           </div>

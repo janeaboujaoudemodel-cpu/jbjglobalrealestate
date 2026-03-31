@@ -235,13 +235,13 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
         </div>
         <div>
           <h3 className="text-white font-semibold">AI Design Assistant</h3>
-          <p className="text-zinc-500 text-xs">Powered by Lovable AI</p>
+          <p className="text-white/60 text-xs">Powered by Lovable AI</p>
         </div>
       </div>
 
       {/* Quick Prompts */}
       <div className="p-3 border-b border-zinc-800">
-        <p className="text-zinc-500 text-xs mb-2">Quick Actions</p>
+        <p className="text-white/60 text-xs mb-2">Quick Actions</p>
         <div className="flex flex-wrap gap-2">
           {QUICK_PROMPTS.map((prompt, index) => (
             <button
@@ -311,7 +311,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
                 <Loader2 className="w-4 h-4 text-white animate-spin" />
               </div>
               <div className="bg-zinc-800 rounded-2xl rounded-tl-none p-3">
-                <p className="text-zinc-400 text-sm">Creating your design...</p>
+                <p className="text-white/70 text-sm">Creating your design...</p>
               </div>
             </motion.div>
           )}
@@ -349,7 +349,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
             size="icon"
             variant="ghost"
             onClick={() => fileInputRef.current?.click()}
-            className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+            className="text-white/70 hover:text-white hover:bg-zinc-800"
           >
             <Upload className="w-5 h-5" />
           </Button>
@@ -358,7 +358,7 @@ export const AIDesignAssistant: React.FC<AIDesignAssistantProps> = ({
             disabled={isGenerating}
             variant="ghost"
             size="icon"
-            className="text-zinc-400 hover:text-white hover:bg-zinc-800"
+            className="text-white/70 hover:text-white hover:bg-zinc-800"
           />
           <Textarea
             value={inputMessage}

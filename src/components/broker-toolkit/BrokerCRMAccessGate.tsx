@@ -90,7 +90,7 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
-          <p className="text-zinc-400">Verifying broker registration...</p>
+          <p className="text-white/70">Verifying broker registration...</p>
         </div>
       </div>
     );
@@ -106,19 +106,19 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
           <h1 className="text-2xl font-bold text-white mb-3">
             Registered Brokers Only
           </h1>
-          <p className="text-zinc-400 mb-6">
+          <p className="text-white/70 mb-6">
             The CRM dashboard is exclusively available to registered JBJ brokers who have completed the hiring process.
           </p>
           
           {userEmail && (
-            <p className="text-zinc-500 text-sm mb-4">
+            <p className="text-white/60 text-sm mb-4">
               Logged in as: {userEmail}
             </p>
           )}
 
           <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 mb-6">
             <h3 className="text-white font-semibold mb-3">How to Get Access</h3>
-            <ol className="text-left text-zinc-400 text-sm space-y-2">
+            <ol className="text-left text-white/70 text-sm space-y-2">
               <li className="flex items-start gap-2">
                 <span className="text-gold font-bold">1.</span>
                 Submit your CV through our HR portal
@@ -150,7 +150,7 @@ const BrokerCRMAccessGate = ({ children, fallbackPath = "/join" }: BrokerCRMAcce
             <Button
               onClick={() => navigate("/")}
               variant="outline"
-              className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+              className="border-zinc-700 text-white/85 hover:bg-zinc-800"
             >
               Return to Home
             </Button>

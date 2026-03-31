@@ -135,7 +135,7 @@ const ListingSearchFilters = ({
           </PopoverTrigger>
           <PopoverContent className="w-64 p-3 bg-white border-zinc-200" align="start">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <Input
                 value={searchValue}
                 onChange={(e) => onSearchChange(e.target.value)}

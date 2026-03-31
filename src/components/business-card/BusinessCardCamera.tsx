@@ -421,7 +421,7 @@ const BusinessCardCamera = ({
             
             <div className="text-center space-y-2">
               <h3 className="text-lg font-bold text-white">JBJ AI Business Card Scanner</h3>
-              <p className="text-sm text-zinc-400 max-w-xs">
+              <p className="text-sm text-white/70 max-w-xs">
                 Scan multiple business cards instantly with AI-powered OCR. 
                 Supports batch scanning up to 100 cards at once.
               </p>
@@ -437,7 +437,7 @@ const BusinessCardCamera = ({
                   <Camera className="h-5 w-5" />
                   Grant Camera Access
                 </Button>
-                <p className="text-xs text-zinc-500 max-w-xs">
+                <p className="text-xs text-white/60 max-w-xs">
                   If camera doesn't open, check browser permissions or try the Upload option.
                 </p>
               </div>
@@ -450,12 +450,12 @@ const BusinessCardCamera = ({
                   <Camera className="h-5 w-5" />
                   Open Camera
                 </Button>
-                <p className="text-xs text-zinc-400">Click the button above to start scanning</p>
+                <p className="text-xs text-white/70">Click the button above to start scanning</p>
               </div>
             )}
             
             {/* Tips */}
-            <div className="flex flex-col items-center gap-2 text-xs text-zinc-500">
+            <div className="flex flex-col items-center gap-2 text-xs text-white/60">
               <div className="flex items-center gap-2">
                 <Lightbulb className="h-4 w-4 text-gold" />
                 <span>Ensure good lighting for best results</span>
@@ -619,7 +619,7 @@ const BusinessCardCamera = ({
       
       {/* Tips section */}
       {isCameraReady && capturedImages.length === 0 && (
-        <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-zinc-500">
+        <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-white/60">
           <div className="flex items-center gap-1.5 bg-zinc-900/50 px-3 py-1.5 rounded-full">
             <Lightbulb className="h-3 w-3 text-gold" />
             <span>Good lighting</span>

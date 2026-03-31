@@ -236,7 +236,7 @@ const AIFinancialAdvisor = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               AI Budget <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-400">Planner</span>
             </h1>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-white/70 max-w-2xl mx-auto">
               Budget analysis and property affordability insights based on your financial profile. Informational only.
             </p>
             <p className="text-xs text-gold mt-2">Developed by Founder and CEO Jane Bou Jaoude</p>
@@ -274,7 +274,7 @@ const AIFinancialAdvisor = () => {
               </DialogHeader>
               <div className="space-y-4">
                 <div>
-                  <Label className="text-zinc-400">Project Name</Label>
+                  <Label className="text-white/70">Project Name</Label>
                   <Input
                     value={newProjectName}
                     onChange={(e) => setNewProjectName(e.target.value)}
@@ -320,7 +320,7 @@ const AIFinancialAdvisor = () => {
               </CardHeader>
               <CardContent>
                 <div>
-                  <Label className="text-zinc-400">Monthly Income (AED)</Label>
+                  <Label className="text-white/70">Monthly Income (AED)</Label>
                   <Input
                     type="number"
                     value={financialData.monthlyIncome || ''}
@@ -352,7 +352,7 @@ const AIFinancialAdvisor = () => {
                   { key: 'otherExpenses', label: 'Other Expenses', placeholder: '500' },
                 ].map(({ key, label, placeholder }) => (
                   <div key={key}>
-                    <Label className="text-xs text-zinc-400">{label}</Label>
+                    <Label className="text-xs text-white/70">{label}</Label>
                     <Input
                       type="number"
                       value={(financialData as any)[key] || ''}
@@ -370,16 +370,16 @@ const AIFinancialAdvisor = () => {
               <CardContent className="p-4">
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-zinc-400">Total Income</span>
+                    <span className="text-white/70">Total Income</span>
                     <span className="text-white">{formatCurrency(financialData.monthlyIncome)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-zinc-400">Total Expenses</span>
+                    <span className="text-white/70">Total Expenses</span>
                     <span className="text-red-400">{formatCurrency(totalExpenses)}</span>
                   </div>
                   <div className="h-px bg-zinc-700 my-2" />
                   <div className="flex justify-between text-lg font-semibold">
-                    <span className="text-zinc-300">Disposable Income</span>
+                    <span className="text-white/85">Disposable Income</span>
                     <span className={disposableIncome >= 0 ? 'text-emerald-400' : 'text-red-400'}>
                       {formatCurrency(disposableIncome)}
                     </span>
@@ -415,21 +415,21 @@ const AIFinancialAdvisor = () => {
                     <CardContent className="p-4 text-center">
                       <PiggyBank className="w-8 h-8 text-emerald-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{formatCurrency(analysis.netAffordability)}</p>
-                      <p className="text-xs text-zinc-400">Net Monthly Affordability</p>
+                      <p className="text-xs text-white/70">Net Monthly Affordability</p>
                     </CardContent>
                   </Card>
                   <Card className="bg-gradient-to-br from-blue-900/30 to-black border-blue-500/30">
                     <CardContent className="p-4 text-center">
                       <Home className="w-8 h-8 text-blue-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{formatCurrency(analysis.maxPropertyBudget)}</p>
-                      <p className="text-xs text-zinc-400">Max Property Budget</p>
+                      <p className="text-xs text-white/70">Max Property Budget</p>
                     </CardContent>
                   </Card>
                   <Card className="bg-gradient-to-br from-purple-900/30 to-black border-purple-500/30">
                     <CardContent className="p-4 text-center">
                       <Target className="w-8 h-8 text-purple-400 mx-auto mb-2" />
                       <p className="text-2xl font-bold text-white">{analysis.savingsRate.toFixed(1)}%</p>
-                      <p className="text-xs text-zinc-400">Current Savings Rate</p>
+                      <p className="text-xs text-white/70">Current Savings Rate</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -443,7 +443,7 @@ const AIFinancialAdvisor = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-zinc-300 leading-relaxed">{analysis.investmentStrategy}</p>
+                    <p className="text-white/85 leading-relaxed">{analysis.investmentStrategy}</p>
                   </CardContent>
                 </Card>
 
@@ -472,12 +472,12 @@ const AIFinancialAdvisor = () => {
                           </div>
                           <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
                             <div>
-                              <span className="text-zinc-500">Payment Plan:</span>
-                              <p className="text-zinc-300">{property.paymentPlan}</p>
+                              <span className="text-white/60">Payment Plan:</span>
+                              <p className="text-white/85">{property.paymentPlan}</p>
                             </div>
                             <div>
-                              <span className="text-zinc-500">Developers:</span>
-                              <p className="text-zinc-300">{property.developer}</p>
+                              <span className="text-white/60">Developers:</span>
+                              <p className="text-white/85">{property.developer}</p>
                             </div>
                           </div>
                         </div>
@@ -498,7 +498,7 @@ const AIFinancialAdvisor = () => {
                           <div className="w-6 h-6 bg-emerald-500/20 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                             <span className="text-emerald-400 text-xs">{index + 1}</span>
                           </div>
-                          <p className="text-zinc-300 text-sm">{rec}</p>
+                          <p className="text-white/85 text-sm">{rec}</p>
                         </li>
                       ))}
                     </ul>
@@ -541,7 +541,7 @@ const AIFinancialAdvisor = () => {
                 <CardContent className="text-center">
                   <Calculator className="w-16 h-16 text-zinc-700 mx-auto mb-4" />
                   <h3 className="text-white text-lg font-medium mb-2">Enter Your Financial Details</h3>
-                  <p className="text-zinc-500 text-sm max-w-md">
+                  <p className="text-white/60 text-sm max-w-md">
                     Fill in your income and expenses on the left, then click "Generate AI Analysis" 
                     to receive personalized investment recommendations.
                   </p>
@@ -553,8 +553,8 @@ const AIFinancialAdvisor = () => {
 
         {/* Financial Disclaimer */}
         <div className="mt-8 p-4 bg-zinc-900/60 border border-gold/20 rounded-xl">
-          <p className="text-zinc-400 text-sm leading-relaxed">
-            <strong className="text-zinc-300">Disclaimer:</strong> This AI-generated analysis is for informational purposes only. Does not constitute financial, investment, or legal advice.{" "}
+          <p className="text-white/70 text-sm leading-relaxed">
+            <strong className="text-white/85">Disclaimer:</strong> This AI-generated analysis is for informational purposes only. Does not constitute financial, investment, or legal advice.{" "}
             <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
             Past performance does not guarantee future results.
           </p>

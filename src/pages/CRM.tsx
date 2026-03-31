@@ -753,7 +753,7 @@ const CRM = () => {
                       <Users className="h-4 w-4 text-black" />
                     </div>
                     Leads Update
-                    <span className="ml-auto text-sm font-normal text-zinc-500">Quick Actions</span>
+                    <span className="ml-auto text-sm font-normal text-gray-500">Quick Actions</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

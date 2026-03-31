@@ -288,7 +288,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   Design Studio
                 </span>
               </h1>
-              <p className="text-zinc-400 text-sm md:text-base max-w-xl mx-auto">
+              <p className="text-white/70 text-sm md:text-base max-w-xl mx-auto">
                 Upload a photo or describe your space. Our AI generates stunning designs instantly.
               </p>
             </motion.div>
@@ -304,7 +304,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
             placeholder="Project name (optional)"
-            className="bg-zinc-900/60 border-gold/30 text-white placeholder:text-zinc-500 max-w-xs focus:border-gold/50"
+            className="bg-zinc-900/60 border-gold/30 text-white placeholder:text-gray-400 max-w-xs focus:border-gold/50"
           />
           <div className="flex gap-2">
             {modeConfig.map(m => {
@@ -317,7 +317,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all border ${
                     active
                       ? 'bg-gold/15 border-gold/50 text-gold'
-                      : 'bg-zinc-900/60 border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300'
+                      : 'bg-zinc-900/60 border-zinc-700 text-white/70 hover:border-zinc-600 hover:text-white/85'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -350,7 +350,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     <Button
                       onClick={() => { setGeneratedImage(null); setGeneratedNotes(''); }}
                       variant="outline"
-                      className="border-zinc-600 text-zinc-400 hover:bg-zinc-800"
+                      className="border-zinc-600 text-white/70 hover:bg-zinc-800"
                     >
                       New Design
                     </Button>
@@ -391,7 +391,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     <h3 className="text-lg font-semibold text-white mb-2">
                       Upload a Photo
                     </h3>
-                    <p className="text-zinc-400 text-sm mb-4">
+                    <p className="text-white/70 text-sm mb-4">
                       Drag & drop or click to upload a room photo
                     </p>
                     <div className="flex gap-3 justify-center">
@@ -415,7 +415,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                   </div>
                   {/* Or generate from description */}
                   <div className="mt-6 text-center">
-                    <p className="text-zinc-500 text-xs mb-3">— or generate from description only —</p>
+                    <p className="text-white/60 text-xs mb-3">— or generate from description only —</p>
                     <Button
                       onClick={() => generateDesign()}
                       disabled={isProcessing || !designStyle}
@@ -437,7 +437,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 </div>
                 <p className="text-white font-medium mb-3">Creating Your Design...</p>
                 <Progress value={progress} className="h-2 max-w-xs mx-auto" />
-                <p className="text-xs text-zinc-500 mt-2">{progress}%</p>
+                <p className="text-xs text-white/60 mt-2">{progress}%</p>
               </div>
             )}
 
@@ -467,7 +467,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       </Badge>
                     )}
                   </div>
-                  {styleOpen ? <ChevronUp className="w-4 h-4 text-zinc-500" /> : <ChevronDown className="w-4 h-4 text-zinc-500" />}
+                  {styleOpen ? <ChevronUp className="w-4 h-4 text-white/60" /> : <ChevronDown className="w-4 h-4 text-white/60" />}
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="px-4 pb-4 grid grid-cols-2 gap-2">
@@ -478,7 +478,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                         className={`p-2.5 rounded-lg border text-left text-xs transition-all ${
                           designStyle === style.id
                             ? 'bg-gold/15 border-gold/50 text-white'
-                            : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600'
+                            : 'bg-zinc-800/50 border-zinc-700 text-white/70 hover:border-zinc-600'
                         }`}
                       >
                         <span className="mr-1.5">{style.emoji}</span>
@@ -503,7 +503,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                       </Badge>
                     )}
                   </div>
-                  {paletteOpen ? <ChevronUp className="w-4 h-4 text-zinc-500" /> : <ChevronDown className="w-4 h-4 text-zinc-500" />}
+                  {paletteOpen ? <ChevronUp className="w-4 h-4 text-white/60" /> : <ChevronDown className="w-4 h-4 text-white/60" />}
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className="px-4 pb-4 grid grid-cols-2 gap-2">
@@ -522,7 +522,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                             <div key={i} className="w-5 h-5 rounded-full border border-zinc-600" style={{ backgroundColor: c }} />
                           ))}
                         </div>
-                        <span className="text-[10px] text-zinc-300">{palette.name}</span>
+                        <span className="text-[10px] text-white/85">{palette.name}</span>
                       </button>
                     ))}
                   </div>
@@ -539,7 +539,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                 </div>
                 <div>
                   <h3 className="font-semibold text-white text-sm">Design Assistant</h3>
-                  <p className="text-[10px] text-zinc-500">Describe edits or new ideas</p>
+                  <p className="text-[10px] text-white/60">Describe edits or new ideas</p>
                 </div>
               </div>
 
@@ -573,7 +573,7 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
                     onChange={(e) => setChatInput(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder="Describe changes: 'make the sofa white' or 'add gold accents'..."
-                    className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-gold/50"
+                    className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 min-h-[40px] max-h-[80px] resize-none flex-1 text-xs focus:border-gold/50"
                     disabled={isProcessing}
                   />
                   <Button
@@ -594,12 +594,12 @@ const InteriorDesignAI = ({ embedded = false }: InteriorDesignAIProps) => {
 
             {/* Additional Notes */}
             <div className="bg-zinc-900/60 border border-gold/30 rounded-2xl p-4">
-              <label className="text-xs font-medium text-zinc-400 mb-2 block">Additional Notes (Optional)</label>
+              <label className="text-xs font-medium text-white/70 mb-2 block">Additional Notes (Optional)</label>
               <Textarea
                 value={customNotes}
                 onChange={(e) => setCustomNotes(e.target.value)}
                 placeholder="Floor-to-ceiling windows, marble floors, specific furniture..."
-                className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[60px] text-xs focus:border-gold/50"
+                className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 min-h-[60px] text-xs focus:border-gold/50"
                 maxLength={500}
               />
             </div>

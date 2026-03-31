@@ -155,7 +155,7 @@ const AITranslationHubPremium = () => {
                 dir={isRTL(sourceLanguage) ? "rtl" : "ltr"}
               />
               <div className="flex items-center justify-between mt-4">
-                <span className="text-xs text-zinc-500">{text.length} characters</span>
+                <span className="text-xs text-white/60">{text.length} characters</span>
               </div>
             </CardContent>
           </Card>
@@ -163,7 +163,7 @@ const AITranslationHubPremium = () => {
           {/* Context Selector */}
           <Card className="bg-amber-900/20 border-amber-500/30">
             <CardContent className="p-4">
-              <Label className="text-zinc-300 flex items-center gap-2 mb-3">
+              <Label className="text-white/85 flex items-center gap-2 mb-3">
                 <MessageSquare className="h-4 w-4 text-amber-400" />
                 Context
               </Label>
@@ -252,7 +252,7 @@ const AITranslationHubPremium = () => {
                   </motion.div>
                 ) : (
                   <div className="bg-zinc-800/50 border border-zinc-700/50 rounded-md p-4 min-h-[200px] flex items-center justify-center">
-                    <div className="text-center text-zinc-500">
+                    <div className="text-center text-white/60">
                       <Globe className="h-8 w-8 mx-auto mb-2 opacity-50" />
                       <p className="text-sm">Translation will appear here</p>
                     </div>
@@ -274,7 +274,7 @@ const AITranslationHubPremium = () => {
                     <Info className="h-4 w-4 text-amber-400 mt-0.5" />
                     <div>
                       <p className="text-sm font-medium text-amber-400 mb-1">Translation Notes</p>
-                      <p className="text-sm text-zinc-300">{response.notes}</p>
+                      <p className="text-sm text-white/85">{response.notes}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -315,7 +315,7 @@ const AITranslationHubPremium = () => {
         ].map(({ icon: Icon, label }) => (
           <Card key={label} className="bg-amber-900/20 border-amber-500/30 p-3 text-center">
             <Icon className="h-5 w-5 mx-auto mb-1 text-amber-400" />
-            <p className="text-xs text-zinc-400">{label}</p>
+            <p className="text-xs text-white/70">{label}</p>
           </Card>
         ))}
       </div>

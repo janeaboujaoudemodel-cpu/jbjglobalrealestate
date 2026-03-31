@@ -202,7 +202,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-1.5 rounded-lg text-zinc-400 hover:text-black hover:bg-zinc-100 transition-colors"
+                  className="p-1.5 rounded-lg text-gray-500 hover:text-black hover:bg-zinc-100 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -269,8 +269,8 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
                 {filteredNotifications.length === 0 && (
                   <div className="py-12 text-center">
                     <Bell className="w-12 h-12 mx-auto text-zinc-200 mb-4" />
-                    <p className="text-zinc-500">No notifications</p>
-                    <p className="text-sm text-zinc-400 mt-1">You're all caught up!</p>
+                    <p className="text-gray-500">No notifications</p>
+                    <p className="text-sm text-gray-500 mt-1">You're all caught up!</p>
                   </div>
                 )}
               </div>
@@ -280,7 +280,7 @@ export const SmartNotifications: React.FC<SmartNotificationsProps> = ({
             <div className="p-3 border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white flex items-center justify-between">
               <button
                 onClick={onMarkAllRead}
-                className="text-sm text-zinc-500 hover:text-gold transition-colors flex items-center gap-1"
+                className="text-sm text-gray-500 hover:text-gold transition-colors flex items-center gap-1"
               >
                 <Check className="w-4 h-4" />
                 Mark all as read
@@ -324,11 +324,11 @@ const NotificationItem: React.FC<{ notification: Notification }> = ({ notificati
             )}>
               {notification.title}
             </h4>
-            <span className="text-xs text-zinc-400 flex-shrink-0">
+            <span className="text-xs text-gray-500 flex-shrink-0">
               {formatTimestamp(notification.timestamp)}
             </span>
           </div>
-          <p className="text-xs text-zinc-500 mt-0.5 line-clamp-2">
+          <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">
             {notification.description}
           </p>
           {notification.action && (

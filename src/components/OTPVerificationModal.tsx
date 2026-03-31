@@ -174,7 +174,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
               <CheckCircle className="w-10 h-10 text-white" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-2">Verified!</h3>
-            <p className="text-zinc-400">Your {type} has been verified successfully.</p>
+            <p className="text-white/70">Your {type} has been verified successfully.</p>
           </div>
         ) : (
           <>
@@ -189,7 +189,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
               <DialogTitle className="text-xl font-bold text-white">
                 Verify Your {type === 'email' ? 'Email' : 'Phone Number'}
               </DialogTitle>
-              <DialogDescription className="text-zinc-400 mt-2">
+              <DialogDescription className="text-white/70 mt-2">
                 We've sent a 6-digit code to:
                 <span dir="ltr" className="block text-gold font-medium mt-1 text-base tracking-wide">
                   {type === 'phone' ? value.replace(/[^\d+\s-]/g, '') : value}
@@ -241,7 +241,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
 
               {/* Resend */}
               <div className="text-center">
-                <p className="text-zinc-500 text-sm mb-2">Didn't receive the code?</p>
+                <p className="text-white/60 text-sm mb-2">Didn't receive the code?</p>
                 <Button
                   variant="ghost"
                   onClick={() => {
@@ -261,7 +261,7 @@ const OTPVerificationModal = forwardRef<HTMLDivElement, OTPVerificationModalProp
               </div>
 
               {/* Help Text */}
-              <p className="text-zinc-500 text-xs text-center">
+              <p className="text-white/60 text-xs text-center">
                 The code is valid for 10 minutes. Check your {type === 'email' ? 'inbox and spam folder' : 'messages'}.
               </p>
             </div>

@@ -381,7 +381,7 @@ const BusinessCardScanner = () => {
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
               AI Business Card <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400">Scanner</span>
             </h1>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-white/70 max-w-2xl mx-auto">
               Scan business cards with AI-powered OCR. Your data is encrypted end-to-end.
             </p>
             
@@ -406,7 +406,7 @@ const BusinessCardScanner = () => {
         {/* Privacy Alert */}
         <Alert className="mb-6 border-amber-500/30 bg-amber-900/20">
           <Info className="h-4 w-4 text-amber-400" />
-          <AlertDescription className="text-sm text-zinc-300">
+          <AlertDescription className="text-sm text-white/85">
             <strong className="text-white">Your privacy matters:</strong> All scanned data is encrypted with a key only you possess. 
             Data is processed in-memory and never stored on our servers.
           </AlertDescription>
@@ -420,7 +420,7 @@ const BusinessCardScanner = () => {
                 <Sparkles className="h-5 w-5 text-amber-400" />
                 Scan Business Cards
               </CardTitle>
-              <CardDescription className="text-zinc-400">
+              <CardDescription className="text-white/70">
                 Use your camera or upload images to extract contact information
               </CardDescription>
             </CardHeader>
@@ -470,7 +470,7 @@ const BusinessCardScanner = () => {
                       <Badge className="bg-amber-500/20 text-amber-300">{scannedContacts.length}</Badge>
                     )}
                   </CardTitle>
-                  <CardDescription className="text-zinc-400">
+                  <CardDescription className="text-white/70">
                     Review and export your extracted contacts
                   </CardDescription>
                 </div>
@@ -478,7 +478,7 @@ const BusinessCardScanner = () => {
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    className="text-zinc-400 hover:text-white"
+                    className="text-white/70 hover:text-white"
                     onClick={() => setShowEncryptedData(!showEncryptedData)}
                   >
                     {showEncryptedData ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -506,17 +506,17 @@ const BusinessCardScanner = () => {
           <Card className="mt-6 bg-zinc-900/50 border-blue-500/30">
             <CardContent className="py-4">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-2 text-sm text-zinc-400">
+                <div className="flex items-center gap-2 text-sm text-white/70">
                   <Lock className="h-4 w-4 text-blue-400" />
                   <span>All data encrypted with your session key</span>
                 </div>
                 
                 <div className="flex flex-wrap items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={handleExportCSV} className="gap-2 border-zinc-600 text-zinc-300 hover:bg-zinc-800">
+                  <Button variant="outline" size="sm" onClick={handleExportCSV} className="gap-2 border-zinc-600 text-white/85 hover:bg-zinc-800">
                     <Download className="h-4 w-4" />
                     Export CSV
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handleExportExcel} className="gap-2 border-zinc-600 text-zinc-300 hover:bg-zinc-800">
+                  <Button variant="outline" size="sm" onClick={handleExportExcel} className="gap-2 border-zinc-600 text-white/85 hover:bg-zinc-800">
                     <FileSpreadsheet className="h-4 w-4" />
                     Export Excel
                   </Button>
@@ -537,7 +537,7 @@ const BusinessCardScanner = () => {
         )}
 
         {/* Footer Privacy Notice */}
-        <div className="mt-8 text-center text-xs text-zinc-500 space-y-2">
+        <div className="mt-8 text-center text-xs text-white/60 space-y-2">
           <p>
             <Lock className="h-3 w-3 inline mr-1 text-blue-400" />
             Your scanned data is encrypted client-side and never transmitted to our servers unencrypted.

@@ -148,7 +148,7 @@ const BrokerCircleSection = () => {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             Ready to Join the <span className="text-gold">Broker Circle</span>?
           </h2>
-          <p className="text-zinc-400 text-lg">
+          <p className="text-white/70 text-lg">
             Join JBJ Global Real Estate and unlock instant access to a dedicated support team, 
             professional tools, and AI-powered technology — all completely free.
           </p>
@@ -177,7 +177,7 @@ const BrokerCircleSection = () => {
                     </div>
                     <h4 className="text-white font-semibold mb-1">{member.role}</h4>
                     <p className="text-gold text-sm mb-2">{member.name}</p>
-                    <p className="text-zinc-500 text-sm">{member.description}</p>
+                    <p className="text-white/60 text-sm">{member.description}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -219,7 +219,7 @@ const BrokerCircleSection = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="text-white text-sm font-medium truncate">{tool.name}</h4>
-                          <p className="text-zinc-500 text-xs truncate">{tool.description}</p>
+                          <p className="text-white/60 text-xs truncate">{tool.description}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -244,21 +244,21 @@ const BrokerCircleSection = () => {
                 <GraduationCap className="h-8 w-8 text-gold" />
               </div>
               <h4 className="text-white font-semibold mb-2">Free Training</h4>
-              <p className="text-zinc-400 text-sm">Access all courses, guides, and educational materials at no cost.</p>
+              <p className="text-white/70 text-sm">Access all courses, guides, and educational materials at no cost.</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Bot className="h-8 w-8 text-gold" />
               </div>
               <h4 className="text-white font-semibold mb-2">Free AI Tools</h4>
-              <p className="text-zinc-400 text-sm">Use all 10+ AI-powered tools without any subscription fees.</p>
+              <p className="text-white/70 text-sm">Use all 10+ AI-powered tools without any subscription fees.</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="h-8 w-8 text-gold" />
               </div>
               <h4 className="text-white font-semibold mb-2">Full Team Support</h4>
-              <p className="text-zinc-400 text-sm">Dedicated HR, marketing, and admin support for your success.</p>
+              <p className="text-white/70 text-sm">Dedicated HR, marketing, and admin support for your success.</p>
             </div>
           </div>
         </motion.div>
@@ -288,7 +288,7 @@ const BrokerCircleSection = () => {
           </div>
           
           {/* Contact Info */}
-          <div className="mt-8 flex items-center justify-center gap-6 text-sm text-zinc-500">
+          <div className="mt-8 flex items-center justify-center gap-6 text-sm text-white/60">
             <a href="mailto:CONTACT@JBJ.AE" className="flex items-center gap-2 hover:text-gold transition-colors">
               <Mail className="h-4 w-4" />
               CONTACT@JBJ.AE

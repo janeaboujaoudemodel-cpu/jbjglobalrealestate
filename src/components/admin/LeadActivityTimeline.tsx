@@ -49,7 +49,7 @@ const EVENT_CONFIG: Record<
   },
   time_on_page: {
     icon: Clock,
-    color: "text-zinc-400",
+    color: "text-white/70",
     bg: "bg-zinc-700/30 border-zinc-600/30",
     label: "Time on page",
   },
@@ -85,7 +85,7 @@ const EVENT_CONFIG: Record<
   },
   click: {
     icon: MousePointer,
-    color: "text-zinc-300",
+    color: "text-white/85",
     bg: "bg-zinc-700/30 border-zinc-600/30",
     label: "Clicked",
   },
@@ -105,7 +105,7 @@ const EVENT_CONFIG: Record<
 
 const DEFAULT_EVENT = {
   icon: Activity,
-  color: "text-zinc-400",
+  color: "text-white/70",
   bg: "bg-zinc-700/30 border-zinc-600/30",
   label: "Activity",
 };
@@ -207,7 +207,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
 
   if (!email) {
     return (
-      <div className="flex items-center justify-center py-16 text-zinc-500">
+      <div className="flex items-center justify-center py-16 text-white/60">
         <AlertCircle className="w-5 h-5 mr-2" />
         No email address — cannot look up activity.
       </div>
@@ -229,7 +229,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
             className={`bg-zinc-950 border rounded-xl p-3 text-center ${stat.color}`}
           >
             <p className="text-2xl font-bold">{stat.value}</p>
-            <p className="text-xs text-zinc-400 mt-0.5">{stat.label}</p>
+            <p className="text-xs text-white/70 mt-0.5">{stat.label}</p>
             <p className="text-[10px] text-zinc-600">{stat.sub}</p>
           </div>
         ))}
@@ -254,7 +254,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
           {error}
         </div>
       ) : events.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-12 text-zinc-500 gap-2">
+        <div className="flex flex-col items-center justify-center py-12 text-white/60 gap-2">
           <Activity className="w-8 h-8 text-zinc-700" />
           <p className="text-sm">No activity recorded yet for this lead.</p>
           <p className="text-xs text-zinc-600">Activity is tracked after form submission.</p>
@@ -294,14 +294,14 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
                           {detail && (
                             <Badge
                               variant="outline"
-                              className="text-[10px] px-1.5 py-0 border-zinc-700 text-zinc-300 font-normal"
+                              className="text-[10px] px-1.5 py-0 border-zinc-700 text-white/85 font-normal"
                             >
                               {detail}
                             </Badge>
                           )}
                         </div>
                         <time
-                          className="text-zinc-500 text-[11px] flex-shrink-0"
+                          className="text-white/60 text-[11px] flex-shrink-0"
                           title={format(new Date(event.created_at), "PPpp")}
                         >
                           {formatDistanceToNow(new Date(event.created_at), { addSuffix: true })}
@@ -309,7 +309,7 @@ export default function LeadActivityTimeline({ email }: LeadActivityTimelineProp
                       </div>
                       {path !== "—" && (
                         <p
-                          className="text-zinc-500 text-[11px] mt-1 font-mono truncate max-w-[340px]"
+                          className="text-white/60 text-[11px] mt-1 font-mono truncate max-w-[340px]"
                           title={path}
                         >
                           {path}

@@ -99,7 +99,7 @@ const VisitorDashboard = () => {
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Welcome to <span className="text-gold">JBJ Global Real Estate</span>
             </h1>
-            <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-xl text-white/70 max-w-2xl mx-auto">
               Explore. Compare. Invest. List.
             </p>
           </motion.div>
@@ -118,7 +118,7 @@ const VisitorDashboard = () => {
                       <CardTitle className="text-white group-hover:text-gold transition-colors">
                         {action.title}
                       </CardTitle>
-                      <CardDescription className="text-zinc-400">
+                      <CardDescription className="text-white/70">
                         {action.description}
                       </CardDescription>
                     </CardHeader>
@@ -144,13 +144,13 @@ const VisitorDashboard = () => {
                     <Card className="bg-zinc-900/30 border-zinc-800 hover:border-zinc-700 transition-all group cursor-pointer">
                       <CardContent className="flex items-center gap-4 p-5">
                         <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center group-hover:bg-zinc-700 transition-colors">
-                          <Icon className="w-6 h-6 text-zinc-400 group-hover:text-gold transition-colors" />
+                          <Icon className="w-6 h-6 text-white/70 group-hover:text-gold transition-colors" />
                         </div>
                         <div>
                           <h3 className="font-medium text-white group-hover:text-gold transition-colors">
                             {item.title}
                           </h3>
-                          <p className="text-sm text-zinc-500">{item.description}</p>
+                          <p className="text-sm text-white/60">{item.description}</p>
                         </div>
                       </CardContent>
                     </Card>
@@ -168,7 +168,7 @@ const VisitorDashboard = () => {
                   <h3 className="text-2xl font-semibold text-white mb-2">
                     Ready to get started?
                   </h3>
-                  <p className="text-zinc-400">
+                  <p className="text-white/70">
                     Create an account to unlock personalized features and save your preferences.
                   </p>
                 </div>

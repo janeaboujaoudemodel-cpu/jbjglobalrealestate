@@ -309,14 +309,14 @@ const SellerGuide = () => {
               
               {/* Description */}
               <motion.p 
-                className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+                className="text-lg md:text-xl text-white/85 font-light leading-relaxed max-w-3xl mx-auto mb-10"
                 variants={fadeInUp}
               >
                 Selling property in Dubai is a regulated, process-driven transaction. Whether you are selling an investment unit or an end-user property, understanding pricing, timing, costs, and legal steps is essential to protect your value and close efficiently.
               </motion.p>
 
               <motion.p 
-                className="text-base text-zinc-400 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+                className="text-base text-white/70 font-light leading-relaxed max-w-3xl mx-auto mb-10"
                 variants={fadeInUp}
               >
                 This guide explains how to sell, what you pay, how pricing works, and how JBJ Global Real Estate manages the process from listing to transfer.
@@ -428,7 +428,7 @@ const SellerGuide = () => {
                           ))}
                         </ul>
                         {step.note && (
-                          <p className="text-zinc-500 text-sm italic">{step.note}</p>
+                          <p className="text-white/60 text-sm italic">{step.note}</p>
                         )}
                         {step.warning && (
                           <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
@@ -528,7 +528,7 @@ const SellerGuide = () => {
                     </li>
                   ))}
                 </ul>
-                <p className="text-zinc-500 text-sm italic">This process is handled step-by-step to avoid delays.</p>
+                <p className="text-white/60 text-sm italic">This process is handled step-by-step to avoid delays.</p>
               </motion.div>
             </motion.div>
           </div>
@@ -558,7 +558,7 @@ const SellerGuide = () => {
                     </li>
                   ))}
                 </ul>
-                <p className="text-zinc-500 text-sm italic">Not all off-plan units are immediately resellable — eligibility is verified before listing.</p>
+                <p className="text-white/60 text-sm italic">Not all off-plan units are immediately resellable — eligibility is verified before listing.</p>
               </motion.div>
             </motion.div>
           </div>

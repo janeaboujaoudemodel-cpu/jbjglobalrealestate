@@ -595,7 +595,7 @@ const VideoMeeting = () => {
                 <Video className="w-10 h-10 text-white" />
               </div>
               <h1 className="text-3xl font-bold text-white mb-2">JBJ <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-purple-400">Video Meet</span></h1>
-              <p className="text-zinc-400">Free professional video meetings for everyone</p>
+              <p className="text-white/70">Free professional video meetings for everyone</p>
               <div className="flex items-center justify-center gap-2 mt-2 text-violet-400 text-xs">
                 <Shield className="w-3 h-3" />
                 <span>End-to-end encrypted • Unlimited time</span>
@@ -616,7 +616,7 @@ const VideoMeeting = () => {
                 {!videoEnabled && (
                   <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
                     <div className="w-20 h-20 rounded-full bg-zinc-700 flex items-center justify-center">
-                      <VideoOff className="w-8 h-8 text-zinc-400" />
+                      <VideoOff className="w-8 h-8 text-white/70" />
                     </div>
                   </div>
                 )}
@@ -688,7 +688,7 @@ const VideoMeeting = () => {
                   <div className="w-full border-t border-violet-500/30" />
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-violet-900/20 px-2 text-zinc-500">or</span>
+                  <span className="bg-violet-900/20 px-2 text-white/60">or</span>
                 </div>
               </div>
 
@@ -701,7 +701,7 @@ const VideoMeeting = () => {
               </Button>
             </div>
 
-            <p className="text-center text-zinc-500 text-sm mt-4">
+            <p className="text-center text-white/60 text-sm mt-4">
               Unlimited meeting time • No account required • Encrypted connections
             </p>
           </div>
@@ -850,7 +850,7 @@ const VideoMeeting = () => {
               </span>
             )}
           </div>
-          <div className="text-zinc-400 text-sm">
+          <div className="text-white/70 text-sm">
             {formatDuration(meetingDuration)}
           </div>
           {isRecording && (
@@ -866,7 +866,7 @@ const VideoMeeting = () => {
             variant="ghost"
             size="sm"
             onClick={copyMeetingLink}
-            className="text-zinc-400 hover:text-white"
+            className="text-white/70 hover:text-white"
           >
             <LinkIcon className="w-4 h-4 mr-2" />
             {roomId}
@@ -879,7 +879,7 @@ const VideoMeeting = () => {
             variant="ghost"
             size="icon"
             onClick={() => setShowShareDialog(true)}
-            className="text-zinc-400 hover:text-white"
+            className="text-white/70 hover:text-white"
             title="Invite participants"
           >
             <Share2 className="w-4 h-4" />
@@ -888,7 +888,7 @@ const VideoMeeting = () => {
             variant="ghost"
             size="icon"
             onClick={() => setShowChat(!showChat)}
-            className={`${showChat ? 'text-white bg-zinc-800' : 'text-zinc-400'} hover:text-white`}
+            className={`${showChat ? 'text-white bg-zinc-800' : 'text-white/70'} hover:text-white`}
             title="Chat"
           >
             <MessageSquare className="w-4 h-4" />
@@ -897,7 +897,7 @@ const VideoMeeting = () => {
             variant="ghost"
             size="icon"
             onClick={() => setGridView(!gridView)}
-            className="text-zinc-400 hover:text-white"
+            className="text-white/70 hover:text-white"
           >
             <Grid className="w-4 h-4" />
           </Button>
@@ -905,7 +905,7 @@ const VideoMeeting = () => {
             variant="ghost"
             size="icon"
             onClick={toggleFullscreen}
-            className="text-zinc-400 hover:text-white"
+            className="text-white/70 hover:text-white"
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </Button>
@@ -913,7 +913,7 @@ const VideoMeeting = () => {
             variant="ghost"
             size="icon"
             onClick={() => setShowParticipants(true)}
-            className="text-zinc-400 hover:text-white relative"
+            className="text-white/70 hover:text-white relative"
           >
             <Users className="w-4 h-4" />
             <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[10px] flex items-center justify-center text-white">
@@ -923,7 +923,7 @@ const VideoMeeting = () => {
           {isHost && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-zinc-400 hover:text-white">
+                <Button variant="ghost" size="icon" className="text-white/70 hover:text-white">
                   <Settings className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -942,7 +942,7 @@ const VideoMeeting = () => {
             variant="ghost"
             size="icon"
             onClick={() => setShowAIAssistant(!showAIAssistant)}
-            className={`${showAIAssistant ? 'text-gold bg-gold/20' : 'text-zinc-400'} hover:text-gold`}
+            className={`${showAIAssistant ? 'text-gold bg-gold/20' : 'text-white/70'} hover:text-gold`}
             title="AI Assistant (Private)"
           >
             <Brain className="w-4 h-4" />
@@ -951,7 +951,7 @@ const VideoMeeting = () => {
             variant="ghost"
             size="icon"
             onClick={() => setShowSupportChat(true)}
-            className="text-zinc-400 hover:text-white"
+            className="text-white/70 hover:text-white"
             title="JBJ Support"
           >
             <MessageCircle className="w-4 h-4 text-green-500" />
@@ -1079,7 +1079,7 @@ const VideoMeeting = () => {
               <div className="flex items-center justify-center bg-zinc-900/50 rounded-2xl border-2 border-dashed border-zinc-700">
                 <div className="text-center p-8">
                   <Users className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                  <p className="text-zinc-400 mb-2">Waiting for others to join...</p>
+                  <p className="text-white/70 mb-2">Waiting for others to join...</p>
                   <Button variant="outline" size="sm" onClick={() => setShowShareDialog(true)}>
                     <Share2 className="w-4 h-4 mr-2" />
                     Invite participants
@@ -1096,7 +1096,7 @@ const VideoMeeting = () => {
             <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
               <h3 className="text-white font-semibold">Meeting Chat</h3>
               <Button variant="ghost" size="icon" onClick={() => setShowChat(false)}>
-                <X className="w-4 h-4 text-zinc-400" />
+                <X className="w-4 h-4 text-white/70" />
               </Button>
             </div>
             <ScrollArea className="flex-1 p-4" ref={chatScrollRef}>
@@ -1107,16 +1107,16 @@ const VideoMeeting = () => {
                     className={`${msg.isSystem ? 'text-center' : ''}`}
                   >
                     {msg.isSystem ? (
-                      <span className="text-xs text-zinc-500 italic">{msg.message}</span>
+                      <span className="text-xs text-white/60 italic">{msg.message}</span>
                     ) : (
                       <div className="bg-zinc-800 rounded-lg p-3">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-white text-sm font-medium">{msg.sender}</span>
-                          <span className="text-zinc-500 text-xs">
+                          <span className="text-white/60 text-xs">
                             {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         </div>
-                        <p className="text-zinc-300 text-sm">{msg.message}</p>
+                        <p className="text-white/85 text-sm">{msg.message}</p>
                       </div>
                     )}
                   </div>
@@ -1230,11 +1230,11 @@ const VideoMeeting = () => {
                   {userName || 'You'}
                   {isHost && <Crown className="w-4 h-4 text-gold" />}
                 </p>
-                <p className="text-zinc-400 text-sm">{isHost ? 'Host' : 'You'}</p>
+                <p className="text-white/70 text-sm">{isHost ? 'Host' : 'You'}</p>
               </div>
               <div className="flex gap-1">
-                {audioEnabled ? <Mic className="w-4 h-4 text-zinc-400" /> : <MicOff className="w-4 h-4 text-red-400" />}
-                {videoEnabled ? <Video className="w-4 h-4 text-zinc-400" /> : <VideoOff className="w-4 h-4 text-red-400" />}
+                {audioEnabled ? <Mic className="w-4 h-4 text-white/70" /> : <MicOff className="w-4 h-4 text-red-400" />}
+                {videoEnabled ? <Video className="w-4 h-4 text-white/70" /> : <VideoOff className="w-4 h-4 text-red-400" />}
               </div>
             </div>
             
@@ -1250,7 +1250,7 @@ const VideoMeeting = () => {
                   </p>
                 </div>
                 <div className="flex gap-1">
-                  {p.isMuted ? <MicOff className="w-4 h-4 text-red-400" /> : <Mic className="w-4 h-4 text-zinc-400" />}
+                  {p.isMuted ? <MicOff className="w-4 h-4 text-red-400" /> : <Mic className="w-4 h-4 text-white/70" />}
                 </div>
                 {isHost && (
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
@@ -1273,13 +1273,13 @@ const VideoMeeting = () => {
         <DialogContent className="bg-zinc-900 border-zinc-800">
           <DialogHeader>
             <DialogTitle className="text-white">Invite Participants</DialogTitle>
-            <DialogDescription className="text-zinc-400">
+            <DialogDescription className="text-white/70">
               Share this meeting link with others to join.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="p-3 bg-zinc-800 rounded-lg">
-              <p className="text-zinc-400 text-xs mb-2">Invitation Preview:</p>
+              <p className="text-white/70 text-xs mb-2">Invitation Preview:</p>
               <p className="text-white text-sm whitespace-pre-line">{generateInviteText()}</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -1305,7 +1305,7 @@ const VideoMeeting = () => {
               <AlertCircle className="w-5 h-5 text-amber-400" />
               Recording Consent
             </DialogTitle>
-            <DialogDescription className="text-zinc-400">
+            <DialogDescription className="text-white/70">
               All participants will be notified that this meeting is being recorded. Do you want to proceed?
             </DialogDescription>
           </DialogHeader>
@@ -1442,7 +1442,7 @@ const VideoMeeting = () => {
         <DialogContent className="bg-zinc-900 border-zinc-800">
           <DialogHeader>
             <DialogTitle className="text-white">JBJ Support Assistant</DialogTitle>
-            <DialogDescription className="text-zinc-400">
+            <DialogDescription className="text-white/70">
               Having issues? Send us a message and we'll help you right away.
             </DialogDescription>
           </DialogHeader>
@@ -1482,7 +1482,7 @@ const VideoMeeting = () => {
               <Shield className="w-5 h-5 text-green-400" />
               Privacy First
             </DialogTitle>
-            <DialogDescription className="text-zinc-400">
+            <DialogDescription className="text-white/70">
               Your camera and microphone are OFF by default for your privacy. Enable them when you're ready to participate.
             </DialogDescription>
           </DialogHeader>
@@ -1525,7 +1525,7 @@ const VideoMeeting = () => {
               Continue to Meeting
             </Button>
           </div>
-          <p className="text-zinc-500 text-xs text-center">
+          <p className="text-white/60 text-xs text-center">
             End-to-end encrypted — No data shared without your permission
           </p>
         </DialogContent>
@@ -1540,17 +1540,17 @@ const VideoMeeting = () => {
             </div>
             <div>
               <h2 className="text-2xl font-bold text-white mb-2">Meeting Ended</h2>
-              <p className="text-zinc-400">
+              <p className="text-white/70">
                 This meeting has been ended by {meetingEndedBy || 'the host'}.
               </p>
             </div>
             <div className="bg-zinc-800/50 rounded-xl p-4 border border-zinc-700">
               <p className="text-gold text-sm font-medium">JBJ Global Real Estate</p>
-              <p className="text-zinc-500 text-xs mt-1">
+              <p className="text-white/60 text-xs mt-1">
                 Thank you for joining our video meeting. We appreciate your time.
               </p>
             </div>
-            <p className="text-zinc-500 text-sm">
+            <p className="text-white/60 text-sm">
               You will be redirected shortly...
             </p>
           </div>

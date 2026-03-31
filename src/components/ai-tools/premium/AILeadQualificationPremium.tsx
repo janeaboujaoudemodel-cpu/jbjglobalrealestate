@@ -99,7 +99,7 @@ const AILeadQualificationPremium = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
+                  <Label className="text-white/85 flex items-center gap-2">
                     <UserCheck className="h-4 w-4 text-purple-400" />
                     Lead Name *
                   </Label>
@@ -112,7 +112,7 @@ const AILeadQualificationPremium = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
+                  <Label className="text-white/85 flex items-center gap-2">
                     <Mail className="h-4 w-4 text-purple-400" />
                     Email
                   </Label>
@@ -126,7 +126,7 @@ const AILeadQualificationPremium = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
+                  <Label className="text-white/85 flex items-center gap-2">
                     <Phone className="h-4 w-4 text-purple-400" />
                     Phone
                   </Label>
@@ -139,7 +139,7 @@ const AILeadQualificationPremium = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
+                  <Label className="text-white/85 flex items-center gap-2">
                     <DollarSign className="h-4 w-4 text-purple-400" />
                     Budget Range
                   </Label>
@@ -152,7 +152,7 @@ const AILeadQualificationPremium = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
+                  <Label className="text-white/85 flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-purple-400" />
                     Property Interest
                   </Label>
@@ -165,7 +165,7 @@ const AILeadQualificationPremium = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
+                  <Label className="text-white/85 flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-purple-400" />
                     Timeline
                   </Label>
@@ -178,7 +178,7 @@ const AILeadQualificationPremium = () => {
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
+                  <Label className="text-white/85 flex items-center gap-2">
                     <MessageSquare className="h-4 w-4 text-purple-400" />
                     Lead Source
                   </Label>
@@ -192,7 +192,7 @@ const AILeadQualificationPremium = () => {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Additional Notes</Label>
+                <Label className="text-white/85">Additional Notes</Label>
                 <Textarea
                   placeholder="Any additional context about the lead..."
                   value={leadInfo.notes}
@@ -241,7 +241,7 @@ const AILeadQualificationPremium = () => {
                     <Card className={`p-6 ${getScoreBg(response.qualificationScore)}`}>
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <p className="text-sm text-zinc-400">Qualification Score</p>
+                          <p className="text-sm text-white/70">Qualification Score</p>
                           <p className={`text-4xl font-bold ${getScoreColor(response.qualificationScore)}`}>
                             {response.qualificationScore}/100
                           </p>
@@ -272,14 +272,14 @@ const AILeadQualificationPremium = () => {
                   {response.conversionProbability && (
                     <Card className="bg-purple-500/10 border-purple-500/30 p-4">
                       <Target className="h-5 w-5 mb-2 text-purple-400" />
-                      <p className="text-xs text-zinc-400">Conversion Probability</p>
+                      <p className="text-xs text-white/70">Conversion Probability</p>
                       <p className="text-xl font-bold text-purple-400">{response.conversionProbability}%</p>
                     </Card>
                   )}
                   {response.urgencyLevel && (
                     <Card className="bg-orange-500/10 border-orange-500/30 p-4">
                       <TrendingUp className="h-5 w-5 mb-2 text-orange-400" />
-                      <p className="text-xs text-zinc-400">Urgency Level</p>
+                      <p className="text-xs text-white/70">Urgency Level</p>
                       <p className="text-xl font-bold text-orange-400 capitalize">{response.urgencyLevel}</p>
                     </Card>
                   )}
@@ -294,7 +294,7 @@ const AILeadQualificationPremium = () => {
                     </h4>
                     <ul className="space-y-2">
                       {response.recommendedActions.map((action: string, i: number) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-zinc-300">
+                        <li key={i} className="flex items-start gap-2 text-sm text-white/85">
                           <span className="w-5 h-5 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0 text-xs text-purple-400">
                             {i + 1}
                           </span>
@@ -314,7 +314,7 @@ const AILeadQualificationPremium = () => {
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </Button>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                       {response.analysis}
                     </div>
                   </CardContent>
@@ -330,8 +330,8 @@ const AILeadQualificationPremium = () => {
               <div className="p-6 rounded-full bg-purple-500/10 mb-4">
                 <UserCheck className="h-12 w-12 text-purple-400/50" />
               </div>
-              <h3 className="text-lg font-semibold text-zinc-400">Ready to Qualify</h3>
-              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+              <h3 className="text-lg font-semibold text-white/70">Ready to Qualify</h3>
+              <p className="text-sm text-white/60 mt-2 max-w-sm">
                 Enter lead information to get AI-powered qualification scoring with conversion probability
               </p>
             </motion.div>

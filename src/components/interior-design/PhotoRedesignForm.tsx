@@ -139,13 +139,13 @@ const PhotoRedesignForm = ({
               onClick={() => fileInputRef.current?.click()}
               className="aspect-square rounded-xl border-2 border-dashed border-zinc-700 hover:border-blue-500/50 flex flex-col items-center justify-center gap-2 transition-colors"
             >
-              <Upload className="w-8 h-8 text-zinc-500" />
-              <span className="text-xs text-zinc-500">Add Photo</span>
+              <Upload className="w-8 h-8 text-white/60" />
+              <span className="text-xs text-white/60">Add Photo</span>
             </button>
           )}
         </div>
 
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-white/60">
           Upload up to 4 photos of your room. The AI will transform them based on your style preferences.
         </p>
       </div>
@@ -169,7 +169,7 @@ const PhotoRedesignForm = ({
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
                     ? 'bg-blue-500/20 border-blue-500/50 text-white'
-                    : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300'
+                    : 'bg-zinc-800/50 border-zinc-700 text-white/70 hover:border-zinc-600 hover:text-white/85'
                   }
                 `}
               >
@@ -213,7 +213,7 @@ const PhotoRedesignForm = ({
                     />
                   ))}
                 </div>
-                <span className="text-xs text-zinc-300 font-medium">{palette.name}</span>
+                <span className="text-xs text-white/85 font-medium">{palette.name}</span>
               </button>
             );
           })}
@@ -224,14 +224,14 @@ const PhotoRedesignForm = ({
       <div className="bg-zinc-900/60 border border-blue-500/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Redesign Instructions</h3>
-          <Badge className="bg-zinc-700 text-zinc-300">Optional</Badge>
+          <Badge className="bg-zinc-700 text-white/85">Optional</Badge>
         </div>
         
         <Textarea
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe what you'd like to change: remove furniture, add plants, change lighting, update color scheme..."
-          className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[100px] focus:border-blue-500/50"
+          className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 min-h-[100px] focus:border-blue-500/50"
           maxLength={1000}
         />
       </div>

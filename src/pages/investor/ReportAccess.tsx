@@ -271,7 +271,7 @@ export default function ReportAccess() {
                 Centralized Access to{" "}
                 <span className="text-gold">Official Market & Asset Reports</span>
               </h1>
-              <p className="text-zinc-300 text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-white/85 text-lg mb-8 max-w-2xl mx-auto">
                 Report Access is your private library for all reports available to your account—organized, 
                 traceable, and source-backed.
               </p>

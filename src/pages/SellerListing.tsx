@@ -485,13 +485,13 @@ Requirements:
                 <CheckCircle2 className="w-10 h-10 text-gold" />
               </div>
               <h1 className="text-3xl font-bold text-white mb-4">Listing Submitted Successfully!</h1>
-              <p className="text-zinc-400 mb-8">
+              <p className="text-gray-500 mb-8">
                 Thank you for submitting your property listing. Our team will review your submission and 
                 contact you within 24-48 hours to discuss next steps.
               </p>
               <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 mb-8 text-left">
                 <h3 className="text-gold font-semibold mb-3">What Happens Next?</h3>
-                <ul className="space-y-2 text-zinc-300 text-sm">
+                <ul className="space-y-2 text-gray-400 text-sm">
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
                     <span>Our team will review your listing details and documents</span>
@@ -600,7 +600,7 @@ Requirements:
                       ? 'text-black' 
                       : currentStep > step.number 
                         ? 'text-gold' 
-                        : 'text-zinc-500'
+                        : 'text-gray-500'
                   }`}
                   onClick={() => step.number < currentStep && setCurrentStep(step.number)}
                 >
@@ -609,7 +609,7 @@ Requirements:
                       ? 'bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-black text-black shadow-lg' 
                       : currentStep > step.number 
                         ? 'bg-white border-gold text-gold'
-                        : 'bg-zinc-100 border-zinc-300 text-zinc-500'
+                        : 'bg-zinc-100 border-zinc-300 text-gray-500'
                   }`}>
                     {currentStep > step.number ? (
                       <CheckCircle2 className="w-5 h-5" />
@@ -792,7 +792,7 @@ Requirements:
                       <Input
                         {...form.register("community_building")}
                         placeholder="e.g., Burj Khalifa, Palm Jumeirah"
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1"
                       />
                     </div>
 
@@ -823,7 +823,7 @@ Requirements:
                           type="number"
                           {...form.register("property_size_sqft", { valueAsNumber: true })}
                           placeholder="e.g., 1500"
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1"
                         />
                       </div>
                     </div>
@@ -863,7 +863,7 @@ Requirements:
                       <Textarea
                         {...form.register("property_notes")}
                         placeholder="Any other details about your property..."
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1 min-h-[100px]"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1 min-h-[100px]"
                       />
                     </div>
                   </motion.div>
@@ -889,9 +889,9 @@ Requirements:
                         type="number"
                         {...form.register("purchase_price", { valueAsNumber: true })}
                         placeholder="Original purchase price"
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1"
                       />
-                      <p className="text-zinc-500 text-xs mt-1">What you paid for the property</p>
+                      <p className="text-gray-500 text-xs mt-1">What you paid for the property</p>
                     </div>
 
                     <div>
@@ -900,7 +900,7 @@ Requirements:
                         type="number"
                         {...form.register("target_selling_price", { valueAsNumber: true })}
                         placeholder="Your desired selling price"
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1"
                       />
                     </div>
 
@@ -910,7 +910,7 @@ Requirements:
                         type="number"
                         {...form.register("minimum_acceptable_price", { valueAsNumber: true })}
                         placeholder="Lowest price you'd accept"
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1"
                       />
                     </div>
 
@@ -970,7 +970,7 @@ Requirements:
                           <p className="text-black">
                             AED {form.watch("estimated_range_min")?.toLocaleString()} - AED {form.watch("estimated_range_max")?.toLocaleString()}
                           </p>
-                          <p className="text-zinc-500 text-xs mt-1">{form.watch("estimated_note")}</p>
+                          <p className="text-gray-500 text-xs mt-1">{form.watch("estimated_note")}</p>
                         </div>
                       )}
                     </div>
@@ -1023,7 +1023,7 @@ Requirements:
                         <Textarea
                           {...form.register("upgrade_details")}
                           placeholder="Describe any upgrades, renovations, or improvements..."
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1 min-h-[100px]"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1 min-h-[100px]"
                         />
                       </div>
                     )}
@@ -1035,7 +1035,7 @@ Requirements:
                           value={newHighlight}
                           onChange={(e) => setNewHighlight(e.target.value)}
                           placeholder="e.g., Sea view, Private pool, Smart home"
-                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400"
+                          className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400"
                           onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addHighlight())}
                         />
                         <Button 
@@ -1089,9 +1089,9 @@ Requirements:
                       <Textarea
                         {...form.register("listing_description")}
                         placeholder="Describe your property or use AI to generate a professional description..."
-                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 mt-1 min-h-[150px]"
+                        className="bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 mt-1 min-h-[150px]"
                       />
-                      <p className="text-zinc-500 text-xs mt-1">
+                      <p className="text-gray-500 text-xs mt-1">
                         This description will be used in marketing materials (you can edit it)
                       </p>
                     </div>
@@ -1126,9 +1126,9 @@ Requirements:
                             id="photo-upload"
                           />
                           <label htmlFor="photo-upload" className="cursor-pointer">
-                            <Camera className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <Camera className="w-8 h-8 text-gray-500 mx-auto mb-2" />
                             <p className="text-zinc-600">Click to upload photos</p>
-                            <p className="text-zinc-400 text-xs mt-1">JPG, PNG up to 10MB each</p>
+                            <p className="text-gray-500 text-xs mt-1">JPG, PNG up to 10MB each</p>
                           </label>
                         </div>
                         {photoFiles.length > 0 && (
@@ -1149,9 +1149,9 @@ Requirements:
                             id="video-upload"
                           />
                           <label htmlFor="video-upload" className="cursor-pointer">
-                            <Upload className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <Upload className="w-8 h-8 text-gray-500 mx-auto mb-2" />
                             <p className="text-zinc-600">Click to upload videos</p>
-                            <p className="text-zinc-400 text-xs mt-1">MP4, MOV up to 100MB each</p>
+                            <p className="text-gray-500 text-xs mt-1">MP4, MOV up to 100MB each</p>
                           </label>
                         </div>
                         {videoFiles.length > 0 && (
@@ -1172,9 +1172,9 @@ Requirements:
                             id="floorplan-upload"
                           />
                           <label htmlFor="floorplan-upload" className="cursor-pointer">
-                            <FileText className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <FileText className="w-8 h-8 text-gray-500 mx-auto mb-2" />
                             <p className="text-zinc-600">Click to upload floor plans</p>
-                            <p className="text-zinc-400 text-xs mt-1">PDF, JPG, PNG</p>
+                            <p className="text-gray-500 text-xs mt-1">PDF, JPG, PNG</p>
                           </label>
                         </div>
                         {floorPlanFiles.length > 0 && (
@@ -1228,7 +1228,7 @@ Requirements:
                             id="titledeed-upload"
                           />
                           <label htmlFor="titledeed-upload" className="cursor-pointer">
-                            <FileText className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <FileText className="w-8 h-8 text-gray-500 mx-auto mb-2" />
                             <p className="text-zinc-600">Upload Title Deed</p>
                           </label>
                         </div>
@@ -1252,7 +1252,7 @@ Requirements:
                             id="passport-upload"
                           />
                           <label htmlFor="passport-upload" className="cursor-pointer">
-                            <User className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <User className="w-8 h-8 text-gray-500 mx-auto mb-2" />
                             <p className="text-zinc-600">Upload ID Document</p>
                           </label>
                         </div>
@@ -1286,7 +1286,7 @@ Requirements:
                               id="poa-upload"
                             />
                             <label htmlFor="poa-upload" className="cursor-pointer">
-                              <FileText className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                              <FileText className="w-8 h-8 text-gray-500 mx-auto mb-2" />
                               <p className="text-zinc-600">Upload POA Document</p>
                             </label>
                           </div>
@@ -1312,7 +1312,7 @@ Requirements:
                             id="additional-upload"
                           />
                           <label htmlFor="additional-upload" className="cursor-pointer">
-                            <Upload className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
+                            <Upload className="w-8 h-8 text-gray-500 mx-auto mb-2" />
                             <p className="text-zinc-600">Upload any other documents</p>
                           </label>
                         </div>
@@ -1346,13 +1346,13 @@ Requirements:
                           Seller Details
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-zinc-500">Name:</p>
+                          <p className="text-gray-500">Name:</p>
                           <p className="text-black">{form.getValues("seller_full_name")}</p>
-                          <p className="text-zinc-500">Phone:</p>
+                          <p className="text-gray-500">Phone:</p>
                           <p className="text-black">{form.getValues("seller_phone")}</p>
-                          <p className="text-zinc-500">Email:</p>
+                          <p className="text-gray-500">Email:</p>
                           <p className="text-black">{form.getValues("seller_email")}</p>
-                          <p className="text-zinc-500">Type:</p>
+                          <p className="text-gray-500">Type:</p>
                           <p className="text-black capitalize">{form.getValues("seller_type")}</p>
                         </div>
                       </div>
@@ -1364,19 +1364,19 @@ Requirements:
                           Property Details
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-zinc-500">Type:</p>
+                          <p className="text-gray-500">Type:</p>
                           <p className="text-black capitalize">{form.getValues("property_type")}</p>
-                          <p className="text-zinc-500">Location:</p>
+                          <p className="text-gray-500">Location:</p>
                           <p className="text-black">{form.getValues("property_location")}</p>
                           {form.getValues("bedrooms") !== undefined && (
                             <>
-                              <p className="text-zinc-500">Bedrooms:</p>
+                              <p className="text-gray-500">Bedrooms:</p>
                               <p className="text-black">{form.getValues("bedrooms") === 0 ? "Studio" : form.getValues("bedrooms")}</p>
                             </>
                           )}
                           {form.getValues("property_size_sqft") && (
                             <>
-                              <p className="text-zinc-500">Size:</p>
+                              <p className="text-gray-500">Size:</p>
                               <p className="text-black">{form.getValues("property_size_sqft")?.toLocaleString()} sq.ft</p>
                             </>
                           )}
@@ -1390,9 +1390,9 @@ Requirements:
                           Pricing
                         </h3>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <p className="text-zinc-500">Target Price:</p>
+                          <p className="text-gray-500">Target Price:</p>
                           <p className="text-black">AED {form.getValues("target_selling_price")?.toLocaleString()}</p>
-                          <p className="text-zinc-500">Urgency:</p>
+                          <p className="text-gray-500">Urgency:</p>
                           <p className="text-black">{form.getValues("selling_urgency")} days</p>
                         </div>
                       </div>
@@ -1516,16 +1516,16 @@ Requirements:
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <p className="text-zinc-400 text-sm">
+            <p className="text-gray-500 text-sm">
               Run our AI-powered evaluator to get an informational estimate for your property based on current market data.
             </p>
             <div className="bg-zinc-800/50 rounded-lg p-4 space-y-2 text-sm">
-              <p className="text-zinc-300"><span className="text-zinc-500">Type:</span> {form.getValues("property_type") || 'Not set'}</p>
-              <p className="text-zinc-300"><span className="text-zinc-500">Location:</span> {form.getValues("property_location") || 'Not set'}</p>
-              <p className="text-zinc-300"><span className="text-zinc-500">Bedrooms:</span> {form.getValues("bedrooms") === 0 ? 'Studio' : form.getValues("bedrooms") || 'Not set'}</p>
-              <p className="text-zinc-300"><span className="text-zinc-500">Size:</span> {form.getValues("property_size_sqft")?.toLocaleString() || 'Not set'} sq.ft</p>
+              <p className="text-gray-400"><span className="text-gray-500">Type:</span> {form.getValues("property_type") || 'Not set'}</p>
+              <p className="text-gray-400"><span className="text-gray-500">Location:</span> {form.getValues("property_location") || 'Not set'}</p>
+              <p className="text-gray-400"><span className="text-gray-500">Bedrooms:</span> {form.getValues("bedrooms") === 0 ? 'Studio' : form.getValues("bedrooms") || 'Not set'}</p>
+              <p className="text-gray-400"><span className="text-gray-500">Size:</span> {form.getValues("property_size_sqft")?.toLocaleString() || 'Not set'} sq.ft</p>
             </div>
-            <p className="text-zinc-500 text-xs">
+            <p className="text-gray-500 text-xs">
               Note: This is an AI-generated informational estimate only and should not be relied upon for pricing decisions.
             </p>
             <div className="flex gap-3 justify-end">

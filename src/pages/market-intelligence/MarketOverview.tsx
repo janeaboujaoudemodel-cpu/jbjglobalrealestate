@@ -132,7 +132,7 @@ const MarketOverview = () => {
   const getTrendIcon = (change: number) => {
     if (change > 0) return <TrendingUp className="w-4 h-4 text-emerald-400" />;
     if (change < 0) return <TrendingDown className="w-4 h-4 text-red-400" />;
-    return <Minus className="w-4 h-4 text-zinc-400" />;
+    return <Minus className="w-4 h-4 text-white/70" />;
   };
 
   return (
@@ -346,7 +346,7 @@ const MarketOverview = () => {
                       <p className="text-black text-3xl font-bold mb-2">{stat.value}</p>
                       <div className="flex items-center justify-center gap-2">
                         {getTrendIcon(stat.change)}
-                        <span className={`text-sm ${stat.change > 0 ? 'text-emerald-500' : stat.change < 0 ? 'text-red-500' : 'text-zinc-400'}`}>
+                        <span className={`text-sm ${stat.change > 0 ? 'text-emerald-500' : stat.change < 0 ? 'text-red-500' : 'text-white/70'}`}>
                           {stat.change > 0 ? '+' : ''}{stat.change}% {stat.period}
                         </span>
                       </div>

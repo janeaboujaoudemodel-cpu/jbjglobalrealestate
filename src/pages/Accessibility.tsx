@@ -52,7 +52,7 @@ const Accessibility = () => {
               <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
                 Committed to Inclusive Digital Experiences
               </p>
-              <p className="text-zinc-300 text-base md:text-lg max-w-3xl leading-relaxed">
+              <p className="text-gray-400 text-base md:text-lg max-w-3xl leading-relaxed">
                 We are committed to ensuring that our website and digital services are accessible to all individuals, including persons with disabilities.
               </p>
             </motion.div>
@@ -66,7 +66,7 @@ const Accessibility = () => {
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Contents</p>
               <nav className="space-y-1 border-l border-[#C8A766]/20">
                 {tocItems.map(({ id, label }) => (
-                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-zinc-400 hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
+                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-gray-500 hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
                 ))}
               </nav>
             </div>
@@ -75,7 +75,7 @@ const Accessibility = () => {
           <main className="flex-1 min-w-0">
             <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80">
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
-              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-zinc-400 hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
+              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-gray-500 hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
             </div>
             <section id="commitment" className="scroll-mt-8">
               <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: "Playfair Display, Georgia, serif" }}><span className="text-[#C8A766] mr-3">1.</span>Our Commitment</h2>
@@ -122,14 +122,14 @@ const Accessibility = () => {
                   <p className="font-semibold text-black">Contact Us</p>
                   <p className="text-sm text-zinc-600 mt-2">Email: <a href="mailto:accessibility@JBJ.ae" className="text-[#C8A766] hover:underline">accessibility@JBJ.ae</a></p>
                   <p className="text-sm text-zinc-600 mt-1">Or use our <Link to="/contact" className="text-[#C8A766] hover:underline">contact form</Link>.</p>
-                  <p className="text-xs text-zinc-500 mt-3">We aim to respond to accessibility-related inquiries within 5 business days.</p>
+                  <p className="text-xs text-gray-500 mt-3">We aim to respond to accessibility-related inquiries within 5 business days.</p>
                 </div>
               </CCard>
             </section>
 
             <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
-              <p className="text-zinc-500 text-xs leading-relaxed mb-6">This Accessibility Statement may be updated periodically.</p>
-              <p className="text-zinc-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+              <p className="text-gray-500 text-xs leading-relaxed mb-6">This Accessibility Statement may be updated periodically.</p>
+              <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
                 <span className="text-zinc-600">|</span>

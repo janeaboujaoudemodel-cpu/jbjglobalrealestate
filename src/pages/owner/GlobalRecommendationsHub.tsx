@@ -219,7 +219,7 @@ export default function GlobalRecommendationsHub() {
       case "immediate": return "bg-red-100 text-red-700";
       case "high": return "bg-orange-100 text-orange-700";
       case "normal": return "bg-zinc-100 text-zinc-700";
-      default: return "bg-zinc-50 text-zinc-500";
+      default: return "bg-zinc-50 text-gray-500";
     }
   };
 
@@ -235,7 +235,7 @@ export default function GlobalRecommendationsHub() {
             <h2 className="text-2xl font-bold text-black">
               Global Recommendations
             </h2>
-            <p className="text-zinc-500 text-sm">
+            <p className="text-gray-500 text-sm">
               Cross-platform AI recommendations with preview & apply
             </p>
           </div>
@@ -267,7 +267,7 @@ export default function GlobalRecommendationsHub() {
       {/* Search & Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
           <Input
             placeholder="Search recommendations..."
             value={searchQuery}
@@ -325,7 +325,7 @@ export default function GlobalRecommendationsHub() {
                 <CheckCircle className="w-8 h-8 text-gold/50" />
               </div>
               <h3 className="text-lg font-bold text-black mb-1">No recommendations</h3>
-              <p className="text-zinc-500 text-sm">
+              <p className="text-gray-500 text-sm">
                 {activeStatus === "pending" ? "All caught up! No pending recommendations." : `No ${activeStatus} recommendations found.`}
               </p>
             </CardContent>
@@ -362,10 +362,10 @@ export default function GlobalRecommendationsHub() {
                         {rec.urgency}
                       </Badge>
                     </div>
-                    <p className="text-xs text-zinc-500 mb-2">{rec.description}</p>
+                    <p className="text-xs text-gray-500 mb-2">{rec.description}</p>
 
                     {/* Source badge */}
-                    <div className="flex items-center gap-3 text-[11px] text-zinc-400">
+                    <div className="flex items-center gap-3 text-[11px] text-gray-500">
                       <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-gold/10 text-gold border border-gold/20">
                         <Building2 className="w-3 h-3" />
                         {rec.sourcePage}
@@ -412,7 +412,7 @@ export default function GlobalRecommendationsHub() {
                         <Button
                           size="sm"
                           onClick={() => handleSnooze(rec)}
-                          className="bg-white text-zinc-500 border border-zinc-200 hover:bg-zinc-50 text-xs"
+                          className="bg-white text-gray-500 border border-zinc-200 hover:bg-zinc-50 text-xs"
                         >
                           <Timer className="w-3.5 h-3.5 mr-1" />
                           Snooze
@@ -438,7 +438,7 @@ export default function GlobalRecommendationsHub() {
                       </Button>
                     )}
                     {rec.status === "reverted" && (
-                      <Badge className="bg-zinc-100 text-zinc-500 text-xs">Reverted</Badge>
+                      <Badge className="bg-zinc-100 text-gray-500 text-xs">Reverted</Badge>
                     )}
                   </div>
                 </div>
@@ -456,7 +456,7 @@ export default function GlobalRecommendationsHub() {
               <Eye className="w-5 h-5 text-gold" />
               Recommendation Preview
             </DialogTitle>
-            <DialogDescription className="text-zinc-500">
+            <DialogDescription className="text-gray-500">
               Review the impact before applying this recommendation
             </DialogDescription>
           </DialogHeader>
@@ -524,7 +524,7 @@ export default function GlobalRecommendationsHub() {
                 <Button
                   variant="ghost"
                   onClick={() => setPreviewOpen(false)}
-                  className="text-zinc-500"
+                  className="text-gray-500"
                 >
                   Cancel
                 </Button>

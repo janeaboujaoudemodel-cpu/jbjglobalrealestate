@@ -317,17 +317,17 @@ const ProjectFilters = ({
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-1 -mb-1" style={{ WebkitOverflowScrolling: 'touch' }}>
           {/* Search */}
           <div className="relative flex-1 min-w-[200px] snap-start flex-shrink-0">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
             <Input
               placeholder="Search projects, developers..."
               value={filters.search}
               onChange={(e) => updateFilter("search", e.target.value)}
-              className="pl-10 h-11 bg-white/80 border-gold/40 text-black placeholder:text-zinc-400 focus:border-gold text-sm rounded-xl"
+              className="pl-10 h-11 bg-white/80 border-gold/40 text-black placeholder:text-gray-400 focus:border-gold text-sm rounded-xl"
             />
             {filters.search && (
               <button
                 onClick={() => updateFilter("search", "")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-black"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -358,7 +358,7 @@ const ProjectFilters = ({
                         onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       />
                     ) : (
-                      <Building2 className="w-4 h-4 text-zinc-400 shrink-0" />
+                      <Building2 className="w-4 h-4 text-gray-500 shrink-0" />
                     )}
                     <span className="truncate">{developer.name}</span>
                   </div>
@@ -410,7 +410,7 @@ const ProjectFilters = ({
               className={`px-3 h-full text-sm font-medium transition-all ${
                 filters.sizeUnit === "sqft"
                   ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] text-black border-r border-gold/30"
-                  : "text-zinc-500 hover:text-black"
+                  : "text-gray-500 hover:text-black"
               }`}
             >
               sq ft
@@ -420,7 +420,7 @@ const ProjectFilters = ({
               className={`px-3 h-full text-sm font-medium transition-all ${
                 filters.sizeUnit === "sqm"
                   ? "bg-gradient-to-br from-[#F7F1E6] to-[#D8C7A6] text-black border-l border-gold/30"
-                  : "text-zinc-500 hover:text-black"
+                  : "text-gray-500 hover:text-black"
               }`}
             >
               sq m
@@ -457,7 +457,7 @@ const ProjectFilters = ({
                       variant="ghost"
                       size="sm"
                       onClick={clearFilters}
-                      className="text-zinc-500 hover:text-black hover:bg-gold/10"
+                      className="text-gray-500 hover:text-black hover:bg-gold/10"
                     >
                       Clear All
                     </Button>
@@ -502,7 +502,7 @@ const ProjectFilters = ({
                     <div className="px-2 pt-2">
                       <div className="grid grid-cols-2 gap-4 mb-4">
                         <div>
-                          <label className="text-zinc-500 text-xs mb-1 block">From</label>
+                          <label className="text-gray-500 text-xs mb-1 block">From</label>
                           <Input
                             type="text"
                             value={Math.round(filters.priceMin * CURRENCY_RATES[filters.currency]).toLocaleString()}
@@ -515,7 +515,7 @@ const ProjectFilters = ({
                           />
                         </div>
                         <div>
-                          <label className="text-zinc-500 text-xs mb-1 block">To</label>
+                          <label className="text-gray-500 text-xs mb-1 block">To</label>
                           <Input
                             type="text"
                             value={Math.round(filters.priceMax * CURRENCY_RATES[filters.currency]).toLocaleString()}
@@ -538,7 +538,7 @@ const ProjectFilters = ({
                         }}
                         className="mb-4"
                       />
-                      <div className="flex justify-between text-zinc-500 text-sm">
+                      <div className="flex justify-between text-gray-500 text-sm">
                         <span>{formatPriceWithCurrency(filters.priceMin)}</span>
                         <span>{formatPriceWithCurrency(filters.priceMax)}</span>
                       </div>
@@ -550,7 +550,7 @@ const ProjectFilters = ({
                     <div className="px-2 pt-2">
                       <div className="grid grid-cols-2 gap-4 mb-4">
                         <div>
-                          <label className="text-zinc-500 text-xs mb-1 block">From</label>
+                          <label className="text-gray-500 text-xs mb-1 block">From</label>
                           <Input
                             type="number"
                             value={convertSize(filters.sizeMin, filters.sizeUnit)}
@@ -564,7 +564,7 @@ const ProjectFilters = ({
                           />
                         </div>
                         <div>
-                          <label className="text-zinc-500 text-xs mb-1 block">To</label>
+                          <label className="text-gray-500 text-xs mb-1 block">To</label>
                           <Input
                             type="number"
                             value={convertSize(filters.sizeMax, filters.sizeUnit)}
@@ -588,7 +588,7 @@ const ProjectFilters = ({
                         }}
                         className="mb-4"
                       />
-                      <div className="flex justify-between text-zinc-500 text-sm">
+                      <div className="flex justify-between text-gray-500 text-sm">
                         <span>{convertSize(filters.sizeMin, filters.sizeUnit).toLocaleString()} {filters.sizeUnit}</span>
                         <span>{convertSize(filters.sizeMax, filters.sizeUnit).toLocaleString()} {filters.sizeUnit}</span>
                       </div>
@@ -909,7 +909,7 @@ const ProjectFilters = ({
               variant="ghost"
               size="sm"
               onClick={clearFilters}
-              className="h-11 px-3 text-sm text-zinc-500 hover:text-black hover:bg-gold/10 rounded-xl border border-gold/30"
+              className="h-11 px-3 text-sm text-gray-500 hover:text-black hover:bg-gold/10 rounded-xl border border-gold/30"
             >
               <X className="w-3.5 h-3.5 mr-1.5" />
               Reset All
@@ -1021,7 +1021,7 @@ const ProjectFilters = ({
           )}
           <button
             onClick={clearFilters}
-            className="text-zinc-400 text-sm hover:text-white hover:underline ml-2"
+            className="text-gray-500 text-sm hover:text-white hover:underline ml-2"
           >
             Clear all
           </button>

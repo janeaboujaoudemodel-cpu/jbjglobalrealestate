@@ -15,7 +15,7 @@ function DemoSection({ title, description, children }: { title: string; descript
       <div className="flex items-center justify-between mb-2">
         <div>
           <h3 className="text-lg font-bold text-black">{title}</h3>
-          <p className="text-sm text-zinc-500">{description}</p>
+          <p className="text-sm text-gray-500">{description}</p>
         </div>
         <Button onClick={() => setShow(!show)} variant="outline" className="border-[hsl(var(--gold))]/40 gap-2">
           <Eye className="w-4 h-4" />
@@ -35,7 +35,7 @@ export default function AlertsDemo() {
   return (
     <div className="max-w-3xl mx-auto py-10 px-4">
       <h1 className="text-2xl font-bold text-black mb-1">🔔 Alerts & Notifications Preview</h1>
-      <p className="text-zinc-500 mb-8">Click "Show Preview" on each card to see the exact UI users will experience.</p>
+      <p className="text-gray-500 mb-8">Click "Show Preview" on each card to see the exact UI users will experience.</p>
 
       {/* 1 — Brand Intro Splash */}
       <DemoSection title="1. Brand Intro Splash" description="Shown once per session on first visit. Logo animation + auto-play music.">
@@ -68,14 +68,14 @@ export default function AlertsDemo() {
       <DemoSection title="2. Owner Tasks Popup" description="Shown to owner on login when pending tasks exist. Once per day.">
         <div className="rounded-xl overflow-hidden border border-zinc-200 relative flex items-center justify-center bg-black/40 backdrop-blur-sm" style={{ height: 360 }}>
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[hsl(var(--gold))]/50 rounded-2xl shadow-2xl p-6 max-w-md w-[90%] relative">
-            <button className="absolute top-3 right-3 text-zinc-400 hover:text-zinc-600"><X className="w-5 h-5" /></button>
+            <button className="absolute top-3 right-3 text-gray-500 hover:text-zinc-600"><X className="w-5 h-5" /></button>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/20 to-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))]/40 flex items-center justify-center">
                 <AlertTriangle className="w-6 h-6 text-[hsl(var(--gold))]" />
               </div>
               <div>
                 <h3 className="text-black font-bold text-lg">Pending Tasks</h3>
-                <p className="text-zinc-500 text-sm">Daily action items require attention</p>
+                <p className="text-gray-500 text-sm">Daily action items require attention</p>
               </div>
             </div>
             <div className="bg-white/60 border border-[hsl(var(--gold))]/20 rounded-xl p-4 mb-5">
@@ -93,14 +93,14 @@ export default function AlertsDemo() {
       <DemoSection title="3. User Notifications Popup" description="Shown to regular users when they have ticket replies or pending tasks. Once per 24h.">
         <div className="rounded-xl overflow-hidden border border-zinc-200 relative flex items-center justify-center bg-black/40 backdrop-blur-sm" style={{ height: 460 }}>
           <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[hsl(var(--gold))]/50 rounded-2xl shadow-2xl p-6 max-w-md w-[90%] relative">
-            <button className="absolute top-3 right-3 text-zinc-400 hover:text-zinc-600"><X className="w-5 h-5" /></button>
+            <button className="absolute top-3 right-3 text-gray-500 hover:text-zinc-600"><X className="w-5 h-5" /></button>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--gold))]/20 to-[hsl(var(--gold))]/10 border-2 border-[hsl(var(--gold))]/40 flex items-center justify-center">
                 <Bell className="w-6 h-6 text-[hsl(var(--gold))]" />
               </div>
               <div>
                 <h3 className="text-black font-bold text-lg">Updates & Tasks</h3>
-                <p className="text-zinc-500 text-sm">4 notifications for you</p>
+                <p className="text-gray-500 text-sm">4 notifications for you</p>
               </div>
             </div>
 
@@ -143,7 +143,7 @@ export default function AlertsDemo() {
       {/* 4 — Global Back Button */}
       <DemoSection title="4. Global Back Button" description="Always visible in the header bar on every page. Navigates back or to home.">
         <div className="rounded-xl overflow-hidden border border-zinc-200 bg-white p-6 flex items-center gap-4">
-          <p className="text-sm text-zinc-500">As it appears in the header →</p>
+          <p className="text-sm text-gray-500">As it appears in the header →</p>
           <button className="h-7 flex items-center gap-1.5 rounded-md border border-[hsl(var(--gold))]/30 hover:border-[hsl(var(--gold))]/60 bg-[hsl(var(--gold))]/5 hover:bg-[hsl(var(--gold))]/15 transition-all px-2 group">
             <ArrowRight className="w-3.5 h-3.5 text-[hsl(var(--gold))] rotate-180" />
             <span className="text-[10px] font-semibold text-black/50 uppercase tracking-wider">Back</span>
@@ -154,14 +154,14 @@ export default function AlertsDemo() {
       {/* 5 — Header Notification Bell Badge */}
       <DemoSection title="5. Header Notification Badge" description="Red badge on the bell icon showing total unread count across all notification types.">
         <div className="rounded-xl overflow-hidden border border-zinc-200 bg-white p-6 flex items-center gap-6">
-          <p className="text-sm text-zinc-500">Bell icon with badge →</p>
+          <p className="text-sm text-gray-500">Bell icon with badge →</p>
           <div className="relative">
             <div className="w-9 h-9 rounded-full border border-[hsl(var(--gold))]/30 bg-[hsl(var(--gold))]/5 flex items-center justify-center">
               <Bell className="w-4 h-4 text-[hsl(var(--gold))]" />
             </div>
             <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center shadow">4</span>
           </div>
-          <p className="text-xs text-zinc-400">Combines: ticket replies + listing updates + system notifications + pending tasks</p>
+          <p className="text-xs text-gray-500">Combines: ticket replies + listing updates + system notifications + pending tasks</p>
         </div>
       </DemoSection>
     </div>

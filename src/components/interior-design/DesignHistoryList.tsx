@@ -58,8 +58,8 @@ const DesignHistoryList = ({
       <div className="w-full max-w-4xl mx-auto">
         <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6">
           <div className="flex items-center gap-3">
-            <History className="w-5 h-5 text-zinc-500 animate-pulse" />
-            <span className="text-zinc-500">Loading history...</span>
+            <History className="w-5 h-5 text-white/60 animate-pulse" />
+            <span className="text-white/60">Loading history...</span>
           </div>
         </div>
       </div>
@@ -79,16 +79,16 @@ const DesignHistoryList = ({
           className="w-full p-4 flex items-center justify-between hover:bg-zinc-800/50 transition-colors"
         >
           <div className="flex items-center gap-3">
-            <History className="w-5 h-5 text-zinc-400" />
+            <History className="w-5 h-5 text-white/70" />
             <span className="font-medium text-white">Your Design History</span>
             <Badge variant="secondary" className="bg-zinc-700">
               {history.length}
             </Badge>
           </div>
           {isExpanded ? (
-            <ChevronUp className="w-5 h-5 text-zinc-400" />
+            <ChevronUp className="w-5 h-5 text-white/70" />
           ) : (
-            <ChevronDown className="w-5 h-5 text-zinc-400" />
+            <ChevronDown className="w-5 h-5 text-white/70" />
           )}
         </button>
 
@@ -138,12 +138,12 @@ const DesignHistoryList = ({
                         </div>
                         
                         {item.roomName && (
-                          <p className="text-sm text-zinc-400 truncate">
+                          <p className="text-sm text-white/70 truncate">
                             {item.roomName}
                           </p>
                         )}
                         
-                        <div className="flex items-center gap-2 mt-2 text-xs text-zinc-500">
+                        <div className="flex items-center gap-2 mt-2 text-xs text-white/60">
                           <Calendar className="w-3 h-3" />
                           {formatDate(item.createdAt)}
                           {item.designStyle && (
@@ -164,7 +164,7 @@ const DesignHistoryList = ({
                             e.stopPropagation();
                             onSelect(item);
                           }}
-                          className="text-zinc-400 hover:text-white"
+                          className="text-white/70 hover:text-white"
                         >
                           <Eye className="w-4 h-4" />
                         </Button>
@@ -173,7 +173,7 @@ const DesignHistoryList = ({
                           variant="ghost"
                           onClick={(e) => handleDelete(item.id, e)}
                           disabled={deletingId === item.id}
-                          className="text-zinc-400 hover:text-red-400"
+                          className="text-white/70 hover:text-red-400"
                         >
                           {deletingId === item.id ? (
                             <div className="w-4 h-4 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin" />

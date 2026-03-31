@@ -89,7 +89,7 @@ const CRMEmployees = () => {
               </div>
               <div>
                 <h1 className="text-lg font-bold text-zinc-900">Employees Hub</h1>
-                <p className="text-xs text-zinc-500">HR, Brokers & Team Management</p>
+                <p className="text-xs text-gray-500">HR, Brokers & Team Management</p>
               </div>
             </div>
           </div>

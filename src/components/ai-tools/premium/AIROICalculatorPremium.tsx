@@ -111,7 +111,7 @@ const AIROICalculatorPremium = () => {
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           {/* Purchase Price */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               <DollarSign className="w-4 h-4 inline mr-1 text-emerald-400" />
               Purchase Price (AED) <span className="text-emerald-400">*</span>
             </Label>
@@ -125,7 +125,7 @@ const AIROICalculatorPremium = () => {
 
           {/* Down Payment */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               <Percent className="w-4 h-4 inline mr-1 text-emerald-400" />
               Down Payment (AED)
             </Label>
@@ -139,7 +139,7 @@ const AIROICalculatorPremium = () => {
 
           {/* Expected Rent */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               <PiggyBank className="w-4 h-4 inline mr-1 text-emerald-400" />
               Expected Annual Rent (AED)
             </Label>
@@ -153,7 +153,7 @@ const AIROICalculatorPremium = () => {
 
           {/* Location */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               <MapPin className="w-4 h-4 inline mr-1 text-emerald-400" />
               Location <span className="text-emerald-400">*</span>
             </Label>
@@ -167,7 +167,7 @@ const AIROICalculatorPremium = () => {
 
           {/* Property Type */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               <Building className="w-4 h-4 inline mr-1 text-emerald-400" />
               Property Type
             </Label>
@@ -187,7 +187,7 @@ const AIROICalculatorPremium = () => {
 
           {/* Holding Period */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               Holding Period
             </Label>
             <Select value={formData.holdingPeriod} onValueChange={(v) => handleChange("holdingPeriod", v)}>
@@ -207,7 +207,7 @@ const AIROICalculatorPremium = () => {
 
         {/* Additional Costs */}
         <div className="mb-8">
-          <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+          <Label className="text-white/85 text-sm font-medium mb-2 block">
             Additional Annual Costs (AED) - Optional
           </Label>
           <Input
@@ -261,23 +261,23 @@ const AIROICalculatorPremium = () => {
               <div className="grid md:grid-cols-3 gap-6 mb-8">
                 {response.roi && (
                   <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
-                    <p className="text-zinc-400 text-sm mb-2">Total ROI</p>
+                    <p className="text-white/70 text-sm mb-2">Total ROI</p>
                     <p className="text-emerald-400 text-4xl font-bold">{response.roi}%</p>
-                    <p className="text-zinc-500 text-xs mt-1">over {formData.holdingPeriod} years</p>
+                    <p className="text-white/60 text-xs mt-1">over {formData.holdingPeriod} years</p>
                   </div>
                 )}
                 {response.netYield && (
                   <div className="bg-emerald-500/20 border border-emerald-400/50 rounded-2xl p-6 text-center">
                     <p className="text-emerald-400 text-sm mb-2 font-medium">Net Yield</p>
                     <p className="text-white text-4xl font-bold">{response.netYield}%</p>
-                    <p className="text-zinc-400 text-xs mt-1">annual return</p>
+                    <p className="text-white/70 text-xs mt-1">annual return</p>
                   </div>
                 )}
                 {response.appreciation && (
                   <div className="bg-black/40 border border-emerald-500/20 rounded-2xl p-6 text-center">
-                    <p className="text-zinc-400 text-sm mb-2">Est. Appreciation</p>
+                    <p className="text-white/70 text-sm mb-2">Est. Appreciation</p>
                     <p className="text-emerald-400 text-4xl font-bold">{response.appreciation}%</p>
-                    <p className="text-zinc-500 text-xs mt-1">projected growth</p>
+                    <p className="text-white/60 text-xs mt-1">projected growth</p>
                   </div>
                 )}
               </div>
@@ -314,7 +314,7 @@ const AIROICalculatorPremium = () => {
                   {response.riskFactors && (
                     <ul className="mt-2 space-y-1">
                       {response.riskFactors.map((factor: string, i: number) => (
-                        <li key={i} className="text-sm text-zinc-400 flex items-start gap-2">
+                        <li key={i} className="text-sm text-white/70 flex items-start gap-2">
                           <ChevronRight className="h-4 w-4 mt-0.5 flex-shrink-0" />
                           {factor}
                         </li>
@@ -331,12 +331,12 @@ const AIROICalculatorPremium = () => {
                   <h4 className="text-white font-semibold">AI Investment Insights</h4>
                 </div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-zinc-400 text-sm">Full Analysis</span>
-                  <Button variant="ghost" size="sm" onClick={copyToClipboard} className="text-zinc-400 hover:text-white">
+                  <span className="text-white/70 text-sm">Full Analysis</span>
+                  <Button variant="ghost" size="sm" onClick={copyToClipboard} className="text-white/70 hover:text-white">
                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </div>
-                <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                   {response.analysis}
                 </div>
               </div>
@@ -345,10 +345,10 @@ const AIROICalculatorPremium = () => {
             {/* Disclaimer */}
             <div className="bg-zinc-800/50 border border-zinc-700 rounded-2xl p-6">
               <div className="flex items-start gap-3">
-                <AlertTriangle className="w-6 h-6 text-zinc-400 flex-shrink-0" />
+                <AlertTriangle className="w-6 h-6 text-white/70 flex-shrink-0" />
                 <div>
-                  <h4 className="text-zinc-300 font-semibold mb-2">Important Disclaimer</h4>
-                  <p className="text-zinc-400 text-sm leading-relaxed">
+                  <h4 className="text-white/85 font-semibold mb-2">Important Disclaimer</h4>
+                  <p className="text-white/70 text-sm leading-relaxed">
                     This analysis is AI-generated for informational purposes only. Does not constitute financial advice.{" "}
                     <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
                     Past performance does not guarantee future results. Market conditions can change rapidly.

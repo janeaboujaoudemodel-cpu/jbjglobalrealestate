@@ -147,7 +147,7 @@ const VerificationRequests = () => {
             <ShieldCheck className="w-6 h-6 text-gold" />
             Verification Requests
           </h1>
-          <p className="text-sm text-zinc-500 mt-1">
+          <p className="text-sm text-gray-500 mt-1">
             Review and approve user identity verifications
           </p>
         </div>
@@ -177,7 +177,7 @@ const VerificationRequests = () => {
           ))}
         </div>
         <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -193,7 +193,7 @@ const VerificationRequests = () => {
           <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-12 text-zinc-400">
+        <div className="text-center py-12 text-gray-500">
           <ShieldCheck className="w-12 h-12 mx-auto mb-3 opacity-30" />
           <p>No {filter === "all" ? "" : filter} verification requests</p>
         </div>
@@ -217,7 +217,7 @@ const VerificationRequests = () => {
                     <td className="px-4 py-3">
                       <Badge className={statusColors[v.status] || ""}>{v.status}</Badge>
                     </td>
-                    <td className="px-4 py-3 text-zinc-500">
+                    <td className="px-4 py-3 text-gray-500">
                       {new Date(v.submitted_at).toLocaleDateString()}
                     </td>
                     <td className="px-4 py-3">

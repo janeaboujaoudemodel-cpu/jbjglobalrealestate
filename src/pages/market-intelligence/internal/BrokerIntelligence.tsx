@@ -65,7 +65,7 @@ const BrokerIntelligence = () => {
                 <h1 className="text-white text-2xl md:text-3xl font-bold">
                   Broker Intelligence Hub
                 </h1>
-                <p className="text-zinc-500">All tools in one place • Market signals • AI Assistant • Contracts</p>
+                <p className="text-white/60">All tools in one place • Market signals • AI Assistant • Contracts</p>
               </div>
             </div>
 
@@ -173,7 +173,7 @@ const BrokerIntelligence = () => {
                   {!selectedArea && (
                     <div className="mt-4 p-4 bg-zinc-800/30 rounded-lg border border-zinc-700/50 text-center">
                       <MapPin className="w-6 h-6 text-zinc-600 mx-auto mb-2" />
-                      <p className="text-zinc-500 text-sm">Select an area from the dropdown above to view market context</p>
+                      <p className="text-white/60 text-sm">Select an area from the dropdown above to view market context</p>
                     </div>
                   )}
                 </motion.div>

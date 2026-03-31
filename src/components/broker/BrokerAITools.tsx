@@ -158,7 +158,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
           <Sparkles className="w-6 h-6 text-purple-400" />
           <div>
             <p className="text-white font-medium">AI Credits Remaining</p>
-            <p className="text-zinc-400 text-sm">
+            <p className="text-white/70 text-sm">
               {typeof creditsRemaining === "number" 
                 ? `${creditsRemaining} analyses left this month`
                 : "Unlimited analyses"}
@@ -200,10 +200,10 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
               >
                 <div>
                   <p className="text-white font-medium">{project.name}</p>
-                  <p className="text-zinc-400 text-sm">{project.location}</p>
+                  <p className="text-white/70 text-sm">{project.location}</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-zinc-400 text-sm">
+                  <span className="text-white/70 text-sm">
                     {formatPrice(project.price_from)} - {formatPrice(project.price_to)}
                   </span>
                   <Plus className="w-5 h-5 text-gold" />
@@ -234,11 +234,11 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
                   onClick={() => removeProject(project.id)}
                   className="absolute top-2 right-2 p-1 hover:bg-zinc-700 rounded transition-colors"
                 >
-                  <X className="w-4 h-4 text-zinc-400" />
+                  <X className="w-4 h-4 text-white/70" />
                 </button>
                 <Badge className="bg-gold/20 text-gold mb-2">{index + 1}</Badge>
                 <p className="text-white font-medium">{project.name}</p>
-                <p className="text-zinc-400 text-sm">{project.location}</p>
+                <p className="text-white/70 text-sm">{project.location}</p>
                 <p className="text-gold text-sm mt-2">
                   {formatPrice(project.price_from)}
                 </p>
@@ -270,7 +270,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
                   <span className="text-white font-medium">AI Recommendation</span>
                   <Badge className="bg-purple-500/20 text-purple-400">Recommended</Badge>
                 </div>
-                <p className="text-zinc-400 text-sm mt-1">
+                <p className="text-white/70 text-sm mt-1">
                   AI will analyze all properties and recommend the best option for your client based on 
                   location, developer reputation, price value, and investment potential.
                 </p>
@@ -283,7 +283,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
               <RadioGroupItem value="manual" className="mt-1" />
               <div>
                 <span className="text-white font-medium">Manual Selection</span>
-                <p className="text-zinc-400 text-sm mt-1">
+                <p className="text-white/70 text-sm mt-1">
                   Get comparison data only. You choose which property to recommend to your client.
                 </p>
               </div>
@@ -328,7 +328,7 @@ export default function BrokerAITools({ subscription }: BrokerAIToolsProps) {
           </div>
           
           <div className="prose prose-invert max-w-none">
-            <div className="text-zinc-300 whitespace-pre-wrap">
+            <div className="text-white/85 whitespace-pre-wrap">
               {analysisResult.split('\n').map((line, i, arr) => (
                 <span key={i}>
                   {line}

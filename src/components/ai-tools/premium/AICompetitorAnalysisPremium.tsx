@@ -85,7 +85,7 @@ const AICompetitorAnalysisPremium = () => {
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           {/* Project Name */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               <Building className="w-4 h-4 inline mr-1 text-yellow-400" />
               Your Project Name <span className="text-yellow-400">*</span>
             </Label>
@@ -99,7 +99,7 @@ const AICompetitorAnalysisPremium = () => {
 
           {/* Location */}
           <div>
-            <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+            <Label className="text-white/85 text-sm font-medium mb-2 block">
               <MapPin className="w-4 h-4 inline mr-1 text-yellow-400" />
               Location
             </Label>
@@ -114,7 +114,7 @@ const AICompetitorAnalysisPremium = () => {
 
         {/* Project Details */}
         <div className="mb-6">
-          <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+          <Label className="text-white/85 text-sm font-medium mb-2 block">
             Your Project Details
           </Label>
           <Textarea
@@ -128,7 +128,7 @@ const AICompetitorAnalysisPremium = () => {
 
         {/* Competitor Projects */}
         <div className="mb-8">
-          <Label className="text-zinc-300 text-sm font-medium mb-2 block">
+          <Label className="text-white/85 text-sm font-medium mb-2 block">
             Competitor Projects (optional)
           </Label>
           <Textarea
@@ -184,7 +184,7 @@ const AICompetitorAnalysisPremium = () => {
                   <div className="flex items-center gap-3">
                     <Target className="h-6 w-6 text-yellow-400" />
                     <div>
-                      <p className="text-sm text-zinc-400">Market Position</p>
+                      <p className="text-sm text-white/70">Market Position</p>
                       <p className="text-2xl font-bold text-yellow-400">{response.marketPosition}</p>
                     </div>
                   </div>
@@ -223,7 +223,7 @@ const AICompetitorAnalysisPremium = () => {
                   </h4>
                   <ul className="space-y-2">
                     {response.advantages.map((adv: string, i: number) => (
-                      <li key={i} className="text-sm text-zinc-300 flex items-start gap-2">
+                      <li key={i} className="text-sm text-white/85 flex items-start gap-2">
                         <span className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 text-xs text-emerald-400">
                           ✓
                         </span>
@@ -243,7 +243,7 @@ const AICompetitorAnalysisPremium = () => {
                   </h4>
                   <ul className="space-y-2">
                     {response.weaknesses.map((weak: string, i: number) => (
-                      <li key={i} className="text-sm text-zinc-300 flex items-start gap-2">
+                      <li key={i} className="text-sm text-white/85 flex items-start gap-2">
                         <span className="w-5 h-5 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 text-xs text-red-400">
                           !
                         </span>
@@ -261,11 +261,11 @@ const AICompetitorAnalysisPremium = () => {
                     <Sparkles className="w-5 h-5 text-yellow-400" />
                     <h4 className="text-white font-semibold">Full Analysis</h4>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={copyToClipboard} className="text-zinc-400 hover:text-white">
+                  <Button variant="ghost" size="sm" onClick={copyToClipboard} className="text-white/70 hover:text-white">
                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                   </Button>
                 </div>
-                <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
+                <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
                   {response.analysis}
                 </div>
               </div>
@@ -274,10 +274,10 @@ const AICompetitorAnalysisPremium = () => {
             {/* Disclaimer */}
             <div className="bg-zinc-800/50 border border-zinc-700 rounded-2xl p-6">
               <div className="flex items-start gap-3">
-                <AlertTriangle className="w-6 h-6 text-zinc-400 flex-shrink-0" />
+                <AlertTriangle className="w-6 h-6 text-white/70 flex-shrink-0" />
                 <div>
-                  <h4 className="text-zinc-300 font-semibold mb-2">Important Disclaimer</h4>
-                  <p className="text-zinc-400 text-sm leading-relaxed">
+                  <h4 className="text-white/85 font-semibold mb-2">Important Disclaimer</h4>
+                  <p className="text-white/70 text-sm leading-relaxed">
                     This analysis is AI-generated for informational purposes only. Market conditions and competitor strategies change frequently.
                     Always conduct your own due diligence and consult with market experts.
                   </p>

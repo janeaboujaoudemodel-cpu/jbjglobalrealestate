@@ -64,7 +64,7 @@ export default function ProtectedContent({
         <div className="absolute inset-0 backdrop-blur-lg bg-zinc-900/80 flex flex-col items-center justify-center p-8 text-center rounded-xl border border-zinc-700">
           <Lock className="w-12 h-12 text-gold mb-4" />
           <h3 className="text-xl font-semibold text-white mb-2">Sign In Required</h3>
-          <p className="text-zinc-400 mb-6 max-w-md">
+          <p className="text-white/70 mb-6 max-w-md">
             Please sign in to access this protected content. Your progress will be saved to your account.
           </p>
           <Button
@@ -87,7 +87,7 @@ export default function ProtectedContent({
         <div className="absolute inset-0 backdrop-blur-lg bg-zinc-900/80 flex flex-col items-center justify-center p-8 text-center rounded-xl border border-amber-500/30">
           <AlertTriangle className="w-12 h-12 text-amber-500 mb-4" />
           <h3 className="text-xl font-semibold text-white mb-2">Session Issue</h3>
-          <p className="text-zinc-400 mb-6 max-w-md">
+          <p className="text-white/70 mb-6 max-w-md">
             Your session has expired or this content is being accessed from another device. 
             Each subscription is limited to one active device for security.
           </p>
@@ -149,7 +149,7 @@ export default function ProtectedContent({
       </div>
 
       {/* Security badge */}
-      <div className="absolute bottom-2 right-2 flex items-center gap-1 text-xs text-zinc-500 bg-zinc-900/80 px-2 py-1 rounded">
+      <div className="absolute bottom-2 right-2 flex items-center gap-1 text-xs text-white/60 bg-zinc-900/80 px-2 py-1 rounded">
         <Shield className="w-3 h-3" />
         Protected Content
       </div>

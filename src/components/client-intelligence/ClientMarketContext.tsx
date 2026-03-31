@@ -124,7 +124,7 @@ const ClientMarketContext = ({
               </Tooltip>
             </TooltipProvider>
           </CardTitle>
-          <div className="flex items-center gap-1 text-xs text-zinc-500 bg-zinc-100 px-2 py-1 rounded-full">
+          <div className="flex items-center gap-1 text-xs text-gray-500 bg-zinc-100 px-2 py-1 rounded-full">
             <Clock className="w-3 h-3 text-gold" />
             <span className="font-medium">Updated {lastUpdated}</span>
           </div>
@@ -146,7 +146,7 @@ const ClientMarketContext = ({
         </p>
 
         {/* Mandatory Disclaimer */}
-        <p className="text-[10px] text-zinc-400 border-t border-zinc-200 pt-3">
+        <p className="text-[10px] text-gray-500 border-t border-zinc-200 pt-3">
           Insights are based on aggregated official data and are provided for informational purposes only.
           This does not constitute financial, investment, or legal advice.{" "}
           <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

@@ -242,7 +242,7 @@ const BuyingAdvisory = () => {
               Buying Advisory Services
             </h1>
             
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Professional representation for buyers across primary & secondary markets. Expert guidance from market analysis to transaction completion.
             </p>
             
@@ -572,7 +572,7 @@ const BuyingAdvisory = () => {
                     <th className="px-6 py-4 text-left text-sm font-bold text-gold uppercase tracking-wider">
                       Aspect
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-bold text-zinc-400 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-left text-sm font-bold text-white/70 uppercase tracking-wider">
                       Buyer Guide
                     </th>
                     <th className="px-6 py-4 text-left text-sm font-bold text-gold uppercase tracking-wider">
@@ -698,25 +698,25 @@ const BuyingAdvisory = () => {
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             <Link
               to="/buyer-guide"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Buyer Guide
             </Link>
             <Link
               to="/areas"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Area Guides
             </Link>
             <Link
               to="/market-intelligence"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Market Intelligence
             </Link>
             <Link
               to="/contact"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Contact Us
             </Link>

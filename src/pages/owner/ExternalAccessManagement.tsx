@@ -124,7 +124,7 @@ const ExternalAccessManagement = () => {
               <Shield className="w-6 h-6 text-gold" />
               External Access Management
             </h1>
-            <p className="text-zinc-400 text-sm mt-1">
+            <p className="text-white/70 text-sm mt-1">
               Manage auditor access, monitor behavior, and review feedback
             </p>
           </div>
@@ -142,9 +142,9 @@ const ExternalAccessManagement = () => {
           </div>
 
           {isLoading ? (
-            <div className="p-8 text-center text-zinc-500">Loading...</div>
+            <div className="p-8 text-center text-white/60">Loading...</div>
           ) : !auditors?.length ? (
-            <div className="p-8 text-center text-zinc-500">No external users</div>
+            <div className="p-8 text-center text-white/60">No external users</div>
           ) : (
             <div className="divide-y divide-zinc-800">
               {auditors.map((auditor: any) => (
@@ -155,7 +155,7 @@ const ExternalAccessManagement = () => {
                         <p className="text-white font-semibold">{auditor.display_name}</p>
                         {getStatusBadge(auditor)}
                       </div>
-                      <p className="text-zinc-500 text-sm">{auditor.email}</p>
+                      <p className="text-white/60 text-sm">{auditor.email}</p>
                       <div className="flex items-center gap-4 mt-1 text-xs text-zinc-600">
                         <span>Logins: {auditor.total_logins}</span>
                         <span>Last: {formatDate(auditor.last_login_at)}</span>
@@ -169,7 +169,7 @@ const ExternalAccessManagement = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => setExpandedUser(expandedUser === auditor.user_id ? null : auditor.user_id)}
-                        className="border-zinc-700 text-zinc-300 hover:text-white"
+                        className="border-zinc-700 text-white/85 hover:text-white"
                       >
                         <Eye className="w-4 h-4 mr-1" />
                         {expandedUser === auditor.user_id ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
@@ -191,7 +191,7 @@ const ExternalAccessManagement = () => {
                   {/* Expanded: Session History */}
                   {expandedUser === auditor.user_id && (
                     <div className="px-5 pb-4 bg-zinc-950/50">
-                      <h3 className="text-sm font-semibold text-zinc-300 mb-3 flex items-center gap-2">
+                      <h3 className="text-sm font-semibold text-white/85 mb-3 flex items-center gap-2">
                         <Clock className="w-4 h-4" />
                         Session History
                       </h3>
@@ -201,7 +201,7 @@ const ExternalAccessManagement = () => {
                         <div className="space-y-2 max-h-60 overflow-y-auto">
                           {sessions.map((s: any) => (
                             <div key={s.id} className="bg-zinc-900 rounded-lg p-3 text-xs">
-                              <div className="flex justify-between text-zinc-400">
+                              <div className="flex justify-between text-white/70">
                                 <span>{formatDate(s.session_start)}</span>
                                 <span>{s.total_time_seconds ? `${Math.round(s.total_time_seconds / 60)}min` : "In progress"}</span>
                                 <span>{s.device_type}</span>
@@ -209,12 +209,12 @@ const ExternalAccessManagement = () => {
                               {s.pages_visited && Array.isArray(s.pages_visited) && (
                                 <div className="mt-2 flex flex-wrap gap-1">
                                   {(s.pages_visited as any[]).slice(0, 10).map((p: any, i: number) => (
-                                    <Badge key={i} variant="outline" className="text-[10px] border-zinc-700 text-zinc-400">
+                                    <Badge key={i} variant="outline" className="text-[10px] border-zinc-700 text-white/70">
                                       {p.path}
                                     </Badge>
                                   ))}
                                   {(s.pages_visited as any[]).length > 10 && (
-                                    <Badge variant="outline" className="text-[10px] border-zinc-700 text-zinc-500">
+                                    <Badge variant="outline" className="text-[10px] border-zinc-700 text-white/60">
                                       +{(s.pages_visited as any[]).length - 10} more
                                     </Badge>
                                   )}
@@ -245,7 +245,7 @@ const ExternalAccessManagement = () => {
           </div>
 
           {!feedback?.length ? (
-            <div className="p-8 text-center text-zinc-500">No feedback received yet</div>
+            <div className="p-8 text-center text-white/60">No feedback received yet</div>
           ) : (
             <div className="divide-y divide-zinc-800 max-h-[500px] overflow-y-auto">
               {feedback.map((f: any) => (
@@ -266,7 +266,7 @@ const ExternalAccessManagement = () => {
                         <Badge className={
                           f.feedback_type === "task" ? "bg-blue-500/20 text-blue-400 border-blue-500/40" :
                           f.feedback_type === "screenshot_note" ? "bg-amber-500/20 text-amber-400 border-amber-500/40" :
-                          "bg-zinc-500/20 text-zinc-400 border-zinc-500/40"
+                          "bg-zinc-500/20 text-white/70 border-zinc-500/40"
                         }>
                           {f.feedback_type === "task" ? "Task" : f.feedback_type === "screenshot_note" ? "Screenshot" : "Message"}
                         </Badge>
@@ -274,11 +274,11 @@ const ExternalAccessManagement = () => {
                         {f.status === "new" && <Badge className="bg-red-500 text-white text-[10px]">New</Badge>}
                       </div>
 
-                      {f.note_text && <p className="text-zinc-300 text-sm mb-1">{f.note_text}</p>}
+                      {f.note_text && <p className="text-white/85 text-sm mb-1">{f.note_text}</p>}
 
                       {f.prompt_text && (
                         <div className="bg-zinc-950 rounded-lg p-3 mt-2 relative group">
-                          <p className="text-zinc-400 text-xs font-mono whitespace-pre-wrap">{f.prompt_text}</p>
+                          <p className="text-white/70 text-xs font-mono whitespace-pre-wrap">{f.prompt_text}</p>
                           <button
                             onClick={() => {
                               navigator.clipboard.writeText(f.prompt_text);
@@ -304,7 +304,7 @@ const ExternalAccessManagement = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => markRead.mutate(f.id)}
-                        className="border-zinc-700 text-zinc-400 hover:text-white flex-shrink-0"
+                        className="border-zinc-700 text-white/70 hover:text-white flex-shrink-0"
                       >
                         Mark Read
                       </Button>

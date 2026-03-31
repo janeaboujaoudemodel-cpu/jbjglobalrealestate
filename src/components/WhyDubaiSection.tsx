@@ -81,7 +81,7 @@ const WhyDubaiSection = () => {
               >
                 Why <span className="text-gold">Dubai</span>?
               </h3>
-              <p className="text-zinc-400 mb-6 leading-relaxed">
+              <p className="text-white/70 mb-6 leading-relaxed">
                 Dubai is not just a city — it's a global phenomenon. As the business capital of the Middle East 
                 and a luxury lifestyle destination, Dubai offers investors access to a market that attracts 
                 over 16 million visitors annually.
@@ -94,7 +94,7 @@ const WhyDubaiSection = () => {
                   "Expo 2020 legacy & upcoming mega projects",
                   "Smart city infrastructure & future-ready development",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-zinc-300 text-sm">
+                  <li key={i} className="flex items-start gap-3 text-white/85 text-sm">
                     <span className="w-1.5 h-1.5 rounded-full bg-gold mt-2 flex-shrink-0" />
                     {item}
                   </li>
@@ -128,7 +128,7 @@ const WhyDubaiSection = () => {
                 ].map((stat, i) => (
                   <div key={i} className="bg-black/70 backdrop-blur-sm rounded-lg p-3 text-center border border-gold/30">
                     <div className="text-gold text-xl font-bold">{stat.value}</div>
-                    <div className="text-zinc-400 text-xs">{stat.label}</div>
+                    <div className="text-white/70 text-xs">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -137,14 +137,14 @@ const WhyDubaiSection = () => {
 
           {/* Source Citations Bar */}
           <div className="border-t border-gold/20 px-8 py-4 flex flex-wrap items-center gap-x-6 gap-y-2 bg-black/50">
-            <span className="text-zinc-500 text-xs font-medium uppercase tracking-wider">Sources:</span>
+            <span className="text-white/60 text-xs font-medium uppercase tracking-wider">Sources:</span>
             {[
               { label: "#1 Safest City", source: "Numbeo Safety Index 2025" },
               { label: "#1 Prime Price Growth", source: "Knight Frank Global Cities Index" },
               { label: "#1 FDI in MENA", source: "fDi Intelligence, Financial Times" },
               { label: "Top 5 Most Visited", source: "Mastercard Destination Cities Index" },
             ].map((citation, i) => (
-              <span key={i} className="text-zinc-500 text-xs">
+              <span key={i} className="text-white/60 text-xs">
                 <span className="text-gold font-medium">{citation.label}</span>
                 {" — "}
                 <span className="italic">{citation.source}</span>

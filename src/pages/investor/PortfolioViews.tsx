@@ -236,7 +236,7 @@ export default function PortfolioViews() {
                 Your Investment Portfolio,{" "}
                 <span className="text-gold">Organized With Clarity</span>
               </h1>
-              <p className="text-zinc-300 text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-white/85 text-lg mb-8 max-w-2xl mx-auto">
                 Portfolio Views is where investors see their assets and opportunities in a structured, 
                 readable format—grouped by purpose, timeline, and performance context.
               </p>

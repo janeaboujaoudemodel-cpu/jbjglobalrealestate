@@ -150,7 +150,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
           <p className="text-white text-lg mb-2">
             Get free access to all JBJ AI tools, assistants, HR Manager, property coach, and creative suite — all in one place.
           </p>
-          <p className="text-zinc-400 text-base mb-8">
+          <p className="text-white/70 text-base mb-8">
             Sign in to unlock <span className="text-emerald-400 font-semibold">free access</span> to all JBJ AI tools and resources.
           </p>
 
@@ -174,7 +174,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
                   <benefit.icon className="w-5 h-5 text-gold" />
                 </div>
                 <h3 className="text-white font-medium text-sm mb-1">{benefit.title}</h3>
-                <p className="text-zinc-500 text-xs">{benefit.description}</p>
+                <p className="text-white/60 text-xs">{benefit.description}</p>
               </motion.div>
             ))}
           </div>

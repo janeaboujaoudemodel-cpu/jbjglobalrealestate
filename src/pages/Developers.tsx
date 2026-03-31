@@ -261,7 +261,7 @@ const Developers = () => {
                 UAE's Premier Developers
               </h1>
               
-              <p className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+              <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
                 Explore off-plan and ready properties directly from UAE's most trusted developers. 
                 No secondary market — only developer-direct listings.
               </p>

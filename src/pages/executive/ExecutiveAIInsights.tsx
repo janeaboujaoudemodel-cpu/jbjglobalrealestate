@@ -154,12 +154,12 @@ const ExecutiveAIInsights = () => {
                 <Brain className="w-8 h-8 text-gold" />
                 Strategic AI Insights
               </h1>
-              <p className="text-zinc-400">
+              <p className="text-white/70">
                 AI-assisted pattern recognition and decision support — descriptive only
               </p>
             </div>
             <div className="mt-4 md:mt-0 flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm text-zinc-500">
+              <div className="flex items-center gap-2 text-sm text-white/60">
                 <Clock className="w-4 h-4" />
                 <span>{new Date(lastUpdated).toLocaleString()}</span>
               </div>
@@ -193,7 +193,7 @@ const ExecutiveAIInsights = () => {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   nav.active
                     ? "bg-gold text-black"
-                    : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                    : "bg-zinc-800 text-white/85 hover:bg-zinc-700"
                 }`}
               >
                 {nav.label}
@@ -221,28 +221,28 @@ const ExecutiveAIInsights = () => {
               <CardContent className="pt-6 text-center">
                 <TrendingUp className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
                 <p className="text-white font-medium">Pattern Recognition</p>
-                <p className="text-xs text-zinc-500 mt-1">Recurring trends identified</p>
+                <p className="text-xs text-white/60 mt-1">Recurring trends identified</p>
               </CardContent>
             </Card>
             <Card className="bg-zinc-900 border-zinc-800">
               <CardContent className="pt-6 text-center">
                 <Activity className="w-8 h-8 text-blue-500 mx-auto mb-2" />
                 <p className="text-white font-medium">Correlation Summary</p>
-                <p className="text-xs text-zinc-500 mt-1">Relationship mapping</p>
+                <p className="text-xs text-white/60 mt-1">Relationship mapping</p>
               </CardContent>
             </Card>
             <Card className="bg-zinc-900 border-zinc-800">
               <CardContent className="pt-6 text-center">
                 <TrendingDown className="w-8 h-8 text-amber-500 mx-auto mb-2" />
                 <p className="text-white font-medium">Period Comparison</p>
-                <p className="text-xs text-zinc-500 mt-1">What changed vs last period</p>
+                <p className="text-xs text-white/60 mt-1">What changed vs last period</p>
               </CardContent>
             </Card>
             <Card className="bg-zinc-900 border-zinc-800">
               <CardContent className="pt-6 text-center">
                 <AlertCircle className="w-8 h-8 text-red-500 mx-auto mb-2" />
                 <p className="text-white font-medium">Attention Required</p>
-                <p className="text-xs text-zinc-500 mt-1">Areas needing focus</p>
+                <p className="text-xs text-white/60 mt-1">Areas needing focus</p>
               </CardContent>
             </Card>
           </div>
@@ -272,9 +272,9 @@ const ExecutiveAIInsights = () => {
                           {insight.category.toUpperCase()}
                         </Badge>
                       </div>
-                      <p className="text-zinc-300 text-sm mb-2">{insight.summary}</p>
+                      <p className="text-white/85 text-sm mb-2">{insight.summary}</p>
                       {insight.details && (
-                        <p className="text-zinc-500 text-xs">{insight.details}</p>
+                        <p className="text-white/60 text-xs">{insight.details}</p>
                       )}
                       <p className="text-zinc-600 text-xs mt-2">
                         Generated: {new Date(insight.timestamp).toLocaleString()}
@@ -295,7 +295,7 @@ const ExecutiveAIInsights = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
                   <h4 className="text-red-400 font-medium mb-2">Forbidden Outputs</h4>
-                  <ul className="text-sm text-zinc-300 space-y-1">
+                  <ul className="text-sm text-white/85 space-y-1">
                     <li>✗ Financial forecasts</li>
                     <li>✗ ROI predictions</li>
                     <li>✗ Investment recommendations</li>
@@ -305,7 +305,7 @@ const ExecutiveAIInsights = () => {
                 </div>
                 <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4">
                   <h4 className="text-emerald-400 font-medium mb-2">Allowed Outputs</h4>
-                  <ul className="text-sm text-zinc-300 space-y-1">
+                  <ul className="text-sm text-white/85 space-y-1">
                     <li>✓ Pattern recognition</li>
                     <li>✓ Correlation summaries</li>
                     <li>✓ Historical comparisons</li>
@@ -319,7 +319,7 @@ const ExecutiveAIInsights = () => {
 
           {/* Footer */}
           <div className="mt-12 pt-6 border-t border-zinc-800 text-center">
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-white/60">
               AI Strategic Insights • Supports judgment, does not replace it • All insights logged and explainable
             </p>
             <p className="text-xs text-zinc-600 mt-1">

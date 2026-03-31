@@ -139,7 +139,7 @@ export function BrokerToolkitEducation() {
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 24 Trainings Modules to <span className="text-blue-300">Master Real Estate</span>
               </h2>
-              <p className="text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-white/70 max-w-2xl mx-auto">
                 Comprehensive video courses, guides, and playbooks to accelerate your career.
               </p>
             </motion.div>
@@ -207,7 +207,7 @@ export function BrokerToolkitEducation() {
               <h3 className="text-2xl md:text-3xl font-bold text-white mb-2">
                 4 Free Books <span className="text-emerald-300">to Download</span>
               </h3>
-              <p className="text-zinc-400">
+              <p className="text-white/70">
                 Exclusive guides written for UAE real estate professionals.
               </p>
             </motion.div>

@@ -231,7 +231,7 @@ const Methodology = () => {
                     </div>
                   </div>
                   
-                  <p className="text-zinc-500 text-xs mt-6 pt-4 border-t border-gold/30">
+                  <p className="text-gray-500 text-xs mt-6 pt-4 border-t border-gold/30">
                     No data is sourced from private platforms, promotional materials, or unofficial aggregators.
                   </p>
                 </div>

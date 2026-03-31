@@ -33,7 +33,7 @@ const ReferralPartner = () => {
             >
               Referral <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Partner Program</span>
             </h1>
-            <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
+            <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto mb-8">
               Collaborate with JBJ Global Real Estate by referring clients interested in UAE real estate.
             </p>
           </motion.div>
@@ -56,7 +56,7 @@ const ReferralPartner = () => {
                 </div>
                 <div>
                   <h2 className="text-white text-2xl font-bold">How It Works</h2>
-                  <p className="text-zinc-500">Simple and straightforward</p>
+                  <p className="text-white/60">Simple and straightforward</p>
                 </div>
               </div>
 
@@ -65,7 +65,7 @@ const ReferralPartner = () => {
                   <CheckCircle className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="text-white font-semibold mb-1">Refer a Client</h3>
-                    <p className="text-zinc-400">
+                    <p className="text-white/70">
                       Introduce us to individuals or companies interested in buying, selling, or renting property in the UAE.
                     </p>
                   </div>
@@ -74,7 +74,7 @@ const ReferralPartner = () => {
                   <CheckCircle className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="text-white font-semibold mb-1">We Handle the Transaction</h3>
-                    <p className="text-zinc-400">
+                    <p className="text-white/70">
                       Our team manages the entire brokerage process with professionalism and discretion.
                     </p>
                   </div>
@@ -83,7 +83,7 @@ const ReferralPartner = () => {
                   <CheckCircle className="w-5 h-5 text-gold mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="text-white font-semibold mb-1">Referral Arrangement</h3>
-                    <p className="text-zinc-400">
+                    <p className="text-white/70">
                       Referral fees may apply subject to a written agreement and compliance with applicable laws.
                     </p>
                   </div>
@@ -93,7 +93,7 @@ const ReferralPartner = () => {
               {/* Compliance Notice */}
               <div className="bg-zinc-800/50 border border-zinc-700 rounded-xl p-6 mb-8">
                 <h4 className="text-gold font-semibold text-sm uppercase tracking-wider mb-3">Important Notice</h4>
-                <p className="text-zinc-400 text-sm leading-relaxed">
+                <p className="text-white/70 text-sm leading-relaxed">
                   Partners are independent and responsible for compliance with regulations in their own jurisdictions. 
                   This program does not constitute an employment relationship. All arrangements are subject to a formal 
                   written agreement between parties.
@@ -107,7 +107,7 @@ const ReferralPartner = () => {
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                 </a>
-                <p className="text-zinc-500 text-sm mt-4">
+                <p className="text-white/60 text-sm mt-4">
                   Contact us at {CONTACT_INFO.email}
                 </p>
               </div>

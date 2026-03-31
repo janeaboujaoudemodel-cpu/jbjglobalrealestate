@@ -126,7 +126,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
             <AlertCircle className="w-5 h-5 text-red-400" />
             Report a Problem
           </DialogTitle>
-          <DialogDescription className="text-zinc-400">
+          <DialogDescription className="text-white/70">
             Help us improve by reporting issues with {toolName}
           </DialogDescription>
         </DialogHeader>
@@ -141,7 +141,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
             >
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">Report Submitted!</h3>
-              <p className="text-zinc-400">Thank you for helping us improve.</p>
+              <p className="text-white/70">Thank you for helping us improve.</p>
             </motion.div>
           ) : (
             <motion.div
@@ -152,7 +152,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
             >
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-zinc-300">Your Name</Label>
+                  <Label className="text-white/85">Your Name</Label>
                   <Input
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
@@ -161,7 +161,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
                   />
                 </div>
                 <div>
-                  <Label className="text-zinc-300">Phone</Label>
+                  <Label className="text-white/85">Phone</Label>
                   <Input
                     value={formData.phone}
                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
@@ -172,7 +172,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
               </div>
 
               <div>
-                <Label className="text-zinc-300">Email</Label>
+                <Label className="text-white/85">Email</Label>
                 <Input
                   type="email"
                   value={formData.email}
@@ -183,7 +183,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
               </div>
 
               <div>
-                <Label className="text-zinc-300">Issue Category *</Label>
+                <Label className="text-white/85">Issue Category *</Label>
                 <Select
                   value={formData.category}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
@@ -202,7 +202,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
               </div>
 
               <div>
-                <Label className="text-zinc-300">Describe the Issue *</Label>
+                <Label className="text-white/85">Describe the Issue *</Label>
                 <Textarea
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
@@ -215,7 +215,7 @@ const ReportProblemButton: React.FC<ReportProblemButtonProps> = ({
                 <Button
                   variant="outline"
                   onClick={() => setIsOpen(false)}
-                  className="flex-1 border-zinc-700 text-zinc-300"
+                  className="flex-1 border-zinc-700 text-white/85"
                 >
                   Cancel
                 </Button>

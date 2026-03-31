@@ -103,7 +103,7 @@ export function BrokerToolkitCTA() {
                   <Phone className="w-5 h-5 text-blue-500" />
                   +971 56 591 1000
                 </a>
-                <span className="text-zinc-300 hidden sm:block">|</span>
+                <span className="text-gray-400 hidden sm:block">|</span>
                 <a
                   href="https://wa.me/971565911000?text=Hi%2C%20I%27m%20interested%20in%20joining%20the%20Broker%20Circle"
                   target="_blank"
@@ -113,7 +113,7 @@ export function BrokerToolkitCTA() {
                   <MessageCircle className="w-5 h-5 text-green-500" />
                   WhatsApp
                 </a>
-                <span className="text-zinc-300 hidden sm:block">|</span>
+                <span className="text-gray-400 hidden sm:block">|</span>
                 <a
                   href="mailto:CONTACT@JBJ.AE"
                   className="flex items-center gap-2 text-zinc-600 hover:text-gold transition-colors"

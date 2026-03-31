@@ -101,7 +101,7 @@ const PreJoinForm = ({
             <Video className="w-10 h-10 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">JBJ Video Meet</h1>
-          <p className="text-zinc-400">Free professional video meetings for everyone</p>
+          <p className="text-white/70">Free professional video meetings for everyone</p>
           <div className="flex items-center justify-center gap-2 mt-2 text-green-400 text-xs">
             <Shield className="w-3 h-3" />
             <span>End-to-end encrypted • Unlimited time</span>
@@ -127,7 +127,7 @@ const PreJoinForm = ({
                 {!videoEnabled && (
                   <div className="absolute inset-0 flex items-center justify-center bg-zinc-800">
                     <div className="w-20 h-20 rounded-full bg-zinc-700 flex items-center justify-center">
-                      <VideoOff className="w-8 h-8 text-zinc-400" />
+                      <VideoOff className="w-8 h-8 text-white/70" />
                     </div>
                   </div>
                 )}
@@ -161,7 +161,7 @@ const PreJoinForm = ({
                   </Button>
                 </div>
               </div>
-              <p className="text-xs text-zinc-500 text-center">
+              <p className="text-xs text-white/60 text-center">
                 Camera and microphone are off by default. Click to enable.
               </p>
             </CardContent>
@@ -174,13 +174,13 @@ const PreJoinForm = ({
                 <User className="w-5 h-5 text-gold" />
                 Enter Your Details
               </CardTitle>
-              <p className="text-xs text-zinc-400">Required to join the meeting</p>
+              <p className="text-xs text-white/70">Required to join the meeting</p>
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Name Row */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label className="text-zinc-300 text-xs mb-1 block">First Name *</Label>
+                  <Label className="text-white/85 text-xs mb-1 block">First Name *</Label>
                   <Input
                     value={formData.firstName}
                     onChange={(e) => updateField('firstName', e.target.value)}
@@ -190,7 +190,7 @@ const PreJoinForm = ({
                   {errors.firstName && <p className="text-red-400 text-xs mt-0.5">{errors.firstName}</p>}
                 </div>
                 <div>
-                  <Label className="text-zinc-300 text-xs mb-1 block">Last Name *</Label>
+                  <Label className="text-white/85 text-xs mb-1 block">Last Name *</Label>
                   <Input
                     value={formData.lastName}
                     onChange={(e) => updateField('lastName', e.target.value)}
@@ -203,7 +203,7 @@ const PreJoinForm = ({
 
               {/* Email */}
               <div>
-                <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+                <Label className="text-white/85 text-xs flex items-center gap-1 mb-1">
                   <Mail className="w-3 h-3 text-gold" />
                   Email Address *
                 </Label>
@@ -219,7 +219,7 @@ const PreJoinForm = ({
 
               {/* Phone */}
               <div>
-                <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+                <Label className="text-white/85 text-xs flex items-center gap-1 mb-1">
                   <Phone className="w-3 h-3 text-gold" />
                   Phone Number *
                 </Label>
@@ -235,7 +235,7 @@ const PreJoinForm = ({
 
               {/* Nationality */}
               <div>
-                <Label className="text-zinc-300 text-xs flex items-center gap-1 mb-1">
+                <Label className="text-white/85 text-xs flex items-center gap-1 mb-1">
                   <Globe className="w-3 h-3 text-gold" />
                   Nationality *
                 </Label>
@@ -256,9 +256,9 @@ const PreJoinForm = ({
                   onCheckedChange={(checked) => updateField('agreeToTerms', checked === true)}
                   className="border-gold/50 data-[state=checked]:bg-gold data-[state=checked]:border-gold mt-0.5"
                 />
-                <label htmlFor="agree-terms" className="text-zinc-300 text-xs leading-tight cursor-pointer">
+                <label htmlFor="agree-terms" className="text-white/85 text-xs leading-tight cursor-pointer">
                   I agree to the terms and consent to have my meeting data processed. 
-                  <span className="text-zinc-500 block mt-1">
+                  <span className="text-white/60 block mt-1">
                     Your details are only visible to the meeting host.
                   </span>
                 </label>
@@ -276,7 +276,7 @@ const PreJoinForm = ({
           </Card>
         </div>
 
-        <p className="text-center text-zinc-500 text-sm mt-4">
+        <p className="text-center text-white/60 text-sm mt-4">
           Unlimited meeting time • Encrypted connections • First name only shown to participants
         </p>
       </div>

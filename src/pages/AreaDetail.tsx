@@ -162,7 +162,7 @@ const AreaDetail = () => {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-10 h-10 text-gold animate-spin mx-auto mb-4" />
-          <p className="text-zinc-400">Loading area...</p>
+          <p className="text-white/70">Loading area...</p>
         </div>
       </div>
     );
