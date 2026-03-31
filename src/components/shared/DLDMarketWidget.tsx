@@ -173,20 +173,30 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <h3 className="text-black text-sm font-semibold">Top 10 Buyer Nationalities</h3>
               </div>
               <div className="space-y-3">
-                {topNationalities.slice(0, 10).map((nat) => (
-                  <div key={nat.country} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-base">{nat.flag}</span>
-                      <span className="text-black/80 text-sm">{nat.country}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-20 h-2 bg-black/10 rounded-full overflow-hidden">
-                        <div className="h-full bg-gold rounded-full" style={{ width: `${nat.percentage * 4}%` }} />
+                {topNationalities.slice(0, 10).map((nat, i) => {
+                  const barColors = [
+                    'bg-emerald-500', 'bg-blue-500', 'bg-red-400', 'bg-amber-500', 'bg-purple-500',
+                    'bg-cyan-500', 'bg-rose-500', 'bg-teal-500', 'bg-orange-500', 'bg-indigo-500'
+                  ];
+                  const textColors = [
+                    'text-emerald-600', 'text-blue-600', 'text-red-500', 'text-amber-600', 'text-purple-600',
+                    'text-cyan-600', 'text-rose-600', 'text-teal-600', 'text-orange-600', 'text-indigo-600'
+                  ];
+                  return (
+                    <div key={nat.country} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-base">{nat.flag}</span>
+                        <span className="text-black/80 text-sm">{nat.country}</span>
                       </div>
-                      <span className="text-gold text-xs font-medium w-8 text-right">{nat.percentage}%</span>
+                      <div className="flex items-center gap-3">
+                        <div className="w-20 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                          <div className={`h-full ${barColors[i % barColors.length]} rounded-full`} style={{ width: `${nat.percentage * 4}%` }} />
+                        </div>
+                        <span className={`${textColors[i % textColors.length]} text-xs font-semibold w-8 text-right`}>{nat.percentage}%</span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
