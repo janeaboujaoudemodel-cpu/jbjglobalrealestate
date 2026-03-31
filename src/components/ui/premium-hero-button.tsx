@@ -54,8 +54,8 @@ export const PremiumHeroButton = ({
     "font-semibold tracking-wide",
     "rounded-xl transition-all duration-300 cursor-pointer",
     isLight 
-      ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold/80 hover:-translate-y-1"
-      : "bg-transparent border-2 border-white/70 hover:border-gold/80 hover:-translate-y-0.5",
+      ? "bg-white border-2 border-gray-300 hover:border-gray-400 hover:-translate-y-1"
+      : "bg-transparent border-2 border-white/70 hover:border-white hover:-translate-y-0.5",
     className
   );
 
