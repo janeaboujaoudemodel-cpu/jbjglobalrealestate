@@ -593,8 +593,6 @@ const Footer = () => {
             </div>
           </div>
           
-          {/* Bottom Radial Glow */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 hidden pointer-events-none" />
         </div>
         </div>
 
