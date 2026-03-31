@@ -447,8 +447,7 @@ const Footer = () => {
       <div className="relative w-full pt-0 pb-8 sm:pb-12 md:pb-16 lg:pb-20">
         {/* NOW BELOW THE 3D CARD: Logo + Company Name Section - COMES FIRST */}
         <div className="flex flex-col items-center justify-center text-center w-full relative pt-4 pb-8">
-          {/* Dark luxury brown background for monogram section */}
-          <div className="absolute inset-0 bg-white pointer-events-none" />
+          {/* Clean background — no white frame */}
           
           <Link to="/" className="inline-block group">
             <img 
