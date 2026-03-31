@@ -48,7 +48,7 @@ const MegaMenuAreas = React.forwardRef<HTMLDivElement, MegaMenuAreasProps>(({ on
             />
           </div>
 
-          <div className="lg:col-span-7 lg:border-l lg:border-gold/20 lg:pl-2 border-t lg:border-t-0 border-gold/20 mt-6 lg:mt-0 pt-6 lg:pt-0">
+          <div className="lg:col-span-7 lg:border-l lg:border-gray-200 lg:pl-2 border-t lg:border-t-0 border-gray-200 mt-6 lg:mt-0 pt-6 lg:pt-0">
             <MegaMenuSection icon={MapPin} title="Top Areas">
               <div className="grid grid-cols-2 gap-1">
                 {displayAreas.map((area) => (

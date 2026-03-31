@@ -95,7 +95,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
       <div className="max-w-[1600px] mx-auto px-4 lg:px-8 py-4 lg:py-5">
         {/* Connected grid with dividers instead of card borders */}
         <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${colCount} gap-0`}>
-          <div className="lg:border-r lg:border-gold/20">
+          <div className="lg:border-r lg:border-gray-200">
             <MegaMenuSection icon={Briefcase} title="Services">
               {servicesLinks.map((item) => (
                 <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -103,7 +103,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
             </MegaMenuSection>
           </div>
 
-          <div className="lg:border-r lg:border-gold/20 border-t lg:border-t-0 border-gold/20">
+          <div className="lg:border-r lg:border-gray-200 border-t lg:border-t-0 border-gray-200">
             <MegaMenuSection icon={Layers} title="Business Suites">
               {businessSuitesLinks.map((item) => (
                 <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -111,7 +111,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
             </MegaMenuSection>
           </div>
 
-          <div className="lg:border-r lg:border-gold/20 border-t lg:border-t-0 border-gold/20">
+          <div className="lg:border-r lg:border-gray-200 border-t lg:border-t-0 border-gray-200">
             <MegaMenuSection icon={Sparkles} title="AI Tools Hub">
               {toolkitLinks.map((item) => (
                 <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -119,7 +119,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
             </MegaMenuSection>
           </div>
 
-          <div className={`${isBrokerMode ? 'lg:border-r lg:border-gold/20' : ''} border-t lg:border-t-0 border-gold/20`}>
+          <div className={`${isBrokerMode ? 'lg:border-r lg:border-gray-200' : ''} border-t lg:border-t-0 border-gray-200`}>
             <MegaMenuSection icon={TrendingUp} title="Investors">
               {investorLinks.map((item) => (
                 <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -128,7 +128,7 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
           </div>
 
           {isBrokerMode && (
-            <div className="lg:border-r lg:border-gold/20 border-t lg:border-t-0 border-gold/20">
+            <div className="lg:border-r lg:border-gray-200 border-t lg:border-t-0 border-gray-200">
               <MegaMenuSection icon={Users} title="Brokers">
                 {brokerLinks.map((item) => (
                   <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
@@ -137,12 +137,12 @@ const MegaMenuMore = React.forwardRef<HTMLDivElement, MegaMenuMoreProps>(({ onCl
             </div>
           )}
 
-          <div className="border-t lg:border-t-0 border-gold/20">
+          <div className="border-t lg:border-t-0 border-gray-200">
             <MegaMenuSection icon={Building2} title="Company & Legal">
               {companyLinks.map((item) => (
                 <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
               ))}
-              <div className="h-px bg-gold/20 my-2 mx-2.5" />
+              <div className="h-px bg-gray-100 my-2 mx-2.5" />
               {legalLinks.slice(0, 3).map((item) => (
                 <MegaMenuIconLink key={item.href} to={item.href} onClick={onClose} icon={item.icon} title={item.label} compact />
               ))}
