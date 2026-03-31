@@ -304,7 +304,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
             <div className="flex items-center gap-5 pb-5 mb-5 border-b-2 border-gray-300">
               {/* Fixed-size avatar container - clickable to profile */}
               <Link to="/profile" onClick={onClose} className="w-16 h-16 flex-shrink-0 cursor-pointer group">
-                <Avatar className="h-16 w-16 border border-gray-300 bg-transparent group-hover:border-gray-400/80 transition-all group-hover:ring-2 group-hover:ring-gold/30">
+                <Avatar className="h-16 w-16 border border-gray-300 bg-transparent group-hover:border-gray-400/80 transition-all group-hover:ring-2 group-hover:ring-gray-200">
                   <AvatarImage src={accountPhotoUrl ?? ""} alt={`${accountDisplayName} profile photo`} className="object-cover" />
                   <AvatarFallback className="bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 border border-gray-300 text-black text-xl font-bold">
                     {avatarInitials}
@@ -558,7 +558,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                   {showSearchDropdown && (
                     <div
                       className="absolute right-0 top-10 w-72 rounded-xl border-2 border-gray-200 shadow-2xl z-[10001] overflow-hidden"
-                      style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}
+                      style={{ background: '#FFFFFF' }}
                       onClick={(e) => e.stopPropagation()}
                       onPointerDown={(e) => e.stopPropagation()}
                     >
@@ -658,8 +658,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       className={cn(
                         "py-1.5 rounded-lg text-[10px] font-medium transition-colors text-center tracking-wide flex flex-col items-center gap-0.5",
                         activeCurrency === cur.code
-                          ? "bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-black border border-[#C8A766]/60 shadow-sm"
-                          : "bg-champagne-light text-black hover:bg-champagne"
+                          ? "bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-black border border-gray-300 shadow-sm"
+                          : "bg-gray-50 text-black hover:bg-gray-100"
                       )}
                     >
                       <span className="text-sm leading-none">{cur.flag}</span>
@@ -686,8 +686,8 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
                       className={cn(
                         "flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors tracking-wider",
                         areaUnit === unit
-                          ? "bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-black border border-[#C8A766]/60 shadow-sm"
-                          : "bg-champagne-light text-black hover:bg-champagne"
+                          ? "bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 text-black border border-gray-300 shadow-sm"
+                          : "bg-gray-50 text-black hover:bg-gray-100"
                       )}
                     >
                       {unit}
@@ -716,7 +716,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               {showLangDropdown && (
                 <div
                   className="absolute left-0 right-0 bottom-full mb-1 rounded-xl border-2 border-gray-200 shadow-2xl z-[10001] p-2 max-h-64 overflow-y-auto"
-                  style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}
+                  style={{ background: '#FFFFFF' }}
                   onClick={(e) => e.stopPropagation()}
                   onPointerDown={(e) => e.stopPropagation()}
                 >

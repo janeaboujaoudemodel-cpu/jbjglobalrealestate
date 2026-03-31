@@ -100,7 +100,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
         "absolute right-0 top-full mt-2 w-[min(95vw,900px)] rounded-xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] z-[9999] overflow-hidden"
       )}
       style={{
-        background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
+        background: '#FFFFFF',
       }}
     >
       {/* Gold border overlay (matches Language dropdown) */}
@@ -118,7 +118,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
               if (e.key === 'Enter') openGlobalSearch();
             }}
             placeholder="Search pages, tools & guides"
-            className="flex-1 h-12 rounded-xl px-4 text-base text-black placeholder:text-black/40 bg-white/80 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gray-300 transition-all duration-200"
+            className="flex-1 h-12 rounded-xl px-4 text-base text-black placeholder:text-black/40 bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-gray-300 transition-all duration-200"
             aria-label="Search"
           />
           <button
@@ -216,7 +216,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
         </div>
       </div>
 
-      {/* Bottom gold accent bar (matches Language dropdown) */}
+      {/* Bottom bottom accent bar (matches Language dropdown) */}
       <div className="h-1 bg-gradient-to-r from-gray-300/50 via-gray-300 to-gray-300/50" />
     </div>
   );

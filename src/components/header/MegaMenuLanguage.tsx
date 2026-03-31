@@ -25,7 +25,7 @@ const MegaMenuLanguage = React.forwardRef<HTMLDivElement, MegaMenuLanguageProps>
         "z-[9999] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] rounded-xl overflow-hidden w-[360px]",
       )}
       style={{
-        background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
+        background: '#FFFFFF',
       }}
     >
       {/* Gold border */}
@@ -43,7 +43,7 @@ const MegaMenuLanguage = React.forwardRef<HTMLDivElement, MegaMenuLanguageProps>
                 className={`flex items-center justify-between w-full cursor-pointer transition-all duration-300 rounded-xl px-4 py-3 group ${
                   language === lang.code 
                     ? 'bg-gradient-to-r from-gray-300/20 via-gray-300/15 to-gray-300/20 border border-gray-300 shadow-[0_4px_15px_rgba(200,167,102,0.2)]' 
-                    : 'hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2]'
+                    : 'hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100'
                 }`}
               >
                 <span className="flex items-center gap-3">
@@ -61,7 +61,7 @@ const MegaMenuLanguage = React.forwardRef<HTMLDivElement, MegaMenuLanguageProps>
         </ScrollArea>
       </div>
       
-      {/* Bottom gold accent */}
+      {/* Bottom bottom accent */}
       <div className="h-1 bg-gradient-to-r from-gray-300/50 via-gray-300 to-gray-300/50" />
     </div>
   );
