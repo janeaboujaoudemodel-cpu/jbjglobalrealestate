@@ -47,7 +47,7 @@ const QuizResults = () => {
         .from("projects")
         .select(`
           *,
-          developer:developers(id, name, slug, description),
+          developer:developers(id, name, slug, description, logo_url),
           images:project_images(id, image_url, alt_text, display_order),
           community:communities(id, name, slug),
           documents:project_documents(id, file_url, file_name, document_type)

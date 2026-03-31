@@ -200,7 +200,7 @@ const Quiz = () => {
         .from("projects")
         .select(`
           *,
-          developer:developers(name, slug, description),
+          developer:developers(name, slug, description, logo_url),
           images:project_images(image_url)
         `);
       if (error) throw error;

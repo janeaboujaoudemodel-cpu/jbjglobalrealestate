@@ -259,7 +259,7 @@ export function useProjectsPaginated(
           .from("projects")
           .select(`
             *,
-            developer:developers(id, name, slug),
+            developer:developers(id, name, slug, logo_url),
             community:communities(id, name, slug)
           `)
           .or("is_published.is.null,is_published.eq.false")
@@ -279,7 +279,7 @@ export function useProjectsPaginated(
         .from("projects")
         .select(`
           *,
-          developer:developers(id, name, slug),
+          developer:developers(id, name, slug, logo_url),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
@@ -331,7 +331,7 @@ export function useProjects() {
         .from("projects")
         .select(`
           *,
-          developer:developers(id, name, slug),
+          developer:developers(id, name, slug, logo_url),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
@@ -414,7 +414,7 @@ export function useProjectsByCommunity(communitySlug: string) {
         .from("projects")
         .select(`
           *,
-          developer:developers(id, name, slug),
+          developer:developers(id, name, slug, logo_url),
           community:communities!inner(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)
@@ -437,7 +437,7 @@ export function useProjectsByDeveloper(developerSlug: string) {
         .from("projects")
         .select(`
           *,
-          developer:developers!inner(id, name, slug),
+          developer:developers!inner(id, name, slug, logo_url),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)

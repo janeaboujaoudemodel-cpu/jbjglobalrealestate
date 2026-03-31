@@ -154,7 +154,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             {/* Developer Logo */}
             {logoUrl && !logoError ? (
               <div className="absolute top-3 left-3 z-10">
-                <div className="w-12 h-12 rounded-lg shadow-lg overflow-hidden p-1.5 bg-black/40 backdrop-blur-sm">
+                <div className="w-12 h-12 rounded-lg shadow-lg overflow-hidden p-1.5 bg-white/90">
                   <img
                     src={logoUrl}
                     alt={devName}

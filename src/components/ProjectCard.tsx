@@ -205,7 +205,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Developer Logo Overlay - Top Left */}
           {getDeveloperLogoUrl(project.developer) && (
             <div
-              className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center shadow-lg p-1.5 bg-black/40 backdrop-blur-sm"
+              className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center shadow-lg p-1.5 bg-white/90"
             >
               <img 
                 src={getDeveloperLogoUrl(project.developer)!} 

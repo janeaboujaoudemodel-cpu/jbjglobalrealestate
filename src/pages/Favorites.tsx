@@ -123,7 +123,7 @@ const Favorites = () => {
       if (!favoriteIds.length) return [];
       const { data, error } = await supabase
         .from("projects")
-        .select(`*, developer:developers(id, name, slug), images:project_images(id, image_url, alt_text, display_order), community:communities(id, name, slug), documents:project_documents(id, file_url, file_name, document_type)`)
+.select(`*, developer:developers(id, name, slug, logo_url), images:project_images(id, image_url, alt_text, display_order), community:communities(id, name, slug), documents:project_documents(id, file_url, file_name, document_type)`)
         .in("id", favoriteIds);
       if (error) throw error;
       return data;
@@ -137,7 +137,7 @@ const Favorites = () => {
       if (!shortlistIds.length) return [];
       const { data, error } = await supabase
         .from("projects")
-        .select(`*, developer:developers(id, name, slug), images:project_images(id, image_url, alt_text, display_order), community:communities(id, name, slug), documents:project_documents(id, file_url, file_name, document_type)`)
+.select(`*, developer:developers(id, name, slug, logo_url), images:project_images(id, image_url, alt_text, display_order), community:communities(id, name, slug), documents:project_documents(id, file_url, file_name, document_type)`)
         .in("id", shortlistIds);
       if (error) throw error;
       return data;
