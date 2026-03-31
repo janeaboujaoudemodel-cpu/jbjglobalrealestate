@@ -432,7 +432,7 @@ const JBJPodcastSection = () => {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className={`text-sm font-medium leading-snug line-clamp-2 break-words ${
-                              selectedEpisode.id === episode.id ? "text-gold" : "text-black"
+                              selectedEpisode.id === episode.id ? "text-black font-bold" : "text-black"
                             }`}>
                               <T>{episode.title}</T>
                             </p>
