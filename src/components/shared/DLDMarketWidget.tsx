@@ -40,7 +40,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-zinc-800/50 rounded-lg p-3">
-            <p className="text-[10px] text-white/70 uppercase tracking-wider">YTD Volume</p>
+            <p className="text-[10px] text-white/80 uppercase tracking-wider font-medium">YTD Volume</p>
             <p className="text-gold font-bold text-lg">{ytd2026.value}</p>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3">
