@@ -231,7 +231,7 @@ const ReellyProjectCard = ({
 
               {/* Sold Out Badge - dedicated red badge top-left */}
               {(project.sale_status?.toLowerCase().includes('sold') || project.status_label?.toLowerCase().includes('sold')) && (
-                <div className={`absolute ${(project as any).developer?.logo_url ? 'top-[60px]' : 'top-3'} left-3 z-10`}>
+                <div className={`absolute ${getDeveloperLogoUrl((project as any).developer) ? 'top-[60px]' : 'top-3'} left-3 z-10`}>
                   <div className="bg-red-600 text-white px-2.5 py-1 rounded-full text-xs font-bold uppercase shadow-lg border border-red-400">
                     Sold Out
                   </div>
