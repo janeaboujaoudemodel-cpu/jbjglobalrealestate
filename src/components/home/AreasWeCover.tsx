@@ -38,7 +38,6 @@ const AreasWeCover = () => {
           </span>
           <h2
             className="text-2xl md:text-3xl font-bold text-black"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             {t('areas.title', 'Areas We Cover')}
           </h2>
