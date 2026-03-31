@@ -811,8 +811,7 @@ const Footer = () => {
 
             {/* Google My Business Link - Relocated to Social Links section */}
           </div>
-          
-        </div>
+          </div>
         </div>
       </div>
       
