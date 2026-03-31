@@ -184,8 +184,7 @@ const Index = () => {
               
               {/* Tagline */}
               <p 
-                className="mt-6 text-gold/70 text-sm md:text-base tracking-[0.25em] uppercase text-center px-6"
-                style={{ fontFamily: 'Poppins, sans-serif' }}
+                className="mt-6 text-white/60 text-sm md:text-base tracking-[0.25em] uppercase text-center px-6"
               >
                 Your Gateway to Dubai's Finest Real Estate
               </p>
