@@ -54,10 +54,10 @@ function BookMarqueeStrip({ books }: { books: BookData[] }) {
             to={book.href}
             className="flex-shrink-0 w-28 md:w-36 group"
           >
-            <div className="relative w-24 h-36 md:w-32 md:h-44 mx-auto rounded-md overflow-hidden border border-gold/40 shadow-[4px_4px_20px_rgba(0,0,0,0.25)] transition-transform duration-300 group-hover:scale-105">
+            <div className="relative w-24 h-36 md:w-32 md:h-44 mx-auto rounded-md overflow-hidden border border-gray-200 shadow-sm transition-transform duration-300 group-hover:scale-105">
               <BookCoverFace book={book} size="thumb" bare />
             </div>
-            <p className="text-center text-[10px] md:text-xs text-zinc-400 mt-2 truncate px-1 group-hover:text-gold transition-colors">
+            <p className="text-center text-[10px] md:text-xs text-gray-400 mt-2 truncate px-1 group-hover:text-black transition-colors">
               {book.title}
             </p>
           </Link>
@@ -69,24 +69,24 @@ function BookMarqueeStrip({ books }: { books: BookData[] }) {
 
 export default function HomepageBookMarquee() {
   return (
-    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] py-10 md:py-14">
+    <section className="bg-white py-10 md:py-14">
       <div className="px-4 md:px-6 lg:px-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 border border-gold/30 flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-gold" />
+            <div className="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-gray-600" />
             </div>
             <div>
-              <h2 className="text-white text-lg md:text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-black text-lg md:text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
                 Explore Our Guides & Reports
               </h2>
-              <p className="text-zinc-500 text-xs">Free educational resources for investors</p>
+              <p className="text-gray-400 text-xs">Free educational resources for investors</p>
             </div>
           </div>
           <Link
             to="/guides"
-            className="hidden sm:flex items-center gap-1.5 text-gold text-sm font-medium hover:text-gold-light transition-colors"
+            className="hidden sm:flex items-center gap-1.5 text-black text-sm font-medium hover:text-gray-600 transition-colors"
           >
             View Library
             <ArrowRight className="w-4 h-4" />
@@ -100,7 +100,7 @@ export default function HomepageBookMarquee() {
         <div className="mt-4 sm:hidden text-center">
           <Link
             to="/guides"
-            className="inline-flex items-center gap-1.5 text-gold text-sm font-medium hover:text-gold-light transition-colors"
+            className="inline-flex items-center gap-1.5 text-black text-sm font-medium hover:text-gray-600 transition-colors"
           >
             View Full Library
             <ArrowRight className="w-4 h-4" />

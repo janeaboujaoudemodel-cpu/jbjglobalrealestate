@@ -56,19 +56,19 @@ const StartingPointSection = () => {
   const activeCards = activeTab === 'audience' ? audienceCards : activeTab === 'services' ? serviceCards : professionalCards;
 
   return (
-    <section className="bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+    <section className="bg-white">
       <div className="jj-layer-2">
         {/* Header badge */}
         <div className="text-center mb-6 md:mb-8">
-          <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-2 border-gold rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold shadow-md">
-            <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-gold" />
+          <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gray-100 border border-gray-300 rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold">
+            <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-gray-600" />
             <span className="text-black">{t('hero.findStartingPoint')}</span>
           </span>
         </div>
 
-        {/* Tab navigation — champagne pill style matching badge */}
+        {/* Tab navigation */}
         <div className="flex justify-center mb-6 md:mb-8">
-          <div className="inline-flex bg-[hsl(32,28%,13%)]/40 border border-gold/30 rounded-full p-1 gap-1">
+          <div className="inline-flex bg-gray-100 border border-gray-200 rounded-full p-1 gap-1">
             {tabs.map((tab) => (
               <button
                 key={tab.key}
@@ -76,8 +76,8 @@ const StartingPointSection = () => {
                 className={cn(
                   "px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide transition-all duration-300",
                   activeTab === tab.key
-                    ? "bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black border-2 border-gold shadow-md"
-                    : "text-white/60 hover:text-white hover:bg-white/5 border-2 border-transparent"
+                    ? "bg-black text-white shadow-md"
+                    : "text-gray-500 hover:text-black hover:bg-gray-50 border border-transparent"
                 )}
               >
                 {tab.label}
@@ -86,25 +86,23 @@ const StartingPointSection = () => {
           </div>
         </div>
 
-        {/* Cards grid — uniform featured style */}
+        {/* Cards grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 w-full">
           {activeCards.map((card) => (
             <Link key={card.to + card.label} to={card.to} className="group">
               <div className={cn(
-                "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 rounded-2xl p-4 md:p-5 text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]",
-                "border-gold/30 hover:border-gold",
-                "hover:shadow-[0_12px_40px_rgba(200,167,102,0.5)] hover:-translate-y-1.5",
-                "shadow-[0_4px_20px_rgba(200,167,102,0.2)]",
+                "bg-white border rounded-2xl p-4 md:p-5 text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center min-h-[120px] md:min-h-[140px]",
+                "border-gray-200 hover:border-gray-400",
+                "hover:shadow-lg hover:-translate-y-1.5",
+                "shadow-sm",
               )}>
-                {/* Hover glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-gold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
                 <div className="relative flex flex-col items-center gap-2 md:gap-3 w-full">
-                  <div className="w-14 h-14 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(200,167,102,0.4)] transition-all duration-300 shadow-lg shrink-0 bg-gradient-to-br from-gold/20 to-gold/10 border-2 border-gold/40">
-                    <card.icon className="w-7 h-7 text-gold" strokeWidth={1.5} />
+                  <div className="w-14 h-14 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shrink-0 bg-gray-100 border border-gray-200">
+                    <card.icon className="w-7 h-7 text-gray-600" strokeWidth={1.5} />
                   </div>
                   <div className="text-center">
-                    <h4 className="text-black group-hover:text-gold text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
-                    <p className="text-black/45 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
+                    <h4 className="text-black group-hover:text-gray-700 text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
+                    <p className="text-gray-400 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
                   </div>
                 </div>
               </div>
