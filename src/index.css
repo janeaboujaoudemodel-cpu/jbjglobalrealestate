@@ -2076,11 +2076,8 @@ svg[class*="text-muted"],
 }
 
 /* ============================================================
- * GLOBAL CONTRAST FIX — Single cascade-proof system
- * All rules are UNLAYERED for maximum priority.
- * 1. Light surfaces → dark text
- * 2. Dark surfaces → light text (overrides #1)
- * Both reset --tw-text-opacity to defeat Tailwind opacity.
+ * GLOBAL CONTRAST ENFORCEMENT
+ * Uses :where() on the dark rule so nested light surfaces win.
  * ============================================================ */
 
 /* ── 1. LIGHT SURFACES: force dark readable text ── */
@@ -2088,7 +2085,9 @@ svg[class*="text-muted"],
   .bg-white, .bg-background, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
   .bg-zinc-50, .bg-gray-50, .bg-slate-50, .bg-neutral-50, .bg-stone-50,
   [class*="bg-white"], [class*="bg-zinc-5"], [class*="bg-gray-5"],
-  [class*="bg-slate-5"], [class*="bg-neutral-5"], [class*="bg-stone-5"]
+  [class*="bg-slate-5"], [class*="bg-neutral-5"], [class*="bg-stone-5"],
+  [class*="bg-gradient-to"][class*="from-gold"],
+  [class*="bg-gold/"], [class*="from-gold/"]
 ) :is(
   [class*="text-zinc-"], [class*="text-gray-"], [class*="text-slate-"],
   [class*="text-stone-"], [class*="text-neutral-"],
@@ -2100,9 +2099,9 @@ svg[class*="text-muted"],
   --tw-text-opacity: 1 !important;
 }
 
-/* ── 2. DARK SURFACES: force light readable text (higher specificity) ── */
-:root:not(.dark) :is(
-  .bg-black, .bg-primary, .bg-foreground,
+/* ── 2. DARK SURFACES: force light text — uses :where() so rule 1 wins when nested ── */
+:where(
+  .dark, .bg-black, .bg-primary, .bg-foreground,
   .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-slate-800, .bg-slate-900, .bg-slate-950,
@@ -2111,7 +2110,8 @@ svg[class*="text-muted"],
   [class*="bg-gray-8"], [class*="bg-gray-9"],
   [class*="bg-slate-8"], [class*="bg-slate-9"],
   [class*="bg-neutral-8"], [class*="bg-neutral-9"],
-  [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"]
+  [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
+  .bg-gradient-to-br
 ) :is(
   [class*="text-zinc-"], [class*="text-gray-"], [class*="text-slate-"],
   [class*="text-stone-"], [class*="text-neutral-"],
@@ -2123,22 +2123,23 @@ svg[class*="text-muted"],
   --tw-text-opacity: 1 !important;
 }
 
-/* ── 3. Gold text on dark → white ── */
-:root:not(.dark) :is(
-  .bg-black, .bg-gray-900, .bg-gray-950, .bg-gold,
-  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
-  [class*="bg-black"], [class*="bg-gray-9"], [class*="bg-zinc-8"], [class*="bg-zinc-9"],
+/* ── 3. Gold text preserved on dark surfaces ── */
+:where(
+  .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900,
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"]
-) :is(.text-gold, [class*="text-gold"]) {
+) .text-gold, :where(
+  .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900,
+  [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"]
+) [class*="text-gold"] {
+  color: #C8A766 !important;
+}
+
+/* ── 4. Gold text on gold bg → white ── */
+.bg-gold .text-gold, .bg-gold [class*="text-gold"] {
   color: #FFFFFF !important;
 }
 
-.bg-black.text-gold, .bg-gray-900.text-gold,
-.bg-gray-950.text-gold, .bg-gold.text-gold {
-  color: #FFFFFF !important;
-}
-
-/* ── 4. Buttons & links on dark backgrounds ── */
+/* ── 5. Buttons & links on dark/gold backgrounds ── */
 button.bg-black, a.bg-black,
 button.bg-gold, a.bg-gold,
 button[class*="bg-gray-900"], a[class*="bg-gray-900"] {
