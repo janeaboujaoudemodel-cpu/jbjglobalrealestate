@@ -196,7 +196,7 @@ const BestIdeaAward = () => {
                       </div>
                       <span className="text-black font-bold text-sm">Winner's Recognition Package</span>
                     </div>
-                    <ul className="space-y-2 text-xs text-zinc-700">
+                    <ul className="space-y-2 text-xs" style={{ color: '#374151' }}>
                       <li className="flex items-start gap-2">
                         <span className="text-gold mt-0.5">✦</span>
                         <span>Your <span className="text-gold font-semibold">portrait framed</span> & featured on our website</span>
