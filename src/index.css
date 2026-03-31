@@ -2132,3 +2132,11 @@ button[class*="bg-green"],
 a[class*="bg-green"] {
   color: #FFFFFF !important;
 }
+
+/* Global logo transparency — merge white PNG backgrounds with parent */
+img[alt="JBJ"],
+img[alt="JBJ Global Real Estate"],
+img[alt="JBJ AI analyzing..."],
+img[alt*="JBJ"][class*="object-contain"] {
+  mix-blend-mode: multiply;
+}

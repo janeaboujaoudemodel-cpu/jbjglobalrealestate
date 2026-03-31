@@ -293,7 +293,7 @@ export const ProjectAIAnalyzer = ({
                 <img
                   src={jbjMonogramNobuffer}
                   alt="JBJ AI analyzing..."
-                  className="w-28 h-28 md:w-36 md:h-36 object-contain"
+                  className="w-28 h-28 md:w-36 md:h-36 object-contain mix-blend-multiply"
                   style={{
                     animation: "jbj-breathe 2s ease-in-out infinite",
                     mixBlendMode: "multiply",
