@@ -1,46 +1,98 @@
 
 
-## Find and Update Logos for Remaining 11 Developers
+## Global Data Color Upgrade & Issue Highlighting
 
-### Research Summary
+### Problems Found
 
-I researched all 11 developers without logos. Here are the findings:
+1. **InvestmentMetricsSection** — Labels use `text-muted-foreground` (faded gray), cards have `hover:shadow-gold/15` (ugly gold hover), `ring-gold/10` on icons. Values like rental yield use `text-gold` which is low-contrast on light cards.
 
-### Logos Found (6 developers)
+2. **MarketOverviewDashboard** — StatCard labels use `text-black/60` (faded), property type volume shows `text-black/50`, data attribution uses `text-black/50` and `text-black/40`. No color differentiation between property types in the list.
 
-| Developer | Logo Source | Logo URL |
-|-----------|-----------|----------|
-| **Peak Summit Development** | tophouse.one aggregator | `https://tophouse.one/wp-content/uploads/2024/02/PS-450x450.jpg` |
-| **Royal Dunes** | Actually "Royal Development Company" (RDC) — rdcuae.com header logo | Extract from rdcuae.com HTML |
-| **Palladium Prime Development** | topaddress.ae aggregator page has a developer image | `https://topaddress.ae/wp-content/uploads/2025/09/2b04af17173683ff3b9e18f5bd1ff584-1200x900.webp` (feature image, need to find actual logo from palladiumdevelopment.ae — it uses an SVG inline logo) |
-| **Lamar Development** | ld.ae / bureaulamar.com — uses inline SVG logo (text wordmark "Lamar Development") | Extract SVG or find raster version from aggregator |
-| **Aqaar** | aqaar.com (Ajman Properties Corporation) — site was unreachable but Tracxn/RocketReach have logo references | Search aggregators for hosted logo |
-| **Sheffield Holding** | sheffieldholdings.com — site is down ("being updated") but known for Marina 101 | May find on archive.org |
+3. **DLDMarketWidget (full)** — Stat labels use `text-black/60`. Top Areas list uses `text-black/40` for rank numbers and `text-black/80` for names. Disclaimer is `text-black/40`.
 
-### Logos NOT Findable (5 developers — no accessible website or discoverable logo)
+4. **DLDMarketWidget (compact)** — Uses `text-gray-600` for disclaimer, `text-white/60` and `text-white/70` (faded).
 
-| Developer | Issue |
-|-----------|-------|
-| **Al Warqa** | "Al Warqa" is a Dubai area name; no official developer entity or website found |
-| **Blue Square Development** | bluesquaredubai.com renders blank (GoDaddy builder with no content). New to UAE market. |
-| **Hamrk Development** | hamrk.com renders blank (GoDaddy builder). Aggregator pages don't host their logo. |
-| **Sunrise Valley** | This is actually a **project** by H&H Development, not a separate developer. Should be re-linked to H&H. |
-| **Urban Wellness** | wellcube.life renders blank (Nuxt app with no content). Niche brand with no discoverable logo asset. |
+5. **ClientMarketSnapshot** — "Moderate" badge uses `text-muted-foreground` (invisible), "stable" trend icon uses `text-muted-foreground`, disclaimer uses `text-muted-foreground/60`.
 
-### Implementation Steps
+6. **DataSourcesPanel** — Descriptions use `text-black/60`, trust indicators use `text-black/70`.
 
-1. **Database UPDATEs** for logos found:
-   - Set `logo_url` for Peak Summit, Royal Dunes (RDC), Aqaar, Palladium, Lamar, and Sheffield using extracted URLs from official sites, aggregators, or archive.org
-   - Fetch each official website's HTML to extract the exact logo `<img>` or favicon URL
+7. **No red highlighting** for issues/errors/negative data anywhere.
 
-2. **Data corrections** for mislinked developers:
-   - "Sunrise Valley" developer should be re-linked: its project "Sunrise Living" is by H&H Development. Update the project's `developer_id` to point to H&H Development instead.
-   - "Royal Dunes" should be renamed to "Royal Development Holding" or "RDC" to match the actual developer behind Mallside Residences.
+### Plan
 
-3. **Report remaining** — Al Warqa, Blue Square, Hamrk, and Urban Wellness have no discoverable official logo. These need manual uploads.
+#### Step 1: Create `src/lib/dataColors.ts` — Global Semantic Color Map
 
-### What stays untouched
-- No code changes
-- No schema changes
-- No UI changes
+A single source of truth for all data/chart/metric colors:
+
+```text
+offPlan    → emerald-500 (green)
+secondary  → red-500 (red)
+cash       → blue-500
+mortgage   → amber-500
+growth     → emerald-600
+decline    → red-600
+issue/alert → red-600 (always red)
+price      → emerald-700
+volume     → purple-600
+yield      → blue-600
+roi        → emerald-500
+rental     → blue-500
+```
+
+Plus Tailwind class constants for bars, text, backgrounds, and badges.
+
+#### Step 2: Fix `InvestmentMetricsSection.tsx`
+
+- Replace all `text-muted-foreground` labels with `text-black font-medium`
+- Change gold hover shadow to a clean `hover:shadow-lg hover:shadow-black/10`
+- Keep ROI green, yield blue (not gold), rental income blue — all with bold saturated values
+- Remove `ring-gold/10`, use `ring-emerald-200`, `ring-blue-200`, etc. matching each metric
+- Remove `border-gold/40` from metric cards, use matching semantic border colors
+
+#### Step 3: Fix `MarketOverviewDashboard.tsx`
+
+- StatCard labels: `text-black/60` → `text-black font-medium`
+- Property Type list: add colored dot indicators per type (Villa=emerald, Apartment=blue, Townhouse=amber, Land=purple)
+- Volume text: `text-black/50` → `text-black/70 font-medium`
+- Data attribution: `text-black/50` → `text-black/70`
+
+#### Step 4: Fix `DLDMarketWidget.tsx` (full + compact)
+
+- Stat labels: `text-black/60` → `text-black/80 font-medium`
+- Top Areas rank: `text-black/40` → `text-black/70 font-bold`
+- Compact: `text-gray-600` → `text-black/70`, `text-white/60` → `text-white/80`
+- Disclaimer: `text-black/40` → `text-black/60`
+
+#### Step 5: Fix `ClientMarketSnapshot.tsx`
+
+- "Moderate" badge: replace `text-muted-foreground` with `text-blue-600 border-blue-400 bg-blue-50`
+- "Stable" trend icon: `text-muted-foreground` → `text-blue-500`
+- All `text-muted-foreground` labels → `text-black/80 font-medium`
+- Disclaimer: `text-muted-foreground/60` → `text-black/60`
+
+#### Step 6: Fix `DataSourcesPanel.tsx`
+
+- Descriptions: `text-black/60` → `text-black/80`
+- Trust indicators: `text-black/70` → `text-black font-medium`
+
+#### Step 7: Add "Issue = Red" Global Rule
+
+- Any negative change, decline, or issue indicator MUST use `text-red-600` with a red background badge
+- Update `master-lock.ts` to add a `DATA_COLOR_LOCK` section that enforces:
+  - Positive = emerald, Negative = red (always)
+  - No gray for any data value, metric label, or chart element
+  - Issues/alerts always highlighted in red
+  - Each data category must use a distinct semantic color
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `src/lib/dataColors.ts` | **NEW** — semantic color constants |
+| `src/components/project-detail/InvestmentMetricsSection.tsx` | Fix faded labels, gold hover, gold yield color |
+| `src/components/market-intelligence/MarketOverviewDashboard.tsx` | Fix faded labels, add property type color dots |
+| `src/components/shared/DLDMarketWidget.tsx` | Fix all faded text in both compact and full modes |
+| `src/components/client-intelligence/ClientMarketSnapshot.tsx` | Fix moderate badge, stable icon, all faded labels |
+| `src/components/market-intelligence/DataSourcesPanel.tsx` | Fix faded descriptions and trust indicators |
+| `src/config/master-lock.ts` | Add `DATA_COLOR_LOCK` governance section |
 
