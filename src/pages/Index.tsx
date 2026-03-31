@@ -291,14 +291,14 @@ const Index = () => {
             {/* Three pillar badges */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-3 gap-px max-w-3xl mx-auto mb-8 border border-[hsl(var(--gold)/0.2)] overflow-hidden"
+              className="grid grid-cols-3 gap-px max-w-3xl mx-auto mb-8 border border-white/20 overflow-hidden"
             >
               {pillars.map((pillar, i) => (
                 <div
                   key={pillar.title}
-                  className="bg-black/50 backdrop-blur-sm p-3 sm:p-4 text-center border-r last:border-r-0 border-[hsl(var(--gold)/0.15)]"
+                  className="bg-black/50 backdrop-blur-sm p-3 sm:p-4 text-center border-r last:border-r-0 border-white/15"
                 >
-                  <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-gold mx-auto mb-1.5" />
+                  <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/80 mx-auto mb-1.5" />
                   <h3 className="text-[10px] sm:text-xs font-semibold text-white mb-0.5">{pillar.title}</h3>
                   <p className="text-[8px] sm:text-[10px] text-zinc-400 leading-tight">{pillar.desc}</p>
                 </div>
