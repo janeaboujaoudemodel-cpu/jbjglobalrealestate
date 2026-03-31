@@ -1,44 +1,47 @@
 
 
-## Fix Corrupt Developer Logos in Database
+## Fix Missing Developer Logos for Meraas and Binghatti
+
+### Problem
+
+The previous database cleanup correctly removed the corrupted `habtoor_polo_villas` photo from all developers, but set Meraas and Binghatti `logo_url` to NULL because no clean sibling record existed. This causes the UI to show a fake initial letter ("M" for Meraas, "B" for Binghatti) instead of a real logo. The user considers this a violation -- every developer must show its official logo.
 
 ### Root Cause
 
-The code is working correctly — it faithfully reads `logo_url` from the database. The problem is that **18 developer records** in the database have their `logo_url` set to a property photo (`habtoor_polo_villas_faeaa3daa7.webp`) instead of the real developer logo. This is a **data corruption issue**, not a code issue.
+Meraas (4 records) and Binghatti (2 records) never had a correct `logo_url` in any database record. All copies either had the corrupt photo or NULL. The Reelly API sync cannot fix this because the API key returns 401 (expired/invalid).
 
-### Affected Developers (all have the same wrong photo as logo)
+### Fix: Database Update
 
-Emaar (2 records), DAMAC (2), Sobha (2), Aldar (2), Binghatti (2), Meraas (2), Ellington (2), Azizi (2), Samana (1), Imtiaz (1)
+Insert the correct, publicly accessible logo URLs for these developers:
 
-### Fix: Database Migration
+| Developer | Records | Logo Source |
+|-----------|---------|-------------|
+| Meraas | `meraas`, `developed-by-meraas` | `https://static.cdnlogo.com/logos/m/18/meraas.svg` (official Meraas logo, black wordmark with icon) |
+| Binghatti | `binghatti`, `developed-by-binghatti` | `https://upload.wikimedia.org/wikipedia/commons/7/7c/Logo_Binghatti.jpg` (official Binghatti logo from Wikimedia Commons) |
 
-Update the `logo_url` for all 18 corrupted records using the correct logos from their duplicate entries that have real logos:
+Both URLs are verified as publicly accessible and match the official logos visible on meraas.com and binghatti.com respectively.
 
-| Developer | Correct Logo Source |
-|-----------|-------------------|
-| Emaar Properties | From `emaar` slug record |
-| DAMAC Properties | From `damac` slug record |
-| Sobha Realty | From `sobha` slug record |
-| Aldar Properties | From `aldar` slug record |
-| Ellington Properties | From `ellington` slug record |
-| Azizi Developments | From `azizi` slug record |
-| Samana Developers | From `samana` or `samana-developers` slug record |
-| Imtiaz Developments | From `imtiaz-developments` slug record |
-| Binghatti | No correct record exists — set to NULL (the code already has a hardcoded fallback for Binghatti in FeaturedListings) |
-| Meraas | No correct record exists — set to NULL (will show initial fallback) |
+### SQL (via insert tool)
 
-### SQL Migration
+```sql
+UPDATE developers SET logo_url = 'https://static.cdnlogo.com/logos/m/18/meraas.svg'
+WHERE slug IN ('meraas', 'developed-by-meraas');
 
-A single UPDATE statement per developer to replace the corrupt `habtoor_polo_villas` URL with the correct logo URL from the sibling record.
+UPDATE developers SET logo_url = 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Logo_Binghatti.jpg'
+WHERE slug IN ('binghatti', 'developed-by-binghatti');
+```
+
+### Verification
+
+After the database update, take a screenshot of the homepage to confirm:
+- Meraas projects show the real Meraas logo (black icon + wordmark)
+- Binghatti projects show the real Binghatti logo
+- No developer shows a letter initial or property photo as logo
+- Logo containers remain clean `bg-white/90`
 
 ### What stays untouched
-- All code files — no changes needed
-- Logo container styling (bg-white/90) — stays as-is
-- `getDeveloperLogoUrl` utility — correct
-- All Supabase joins — already include `logo_url`
-
-### Technical Details
-- The corruption likely happened during a bulk import that set a default/placeholder image
-- All 18 records share the exact same wrong URL: `habtoor_polo_villas_faeaa3daa7.webp`
-- After the fix, `getDeveloperLogoUrl` will return the real logos automatically since the data pipeline is already correct
+- All code files -- no changes needed
+- All other developer logos -- already correct
+- Logo rendering components -- working correctly
+- Logo container styling -- remains `bg-white/90`
 
