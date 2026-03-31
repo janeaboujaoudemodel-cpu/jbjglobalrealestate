@@ -256,7 +256,7 @@ const BestIdeaAward = () => {
                           
                           {!formData.isAnonymous && (
                             <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 border border-gold/40 rounded-xl p-5 mb-5">
-                              <p className="text-sm text-zinc-600 mb-2">Your Draw Ticket Number</p>
+                              <p className="text-sm text-gray-600 mb-2">Your Draw Ticket Number</p>
                               <p className="text-xl font-bold text-gold tracking-wider mb-2">{drawTicketNumber}</p>
                               <p className="text-xs text-gray-500">This ticket is linked to your account</p>
                             </div>
