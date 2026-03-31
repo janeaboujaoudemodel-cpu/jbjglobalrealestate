@@ -188,8 +188,8 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
           <div className="p-4 flex flex-col flex-grow min-h-[140px]">
             <div className="min-h-[20px] mb-2">
               {(project.area_name || project.location) ? (
-                <div className="flex items-center gap-1.5 text-gray-600 text-xs">
-                  <MapPin className="w-3.5 h-3.5 text-gray-600 flex-shrink-0" />
+                <div className="flex items-center gap-1.5 text-gray-700 text-xs">
+                  <MapPin className="w-3.5 h-3.5 text-gray-700 flex-shrink-0" />
                   <span className="truncate">{project.area_name || project.location}</span>
                 </div>
               ) : (
