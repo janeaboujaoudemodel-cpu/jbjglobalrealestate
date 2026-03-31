@@ -212,7 +212,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
                 </Link>
               </span>
             ) : project.developer_name ? (
-              <span className="text-xs font-medium mb-1 block"><span className="text-gray-600">by </span><span className="text-black">{project.developer_name}</span></span>
+              <span className="text-xs font-medium mb-1 block"><span className="text-gray-700">by </span><span className="text-black">{project.developer_name}</span></span>
             ) : null}
 
             {(project as any).description && (
