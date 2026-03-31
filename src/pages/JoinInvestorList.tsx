@@ -146,7 +146,6 @@ const JoinInvestorList = () => {
                 variants={fadeInUp}
                 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 uppercase tracking-wider"
                 style={{
-                  fontFamily: "Poppins, sans-serif",
                   background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',

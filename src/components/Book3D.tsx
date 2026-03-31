@@ -187,7 +187,6 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
                   className="text-gold font-bold tracking-[0.3em] uppercase"
                   style={{ 
                     fontSize: size === "sm" ? "28px" : size === "md" ? "36px" : "44px",
-                    fontFamily: "Poppins, sans-serif",
                     textShadow: "0 2px 8px rgba(168,146,90,0.4)",
                     letterSpacing: "0.2em",
                   }}

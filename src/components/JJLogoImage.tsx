@@ -48,7 +48,6 @@ export const JJLogoImage = ({
         <div 
           className="flex flex-col items-center justify-center text-current mt-1"
           style={{ 
-            fontFamily: "Poppins, sans-serif",
             letterSpacing: '0.08em'
           }}
         >

@@ -137,7 +137,6 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
           <h1 
             className="text-3xl md:text-5xl font-bold mb-4" 
             style={{ 
-              fontFamily: "Poppins, sans-serif",
               background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -193,7 +192,6 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
             <h2 
               className="text-2xl md:text-3xl font-bold mb-4"
               style={{ 
-                fontFamily: "Poppins, sans-serif",
                 background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",

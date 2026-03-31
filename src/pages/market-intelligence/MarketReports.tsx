@@ -164,7 +164,6 @@ const MarketReportsPage = () => {
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-6"
                   style={{ 
-                    fontFamily: "Poppins, sans-serif",
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -339,7 +338,6 @@ const MarketReportsPage = () => {
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-8 text-center"
                   style={{ 
-                    fontFamily: "Poppins, sans-serif",
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -403,7 +401,6 @@ const MarketReportsPage = () => {
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-8 text-center"
                   style={{ 
-                    fontFamily: "Poppins, sans-serif",
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -531,7 +528,6 @@ const MarketReportsPage = () => {
                         <h3 
                           className="text-2xl md:text-3xl font-bold mb-4"
                           style={{ 
-                            fontFamily: "Poppins, sans-serif",
                             background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                             WebkitBackgroundClip: "text",
                             WebkitTextFillColor: "transparent",

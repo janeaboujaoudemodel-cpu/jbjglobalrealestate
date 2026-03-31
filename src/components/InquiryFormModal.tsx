@@ -395,9 +395,6 @@ const InquiryFormModal = ({
                 
                 <DialogTitle 
                   className="text-2xl font-bold text-center text-black"
-                  style={{
-                    fontFamily: 'Poppins, sans-serif',
-                  }}
                 >
                   {propertyName ? `Inquire About ${propertyName}` : 'Join Our Community'}
                 </DialogTitle>

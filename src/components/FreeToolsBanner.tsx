@@ -179,7 +179,6 @@ export default function FreeToolsBanner() {
                 <h3 
                   className="font-bold text-xl md:text-2xl mb-3 leading-tight"
                   style={{ 
-                    fontFamily: "Poppins, sans-serif",
                     color: "#ffffff",
                     textShadow: "0 0 30px rgba(255,255,255,0.2), 0 0 60px rgba(255,255,255,0.1)"
                   }}

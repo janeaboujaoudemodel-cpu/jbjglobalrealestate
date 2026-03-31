@@ -34,7 +34,6 @@ const Communities = React.forwardRef<HTMLElement>((_, ref) => {
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="text-black font-bold mb-3"
               style={{
-                fontFamily: "Poppins, sans-serif",
                 fontSize: "clamp(28px, 4vw, 52px)",
                 lineHeight: "1.1",
               }}
