@@ -375,7 +375,7 @@ const BestIdeaAward = () => {
                               placeholder="Describe your idea in detail... How can we improve our services, processes, or customer experience?"
                               value={formData.idea}
                               onChange={(e) => setFormData({ ...formData, idea: e.target.value })}
-                              className="mt-1 min-h-[120px] border-zinc-300 focus:border-gold"
+                              className="mt-1 min-h-[120px] border-gray-300 focus:border-gold"
                             />
                           </div>
 
