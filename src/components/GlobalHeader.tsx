@@ -41,7 +41,7 @@ import { useIsTouchLayout } from "@/hooks/use-touch-layout";
 import jbjMonogramTransparent from "@/assets/jbj-monogram-transparent.png";
 import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 import ListingNotificationBell from "@/components/ListingNotificationBell";
 import { useUserAlerts } from "@/hooks/useUserAlerts";
 

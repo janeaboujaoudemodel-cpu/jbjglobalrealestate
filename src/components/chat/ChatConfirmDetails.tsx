@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { User, Mail, Phone, CheckCircle, Edit3, ArrowRight, Loader2 } from 'lucide-react';
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 
 interface ChatConfirmDetailsProps {
   name: string;

@@ -4,7 +4,7 @@ import { Home, ArrowLeft, ArrowUpRight, Search, Phone, Mail, MessageCircle, Buil
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 import { CONTACT_INFO, getWhatsAppUrl } from "@/constants/stats";
 
 

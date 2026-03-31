@@ -7,7 +7,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin, Building2, TrendingUp, Flame, ArrowRight, Loader2, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
-import jbjMonogram from "@/assets/jbj-monogram-light-bg.png";
+import jbjMonogram from "@/assets/jbj-monogram-nobuffer.png";
 import { Badge } from "@/components/ui/badge";
 import { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 // PropertiesVerticalNav removed — handled globally by MainLayout
