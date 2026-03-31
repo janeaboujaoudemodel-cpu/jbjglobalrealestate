@@ -96,7 +96,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
   const actions = getContextualActions();
 
   return (
-    <div className={cn('fixed bottom-6 left-1/2 -translate-x-1/2 z-50', className)} style={{ transform: 'translateX(-50%) scale(0.88)' }}>
+    <div className={cn('fixed bottom-6 left-1/2 -translate-x-1/2 z-50 opacity-80 hover:opacity-100 transition-opacity duration-300', className)} style={{ transform: 'translateX(-50%) scale(0.78)' }}>
       <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}

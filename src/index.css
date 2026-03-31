@@ -1972,6 +1972,20 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   color: #111111 !important;
 }
 
+/* Cream/champagne text (was meant for dark bg, now on white) → black */
+[class*="text-[#F7F1E6]"],
+[class*="text-[#D4B896]"],
+[class*="text-[#EFE6D6]"],
+[class*="text-[#E8DCC8]"],
+[class*="text-[#DCCFB5]"] {
+  color: #111111 !important;
+}
+
+/* Cream text opacity variants → dark */
+[class*="text-[#D4B896]/"] {
+  color: rgba(0,0,0,0.5) !important;
+}
+
 /* Light/cream backgrounds → white */
 [class*="bg-[#FDFBF7]"],
 [class*="bg-[#F7F1E6]"],
@@ -2000,16 +2014,45 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   --tw-gradient-to: #F5F5F5 !important;
 }
 
+/* When dark brown/champagne gradients flip to white, ensure ALL child text is dark */
+[class*="from-[hsl(32"] *,
+[class*="from-[hsl(33"] *,
+[class*="from-[hsl(34"] *,
+[class*="from-[hsl(36"] *,
+[class*="from-[hsl(38"] * {
+  color: #111 !important;
+}
+/* Exception: white-on-black buttons inside flipped sections */
+[class*="from-[hsl(32"] .bg-black *,
+[class*="from-[hsl(33"] .bg-black *,
+[class*="from-[hsl(34"] .bg-black *,
+[class*="from-[hsl(36"] .bg-black *,
+[class*="from-[hsl(38"] .bg-black *,
+[class*="from-[hsl(32"] .bg-gold *,
+[class*="from-[hsl(33"] .bg-gold *,
+[class*="from-[hsl(34"] .bg-gold *,
+[class*="from-[hsl(36"] .bg-gold *,
+[class*="from-[hsl(38"] .bg-gold * {
+  color: #fff !important;
+}
+
+/* White text classes that should be black on now-white backgrounds */
+.text-white:not(.bg-black .text-white):not(.bg-zinc-900 .text-white):not([class*="bg-gradient-to"] .text-white) {
+  /* don't override globally — only where parent is flipped */
+}
+
 /* Gold border hex overrides → gray */
 [class*="border-[#D4AF37]"],
-[class*="border-[#C8A766]"] {
+[class*="border-[#C8A766]"],
+[class*="border-[#D4B896]"] {
   border-color: #d4d4d4 !important;
 }
 
 /* ── Tailwind gold utility class overrides ── */
 .text-gold { color: #111111 !important; }
-.bg-gold { background-color: #111111 !important; }
+.bg-gold { background-color: #111111 !important; color: #fff !important; }
 .border-gold { border-color: #d4d4d4 !important; }
+.fill-gold { fill: #111111 !important; }
 
 /* Gold opacity variants */
 [class*="bg-gold\/"] { background-color: rgba(0,0,0,0.05) !important; }
@@ -2022,6 +2065,48 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 [class*="from-gold"] { --tw-gradient-from: #e5e5e5 !important; }
 [class*="to-gold"] { --tw-gradient-to: #d4d4d4 !important; }
 
+/* Colored tool borders → neutral gray */
+[class*="border-blue-500"],
+[class*="border-sky-500"],
+[class*="border-amber-500"],
+[class*="border-emerald-500"],
+[class*="border-purple-500"],
+[class*="border-violet-500"],
+[class*="border-pink-500"],
+[class*="border-red-500"],
+[class*="border-rose-500"] {
+  border-color: #d4d4d4 !important;
+}
+
+/* Colored text icons → neutral gray */
+[class*="text-blue-500"],
+[class*="text-sky-500"],
+[class*="text-amber-500"],
+[class*="text-emerald-500"],
+[class*="text-purple-500"],
+[class*="text-violet-500"],
+[class*="text-pink-500"],
+[class*="text-red-500"] {
+  color: #555 !important;
+}
+
+/* Colored bg accents → subtle gray */
+[class*="bg-blue-500\/"],
+[class*="bg-sky-500\/"],
+[class*="bg-amber-500\/"],
+[class*="bg-emerald-500\/"],
+[class*="bg-purple-500\/"],
+[class*="bg-violet-500\/"],
+[class*="bg-pink-500\/"],
+[class*="bg-red-500\/"] {
+  background-color: rgba(0,0,0,0.04) !important;
+}
+
+/* Colored glow shadows → subtle neutral */
+[class*="hover:shadow-[0_8px_30px"] {
+  --tw-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+}
+
 /* Inline style gold hex overrides */
 [style*="#D4AF37"] { color: #111 !important; border-color: #d4d4d4 !important; }
 [style*="#C8A766"] { color: #111 !important; border-color: #d4d4d4 !important; }
@@ -2029,6 +2114,23 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 
 /* Gold shadow overrides — remove gold-tinted shadows */
 [class*="shadow-[0_10px_40px_rgba(200,167,102"],
-[class*="shadow-[0_8px_25px_rgba(200,167,102"] {
+[class*="shadow-[0_8px_25px_rgba(200,167,102"],
+[class*="shadow-[0_4px_20px_rgba(200,167,102"],
+[class*="shadow-[0_2px_8px_rgba(212,184,150"],
+[style*="rgba(200,167,102"] {
   box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+}
+
+/* Dark brown bg-color used for icon containers → light gray */
+[class*="bg-[hsl(32,28%,13%)]"],
+[class*="from-[hsl(32,28%,13%)]"][class*="to-[hsl(33,28%,11%)]"] {
+  background: #f5f5f5 !important;
+}
+
+/* Ensure bg-white/5 and bg-white/10 on now-white parents → subtle gray */
+[class*="bg-white\/5"] {
+  background-color: rgba(0,0,0,0.03) !important;
+}
+[class*="bg-white\/10"] {
+  background-color: rgba(0,0,0,0.05) !important;
 }
