@@ -437,30 +437,30 @@ const Index = () => {
               className="text-center relative max-w-2xl"
               style={{ transformStyle: 'preserve-3d' }}
             >
-              <div className="relative z-10 bg-gradient-to-br from-[hsl(270,30%,16%)] via-[hsl(270,25%,14%)] to-[hsl(280,20%,10%)] backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-purple-500/20 transition-all duration-300 hover:shadow-[0_20px_60px_rgba(139,92,246,0.25)] shadow-[0_10px_40px_rgba(139,92,246,0.15)]"
+              <div className="relative z-10 bg-white rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-purple-200 transition-all duration-300 hover:shadow-[0_20px_60px_rgba(139,92,246,0.3)] shadow-[0_10px_40px_rgba(139,92,246,0.15)]"
                 style={{ transform: 'translateZ(20px)' }}
               >
                 {/* Label badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/15 border border-purple-400/30 text-purple-300 text-xs uppercase tracking-[0.2em] mb-5">
-                  <Sparkles className="w-3 h-3 text-purple-400" />
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-100 border border-purple-300 text-purple-700 text-xs uppercase tracking-[0.2em] mb-5 font-semibold">
+                  <Sparkles className="w-3 h-3 text-purple-600" />
                   {t('home.aiPowered', 'AI-Powered')}
                 </div>
                 <Link to="/quiz" className="block group">
                   <div className="flex items-center justify-center gap-3 mb-3">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-purple-500/15 border border-purple-400/25 flex items-center justify-center group-hover:bg-purple-500/25 transition-all duration-500">
-                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-purple-300 group-hover:text-purple-200 transition-colors" strokeWidth={1.5} />
+                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-purple-600 flex items-center justify-center group-hover:bg-purple-700 transition-all duration-500 shadow-lg shadow-purple-500/30">
+                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-white" strokeWidth={1.5} />
                     </div>
                     <h2 
-                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-white"
+                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-purple-900"
                     >
                       {t('hero.aiFinder')}
                     </h2>
-                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-purple-400 group-hover:text-purple-300 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-purple-600 group-hover:text-purple-800 transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </div>
-                  <p className="text-purple-200/70 text-sm md:text-base max-w-lg mx-auto">
+                  <p className="text-gray-600 text-sm md:text-base max-w-lg mx-auto">
                     {t('hero.aiFinderDesc')}
                   </p>
-                  <p className="text-purple-300/40 text-xs mt-3">
+                  <p className="text-purple-400 text-xs mt-3 font-medium">
                     {t('home.poweredByJBJ', 'Powered by JBJ Global Real Estate')}
                   </p>
                 </Link>
