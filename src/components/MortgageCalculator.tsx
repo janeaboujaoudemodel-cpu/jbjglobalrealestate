@@ -205,12 +205,12 @@ const MortgageCalculator = ({
         {/* Results Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
           {/* Monthly Payment - Featured */}
-          <div className="col-span-2 sm:col-span-3 bg-gray-900 border border-gray-800 rounded-xl p-5 text-center shadow-md">
-            <p className="text-gray-400 text-xs mb-1 uppercase tracking-wider">Estimated Monthly Payment</p>
-            <p className="text-white font-bold text-2xl sm:text-3xl md:text-4xl">
+          <div className="col-span-2 sm:col-span-3 rounded-xl p-5 text-center shadow-md" style={{ background: '#111111', border: '1px solid #333' }}>
+            <p style={{ color: '#d4d4d4' }} className="text-xs mb-1 uppercase tracking-wider">Estimated Monthly Payment</p>
+            <p style={{ color: '#ffffff' }} className="font-bold text-2xl sm:text-3xl md:text-4xl">
               {formatCurrency(calculations.monthlyPayment)}
             </p>
-            <p className="text-gray-500 text-xs mt-1">per month for {loanTermYears} years</p>
+            <p style={{ color: '#a3a3a3' }} className="text-xs mt-1">per month for {loanTermYears} years</p>
           </div>
 
           {/* Down Payment */}
