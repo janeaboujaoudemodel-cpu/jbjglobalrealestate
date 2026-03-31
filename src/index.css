@@ -2076,85 +2076,59 @@ svg[class*="text-muted"],
 }
 
 /* ============================================================
- * GLOBAL CONTRAST FIX — Final base-layer enforcement
- * Forces readable foreground on ALL light surfaces.
- * Re-allows light text only inside explicitly dark containers.
- * Uses CSS custom properties + :is() for cascade-proof coverage.
+ * GLOBAL CONTRAST FIX — Cascade-proof text enforcement
+ * Two rules: light surfaces get dark text, dark surfaces get
+ * light text. Uses :where() + !important + --tw-text-opacity
+ * reset to beat every Tailwind utility in the cascade.
  * ============================================================ */
 
-@layer base {
-  :root {
-    --fg: 17 24 39;        /* gray-900 */
-    --fg-muted: 55 65 81;  /* gray-700 */
-  }
-
-  html, body, #root {
-    color: rgb(var(--fg));
-    background: #fff;
-  }
-
-  /* ── Light surfaces: enforce dark text ── */
-  :is(.bg-white, .bg-background, .bg-zinc-50, .bg-gray-50, .bg-slate-50, .bg-neutral-50,
-  [class*="bg-white"], [class*="bg-zinc-50"], [class*="bg-gray-50"],
-  [class*="bg-slate-50"], [class*="bg-neutral-50"]) {
-    color: rgb(var(--fg));
-  }
-
-  /* All faded/muted/opacity text utilities on light surfaces → readable muted */
-  :is(.bg-white, .bg-background, .bg-zinc-50, .bg-gray-50, .bg-slate-50, .bg-neutral-50,
-  [class*="bg-white"], [class*="bg-zinc-50"], [class*="bg-gray-50"],
-  [class*="bg-slate-50"], [class*="bg-neutral-50"])
-  :is([class*="text-zinc-"], [class*="text-gray-"], [class*="text-slate-"],
-      [class*="text-neutral-"], [class*="text-stone-"],
-      [class*="text-muted"], [class*="text-foreground"],
-      [class*="text-black/"], [class*="text-white/"]) {
-    color: rgb(var(--fg-muted)) !important;
-    opacity: 1 !important;
-  }
-
-  /* ── Dark containers: restore light text ── */
-  :is(.bg-black, .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
-      .bg-gray-800, .bg-gray-900, .bg-gray-950,
-      .bg-slate-800, .bg-slate-900, .bg-slate-950,
-      .bg-neutral-900, .bg-neutral-950,
-      [class*="bg-black"], [class*="bg-zinc-8"], [class*="bg-zinc-9"],
-      [class*="bg-gray-8"], [class*="bg-gray-9"],
-      [class*="bg-slate-8"], [class*="bg-slate-9"],
-      [class*="bg-neutral-9"],
-      [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"])
-  :is([class*="text-white"], [class*="text-zinc-1"], [class*="text-zinc-2"], [class*="text-zinc-3"],
-      [class*="text-gray-1"], [class*="text-gray-2"], [class*="text-gray-3"],
-      [class*="text-slate-1"], [class*="text-slate-2"], [class*="text-slate-3"],
-      [class*="text-muted"], [class*="text-foreground"]) {
-    color: inherit !important;
-    opacity: revert !important;
-  }
+/* ── Light surfaces: ALL text → foreground dark ── */
+:root:not(.dark) :where(
+  .bg-white, .bg-background, .bg-card, .bg-secondary, .bg-muted,
+  .bg-zinc-50, .bg-gray-50, .bg-slate-50, .bg-neutral-50, .bg-stone-50,
+  [class*="bg-white"], [class*="bg-zinc-5"], [class*="bg-gray-5"],
+  [class*="bg-slate-5"], [class*="bg-neutral-5"], [class*="bg-stone-5"]
+) :where(
+  [class*="text-white"], [class*="text-black/"],
+  [class*="text-zinc-"], [class*="text-gray-"], [class*="text-slate-"],
+  [class*="text-stone-"], [class*="text-neutral-"],
+  .text-muted-foreground, .text-foreground
+) {
+  color: hsl(var(--foreground)) !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
 }
 
-/* ── Utility-level boost (outside @layer for higher specificity) ──
-   Catches elements not inside an explicit bg-* container */
+/* ── Dark surfaces: ALL text → white ── */
+:root:not(.dark) :where(
+  .bg-black, .bg-primary, .bg-foreground,
+  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-gray-800, .bg-gray-900, .bg-gray-950,
+  .bg-slate-800, .bg-slate-900, .bg-slate-950,
+  .bg-neutral-800, .bg-neutral-900, .bg-neutral-950,
+  [class*="bg-black"], [class*="bg-zinc-8"], [class*="bg-zinc-9"],
+  [class*="bg-gray-8"], [class*="bg-gray-9"],
+  [class*="bg-slate-8"], [class*="bg-slate-9"],
+  [class*="bg-neutral-8"], [class*="bg-neutral-9"],
+  [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"]
+) :where(
+  [class*="text-white"], [class*="text-black/"],
+  [class*="text-zinc-"], [class*="text-gray-"], [class*="text-slate-"],
+  [class*="text-stone-"], [class*="text-neutral-"],
+  .text-muted-foreground, .text-foreground
+) {
+  color: #fff !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
 
-/* All faded text families → readable dark */
+/* ── Standalone faded text (no explicit bg parent) → readable ── */
 :is(.text-zinc-100,.text-zinc-200,.text-zinc-300,.text-zinc-400,.text-zinc-500,
     .text-gray-100,.text-gray-200,.text-gray-300,.text-gray-400,.text-gray-500,
     .text-slate-100,.text-slate-200,.text-slate-300,.text-slate-400,.text-slate-500,
     .text-muted,.text-muted-foreground) {
-  color: rgb(var(--fg-muted, 55 65 81)) !important;
-}
-
-/* ── Dark container exemptions (utility level) ── */
-:is(.bg-black, .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
-    .bg-gray-800, .bg-gray-900, .bg-gray-950,
-    .bg-slate-800, .bg-slate-900, .bg-slate-950,
-    [class*="bg-black"], [class*="bg-zinc-8"], [class*="bg-zinc-9"],
-    [class*="bg-gray-8"], [class*="bg-gray-9"],
-    [class*="bg-slate-8"], [class*="bg-slate-9"],
-    [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"])
-:is(.text-zinc-100,.text-zinc-200,.text-zinc-300,.text-zinc-400,.text-zinc-500,
-    .text-gray-100,.text-gray-200,.text-gray-300,.text-gray-400,.text-gray-500,
-    .text-slate-100,.text-slate-200,.text-slate-300,.text-slate-400,.text-slate-500,
-    .text-muted,.text-muted-foreground) {
-  color: #d4d4d4 !important;
+  color: #374151 !important;
+  --tw-text-opacity: 1 !important;
 }
 
 /* ── Gold text on dark backgrounds → white ── */
