@@ -2111,6 +2111,18 @@ svg[class*="text-muted"],
   --tw-text-opacity: 1 !important;
 }
 
+/* 1a-bis. Medium contrast text → bump for readability */
+:root:not(.dark) :is(
+  .bg-white, .bg-background, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
+  .bg-gray-50, .bg-gray-100,
+  .jj-layer-2, .jj-layer-1,
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
+) :is(.text-gray-500, .text-zinc-500, .text-gray-600, .text-zinc-600) {
+  color: #374151 !important; /* gray-700 — 9.7:1 on white */
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
 /* 1b. White text on light surfaces → force dark (but NOT inside dark-bg elements like buttons) */
 :root:not(.dark) :is(
   .bg-white, .bg-background, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
