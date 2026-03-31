@@ -2076,7 +2076,25 @@ svg[class*="text-muted"],
 }
 
 /* ============================================================
- * GLOBAL CONTRAST ENFORCEMENT
+ * GLOBAL: Prevent word-breaking in small uppercase labels/badges
+ * Any text ≤ 11px that is uppercase + tracked should never wrap
+ * mid-word. This covers stat cards, badges, tags, etc.
+ * ============================================================ */
+[class*="uppercase"][class*="tracking-"] {
+  word-break: keep-all;
+  overflow-wrap: normal;
+  hyphens: none;
+}
+
+/* Extra safety: very small text labels should never break */
+[class*="text-[8px]"],
+[class*="text-[9px]"],
+[class*="text-[10px]"],
+[class*="text-[11px]"] {
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
  * Uses :where() on the dark rule so nested light surfaces win.
  * ============================================================ */
 

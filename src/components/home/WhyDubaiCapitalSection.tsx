@@ -136,7 +136,7 @@ export default function WhyDubaiCapitalSection() {
                     >
                       {s.value}
                     </div>
-                    <div className="mt-0.5 text-[8px] md:text-[9px] uppercase tracking-wider text-white/60 font-medium">
+                    <div className="mt-0.5 text-[8px] md:text-[9px] uppercase tracking-wider text-white/60 font-medium whitespace-nowrap">
                       <T>{s.label}</T>
                     </div>
                   </div>
