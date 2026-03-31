@@ -735,9 +735,7 @@ const Footer = () => {
             </div>
           </div>
           
-          {/* Close Premium Champagne Inner Layer */}
           </div>
-        </div>
         </div>
 
         {/* Thin inline divider */}
