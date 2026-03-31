@@ -278,7 +278,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               {searchSlot}
             </div>
           ) : (
-            <div className="min-w-0 w-[160px] flex-shrink-0 flex items-center px-2 border border-gold/30 rounded-full bg-white/40">
+            <div className="min-w-0 w-[160px] flex-shrink-0 flex items-center px-2 border border-gray-300 rounded-full bg-white">
               <input
                 type="text"
                 value={filters.searchQuery}
