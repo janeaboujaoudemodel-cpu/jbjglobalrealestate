@@ -2090,10 +2090,59 @@ svg[class*="text-muted"],
 }
 
 /* ============================================================
- * GLOBAL CONTRAST FIX — Dark backgrounds must have white text
- * Prevents text-gold (#111) from being invisible on bg-black
+ * GLOBAL CONTRAST FIX — Low-contrast text enforcement
+ * Since the site is white-dominant monochrome, all zinc-100
+ * through zinc-400 text colors are boosted to readable levels.
+ * This prevents invisible/faded text across all pages.
  * ============================================================ */
 
+/* Zinc-100/200/300 → solid dark for readability on white/light surfaces */
+.text-zinc-100,
+[class*="text-zinc-100"],
+.text-zinc-200,
+[class*="text-zinc-200"],
+.text-zinc-300,
+[class*="text-zinc-300"] {
+  color: #525252 !important; /* zinc-600 equivalent — readable on white */
+}
+
+/* Zinc-400 → boost to zinc-600 */
+.text-zinc-400,
+[class*="text-zinc-400"] {
+  color: #525252 !important;
+}
+
+/* text-white and text-gray-100/200/300 on light surfaces → dark */
+.text-white:not(.bg-black *):not(.bg-gray-900 *):not(.bg-gray-950 *):not([class*="bg-black"] *):not([class*="bg-gradient-to"] *):not(button *):not(a.bg-black *) {
+  /* Intentionally not overridden globally — white text is valid on dark parents */
+}
+
+/* ── Dark backgrounds: restore light text ──
+   Elements inside explicitly dark containers keep their light text */
+.bg-black .text-zinc-100,
+.bg-black .text-zinc-200,
+.bg-black .text-zinc-300,
+.bg-black .text-zinc-400,
+.bg-gray-900 .text-zinc-100,
+.bg-gray-900 .text-zinc-200,
+.bg-gray-900 .text-zinc-300,
+.bg-gray-900 .text-zinc-400,
+.bg-gray-950 .text-zinc-100,
+.bg-gray-950 .text-zinc-200,
+.bg-gray-950 .text-zinc-300,
+.bg-gray-950 .text-zinc-400,
+[class*="bg-black"] .text-zinc-100,
+[class*="bg-black"] .text-zinc-200,
+[class*="bg-black"] .text-zinc-300,
+[class*="bg-black"] .text-zinc-400,
+[class*="bg-gray-900"] .text-zinc-300,
+[class*="bg-gray-900"] .text-zinc-400,
+[class*="bg-gray-950"] .text-zinc-300,
+[class*="bg-gray-950"] .text-zinc-400 {
+  color: #d4d4d4 !important; /* Original light color — valid on dark bg */
+}
+
+/* ── Gold text on dark backgrounds must be white ── */
 .bg-black .text-gold,
 .bg-black [class*="text-gold"],
 .bg-gray-900 .text-gold,
