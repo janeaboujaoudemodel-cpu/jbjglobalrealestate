@@ -54,26 +54,26 @@ export const PremiumHeroButton = ({
     "font-semibold tracking-wide",
     "rounded-xl transition-all duration-300 cursor-pointer",
     isLight 
-      ? "bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 hover:border-gold/80 hover:-translate-y-1"
-      : "bg-transparent border-2 border-white/70 hover:border-gold/80 hover:-translate-y-0.5",
+      ? "bg-white border-2 border-gray-300 hover:border-gray-400 hover:-translate-y-1"
+      : "bg-transparent border-2 border-white/70 hover:border-white hover:-translate-y-0.5",
     className
   );
 
   const sharedStyle = {
     boxShadow: isLight
-      ? '0 2px 8px rgba(200,167,102,0.2), 0 1px 3px rgba(0,0,0,0.1)'
+      ? '0 2px 8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06)'
       : 'inset 0 1px 2px rgba(255,255,255,0.15), 0 4px 20px rgba(0,0,0,0.4)',
   };
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
     if (isLight) {
-      e.currentTarget.style.boxShadow = '0 8px 25px rgba(200,167,102,0.4), 0 4px 12px rgba(0,0,0,0.15)';
+      e.currentTarget.style.boxShadow = '0 8px 25px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08)';
     }
   };
 
   const handleMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
     if (isLight) {
-      e.currentTarget.style.boxShadow = '0 2px 8px rgba(200,167,102,0.2), 0 1px 3px rgba(0,0,0,0.1)';
+      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06)';
     }
   };
 
@@ -81,21 +81,19 @@ export const PremiumHeroButton = ({
     <>
       {iconPosition === "left" && (
         <IconComponent 
-          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors", isLight ? "text-gold" : "text-gold group-hover:text-black")}
-          style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} 
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors", isLight ? "text-gray-600" : "text-white/80 group-hover:text-black")}
         />
       )}
       <span className={cn("transition-colors", isLight ? "text-black" : "text-white group-hover:text-black")}>{children}</span>
       {iconPosition === "right" && (
         <IconComponent 
-          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-gold" : "text-gold group-hover:text-black")}
-          style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} 
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-gray-600" : "text-white/80 group-hover:text-black")}
         />
       )}
-      {/* Hover fill effect - champagne gradient (only for dark-bg variant) */}
+      {/* Hover fill effect (only for dark-bg variant) */}
       {!isLight && (
         <span 
-          className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 border-2 border-gold/60" 
+          className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 border-2 border-gray-300" 
         />
       )}
     </>

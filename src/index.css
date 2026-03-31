@@ -2058,3 +2058,68 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 [class*="bg-white\/10"] {
   background-color: rgba(0,0,0,0.05) !important;
 }
+
+/* ============================================================
+ * GLOBAL CONTRAST FIX — Dark backgrounds must have white text
+ * Prevents text-gold (#111) from being invisible on bg-black
+ * ============================================================ */
+
+/* Any element with bg-black or bg-gold that contains text-gold children → force white */
+.bg-black .text-gold,
+.bg-black [class*="text-gold"],
+.bg-black [class*="text-[hsl(var(--gold"])],
+.bg-gray-900 .text-gold,
+.bg-gray-900 [class*="text-gold"],
+.bg-gray-950 .text-gold,
+.bg-gray-950 [class*="text-gold"],
+.bg-gold .text-gold,
+.bg-gold [class*="text-gold"] {
+  color: #FFFFFF !important;
+}
+
+/* Self: element that IS bg-black AND text-gold at the same time */
+.bg-black.text-gold,
+[class*="bg-black"][class*="text-gold"],
+[class*="bg-black"][class*="text-[hsl(var(--gold"])],
+.bg-gray-900.text-gold,
+.bg-gray-950.text-gold,
+.bg-gold.text-gold {
+  color: #FFFFFF !important;
+}
+
+/* Buttons with dark backgrounds must always have white text */
+button.bg-black,
+a.bg-black,
+button.bg-gold,
+a.bg-gold,
+button[class*="bg-black"],
+a[class*="bg-black"],
+button[class*="bg-gray-900"],
+a[class*="bg-gray-900"] {
+  color: #FFFFFF !important;
+}
+
+/* Ensure hover states on dark buttons keep text visible */
+button.bg-black *,
+a.bg-black *,
+button.bg-gold *,
+a.bg-gold * {
+  color: inherit;
+}
+
+/* Fix: text-[hsl(var(--gold))] on bg-black containers */
+[class*="bg-black"] [class*="text-[hsl(var(--gold"] {
+  color: #FFFFFF !important;
+}
+
+/* Fix hover:text-gold on light backgrounds — keep dark */
+[class*="hover:bg-[hsl(var(--gold"])]:hover,
+[class*="hover:bg-gold"]:hover {
+  color: #000000 !important;
+}
+
+/* Fix green buttons losing text color (WhatsApp etc.) */
+button[class*="bg-green"],
+a[class*="bg-green"] {
+  color: #FFFFFF !important;
+}

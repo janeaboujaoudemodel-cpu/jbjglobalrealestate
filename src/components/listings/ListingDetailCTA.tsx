@@ -39,8 +39,8 @@ export const ListingDetailCTA = ({
   };
 
   return (
-    <div className={`bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold rounded-xl p-5 shadow-lg ${className}`}>
-      <h4 className="text-lg font-semibold text-black mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>
+    <div className={`bg-white border-2 border-gray-200 rounded-xl p-5 shadow-lg ${className}`}>
+      <h4 className="text-lg font-semibold text-black mb-4">
         Interested in this property?
       </h4>
       
@@ -48,7 +48,7 @@ export const ListingDetailCTA = ({
         {/* WhatsApp - Primary */}
         <Button
           onClick={handleWhatsAppClick}
-          className="w-full h-12 bg-green-600 hover:bg-green-700 text-white font-semibold"
+          className="w-full h-12 !bg-green-600 hover:!bg-green-700 !text-white font-semibold !border-green-600"
         >
           <MessageCircle className="w-5 h-5 mr-2" />
           WhatsApp Us
@@ -78,9 +78,9 @@ export const ListingDetailCTA = ({
       </div>
 
       {/* Email fallback */}
-      <p className="text-center text-sm text-zinc-500 mt-4">
+      <p className="text-center text-sm text-gray-500 mt-4">
         Or email us at{' '}
-        <a href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(listingName)}`} className="text-gold hover:underline">
+        <a href={`mailto:${CONTACT_INFO.email}?subject=Inquiry: ${encodeURIComponent(listingName)}`} className="text-black font-medium hover:underline">
           {CONTACT_INFO.email}
         </a>
       </p>
