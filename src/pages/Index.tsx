@@ -251,7 +251,7 @@ const Index = () => {
             {/* Platform tagline badge */}
             <motion.p
               variants={fadeInUp}
-              className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[hsl(var(--gold)/0.7)] mb-4"
+              className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-white/60 mb-4"
             >
               Dubai's Trusted Real Estate Technology Platform
             </motion.p>
