@@ -196,7 +196,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               )}
             </div>
 
-            <h3 className="text-black font-semibold text-sm mb-2 line-clamp-2 group-hover:text-gray-700 transition-colors min-h-[40px]" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h3 className="text-black font-semibold text-sm mb-2 line-clamp-2 group-hover:text-gray-700 transition-colors min-h-[40px]">
               {project.name}
             </h3>
             {project.developer?.slug ? (
@@ -265,7 +265,6 @@ const FeaturedListings = () => {
           </span>
           <h2
             className="text-2xl md:text-3xl font-bold text-black"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             {t('featured.heading', 'Handpicked For You')}
           </h2>

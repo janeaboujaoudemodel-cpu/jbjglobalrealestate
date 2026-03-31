@@ -128,7 +128,6 @@ const DesignBuild = () => {
           <motion.h1 
             className="text-white text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide mb-6"
             variants={fadeInUp}
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Creating{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
@@ -189,7 +188,6 @@ const DesignBuild = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Services</span>
             <h2 
               className="text-white text-3xl md:text-4xl font-bold mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Comprehensive Design Solutions
             </h2>
@@ -235,7 +233,6 @@ const DesignBuild = () => {
                   <CardContent className="p-6">
                     <h3 
                       className="text-black text-2xl font-bold mb-3 group-hover:text-gold transition-colors"
-                      style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {service.title}
                     </h3>
@@ -281,7 +278,6 @@ const DesignBuild = () => {
             </Badge>
             <h2 
               className="text-white text-3xl md:text-4xl font-bold mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Go Premium <span className="text-gold">On Your Own</span>
             </h2>
@@ -348,7 +344,6 @@ const DesignBuild = () => {
                 </Badge>
                 <h2 
                   className="text-black text-2xl md:text-3xl font-bold mb-4"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Ready to Transform <span className="text-gold">Your Space?</span>
                 </h2>

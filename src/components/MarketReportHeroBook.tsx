@@ -103,7 +103,6 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
 
                 <h3
                   className="text-white text-xl md:text-2xl font-bold leading-tight mb-2"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   UAE Real Estate
                   <span className="block text-gold">Market Intelligence</span>

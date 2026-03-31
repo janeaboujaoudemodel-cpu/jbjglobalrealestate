@@ -78,7 +78,6 @@ const ActionGateModal = () => {
           {/* Headline */}
           <h2
             className="text-center text-xl md:text-2xl font-bold text-gold mb-2 tracking-wide"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             {headline}
           </h2>

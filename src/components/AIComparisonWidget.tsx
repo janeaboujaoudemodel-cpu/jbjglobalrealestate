@@ -46,7 +46,6 @@ const AIComparisonWidget = () => {
             </div>
             <h3 
               className="text-black text-2xl md:text-3xl font-bold mb-2"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               AI Property Comparison
             </h3>

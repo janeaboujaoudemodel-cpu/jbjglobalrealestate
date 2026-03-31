@@ -34,7 +34,6 @@ const ToolCard: React.FC<ToolCardProps> = ({ tool }) => {
         </div>
         <h4 
           className="text-base font-bold text-black mb-2 group-hover:text-gold transition-colors flex-shrink-0"
-          style={{ fontFamily: "Poppins, sans-serif" }}
         >
           {tool.name}
         </h4>
@@ -98,7 +97,6 @@ export default function RoyalToolsHub() {
             
             <h1 
               className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-2"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               JBJ Royal Tools Hub
             </h1>
@@ -188,7 +186,6 @@ export default function RoyalToolsHub() {
                       <Sparkles className="w-5 h-5 text-[#B89555]" />
                       <h2 
                         className="text-xl md:text-2xl font-bold text-black"
-                        style={{ fontFamily: "Poppins, sans-serif" }}
                       >
                         {categoryLabels[category]}
                       </h2>

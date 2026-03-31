@@ -135,7 +135,6 @@ const LawFirm = () => {
 
           <motion.h1 
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             Legal Services
@@ -173,7 +172,7 @@ const LawFirm = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Expertise
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Practice Areas" />
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto">
@@ -229,7 +228,7 @@ const LawFirm = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Our Advantage
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Why Choose Us" />
               </h2>
             </motion.div>
@@ -268,7 +267,7 @@ const LawFirm = () => {
             className="text-center"
           >
             <div className="jj-card-inner rounded-2xl p-8 md:p-12 max-w-3xl mx-auto">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 <SplitTitle text="Need Legal Assistance?" />
               </h2>
               <p className="text-black/70 mb-8 max-w-xl mx-auto">

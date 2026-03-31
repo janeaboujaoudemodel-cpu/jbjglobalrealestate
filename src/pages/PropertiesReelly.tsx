@@ -258,7 +258,7 @@ const PropertiesReelly = () => {
       {/* Hero Section */}
       <PropertiesHeroVideo>
         <div className="relative z-10 max-w-3xl">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
             Discover Dubai's Finest <span className="text-gold">Off-Plan</span> Properties
           </h1>
           <p className="text-white/80 text-sm sm:text-base md:text-lg mb-6 max-w-xl">

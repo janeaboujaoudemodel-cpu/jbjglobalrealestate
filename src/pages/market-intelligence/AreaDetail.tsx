@@ -106,7 +106,6 @@ const MarketAreaDetail = () => {
 
           <motion.h1 
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             {area.area}
@@ -203,7 +202,7 @@ const MarketAreaDetail = () => {
       {/* Key Highlights - 3-layer system */}
       <section className="py-12 bg-black">
         <div className="jj-layer-2">
-          <h2 className="text-black text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-black text-2xl font-bold mb-8 text-center">
             <span className="text-gold">Market</span> Highlights
           </h2>
           <div className="max-w-2xl mx-auto space-y-4">
@@ -244,7 +243,7 @@ const MarketAreaDetail = () => {
       {/* Internal Links - 3-layer system */}
       <section className="py-12 bg-black">
         <div className="jj-layer-2">
-          <h3 className="text-black text-xl font-bold mb-6 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h3 className="text-black text-xl font-bold mb-6 text-center">
             <span className="text-gold">Continue</span> Exploring
           </h3>
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">

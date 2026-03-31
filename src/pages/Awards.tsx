@@ -50,8 +50,7 @@ const CounterStat = ({ end, suffix, prefix, label }: { end: number; suffix: stri
   return (
     <div ref={ref} className="text-center min-w-0">
       <p 
-        className="text-gold text-2xl md:text-4xl lg:text-5xl font-bold mb-2 break-words" 
-        style={{ fontFamily: "Poppins, sans-serif" }}
+        className="text-gold text-2xl md:text-4xl lg:text-5xl font-bold mb-2 break-words"
       >
         {formattedValue}
       </p>
@@ -87,7 +86,6 @@ const Awards = () => {
               <p className="text-gold text-sm uppercase tracking-widest mb-4">Awards & Recognition</p>
               <h1 
                 className="text-black text-4xl md:text-6xl font-bold mb-6 max-w-3xl"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Recognized for <span className="text-gold">Excellence</span>
               </h1>
@@ -135,7 +133,6 @@ const Awards = () => {
                 <div className="w-32 mx-auto mt-4 mb-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
                 <h2 
                   className="text-black text-3xl md:text-4xl font-bold"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Awards & <span className="text-gold">Achievements</span>
                 </h2>
@@ -187,7 +184,6 @@ const Awards = () => {
                 <div className="jj-card-inner border-2 border-gold rounded-xl p-8 md:p-12 text-center shadow-[0_0_30px_rgba(200,167,102,0.25)]">
                   <h2 
                     className="text-black text-3xl md:text-4xl font-bold mb-4"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     Experience Award-Winning <span className="text-gold">Service</span>
                   </h2>

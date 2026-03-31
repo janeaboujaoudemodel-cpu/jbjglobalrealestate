@@ -51,7 +51,6 @@ export function BrandMonogram({
           : "flex-col items-center gap-3",
         className
       )}
-      style={{ fontFamily: "Poppins, sans-serif" }}
     >
       {/* Monogram Image */}
       <img 
@@ -97,7 +96,6 @@ export function BrandMonogramHeader({ className = "" }: { className?: string }) 
   return (
     <div 
       className={cn("flex items-center gap-2 md:gap-3", className)}
-      style={{ fontFamily: "Poppins, sans-serif" }}
     >
       <img 
         src={jbjMonogramNobuffer}

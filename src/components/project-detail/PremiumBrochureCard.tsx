@@ -175,7 +175,6 @@ const PremiumBrochureCard = ({
               
               <h3
                 className="text-white text-2xl font-bold mb-3 line-clamp-2 leading-tight drop-shadow-lg"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {projectName}
               </h3>

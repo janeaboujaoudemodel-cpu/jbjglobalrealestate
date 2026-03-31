@@ -180,7 +180,6 @@ export function Book3DCard({ book, progress, onOpen, index, isLocked = false }: 
               {/* Title */}
               <h3
                 className="text-white text-base font-bold leading-tight mb-2 line-clamp-2"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {book.title}
               </h3>

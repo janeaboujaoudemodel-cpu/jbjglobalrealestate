@@ -295,7 +295,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   <span className="text-gold text-xs font-medium">Welcome Guide</span>
                 </div>
 
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-black mb-3">
                   Welcome to JBJ Global Real Estate
                 </h2>
                 <p className="text-gray-600 text-sm mb-8 max-w-sm mx-auto">
@@ -400,7 +400,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                   </motion.div>
                 </div>
 
-                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-black mb-3">
                   {tourSteps[currentStep].title}
                 </h3>
                 <p className="text-gray-600 text-sm mb-6 max-w-sm mx-auto leading-relaxed">
@@ -468,7 +468,7 @@ const GuidedTour = ({ isOpen, onClose }: GuidedTourProps) => {
                     <Sparkles className="w-3.5 h-3.5 text-gold" />
                     <span className="text-gold text-xs font-medium">Quick Reference</span>
                   </div>
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-black mb-2">
                     Key Shortcuts
                   </h3>
                   <p className="text-gray-600 text-sm">

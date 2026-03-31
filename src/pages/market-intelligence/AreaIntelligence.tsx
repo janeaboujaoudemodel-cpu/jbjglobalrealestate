@@ -96,7 +96,7 @@ const AreaIntelligence = () => {
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <AlertTriangle className="w-6 h-6" />
                       </div>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h2 className="text-2xl md:text-3xl font-bold text-black">
                         <span className="text-gold">No</span> Assumptions, Projections, or Guarantees
                       </h2>
                     </div>
@@ -122,7 +122,7 @@ const AreaIntelligence = () => {
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <MapPin className="w-6 h-6" />
                       </div>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h2 className="text-2xl md:text-3xl font-bold text-black">
                         <span className="text-gold">What</span> "Area Intelligence" Means
                       </h2>
                     </div>
@@ -168,7 +168,7 @@ const AreaIntelligence = () => {
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <Database className="w-6 h-6" />
                       </div>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h2 className="text-2xl md:text-3xl font-bold text-black">
                         <span className="text-gold">Official</span> Data Sources Used Per Area
                       </h2>
                     </div>
@@ -218,7 +218,7 @@ const AreaIntelligence = () => {
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <BarChart3 className="w-6 h-6" />
                       </div>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h2 className="text-2xl md:text-3xl font-bold text-black">
                         <span className="text-gold">How</span> an Area Is Evaluated
                       </h2>
                     </div>
@@ -263,7 +263,7 @@ const AreaIntelligence = () => {
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <Shield className="w-6 h-6" />
                       </div>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h2 className="text-2xl md:text-3xl font-bold text-black">
                         <span className="text-gold">What</span> Area Intelligence Does Not Do
                       </h2>
                     </div>
@@ -309,7 +309,7 @@ const AreaIntelligence = () => {
                     <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                       <Building2 className="w-6 h-6" />
                     </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <h2 className="text-2xl md:text-3xl font-bold text-black">
                       <span className="text-gold">Why</span> Area-Level Analysis Matters
                     </h2>
                   </div>
@@ -354,7 +354,7 @@ const AreaIntelligence = () => {
                       <div className="jj-icon-box-active w-12 h-12 rounded-xl">
                         <FileText className="w-6 h-6" />
                       </div>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h2 className="text-2xl md:text-3xl font-bold text-black">
                         <span className="text-gold">How</span> JBJ Global Real Estate Uses Area Intelligence
                       </h2>
                     </div>
@@ -402,7 +402,7 @@ const AreaIntelligence = () => {
                 variants={fadeInUp}
               >
                   <div className="jj-card-inner p-8">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
                       <span className="text-gold">Dubai</span>{" "}
                       <span className="text-black">Neighborhood Analysis</span>
                     </h2>

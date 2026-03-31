@@ -637,7 +637,6 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           <Link 
             to="/" 
             className="flex items-center gap-2 sm:gap-3 xl:gap-4 shrink-0 group transition-all duration-300"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <div className="relative shrink-0 ml-0">
@@ -1085,7 +1084,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       <div className="flex justify-center mb-4">
                         <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain" />
                       </div>
-                      <h3 className="text-black font-bold text-xl text-center mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h3 className="text-black font-bold text-xl text-center mb-3">
                         Welcome to JBJ Global Real Estate
                       </h3>
                       <p className="text-zinc-600 text-sm text-center mb-6 leading-relaxed">

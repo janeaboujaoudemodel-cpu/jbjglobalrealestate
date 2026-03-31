@@ -174,7 +174,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-2xl shadow-gold/20">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-3 text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <DialogTitle className="flex items-center gap-3 text-black text-xl font-bold">
             <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
               <Video className="w-5 h-5 text-gold" />
             </div>

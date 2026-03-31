@@ -90,7 +90,7 @@ export const AreaProjectsGrid = ({ areaName, areaSlug, shortcutFilters, searchQu
   return (
     <section className="py-16 overflow-visible px-4 sm:px-6 md:px-8" style={{ background: 'linear-gradient(135deg, #FDFBF7 0%, #F7F2EA 50%, #EFE6D6 100%)' }}>
       <div>
-        <h2 className="text-black text-2xl md:text-3xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+        <h2 className="text-black text-2xl md:text-3xl font-bold mb-6">
           Projects in {areaName.replace(/\s*\(.*?\)/g, '')}
         </h2>
 

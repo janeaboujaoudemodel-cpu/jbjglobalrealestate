@@ -172,7 +172,6 @@ const RentalIndex = () => {
             
             <h1 
               className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Dubai <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-400">Rental Index</span> Evaluator
             </h1>

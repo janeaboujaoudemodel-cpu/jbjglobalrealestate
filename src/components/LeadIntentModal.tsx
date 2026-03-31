@@ -184,7 +184,7 @@ export default function LeadIntentModal() {
               <div className="flex justify-center mb-4">
                 <JJLogoImage variant="light" size="sm" />
               </div>
-              <h2 className="text-white text-2xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-white text-2xl font-bold mb-2">
                 What brings you to JBJ?
               </h2>
               <p className="text-zinc-400 text-sm">

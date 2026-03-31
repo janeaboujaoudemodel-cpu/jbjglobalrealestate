@@ -46,7 +46,6 @@ const Communities = React.forwardRef<HTMLElement>((_, ref) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
               className="text-zinc-600 text-base md:text-lg max-w-2xl"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Explore the UAE's most prestigious communities and find your perfect home
             </motion.p>

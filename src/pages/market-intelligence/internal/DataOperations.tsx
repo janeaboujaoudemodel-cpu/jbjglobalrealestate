@@ -66,7 +66,7 @@ const DataOperations = () => {
               <Database className="w-6 h-6 text-gold" />
             </div>
             <div>
-              <h1 className="text-white text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h1 className="text-white text-3xl font-bold">
                 Data Operations & Audit
               </h1>
               <p className="text-zinc-500">Dataset management, refresh logs, and compliance audit</p>

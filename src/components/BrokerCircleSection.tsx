@@ -145,7 +145,7 @@ const BrokerCircleSection = () => {
             <span className="text-gold">JBJ</span>
             <span className="text-black ml-1">Broker Circle</span>
           </Badge>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             Ready to Join the <span className="text-gold">Broker Circle</span>?
           </h2>
           <p className="text-zinc-400 text-lg">

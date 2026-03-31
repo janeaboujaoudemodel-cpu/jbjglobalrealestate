@@ -13,7 +13,6 @@ const WhyDubaiSection = () => {
           </span>
           <h2 
             className="text-4xl md:text-5xl font-bold text-black mb-4"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Why Invest in the <span className="text-gold">UAE</span>?
           </h2>
@@ -79,7 +78,6 @@ const WhyDubaiSection = () => {
               </span>
               <h3 
                 className="text-3xl md:text-4xl font-bold text-white mb-4"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Why <span className="text-gold">Dubai</span>?
               </h3>

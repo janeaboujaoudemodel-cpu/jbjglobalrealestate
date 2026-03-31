@@ -173,7 +173,6 @@ const PressKit = () => {
             </motion.span>
             <motion.h1 
               className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
               Press <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Kit</span>
@@ -257,7 +256,6 @@ const PressKit = () => {
                 <span className="text-gold text-sm uppercase tracking-[0.3em] mb-4 block">Founder Photos</span>
                 <h2 
                   className="text-white text-3xl md:text-4xl font-bold"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Jane Bou Jaoude <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Headshots</span>
                 </h2>
@@ -334,7 +332,6 @@ const PressKit = () => {
               <span className="text-gold text-sm uppercase tracking-[0.3em] mb-4 block">Quick Reference</span>
               <h2 
                 className="text-white text-3xl md:text-4xl font-bold"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Company <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Fact Sheet</span>
               </h2>
@@ -433,7 +430,6 @@ const PressKit = () => {
               </span>
               <h2
                 className="text-black text-3xl md:text-4xl font-bold mb-6"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Media <span className="text-gold">Contact</span>
               </h2>

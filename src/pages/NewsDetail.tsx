@@ -207,7 +207,6 @@ const NewsDetail = () => {
               </div>
               <h1
                 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {article.title}
               </h1>
@@ -309,7 +308,7 @@ const NewsDetail = () => {
                       <TrendingUp className="w-5 h-5 text-emerald-600" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-emerald-900" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h3 className="text-lg font-bold text-emerald-900">
                         How This Affects Dubai Real Estate
                       </h3>
                       <p className="text-xs text-emerald-600">AI-powered market impact analysis</p>
@@ -337,7 +336,7 @@ const NewsDetail = () => {
                   <TrendingUp className="w-5 h-5 text-black" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h3 className="text-lg font-bold text-black">
                     Dubai Market Intelligence
                   </h3>
                   <p className="text-xs text-zinc-500">Source: Dubai Land Department (DLD) · 2026 YTD</p>

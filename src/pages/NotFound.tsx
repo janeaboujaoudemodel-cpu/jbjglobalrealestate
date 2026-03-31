@@ -81,7 +81,6 @@ const NotFound = () => {
               <motion.h1
                 variants={fadeInUp}
                 className="text-5xl md:text-[80px] font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold leading-none"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 404
               </motion.h1>
@@ -89,7 +88,6 @@ const NotFound = () => {
               <motion.p
                 variants={fadeInUp}
                 className="text-xl md:text-2xl text-black font-semibold mb-2"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Page Not Found
               </motion.p>

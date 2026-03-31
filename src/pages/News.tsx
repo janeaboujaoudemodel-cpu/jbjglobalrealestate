@@ -512,7 +512,7 @@ const News = () => {
                       <TrendingUp className="w-6 h-6 text-black" />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h3 className="text-xl font-bold text-black">
                         Key Market Statistics — 2026
                       </h3>
                       <p className="text-xs text-zinc-500 mt-0.5">Source: Dubai Land Department (DLD) · Data as of {dldDateLabel}</p>
@@ -625,7 +625,7 @@ const News = () => {
                     <MapPin className="w-5 h-5 text-black" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <h3 className="text-lg font-bold text-black">
                       Top 10 Areas by Transaction Volume
                     </h3>
                     <p className="text-xs text-zinc-500">2026 YTD · Dubai Land Department (DLD)</p>
@@ -645,7 +645,7 @@ const News = () => {
                     <Globe className="w-5 h-5 text-black" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <h3 className="text-lg font-bold text-black">
                       Top Buyer Nationalities
                     </h3>
                     <p className="text-xs text-zinc-500">2026 YTD · Dubai Land Department (DLD)</p>
@@ -687,7 +687,7 @@ const News = () => {
                     <Calendar className="w-5 h-5 text-black" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <h3 className="text-lg font-bold text-black">
                       2025 Full Year Recap
                     </h3>
                     <p className="text-xs text-zinc-500">January 1, 2025 – January 1, 2026 · Dubai Land Department (DLD)</p>
@@ -746,7 +746,7 @@ const News = () => {
                     <MapPin className="w-5 h-5 text-black" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <h3 className="text-lg font-bold text-black">
                       Top 10 Areas by Transaction Volume
                     </h3>
                     <p className="text-xs text-zinc-500">Full Year 2025 · Dubai Land Department (DLD)</p>

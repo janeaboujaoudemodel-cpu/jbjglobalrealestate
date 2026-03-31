@@ -319,7 +319,7 @@ const JBJDesignStudio: React.FC = () => {
                 <Palette className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-white text-2xl font-bold" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                <h1 className="text-white text-2xl font-bold">
                   JBJ AI Graphic Designer
                 </h1>
                 <p className="text-zinc-400 text-sm">Create professional designs with AI assistance</p>

@@ -229,7 +229,7 @@ const ResaleProperties = () => {
             Back to Properties
           </Link>
           <Badge className="bg-gold/20 text-gold border-gold/40 mb-4 block w-fit mx-auto">Exclusive — JBJ Global Real Estate</Badge>
-          <h1 className="text-3xl md:text-5xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h1 className="text-3xl md:text-5xl font-bold text-black mb-4">
             Exclusive Resale <span className="text-gold">Properties</span>
           </h1>
           <p className="text-lg text-black/60 max-w-2xl mx-auto">
@@ -528,7 +528,7 @@ const ResaleProperties = () => {
               <div className="w-20 h-20 rounded-2xl bg-gold/15 border border-gold/30 flex items-center justify-center mx-auto mb-6">
                 <Building2 className="w-10 h-10 text-gold" />
               </div>
-              <h3 className="text-2xl font-bold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h3 className="text-2xl font-bold text-black mb-3">
                 Recently Sold Out
               </h3>
               <p className="text-black/60 mb-2">

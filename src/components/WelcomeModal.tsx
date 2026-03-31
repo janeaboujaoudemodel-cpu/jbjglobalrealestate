@@ -115,7 +115,6 @@ const WelcomeModal = () => {
             <div className="text-center mb-6">
               <h2 
                 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-[0.12em] text-gold uppercase leading-tight"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 JBJ GLOBAL REAL ESTATE
               </h2>
@@ -125,7 +124,6 @@ const WelcomeModal = () => {
             <div className="text-center mb-8">
               <h3
                 className="text-lg md:text-xl font-semibold mb-3 tracking-tight text-white"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Welcome to JBJ Global Real Estate
               </h3>

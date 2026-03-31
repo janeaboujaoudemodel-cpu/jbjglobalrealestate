@@ -78,7 +78,7 @@ export default function HomepageBookMarquee() {
               <BookOpen className="w-5 h-5 text-gray-600" />
             </div>
             <div>
-              <h2 className="text-black text-lg md:text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-black text-lg md:text-xl font-bold">
                 Explore Our Guides & Reports
               </h2>
               <p className="text-gray-400 text-xs">Free educational resources for investors</p>

@@ -98,7 +98,6 @@ export default function BrandIntroSplash() {
       {/* Wordmark */}
       <div
         className="mt-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300"
-        style={{ fontFamily: "Poppins, sans-serif" }}
       >
         <p className="text-lg md:text-2xl font-bold text-white tracking-[0.2em] uppercase">
           JBJ Global

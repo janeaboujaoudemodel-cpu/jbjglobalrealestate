@@ -120,7 +120,7 @@ export const ViewingRequestModal = ({
               {/* Header */}
               <div className="flex items-center justify-between p-5 border-b border-gold/30">
                 <div>
-                  <h3 className="text-lg font-semibold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  <h3 className="text-lg font-semibold text-black">
                     Book a Viewing
                   </h3>
                   <p className="text-sm text-zinc-600 truncate max-w-[280px]">{listingName}</p>

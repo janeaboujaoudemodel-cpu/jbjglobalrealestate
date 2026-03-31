@@ -206,7 +206,6 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             {/* Title */}
             <h3 
               className={`text-white font-bold mb-1 ${titleSize} leading-tight`}
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               UAE Real Estate
             </h3>

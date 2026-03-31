@@ -187,7 +187,7 @@ export default function BrokerTraining() {
                 <BookOpen className="w-6 h-6 text-gold" />
               </div>
               <div>
-                <h1 className="text-white text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h1 className="text-white text-3xl font-bold">
                   Market Intelligence Training
                 </h1>
                 <p className="text-zinc-500">Master data-driven conversations for BUY · SELL · RENT</p>
@@ -284,7 +284,7 @@ export default function BrokerTraining() {
       {/* Compliance Quick Reference */}
       <section className="py-12 border-t border-zinc-900">
         <div className="container mx-auto px-4">
-          <h2 className="text-white text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-2xl font-bold mb-8 text-center">
             Compliance Quick Reference
           </h2>
 

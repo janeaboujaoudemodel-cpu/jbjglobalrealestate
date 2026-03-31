@@ -86,7 +86,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-black text-xl md:text-2xl font-bold flex items-center gap-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-black text-xl md:text-2xl font-bold flex items-center gap-3">
                 <Banknote className="w-6 h-6 text-gold" />
                 Dubai Market Intelligence
               </h2>

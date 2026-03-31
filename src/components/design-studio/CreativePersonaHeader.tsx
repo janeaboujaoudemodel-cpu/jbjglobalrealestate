@@ -102,7 +102,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
 
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-xl font-bold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              <h2 className="text-xl font-bold text-black">
                 {persona.name}
               </h2>
               <Badge className="bg-gradient-to-r from-rose-500 to-pink-500 text-white border-0 text-xs">

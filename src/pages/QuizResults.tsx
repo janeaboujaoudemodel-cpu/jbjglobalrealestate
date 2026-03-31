@@ -254,7 +254,7 @@ Best regards`);
             <span className="text-stone-800 text-sm font-medium">#1 AI Property Matchmaker — Exclusive by JBJ Global Real Estate</span>
           </div>
           
-          <h1 className="text-stone-900 text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h1 className="text-stone-900 text-4xl md:text-5xl font-bold mb-4">
             Your AI-Selected Properties
           </h1>
           <p className="text-stone-500 text-lg max-w-2xl mx-auto mb-6">

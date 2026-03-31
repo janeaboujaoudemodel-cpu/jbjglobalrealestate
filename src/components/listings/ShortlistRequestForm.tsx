@@ -125,7 +125,7 @@ export const ShortlistRequestForm = ({
         <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-gold" />
         </div>
-        <h3 className="text-xl font-semibold text-black mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <h3 className="text-xl font-semibold text-black mb-2">
           Request Received!
         </h3>
         <p className="text-zinc-600">
@@ -148,7 +148,7 @@ export const ShortlistRequestForm = ({
           <Sparkles className="w-3 h-3" />
           {transactionType === 'buy' ? 'Property Shortlist' : 'Rental Shortlist'}
         </div>
-        <h3 className="text-xl md:text-2xl font-semibold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <h3 className="text-xl md:text-2xl font-semibold text-black">
           Get a <span className="text-gold">Curated Shortlist</span>
         </h3>
         <p className="text-zinc-600 text-sm mt-2">

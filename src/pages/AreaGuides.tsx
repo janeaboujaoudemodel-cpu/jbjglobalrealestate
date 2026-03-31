@@ -267,7 +267,7 @@ const AreaGuides = () => {
       {(!shortcutFilters.emirates || shortcutFilters.emirates.length === 0) && !shortcutFilters.searchQuery && (
         <section className="pt-8 pb-4 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]">
           <div className="px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-xl font-bold text-black mb-4">
               Browse by Emirate
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-2">
@@ -519,7 +519,7 @@ const AreaGuides = () => {
       {/* CTA Section */}
       <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
         <div className="px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
             Can't Find What You're Looking For?
           </h2>
           <p className="text-zinc-600 mb-6 max-w-xl mx-auto">

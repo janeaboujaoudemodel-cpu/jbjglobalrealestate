@@ -44,7 +44,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="bg-zinc-950 border-zinc-800 text-white max-w-3xl max-h-[85vh] overflow-hidden">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-semibold flex items-center gap-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <DialogTitle className="text-2xl font-semibold flex items-center gap-2">
             <Building2 className="w-6 h-6 text-gold" />
             Search by Developer
           </DialogTitle>
@@ -103,7 +103,7 @@ const DeveloperSearchModal = ({ isOpen, onClose }: DeveloperSearchModalProps) =>
                   {/* Developer Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="text-white font-semibold truncate text-base" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h4 className="text-white font-semibold truncate text-base">
                         {developer.name}
                       </h4>
                       {tier && (

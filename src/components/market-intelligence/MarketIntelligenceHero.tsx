@@ -93,7 +93,6 @@ export const MarketIntelligenceHero = ({
           {/* Title */}
           <motion.h1 
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             {title}

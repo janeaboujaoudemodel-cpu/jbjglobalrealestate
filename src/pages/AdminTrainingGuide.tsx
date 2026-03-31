@@ -72,7 +72,7 @@ const AdminTrainingGuide = () => {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div>
-              <h1 className="text-white text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h1 className="text-white text-xl font-bold">
                 Listing Training Guide
               </h1>
               <p className="text-zinc-500 text-sm">Complete property listing & verification guide</p>

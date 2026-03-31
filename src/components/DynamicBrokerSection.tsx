@@ -207,7 +207,6 @@ const DynamicBrokerSection = ({ forcedUserType }: DynamicBrokerSectionProps) => 
           {/* Title */}
           <h2 
             className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4"
-            style={{ fontFamily: 'Poppins, sans-serif' }}
           >
             {content.title} <span className="text-gold">{content.highlightText}</span>
           </h2>

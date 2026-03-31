@@ -322,7 +322,6 @@ const MeetTheTeam: React.FC = () => {
                 <motion.h1
                   className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
                   variants={fadeInUp}
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   <span className="text-white">Meet the </span>
                   <span className="text-gold">Experts</span>
@@ -533,7 +532,6 @@ const MeetTheTeam: React.FC = () => {
                   {/* Title */}
                   <motion.h3 
                     className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
                     variants={fadeInUp}
                   >
                     Ready to Work With Our Experts?

@@ -287,7 +287,7 @@ const MyDashboard = () => {
           <div className="container mx-auto px-4 py-6 max-w-7xl">
             {/* Dashboard Title + Badge */}
             <div className="flex flex-wrap items-center gap-3 mb-2">
-              <h1 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              <h1 className="text-2xl md:text-3xl font-bold text-black">
                 My <span className="text-gold">Dashboard</span>
               </h1>
               {isCombinedMode ? (

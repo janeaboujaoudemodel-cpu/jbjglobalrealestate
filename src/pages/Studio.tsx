@@ -220,7 +220,7 @@ export default function Studio() {
               <div className="h-px w-6 bg-gold/60" />
               <span className="text-[10px] uppercase tracking-widest font-semibold text-gold">Creative Studio</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-black leading-tight" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h1 className="text-3xl sm:text-4xl font-bold text-black leading-tight">
               Your <span className="text-gold">Projects</span>
             </h1>
             <p className="mt-1.5 text-sm text-zinc-500">Create and manage your creative projects</p>
@@ -235,7 +235,7 @@ export default function Studio() {
             </DialogTrigger>
             <DialogContent className="border border-gold/30 max-w-md mx-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]" style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.15)" }}>
               <DialogHeader>
-                <DialogTitle className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <DialogTitle className="text-black text-xl font-bold">
                   Create New <span className="text-gold">Project</span>
                 </DialogTitle>
               </DialogHeader>

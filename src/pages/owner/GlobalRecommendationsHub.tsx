@@ -232,7 +232,7 @@ export default function GlobalRecommendationsHub() {
             <Target className="h-6 w-6 text-gold" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-2xl font-bold text-black">
               Global Recommendations
             </h2>
             <p className="text-zinc-500 text-sm">
@@ -452,7 +452,7 @@ export default function GlobalRecommendationsHub() {
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
         <DialogContent className="max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-gold/30">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <DialogTitle className="flex items-center gap-2 text-black">
               <Eye className="w-5 h-5 text-gold" />
               Recommendation Preview
             </DialogTitle>

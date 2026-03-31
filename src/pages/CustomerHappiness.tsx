@@ -986,7 +986,6 @@ const CustomerHappiness = () => {
               <motion.h1
                 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
                 variants={fadeInUp}
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 <span className="text-white">We're Here to </span>
                 <span

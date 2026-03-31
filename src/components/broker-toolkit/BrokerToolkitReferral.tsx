@@ -95,7 +95,7 @@ export function BrokerToolkitReferral() {
                 <div className="text-center mb-10">
                   <div className="flex flex-col items-center justify-center mb-8">
                     <img src={jbjMonogramLightTransparent} alt="JBJ Global Real Estate" className="w-28 h-28 md:w-32 md:h-32 object-contain mb-3" />
-                    <span className="text-white font-semibold text-lg md:text-xl tracking-[0.12em] uppercase" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <span className="text-white font-semibold text-lg md:text-xl tracking-[0.12em] uppercase">
                       JBJ GLOBAL REAL ESTATE
                     </span>
                   </div>

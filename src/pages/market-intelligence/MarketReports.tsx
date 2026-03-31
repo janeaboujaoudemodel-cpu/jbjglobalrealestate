@@ -183,7 +183,7 @@ const MarketReportsPage = () => {
 
               {/* Purpose Section */}
               <SectionWrapper id="purpose">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -204,7 +204,7 @@ const MarketReportsPage = () => {
 
               {/* Data Sources Section */}
               <SectionWrapper id="data-sources">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -237,7 +237,7 @@ const MarketReportsPage = () => {
 
               {/* Report Structure Section */}
               <SectionWrapper id="report-structure">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -273,7 +273,7 @@ const MarketReportsPage = () => {
 
               {/* Exclusions Section */}
               <SectionWrapper id="exclusions">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -295,7 +295,7 @@ const MarketReportsPage = () => {
 
               {/* Reporting Frequency Section */}
               <SectionWrapper id="frequency">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -314,7 +314,7 @@ const MarketReportsPage = () => {
 
               {/* JBJ Approach Section */}
               <SectionWrapper id="jbj-approach">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",

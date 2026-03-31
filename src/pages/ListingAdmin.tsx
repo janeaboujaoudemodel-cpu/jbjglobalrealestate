@@ -684,7 +684,7 @@ const ListingAdmin = () => {
                   <Building2 className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-zinc-900 text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h1 className="text-zinc-900 text-xl font-bold">
                     {t('listingAdmin.title')}
                   </h1>
                   <span className="text-zinc-500 text-sm">{t('listingAdmin.propertyManager')}</span>

@@ -506,7 +506,7 @@ const Quiz = () => {
               <Wand2 className="w-10 h-10 text-black" />
             </div>
 
-            <h1 className="text-stone-900 text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h1 className="text-stone-900 text-4xl md:text-5xl font-bold mb-4">
               AI Property Finder
             </h1>
             
@@ -615,7 +615,7 @@ const Quiz = () => {
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#B89555] to-[#A68444] mx-auto mb-4 flex items-center justify-center shadow-lg shadow-[#B89555]/30">
                 <Sparkles className="w-8 h-8 text-black" />
               </div>
-              <h2 className="text-stone-900 text-3xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-stone-900 text-3xl font-bold mb-2">
                 Get Your AI Analysis
               </h2>
               <p className="text-stone-500">
@@ -776,7 +776,6 @@ const Quiz = () => {
           <div className="flex-1 max-w-2xl mx-auto">
             <h2
               className="text-stone-900 text-2xl md:text-3xl font-bold mb-8 text-center"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               {currentQuestion.question}
             </h2>

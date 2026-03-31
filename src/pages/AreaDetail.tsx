@@ -279,7 +279,7 @@ const AreaDetail = () => {
             <div className="w-14 h-14 rounded-2xl bg-gold/10 border border-gold/30 flex items-center justify-center mx-auto mb-6">
               <MapPin className="w-7 h-7 text-gold" />
             </div>
-            <h2 className="text-black text-2xl md:text-3xl lg:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-black text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
               Properties in {area.name}
             </h2>
             <p className="text-black/50 text-lg mb-10 max-w-2xl mx-auto">
@@ -314,7 +314,7 @@ const AreaDetail = () => {
                   <MapPin className="w-3.5 h-3.5 text-gold" />
                   <span className="text-black">Similar Areas</span>
                 </span>
-                <h2 className="text-white text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-white text-2xl md:text-3xl font-bold">
                   Explore More in {area.emirate}
                 </h2>
               </div>

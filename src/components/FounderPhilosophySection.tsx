@@ -86,7 +86,7 @@ export const FounderPhilosophySection = () => {
             <motion.div variants={fadeInUp} className="space-y-6">
               <div>
                 <span className="inline-block text-gold text-xs uppercase tracking-[0.3em] mb-4">Philosophy</span>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">
                   <span className="text-black">A Founder-Led</span> <span className="text-gold">Vision</span>
                 </h2>
               </div>

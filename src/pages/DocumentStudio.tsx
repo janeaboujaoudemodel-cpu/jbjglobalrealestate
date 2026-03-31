@@ -88,7 +88,7 @@ const DocumentStudio = () => {
             <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center">
               <Sparkles className="w-5 h-5 text-gold" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">
               Document <span className="text-gold">Studio</span>
             </h1>
           </div>

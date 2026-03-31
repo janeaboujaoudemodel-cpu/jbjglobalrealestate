@@ -49,7 +49,7 @@ export default function AlertsDemo() {
                 style={{ filter: "drop-shadow(0 0 40px rgba(200,167,102,0.5))", animation: "splashPulse 2s ease-in-out infinite" }}
               />
             </div>
-            <div className="mt-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-700" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <div className="mt-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
               <p className="text-lg font-bold text-white tracking-[0.2em] uppercase">JBJ Global</p>
               <p className="text-sm font-semibold text-[#D4B896] tracking-[0.25em] uppercase mt-1">Real Estate</p>
             </div>

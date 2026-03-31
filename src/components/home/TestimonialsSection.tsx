@@ -71,7 +71,6 @@ const TestimonialsSection = () => {
         <div className="text-center mb-10">
           <h2 
             className="text-2xl md:text-3xl font-bold text-black mb-3"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             {t('testimonials.title', 'What Our Clients Say')}
           </h2>

@@ -241,7 +241,6 @@ const Services = () => {
 
           <motion.h1 
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             Explore JBJ Services
@@ -283,7 +282,7 @@ const Services = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Our Service Library
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
                 Select a Service
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto">
@@ -356,7 +355,7 @@ const Services = () => {
             <Card className="jj-card-inner max-w-4xl mx-auto">
               <CardContent className="p-8 text-center">
                 <motion.div variants={fadeInUp}>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black">
                     Not sure which service you need?
                   </h2>
                   <p className="text-black/70 max-w-xl mx-auto mb-6">
@@ -396,7 +395,7 @@ const Services = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Service Scope
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
                 How Our Services Work
               </h2>
             </motion.div>

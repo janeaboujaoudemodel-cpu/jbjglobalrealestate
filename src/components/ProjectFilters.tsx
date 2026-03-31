@@ -449,7 +449,7 @@ const ProjectFilters = ({
             <SheetContent className="w-full sm:max-w-lg bg-gradient-to-b from-[#FDFBF7] to-[#EFE6D6] border-gold/30 p-0 top-[72px] h-[calc(100vh-72px)]">
               <SheetHeader className="p-6 border-b border-gold/20">
                 <div className="flex items-center justify-between">
-                  <SheetTitle className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <SheetTitle className="text-black text-xl font-bold">
                     All Filters
                   </SheetTitle>
                   {activeFilterCount > 0 && (

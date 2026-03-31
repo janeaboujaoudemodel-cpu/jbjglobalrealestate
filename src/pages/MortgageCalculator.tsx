@@ -57,7 +57,6 @@ const MortgageCalculatorPage = () => {
             </span>
             <h1 
               className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               <span className="text-black">Mortgage</span>{" "}
               <span className="text-gold">Calculator</span>
@@ -99,7 +98,6 @@ const MortgageCalculatorPage = () => {
             </span>
             <h2 
               className="text-3xl md:text-4xl font-bold text-black mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Prefer a <span className="text-gold">Mortgage Advisor</span> Through Our Licensed Partners?
             </h2>
@@ -152,7 +150,6 @@ const MortgageCalculatorPage = () => {
           <div className="max-w-3xl mx-auto text-center">
             <h2 
               className="text-3xl md:text-4xl font-bold text-black mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Ready to Secure Your <span className="text-gold">Mortgage?</span>
             </h2>

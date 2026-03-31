@@ -228,7 +228,7 @@ const AdminRoleManagement = () => {
                 <Shield className="w-5 h-5 text-black" />
               </div>
               <div>
-                <h1 className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h1 className="text-black text-xl font-bold">
                   Role Management
                 </h1>
                 <span className="text-zinc-600 text-sm">Assign and revoke admin roles</span>

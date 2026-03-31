@@ -446,7 +446,6 @@ const CompanyProfile = () => {
           </motion.span>
           <motion.h1
             className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
@@ -485,7 +484,7 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-8">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Contents</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Table of Contents
             </h2>
           </div>
@@ -543,7 +542,7 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Overview</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-6">
               Company Overview
             </h2>
           </div>
@@ -568,7 +567,7 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Ecosystem</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Platform Positioning
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">{PROFILE_CONTENT.platformPositioning}</p>
@@ -604,7 +603,7 @@ const CompanyProfile = () => {
           >
             <div className="text-center mb-10">
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Watch</span>
-              <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
                 Company Introduction
               </h2>
               <p className="text-white/60 max-w-xl mx-auto">
@@ -632,7 +631,7 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Story</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-6">
               Brand Story
             </h2>
           </div>
@@ -676,7 +675,7 @@ const CompanyProfile = () => {
 
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Foundation</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold">
               Core Values
             </h2>
           </div>
@@ -705,7 +704,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="services" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">What We Do</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-3xl md:text-4xl font-bold">
             Services
           </h2>
         </div>
@@ -741,7 +740,7 @@ const CompanyProfile = () => {
         <div id="ai-tools" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Technology</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               AI Tools & Creativity
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">
@@ -773,7 +772,7 @@ const CompanyProfile = () => {
         <div id="marketplace" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Platform</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Real Estate Marketplace
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">{PROFILE_CONTENT.marketplace.intro}</p>
@@ -805,7 +804,7 @@ const CompanyProfile = () => {
         <div id="dubai-destination" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Location</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Dubai — A Global Real Estate Destination
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">{PROFILE_CONTENT.dubaiDestination.intro}</p>
@@ -834,7 +833,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="areas" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Where We Operate</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
             Prime Areas of Focus
           </h2>
           <p className="text-white/70 max-w-2xl mx-auto">
@@ -934,7 +933,7 @@ const CompanyProfile = () => {
         <div id="platform-benefits" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Value</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold">
               Platform Benefits
             </h2>
           </div>
@@ -974,7 +973,7 @@ const CompanyProfile = () => {
         <div id="portfolio" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Portfolio</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Portfolio Highlights
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">
@@ -989,7 +988,7 @@ const CompanyProfile = () => {
         <div id="investor-journey" className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Process</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               The Investor Journey
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">
@@ -1018,7 +1017,7 @@ const CompanyProfile = () => {
         <div id="partner-network" className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Network</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Partner Network
             </h2>
             <p className="text-white/70 max-w-2xl mx-auto">{PROFILE_CONTENT.partnerNetwork.intro}</p>
@@ -1047,7 +1046,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="process" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">How We Work</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-3xl md:text-4xl font-bold">
             Our Process
           </h2>
         </div>
@@ -1073,7 +1072,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="differentiators" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Edge</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-3xl md:text-4xl font-bold">
             Why JBJ
           </h2>
         </div>
@@ -1099,7 +1098,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="client-experience" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Commitment</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-3xl md:text-4xl font-bold">
             Client Experience Standards
           </h2>
         </div>
@@ -1144,7 +1143,7 @@ const CompanyProfile = () => {
           <div id="founder" className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Leadership</span>
-               <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+               <h2 className="text-white text-3xl md:text-4xl font-bold">
                 Founder & CEO
               </h2>
             </div>
@@ -1194,7 +1193,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div id="snapshot" className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">At a Glance</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-3xl md:text-4xl font-bold">
             Company Snapshot
           </h2>
         </div>
@@ -1241,7 +1240,7 @@ const CompanyProfile = () => {
       <SectionShell>
         <div className="text-center mb-12">
           <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Get Started</span>
-          <h2 className="text-white text-3xl md:text-4xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-white text-3xl md:text-4xl font-bold">
             Ready to Connect?
           </h2>
         </div>
@@ -1282,7 +1281,7 @@ const CompanyProfile = () => {
         >
           <div className="text-center mb-8">
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Download</span>
-            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-white text-3xl md:text-4xl font-bold mb-4">
               Get the Full Company Profile
             </h2>
             <p className="text-white/70">

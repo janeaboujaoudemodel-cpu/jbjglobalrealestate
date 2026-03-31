@@ -155,7 +155,7 @@ export default function ESignatureDashboard() {
         <div className="max-w-7xl mx-auto px-6 flex items-end h-[84px] pb-4">
           <div className="flex flex-wrap items-center gap-3">
             <FileSignature className="w-6 h-6 text-gold" />
-            <h1 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            <h1 className="text-2xl md:text-3xl font-bold text-white">
               E-<span className="text-gold">Signature</span>
             </h1>
           </div>

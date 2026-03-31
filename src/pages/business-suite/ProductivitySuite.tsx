@@ -177,7 +177,7 @@ const ProductivitySuite = () => {
             <span className="text-zinc-800 font-semibold text-sm tracking-wide">JBJ Royal Tools Hub</span>
           </div>
           
-          <h1 className="text-3xl md:text-5xl font-bold text-zinc-900 mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h1 className="text-3xl md:text-5xl font-bold text-zinc-900 mb-4">
             Corporate & <span style={{ background: 'linear-gradient(135deg, #C8A766 0%, #D4AF37 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Productivity</span> Suite
           </h1>
           

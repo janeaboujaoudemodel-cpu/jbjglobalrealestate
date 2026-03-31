@@ -59,7 +59,6 @@ export const JBJLogo = ({
 export const JBJLogoHeader = ({ className = '' }: { className?: string }) => (
   <div 
     className={`flex items-center gap-3 ${className}`}
-    style={{ fontFamily: "Poppins, sans-serif" }}
   >
     {/* Logo image - dark version for header */}
     <img 

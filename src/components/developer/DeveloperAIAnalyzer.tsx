@@ -449,7 +449,7 @@ export const DeveloperAIAnalyzer = ({
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="w-6 h-6 text-gold" />
-          <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-2xl md:text-3xl font-bold text-black">
             JBJ AI Developer Intelligence
           </h2>
         </div>

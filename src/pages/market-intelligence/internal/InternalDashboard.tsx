@@ -64,7 +64,7 @@ const InternalDashboard = () => {
               <BarChart3 className="w-6 h-6 text-gold" />
             </div>
             <div>
-              <h1 className="text-white text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h1 className="text-white text-3xl font-bold">
                 Internal Market Dashboard
               </h1>
               <p className="text-zinc-500">Real-time signals for competitive advantage</p>

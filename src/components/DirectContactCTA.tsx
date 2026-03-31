@@ -112,8 +112,7 @@ const DirectContactCTA = ({
                 titleSize === 'premium' 
                   ? 'text-3xl md:text-4xl lg:text-5xl' 
                   : 'text-2xl md:text-3xl'
-              }`} 
-              style={{ fontFamily: "Poppins, sans-serif" }}
+              }`}
             >
               <span className="text-black">{resolvedTitle.split(' ').slice(0, -1).join(' ')}</span>{" "}
               <span className="text-gold">{resolvedTitle.split(' ').slice(-1)[0]}</span>
@@ -135,7 +134,7 @@ const DirectContactCTA = ({
               <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" />
             </div>
             <div>
-              <h3 className="text-black font-semibold text-sm mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h3 className="text-black font-semibold text-sm mb-0.5">
                 {t('cta.whatsapp', 'WhatsApp')}
               </h3>
               <p className="text-emerald-600 text-xs sm:text-sm font-semibold">{CONTACT_INFO.phone}</p>
@@ -151,7 +150,7 @@ const DirectContactCTA = ({
               <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
             </div>
             <div>
-              <h3 className="text-black font-semibold text-sm mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h3 className="text-black font-semibold text-sm mb-0.5">
                 {t('cta.callUs', 'Call Us')}
               </h3>
               <p className="text-blue-600 text-xs sm:text-sm font-semibold">{CONTACT_INFO.phone}</p>
@@ -167,7 +166,7 @@ const DirectContactCTA = ({
               <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.8)]" />
             </div>
             <div>
-              <h3 className="text-black font-semibold text-sm mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h3 className="text-black font-semibold text-sm mb-0.5">
                 {t('cta.emailUs', 'Email Us')}
               </h3>
               <p className="text-gold text-xs sm:text-sm font-semibold">{CONTACT_INFO.email}</p>

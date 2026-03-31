@@ -923,7 +923,7 @@ const HeroSearchBar = () => {
             </DialogTrigger>
             <DialogContent className="sm:max-w-[650px] max-h-[85vh] overflow-y-auto overscroll-contain bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40">
               <DialogHeader>
-                <DialogTitle className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <DialogTitle className="text-black text-xl font-bold">
                   Advanced Filters
                 </DialogTitle>
               </DialogHeader>

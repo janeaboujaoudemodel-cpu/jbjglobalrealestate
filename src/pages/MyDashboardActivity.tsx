@@ -115,7 +115,7 @@ const MyDashboardActivity = () => {
 
             {/* Header */}
             <div className="mb-8">
-              <h1 className="text-3xl font-bold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              <h1 className="text-3xl font-bold text-black">
                 My Activity Intelligence
               </h1>
               <p className="text-stone-500 mt-2">Real-time behavioral analytics and engagement tracking.</p>

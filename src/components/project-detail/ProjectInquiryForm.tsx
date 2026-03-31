@@ -242,7 +242,7 @@ export function ProjectInquiryForm({
   return (
     <div>
       <div className="text-center mb-8">
-        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+        <h3 className="text-2xl md:text-3xl font-bold text-foreground mb-3">
           Register Your Interest
         </h3>
         <p className="text-muted-foreground text-base max-w-md mx-auto">

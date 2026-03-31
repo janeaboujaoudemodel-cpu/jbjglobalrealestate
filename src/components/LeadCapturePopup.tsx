@@ -131,7 +131,7 @@ const LeadCapturePopup = () => {
                 <Sparkles className="w-5 h-5 text-gold" />
                 <span className="text-xs uppercase tracking-[0.2em] font-semibold text-gold">Exclusive Access</span>
               </div>
-              <h3 className="text-xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h3 className="text-xl font-bold text-black">
                 {headline}
               </h3>
               <p className="text-sm text-zinc-600 mt-1">

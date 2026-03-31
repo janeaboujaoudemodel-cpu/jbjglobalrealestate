@@ -108,7 +108,7 @@ const MarketReport = () => {
                       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-[10px] uppercase tracking-[0.2em] mb-4">
                         <Sparkles className="w-3 h-3" />Latest Edition 2026
                       </div>
-                      <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h3 className="text-white text-xl md:text-2xl font-bold leading-tight mb-2">
                         UAE Real Estate<span className="block text-gold">Market Intelligence</span>
                       </h3>
                       <FounderContent fallback={null}><p className="text-zinc-500 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p></FounderContent>
@@ -134,7 +134,7 @@ const MarketReport = () => {
               <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gold/10 border border-gold/30 text-gold text-xs uppercase tracking-[0.25em] mb-6">
                 <FileText className="w-4 h-4" />Exclusive Market Report
               </div>
-              <h1 className="text-black text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h1 className="text-black text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
                 Unlock Your<span className="block text-gold">Investment Edge</span>
               </h1>
               <p className="text-black text-lg md:text-xl leading-relaxed mb-8">
@@ -170,7 +170,7 @@ const MarketReport = () => {
               <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 border-gold/50 mx-auto mb-6 bg-white">
                 <img src={founderCompanyProfile} alt="Jane Bou Jaoude, Founder & CEO of JBJ GLOBAL REAL ESTATE" className="w-full h-full" style={{ objectFit: 'contain', objectPosition: 'center top', transform: 'scaleX(1.08)' }} />
               </div>
-              <blockquote className="text-white text-xl md:text-2xl lg:text-3xl font-light leading-relaxed mb-6 italic" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <blockquote className="text-white text-xl md:text-2xl lg:text-3xl font-light leading-relaxed mb-6 italic">
                 "This book represents years of experience in UAE real estate, distilled into actionable frameworks. I created it so investors can make informed decisions with confidence."
               </blockquote>
               <div>

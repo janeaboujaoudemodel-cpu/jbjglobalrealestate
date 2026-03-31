@@ -132,7 +132,6 @@ const Founder = () => {
             
             <motion.h1 
               className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
               Founder &
@@ -228,7 +227,6 @@ const Founder = () => {
                 
                 <h2 
                   className="text-black text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Jane Bou
                   <br />
@@ -299,7 +297,6 @@ const Founder = () => {
                 <div className="w-32 mx-auto mt-4 mb-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
                 <h2 
                   className="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Executive <span className="text-gold">Leadership</span>
                 </h2>
@@ -357,7 +354,6 @@ const Founder = () => {
                 <div className="w-32 mx-auto mt-4 mb-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
                 <h2 
                   className="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Governance & <span className="text-gold">Accountability</span>
                 </h2>
@@ -424,7 +420,6 @@ const Founder = () => {
                 <div className="w-32 mx-auto mt-4 mb-8 h-px bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
                 <h2 
                   className="text-black text-4xl md:text-5xl lg:text-6xl font-bold"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Regulatory <span className="text-gold">Standing</span>
                 </h2>

@@ -136,7 +136,6 @@ const InteriorDesign = () => {
 
           <motion.h1 
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             Interior Design
@@ -174,7 +173,7 @@ const InteriorDesign = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Our Services
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Design Services" />
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto">
@@ -230,7 +229,7 @@ const InteriorDesign = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Portfolio
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Our Work" />
               </h2>
             </motion.div>
@@ -276,7 +275,7 @@ const InteriorDesign = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 How We Work
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Our Process" />
               </h2>
             </motion.div>
@@ -319,7 +318,7 @@ const InteriorDesign = () => {
                 <Sparkles className="w-5 h-5 text-gold" />
                 <span className="text-gold text-sm uppercase tracking-wider">Try AI First</span>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 <SplitTitle text="Visualize Your Space" />
               </h2>
               <p className="text-black/70 mb-8 max-w-xl mx-auto">

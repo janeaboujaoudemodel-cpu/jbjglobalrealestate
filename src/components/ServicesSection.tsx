@@ -313,7 +313,6 @@ const ServicesSection = () => {
           </span>
           <h2 
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             How We <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Help</span>
           </h2>
@@ -340,7 +339,6 @@ const ServicesSection = () => {
                   
                   <h3 
                     className="text-lg font-bold text-white mb-2 group-hover:text-gold transition-colors duration-300"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     {item.title}
                   </h3>
@@ -366,7 +364,6 @@ const ServicesSection = () => {
           </span>
           <h2 
             className="text-3xl md:text-4xl font-bold text-white mb-4"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Partner <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Introductions</span>
           </h2>
@@ -396,7 +393,6 @@ const ServicesSection = () => {
 
                   <h3 
                     className="text-xl font-bold text-white mb-3 group-hover:text-gold transition-colors duration-300"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     {service.title}
                   </h3>

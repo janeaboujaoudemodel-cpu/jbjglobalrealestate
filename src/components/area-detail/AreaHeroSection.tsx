@@ -89,7 +89,6 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
         
         <motion.h1 
           className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4 max-w-3xl"
-          style={{ fontFamily: "Poppins, sans-serif" }}
           variants={fadeInUp}
         >
           {area.name}

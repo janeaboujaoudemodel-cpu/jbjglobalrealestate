@@ -116,7 +116,7 @@ export default function Welcome() {
           <div className="flex justify-center mb-6">
             <JJLogoImage variant="light" size="md" />
           </div>
-          <h1 className="text-3xl font-bold text-black mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <h1 className="text-3xl font-bold text-black mb-2">
             Welcome to <span className="text-gold">JBJ Global</span>
           </h1>
           <p className="text-zinc-600 text-sm">

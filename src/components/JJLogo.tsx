@@ -58,7 +58,6 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
 export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
   <div 
     className={`flex items-center gap-3 ${className}`}
-    style={{ fontFamily: "Poppins, sans-serif" }}
   >
     {/* JBJ Monogram */}
     <img 

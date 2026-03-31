@@ -431,7 +431,7 @@ const AdvancedBrokerToolkit = () => {
             <span className="text-gold">Advanced</span>
             <span className="text-black ml-1">Broker Toolkit</span>
           </Badge>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             Everything You Need to <span className="text-gold">Succeed</span>
           </h2>
           <p className="text-zinc-400 text-lg">

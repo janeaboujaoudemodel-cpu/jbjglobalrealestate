@@ -73,7 +73,6 @@ const SectionLabel = ({ children, dark = true }: { children: React.ReactNode; da
 const SectionHeadline = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <h2 
     className={`text-black text-2xl md:text-[32px] lg:text-[40px] font-semibold mb-6 leading-tight ${className}`}
-    style={{ fontFamily: "Poppins, sans-serif" }}
   >
     {children}
   </h2>
@@ -155,7 +154,6 @@ const About = () => {
             </motion.button>
             <motion.h1 
               className="text-white text-[36px] md:text-[48px] lg:text-[58px] font-semibold mb-6 leading-tight"
-              style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
               About JBJ Global Real Estate
@@ -573,7 +571,6 @@ const About = () => {
                   {/* Title */}
                   <motion.h2 
                     className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
                     variants={fadeInUp}
                   >
                     Not Sure Where to Start?

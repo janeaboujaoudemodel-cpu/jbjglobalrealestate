@@ -62,7 +62,7 @@ const BrokerIntelligence = () => {
                 <Users className="w-6 h-6 text-gold" />
               </div>
               <div>
-                <h1 className="text-white text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h1 className="text-white text-2xl md:text-3xl font-bold">
                   Broker Intelligence Hub
                 </h1>
                 <p className="text-zinc-500">All tools in one place • Market signals • AI Assistant • Contracts</p>

@@ -121,7 +121,7 @@ const CreativeSuite = () => {
             <span className="text-zinc-800 font-semibold text-sm tracking-wide">Creative & Communication Suite</span>
           </div>
           
-          <h1 className="text-3xl md:text-5xl font-bold text-zinc-900 mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h1 className="text-3xl md:text-5xl font-bold text-zinc-900 mb-4">
             Creative & <span style={{ background: 'linear-gradient(135deg, #EC4899 0%, #F43F5E 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Communication</span> Suite
           </h1>
           
