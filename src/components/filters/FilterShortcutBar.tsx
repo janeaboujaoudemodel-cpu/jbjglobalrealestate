@@ -489,8 +489,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               }}
             >
               <TabsList className="w-full mb-3 bg-white/60">
-                <TabsTrigger value="residential" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F7F2EA] data-[state=active]:to-[#EFE6D6] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">{t('filter.residential')}</TabsTrigger>
-                <TabsTrigger value="commercial" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F7F2EA] data-[state=active]:to-[#EFE6D6] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">{t('filter.commercial')}</TabsTrigger>
+                <TabsTrigger value="residential" className="flex-1 text-xs data-[state=active]:bg-black data-[state=active]:text-white data-[state=active]:font-bold data-[state=active]:shadow-sm">{t('filter.residential')}</TabsTrigger>
+                <TabsTrigger value="commercial" className="flex-1 text-xs data-[state=active]:bg-black data-[state=active]:text-white data-[state=active]:font-bold data-[state=active]:shadow-sm">{t('filter.commercial')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="flex flex-wrap gap-2">
