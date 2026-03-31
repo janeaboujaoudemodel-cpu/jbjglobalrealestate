@@ -1,68 +1,113 @@
 
 
-# TASK 3 Visual Correction Pass — Final QA Fix
+# TASK 3 — Final Visual QA Pass: Component-Level Cleanup
 
-## Root Causes Identified
+## The Real Problem
 
-After inspecting the actual code, the remaining visual defects come from **3 specific, fixable problems**:
+The CSS override system in `index.css` correctly remaps dark brown section backgrounds (`from-[hsl(32...)]`) to white and maps `text-gold`/`bg-gold`/`border-gold` utilities to monochrome. However, **695 references** across 13 homepage component files still use:
 
-### Problem 1: Footer Logo is Ghosted/Invisible
-The footer uses `jbj-monogram-light-transparent.png` (white J's on transparent background) displayed on a **white background**. Result: invisible/ghosted logo. It also renders **4 copies** of this invisible logo as "shadow layers" creating a faded mess.
+- Inline champagne gradients: `from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]`
+- Inline gold borders: `border-gold/30`, `border-gold/40`, `border-gold/60`, `border-2 border-gold`
+- Gold shadows: `shadow-[0_8px_30px_rgba(200,167,102,0.3)]`
+- Gold hover states: `hover:text-gold`, `hover:border-gold`
+- Gold icon tints: `text-gold` on icons
+- Gold gradient CTAs: `from-[#B89555] to-[#A68444]`
+- Champagne badges: `bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]`
 
-**Fix**: Switch to `jbj-monogram-nobuffer.png` (dark J's on transparent background) for the footer. Remove the 3 decorative shadow layers — use a single clean logo with a simple `drop-shadow`.
+The CSS overrides partially catch some of these (the Tailwind `text-gold` and gradient `from-` overrides work), but **inline hex gradients, shadow values, and border-opacity variants slip through** — creating the remaining gold accents, muddy cards, and inconsistent styling.
 
-### Problem 2: CSS `!important` Overrides Create Unintended Collateral Damage
-The global override block at the bottom of `index.css` (lines 1947-2136) has rules like:
-- `[class*="from-[hsl(32"] * { color: #111 !important; }` — forces ALL descendants to black text, including buttons that should have white text on dark backgrounds
-- `[class*="bg-[#0A0A0A]"], [class*="bg-[#111111]"] { background-color: #FAFAFA !important; }` — forces intentionally dark sections to near-white, breaking hero overlays and dark feature sections
-- `[class*="text-blue-500"] { color: #555 !important; }` — kills semantic status colors in CRM/data views
+Additionally, `CombinedContactNewsletter` (the "Ready to Get Started?" CTA) has a completely legacy design with gold gradient text, champagne background, and gold borders — this renders as a broken/muddy section.
 
-These broad selectors are the source of "dead CTA buttons" (white text forced to black on black buttons) and "washed out text" (dark sections turned light but text also forced light by other rules).
+## Fix Strategy
 
-**Fix**: Remove the most destructive wildcard rules. Replace with targeted fixes only where gold/champagne actually appeared. Keep the gold utility overrides (`.text-gold`, `.bg-gold`, etc.) but remove the `[class*="from-[hsl("] *` descendant color forcing and the dark background flipping.
+Instead of adding more CSS overrides (which create cascading collisions), fix the **8 homepage component files** directly. Each file gets the same treatment:
 
-### Problem 3: Footer Over-Engineering
-The footer has triple-nested border rings, empty shimmer sweep divs, decorative accent divs, and redundant wrapper layers — all producing visual noise (mismatched borders, inconsistent edges). 
+- Champagne card gradients → `bg-white border border-gray-200`
+- Badge pills → `bg-gray-100 border border-gray-300 text-black`
+- Gold icon containers → `bg-gray-100 border border-gray-200`
+- Icon `text-gold` → `text-gray-600`
+- Gold hover shadows → `hover:shadow-lg`
+- Gold hover borders → `hover:border-gray-400`
+- `hover:text-gold` → `hover:text-gray-700`
+- Gold gradient CTA buttons → `bg-black text-white hover:bg-gray-800`
+- Gold divider lines → `bg-gray-200`
 
-**Fix**: Simplify footer structure. Remove:
-- Double border rings (`inset-[3px]` inner borders)
-- Empty shimmer sweep divs
-- Redundant radial glow divs
-- Decorative accent divs that do nothing
+## Files to Edit (8 component files)
 
-## Execution Plan (4 files)
+### 1. `src/components/CombinedContactNewsletter.tsx`
+Most broken visible section. Full restyle:
+- Section bg: `bg-white` (remove dark brown gradient)
+- Inner container: `bg-gray-50 rounded-2xl border border-gray-200 p-6 md:p-10`
+- Title: Remove gold gradient text effect, use `color: #111` plain
+- Contact cards: `border-gray-200` instead of `border-gold`, icon backgrounds `bg-gray-100` instead of colored
+- Divider: `bg-gray-200` instead of `via-gold/40`
+- Newsletter title: Same — plain black, no gradient
 
-### File 1: `src/components/Footer.tsx`
-- **Logo**: Change `jbjMonogramLightTransparent` import to `jbjMonogramNobuffer` (dark J's)
-- **Remove** the 3 shadow layer `<img>` copies (lines 457-476) — keep only the main logo
-- **Reduce** logo size from `h-48 sm:h-60 md:h-72 lg:h-80` to `h-32 sm:h-40 md:h-48`
-- **Remove** all empty decorative divs: shimmer sweeps, radial glows, inner border rings
-- **Simplify** the 3-zone structure: remove `rounded-none` triple-border wrapper pattern, use simple `border-t border-gray-200` between zones
+### 2. `src/components/home/WhyChooseUs.tsx`
+- Badge: `bg-gray-100 border border-gray-300` (remove champagne gradient)
+- Cards: `bg-white border border-gray-200 hover:border-gray-400 hover:shadow-lg` (remove gold borders/shadows)
+- Icon containers: `bg-gray-100` (remove dark brown gradient)
+- `text-gold` → `text-gray-600` on icons
+- `hover:text-gold` → `hover:text-gray-700` on titles
 
-### File 2: `src/index.css` (lines 1947-2136)
-- **Remove** the destructive wildcard descendant rules:
-  - `[class*="from-[hsl(32"] * { color: #111 !important; }` (and 33, 34, 36, 38 variants)
-  - `[class*="bg-[#0A0A0A]"] { background-color: #FAFAFA !important; }` 
-  - `[class*="bg-[#111111]"] { background-color: #FAFAFA !important; }`
-- **Keep** the gold utility overrides (`.text-gold`, `.bg-gold`, `.border-gold`)
-- **Keep** champagne gradient → white overrides
-- **Keep** cream text → black overrides
-- **Remove** colored border/text forcing (`border-blue-500`, `text-blue-500` etc.) — these break semantic UI
+### 3. `src/components/home/StartingPointSection.tsx`
+- Badge: same gray treatment
+- Tab container: `bg-gray-100 border border-gray-200` (remove brown/gold)
+- Active tab: `bg-black text-white` (remove champagne gradient)
+- Cards: `bg-white border border-gray-200` (remove champagne gradient + gold borders)
+- Icon containers: `bg-gray-100 border border-gray-200` (remove gold gradient)
+- `text-gold` → `text-gray-600`
 
-### File 3: `src/components/ui/floating-action-bar.tsx`
-- Reduce scale from `0.78` to `0.72`
-- Add `opacity-60 hover:opacity-95` for quieter idle state
-- Remove `shadow-lg` from main bar, use `shadow-sm` instead
+### 4. `src/components/home/OverseasInvestorsBanner.tsx`
+- Badge: gray treatment
+- Highlight cards: `bg-white border border-gray-200` (remove champagne)
+- Icon containers: `bg-gray-100 border border-gray-200`
+- CTA buttons: `bg-black text-white` (remove gold gradient buttons)
+- Remove inline gold box-shadow styles
 
-### File 4: `src/components/JBJLogo.tsx`
-- No changes needed — already uses correct assets
+### 5. `src/components/home/FeaturedListings.tsx`
+- Badge: gray treatment
+- Skeleton loaders: `bg-gray-100 border border-gray-200` (remove champagne)
+- Favorites/Shortlist pills: `bg-gray-100 border border-gray-300 text-gray-600` (remove rose/amber colored pills)
 
-## Visual Checklist After Fix
-- Footer logo: dark monogram, crisp and visible on white
-- Footer: clean single-border sections, no ghost layers
-- CTA buttons: white text visible on black buttons (no forced override)
-- Dark sections: remain dark where intended (hero overlays work)
-- Floating bar: much quieter, near-invisible until hover
-- No gold/champagne visible (gold utility overrides still active)
-- Semantic colors preserved in data/CRM views
+### 6. `src/components/home/AreasWeCover.tsx`
+- Badge: gray treatment
+- Area cards hover: `hover:border-gray-400` (remove `hover:border-gold`)
+- Remove gold hover shadows
+
+### 7. `src/components/home/HomepageBookMarquee.tsx`
+- Icon container: `bg-gray-100 border border-gray-200` (remove gold gradient)
+- `text-gold` → `text-gray-600` on icon
+- Header text: `text-black` (remove `text-white` — parent is now white)
+- "View Library" link: `text-black` (remove `text-gold`)
+
+### 8. `src/components/home/ResalePropertiesSection.tsx`
+- Inner card: `bg-white border border-gray-200` (remove champagne gradient + gold border)
+
+## Footer Polish (minor)
+
+The footer structure is already largely correct. Two small fixes:
+- Remove redundant double wrapper divs in Zone 2 (lines 606-614 have nested `rounded-none` wrappers with duplicate borders)
+- Simplify Zone 3 same way
+
+## What Will NOT Change
+
+- No layout restructuring
+- No content or link removal
+- No header/filter changes (already correct)
+- Hero section stays as-is (dark overlay with video is intentional)
+- `ToolkitShowcaseCard` already correct from prior pass
+- `TrustBar` already correct from prior pass
+- `DeveloperPortalCTA` already correct from prior pass
+- Floating action bar stays at current scale/opacity
+
+## Expected Visual Result
+
+- Every homepage section: white cards, gray borders, black text, black CTAs
+- No champagne gradients visible anywhere
+- No gold text, borders, or shadows
+- Consistent card language (white + gray-200 border + rounded-xl)
+- Consistent badge language (gray-100 + gray-300 border + rounded-full)
+- Clean CTA buttons (black bg, white text, or outlined gray)
+- Footer: clean, no double borders
 
