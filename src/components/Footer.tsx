@@ -454,7 +454,7 @@ const Footer = () => {
             <img 
               src={jbjMonogramNobuffer} 
               alt="JBJ Global Real Estate" 
-              className="h-32 sm:h-40 md:h-48 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.08)] transition-all duration-500 group-hover:scale-[1.02]"
+              className="h-32 sm:h-40 md:h-48 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.08)] transition-all duration-500 group-hover:scale-[1.02] mix-blend-multiply"
             />
           </Link>
           
