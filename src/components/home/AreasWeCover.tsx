@@ -65,9 +65,10 @@ const AreasWeCover = () => {
                   <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
                     <span
                       className="text-6xl font-black text-black select-none"
-                      style={{ opacity: 0.1, fontFamily: "Poppins, sans-serif" }}
+                      style={{ opacity: 0.1 }}
                     >
                       JBJ
+                    </span>
                     </span>
                   </div>
                 )}
