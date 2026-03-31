@@ -388,7 +388,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   value={filters.afterHandover}
                   onChange={(e) => update({ afterHandover: e.target.value.replace(/[^0-9]/g, '') })}
                   placeholder="e.g. 30"
-                  className="w-full h-9 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black"
+                  className="w-full h-9 px-3 bg-white border border-gray-300 rounded-lg text-sm text-black"
                 />
               </div>
               <div className="flex items-center justify-between">
