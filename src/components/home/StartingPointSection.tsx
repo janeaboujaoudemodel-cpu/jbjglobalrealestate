@@ -61,8 +61,8 @@ const StartingPointSection = () => {
         {/* Header badge */}
         <div className="text-center mb-6 md:mb-8">
           <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-1.5 md:py-2 bg-gray-100 border border-gray-300 rounded-full text-[10px] md:text-xs uppercase tracking-[0.15em] md:tracking-[0.2em] font-semibold">
-            <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-gray-600" />
-            <span className="text-black">{t('hero.findStartingPoint')}</span>
+            <Users className="w-3 h-3 md:w-3.5 md:h-3.5 text-gray-700" />
+            <span className="text-gray-900">{t('hero.findStartingPoint')}</span>
           </span>
         </div>
 
@@ -77,7 +77,7 @@ const StartingPointSection = () => {
                   "px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide transition-all duration-300 border",
                   activeTab === tab.key
                     ? "bg-white text-gray-900 border-gray-300 shadow-sm font-bold"
-                    : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50 hover:text-gray-900"
+                    : "bg-transparent text-gray-600 border-transparent hover:bg-white/60 hover:text-gray-900"
                 )}
               >
                 {tab.label}
@@ -98,11 +98,11 @@ const StartingPointSection = () => {
               )}>
                 <div className="relative flex flex-col items-center gap-2 md:gap-3 w-full">
                   <div className="w-14 h-14 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shrink-0 bg-gray-100 border border-gray-200">
-                    <card.icon className="w-7 h-7 text-gray-600" strokeWidth={1.5} />
+                    <card.icon className="w-7 h-7 text-gray-800" strokeWidth={1.5} />
                   </div>
                   <div className="text-center">
-                    <h4 className="text-black group-hover:text-gray-700 text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
-                    <p className="text-gray-600 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
+                    <h4 className="text-gray-900 group-hover:text-gray-700 text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
+                    <p className="text-gray-500 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
                   </div>
                 </div>
               </div>
