@@ -480,33 +480,29 @@ const Index = () => {
 
       <SectionDivider />
 
-      {/* MORTGAGE CALCULATOR SECTION */}
-      <section>
+      <section className="py-12 md:py-16">
         <div className="jj-layer-2">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-24 md:w-48 h-24 md:h-48 bg-gold/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
-            
+          <div className="bg-gray-50 border border-gray-200 rounded-xl md:rounded-3xl p-4 md:p-12 relative overflow-hidden">
             <div className="relative z-10">
               <Suspense fallback={<SectionLoader />}>
                 <MortgageCalculator compact />
               </Suspense>
-              <p className="text-zinc-500 text-xs text-center mt-4">
+              <p className="text-gray-500 text-xs text-center mt-4">
                 Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
                 <Link to="/mortgage-calculator">
-                  <Button variant="primary" size="lg" className="gap-2 px-8 py-5 text-base group">
-                    <Sparkles className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                    <span className="whitespace-nowrap"><span className="text-black group-hover:text-gold transition-colors">{t('home.tryOurAi', 'Try Our AI')} </span><span className="text-gold group-hover:text-black transition-colors">{t('mortgage.calculator', 'Mortgage Calculator')}</span></span>
-                    <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  <Button size="lg" className="gap-2 px-8 py-5 text-base bg-black text-white hover:bg-gray-800">
+                    <Sparkles className="w-5 h-5" />
+                    <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
+                    <ArrowUpRight className="w-5 h-5" />
                   </Button>
                 </Link>
                 
                 <Link to="/partners/mortgage">
-                  <Button variant="secondary" size="lg" className="gap-2 px-8 py-5 text-base group">
-                    <Users className="w-5 h-5 text-gold" />
+                  <Button variant="outline" size="lg" className="gap-2 px-8 py-5 text-base border-gray-300 text-black hover:bg-gray-100">
+                    <Users className="w-5 h-5 text-gray-600" />
                     <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
                     <ArrowUpRight className="w-5 h-5" />
                   </Button>
