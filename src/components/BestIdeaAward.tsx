@@ -262,8 +262,8 @@ const BestIdeaAward = () => {
                             </div>
                           )}
 
-                          <div className="bg-zinc-50 rounded-xl p-5 mb-5 text-left">
-                            <p className="text-zinc-700 mb-3">
+                          <div className="bg-gray-50 rounded-xl p-5 mb-5 text-left">
+                            <p className="text-gray-700 mb-3">
                               <span className="text-gold font-semibold">We deeply appreciate</span> your creativity and the time you took to share your idea with us.
                             </p>
                             {!formData.isAnonymous ? (
