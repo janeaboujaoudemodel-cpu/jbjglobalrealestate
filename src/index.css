@@ -2022,8 +2022,24 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 /* Gold opacity variants */
 [class*="bg-gold\/"] { background-color: rgba(0,0,0,0.05) !important; }
 [class*="border-gold\/"] { border-color: rgba(0,0,0,0.12) !important; }
-[class*="text-gold\/"] { color: rgba(0,0,0,0.7) !important; }
+[class*="text-gold\/"] { color: rgba(0,0,0,0.85) !important; }
 [class*="ring-gold"] { --tw-ring-color: #d4d4d4 !important; }
+
+/* ── Global icon contrast unification ──
+   All standalone icons (svg) using text-gold get solid black.
+   Icons inside dark containers get white. */
+svg.text-gold,
+.text-gold > svg,
+[class*="text-gold"] > svg {
+  color: #111111 !important;
+}
+
+.bg-black svg,
+.bg-gray-900 svg,
+.bg-gray-950 svg,
+.bg-gold svg {
+  color: #FFFFFF !important;
+}
 
 /* Gold gradient stops */
 [class*="via-gold"] { --tw-gradient-via: #e5e5e5 !important; }

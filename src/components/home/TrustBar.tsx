@@ -84,18 +84,8 @@ const TrustBar = () => {
             }`}
           >
             {/* Icon */}
-            <div 
-              className={`w-8 h-8 md:w-11 md:h-11 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
-                item.highlight 
-                  ? 'bg-black shadow-lg' 
-                  : 'bg-gray-100 group-hover:bg-gray-200 shadow-sm'
-              }`}
-            >
-              <item.icon 
-                className={`w-4 h-4 md:w-5 md:h-5 transition-colors duration-300 ${
-                  item.highlight ? 'text-white' : 'text-gray-700'
-                }`}
-              />
+            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0 bg-black shadow-sm">
+              <item.icon className="w-4 h-4 md:w-5 md:h-5 text-white" />
             </div>
             
             {/* Text content */}
