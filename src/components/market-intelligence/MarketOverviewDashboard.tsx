@@ -35,7 +35,8 @@ const StatCard = ({
   change, 
   icon: Icon, 
   suffix = "",
-  prefix = ""
+  prefix = "",
+  accentColor = "text-black"
 }: { 
   title: string; 
   value: string | number; 
@@ -43,6 +44,7 @@ const StatCard = ({
   icon: React.ElementType;
   suffix?: string;
   prefix?: string;
+  accentColor?: string;
 }) => {
   const isPositive = change >= 0;
   
@@ -52,14 +54,14 @@ const StatCard = ({
         <CardContent className="p-6">
           <div className="flex items-start justify-between">
             <IconBox icon={Icon} />
-            <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-emerald-600' : 'text-red-600'}`}>
+            <div className={`flex items-center gap-1 text-sm font-bold px-2 py-0.5 rounded-full ${isPositive ? 'text-emerald-700 bg-emerald-50' : 'text-red-700 bg-red-50'}`}>
               {isPositive ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
               <span>{isPositive ? '+' : ''}{change}%</span>
             </div>
           </div>
           <div className="mt-4">
             <p className="text-black/60 text-sm mb-1">{title}</p>
-            <p className="text-black text-2xl font-bold truncate">
+            <p className={`${accentColor} text-2xl font-bold truncate`}>
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
           </div>

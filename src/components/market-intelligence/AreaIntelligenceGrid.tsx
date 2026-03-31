@@ -92,24 +92,24 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           <div className="space-y-3 mb-4">
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-black/60">Demand Score</span>
-                <span className="text-black">{area.demandScore}/100</span>
+                <span className="text-emerald-700 font-medium">Demand Score</span>
+                <span className="text-emerald-700 font-bold">{area.demandScore}/100</span>
               </div>
-              <div className="h-2 bg-white/50 rounded-full overflow-hidden">
+              <div className="h-2.5 bg-emerald-100 rounded-full overflow-hidden shadow-inner">
                 <div 
-                  className="h-full bg-gradient-to-r from-gold/80 to-gold rounded-full"
+                  className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"
                   style={{ width: `${area.demandScore}%` }}
                 />
               </div>
             </div>
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-black/60">Supply Score</span>
-                <span className="text-black">{area.supplyScore}/100</span>
+                <span className="text-blue-700 font-medium">Supply Score</span>
+                <span className="text-blue-700 font-bold">{area.supplyScore}/100</span>
               </div>
-              <div className="h-2 bg-white/50 rounded-full overflow-hidden">
+              <div className="h-2.5 bg-blue-100 rounded-full overflow-hidden shadow-inner">
                 <div 
-                  className="h-full bg-gradient-to-r from-black/50 to-black/40 rounded-full"
+                  className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"
                   style={{ width: `${area.supplyScore}%` }}
                 />
               </div>

@@ -189,10 +189,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                         <span className="text-black/80 text-sm">{nat.country}</span>
                       </div>
                       <div className="flex items-center gap-3">
-                        <div className="w-20 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="w-20 h-3 bg-black/5 rounded-full overflow-hidden shadow-inner">
                           <div className={`h-full ${barColors[i % barColors.length]} rounded-full`} style={{ width: `${nat.percentage * 4}%` }} />
                         </div>
-                        <span className={`${textColors[i % textColors.length]} text-xs font-semibold w-8 text-right`}>{nat.percentage}%</span>
+                        <span className={`${textColors[i % textColors.length]} text-xs font-bold w-8 text-right`}>{nat.percentage}%</span>
                       </div>
                     </div>
                   );
