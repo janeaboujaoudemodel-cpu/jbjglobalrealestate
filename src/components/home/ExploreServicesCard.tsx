@@ -280,9 +280,9 @@ const ExploreServicesCard = () => {
             {currentService.available ? (
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <Link to={currentService.href}>
-                  <Button variant="primary" size="default" className="gap-2 px-4 sm:px-8 py-3 sm:py-4 rounded-lg group text-sm sm:text-base">
+                  <Button variant="default" size="default" className="gap-2 px-4 sm:px-8 py-3 sm:py-4 rounded-lg group text-sm sm:text-base bg-white text-black font-bold hover:bg-gray-100 border border-gray-200 shadow-lg">
                     <span className="tracking-wide">{CTA_LABELS[currentService.id] ?? "Explore Now"}</span>
-                    <ArrowRight className="w-4 h-4 text-gold group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="w-4 h-4 text-black group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
                 {currentService.id === "golden-visa" && (
