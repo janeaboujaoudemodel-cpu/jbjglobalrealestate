@@ -97,7 +97,7 @@ export default function WhyDubaiCapitalSection() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.5 }}
           >
-            <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-gold/30 bg-[hsl(32,28%,13%)]/50 backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] font-semibold text-gold/90">
+            <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border backdrop-blur-sm text-[9px] uppercase tracking-[0.2em] font-semibold" style={{ borderColor: 'rgba(255,255,255,0.2)', background: 'rgba(0,0,0,0.4)', color: '#e5e7eb' }}>
               <T>Global Investment Hub</T>
             </span>
 
@@ -109,7 +109,7 @@ export default function WhyDubaiCapitalSection() {
               }}
             >
               <T>Why Dubai Became the Capital of</T>{" "}
-              <span className="text-gold"><T>Global Investors</T></span>
+              <span style={{ color: '#93c5fd' }}><T>Global Investors</T></span>
             </h2>
 
             <p className="mt-2.5 text-xs md:text-sm text-white/70 max-w-sm leading-relaxed">
