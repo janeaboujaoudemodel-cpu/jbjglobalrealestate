@@ -168,7 +168,6 @@ const ReellyProjectCard = ({
                   alt={project.developer_name || ''}
                   className="w-full h-full object-contain"
                 />
-                />
               </div>
               )}
 
