@@ -223,29 +223,13 @@ const BestIdeaAward = () => {
                 <div className="text-center md:text-right">
                   <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
-                      <Button
-                        className="relative bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-2 border-gold/50 px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:scale-105 transform active:scale-95 group whitespace-nowrap"
-                        style={{
-                          textShadow: 'none',
-                          boxShadow: `
-                            0 10px 30px rgba(200,167,102,0.4),
-                            0 6px 15px rgba(0,0,0,0.2),
-                            inset 0 2px 4px rgba(255,255,255,0.9),
-                            inset 0 -2px 4px rgba(200,167,102,0.2),
-                            0 0 20px rgba(200,167,102,0.3)
-                          `,
-                        }}
+                       <Button
+                        className="relative bg-black text-white border-2 border-black px-10 py-7 text-lg font-bold rounded-xl transition-all duration-300 hover:bg-gray-800 hover:border-gray-800 hover:-translate-y-0.5 active:translate-y-0 group whitespace-nowrap shadow-[0_10px_30px_rgba(0,0,0,0.25)]"
                       >
-                        {/* 3D Top highlight */}
-                        <span className="absolute inset-x-0 top-0 h-1/2 rounded-t-xl bg-gradient-to-b from-white/80 to-transparent pointer-events-none" />
-                        {/* 3D Bottom shadow */}
-                        <span className="absolute inset-x-0 bottom-0 h-1/3 rounded-b-xl bg-gradient-to-t from-gold/10 to-transparent pointer-events-none" />
-                        {/* Glow effect on hover */}
-                        <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ boxShadow: '0 0 40px rgba(200,167,102,0.6), inset 0 0 20px rgba(200,167,102,0.1)' }} />
                         <span className="relative flex items-center gap-2 whitespace-nowrap">
-                          <Lightbulb className="w-6 h-6 text-gold group-hover:text-black transition-colors" />
-                          <span className="whitespace-nowrap"><span className="text-black group-hover:text-gold transition-colors">Drop Your </span><span className="text-gold group-hover:text-black transition-colors">Idea</span></span>
-                          <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold ml-1 transition-colors" />
+                          <Lightbulb className="w-6 h-6 text-white" />
+                          <span className="whitespace-nowrap text-white font-bold">Drop Your Idea</span>
+                          <ArrowUpRight className="w-5 h-5 text-white ml-1" />
                         </span>
                       </Button>
                     </DialogTrigger>
