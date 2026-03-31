@@ -496,7 +496,7 @@ const Index = () => {
               <Suspense fallback={<SectionLoader />}>
                 <MortgageCalculator compact />
               </Suspense>
-              <p className="text-gray-500 text-xs text-center mt-4">
+              <p className="text-gray-600 text-xs text-center mt-4">
                 Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
               </p>
               
