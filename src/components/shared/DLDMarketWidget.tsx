@@ -106,7 +106,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               <div key={stat.label} className={`${stat.bgAccent} border rounded-xl p-4`}>
                 <div className="flex items-center gap-2 mb-2">
                   <stat.icon className={`w-4 h-4 ${stat.color}`} />
-                  <span className="text-black/60 text-xs uppercase tracking-wider font-medium">{stat.label}</span>
+                  <span className="text-black/80 text-xs uppercase tracking-wider font-semibold">{stat.label}</span>
                 </div>
                 <p className={`${stat.color} text-xl font-bold`}>{stat.value}</p>
               </div>
