@@ -273,10 +273,8 @@ const ExploreServicesCard = () => {
           >
             {currentService.title}
           </h4>
-          
-          <p className="text-zinc-200 text-xs sm:text-sm md:text-lg max-w-lg mb-4 md:mb-6 leading-relaxed line-clamp-3">
-            {currentService.description}
-          </p>
+
+
 
           <div className="flex items-center justify-between gap-2">
             {currentService.available ? (
