@@ -44,7 +44,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <p className="text-gold font-bold text-lg">{ytd2026.value}</p>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3">
-            <p className="text-[10px] text-white/70 uppercase tracking-wider">Transactions</p>
+            <p className="text-[10px] text-white/80 uppercase tracking-wider font-medium">Transactions</p>
             <p className="text-white font-bold text-lg">{ytd2026.transactions.toLocaleString()}</p>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3">
