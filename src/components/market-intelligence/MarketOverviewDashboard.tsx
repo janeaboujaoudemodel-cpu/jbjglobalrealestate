@@ -215,11 +215,11 @@ export const MarketOverviewDashboard = () => {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 jj-card-inner rounded-full">
               <Calendar className="w-4 h-4 text-gold" />
-              <span className="text-black/70 text-sm">
+              <span className="text-black/80 text-sm font-medium">
                 Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
-              <span className="text-black/40">•</span>
-              <span className="text-black/50 text-sm">
+              <span className="text-black/50">•</span>
+              <span className="text-black/70 text-sm font-medium">
                 {MARKET_OVERVIEW_STATS.dataSource}
               </span>
             </div>
