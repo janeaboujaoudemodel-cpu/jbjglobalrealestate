@@ -610,22 +610,9 @@ const Footer = () => {
               boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
             }}
           >
-            {/* Outer Gold Border Ring - Enhanced */}
-            <div className="absolute inset-0 rounded-none border border-gray-200 pointer-events-none" />
-            <div className="absolute inset-[3px] rounded-none border border-gray-100 pointer-events-none" />
-            
-            {/* Animated Shimmer Sweep */}
-            <div 
-              className="absolute inset-0 rounded-none pointer-events-none opacity-50"
-              style={{
-                background: 'none',
-              }}
-            />
+            <div className="absolute inset-0 border border-gray-200 pointer-events-none" />
           
-          {/* Edge-to-edge: no corner accents needed */}
-          
-          {/* Inner Layer */}
-          <div className="bg-white rounded-none border border-gray-200 m-0 overflow-hidden">
+          <div className="bg-white border border-gray-200 overflow-hidden">
             
             {/* Navigation Grid Section - Card-Based 2-Column Layout */}
             <div className="p-4 sm:p-6 md:p-8">
