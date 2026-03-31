@@ -216,7 +216,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             ) : null}
 
             {(project as any).description && (
-              <p className="text-gray-600 text-xs line-clamp-2 mb-2">{(project as any).description}</p>
+              <p className="text-gray-700 text-xs line-clamp-2 mb-2">{(project as any).description}</p>
             )}
 
             <hr className="border-gray-200 my-2" />
