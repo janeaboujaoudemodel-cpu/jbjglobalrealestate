@@ -49,7 +49,7 @@ export default function PortfolioPerformanceContext({ contextItems }: PortfolioP
             <CardContent className="space-y-3">
               {item.rentalContext && (
                 <div className="flex items-start gap-2">
-                  <Home className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <Home className="w-4 h-4 text-black mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-muted-foreground uppercase tracking-wide">Rental Context</p>
                     <p className="text-sm text-foreground">{item.rentalContext}</p>
