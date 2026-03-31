@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 
 interface RecommendedProjectsProps {
   currentProjectId: string;
@@ -137,7 +138,7 @@ export default function RecommendedProjects({
               : [];
             const paymentLabel = percentages.length > 0 ? percentages.join('/') : null;
             const saleStatus = (project as any).sale_status || "On Sale";
-            const devLogo = (project.developer as any)?.logo_url;
+            const devLogo = getDeveloperLogoUrl(project.developer);
             const description = (project as any).description;
 
             // Location fallback
@@ -187,11 +188,11 @@ export default function RecommendedProjects({
 
                   {/* Developer Logo — Bottom Left — eager loaded, rounded with no white frame */}
                   {devLogo && (
-                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl overflow-hidden shadow-md border border-gold/40">
+                    <div className="absolute bottom-3 left-3 w-10 h-10 rounded-xl overflow-hidden shadow-md border border-gold/40 bg-white p-0.5">
                       <SafeImage
                         src={devLogo}
                         alt={project.developer?.name || "Developer"}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         loading="eager"
                       />
                     </div>

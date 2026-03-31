@@ -11,6 +11,7 @@ import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
+import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerLogo";
 
 interface ProjectCardProps {
   project: Project & { is_sold_out?: boolean | null };
@@ -172,7 +173,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
 
   const statusLabel = getStatusLabel();
   const saleStatusBadge = getSaleStatusBadge(project.status_label);
-  const hasDevLogo = !!(project.developer as any)?.logo_url;
+  const hasDevLogo = !!getDeveloperLogoUrl(project.developer);
   const badgePosition = hasDevLogo ? 'top-14 left-3' : 'top-3 left-3';
 
   return (
@@ -202,15 +203,15 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         {/* Image with Carousel - LANDSCAPE aspect ratio (16:10 - Premium Hybrid) */}
         <div className="aspect-[16/10] overflow-hidden relative">
           {/* Developer Logo Overlay - Top Left */}
-          {(project.developer as any)?.logo_url && (
+          {getDeveloperLogoUrl(project.developer) && (
             <div
               className={`absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center ${
-                (project.developer as any)?.logo_bg_color ? 'shadow-lg' : ''
+                getDeveloperLogoBgColor(project.developer) ? 'shadow-lg' : 'bg-white shadow-lg p-1'
               }`}
-              style={{ backgroundColor: (project.developer as any)?.logo_bg_color || 'transparent' }}
+              style={{ backgroundColor: getDeveloperLogoBgColor(project.developer) || '#FFFFFF' }}
             >
               <img 
-                src={(project.developer as any).logo_url} 
+                src={getDeveloperLogoUrl(project.developer)!} 
                 alt={project.developer?.name}
                 className="w-full h-full object-contain"
               />
@@ -269,7 +270,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           )}
           
           {/* Top-Left: Property Type Label (if no developer logo) */}
-          {project.property_type_label && !(project.developer as any)?.logo_url && (
+          {project.property_type_label && !getDeveloperLogoUrl(project.developer) && (
             <div className="absolute top-3 left-3 z-10 bg-premium-bg/90 text-gold px-2 py-1 rounded text-xs font-semibold border border-gold/30">
               {project.property_type_label}
             </div>

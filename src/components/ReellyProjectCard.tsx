@@ -9,6 +9,7 @@ import { VerifiedMedia } from "@/components/ui/verified-media";
 import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
+import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerLogo";
  
 interface ReellyProjectCardProps {
   project: ReellyProject;
@@ -158,15 +159,12 @@ const ReellyProjectCard = ({
          {/* Image with Carousel */}
           <div className="aspect-[16/10] overflow-hidden relative">
             {/* Developer Logo Overlay - Top Left */}
-            {(project as any).developer?.logo_url && (
+            {getDeveloperLogoUrl((project as any).developer) && (
               <div
-                className={`absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center ${
-                  (project as any).developer?.logo_bg_color ? 'shadow-lg' : ''
-                }`}
-                style={{ backgroundColor: (project as any).developer?.logo_bg_color || 'transparent' }}
+                className={`absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center bg-white shadow-lg p-1`}
               >
                 <img 
-                  src={(project as any).developer.logo_url} 
+                  src={getDeveloperLogoUrl((project as any).developer)!} 
                   alt={project.developer_name || ''}
                   className="w-full h-full object-contain"
                 />
@@ -226,14 +224,14 @@ const ReellyProjectCard = ({
            
             {/* Top-Left: Sale Status Badge - offset below dev logo if present */}
               {saleStatusBadge && !project.sale_status?.toLowerCase().includes('sold') && !project.status_label?.toLowerCase().includes('sold') && (
-                <div className={`absolute ${(project as any).developer?.logo_url ? 'top-[60px]' : 'top-3'} left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
+                <div className={`absolute ${getDeveloperLogoUrl((project as any).developer) ? 'top-[60px]' : 'top-3'} left-3 z-10 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${saleStatusBadge.className}`}>
                   {saleStatusBadge.label}
                 </div>
               )}
 
               {/* Sold Out Badge - dedicated red badge top-left */}
               {(project.sale_status?.toLowerCase().includes('sold') || project.status_label?.toLowerCase().includes('sold')) && (
-                <div className={`absolute ${(project as any).developer?.logo_url ? 'top-[60px]' : 'top-3'} left-3 z-10`}>
+                <div className={`absolute ${getDeveloperLogoUrl((project as any).developer) ? 'top-[60px]' : 'top-3'} left-3 z-10`}>
                   <div className="bg-red-600 text-white px-2.5 py-1 rounded-full text-xs font-bold uppercase shadow-lg border border-red-400">
                     Sold Out
                   </div>
