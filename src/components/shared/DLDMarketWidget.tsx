@@ -98,15 +98,15 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Main Stats Row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             {[
-              { label: "YTD Volume", value: ytd2026.value, icon: Banknote, color: "text-gold" },
-              { label: "Transactions (YTD 2026)", value: ytd2026.transactions.toLocaleString(), icon: Building2, color: "text-black" },
-              { label: "Off-Plan", value: ytd2026.offPlan.toLocaleString(), icon: TrendingUp, color: "text-emerald-600" },
-              { label: "Cash Deals", value: ytd2026.cash.toLocaleString(), icon: Banknote, color: "text-amber-700" },
+              { label: "YTD Volume", value: ytd2026.value, icon: Banknote, color: "text-emerald-700", bgAccent: "bg-emerald-50 border-emerald-200" },
+              { label: "Transactions (YTD 2026)", value: ytd2026.transactions.toLocaleString(), icon: Building2, color: "text-blue-700", bgAccent: "bg-blue-50 border-blue-200" },
+              { label: "Off-Plan", value: ytd2026.offPlan.toLocaleString(), icon: TrendingUp, color: "text-purple-700", bgAccent: "bg-purple-50 border-purple-200" },
+              { label: "Cash Deals", value: ytd2026.cash.toLocaleString(), icon: Banknote, color: "text-amber-700", bgAccent: "bg-amber-50 border-amber-200" },
             ].map((stat) => (
-              <div key={stat.label} className="bg-white/70 border border-gold/20 rounded-xl p-4">
+              <div key={stat.label} className={`${stat.bgAccent} border rounded-xl p-4`}>
                 <div className="flex items-center gap-2 mb-2">
                   <stat.icon className={`w-4 h-4 ${stat.color}`} />
-                  <span className="text-black/50 text-xs uppercase tracking-wider">{stat.label}</span>
+                  <span className="text-black/60 text-xs uppercase tracking-wider font-medium">{stat.label}</span>
                 </div>
                 <p className={`${stat.color} text-xl font-bold`}>{stat.value}</p>
               </div>
