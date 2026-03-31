@@ -205,10 +205,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           {/* Developer Logo Overlay - Top Left */}
           {getDeveloperLogoUrl(project.developer) && (
             <div
-              className={`absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center ${
-                getDeveloperLogoBgColor(project.developer) ? 'shadow-lg' : 'bg-white shadow-lg p-1'
-              }`}
-              style={{ backgroundColor: getDeveloperLogoBgColor(project.developer) || '#FFFFFF' }}
+              className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center bg-white shadow-lg p-1.5"
             >
               <img 
                 src={getDeveloperLogoUrl(project.developer)!} 
