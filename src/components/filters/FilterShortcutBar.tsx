@@ -340,8 +340,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   className={cn(
                     "px-3 py-1 rounded-full text-xs font-medium border transition-all",
                     filters.priceMax === p.value
-                      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black font-bold"
-                      : "bg-white/80 text-black border-gold/30 hover:border-gold"
+                      ? "bg-black text-white border-black font-bold"
+                      : "bg-white text-black border-gray-300 hover:border-gray-400"
                   )}
                 >
                   {p.label}
