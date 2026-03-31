@@ -168,7 +168,7 @@ const BestIdeaAward = () => {
                         </div>
                         <div>
                           <p className="text-gold font-bold">iPad Pro with M4 chip (13-inch)</p>
-                          <p className="text-zinc-400 text-xs">Ultra Retina XDR Display • Apple Pencil Pro Compatible • Space Black</p>
+                          <p className="text-white/70 text-xs">Ultra Retina XDR Display • Apple Pencil Pro Compatible • Space Black</p>
                         </div>
                       </div>
                     </div>
