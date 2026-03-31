@@ -1267,7 +1267,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           {/* Logo header (88px) — collapsed: just icon */}
           <div className="h-[88px] w-full shrink-0 flex items-center justify-center bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-gold/20">
             <Link to="/">
-              <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain" />
+              <img src={jbjMonogramLightBg} alt="JBJ" className="w-8 h-8 object-contain mix-blend-multiply" />
             </Link>
           </div>
           {/* Section icons — darker body matching header center */}
