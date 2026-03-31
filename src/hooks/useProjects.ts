@@ -437,7 +437,7 @@ export function useProjectsByDeveloper(developerSlug: string) {
         .from("projects")
         .select(`
           *,
-          developer:developers!inner(id, name, slug),
+          developer:developers!inner(id, name, slug, logo_url),
           community:communities(id, name, slug),
           images:project_images(id, image_url, alt_text, display_order),
           documents:project_documents(id, document_type, file_url, file_name, display_order)

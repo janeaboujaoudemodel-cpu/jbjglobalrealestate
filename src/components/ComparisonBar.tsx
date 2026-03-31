@@ -51,7 +51,7 @@ const ComparisonBar = () => {
         .from("projects")
         .select(`
           *,
-          developer:developers(name, slug),
+          developer:developers(name, slug, logo_url),
           images:project_images(image_url, alt_text, display_order)
         `)
         .in("id", shortlistIds);

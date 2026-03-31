@@ -131,7 +131,7 @@ const Compare = () => {
         .from("projects")
         .select(`
           *,
-          developer:developers(name, slug),
+          developer:developers(name, slug, logo_url),
           images:project_images(image_url, alt_text, display_order),
           community:communities(name, slug),
           documents:project_documents(file_url, file_name, document_type)
