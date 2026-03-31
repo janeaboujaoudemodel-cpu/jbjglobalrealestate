@@ -391,6 +391,41 @@ export const DEVELOPER_LOGO_LOCK = Object.freeze({
   }),
 });
 
+// ============================================
+// K) UI CONTRAST LOCK (IMMUTABLE)
+// ============================================
+
+export const UI_CONTRAST_LOCK = Object.freeze({
+  STATUS: 'GLOBALLY_LOCKED',
+  LOCK_DATE: '2026-03-31',
+
+  LIGHT_SURFACE: Object.freeze({
+    PRIMARY_TEXT: 'text-black',
+    SECONDARY_TEXT: 'text-gray-700',
+    MUTED_TEXT: 'text-gray-500',
+    CTA_BG: 'bg-black',
+    CTA_TEXT: 'text-white',
+  }),
+
+  DARK_SURFACE: Object.freeze({
+    PRIMARY_TEXT: 'text-white',
+    SECONDARY_TEXT: 'rgb(255 255 255 / 0.92)',
+    MUTED_TEXT: 'rgb(255 255 255 / 0.78)',
+    TITLE_SHADOW: '[text-shadow:0_1px_2px_rgba(0,0,0,.9),0_0_12px_rgba(0,0,0,.45)]',
+    BODY_SHADOW: '[text-shadow:0_1px_2px_rgba(0,0,0,.85)]',
+    OVERLAY: 'bg-gradient-to-t from-black/78 via-black/36 to-transparent',
+  }),
+
+  RULES: Object.freeze([
+    'All button text MUST be white on dark/black backgrounds, black on light backgrounds',
+    'No gold, champagne, or low-contrast text inside buttons or CTAs',
+    'text-gray-500 is the absolute minimum contrast on light surfaces (4.6:1)',
+    'text-gray-600 is auto-bumped to text-gray-700 on light surfaces via global CSS',
+    'All image overlay text must use text-white with text-shadow for readability',
+    'Per-component color overrides on buttons are FORBIDDEN without founder unlock',
+  ]),
+});
+
 // Export master lock object for read-only access
 export const MASTER_LOCK = Object.freeze({
   BRAND: BRAND_LOCK,
@@ -404,6 +439,7 @@ export const MASTER_LOCK = Object.freeze({
   BEHAVIOR: BEHAVIOR_RULES,
   STATUS: SYSTEM_STATUS,
   DEVELOPER_LOGOS: DEVELOPER_LOGO_LOCK,
+  UI_CONTRAST: UI_CONTRAST_LOCK,
 });
 
 export default MASTER_LOCK;

@@ -454,23 +454,17 @@ export const ConsultationRequestForm = ({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-14 text-base font-bold relative overflow-hidden group"
-            style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #FDFBF7 25%, #F7F2EA 50%, #E8DFD0 75%, #C8A766 100%)',
-              border: '2px solid rgba(200,167,102,0.6)',
-              boxShadow: '0 10px 30px rgba(200,167,102,0.4)',
-            }}
+            className="w-full h-14 text-base font-bold relative overflow-hidden group bg-black hover:bg-gray-800 text-white border-2 border-black"
           >
             {isSubmitting ? (
-              <span className="flex items-center gap-2 text-black">
+              <span className="flex items-center gap-2 text-white">
                 <Loader2 className="w-5 h-5 animate-spin" />
                 Submitting...
               </span>
             ) : (
-              <span className="flex items-center gap-2">
-                <span className="text-black group-hover:text-gold transition-colors">Request</span>
-                <span className="text-gold group-hover:text-black transition-colors">Consultation</span>
-                <Send className="w-4 h-4 text-gold group-hover:text-black transition-colors" />
+              <span className="flex items-center gap-2 text-white">
+                <span>Request Consultation</span>
+                <Send className="w-4 h-4" />
               </span>
             )}
           </Button>

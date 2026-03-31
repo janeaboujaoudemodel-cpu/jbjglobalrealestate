@@ -2238,3 +2238,28 @@ a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
 }
+
+/* ── 8. BUTTON CONTRAST LOCK — All button inner text must be readable ── */
+/* Buttons with dark backgrounds: all children inherit white */
+button.bg-black *, button.bg-black span,
+button[class*="bg-gray-900"] *, button[class*="bg-gray-900"] span,
+button[class*="bg-gray-800"] *, button[class*="bg-gray-800"] span,
+a.bg-black *, a.bg-black span,
+a[class*="bg-gray-900"] *, a[class*="bg-gray-900"] span {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Kill gold/champagne text inside ANY button — it's never readable */
+button .text-gold, button [class*="text-gold"],
+button [class*="text-amber"], button [class*="text-yellow"],
+a .text-gold, a [class*="text-gold"] {
+  color: inherit !important;
+}
+
+/* Buttons on light/champagne gradient backgrounds: force black text */
+button[style*="linear-gradient"] *,
+button[style*="background"] [class*="text-gold"] {
+  color: #111111 !important;
+  opacity: 1 !important;
+}
