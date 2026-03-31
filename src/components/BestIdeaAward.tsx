@@ -337,7 +337,7 @@ const BestIdeaAward = () => {
                                 />
                               </div>
                               <div>
-                                <Label className="text-zinc-700 flex items-center gap-2">
+                                <Label className="text-gray-700 flex items-center gap-2">
                                   <Mail className="w-4 h-4 text-gold" />
                                   Email *
                                 </Label>
