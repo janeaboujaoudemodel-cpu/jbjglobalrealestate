@@ -60,7 +60,7 @@ const StatCard = ({
             </div>
           </div>
           <div className="mt-4">
-            <p className="text-black/60 text-sm mb-1">{title}</p>
+            <p className="text-black font-medium text-sm mb-1">{title}</p>
             <p className={`${accentColor} text-2xl font-bold truncate`}>
               {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
             </p>
@@ -91,7 +91,7 @@ export const MarketOverviewDashboard = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               <span className="text-gold">Dubai</span> <span className="text-black">Real Estate Dashboard</span>
             </h2>
-            <p className="text-black/70 max-w-2xl mx-auto">
+            <p className="text-black/80 max-w-2xl mx-auto">
               High-level market metrics aggregated from official government Open Data sources.
             </p>
           </motion.div>
@@ -170,7 +170,7 @@ export const MarketOverviewDashboard = () => {
                       );
                     })}
                   </div>
-                  <p className="text-black/50 text-xs mt-4">
+                  <p className="text-black/70 text-xs mt-4">
                     Source: Dubai Government Open Data
                   </p>
                 </CardContent>
@@ -192,7 +192,7 @@ export const MarketOverviewDashboard = () => {
                       <div key={prop.type} className="flex items-center justify-between py-3 border-b border-black/10 last:border-0">
                         <div>
                           <p className="text-black font-medium">{prop.type}</p>
-                          <p className="text-black/50 text-sm">{prop.volume.toLocaleString()} transactions</p>
+                          <p className="text-black/70 font-medium text-sm">{prop.volume.toLocaleString()} transactions</p>
                         </div>
                         <div className="text-right">
                           <p className="text-black font-bold">AED {prop.avgPrice.toLocaleString()}/sqft</p>
@@ -215,11 +215,11 @@ export const MarketOverviewDashboard = () => {
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 jj-card-inner rounded-full">
               <Calendar className="w-4 h-4 text-gold" />
-              <span className="text-black/70 text-sm">
+              <span className="text-black/80 text-sm font-medium">
                 Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
-              <span className="text-black/40">•</span>
-              <span className="text-black/50 text-sm">
+              <span className="text-black/50">•</span>
+              <span className="text-black/70 text-sm font-medium">
                 {MARKET_OVERVIEW_STATS.dataSource}
               </span>
             </div>

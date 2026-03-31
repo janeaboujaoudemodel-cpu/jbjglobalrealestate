@@ -35,24 +35,24 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <TrendingUp className="w-4 h-4 text-gold" />
             Dubai Market Pulse
           </h3>
-          <span className="text-[10px] text-white/60">As of {today}</span>
+          <span className="text-[10px] text-white/80">As of {today}</span>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-zinc-800/50 rounded-lg p-3">
-            <p className="text-[10px] text-white/70 uppercase tracking-wider">YTD Volume</p>
+            <p className="text-[10px] text-white/80 uppercase tracking-wider font-medium">YTD Volume</p>
             <p className="text-gold font-bold text-lg">{ytd2026.value}</p>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3">
-            <p className="text-[10px] text-white/70 uppercase tracking-wider">Transactions</p>
+            <p className="text-[10px] text-white/80 uppercase tracking-wider font-medium">Transactions</p>
             <p className="text-white font-bold text-lg">{ytd2026.transactions.toLocaleString()}</p>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3">
-            <p className="text-[10px] text-white/70 uppercase tracking-wider">Growth</p>
+            <p className="text-[10px] text-white/80 uppercase tracking-wider font-medium">Growth</p>
             <p className="text-emerald-400 font-bold text-lg">{ytd2026.growth}</p>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3">
-            <p className="text-[10px] text-white/70 uppercase tracking-wider">Off-Plan</p>
+            <p className="text-[10px] text-white/80 uppercase tracking-wider font-medium">Off-Plan</p>
             <p className="text-white font-bold text-lg">{ytd2026.offPlan.toLocaleString()}</p>
           </div>
         </div>
@@ -67,7 +67,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           </div>
         )}
 
-        <p className="text-[9px] text-gray-600 leading-relaxed">
+        <p className="text-[9px] text-white/70 leading-relaxed">
           Sources: DLD, RERA, DXB Interact. For informational purposes only.{" "}
           <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
         </p>
@@ -90,7 +90,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <Banknote className="w-6 h-6 text-gold" />
                 Dubai Market Intelligence
               </h2>
-              <p className="text-black/50 text-sm mt-1">DLD Transaction Data • As of {today}</p>
+              <p className="text-black/70 text-sm mt-1 font-medium">DLD Transaction Data • As of {today}</p>
             </div>
             <span className="text-emerald-600 text-xl font-bold">{ytd2026.growth}</span>
           </div>
@@ -106,7 +106,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               <div key={stat.label} className={`${stat.bgAccent} border rounded-xl p-4`}>
                 <div className="flex items-center gap-2 mb-2">
                   <stat.icon className={`w-4 h-4 ${stat.color}`} />
-                  <span className="text-black/60 text-xs uppercase tracking-wider font-medium">{stat.label}</span>
+                  <span className="text-black/80 text-xs uppercase tracking-wider font-semibold">{stat.label}</span>
                 </div>
                 <p className={`${stat.color} text-xl font-bold`}>{stat.value}</p>
               </div>
@@ -153,8 +153,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   return (
                     <div key={area.area} className={`flex items-center justify-between ${isHighlighted ? "bg-gold/10 -mx-2 px-2 py-1 rounded-lg border border-gold/30" : ""}`}>
                       <div className="flex items-center gap-2">
-                        <span className="text-black/40 text-xs w-4">{i + 1}</span>
-                        <span className={`text-sm ${isHighlighted ? "text-gold font-semibold" : "text-black/80"}`}>{area.area}</span>
+                        <span className="text-black/70 text-xs w-4 font-bold">{i + 1}</span>
+                         <span className={`text-sm ${isHighlighted ? "text-gold font-semibold" : "text-black font-medium"}`}>{area.area}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-black text-xs font-medium">{area.transactions.toLocaleString()}</span>
@@ -186,7 +186,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     <div key={nat.country} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-base">{nat.flag}</span>
-                        <span className="text-black/80 text-sm">{nat.country}</span>
+                        <span className="text-black font-medium text-sm">{nat.country}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="w-20 h-3 bg-black/5 rounded-full overflow-hidden shadow-inner">
@@ -202,7 +202,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           </div>
 
           {/* Disclaimer */}
-          <p className="text-[10px] text-black/40 text-center mt-6">
+          <p className="text-[10px] text-black/60 text-center mt-6">
             Sources: Dubai Land Department (DLD), RERA, DXB Interact. YTD 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
             <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
           </p>

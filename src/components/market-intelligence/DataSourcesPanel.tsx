@@ -75,7 +75,7 @@ export const DataSourcesPanel = () => {
 
                     <h3 className="text-black font-semibold text-lg mb-1">{source.name}</h3>
                     <p className="text-gold text-sm mb-3">{source.provider}</p>
-                    <p className="text-black/60 text-sm mb-4">{source.description}</p>
+                    <p className="text-black/80 text-sm mb-4">{source.description}</p>
 
                     {/* Data Types */}
                     <div className="flex flex-wrap gap-2 mb-4">
@@ -125,7 +125,7 @@ export const DataSourcesPanel = () => {
             ].map((item) => (
               <div 
                 key={item.text}
-                className="flex items-center gap-2 text-black/70"
+                className="flex items-center gap-2 text-black font-medium"
               >
                 <item.icon className="w-5 h-5 text-emerald-600" />
                 <span className="text-sm">{item.text}</span>
