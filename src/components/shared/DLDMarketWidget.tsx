@@ -52,7 +52,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <p className="text-emerald-400 font-bold text-lg">{ytd2026.growth}</p>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3">
-            <p className="text-[10px] text-white/70 uppercase tracking-wider">Off-Plan</p>
+            <p className="text-[10px] text-white/80 uppercase tracking-wider font-medium">Off-Plan</p>
             <p className="text-white font-bold text-lg">{ytd2026.offPlan.toLocaleString()}</p>
           </div>
         </div>
