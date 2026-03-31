@@ -1995,14 +1995,6 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   background-color: #FFFFFF !important;
 }
 
-/* Dark backgrounds used as sections → light */
-[class*="bg-[#0A0A0A]"],
-[class*="bg-[#111111]"],
-[class*="bg-[#1A1A1A]"] {
-  background-color: #FAFAFA !important;
-  color: #111 !important;
-}
-
 /* Brown/champagne background gradients → white */
 [class*="from-[hsl(32"],
 [class*="from-[hsl(33"],
@@ -2012,33 +2004,6 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   --tw-gradient-from: #FFFFFF !important;
   --tw-gradient-via: #FAFAFA !important;
   --tw-gradient-to: #F5F5F5 !important;
-}
-
-/* When dark brown/champagne gradients flip to white, ensure ALL child text is dark */
-[class*="from-[hsl(32"] *,
-[class*="from-[hsl(33"] *,
-[class*="from-[hsl(34"] *,
-[class*="from-[hsl(36"] *,
-[class*="from-[hsl(38"] * {
-  color: #111 !important;
-}
-/* Exception: white-on-black buttons inside flipped sections */
-[class*="from-[hsl(32"] .bg-black *,
-[class*="from-[hsl(33"] .bg-black *,
-[class*="from-[hsl(34"] .bg-black *,
-[class*="from-[hsl(36"] .bg-black *,
-[class*="from-[hsl(38"] .bg-black *,
-[class*="from-[hsl(32"] .bg-gold *,
-[class*="from-[hsl(33"] .bg-gold *,
-[class*="from-[hsl(34"] .bg-gold *,
-[class*="from-[hsl(36"] .bg-gold *,
-[class*="from-[hsl(38"] .bg-gold * {
-  color: #fff !important;
-}
-
-/* White text classes that should be black on now-white backgrounds */
-.text-white:not(.bg-black .text-white):not(.bg-zinc-900 .text-white):not([class*="bg-gradient-to"] .text-white) {
-  /* don't override globally — only where parent is flipped */
 }
 
 /* Gold border hex overrides → gray */
@@ -2065,47 +2030,6 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 [class*="from-gold"] { --tw-gradient-from: #e5e5e5 !important; }
 [class*="to-gold"] { --tw-gradient-to: #d4d4d4 !important; }
 
-/* Colored tool borders → neutral gray */
-[class*="border-blue-500"],
-[class*="border-sky-500"],
-[class*="border-amber-500"],
-[class*="border-emerald-500"],
-[class*="border-purple-500"],
-[class*="border-violet-500"],
-[class*="border-pink-500"],
-[class*="border-red-500"],
-[class*="border-rose-500"] {
-  border-color: #d4d4d4 !important;
-}
-
-/* Colored text icons → neutral gray */
-[class*="text-blue-500"],
-[class*="text-sky-500"],
-[class*="text-amber-500"],
-[class*="text-emerald-500"],
-[class*="text-purple-500"],
-[class*="text-violet-500"],
-[class*="text-pink-500"],
-[class*="text-red-500"] {
-  color: #555 !important;
-}
-
-/* Colored bg accents → subtle gray */
-[class*="bg-blue-500\/"],
-[class*="bg-sky-500\/"],
-[class*="bg-amber-500\/"],
-[class*="bg-emerald-500\/"],
-[class*="bg-purple-500\/"],
-[class*="bg-violet-500\/"],
-[class*="bg-pink-500\/"],
-[class*="bg-red-500\/"] {
-  background-color: rgba(0,0,0,0.04) !important;
-}
-
-/* Colored glow shadows → subtle neutral */
-[class*="hover:shadow-[0_8px_30px"] {
-  --tw-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
-}
 
 /* Inline style gold hex overrides */
 [style*="#D4AF37"] { color: #111 !important; border-color: #d4d4d4 !important; }

@@ -8,7 +8,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { CONTACT_INFO, getWhatsAppUrl, getCallUrl, getEmailUrl } from "@/constants/stats";
-import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
+import jbjMonogramNobuffer from "@/assets/jbj-monogram-nobuffer.png";
 import {
   Collapsible,
   CollapsibleContent,
@@ -450,37 +450,12 @@ const Footer = () => {
           {/* Dark luxury brown background for monogram section */}
           <div className="absolute inset-0 bg-white pointer-events-none" />
           
-          <Link to="/" className="inline-block group relative">
-            {/* 3D Logo with multi-layer shadow depth */}
-            <div className="relative transform-gpu transition-all duration-700 group-hover:scale-[1.03] group-hover:-translate-y-1">
-              {/* Deep shadow layer 3 - furthest */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="" 
-                aria-hidden="true"
-                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.08] blur-[3px] translate-y-4 translate-x-2 pointer-events-none"
-              />
-              {/* Shadow layer 2 */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="" 
-                aria-hidden="true"
-                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.12] blur-[2px] translate-y-2 translate-x-1 pointer-events-none"
-              />
-              {/* Shadow layer 1 - closest */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="" 
-                aria-hidden="true"
-                className="absolute h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto opacity-[0.15] blur-[1px] translate-y-1 translate-x-0.5 pointer-events-none"
-              />
-              {/* Main logo with subtle lift */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="JBJ Global Real Estate" 
-                className="relative h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.1)] transition-all duration-500 group-hover:drop-shadow-[0_4px_8px_rgba(0,0,0,0.15)]"
-              />
-            </div>
+          <Link to="/" className="inline-block group">
+            <img 
+              src={jbjMonogramNobuffer} 
+              alt="JBJ Global Real Estate" 
+              className="h-32 sm:h-40 md:h-48 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.08)] transition-all duration-500 group-hover:scale-[1.02]"
+            />
           </Link>
           
           {/* Company Name with Enhanced Readability */}
@@ -517,42 +492,9 @@ const Footer = () => {
               boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
             }}
           >
-            {/* Outer Gold Border Ring */}
-            <div className="absolute inset-0 rounded-none border border-gray-200 pointer-events-none" />
-            <div className="absolute inset-[3px] rounded-none border border-gray-100 pointer-events-none" />
-            
-            {/* Animated Shimmer Sweep */}
-            <div 
-              className="absolute inset-0 rounded-none pointer-events-none opacity-60"
-              style={{
-                background: 'none',
-              }}
-            />
+            <div className="absolute inset-0 border border-gray-200 pointer-events-none" />
           
-          {/* Edge-to-edge: no corner accents needed */}
-          
-          {/* Inner Content Container with padding */}
           <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
-            {/* Decorative Top Emblem */}
-            <div className="flex justify-center mb-4 sm:mb-6">
-              <div 
-                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center relative"
-                style={{
-                  background: 'rgba(0,0,0,0.04)',
-                  boxShadow: '0 2px 8px -2px rgba(0,0,0,0.06)',
-                  border: '1px solid rgba(0,0,0,0.08)',
-                }}
-              >
-                <div className="absolute inset-0 rounded-xl sm:rounded-2xl hidden pointer-events-none" />
-                <span 
-                  className="text-2xl sm:text-3xl md:text-4xl font-bold relative"
-                  style={{
-                    color: '#111111',
-                    
-                  }}
-                >✦</span>
-              </div>
-            </div>
             
             {/* Licensed Badge - ULTRA Enhanced */}
             <div className="relative flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-5 flex-wrap px-1">
@@ -572,12 +514,7 @@ const Footer = () => {
               Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
             </p>
 
-            {/* Premium Divider with intense glow */}
-            <div className="relative h-[2px] mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent blur-md" />
-              <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-gray-100 to-transparent blur-xl" />
-            </div>
+            <div className="h-px bg-gray-200 mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto" />
 
             {/* Stay in the Loop - Newsletter inside the 3D card */}
             {!isBackOfficeContext && (
@@ -608,11 +545,7 @@ const Footer = () => {
               </div>
             )}
 
-            {/* Divider before social links */}
-            <div className="relative h-[2px] mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent blur-md" />
-            </div>
+            <div className="h-px bg-gray-200 mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto" />
 
             {/* Single Premium Strip: Social + Write Us + Google + Mode + Currency/Unit */}
             <div className="relative flex flex-col items-center gap-0">
@@ -660,8 +593,6 @@ const Footer = () => {
             </div>
           </div>
           
-          {/* Bottom Radial Glow */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 hidden pointer-events-none" />
         </div>
         </div>
 
@@ -679,22 +610,9 @@ const Footer = () => {
               boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
             }}
           >
-            {/* Outer Gold Border Ring - Enhanced */}
-            <div className="absolute inset-0 rounded-none border border-gray-200 pointer-events-none" />
-            <div className="absolute inset-[3px] rounded-none border border-gray-100 pointer-events-none" />
-            
-            {/* Animated Shimmer Sweep */}
-            <div 
-              className="absolute inset-0 rounded-none pointer-events-none opacity-50"
-              style={{
-                background: 'none',
-              }}
-            />
+            <div className="absolute inset-0 border border-gray-200 pointer-events-none" />
           
-          {/* Edge-to-edge: no corner accents needed */}
-          
-          {/* Inner Layer */}
-          <div className="bg-white rounded-none border border-gray-200 m-0 overflow-hidden">
+          <div className="bg-white border border-gray-200 overflow-hidden">
             
             {/* Navigation Grid Section - Card-Based 2-Column Layout */}
             <div className="p-4 sm:p-6 md:p-8">
@@ -845,22 +763,7 @@ const Footer = () => {
               boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
             }}
           >
-          {/* Outer Gold Border Ring - Enhanced */}
-          <div className="absolute inset-0 rounded-none border border-gray-200 pointer-events-none" />
-          <div className="absolute inset-[3px] rounded-none border border-gray-100 pointer-events-none" />
-          
-          {/* Animated Shimmer Sweep */}
-          <div 
-            className="absolute inset-0 rounded-none pointer-events-none opacity-50"
-            style={{
-              background: 'none',
-            }}
-          />
-          
-          {/* Top Radial Glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-20 hidden pointer-events-none" />
-          
-          {/* Edge-to-edge: no corner accents needed */}
+          <div className="absolute inset-0 border border-gray-200 pointer-events-none" />
 
           <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
             {/* Legal Disclaimer Section */}
@@ -928,15 +831,11 @@ const Footer = () => {
             {/* Google My Business Link - Relocated to Social Links section */}
           </div>
           
-          {/* Bottom Radial Glow */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-20 hidden pointer-events-none" />
         </div>
         </div>
       </div>
       
-      {/* Bottom accent line - Enhanced */}
-      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gray-200" />
-      <div className="absolute bottom-[2px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent blur-sm" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gray-200" />
     </footer>
      </>
   );
