@@ -170,7 +170,7 @@ export const MarketOverviewDashboard = () => {
                       );
                     })}
                   </div>
-                  <p className="text-black/50 text-xs mt-4">
+                  <p className="text-black/70 text-xs mt-4">
                     Source: Dubai Government Open Data
                   </p>
                 </CardContent>
