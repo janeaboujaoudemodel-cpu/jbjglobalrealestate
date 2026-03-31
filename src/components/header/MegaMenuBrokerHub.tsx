@@ -44,7 +44,7 @@ const MegaMenuBrokerHub = React.forwardRef<HTMLDivElement, MegaMenuBrokerHubProp
             />
           </div>
 
-          <div className="lg:col-span-6 lg:border-l lg:border-gold/30 lg:pl-10">
+          <div className="lg:col-span-6 lg:border-l lg:border-gray-200 lg:pl-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               {/* Column 1: Dashboard & Tools */}
               <div className="relative flex flex-col">
@@ -63,7 +63,7 @@ const MegaMenuBrokerHub = React.forwardRef<HTMLDivElement, MegaMenuBrokerHubProp
                   ))}
                 </div>
                 {/* Vertical divider between columns */}
-                <div className="hidden sm:block absolute top-0 -right-4 h-full w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+                <div className="hidden sm:block absolute top-0 -right-4 h-full w-px bg-gradient-to-b from-transparent via-gray-300/40 to-transparent" />
               </div>
 
               {/* Column 2: Education & Resources */}

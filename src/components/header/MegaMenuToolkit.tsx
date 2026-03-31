@@ -118,13 +118,13 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <Sparkles className="w-5 h-5 text-gold" />
+            <Sparkles className="w-5 h-5 text-black" />
             <h3 className="text-lg font-semibold text-white">JBJ Royal Tools Hub</h3>
           </div>
           <a 
             href="/ai-hub" 
             onClick={onClose}
-            className="text-sm text-gold hover:underline"
+            className="text-sm text-black hover:underline"
           >
             View All Tools →
           </a>
@@ -133,8 +133,8 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
         {/* Creative Suites Row - all 6 in one line */}
         <div className="mb-1">
           <div className="flex items-center gap-2 mb-2">
-            <Layers className="w-4 h-4 text-gold" />
-            <span className="text-xs font-bold text-gold tracking-[0.18em] uppercase">Creative Suites</span>
+            <Layers className="w-4 h-4 text-black" />
+            <span className="text-xs font-bold text-black tracking-[0.18em] uppercase">Creative Suites</span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
             {creativeSuites.map((suite) => (
@@ -152,11 +152,11 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
         </div>
 
         {/* AI Corporate Tools Row */}
-        <div className="mt-3 border-t border-gold/20 pt-3">
+        <div className="mt-3 border-t border-gray-200 pt-3">
           <div className="flex items-center gap-2 mb-2">
-            <Stamp className="w-4 h-4 text-gold" />
-            <span className="text-xs font-bold text-gold tracking-[0.18em] uppercase">AI Corporate Tools</span>
-            <span className="text-[10px] bg-gold/20 text-gold border border-gold/30 rounded-full px-2 py-0.5 font-semibold">5 NEW</span>
+            <Stamp className="w-4 h-4 text-black" />
+            <span className="text-xs font-bold text-black tracking-[0.18em] uppercase">AI Corporate Tools</span>
+            <span className="text-[10px] bg-gray-100 text-black border border-gray-200 rounded-full px-2 py-0.5 font-semibold">5 NEW</span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
             {corporateTools.map((tool) => (
@@ -173,10 +173,10 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-4 p-4 bg-gradient-to-br from-zinc-900 via-black to-zinc-800 rounded-xl border border-gold/40">
+        <div className="mt-4 p-4 bg-gradient-to-br from-zinc-900 via-black to-zinc-800 rounded-xl border border-gray-300">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <p className="text-gold text-[10px] font-bold tracking-[0.2em] uppercase">
+              <p className="text-black text-[10px] font-bold tracking-[0.2em] uppercase">
                 FREE PROFESSIONAL TOOLS
               </p>
               <p className="text-white text-sm font-semibold mt-1">
@@ -186,7 +186,7 @@ const MegaMenuToolkit = React.forwardRef<HTMLDivElement, MegaMenuToolkitProps>((
             <a 
               href="/ai-hub"
               onClick={onClose}
-              className="px-4 py-2 bg-gold text-black text-sm font-semibold rounded-lg hover:bg-gold/90 transition-colors"
+              className="px-4 py-2 bg-black text-white text-sm font-semibold rounded-lg hover:bg-gray-800 transition-colors"
             >
               Explore All
             </a>

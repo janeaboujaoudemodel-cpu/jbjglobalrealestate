@@ -25,11 +25,11 @@ const MegaMenuLanguage = React.forwardRef<HTMLDivElement, MegaMenuLanguageProps>
         "z-[9999] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] rounded-xl overflow-hidden w-[360px]",
       )}
       style={{
-        background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
+        background: '#FFFFFF',
       }}
     >
       {/* Gold border */}
-      <div className="absolute inset-0 rounded-xl border-2 border-gold/40 pointer-events-none" />
+      <div className="absolute inset-0 rounded-xl border-2 border-gray-300 pointer-events-none" />
       
       <div className="px-6 py-6">
         <MegaMenuSectionTitle icon={Globe} title="Select Language" />
@@ -42,18 +42,18 @@ const MegaMenuLanguage = React.forwardRef<HTMLDivElement, MegaMenuLanguageProps>
                 onClick={() => handleSelectLanguage(lang.code)}
                 className={`flex items-center justify-between w-full cursor-pointer transition-all duration-300 rounded-xl px-4 py-3 group ${
                   language === lang.code 
-                    ? 'bg-gradient-to-r from-gold/20 via-gold/15 to-gold/20 border border-gold/40 shadow-[0_4px_15px_rgba(200,167,102,0.2)]' 
-                    : 'hover:bg-gradient-to-r hover:from-[#F7F1E6] hover:to-[#ECE2D2]'
+                    ? 'bg-gradient-to-r from-gray-300/20 via-gray-300/15 to-gray-300/20 border border-gray-300 shadow-[0_4px_15px_rgba(200,167,102,0.2)]' 
+                    : 'hover:bg-gradient-to-r hover:from-gray-50 hover:to-gray-100'
                 }`}
               >
                 <span className="flex items-center gap-3">
                   <span className="text-xl">{lang.flag}</span>
                   <span className={`text-sm font-semibold transition-colors ${
-                    language === lang.code ? 'text-gold' : 'text-black group-hover:text-gold'
+                    language === lang.code ? 'text-black' : 'text-black group-hover:text-black'
                   }`}>{lang.nativeName}</span>
                 </span>
                 {language === lang.code && (
-                  <Check className="w-5 h-5 text-gold" />
+                  <Check className="w-5 h-5 text-black" />
                 )}
               </button>
             ))}
@@ -61,8 +61,8 @@ const MegaMenuLanguage = React.forwardRef<HTMLDivElement, MegaMenuLanguageProps>
         </ScrollArea>
       </div>
       
-      {/* Bottom gold accent */}
-      <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
+      {/* Bottom bottom accent */}
+      <div className="h-1 bg-gradient-to-r from-gray-300/50 via-gray-300 to-gray-300/50" />
     </div>
   );
 });

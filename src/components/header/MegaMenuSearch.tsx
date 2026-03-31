@@ -77,7 +77,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
       borderClassName: 'border-black/40 hover:border-black',
       external: true,
     },
-    { href: '/contact', label: 'Contact Form', icon: FileText, iconClassName: 'text-gold', borderClassName: 'border-gold/40 hover:border-gold' },
+    { href: '/contact', label: 'Contact Form', icon: FileText, iconClassName: 'text-black', borderClassName: 'border-gray-300 hover:border-gray-400' },
   ];
 
   // Quick Links with Guides Library and Market Intelligence
@@ -100,11 +100,11 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
         "absolute right-0 top-full mt-2 w-[min(95vw,900px)] rounded-xl shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] z-[9999] overflow-hidden"
       )}
       style={{
-        background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)',
+        background: '#FFFFFF',
       }}
     >
       {/* Gold border overlay (matches Language dropdown) */}
-      <div className="absolute inset-0 rounded-xl border-2 border-gold/40 pointer-events-none" />
+      <div className="absolute inset-0 rounded-xl border-2 border-gray-300 pointer-events-none" />
 
       <div className="px-5 lg:px-8 py-4 lg:py-5">
         <MegaMenuSectionTitle icon={Search} title="Search & Shortcuts" />
@@ -118,13 +118,13 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
               if (e.key === 'Enter') openGlobalSearch();
             }}
             placeholder="Search pages, tools & guides"
-            className="flex-1 h-12 rounded-xl px-4 text-base text-black placeholder:text-black/40 bg-white/80 border border-gold/30 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all duration-200"
+            className="flex-1 h-12 rounded-xl px-4 text-base text-black placeholder:text-black/40 bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:border-gray-300 transition-all duration-200"
             aria-label="Search"
           />
           <button
             type="button"
             onClick={openGlobalSearch}
-            className="h-12 px-6 rounded-xl border-2 border-gold bg-transparent text-black text-base font-bold transition-all duration-300 hover:text-gold hover:shadow-[0_4px_15px_rgba(200,167,102,0.4)] hover:-translate-y-0.5"
+            className="h-12 px-6 rounded-xl border-2 border-gray-300 bg-transparent text-black text-base font-bold transition-all duration-300 hover:text-black hover:shadow-[0_4px_15px_rgba(200,167,102,0.4)] hover:-translate-y-0.5"
           >
             Search
           </button>
@@ -135,7 +135,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
           {/* Services */}
           <div>
-            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-2">Services</p>
+            <p className="text-[10px] uppercase tracking-wider text-black font-medium mb-2">Services</p>
             <div className="space-y-0">
               {servicesLinks.map((link) => (
                 <MegaMenuIconLink
@@ -152,12 +152,12 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
 
           {/* Vertical Divider */}
           <div className="hidden md:flex items-stretch justify-center">
-            <div className="w-px bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+            <div className="w-px bg-gradient-to-b from-transparent via-gray-300/40 to-transparent" />
           </div>
 
           {/* Quick Links */}
           <div className="md:col-start-2 md:col-end-3">
-            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-2">Quick Links</p>
+            <p className="text-[10px] uppercase tracking-wider text-black font-medium mb-2">Quick Links</p>
             <div className="space-y-0">
               {navigationLinks.map((link) => (
                 <MegaMenuIconLink
@@ -174,7 +174,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
 
           {/* Contact */}
           <div className="flex flex-col md:col-start-3">
-            <p className="text-[10px] uppercase tracking-wider text-gold font-medium mb-3">Contact</p>
+            <p className="text-[10px] uppercase tracking-wider text-black font-medium mb-3">Contact</p>
             <div className="grid grid-cols-2 gap-3 flex-1">
               {contactLinks.map((link) =>
                 link.external ? (
@@ -190,7 +190,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                     }}
                     className={cn(
                       "flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 hover:bg-black/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300",
-                      link.borderClassName ?? "border-gold/40 hover:border-gold"
+                      link.borderClassName ?? "border-gray-300 hover:border-gray-400"
                     )}
                   >
                     <link.icon className={cn("w-6 h-6", link.iconClassName ?? "text-black")} />
@@ -203,7 +203,7 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
                     onClick={onClose}
                     className={cn(
                       "flex flex-col items-center justify-center gap-2 py-4 px-4 rounded-xl bg-gradient-to-br from-black/10 to-black/5 border-2 hover:bg-black/15 hover:shadow-[0_4px_15px_rgba(200,167,102,0.3)] transition-all duration-300",
-                      link.borderClassName ?? "border-gold/40 hover:border-gold"
+                      link.borderClassName ?? "border-gray-300 hover:border-gray-400"
                     )}
                   >
                     <link.icon className={cn("w-6 h-6", link.iconClassName ?? "text-black")} />
@@ -216,8 +216,8 @@ const MegaMenuSearch = React.forwardRef<HTMLDivElement, MegaMenuSearchProps>(({ 
         </div>
       </div>
 
-      {/* Bottom gold accent bar (matches Language dropdown) */}
-      <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
+      {/* Bottom bottom accent bar (matches Language dropdown) */}
+      <div className="h-1 bg-gradient-to-r from-gray-300/50 via-gray-300 to-gray-300/50" />
     </div>
   );
 });

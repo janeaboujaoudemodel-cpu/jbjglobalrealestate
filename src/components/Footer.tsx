@@ -27,33 +27,30 @@ import { cn } from "@/lib/utils";
 
 // Removed: AI_TOOL_COLORS and CREATIVE_TOOL_COLORS maps (no longer needed with card layout)
 
-/** Reusable footer navigation card with centered gold title and 2-column link grid */
+/** Reusable footer navigation card with centered title and 2-column link grid */
 const FooterCard = ({ title, links, viewAllHref, viewAllLabel }: {
   title: string;
   links: { label: string; href: string }[];
   viewAllHref?: string;
   viewAllLabel?: string;
 }) => (
-  <div className="group relative bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-none px-6 py-5 hover:border-gold/60 transition-all duration-300 shadow-[0_4px_15px_rgba(200,167,102,0.1)] hover:shadow-[0_6px_20px_rgba(200,167,102,0.2)]">
-    <h4 className="text-center font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] mb-3 pb-2.5 border-b-2 border-gold/40 text-gold"
-      style={{
-        fontFamily: "Poppins, sans-serif",
-        textShadow: '0 1px 3px rgba(200,167,102,0.4)',
-      }}
+  <div className="group relative bg-white border border-gray-200 rounded-none px-6 py-5 hover:border-gray-300 transition-all duration-300 shadow-sm hover:shadow-md">
+    <h4 className="text-center font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] mb-3 pb-2.5 border-b border-gray-200 text-black"
+      
     >{title}</h4>
     <div className="relative">
       {/* Gold vertical divider between columns — hidden on single-column */}
-      <div className="hidden min-[375px]:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-gold/10 via-gold/50 to-gold/10 -translate-x-1/2" />
+      <div className="hidden min-[375px]:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-gray-200 to-transparent -translate-x-1/2" />
       <div className="grid grid-cols-1 min-[375px]:grid-cols-2 gap-x-5 gap-y-2">
         {links.map((link) => (
-          <Link key={link.href} to={link.href} className="text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
+          <Link key={link.href} to={link.href} className="text-gray-600 hover:text-black transition-all duration-300 text-xs sm:text-sm inline-block hover:translate-x-1">
             {link.label}
           </Link>
         ))}
       </div>
     </div>
     {viewAllHref && (
-      <Link to={viewAllHref} className="block text-center mt-3.5 pt-2.5 border-t-2 border-gold/40 text-gold text-xs sm:text-sm font-semibold hover:text-gold/80 transition-colors">
+      <Link to={viewAllHref} className="block text-center mt-3.5 pt-2.5 border-t border-gray-200 text-black text-xs sm:text-sm font-semibold hover:text-gray-600 transition-colors">
         {viewAllLabel}
       </Link>
     )}
@@ -75,7 +72,7 @@ const DivisionAccordion = ({
     return (
       <Link 
         to={href}
-        className="flex items-center gap-2 text-white hover:text-gold transition-colors text-base justify-center md:justify-start"
+        className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors text-base justify-center md:justify-start"
       >
         {title}
       </Link>
@@ -84,18 +81,18 @@ const DivisionAccordion = ({
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <CollapsibleTrigger className="flex items-center gap-2 text-white hover:text-gold transition-colors text-base w-full justify-center md:justify-start group">
+      <CollapsibleTrigger className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors text-base w-full justify-center md:justify-start group">
         {title}
         <ChevronDown
           className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
         />
       </CollapsibleTrigger>
-      <CollapsibleContent className="mt-2 space-y-2 pl-4 border-l border-zinc-800">
+      <CollapsibleContent className="mt-2 space-y-2 pl-4 border-l border-gray-200">
         {items.map((item) => (
           <Link
             key={item.label}
             to={item.href}
-            className="block text-zinc-400 hover:text-gold transition-colors text-sm"
+            className="block text-gray-500 hover:text-black transition-colors text-sm"
           >
             {item.label}
           </Link>
@@ -144,25 +141,25 @@ const FooterCurrencyUnit = () => {
 
   return (
     <div className="flex items-center gap-3">
-      <p className="text-gold text-[10px] uppercase tracking-wider whitespace-nowrap">Currency</p>
+      <p className="text-gray-500 text-[10px] uppercase tracking-wider whitespace-nowrap">Currency</p>
       <div className="flex items-center gap-2">
         {/* Currency Dropdown */}
         <div className="relative">
           <button
             onClick={() => { setCurrencyOpen(!currencyOpen); setUnitOpen(false); }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black text-sm font-semibold transition-all hover:border-gold"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 bg-white text-black text-sm font-semibold transition-all hover:border-gray-400"
             style={{
-              boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.7), inset 0 -1px 3px rgba(200,167,102,0.2)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
             }}
           >
             <span>{currentCur?.flag} {activeCurrency}</span>
-            <ChevronDown className={cn("w-4 h-4 text-gold transition-transform", currencyOpen && "rotate-180")} />
+            <ChevronDown className={cn("w-4 h-4 text-gray-400 transition-transform", currencyOpen && "rotate-180")} />
           </button>
           {currencyOpen && (
             <div 
-              className="absolute bottom-full mb-2 left-0 w-52 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] overflow-hidden z-50 max-h-80 overflow-y-auto"
+              className="absolute bottom-full mb-2 left-0 w-52 rounded-xl border border-gray-200 bg-white overflow-hidden z-50 max-h-80 overflow-y-auto"
               style={{
-                boxShadow: '0 10px 30px rgba(200,167,102,0.4), 0 6px 15px rgba(0,0,0,0.2)',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
               }}
             >
               {SUPPORTED_CURRENCIES.map((cur) => (
@@ -172,26 +169,26 @@ const FooterCurrencyUnit = () => {
                   className={cn(
                     "w-full flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors text-left",
                     activeCurrency === cur.code
-                      ? "bg-gold/30 text-black font-bold"
-                      : "text-black/80 hover:bg-gold/15"
+                      ? "bg-gray-100 text-black font-bold"
+                      : "text-gray-700 hover:bg-gray-50"
                   )}
                 >
                   <span>{cur.flag}</span>
                   <span>{cur.code}</span>
-                  <span className="text-black/50 text-xs ml-auto">{cur.name}</span>
+                  <span className="text-gray-400 text-xs ml-auto">{cur.name}</span>
                 </button>
               ))}
             </div>
           )}
         </div>
 
-        {/* Vertical gold divider */}
-        <div className="w-px h-8 bg-gradient-to-b from-transparent via-gold/40 to-transparent" />
+        {/* Vertical divider */}
+        <div className="w-px h-8 bg-gradient-to-b from-transparent via-gray-300 to-transparent" />
 
         {/* Area Unit Inline Toggle */}
-        <div className="flex rounded-xl border-2 border-gold/40 overflow-hidden"
+        <div className="flex rounded-xl border border-gray-300 overflow-hidden"
           style={{
-            boxShadow: '0 6px 20px rgba(200,167,102,0.3), inset 0 1px 3px rgba(255,255,255,0.7), inset 0 -1px 3px rgba(200,167,102,0.2)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
           }}
         >
           {(['sqft', 'sqm'] as const).map((unit) => (
@@ -201,8 +198,8 @@ const FooterCurrencyUnit = () => {
               className={cn(
                 "px-4 py-2.5 text-sm font-semibold transition-all",
                 areaUnit === unit
-                  ? "bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black"
-                  : "bg-[#F7F1E6]/40 text-black/70 hover:bg-[#F7F1E6]/70 hover:text-black/90"
+                  ? "bg-gray-100 text-black"
+                  : "bg-white text-gray-500 hover:bg-gray-50 hover:text-black"
               )}
             >
               {unit === 'sqft' ? 'sq ft' : 'sq m'}
@@ -433,16 +430,16 @@ const Footer = () => {
 
   return (
     <>
-      <footer id="site-footer" className="relative overflow-x-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <footer id="site-footer" className="relative overflow-x-hidden bg-white">
       {/* Dark premium brown background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]" />
+      <div className="absolute inset-0 bg-white" />
       
       {/* Premium Gold Divider at top - 3D layered effect with symmetric spacing */}
       <div className="relative py-4">
         <div className="w-full max-w-4xl mx-auto px-8">
-          <div className="h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-          <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent mt-[1px]" />
-          <div className="h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent mt-[1px]" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent mt-[1px]" />
+          <div className="h-[1px] bg-transparent mt-[1px]" />
         </div>
       </div>
       
@@ -451,7 +448,7 @@ const Footer = () => {
         {/* NOW BELOW THE 3D CARD: Logo + Company Name Section - COMES FIRST */}
         <div className="flex flex-col items-center justify-center text-center w-full relative pt-4 pb-8">
           {/* Dark luxury brown background for monogram section */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[hsl(38,35%,10%)] via-[hsl(36,30%,13%)] to-[hsl(34,25%,10%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-white pointer-events-none" />
           
           <Link to="/" className="inline-block group relative">
             {/* 3D Logo with multi-layer shadow depth */}
@@ -481,7 +478,7 @@ const Footer = () => {
               <img 
                 src={jbjMonogramLightTransparent} 
                 alt="JBJ Global Real Estate" 
-                className="relative h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_6px_12px_rgba(0,0,0,0.8)] transition-all duration-500 group-hover:drop-shadow-[0_12px_24px_rgba(0,0,0,0.9)]"
+                className="relative h-48 sm:h-60 md:h-72 lg:h-80 w-auto object-contain mx-auto mb-4 sm:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.1)] transition-all duration-500 group-hover:drop-shadow-[0_4px_8px_rgba(0,0,0,0.15)]"
               />
             </div>
           </Link>
@@ -490,12 +487,10 @@ const Footer = () => {
           <h2 
             className="relative text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-semibold tracking-[0.08em] sm:tracking-[0.12em] md:tracking-[0.15em] lg:tracking-[0.18em] mb-2 sm:mb-3 md:mb-4 px-2 transition-all duration-500 hover:scale-[1.01]"
             style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #F5E6C8 25%, #D4AF37 50%, #C8A766 75%, #FFFFFF 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              textShadow: 'none',
+              color: '#111111',
+              
               letterSpacing: '0.12em',
-              filter: 'drop-shadow(0 2px 4px rgba(200,167,102,0.4))',
+              
             }}
           >
             JBJ GLOBAL REAL ESTATE
@@ -505,10 +500,8 @@ const Footer = () => {
           <p 
             className="relative text-sm sm:text-base md:text-lg tracking-[0.15em] sm:tracking-[0.2em] uppercase font-semibold transition-all duration-500 px-4 py-2"
             style={{
-              background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              filter: 'drop-shadow(0 2px 8px rgba(200,167,102,0.6))',
+              color: '#555555',
+              
             }}
           >
             Excellence in Real Estate
@@ -520,28 +513,19 @@ const Footer = () => {
           <div 
             className="w-full rounded-none relative overflow-hidden"
             style={{
-              background: 'linear-gradient(165deg, rgba(245,235,215,0.99) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
-              boxShadow: `
-                0 50px 100px -30px rgba(0,0,0,0.98),
-                0 30px 60px -20px rgba(0,0,0,0.9),
-                0 0 0 2px rgba(200,167,102,0.5),
-                0 0 40px rgba(200,167,102,0.15),
-                inset 0 1px 0 rgba(200,167,102,0.15),
-                inset 0 -1px 0 rgba(0,0,0,0.8)
-              `,
+              background: '#FFFFFF',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
             }}
           >
             {/* Outer Gold Border Ring */}
-            <div className="absolute inset-0 rounded-none border-2 border-gold/50 pointer-events-none" />
-            <div className="absolute inset-[3px] rounded-none border border-gold/25 pointer-events-none" />
+            <div className="absolute inset-0 rounded-none border border-gray-200 pointer-events-none" />
+            <div className="absolute inset-[3px] rounded-none border border-gray-100 pointer-events-none" />
             
             {/* Animated Shimmer Sweep */}
             <div 
               className="absolute inset-0 rounded-none pointer-events-none opacity-60"
               style={{
-                background: 'linear-gradient(110deg, transparent 20%, rgba(200,167,102,0.08) 40%, rgba(245,230,200,0.15) 50%, rgba(200,167,102,0.08) 60%, transparent 80%)',
-                backgroundSize: '250% 100%',
-                animation: 'shimmer 6s ease-in-out infinite',
+                background: 'none',
               }}
             />
           
@@ -554,19 +538,17 @@ const Footer = () => {
               <div 
                 className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl sm:rounded-2xl flex items-center justify-center relative"
                 style={{
-                  background: 'linear-gradient(145deg, rgba(200,167,102,0.2) 0%, rgba(200,167,102,0.08) 100%)',
-                  boxShadow: '0 8px 32px -8px rgba(200,167,102,0.4), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.2)',
-                  border: '1px solid rgba(200,167,102,0.4)',
+                  background: 'rgba(0,0,0,0.04)',
+                  boxShadow: '0 2px 8px -2px rgba(0,0,0,0.06)',
+                  border: '1px solid rgba(0,0,0,0.08)',
                 }}
               >
-                <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 rounded-xl sm:rounded-2xl hidden pointer-events-none" />
                 <span 
                   className="text-2xl sm:text-3xl md:text-4xl font-bold relative"
                   style={{
-                    background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 40%, #D4AF37 60%, #C8A766 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    filter: 'drop-shadow(0 2px 4px rgba(200,167,102,0.5))',
+                    color: '#111111',
+                    
                   }}
                 >✦</span>
               </div>
@@ -574,53 +556,49 @@ const Footer = () => {
             
             {/* Licensed Badge - ULTRA Enhanced */}
             <div className="relative flex items-center justify-center gap-2 sm:gap-3 md:gap-4 mb-3 sm:mb-4 md:mb-5 flex-wrap px-1">
-              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gold rounded-full shadow-[0_0_8px_rgba(200,167,102,0.4)]" />
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gray-400 rounded-full" />
               <p 
                 className="font-bold text-sm sm:text-base md:text-lg lg:text-xl tracking-wide text-center leading-relaxed uppercase"
                 style={{
-                  fontFamily: "Poppins, sans-serif",
-                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
+                  
+                  color: '#111111',
                 }}
               >
                 Licensed ✦ BUY ✦ SELL ✦ RENT ✦ REAL ESTATE In The UAE
               </p>
-              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gold rounded-full shadow-[0_0_8px_rgba(200,167,102,0.4)]" />
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-3.5 md:h-3.5 bg-gray-400 rounded-full" />
             </div>
-            <p className="relative text-zinc-600 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 md:mb-10 text-center px-2 max-w-2xl mx-auto">
+            <p className="relative text-gray-500 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 md:mb-10 text-center px-2 max-w-2xl mx-auto">
               Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
             </p>
 
             {/* Premium Divider with intense glow */}
             <div className="relative h-[2px] mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/50 to-transparent blur-md" />
-              <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-gold/20 to-transparent blur-xl" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent blur-md" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-gray-100 to-transparent blur-xl" />
             </div>
 
             {/* Stay in the Loop - Newsletter inside the 3D card */}
             {!isBackOfficeContext && (
               <div className="relative mb-6 sm:mb-8 md:mb-10 px-2 sm:px-4">
                 <div 
-                  className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border-2 border-gold/40 p-6 md:p-8"
+                  className="bg-gray-50 rounded-2xl border border-gray-200 p-6 md:p-8"
                   style={{
-                    boxShadow: '0 10px 30px rgba(0,0,0,0.3), 0 6px 15px rgba(200,167,102,0.25), inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -1px 0 rgba(0,0,0,0.15), 0 0 0 2px rgba(200,167,102,0.4)',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
                   }}
                 >
                   {/* Premium Title */}
                   <h3 
                     className="text-center text-2xl md:text-3xl font-bold mb-3 uppercase tracking-[0.15em]"
                     style={{
-                      fontFamily: "Poppins, sans-serif",
-                      background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
+                      
+                      color: '#111111',
                     }}
                   >
                     ✦ Stay in the Loop ✦
                   </h3>
-                  <p className="text-center text-zinc-600 text-sm md:text-base mb-6 max-w-xl mx-auto">
+                  <p className="text-center text-gray-500 text-sm md:text-base mb-6 max-w-xl mx-auto">
                     Be the first to access new listings, market updates, and personalized brokerage guidance.
                   </p>
                   <div className="max-w-lg mx-auto">
@@ -632,8 +610,8 @@ const Footer = () => {
 
             {/* Divider before social links */}
             <div className="relative h-[2px] mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/50 to-transparent blur-md" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent blur-md" />
             </div>
 
             {/* Single Premium Strip: Social + Write Us + Google + Mode + Currency/Unit */}
@@ -641,36 +619,36 @@ const Footer = () => {
               <div 
                 className="w-full flex flex-col md:flex-row items-center justify-center gap-0 rounded-none overflow-hidden"
                 style={{
-                  background: 'linear-gradient(145deg, hsl(32 28% 13%) 0%, hsl(33 27% 15%) 50%, hsl(33 28% 11%) 100%)',
-                  border: '1px solid rgba(200,167,102,0.3)',
+                  background: '#F5F5F5',
+                  border: '1px solid rgba(0,0,0,0.06)',
                 }}
               >
                 {/* Social Icons */}
-                <div className="flex items-center gap-4 px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20">
-                  <p className="text-gold text-xs uppercase tracking-[0.15em] font-medium whitespace-nowrap">Connect</p>
+                <div className="flex items-center gap-4 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200">
+                  <p className="text-gray-500 text-xs uppercase tracking-[0.15em] font-medium whitespace-nowrap">Connect</p>
                   <SocialLinks variant="glow" iconClassName="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
 
                 {/* Write Us */}
                 <a
                   href={getEmailUrl()}
-                  className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20 hover:bg-gold/5 transition-colors"
+                  className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 hover:bg-gray-50 transition-colors"
                 >
-                  <Mail className="w-5 h-5 text-gold" />
+                  <Mail className="w-5 h-5 text-gray-700" />
                   <div>
-                    <p className="text-gold/90 text-[10px] uppercase tracking-wider">Write Us</p>
-                    <p className="text-gold text-sm font-semibold">{CONTACT_INFO.email}</p>
+                    <p className="text-gray-400 text-[10px] uppercase tracking-wider">Write Us</p>
+                    <p className="text-gray-700 text-sm font-semibold">{CONTACT_INFO.email}</p>
                   </div>
                 </a>
 
                 {/* Google Business */}
-                <div className="flex items-center px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20">
+                <div className="flex items-center px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200">
                   <GoogleMyBusinessLink />
                 </div>
 
                 {/* Mode */}
-                <div className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gold/20">
-                  <p className="text-gold text-[10px] uppercase tracking-wider whitespace-nowrap">Mode</p>
+                <div className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200">
+                  <p className="text-gray-500 text-[10px] uppercase tracking-wider whitespace-nowrap">Mode</p>
                   <ModeSwitcher variant="header" showForUnselected={true} />
                 </div>
 
@@ -683,13 +661,13 @@ const Footer = () => {
           </div>
           
           {/* Bottom Radial Glow */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 bg-gradient-to-t from-gold/8 to-transparent blur-2xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-24 hidden pointer-events-none" />
         </div>
         </div>
 
-        {/* Thin inline gold divider */}
+        {/* Thin inline divider */}
         <div className="relative py-2">
-          <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
 
         {/* ZONE 2: ULTRA PREMIUM Navigation + Tools + Contact Block */}
@@ -697,35 +675,26 @@ const Footer = () => {
           <div 
             className="w-full rounded-none overflow-hidden relative"
             style={{
-              background: 'linear-gradient(165deg, rgba(245,235,215,1) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
-              boxShadow: `
-                0 50px 100px -30px rgba(0,0,0,0.98),
-                0 30px 60px -20px rgba(0,0,0,0.9),
-                0 0 0 2px rgba(200,167,102,0.5),
-                0 0 40px rgba(200,167,102,0.15),
-                inset 0 1px 0 rgba(200,167,102,0.15),
-                inset 0 -1px 0 rgba(0,0,0,0.8)
-              `,
+              background: '#FFFFFF',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
             }}
           >
             {/* Outer Gold Border Ring - Enhanced */}
-            <div className="absolute inset-0 rounded-none border-2 border-gold/50 pointer-events-none" />
-            <div className="absolute inset-[3px] rounded-none border border-gold/25 pointer-events-none" />
+            <div className="absolute inset-0 rounded-none border border-gray-200 pointer-events-none" />
+            <div className="absolute inset-[3px] rounded-none border border-gray-100 pointer-events-none" />
             
             {/* Animated Shimmer Sweep */}
             <div 
               className="absolute inset-0 rounded-none pointer-events-none opacity-50"
               style={{
-                background: 'linear-gradient(110deg, transparent 20%, rgba(200,167,102,0.06) 40%, rgba(245,230,200,0.12) 50%, rgba(200,167,102,0.06) 60%, transparent 80%)',
-                backgroundSize: '250% 100%',
-                animation: 'shimmer 8s ease-in-out infinite',
+                background: 'none',
               }}
             />
           
           {/* Edge-to-edge: no corner accents needed */}
           
-          {/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact - Fills to gold border */}
-          <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-none border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] m-0 overflow-hidden">
+          {/* Inner Layer */}
+          <div className="bg-white rounded-none border border-gray-200 m-0 overflow-hidden">
             
             {/* Navigation Grid Section - Card-Based 2-Column Layout */}
             <div className="p-4 sm:p-6 md:p-8">
@@ -802,17 +771,17 @@ const Footer = () => {
             </div>
 
           {/* Internal Divider */}
-          <div className="h-[2px] bg-gradient-to-r from-gold/20 via-gold/80 to-gold/20 mx-6" />
+          <div className="h-[1px] bg-gray-200 mx-6" />
 
           {/* Contact Section - Premium on Champagne */}
           <div className="p-3 sm:p-5 md:p-8 text-center relative">
-            <h4 className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-3 sm:mb-4 md:mb-5 text-gold">
+            <h4 className="font-bold text-sm sm:text-base md:text-lg uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-3 sm:mb-4 md:mb-5 text-gray-700">
               Get in Touch
             </h4>
             
             {/* Location with Gold Circle Background */}
-            <div className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 text-xs sm:text-sm md:text-base mb-3 sm:mb-4 md:mb-5 px-1">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
+            <div className="flex items-center justify-center gap-2 sm:gap-3 text-gray-600 text-xs sm:text-sm md:text-base mb-3 sm:mb-4 md:mb-5 px-1">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
                 <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
               </div>
               <span className="break-words text-center">{CONTACT_INFO.address}</span>
@@ -823,10 +792,10 @@ const Footer = () => {
               {/* Phone - Blue */}
               <a
                 href={getCallUrl()}
-                className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-blue-600 transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
+                className="flex items-center justify-center gap-2 sm:gap-3 text-gray-600 hover:text-black transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500/20 flex items-center justify-center">
-                  <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                  <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                 </div>
                 <span>{CONTACT_INFO.phone}</span>
               </a>
@@ -836,10 +805,10 @@ const Footer = () => {
                 href={getWhatsAppUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-emerald-600 transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
+                className="flex items-center justify-center gap-2 sm:gap-3 text-gray-600 hover:text-black transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                  <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-500" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                  <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
                 </div>
                 <span>WhatsApp Us</span>
               </a>
@@ -847,10 +816,10 @@ const Footer = () => {
               {/* Email - Gold */}
               <a
                 href={getEmailUrl()}
-                className="flex items-center justify-center gap-2 sm:gap-3 text-zinc-700 hover:text-gold transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
+                className="flex items-center justify-center gap-2 sm:gap-3 text-gray-600 hover:text-black transition-all duration-300 text-xs sm:text-sm md:text-base py-1"
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold/20 flex items-center justify-center">
-                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
                 </div>
                 <span className="break-all">{CONTACT_INFO.emailCapitalized}</span>
               </a>
@@ -862,9 +831,9 @@ const Footer = () => {
         </div>
         </div>
 
-        {/* Thin inline gold divider */}
+        {/* Thin inline divider */}
         <div className="relative py-2">
-          <div className="h-[2px] bg-gradient-to-r from-transparent via-gold/60 to-transparent" />
+          <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
 
         {/* ZONE 3: ULTRA PREMIUM Legal + Google Review Block */}
@@ -872,61 +841,50 @@ const Footer = () => {
           <div 
             className="w-full rounded-none overflow-hidden relative"
             style={{
-              background: 'linear-gradient(165deg, rgba(245,235,215,1) 0%, rgba(232,220,200,1) 40%, rgba(212,196,168,1) 100%)',
-              boxShadow: `
-                0 50px 100px -30px rgba(0,0,0,0.98),
-                0 30px 60px -20px rgba(0,0,0,0.9),
-                0 0 0 2px rgba(200,167,102,0.5),
-                0 0 40px rgba(200,167,102,0.15),
-                inset 0 1px 0 rgba(200,167,102,0.15),
-                inset 0 -1px 0 rgba(0,0,0,0.8)
-              `,
+              background: '#FFFFFF',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
             }}
           >
           {/* Outer Gold Border Ring - Enhanced */}
-          <div className="absolute inset-0 rounded-none border-2 border-gold/50 pointer-events-none" />
-          <div className="absolute inset-[3px] rounded-none border border-gold/25 pointer-events-none" />
+          <div className="absolute inset-0 rounded-none border border-gray-200 pointer-events-none" />
+          <div className="absolute inset-[3px] rounded-none border border-gray-100 pointer-events-none" />
           
           {/* Animated Shimmer Sweep */}
           <div 
             className="absolute inset-0 rounded-none pointer-events-none opacity-50"
             style={{
-              background: 'linear-gradient(110deg, transparent 20%, rgba(200,167,102,0.06) 40%, rgba(245,230,200,0.12) 50%, rgba(200,167,102,0.06) 60%, transparent 80%)',
-              backgroundSize: '250% 100%',
-              animation: 'shimmer 8s ease-in-out infinite',
+              background: 'none',
             }}
           />
           
           {/* Top Radial Glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-20 bg-gradient-to-b from-gold/8 to-transparent blur-2xl pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-20 hidden pointer-events-none" />
           
           {/* Edge-to-edge: no corner accents needed */}
 
           <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
             {/* Legal Disclaimer Section */}
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8 text-center">
+            <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 md:p-8 text-center">
               <h4 
                 className="font-bold text-base sm:text-lg md:text-xl uppercase tracking-[0.15em] sm:tracking-[0.2em] mb-4 sm:mb-5"
                 style={{
-                  background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
+                  color: '#111111',
                 }}
               >
                 ✦ Legal Disclaimer ✦
               </h4>
               
-              <p className="text-zinc-700 text-xs sm:text-sm md:text-base leading-relaxed mb-4 sm:mb-5 max-w-3xl mx-auto">
-                <span className="text-zinc-900 font-semibold">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage licensed for Buy, Sell, and Rent transactions across the UAE. 
+              <p className="text-gray-600 text-xs sm:text-sm md:text-base leading-relaxed mb-4 sm:mb-5 max-w-3xl mx-auto">
+                <span className="text-gray-900 font-semibold">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage licensed for Buy, Sell, and Rent transactions across the UAE. 
                 For legal, mortgage, visa, and corporate support, we can introduce you to independent, licensed partners. 
                 Clients contract directly with partners under the partner's own terms and licence.
               </p>
               
               {/* English Legal Line */}
-              <p className="text-zinc-600 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 font-medium max-w-3xl mx-auto">
-                Licensed Real Estate Brokerage — Buy, Sell, Rent (Dubai Mainland). Operated by <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate L.L.C S.O.C.</Link>
+              <p className="text-gray-500 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-3 sm:mb-4 font-medium max-w-3xl mx-auto">
+                Licensed Real Estate Brokerage — Buy, Sell, Rent (Dubai Mainland). Operated by <Link to="/about" className="text-gray-700 hover:underline font-semibold">JBJ Global Real Estate L.L.C S.O.C.</Link>
                 <FounderContent fallback={null}>
-                  {" "}Owned & led by <Link to="/founder" className="text-gold hover:underline font-semibold">Jane Bou Jaoude (جاين بو جودة)</Link>, Founder & CEO.
+                  {" "}Owned & led by <Link to="/founder" className="text-gray-700 hover:underline font-semibold">Jane Bou Jaoude (جاين بو جودة)</Link>, Founder & CEO.
                 </FounderContent>
               </p>
               
@@ -942,15 +900,15 @@ const Footer = () => {
               
               <p className="text-zinc-500 text-[11px] sm:text-xs md:text-sm leading-relaxed mb-5 sm:mb-6 max-w-3xl mx-auto">
                 All website content, branding, designs, and software are protected intellectual property of 
-                <FounderContent fallback={<Link to="/about" className="text-gold hover:underline font-semibold"> JBJ Global Real Estate</Link>}>
-                  <Link to="/founder" className="text-gold hover:underline font-semibold"> Jane Bou Jaoude (جاين بو جودة)</Link> and <Link to="/about" className="text-gold hover:underline font-semibold">JBJ Global Real Estate</Link>
+                <FounderContent fallback={<Link to="/about" className="text-gray-700 hover:underline font-semibold"> JBJ Global Real Estate</Link>}>
+                  <Link to="/founder" className="text-gray-700 hover:underline font-semibold"> Jane Bou Jaoude (جاين بو جودة)</Link> and <Link to="/about" className="text-gray-700 hover:underline font-semibold">JBJ Global Real Estate</Link>
                 </FounderContent>. Unauthorized copying, reuse, mirroring, or reproduction is prohibited.
               </p>
               
               {/* Premium unified legal badge */}
               <div className="flex items-center justify-center">
                 <div 
-                  className="px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-xl relative overflow-hidden bg-zinc-900/90 border border-gold/40"
+                  className="px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-xl relative overflow-hidden bg-zinc-900/90 border border-gray-300"
                   style={{
                     boxShadow: '0 8px 25px -8px rgba(0,0,0,0.5)',
                   }}
@@ -958,9 +916,7 @@ const Footer = () => {
                   <span 
                     className="font-bold tracking-wider relative z-10 text-xs sm:text-sm md:text-base"
                     style={{
-                      background: 'linear-gradient(135deg, #D4AF37 0%, #F5E6C8 30%, #E8D5A3 50%, #F5E6C8 70%, #D4AF37 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
+                      color: '#555555',
                     }}
                   >
                     JBJ Global Real Estate &nbsp;|&nbsp; All Rights Reserved &nbsp;|&nbsp; © {currentYear}
@@ -973,14 +929,14 @@ const Footer = () => {
           </div>
           
           {/* Bottom Radial Glow */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-20 bg-gradient-to-t from-gold/8 to-transparent blur-2xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-20 hidden pointer-events-none" />
         </div>
         </div>
       </div>
       
-      {/* Bottom gold accent line - Enhanced */}
-      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent" />
-      <div className="absolute bottom-[2px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-sm" />
+      {/* Bottom accent line - Enhanced */}
+      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gray-200" />
+      <div className="absolute bottom-[2px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent blur-sm" />
     </footer>
      </>
   );

@@ -540,11 +540,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
           className={`flex items-center gap-0.5 lg:gap-1 px-1 lg:px-1.5 xl:px-2 py-1 text-[10px] lg:text-[11px] xl:text-xs 2xl:text-sm font-semibold whitespace-nowrap transition-all rounded-full ${
             isFullyTransparent
               ? isActiveCheck?.() 
-                ? 'text-gold bg-transparent' 
-                : 'text-white hover:text-gold bg-transparent'
+                ? 'text-black bg-transparent' 
+                : 'text-white hover:text-gray-900 bg-transparent'
               : isActiveCheck?.() 
-                ? 'text-gold bg-gold/15' 
-                : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                ? 'text-black bg-gray-200' 
+                : 'text-zinc-800 hover:text-black hover:bg-gray-50'
           }`}
           style={{ letterSpacing: '0.01em' }}
         >
@@ -555,23 +555,23 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       <DropdownMenuContent 
         align="center" 
         sideOffset={16}
-        className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-2 border-gold/40 min-w-[260px] max-h-[70vh] overflow-y-auto shadow-2xl py-5 rounded-2xl"
+        className="bg-white border border-gray-200 min-w-[260px] max-h-[70vh] overflow-y-auto shadow-2xl py-5 rounded-2xl"
         style={{
-          boxShadow: '0 25px 60px -15px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,167,102,0.3), 0 0 60px -20px rgba(200,167,102,0.3)',
+          boxShadow: '0 25px 60px -15px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.05)',
         }}
       >
-        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         <div className="flex flex-col gap-2 px-3">
           {links.map((link) => (
-            <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gold/10 rounded-xl">
-              <Link to={link.href} className="flex items-center gap-4 text-zinc-800 hover:text-gold hover:bg-gold/10 py-3 px-4 transition-all w-full group rounded-xl">
+            <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gray-50 rounded-xl">
+              <Link to={link.href} className="flex items-center gap-4 text-zinc-800 hover:text-black hover:bg-gray-50 py-3 px-4 transition-all w-full group rounded-xl">
                 <div 
-                  className="w-9 h-9 rounded-lg bg-black/90 border border-gold/30 flex items-center justify-center transition-all group-hover:bg-black group-hover:border-gold/50"
+                  className="w-9 h-9 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center transition-all group-hover:bg-gray-200 group-hover:border-gray-300"
                   style={{
-                    boxShadow: '0 4px 12px -4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)'
+                    boxShadow: '0 2px 4px -2px rgba(0,0,0,0.06)'
                   }}
                 >
-                  <link.icon className="w-4 h-4 text-gold transition-colors" />
+                  <link.icon className="w-4 h-4 text-black transition-colors" />
                 </div>
                 <span className="font-semibold text-sm">{link.label}</span>
               </Link>
@@ -596,34 +596,34 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       <div 
         className={`absolute inset-0 transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
         style={{
-          background: 'linear-gradient(180deg, hsl(0 0% 0% / 0.98) 0%, hsl(0 0% 0% / 0.99) 50%, hsl(0 0% 0% / 1) 100%)',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.99) 50%, rgba(255,255,255,1) 100%)',
         }}
       />
       
-      {/* Subtle ambient gold glow at top */}
+      {/* Subtle ambient glow at top */}
       <div 
         className={`absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-24 pointer-events-none transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
         style={{
-          background: 'radial-gradient(ellipse at center top, hsl(var(--gold) / 0.08) 0%, transparent 70%)',
+          background: 'none',
         }}
       />
       
       {/* Premium Bottom Border - 3D Effect when solid */}
       <div className="absolute bottom-0 left-0 right-0 h-[3px] z-10">
-        {/* Main gold gradient line - shown when solid */}
-        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-gold/60 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
+        {/* Main gradient line - shown when solid */}
+        <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-gray-400 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
         {/* Highlight on top - shown when solid */}
-        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gold/80 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
+        <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
       </div>
       
       {/* Gold divider when transparent - separates header from hero */}
-      <div className={`absolute bottom-0 left-0 right-0 h-[1px] z-10 bg-gradient-to-r from-transparent via-gold/40 to-transparent transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`} />
+      <div className={`absolute bottom-0 left-0 right-0 h-[1px] z-10 bg-gradient-to-r from-transparent via-gray-300 to-transparent transition-opacity duration-300 ${isFullyTransparent ? "opacity-100" : "opacity-0"}`} />
       
       {/* Inner shadow for depth */}
       <div 
         className={`absolute inset-0 pointer-events-none transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
         style={{
-          boxShadow: 'inset 0 -20px 40px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03)'
+          boxShadow: 'inset 0 -1px 0 rgba(0,0,0,0.05)'
         }}
       />
       
@@ -645,7 +645,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <div 
                 className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 style={{
-                  background: 'radial-gradient(circle, rgba(200,167,102,0.3) 0%, transparent 70%)',
+                  background: 'none',
                   transform: 'scale(1.5)',
                   filter: 'blur(10px)'
                 }}
@@ -672,7 +672,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 style={isFullyTransparent ? {
                   color: '#FFFFFF',
                 } : {
-                  background: 'linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 30%, #C8A766 70%, #D4AF37 100%)',
+                  color: '#111111',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                 }}
@@ -684,9 +684,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 style={isFullyTransparent ? {
                   color: '#FFFFFF',
                 } : {
-                  background: 'linear-gradient(90deg, #C8A766 0%, #D4AF37 50%, #C8A766 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
+                  color: '#666666',
                 }}
               >
                 Excellence in Real Estate
@@ -707,9 +705,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               >
                 {mobileMenuOpen ? (
-                  <span className="text-gold text-2xl font-light">✕</span>
+                  <span className="text-black text-2xl font-light">✕</span>
                 ) : (
-                  <Menu className="w-6 h-6 text-gold group-hover:text-gold-light transition-colors" />
+                  <Menu className="w-6 h-6 text-black group-hover:text-gray-900-light transition-colors" />
                 )}
               </button>
             </div>
@@ -729,27 +727,27 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {/* Menu Panel */}
               <div 
                 className="relative w-full h-full overflow-y-auto overscroll-contain"
-                style={{ background: 'linear-gradient(180deg, #FDFBF7 0%, #F7F2EA 40%, #EFE6D6 100%)' }}
+                style={{ background: '#FFFFFF' }}
               >
                 {/* Quick Actions Row */}
-                <div className="flex items-center justify-evenly px-4 py-3 border-b border-gold/20">
+                <div className="flex items-center justify-evenly px-4 py-3 border-b border-gray-200">
                   <button
-                    className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gold py-2 w-16 transition-colors"
+                    className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gray-900 py-2 w-16 transition-colors"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       setSearchInitialQuery("");
                       setSearchOpen(true);
                     }}
                   >
-                    <Search className="w-5 h-5 text-gold" />
+                    <Search className="w-5 h-5 text-black" />
                     <span className="text-[9px] font-medium text-center">Search</span>
                   </button>
                   <Link
                     to={user ? "/my-account" : authHref}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gold py-2 w-16 transition-colors"
+                    className="flex flex-col items-center justify-center gap-1.5 text-black hover:text-gray-900 py-2 w-16 transition-colors"
                   >
-                    <User className="w-5 h-5 text-gold" />
+                    <User className="w-5 h-5 text-black" />
                     <span className="text-[9px] font-medium text-center">{user ? "Account" : "Sign In"}</span>
                   </Link>
                   <LanguageSwitcher variant="mobile" />
@@ -758,251 +756,251 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* My Shortcuts */}
                 <div className="px-4 pt-4 pb-2">
-                  <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gold mb-2">My Shortcuts</p>
+                  <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-black mb-2">My Shortcuts</p>
                   <div className="space-y-0.5">
-                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-amber-700 hover:text-amber-800 bg-amber-50/80 hover:bg-amber-100/60 rounded-lg transition-colors border border-amber-300/30">
-                      <Cpu className="w-4 h-4 text-amber-700" />AI Tools Hub
+                    <Link to="/ai-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-800 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
+                      <Cpu className="w-4 h-4 text-gray-700" />AI Tools Hub
                     </Link>
-                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-sky-500 hover:text-sky-600 bg-sky-50/80 hover:bg-sky-100/60 rounded-lg transition-colors border border-sky-300/25">
-                      <ClipboardCheck className="w-4 h-4 text-sky-500" />List Your Property
+                    <Link to="/listing-portal" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
+                      <ClipboardCheck className="w-4 h-4 text-gray-600" />List Your Property
                     </Link>
-                    <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-rose-500 hover:text-rose-600 bg-rose-50/80 hover:bg-rose-100/60 rounded-lg transition-colors border border-rose-300/25">
-                      <GraduationCap className="w-4 h-4 text-rose-500" />Careers
+                    <Link to="/join" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
+                      <GraduationCap className="w-4 h-4 text-gray-600" />Careers
                     </Link>
-                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 bg-emerald-50/80 hover:bg-emerald-100/60 rounded-lg transition-colors border border-emerald-300/25">
-                      <Home className="w-4 h-4 text-emerald-600" />Resale Properties
+                    <Link to="/resale-properties" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
+                      <Home className="w-4 h-4 text-gray-600" />Resale Properties
                     </Link>
-                    <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-pink-500 hover:text-pink-600 bg-pink-50/80 hover:bg-pink-100/60 rounded-lg transition-colors border border-pink-300/25">
-                      <Heart className="w-4 h-4 text-pink-500" />My Favorites
+                    <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
+                      <Heart className="w-4 h-4 text-gray-600" />My Favorites
                     </Link>
-                    <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 bg-blue-50/80 hover:bg-blue-100/60 rounded-lg transition-colors border border-blue-300/25">
-                      <LayoutDashboard className="w-4 h-4 text-blue-600" />My Dashboard
+                    <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
+                      <LayoutDashboard className="w-4 h-4 text-gray-600" />My Dashboard
                     </Link>
-                    <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-cyan-600 hover:text-cyan-700 bg-cyan-50/80 hover:bg-cyan-100/60 rounded-lg transition-colors border border-cyan-300/25">
-                      <CalendarClock className="w-4 h-4 text-cyan-600" />AI Calendar
+                    <Link to="/ai-calendar" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
+                      <CalendarClock className="w-4 h-4 text-gray-600" />AI Calendar
                     </Link>
-                    <Link to="/quiz" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-violet-600 hover:text-violet-700 bg-violet-50/80 hover:bg-violet-100/60 rounded-lg transition-colors border border-violet-300/25">
-                      <Sparkles className="w-4 h-4 text-violet-600" />AI Home Finder
+                    <Link to="/quiz" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
+                      <Sparkles className="w-4 h-4 text-gray-600" />AI Home Finder
                     </Link>
-                    <Link to="/property-evaluator" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-700 bg-indigo-50/80 hover:bg-indigo-100/60 rounded-lg transition-colors border border-indigo-300/25">
-                      <Calculator className="w-4 h-4 text-indigo-600" />Property Evaluator
+                    <Link to="/property-evaluator" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors border border-gray-300">
+                      <Calculator className="w-4 h-4 text-gray-600" />Property Evaluator
                     </Link>
                   </div>
                 </div>
 
-                <div className="h-px bg-gold/20 mx-4" />
+                <div className="h-px bg-gray-200 mx-4" />
 
                 {/* Accordion Sections */}
                 <nav className="flex flex-col px-4 py-2">
                   {/* PROPERTIES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
                       <span>Properties</span>
-                      <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
                         {mobileBuyLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
-                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-gold/60">Sell</p>
+                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Sell</p>
                         {mobileSellLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
-                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-gold/60">Rent</p>
+                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Rent</p>
                         {mobileRentLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
-                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-gold/60">Developers</p>
+                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Developers</p>
                         {mobileDeveloperLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
-                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-gold/60">Areas</p>
+                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Areas</p>
                         {mobileAreaLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
-                        <Link to="/map" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                          <MapPin className="w-4 h-4 text-gold" />Property Map
+                        <Link to="/map" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                          <MapPin className="w-4 h-4 text-black" />Property Map
                         </Link>
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gold/20 my-1" />
+                  <div className="h-px bg-gray-200 my-1" />
 
                   {/* TOOLS */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
                       <span>Tools</span>
-                      <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
                         {mobileToolkitLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gold/20 my-1" />
+                  <div className="h-px bg-gray-200 my-1" />
 
                   {/* INSIGHTS */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
                       <span>Insights</span>
-                      <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
                         {mobileResourceLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gold/20 my-1" />
+                  <div className="h-px bg-gray-200 my-1" />
 
                   {/* GUIDES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
                       <span>Guides</span>
-                      <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
                         {mobileGuideLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gold/20 my-1" />
+                  <div className="h-px bg-gray-200 my-1" />
 
                   {/* SERVICES */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
                       <span>Services</span>
-                      <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
                         {servicesLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
-                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-gold/60">Partners</p>
+                        <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Partners</p>
                         {mobilePartnerLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gold/20 my-1" />
+                  <div className="h-px bg-gray-200 my-1" />
 
                   {/* COMPANY */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
                       <span>Company</span>
-                      <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
                         {mobileMoreLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gold/20 my-1" />
+                  <div className="h-px bg-gray-200 my-1" />
 
                   {/* MY ACCOUNT */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
                       <span>My Account</span>
-                      <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
                         {user ? (
                           <>
-                            <div className="px-3 py-2 bg-gold/5 rounded-lg mb-1">
+                            <div className="px-3 py-2 bg-gray-100 rounded-lg mb-1">
                               <p className="text-[10px] text-black/50 uppercase tracking-wider">Signed in as</p>
                               <p className="text-sm font-medium text-black truncate">{accountDisplayName}</p>
                             </div>
-                            <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                              <Home className="w-4 h-4 text-gold" />My Dashboard
+                            <Link to="/my-dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                              <Home className="w-4 h-4 text-black" />My Dashboard
                             </Link>
-                            <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                              <User className="w-4 h-4 text-gold" />My Profile
+                            <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                              <User className="w-4 h-4 text-black" />My Profile
                             </Link>
                             {(isOwner || hasCRMAccess) && (
                               <>
-                                <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-gold/60">Owner Shortcuts</p>
-                                <Link to="/owner/founder-assistant" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                                  <Sparkles className="w-4 h-4 text-gold" />My Assistant
+                                <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-wider font-semibold text-black/60">Owner Shortcuts</p>
+                                <Link to="/owner/founder-assistant" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                                  <Sparkles className="w-4 h-4 text-black" />My Assistant
                                 </Link>
-                                <Link to="/employee-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                                  <Briefcase className="w-4 h-4 text-gold" />Employee Hub
+                                <Link to="/employee-hub" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                                  <Briefcase className="w-4 h-4 text-black" />Employee Hub
                                 </Link>
-                                <Link to="/crm" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                                  <Users className="w-4 h-4 text-gold" />CRM Dashboard
+                                <Link to="/crm" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                                  <Users className="w-4 h-4 text-black" />CRM Dashboard
                                 </Link>
                                 {isOwner && (
-                                  <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                                    <Settings className="w-4 h-4 text-gold" />Owner Panel
+                                  <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                                    <Settings className="w-4 h-4 text-black" />Owner Panel
                                   </Link>
                                 )}
                               </>
                             )}
                           </>
                         ) : (
-                          <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-gold font-medium hover:bg-gold/10 rounded-lg transition-colors">
-                            <User className="w-4 h-4 text-gold" />{t('nav.signIn')}
+                          <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black font-medium hover:bg-gray-100 rounded-lg transition-colors">
+                            <User className="w-4 h-4 text-black" />{t('nav.signIn')}
                           </Link>
                         )}
                       </div>
                     </CollapsibleContent>
                   </Collapsible>
 
-                  <div className="h-px bg-gold/20 my-1" />
+                  <div className="h-px bg-gray-200 my-1" />
 
                   {/* LEGAL & TRUST */}
                   <Collapsible>
-                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-gold hover:bg-gold/5 rounded-lg transition-colors border border-transparent hover:border-gold/20">
+                    <CollapsibleTrigger className="w-full flex items-center justify-between px-3 py-2.5 text-xs uppercase tracking-[0.15em] font-bold text-black hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
                       <span>Legal & Trust</span>
-                      <ChevronDown className="w-4 h-4 text-gold transition-transform duration-200" />
+                      <ChevronDown className="w-4 h-4 text-black transition-transform duration-200" />
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <div className="ml-3 pl-3 border-l-2 border-gold/20 space-y-0.5 pb-1">
+                      <div className="ml-3 pl-3 border-l-2 border-gray-200 space-y-0.5 pb-1">
                         {mobileLegalLinks.map((link) => (
-                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                            <link.icon className="w-4 h-4 text-gold" />{link.label}
+                          <Link key={link.href} to={link.href} onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                            <link.icon className="w-4 h-4 text-black" />{link.label}
                           </Link>
                         ))}
                       </div>
@@ -1012,7 +1010,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
 
                 {/* Bottom Section */}
                 <div className="px-4 pb-6">
-                  <div className="h-px bg-gold/30 mb-3" />
+                  <div className="h-px bg-gray-200 mb-3" />
 
                   {/* Sign In/Out */}
                   {user ? (
@@ -1023,42 +1021,42 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       <LogOut className="w-4 h-4 text-red-500" />{t('nav.signOut')}
                     </button>
                   ) : (
-                    <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-gold font-medium hover:bg-gold/10 rounded-lg transition-colors">
-                      <User className="w-4 h-4 text-gold" />{t('nav.signIn')}
+                    <Link to="/auth" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black font-medium hover:bg-gray-100 rounded-lg transition-colors">
+                      <User className="w-4 h-4 text-black" />{t('nav.signIn')}
                     </Link>
                   )}
 
                   {/* App Navigation Guide */}
                   <button
                     onClick={() => setShowWalkthrough(true)}
-                    className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors w-full text-left"
+                    className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors w-full text-left"
                   >
-                    <HelpCircle className="w-4 h-4 text-gold" />App & Navigation Guide
+                    <HelpCircle className="w-4 h-4 text-black" />App & Navigation Guide
                   </button>
 
                   {/* Sitemap */}
-                  <Link to="/sitemap" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                    <MapPin className="w-4 h-4 text-gold" />Sitemap
+                  <Link to="/sitemap" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                    <MapPin className="w-4 h-4 text-black" />Sitemap
                   </Link>
 
                   {/* Favorites */}
-                  <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                    <Heart className="w-4 h-4 text-gold" />Favorites
+                  <Link to="/favorites" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                    <Heart className="w-4 h-4 text-black" />Favorites
                     {totalCount > 0 && (
-                      <span className="ml-auto bg-gold/20 text-gold text-xs font-medium px-2 py-0.5 rounded-full">{totalCount}</span>
+                      <span className="ml-auto bg-gray-200 text-black text-xs font-medium px-2 py-0.5 rounded-full">{totalCount}</span>
                     )}
                   </Link>
 
                   {/* My Profile & Settings */}
-                  <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                    <User className="w-4 h-4 text-gold" />My Profile
+                  <Link to="/profile" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                    <User className="w-4 h-4 text-black" />My Profile
                   </Link>
-                  <Link to="/profile?tab=settings" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-gold hover:bg-gold/5 rounded-lg transition-colors">
-                    <Settings className="w-4 h-4 text-gold" />Settings
+                  <Link to="/profile?tab=settings" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 text-sm text-black/80 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                    <Settings className="w-4 h-4 text-black" />Settings
                   </Link>
 
                   {/* Gold Divider */}
-                  <div className="h-px bg-gold/30 my-3" />
+                  <div className="h-px bg-gray-200 my-3" />
 
                   {/* Contact Support & Create Ticket — stacked */}
                   <div className="space-y-1.5 px-3">
@@ -1075,12 +1073,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {showWalkthrough && (
                   <div className="fixed inset-0 z-[10070] flex items-center justify-center bg-black/70 p-4">
                     <div 
-                      className="relative max-w-md w-full rounded-2xl p-6 border-2 border-gold/40 shadow-2xl"
-                      style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
+                      className="relative max-w-md w-full rounded-2xl p-6 border-2 border-gray-300 shadow-2xl"
+                      style={{ background: '#FFFFFF' }}
                     >
                       <button
                         onClick={() => setShowWalkthrough(false)}
-                        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gold/20 transition-colors"
+                        className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 transition-colors"
                       >
                         <span className="text-zinc-600 text-xl">×</span>
                       </button>
@@ -1095,21 +1093,21 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                       </p>
                       <div className="space-y-3 mb-6">
                         <div className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-xs shrink-0">1</span>
+                          <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-black font-bold text-xs shrink-0">1</span>
                           <span className="text-zinc-700"><strong>Buy & Rent</strong> – Browse properties for sale or rent</span>
                         </div>
                         <div className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-xs shrink-0">2</span>
+                          <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-black font-bold text-xs shrink-0">2</span>
                           <span className="text-zinc-700"><strong>Services</strong> – Explore our brokerage services</span>
                         </div>
                         <div className="flex items-start gap-3 text-sm">
-                          <span className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-xs shrink-0">3</span>
+                          <span className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-black font-bold text-xs shrink-0">3</span>
                           <span className="text-zinc-700"><strong>Contact</strong> – Reach us via WhatsApp, call, or email</span>
                         </div>
                       </div>
                       <button
                         onClick={() => { setShowWalkthrough(false); localStorage.setItem('jj_mobile_walkthrough_done', 'true'); }}
-                        className="w-full py-3 bg-black text-gold font-semibold rounded-xl hover:bg-zinc-900 transition-colors"
+                        className="w-full py-3 bg-black text-white font-semibold rounded-xl hover:bg-zinc-900 transition-colors"
                       >
                         Got it!
                       </button>
@@ -1132,11 +1130,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   "min-w-0 flex items-center justify-evenly gap-1 lg:gap-2 xl:gap-3 2xl:gap-4 rounded-full px-3 lg:px-5 xl:px-7 py-2 lg:py-2.5 transition-all duration-300",
                   isFullyTransparent
                     ? 'bg-transparent border-transparent max-w-full'
-                    : 'border-2 border-gold/40 w-full max-w-[900px]'
+                    : 'border-2 border border-gray-200 w-full max-w-[900px]'
                 )}
                 style={!isFullyTransparent ? {
-                  background: 'linear-gradient(135deg, rgba(245,235,215,0.98) 0%, rgba(232,220,200,0.95) 50%, rgba(212,196,168,0.98) 100%)',
-                  boxShadow: '0 8px 32px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(200,167,102,0.2), inset 0 2px 0 rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.05)',
+                  background: 'rgba(255,255,255,0.95)',
+                  boxShadow: '0 4px 16px -4px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.08)',
                 } : {}}
               >
                 {/* Buy */}
@@ -1145,14 +1143,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('buy')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'buy' ? 'text-gold' : 'text-white hover:text-gold'
-                      : activeMegaMenu === 'buy' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                      ? activeMegaMenu === 'buy' ? 'text-black' : 'text-white hover:text-gray-900'
+                      : activeMegaMenu === 'buy' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Buy
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'buy' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
 
                 {/* Sell */}
                 <button
@@ -1160,14 +1158,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('sell')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'sell' ? 'text-gold' : 'text-white hover:text-gold'
-                      : activeMegaMenu === 'sell' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                      ? activeMegaMenu === 'sell' ? 'text-black' : 'text-white hover:text-gray-900'
+                      : activeMegaMenu === 'sell' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Sell
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'sell' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
 
                 {/* Rent */}
                 <button
@@ -1175,14 +1173,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('rent')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'rent' ? 'text-gold' : 'text-white hover:text-gold'
-                      : activeMegaMenu === 'rent' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                      ? activeMegaMenu === 'rent' ? 'text-black' : 'text-white hover:text-gray-900'
+                      : activeMegaMenu === 'rent' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Rent
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'rent' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
 
                 {/* Projects */}
                 <button
@@ -1190,14 +1188,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('projects')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'projects' ? 'text-gold' : 'text-white hover:text-gold'
-                      : activeMegaMenu === 'projects' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                      ? activeMegaMenu === 'projects' ? 'text-black' : 'text-white hover:text-gray-900'
+                      : activeMegaMenu === 'projects' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Projects
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'projects' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
 
                 {/* Areas */}
                 <button
@@ -1205,14 +1203,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('areas')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'areas' ? 'text-gold' : 'text-white hover:text-gold'
-                      : activeMegaMenu === 'areas' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                      ? activeMegaMenu === 'areas' ? 'text-black' : 'text-white hover:text-gray-900'
+                      : activeMegaMenu === 'areas' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Areas
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'areas' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
 
                 {/* Developers */}
                 <button
@@ -1220,14 +1218,14 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('developers')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'developers' ? 'text-gold' : 'text-white hover:text-gold'
-                      : activeMegaMenu === 'developers' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                      ? activeMegaMenu === 'developers' ? 'text-black' : 'text-white hover:text-gray-900'
+                      : activeMegaMenu === 'developers' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Developers
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform ${activeMegaMenu === 'developers' ? 'rotate-180' : ''}`} />
                 </button>
-                {isFullyTransparent && <span className="text-white/40 text-xs px-1">|</span>}
+                {isFullyTransparent && <span className="text-white/30 text-xs px-1">|</span>}
 
                 {/* Insights (News & Market Intelligence) */}
                 <button
@@ -1235,8 +1233,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                   onClick={() => handleMegaMenuClick('insights')}
                   className={`flex items-center gap-1 px-2.5 lg:px-3.5 xl:px-4 py-1.5 text-xs lg:text-sm xl:text-sm 2xl:text-base font-semibold whitespace-nowrap transition-all rounded-full cursor-pointer ${
                     isFullyTransparent
-                      ? activeMegaMenu === 'insights' ? 'text-gold' : 'text-white hover:text-gold'
-                      : activeMegaMenu === 'insights' ? 'text-gold bg-gold/15' : 'text-zinc-800 hover:text-gold hover:bg-gold/10'
+                      ? activeMegaMenu === 'insights' ? 'text-black' : 'text-white hover:text-gray-900'
+                      : activeMegaMenu === 'insights' ? 'text-black bg-gray-200' : 'text-zinc-800 hover:text-black hover:bg-gray-50'
                   }`}
                 >
                   Insights
@@ -1284,11 +1282,11 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               className={`flex items-center gap-0.5 px-3 py-2 rounded-full shrink-0 transition-all duration-300 ${
                 isFullyTransparent 
                   ? 'bg-transparent border-transparent' 
-                  : 'border border-gold/30'
+                  : 'border border-gray-300'
               }`}
               style={!isFullyTransparent ? {
-                background: 'linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(20,20,20,0.9) 100%)',
-                boxShadow: '0 4px 16px -4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05), 0 0 30px -10px rgba(200,167,102,0.15)'
+                background: 'rgba(255,255,255,0.95)',
+                boxShadow: '0 2px 8px -2px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.06)'
               } : {}}
             >
               {/* Search Icon - triggers mega menu on hover (same as language dropdown) */}
@@ -1299,13 +1297,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 aria-label="Search"
               >
                 <Search 
-                  className={`w-5 h-5 transition-colors duration-300 text-gold group-hover:text-white ${activeMegaMenu === 'search' ? '!text-gold' : ''}`}
-                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
+                  className={`w-5 h-5 transition-colors duration-300 text-gray-600 group-hover:text-black ${activeMegaMenu === 'search' ? '!text-black' : ''}`}
+                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }} 
                 />
               </button>
 
               {/* Divider */}
-              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gold/40'} to-transparent`} />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gray-300'} to-transparent`} />
 
               {/* Language Icon - triggers mega menu on hover (desktop only) */}
               <button
@@ -1315,13 +1313,13 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 aria-label="Language"
               >
                 <Globe 
-                  className={`w-5 h-5 transition-colors duration-300 text-gold group-hover:text-white ${activeMegaMenu === 'language' ? '!text-gold' : ''}`}
-                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }} 
+                  className={`w-5 h-5 transition-colors duration-300 text-gray-600 group-hover:text-black ${activeMegaMenu === 'language' ? '!text-black' : ''}`}
+                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }} 
                 />
               </button>
 
               {/* Divider */}
-              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gold/40'} to-transparent`} />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gray-300'} to-transparent`} />
 
               {/* Notification Bell Icon - triggers mega menu */}
               <ListingNotificationBell 
@@ -1333,7 +1331,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               />
 
               {/* Divider */}
-              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gold/40'} to-transparent`} />
+              <div className={`w-px h-5 bg-gradient-to-b from-transparent ${isFullyTransparent ? 'via-white/40' : 'via-gray-300'} to-transparent`} />
 
               {/* Account Icon - triggers mega menu on hover (desktop only) */}
               <button
@@ -1343,8 +1341,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 aria-label={user ? t('nav.myAccount') : t('nav.signIn')}
               >
                 <User 
-                  className={`w-5 h-5 transition-colors duration-300 text-gold group-hover:text-white ${activeMegaMenu === 'account' ? '!text-gold' : ''}`}
-                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'drop-shadow(0 0 6px rgba(200,167,102,0.4))' }}
+                  className={`w-5 h-5 transition-colors duration-300 text-gray-600 group-hover:text-black ${activeMegaMenu === 'account' ? '!text-black' : ''}`}
+                  style={{ filter: isFullyTransparent ? 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' : 'none' }}
                 />
                 {totalUserAlerts > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 min-w-[18px] min-h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center leading-none">
@@ -1390,10 +1388,10 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {activeMegaMenu === 'search' && (
                   <div
                     className="w-[620px] max-w-[calc(100vw-32px)] rounded-xl overflow-hidden shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)] relative"
-                    style={{ background: 'linear-gradient(135deg, #F7F1E6 0%, #ECE2D2 50%, #D8C7A6 100%)' }}
+                    style={{ background: '#FFFFFF' }}
                   >
                     {/* Gold border overlay */}
-                    <div className="absolute inset-0 rounded-xl border-2 border-gold/40 pointer-events-none z-10" />
+                    <div className="absolute inset-0 rounded-xl border border-gray-200 pointer-events-none z-10" />
                     <div className="p-4">
                       <GlobalSearchModal
                         isOpen={true}
@@ -1402,8 +1400,8 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         embedded
                       />
                     </div>
-                    {/* Bottom gold accent bar */}
-                    <div className="h-1 bg-gradient-to-r from-gold/50 via-gold to-gold/50" />
+                    {/* Bottom accent bar */}
+                    <div className="h-[1px] bg-gray-200" />
                   </div>
                 )}
                 {activeMegaMenu === 'language' && <MegaMenuLanguage onClose={closeMegaMenu} />}
