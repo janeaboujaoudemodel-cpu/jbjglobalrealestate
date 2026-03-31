@@ -346,7 +346,7 @@ const BestIdeaAward = () => {
                                   placeholder="john@example.com"
                                   value={formData.email}
                                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                  className="mt-1 border-zinc-300 focus:border-gold"
+                                className="mt-1 border-gray-300 focus:border-gold"
                                 />
                               </div>
                               <div>
