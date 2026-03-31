@@ -203,7 +203,7 @@ const AreaGuides = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-10"
+            className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10"
           >
             Discover the UAE's most prestigious communities across all seven emirates
           </motion.p>
@@ -267,7 +267,7 @@ const AreaGuides = () => {
       {(!shortcutFilters.emirates || shortcutFilters.emirates.length === 0) && !shortcutFilters.searchQuery && (
         <section className="pt-8 pb-4 bg-gradient-to-br from-[#F0E6D2] via-[#E8DCCA] to-[#DED0BC]">
           <div className="px-4 sm:px-6 lg:px-8">
-            <h2 className="text-xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-xl font-bold text-black mb-4">
               Browse by Emirate
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 mb-2">
@@ -422,7 +422,7 @@ const AreaGuides = () => {
                                   .trim()}
                               </p>
                             ) : (
-                              <p className="text-zinc-400 text-xs italic">
+                              <p className="text-gray-500 text-xs italic">
                                 Explore properties in {area.name}
                               </p>
                             )}
@@ -438,7 +438,7 @@ const AreaGuides = () => {
                             )}
                             {(area.developer_count ?? 0) > 0 && (
                               <div className="flex items-center gap-1">
-                                <span className="text-zinc-500">{area.developer_count} Developers</span>
+                                <span className="text-gray-500">{area.developer_count} Developers</span>
                               </div>
                             )}
                             {area.is_trending && (
@@ -454,7 +454,7 @@ const AreaGuides = () => {
                               </div>
                             )}
                             {(area.property_count ?? 0) === 0 && (area.developer_count ?? 0) === 0 && !area.is_trending && (
-                              <span className="text-zinc-500 text-xs">View area details</span>
+                              <span className="text-gray-500 text-xs">View area details</span>
                             )}
                           </div>
                         </div>
@@ -519,7 +519,7 @@ const AreaGuides = () => {
       {/* CTA Section */}
       <section id="ready-to-get-started" className="py-16 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
         <div className="px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
             Can't Find What You're Looking For?
           </h2>
           <p className="text-zinc-600 mb-6 max-w-xl mx-auto">

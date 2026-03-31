@@ -34,7 +34,7 @@ const WhyChooseUs = () => {
               <Award className="w-3.5 h-3.5 text-gray-600" />
               <span className="text-black">{t('whyUs.ourCommitment', 'Our Commitment')}</span>
             </span>
-            <h2 className="text-2xl md:text-3xl font-bold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-2xl md:text-3xl font-bold text-black mb-3">
               {t('whyUs.title', 'Why Choose Us')}
             </h2>
             <p className="text-gray-500 text-sm max-w-md mx-auto">
@@ -53,7 +53,7 @@ const WhyChooseUs = () => {
                 <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <prop.icon className="w-6 h-6 text-gray-600" />
                 </div>
-                <h3 className="text-black font-bold text-base mb-2 group-hover:text-gray-700 transition-colors" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h3 className="text-black font-bold text-base mb-2 group-hover:text-gray-700 transition-colors">
                   {prop.title}
                 </h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{prop.text}</p>

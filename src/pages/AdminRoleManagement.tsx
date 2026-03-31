@@ -228,7 +228,7 @@ const AdminRoleManagement = () => {
                 <Shield className="w-5 h-5 text-black" />
               </div>
               <div>
-                <h1 className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h1 className="text-black text-xl font-bold">
                   Role Management
                 </h1>
                 <span className="text-zinc-600 text-sm">Assign and revoke admin roles</span>
@@ -272,7 +272,7 @@ const AdminRoleManagement = () => {
                       <SelectItem key={role.value} value={role.value}>
                         <div className="flex flex-col">
                           <span>{role.label}</span>
-                          <span className="text-xs text-zinc-500">{role.description}</span>
+                          <span className="text-xs text-gray-500">{role.description}</span>
                         </div>
                       </SelectItem>
                     ))}
@@ -390,7 +390,7 @@ const AdminRoleManagement = () => {
                 ))}
                 {userRoles.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={4} className="text-center text-zinc-500 py-8">
+                    <TableCell colSpan={4} className="text-center text-gray-500 py-8">
                       No system roles configured
                     </TableCell>
                   </TableRow>
@@ -470,7 +470,7 @@ const AdminRoleManagement = () => {
                 ))}
                 {listingAdmins.length === 0 && (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-zinc-500 py-8">
+                    <TableCell colSpan={5} className="text-center text-gray-500 py-8">
                       No listing admins configured
                     </TableCell>
                   </TableRow>

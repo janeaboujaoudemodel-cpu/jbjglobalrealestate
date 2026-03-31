@@ -75,20 +75,19 @@ const AccessDenied = () => {
         {/* Title */}
         <h1 
           className="text-3xl font-bold text-white mb-4"
-          style={{ fontFamily: "Poppins, sans-serif" }}
         >
           Access Denied
         </h1>
 
         {/* Message */}
-        <p className="text-zinc-400 mb-6 leading-relaxed">
+        <p className="text-white/70 mb-6 leading-relaxed">
           This is an Owner-only system. The page you are trying to access is restricted.
         </p>
 
         {/* User status — email hidden for security */}
         {user && (
           <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-4 mb-6">
-            <p className="text-zinc-400 text-sm">You are signed in but do not have access to this page.</p>
+            <p className="text-white/70 text-sm">You are signed in but do not have access to this page.</p>
           </div>
         )}
 

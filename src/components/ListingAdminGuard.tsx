@@ -98,7 +98,7 @@ const ListingAdminGuard = ({ children }: ListingAdminGuardProps) => {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-zinc-400 text-sm">Verifying access...</p>
+          <p className="text-white/70 text-sm">Verifying access...</p>
         </div>
       </div>
     );

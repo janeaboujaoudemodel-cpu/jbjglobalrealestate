@@ -128,7 +128,7 @@ const OwnerDashboard = () => {
       case 'sold':
         return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Sold</Badge>;
       default:
-        return <Badge className="bg-zinc-500/20 text-zinc-400 border-zinc-500/30">{status}</Badge>;
+        return <Badge className="bg-zinc-500/20 text-gray-500 border-zinc-500/30">{status}</Badge>;
     }
   };
 
@@ -145,7 +145,7 @@ const OwnerDashboard = () => {
           <motion.div variants={fadeInUp} className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
               <h1 className="text-3xl font-bold mb-2">Owner Dashboard</h1>
-              <p className="text-zinc-400">Manage your properties, track listings, and communicate with JBJ</p>
+              <p className="text-white/70">Manage your properties, track listings, and communicate with JBJ</p>
             </div>
             
             <DropdownMenu>
@@ -159,7 +159,7 @@ const OwnerDashboard = () => {
                   </Avatar>
                   <div className="text-left hidden md:block">
                     <p className="text-sm font-medium">{profileName}</p>
-                    <p className="text-xs text-zinc-400">Property Owner</p>
+                    <p className="text-xs text-white/70">Property Owner</p>
                   </div>
                 </Button>
               </DropdownMenuTrigger>
@@ -192,7 +192,7 @@ const OwnerDashboard = () => {
                   </div>
                   <div>
                     <p className="text-2xl font-bold">{MOCK_LISTINGS.length}</p>
-                    <p className="text-xs text-zinc-400">My Listings</p>
+                    <p className="text-xs text-white/70">My Listings</p>
                   </div>
                 </div>
               </CardContent>
@@ -206,7 +206,7 @@ const OwnerDashboard = () => {
                   </div>
                   <div>
                     <p className="text-2xl font-bold">{MOCK_LISTINGS.filter(l => l.status === 'active').length}</p>
-                    <p className="text-xs text-zinc-400">Active</p>
+                    <p className="text-xs text-white/70">Active</p>
                   </div>
                 </div>
               </CardContent>
@@ -220,7 +220,7 @@ const OwnerDashboard = () => {
                   </div>
                   <div>
                     <p className="text-2xl font-bold">{MOCK_LISTINGS.filter(l => l.status === 'pending').length}</p>
-                    <p className="text-xs text-zinc-400">Pending</p>
+                    <p className="text-xs text-white/70">Pending</p>
                   </div>
                 </div>
               </CardContent>
@@ -234,7 +234,7 @@ const OwnerDashboard = () => {
                   </div>
                   <div>
                     <p className="text-2xl font-bold">{MOCK_MESSAGES.filter(m => m.unread).length}</p>
-                    <p className="text-xs text-zinc-400">New Messages</p>
+                    <p className="text-xs text-white/70">New Messages</p>
                   </div>
                 </div>
               </CardContent>
@@ -267,20 +267,20 @@ const OwnerDashboard = () => {
                         >
                           <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-lg bg-zinc-700 flex items-center justify-center">
-                              <Building2 className="w-6 h-6 text-zinc-400" />
+                              <Building2 className="w-6 h-6 text-white/70" />
                             </div>
                             <div>
                               <h4 className="font-medium">{listing.title}</h4>
-                              <p className="text-sm text-zinc-400">{listing.location} • {listing.type}</p>
+                              <p className="text-sm text-white/70">{listing.location} • {listing.type}</p>
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
                             <div className="text-right hidden md:block">
                               <p className="font-semibold text-gold">{listing.price}</p>
-                              <p className="text-xs text-zinc-400">{listing.views} views • {listing.inquiries} inquiries</p>
+                              <p className="text-xs text-white/70">{listing.views} views • {listing.inquiries} inquiries</p>
                             </div>
                             {getStatusBadge(listing.status)}
-                            <ChevronRight className="w-5 h-5 text-zinc-500" />
+                            <ChevronRight className="w-5 h-5 text-white/60" />
                           </div>
                         </div>
                       ))}
@@ -288,7 +288,7 @@ const OwnerDashboard = () => {
                       {MOCK_LISTINGS.length === 0 && (
                         <div className="text-center py-8">
                           <Home className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
-                          <p className="text-zinc-400">No listings yet</p>
+                          <p className="text-white/70">No listings yet</p>
                           <Link to="/seller-listing">
                             <Button className="mt-4 bg-gold hover:bg-gold/90 text-black">
                               List Your First Property
@@ -319,8 +319,8 @@ const OwnerDashboard = () => {
                         </div>
                         <div>
                           <p className="font-medium">Listing Submitted</p>
-                          <p className="text-sm text-zinc-400">Marina View Tower - 2BR</p>
-                          <p className="text-xs text-zinc-500">Jan 14, 2025 at 10:30 AM</p>
+                          <p className="text-sm text-white/70">Marina View Tower - 2BR</p>
+                          <p className="text-xs text-white/60">Jan 14, 2025 at 10:30 AM</p>
                         </div>
                       </div>
                       
@@ -333,8 +333,8 @@ const OwnerDashboard = () => {
                         </div>
                         <div>
                           <p className="font-medium">Documents Verified</p>
-                          <p className="text-sm text-zinc-400">Title deed and NOC confirmed</p>
-                          <p className="text-xs text-zinc-500">Jan 15, 2025 at 2:15 PM</p>
+                          <p className="text-sm text-white/70">Title deed and NOC confirmed</p>
+                          <p className="text-xs text-white/60">Jan 15, 2025 at 2:15 PM</p>
                         </div>
                       </div>
                       
@@ -346,8 +346,8 @@ const OwnerDashboard = () => {
                         </div>
                         <div>
                           <p className="font-medium">Listing Published</p>
-                          <p className="text-sm text-zinc-400">Now live on JBJ platform</p>
-                          <p className="text-xs text-zinc-500">Jan 15, 2025 at 4:00 PM</p>
+                          <p className="text-sm text-white/70">Now live on JBJ platform</p>
+                          <p className="text-xs text-white/60">Jan 15, 2025 at 4:00 PM</p>
                         </div>
                       </div>
                     </div>
@@ -378,10 +378,10 @@ const OwnerDashboard = () => {
                         >
                           <div className="flex items-center justify-between mb-1">
                             <p className="font-medium text-sm">{message.from}</p>
-                            <span className="text-xs text-zinc-500">{message.time}</span>
+                            <span className="text-xs text-white/60">{message.time}</span>
                           </div>
-                          <p className="text-sm text-zinc-300">{message.subject}</p>
-                          <p className="text-xs text-zinc-500 mt-1 truncate">{message.preview}</p>
+                          <p className="text-sm text-white/85">{message.subject}</p>
+                          <p className="text-xs text-white/60 mt-1 truncate">{message.preview}</p>
                         </div>
                       ))}
                     </div>
@@ -411,7 +411,7 @@ const OwnerDashboard = () => {
                           <FileText className="w-8 h-8 text-red-400" />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium truncate">{doc.name}</p>
-                            <p className="text-xs text-zinc-500">{doc.uploadedAt}</p>
+                            <p className="text-xs text-white/60">{doc.uploadedAt}</p>
                           </div>
                         </div>
                       ))}
@@ -426,7 +426,7 @@ const OwnerDashboard = () => {
                   <CardContent className="p-6 text-center">
                     <HelpCircle className="w-10 h-10 text-gold mx-auto mb-3" />
                     <h3 className="font-semibold mb-2">Need Help?</h3>
-                    <p className="text-sm text-zinc-400 mb-4">
+                    <p className="text-sm text-white/70 mb-4">
                       Our team is here to assist with your listings
                     </p>
                     <Link to="/contact">

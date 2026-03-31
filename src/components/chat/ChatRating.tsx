@@ -53,7 +53,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
       {step === 'main' ? (
         <>
           <h4 className="text-white text-base font-semibold mb-1 text-center">How was your experience?</h4>
-          <p className="text-zinc-400 text-xs text-center mb-4">Your feedback helps us improve</p>
+          <p className="text-gray-500 text-xs text-center mb-4">Your feedback helps us improve</p>
 
           {/* Overall Rating */}
           <div className="flex gap-2 mb-2 justify-center">
@@ -81,14 +81,14 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
 
           {/* Was it helpful */}
           <div className="mb-4">
-            <p className="text-zinc-300 text-xs mb-2 text-center">Did this chat answer your questions?</p>
+            <p className="text-gray-400 text-xs mb-2 text-center">Did this chat answer your questions?</p>
             <div className="flex gap-3 justify-center">
               <button
                 onClick={() => setWasHelpful(true)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
                   wasHelpful === true
                     ? 'border-green-500 bg-green-500/20 text-green-400'
-                    : 'border-zinc-600 text-zinc-400 hover:border-green-500/50'
+                    : 'border-zinc-600 text-gray-500 hover:border-green-500/50'
                 }`}
               >
                 <ThumbsUp className="w-4 h-4" />
@@ -99,7 +99,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all ${
                   wasHelpful === false
                     ? 'border-red-500 bg-red-500/20 text-red-400'
-                    : 'border-zinc-600 text-zinc-400 hover:border-red-500/50'
+                    : 'border-zinc-600 text-gray-500 hover:border-red-500/50'
                 }`}
               >
                 <ThumbsDown className="w-4 h-4" />
@@ -110,7 +110,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
 
           {/* How did you hear about us */}
           <div className="mb-4">
-            <p className="text-zinc-300 text-xs mb-2 text-center">How did you hear about us?</p>
+            <p className="text-gray-400 text-xs mb-2 text-center">How did you hear about us?</p>
             <Select value={howHeardAboutUs} onValueChange={setHowHeardAboutUs}>
               <SelectTrigger className="bg-white/10 border-gold/20 text-white text-xs h-9">
                 <SelectValue placeholder="Select an option" />
@@ -134,7 +134,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
               variant="outline"
               onClick={onSkip}
               size="sm"
-              className="flex-1 border-zinc-600 text-zinc-300 hover:bg-zinc-800"
+              className="flex-1 border-zinc-600 text-white/85 hover:bg-zinc-800"
             >
               <X className="w-3 h-3 mr-1" />
               Skip
@@ -156,7 +156,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
           {/* Agent Behavior Rating */}
           <div className="mb-3">
             <div className="flex items-center justify-between mb-1">
-              <p className="text-zinc-300 text-xs flex items-center gap-1">
+              <p className="text-gray-400 text-xs flex items-center gap-1">
                 <MessageCircle className="w-3 h-3 text-gold" />
                 Assistant behavior
               </p>
@@ -185,7 +185,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
           {/* Response Speed Rating */}
           <div className="mb-3">
             <div className="flex items-center justify-between mb-1">
-              <p className="text-zinc-300 text-xs flex items-center gap-1">
+              <p className="text-gray-400 text-xs flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-gold" />
                 Response speed
               </p>
@@ -214,7 +214,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
           {/* What didn't work (if rating < 4) */}
           {rating < 4 && (
             <div className="mb-3">
-              <p className="text-zinc-300 text-xs mb-1">What didn't work for you?</p>
+              <p className="text-gray-400 text-xs mb-1">What didn't work for you?</p>
               <Textarea
                 value={whatDidntWork}
                 onChange={(e) => setWhatDidntWork(e.target.value)}
@@ -226,7 +226,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
 
           {/* What can we improve */}
           <div className="mb-3">
-            <p className="text-zinc-300 text-xs mb-1">What can we improve?</p>
+            <p className="text-gray-400 text-xs mb-1">What can we improve?</p>
             <Textarea
               value={whatImprove}
               onChange={(e) => setWhatImprove(e.target.value)}
@@ -248,7 +248,7 @@ const ChatRating = ({ onSubmitRating, onSkip }: ChatRatingProps) => {
               variant="outline"
               onClick={() => setStep('main')}
               size="sm"
-              className="flex-1 border-zinc-600 text-zinc-300 hover:bg-zinc-800"
+              className="flex-1 border-zinc-600 text-white/85 hover:bg-zinc-800"
             >
               Back
             </Button>

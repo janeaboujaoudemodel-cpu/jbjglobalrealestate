@@ -519,7 +519,7 @@ export function BrokerToolkitTools() {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Discover All <span className="text-sky-300">Free Tools</span>
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-white/70 max-w-2xl mx-auto">
               All tools in one place (shortcuts). Scroll down to see the same tools organized by category.
             </p>
           </motion.div>
@@ -527,25 +527,25 @@ export function BrokerToolkitTools() {
           {/* Search Input */}
           <div className="max-w-md mx-auto mb-8">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70" />
               <Input
                 type="text"
                 placeholder="Search tools (e.g. stamp, calculator, CRM...)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-12 bg-slate-700/50 border-slate-500/50 text-white placeholder:text-zinc-400 focus:border-gold focus:ring-gold/30 rounded-xl"
+                className="pl-12 h-12 bg-slate-700/50 border-slate-500/50 text-white placeholder:text-gray-400 focus:border-gold focus:ring-gold/30 rounded-xl"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white text-sm"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white text-sm"
                 >
                   Clear
                 </button>
               )}
             </div>
             {searchQuery && (
-              <p className="text-zinc-400 text-sm mt-2 text-center">
+              <p className="text-white/70 text-sm mt-2 text-center">
                 {filteredTools.length} tool{filteredTools.length !== 1 ? 's' : ''} found
               </p>
             )}

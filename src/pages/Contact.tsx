@@ -297,14 +297,13 @@ END:VCARD`;
           <p className="text-gold text-sm uppercase tracking-[0.2em] mb-4">Real Estate Brokerage</p>
           <h1 
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Contact JBJ Global Real Estate
           </h1>
           <p className="text-white text-xl md:text-2xl font-medium max-w-3xl leading-relaxed mb-4">
             Professional Support. Clear Communication. Trusted Guidance.
           </p>
-          <p className="text-zinc-300 text-base md:text-lg max-w-3xl leading-relaxed">
+          <p className="text-gray-400 text-base md:text-lg max-w-3xl leading-relaxed">
             Whether you are an investor, property owner, broker, or partner, our team is here to support you with accurate information, structured guidance, and accountable follow-up. Choose the option below that best fits your request.
           </p>
         </div>
@@ -352,7 +351,7 @@ END:VCARD`;
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-green-500/30">
                   <CheckCircle className="w-10 h-10 text-white" />
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
                   Thank You for Your Inquiry
                 </h2>
                 <p className="text-zinc-600 text-lg mb-6">
@@ -381,7 +380,7 @@ END:VCARD`;
                   <div className="w-14 h-14 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
                     <Shield className="w-7 h-7 text-gold" />
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
                     Request a Consultation
                   </h2>
                   <p className="text-zinc-600 text-sm">
@@ -779,7 +778,7 @@ END:VCARD`;
       <section className="py-12 bg-black">
         {/* Thin black contour + Active Champagne Layer */}
         <div className="jj-section-gutter bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-2xl border border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-6 md:p-8">
-          <h2 className="text-center text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-center text-2xl md:text-3xl font-bold mb-3">
             <span className="text-black">Prefer to Reach Us</span>{" "}
             <span className="text-gold">Directly?</span>
           </h2>
@@ -799,7 +798,7 @@ END:VCARD`;
                 <MessageCircle className="w-6 h-6 text-green-600" />
               </div>
               <div>
-                <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h3 className="text-black font-semibold mb-0.5">
                   WhatsApp
                 </h3>
                 <p className="text-gold text-sm">+971-5659-11000</p>
@@ -815,7 +814,7 @@ END:VCARD`;
                 <Phone className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <h3 className="text-black font-semibold mb-0.5" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h3 className="text-black font-semibold mb-0.5">
                   Call Us
                 </h3>
                 <p className="text-gold text-sm">+971-5659-11000</p>
@@ -836,7 +835,7 @@ END:VCARD`;
                 <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center">
                   <Shield className="w-5 h-5 text-gold" />
                 </div>
-                <h3 className="text-black font-semibold text-lg" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h3 className="text-black font-semibold text-lg">
                   <span className="text-gold">Important</span> Notice
                 </h3>
               </div>
@@ -859,7 +858,7 @@ END:VCARD`;
               <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Calendar className="w-5 h-5 text-gold" />
               </div>
-              <h3 className="text-black font-semibold text-lg mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h3 className="text-black font-semibold text-lg mb-2">
                 Appointments
               </h3>
               <p className="text-zinc-700 text-sm leading-relaxed">

@@ -253,7 +253,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
             </div>
             Property Report & Share
           </DialogTitle>
-          <DialogDescription className="text-zinc-500">
+          <DialogDescription className="text-gray-500">
             View the complete property report or share it with others.
           </DialogDescription>
         </DialogHeader>
@@ -262,7 +262,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
           {/* Property Info Summary */}
           <div className="bg-zinc-100 rounded-lg p-4 border border-zinc-200">
             <h3 className="font-semibold text-black mb-1">{project.name}</h3>
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-gray-500">
               {project.location || 'Dubai'} • {project.developer?.name || 'Premium Developer'}
             </p>
             <p className="text-gold font-medium mt-2">
@@ -319,7 +319,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
                 placeholder="Enter email address"
                 value={userEmail}
                 onChange={(e) => setUserEmail(e.target.value)}
-                className="bg-white border-zinc-300 text-black placeholder:text-zinc-400 flex-1"
+                className="bg-white border-zinc-300 text-black placeholder:text-gray-400 flex-1"
               />
               <Button
                 onClick={handleShareToEmail}
@@ -358,7 +358,7 @@ const PropertyReportModal = ({ open, onOpenChange, project }: PropertyReportModa
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-black text-sm font-medium truncate">{doc.file_name}</p>
-                      <p className="text-zinc-500 text-xs capitalize">{doc.document_type.replace(/_/g, ' ')}</p>
+                      <p className="text-gray-500 text-xs capitalize">{doc.document_type.replace(/_/g, ' ')}</p>
                     </div>
                     <Download className="w-4 h-4 text-gold" />
                   </button>

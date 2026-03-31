@@ -60,8 +60,8 @@ const statusConfig: Record<EnvelopeStatus, { label: string; color: string; icon:
   partially_signed: { label: "Partially Signed", color: "bg-orange-50 text-orange-700 border-orange-200", icon: <Clock className="w-3 h-3" /> },
   completed: { label: "Completed", color: "bg-emerald-50 text-emerald-700 border-emerald-200", icon: <CheckCircle2 className="w-3 h-3" /> },
   declined: { label: "Declined", color: "bg-red-50 text-red-700 border-red-200", icon: <XCircle className="w-3 h-3" /> },
-  expired: { label: "Expired", color: "bg-zinc-100 text-zinc-500 border-zinc-200", icon: <Clock className="w-3 h-3" /> },
-  voided: { label: "Voided", color: "bg-zinc-100 text-zinc-500 border-zinc-200", icon: <XCircle className="w-3 h-3" /> },
+  expired: { label: "Expired", color: "bg-zinc-100 text-gray-500 border-zinc-200", icon: <Clock className="w-3 h-3" /> },
+  voided: { label: "Voided", color: "bg-zinc-100 text-gray-500 border-zinc-200", icon: <XCircle className="w-3 h-3" /> },
 };
 
 export default function ESignatureDashboard() {
@@ -155,7 +155,7 @@ export default function ESignatureDashboard() {
         <div className="max-w-7xl mx-auto px-6 flex items-end h-[84px] pb-4">
           <div className="flex flex-wrap items-center gap-3">
             <FileSignature className="w-6 h-6 text-gold" />
-            <h1 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            <h1 className="text-2xl md:text-3xl font-bold text-white">
               E-<span className="text-gold">Signature</span>
             </h1>
           </div>

@@ -153,7 +153,7 @@ const Guides = () => {
             <BookOpen className="w-4 h-4 text-gold" />
             <span className="text-gold font-semibold text-xs uppercase tracking-[0.2em]">Guides</span>
           </motion.div>
-          <motion.h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-[-0.02em]" style={{ fontFamily: "Poppins, sans-serif" }} variants={fadeInUp}>
+          <motion.h1 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-[-0.02em]" variants={fadeInUp}>
             Guides Library
           </motion.h1>
           <motion.p className="text-white/70 text-base md:text-lg max-w-3xl mx-auto mb-10 leading-relaxed" variants={fadeInUp}>

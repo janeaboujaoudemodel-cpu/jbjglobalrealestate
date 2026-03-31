@@ -94,8 +94,8 @@ export function CrossChannelToggle({
   // External recipient
   return (
     <div className="flex items-center gap-2 bg-zinc-50 border border-zinc-200 rounded-lg px-3 py-2">
-      <Mail className="w-4 h-4 text-zinc-400" />
-      <span className="text-xs text-zinc-500">External recipient — email only</span>
+      <Mail className="w-4 h-4 text-gray-500" />
+      <span className="text-xs text-gray-500">External recipient — email only</span>
     </div>
   );
 }

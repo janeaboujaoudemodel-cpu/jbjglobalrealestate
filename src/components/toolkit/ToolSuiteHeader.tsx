@@ -72,7 +72,7 @@ export function ToolSuiteHeader({
                 title
               )}
             </h1>
-            <p className="text-zinc-400 text-sm">{subtitle}</p>
+            <p className="text-white/70 text-sm">{subtitle}</p>
           </div>
         </div>
       </div>

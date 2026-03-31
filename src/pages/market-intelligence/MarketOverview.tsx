@@ -33,7 +33,6 @@ const SectionTitle = ({ title, centered = true }: { title: string; centered?: bo
   return (
     <h2 
       className={`text-3xl md:text-4xl font-bold mb-8 ${centered ? 'text-center' : ''}`}
-      style={{ fontFamily: "Poppins, sans-serif" }}
     >
       <span className="text-gold mr-2">{firstWord}</span>
       <span className="text-black font-bold">{restWords}</span>
@@ -72,7 +71,7 @@ const ContentSection = ({
             <div className="jj-icon-box-active w-12 h-12 rounded-xl flex-shrink-0">
               <Icon className="w-6 h-6" />
             </div>
-            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-2xl md:text-3xl font-bold">
               <span className="text-gold">{firstWord}</span>
               <span className="text-black ml-2">{restWords}</span>
             </h2>
@@ -133,7 +132,7 @@ const MarketOverview = () => {
   const getTrendIcon = (change: number) => {
     if (change > 0) return <TrendingUp className="w-4 h-4 text-emerald-400" />;
     if (change < 0) return <TrendingDown className="w-4 h-4 text-red-400" />;
-    return <Minus className="w-4 h-4 text-zinc-400" />;
+    return <Minus className="w-4 h-4 text-white/70" />;
   };
 
   return (
@@ -184,7 +183,7 @@ const MarketOverview = () => {
                 <div className="jj-icon-box-active w-12 h-12 rounded-xl flex-shrink-0">
                   <FileText className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-2xl md:text-3xl font-bold">
                   <span className="text-gold">About</span>
                   <span className="text-black ml-2">This Page</span>
                 </h2>
@@ -206,7 +205,7 @@ const MarketOverview = () => {
                 <div className="jj-icon-box-active w-12 h-12 rounded-xl flex-shrink-0">
                   <Landmark className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-2xl md:text-3xl font-bold">
                   <span className="text-gold">Market</span>
                   <span className="text-black ml-2">Structure & Regulation</span>
                 </h2>
@@ -347,7 +346,7 @@ const MarketOverview = () => {
                       <p className="text-black text-3xl font-bold mb-2">{stat.value}</p>
                       <div className="flex items-center justify-center gap-2">
                         {getTrendIcon(stat.change)}
-                        <span className={`text-sm ${stat.change > 0 ? 'text-emerald-500' : stat.change < 0 ? 'text-red-500' : 'text-zinc-400'}`}>
+                        <span className={`text-sm ${stat.change > 0 ? 'text-emerald-500' : stat.change < 0 ? 'text-red-500' : 'text-white/70'}`}>
                           {stat.change > 0 ? '+' : ''}{stat.change}% {stat.period}
                         </span>
                       </div>

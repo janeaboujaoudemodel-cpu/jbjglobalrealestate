@@ -322,7 +322,7 @@ const MindMap = () => {
           <Button variant="outline" size="icon" onClick={() => setZoom(z => Math.max(0.5, z - 0.1))}>
             <ZoomOut className="w-4 h-4" />
           </Button>
-          <span className="text-sm text-zinc-400 w-12 text-center">{Math.round(zoom * 100)}%</span>
+          <span className="text-sm text-white/70 w-12 text-center">{Math.round(zoom * 100)}%</span>
           <Button variant="outline" size="icon" onClick={() => setZoom(z => Math.min(2, z + 0.1))}>
             <ZoomIn className="w-4 h-4" />
           </Button>
@@ -341,7 +341,7 @@ const MindMap = () => {
         <div className="w-64 border-r border-zinc-800 p-4">
           <div className="space-y-4">
             <div>
-              <h3 className="text-sm font-semibold text-zinc-400 mb-3">Actions</h3>
+              <h3 className="text-sm font-semibold text-white/70 mb-3">Actions</h3>
               <div className="space-y-2">
                 <Button 
                   onClick={addChildNode} 
@@ -365,7 +365,7 @@ const MindMap = () => {
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-zinc-400 mb-3">Node Color</h3>
+              <h3 className="text-sm font-semibold text-white/70 mb-3">Node Color</h3>
               <div className="flex flex-wrap gap-2">
                 {colorOptions.map((color) => (
                   <button
@@ -384,22 +384,22 @@ const MindMap = () => {
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-zinc-400 mb-3">Selected Node</h3>
+              <h3 className="text-sm font-semibold text-white/70 mb-3">Selected Node</h3>
               {selectedNode ? (
                 <div className="bg-zinc-900 rounded-lg p-3">
                   <p className="text-sm">{nodes.find(n => n.id === selectedNode)?.text}</p>
-                  <p className="text-xs text-zinc-500 mt-1">
+                  <p className="text-xs text-white/60 mt-1">
                     {nodes.find(n => n.id === selectedNode)?.children.length} children
                   </p>
                 </div>
               ) : (
-                <p className="text-sm text-zinc-500">Click a node to select it</p>
+                <p className="text-sm text-white/60">Click a node to select it</p>
               )}
             </div>
 
             <div>
-              <h3 className="text-sm font-semibold text-zinc-400 mb-3">Tips</h3>
-              <ul className="text-xs text-zinc-500 space-y-1">
+              <h3 className="text-sm font-semibold text-white/70 mb-3">Tips</h3>
+              <ul className="text-xs text-white/60 space-y-1">
                 <li>• Click to select a node</li>
                 <li>• Double-click to edit text</li>
                 <li>• Drag nodes to reposition</li>

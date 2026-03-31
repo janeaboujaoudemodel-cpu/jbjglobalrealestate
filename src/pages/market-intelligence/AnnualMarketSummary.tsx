@@ -247,7 +247,7 @@ const AnnualMarketSummary = () => {
                 <span className="text-2xl font-bold text-black">
                   {data.totalTransactions.buy.toLocaleString()}
                 </span>
-                <p className="text-xs text-zinc-500 mt-1">Full year {data.year}</p>
+                <p className="text-xs text-gray-500 mt-1">Full year {data.year}</p>
               </CardContent>
             </Card>
 
@@ -262,7 +262,7 @@ const AnnualMarketSummary = () => {
                 <span className="text-2xl font-bold text-black">
                   {data.totalTransactions.sell.toLocaleString()}
                 </span>
-                <p className="text-xs text-zinc-500 mt-1">Full year {data.year}</p>
+                <p className="text-xs text-gray-500 mt-1">Full year {data.year}</p>
               </CardContent>
             </Card>
 
@@ -277,7 +277,7 @@ const AnnualMarketSummary = () => {
                 <span className="text-2xl font-bold text-black">
                   {data.totalTransactions.rent.toLocaleString()}
                 </span>
-                <p className="text-xs text-zinc-500 mt-1">Full year {data.year}</p>
+                <p className="text-xs text-gray-500 mt-1">Full year {data.year}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -397,7 +397,7 @@ const AnnualMarketSummary = () => {
                   It is provided for informational purposes only and does not constitute financial, investment, or legal advice.
                   This document contains historical information only and no forward-looking statements.
                 </p>
-                <div className="flex flex-wrap gap-4 text-xs text-zinc-500">
+                <div className="flex flex-wrap gap-4 text-xs text-gray-500">
                   <span>Data Sources: Dubai Land Department Open Data</span>
                   <span>•</span>
                   <span>Update Frequency: Annual</span>
@@ -407,7 +407,7 @@ const AnnualMarketSummary = () => {
                   </Link>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gold/30">
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-gray-500">
                     JBJ GLOBAL REAL ESTATE • Jane Bou Jaoude, Founder & CEO
                   </p>
                 </div>

@@ -91,7 +91,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
       <Card className="bg-zinc-900/50 border-zinc-800">
         <CardContent className="p-4 text-center">
           <Info className="w-6 h-6 text-zinc-600 mx-auto mb-2" />
-          <p className="text-zinc-500 text-sm">
+          <p className="text-white/60 text-sm">
             {leadArea ? `No market data available for "${leadArea}"` : "Select a location to view market context"}
           </p>
         </CardContent>
@@ -102,7 +102,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
   const getTrendIcon = (change: number) => {
     if (change > 0) return <TrendingUp className="w-4 h-4 text-emerald-400" />;
     if (change < 0) return <TrendingDown className="w-4 h-4 text-red-400" />;
-    return <Minus className="w-4 h-4 text-zinc-400" />;
+    return <Minus className="w-4 h-4 text-white/70" />;
   };
 
   const getUrgencyBadge = (urgency: string) => {
@@ -126,7 +126,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
           </div>
           {getUrgencyBadge(contextNarrative.urgency)}
         </div>
-        <p className="text-zinc-400 text-xs">{contextNarrative.summary}</p>
+        <p className="text-white/70 text-xs">{contextNarrative.summary}</p>
       </div>
     );
   }
@@ -149,7 +149,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
         {/* Key Metrics */}
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-zinc-800/50 rounded-lg p-3 text-center">
-            <p className="text-zinc-500 text-xs mb-1">Price Trend</p>
+            <p className="text-white/60 text-xs mb-1">Price Trend</p>
             <div className="flex items-center justify-center gap-1">
               {getTrendIcon(areaData.yoyChange)}
               <span className={`font-semibold ${areaData.yoyChange > 0 ? "text-emerald-400" : "text-red-400"}`}>
@@ -158,7 +158,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
             </div>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3 text-center">
-            <p className="text-zinc-500 text-xs mb-1">Demand</p>
+            <p className="text-white/60 text-xs mb-1">Demand</p>
             <div className="w-full bg-zinc-700 rounded-full h-1.5 mt-1">
               <div 
                 className="bg-emerald-500 h-1.5 rounded-full" 
@@ -168,7 +168,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
             <span className="text-white text-xs">{areaData.demandScore}%</span>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3 text-center">
-            <p className="text-zinc-500 text-xs mb-1">Supply</p>
+            <p className="text-white/60 text-xs mb-1">Supply</p>
             <div className="w-full bg-zinc-700 rounded-full h-1.5 mt-1">
               <div 
                 className="bg-amber-500 h-1.5 rounded-full" 
@@ -181,7 +181,7 @@ export function LeadMarketContext({ leadArea, leadIntent = "buy", compact = fals
 
         {/* Broker Guidance */}
         <div className="bg-gold/5 border border-gold/20 rounded-lg p-3">
-          <p className="text-zinc-300 text-sm">{contextNarrative.detail}</p>
+          <p className="text-white/85 text-sm">{contextNarrative.detail}</p>
         </div>
 
         {/* Disclaimer */}

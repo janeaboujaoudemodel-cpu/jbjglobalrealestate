@@ -185,14 +185,14 @@ const BrokerResources = () => {
             </motion.h1>
             
             <motion.p 
-              className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed max-w-3xl mx-auto mb-6"
+              className="text-lg md:text-xl text-white/85 font-light leading-relaxed max-w-3xl mx-auto mb-6"
               variants={fadeInUp}
             >
               The Broker Resources section is designed to support brokers with practical tools, reference materials, and operational guidance required to operate efficiently within the JBJ Global Real Estate ecosystem and the wider UAE real estate market.
             </motion.p>
             
             <motion.p 
-              className="text-base md:text-lg text-zinc-400 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+              className="text-base md:text-lg text-white/70 font-light leading-relaxed max-w-3xl mx-auto mb-10"
               variants={fadeInUp}
             >
               These resources are intended to enhance day-to-day brokerage performance, ensure regulatory alignment, and streamline client-facing operations.
@@ -273,7 +273,7 @@ const BrokerResources = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-zinc-400 max-w-2xl mx-auto mb-12"
+              className="text-center text-white/70 max-w-2xl mx-auto mb-12"
             >
               This resource hub is designed for:
             </motion.p>
@@ -359,7 +359,7 @@ const BrokerResources = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-lg text-zinc-400 mb-10"
+              className="text-lg text-white/70 mb-10"
             >
               Brokers can access relevant materials directly through their account dashboard or by contacting the JBJ Global Real Estate support team.
             </motion.p>

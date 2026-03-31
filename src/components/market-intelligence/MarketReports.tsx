@@ -133,7 +133,7 @@ export const MarketReports = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
               Market Reports
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
               Downloadable Reports
             </h2>
             <p className="text-black/70 max-w-2xl mx-auto">

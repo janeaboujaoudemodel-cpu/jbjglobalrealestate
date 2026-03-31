@@ -203,7 +203,7 @@ export default function OwnerCommSettings() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-black">Communication Settings</h1>
-                <p className="text-zinc-500 text-sm">Jane Bou Jaoude — Manage channels, AI behavior, and integrations</p>
+                <p className="text-gray-500 text-sm">Jane Bou Jaoude — Manage channels, AI behavior, and integrations</p>
               </div>
             </div>
           </motion.div>
@@ -252,7 +252,7 @@ export default function OwnerCommSettings() {
                               );
                             })}
                           </div>
-                          <p className="text-xs text-zinc-500 text-center mt-4">
+                          <p className="text-xs text-gray-500 text-center mt-4">
                             Note: OAuth integrations coming soon. Manual setup available.
                           </p>
                         </DialogContent>
@@ -267,8 +267,8 @@ export default function OwnerCommSettings() {
                     ) : channels.length === 0 ? (
                       <div className="text-center py-8">
                         <MessageSquare className="h-12 w-12 text-gold/30 mx-auto mb-3" />
-                        <p className="text-zinc-500">No channels connected</p>
-                        <p className="text-zinc-400 text-sm">Add your first channel to start receiving messages</p>
+                        <p className="text-gray-500">No channels connected</p>
+                        <p className="text-gray-500 text-sm">Add your first channel to start receiving messages</p>
                       </div>
                     ) : (
                       <div className="space-y-3">
@@ -281,12 +281,12 @@ export default function OwnerCommSettings() {
                               className="flex items-center justify-between p-3 rounded-xl border border-gold/20 bg-white"
                             >
                               <div className="flex items-center gap-3">
-                                <div className={`p-2 rounded-lg bg-zinc-50 ${chType?.color || 'text-zinc-500'}`}>
+                                <div className={`p-2 rounded-lg bg-zinc-50 ${chType?.color || 'text-gray-500'}`}>
                                   <Icon className="h-5 w-5" />
                                 </div>
                                 <div>
                                   <p className="font-medium text-black">{channel.display_name}</p>
-                                  <p className="text-xs text-zinc-500">{channel.identifier}</p>
+                                  <p className="text-xs text-gray-500">{channel.identifier}</p>
                                 </div>
                               </div>
                               <div className="flex items-center gap-2">
@@ -330,7 +330,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Auto-Send Replies</Label>
-                        <p className="text-sm text-zinc-500">AI sends responses automatically without approval</p>
+                        <p className="text-sm text-gray-500">AI sends responses automatically without approval</p>
                       </div>
                       <Switch
                         checked={settings?.auto_send_enabled || false}
@@ -341,7 +341,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Draft by Default</Label>
-                        <p className="text-sm text-zinc-500">Automatically generate AI drafts for new messages</p>
+                        <p className="text-sm text-gray-500">Automatically generate AI drafts for new messages</p>
                       </div>
                       <Switch
                         checked={settings?.ai_draft_by_default ?? true}
@@ -352,7 +352,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Auto-Link to CRM</Label>
-                        <p className="text-sm text-zinc-500">Automatically link conversations to matching leads</p>
+                        <p className="text-sm text-gray-500">Automatically link conversations to matching leads</p>
                       </div>
                       <Switch
                         checked={settings?.auto_link_leads ?? true}
@@ -363,7 +363,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label className="text-base">Log to CRM</Label>
-                        <p className="text-sm text-zinc-500">Record all communications in CRM activity</p>
+                        <p className="text-sm text-gray-500">Record all communications in CRM activity</p>
                       </div>
                       <Switch
                         checked={settings?.auto_log_to_crm ?? true}
@@ -385,7 +385,7 @@ export default function OwnerCommSettings() {
                     <div className="flex items-center justify-between p-4 rounded-xl bg-gold/5 border border-gold/20">
                       <div>
                         <p className="font-medium text-black">Learning Enabled</p>
-                        <p className="text-sm text-zinc-500">AI adapts to your writing style and preferences</p>
+                        <p className="text-sm text-gray-500">AI adapts to your writing style and preferences</p>
                       </div>
                       <CheckCircle className="h-6 w-6 text-green-500" />
                     </div>
@@ -405,7 +405,7 @@ export default function OwnerCommSettings() {
                   <div>
                     <Label className="text-base mb-3 block">Formality Level</Label>
                     <div className="flex items-center gap-4">
-                      <span className="text-sm text-zinc-500 w-16">Casual</span>
+                      <span className="text-sm text-gray-500 w-16">Casual</span>
                       <Slider
                         value={[toneProfile?.formality_level || 3]}
                         min={1}
@@ -414,14 +414,14 @@ export default function OwnerCommSettings() {
                         onValueChange={([v]) => updateToneProfile.mutate({ formality_level: v })}
                         className="flex-1"
                       />
-                      <span className="text-sm text-zinc-500 w-16 text-right">Formal</span>
+                      <span className="text-sm text-gray-500 w-16 text-right">Formal</span>
                     </div>
                   </div>
 
                   <div>
                     <Label className="text-base mb-3 block">Emoji Usage</Label>
                     <div className="flex items-center gap-4">
-                      <span className="text-sm text-zinc-500 w-16">Never</span>
+                      <span className="text-sm text-gray-500 w-16">Never</span>
                       <Slider
                         value={[toneProfile?.emoji_usage || 2]}
                         min={0}
@@ -430,7 +430,7 @@ export default function OwnerCommSettings() {
                         onValueChange={([v]) => updateToneProfile.mutate({ emoji_usage: v })}
                         className="flex-1"
                       />
-                      <span className="text-sm text-zinc-500 w-16 text-right">Often</span>
+                      <span className="text-sm text-gray-500 w-16 text-right">Often</span>
                     </div>
                   </div>
 
@@ -463,7 +463,7 @@ export default function OwnerCommSettings() {
                   <div className="flex items-center justify-between">
                     <div>
                       <Label className="text-base">Language Switching</Label>
-                      <p className="text-sm text-zinc-500">Reply in the same language as the sender</p>
+                      <p className="text-sm text-gray-500">Reply in the same language as the sender</p>
                     </div>
                     <Switch
                       checked={toneProfile?.language_switching ?? true}
@@ -488,7 +488,7 @@ export default function OwnerCommSettings() {
                   <div className="flex items-center justify-between">
                     <div>
                       <Label className="text-base">Voice Enabled</Label>
-                      <p className="text-sm text-zinc-500">Generate voice replies using your cloned voice</p>
+                      <p className="text-sm text-gray-500">Generate voice replies using your cloned voice</p>
                     </div>
                     <Switch
                       checked={settings?.voice_enabled ?? true}

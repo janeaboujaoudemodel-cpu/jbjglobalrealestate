@@ -136,7 +136,7 @@ interface Recommendation {
 const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
   published: { label: "Live", className: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
   live: { label: "Live", className: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
-  draft: { label: "Draft", className: "bg-zinc-500/20 text-zinc-300 border-zinc-500/40" },
+  draft: { label: "Draft", className: "bg-zinc-500/20 text-white/85 border-zinc-500/40" },
   applied: { label: "Applied – Pending Test", className: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   tested: { label: "Tested – Pending Publish", className: "bg-blue-500/20 text-blue-300 border-blue-500/40" },
   reverted: { label: "Reverted", className: "bg-orange-500/20 text-orange-300 border-orange-500/40" },
@@ -324,14 +324,14 @@ export default function AIToolsControlPanel() {
           <Shield className="w-7 h-7" />
           AI Tools Control Panel
         </h1>
-        <p className="text-zinc-400 text-sm">Apply → Test → Publish workflow for every tool. Owner-only access.</p>
+        <p className="text-white/70 text-sm">Apply → Test → Publish workflow for every tool. Owner-only access.</p>
       </div>
 
       {/* Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-6">
         {[
           { label: "Live", value: stats.live, color: "text-emerald-400" },
-          { label: "Draft", value: stats.draft, color: "text-zinc-400" },
+          { label: "Draft", value: stats.draft, color: "text-white/70" },
           { label: "Pending Test", value: stats.applied, color: "text-amber-400" },
           { label: "Pending Publish", value: stats.tested, color: "text-blue-400" },
           { label: "Reverted", value: stats.reverted, color: "text-orange-400" },
@@ -339,7 +339,7 @@ export default function AIToolsControlPanel() {
         ].map(s => (
           <div key={s.label} className="bg-zinc-900/60 border border-zinc-800 rounded-lg p-3 text-center">
             <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
-            <div className="text-xs text-zinc-500">{s.label}</div>
+            <div className="text-xs text-white/60">{s.label}</div>
           </div>
         ))}
       </div>
@@ -347,7 +347,7 @@ export default function AIToolsControlPanel() {
       {/* Search + Filter */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
           <Input
             placeholder="Search tools..."
             value={search}
@@ -362,7 +362,7 @@ export default function AIToolsControlPanel() {
               size="sm"
               variant={catFilter === c ? "default" : "outline"}
               onClick={() => setCatFilter(c)}
-              className={catFilter === c ? "bg-gold text-black hover:bg-gold/90" : "border-zinc-700 text-zinc-400 hover:text-white"}
+              className={catFilter === c ? "bg-gold text-black hover:bg-gold/90" : "border-zinc-700 text-white/70 hover:text-white"}
             >
               {c === "all" ? "All" : CATEGORY_LABELS[c]}
             </Button>
@@ -372,7 +372,7 @@ export default function AIToolsControlPanel() {
 
       {/* Tool List */}
       {loading ? (
-        <div className="text-center py-20 text-zinc-500">Loading tools...</div>
+        <div className="text-center py-20 text-white/60">Loading tools...</div>
       ) : (
         <div className="space-y-3">
           {filtered.map(tool => {
@@ -390,25 +390,25 @@ export default function AIToolsControlPanel() {
                     <CardHeader className="cursor-pointer py-4">
                       <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3 flex-1 min-w-0">
-                          <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform shrink-0 ${isExpanded ? "rotate-180" : ""}`} />
+                          <ChevronDown className={`w-4 h-4 text-white/60 transition-transform shrink-0 ${isExpanded ? "rotate-180" : ""}`} />
                           <div className="min-w-0">
                             <CardTitle className="!text-base text-white truncate">{tool.title}</CardTitle>
-                            <p className="text-xs text-zinc-500 mt-0.5">{tool.description}</p>
+                            <p className="text-xs text-white/60 mt-0.5">{tool.description}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
-                          <Badge className="bg-zinc-800 text-zinc-400 border-zinc-700 text-[10px]">{CATEGORY_LABELS[tool.category]}</Badge>
+                          <Badge className="bg-zinc-800 text-white/70 border-zinc-700 text-[10px]">{CATEGORY_LABELS[tool.category]}</Badge>
                           <StatusBadge status={status} />
                         </div>
                       </div>
                       {/* Direct URL row */}
                       <div className="flex items-center gap-2 mt-2 ml-7" onClick={e => e.stopPropagation()}>
-                        <code className="text-xs text-zinc-400 bg-zinc-800/80 px-2 py-1 rounded font-mono truncate max-w-[400px]">{fullUrl}</code>
-                        <Button size="sm" variant="ghost" onClick={() => copyUrl(fullUrl)} className="h-6 w-6 p-0 text-zinc-500 hover:text-gold">
+                        <code className="text-xs text-white/70 bg-zinc-800/80 px-2 py-1 rounded font-mono truncate max-w-[400px]">{fullUrl}</code>
+                        <Button size="sm" variant="ghost" onClick={() => copyUrl(fullUrl)} className="h-6 w-6 p-0 text-white/60 hover:text-gold">
                           <Copy className="w-3 h-3" />
                         </Button>
                         <Link to={tool.link} target="_blank">
-                          <Button size="sm" variant="ghost" className="h-6 px-2 text-xs text-zinc-400 hover:text-gold gap-1">
+                          <Button size="sm" variant="ghost" className="h-6 px-2 text-xs text-white/70 hover:text-gold gap-1">
                             <ExternalLink className="w-3 h-3" /> Open Tool
                           </Button>
                         </Link>
@@ -458,7 +458,7 @@ export default function AIToolsControlPanel() {
                                   <Rocket className="w-3 h-3" /> Save & Publish
                                 </Button>
                               )}
-                              <Button size="sm" variant="outline" onClick={() => revertFix(tool.id)} className="border-zinc-700 text-zinc-400 hover:text-red-400 gap-1">
+                              <Button size="sm" variant="outline" onClick={() => revertFix(tool.id)} className="border-zinc-700 text-white/70 hover:text-red-400 gap-1">
                                 <Undo2 className="w-3 h-3" /> Revert
                               </Button>
                             </div>
@@ -477,22 +477,22 @@ export default function AIToolsControlPanel() {
                                     <div className="flex items-center gap-2">
                                       <span className="text-sm font-mono text-gold">v{v.version_number}</span>
                                       <StatusBadge status={v.status} />
-                                      <span className="text-xs text-zinc-500">{new Date(v.created_at).toLocaleString()}</span>
+                                      <span className="text-xs text-white/60">{new Date(v.created_at).toLocaleString()}</span>
                                     </div>
                                     <div className="flex items-center gap-1">
                                       {v.status !== "published" && (
-                                        <Button size="sm" variant="ghost" onClick={() => restoreVersion(tool.id, v)} className="h-7 text-xs text-zinc-400 hover:text-gold gap-1">
+                                        <Button size="sm" variant="ghost" onClick={() => restoreVersion(tool.id, v)} className="h-7 text-xs text-white/70 hover:text-gold gap-1">
                                           <RotateCcw className="w-3 h-3" /> Restore
                                         </Button>
                                       )}
                                     </div>
                                   </div>
-                                  {v.changes_description && <p className="text-xs text-zinc-400 mt-1">{v.changes_description}</p>}
-                                  {v.change_reason && <p className="text-xs text-zinc-500 mt-0.5">Reason: {v.change_reason}</p>}
+                                  {v.changes_description && <p className="text-xs text-white/70 mt-1">{v.changes_description}</p>}
+                                  {v.change_reason && <p className="text-xs text-white/60 mt-0.5">Reason: {v.change_reason}</p>}
                                   {v.test_result && (
                                     <div className="flex items-center gap-1 mt-1">
                                       {v.test_result === "pass" ? <CheckCircle2 className="w-3 h-3 text-emerald-400" /> : <XCircle className="w-3 h-3 text-red-400" />}
-                                      <span className="text-xs text-zinc-500">Test: {v.test_result}</span>
+                                      <span className="text-xs text-white/60">Test: {v.test_result}</span>
                                       {v.test_notes && <span className="text-xs text-zinc-600"> — {v.test_notes}</span>}
                                     </div>
                                   )}
@@ -502,13 +502,13 @@ export default function AIToolsControlPanel() {
                                       {v.before_snapshot && (
                                         <div className="bg-red-900/10 border border-red-900/30 rounded p-2">
                                           <span className="text-[10px] text-red-400 font-semibold">BEFORE</span>
-                                          <pre className="text-[10px] text-zinc-400 mt-1 whitespace-pre-wrap">{JSON.stringify(v.before_snapshot, null, 2).slice(0, 200)}</pre>
+                                          <pre className="text-[10px] text-white/70 mt-1 whitespace-pre-wrap">{JSON.stringify(v.before_snapshot, null, 2).slice(0, 200)}</pre>
                                         </div>
                                       )}
                                       {v.after_snapshot && (
                                         <div className="bg-emerald-900/10 border border-emerald-900/30 rounded p-2">
                                           <span className="text-[10px] text-emerald-400 font-semibold">AFTER</span>
-                                          <pre className="text-[10px] text-zinc-400 mt-1 whitespace-pre-wrap">{JSON.stringify(v.after_snapshot, null, 2).slice(0, 200)}</pre>
+                                          <pre className="text-[10px] text-white/70 mt-1 whitespace-pre-wrap">{JSON.stringify(v.after_snapshot, null, 2).slice(0, 200)}</pre>
                                         </div>
                                       )}
                                     </div>
@@ -530,8 +530,8 @@ export default function AIToolsControlPanel() {
                                   <div className="flex items-center gap-3">
                                     {t.result === "pass" ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <XCircle className="w-4 h-4 text-red-400" />}
                                     <div>
-                                      <span className="text-xs text-zinc-300">{t.result === "pass" ? "Passed" : "Failed"}</span>
-                                      {t.notes && <span className="text-xs text-zinc-500 ml-2">— {t.notes}</span>}
+                                      <span className="text-xs text-white/85">{t.result === "pass" ? "Passed" : "Failed"}</span>
+                                      {t.notes && <span className="text-xs text-white/60 ml-2">— {t.notes}</span>}
                                     </div>
                                   </div>
                                   <div className="flex items-center gap-2">
@@ -577,13 +577,13 @@ function FixCard({
           <div className="flex items-center gap-2 mb-1">
             <span className="text-sm font-medium text-white">{rec.title}</span>
             {rec.impact_level && (
-              <Badge className={`text-[10px] ${rec.impact_level === "high" ? "bg-red-500/20 text-red-300 border-red-500/40" : rec.impact_level === "medium" ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-zinc-500/20 text-zinc-300 border-zinc-500/40"}`}>
+              <Badge className={`text-[10px] ${rec.impact_level === "high" ? "bg-red-500/20 text-red-300 border-red-500/40" : rec.impact_level === "medium" ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-zinc-500/20 text-gray-400 border-zinc-500/40"}`}>
                 {rec.impact_level}
               </Badge>
             )}
             {rec.status && <StatusBadge status={rec.status} />}
           </div>
-          <p className="text-xs text-zinc-400">{rec.description}</p>
+          <p className="text-xs text-white/70">{rec.description}</p>
           {rec.side_effects && <p className="text-xs text-amber-400/80 mt-1">⚠ Side effects: {rec.side_effects}</p>}
         </div>
         {/* Action Buttons — inline next to fix */}
@@ -603,7 +603,7 @@ function FixCard({
               <Save className="w-3 h-3" /> Save & Publish
             </Button>
           )}
-          <Button size="sm" variant="ghost" onClick={onRevert} className="h-7 text-xs text-zinc-500 hover:text-red-400 gap-1">
+          <Button size="sm" variant="ghost" onClick={onRevert} className="h-7 text-xs text-white/60 hover:text-red-400 gap-1">
             <Undo2 className="w-3 h-3" /> Revert
           </Button>
         </div>
@@ -614,13 +614,13 @@ function FixCard({
           {rec.before_preview && (
             <div className="bg-red-900/10 border border-red-900/30 rounded p-2">
               <span className="text-[10px] text-red-400 font-semibold uppercase">Before</span>
-              <p className="text-[10px] text-zinc-400 mt-1 whitespace-pre-wrap">{rec.before_preview}</p>
+              <p className="text-[10px] text-white/70 mt-1 whitespace-pre-wrap">{rec.before_preview}</p>
             </div>
           )}
           {rec.after_preview && (
             <div className="bg-emerald-900/10 border border-emerald-900/30 rounded p-2">
               <span className="text-[10px] text-emerald-400 font-semibold uppercase">After</span>
-              <p className="text-[10px] text-zinc-400 mt-1 whitespace-pre-wrap">{rec.after_preview}</p>
+              <p className="text-[10px] text-white/70 mt-1 whitespace-pre-wrap">{rec.after_preview}</p>
             </div>
           )}
         </div>

@@ -334,7 +334,7 @@ const HubCard = ({ hub, hideFounderLinks }: { hub: HubSection; hideFounderLinks?
         <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
           <Icon className="w-5 h-5 text-gold" />
         </div>
-        <h3 className="text-black text-lg font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+        <h3 className="text-black text-lg font-bold">
           {hub.title}
         </h3>
       </div>
@@ -432,7 +432,6 @@ const Sitemap = () => {
               <motion.h1
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
                 variants={fadeInUp}
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 <span className="text-white">Navigate </span>
                 <span
@@ -448,7 +447,7 @@ const Sitemap = () => {
 
               {/* Subtext */}
               <motion.p
-                className="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto mb-6"
+                className="text-white/70 text-base sm:text-lg max-w-2xl mx-auto mb-6"
                 variants={fadeInUp}
               >
                 Your complete directory to all pages, tools, services, and resources across our platform.
@@ -470,7 +469,7 @@ const Sitemap = () => {
               {/* Last Updated */}
               <motion.p 
                 variants={fadeInUp}
-                className="text-zinc-500 text-xs"
+                className="text-white/60 text-xs"
               >
                 Last Updated: {lastUpdated}
               </motion.p>
@@ -511,7 +510,7 @@ const Sitemap = () => {
               viewport={{ once: true }}
               className="text-center mb-10"
             >
-              <h2 className="text-black text-2xl sm:text-3xl font-bold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-black text-2xl sm:text-3xl font-bold mb-3">
                 Complete <span className="text-gold">Directory</span>
               </h2>
               <p className="text-zinc-600 text-sm sm:text-base max-w-xl mx-auto">
@@ -547,7 +546,7 @@ const Sitemap = () => {
               viewport={{ once: true }}
               className="text-center mb-8"
             >
-              <h2 className="text-black text-xl sm:text-2xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-black text-xl sm:text-2xl font-bold mb-2">
                 Support & <span className="text-gold">Legal</span>
               </h2>
             </motion.div>
@@ -581,7 +580,7 @@ const Sitemap = () => {
               viewport={{ once: true }}
               className="text-center mb-8"
             >
-              <h2 className="text-black text-xl sm:text-2xl font-bold mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-black text-xl sm:text-2xl font-bold mb-2">
                 Get <span className="text-gold">In Touch</span>
               </h2>
               <p className="text-zinc-600 text-sm">Choose your preferred way to connect with us</p>

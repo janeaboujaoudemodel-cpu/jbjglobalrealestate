@@ -149,7 +149,6 @@ const BrokerEducation = () => {
             
             <motion.h1 
               className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight"
-              style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
               Internal Training <span className="text-gold">Library</span>
@@ -198,7 +197,7 @@ const BrokerEducation = () => {
                     <Lock className="w-8 h-8 text-gold" />
                   </div>
                   <div className="text-center sm:text-left flex-1">
-                    <h2 className="text-xl md:text-2xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                    <h2 className="text-xl md:text-2xl font-bold text-black mb-2">
                       Training is <span className="text-gold">Locked</span>
                     </h2>
                     <p className="text-black/60 text-sm mb-0">
@@ -288,7 +287,7 @@ const BrokerEducation = () => {
                 <BookOpen className="w-3 h-3 mr-1" />
                   {loading ? "Loading…" : `${books.length} Books • ${groupedBooks.length} Learning Paths`}
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
                 Step 2: Education <span className="text-gold">Library</span>
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto mb-6">
@@ -440,7 +439,7 @@ const BrokerEducation = () => {
                 <Shield className="w-3 h-3 mr-1" />
                 JBJ Employee Benefits
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">
                 What JBJ Brokers <span className="text-gold">Receive</span>
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto">
@@ -493,7 +492,7 @@ const BrokerEducation = () => {
             variants={fadeInUp}
             className="max-w-3xl mx-auto text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-black mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-3xl md:text-4xl font-bold text-black mb-6">
               Join the JBJ <span className="text-gold">Broker Network</span>
             </h2>
             <p className="text-lg text-black/70 mb-10">

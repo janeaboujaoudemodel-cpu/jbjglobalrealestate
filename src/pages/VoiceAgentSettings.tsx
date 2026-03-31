@@ -52,7 +52,7 @@ const VoiceAgentSettings = () => {
             Voice Agent <span className="text-gold">Configuration</span>
           </h1>
           
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+          <p className="text-lg text-white/70 max-w-2xl mx-auto">
             Configure your AI voice concierge settings, branding, and integrations.
           </p>
         </div>
@@ -71,7 +71,7 @@ const VoiceAgentSettings = () => {
 
           <div className="space-y-6">
             <div>
-              <Label className="text-zinc-300 mb-2 block">Agent Name</Label>
+              <Label className="text-white/85 mb-2 block">Agent Name</Label>
               <Input
                 value={settings.agentName}
                 onChange={(e) => setSettings(s => ({ ...s, agentName: e.target.value }))}
@@ -80,7 +80,7 @@ const VoiceAgentSettings = () => {
             </div>
 
             <div>
-              <Label className="text-zinc-300 mb-2 block">Greeting Message</Label>
+              <Label className="text-white/85 mb-2 block">Greeting Message</Label>
               <Textarea
                 value={settings.greeting}
                 onChange={(e) => setSettings(s => ({ ...s, greeting: e.target.value }))}
@@ -103,7 +103,7 @@ const VoiceAgentSettings = () => {
             <div className="flex items-center justify-between p-4 bg-zinc-800 rounded-lg">
               <div>
                 <h3 className="font-medium text-white">Property Listing Access</h3>
-                <p className="text-sm text-zinc-400">Allow agent to search and recommend properties</p>
+                <p className="text-sm text-white/70">Allow agent to search and recommend properties</p>
               </div>
               <Switch
                 checked={settings.propertyAccessEnabled}
@@ -114,7 +114,7 @@ const VoiceAgentSettings = () => {
             <div className="flex items-center justify-between p-4 bg-zinc-800 rounded-lg">
               <div>
                 <h3 className="font-medium text-white">Document Generation</h3>
-                <p className="text-sm text-zinc-400">Allow agent to trigger document creation</p>
+                <p className="text-sm text-white/70">Allow agent to trigger document creation</p>
               </div>
               <Switch
                 checked={settings.documentGenerationEnabled}
@@ -125,7 +125,7 @@ const VoiceAgentSettings = () => {
             <div className="flex items-center justify-between p-4 bg-zinc-800 rounded-lg">
               <div>
                 <h3 className="font-medium text-white">Call Logging</h3>
-                <p className="text-sm text-zinc-400">Log all voice conversations for review</p>
+                <p className="text-sm text-white/70">Log all voice conversations for review</p>
               </div>
               <Switch
                 checked={settings.callLoggingEnabled}
@@ -142,52 +142,52 @@ const VoiceAgentSettings = () => {
               <CreditCard className="w-5 h-5 text-black" />
             </div>
             <h2 className="text-xl font-bold text-white">Business Card Branding</h2>
-            <span className="text-xs text-zinc-500">Applied to generated documents</span>
+            <span className="text-xs text-white/60">Applied to generated documents</span>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <Label className="text-zinc-300 mb-2 block">Your Name</Label>
+              <Label className="text-white/85 mb-2 block">Your Name</Label>
               <Input
                 value={settings.businessCardName}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardName: e.target.value }))}
                 placeholder="Enter your full name"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400"
               />
             </div>
 
             <div>
-              <Label className="text-zinc-300 mb-2 block">Title</Label>
+              <Label className="text-white/85 mb-2 block">Title</Label>
               <Input
                 value={settings.businessCardTitle}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardTitle: e.target.value }))}
                 placeholder="e.g., Senior Property Consultant"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400"
               />
             </div>
 
             <div>
-              <Label className="text-zinc-300 mb-2 block">Phone</Label>
+              <Label className="text-white/85 mb-2 block">Phone</Label>
               <Input
                 value={settings.businessCardPhone}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardPhone: e.target.value }))}
                 placeholder="+971 XX XXX XXXX"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400"
               />
             </div>
 
             <div>
-              <Label className="text-zinc-300 mb-2 block">Email</Label>
+              <Label className="text-white/85 mb-2 block">Email</Label>
               <Input
                 value={settings.businessCardEmail}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardEmail: e.target.value }))}
                 placeholder="your.email@jbjglobal.com"
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400"
               />
             </div>
 
             <div className="md:col-span-2">
-              <Label className="text-zinc-300 mb-2 block">Company Name</Label>
+              <Label className="text-white/85 mb-2 block">Company Name</Label>
               <Input
                 value={settings.businessCardCompany}
                 onChange={(e) => setSettings(s => ({ ...s, businessCardCompany: e.target.value }))}

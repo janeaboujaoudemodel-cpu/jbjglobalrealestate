@@ -56,7 +56,6 @@ const CommunityGrid = React.forwardRef<HTMLDivElement>((_, ref) => {
             <div className="absolute bottom-0 left-0 right-0 p-4">
               <h3
                 className="text-gold font-semibold text-xl mb-1 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {community.name}
               </h3>

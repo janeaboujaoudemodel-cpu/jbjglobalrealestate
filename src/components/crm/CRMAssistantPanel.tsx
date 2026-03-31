@@ -487,7 +487,7 @@ ${COMPANY_CONTACTS.email}`;
             </div>
             <div>
               <span className="text-lg font-bold text-black">{ASSISTANT_IDENTITY.name}</span>
-              <p className="text-xs text-zinc-500 font-normal">{ASSISTANT_IDENTITY.title}</p>
+              <p className="text-xs text-gray-500 font-normal">{ASSISTANT_IDENTITY.title}</p>
             </div>
           </DialogTitle>
         </DialogHeader>

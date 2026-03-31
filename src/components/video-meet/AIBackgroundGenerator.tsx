@@ -66,14 +66,14 @@ const AIBackgroundGenerator = ({
           <Image className="w-5 h-5 text-gold" />
           Virtual Backgrounds
         </CardTitle>
-        <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-zinc-400 hover:text-white">
+        <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-white/70 hover:text-white">
           <X className="h-4 w-4" />
         </Button>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Preset Backgrounds */}
         <div>
-          <Label className="text-zinc-300 text-sm mb-2 block">Preset Backgrounds</Label>
+          <Label className="text-white/85 text-sm mb-2 block">Preset Backgrounds</Label>
           <div className="grid grid-cols-4 gap-2">
             {PRESET_BACKGROUNDS.map(bg => (
               <button
@@ -87,11 +87,11 @@ const AIBackgroundGenerator = ({
               >
                 {bg.type === 'none' ? (
                   <div className="absolute inset-0 bg-zinc-800 flex items-center justify-center">
-                    <X className="h-4 w-4 text-zinc-400" />
+                    <X className="h-4 w-4 text-white/70" />
                   </div>
                 ) : bg.type === 'blur' ? (
                   <div className="absolute inset-0 bg-gradient-to-br from-zinc-600 to-zinc-800 flex items-center justify-center">
-                    <span className="text-[8px] text-zinc-300">Blur</span>
+                    <span className="text-[8px] text-white/85">Blur</span>
                   </div>
                 ) : (
                   <div 
@@ -115,7 +115,7 @@ const AIBackgroundGenerator = ({
 
         {/* AI Background Generator */}
         <div className="pt-4 border-t border-zinc-700">
-          <Label className="text-zinc-300 text-sm mb-2 flex items-center gap-2">
+          <Label className="text-white/85 text-sm mb-2 flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-gold" />
             AI Background Generator
           </Label>
@@ -147,7 +147,7 @@ const AIBackgroundGenerator = ({
         {/* Generated Backgrounds */}
         {generatedBackgrounds.length > 0 && (
           <div>
-            <Label className="text-zinc-300 text-sm mb-2 block">Your Generated Backgrounds</Label>
+            <Label className="text-white/85 text-sm mb-2 block">Your Generated Backgrounds</Label>
             <div className="grid grid-cols-4 gap-2">
               {generatedBackgrounds.map((bg, index) => (
                 <button
@@ -173,7 +173,7 @@ const AIBackgroundGenerator = ({
           </div>
         )}
 
-        <p className="text-xs text-zinc-500 text-center">
+        <p className="text-xs text-white/60 text-center">
           AI-generated backgrounds require processing time
         </p>
       </CardContent>

@@ -95,7 +95,6 @@ export const GuideHero = ({
           {/* Title */}
           <motion.h1 
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             {title}
@@ -103,7 +102,7 @@ export const GuideHero = ({
           
           {/* Description */}
           <motion.p 
-            className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+            className="text-lg md:text-xl text-white/85 font-light leading-relaxed max-w-3xl mx-auto mb-10"
             variants={fadeInUp}
           >
             {description}

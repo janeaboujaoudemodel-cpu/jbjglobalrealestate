@@ -236,7 +236,7 @@ const EducationHub = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
                 Need Help Choosing <span className="text-gold">What to Read?</span>
               </h2>
-              <p className="text-zinc-400 mb-8 max-w-2xl mx-auto">
+              <p className="text-white/70 mb-8 max-w-2xl mx-auto">
                 Our team can recommend the right resources based on your role, experience level, and goals. Whether you're a first-time buyer or a seasoned investor, we'll point you in the right direction.
               </p>
               <div className="flex flex-wrap justify-center gap-4">

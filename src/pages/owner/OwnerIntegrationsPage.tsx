@@ -57,7 +57,7 @@ const OwnerIntegrationsPage = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-black">Integration Status</h1>
-                <p className="text-zinc-500">Multi-channel integration dashboard</p>
+                <p className="text-gray-500">Multi-channel integration dashboard</p>
               </div>
             </div>
           </div>
@@ -98,26 +98,26 @@ const OwnerIntegrationsPage = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-zinc-500">Status</span>
+                    <span className="text-sm text-gray-500">Status</span>
                     {getStatusBadge(integration.status)}
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-zinc-500">Auth Method</span>
+                    <span className="text-sm text-gray-500">Auth Method</span>
                     <span className="text-sm text-zinc-600">{integration.authMethod || 'Not configured'}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-zinc-500">Last Sync</span>
+                    <span className="text-sm text-gray-500">Last Sync</span>
                     <span className="text-sm text-zinc-600">{integration.lastSync || 'Never'}</span>
                   </div>
                   <div className="pt-3 border-t border-[#B89555]/10">
                     <div className="flex gap-4">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-zinc-500">Can Send:</span>
-                        {integration.canSend ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-zinc-400" />}
+                        <span className="text-xs text-gray-500">Can Send:</span>
+                        {integration.canSend ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-gray-500" />}
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-zinc-500">Can Receive:</span>
-                        {integration.canReceive ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-zinc-400" />}
+                        <span className="text-xs text-gray-500">Can Receive:</span>
+                        {integration.canReceive ? <Check className="w-4 h-4 text-green-600" /> : <X className="w-4 h-4 text-gray-500" />}
                       </div>
                     </div>
                   </div>
@@ -140,15 +140,15 @@ const OwnerIntegrationsPage = () => {
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-100 text-green-700 border-green-200">Connected</Badge>
-                <span className="text-zinc-500">= Fully operational</span>
+                <span className="text-gray-500">= Fully operational</span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-amber-100 text-amber-700 border-amber-200">Draft / Not Active</Badge>
-                <span className="text-zinc-500">= Not yet configured</span>
+                <span className="text-gray-500">= Not yet configured</span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge className="bg-red-100 text-red-700 border-red-200">Error</Badge>
-                <span className="text-zinc-500">= Connection issue</span>
+                <span className="text-gray-500">= Connection issue</span>
               </div>
             </div>
           </div>

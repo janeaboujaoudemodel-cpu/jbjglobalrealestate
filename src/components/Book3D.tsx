@@ -187,7 +187,6 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
                   className="text-gold font-bold tracking-[0.3em] uppercase"
                   style={{ 
                     fontSize: size === "sm" ? "28px" : size === "md" ? "36px" : "44px",
-                    fontFamily: "Poppins, sans-serif",
                     textShadow: "0 2px 8px rgba(168,146,90,0.4)",
                     letterSpacing: "0.2em",
                   }}
@@ -206,7 +205,6 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             {/* Title */}
             <h3 
               className={`text-white font-bold mb-1 ${titleSize} leading-tight`}
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               UAE Real Estate
             </h3>
@@ -228,7 +226,7 @@ const Book3D = ({ size = "md", className = "" }: Book3DProps) => {
             <div className="mt-auto pt-3 md:pt-4 w-full">
               <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-zinc-700/50 to-transparent mb-2" />
               <FounderContent fallback={null}>
-                <p className="text-zinc-500 text-[7px] md:text-[8px] uppercase tracking-[0.2em]">
+                <p className="text-white/60 text-[7px] md:text-[8px] uppercase tracking-[0.2em]">
                   By Founder & CEO Jane Bou Jaoude
                 </p>
               </FounderContent>

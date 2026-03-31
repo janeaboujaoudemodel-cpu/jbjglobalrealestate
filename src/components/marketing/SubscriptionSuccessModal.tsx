@@ -23,7 +23,7 @@ const SubscriptionSuccessModal = ({ isOpen, onClose }: SubscriptionSuccessModalP
             <CheckCircle className="w-10 h-10 text-emerald-500" />
           </div>
           
-          <DialogTitle className="text-2xl font-bold text-foreground" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <DialogTitle className="text-2xl font-bold text-foreground">
             You're In.
           </DialogTitle>
           

@@ -69,7 +69,7 @@ const OwnerSafetyPage = () => {
                 </Badge>
               )}
             </div>
-            <p className="text-sm text-zinc-500">{feature.description}</p>
+            <p className="text-sm text-gray-500">{feature.description}</p>
           </div>
         </div>
         <Switch
@@ -93,7 +93,7 @@ const OwnerSafetyPage = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-black">AI & Automation Safety Panel</h1>
-                <p className="text-zinc-500">Control what AI can and cannot do</p>
+                <p className="text-gray-500">Control what AI can and cannot do</p>
               </div>
             </div>
           </div>
@@ -112,7 +112,7 @@ const OwnerSafetyPage = () => {
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-black">Master Emergency Kill Switch</h2>
-                    <p className="text-zinc-500">
+                    <p className="text-gray-500">
                       {masterKillSwitch 
                         ? 'All AI and automation features are DISABLED' 
                         : 'Instantly disable all AI and automation'}
@@ -236,17 +236,17 @@ const OwnerSafetyPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
               <div className="text-center p-3 rounded-lg bg-[#B89555]/5 border border-[#B89555]/10">
                 <div className="text-2xl font-bold text-black">{features.filter(f => f.enabled).length}</div>
-                <div className="text-zinc-500">Features Enabled</div>
+                <div className="text-gray-500">Features Enabled</div>
               </div>
               <div className="text-center p-3 rounded-lg bg-purple-50 border border-purple-100">
                 <div className="text-2xl font-bold text-purple-700">{features.filter(f => f.requiresApproval).length}</div>
-                <div className="text-zinc-500">Require Approval</div>
+                <div className="text-gray-500">Require Approval</div>
               </div>
               <div className="text-center p-3 rounded-lg bg-[#B89555]/5 border border-[#B89555]/10">
                 <div className={`text-2xl font-bold ${masterKillSwitch ? 'text-red-600' : 'text-green-600'}`}>
                   {masterKillSwitch ? 'ACTIVE' : 'OFF'}
                 </div>
-                <div className="text-zinc-500">Kill Switch</div>
+                <div className="text-gray-500">Kill Switch</div>
               </div>
             </div>
           </div>

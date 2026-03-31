@@ -128,7 +128,6 @@ const DesignBuild = () => {
           <motion.h1 
             className="text-white text-4xl md:text-6xl lg:text-7xl font-bold tracking-wide mb-6"
             variants={fadeInUp}
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Creating{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">
@@ -137,7 +136,7 @@ const DesignBuild = () => {
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            className="text-white/85 text-lg md:text-xl max-w-2xl mx-auto mb-8"
             variants={fadeInUp}
           >
             From concept to completion, our licensed partners deliver architectural excellence, interior sophistication, and premium fit-out solutions.
@@ -172,7 +171,7 @@ const DesignBuild = () => {
               <span className="text-sm font-medium uppercase tracking-wider">Through Our Licensed Partners</span>
             </div>
             <div className="h-4 w-px bg-gold/30 hidden md:block" />
-            <span className="text-zinc-400 text-sm">Architecture • Interior Design • Fit-Out & Renovation</span>
+            <span className="text-white/70 text-sm">Architecture • Interior Design • Fit-Out & Renovation</span>
           </div>
         </div>
       </section>
@@ -189,11 +188,10 @@ const DesignBuild = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">Our Services</span>
             <h2 
               className="text-white text-3xl md:text-4xl font-bold mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Comprehensive Design Solutions
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-white/70 max-w-2xl mx-auto">
               Through our network of licensed partners, access world-class design and construction services
             </p>
           </motion.div>
@@ -235,7 +233,6 @@ const DesignBuild = () => {
                   <CardContent className="p-6">
                     <h3 
                       className="text-black text-2xl font-bold mb-3 group-hover:text-gold transition-colors"
-                      style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {service.title}
                     </h3>
@@ -281,11 +278,10 @@ const DesignBuild = () => {
             </Badge>
             <h2 
               className="text-white text-3xl md:text-4xl font-bold mb-4"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Go Premium <span className="text-gold">On Your Own</span>
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-white/70 max-w-2xl mx-auto">
               Design and measure your space with AI before consulting with our partners
             </p>
           </motion.div>
@@ -348,7 +344,6 @@ const DesignBuild = () => {
                 </Badge>
                 <h2 
                   className="text-black text-2xl md:text-3xl font-bold mb-4"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Ready to Transform <span className="text-gold">Your Space?</span>
                 </h2>

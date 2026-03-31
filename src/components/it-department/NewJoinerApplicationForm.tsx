@@ -289,7 +289,7 @@ const NewJoinerApplicationForm: React.FC<NewJoinerApplicationFormProps> = ({
                 {photoPreview ? (
                   <img src={photoPreview} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
-                  <Camera className="w-12 h-12 text-zinc-500" />
+                  <Camera className="w-12 h-12 text-gray-500" />
                 )}
               </div>
               <label className="absolute bottom-0 right-0 w-10 h-10 bg-gold rounded-full flex items-center justify-center cursor-pointer hover:bg-gold/90 transition-colors">

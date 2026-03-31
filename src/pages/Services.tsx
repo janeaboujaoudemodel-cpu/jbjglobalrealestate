@@ -241,14 +241,13 @@ const Services = () => {
 
           <motion.h1 
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             Explore JBJ Services
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-300 text-base md:text-lg max-w-3xl mx-auto mb-10"
+            className="text-white/85 text-base md:text-lg max-w-3xl mx-auto mb-10"
             variants={fadeInUp}
           >
             A curated set of brokerage-adjacent services designed to simplify your property journey — delivered with premium coordination, clear process, and consistent standards.
@@ -283,7 +282,7 @@ const Services = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Our Service Library
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
                 Select a Service
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto">
@@ -356,7 +355,7 @@ const Services = () => {
             <Card className="jj-card-inner max-w-4xl mx-auto">
               <CardContent className="p-8 text-center">
                 <motion.div variants={fadeInUp}>
-                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl md:text-3xl font-bold mb-4 text-black">
                     Not sure which service you need?
                   </h2>
                   <p className="text-black/70 max-w-xl mx-auto mb-6">
@@ -396,7 +395,7 @@ const Services = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Service Scope
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
                 How Our Services Work
               </h2>
             </motion.div>
@@ -432,13 +431,13 @@ const Services = () => {
                     {/* We do not provide */}
                     <div>
                       <h3 className="text-black font-semibold text-lg mb-4 flex items-center gap-2">
-                        <AlertCircle className="w-5 h-5 text-zinc-500" />
+                        <AlertCircle className="w-5 h-5 text-white/60" />
                         We do not provide
                       </h3>
                       <ul className="space-y-3">
                         {scopeExcludes.map((item, idx) => (
                           <li key={idx} className="flex items-start gap-3 text-black/70">
-                            <span className="text-zinc-400">•</span>
+                            <span className="text-white/70">•</span>
                             <span>{item}</span>
                           </li>
                         ))}
@@ -462,7 +461,7 @@ const Services = () => {
       {/* Footer Disclaimer */}
       <section className="bg-black py-8 border-t border-zinc-800">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-zinc-500 text-sm max-w-3xl mx-auto">
+          <p className="text-white/60 text-sm max-w-3xl mx-auto">
             JBJ Global Real Estate is a licensed real estate brokerage. Advisory support is provided 
             within brokerage scope. Partner services are delivered independently under partner licenses.
           </p>

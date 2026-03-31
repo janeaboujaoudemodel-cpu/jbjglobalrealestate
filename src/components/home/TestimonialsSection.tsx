@@ -71,7 +71,6 @@ const TestimonialsSection = () => {
         <div className="text-center mb-10">
           <h2 
             className="text-2xl md:text-3xl font-bold text-black mb-3"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             {t('testimonials.title', 'What Our Clients Say')}
           </h2>
@@ -117,7 +116,7 @@ const TestimonialsSection = () => {
                   <p className="text-black font-semibold text-base">
                     {currentTestimonial.name}
                   </p>
-                  <p className="text-zinc-500 text-sm">
+                  <p className="text-gray-500 text-sm">
                     {currentTestimonial.area}
                   </p>
                 </div>

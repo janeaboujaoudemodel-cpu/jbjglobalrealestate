@@ -108,7 +108,7 @@ export function BrokerCalendarWidget() {
               Quick Add
             </Button>
           </div>
-          <p className="text-zinc-500 text-sm">{formattedDate}</p>
+          <p className="text-white/60 text-sm">{formattedDate}</p>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Quick Add Form */}
@@ -116,16 +116,16 @@ export function BrokerCalendarWidget() {
             <div className="bg-zinc-800/50 rounded-lg p-4 border border-gold/20 space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <Label className="text-zinc-400 text-xs">Event Title</Label>
+                  <Label className="text-white/70 text-xs">Event Title</Label>
                   <Input
                     placeholder="Meeting title"
                     value={quickEvent.title}
                     onChange={(e) => setQuickEvent({ ...quickEvent, title: e.target.value })}
-                    className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 h-9"
+                    className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400 h-9"
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-zinc-400 text-xs">Time</Label>
+                  <Label className="text-white/70 text-xs">Time</Label>
                   <Input
                     type="time"
                     value={quickEvent.time}
@@ -136,7 +136,7 @@ export function BrokerCalendarWidget() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <Label className="text-zinc-400 text-xs">Type</Label>
+                  <Label className="text-white/70 text-xs">Type</Label>
                   <Select value={quickEvent.type} onValueChange={(v) => setQuickEvent({ ...quickEvent, type: v })}>
                     <SelectTriggerDark className="h-9">
                       <SelectValue />
@@ -150,12 +150,12 @@ export function BrokerCalendarWidget() {
                   </Select>
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-zinc-400 text-xs">Client (Optional)</Label>
+                  <Label className="text-white/70 text-xs">Client (Optional)</Label>
                   <Input
                     placeholder="Client name"
                     value={quickEvent.client}
                     onChange={(e) => setQuickEvent({ ...quickEvent, client: e.target.value })}
-                    className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 h-9"
+                    className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400 h-9"
                   />
                 </div>
               </div>
@@ -172,7 +172,7 @@ export function BrokerCalendarWidget() {
 
           {/* Events List */}
           {events.length === 0 ? (
-            <div className="text-center py-8 text-zinc-500">
+            <div className="text-center py-8 text-white/60">
               <Calendar className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p>No events scheduled for today</p>
             </div>
@@ -190,7 +190,7 @@ export function BrokerCalendarWidget() {
                     </div>
                     {getEventTypeBadge(event.type)}
                   </div>
-                  <div className="flex items-center gap-4 text-xs text-zinc-500">
+                  <div className="flex items-center gap-4 text-xs text-white/60">
                     <div className="flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       {event.time}
@@ -223,7 +223,7 @@ export function BrokerCalendarWidget() {
               <Calendar className="w-5 h-5 text-gold" />
               <div>
                 <p className="text-white font-medium text-sm">Open Full Calendar</p>
-                <p className="text-zinc-500 text-xs">Manage all events, sync with Google Calendar</p>
+                <p className="text-white/60 text-xs">Manage all events, sync with Google Calendar</p>
               </div>
             </div>
             <ChevronRight className="w-5 h-5 text-zinc-600" />

@@ -317,7 +317,7 @@ const RentGuide = () => {
                         {step.title}
                       </h3>
                     </div>
-                    <p className="text-zinc-500 mb-4">{step.description}</p>
+                    <p className="text-gray-500 mb-4">{step.description}</p>
                     <ul className="grid md:grid-cols-2 gap-3">
                       {step.items.map((item, itemIndex) => (
                         <li key={itemIndex} className="flex items-start gap-3">

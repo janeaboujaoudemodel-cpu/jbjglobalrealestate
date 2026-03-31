@@ -134,7 +134,7 @@ const ITDepartment: React.FC = () => {
             <Shield className="w-10 h-10 text-gold" />
           </div>
           <h1 className="text-3xl font-bold text-black mb-4">Access Restricted</h1>
-          <p className="text-zinc-500 mb-8">
+          <p className="text-gray-500 mb-8">
             This area is restricted to IT Department personnel and administrators.
           </p>
           <Button 
@@ -173,7 +173,7 @@ const ITDepartment: React.FC = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-black mb-4">
               Information Technology <span className="text-gold">Hub</span>
             </h1>
-            <p className="text-xl text-zinc-500 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-500 max-w-2xl mx-auto">
               Manage new joiner onboarding, CRM credentials, and IT operations
             </p>
           </motion.div>
@@ -187,7 +187,7 @@ const ITDepartment: React.FC = () => {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-zinc-500 text-sm">Pending Applications</p>
+                  <p className="text-gray-500 text-sm">Pending Applications</p>
                   <p className="text-3xl font-bold text-orange-600">{stats.pendingApplications}</p>
                 </div>
                 <div className="w-12 h-12 bg-orange-500/10 rounded-xl flex items-center justify-center">
@@ -201,7 +201,7 @@ const ITDepartment: React.FC = () => {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-zinc-500 text-sm">Open IT Tasks</p>
+                  <p className="text-gray-500 text-sm">Open IT Tasks</p>
                   <p className="text-3xl font-bold text-blue-600">{stats.openTasks}</p>
                 </div>
                 <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
@@ -215,7 +215,7 @@ const ITDepartment: React.FC = () => {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-zinc-500 text-sm">Completed Today</p>
+                  <p className="text-gray-500 text-sm">Completed Today</p>
                   <p className="text-3xl font-bold text-green-600">{stats.completedToday}</p>
                 </div>
                 <div className="w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center">
@@ -229,7 +229,7 @@ const ITDepartment: React.FC = () => {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-zinc-500 text-sm">Active Employees</p>
+                  <p className="text-gray-500 text-sm">Active Employees</p>
                   <p className="text-3xl font-bold text-gold">{stats.activeEmployees}</p>
                 </div>
                 <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center">
@@ -267,7 +267,7 @@ const ITDepartment: React.FC = () => {
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-white border-2 border-gold/30 text-black w-64 placeholder:text-zinc-400"
+                  className="pl-10 bg-white border-2 border-gold/30 text-black w-64 placeholder:text-gray-400"
                 />
               </div>
               <Button

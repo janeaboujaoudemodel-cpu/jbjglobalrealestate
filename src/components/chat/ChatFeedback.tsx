@@ -112,7 +112,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
 
         <button
           onClick={onSkip}
-          className="text-zinc-500 text-sm hover:text-gold transition-colors"
+          className="text-gray-500 text-sm hover:text-gold transition-colors"
         >
           <T>Skip feedback</T>
         </button>
@@ -146,7 +146,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
               className={`w-8 h-8 ${
                 star <= (hoveredRating || rating)
                   ? 'text-gold fill-gold'
-                  : 'text-zinc-300'
+                  : 'text-gray-400'
               }`}
             />
           </button>
@@ -159,7 +159,7 @@ const ChatFeedback = ({ onSubmitFeedback, onSkip }: ChatFeedbackProps) => {
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Share your thoughts with us... (optional)"
-          className="bg-white border-2 border-gold/40 text-black placeholder:text-zinc-400 resize-none h-24"
+          className="bg-white border-2 border-gold/40 text-black placeholder:text-gray-400 resize-none h-24"
         />
       </div>
 

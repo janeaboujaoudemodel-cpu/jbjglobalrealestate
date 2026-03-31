@@ -76,7 +76,6 @@ class AppErrorBoundary extends React.Component<
             alignItems: "center",
             justifyContent: "center",
             padding: "2rem",
-            fontFamily: "'Poppins', sans-serif",
           }}
         >
           <div

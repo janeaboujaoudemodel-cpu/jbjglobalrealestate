@@ -157,7 +157,7 @@ const AITools = () => {
               AI Tools & Calculators
             </h1>
             
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Clarity-first tools that support decision-making through structured inputs, transparent outputs, and consistent formatting.
             </p>
             

@@ -339,7 +339,7 @@ jbj.ae
               </span>
             </h1>
             
-            <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8">
+            <p className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto mb-8">
               Verify your property size with AI precision. Upload photos room by room — 
               get accurate measurements in seconds. <span className="text-teal-400 font-semibold">100% Free.</span>
             </p>
@@ -349,17 +349,17 @@ jbj.ae
               <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
                 <CheckCircle2 className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Verify Developer Claims</p>
-                <p className="text-zinc-500 text-sm">Check if the property matches the stated size before you buy</p>
+                <p className="text-white/60 text-sm">Check if the property matches the stated size before you buy</p>
               </div>
               <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
                 <AlertCircle className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Check Rental Sizes</p>
-                <p className="text-zinc-500 text-sm">Verify apartment sizes before signing a rental agreement</p>
+                <p className="text-white/60 text-sm">Verify apartment sizes before signing a rental agreement</p>
               </div>
               <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl p-4">
                 <Sparkles className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-white font-medium">Secondary Market Check</p>
-                <p className="text-zinc-500 text-sm">Verify size claims before viewing a resale property</p>
+                <p className="text-white/60 text-sm">Verify size claims before viewing a resale property</p>
               </div>
             </div>
           </motion.div>
@@ -376,7 +376,7 @@ jbj.ae
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
                   step >= s 
                     ? "bg-teal-500 text-white" 
-                    : "bg-zinc-800 text-zinc-500"
+                    : "bg-zinc-800 text-white/60"
                 }`}>
                   {step > s ? <CheckCircle2 className="w-5 h-5" /> : s}
                 </div>
@@ -413,7 +413,7 @@ jbj.ae
                         className={`p-4 rounded-xl border transition-all ${
                           propertyType === type.id
                             ? "border-teal-500 bg-teal-500/20 text-teal-300"
-                            : "border-zinc-700 bg-zinc-800/50 text-zinc-400 hover:border-zinc-600"
+                            : "border-zinc-700 bg-zinc-800/50 text-white/70 hover:border-zinc-600"
                         }`}
                       >
                         <type.icon className="w-6 h-6 mx-auto mb-2" />
@@ -448,7 +448,7 @@ jbj.ae
                         className={`px-4 py-2 rounded-lg border transition-all ${
                           unitPreference === unit.id
                             ? "border-teal-500 bg-teal-500/20 text-teal-300"
-                            : "border-zinc-700 bg-zinc-800/50 text-zinc-400 hover:border-zinc-600"
+                            : "border-zinc-700 bg-zinc-800/50 text-white/70 hover:border-zinc-600"
                         }`}
                       >
                         {unit.label}
@@ -487,26 +487,26 @@ jbj.ae
               <CardContent className="space-y-6">
                 <div className="bg-teal-500/10 border border-teal-500/30 rounded-xl p-6">
                   <h3 className="text-teal-300 font-semibold text-lg mb-4">📱 Room-by-Room Guide</h3>
-                  <div className="space-y-4 text-zinc-300">
+                  <div className="space-y-4 text-white/85">
                     <div className="flex items-start gap-3">
                       <span className="w-8 h-8 bg-teal-500/30 rounded-full flex items-center justify-center text-teal-300 font-bold flex-shrink-0">1</span>
                       <div>
                         <p className="font-medium text-white">Select your rooms</p>
-                        <p className="text-sm text-zinc-400">We'll suggest rooms based on your property type. Add custom rooms if needed.</p>
+                        <p className="text-sm text-white/70">We'll suggest rooms based on your property type. Add custom rooms if needed.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="w-8 h-8 bg-teal-500/30 rounded-full flex items-center justify-center text-teal-300 font-bold flex-shrink-0">2</span>
                       <div>
                         <p className="font-medium text-white">Upload for each room</p>
-                        <p className="text-sm text-zinc-400">Choose to upload <strong>photos</strong> (2-3 per room) OR a <strong>video walkthrough</strong> of each specific room.</p>
+                        <p className="text-sm text-white/70">Choose to upload <strong>photos</strong> (2-3 per room) OR a <strong>video walkthrough</strong> of each specific room.</p>
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="w-8 h-8 bg-teal-500/30 rounded-full flex items-center justify-center text-teal-300 font-bold flex-shrink-0">3</span>
                       <div>
                         <p className="font-medium text-white">Get accurate measurements</p>
-                        <p className="text-sm text-zinc-400">AI analyzes each room separately for precise individual and total area calculations.</p>
+                        <p className="text-sm text-white/70">AI analyzes each room separately for precise individual and total area calculations.</p>
                       </div>
                     </div>
                   </div>
@@ -517,7 +517,7 @@ jbj.ae
                     <AlertCircle className="w-5 h-5" />
                     Important Tips
                   </p>
-                  <ul className="text-zinc-400 text-sm mt-2 space-y-1">
+                  <ul className="text-white/70 text-sm mt-2 space-y-1">
                     <li>• When uploading for "Kitchen", only upload kitchen photos/video</li>
                     <li>• Include doors and windows in shots for scale reference</li>
                     <li>• For best accuracy, capture all corners of each room</li>
@@ -529,7 +529,7 @@ jbj.ae
                   <Button 
                     onClick={() => setStep(1)}
                     variant="outline"
-                    className="border-zinc-700 text-zinc-300"
+                    className="border-zinc-700 text-white/85"
                   >
                     Back
                   </Button>
@@ -587,7 +587,7 @@ jbj.ae
                           <span className="text-sm">{room.files.length} file(s) added</span>
                         </div>
                       ) : (
-                        <p className="text-zinc-500 text-sm">No media uploaded</p>
+                        <p className="text-white/60 text-sm">No media uploaded</p>
                       )}
                     </div>
                   ))}
@@ -600,8 +600,8 @@ jbj.ae
                     }}
                     className="p-4 rounded-xl border-2 border-dashed border-zinc-700 hover:border-teal-500/50 bg-zinc-800/30 hover:bg-zinc-800/50 transition-all flex flex-col items-center justify-center gap-2 min-h-[100px]"
                   >
-                    <Plus className="w-6 h-6 text-zinc-500" />
-                    <span className="text-zinc-400 text-sm">Add Custom Room</span>
+                    <Plus className="w-6 h-6 text-white/60" />
+                    <span className="text-white/70 text-sm">Add Custom Room</span>
                   </button>
                 </div>
 
@@ -609,7 +609,7 @@ jbj.ae
                   <Button 
                     onClick={() => setStep(2)}
                     variant="outline"
-                    className="border-zinc-700 text-zinc-300"
+                    className="border-zinc-700 text-white/85"
                   >
                     Back
                   </Button>
@@ -663,7 +663,7 @@ jbj.ae
                           {room.isComplete ? (
                             <CheckCircle2 className="w-5 h-5 text-teal-400" />
                           ) : (
-                            <Camera className="w-5 h-5 text-zinc-500" />
+                            <Camera className="w-5 h-5 text-white/60" />
                           )}
                           <h4 className="text-white font-medium">{room.name}</h4>
                         </div>
@@ -675,7 +675,7 @@ jbj.ae
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                               room.mediaType === "photo"
                                 ? "bg-teal-500 text-white"
-                                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                                : "bg-zinc-800 text-white/70 hover:bg-zinc-700"
                             }`}
                           >
                             <Camera className="w-3 h-3 inline mr-1" />
@@ -686,7 +686,7 @@ jbj.ae
                             className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                               room.mediaType === "video"
                                 ? "bg-teal-500 text-white"
-                                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                                : "bg-zinc-800 text-white/70 hover:bg-zinc-700"
                             }`}
                           >
                             <Video className="w-3 h-3 inline mr-1" />
@@ -713,13 +713,13 @@ jbj.ae
                           >
                             {room.mediaType === "photo" ? (
                               <>
-                                <Camera className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-                                <p className="text-zinc-400 text-sm">Click to upload 2-3 photos of <strong>{room.name}</strong></p>
+                                <Camera className="w-8 h-8 text-white/60 mx-auto mb-2" />
+                                <p className="text-white/70 text-sm">Click to upload 2-3 photos of <strong>{room.name}</strong></p>
                               </>
                             ) : (
                               <>
-                                <Video className="w-8 h-8 text-zinc-500 mx-auto mb-2" />
-                                <p className="text-zinc-400 text-sm">Click to upload video walkthrough of <strong>{room.name}</strong></p>
+                                <Video className="w-8 h-8 text-white/60 mx-auto mb-2" />
+                                <p className="text-white/70 text-sm">Click to upload video walkthrough of <strong>{room.name}</strong></p>
                               </>
                             )}
                           </label>
@@ -733,7 +733,7 @@ jbj.ae
                                   ) : (
                                     <Video className="w-4 h-4 text-teal-400" />
                                   )}
-                                  <span className="text-zinc-300 text-sm truncate max-w-[120px]">{file.name}</span>
+                                  <span className="text-white/85 text-sm truncate max-w-[120px]">{file.name}</span>
                                   <button
                                     onClick={() => removeFileFromRoom(room.id, i)}
                                     className="w-4 h-4 bg-red-500/20 rounded-full flex items-center justify-center text-red-400 hover:bg-red-500/40"
@@ -764,7 +764,7 @@ jbj.ae
                       <p className="text-teal-300 font-medium">AI is analyzing each room...</p>
                     </div>
                     <Progress value={progress} className="h-2" />
-                    <p className="text-zinc-500 text-sm mt-2">{progress}% complete</p>
+                    <p className="text-white/60 text-sm mt-2">{progress}% complete</p>
                   </div>
                 )}
 
@@ -772,7 +772,7 @@ jbj.ae
                   <Button 
                     onClick={() => setStep(3)}
                     variant="outline"
-                    className="border-zinc-700 text-zinc-300"
+                    className="border-zinc-700 text-white/85"
                     disabled={isProcessing}
                   >
                     Back
@@ -824,11 +824,11 @@ jbj.ae
               <CardContent className="pt-6 space-y-6">
                 {/* Total Area */}
                 <div className="bg-gradient-to-r from-teal-500/20 to-emerald-500/20 rounded-xl p-6 text-center">
-                  <p className="text-zinc-400 mb-2">Total Property Area</p>
+                  <p className="text-white/70 mb-2">Total Property Area</p>
                   <p className="text-4xl md:text-5xl font-bold text-white">
                     {result.totalArea.toLocaleString()} <span className="text-teal-400">sq ft</span>
                   </p>
-                  <p className="text-xl text-zinc-400 mt-2">
+                  <p className="text-xl text-white/70 mt-2">
                     ({convertArea(result.totalArea, "sqm").toLocaleString()} sq m)
                   </p>
                 </div>
@@ -839,8 +839,8 @@ jbj.ae
                     <div className="flex items-start gap-3">
                       <Info className="w-5 h-5 text-teal-400 mt-0.5 flex-shrink-0" />
                       <div>
-                        <p className="text-zinc-300 font-medium mb-1">AI Analysis Notes</p>
-                        <p className="text-zinc-400 text-sm">{result.notes}</p>
+                        <p className="text-white/85 font-medium mb-1">AI Analysis Notes</p>
+                        <p className="text-white/70 text-sm">{result.notes}</p>
                       </div>
                     </div>
                   </div>
@@ -853,16 +853,16 @@ jbj.ae
                     {result.rooms.map((room, i) => (
                       <div key={i} className="bg-zinc-800/50 rounded-lg p-4">
                         <div className="flex justify-between items-center">
-                          <span className="text-zinc-300">{room.name}</span>
+                          <span className="text-white/85">{room.name}</span>
                           <div className="text-right">
                             <span className="text-white font-medium">{room.area} sq ft</span>
-                            <span className="text-zinc-500 text-sm ml-2">
+                            <span className="text-white/60 text-sm ml-2">
                               ({convertArea(room.area, "sqm")} sqm)
                             </span>
                           </div>
                         </div>
                         {room.dimensions && (
-                          <p className="text-zinc-500 text-xs mt-1">
+                          <p className="text-white/60 text-xs mt-1">
                             Estimated: {room.dimensions}
                           </p>
                         )}
@@ -875,7 +875,7 @@ jbj.ae
                 {!user && (
                   <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4 text-center">
                     <p className="text-yellow-300 font-medium">Want to save this measurement?</p>
-                    <p className="text-zinc-400 text-sm mt-1">Log in to save your projects and access them anytime.</p>
+                    <p className="text-white/70 text-sm mt-1">Log in to save your projects and access them anytime.</p>
                     <Link to="/auth">
                       <Button className="mt-3 bg-yellow-500 hover:bg-yellow-600 text-black">
                         Log In to Save
@@ -903,7 +903,7 @@ jbj.ae
                   </Button>
                 </div>
 
-                <p className="text-center text-zinc-500 text-sm">
+                <p className="text-center text-white/60 text-sm">
                   Your measurement data will be automatically transferred to the Interior Design tool.
                 </p>
               </CardContent>

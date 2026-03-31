@@ -57,7 +57,7 @@ const DesignModeSelector = ({ selectedMode, onSelectMode }: DesignModeSelectorPr
                 value={mode.id}
                 className={`
                   flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg
-                  text-zinc-400 border border-transparent
+                  text-white/70 border border-transparent
                   hover:text-white hover:bg-zinc-800/50
                   transition-all duration-200
                   ${mode.activeClasses}

@@ -106,7 +106,6 @@ const MarketAreaDetail = () => {
 
           <motion.h1 
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-4"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             {area.area}
@@ -137,7 +136,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <BarChart3 className="w-6 h-6" />
                 </div>
-                <p className="text-zinc-500 text-sm mb-1">Price Index</p>
+                <p className="text-white/60 text-sm mb-1">Price Index</p>
                 <p className="text-black text-3xl font-bold">{area.priceIndex}</p>
               </CardContent>
             </Card>
@@ -146,7 +145,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Home className="w-6 h-6" />
                 </div>
-                <p className="text-zinc-500 text-sm mb-1">Rental Index</p>
+                <p className="text-white/60 text-sm mb-1">Rental Index</p>
                 <p className="text-black text-3xl font-bold">{area.rentalIndex}</p>
               </CardContent>
             </Card>
@@ -155,7 +154,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Users className="w-6 h-6" />
                 </div>
-                <p className="text-zinc-500 text-sm mb-1">Demand Score</p>
+                <p className="text-white/60 text-sm mb-1">Demand Score</p>
                 <p className="text-black text-3xl font-bold">{area.demandScore}%</p>
               </CardContent>
             </Card>
@@ -164,7 +163,7 @@ const MarketAreaDetail = () => {
                 <div className="w-12 h-12 jj-icon-box-active rounded-xl mx-auto mb-3">
                   <Building2 className="w-6 h-6" />
                 </div>
-                <p className="text-zinc-500 text-sm mb-1">Supply Score</p>
+                <p className="text-white/60 text-sm mb-1">Supply Score</p>
                 <p className="text-black text-3xl font-bold">{area.supplyScore}%</p>
               </CardContent>
             </Card>
@@ -203,7 +202,7 @@ const MarketAreaDetail = () => {
       {/* Key Highlights - 3-layer system */}
       <section className="py-12 bg-black">
         <div className="jj-layer-2">
-          <h2 className="text-black text-2xl font-bold mb-8 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-black text-2xl font-bold mb-8 text-center">
             <span className="text-gold">Market</span> Highlights
           </h2>
           <div className="max-w-2xl mx-auto space-y-4">
@@ -244,7 +243,7 @@ const MarketAreaDetail = () => {
       {/* Internal Links - 3-layer system */}
       <section className="py-12 bg-black">
         <div className="jj-layer-2">
-          <h3 className="text-black text-xl font-bold mb-6 text-center" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h3 className="text-black text-xl font-bold mb-6 text-center">
             <span className="text-gold">Continue</span> Exploring
           </h3>
           <div className="grid md:grid-cols-3 gap-4 max-w-3xl mx-auto">

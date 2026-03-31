@@ -60,7 +60,7 @@ const LeadJourneyTracker = ({
       case "form_submission": return "text-green-400";
       case "click": return "text-amber-400";
       case "inquiry": return "text-purple-400";
-      default: return "text-zinc-400";
+      default: return "text-white/70";
     }
   };
 
@@ -77,7 +77,7 @@ const LeadJourneyTracker = ({
         <div className="grid grid-cols-2 gap-3">
           {/* Entry Time */}
           <div className="p-3 bg-zinc-800/50 rounded-lg">
-            <div className="flex items-center gap-2 text-zinc-400 text-xs mb-1">
+            <div className="flex items-center gap-2 text-white/70 text-xs mb-1">
               <Clock className="w-3 h-3" />
               Entry Time
             </div>
@@ -88,7 +88,7 @@ const LeadJourneyTracker = ({
 
           {/* Time Spent */}
           <div className="p-3 bg-zinc-800/50 rounded-lg">
-            <div className="flex items-center gap-2 text-zinc-400 text-xs mb-1">
+            <div className="flex items-center gap-2 text-white/70 text-xs mb-1">
               <Timer className="w-3 h-3" />
               Time on Site
             </div>
@@ -99,7 +99,7 @@ const LeadJourneyTracker = ({
 
           {/* Pages Visited */}
           <div className="p-3 bg-zinc-800/50 rounded-lg">
-            <div className="flex items-center gap-2 text-zinc-400 text-xs mb-1">
+            <div className="flex items-center gap-2 text-white/70 text-xs mb-1">
               <Eye className="w-3 h-3" />
               Pages Visited
             </div>
@@ -110,7 +110,7 @@ const LeadJourneyTracker = ({
 
           {/* Source */}
           <div className="p-3 bg-zinc-800/50 rounded-lg">
-            <div className="flex items-center gap-2 text-zinc-400 text-xs mb-1">
+            <div className="flex items-center gap-2 text-white/70 text-xs mb-1">
               <Globe className="w-3 h-3" />
               Source
             </div>
@@ -133,19 +133,19 @@ const LeadJourneyTracker = ({
         {/* Pages Visited List */}
         {pagesVisited.length > 0 && (
           <div>
-            <p className="text-xs text-zinc-500 mb-2">Pages Viewed</p>
+            <p className="text-xs text-white/60 mb-2">Pages Viewed</p>
             <div className="flex flex-wrap gap-1">
               {pagesVisited.slice(0, 6).map((page, i) => (
                 <Badge 
                   key={i} 
                   variant="outline" 
-                  className="text-xs border-zinc-700 text-zinc-400"
+                  className="text-xs border-zinc-700 text-white/70"
                 >
                   {page === "/" ? "Home" : page.replace("/", "")}
                 </Badge>
               ))}
               {pagesVisited.length > 6 && (
-                <Badge variant="outline" className="text-xs border-zinc-700 text-zinc-400">
+                <Badge variant="outline" className="text-xs border-zinc-700 text-white/70">
                   +{pagesVisited.length - 6} more
                 </Badge>
               )}
@@ -156,7 +156,7 @@ const LeadJourneyTracker = ({
         {/* Recent Events Timeline */}
         {events.length > 0 && (
           <div>
-            <p className="text-xs text-zinc-500 mb-2">Recent Activity</p>
+            <p className="text-xs text-white/60 mb-2">Recent Activity</p>
             <div className="space-y-2 max-h-40 overflow-y-auto">
               {events.slice(0, 5).map((event) => (
                 <div 
@@ -166,7 +166,7 @@ const LeadJourneyTracker = ({
                   <span className={getEventColor(event.event_type)}>
                     {getEventIcon(event.event_type)}
                   </span>
-                  <span className="text-zinc-400 flex-1 truncate">
+                  <span className="text-white/70 flex-1 truncate">
                     {event.event_type.replace(/_/g, ' ')} - {event.page_path}
                   </span>
                   <span className="text-zinc-600">

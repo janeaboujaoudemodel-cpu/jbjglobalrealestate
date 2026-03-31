@@ -25,7 +25,7 @@ const toolCategories = [
       { name: "Daily Agenda", href: "/owner/agenda", icon: Calendar, color: "text-blue-400" },
       { name: "Unified Inbox", href: "/owner/inbox", icon: MessageSquare, color: "text-emerald-400" },
       { name: "Message Templates", href: "/owner/templates", icon: FileText, color: "text-purple-400" },
-      { name: "Communication Settings", href: "/owner/settings/communication", icon: Wrench, color: "text-zinc-400" },
+      { name: "Communication Settings", href: "/owner/settings/communication", icon: Wrench, color: "text-white/70" },
       { name: "Feature Registry", href: "/owner/features", icon: Layers, color: "text-pink-400" },
     ]
   },
@@ -112,7 +112,7 @@ const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
           <Wrench className="w-5 h-5 text-gold" />
           <h3 className="font-semibold text-white">CRM Navigation</h3>
         </div>
-        <Button variant="ghost" size="icon" onClick={onClose} className="text-zinc-400 hover:text-white">
+        <Button variant="ghost" size="icon" onClick={onClose} className="text-white/70 hover:text-white">
           <X className="w-5 h-5" />
         </Button>
       </div>
@@ -122,7 +122,7 @@ const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
         <div className="p-4 space-y-6">
           {toolCategories.map((category) => (
             <div key={category.name}>
-              <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-3">
+              <h4 className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3">
                 {category.name}
               </h4>
               <div className="space-y-1">
@@ -135,7 +135,7 @@ const CRMToolsSidebar = ({ isOpen, onClose }: CRMToolsSidebarProps) => {
                       "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all group",
                       isActive(tool.href) 
                         ? "bg-gold/20 text-gold border-l-2 border-gold" 
-                        : "text-zinc-300 hover:text-white hover:bg-zinc-800/50"
+                        : "text-white/85 hover:text-white hover:bg-zinc-800/50"
                     )}
                   >
                     <tool.icon className={cn("w-4 h-4", isActive(tool.href) ? "text-gold" : tool.color)} />

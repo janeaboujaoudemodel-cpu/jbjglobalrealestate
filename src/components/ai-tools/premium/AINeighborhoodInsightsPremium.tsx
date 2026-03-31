@@ -77,7 +77,7 @@ const AINeighborhoodInsightsPremium = () => {
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-300 flex items-center gap-2">
+                  <Label className="text-white/85 flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-teal-400" />
                     Location / Neighborhood *
                   </Label>
@@ -90,7 +90,7 @@ const AINeighborhoodInsightsPremium = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Specific Interests (optional)</Label>
+                  <Label className="text-white/85">Specific Interests (optional)</Label>
                   <Textarea
                     placeholder="Schools, healthcare facilities, nightlife, beach access, family-friendly..."
                     value={interests}
@@ -125,17 +125,17 @@ const AINeighborhoodInsightsPremium = () => {
         <div className="grid grid-cols-3 gap-3">
             <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
               <School className="h-5 w-5 mx-auto mb-2 text-teal-400" />
-              <p className="text-xs text-zinc-500">Education</p>
+              <p className="text-xs text-white/60">Education</p>
               <p className="text-sm font-semibold text-white">Schools</p>
             </Card>
             <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
               <Hospital className="h-5 w-5 mx-auto mb-2 text-teal-400" />
-              <p className="text-xs text-zinc-500">Healthcare</p>
+              <p className="text-xs text-white/60">Healthcare</p>
               <p className="text-sm font-semibold text-white">Facilities</p>
             </Card>
             <Card className="bg-teal-900/20 border-teal-500/30 p-4 text-center">
               <Train className="h-5 w-5 mx-auto mb-2 text-teal-400" />
-              <p className="text-xs text-zinc-500">Transport</p>
+              <p className="text-xs text-white/60">Transport</p>
               <p className="text-sm font-semibold text-white">Access</p>
             </Card>
         </div>
@@ -159,7 +159,7 @@ const AINeighborhoodInsightsPremium = () => {
                     <Card className="bg-teal-500/10 border-teal-500/30 p-6">
                       <div className="flex items-center justify-between mb-4">
                         <div>
-                          <p className="text-sm text-zinc-400">Neighborhood Score</p>
+                          <p className="text-sm text-white/70">Neighborhood Score</p>
                           <p className="text-4xl font-bold text-teal-400">{response.score}/10</p>
                         </div>
                         <div className="flex items-center gap-1">
@@ -193,7 +193,7 @@ const AINeighborhoodInsightsPremium = () => {
                         >
                           <Card className="bg-teal-900/20 border-teal-500/30 p-4">
                             <Icon className="h-5 w-5 mb-2 text-teal-400" />
-                            <p className="text-xs text-zinc-400 capitalize">{key}</p>
+                            <p className="text-xs text-white/70 capitalize">{key}</p>
                             <p className="text-lg font-bold text-white">{value}</p>
                           </Card>
                         </motion.div>
@@ -231,12 +231,12 @@ const AINeighborhoodInsightsPremium = () => {
                     <div className="flex items-center gap-2">
                       <Building className={`h-5 w-5 ${
                         response.investmentPotential === 'high' ? 'text-emerald-400' :
-                        response.investmentPotential === 'medium' ? 'text-amber-400' : 'text-zinc-400'
+                        response.investmentPotential === 'medium' ? 'text-amber-400' : 'text-white/70'
                       }`} />
                       <span className="font-semibold text-white">Investment Potential: </span>
                       <span className={`capitalize ${
                         response.investmentPotential === 'high' ? 'text-emerald-400' :
-                        response.investmentPotential === 'medium' ? 'text-amber-400' : 'text-zinc-400'
+                        response.investmentPotential === 'medium' ? 'text-amber-400' : 'text-white/70'
                       }`}>{response.investmentPotential}</span>
                     </div>
                   </Card>
@@ -251,7 +251,7 @@ const AINeighborhoodInsightsPremium = () => {
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                       </Button>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
+                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[300px] overflow-y-auto">
                       {response.insights}
                     </div>
                   </CardContent>
@@ -267,8 +267,8 @@ const AINeighborhoodInsightsPremium = () => {
               <div className="p-6 rounded-full bg-teal-500/10 mb-4">
                 <MapPin className="h-12 w-12 text-teal-400/50" />
               </div>
-              <h3 className="text-lg font-semibold text-zinc-400">Ready to Explore</h3>
-              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+              <h3 className="text-lg font-semibold text-white/70">Ready to Explore</h3>
+              <p className="text-sm text-white/60 mt-2 max-w-sm">
                 Enter a location to get AI-powered neighborhood insights with livability scores
               </p>
             </motion.div>

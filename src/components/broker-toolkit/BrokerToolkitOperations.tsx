@@ -87,7 +87,7 @@ export function BrokerToolkitOperations() {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Operations <span className="text-indigo-300">Support</span>
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-white/70 max-w-2xl mx-auto">
               Dedicated operations team to handle contracts, compliance, and administrative tasks so you can focus on closing deals.
             </p>
           </motion.div>

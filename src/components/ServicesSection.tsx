@@ -313,11 +313,10 @@ const ServicesSection = () => {
           </span>
           <h2 
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             How We <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Help</span>
           </h2>
-          <p className="text-zinc-300 max-w-2xl mx-auto text-lg leading-relaxed">
+          <p className="text-white/85 max-w-2xl mx-auto text-lg leading-relaxed">
             Expert brokerage services and trusted partner introductions for your property journey
           </p>
         </div>
@@ -340,12 +339,11 @@ const ServicesSection = () => {
                   
                   <h3 
                     className="text-lg font-bold text-white mb-2 group-hover:text-gold transition-colors duration-300"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     {item.title}
                   </h3>
                   
-                  <p className="text-zinc-400 text-sm leading-relaxed group-hover:text-zinc-300 transition-colors">
+                  <p className="text-white/70 text-sm leading-relaxed group-hover:text-white/85 transition-colors">
                     {item.description}
                   </p>
                   
@@ -366,11 +364,10 @@ const ServicesSection = () => {
           </span>
           <h2 
             className="text-3xl md:text-4xl font-bold text-white mb-4"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             Partner <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Introductions</span>
           </h2>
-          <p className="text-zinc-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-white/85 max-w-2xl mx-auto leading-relaxed">
             We connect you with independent, licensed professionals for comprehensive support
           </p>
         </div>
@@ -396,12 +393,11 @@ const ServicesSection = () => {
 
                   <h3 
                     className="text-xl font-bold text-white mb-3 group-hover:text-gold transition-colors duration-300"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     {service.title}
                   </h3>
                   
-                  <p className="text-zinc-400 text-sm leading-relaxed mb-4 group-hover:text-zinc-300 transition-colors">
+                  <p className="text-white/70 text-sm leading-relaxed mb-4 group-hover:text-white/85 transition-colors">
                     {service.description}
                   </p>
 

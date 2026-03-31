@@ -49,7 +49,7 @@ const AllToolsSuite = () => {
             {/* Back link */}
             <Link
               to="/toolkit"
-              className="inline-flex items-center gap-2 text-zinc-400 hover:text-gold transition-colors mb-6"
+              className="inline-flex items-center gap-2 text-white/70 hover:text-gold transition-colors mb-6"
             >
               <ArrowLeft className="w-4 h-4" />
               <span className="text-sm">Back to Toolkit</span>
@@ -65,7 +65,7 @@ const AllToolsSuite = () => {
                   <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
                     All <span className="bg-gradient-to-r from-gold via-amber-400 to-gold bg-clip-text text-transparent">Tools Suite</span>
                   </h1>
-                  <p className="text-zinc-400 text-sm mt-1">
+                  <p className="text-white/70 text-sm mt-1">
                     Access all AI and productivity tools in one place
                   </p>
                 </div>
@@ -113,7 +113,7 @@ const AllToolsSuite = () => {
             <h2 className={`text-xl font-bold ${currentColors.active.split(' ')[0]}`}>
               {currentCategory.label}
             </h2>
-            <span className="text-zinc-500 text-sm">
+            <span className="text-white/60 text-sm">
               ({currentCategory.tools.length} tools)
             </span>
           </div>
@@ -162,7 +162,7 @@ const AllToolsSuite = () => {
                     )}>
                       {tool.name}
                     </h3>
-                    <p className="text-zinc-400 text-sm leading-relaxed line-clamp-2">
+                    <p className="text-white/70 text-sm leading-relaxed line-clamp-2">
                       {tool.description}
                     </p>
                     
@@ -209,14 +209,14 @@ const AllToolsSuite = () => {
                         : "bg-zinc-900/50 border border-zinc-800 hover:border-zinc-700"
                     )}
                   >
-                    <Icon className={cn("w-6 h-6", isActive ? colors.active.split(' ')[0] : "text-zinc-400")} />
+                    <Icon className={cn("w-6 h-6", isActive ? colors.active.split(' ')[0] : "text-white/70")} />
                     <span className={cn(
                       "text-xs text-center font-medium",
-                      isActive ? colors.active.split(' ')[0] : "text-zinc-400"
+                      isActive ? colors.active.split(' ')[0] : "text-white/70"
                     )}>
                       {category.label}
                     </span>
-                    <span className="text-xs text-zinc-500">{category.tools.length} tools</span>
+                    <span className="text-xs text-white/60">{category.tools.length} tools</span>
                   </button>
                 );
               })}

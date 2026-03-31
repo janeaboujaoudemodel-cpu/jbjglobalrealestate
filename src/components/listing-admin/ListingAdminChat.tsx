@@ -709,7 +709,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <Building2 className="w-12 h-12 text-zinc-300" />
+              <Building2 className="w-12 h-12 text-gray-400" />
             </div>
           )}
           {/* Status Badge */}
@@ -829,7 +829,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
                 <span key={i} className="text-[9px] px-1.5 py-0.5 bg-zinc-100 text-zinc-600 rounded-full">{a}</span>
               ))}
               {listing.amenities.length > 5 && (
-                <span className="text-[9px] px-1.5 py-0.5 bg-zinc-100 text-zinc-500 rounded-full">+{listing.amenities.length - 5}</span>
+                <span className="text-[9px] px-1.5 py-0.5 bg-zinc-100 text-gray-500 rounded-full">+{listing.amenities.length - 5}</span>
               )}
             </div>
           )}
@@ -901,7 +901,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
           <h3 className="font-semibold text-black text-sm">{adminPersona?.name || "Sarah Mitchell"}</h3>
           <p className="text-xs text-zinc-600">{adminPersona?.role || "Senior Listing Administrator"}</p>
         </div>
-        <Button variant="ghost" size="sm" onClick={handleClearChat} className="h-8 w-8 p-0 text-zinc-500 hover:text-red-500 hover:bg-red-50" title="Clear chat">
+        <Button variant="ghost" size="sm" onClick={handleClearChat} className="h-8 w-8 p-0 text-gray-500 hover:text-red-500 hover:bg-red-50" title="Clear chat">
           <Trash2 className="w-4 h-4" />
         </Button>
         <div className="flex items-center gap-1.5">
@@ -1012,7 +1012,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
 
                 <button
                   onClick={async () => { await navigator.clipboard.writeText(message.content); toast.success("Copied"); }}
-                  className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-400 hover:text-zinc-700 transition-colors opacity-0 group-hover:opacity-100 ${message.role === "user" ? "self-end mr-1" : "self-start ml-1"}`}
+                  className={`flex items-center gap-1 mt-1 text-[10px] text-gray-500 hover:text-zinc-700 transition-colors opacity-0 group-hover:opacity-100 ${message.role === "user" ? "self-end mr-1" : "self-start ml-1"}`}
                 >
                   <Copy className="w-3 h-3" /><span>Copy</span>
                 </button>
@@ -1038,7 +1038,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
                 variant="ghost"
                 size="sm"
                 onClick={handleClearChat}
-                className="h-7 text-[11px] text-zinc-400 hover:text-red-500 hover:bg-red-50/80 gap-1.5 rounded-full px-4 border border-transparent hover:border-red-200 transition-all"
+                className="h-7 text-[11px] text-gray-500 hover:text-red-500 hover:bg-red-50/80 gap-1.5 rounded-full px-4 border border-transparent hover:border-red-200 transition-all"
               >
                 <Trash2 className="w-3 h-3" />
                 Clear Chat
@@ -1083,7 +1083,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               <div key={i} className="flex gap-2">
                 <Input value={urlVal} onChange={(e) => updateUrlInput(i, e.target.value)} placeholder={`https://example.com/project-${i + 1}`} className="flex-1 bg-white border-zinc-300 text-black text-sm h-9" />
                 {urlInputs.length > 1 && (
-                  <Button variant="ghost" size="sm" onClick={() => removeUrlInput(i)} className="h-9 w-9 p-0 text-zinc-400 hover:text-red-500">
+                  <Button variant="ghost" size="sm" onClick={() => removeUrlInput(i)} className="h-9 w-9 p-0 text-gray-500 hover:text-red-500">
                     <X className="w-4 h-4" />
                   </Button>
                 )}
@@ -1140,7 +1140,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               </span>
             </div>
             <div className="flex gap-2">
-              <Button variant="ghost" size="sm" onClick={() => setUploadedFiles([])} className="h-6 text-[10px] text-zinc-500 hover:text-red-500 px-2 cursor-pointer">Clear all</Button>
+              <Button variant="ghost" size="sm" onClick={() => setUploadedFiles([])} className="h-6 text-[10px] text-gray-500 hover:text-red-500 px-2 cursor-pointer">Clear all</Button>
               <Button variant="ghost" size="sm" onClick={openMultiFilePicker} className="h-6 text-[10px] text-gold px-2 cursor-pointer"><Plus className="w-3 h-3 mr-1" /> Add more</Button>
             </div>
           </div>
@@ -1149,7 +1149,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
               <div key={idx} className="flex items-center gap-1 px-2 py-1 bg-white border border-zinc-200 rounded text-xs text-foreground group/file">
                 {file.type.includes("image") ? <ImageIcon className="w-3 h-3 text-blue-500" /> : <FileText className="w-3 h-3 text-red-500" />}
                 <span className="truncate max-w-[100px]">{file.name}</span>
-                <button onClick={() => removeQueuedFile(idx)} className="ml-0.5 text-zinc-400 hover:text-red-500 cursor-pointer"><X className="w-3 h-3" /></button>
+                <button onClick={() => removeQueuedFile(idx)} className="ml-0.5 text-gray-500 hover:text-red-500 cursor-pointer"><X className="w-3 h-3" /></button>
               </div>
             ))}
           </div>
@@ -1182,7 +1182,7 @@ const ListingAdminChat = ({ onBulkUpload, onCreateListing }: ListingAdminChatPro
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendMessage(); } }}
             placeholder="Paste a URL, ask Sarah anything, or upload files..."
-            className="flex-1 bg-zinc-50 border-zinc-300 text-black placeholder:text-zinc-400 h-10"
+            className="flex-1 bg-zinc-50 border-zinc-300 text-black placeholder:text-gray-400 h-10"
             disabled={isLoading}
           />
           <Button onClick={() => handleSendMessage()} disabled={isLoading || !input.trim()} className="h-10 w-10 p-0 bg-gradient-to-r from-[#D4A853] to-[#C19A3E] text-white hover:opacity-90 disabled:opacity-50">

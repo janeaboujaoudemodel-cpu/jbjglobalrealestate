@@ -334,7 +334,7 @@ const AIDocumentGeneratorPremium = () => {
               className={`px-3 py-1.5 rounded-full text-xs border transition-all ${
                 value === opt
                   ? "bg-lime-500/20 border-lime-500 text-lime-400"
-                  : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-500"
+                  : "bg-zinc-800 border-zinc-700 text-white/70 hover:border-zinc-500"
               }`}
             >
               {opt}
@@ -370,11 +370,11 @@ const AIDocumentGeneratorPremium = () => {
                     <div className="flex items-center gap-2">
                       <MessageSquare className="h-4 w-4 text-lime-400" />
                       <span className="text-sm font-semibold text-white">SMS Version</span>
-                      <Badge className="bg-zinc-700 text-zinc-300 border-0 text-xs">
+                      <Badge className="bg-zinc-700 text-white/85 border-0 text-xs">
                         {response.smsVersion.length} / 160 chars
                       </Badge>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={() => copyToClipboard(response.smsVersion, "sms")} className="text-zinc-400">
+                    <Button variant="ghost" size="sm" onClick={() => copyToClipboard(response.smsVersion, "sms")} className="text-white/70">
                       {copied === "sms" ? <Check className="h-4 w-4 text-lime-400" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
@@ -391,11 +391,11 @@ const AIDocumentGeneratorPremium = () => {
                     <div className="flex items-center gap-2">
                       <MessageSquare className="h-4 w-4 text-green-400" />
                       <span className="text-sm font-semibold text-white">WhatsApp Version</span>
-                      <Badge className="bg-zinc-700 text-zinc-300 border-0 text-xs">
+                      <Badge className="bg-zinc-700 text-white/85 border-0 text-xs">
                         {response.whatsappVersion.length} / 320 chars
                       </Badge>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={() => copyToClipboard(response.whatsappVersion, "wa")} className="text-zinc-400">
+                    <Button variant="ghost" size="sm" onClick={() => copyToClipboard(response.whatsappVersion, "wa")} className="text-white/70">
                       {copied === "wa" ? <Check className="h-4 w-4 text-lime-400" /> : <Copy className="h-4 w-4" />}
                     </Button>
                   </div>
@@ -412,10 +412,10 @@ const AIDocumentGeneratorPremium = () => {
         {(documentType === "email-follow-up" || documentType === "email-introduction") && response.subject && (
           <Card className="bg-lime-500/10 border-lime-500/30">
             <CardContent className="p-4">
-              <p className="text-xs text-zinc-400 mb-1 uppercase tracking-wide">Subject Line</p>
+              <p className="text-xs text-white/70 mb-1 uppercase tracking-wide">Subject Line</p>
               <div className="flex items-center justify-between">
                 <p className="font-semibold text-white">{response.subject}</p>
-                <Button variant="ghost" size="sm" onClick={() => copyToClipboard(response.subject, "subject")} className="text-zinc-400">
+                <Button variant="ghost" size="sm" onClick={() => copyToClipboard(response.subject, "subject")} className="text-white/70">
                   {copied === "subject" ? <Check className="h-4 w-4 text-lime-400" /> : <Copy className="h-4 w-4" />}
                 </Button>
               </div>
@@ -429,7 +429,7 @@ const AIDocumentGeneratorPremium = () => {
             {response.hook && (
               <Card className="bg-lime-500/10 border-lime-500/30">
                 <CardContent className="p-4">
-                  <p className="text-xs text-zinc-400 mb-1 uppercase tracking-wide">Opening Hook</p>
+                  <p className="text-xs text-white/70 mb-1 uppercase tracking-wide">Opening Hook</p>
                   <p className="text-white font-medium italic">"{response.hook}"</p>
                 </CardContent>
               </Card>
@@ -441,10 +441,10 @@ const AIDocumentGeneratorPremium = () => {
         {documentType === "listing" && response.headline && (
           <Card className="bg-lime-500/10 border-lime-500/30">
             <CardContent className="p-4">
-              <p className="text-xs text-zinc-400 mb-1 uppercase tracking-wide">Listing Headline</p>
+              <p className="text-xs text-white/70 mb-1 uppercase tracking-wide">Listing Headline</p>
               <div className="flex items-center justify-between">
                 <p className="font-bold text-white text-lg">{response.headline}</p>
-                <Button variant="ghost" size="sm" onClick={() => copyToClipboard(response.headline, "headline")} className="text-zinc-400">
+                <Button variant="ghost" size="sm" onClick={() => copyToClipboard(response.headline, "headline")} className="text-white/70">
                   {copied === "headline" ? <Check className="h-4 w-4 text-lime-400" /> : <Copy className="h-4 w-4" />}
                 </Button>
               </div>
@@ -479,7 +479,7 @@ const AIDocumentGeneratorPremium = () => {
                   </Button>
                 </div>
               </div>
-              <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[450px] overflow-y-auto leading-relaxed">
+              <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[450px] overflow-y-auto leading-relaxed">
                 {response.document}
               </div>
             </CardContent>
@@ -495,7 +495,7 @@ const AIDocumentGeneratorPremium = () => {
                   <Hash className="h-4 w-4 text-lime-400" />
                   <span className="text-sm font-semibold text-white">Hashtags</span>
                 </div>
-                <Button variant="ghost" size="sm" onClick={() => copyToClipboard(response.hashtags.join(" "), "hashtags")} className="text-zinc-400">
+                <Button variant="ghost" size="sm" onClick={() => copyToClipboard(response.hashtags.join(" "), "hashtags")} className="text-white/70">
                   {copied === "hashtags" ? <Check className="h-4 w-4 text-lime-400" /> : <Copy className="h-4 w-4" />}
                 </Button>
               </div>
@@ -517,7 +517,7 @@ const AIDocumentGeneratorPremium = () => {
               <h4 className="text-sm font-semibold text-white mb-2">Key Features</h4>
               <ul className="grid grid-cols-2 gap-1.5">
                 {response.keyFeatures.map((feat: string, i: number) => (
-                  <li key={i} className="flex items-center gap-2 text-xs text-zinc-300">
+                  <li key={i} className="flex items-center gap-2 text-xs text-white/85">
                     <span className="w-1.5 h-1.5 rounded-full bg-lime-400 flex-shrink-0" />
                     {feat}
                   </li>
@@ -534,7 +534,7 @@ const AIDocumentGeneratorPremium = () => {
               <h4 className="text-sm font-semibold text-white mb-2">Next Steps</h4>
               <ol className="space-y-1">
                 {response.nextSteps.map((step: string, i: number) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-zinc-300">
+                  <li key={i} className="flex items-start gap-2 text-xs text-white/85">
                     <span className="text-lime-400 font-bold mt-0.5">{i + 1}.</span>
                     {step}
                   </li>
@@ -586,7 +586,7 @@ const AIDocumentGeneratorPremium = () => {
 
             {/* Quick-pick type grid */}
             <div className="space-y-2">
-              <Label className="text-zinc-300">Document Type *</Label>
+              <Label className="text-white/85">Document Type *</Label>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {QUICK_TYPES.map((typeKey) => {
                   const cfg = DOCUMENT_TYPE_CONFIGS[typeKey];
@@ -598,7 +598,7 @@ const AIDocumentGeneratorPremium = () => {
                       className={`p-3 rounded-lg border text-left transition-all ${
                         documentType === typeKey
                           ? "bg-lime-500/20 border-lime-500/60 text-white"
-                          : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-600"
+                          : "bg-zinc-800 border-zinc-700 text-white/70 hover:border-zinc-600"
                       }`}
                     >
                       <TypeIcon className="h-4 w-4 mb-1" />
@@ -632,7 +632,7 @@ const AIDocumentGeneratorPremium = () => {
                 <Icon className="h-5 w-5 text-lime-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm font-semibold text-lime-300">{config.label}</p>
-                  <p className="text-xs text-zinc-400">{config.description}</p>
+                  <p className="text-xs text-white/70">{config.description}</p>
                   <p className="text-xs text-lime-500/70 mt-0.5">Output: {config.outputHint}</p>
                 </div>
               </motion.div>
@@ -641,7 +641,7 @@ const AIDocumentGeneratorPremium = () => {
             {/* Tone selector (hidden for SMS) */}
             {config.showTone && (
               <div className="space-y-2">
-                <Label className="text-zinc-300">Tone</Label>
+                <Label className="text-white/85">Tone</Label>
                 <Select value={tone} onValueChange={setTone}>
                   <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50">
                     <SelectValue />
@@ -650,7 +650,7 @@ const AIDocumentGeneratorPremium = () => {
                     {TONES.map((t) => (
                       <SelectItemDark key={t.value} value={t.value}>
                         <span>{t.label}</span>
-                        <span className="text-xs text-zinc-500 ml-2">{t.desc}</span>
+                        <span className="text-xs text-white/60 ml-2">{t.desc}</span>
                       </SelectItemDark>
                     ))}
                   </SelectContentDark>
@@ -672,7 +672,7 @@ const AIDocumentGeneratorPremium = () => {
                     key={field.key}
                     className={`space-y-1.5 ${field.type === "textarea" ? "md:col-span-2" : ""}`}
                   >
-                    <Label className="text-zinc-300 text-xs">{field.label}</Label>
+                    <Label className="text-white/85 text-xs">{field.label}</Label>
                     {renderField(field)}
                   </div>
                 ))}
@@ -703,22 +703,22 @@ const AIDocumentGeneratorPremium = () => {
         <Collapsible open={brandAssetsOpen} onOpenChange={setBrandAssetsOpen}>
           <CollapsibleTrigger asChild>
             <button className="w-full flex items-center justify-between p-4 rounded-lg bg-zinc-800/50 border border-zinc-700 hover:border-lime-500/30 transition-all">
-              <div className="flex items-center gap-2 text-zinc-300">
+              <div className="flex items-center gap-2 text-white/85">
                 <Package className="h-4 w-4 text-lime-400" />
                 <span className="text-sm font-medium">Brand Assets</span>
                 {selectedAsset && (
                   <Badge className="bg-lime-500/20 text-lime-400 text-[10px]">1 selected</Badge>
                 )}
               </div>
-              <ChevronDown className={`h-4 w-4 text-zinc-500 transition-transform ${brandAssetsOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`h-4 w-4 text-white/60 transition-transform ${brandAssetsOpen ? 'rotate-180' : ''}`} />
             </button>
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-3">
             <div className="rounded-lg bg-zinc-800/30 border border-zinc-700/50 p-4 space-y-3">
-              <p className="text-xs text-zinc-500">Select a saved logo, stamp, or signature to include in your document.</p>
+              <p className="text-xs text-white/60">Select a saved logo, stamp, or signature to include in your document.</p>
               {loadingAssets ? (
                 <div className="flex justify-center py-6">
-                  <Loader2 size={18} className="animate-spin text-zinc-500" />
+                  <Loader2 size={18} className="animate-spin text-white/60" />
                 </div>
               ) : brandAssets.length === 0 ? (
                 <p className="text-xs text-zinc-600 text-center py-4">No brand assets saved yet.</p>
@@ -740,10 +740,10 @@ const AIDocumentGeneratorPremium = () => {
                         ) : asset.file_url || asset.thumbnail_url ? (
                           <img src={asset.file_url || asset.thumbnail_url} alt={asset.name} className="max-h-[40px] object-contain" />
                         ) : (
-                          <Package size={16} className="text-zinc-400" />
+                          <Package size={16} className="text-white/70" />
                         )}
                       </div>
-                      <p className="text-[8px] text-zinc-400 truncate">{asset.name}</p>
+                      <p className="text-[8px] text-white/70 truncate">{asset.name}</p>
                     </button>
                   ))}
                 </div>
@@ -765,8 +765,8 @@ const AIDocumentGeneratorPremium = () => {
               <div className="p-6 rounded-full bg-lime-500/10 mb-4">
                 <FilePlus className="h-12 w-12 text-lime-400/50" />
               </div>
-              <h3 className="text-lg font-semibold text-zinc-400">Ready to Create</h3>
-              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+              <h3 className="text-lg font-semibold text-white/70">Ready to Create</h3>
+              <p className="text-sm text-white/60 mt-2 max-w-sm">
                 Select a document type, fill in the smart fields, and generate professional content instantly
               </p>
             </motion.div>

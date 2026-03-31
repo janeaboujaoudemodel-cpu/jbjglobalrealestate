@@ -206,7 +206,7 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
             SECURITY VIOLATION DETECTED
           </h1>
           
-          <div className="text-zinc-300 text-sm space-y-4 text-left mb-6">
+          <div className="text-white/85 text-sm space-y-4 text-left mb-6">
             <p>
               <strong>Unauthorized access, inspection, extraction, duplication, mirroring, or synchronization</strong> of this website's content, listings, data, design, UI, or code is <strong>strictly prohibited</strong>.
             </p>
@@ -220,15 +220,15 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
                 <Scale className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-semibold text-red-400 mb-2">UAE CYBERCRIME LAW NOTICE</p>
-                  <p className="text-xs text-zinc-400">
+                  <p className="text-xs text-white/70">
                     This incident may constitute a violation of <strong>UAE Federal Decree-Law No. 34 of 2021</strong> (Cybercrime Law), including but not limited to:
                   </p>
-                  <ul className="text-xs text-zinc-400 mt-2 space-y-1 list-disc list-inside">
+                  <ul className="text-xs text-white/70 mt-2 space-y-1 list-disc list-inside">
                     <li>Article 4: Unauthorized access to electronic systems</li>
                     <li>Article 6: Illegal acquisition of electronic data</li>
                     <li>Article 44: Intellectual property infringement</li>
                   </ul>
-                  <p className="text-xs text-zinc-400 mt-2">
+                  <p className="text-xs text-white/70 mt-2">
                     Penalties may include <strong>imprisonment and fines up to AED 3,000,000</strong>.
                   </p>
                 </div>
@@ -244,11 +244,11 @@ export function SecurityShield({ children }: { children: React.ReactNode }) {
             </p>
             
             <div className="bg-zinc-800 rounded-lg p-4 mt-4 border border-zinc-700">
-              <p className="text-xs text-zinc-400 flex items-center gap-2 mb-2">
+              <p className="text-xs text-white/70 flex items-center gap-2 mb-2">
                 <Lock className="w-4 h-4" />
                 <strong>Recorded Evidence:</strong>
               </p>
-              <ul className="text-xs text-zinc-500 space-y-1">
+              <ul className="text-xs text-white/60 space-y-1">
                 <li>• IP Address & Geolocation: Captured</li>
                 <li>• Device Fingerprint: Captured</li>
                 <li>• Timestamp: {violation?.timestamp.toISOString()}</li>

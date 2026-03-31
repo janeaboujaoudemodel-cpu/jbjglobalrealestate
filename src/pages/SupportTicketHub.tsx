@@ -179,7 +179,7 @@ const SupportTicketHub = () => {
                   <Ticket className="w-7 h-7" />
                   Ticket Support Hub
                 </h1>
-                <p className="text-zinc-400 text-sm mt-1">
+                <p className="text-white/70 text-sm mt-1">
                   Manage and respond to customer support tickets
                 </p>
               </div>
@@ -197,7 +197,7 @@ const SupportTicketHub = () => {
           {/* Stats */}
           <div className="grid grid-cols-4 lg:grid-cols-5 gap-4 mb-6">
             <div className="bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 rounded-xl p-4 border border-gold/30 shadow-[0_0_20px_rgba(200,167,102,0.1)]">
-              <p className="text-zinc-300 text-sm font-medium">Total Tickets</p>
+              <p className="text-white/85 text-sm font-medium">Total Tickets</p>
               <p className="text-3xl font-bold text-white">{ticketCounts.total}</p>
             </div>
             <div className="bg-gradient-to-br from-yellow-900/30 to-yellow-950/50 rounded-xl p-4 border border-yellow-500/30 shadow-[0_0_20px_rgba(234,179,8,0.1)]">
@@ -233,7 +233,7 @@ const SupportTicketHub = () => {
                 value={filters.search}
                 onChange={(e) => handleSearchChange(e.target.value)}
                 placeholder="Search by ticket #, email, name, or subject..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg bg-zinc-800 border border-gold/30 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
+                className="w-full h-10 pl-10 pr-4 rounded-lg bg-zinc-800 border border-gold/30 text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold transition-all"
               />
             </div>
 
@@ -299,7 +299,7 @@ const SupportTicketHub = () => {
                   <SelectItem value="low">
                     <span className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-zinc-500" />
-                      <span className="text-zinc-400">Low</span>
+                      <span className="text-white/70">Low</span>
                     </span>
                   </SelectItem>
                 </SelectContent>
@@ -367,7 +367,7 @@ const SupportTicketHub = () => {
                 <div className="p-12 text-center flex-1 flex flex-col items-center justify-center min-h-[400px]">
                   <AlertCircle className="w-12 h-12 text-red-400/50 mx-auto mb-3" />
                   <p className="text-red-400 font-medium">Failed to load tickets</p>
-                  <p className="text-zinc-500 text-sm mt-1">
+                  <p className="text-white/60 text-sm mt-1">
                     {error instanceof Error ? error.message : "Please try again"}
                   </p>
                   <Button
@@ -452,7 +452,7 @@ const SupportTicketHub = () => {
                                 <p className="text-white font-medium text-xs truncate max-w-[130px]">
                                   {ticket.full_name}
                                 </p>
-                                <p className="text-[10px] text-zinc-400 truncate max-w-[130px]">
+                                <p className="text-[10px] text-white/70 truncate max-w-[130px]">
                                   {ticket.email}
                                 </p>
                               </div>
@@ -461,7 +461,7 @@ const SupportTicketHub = () => {
                               <p className="text-white text-xs truncate">{ticket.subject}</p>
                             </TableCell>
                             <TableCell className="px-2 hidden xl:table-cell">
-                              <span className="text-zinc-300 text-xs truncate block max-w-[100px]">
+                              <span className="text-white/85 text-xs truncate block max-w-[100px]">
                                 {ticket.service_category}
                               </span>
                             </TableCell>
@@ -483,7 +483,7 @@ const SupportTicketHub = () => {
                                 {status.label}
                               </Badge>
                             </TableCell>
-                            <TableCell className="text-zinc-300 text-[11px] px-2 whitespace-nowrap">
+                            <TableCell className="text-white/85 text-[11px] px-2 whitespace-nowrap">
                               {format(new Date(ticket.created_at), "MMM d, h:mm a")}
                             </TableCell>
                           </TableRow>
@@ -495,8 +495,8 @@ const SupportTicketHub = () => {
               ) : (
                 <div className="p-12 text-center flex-1 flex flex-col items-center justify-center min-h-[400px]">
                   <Ticket className="w-12 h-12 text-gold/30 mx-auto mb-3" />
-                  <p className="text-zinc-400 font-medium">No tickets found</p>
-                  <p className="text-zinc-500 text-sm mt-1">
+                  <p className="text-white/70 font-medium">No tickets found</p>
+                  <p className="text-white/60 text-sm mt-1">
                     Try adjusting your filters or check back later
                   </p>
                 </div>
@@ -519,7 +519,7 @@ const SupportTicketHub = () => {
         <AlertDialogContent className="bg-zinc-900 border-gold/30">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-white">Delete {selectedTicketIds.size} Ticket{selectedTicketIds.size > 1 ? 's' : ''}?</AlertDialogTitle>
-            <AlertDialogDescription className="text-zinc-400">
+            <AlertDialogDescription className="text-white/70">
               This action cannot be undone. All selected tickets and their messages will be permanently deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>

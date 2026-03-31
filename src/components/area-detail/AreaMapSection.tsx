@@ -145,7 +145,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
       <div className="mx-1 sm:mx-2 md:mx-3 lg:mx-4">
         <div className="flex items-center gap-3 mb-8">
           <MapIcon className="w-6 h-6 text-gold" />
-          <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-2xl md:text-3xl font-bold text-black">
             {t('map.mapOf')} {areaName}
           </h2>
         </div>
@@ -205,7 +205,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
                         </Link>
                       </div>
                       {project.developer_name && (
-                        <p className="text-[11px] text-zinc-500">{t('map.by')} {project.developer_name}</p>
+                        <p className="text-[11px] text-gray-500">{t('map.by')} {project.developer_name}</p>
                       )}
                       {project.price_from && (
                         <p className="text-xs font-semibold text-amber-700 mt-1">

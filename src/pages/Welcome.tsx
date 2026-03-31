@@ -116,7 +116,7 @@ export default function Welcome() {
           <div className="flex justify-center mb-6">
             <JJLogoImage variant="light" size="md" />
           </div>
-          <h1 className="text-3xl font-bold text-black mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <h1 className="text-3xl font-bold text-black mb-2">
             Welcome to <span className="text-gold">JBJ Global</span>
           </h1>
           <p className="text-zinc-600 text-sm">
@@ -160,7 +160,7 @@ export default function Welcome() {
                       </h3>
                       {isSelected && <CheckCircle2 className="w-4 h-4 text-gold" />}
                     </div>
-                    <p className="text-xs text-zinc-500 mt-0.5">{cat.description}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{cat.description}</p>
                   </div>
                 </div>
                 {/* Features */}
@@ -193,10 +193,10 @@ export default function Welcome() {
           )}
         </Button>
 
-        <p className="text-center text-zinc-400 text-xs mt-6">
+        <p className="text-center text-gray-500 text-xs mt-6">
           You can change your category anytime from your profile settings.
         </p>
-        <p className="text-center text-zinc-300 text-xs mt-2">
+        <p className="text-center text-gray-400 text-xs mt-2">
           © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
         </p>
       </div>

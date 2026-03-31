@@ -77,7 +77,7 @@ function PricePerSqftChart({ text, stats }: { text: string; stats: any }) {
         </ResponsiveContainer>
       </div>
 
-      <div className="flex items-center gap-3 text-xs text-zinc-500 mb-3">
+      <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
         <span className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: '#C8A766' }} /> Historical</span>
         <span className="flex items-center gap-1"><div className="w-3 h-3 rounded border-2 border-dashed" style={{ borderColor: '#C8A766', backgroundColor: '#C8A76630' }} /> Projected</span>
       </div>
@@ -339,7 +339,7 @@ function DeveloperLandscapeCard({ text, stats }: { text: string; stats: any }) {
             <div className="flex-1 min-w-0">
               <p className="text-black font-semibold text-sm truncate">{dev.name}</p>
               {dev.projects && (
-                <p className="text-zinc-500 text-xs mt-0.5 truncate">{dev.projects}</p>
+                <p className="text-gray-500 text-xs mt-0.5 truncate">{dev.projects}</p>
               )}
             </div>
             <ArrowUpRight className="w-3.5 h-3.5 text-gold/50 flex-shrink-0 mt-1" />
@@ -472,7 +472,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <Brain className="w-6 h-6 text-gold" />
-          <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-2xl md:text-3xl font-bold text-black">
             JBJ AI Area Intelligence
           </h2>
         </div>
@@ -516,7 +516,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
           <div className="text-center py-8">
             {hasTimedOut ? (
               <div className="space-y-4">
-                <p className="text-zinc-500 text-sm">Analysis is taking longer than expected.</p>
+                <p className="text-gray-500 text-sm">Analysis is taking longer than expected.</p>
                 <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry Analysis
@@ -525,7 +525,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             ) : (
               <>
                 <Loader2 className="w-8 h-8 text-gold animate-spin mx-auto mb-3" />
-                <p className="text-zinc-500 text-sm">Analyzing {areaName}...</p>
+                <p className="text-gray-500 text-sm">Analyzing {areaName}...</p>
               </>
             )}
           </div>
@@ -543,7 +543,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                       </div>
                       <div>
                         <h3 className="font-bold text-black text-lg">Area Overview</h3>
-                        <span className="text-zinc-400 text-xs">{areaName} Community Profile</span>
+                        <span className="text-gray-500 text-xs">{areaName} Community Profile</span>
                       </div>
                     </div>
                     <p className="text-zinc-700 text-sm leading-relaxed mb-5">{cleanMarkdown(sections.overview)}</p>
@@ -554,28 +554,28 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <Home className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-black">{stats.totalProjects}</div>
-                          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Projects</div>
+                          <div className="text-[10px] text-gray-500 uppercase tracking-wider">Projects</div>
                         </div>
                       )}
                       {hasStats && stats.developers?.length > 0 && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <Landmark className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-black">{stats.developers.length}</div>
-                          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Developers</div>
+                          <div className="text-[10px] text-gray-500 uppercase tracking-wider">Developers</div>
                         </div>
                       )}
                       {hasStats && stats.pricePerSqft && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <BarChart3 className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-black">{stats.pricePerSqft.toLocaleString()}</div>
-                          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">AED/sqft</div>
+                          <div className="text-[10px] text-gray-500 uppercase tracking-wider">AED/sqft</div>
                         </div>
                       )}
                       {hasStats && stats.avgPrice && (
                         <div className="bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-xl p-3 border border-gold/15 text-center">
                           <TrendingUp className="w-4 h-4 text-gold mx-auto mb-1" />
                           <div className="text-lg font-bold text-black">{(stats.avgPrice / 1000000).toFixed(1)}M</div>
-                          <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Avg Price</div>
+                          <div className="text-[10px] text-gray-500 uppercase tracking-wider">Avg Price</div>
                         </div>
                       )}
                     </div>
@@ -585,7 +585,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   {hasStats && stats.statuses && Object.keys(stats.statuses).length > 0 && (
                     <div className="border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white px-6 py-3">
                       <div className="flex items-center gap-4 flex-wrap">
-                        <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold">Status Mix</span>
+                        <span className="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Status Mix</span>
                         {Object.entries(stats.statuses).slice(0, 4).map(([status, count]) => (
                           <div key={status} className="flex items-center gap-1.5">
                             <div className={`w-2 h-2 rounded-full ${
@@ -641,7 +641,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
                   
                   <div className="text-gold/70 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
                   {sections?.rating && (
-                    <p className="text-zinc-400 text-xs leading-relaxed max-w-[200px] relative z-10">
+                    <p className="text-gray-500 text-xs leading-relaxed max-w-[200px] relative z-10">
                       {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}
                     </p>
                   )}
@@ -705,7 +705,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-zinc-500 text-xs pt-2 flex-wrap">
+            <div className="flex items-center gap-2 text-gray-500 text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
               <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

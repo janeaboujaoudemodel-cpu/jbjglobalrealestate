@@ -256,11 +256,11 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                 <TrendingUp className="w-5 h-5 text-gold" />
                 Task Progress Overview
               </h3>
-              <p className="text-sm text-zinc-500">Synced with CRM • Your productivity dashboard</p>
+              <p className="text-sm text-gray-500">Synced with CRM • Your productivity dashboard</p>
             </div>
             <div className="text-right">
               <p className="text-4xl font-bold text-gold">{completionRate}%</p>
-              <p className="text-xs text-zinc-500">{stats.completed} of {stats.total} tasks completed</p>
+              <p className="text-xs text-gray-500">{stats.completed} of {stats.total} tasks completed</p>
             </div>
           </div>
           <Progress value={completionRate} className="h-3 bg-gold/20" />
@@ -272,28 +272,28 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
               className="text-center p-3 rounded-lg bg-gold/5 border-2 border-gold/20 hover:border-gold/40 hover:shadow-[0_0_15px_rgba(200,167,102,0.2)] transition-all cursor-pointer"
             >
               <p className="text-2xl font-bold text-gold">{stats.total}</p>
-              <p className="text-xs text-zinc-500">🧭 Active</p>
+              <p className="text-xs text-gray-500">🧭 Active</p>
             </button>
             <button 
               onClick={() => handleCardClick('completed')}
               className="text-center p-3 rounded-lg bg-green-50 border-2 border-green-200 hover:border-green-400 hover:shadow-[0_0_15px_rgba(34,197,94,0.2)] transition-all cursor-pointer"
             >
               <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
-              <p className="text-xs text-zinc-500">✅ Finished</p>
+              <p className="text-xs text-gray-500">✅ Finished</p>
             </button>
             <button 
               onClick={() => handleCardClick('pending')}
               className="text-center p-3 rounded-lg bg-amber-50 border-2 border-amber-200 hover:border-amber-400 hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] transition-all cursor-pointer"
             >
               <p className="text-2xl font-bold text-amber-600">{stats.pending}</p>
-              <p className="text-xs text-zinc-500">⏳ Pending</p>
+              <p className="text-xs text-gray-500">⏳ Pending</p>
             </button>
             <button 
               onClick={() => handleCardClick('approval')}
               className="text-center p-3 rounded-lg bg-orange-50 border-2 border-orange-200 hover:border-orange-400 hover:shadow-[0_0_15px_rgba(249,115,22,0.2)] transition-all cursor-pointer"
             >
               <p className="text-2xl font-bold text-orange-600">{stats.awaiting}</p>
-              <p className="text-xs text-zinc-500">⚠️ Approval</p>
+              <p className="text-xs text-gray-500">⚠️ Approval</p>
             </button>
           </div>
         </CardContent>
@@ -335,8 +335,8 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
               <CardContent className="p-8 text-center">
                 <CheckCircle2 className="w-16 h-16 text-gold/30 mx-auto mb-4" />
                 <h4 className="text-black font-semibold mb-2">No Tasks Found</h4>
-                <p className="text-zinc-500">No tasks found in this category</p>
-                <p className="text-sm text-zinc-400 mt-1">Ask Amanda to create tasks for you</p>
+                <p className="text-gray-500">No tasks found in this category</p>
+                <p className="text-sm text-gray-500 mt-1">Ask Amanda to create tasks for you</p>
               </CardContent>
             </Card>
           ) : (
@@ -382,19 +382,19 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                             {/* Progress Bar */}
                             <div className="mt-2 mb-2">
                               <div className="flex items-center justify-between text-xs mb-1">
-                                <span className="text-zinc-400">Progress</span>
+                                <span className="text-gray-500">Progress</span>
                                 <span className={config.color}>{taskProgress}%</span>
                               </div>
                               <Progress value={taskProgress} className="h-1.5 bg-zinc-100" />
                             </div>
 
                             {task.description && (
-                              <p className={`text-sm text-zinc-500 mt-1 ${isExpanded ? '' : 'line-clamp-2'}`}>
+                              <p className={`text-sm text-gray-500 mt-1 ${isExpanded ? '' : 'line-clamp-2'}`}>
                                 {task.description}
                               </p>
                             )}
                             
-                            <div className="flex items-center gap-4 mt-3 text-xs text-zinc-400 flex-wrap">
+                            <div className="flex items-center gap-4 mt-3 text-xs text-gray-500 flex-wrap">
                               {'due_date' in task && task.due_date && (
                                 <span className="flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
@@ -415,7 +415,7 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                             size="sm"
                             variant="ghost"
                             onClick={() => setExpandedTask(isExpanded ? null : task.id)}
-                            className="text-zinc-500 hover:text-gold"
+                            className="text-gray-500 hover:text-gold"
                           >
                             <Eye className="w-4 h-4" />
                           </Button>
@@ -461,20 +461,20 @@ const FoundersTaskDashboard: React.FC<FoundersTaskDashboardProps> = ({ onStatsCh
                         >
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
-                              <p className="text-zinc-400">Status</p>
+                              <p className="text-gray-500">Status</p>
                               <p className={`font-medium ${config.color}`}>{task.status.replace('_', ' ')}</p>
                             </div>
                             <div>
-                              <p className="text-zinc-400">Priority</p>
+                              <p className="text-gray-500">Priority</p>
                               <p className="text-black font-medium capitalize">{task.priority}</p>
                             </div>
                             <div>
-                              <p className="text-zinc-400">Created</p>
+                              <p className="text-gray-500">Created</p>
                               <p className="text-black">{format(new Date(task.created_at), 'MMM d, yyyy h:mm a')}</p>
                             </div>
                             {task.completed_at && (
                               <div>
-                                <p className="text-zinc-400">Completed</p>
+                                <p className="text-gray-500">Completed</p>
                                 <p className="text-green-600">{format(new Date(task.completed_at), 'MMM d, yyyy h:mm a')}</p>
                               </div>
                             )}

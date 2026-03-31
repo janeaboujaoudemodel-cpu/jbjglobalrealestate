@@ -79,7 +79,6 @@ export default function RecommendedDevelopers({
             </span>
             <h2
               className="text-white text-2xl md:text-3xl font-bold"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Similar Developers
             </h2>

@@ -45,14 +45,13 @@ const Philanthropy = () => {
 
           <motion.h1 
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl mx-auto"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             Philanthropy
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-8"
+            className="text-white/70 text-lg md:text-xl max-w-2xl mx-auto mb-8"
             variants={fadeInUp}
           >
             Our commitment to making a positive impact extends beyond real estate.
@@ -63,15 +62,15 @@ const Philanthropy = () => {
             className="flex flex-wrap justify-center gap-6 mt-12"
             variants={fadeInUp}
           >
-            <div className="flex items-center gap-2 text-zinc-500">
+            <div className="flex items-center gap-2 text-white/60">
               <Heart className="w-5 h-5 text-gold" />
               <span className="text-sm">Community Support</span>
             </div>
-            <div className="flex items-center gap-2 text-zinc-500">
+            <div className="flex items-center gap-2 text-white/60">
               <Users className="w-5 h-5 text-gold" />
               <span className="text-sm">Social Responsibility</span>
             </div>
-            <div className="flex items-center gap-2 text-zinc-500">
+            <div className="flex items-center gap-2 text-white/60">
               <Globe className="w-5 h-5 text-gold" />
               <span className="text-sm">Global Impact</span>
             </div>

@@ -185,7 +185,7 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
     <div className="p-4 space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          {syncing && <RefreshCw className="h-3 w-3 text-zinc-400 animate-spin" />}
+          {syncing && <RefreshCw className="h-3 w-3 text-gray-500 animate-spin" />}
           <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 text-xs">
             {activeCount} Active
           </Badge>
@@ -214,13 +214,13 @@ const AutomationRules = ({ userId, isOwner = false }: AutomationRulesProps) => {
                 <h4 className="text-sm font-semibold text-zinc-800">{rule.name}</h4>
               </div>
               {rule.description && (
-                <p className="text-xs text-zinc-500 mb-2">{rule.description}</p>
+                <p className="text-xs text-gray-500 mb-2">{rule.description}</p>
               )}
               <div className="flex items-center gap-2 text-xs flex-wrap">
                 <Badge variant="secondary" className="bg-blue-100 text-blue-700 px-2 text-[10px]">
                   {rule.trigger_event}
                 </Badge>
-                <ArrowRight className="h-3 w-3 text-zinc-400" />
+                <ArrowRight className="h-3 w-3 text-gray-500" />
                 <Badge variant="secondary" className="bg-purple-100 text-purple-700 px-2 text-[10px]">
                   {rule.action_type}
                 </Badge>

@@ -570,7 +570,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
             ) : (
               <>
                 <h3 className="text-black font-semibold">Voice Note</h3>
-                <p className="text-sm text-zinc-500 mt-1">Record & transcribe</p>
+                <p className="text-sm text-gray-500 mt-1">Record & transcribe</p>
               </>
             )}
           </CardContent>
@@ -586,7 +586,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
               <Plus className="w-6 h-6 text-purple-600" />
             </div>
             <h3 className="text-black font-semibold">New Note</h3>
-            <p className="text-sm text-zinc-500 mt-1">Create manually</p>
+            <p className="text-sm text-gray-500 mt-1">Create manually</p>
           </CardContent>
         </Card>
 
@@ -600,7 +600,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
               <Upload className="w-6 h-6 text-blue-600" />
             </div>
             <h3 className="text-black font-semibold">Upload</h3>
-            <p className="text-sm text-zinc-500 mt-1">PDF, DOC, TXT</p>
+            <p className="text-sm text-gray-500 mt-1">PDF, DOC, TXT</p>
           </CardContent>
         </Card>
 
@@ -614,7 +614,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
               <FolderOpen className="w-6 h-6 text-green-600" />
             </div>
             <h3 className="text-black font-semibold">New Project</h3>
-            <p className="text-sm text-zinc-500 mt-1">Organize notes</p>
+            <p className="text-sm text-gray-500 mt-1">Organize notes</p>
           </CardContent>
         </Card>
       </div>
@@ -626,7 +626,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
             <Loader2 className="w-5 h-5 text-[#B89555] animate-spin" />
             <div>
               <p className="text-black font-medium">Processing...</p>
-              <p className="text-sm text-zinc-500">Extracting key points and action items</p>
+              <p className="text-sm text-gray-500">Extracting key points and action items</p>
             </div>
           </CardContent>
         </Card>
@@ -635,7 +635,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
       {/* Search, Filter, and Recently Deleted Toggle */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <Input
             placeholder="Search notes..."
             value={searchQuery}
@@ -684,14 +684,14 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
           </CardHeader>
           <CardContent>
             {archivedNotes.length === 0 ? (
-              <p className="text-sm text-zinc-500 text-center py-4">No recently deleted notes</p>
+              <p className="text-sm text-gray-500 text-center py-4">No recently deleted notes</p>
             ) : (
               <div className="space-y-2">
                 {archivedNotes.map(note => (
                   <div key={note.id} className="flex items-center justify-between p-3 rounded-lg bg-white border border-red-100">
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-black text-sm truncate">{note.title}</p>
-                      <p className="text-xs text-zinc-500">
+                      <p className="text-xs text-gray-500">
                         Deleted {new Date(note.updated_at).toLocaleDateString()}
                       </p>
                     </div>
@@ -733,7 +733,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                 </Badge>
               </div>
               
-              <p className="text-zinc-500 text-sm line-clamp-3 mb-3">
+              <p className="text-gray-500 text-sm line-clamp-3 mb-3">
                 {note.content?.substring(0, 150)}...
               </p>
 
@@ -744,7 +744,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                 </div>
               )}
 
-              <div className="flex items-center justify-between text-xs text-zinc-400">
+              <div className="flex items-center justify-between text-xs text-gray-500">
                 <span className="flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   {new Date(note.created_at).toLocaleDateString()}
@@ -775,8 +775,8 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
         {filteredNotes.length === 0 && (
           <div className="col-span-full text-center py-12">
             <BookOpen className="w-12 h-12 text-[#B89555]/30 mx-auto mb-4" />
-            <p className="text-zinc-500">No notes yet</p>
-            <p className="text-sm text-zinc-400 mt-1">Start by recording a voice note or creating a new note</p>
+            <p className="text-gray-500">No notes yet</p>
+            <p className="text-sm text-gray-500 mt-1">Start by recording a voice note or creating a new note</p>
           </div>
         )}
       </div>
@@ -820,7 +820,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                       </div>
                     </div>
                   ) : (
-                    <p className="text-zinc-400 text-center py-8">No summary available</p>
+                    <p className="text-gray-500 text-center py-8">No summary available</p>
                   )}
                 </TabsContent>
                 
@@ -829,7 +829,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                     <div className="space-y-2">
                       {activeNote.ai_action_items.map((item: any, i: number) => (
                         <div key={i} className="flex items-start gap-3 p-3 bg-zinc-50 rounded-lg border border-zinc-200">
-                          <CheckCircle className={`w-5 h-5 mt-0.5 ${item.completed ? 'text-green-600' : 'text-zinc-400'}`} />
+                          <CheckCircle className={`w-5 h-5 mt-0.5 ${item.completed ? 'text-green-600' : 'text-gray-500'}`} />
                           <span className={`text-zinc-700 ${item.completed ? 'line-through opacity-50' : ''}`}>
                             {item.text}
                           </span>
@@ -837,7 +837,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                       ))}
                     </div>
                   ) : (
-                    <p className="text-zinc-400 text-center py-8">No action items extracted</p>
+                    <p className="text-gray-500 text-center py-8">No action items extracted</p>
                   )}
                 </TabsContent>
               </Tabs>
@@ -952,8 +952,8 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
           <div className="mt-4">
             <div className="border-2 border-dashed border-[#B89555]/30 rounded-xl p-8 text-center hover:border-[#B89555]/50 transition-colors relative">
               <Upload className="w-12 h-12 text-[#B89555]/40 mx-auto mb-4" />
-              <p className="text-zinc-500 mb-2">Drop your file here or click to upload</p>
-              <p className="text-xs text-zinc-400">Supports PDF, DOC, DOCX, TXT, and more</p>
+              <p className="text-gray-500 mb-2">Drop your file here or click to upload</p>
+              <p className="text-xs text-gray-500">Supports PDF, DOC, DOCX, TXT, and more</p>
               <input type="file" accept=".pdf,.doc,.docx,.txt,.md" onChange={handleFileUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
               <Button className="mt-4 relative bg-gradient-to-r from-[#B89555] to-[#A68444] text-white">
                 Choose File
@@ -965,7 +965,7 @@ ${note.ai_action_items?.length ? `## Action Items\n${note.ai_action_items.map(a 
                 <Brain className="w-5 h-5 text-blue-600 mt-0.5" />
                 <div>
                   <p className="text-blue-700 font-medium">Extraction</p>
-                  <p className="text-xs text-zinc-500 mt-1">Key points, action items, and a summary will be automatically extracted from your document.</p>
+                  <p className="text-xs text-gray-500 mt-1">Key points, action items, and a summary will be automatically extracted from your document.</p>
                 </div>
               </div>
             </div>

@@ -122,7 +122,6 @@ const ServicesGrid = () => {
           {/* Title */}
           <h3
             className="text-xl font-bold text-black mb-3 group-hover:text-gold transition-colors"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             {service.title}
           </h3>
@@ -149,7 +148,6 @@ const ServicesGrid = () => {
         <div className="text-center mb-10">
           <h2
             className="text-2xl md:text-3xl font-bold text-black mb-3"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             {t('services.howCanWeHelp', 'How Can We Help?')}
           </h2>

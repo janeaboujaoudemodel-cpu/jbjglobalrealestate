@@ -98,7 +98,7 @@ export function BrokerNotesWidget() {
       case "meeting":
         return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs"><Clock className="w-3 h-3 mr-1" />Meeting</Badge>;
       case "general":
-        return <Badge className="bg-zinc-500/20 text-zinc-400 border-zinc-500/30 text-xs"><Tag className="w-3 h-3 mr-1" />General</Badge>;
+        return <Badge className="bg-zinc-500/20 text-gray-500 border-zinc-500/30 text-xs"><Tag className="w-3 h-3 mr-1" />General</Badge>;
     }
   };
 
@@ -138,11 +138,11 @@ export function BrokerNotesWidget() {
                 placeholder="Write your note here..."
                 value={newNote.content}
                 onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
-                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 min-h-[80px]"
+                className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400 min-h-[80px]"
               />
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-zinc-400 text-xs">Category</label>
+                  <label className="text-white/70 text-xs">Category</label>
                   <Select 
                     value={newNote.category} 
                     onValueChange={(v) => setNewNote({ ...newNote, category: v as QuickNote["category"] })}
@@ -159,12 +159,12 @@ export function BrokerNotesWidget() {
                   </Select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-zinc-400 text-xs">Link to (Optional)</label>
+                  <label className="text-white/70 text-xs">Link to (Optional)</label>
                   <Input
                     placeholder="Lead or property name"
                     value={newNote.linkedTo}
                     onChange={(e) => setNewNote({ ...newNote, linkedTo: e.target.value })}
-                    className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 h-9"
+                    className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400 h-9"
                   />
                 </div>
               </div>
@@ -182,18 +182,18 @@ export function BrokerNotesWidget() {
 
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
             <Input
               placeholder="Search notes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-zinc-500 pl-10"
+              className="bg-zinc-800/50 border-zinc-700 text-white placeholder:text-gray-400 pl-10"
             />
           </div>
 
           {/* Notes List */}
           {filteredNotes.length === 0 ? (
-            <div className="text-center py-8 text-zinc-500">
+            <div className="text-center py-8 text-white/60">
               <FileText className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p>{searchQuery ? "No notes match your search" : "No notes yet"}</p>
             </div>
@@ -218,7 +218,7 @@ export function BrokerNotesWidget() {
                       </Button>
                     </div>
                   </div>
-                  <p className="text-zinc-300 text-sm whitespace-pre-wrap">{note.content}</p>
+                  <p className="text-white/85 text-sm whitespace-pre-wrap">{note.content}</p>
                   {note.linkedTo && (
                     <div className="flex items-center gap-1 mt-2 text-xs text-gold">
                       <Tag className="w-3 h-3" />
@@ -240,7 +240,7 @@ export function BrokerNotesWidget() {
               <FileText className="w-5 h-5 text-gold" />
               <div>
                 <p className="text-white font-medium text-sm">Open Full Notes</p>
-                <p className="text-zinc-500 text-xs">Access all notes, AI summaries, and linked items</p>
+                <p className="text-white/60 text-xs">Access all notes, AI summaries, and linked items</p>
               </div>
             </div>
             <ChevronRight className="w-5 h-5 text-zinc-600" />

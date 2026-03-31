@@ -137,7 +137,6 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
           <h1 
             className="text-3xl md:text-5xl font-bold mb-4" 
             style={{ 
-              fontFamily: "Poppins, sans-serif",
               background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -150,7 +149,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
           <p className="text-white text-lg mb-2">
             Get free access to all JBJ AI tools, assistants, HR Manager, property coach, and creative suite — all in one place.
           </p>
-          <p className="text-zinc-400 text-base mb-8">
+          <p className="text-white/70 text-base mb-8">
             Sign in to unlock <span className="text-emerald-400 font-semibold">free access</span> to all JBJ AI tools and resources.
           </p>
 
@@ -174,7 +173,7 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
                   <benefit.icon className="w-5 h-5 text-gold" />
                 </div>
                 <h3 className="text-white font-medium text-sm mb-1">{benefit.title}</h3>
-                <p className="text-zinc-500 text-xs">{benefit.description}</p>
+                <p className="text-white/60 text-xs">{benefit.description}</p>
               </motion.div>
             ))}
           </div>
@@ -193,7 +192,6 @@ export default function AIAccessGate({ children, toolName }: AIAccessGateProps) 
             <h2 
               className="text-2xl md:text-3xl font-bold mb-4"
               style={{ 
-                fontFamily: "Poppins, sans-serif",
                 background: "linear-gradient(135deg, #CBA64B 0%, #E8D5A3 50%, #CBA64B 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",

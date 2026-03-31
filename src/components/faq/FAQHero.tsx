@@ -98,7 +98,7 @@ export const FAQHero = ({
           
           {/* Description */}
           <motion.p 
-            className="text-lg md:text-xl text-zinc-300 font-light leading-relaxed max-w-3xl mx-auto mb-10"
+            className="text-lg md:text-xl text-white/85 font-light leading-relaxed max-w-3xl mx-auto mb-10"
             variants={fadeInUp}
           >
             {description}

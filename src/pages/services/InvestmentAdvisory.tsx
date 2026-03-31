@@ -180,7 +180,7 @@ const InvestmentAdvisory = () => {
               Strategic Investment Advisory
             </h1>
             
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Data-driven investment guidance for the UAE real estate market. Make informed decisions with clarity and confidence.
             </p>
             
@@ -310,7 +310,7 @@ const InvestmentAdvisory = () => {
             
             <motion.p 
               variants={fadeInUp}
-              className="text-center text-zinc-500 text-sm"
+              className="text-center text-white/60 text-sm"
             >
               Where required, we introduce clients to licensed third-party professionals for legal, mortgage, or tax services.
             </motion.p>
@@ -457,25 +457,25 @@ const InvestmentAdvisory = () => {
           <div className="flex flex-wrap justify-center gap-6 text-sm">
             <Link
               to="/investor-education"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Investor Education
             </Link>
             <Link
               to="/market-intelligence"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Market Intelligence
             </Link>
             <Link
               to="/buyer-guide"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Buyer Guide
             </Link>
             <Link
               to="/contact"
-              className="text-zinc-400 hover:text-gold transition-colors"
+              className="text-white/70 hover:text-gold transition-colors"
             >
               Contact Us
             </Link>

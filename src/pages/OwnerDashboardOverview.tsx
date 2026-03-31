@@ -113,7 +113,7 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
         </div>
         <div className="min-w-0 flex-1">
           <p className="font-medium text-black truncate text-sm">{lead.full_name}</p>
-          <span className="text-xs text-zinc-500">
+          <span className="text-xs text-gray-500">
             {formatDistanceToNow(new Date(lead.created_at), { addSuffix: true })}
           </span>
         </div>
@@ -125,12 +125,12 @@ function LeadRow({ lead, onOpen }: LeadRowProps) {
           </Badge>
         )}
         {lead.phone_e164 && (
-          <span className="flex items-center gap-1 text-xs text-zinc-500 truncate">
+          <span className="flex items-center gap-1 text-xs text-gray-500 truncate">
             <Phone className="h-3 w-3" /> {lead.phone_e164}
           </span>
         )}
         {lead.email_lower && (
-          <span className="flex items-center gap-1 text-xs text-zinc-500 truncate">
+          <span className="flex items-center gap-1 text-xs text-gray-500 truncate">
             <Mail className="h-3 w-3" /> {lead.email_lower}
           </span>
         )}
@@ -171,7 +171,7 @@ function ConversationRow({ conversation }: ConversationRowProps) {
           <p className="font-medium text-black text-sm truncate">
             {conversation.user_name || conversation.user_email}
           </p>
-          <p className="text-xs text-zinc-500 truncate">
+          <p className="text-xs text-gray-500 truncate">
             {conversation.page_source || 'Website chat'}
           </p>
         </div>
@@ -187,7 +187,7 @@ function ConversationRow({ conversation }: ConversationRowProps) {
         >
           {conversation.status}
         </Badge>
-        <span className="text-xs text-zinc-500">
+        <span className="text-xs text-gray-500">
           {formatDistanceToNow(new Date(conversation.created_at), { addSuffix: true })}
         </span>
       </div>
@@ -233,7 +233,7 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
           </div>
         )}
         <div className="min-w-0">
-          <p className={`font-medium text-sm truncate ${item.status === 'completed' ? 'text-zinc-400 line-through' : 'text-black'}`}>
+          <p className={`font-medium text-sm truncate ${item.status === 'completed' ? 'text-gray-500 line-through' : 'text-black'}`}>
             {displayName}
           </p>
           {(item as any).lead_context && (
@@ -242,7 +242,7 @@ function FollowUpItem({ item, onComplete, onOpen }: FollowUpItemProps) {
             </p>
           )}
           {item.due_at && (
-            <p className={`text-xs flex items-center gap-1 ${isOverdue ? 'text-red-500' : 'text-zinc-500'}`}>
+            <p className={`text-xs flex items-center gap-1 ${isOverdue ? 'text-red-500' : 'text-gray-500'}`}>
               <Calendar className="h-3 w-3" />
               {format(new Date(item.due_at), 'MMM d, h:mm a')}
               {isOverdue && <AlertCircle className="h-3 w-3 ml-1" />}
@@ -578,7 +578,7 @@ export default function OwnerDashboardOverview() {
               <CardHeader className="flex flex-row items-center justify-between pb-3">
                 <div>
                   <CardTitle className="text-lg text-black">Newest Leads</CardTitle>
-                  <CardDescription className="text-zinc-500">Most recent contacts</CardDescription>
+                  <CardDescription className="text-gray-500">Most recent contacts</CardDescription>
                 </div>
                 <Button 
                   variant="ghost" 
@@ -609,7 +609,7 @@ export default function OwnerDashboardOverview() {
                 ) : (
                   <div className="text-center py-8">
                     <Users className="h-12 w-12 text-[#B89555]/40 mx-auto mb-3" />
-                    <p className="text-zinc-500">No leads yet</p>
+                    <p className="text-gray-500">No leads yet</p>
                     <Button 
                       variant="secondary" 
                       size="sm" 
@@ -631,7 +631,7 @@ export default function OwnerDashboardOverview() {
                     <Clock className="h-5 w-5 text-amber-600" />
                     Needs Follow-up
                   </CardTitle>
-                  <CardDescription className="text-zinc-500 text-xs">Pending items</CardDescription>
+                  <CardDescription className="text-gray-500 text-xs">Pending items</CardDescription>
                 </div>
                 <Button 
                   variant="ghost" 
@@ -659,7 +659,7 @@ export default function OwnerDashboardOverview() {
                 ) : (
                   <div className="text-center py-6">
                     <CheckSquare className="h-10 w-10 text-[#B89555]/40 mx-auto mb-2" />
-                    <p className="text-sm text-zinc-500">All caught up!</p>
+                    <p className="text-sm text-gray-500">All caught up!</p>
                   </div>
                 )}
               </CardContent>
@@ -673,7 +673,7 @@ export default function OwnerDashboardOverview() {
                 <Activity className="h-5 w-5 text-purple-600" />
                 Recent Conversations
               </CardTitle>
-              <CardDescription className="text-zinc-500">Website chat sessions</CardDescription>
+              <CardDescription className="text-gray-500">Website chat sessions</CardDescription>
             </CardHeader>
             <CardContent className="pt-0">
               {loadingRecentConvos ? (
@@ -691,8 +691,8 @@ export default function OwnerDashboardOverview() {
               ) : (
                 <div className="text-center py-8">
                   <MessageSquare className="h-12 w-12 text-[#B89555]/40 mx-auto mb-3" />
-                  <p className="text-zinc-500">No conversations yet</p>
-                  <p className="text-zinc-400 text-xs mt-1">Conversations from website visitors will appear here</p>
+                  <p className="text-gray-500">No conversations yet</p>
+                  <p className="text-gray-500 text-xs mt-1">Conversations from website visitors will appear here</p>
                 </div>
               )}
             </CardContent>
@@ -712,7 +712,7 @@ export default function OwnerDashboardOverview() {
             <Card className="bg-white/70 border-2 border-[#B89555]/30 shadow-sm">
               <CardHeader>
                 <CardTitle className="text-lg text-black">All Leads</CardTitle>
-                <CardDescription className="text-zinc-500">Complete lead management</CardDescription>
+                <CardDescription className="text-gray-500">Complete lead management</CardDescription>
               </CardHeader>
                <CardContent>
                 <Suspense fallback={<Skeleton className="h-64 w-full" />}>
@@ -737,7 +737,7 @@ export default function OwnerDashboardOverview() {
                   <Flag className="h-5 w-5 text-red-500" />
                   Flagged Leads
                 </CardTitle>
-                <CardDescription className="text-zinc-500">Leads requiring attention</CardDescription>
+                <CardDescription className="text-gray-500">Leads requiring attention</CardDescription>
               </CardHeader>
               <CardContent>
                 <Suspense fallback={<Skeleton className="h-64 w-full" />}>
@@ -761,7 +761,7 @@ export default function OwnerDashboardOverview() {
                   <Crown className="h-5 w-5 text-[#B89555]" />
                   VIP Leads
                 </CardTitle>
-                <CardDescription className="text-zinc-500">High-value contacts</CardDescription>
+                <CardDescription className="text-gray-500">High-value contacts</CardDescription>
               </CardHeader>
               <CardContent>
                 <Suspense fallback={<Skeleton className="h-64 w-full" />}>
@@ -795,7 +795,7 @@ export default function OwnerDashboardOverview() {
                   <Briefcase className="h-5 w-5 text-blue-600" />
                   Employees Hub
                 </CardTitle>
-                <CardDescription className="text-zinc-500">Team management</CardDescription>
+                <CardDescription className="text-gray-500">Team management</CardDescription>
               </CardHeader>
               <CardContent>
                 <Suspense fallback={<Skeleton className="h-64 w-full" />}>
@@ -814,12 +814,12 @@ export default function OwnerDashboardOverview() {
                 <Shield className="h-5 w-5 text-purple-600" />
                 Audit Logs
               </CardTitle>
-              <CardDescription className="text-zinc-500">System activity tracking</CardDescription>
+              <CardDescription className="text-gray-500">System activity tracking</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-center py-12">
                 <Shield className="h-12 w-12 text-[#B89555]/40 mx-auto mb-3" />
-                <p className="text-zinc-500 mb-4">View audit logs for all CRM activity</p>
+                <p className="text-gray-500 mb-4">View audit logs for all CRM activity</p>
                 <Button 
                   variant="secondary"
                   onClick={() => navigate('/owner/admin')}

@@ -87,14 +87,14 @@ export default function AddNoteDialog({ leadId, leadName, trigger }: AddNoteDial
             placeholder="Enter your note..."
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            className="min-h-[120px] bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500"
+            className="min-h-[120px] bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400"
             autoFocus
           />
           <div className="flex justify-end gap-2">
             <Button 
               variant="ghost" 
               onClick={() => setOpen(false)}
-              className="text-zinc-400 hover:text-white"
+              className="text-white/70 hover:text-white"
             >
               Cancel
             </Button>

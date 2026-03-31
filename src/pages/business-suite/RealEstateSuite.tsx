@@ -114,13 +114,13 @@ const SECTIONS = [
 
 // Color mappings for section tabs
 const sectionColors: Record<string, { active: string; inactive: string; border: string }> = {
-  sky: { active: 'text-sky-400 bg-sky-500/10', inactive: 'text-zinc-400 hover:text-sky-400', border: 'border-sky-400' },
-  emerald: { active: 'text-emerald-400 bg-emerald-500/10', inactive: 'text-zinc-400 hover:text-emerald-400', border: 'border-emerald-400' },
-  indigo: { active: 'text-indigo-400 bg-indigo-500/10', inactive: 'text-zinc-400 hover:text-indigo-400', border: 'border-indigo-400' },
-  amber: { active: 'text-amber-400 bg-amber-500/10', inactive: 'text-zinc-400 hover:text-amber-400', border: 'border-amber-400' },
-  lime: { active: 'text-lime-400 bg-lime-500/10', inactive: 'text-zinc-400 hover:text-lime-400', border: 'border-lime-400' },
-  violet: { active: 'text-violet-400 bg-violet-500/10', inactive: 'text-zinc-400 hover:text-violet-400', border: 'border-violet-400' },
-  fuchsia: { active: 'text-fuchsia-400 bg-fuchsia-500/10', inactive: 'text-zinc-400 hover:text-fuchsia-400', border: 'border-fuchsia-400' },
+  sky: { active: 'text-sky-400 bg-sky-500/10', inactive: 'text-white/70 hover:text-sky-400', border: 'border-sky-400' },
+  emerald: { active: 'text-emerald-400 bg-emerald-500/10', inactive: 'text-white/70 hover:text-emerald-400', border: 'border-emerald-400' },
+  indigo: { active: 'text-indigo-400 bg-indigo-500/10', inactive: 'text-white/70 hover:text-indigo-400', border: 'border-indigo-400' },
+  amber: { active: 'text-amber-400 bg-amber-500/10', inactive: 'text-white/70 hover:text-amber-400', border: 'border-amber-400' },
+  lime: { active: 'text-lime-400 bg-lime-500/10', inactive: 'text-white/70 hover:text-lime-400', border: 'border-lime-400' },
+  violet: { active: 'text-violet-400 bg-violet-500/10', inactive: 'text-white/70 hover:text-violet-400', border: 'border-violet-400' },
+  fuchsia: { active: 'text-fuchsia-400 bg-fuchsia-500/10', inactive: 'text-white/70 hover:text-fuchsia-400', border: 'border-fuchsia-400' },
 };
 
 const LoadingSpinner = () => (
@@ -232,7 +232,7 @@ const RealEstateSuite = () => {
                       "flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all whitespace-nowrap min-w-fit",
                       isActive
                         ? `${currentColors.active} border ${currentColors.border}`
-                        : "text-zinc-500 hover:text-zinc-300 border border-zinc-800 hover:border-zinc-700"
+                        : "text-white/60 hover:text-white/85 border border-zinc-800 hover:border-zinc-700"
                     )}
                   >
                     <Icon className="w-4 h-4" />

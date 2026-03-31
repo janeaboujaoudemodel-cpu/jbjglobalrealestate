@@ -91,7 +91,7 @@ const ROLES: RoleOption[] = [
     title: 'Just Browsing',
     subtitle: 'Explore our platform first',
     icon: Eye,
-    color: 'text-zinc-400',
+    color: 'text-gray-500',
     bgGradient: 'from-zinc-400/20 to-zinc-500/10',
     benefits: [
       'Browse Properties',
@@ -305,11 +305,10 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                   <h3 
                     className="text-lg md:text-xl font-bold tracking-[0.1em] text-black uppercase mb-3"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     JBJ GLOBAL REAL ESTATE
                   </h3>
-                  <h2 className="text-2xl md:text-3xl font-semibold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl md:text-3xl font-semibold text-black mb-2">
                     How Can We Help You?
                   </h2>
                   <p className="text-gray-600 text-sm">
@@ -390,7 +389,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 </div>
 
-                <h2 className="text-2xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-2xl font-bold text-black mb-4">
                   Important Notice for Brokers
                 </h2>
 
@@ -476,7 +475,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-2xl md:text-3xl font-bold text-black mb-3">
                   {selectedRoleData.welcomeTitle}
                 </h2>
 
@@ -575,7 +574,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                   </div>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
                   Welcome Onboard!
                 </h2>
                 

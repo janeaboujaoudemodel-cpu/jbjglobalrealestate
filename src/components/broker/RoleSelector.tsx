@@ -90,7 +90,7 @@ export default function RoleSelector({ selectedRole, onRoleChange, isLoading = f
     <div className="space-y-4">
       <div className="text-center mb-6">
         <h3 className="text-lg font-semibold text-white mb-2">What best describes you?</h3>
-        <p className="text-zinc-400 text-sm">Select your role to customize your experience</p>
+        <p className="text-white/70 text-sm">Select your role to customize your experience</p>
       </div>
       
       <div className="grid gap-4">
@@ -117,7 +117,7 @@ export default function RoleSelector({ selectedRole, onRoleChange, isLoading = f
                   <Loader2 className="w-6 h-6 text-gold animate-spin" />
                 ) : (
                   <role.icon className={`w-6 h-6 ${
-                    isRoleActive(role.id) ? "text-gold" : "text-zinc-400"
+                    isRoleActive(role.id) ? "text-gold" : "text-white/70"
                   }`} />
                 )}
               </div>
@@ -131,7 +131,7 @@ export default function RoleSelector({ selectedRole, onRoleChange, isLoading = f
                     <span className="text-xs text-gold">Saving...</span>
                   )}
                 </div>
-                <p className="text-zinc-400 text-sm mb-3">{role.description}</p>
+                <p className="text-white/70 text-sm mb-3">{role.description}</p>
                 <div className="flex flex-wrap gap-2">
                   {role.benefits.map((benefit, i) => (
                     <Badge 
@@ -140,7 +140,7 @@ export default function RoleSelector({ selectedRole, onRoleChange, isLoading = f
                       className={`text-xs ${
                         isRoleActive(role.id)
                           ? "border-gold/50 text-gold"
-                          : "border-zinc-700 text-zinc-500"
+                          : "border-zinc-700 text-white/60"
                       }`}
                     >
                       {benefit}

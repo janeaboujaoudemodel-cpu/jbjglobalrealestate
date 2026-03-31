@@ -181,7 +181,7 @@ const CRMReminders = () => {
               </div>
               <div>
                 <h1 className="text-lg font-bold text-zinc-900">Smart Reminders</h1>
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-gray-500">
                   {overdueCount > 0 && <span className="text-red-600">{overdueCount} overdue</span>}
                   {overdueCount > 0 && todayCount > 0 && ' • '}
                   {todayCount > 0 && <span className="text-amber-600">{todayCount} due today</span>}
@@ -230,7 +230,7 @@ const CRMReminders = () => {
               <CardContent className="py-12 text-center">
                 <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-400" />
                 <p className="text-zinc-600 font-medium">All Caught Up!</p>
-                <p className="text-sm text-zinc-400 mt-1">
+                <p className="text-sm text-gray-500 mt-1">
                   {filter === 'all' 
                     ? "No pending reminders" 
                     : `No ${filter} reminders`}
@@ -259,13 +259,13 @@ const CRMReminders = () => {
                           ) : dueInfo.label === 'Overdue' ? (
                             <AlertTriangle className="h-5 w-5 text-red-500" />
                           ) : (
-                            <Clock className="h-5 w-5 text-zinc-400" />
+                            <Clock className="h-5 w-5 text-gray-500" />
                           )}
                         </button>
                         <div>
                           <h3 className="font-medium text-zinc-900">{reminder.title}</h3>
                           {reminder.description && (
-                            <p className="text-sm text-zinc-500 mt-0.5">{reminder.description}</p>
+                            <p className="text-sm text-gray-500 mt-0.5">{reminder.description}</p>
                           )}
                           <div className="flex items-center gap-2 mt-2">
                             <span className={`text-xs font-medium ${dueInfo.color}`}>
@@ -288,7 +288,7 @@ const CRMReminders = () => {
                           variant="ghost" 
                           size="sm"
                           onClick={() => deleteReminder(reminder.id)}
-                          className="h-8 w-8 p-0 text-zinc-400 hover:text-red-600"
+                          className="h-8 w-8 p-0 text-gray-500 hover:text-red-600"
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -304,7 +304,7 @@ const CRMReminders = () => {
         {/* Completed Section */}
         {reminders.some(r => r.is_completed) && (
           <div className="pt-4">
-            <h3 className="text-sm font-semibold text-zinc-500 mb-3">Completed</h3>
+            <h3 className="text-sm font-semibold text-gray-500 mb-3">Completed</h3>
             <div className="space-y-2">
               {reminders.filter(r => r.is_completed).map(reminder => (
                 <Card key={reminder.id} className="border-zinc-200 bg-zinc-50 opacity-60">
@@ -314,13 +314,13 @@ const CRMReminders = () => {
                         <button onClick={() => toggleComplete(reminder.id)}>
                           <CheckCircle className="h-5 w-5 text-green-500" />
                         </button>
-                        <span className="text-sm text-zinc-500 line-through">{reminder.title}</span>
+                        <span className="text-sm text-gray-500 line-through">{reminder.title}</span>
                       </div>
                       <Button 
                         variant="ghost" 
                         size="sm"
                         onClick={() => deleteReminder(reminder.id)}
-                        className="h-6 w-6 p-0 text-zinc-400 hover:text-red-600"
+                        className="h-6 w-6 p-0 text-gray-500 hover:text-red-600"
                       >
                         <X className="h-3 w-3" />
                       </Button>

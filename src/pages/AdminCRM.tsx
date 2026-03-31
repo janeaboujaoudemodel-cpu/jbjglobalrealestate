@@ -303,7 +303,7 @@ const AdminCRM = () => {
           {/* Search */}
           <button
             onClick={() => setShowCommandPalette(true)}
-            className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-gold/30 text-zinc-500 hover:border-gold/50 transition-all"
+            className="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-gold/30 text-gray-500 hover:border-gold/50 transition-all"
           >
             <Search className="h-4 w-4 text-gold" />
             <span className="text-sm">Search...</span>
@@ -385,7 +385,7 @@ const AdminCRM = () => {
                         <TableCell>
                           <div>
                             <p className="font-medium text-black">{broker.display_name || "No name"}</p>
-                            <p className="text-xs text-zinc-500">{broker.user_id.slice(0, 8)}...</p>
+                            <p className="text-xs text-gray-500">{broker.user_id.slice(0, 8)}...</p>
                           </div>
                         </TableCell>
                         <TableCell>
@@ -444,7 +444,7 @@ const AdminCRM = () => {
                         <TableCell>
                           <div>
                             <p className="font-medium text-black">{lead.full_name}</p>
-                            <p className="text-xs text-zinc-500">
+                            <p className="text-xs text-gray-500">
                               {lead.nationality}
                             </p>
                           </div>
@@ -453,7 +453,7 @@ const AdminCRM = () => {
                           <div className="text-sm">
                             {lead.email_lower && <p className="text-black">{lead.email_lower}</p>}
                             {lead.phone_e164 && (
-                              <p className="text-zinc-500">{lead.phone_e164}</p>
+                              <p className="text-gray-500">{lead.phone_e164}</p>
                             )}
                           </div>
                         </TableCell>
@@ -464,7 +464,7 @@ const AdminCRM = () => {
                           <Badge variant="outline" className="border-gold/30 text-black">{lead.owner_type}</Badge>
                         </TableCell>
                         <TableCell className="text-black">{lead.source || "-"}</TableCell>
-                        <TableCell className="text-sm text-zinc-500">
+                        <TableCell className="text-sm text-gray-500">
                           {new Date(lead.created_at).toLocaleDateString()}
                         </TableCell>
                       </TableRow>
@@ -472,7 +472,7 @@ const AdminCRM = () => {
                   </TableBody>
                 </Table>
                 {allLeads.length > 50 && (
-                  <p className="text-center text-sm text-zinc-500 mt-4">
+                  <p className="text-center text-sm text-gray-500 mt-4">
                     Showing 50 of {allLeads.length} leads. Export for full list.
                   </p>
                 )}
@@ -503,7 +503,7 @@ const AdminCRM = () => {
                         <TableCell className="text-sm text-black">
                           {new Date(log.created_at).toLocaleString()}
                         </TableCell>
-                        <TableCell className="text-sm font-mono text-zinc-500">
+                        <TableCell className="text-sm font-mono text-gray-500">
                           {log.actor_user_id?.slice(0, 8)}...
                         </TableCell>
                         <TableCell>
@@ -512,7 +512,7 @@ const AdminCRM = () => {
                         <TableCell className="text-sm text-black">
                           {log.entity_type}
                         </TableCell>
-                        <TableCell className="text-xs text-zinc-500 max-w-xs truncate">
+                        <TableCell className="text-xs text-gray-500 max-w-xs truncate">
                           {JSON.stringify(log.details)}
                         </TableCell>
                       </TableRow>

@@ -54,7 +54,7 @@ const categoryConfig: Record<string, { color: string; bgColor: string; borderCol
   routine: { color: 'text-green-600', bgColor: 'bg-green-50', borderColor: 'border-green-200' },
   recruitment: { color: 'text-blue-600', bgColor: 'bg-blue-50', borderColor: 'border-blue-200' },
   flagged: { color: 'text-amber-600', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
-  spam: { color: 'text-zinc-500', bgColor: 'bg-zinc-50', borderColor: 'border-zinc-200' },
+  spam: { color: 'text-gray-500', bgColor: 'bg-zinc-50', borderColor: 'border-zinc-200' },
 };
 
 const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({ 
@@ -187,7 +187,7 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                 </div>
                 <div>
                   <h2 className="text-lg font-semibold text-black">Notification Inbox</h2>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-gray-500">
                     {unreadCount > 0 ? (
                       <span className="text-[#B89555] font-medium">{unreadCount} unread</span>
                     ) : (
@@ -258,7 +258,7 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                   <div className="text-center py-12">
                     <CheckCircle className="w-12 h-12 text-green-500/40 mx-auto mb-4" />
                     <p className="text-black font-medium">No notifications</p>
-                    <p className="text-sm text-zinc-500 mt-1">You're all caught up!</p>
+                    <p className="text-sm text-gray-500 mt-1">You're all caught up!</p>
                   </div>
                 ) : (
                   filteredNotifications.map((notification, index) => {
@@ -298,13 +298,13 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                               </div>
                             </div>
                             {notification.subject && (
-                              <p className={`text-sm truncate mt-1 ${notification.is_read ? 'text-zinc-500' : 'text-zinc-700'}`}>
+                              <p className={`text-sm truncate mt-1 ${notification.is_read ? 'text-gray-500' : 'text-zinc-700'}`}>
                                 {notification.subject}
                               </p>
                             )}
-                            <p className="text-xs text-zinc-500 line-clamp-2 mt-1">{notification.content}</p>
+                            <p className="text-xs text-gray-500 line-clamp-2 mt-1">{notification.content}</p>
                             <div className="flex items-center justify-between mt-3">
-                              <span className="text-xs text-zinc-400 flex items-center gap-1">
+                              <span className="text-xs text-gray-500 flex items-center gap-1">
                                 <Clock className="w-3 h-3" />
                                 {formatDistanceToNow(new Date(notification.received_at), { addSuffix: true })}
                               </span>
@@ -313,7 +313,7 @@ const FoundersNotificationCenter: React.FC<FoundersNotificationCenterProps> = ({
                                   e.stopPropagation();
                                   deleteNotification(notification.id);
                                 }}
-                                className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 text-zinc-400 hover:text-red-500 transition-all"
+                                className="p-1.5 rounded-lg opacity-0 group-hover:opacity-100 hover:bg-red-50 text-gray-500 hover:text-red-500 transition-all"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>

@@ -34,7 +34,6 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
                   ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-gold/60 shadow-lg"
                   : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-zinc-600 hover:text-black hover:border-gold/40 border-gold/20"
               }`}
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               <div className={`w-6 h-6 rounded-md flex items-center justify-center ${
                 isDeveloperActive 
@@ -53,7 +52,6 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
                   ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black border-gold/60 shadow-lg"
                   : "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark text-zinc-600 hover:text-black hover:border-gold/40 border-gold/20"
               }`}
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               <div className={`w-6 h-6 rounded-md flex items-center justify-center ${
                 isCommunityActive 
@@ -73,7 +71,6 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
                 onClick={() => setIsDeveloperSearchOpen(true)}
                 variant="outline"
                 className="px-6 py-3 h-auto rounded-full border-2 border-gold/30 text-black hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-gold/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] mr-2">
                   <Search className="w-3.5 h-3.5 text-black" />
@@ -85,7 +82,6 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
                 onClick={() => setIsCommunitySearchOpen(true)}
                 variant="outline"
                 className="px-6 py-3 h-auto rounded-full border-2 border-gold/30 text-black hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-gold/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] mr-2">
                   <Search className="w-3.5 h-3.5 text-black" />
@@ -100,7 +96,6 @@ const NavigationTabs = React.forwardRef<HTMLDivElement, NavigationTabsProps>(
                 onClick={onFiltersClick}
                 variant="outline"
                 className="px-6 py-3 h-auto rounded-full border-2 border-gold/30 text-black hover:bg-gradient-to-br hover:from-[#FDFBF7] hover:via-[#F7F2EA] hover:to-[#EFE6D6] hover:border-gold/50 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 <div className="w-6 h-6 rounded-md flex items-center justify-center bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] mr-2">
                   <SlidersHorizontal className="w-3.5 h-3.5 text-black" />

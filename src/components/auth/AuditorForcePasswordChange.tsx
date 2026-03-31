@@ -51,40 +51,40 @@ const AuditorForcePasswordChange = ({
           <h1 className="text-2xl font-bold text-white mb-2">
             Welcome, {displayName}
           </h1>
-          <p className="text-zinc-400">
+          <p className="text-white/70">
             For security, you must set a new password before accessing the platform.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
             <Input
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="New password (min 8 characters)"
-              className="pl-10 pr-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+              className="pl-10 pr-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-gray-400"
               required
               minLength={8}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white/85"
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
 
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
             <Input
               type={showPassword ? "text" : "password"}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm new password"
-              className="pl-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-zinc-500"
+              className="pl-10 bg-zinc-900 border-zinc-700 text-white placeholder:text-gray-400"
               required
             />
           </div>

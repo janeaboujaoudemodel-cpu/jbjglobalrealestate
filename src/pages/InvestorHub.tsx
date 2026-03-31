@@ -100,7 +100,7 @@ const InvestorHub = () => {
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">
               Welcome{user?.email ? `, ${user.email.split('@')[0]}` : ''}
             </h1>
-            <p className="text-zinc-400">Your central hub for property investment tools, insights, and portfolio management.</p>
+            <p className="text-white/70">Your central hub for property investment tools, insights, and portfolio management.</p>
             {/* Favorites & Shortlist */}
             <div className="flex items-center justify-center gap-3 mt-5">
               <Link
@@ -133,25 +133,25 @@ const InvestorHub = () => {
                     <Trophy className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1 text-center sm:text-left">
-                    <p className="text-zinc-400 text-sm mb-1">Your Tier</p>
+                    <p className="text-white/70 text-sm mb-1">Your Tier</p>
                     <h3 className={`text-2xl font-bold ${tier.text}`}>{tier.name}</h3>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
                     <div>
                       <p className="text-2xl font-bold text-white">{isLoading ? '...' : summary.totalPoints.toLocaleString()}</p>
-                      <p className="text-zinc-500 text-xs">Total Points</p>
+                      <p className="text-white/60 text-xs">Total Points</p>
                     </div>
                     <div>
                       <p className="text-2xl font-bold text-emerald-400">{isLoading ? '...' : summary.dealPoints.toLocaleString()}</p>
-                      <p className="text-zinc-500 text-xs">Deal Points</p>
+                      <p className="text-white/60 text-xs">Deal Points</p>
                     </div>
                     <div>
                       <p className="text-2xl font-bold text-blue-400">{isLoading ? '...' : summary.activityPoints.toLocaleString()}</p>
-                      <p className="text-zinc-500 text-xs">Activity</p>
+                      <p className="text-white/60 text-xs">Activity</p>
                     </div>
                     <div>
                       <p className="text-2xl font-bold text-purple-400">{isLoading ? '...' : summary.referralPoints.toLocaleString()}</p>
-                      <p className="text-zinc-500 text-xs">Referral</p>
+                      <p className="text-white/60 text-xs">Referral</p>
                     </div>
                   </div>
                 </div>
@@ -178,7 +178,7 @@ const InvestorHub = () => {
                     <Icon className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="text-white font-semibold text-sm mb-1 relative z-10">{card.title}</h3>
-                  <p className="text-zinc-500 text-xs relative z-10">{card.desc}</p>
+                  <p className="text-white/60 text-xs relative z-10">{card.desc}</p>
                   <ArrowRight className="w-4 h-4 text-fuchsia-400 mt-2 opacity-0 group-hover:opacity-100 transition-opacity relative z-10" />
                 </motion.button>
               );
@@ -203,7 +203,7 @@ const InvestorHub = () => {
                 >
                   <Icon className="w-5 h-5 text-fuchsia-400 mb-2" />
                   <h3 className="text-white font-medium text-sm">{tool.title}</h3>
-                  <p className="text-zinc-500 text-xs mt-1">{tool.desc}</p>
+                  <p className="text-white/60 text-xs mt-1">{tool.desc}</p>
                 </button>
               );
             })}
@@ -228,7 +228,7 @@ const InvestorHub = () => {
                 {supportTickets.length === 0 ? (
                   <div className="text-center py-8">
                     <Ticket className="w-8 h-8 text-zinc-600 mx-auto mb-3" />
-                    <p className="text-zinc-500">No support tickets</p>
+                    <p className="text-white/60">No support tickets</p>
                     <Button
                       className="mt-4 bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
                       onClick={() => navigate('/support')}
@@ -239,7 +239,7 @@ const InvestorHub = () => {
                 ) : (
                   <div className="space-y-2">
                     <div className="flex justify-between items-center mb-4">
-                      <p className="text-sm text-zinc-400">{openTickets} open ticket{openTickets !== 1 ? 's' : ''}</p>
+                      <p className="text-sm text-white/70">{openTickets} open ticket{openTickets !== 1 ? 's' : ''}</p>
                       <Button
                         size="sm"
                         className="bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-medium"
@@ -256,7 +256,7 @@ const InvestorHub = () => {
                       >
                         <div>
                           <p className="text-sm text-white">{ticket.subject}</p>
-                          <p className="text-xs text-zinc-500">#{ticket.ticket_number} · {format(new Date(ticket.created_at), 'MMM d')}</p>
+                          <p className="text-xs text-white/60">#{ticket.ticket_number} · {format(new Date(ticket.created_at), 'MMM d')}</p>
                         </div>
                         <Badge className={
                           ticket.status === 'open' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' :
@@ -291,7 +291,7 @@ const InvestorHub = () => {
                 ].map(doc => (
                   <div key={doc.label} className="p-4 bg-zinc-800/50 rounded-xl text-center border border-zinc-700/50 hover:border-fuchsia-500/30 transition-colors cursor-pointer">
                     <doc.icon className="w-8 h-8 mx-auto text-fuchsia-400 mb-2" />
-                    <p className="text-xs text-zinc-400">{doc.label}</p>
+                    <p className="text-xs text-white/70">{doc.label}</p>
                   </div>
                 ))}
               </div>
@@ -310,7 +310,7 @@ const InvestorHub = () => {
         <div className="bg-gradient-to-r from-indigo-900/30 to-fuchsia-900/30 border border-fuchsia-500/20 rounded-2xl p-8 text-center">
           <Sparkles className="w-8 h-8 text-fuchsia-400 mx-auto mb-3" />
           <h3 className="text-xl font-bold text-white mb-2">Explore All AI Tools</h3>
-          <p className="text-zinc-400 text-sm mb-4">Access 30+ free AI tools including creative suites, corporate tools, and productivity apps.</p>
+          <p className="text-white/70 text-sm mb-4">Access 30+ free AI tools including creative suites, corporate tools, and productivity apps.</p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button onClick={() => navigate('/ai-hub')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-medium">
               Go to JBJ Tools Hub
@@ -330,7 +330,7 @@ const InvestorHub = () => {
         {/* CTA */}
         <div className="bg-gradient-to-r from-fuchsia-900/30 to-purple-900/30 border border-fuchsia-500/20 rounded-2xl p-8 text-center">
           <h3 className="text-xl font-bold text-white mb-2">Ready to Find Your Next Investment?</h3>
-          <p className="text-zinc-400 text-sm mb-4">Browse 10,000+ properties across Dubai's top communities.</p>
+          <p className="text-white/70 text-sm mb-4">Browse 10,000+ properties across Dubai's top communities.</p>
           <Button onClick={() => navigate('/properties')} className="bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-medium">
             Browse Properties
             <ArrowRight className="w-4 h-4 ml-2" />

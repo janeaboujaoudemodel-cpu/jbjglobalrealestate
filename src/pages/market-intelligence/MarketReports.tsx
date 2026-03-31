@@ -164,7 +164,6 @@ const MarketReportsPage = () => {
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-6"
                   style={{ 
-                    fontFamily: "Poppins, sans-serif",
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -183,7 +182,7 @@ const MarketReportsPage = () => {
 
               {/* Purpose Section */}
               <SectionWrapper id="purpose">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -204,7 +203,7 @@ const MarketReportsPage = () => {
 
               {/* Data Sources Section */}
               <SectionWrapper id="data-sources">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -237,7 +236,7 @@ const MarketReportsPage = () => {
 
               {/* Report Structure Section */}
               <SectionWrapper id="report-structure">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -273,7 +272,7 @@ const MarketReportsPage = () => {
 
               {/* Exclusions Section */}
               <SectionWrapper id="exclusions">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -295,7 +294,7 @@ const MarketReportsPage = () => {
 
               {/* Reporting Frequency Section */}
               <SectionWrapper id="frequency">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -314,7 +313,7 @@ const MarketReportsPage = () => {
 
               {/* JBJ Approach Section */}
               <SectionWrapper id="jbj-approach">
-                <h2 className="text-3xl md:text-4xl font-bold mb-6" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
                   <span style={{ 
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
@@ -339,7 +338,6 @@ const MarketReportsPage = () => {
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-8 text-center"
                   style={{ 
-                    fontFamily: "Poppins, sans-serif",
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -362,7 +360,7 @@ const MarketReportsPage = () => {
                         <CardContent className="p-6 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-4">
                             {getTypeBadge(report.type)}
-                            <span className="text-zinc-500 text-xs bg-black/5 px-2 py-1 rounded">{report.pages} pages</span>
+                            <span className="text-white/60 text-xs bg-black/5 px-2 py-1 rounded">{report.pages} pages</span>
                           </div>
 
                           <h3 
@@ -380,7 +378,7 @@ const MarketReportsPage = () => {
                           <p className="text-zinc-600 text-sm mb-6 flex-grow leading-relaxed">{report.description}</p>
 
                           <div className="flex items-center justify-between pt-4 border-t border-gold/30">
-                            <div className="flex items-center gap-2 text-zinc-500 text-xs">
+                            <div className="flex items-center gap-2 text-gray-500 text-xs">
                               <Calendar className="w-3 h-3" />
                               {new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                             </div>
@@ -403,7 +401,6 @@ const MarketReportsPage = () => {
                 <h2 
                   className="text-3xl md:text-4xl font-bold mb-8 text-center"
                   style={{ 
-                    fontFamily: "Poppins, sans-serif",
                     background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
@@ -531,7 +528,6 @@ const MarketReportsPage = () => {
                         <h3 
                           className="text-2xl md:text-3xl font-bold mb-4"
                           style={{ 
-                            fontFamily: "Poppins, sans-serif",
                             background: "linear-gradient(135deg, #C8A766, #E8D5B0, #C8A766)",
                             WebkitBackgroundClip: "text",
                             WebkitTextFillColor: "transparent",

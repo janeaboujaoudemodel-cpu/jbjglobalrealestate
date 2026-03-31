@@ -55,7 +55,6 @@ export const PreFooterSeparator = ({
 
             <h2 
               className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               {title}
             </h2>

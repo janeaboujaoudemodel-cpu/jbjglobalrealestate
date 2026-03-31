@@ -159,7 +159,6 @@ const PremiumBrochureCard = ({
               <p 
                 className="text-white text-[10px] font-semibold uppercase tracking-[0.18em] leading-relaxed drop-shadow-lg"
                 style={{ 
-                  fontFamily: "Poppins, sans-serif",
                   textShadow: "0 2px 4px rgba(0,0,0,0.8)"
                 }}
               >
@@ -175,7 +174,6 @@ const PremiumBrochureCard = ({
               
               <h3
                 className="text-white text-2xl font-bold mb-3 line-clamp-2 leading-tight drop-shadow-lg"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {projectName}
               </h3>

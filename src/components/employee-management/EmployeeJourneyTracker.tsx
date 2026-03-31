@@ -126,7 +126,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                   }`}
                 >
                   <p className="font-medium text-black text-sm">{emp.display_name}</p>
-                  <p className="text-xs text-zinc-500">{emp.job_title} • {emp.department}</p>
+                  <p className="text-xs text-gray-500">{emp.job_title} • {emp.department}</p>
                 </button>
               ))}
             </div>
@@ -146,8 +146,8 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
           {events.length === 0 ? (
             <div className="text-center py-12">
               <Activity className="w-12 h-12 text-gold/30 mx-auto mb-4" />
-              <p className="text-zinc-500">No journey events recorded yet</p>
-              <p className="text-xs text-zinc-400 mt-1">Events will appear as the employee progresses</p>
+              <p className="text-gray-500">No journey events recorded yet</p>
+              <p className="text-xs text-gray-500 mt-1">Events will appear as the employee progresses</p>
             </div>
           ) : (
             <ScrollArea className="h-[400px]">
@@ -169,7 +169,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                               {event.event_type.replace(/_/g, ' ')}
                             </Badge>
                           </div>
-                          <div className="flex items-center gap-1 text-xs text-zinc-500">
+                          <div className="flex items-center gap-1 text-xs text-gray-500">
                             <Clock className="w-3 h-3" />
                             {format(new Date(event.created_at), 'MMM d, yyyy')}
                           </div>
@@ -177,7 +177,7 @@ const EmployeeJourneyTracker: React.FC<EmployeeJourneyTrackerProps> = ({ searchQ
                         
                         {event.previous_value && event.new_value && (
                           <div className="flex items-center gap-2 text-sm mt-2">
-                            <span className="text-zinc-500">{JSON.stringify(event.previous_value)}</span>
+                            <span className="text-gray-500">{JSON.stringify(event.previous_value)}</span>
                             <ArrowRight className="w-4 h-4 text-gold" />
                             <span className="text-black font-medium">{JSON.stringify(event.new_value)}</span>
                           </div>

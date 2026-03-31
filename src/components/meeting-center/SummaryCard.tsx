@@ -53,10 +53,10 @@ const SummaryCard = ({ item }: SummaryCardProps) => {
             </div>
             <div>
               <h3 className="font-semibold text-black flex items-center gap-2">
-                <User className="w-4 h-4 text-zinc-500" />
+                <User className="w-4 h-4 text-gray-500" />
                 {item.clientName}
               </h3>
-              <p className="text-sm text-zinc-500 flex items-center gap-1">
+              <p className="text-sm text-gray-500 flex items-center gap-1">
                 <Clock className="w-3 h-3" />
                 {new Date(item.date).toLocaleDateString('en-US', { 
                   weekday: 'short', 

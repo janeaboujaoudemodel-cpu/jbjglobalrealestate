@@ -283,7 +283,7 @@ const CompanyCommunicationHub = () => {
               </div>
               <div>
                 <h1 className="font-bold text-sm">JBJ Global</h1>
-                <p className="text-xs text-zinc-400">Real Estate</p>
+                <p className="text-xs text-white/70">Real Estate</p>
               </div>
             </div>
             <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -295,7 +295,7 @@ const CompanyCommunicationHub = () => {
         {/* Search */}
         <div className="p-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60" />
             <Input
               placeholder="Search messages..."
               value={searchQuery}
@@ -309,8 +309,8 @@ const CompanyCommunicationHub = () => {
         <div className="px-3 py-2 border-b border-zinc-800">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Globe className="w-4 h-4 text-zinc-400" />
-              <span className="text-xs text-zinc-400">Translation</span>
+              <Globe className="w-4 h-4 text-white/70" />
+              <span className="text-xs text-white/70">Translation</span>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -344,7 +344,7 @@ const CompanyCommunicationHub = () => {
             </DropdownMenu>
           </div>
           {translation.enabled && (
-            <p className="text-[10px] text-zinc-500 mt-1">
+            <p className="text-[10px] text-white/60 mt-1">
               Messages will be translated to {AVAILABLE_LANGUAGES.find(l => l.code === translation.targetLanguage)?.name}
             </p>
           )}
@@ -354,7 +354,7 @@ const CompanyCommunicationHub = () => {
         <ScrollArea className="flex-1">
           <div className="px-3 py-2">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Channels</span>
+              <span className="text-xs font-semibold text-white/70 uppercase tracking-wider">Channels</span>
               <Button variant="ghost" size="icon" className="h-5 w-5" onClick={() => toast.info('Create channel coming soon')}>
                 <Plus className="w-3 h-3" />
               </Button>
@@ -365,7 +365,7 @@ const CompanyCommunicationHub = () => {
                 className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-sm transition-colors ${
                   activeChannel === channel.id && !activeDM
                     ? 'bg-gold/20 text-gold' 
-                    : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                    : 'text-white/70 hover:bg-zinc-800 hover:text-white'
                 }`}
                 onClick={() => handleChannelSwitch(channel.id)}
               >
@@ -389,7 +389,7 @@ const CompanyCommunicationHub = () => {
           {/* Direct Messages */}
           <div className="px-3 py-2">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Direct Messages</span>
+              <span className="text-xs font-semibold text-white/70 uppercase tracking-wider">Direct Messages</span>
               <Button variant="ghost" size="icon" className="h-5 w-5">
                 <Plus className="w-3 h-3" />
               </Button>
@@ -400,7 +400,7 @@ const CompanyCommunicationHub = () => {
                 className={`w-full flex items-center gap-2 px-2 py-1.5 rounded text-sm transition-colors ${
                   activeDM === member.id
                     ? 'bg-gold/20 text-gold'
-                    : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                    : 'text-white/70 hover:bg-zinc-800 hover:text-white'
                 }`}
                 onClick={() => handleDMSwitch(member.id)}
               >
@@ -440,7 +440,7 @@ const CompanyCommunicationHub = () => {
                 </Avatar>
                 <div>
                   <h2 className="font-semibold text-sm">{activeDMUser?.name}</h2>
-                  <p className="text-xs text-zinc-400">{activeDMUser?.role}</p>
+                  <p className="text-xs text-white/70">{activeDMUser?.role}</p>
                 </div>
                 {activeDMUser?.isAI && (
                   <Badge variant="outline" className="text-[10px] border-gold/50 text-gold">AI Assistant</Badge>
@@ -449,13 +449,13 @@ const CompanyCommunicationHub = () => {
             ) : (
               <>
                 {activeChannelData?.isPrivate ? (
-                  <Lock className="w-5 h-5 text-zinc-400" />
+                  <Lock className="w-5 h-5 text-white/70" />
                 ) : (
-                  <Hash className="w-5 h-5 text-zinc-400" />
+                  <Hash className="w-5 h-5 text-white/70" />
                 )}
                 <div>
                   <h2 className="font-semibold">{activeChannelData?.name}</h2>
-                  <p className="text-xs text-zinc-400">{activeChannelData?.description}</p>
+                  <p className="text-xs text-white/70">{activeChannelData?.description}</p>
                 </div>
               </>
             )}
@@ -518,11 +518,11 @@ const CompanyCommunicationHub = () => {
                             AI
                           </Badge>
                         )}
-                        <span className="text-xs text-zinc-500">
+                        <span className="text-xs text-white/60">
                           {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
-                      <p className="text-zinc-300 text-sm break-words">{message.content}</p>
+                      <p className="text-white/85 text-sm break-words">{message.content}</p>
                       
                       {/* Reactions */}
                       {message.reactions && message.reactions.length > 0 && (
@@ -538,7 +538,7 @@ const CompanyCommunicationHub = () => {
                               onClick={() => addReaction(message.id, reaction.emoji)}
                             >
                               <span>{reaction.emoji}</span>
-                              <span className="text-zinc-400 text-xs">{reaction.userIds.length}</span>
+                              <span className="text-white/70 text-xs">{reaction.userIds.length}</span>
                             </button>
                           ))}
                         </div>
@@ -579,7 +579,7 @@ const CompanyCommunicationHub = () => {
               className="mx-4 mb-2 bg-zinc-800 rounded-lg border border-zinc-700 shadow-xl max-h-64 overflow-y-auto"
             >
               <div className="sticky top-0 bg-zinc-800 px-3 py-2 border-b border-zinc-700">
-                <p className="text-xs text-zinc-400">{filteredMembers.length} team members</p>
+                <p className="text-xs text-white/70">{filteredMembers.length} team members</p>
               </div>
               {filteredMembers.map((member) => (
                 <button
@@ -595,7 +595,7 @@ const CompanyCommunicationHub = () => {
                   </Avatar>
                   <div className="text-left flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{member.name}</p>
-                    <p className="text-xs text-zinc-400 truncate">{member.role} • {member.department}</p>
+                    <p className="text-xs text-white/70 truncate">{member.role} • {member.department}</p>
                   </div>
                   {member.isAI && (
                     <Badge variant="outline" className="ml-auto text-[9px] border-gold/50 text-gold flex-shrink-0">AI</Badge>
@@ -657,7 +657,7 @@ const CompanyCommunicationHub = () => {
       {/* Members Sidebar */}
       <div className="w-60 bg-zinc-900 border-l border-zinc-800 hidden xl:flex flex-col">
         <div className="p-4 border-b border-zinc-800">
-          <h3 className="text-sm font-semibold text-zinc-400">
+          <h3 className="text-sm font-semibold text-white/70">
             {activeDM ? 'User Info' : `Members — ${activeChannelData?.members.length || 0}`}
           </h3>
         </div>
@@ -673,23 +673,23 @@ const CompanyCommunicationHub = () => {
                   </AvatarFallback>
                 </Avatar>
                 <h4 className="font-semibold">{activeDMUser?.name}</h4>
-                <p className="text-sm text-zinc-400">{activeDMUser?.role}</p>
+                <p className="text-sm text-white/70">{activeDMUser?.role}</p>
                 {activeDMUser?.isAI && (
                   <Badge className="mt-2 bg-gold/20 text-gold border-gold/50">AI Assistant</Badge>
                 )}
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-zinc-400">Department</span>
+                  <span className="text-white/70">Department</span>
                   <span>{activeDMUser?.department}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-zinc-400">Email</span>
+                  <span className="text-white/70">Email</span>
                   <span className="text-gold truncate max-w-[120px]">{activeDMUser?.email}</span>
                 </div>
                 {activeDMUser?.languages && (
                   <div className="flex justify-between">
-                    <span className="text-zinc-400">Languages</span>
+                    <span className="text-white/70">Languages</span>
                     <span className="truncate max-w-[120px]">{activeDMUser.languages.slice(0, 2).join(', ')}</span>
                   </div>
                 )}
@@ -714,7 +714,7 @@ const CompanyCommunicationHub = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm truncate">{member.name}</p>
-                      <p className="text-xs text-zinc-500 truncate">{member.role}</p>
+                      <p className="text-xs text-white/60 truncate">{member.role}</p>
                     </div>
                   </div>
                 );

@@ -257,7 +257,7 @@ const MortgageCalculator = ({
             <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-gradient-to-br from-gold/30 to-gold/10 border border-gold/30 flex items-center justify-center mb-4">
               <Calculator className="w-7 h-7 lg:w-8 lg:h-8 text-gold" />
             </div>
-            <h3 className="text-2xl lg:text-3xl font-bold text-foreground" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h3 className="text-2xl lg:text-3xl font-bold text-foreground">
               Mortgage Calculator
             </h3>
             <p className="text-muted-foreground text-sm lg:text-base mt-2">Estimate your monthly payments</p>
@@ -394,7 +394,6 @@ const MortgageCalculator = ({
               <p className="text-muted-foreground text-xs lg:text-sm mb-1 lg:mb-2">Estimated Monthly Payment</p>
               <p 
                 className="text-xl sm:text-2xl lg:text-4xl xl:text-5xl font-bold text-gold break-words"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {formatCurrency(calculations.monthlyPayment)}
               </p>
@@ -408,42 +407,42 @@ const MortgageCalculator = ({
                   <Building2 className="w-4 h-4 text-gold" />
                 </div>
                 <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Property Price (100%)</p>
-                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(propertyPrice)}</p>
+                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(propertyPrice)}</p>
               </div>
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
                   <Percent className="w-4 h-4 text-gold" />
                 </div>
                 <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Down Payment ({downPaymentPercent}%)</p>
-                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(calculations.downPayment)}</p>
+                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.downPayment)}</p>
               </div>
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
                   <DollarSign className="w-4 h-4 text-gold" />
                 </div>
                 <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Loan Amount ({100 - downPaymentPercent}%)</p>
-                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(calculations.loanAmount)}</p>
+                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.loanAmount)}</p>
               </div>
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
                   <Calculator className="w-4 h-4 text-gold" />
                 </div>
                 <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Monthly Payment</p>
-                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(calculations.monthlyPayment)}</p>
+                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.monthlyPayment)}</p>
               </div>
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
                   <TrendingUp className="w-4 h-4 text-gold" />
                 </div>
                 <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Interest ({interestRate}% · {loanTermYears}yr)</p>
-                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(calculations.totalInterest)}</p>
+                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.totalInterest)}</p>
               </div>
               <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border border-gold/40 rounded-xl p-4 lg:p-5 text-center shadow-md min-w-0">
                 <div className="w-8 h-8 mx-auto mb-2 rounded-lg bg-gradient-to-br from-gold/20 to-gold/10 flex items-center justify-center">
                   <Wallet className="w-4 h-4 text-gold" />
                 </div>
                 <p className="text-black/60 text-[10px] lg:text-xs mb-2 uppercase tracking-wider">Total Cost (All-In)</p>
-                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap" style={{ fontFamily: "Poppins, sans-serif" }}>{formatCurrency(calculations.totalPayment)}</p>
+                <p className="text-black font-bold text-xs lg:text-sm xl:text-base whitespace-nowrap">{formatCurrency(calculations.totalPayment)}</p>
               </div>
             </div>
 

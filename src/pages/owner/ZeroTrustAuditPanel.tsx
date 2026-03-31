@@ -261,7 +261,7 @@ const ZeroTrustAuditPanel = () => {
                           fn.authLevel === "owner-only" ? "border-primary/50 text-primary" :
                           fn.authLevel === "authenticated" ? "border-blue-500/50 text-blue-400" :
                           fn.authLevel === "webhook" ? "border-purple-500/50 text-purple-400" :
-                          "border-zinc-500/50 text-zinc-400"
+                          "border-zinc-500/50 text-gray-500"
                         }>
                           {fn.authLevel}
                         </Badge>

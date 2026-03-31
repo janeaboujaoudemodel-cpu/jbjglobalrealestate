@@ -72,12 +72,12 @@ const BrokerSuite = () => {
             Broker <span className="text-purple-400">Intelligence</span> Suite
           </h1>
           
-          <p className="text-lg text-zinc-400 max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-white/70 max-w-2xl mx-auto mb-8">
             AI-powered tools for lead management, client communication, and deal closing. 
             Accelerate your sales pipeline with intelligent automation.
           </p>
           
-          <div className="flex items-center justify-center gap-4 text-sm text-zinc-500">
+          <div className="flex items-center justify-center gap-4 text-sm text-white/60">
             <span className="flex items-center gap-1">
               <span className="w-2 h-2 bg-purple-400 rounded-full" />
               5 Tools Included

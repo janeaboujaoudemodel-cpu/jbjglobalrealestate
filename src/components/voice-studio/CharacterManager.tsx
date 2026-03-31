@@ -172,7 +172,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
             <div className="space-y-4 pt-4">
               {/* Character Name */}
               <div>
-                <Label className="text-zinc-400">Character Name *</Label>
+                <Label className="text-white/70">Character Name *</Label>
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
@@ -183,7 +183,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
 
               {/* Nationality */}
               <div>
-                <Label className="text-zinc-400">Nationality</Label>
+                <Label className="text-white/70">Nationality</Label>
                 <Select 
                   value={formData.nationality} 
                   onValueChange={(value) => setFormData(prev => ({ ...prev, nationality: value }))}
@@ -203,7 +203,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
 
               {/* Languages */}
               <div>
-                <Label className="text-zinc-400">Languages</Label>
+                <Label className="text-white/70">Languages</Label>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {LANGUAGES.slice(0, 5).map(lang => (
                     <Badge
@@ -212,7 +212,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                       className={`cursor-pointer transition-all ${
                         formData.languages.includes(lang)
                           ? 'bg-gold/20 border-gold text-gold'
-                          : 'border-zinc-700 text-zinc-400 hover:border-gold/50'
+                          : 'border-zinc-700 text-white/70 hover:border-gold/50'
                       }`}
                       onClick={() => {
                         setFormData(prev => ({
@@ -231,7 +231,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
 
               {/* Voice Selection */}
               <div>
-                <Label className="text-zinc-400">Voice</Label>
+                <Label className="text-white/70">Voice</Label>
                 <div className="grid grid-cols-2 gap-2 mt-2 max-h-40 overflow-y-auto">
                   {VOICE_LIBRARY.map(voice => (
                     <button
@@ -254,15 +254,15 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                           {previewingVoice === voice.id ? (
                             <Pause className="w-3 h-3 text-gold" />
                           ) : (
-                            <Play className="w-3 h-3 text-zinc-400" />
+                            <Play className="w-3 h-3 text-white/70" />
                           )}
                         </Button>
                       </div>
                       <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="outline" className="text-xs border-zinc-600 text-zinc-400">
+                        <Badge variant="outline" className="text-xs border-zinc-600 text-white/70">
                           {voice.gender}
                         </Badge>
-                        <span className="text-xs text-zinc-500">{voice.accent}</span>
+                        <span className="text-xs text-white/60">{voice.accent}</span>
                       </div>
                     </button>
                   ))}
@@ -271,7 +271,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
 
               {/* Persona Selection */}
               <div>
-                <Label className="text-zinc-400">Persona</Label>
+                <Label className="text-white/70">Persona</Label>
                 <div className="grid grid-cols-2 gap-2 mt-2">
                   {PERSONA_PRESETS.map(preset => {
                     const Icon = preset.icon;
@@ -286,10 +286,10 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                         }`}
                       >
                         <div className="flex items-center gap-2">
-                          <Icon className={`w-4 h-4 ${formData.persona === preset.id ? 'text-gold' : 'text-zinc-400'}`} />
+                          <Icon className={`w-4 h-4 ${formData.persona === preset.id ? 'text-gold' : 'text-white/70'}`} />
                           <span className="text-white text-sm">{preset.name}</span>
                         </div>
-                        <p className="text-xs text-zinc-500 mt-1">{preset.description}</p>
+                        <p className="text-xs text-white/60 mt-1">{preset.description}</p>
                       </button>
                     );
                   })}
@@ -298,7 +298,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
 
               {/* Description */}
               <div>
-                <Label className="text-zinc-400">Description (Optional)</Label>
+                <Label className="text-white/70">Description (Optional)</Label>
                 <Input
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
@@ -324,7 +324,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
       {characters.length === 0 ? (
         <div className="text-center py-8 border-2 border-dashed border-zinc-700 rounded-lg">
           <Users className="w-10 h-10 text-zinc-600 mx-auto mb-2" />
-          <p className="text-zinc-500 text-sm">No characters created yet</p>
+          <p className="text-white/60 text-sm">No characters created yet</p>
           <p className="text-zinc-600 text-xs">Create characters for multi-voice scripts</p>
         </div>
       ) : (
@@ -351,11 +351,11 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
                         isSelected ? 'bg-gold/20' : 'bg-zinc-700'
                       }`}>
-                        <PersonaIcon className={`w-5 h-5 ${isSelected ? 'text-gold' : 'text-zinc-400'}`} />
+                        <PersonaIcon className={`w-5 h-5 ${isSelected ? 'text-gold' : 'text-white/70'}`} />
                       </div>
                       <div>
                         <p className="text-white font-medium">{character.name}</p>
-                        <div className="flex items-center gap-2 text-xs text-zinc-500">
+                        <div className="flex items-center gap-2 text-xs text-white/60">
                           <Globe className="w-3 h-3" />
                           <span>{character.nationality}</span>
                           <span>•</span>
@@ -369,7 +369,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                         size="icon"
                         variant="ghost"
                         onClick={(e) => { e.stopPropagation(); handlePreviewVoice(character.voiceId); }}
-                        className="w-8 h-8 text-zinc-400 hover:text-gold"
+                        className="w-8 h-8 text-white/70 hover:text-gold"
                       >
                         {previewingVoice === character.voiceId ? (
                           <Pause className="w-4 h-4" />
@@ -381,7 +381,7 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                         size="icon"
                         variant="ghost"
                         onClick={(e) => { e.stopPropagation(); onDeleteCharacter(character.id); }}
-                        className="w-8 h-8 text-zinc-400 hover:text-red-400"
+                        className="w-8 h-8 text-white/70 hover:text-red-400"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -390,12 +390,12 @@ export const CharacterManager: React.FC<CharacterManagerProps> = ({
                   {character.languages.length > 0 && (
                     <div className="flex gap-1 mt-2">
                       {character.languages.slice(0, 3).map(lang => (
-                        <Badge key={lang} variant="outline" className="text-xs border-zinc-700 text-zinc-400">
+                        <Badge key={lang} variant="outline" className="text-xs border-zinc-700 text-white/70">
                           {lang}
                         </Badge>
                       ))}
                       {character.languages.length > 3 && (
-                        <Badge variant="outline" className="text-xs border-zinc-700 text-zinc-400">
+                        <Badge variant="outline" className="text-xs border-zinc-700 text-white/70">
                           +{character.languages.length - 3}
                         </Badge>
                       )}

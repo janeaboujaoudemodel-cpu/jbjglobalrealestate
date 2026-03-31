@@ -39,7 +39,7 @@ const AIToolGuide = ({ description, steps, benefits, accentColor }: AIToolGuideP
         <div className="flex items-start gap-3">
           <Lightbulb className={`h-5 w-5 ${colors.icon} flex-shrink-0 mt-0.5`} />
           <div className="flex-1">
-            <p className="text-zinc-300 text-sm leading-relaxed">{description}</p>
+            <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
             
             <button
               onClick={() => setIsExpanded(!isExpanded)}
@@ -79,7 +79,7 @@ const AIToolGuide = ({ description, steps, benefits, accentColor }: AIToolGuideP
                   </div>
                   <ol className="space-y-2">
                     {steps.map((step, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-zinc-400">
+                      <li key={idx} className="flex items-start gap-2 text-sm text-gray-500">
                         <span className={`w-5 h-5 rounded-full ${colors.bg} ${colors.text} flex items-center justify-center flex-shrink-0 text-xs font-bold`}>
                           {idx + 1}
                         </span>
@@ -97,7 +97,7 @@ const AIToolGuide = ({ description, steps, benefits, accentColor }: AIToolGuideP
                   </div>
                   <ul className="space-y-2">
                     {benefits.map((benefit, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-zinc-400">
+                      <li key={idx} className="flex items-start gap-2 text-sm text-gray-500">
                         <CheckCircle className={`h-4 w-4 ${colors.icon} flex-shrink-0 mt-0.5`} />
                         {benefit}
                       </li>

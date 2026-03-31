@@ -120,14 +120,14 @@ export const ViewingRequestModal = ({
               {/* Header */}
               <div className="flex items-center justify-between p-5 border-b border-gold/30">
                 <div>
-                  <h3 className="text-lg font-semibold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  <h3 className="text-lg font-semibold text-black">
                     Book a Viewing
                   </h3>
                   <p className="text-sm text-zinc-600 truncate max-w-[280px]">{listingName}</p>
                 </div>
                 <button
                   onClick={handleClose}
-                  className="w-8 h-8 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-zinc-500 hover:text-black hover:border-zinc-300 transition-colors"
+                  className="w-8 h-8 rounded-full bg-white border border-zinc-200 flex items-center justify-center text-gray-500 hover:text-black hover:border-zinc-300 transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -177,7 +177,7 @@ export const ViewingRequestModal = ({
 
                     <div className="grid grid-cols-2 gap-3">
                       <div className="relative">
-                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                         <Input
                           type="date"
                           value={formData.preferredDate}
@@ -187,7 +187,7 @@ export const ViewingRequestModal = ({
                         />
                       </div>
                       <div className="relative">
-                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                         <Input
                           placeholder="Time (e.g. 2pm)"
                           value={formData.preferredTime}
@@ -202,7 +202,7 @@ export const ViewingRequestModal = ({
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       rows={3}
-                      className="w-full px-4 py-3 bg-white border border-zinc-300 text-black placeholder:text-zinc-400 rounded-lg resize-none focus:outline-none focus:border-gold"
+                      className="w-full px-4 py-3 bg-white border border-zinc-300 text-black placeholder:text-gray-400 rounded-lg resize-none focus:outline-none focus:border-gold"
                     />
 
                     <div className="flex items-start gap-3">

@@ -239,7 +239,7 @@ const ListingAdmin = () => {
       <div className="min-h-screen bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] flex flex-col items-center justify-center pt-28 gap-6">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-10 h-10 animate-spin text-gold" />
-          <p className="text-zinc-400 text-sm">Verifying access permissions...</p>
+          <p className="text-gray-500 text-sm">Verifying access permissions...</p>
         </div>
         <div className="w-80 space-y-3">
           <div className="h-2 bg-zinc-800 rounded-full animate-pulse" />
@@ -684,10 +684,10 @@ const ListingAdmin = () => {
                   <Building2 className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-zinc-900 text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h1 className="text-zinc-900 text-xl font-bold">
                     {t('listingAdmin.title')}
                   </h1>
-                  <span className="text-zinc-500 text-sm">{t('listingAdmin.propertyManager')}</span>
+                  <span className="text-gray-500 text-sm">{t('listingAdmin.propertyManager')}</span>
                 </div>
               </div>
             </div>
@@ -746,7 +746,7 @@ const ListingAdmin = () => {
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] rounded-lg border-2 border-gold/30">
                 <Building2 className="w-4 h-4 text-gold" />
                 <span className="text-sm text-black font-medium">{totalCount ?? 0} Published</span>
-                <span className="text-xs text-zinc-400">/ {allProjectsCount ?? 0} Total</span>
+                <span className="text-xs text-gray-500">/ {allProjectsCount ?? 0} Total</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#FDFBF7] to-[#EFE6D6] rounded-lg border-2 border-gold/30">
                 <Crown className="w-4 h-4 text-gold" />
@@ -993,7 +993,7 @@ const ListingAdmin = () => {
                     );
                   })}
                   {filteredProjects?.length === 0 && (
-                    <div className="col-span-full text-center py-16 text-zinc-500">
+                    <div className="col-span-full text-center py-16 text-gray-500">
                       <FolderOpen className="w-16 h-16 mx-auto mb-4 opacity-50" />
                       <p className="text-lg">{t('listingAdmin.noProjectsFound')}</p>
                     </div>
@@ -1338,7 +1338,7 @@ const ListingAdmin = () => {
                             <Crown className="w-4 h-4 text-gold" />
                             {t('listingAdmin.premiumListing')}
                           </Label>
-                          <p className="text-zinc-500 text-sm">
+                          <p className="text-gray-500 text-sm">
                             {t('listingAdmin.premiumDesc')}
                           </p>
                         </div>
@@ -1357,7 +1357,7 @@ const ListingAdmin = () => {
                             <X className="w-4 h-4 text-destructive" />
                             {t('listingAdmin.soldOut')}
                           </Label>
-                          <p className="text-zinc-500 text-sm">
+                          <p className="text-gray-500 text-sm">
                             {t('listingAdmin.soldOutDesc')}
                           </p>
                         </div>
@@ -1451,7 +1451,7 @@ const ListingAdmin = () => {
                             <File className="w-5 h-5 text-zinc-600" />
                             <div>
                               <p className="text-black text-sm font-medium">{doc.file_name}</p>
-                              <p className="text-zinc-500 text-xs">
+                              <p className="text-gray-500 text-xs">
                                 {doc.document_type} • {formatFileSize(doc.file_size)}
                               </p>
                             </div>
@@ -1476,7 +1476,7 @@ const ListingAdmin = () => {
                         </div>
                       ))}
                       {projectDocuments.length === 0 && (
-                        <div className="text-center py-12 text-zinc-500">
+                        <div className="text-center py-12 text-gray-500">
                           <FolderOpen className="w-12 h-12 mx-auto mb-4 opacity-50" />
                           <p>{t('listingAdmin.noDocuments')}</p>
                         </div>

@@ -132,7 +132,7 @@ export default function AIEmailGeneratorPage() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-zinc-300">Email Type</Label>
+                <Label className="text-white/85">Email Type</Label>
                 <Select value={emailType} onValueChange={setEmailType}>
                   <SelectTrigger className="bg-zinc-800 border-teal-500/30 text-white">
                     <SelectValue />
@@ -145,7 +145,7 @@ export default function AIEmailGeneratorPage() {
                 </Select>
               </div>
               <div>
-                <Label className="text-zinc-300">Tone</Label>
+                <Label className="text-white/85">Tone</Label>
                 <Select value={tone} onValueChange={setTone}>
                   <SelectTrigger className="bg-zinc-800 border-teal-500/30 text-white">
                     <SelectValue />
@@ -162,7 +162,7 @@ export default function AIEmailGeneratorPage() {
             </div>
 
             <div>
-              <Label className="text-zinc-300">Recipient Name</Label>
+              <Label className="text-white/85">Recipient Name</Label>
               <Input
                 value={recipientName}
                 onChange={(e) => setRecipientName(e.target.value)}
@@ -172,7 +172,7 @@ export default function AIEmailGeneratorPage() {
             </div>
 
             <div>
-              <Label className="text-zinc-300">Property Details (if applicable)</Label>
+              <Label className="text-white/85">Property Details (if applicable)</Label>
               <Textarea
                 value={propertyDetails}
                 onChange={(e) => setPropertyDetails(e.target.value)}
@@ -182,7 +182,7 @@ export default function AIEmailGeneratorPage() {
             </div>
 
             <div>
-              <Label className="text-zinc-300">Purpose/Objective</Label>
+              <Label className="text-white/85">Purpose/Objective</Label>
               <Input
                 value={purpose}
                 onChange={(e) => setPurpose(e.target.value)}
@@ -192,7 +192,7 @@ export default function AIEmailGeneratorPage() {
             </div>
 
             <div>
-              <Label className="text-zinc-300">Additional Context</Label>
+              <Label className="text-white/85">Additional Context</Label>
               <Textarea
                 value={additionalContext}
                 onChange={(e) => setAdditionalContext(e.target.value)}
@@ -247,19 +247,19 @@ export default function AIEmailGeneratorPage() {
               )}
 
               <div className="bg-zinc-800/50 rounded-lg p-4 border border-teal-500/20 space-y-3">
-                {result.greeting && <p className="text-zinc-300">{result.greeting}</p>}
-                {result.body && <p className="text-zinc-300 whitespace-pre-wrap">{result.body}</p>}
+                {result.greeting && <p className="text-white/85">{result.greeting}</p>}
+                {result.body && <p className="text-white/85 whitespace-pre-wrap">{result.body}</p>}
                 {result.callToAction && <p className="text-teal-300 font-medium">{result.callToAction}</p>}
-                {result.closing && <p className="text-zinc-300">{result.closing}</p>}
-                {result.signature && <p className="text-zinc-400 text-sm whitespace-pre-line">{result.signature}</p>}
+                {result.closing && <p className="text-white/85">{result.closing}</p>}
+                {result.signature && <p className="text-white/70 text-sm whitespace-pre-line">{result.signature}</p>}
               </div>
 
               {result.alternativeSubjects && result.alternativeSubjects.length > 0 && (
                 <div>
-                  <Label className="text-zinc-400 text-sm">Alternative Subject Lines</Label>
+                  <Label className="text-white/70 text-sm">Alternative Subject Lines</Label>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {result.alternativeSubjects.map((subj, i) => (
-                      <span key={i} className="text-xs px-3 py-1 bg-zinc-800 rounded-full text-zinc-300 border border-teal-500/20">
+                      <span key={i} className="text-xs px-3 py-1 bg-zinc-800 rounded-full text-white/85 border border-teal-500/20">
                         {subj}
                       </span>
                     ))}
@@ -272,7 +272,7 @@ export default function AIEmailGeneratorPage() {
                   <Label className="text-teal-400 text-sm">Personalization Tips</Label>
                   <ul className="mt-2 space-y-1">
                     {result.tips.map((tip, i) => (
-                      <li key={i} className="text-zinc-300 text-sm flex items-start gap-2">
+                      <li key={i} className="text-white/85 text-sm flex items-start gap-2">
                         <span className="text-teal-400">•</span>
                         {tip}
                       </li>
@@ -288,7 +288,7 @@ export default function AIEmailGeneratorPage() {
         {!result && !loading && (
           <div className="bg-zinc-900/50 border border-teal-500/20 rounded-xl py-12 text-center">
             <Mail className="w-12 h-12 text-teal-400/50 mx-auto mb-4" />
-            <p className="text-zinc-400">Configure your email above to generate professional content</p>
+            <p className="text-white/70">Configure your email above to generate professional content</p>
           </div>
         )}
       </div>

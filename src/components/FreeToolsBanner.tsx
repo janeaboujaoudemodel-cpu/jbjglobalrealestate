@@ -133,7 +133,7 @@ export default function FreeToolsBanner() {
                 disabled={!canClose}
                 className={`absolute top-4 right-4 z-10 p-1 rounded-full transition-all duration-300 ${
                   canClose 
-                    ? "text-zinc-400 hover:text-white hover:bg-white/10 cursor-pointer" 
+                    ? "text-gray-500 hover:text-white hover:bg-white/10 cursor-pointer" 
                     : "text-zinc-600 cursor-not-allowed opacity-50"
                 }`}
                 aria-label="Close"
@@ -179,7 +179,6 @@ export default function FreeToolsBanner() {
                 <h3 
                   className="font-bold text-xl md:text-2xl mb-3 leading-tight"
                   style={{ 
-                    fontFamily: "Poppins, sans-serif",
                     color: "#ffffff",
                     textShadow: "0 0 30px rgba(255,255,255,0.2), 0 0 60px rgba(255,255,255,0.1)"
                   }}
@@ -221,13 +220,13 @@ export default function FreeToolsBanner() {
                 {/* Countdown timer - positioned bottom-right */}
                 <div className="flex justify-end mt-4">
                   {!canClose ? (
-                    <p className="text-zinc-500 text-xs">
+                    <p className="text-white/60 text-xs">
                       You can close this window in{" "}
                       <span className="text-gold font-bold">{countdown}</span>{" "}
                       {countdown === 1 ? "second" : "seconds"}…
                     </p>
                   ) : (
-                    <p className="text-zinc-400 text-xs font-medium">
+                    <p className="text-white/70 text-xs font-medium">
                       You may now close this window.
                     </p>
                   )}

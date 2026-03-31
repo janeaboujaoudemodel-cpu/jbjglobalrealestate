@@ -30,7 +30,7 @@ export function EmbeddedHRDashboard() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Active Employees</p>
+                <p className="text-gray-500 text-xs">Active Employees</p>
                 <p className="text-2xl font-bold text-black">{statsLoading ? "..." : String(stats?.activeEmployees || 0)}</p>
               </div>
               <div className="w-10 h-10 bg-gold/10 rounded-lg flex items-center justify-center">
@@ -43,7 +43,7 @@ export function EmbeddedHRDashboard() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">Open Positions</p>
+                <p className="text-gray-500 text-xs">Open Positions</p>
                 <p className="text-2xl font-bold text-blue-600">{statsLoading ? "..." : String(stats?.openPositions || 0)}</p>
               </div>
               <div className="w-10 h-10 bg-blue-500/10 rounded-lg flex items-center justify-center">
@@ -56,7 +56,7 @@ export function EmbeddedHRDashboard() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">New Hires</p>
+                <p className="text-gray-500 text-xs">New Hires</p>
                 <p className="text-2xl font-bold text-green-600">{statsLoading ? "..." : String(stats?.newHires || 0)}</p>
               </div>
               <div className="w-10 h-10 bg-green-500/10 rounded-lg flex items-center justify-center">
@@ -72,9 +72,9 @@ export function EmbeddedHRDashboard() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">CVs Collected</p>
+                <p className="text-gray-500 text-xs">CVs Collected</p>
                 <p className="text-2xl font-bold text-amber-600">{statsLoading ? "..." : String(stats?.totalCVs || 0)}</p>
-                <p className="text-[10px] text-zinc-400">{stats?.pendingCVs || 0} pending</p>
+                <p className="text-[10px] text-gray-500">{stats?.pendingCVs || 0} pending</p>
               </div>
               <div className="w-10 h-10 bg-amber-500/10 rounded-lg flex items-center justify-center">
                 <FileText className="w-5 h-5 text-amber-500" />
@@ -86,7 +86,7 @@ export function EmbeddedHRDashboard() {
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-zinc-500 text-xs">AI Insights</p>
+                <p className="text-gray-500 text-xs">AI Insights</p>
                 <p className="text-2xl font-bold text-purple-600">{statsLoading ? "..." : String(stats?.aiInsights || 0)}</p>
               </div>
               <div className="w-10 h-10 bg-purple-500/10 rounded-lg flex items-center justify-center">

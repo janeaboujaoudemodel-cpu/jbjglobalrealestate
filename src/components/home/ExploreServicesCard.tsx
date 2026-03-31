@@ -225,7 +225,7 @@ const ExploreServicesCard = () => {
     <div className="relative overflow-hidden rounded-2xl md:rounded-3xl border-2 border-gold/50 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] shadow-[0_12px_40px_rgba(200,167,102,0.45),0_6px_20px_rgba(0,0,0,0.2)]">
       {/* Header */}
       <div className="px-6 md:px-8 py-5 md:py-6 border-b border-gold/30 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
-        <h3 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+        <h3 className="text-2xl md:text-3xl font-bold text-black">
           Explore Our Services
         </h3>
         <p className="text-sm md:text-base text-zinc-600 mt-1">Premium real estate solutions tailored to your needs</p>
@@ -265,7 +265,6 @@ const ExploreServicesCard = () => {
           <h4 
             className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 transition-all duration-300" 
             style={{ 
-              fontFamily: "Poppins, sans-serif",
               background: 'linear-gradient(135deg, #FFFFFF 0%, #F7F1E6 50%, #C8A766 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',

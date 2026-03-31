@@ -47,7 +47,6 @@ export function BrandedLoader({ text = "Loading...", className = "", variant = "
       </div>
       <span
         className={`text-xs tracking-[0.25em] uppercase animate-pulse ${variant === 'light' ? 'text-black/60' : 'text-gold/60'}`}
-        style={{ fontFamily: "Poppins, sans-serif" }}
       >
         {text}
       </span>

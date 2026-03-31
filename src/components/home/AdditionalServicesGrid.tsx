@@ -104,7 +104,7 @@ const AdditionalServicesGrid = () => {
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 shadow-lg`}>
                   <service.icon className="w-6 h-6 text-white" />
                 </div>
-                <h4 className="text-lg font-bold text-black mb-2 group-hover:text-gold transition-colors" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <h4 className="text-lg font-bold text-black mb-2 group-hover:text-gold transition-colors">
                   {service.title}
                 </h4>
                 <p className="text-sm text-zinc-600 mb-3">
@@ -121,13 +121,13 @@ const AdditionalServicesGrid = () => {
               <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 shadow-lg opacity-50`}>
                 <service.icon className="w-6 h-6 text-white" />
               </div>
-              <h4 className="text-lg font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h4 className="text-lg font-bold text-black mb-2">
                 {service.title}
               </h4>
               <p className="text-sm text-zinc-600 mb-3">
                 {service.description}
               </p>
-              <span className="text-xs text-zinc-500 font-medium uppercase tracking-wide">
+              <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">
                 Coming Soon
               </span>
             </div>

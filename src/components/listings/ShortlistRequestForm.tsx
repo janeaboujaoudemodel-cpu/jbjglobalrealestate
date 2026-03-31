@@ -125,7 +125,7 @@ export const ShortlistRequestForm = ({
         <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-gold" />
         </div>
-        <h3 className="text-xl font-semibold text-black mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <h3 className="text-xl font-semibold text-black mb-2">
           Request Received!
         </h3>
         <p className="text-zinc-600">
@@ -148,7 +148,7 @@ export const ShortlistRequestForm = ({
           <Sparkles className="w-3 h-3" />
           {transactionType === 'buy' ? 'Property Shortlist' : 'Rental Shortlist'}
         </div>
-        <h3 className="text-xl md:text-2xl font-semibold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
+        <h3 className="text-xl md:text-2xl font-semibold text-black">
           Get a <span className="text-gold">Curated Shortlist</span>
         </h3>
         <p className="text-zinc-600 text-sm mt-2">
@@ -162,7 +162,7 @@ export const ShortlistRequestForm = ({
           placeholder="Full Name *"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="h-12 bg-white border-zinc-300 text-black placeholder:text-zinc-400"
+          className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
           required
         />
         
@@ -171,7 +171,7 @@ export const ShortlistRequestForm = ({
           placeholder="Phone Number *"
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          className="h-12 bg-white border-zinc-300 text-black placeholder:text-zinc-400"
+          className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
           required
         />
 
@@ -180,13 +180,13 @@ export const ShortlistRequestForm = ({
             placeholder={transactionType === 'buy' ? 'Budget (AED)' : 'Max Rent (AED)'}
             value={formData.budget}
             onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-            className="h-12 bg-white border-zinc-300 text-black placeholder:text-zinc-400"
+            className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
           />
           <Input
             placeholder="Bedrooms (e.g. 2-3)"
             value={formData.bedrooms}
             onChange={(e) => setFormData({ ...formData, bedrooms: e.target.value })}
-            className="h-12 bg-white border-zinc-300 text-black placeholder:text-zinc-400"
+            className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
           />
         </div>
 
@@ -194,14 +194,14 @@ export const ShortlistRequestForm = ({
           placeholder="Preferred Areas (e.g. Downtown, Marina)"
           value={formData.preferredAreas}
           onChange={(e) => setFormData({ ...formData, preferredAreas: e.target.value })}
-          className="h-12 bg-white border-zinc-300 text-black placeholder:text-zinc-400"
+          className="h-12 bg-white border-zinc-300 text-black placeholder:text-gray-400"
         />
 
         <Select
           value={formData.timeline}
           onValueChange={(value) => setFormData({ ...formData, timeline: value as LeadTimeline })}
         >
-          <SelectTrigger className="h-12 bg-white border-zinc-300 text-zinc-400">
+          <SelectTrigger className="h-12 bg-white border-zinc-300 text-gray-500">
             <SelectValue placeholder={transactionType === 'buy' ? 'When do you want to buy?' : 'When do you need to move?'} />
           </SelectTrigger>
           <SelectContent className="bg-white border-zinc-200">

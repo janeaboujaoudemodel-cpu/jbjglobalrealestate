@@ -133,7 +133,7 @@ export default function AIDescriptionWriterPage() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-zinc-300">Property Type</Label>
+                <Label className="text-white/85">Property Type</Label>
                 <Select value={propertyType} onValueChange={setPropertyType}>
                   <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50">
                     <SelectValue />
@@ -149,7 +149,7 @@ export default function AIDescriptionWriterPage() {
                 </Select>
               </div>
               <div>
-                <Label className="text-zinc-300">Location</Label>
+                <Label className="text-white/85">Location</Label>
                 <Input
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
@@ -161,7 +161,7 @@ export default function AIDescriptionWriterPage() {
 
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <Label className="text-zinc-300">Bedrooms</Label>
+                <Label className="text-white/85">Bedrooms</Label>
                 <Select value={bedrooms} onValueChange={setBedrooms}>
                   <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50">
                     <SelectValue />
@@ -174,7 +174,7 @@ export default function AIDescriptionWriterPage() {
                 </Select>
               </div>
               <div>
-                <Label className="text-zinc-300">Size (sqft)</Label>
+                <Label className="text-white/85">Size (sqft)</Label>
                 <Input
                   value={size}
                   onChange={(e) => setSize(e.target.value)}
@@ -183,7 +183,7 @@ export default function AIDescriptionWriterPage() {
                 />
               </div>
               <div>
-                <Label className="text-zinc-300">Price (AED)</Label>
+                <Label className="text-white/85">Price (AED)</Label>
                 <Input
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
@@ -194,7 +194,7 @@ export default function AIDescriptionWriterPage() {
             </div>
 
             <div>
-              <Label className="text-zinc-300">Key Features (comma-separated)</Label>
+              <Label className="text-white/85">Key Features (comma-separated)</Label>
               <Input
                 value={features}
                 onChange={(e) => setFeatures(e.target.value)}
@@ -205,7 +205,7 @@ export default function AIDescriptionWriterPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label className="text-zinc-300">Views</Label>
+                <Label className="text-white/85">Views</Label>
                 <Input
                   value={views}
                   onChange={(e) => setViews(e.target.value)}
@@ -214,7 +214,7 @@ export default function AIDescriptionWriterPage() {
                 />
               </div>
               <div>
-                <Label className="text-zinc-300">Writing Style</Label>
+                <Label className="text-white/85">Writing Style</Label>
                 <Select value={style} onValueChange={setStyle}>
                   <SelectTriggerDark className="border-lime-500/30 hover:border-lime-500/50">
                     <SelectValue />
@@ -230,7 +230,7 @@ export default function AIDescriptionWriterPage() {
             </div>
 
             <div>
-              <Label className="text-zinc-300">Additional Information</Label>
+              <Label className="text-white/85">Additional Information</Label>
               <Textarea
                 value={additionalInfo}
                 onChange={(e) => setAdditionalInfo(e.target.value)}
@@ -300,7 +300,7 @@ export default function AIDescriptionWriterPage() {
                   </Button>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-zinc-300 whitespace-pre-wrap">{result.fullDescription}</p>
+                  <p className="text-white/85 whitespace-pre-wrap">{result.fullDescription}</p>
                 </CardContent>
               </Card>
             )}
@@ -333,13 +333,13 @@ export default function AIDescriptionWriterPage() {
                   {result.seoTitle && (
                     <div>
                       <Label className="text-lime-400 text-xs uppercase">Title Tag</Label>
-                      <p className="text-zinc-300">{result.seoTitle}</p>
+                      <p className="text-white/85">{result.seoTitle}</p>
                     </div>
                   )}
                   {result.seoDescription && (
                     <div>
                       <Label className="text-lime-400 text-xs uppercase">Meta Description</Label>
-                      <p className="text-zinc-400 text-sm">{result.seoDescription}</p>
+                      <p className="text-white/70 text-sm">{result.seoDescription}</p>
                     </div>
                   )}
                 </CardContent>
@@ -352,7 +352,7 @@ export default function AIDescriptionWriterPage() {
         {!result && !loading && (
           <div className="bg-zinc-900/50 border border-lime-500/20 rounded-xl py-12 text-center">
             <PenTool className="w-12 h-12 text-lime-400/50 mx-auto mb-4" />
-            <p className="text-zinc-400">Enter property details above to generate compelling descriptions</p>
+            <p className="text-white/70">Enter property details above to generate compelling descriptions</p>
           </div>
         )}
       </div>

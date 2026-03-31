@@ -165,7 +165,7 @@ export default function OwnerInbox() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-black">Unified Inbox</h1>
-                  <p className="text-zinc-500 text-sm">Jane Bou Jaoude — All communications in one place</p>
+                  <p className="text-gray-500 text-sm">Jane Bou Jaoude — All communications in one place</p>
                 </div>
               </div>
               
@@ -233,7 +233,7 @@ export default function OwnerInbox() {
           {/* Search & Status Filters */}
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="relative flex-1 min-w-[200px] max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <Input
                 placeholder="Search contacts..."
                 value={filters.search}
@@ -264,8 +264,8 @@ export default function OwnerInbox() {
                   ) : threads.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full p-8 text-center">
                       <MessageSquare className="h-12 w-12 text-gold/40 mb-4" />
-                      <p className="text-zinc-500 font-medium">No conversations yet</p>
-                      <p className="text-zinc-400 text-sm mt-1">Connect channels to start receiving messages</p>
+                      <p className="text-gray-500 font-medium">No conversations yet</p>
+                      <p className="text-gray-500 text-sm mt-1">Connect channels to start receiving messages</p>
                     </div>
                   ) : (
                     <div className="divide-y divide-gold/10">
@@ -295,8 +295,8 @@ export default function OwnerInbox() {
                 <Card className="border border-gold/20 bg-white/90 backdrop-blur-sm h-full flex items-center justify-center shadow-sm">
                   <div className="text-center p-8">
                     <MessageSquare className="h-16 w-16 text-gold/30 mx-auto mb-4" />
-                    <p className="text-zinc-500 font-medium">Select a conversation</p>
-                    <p className="text-zinc-400 text-sm mt-1">Choose a thread from the list to view messages</p>
+                    <p className="text-gray-500 font-medium">Select a conversation</p>
+                    <p className="text-gray-500 text-sm mt-1">Choose a thread from the list to view messages</p>
                   </div>
                 </Card>
               )}
@@ -360,7 +360,7 @@ function StatsCard({
       <CardContent className="p-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-zinc-500">{label}</p>
+            <p className="text-xs text-gray-500">{label}</p>
             <p className="text-xl font-bold text-black">{value}</p>
           </div>
           <div className={`p-2 rounded-lg bg-white/50 ${iconColors[variant]}`}>
@@ -419,7 +419,7 @@ function ThreadListItem({
             )}
           </div>
           
-          <p className="text-sm text-zinc-500 truncate mt-0.5">
+          <p className="text-sm text-gray-500 truncate mt-0.5">
             {thread.last_message_preview || 'No messages yet'}
           </p>
 
@@ -430,7 +430,7 @@ function ThreadListItem({
             </Badge>
             
             {thread.last_message_at && (
-              <span className="text-[10px] text-zinc-400">
+              <span className="text-[10px] text-gray-500">
                 {formatDistanceToNow(new Date(thread.last_message_at), { addSuffix: true })}
               </span>
             )}

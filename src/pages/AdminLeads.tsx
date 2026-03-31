@@ -517,7 +517,7 @@ const AdminLeads = () => {
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Admin
             </Button>
-            <h1 className="text-black text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h1 className="text-black text-2xl font-bold">
               Leads & Conversations
             </h1>
           </div>

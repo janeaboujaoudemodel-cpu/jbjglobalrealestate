@@ -336,7 +336,7 @@ const CRMNotes = () => {
                           <p className="text-sm text-zinc-700 whitespace-pre-wrap line-clamp-6">
                             {note.content || 'Empty note...'}
                           </p>
-                          <p className="text-xs text-zinc-500 mt-3">
+                          <p className="text-xs text-gray-500 mt-3">
                             Updated {format(note.updatedAt, 'MMM d, yyyy')}
                           </p>
                         </>

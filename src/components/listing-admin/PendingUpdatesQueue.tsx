@@ -382,7 +382,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
             {migrationLog.length > 0 && (
               <div className="bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden">
                 <div className="px-4 py-2 border-b border-zinc-800">
-                  <span className="text-zinc-300 text-xs font-semibold">Migration Log</span>
+                  <span className="text-gray-400 text-xs font-semibold">Migration Log</span>
                 </div>
                 <div className="max-h-48 overflow-y-auto p-3 font-mono text-xs space-y-0.5">
                   {migrationLog.map((line, i) => (
@@ -391,7 +391,7 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                       line.includes("[OK]") || line.includes("[COMPLETE]") ? "text-emerald-400" :
                       line.includes("[START]") ? "text-yellow-300" :
                       line.includes("[WARN]") ? "text-amber-400" :
-                      "text-zinc-400"
+                      "text-gray-500"
                     }`}>{line}</div>
                   ))}
                 </div>
@@ -533,20 +533,20 @@ export function PendingUpdatesQueue({ onRefresh }: PendingUpdatesQueueProps) {
                           <span className="font-medium text-zinc-900 text-sm">
                             {update.field_name.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
                           </span>
-                          <div className="flex items-center gap-1 text-xs text-zinc-500">
+                          <div className="flex items-center gap-1 text-xs text-gray-500">
                             <Clock className="h-3 w-3" />
                             {format(new Date(update.created_at), "MMM d, h:mm a")}
                           </div>
                         </div>
                         <div className="grid grid-cols-2 gap-3 mb-3">
                           <div>
-                            <p className="text-[10px] text-zinc-500 mb-1">Current</p>
+                            <p className="text-[10px] text-gray-500 mb-1">Current</p>
                             <div className="bg-white border border-zinc-200 rounded p-2 text-xs text-zinc-900">
-                              {update.current_value || <span className="text-zinc-400 italic">Empty</span>}
+                              {update.current_value || <span className="text-gray-500 italic">Empty</span>}
                             </div>
                           </div>
                           <div>
-                            <p className="text-[10px] text-zinc-500 mb-1">Proposed</p>
+                            <p className="text-[10px] text-gray-500 mb-1">Proposed</p>
                             <div className="bg-emerald-50 border border-emerald-200 rounded p-2 text-xs text-zinc-900">
                               {update.proposed_value}
                             </div>

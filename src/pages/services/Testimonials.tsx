@@ -222,7 +222,7 @@ const Testimonials = () => {
               </div>
               <div>
                 <p className="font-semibold text-black">{testimonial.name}</p>
-                <p className="text-sm text-zinc-500">{testimonial.role} • {testimonial.location}</p>
+                <p className="text-sm text-white/60">{testimonial.role} • {testimonial.location}</p>
               </div>
             </div>
             <div className="flex gap-1">
@@ -254,7 +254,7 @@ const Testimonials = () => {
                 <Star className="w-12 h-12 text-gold/60" />
               </div>
               <p className="text-gold/60 text-sm tracking-widest uppercase">Client Stories</p>
-              <p className="text-zinc-500 text-xs mt-2">Video placeholder only</p>
+              <p className="text-white/60 text-xs mt-2">Video placeholder only</p>
             </div>
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black" />
@@ -282,7 +282,7 @@ const Testimonials = () => {
               Testimonials
             </h1>
             
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Real feedback, presented with premium formatting and privacy respect—because trust is built with receipts, not hype.
             </p>
             
@@ -431,7 +431,7 @@ const Testimonials = () => {
                     <div className="aspect-video bg-zinc-200 flex items-center justify-center">
                       <div className="text-center">
                         <Video className="w-12 h-12 text-gold mx-auto mb-2" />
-                        <p className="text-sm text-zinc-500">Video Coming Soon</p>
+                        <p className="text-sm text-white/60">Video Coming Soon</p>
                       </div>
                     </div>
                     <CardContent className="p-4">

@@ -305,7 +305,7 @@ export default function AdminIntelligencePage({ embedded = false }: { embedded?:
                   <ArrowLeft className="w-4 h-4 mr-2" /> Back
                 </Button>
               )}
-              <h1 className={`${embedded ? 'text-2xl' : 'text-3xl'} font-bold text-black`} style={{ fontFamily: 'Poppins, sans-serif' }}>
+              <h1 className={`${embedded ? 'text-2xl' : 'text-3xl'} font-bold text-black`}>
                 User Intelligence Panel
               </h1>
               <p className="text-stone-500 mt-1">{filteredProfiles.length} users tracked</p>

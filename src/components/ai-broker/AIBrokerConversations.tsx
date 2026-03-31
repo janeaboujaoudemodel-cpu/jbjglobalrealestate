@@ -84,7 +84,7 @@ export function AIBrokerConversations({ brokerId }: AIBrokerConversationsProps) 
       case "phone":
         return "border-purple-500/30 text-purple-400";
       default:
-        return "border-zinc-500/30 text-zinc-400";
+        return "border-zinc-500/30 text-white/70";
     }
   };
 

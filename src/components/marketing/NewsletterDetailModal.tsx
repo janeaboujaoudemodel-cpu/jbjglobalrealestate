@@ -41,7 +41,7 @@ const NewsletterDetailModal = ({ isOpen, onClose, onComplete, email }: Newslette
           <div className="mx-auto w-16 h-16 rounded-full bg-gold/10 border-2 border-gold/40 flex items-center justify-center">
             <User className="w-8 h-8 text-gold" />
           </div>
-          <DialogTitle className="text-xl font-bold text-foreground" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <DialogTitle className="text-xl font-bold text-foreground">
             Email Received Successfully
           </DialogTitle>
           <DialogDescription className="text-muted-foreground text-sm leading-relaxed">

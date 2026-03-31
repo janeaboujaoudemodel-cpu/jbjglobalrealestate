@@ -452,7 +452,7 @@ const FeedbackForm = () => {
               className="transition-transform hover:scale-110"
             >
               <Star
-                className={`w-8 h-8 ${star <= rating ? "fill-gold text-gold" : "text-zinc-400"}`}
+                className={`w-8 h-8 ${star <= rating ? "fill-gold text-gold" : "text-gray-500"}`}
               />
             </button>
           ))}
@@ -986,7 +986,6 @@ const CustomerHappiness = () => {
               <motion.h1
                 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
                 variants={fadeInUp}
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 <span className="text-white">We're Here to </span>
                 <span
@@ -1001,7 +1000,7 @@ const CustomerHappiness = () => {
               </motion.h1>
 
               <motion.p
-                className="text-zinc-400 text-lg max-w-2xl mx-auto mb-8"
+                className="text-gray-500 text-lg max-w-2xl mx-auto mb-8"
                 variants={fadeInUp}
               >
                 Your satisfaction is our priority. Whether you need support, want to share feedback, 

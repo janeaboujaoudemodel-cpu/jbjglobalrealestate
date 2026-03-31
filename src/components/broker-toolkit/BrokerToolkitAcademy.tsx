@@ -88,7 +88,7 @@ export function BrokerToolkitAcademy() {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Professional <span className="text-sky-400">Development Courses</span>
             </h2>
-            <p className="text-zinc-400 max-w-2xl mx-auto">
+            <p className="text-white/70 max-w-2xl mx-auto">
               Complete our internal certification courses and earn verified JBJ badges. 
               Go beyond real estate with skills in marketing, client relations, and business development.
             </p>
@@ -116,8 +116,8 @@ export function BrokerToolkitAcademy() {
                       </Badge>
                     </div>
                     <h3 className="text-sky-300 font-semibold text-lg mb-2">{cert.title}</h3>
-                    <p className="text-zinc-400 text-sm mb-4">{cert.description}</p>
-                    <div className="flex items-center justify-between text-xs text-zinc-500">
+                    <p className="text-white/70 text-sm mb-4">{cert.description}</p>
+                    <div className="flex items-center justify-between text-xs text-white/60">
                       <span className="flex items-center gap-1">
                         <Clock className="w-3 h-3" />
                         {cert.duration}

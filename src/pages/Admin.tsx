@@ -94,7 +94,7 @@ const Admin = () => {
             </div>
           </div>
           <div className="hidden lg:flex items-center flex-1 max-w-sm mx-4">
-            <button onClick={() => h.setShowCommandPalette(true)} className="flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-white/80 border border-gold/30 text-zinc-500 hover:border-gold/50 transition-all">
+            <button onClick={() => h.setShowCommandPalette(true)} className="flex items-center gap-2 w-full px-3 py-2 rounded-xl bg-white/80 border border-gold/30 text-gray-500 hover:border-gold/50 transition-all">
               <Search className="h-4 w-4 text-gold flex-shrink-0" />
               <span className="text-sm">Search...</span>
               <kbd className="ml-auto px-1.5 py-0.5 bg-gold/10 text-gold text-[10px] rounded font-mono flex-shrink-0">⌘K</kbd>
@@ -251,7 +251,7 @@ const Admin = () => {
                       <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">{stat.icon}</div>
                       <div className="min-w-0">
                         <p className="text-2xl font-bold text-black leading-tight">{stat.value}</p>
-                        <p className="text-xs text-zinc-500 truncate">{stat.label}</p>
+                        <p className="text-xs text-gray-500 truncate">{stat.label}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -271,7 +271,7 @@ const Admin = () => {
                             <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden flex-shrink-0">
                               {dev.logo_url ? <img src={dev.logo_url} alt={dev.name} className="w-full h-full object-contain" /> : <Building2 className="w-5 h-5 text-gold" />}
                             </div>
-                            <div className="min-w-0"><p className="font-semibold text-black truncate">{dev.name}</p><p className="text-xs text-zinc-400">{dev.slug}</p></div>
+                            <div className="min-w-0"><p className="font-semibold text-black truncate">{dev.name}</p><p className="text-xs text-gray-500">{dev.slug}</p></div>
                           </div>
                           <Button variant="ghost" size="sm" onClick={() => window.open(`/developers/${dev.slug}`, '_blank')}><ExternalLink className="w-4 h-4" /></Button>
                         </div>
@@ -288,7 +288,7 @@ const Admin = () => {
                     <div className="space-y-2">
                       {h.communities?.map((comm) => (
                         <div key={comm.id} className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-[#FDFBF7] to-white border border-gold/20 hover:border-gold/40 transition-all">
-                          <div className="min-w-0"><p className="font-semibold text-black truncate">{comm.name}</p><p className="text-xs text-zinc-400">{comm.slug}</p></div>
+                          <div className="min-w-0"><p className="font-semibold text-black truncate">{comm.name}</p><p className="text-xs text-gray-500">{comm.slug}</p></div>
                           <Button variant="ghost" size="sm" onClick={() => window.open(`/communities/${comm.slug}`, '_blank')}><ExternalLink className="w-4 h-4" /></Button>
                         </div>
                       ))}
@@ -308,7 +308,7 @@ const Admin = () => {
                             <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center overflow-hidden flex-shrink-0">
                               {area.image_url ? <img src={area.image_url} alt={area.name} className="w-full h-full object-cover" /> : <MapPin className="w-5 h-5 text-gold" />}
                             </div>
-                            <div className="min-w-0"><p className="font-semibold text-black truncate">{area.name}</p><p className="text-xs text-zinc-400">{area.emirate} · {area.property_count || 0} projects</p></div>
+                            <div className="min-w-0"><p className="font-semibold text-black truncate">{area.name}</p><p className="text-xs text-gray-500">{area.emirate} · {area.property_count || 0} projects</p></div>
                           </div>
                           <div className="flex items-center gap-2 flex-shrink-0">
                             {area.is_trending && <Badge className="bg-gold/10 text-gold border-gold/30 text-[10px] px-1 py-0">Trending</Badge>}
@@ -332,7 +332,7 @@ const Admin = () => {
                       <CardTitle className="text-black">{h.propertiesFilter === "premium" ? "Premium Projects" : "All Projects"}</CardTitle>
                       <div className="relative w-64">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
-                        <Input placeholder="Search projects..." value={h.searchQuery} onChange={(e) => h.setSearchQuery(e.target.value)} className="pl-10 bg-white border border-gold/30 text-black placeholder:text-zinc-400" />
+                        <Input placeholder="Search projects..." value={h.searchQuery} onChange={(e) => h.setSearchQuery(e.target.value)} className="pl-10 bg-white border border-gold/30 text-black placeholder:text-gray-400" />
                       </div>
                     </div>
                   </CardHeader>
@@ -356,17 +356,17 @@ const Admin = () => {
                                     {isIncomplete && <Badge className="bg-red-50 text-red-600 border-red-200 text-[10px] px-1 py-0 flex-shrink-0"><AlertCircle className="w-3 h-3 mr-0.5" />Incomplete</Badge>}
                                     {project.is_premium && <Badge className="bg-gold/10 text-gold border-gold/30 text-[10px] px-1 py-0 flex-shrink-0"><Crown className="w-3 h-3" /></Badge>}
                                   </div>
-                                  {subtitleParts.length > 0 && <p className="text-xs text-zinc-500 truncate">{subtitleParts.join(' — ')}</p>}
-                                  <div className="flex items-center gap-2 mt-0.5 text-[11px] text-zinc-400">
+                                  {subtitleParts.length > 0 && <p className="text-xs text-gray-500 truncate">{subtitleParts.join(' — ')}</p>}
+                                  <div className="flex items-center gap-2 mt-0.5 text-[11px] text-gray-500">
                                     {priceDisplay && <span>{priceDisplay}</span>}
                                     {project.updated_at && <span className="flex items-center gap-0.5"><Calendar className="w-3 h-3" />Auto-updated {new Date(project.updated_at).toLocaleDateString()}</span>}
                                   </div>
                                 </div>
                               </div>
                               <div className="flex items-center gap-1 flex-shrink-0">
-                                <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-gold" onClick={() => window.open(`/project/${project.slug}`, '_blank')} title="Preview"><ExternalLink className="w-4 h-4" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-gold" onClick={() => h.handleEditProject(project)} title="Edit & Upload Docs"><Edit2 className="w-4 h-4" /></Button>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-gold" onClick={() => h.handleToggleFeatured(project.id, project.is_premium)} title={project.is_premium ? "Remove Premium" : "Make Premium"}><Crown className="w-4 h-4" /></Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-gold" onClick={() => window.open(`/project/${project.slug}`, '_blank')} title="Preview"><ExternalLink className="w-4 h-4" /></Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-gold" onClick={() => h.handleEditProject(project)} title="Edit & Upload Docs"><Edit2 className="w-4 h-4" /></Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-gold" onClick={() => h.handleToggleFeatured(project.id, project.is_premium)} title={project.is_premium ? "Remove Premium" : "Make Premium"}><Crown className="w-4 h-4" /></Button>
                               </div>
                             </div>
                           );
@@ -404,7 +404,7 @@ const Admin = () => {
             <div className="space-y-2"><Label className="text-black">Price From (AED)</Label><Input type="number" value={h.formData.price_from} onChange={(e) => h.setFormData({ ...h.formData, price_from: e.target.value })} className="bg-white border-gold/30 text-black" /></div>
             <div className="space-y-2"><Label className="text-black">Price To (AED)</Label><Input type="number" value={h.formData.price_to} onChange={(e) => h.setFormData({ ...h.formData, price_to: e.target.value })} className="bg-white border-gold/30 text-black" /></div>
             <div className="col-span-2 flex items-center justify-between bg-gold/5 p-4 rounded-xl border border-gold/20">
-              <div><Label className="text-black font-semibold">Premium Property</Label><p className="text-sm text-zinc-500">Mark as featured/premium listing</p></div>
+              <div><Label className="text-black font-semibold">Premium Property</Label><p className="text-sm text-gray-500">Mark as featured/premium listing</p></div>
               <Switch checked={h.formData.is_premium} onCheckedChange={(checked) => h.setFormData({ ...h.formData, is_premium: checked })} />
             </div>
           </div>
@@ -430,7 +430,7 @@ const Admin = () => {
                   <div key={doc.id} className="flex items-center justify-between p-3 bg-gradient-to-r from-[#FDFBF7] to-white rounded-lg border border-gold/20">
                     <div className="flex items-center gap-3">
                       <File className="w-5 h-5 text-gold" />
-                      <div><p className="text-sm text-black font-medium">{doc.file_name}</p><p className="text-xs text-zinc-500">{doc.document_type} • {h.formatFileSize(doc.file_size)}</p></div>
+                      <div><p className="text-sm text-black font-medium">{doc.file_name}</p><p className="text-xs text-gray-500">{doc.document_type} • {h.formatFileSize(doc.file_size)}</p></div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Button variant="ghost" size="sm" onClick={() => window.open(doc.file_url, "_blank")} className="text-gold hover:text-black hover:bg-gold/10"><Download className="w-4 h-4" /></Button>
@@ -439,7 +439,7 @@ const Admin = () => {
                   </div>
                 ))}
               </div>
-            ) : <p className="text-zinc-500 text-sm">No documents uploaded yet.</p>}
+            ) : <p className="text-gray-500 text-sm">No documents uploaded yet.</p>}
           </div>
 
           <div className="flex justify-end gap-3 mt-6">

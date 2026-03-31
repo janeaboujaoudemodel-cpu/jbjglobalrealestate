@@ -181,7 +181,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-zinc-500">Awaiting Setup</p>
+                <p className="text-xs text-gray-500">Awaiting Setup</p>
                 <p className="text-2xl font-bold text-amber-600">
                   {applications.filter(a => a.status === 'hr_approved').length}
                 </p>
@@ -194,7 +194,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-zinc-500">In Progress</p>
+                <p className="text-xs text-gray-500">In Progress</p>
                 <p className="text-2xl font-bold text-purple-600">
                   {applications.filter(a => a.status === 'it_processing').length}
                 </p>
@@ -207,7 +207,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-zinc-500">Completed Today</p>
+                <p className="text-xs text-gray-500">Completed Today</p>
                 <p className="text-2xl font-bold text-green-600">0</p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-500/50" />
@@ -240,7 +240,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
           ) : filteredApps.length === 0 ? (
             <div className="text-center py-12">
               <CheckCircle className="w-12 h-12 text-green-500/30 mx-auto mb-4" />
-              <p className="text-zinc-500">All caught up! No pending provisioning tasks.</p>
+              <p className="text-gray-500">All caught up! No pending provisioning tasks.</p>
             </div>
           ) : (
             <ScrollArea className="h-[400px]">
@@ -256,14 +256,14 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                       </div>
                       <div>
                         <p className="font-medium text-black">{app.full_name}</p>
-                        <div className="flex items-center gap-2 text-xs text-zinc-500">
+                        <div className="flex items-center gap-2 text-xs text-gray-500">
                           <Briefcase className="w-3 h-3" />
                           <span>{app.job_title}</span>
                           <span>•</span>
                           <Building2 className="w-3 h-3" />
                           <span>{app.department}</span>
                         </div>
-                        <p className="text-xs text-zinc-400 mt-1">
+                        <p className="text-xs text-gray-500 mt-1">
                           HR approved: {app.hr_approved_at ? format(new Date(app.hr_approved_at), 'MMM d, yyyy') : 'Pending'}
                         </p>
                       </div>
@@ -338,7 +338,7 @@ const ITProvisioningPanel: React.FC<ITProvisioningPanelProps> = ({ searchQuery, 
                   <Copy className="w-4 h-4" />
                 </Button>
               </div>
-              <p className="text-xs text-zinc-500">Employee must change on first login</p>
+              <p className="text-xs text-gray-500">Employee must change on first login</p>
             </div>
 
             {/* Email Signature Preview */}

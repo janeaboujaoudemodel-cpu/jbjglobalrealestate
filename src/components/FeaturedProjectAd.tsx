@@ -66,7 +66,6 @@ export const FeaturedProjectAd = ({
               {/* Title */}
               <h3 
                 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-3"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 {title}
               </h3>

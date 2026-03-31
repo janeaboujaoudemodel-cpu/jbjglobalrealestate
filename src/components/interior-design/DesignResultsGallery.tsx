@@ -231,7 +231,7 @@ const DesignResultsGallery = ({
             </div>
             <div>
               <h3 className="text-lg font-semibold text-white">Your Design is Ready!</h3>
-              <p className="text-sm text-zinc-500">{projectName || 'AI Generated Design'}</p>
+              <p className="text-sm text-white/60">{projectName || 'AI Generated Design'}</p>
             </div>
           </div>
           
@@ -266,9 +266,9 @@ const DesignResultsGallery = ({
         {/* Design Notes */}
         {notes && (
           <div className="px-6 pb-6">
-            <h4 className="text-sm font-semibold text-zinc-300 mb-3">Design Notes</h4>
+            <h4 className="text-sm font-semibold text-white/85 mb-3">Design Notes</h4>
             <div className="bg-zinc-800/50 rounded-xl p-4">
-              <p className="text-sm text-zinc-400 whitespace-pre-wrap">{notes}</p>
+              <p className="text-sm text-white/70 whitespace-pre-wrap">{notes}</p>
             </div>
           </div>
         )}

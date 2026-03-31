@@ -35,24 +35,24 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <TrendingUp className="w-4 h-4 text-gold" />
             Dubai Market Pulse
           </h3>
-          <span className="text-[10px] text-zinc-500">As of {today}</span>
+          <span className="text-[10px] text-white/60">As of {today}</span>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-zinc-800/50 rounded-lg p-3">
-            <p className="text-[10px] text-zinc-400 uppercase tracking-wider">YTD Volume</p>
+            <p className="text-[10px] text-white/70 uppercase tracking-wider">YTD Volume</p>
             <p className="text-gold font-bold text-lg">{ytd2026.value}</p>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3">
-            <p className="text-[10px] text-zinc-400 uppercase tracking-wider">Transactions</p>
+            <p className="text-[10px] text-white/70 uppercase tracking-wider">Transactions</p>
             <p className="text-white font-bold text-lg">{ytd2026.transactions.toLocaleString()}</p>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3">
-            <p className="text-[10px] text-zinc-400 uppercase tracking-wider">Growth</p>
+            <p className="text-[10px] text-white/70 uppercase tracking-wider">Growth</p>
             <p className="text-emerald-400 font-bold text-lg">{ytd2026.growth}</p>
           </div>
           <div className="bg-zinc-800/50 rounded-lg p-3">
-            <p className="text-[10px] text-zinc-400 uppercase tracking-wider">Off-Plan</p>
+            <p className="text-[10px] text-white/70 uppercase tracking-wider">Off-Plan</p>
             <p className="text-white font-bold text-lg">{ytd2026.offPlan.toLocaleString()}</p>
           </div>
         </div>
@@ -86,7 +86,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-black text-xl md:text-2xl font-bold flex items-center gap-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-black text-xl md:text-2xl font-bold flex items-center gap-3">
                 <Banknote className="w-6 h-6 text-gold" />
                 Dubai Market Intelligence
               </h2>

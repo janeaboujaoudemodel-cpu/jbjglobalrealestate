@@ -89,7 +89,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         )}
       >
         {isLoading ? (
-          <Loader2 className="w-3.5 h-3.5 animate-spin text-zinc-400" />
+          <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-500" />
         ) : (
           <CurrentIcon className={cn("w-3.5 h-3.5", currentConfig.color)} />
         )}
@@ -117,7 +117,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             )}
           >
             {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin text-zinc-400 shrink-0" />
+              <Loader2 className="w-4 h-4 animate-spin text-gray-500 shrink-0" />
             ) : (
               <CurrentIcon className={cn("w-4 h-4 shrink-0", currentConfig.color)} />
             )}

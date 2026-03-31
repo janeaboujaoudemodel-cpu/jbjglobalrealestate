@@ -322,14 +322,13 @@ const MeetTheTeam: React.FC = () => {
                 <motion.h1
                   className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-4"
                   variants={fadeInUp}
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   <span className="text-white">Meet the </span>
                   <span className="text-gold">Experts</span>
                 </motion.h1>
 
                 <motion.p
-                  className="text-zinc-300 text-lg max-w-2xl mx-auto mb-4"
+                  className="text-gray-400 text-lg max-w-2xl mx-auto mb-4"
                   variants={fadeInUp}
                 >
                   A world-class team of professionals dedicated to delivering
@@ -338,7 +337,7 @@ const MeetTheTeam: React.FC = () => {
 
                 {/* Company Summary */}
                 <motion.p
-                  className="text-zinc-400 text-sm max-w-3xl mx-auto mb-6 italic"
+                  className="text-gray-500 text-sm max-w-3xl mx-auto mb-6 italic"
                   variants={fadeInUp}
                 >
                   {companySummary}
@@ -533,7 +532,6 @@ const MeetTheTeam: React.FC = () => {
                   {/* Title */}
                   <motion.h3 
                     className="text-black text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold mb-3 sm:mb-4 leading-tight"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
                     variants={fadeInUp}
                   >
                     Ready to Work With Our Experts?

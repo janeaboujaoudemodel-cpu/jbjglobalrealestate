@@ -17,7 +17,7 @@ export default function SignatureStudio() {
           </Button>
           <div className="flex items-center gap-3">
             <PenTool className="w-5 h-5 text-gold" />
-            <h1 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            <h1 className="text-2xl md:text-3xl font-bold text-white">
               AI Signature <span className="text-gold">Designer</span>
             </h1>
           </div>

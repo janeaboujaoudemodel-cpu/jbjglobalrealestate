@@ -63,7 +63,7 @@ const AmlKycPolicy = () => {
               <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>
                 Commitment to Financial Integrity, Transparency, and Regulatory Compliance
               </p>
-              <p className="text-zinc-300 text-base md:text-lg max-w-3xl leading-relaxed">
+              <p className="text-gray-400 text-base md:text-lg max-w-3xl leading-relaxed">
                 We are committed to preventing money laundering, terrorist financing, fraud, and illicit financial activity. Our AML and KYC framework aligns with applicable UAE regulatory standards.
               </p>
             </motion.div>
@@ -77,7 +77,7 @@ const AmlKycPolicy = () => {
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Contents</p>
               <nav className="space-y-1 border-l border-[#C8A766]/20">
                 {tocItems.map(({ id, label }) => (
-                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-zinc-400 hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
+                  <button key={id} onClick={() => scrollTo(id)} className={`block w-full text-left pl-4 py-1.5 text-sm transition-all border-l-2 -ml-px ${activeSection === id ? "border-[#C8A766] text-[#C8A766] font-medium" : "border-transparent text-gray-500 hover:text-[#C8A766] hover:bg-[#C8A766]/5"}`}>{label}</button>
                 ))}
               </nav>
             </div>
@@ -86,7 +86,7 @@ const AmlKycPolicy = () => {
           <main className="flex-1 min-w-0">
             <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80">
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
-              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-zinc-400 hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
+              <nav className="space-y-1">{tocItems.map(({ id, label }) => (<button key={id} onClick={() => scrollTo(id)} className="block w-full text-left text-sm text-gray-500 hover:text-[#C8A766] px-3 py-1.5 rounded-lg transition-colors">{label}</button>))}</nav>
             </div>
 
 
@@ -141,7 +141,7 @@ const AmlKycPolicy = () => {
               <CCard className="space-y-4 text-zinc-700 leading-relaxed">
                 <p>In the event of suspicious activity indicators:</p>
                 <ul className="list-disc pl-6 space-y-2"><li>An internal compliance review is initiated promptly</li><li>Relevant documentation and transaction records are evaluated</li><li>Reporting obligations are fulfilled where legally required under applicable UAE law</li></ul>
-                <p className="text-zinc-500 text-sm mt-2">All internal reviews are conducted with discretion and in accordance with established procedures.</p>
+                <p className="text-gray-500 text-sm mt-2">All internal reviews are conducted with discretion and in accordance with established procedures.</p>
               </CCard>
             </section>
             <GoldDivider />
@@ -151,7 +151,7 @@ const AmlKycPolicy = () => {
               <CCard className="space-y-4 text-zinc-700 leading-relaxed">
                 <p>We maintain rigorous standards for the storage and protection of compliance-related records:</p>
                 <ul className="list-disc pl-6 space-y-2"><li>Secure digital storage with encryption protocols</li><li>Restricted access controls limiting data to authorised compliance personnel</li><li>Retention periods in accordance with applicable legal obligations</li><li>Protection of sensitive client documentation at all stages of processing</li></ul>
-                <p className="text-sm text-zinc-500 mt-2">For further information on data handling, please refer to our <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>.</p>
+                <p className="text-sm text-gray-500 mt-2">For further information on data handling, please refer to our <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>.</p>
               </CCard>
             </section>
             <GoldDivider />
@@ -166,8 +166,8 @@ const AmlKycPolicy = () => {
             </section>
 
             <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
-              <p className="text-zinc-500 text-xs leading-relaxed mb-6">This AML &amp; KYC Policy may be updated periodically to reflect regulatory developments.</p>
-              <p className="text-zinc-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+              <p className="text-gray-500 text-xs leading-relaxed mb-6">This AML &amp; KYC Policy may be updated periodically to reflect regulatory developments.</p>
+              <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
                 <span className="text-zinc-600">|</span>

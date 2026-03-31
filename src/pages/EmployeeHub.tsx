@@ -146,7 +146,7 @@ const EmployeeCard = ({
             <div className="flex-1 min-w-0">
               <h3 className="text-black font-bold truncate">{member.name}</h3>
               <p className="text-gold text-sm font-semibold">{member.role}</p>
-              <p className="text-zinc-500 text-xs">{member.department}</p>
+              <p className="text-gray-500 text-xs">{member.department}</p>
             </div>
           </div>
           
@@ -163,7 +163,7 @@ const EmployeeCard = ({
           
           {/* Join Date */}
           {member.joinDate && (
-            <div className="flex items-center gap-1 mt-2 text-xs text-zinc-400">
+            <div className="flex items-center gap-1 mt-2 text-xs text-gray-500">
               <Calendar className="h-3 w-3" />
               <span>Joined: {joinDateFormatted}</span>
             </div>
@@ -179,11 +179,11 @@ const EmployeeCard = ({
           
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-gold/20">
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className={`text-xs ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-zinc-300 text-zinc-500 bg-white'}`}>
+              <Badge variant="outline" className={`text-xs ${member.status === 'online' ? 'border-green-500/50 text-green-600 bg-green-50' : 'border-zinc-300 text-gray-500 bg-white'}`}>
                 {member.status === 'online' ? '● Online' : '○ Away'}
               </Badge>
               {member.nationality && (
-                <span className="text-zinc-400 text-xs">{member.nationality}</span>
+                <span className="text-gray-500 text-xs">{member.nationality}</span>
               )}
             </div>
             
@@ -251,7 +251,7 @@ const DepartmentSection = ({
           </div>
           <div>
             <h3 className="text-black font-bold text-lg">{displayName}</h3>
-            <p className="text-zinc-500 text-sm">{members.length} team members</p>
+            <p className="text-gray-500 text-sm">{members.length} team members</p>
           </div>
         </div>
         {performer && (
@@ -361,7 +361,7 @@ const EmployeeHub = () => {
                 Our <span className="text-gold">Team</span> Hub
               </h1>
               
-              <p className="text-zinc-500 text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-gray-500 text-lg mb-8 max-w-2xl mx-auto">
                 Connect with colleagues, discover top performers, and explore the talented professionals driving JBJ Global Real Estate forward.
               </p>
               
@@ -369,19 +369,19 @@ const EmployeeHub = () => {
               <div className="flex flex-wrap justify-center gap-6 mb-8">
                 <div className="text-center bg-white/80 border-2 border-gold/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
                   <p className="text-3xl font-bold text-gold">{totalEmployees}</p>
-                  <p className="text-zinc-500 text-sm">Team Members</p>
+                  <p className="text-gray-500 text-sm">Team Members</p>
                 </div>
                 <div className="text-center bg-white/80 border-2 border-green-500/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(34,197,94,0.1)]">
                   <p className="text-3xl font-bold text-green-600">{onlineCount}</p>
-                  <p className="text-zinc-500 text-sm">Online Now</p>
+                  <p className="text-gray-500 text-sm">Online Now</p>
                 </div>
                 <div className="text-center bg-white/80 border-2 border-gold/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(200,167,102,0.1)]">
                   <p className="text-3xl font-bold text-gold">{departmentCount}</p>
-                  <p className="text-zinc-500 text-sm">Departments</p>
+                  <p className="text-gray-500 text-sm">Departments</p>
                 </div>
                 <div className="text-center bg-white/80 border-2 border-amber-500/30 rounded-xl px-6 py-3 shadow-[0_4px_20px_rgba(245,158,11,0.1)]">
                   <p className="text-3xl font-bold text-amber-600">{Object.keys(topPerformers).length}</p>
-                  <p className="text-zinc-500 text-sm">Top Performers</p>
+                  <p className="text-gray-500 text-sm">Top Performers</p>
                 </div>
               </div>
               
@@ -429,7 +429,7 @@ const EmployeeHub = () => {
                     placeholder="Search by name, role, department, or language..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-zinc-400 h-12"
+                    className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-gray-400 h-12"
                   />
                 </div>
                 <div className="flex gap-2 flex-wrap">

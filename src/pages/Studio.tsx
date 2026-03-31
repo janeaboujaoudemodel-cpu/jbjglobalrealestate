@@ -188,7 +188,7 @@ export default function Studio() {
             </div>
             <div className="hidden sm:block">
               <p className="text-sm font-bold text-black leading-none tracking-tight">Creative Suite™</p>
-              <p className="text-[10px] mt-0.5 leading-none text-zinc-500">JBJ Global Real Estate</p>
+              <p className="text-[10px] mt-0.5 leading-none text-gray-500">JBJ Global Real Estate</p>
             </div>
           </Link>
 
@@ -220,10 +220,10 @@ export default function Studio() {
               <div className="h-px w-6 bg-gold/60" />
               <span className="text-[10px] uppercase tracking-widest font-semibold text-gold">Creative Studio</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-black leading-tight" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h1 className="text-3xl sm:text-4xl font-bold text-black leading-tight">
               Your <span className="text-gold">Projects</span>
             </h1>
-            <p className="mt-1.5 text-sm text-zinc-500">Create and manage your creative projects</p>
+            <p className="mt-1.5 text-sm text-gray-500">Create and manage your creative projects</p>
           </div>
 
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
@@ -235,23 +235,23 @@ export default function Studio() {
             </DialogTrigger>
             <DialogContent className="border border-gold/30 max-w-md mx-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]" style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.15)" }}>
               <DialogHeader>
-                <DialogTitle className="text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                <DialogTitle className="text-black text-xl font-bold">
                   Create New <span className="text-gold">Project</span>
                 </DialogTitle>
               </DialogHeader>
               <div className="space-y-5 pt-2">
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider mb-2 block text-zinc-500">Project Name</label>
+                  <label className="text-[10px] uppercase tracking-wider mb-2 block text-gray-500">Project Name</label>
                   <input
                     value={newProjectName}
                     onChange={(e) => setNewProjectName(e.target.value)}
                     placeholder="My New Project..."
-                    className="w-full px-4 py-3 rounded-xl text-black text-sm placeholder:text-zinc-400 outline-none transition-all bg-white/60 border border-gold/20 focus:border-gold/50"
+                    className="w-full px-4 py-3 rounded-xl text-black text-sm placeholder:text-gray-400 outline-none transition-all bg-white/60 border border-gold/20 focus:border-gold/50"
                     onKeyDown={(e) => e.key === "Enter" && handleCreate()}
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] uppercase tracking-wider mb-2 block text-zinc-500">Project Type</label>
+                  <label className="text-[10px] uppercase tracking-wider mb-2 block text-gray-500">Project Type</label>
                   <div className="grid grid-cols-2 gap-2">
                     {projectTypes.map((type) => {
                       const Icon = type.icon;
@@ -263,7 +263,7 @@ export default function Studio() {
                               ? "bg-gold/15 border-gold/50 shadow-[0_0_16px_rgba(201,168,76,0.15)]"
                               : "bg-white/30 border-gold/10 hover:border-gold/30"
                           }`}>
-                          <Icon className={`w-5 h-5 mb-2 ${isActive ? "text-gold" : "text-zinc-400"}`} />
+                          <Icon className={`w-5 h-5 mb-2 ${isActive ? "text-gold" : "text-gray-500"}`} />
                           <p className="text-xs text-black font-medium leading-snug">{type.label}</p>
                         </button>
                       );
@@ -286,7 +286,7 @@ export default function Studio() {
               <Sparkles className="w-3.5 h-3.5 text-gold" />
               <span className="text-xs font-semibold uppercase tracking-wider text-gold">Creative Suites — Click to Open</span>
             </div>
-            <Link to="/toolkit" className="flex items-center gap-1 text-xs text-zinc-500 hover:text-black transition-colors">
+            <Link to="/toolkit" className="flex items-center gap-1 text-xs text-gray-500 hover:text-black transition-colors">
               All tools <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
@@ -302,7 +302,7 @@ export default function Studio() {
                   </div>
                   <div className="flex-1">
                     <p className="text-black font-semibold text-sm mb-0.5">{suite.label}</p>
-                    <p className="text-[11px] leading-snug text-zinc-500">{suite.desc}</p>
+                    <p className="text-[11px] leading-snug text-gray-500">{suite.desc}</p>
                   </div>
                   <div className="flex items-center gap-1 text-[11px] font-semibold text-gold transition-colors">
                     Open Suite <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
@@ -331,7 +331,7 @@ export default function Studio() {
                       <Icon className="w-4 h-4 text-gold" />
                     </div>
                     <span className="text-xs text-zinc-600 group-hover:text-black transition-colors font-medium leading-snug flex-1">{tool.label}</span>
-                    <ChevronRight className="w-3 h-3 shrink-0 text-zinc-400" />
+                    <ChevronRight className="w-3 h-3 shrink-0 text-gray-500" />
                   </Link>
                 );
               })}
@@ -348,18 +348,18 @@ export default function Studio() {
             </div>
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <div className="relative flex-1 sm:flex-none">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search..."
-                  className="w-full sm:w-48 pl-9 pr-3 py-2 rounded-xl text-sm text-black placeholder:text-zinc-400 outline-none transition-all bg-white/60 border border-gold/20 focus:border-gold/50"
+                  className="w-full sm:w-48 pl-9 pr-3 py-2 rounded-xl text-sm text-black placeholder:text-gray-400 outline-none transition-all bg-white/60 border border-gold/20 focus:border-gold/50"
                 />
               </div>
               <div className="flex items-center gap-0.5 p-1 rounded-lg bg-white/40 border border-gold/15">
                 {(["grid", "list"] as const).map((mode) => (
                   <button key={mode} onClick={() => setViewMode(mode)}
-                    className={`p-1.5 rounded-md transition-colors ${viewMode === mode ? "bg-gold/20 text-gold" : "text-zinc-400"}`}>
+                    className={`p-1.5 rounded-md transition-colors ${viewMode === mode ? "bg-gold/20 text-gold" : "text-gray-500"}`}>
                     {mode === "grid" ? <Grid className="w-3.5 h-3.5" /> : <List className="w-3.5 h-3.5" />}
                   </button>
                 ))}
@@ -370,7 +370,7 @@ export default function Studio() {
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
               <Loader2 className="w-8 h-8 animate-spin text-gold" />
-              <p className="text-sm text-zinc-500">Loading projects...</p>
+              <p className="text-sm text-gray-500">Loading projects...</p>
             </div>
           ) : filteredProjects.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center rounded-2xl bg-white/40 border border-gold/20">
@@ -378,7 +378,7 @@ export default function Studio() {
                 <FolderOpen className="w-8 h-8 text-gold/50" />
               </div>
               <h3 className="text-lg font-bold text-black mb-1">No projects yet</h3>
-              <p className="mb-5 text-sm max-w-xs text-zinc-500">
+              <p className="mb-5 text-sm max-w-xs text-gray-500">
                 Create your first project or use the Creative Suites above to get started
               </p>
               <Button className="font-semibold px-6 rounded-xl text-black h-10 bg-gold hover:bg-gold/90 border-0 shadow-[0_4px_16px_rgba(201,168,76,0.25)]"
@@ -397,7 +397,7 @@ export default function Studio() {
                     </div>
                     <Link to={`/studio/editor/${project.id}`} className="flex-1 min-w-0">
                       <p className="text-black font-medium truncate text-sm">{project.name}</p>
-                      <p className="text-xs mt-0.5 text-zinc-500">{project.project_type} · {formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}</p>
+                      <p className="text-xs mt-0.5 text-gray-500">{project.project_type} · {formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}</p>
                     </Link>
                     <ProjectMenu projectId={project.id} onRename={() => toast.info("Rename coming soon")} onDuplicate={() => handleDuplicate(project.id)} onShare={() => handleShare(project.id)} onDelete={() => handleDelete(project.id)} />
                   </div>
@@ -436,7 +436,7 @@ export default function Studio() {
                     <div className="p-3.5 flex items-start justify-between gap-2">
                       <Link to={`/studio/editor/${project.id}`} className="flex-1 min-w-0">
                         <h3 className="text-black font-semibold truncate text-sm">{project.name}</h3>
-                        <p className="text-xs mt-0.5 text-zinc-500">{formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}</p>
+                        <p className="text-xs mt-0.5 text-gray-500">{formatDistanceToNow(new Date(project.updated_at), { addSuffix: true })}</p>
                       </Link>
                       <ProjectMenu projectId={project.id} onRename={() => toast.info("Rename coming soon")} onDuplicate={() => handleDuplicate(project.id)} onShare={() => handleShare(project.id)} onDelete={() => handleDelete(project.id)} />
                     </div>
@@ -451,10 +451,10 @@ export default function Studio() {
       {/* ─── Footer ─── */}
       <footer className="mt-12 border-t border-gold/20">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-zinc-500">JBJ Creative Suite™ — Free for all users</p>
+          <p className="text-xs text-gray-500">JBJ Creative Suite™ — Free for all users</p>
           <div className="flex items-center gap-4">
-            <Link to="/toolkit" className="text-xs text-zinc-500 hover:text-black transition-colors">AI Tools Hub</Link>
-            <Link to="/studio/settings" className="text-xs text-zinc-500 hover:text-black transition-colors">Settings</Link>
+            <Link to="/toolkit" className="text-xs text-gray-500 hover:text-black transition-colors">AI Tools Hub</Link>
+            <Link to="/studio/settings" className="text-xs text-gray-500 hover:text-black transition-colors">Settings</Link>
           </div>
         </div>
       </footer>
@@ -467,7 +467,7 @@ function ProjectMenu({ projectId, onRename, onDuplicate, onShare, onDelete }: {
 }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="p-1.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 text-zinc-400 hover:bg-gold/10">
+      <DropdownMenuTrigger className="p-1.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 text-gray-500 hover:bg-gold/10">
         <MoreVertical className="w-4 h-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="border border-gold/30 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA]">

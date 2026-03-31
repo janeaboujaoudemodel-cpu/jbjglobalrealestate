@@ -33,7 +33,7 @@ const DataOperations = () => {
       case 'error':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Error</Badge>;
       default:
-        return <Badge className="bg-zinc-500/20 text-zinc-400 border-zinc-500/30">Unknown</Badge>;
+        return <Badge className="bg-zinc-500/20 text-gray-500 border-zinc-500/30">Unknown</Badge>;
     }
   };
 
@@ -66,10 +66,10 @@ const DataOperations = () => {
               <Database className="w-6 h-6 text-gold" />
             </div>
             <div>
-              <h1 className="text-white text-3xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h1 className="text-white text-3xl font-bold">
                 Data Operations & Audit
               </h1>
-              <p className="text-zinc-500">Dataset management, refresh logs, and compliance audit</p>
+              <p className="text-white/60">Dataset management, refresh logs, and compliance audit</p>
             </div>
           </div>
         </div>
@@ -92,22 +92,22 @@ const DataOperations = () => {
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-zinc-500">Provider</span>
-                      <span className="text-zinc-300">{source.provider}</span>
+                      <span className="text-white/60">Provider</span>
+                      <span className="text-white/85">{source.provider}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-zinc-500">Update Frequency</span>
-                      <span className="text-zinc-300 capitalize">{source.updateFrequency}</span>
+                      <span className="text-white/60">Update Frequency</span>
+                      <span className="text-white/85 capitalize">{source.updateFrequency}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-zinc-500">Last Updated</span>
+                      <span className="text-white/60">Last Updated</span>
                       <span className="text-emerald-400">{source.lastUpdated}</span>
                     </div>
                     <div className="pt-2 border-t border-zinc-800">
                       <p className="text-zinc-600 text-xs">Data Types</p>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {source.dataTypes.map((type) => (
-                          <span key={type} className="text-xs bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded">
+                          <span key={type} className="text-xs bg-zinc-800 text-white/70 px-2 py-0.5 rounded">
                             {type}
                           </span>
                         ))}
@@ -130,11 +130,11 @@ const DataOperations = () => {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-zinc-800">
-                  <th className="text-left text-zinc-500 text-sm py-3 px-4">Timestamp</th>
-                  <th className="text-left text-zinc-500 text-sm py-3 px-4">Action</th>
-                  <th className="text-left text-zinc-500 text-sm py-3 px-4">Source</th>
-                  <th className="text-center text-zinc-500 text-sm py-3 px-4">Status</th>
-                  <th className="text-right text-zinc-500 text-sm py-3 px-4">Records</th>
+                  <th className="text-left text-white/60 text-sm py-3 px-4">Timestamp</th>
+                  <th className="text-left text-white/60 text-sm py-3 px-4">Action</th>
+                  <th className="text-left text-white/60 text-sm py-3 px-4">Source</th>
+                  <th className="text-center text-white/60 text-sm py-3 px-4">Status</th>
+                  <th className="text-right text-white/60 text-sm py-3 px-4">Records</th>
                 </tr>
               </thead>
               <tbody>
@@ -143,20 +143,20 @@ const DataOperations = () => {
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-zinc-600" />
-                        <span className="text-zinc-400 text-sm font-mono">{log.timestamp}</span>
+                        <span className="text-white/70 text-sm font-mono">{log.timestamp}</span>
                       </div>
                     </td>
                     <td className="py-3 px-4">
                       <span className="text-white font-medium">{log.action}</span>
                     </td>
                     <td className="py-3 px-4">
-                      <span className="text-zinc-400">{log.source}</span>
+                      <span className="text-white/70">{log.source}</span>
                     </td>
                     <td className="py-3 px-4 text-center">
                       {getStatusBadge(log.status)}
                     </td>
                     <td className="py-3 px-4 text-right">
-                      <span className="text-zinc-400">{log.records > 0 ? log.records.toLocaleString() : '-'}</span>
+                      <span className="text-white/70">{log.records > 0 ? log.records.toLocaleString() : '-'}</span>
                     </td>
                   </tr>
                 ))}
@@ -177,7 +177,7 @@ const DataOperations = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="space-y-3 text-zinc-400 text-sm">
+              <ul className="space-y-3 text-white/70 text-sm">
                 <li className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   All data sourced from official government Open Data portals

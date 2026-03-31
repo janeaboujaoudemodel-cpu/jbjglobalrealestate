@@ -79,7 +79,7 @@ const ConceptRenderForm = ({
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
                     ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white'
-                    : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300'
+                    : 'bg-zinc-800/50 border-zinc-700 text-white/70 hover:border-zinc-600 hover:text-white/85'
                   }
                 `}
               >
@@ -123,7 +123,7 @@ const ConceptRenderForm = ({
                     />
                   ))}
                 </div>
-                <span className="text-xs text-zinc-300 font-medium">{palette.name}</span>
+                <span className="text-xs text-white/85 font-medium">{palette.name}</span>
               </button>
             );
           })}
@@ -148,7 +148,7 @@ const ConceptRenderForm = ({
                   p-4 rounded-xl border text-center transition-all
                   ${isSelected
                     ? 'bg-fuchsia-500/20 border-fuchsia-500/50 text-white'
-                    : 'bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300'
+                    : 'bg-zinc-800/50 border-zinc-700 text-white/70 hover:border-zinc-600 hover:text-white/85'
                   }
                 `}
               >
@@ -164,17 +164,17 @@ const ConceptRenderForm = ({
       <div className="bg-zinc-900/60 border border-fuchsia-500/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-5">
           <h3 className="text-lg font-semibold text-white">Additional Notes</h3>
-          <Badge className="bg-zinc-700 text-zinc-300">Optional</Badge>
+          <Badge className="bg-zinc-700 text-white/85">Optional</Badge>
         </div>
         
         <Textarea
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe any specific features you want: floor-to-ceiling windows, marble floors, gold accents, specific furniture pieces, lighting preferences..."
-          className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-zinc-500 min-h-[120px] focus:border-fuchsia-500/50"
+          className="bg-zinc-800/50 border-zinc-600 text-white placeholder:text-gray-400 min-h-[120px] focus:border-fuchsia-500/50"
           maxLength={1000}
         />
-        <p className="text-xs text-zinc-500 mt-2 text-right">
+        <p className="text-xs text-white/60 mt-2 text-right">
           {customNotes.length}/1000 characters
         </p>
       </div>

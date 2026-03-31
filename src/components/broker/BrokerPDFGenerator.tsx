@@ -223,10 +223,10 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
               >
                 <div>
                   <p className="text-white font-medium">{project.name}</p>
-                  <p className="text-zinc-400 text-sm">{project.location}</p>
+                  <p className="text-white/70 text-sm">{project.location}</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-zinc-400 text-sm">
+                  <span className="text-white/70 text-sm">
                     {formatPrice(project.price_from)} - {formatPrice(project.price_to)}
                   </span>
                   <Plus className="w-5 h-5 text-gold" />
@@ -258,20 +258,20 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
                   <Badge className="bg-gold/20 text-gold">{index + 1}</Badge>
                   <div>
                     <p className="text-white font-medium">{project.name}</p>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-white/70 text-sm">
                       {project.location} • {project.bedrooms_min}-{project.bedrooms_max} BR
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-zinc-400 text-sm">
+                  <span className="text-white/70 text-sm">
                     {hidePrices ? "Price Hidden" : `${formatPrice(project.price_from)} - ${formatPrice(project.price_to)}`}
                   </span>
                   <button
                     onClick={() => removeProject(project.id)}
                     className="p-1 hover:bg-zinc-700 rounded transition-colors"
                   >
-                    <X className="w-4 h-4 text-zinc-400" />
+                    <X className="w-4 h-4 text-white/70" />
                   </button>
                 </div>
               </motion.div>
@@ -292,13 +292,13 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
           <div className="flex items-center justify-between p-4 bg-zinc-800/50 rounded-lg">
             <div className="flex items-center gap-3">
               {hidePrices ? (
-                <EyeOff className="w-5 h-5 text-zinc-400" />
+                <EyeOff className="w-5 h-5 text-white/70" />
               ) : (
                 <Eye className="w-5 h-5 text-green-400" />
               )}
               <div>
                 <p className="text-white font-medium">Price Visibility</p>
-                <p className="text-zinc-400 text-sm">Show or hide property prices</p>
+                <p className="text-white/70 text-sm">Show or hide property prices</p>
               </div>
             </div>
             <Checkbox
@@ -314,7 +314,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
                 <Sparkles className="w-5 h-5 text-purple-400" />
                 <div>
                   <p className="text-white font-medium">AI Recommendation</p>
-                  <p className="text-zinc-400 text-sm">Include AI-powered property recommendation</p>
+                  <p className="text-white/70 text-sm">Include AI-powered property recommendation</p>
                 </div>
               </div>
               <Checkbox
@@ -331,7 +331,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
                 <Building className="w-5 h-5 text-gold" />
                 <div>
                   <p className="text-white font-medium">Custom Branding</p>
-                  <p className="text-zinc-400 text-sm">Add your own branding and contact info</p>
+                  <p className="text-white/70 text-sm">Add your own branding and contact info</p>
                 </div>
               </div>
               <Checkbox
@@ -431,7 +431,7 @@ export default function BrokerPDFGenerator({ subscription }: BrokerPDFGeneratorP
               checked={hideJJBranding}
               onCheckedChange={(checked) => setHideJJBranding(!!checked)}
             />
-            <Label className="text-zinc-300">Remove JBJ Global Real Estate branding (white-label)</Label>
+            <Label className="text-white/85">Remove JBJ Global Real Estate branding (white-label)</Label>
           </div>
         </motion.div>
       )}

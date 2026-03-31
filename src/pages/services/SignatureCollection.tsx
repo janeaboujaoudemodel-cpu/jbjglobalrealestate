@@ -169,7 +169,7 @@ const SignatureCollection = () => {
               Signature Collection (JBJ)
             </h1>
             
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               A controlled internal signature request workflow—tracked, timestamped, and audit-ready.
             </p>
             

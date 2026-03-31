@@ -315,7 +315,7 @@ const SmartLeadAlerts = ({ userId, limit = 10 }: SmartLeadAlertsProps) => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="h-7 text-xs text-zinc-400 hover:text-zinc-300 ml-auto"
+                      className="h-7 text-xs text-white/70 hover:text-white/85 ml-auto"
                       onClick={() => handleQuickAction(alert, 'dismiss')}
                     >
                       Dismiss

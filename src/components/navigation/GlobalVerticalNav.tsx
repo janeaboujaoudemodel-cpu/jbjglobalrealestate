@@ -1061,7 +1061,7 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
     <div className="flex flex-col h-full">
       {/* ━━━ LOGO HEADER (88px) — restored, matches horizontal header height ━━━ */}
       <div className="h-[88px] shrink-0 flex flex-row items-center justify-between px-2.5 bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] border-b border-gold/20">
-        <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-1" style={{ fontFamily: "Poppins, sans-serif" }}>
+        <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity ml-1">
           <img src={jbjMonogramLightBg} alt="JBJ" className="w-14 h-14 object-contain shrink-0" />
           <div className="flex flex-col mt-1">
             <span className="text-[11px] font-extrabold text-black/85 tracking-[0.13em] leading-tight whitespace-nowrap">JBJ GLOBAL</span>

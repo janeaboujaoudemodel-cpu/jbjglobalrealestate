@@ -177,7 +177,7 @@ const ProductivitySuite = () => {
             <span className="text-zinc-800 font-semibold text-sm tracking-wide">JBJ Royal Tools Hub</span>
           </div>
           
-          <h1 className="text-3xl md:text-5xl font-bold text-zinc-900 mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h1 className="text-3xl md:text-5xl font-bold text-zinc-900 mb-4">
             Corporate & <span style={{ background: 'linear-gradient(135deg, #C8A766 0%, #D4AF37 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Productivity</span> Suite
           </h1>
           
@@ -186,12 +186,12 @@ const ProductivitySuite = () => {
             resumes, cover letters, and more. All in one premium hub.
           </p>
           
-          <div className="flex items-center justify-center gap-6 text-sm text-zinc-500">
+          <div className="flex items-center justify-center gap-6 text-sm text-gray-500">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-gold rounded-full" />
               {corporateTools.length + productivityTools.length} Tools Included
             </span>
-            <span className="text-zinc-300">|</span>
+            <span className="text-gray-400">|</span>
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-emerald-500 rounded-full" />
               Free Access

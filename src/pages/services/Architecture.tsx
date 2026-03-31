@@ -132,14 +132,13 @@ const Architecture = () => {
 
           <motion.h1 
             className="text-white text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl"
-            style={{ fontFamily: "Poppins, sans-serif" }}
             variants={fadeInUp}
           >
             Visionary Architecture
           </motion.h1>
 
           <motion.p 
-            className="text-zinc-400 text-lg md:text-xl max-w-2xl mb-8"
+            className="text-white/70 text-lg md:text-xl max-w-2xl mb-8"
             variants={fadeInUp}
           >
             Partner with licensed architects to bring your vision to life. 
@@ -170,7 +169,7 @@ const Architecture = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Our Services
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Architectural Excellence" />
               </h2>
               <p className="text-black/70 max-w-2xl mx-auto">
@@ -226,7 +225,7 @@ const Architecture = () => {
               <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
                 Portfolio
               </span>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <SplitTitle text="Featured Projects" />
               </h2>
             </motion.div>
@@ -274,7 +273,7 @@ const Architecture = () => {
             className="text-center"
           >
             <div className="jj-card-inner rounded-2xl p-8 md:p-12 max-w-3xl mx-auto">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
                 <SplitTitle text="Let's Build Your Vision" />
               </h2>
               <p className="text-black/70 mb-8 max-w-xl mx-auto">

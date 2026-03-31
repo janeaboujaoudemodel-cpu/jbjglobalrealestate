@@ -77,7 +77,7 @@ const Methodology = () => {
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
                     <Shield className="w-5 h-5" />
                   </div>
-                  <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl font-bold">
                     <span className="text-gold">Methodology</span>{" "}
                     <span className="text-black">& Sources</span>
                   </h2>
@@ -106,7 +106,7 @@ const Methodology = () => {
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
                     <FileCheck className="w-5 h-5" />
                   </div>
-                  <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl font-bold">
                     <span className="text-gold">Data</span>{" "}
                     <span className="text-black">Selection Principles</span>
                   </h2>
@@ -153,7 +153,7 @@ const Methodology = () => {
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
                     <Database className="w-5 h-5" />
                   </div>
-                  <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl font-bold">
                     <span className="text-gold">Primary</span>{" "}
                     <span className="text-black">Official Sources</span>
                   </h2>
@@ -231,7 +231,7 @@ const Methodology = () => {
                     </div>
                   </div>
                   
-                  <p className="text-zinc-500 text-xs mt-6 pt-4 border-t border-gold/30">
+                  <p className="text-gray-500 text-xs mt-6 pt-4 border-t border-gold/30">
                     No data is sourced from private platforms, promotional materials, or unofficial aggregators.
                   </p>
                 </div>
@@ -250,7 +250,7 @@ const Methodology = () => {
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
                     <FileCheck className="w-5 h-5" />
                   </div>
-                  <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl font-bold">
                     <span className="text-gold">Data</span>{" "}
                     <span className="text-black">Validation Process</span>
                   </h2>
@@ -297,7 +297,7 @@ const Methodology = () => {
                   <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
                     <AlertTriangle className="w-5 h-5 text-red-600" />
                   </div>
-                  <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl font-bold">
                     <span className="text-gold">Presentation</span>{" "}
                     <span className="text-black">Standards</span>
                   </h2>
@@ -344,7 +344,7 @@ const Methodology = () => {
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
                     <Clock className="w-5 h-5" />
                   </div>
-                  <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl font-bold">
                     <span className="text-gold">Update</span>{" "}
                     <span className="text-black">Frequency</span>
                   </h2>
@@ -402,7 +402,7 @@ const Methodology = () => {
                   <div className="jj-icon-box-active w-10 h-10 rounded-lg">
                     <Scale className="w-5 h-5" />
                   </div>
-                  <h2 className="text-2xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl font-bold">
                     <span className="text-gold">Compliance</span>{" "}
                     <span className="text-black">& Use of Information</span>
                   </h2>

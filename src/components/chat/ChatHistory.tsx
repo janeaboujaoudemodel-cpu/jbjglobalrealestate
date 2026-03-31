@@ -63,7 +63,7 @@ const ChatHistory = ({
           <History className="w-7 h-7 text-gold" />
         </div>
         <h4 className="text-white text-lg font-semibold mb-1"><T>{`Welcome back, ${userFirstName}!`}</T></h4>
-        <p className="text-zinc-400 text-sm"><T>Continue a conversation or start fresh</T></p>
+        <p className="text-gray-500 text-sm"><T>Continue a conversation or start fresh</T></p>
       </div>
 
       {/* New Conversation Button */}
@@ -99,18 +99,18 @@ const ChatHistory = ({
       {/* Search Bar */}
       {chatHistory.length > 0 && !isLoading && (
         <div className="relative mb-3">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <Input
             type="text"
             value={historySearch}
             onChange={(e) => setHistorySearch(e.target.value)}
             placeholder="Search conversations..."
-            className="pl-9 bg-white/5 border-zinc-700 text-white placeholder:text-zinc-500 h-9 text-sm"
+            className="pl-9 bg-white/5 border-zinc-700 text-white placeholder:text-gray-400 h-9 text-sm"
           />
           {historySearch && (
             <button
               onClick={() => setHistorySearch('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -125,7 +125,7 @@ const ChatHistory = ({
         </div>
       ) : chatHistory.length > 0 ? (
         <div className="space-y-2">
-          <p className="text-zinc-500 text-xs font-medium mb-2 flex items-center gap-1">
+          <p className="text-gray-500 text-xs font-medium mb-2 flex items-center gap-1">
             <Clock className="w-3 h-3" />
             <T>Previous Conversations</T>
             {historySearch && <T>{` (filtered)`}</T>}
@@ -152,9 +152,9 @@ const ChatHistory = ({
                       <h6 className="text-white text-sm font-medium truncate">
                         <HighlightText text={serviceName} search={historySearch} />
                       </h6>
-                      <span className="text-zinc-500 text-xs flex-shrink-0 ml-2">{getTimeAgo(updatedAt)}</span>
+                      <span className="text-gray-500 text-xs flex-shrink-0 ml-2">{getTimeAgo(updatedAt)}</span>
                     </div>
-                    <p className="text-zinc-400 text-xs line-clamp-2">
+                    <p className="text-gray-500 text-xs line-clamp-2">
                       <HighlightText text={preview} search={historySearch} />
                     </p>
                     <div className="flex items-center gap-2 mt-1.5">
@@ -163,7 +163,7 @@ const ChatHistory = ({
                           ? 'bg-green-500/20 text-green-400' 
                           : conv.status === 'submitted_to_team'
                           ? 'bg-blue-500/20 text-blue-400'
-                          : 'bg-zinc-700 text-zinc-400'
+                          : 'bg-zinc-700 text-gray-500'
                       }`}>
                         {conv.status === 'submitted_to_team' ? <T>With Team</T> : <T>{conv.status}</T>}
                       </span>
@@ -177,7 +177,7 @@ const ChatHistory = ({
             );
           })}
           {historySearch && filteredHistory.length === 0 && (
-            <p className="text-zinc-500 text-sm text-center py-4"><T>{`No conversations match "${historySearch}"`}</T></p>
+            <p className="text-gray-500 text-sm text-center py-4"><T>{`No conversations match "${historySearch}"`}</T></p>
           )}
         </div>
       ) : (
@@ -185,7 +185,7 @@ const ChatHistory = ({
           <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-zinc-800 flex items-center justify-center">
             <MessageCircle className="w-6 h-6 text-zinc-600" />
           </div>
-          <p className="text-zinc-500 text-sm"><T>No previous conversations</T></p>
+          <p className="text-gray-500 text-sm"><T>No previous conversations</T></p>
           <p className="text-zinc-600 text-xs mt-1"><T>Start a new chat above!</T></p>
         </div>
       )}

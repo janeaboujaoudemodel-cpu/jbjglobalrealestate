@@ -383,7 +383,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           <div className="bg-white/80 backdrop-blur-sm border border-gold/30 rounded-2xl p-10 shadow-sm">
             <div className="flex justify-center mb-8"><JJLogoImage variant="light" size="md" /></div>
             <div className="text-center mb-8">
-              <h1 className="text-black text-2xl font-semibold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>You're Signed In</h1>
+              <h1 className="text-black text-2xl font-semibold mb-3">You're Signed In</h1>
               <p className="text-gray-600 text-sm">Welcome back, <span className="text-gold font-medium">{user.email}</span></p>
             </div>
             <div className="space-y-3">
@@ -409,7 +409,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
             <div className="mx-auto mb-6 w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center">
               <Mail className="w-8 h-8 text-gold" />
             </div>
-            <h1 className="text-black text-2xl font-semibold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>Check Your Email</h1>
+            <h1 className="text-black text-2xl font-semibold mb-3">Check Your Email</h1>
             <p className="text-gray-600 text-sm leading-relaxed mb-2">
               We've sent a verification email to
             </p>
@@ -485,7 +485,7 @@ const Auth = forwardRef<HTMLDivElement>((_, ref) => {
           <div className="flex justify-center mb-8"><JJLogoImage variant="light" size="md" /></div>
 
           <div className="text-center mb-8">
-            <h1 className="text-black text-2xl font-semibold mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>{getTitle()}</h1>
+            <h1 className="text-black text-2xl font-semibold mb-3">{getTitle()}</h1>
             <p className="text-gray-600 text-sm leading-relaxed">{getSubtitle()}</p>
           </div>
 

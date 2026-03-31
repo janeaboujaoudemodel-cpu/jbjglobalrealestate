@@ -162,7 +162,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Select Area *</Label>
+                  <Label className="text-white/85">Select Area *</Label>
                   <Select value={area} onValueChange={setArea}>
                     <SelectTriggerDark className="border-sky-500/30 hover:border-sky-500/50">
                       <SelectValue placeholder="Choose an area" />
@@ -181,7 +181,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Property Type</Label>
+                  <Label className="text-white/85">Property Type</Label>
                   <Select value={propertyType} onValueChange={setPropertyType}>
                     <SelectTriggerDark className="border-sky-500/30 hover:border-sky-500/50">
                       <SelectValue />
@@ -199,7 +199,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
 
               {area === "custom" && (
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Custom Area Name</Label>
+                  <Label className="text-white/85">Custom Area Name</Label>
                   <Input
                     placeholder="Enter area name..."
                     value={customArea}
@@ -211,7 +211,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
 
               {/* Compare With */}
               <div className="space-y-2">
-                <Label className="text-zinc-300">Compare With (max 3)</Label>
+                <Label className="text-white/85">Compare With (max 3)</Label>
                 <div className="flex flex-wrap gap-2">
                   {compareWith.map((a) => (
                     <Badge
@@ -224,7 +224,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                   ))}
                   {compareWith.length < 3 && (
                     <Select onValueChange={addCompareArea}>
-                      <SelectTriggerDark className="w-auto border-sky-500/30 text-zinc-400 text-sm h-7 px-2">
+                      <SelectTriggerDark className="w-auto border-sky-500/30 text-white/70 text-sm h-7 px-2">
                         <span>+ Add area</span>
                       </SelectTriggerDark>
                       <SelectContentDark className="border-sky-500/30 max-h-40">
@@ -242,7 +242,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
               {/* Report Options */}
               <div className="grid grid-cols-2 gap-4 pt-4 border-t border-zinc-800">
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Unit</Label>
+                  <Label className="text-white/85">Unit</Label>
                   <Select value={measurementUnit} onValueChange={(v: "sqft" | "sqm" | "both") => setMeasurementUnit(v)}>
                     <SelectTriggerDark className="border-sky-500/30 hover:border-sky-500/50">
                       <SelectValue />
@@ -255,7 +255,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Currency</Label>
+                  <Label className="text-white/85">Currency</Label>
                   <Select value={currency} onValueChange={(v: "AED" | "USD" | "EUR" | "GBP") => setCurrency(v)}>
                     <SelectTriggerDark className="border-sky-500/30 hover:border-sky-500/50">
                       <SelectValue />
@@ -291,7 +291,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
               {/* Data Sources */}
               <div className="flex flex-wrap gap-2 justify-center pt-2">
                 {["Dubai Land Dept", "DXB Interact", "Property Finder", "RERA"].map((source) => (
-                  <Badge key={source} variant="outline" className="text-zinc-500 border-zinc-700 text-xs">
+                  <Badge key={source} variant="outline" className="text-white/60 border-zinc-700 text-xs">
                     {source}
                   </Badge>
                 ))}
@@ -320,7 +320,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                           <MapPin className="h-5 w-5 text-sky-400" />
                           {response.area}
                         </h3>
-                        <p className="text-xs text-zinc-400 mt-1">
+                        <p className="text-xs text-white/70 mt-1">
                           {response.propertyType?.charAt(0).toUpperCase() + response.propertyType?.slice(1)} Analysis • 
                           {response.generatedAt && new Date(response.generatedAt).toLocaleDateString()}
                         </p>
@@ -348,7 +348,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                             Area Overview
                           </span>
                         </AccordionTrigger>
-                        <AccordionContent className="text-zinc-300 whitespace-pre-wrap text-sm">
+                        <AccordionContent className="text-white/85 whitespace-pre-wrap text-sm">
                           {response.sections.areaOverview}
                         </AccordionContent>
                       </AccordionItem>
@@ -362,7 +362,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                             Price Analysis
                           </span>
                         </AccordionTrigger>
-                        <AccordionContent className="text-zinc-300 whitespace-pre-wrap text-sm">
+                        <AccordionContent className="text-white/85 whitespace-pre-wrap text-sm">
                           {response.sections.priceAnalysis}
                         </AccordionContent>
                       </AccordionItem>
@@ -376,7 +376,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                             Investment Metrics
                           </span>
                         </AccordionTrigger>
-                        <AccordionContent className="text-zinc-300 whitespace-pre-wrap text-sm">
+                        <AccordionContent className="text-white/85 whitespace-pre-wrap text-sm">
                           {response.sections.investmentMetrics}
                         </AccordionContent>
                       </AccordionItem>
@@ -390,7 +390,7 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                             Recommendation
                           </span>
                         </AccordionTrigger>
-                        <AccordionContent className="text-zinc-300 whitespace-pre-wrap text-sm">
+                        <AccordionContent className="text-white/85 whitespace-pre-wrap text-sm">
                           {response.sections.recommendation}
                         </AccordionContent>
                       </AccordionItem>
@@ -403,14 +403,14 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                   <Card className="bg-zinc-900/50 border-zinc-800">
                     <CardContent className="p-4">
                       <h4 className="font-semibold text-white mb-3">Full Analysis</h4>
-                      <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
+                      <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
                         {response.fullAnalysis}
                       </div>
                     </CardContent>
                   </Card>
                 )}
 
-                <p className="text-xs text-zinc-500 text-center">
+                <p className="text-xs text-white/60 text-center">
                   {response.disclaimer || "* AI-generated analysis for informational purposes only."}
                 </p>
               </motion.div>
@@ -424,8 +424,8 @@ DISCLAIMER: ${response.disclaimer || "AI-generated analysis for informational pu
                 <div className="p-6 rounded-full bg-sky-500/10 mb-4">
                   <Brain className="h-12 w-12 text-sky-400/50" />
                 </div>
-                <h3 className="text-lg font-semibold text-zinc-400">Ready to Analyze</h3>
-                <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+                <h3 className="text-lg font-semibold text-white/70">Ready to Analyze</h3>
+                <p className="text-sm text-white/60 mt-2 max-w-sm">
                   Select an area to get comprehensive market analysis with price trends, developer insights, and investment recommendations
                 </p>
               </motion.div>

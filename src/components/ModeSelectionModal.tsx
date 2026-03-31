@@ -197,7 +197,7 @@ export const ModeSelectionModal = () => {
             )}
           </Button>
           {!isLoggedIn && (
-            <p className="text-center text-zinc-500 text-xs mt-3">
+            <p className="text-center text-gray-500 text-xs mt-3">
               Already have an account?{' '}
               <button
                 onClick={() => { dismiss(); navigate('/auth'); }}

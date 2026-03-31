@@ -252,7 +252,7 @@ const OwnerAuditPage = () => {
               <div className="flex flex-wrap gap-4 mb-6">
                 <div className="flex-1 min-w-[200px]">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <Input
                       placeholder="Search routes..."
                       value={searchQuery}
@@ -318,7 +318,7 @@ const OwnerAuditPage = () => {
                             >
                               <td className="p-4">
                                 <div className="font-medium text-black">{route.name}</div>
-                                <div className="text-xs text-zinc-500 font-mono">{route.path}</div>
+                                <div className="text-xs text-gray-500 font-mono">{route.path}</div>
                               </td>
                               <td className="p-4">
                                 {getAccessBadge(route.access as AccessLevel)}
@@ -327,21 +327,21 @@ const OwnerAuditPage = () => {
                                 {route.dashboard ? (
                                   <Check className="w-4 h-4 text-green-600 mx-auto" />
                                 ) : (
-                                  <X className="w-4 h-4 text-zinc-400 mx-auto" />
+                                  <X className="w-4 h-4 text-gray-500 mx-auto" />
                                 )}
                               </td>
                               <td className="p-4 text-center">
                                 {route.sidebar ? (
                                   <Check className="w-4 h-4 text-green-600 mx-auto" />
                                 ) : (
-                                  <X className="w-4 h-4 text-zinc-400 mx-auto" />
+                                  <X className="w-4 h-4 text-gray-500 mx-auto" />
                                 )}
                               </td>
                               <td className="p-4 text-center">
                                 {route.registry ? (
                                   <Check className="w-4 h-4 text-green-600 mx-auto" />
                                 ) : (
-                                  <X className="w-4 h-4 text-zinc-400 mx-auto" />
+                                  <X className="w-4 h-4 text-gray-500 mx-auto" />
                                 )}
                               </td>
                               <td className="p-4 text-center">
@@ -496,7 +496,7 @@ const OwnerAuditPage = () => {
                               {tool.route ? (
                                 <span className="text-xs text-zinc-600 font-mono">{tool.route}</span>
                               ) : (
-                                <span className="text-xs text-zinc-400 italic">N/A</span>
+                                <span className="text-xs text-gray-500 italic">N/A</span>
                               )}
                             </td>
                             <td className="p-4">
@@ -511,7 +511,7 @@ const OwnerAuditPage = () => {
                                   {tool.edgeFunction}
                                 </Badge>
                               ) : (
-                                <span className="text-xs text-zinc-400">—</span>
+                                <span className="text-xs text-gray-500">—</span>
                               )}
                             </td>
                             <td className="p-4">
@@ -540,7 +540,7 @@ const OwnerAuditPage = () => {
                               ) : tool.status === '404' ? (
                                 <Badge className="bg-red-100 text-red-700 border-red-300">Route Missing</Badge>
                               ) : (
-                                <span className="text-xs text-zinc-400">—</span>
+                                <span className="text-xs text-gray-500">—</span>
                               )}
                             </td>
                           </tr>

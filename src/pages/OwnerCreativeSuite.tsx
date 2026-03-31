@@ -133,7 +133,7 @@ const OwnerCreativeSuite = () => {
                     <h3 className="font-bold text-black text-sm">{tool.title}</h3>
                     <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-gold/20 text-[#8A7356]">{tool.badge}</span>
                   </div>
-                  <p className="text-xs text-zinc-500 leading-relaxed">{tool.description}</p>
+                  <p className="text-xs text-gray-500 leading-relaxed">{tool.description}</p>
                 </div>
               </div>
               <div className="flex justify-end mt-3">

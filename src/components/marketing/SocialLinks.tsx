@@ -29,7 +29,7 @@ export const SocialLinks = React.forwardRef<HTMLDivElement, SocialLinksProps>(({
       case 'glow':
         return 'text-gold hover:text-white drop-shadow-[0_0_8px_rgba(200,167,102,0.8)] hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.8)] hover:scale-110 transition-all duration-300';
       default:
-        return 'text-zinc-400 hover:text-gold';
+        return 'text-gray-500 hover:text-gold';
     }
   };
 

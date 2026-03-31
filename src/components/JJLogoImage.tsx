@@ -48,7 +48,6 @@ export const JJLogoImage = ({
         <div 
           className="flex flex-col items-center justify-center text-current mt-1"
           style={{ 
-            fontFamily: "Poppins, sans-serif",
             letterSpacing: '0.08em'
           }}
         >
@@ -96,7 +95,6 @@ export const JJLogoTransparent = ({ size = 'md', className = '' }: JJLogoTranspa
 export const JJLogoHeaderImage = ({ className = '' }: { className?: string }) => (
   <div 
     className={`flex items-center gap-3 ${className}`}
-    style={{ fontFamily: "Poppins, sans-serif" }}
   >
     {/* JBJ Logo image - dark bg version for header (white J's visible on dark header) */}
     <img 

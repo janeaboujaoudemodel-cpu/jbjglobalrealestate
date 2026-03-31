@@ -180,7 +180,7 @@ export const ConsultationRequestForm = ({
         <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="w-8 h-8 text-gold" />
         </div>
-        <h3 className="text-xl font-semibold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+        <h3 className="text-xl font-semibold text-black mb-2">
           Request Received!
         </h3>
         <p className="text-zinc-600">
@@ -204,7 +204,7 @@ export const ConsultationRequestForm = ({
           <Calendar className="w-3 h-3" />
           Expert Consultation
         </div>
-        <h3 className="text-xl md:text-2xl font-semibold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+        <h3 className="text-xl md:text-2xl font-semibold text-black">
           {projectName ? (
             <>Register Interest in <span className="text-gold">{projectName}</span></>
           ) : (

@@ -74,11 +74,11 @@ const DraggableMediaGrid = ({ items, onReorder, onDelete, type }: DraggableMedia
     return (
       <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-zinc-300 rounded-xl bg-zinc-50">
         {type === "images" ? (
-          <ImageIcon className="w-8 h-8 text-zinc-400 mb-2" />
+          <ImageIcon className="w-8 h-8 text-gray-500 mb-2" />
         ) : (
-          <FileText className="w-8 h-8 text-zinc-400 mb-2" />
+          <FileText className="w-8 h-8 text-gray-500 mb-2" />
         )}
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-gray-500">
           No {type} uploaded yet
         </p>
       </div>
@@ -157,7 +157,7 @@ const DraggableMediaGrid = ({ items, onReorder, onDelete, type }: DraggableMedia
                 <p className="text-sm font-medium text-black truncate">
                   {item.name || `Document ${index + 1}`}
                 </p>
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-gray-500">
                   Drag to reorder
                 </p>
               </div>

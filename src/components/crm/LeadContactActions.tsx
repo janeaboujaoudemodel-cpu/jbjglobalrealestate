@@ -111,7 +111,7 @@ const LeadContactActions = ({ lead, onGenerateReport }: LeadContactActionsProps)
         <DropdownMenuContent align="end" className="bg-zinc-900 border-zinc-800 w-56">
           <DropdownMenuItem 
             onClick={handleGenerateReport}
-            className="flex items-center gap-2 text-zinc-300 hover:text-white cursor-pointer"
+            className="flex items-center gap-2 text-white/85 hover:text-white cursor-pointer"
           >
             <FileText className="w-4 h-4 text-purple-400" />
             <span>Generate & Share AI Report</span>

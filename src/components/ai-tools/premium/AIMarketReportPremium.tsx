@@ -120,7 +120,7 @@ ${response.report}
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Location / Area *</Label>
+                  <Label className="text-white/85">Location / Area *</Label>
                   <Input
                     placeholder="Dubai Marina, Palm Jumeirah, Downtown..."
                     value={formData.location}
@@ -131,7 +131,7 @@ ${response.report}
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-zinc-300">Property Type</Label>
+                    <Label className="text-white/85">Property Type</Label>
                   <Select value={formData.propertyType} onValueChange={(v) => handleChange("propertyType", v)}>
                       <SelectTriggerDark className="border-indigo-500/30 hover:border-indigo-500/50">
                         <SelectValue />
@@ -147,7 +147,7 @@ ${response.report}
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-zinc-300">Timeframe</Label>
+                    <Label className="text-white/85">Timeframe</Label>
                     <Select value={formData.timeframe} onValueChange={(v) => handleChange("timeframe", v)}>
                       <SelectTriggerDark className="border-indigo-500/30 hover:border-indigo-500/50">
                         <SelectValue />
@@ -163,7 +163,7 @@ ${response.report}
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Report Focus</Label>
+                  <Label className="text-white/85">Report Focus</Label>
                   <Select value={formData.focus} onValueChange={(v) => handleChange("focus", v)}>
                     <SelectTriggerDark className="border-indigo-500/30 hover:border-indigo-500/50">
                       <SelectValue />
@@ -203,17 +203,17 @@ ${response.report}
         <div className="grid grid-cols-3 gap-3">
             <Card className="bg-indigo-900/20 border-indigo-500/30 p-4 text-center">
               <BarChart3 className="h-5 w-5 mx-auto mb-2 text-indigo-400" />
-              <p className="text-xs text-zinc-500">Trend</p>
+              <p className="text-xs text-white/60">Trend</p>
               <p className="text-sm font-semibold text-white">Analysis</p>
             </Card>
             <Card className="bg-indigo-900/20 border-indigo-500/30 p-4 text-center">
               <PieChart className="h-5 w-5 mx-auto mb-2 text-indigo-400" />
-              <p className="text-xs text-zinc-500">Market</p>
+              <p className="text-xs text-white/60">Market</p>
               <p className="text-sm font-semibold text-white">Share</p>
             </Card>
             <Card className="bg-indigo-900/20 border-indigo-500/30 p-4 text-center">
               <Target className="h-5 w-5 mx-auto mb-2 text-indigo-400" />
-              <p className="text-xs text-zinc-500">Investment</p>
+              <p className="text-xs text-white/60">Investment</p>
               <p className="text-sm font-semibold text-white">Insights</p>
             </Card>
         </div>
@@ -246,7 +246,7 @@ ${response.report}
                         <BarChart3 className="h-6 w-6 text-amber-400" />
                       )}
                       <div>
-                        <p className="text-xs text-zinc-400">Market Outlook</p>
+                        <p className="text-xs text-white/70">Market Outlook</p>
                         <p className={`text-lg font-bold capitalize ${
                           response.outlook === "bullish" ? "text-emerald-400" :
                           response.outlook === "bearish" ? "text-red-400" : "text-amber-400"
@@ -266,7 +266,7 @@ ${response.report}
                         <FileBarChart className="h-4 w-4 text-indigo-400" />
                         Executive Summary
                       </h4>
-                      <p className="text-sm text-zinc-300">{response.summary}</p>
+                      <p className="text-sm text-white/85">{response.summary}</p>
                     </CardContent>
                   </Card>
                 )}
@@ -285,13 +285,13 @@ ${response.report}
                         </Button>
                       </div>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[500px] overflow-y-auto">
+                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[500px] overflow-y-auto">
                       {response.report}
                     </div>
                   </CardContent>
                 </Card>
 
-                <p className="text-xs text-zinc-500 text-center">
+                <p className="text-xs text-white/60 text-center">
                   * AI-generated report. For investment decisions, consult with licensed professionals.
                 </p>
               </motion.div>
@@ -305,8 +305,8 @@ ${response.report}
               <div className="p-6 rounded-full bg-indigo-500/10 mb-4">
                 <FileBarChart className="h-12 w-12 text-indigo-400/50" />
               </div>
-              <h3 className="text-lg font-semibold text-zinc-400">Ready to Analyze</h3>
-              <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+              <h3 className="text-lg font-semibold text-white/70">Ready to Analyze</h3>
+              <p className="text-sm text-white/60 mt-2 max-w-sm">
                 Enter a location to generate comprehensive market insights with trends and investment recommendations
               </p>
             </motion.div>

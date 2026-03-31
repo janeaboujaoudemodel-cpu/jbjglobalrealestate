@@ -159,7 +159,7 @@ export default function FoundersCollaborationPanel() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-semibold text-black">Department Coordination</h2>
-          <p className="text-sm text-zinc-500">Cross-department collaboration hub</p>
+          <p className="text-sm text-gray-500">Cross-department collaboration hub</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Dialog open={isTaskDialogOpen} onOpenChange={setIsTaskDialogOpen}>
@@ -259,7 +259,7 @@ export default function FoundersCollaborationPanel() {
               <Calendar className="h-5 w-5" />
               Daily Company Summary
             </CardTitle>
-            <Button size="sm" variant="ghost" onClick={() => setDailySummary(null)} className="text-zinc-500 hover:text-black">
+            <Button size="sm" variant="ghost" onClick={() => setDailySummary(null)} className="text-gray-500 hover:text-black">
               <AlertCircle className="h-4 w-4" />
             </Button>
           </CardHeader>
@@ -306,7 +306,7 @@ export default function FoundersCollaborationPanel() {
                           </div>
                           <div>
                             <CardTitle className="text-black text-lg">{dept.name}</CardTitle>
-                            <p className="text-xs text-zinc-500">{dept.headName}</p>
+                            <p className="text-xs text-gray-500">{dept.headName}</p>
                           </div>
                         </div>
                         <Badge variant="outline" className="border-[#B89555]/30 text-[#B89555]">{subAI?.name}</Badge>
@@ -316,15 +316,15 @@ export default function FoundersCollaborationPanel() {
                       <div className="grid grid-cols-3 gap-2 mb-3">
                         <div className="text-center p-2 bg-zinc-50 rounded-lg border border-zinc-200">
                           <p className="text-lg font-bold text-[#B89555]">{deptStats.activeTasks}</p>
-                          <p className="text-xs text-zinc-500">Active</p>
+                          <p className="text-xs text-gray-500">Active</p>
                         </div>
                         <div className="text-center p-2 bg-green-50 rounded-lg border border-green-200">
                           <p className="text-lg font-bold text-green-700">{deptStats.completedToday}</p>
-                          <p className="text-xs text-zinc-500">Completed</p>
+                          <p className="text-xs text-gray-500">Completed</p>
                         </div>
                         <div className="text-center p-2 bg-amber-50 rounded-lg border border-amber-200">
                           <p className="text-lg font-bold text-amber-700">{deptStats.pendingTasks}</p>
-                          <p className="text-xs text-zinc-500">Pending</p>
+                          <p className="text-xs text-gray-500">Pending</p>
                         </div>
                       </div>
                       
@@ -358,22 +358,22 @@ export default function FoundersCollaborationPanel() {
                     </div>
                     <div>
                       <CardTitle className="text-black">{dept.name}</CardTitle>
-                      <p className="text-sm text-zinc-500">{dept.description}</p>
+                      <p className="text-sm text-gray-500">{dept.description}</p>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <p className="text-xs text-zinc-500 mb-2">Department Head</p>
+                      <p className="text-xs text-gray-500 mb-2">Department Head</p>
                       <p className="text-black font-medium">{dept.headName}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-zinc-500 mb-2">Assistant</p>
+                      <p className="text-xs text-gray-500 mb-2">Assistant</p>
                       <p className="text-[#B89555] font-medium">{DEPARTMENTS[dept.id]?.subAIName || 'Assistant'}</p>
                     </div>
                     <div>
-                      <p className="text-xs text-zinc-500 mb-2">Channels</p>
+                      <p className="text-xs text-gray-500 mb-2">Channels</p>
                       <div className="flex flex-wrap gap-1">
                         {dept.channels.map((ch) => (
                           <Badge key={ch} variant="outline" className="text-xs border-[#B89555]/30 text-zinc-600">#{ch}</Badge>
@@ -383,7 +383,7 @@ export default function FoundersCollaborationPanel() {
                   </div>
                   
                   <div className="mt-4">
-                    <p className="text-xs text-zinc-500 mb-2">KPIs</p>
+                    <p className="text-xs text-gray-500 mb-2">KPIs</p>
                     <div className="flex flex-wrap gap-2">
                       {dept.kpis.map((kpi) => (
                         <Badge key={kpi.id} className="bg-zinc-50 text-zinc-700 border border-zinc-200">
@@ -411,36 +411,36 @@ export default function FoundersCollaborationPanel() {
                       </div>
                       <div>
                         <CardTitle className="text-black text-base">{ai.name}</CardTitle>
-                        <p className="text-xs text-zinc-500">{ai.role}</p>
+                        <p className="text-xs text-gray-500">{ai.role}</p>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div>
-                      <p className="text-xs text-zinc-500 mb-1">Department</p>
+                      <p className="text-xs text-gray-500 mb-1">Department</p>
                       <Badge className={departmentColors[ai.department]}>
                         {departmentIcons[ai.department]} {dept?.name}
                       </Badge>
                     </div>
                     <div>
-                      <p className="text-xs text-zinc-500 mb-1">Daily Report</p>
+                      <p className="text-xs text-gray-500 mb-1">Daily Report</p>
                       <p className="text-black text-sm flex items-center gap-2">
                         <Clock className="h-3 w-3" /> {ai.dailyReportTime}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-zinc-500 mb-1">Capabilities</p>
+                      <p className="text-xs text-gray-500 mb-1">Capabilities</p>
                       <div className="flex flex-wrap gap-1">
                         {ai.capabilities.slice(0, 3).map((cap, i) => (
                           <Badge key={i} variant="outline" className="text-xs border-[#B89555]/30 text-zinc-600">{cap}</Badge>
                         ))}
                         {ai.capabilities.length > 3 && (
-                          <Badge variant="outline" className="text-xs border-[#B89555]/30 text-zinc-400">+{ai.capabilities.length - 3} more</Badge>
+                          <Badge variant="outline" className="text-xs border-[#B89555]/30 text-gray-500">+{ai.capabilities.length - 3} more</Badge>
                         )}
                       </div>
                     </div>
                     <div className="flex items-center justify-between pt-2">
-                      <p className="text-xs text-zinc-500">Reports to: <span className="text-[#B89555]">Amanda Clarke</span></p>
+                      <p className="text-xs text-gray-500">Reports to: <span className="text-[#B89555]">Amanda Clarke</span></p>
                       <div className="flex items-center gap-1 text-green-600 text-xs">
                         <CheckCircle2 className="h-3 w-3" /> Active
                       </div>
@@ -488,15 +488,15 @@ export default function FoundersCollaborationPanel() {
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
                             <p className="text-black font-medium text-sm">{log.action}</p>
-                            <span className="text-xs text-zinc-400">{format(new Date(log.timestamp), 'HH:mm')}</span>
+                            <span className="text-xs text-gray-500">{format(new Date(log.timestamp), 'HH:mm')}</span>
                           </div>
-                          <p className="text-zinc-500 text-xs mt-1">{log.details}</p>
+                          <p className="text-gray-500 text-xs mt-1">{log.details}</p>
                           <div className="flex items-center gap-2 mt-2">
-                            <Badge variant="outline" className="text-xs border-[#B89555]/30 text-zinc-500">{log.actorName}</Badge>
+                            <Badge variant="outline" className="text-xs border-[#B89555]/30 text-gray-500">{log.actorName}</Badge>
                             {log.targetName && (
                               <>
-                                <ArrowRight className="h-3 w-3 text-zinc-400" />
-                                <Badge variant="outline" className="text-xs border-[#B89555]/30 text-zinc-500">{log.targetName}</Badge>
+                                <ArrowRight className="h-3 w-3 text-gray-500" />
+                                <Badge variant="outline" className="text-xs border-[#B89555]/30 text-gray-500">{log.targetName}</Badge>
                               </>
                             )}
                           </div>
@@ -505,7 +505,7 @@ export default function FoundersCollaborationPanel() {
                     ))}
                   </AnimatePresence>
                   {logs.length === 0 && (
-                    <div className="text-center py-8 text-zinc-400">
+                    <div className="text-center py-8 text-gray-500">
                       <Activity className="h-8 w-8 mx-auto mb-2 opacity-50" />
                       <p>No coordination activity yet</p>
                     </div>

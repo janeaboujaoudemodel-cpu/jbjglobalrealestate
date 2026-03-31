@@ -151,7 +151,7 @@ ${response.script}
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Property Name *</Label>
+                  <Label className="text-white/85">Property Name *</Label>
                   <Input
                     placeholder="Sunset Bay Residences"
                     value={formData.propertyName}
@@ -160,7 +160,7 @@ ${response.script}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Location</Label>
+                  <Label className="text-white/85">Location</Label>
                   <Input
                     placeholder="Palm Jumeirah, Dubai"
                     value={formData.location}
@@ -172,7 +172,7 @@ ${response.script}
 
               {/* Audience Selector */}
               <div className="space-y-2">
-                <Label className="text-zinc-300">Target Audience</Label>
+                <Label className="text-white/85">Target Audience</Label>
                 <div className="grid grid-cols-3 gap-2">
                   {AUDIENCES.slice(0, 3).map((audience) => (
                     <button
@@ -181,7 +181,7 @@ ${response.script}
                       className={`p-2 rounded-lg border text-center transition-all ${
                         formData.targetAudience === audience.value
                           ? "bg-pink-500/20 border-pink-500/50 text-white"
-                          : "bg-zinc-800 border-zinc-700 text-zinc-400 hover:border-zinc-600"
+                          : "bg-zinc-800 border-zinc-700 text-white/70 hover:border-zinc-600"
                       }`}
                     >
                       <span className="text-xs font-medium">{audience.label}</span>
@@ -204,7 +204,7 @@ ${response.script}
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Tone & Style</Label>
+                  <Label className="text-white/85">Tone & Style</Label>
                   <Select value={formData.tone} onValueChange={(v) => handleChange("tone", v)}>
                     <SelectTriggerDark className="border-pink-500/30 hover:border-pink-500/50">
                       <SelectValue />
@@ -219,7 +219,7 @@ ${response.script}
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-zinc-300">Duration</Label>
+                  <Label className="text-white/85">Duration</Label>
                   <Select value={formData.duration} onValueChange={(v) => handleChange("duration", v)}>
                     <SelectTriggerDark className="border-pink-500/30 hover:border-pink-500/50">
                       <SelectValue />
@@ -235,7 +235,7 @@ ${response.script}
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300">Property Details *</Label>
+                <Label className="text-white/85">Property Details *</Label>
                 <Textarea
                   placeholder="Bedrooms, features, views, amenities, unique selling points..."
                   value={formData.propertyDetails}
@@ -278,7 +278,7 @@ ${response.script}
               >
                 {/* Duration Badge */}
                 {response.estimatedDuration && (
-                  <div className="flex items-center gap-2 text-zinc-400">
+                  <div className="flex items-center gap-2 text-white/70">
                     <Clock className="h-4 w-4" />
                     <span className="text-sm">Estimated duration: {response.estimatedDuration}</span>
                   </div>
@@ -292,7 +292,7 @@ ${response.script}
                         <Megaphone className="h-4 w-4 text-pink-400" />
                         <span className="text-sm font-semibold text-white">Opening Hook</span>
                       </div>
-                      <p className="text-zinc-300 italic">"{response.hook}"</p>
+                      <p className="text-white/85 italic">"{response.hook}"</p>
                     </CardContent>
                   </Card>
                 )}
@@ -314,7 +314,7 @@ ${response.script}
                         </Button>
                       </div>
                     </div>
-                    <div className="bg-zinc-800/50 p-4 rounded-lg text-zinc-300 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
+                    <div className="bg-zinc-800/50 p-4 rounded-lg text-white/85 whitespace-pre-wrap text-sm max-h-[400px] overflow-y-auto">
                       {response.script}
                     </div>
                   </CardContent>
@@ -328,7 +328,7 @@ ${response.script}
                         <Play className="h-4 w-4 text-emerald-400" />
                         <span className="text-sm font-semibold text-white">Call to Action</span>
                       </div>
-                      <p className="text-zinc-300">"{response.callToAction}"</p>
+                      <p className="text-white/85">"{response.callToAction}"</p>
                     </CardContent>
                   </Card>
                 )}
@@ -343,8 +343,8 @@ ${response.script}
                 <div className="p-6 rounded-full bg-pink-500/10 mb-4">
                   <Video className="h-12 w-12 text-pink-400/50" />
                 </div>
-                <h3 className="text-lg font-semibold text-zinc-400">Ready to Script</h3>
-                <p className="text-sm text-zinc-500 mt-2 max-w-sm">
+                <h3 className="text-lg font-semibold text-white/70">Ready to Script</h3>
+                <p className="text-sm text-white/60 mt-2 max-w-sm">
                   Enter property details to generate a professional video tour script with hooks and CTAs
                 </p>
               </motion.div>

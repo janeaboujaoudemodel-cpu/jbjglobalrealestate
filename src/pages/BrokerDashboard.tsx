@@ -201,7 +201,7 @@ export default function BrokerDashboard() {
             </motion.h1>
             
             <motion.p 
-              className="text-lg text-zinc-300 font-light max-w-2xl mx-auto"
+              className="text-lg text-white/85 font-light max-w-2xl mx-auto"
               variants={fadeInUp}
             >
               Manage your brokerage activity, track performance, and access operational tools.
@@ -242,7 +242,7 @@ export default function BrokerDashboard() {
                       </Badge>
                     </div>
                     {profile?.title && (
-                      <p className="text-zinc-400 text-sm">{profile.title}</p>
+                      <p className="text-white/70 text-sm">{profile.title}</p>
                     )}
                   </div>
                 </div>

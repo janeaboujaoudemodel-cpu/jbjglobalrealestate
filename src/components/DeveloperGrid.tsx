@@ -107,7 +107,6 @@ const DeveloperGrid = () => {
                   ) : (
                     <h2
                       className="text-foreground font-bold text-2xl md:text-3xl text-center"
-                      style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {developer.name}
                     </h2>
@@ -206,7 +205,6 @@ const DeveloperGrid = () => {
                   <div className="p-5">
                     <h4
                       className="text-black text-lg font-semibold mb-2 whitespace-normal break-words leading-tight group-hover:text-gold transition-colors"
-                      style={{ fontFamily: "Poppins, sans-serif" }}
                     >
                       {project.name}
                     </h4>
@@ -220,7 +218,7 @@ const DeveloperGrid = () => {
                       </p>
                     )}
                     {project.bedrooms_min && (
-                      <p className="text-zinc-500 text-sm mb-3">
+                      <p className="text-gray-500 text-sm mb-3">
                         {project.bedrooms_min === project.bedrooms_max
                           ? `${project.bedrooms_min} Bedrooms`
                           : `${project.bedrooms_min}-${project.bedrooms_max} Bedrooms`}
@@ -255,7 +253,7 @@ const DeveloperGrid = () => {
 
         {(!projectsByDeveloper || projectsByDeveloper.length === 0) && (
           <div className="text-center py-20 bg-zinc-900 rounded-lg">
-            <p className="text-gray-400 text-lg mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <p className="text-gray-400 text-lg mb-2">
               {hasFiltersApplied ? "No projects match your filters" : "No projects available yet"}
             </p>
             {hasFiltersApplied && (

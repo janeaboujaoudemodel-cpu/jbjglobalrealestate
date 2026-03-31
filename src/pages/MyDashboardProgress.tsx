@@ -84,7 +84,7 @@ const MyDashboardProgress = () => {
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
-            <h1 className="text-2xl md:text-3xl font-bold text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            <h1 className="text-2xl md:text-3xl font-bold text-white">
               My <span className="text-gold">Progress</span>
             </h1>
           </div>
@@ -100,7 +100,7 @@ const MyDashboardProgress = () => {
             <Card className="mb-6 border-gold/30 bg-gradient-to-br from-gold/10 to-gold/5">
               <CardContent className="p-6 text-center">
                 <p className="text-muted-foreground text-sm mb-2">Total Points Earned</p>
-                <p className="text-5xl font-bold text-gold" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                <p className="text-5xl font-bold text-gold">
                   {totalPoints.toLocaleString()}
                 </p>
               </CardContent>

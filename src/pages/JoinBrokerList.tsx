@@ -125,7 +125,6 @@ const JoinBrokerList = () => {
                 variants={fadeInUp}
                 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 uppercase tracking-wider"
                 style={{
-                  fontFamily: "Poppins, sans-serif",
                   background: 'linear-gradient(135deg, #1a1a1a 0%, #1e3a5f 30%, #2563eb 50%, #1e3a5f 70%, #1a1a1a 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',

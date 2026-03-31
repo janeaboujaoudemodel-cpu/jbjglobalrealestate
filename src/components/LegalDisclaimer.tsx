@@ -19,11 +19,11 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           </div>
           <div>
             <h4 className="text-white font-semibold">Legal Notice & Disclaimer</h4>
-            <p className="text-zinc-500 text-xs">JBJ Global Real Estate | Brokerage</p>
+            <p className="text-white/60 text-xs">JBJ Global Real Estate | Brokerage</p>
           </div>
         </div>
 
-        <div className="space-y-4 text-zinc-400 text-sm">
+        <div className="space-y-4 text-white/70 text-sm">
           <div className="flex items-start gap-3">
             <Building2 className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
             <p>
@@ -96,7 +96,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
           </div>
           <div>
             <p className="text-gold text-sm font-semibold mb-1">AI Tool Disclaimer</p>
-            <p className="text-zinc-400 text-xs leading-relaxed">
+            <p className="text-white/70 text-xs leading-relaxed">
               AI outputs support information and comparisons based on available data and inputs. 
               They are not guarantees and do not replace official documents or registration records.
             </p>
@@ -104,7 +104,7 @@ const LegalDisclaimer = ({ variant = "compact", className = "" }: LegalDisclaime
         </div>
         
         <div className="border-t border-zinc-800 pt-4">
-          <p className="text-zinc-400 text-xs mb-3">
+          <p className="text-white/70 text-xs mb-3">
             For legal, mortgage, or visa guidance, contact our team to connect you with our licensed partners.
           </p>
           <div className="flex flex-wrap gap-3">

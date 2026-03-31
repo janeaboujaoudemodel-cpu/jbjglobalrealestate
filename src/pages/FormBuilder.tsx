@@ -164,7 +164,7 @@ const FormBuilder = () => {
         return (
           <div className="flex items-center gap-2">
             <Switch checked={!!value} onCheckedChange={onChange} />
-            <span className="text-sm text-zinc-400">Yes</span>
+            <span className="text-sm text-white/70">Yes</span>
           </div>
         );
       case "radio":
@@ -247,7 +247,7 @@ const FormBuilder = () => {
           <>
             {/* Field Types Sidebar */}
             <div className="w-64 border-r border-zinc-800 p-4">
-              <h3 className="text-sm font-semibold text-zinc-400 mb-4">Add Field</h3>
+              <h3 className="text-sm font-semibold text-white/70 mb-4">Add Field</h3>
               <div className="space-y-2">
                 {fieldTypes.map(({ type, icon: Icon, label }) => (
                   <Button
@@ -283,7 +283,7 @@ const FormBuilder = () => {
               </Card>
 
               {fields.length === 0 ? (
-                <div className="text-center py-16 text-zinc-500">
+                <div className="text-center py-16 text-white/60">
                   <FileText className="w-12 h-12 mx-auto mb-4 opacity-50" />
                   <p>Add fields from the sidebar to build your form</p>
                 </div>
@@ -350,7 +350,7 @@ const FormBuilder = () => {
                                   checked={field.required}
                                   onCheckedChange={(checked) => updateField(field.id, { required: checked })}
                                 />
-                                <Label className="text-sm text-zinc-400">Required</Label>
+                                <Label className="text-sm text-white/70">Required</Label>
                               </div>
                               <div className="flex gap-1">
                                 <Button variant="ghost" size="icon" onClick={() => duplicateField(field)}>
@@ -377,7 +377,7 @@ const FormBuilder = () => {
             <Card className="bg-zinc-900 border-zinc-800">
               <CardHeader>
                 <CardTitle className="text-2xl">{formTitle}</CardTitle>
-                <p className="text-zinc-400">{formDescription}</p>
+                <p className="text-white/70">{formDescription}</p>
               </CardHeader>
               <CardContent className="space-y-6">
                 {fields.map((field) => (
@@ -414,7 +414,7 @@ const FormBuilder = () => {
             </div>
 
             {responses.length === 0 ? (
-              <div className="text-center py-16 text-zinc-500">
+              <div className="text-center py-16 text-white/60">
                 <List className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>No responses yet</p>
               </div>
@@ -423,9 +423,9 @@ const FormBuilder = () => {
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="border-b border-zinc-800">
-                      <th className="text-left p-3 text-sm text-zinc-400">Submitted</th>
+                      <th className="text-left p-3 text-sm text-white/70">Submitted</th>
                       {fields.map((f) => (
-                        <th key={f.id} className="text-left p-3 text-sm text-zinc-400">{f.label}</th>
+                        <th key={f.id} className="text-left p-3 text-sm text-white/70">{f.label}</th>
                       ))}
                     </tr>
                   </thead>

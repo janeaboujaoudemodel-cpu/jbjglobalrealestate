@@ -1305,9 +1305,9 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                 <p className="text-xs text-amber-300">Flagged</p>
               </div>
               <div className="p-3 bg-zinc-500/10 border border-zinc-500/30 rounded-lg text-center">
-                <AlertCircle className="h-5 w-5 text-zinc-500 mx-auto mb-1" />
-                <p className="text-lg font-bold text-zinc-400">{analyzedData.skipped.length}</p>
-                <p className="text-xs text-zinc-300">Duplicates</p>
+                <AlertCircle className="h-5 w-5 text-gray-500 mx-auto mb-1" />
+                <p className="text-lg font-bold text-gray-500">{analyzedData.skipped.length}</p>
+                <p className="text-xs text-gray-400">Duplicates</p>
               </div>
             </div>
 
@@ -1468,8 +1468,8 @@ const CRMImportModalV3 = ({ open, onClose, onSuccess, userId }: CRMImportModalV3
                   <p className="text-xs text-amber-300">Flagged</p>
                 </div>
                 <div className="p-3 bg-zinc-500/10 rounded-lg">
-                  <p className="text-xl font-bold text-zinc-400">{result.duplicates}</p>
-                  <p className="text-xs text-zinc-300">Skipped</p>
+                  <p className="text-xl font-bold text-gray-500">{result.duplicates}</p>
+                  <p className="text-xs text-gray-400">Skipped</p>
                 </div>
               </div>
             </div>

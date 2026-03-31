@@ -78,11 +78,11 @@ const ExecutivePerformance = () => {
               <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
                 Brokerage Performance Snapshot
               </h1>
-              <p className="text-zinc-400">
+              <p className="text-white/70">
                 Performance trends, not micro-management metrics
               </p>
             </div>
-            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-zinc-500">
+            <div className="mt-4 md:mt-0 flex items-center gap-2 text-sm text-white/60">
               <Clock className="w-4 h-4" />
               <span>Last updated: {new Date(lastUpdated).toLocaleString()}</span>
             </div>
@@ -103,7 +103,7 @@ const ExecutivePerformance = () => {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   nav.active
                     ? "bg-gold text-black"
-                    : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                    : "bg-zinc-800 text-white/85 hover:bg-zinc-700"
                 }`}
               >
                 {nav.label}
@@ -114,7 +114,7 @@ const ExecutivePerformance = () => {
           {loading ? (
             <div className="text-center py-12">
               <Activity className="w-8 h-8 text-gold animate-pulse mx-auto mb-4" />
-              <p className="text-zinc-400">Loading performance data...</p>
+              <p className="text-white/70">Loading performance data...</p>
             </div>
           ) : (
             <>
@@ -122,7 +122,7 @@ const ExecutivePerformance = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Clock className="w-4 h-4" />
                       BUY Deal Cycle (Avg)
                     </CardTitle>
@@ -130,7 +130,7 @@ const ExecutivePerformance = () => {
                   <CardContent>
                     <div className="flex items-baseline gap-2">
                       <span className="text-4xl font-bold text-white">{metrics.avgDealCycleBuy}</span>
-                      <span className="text-zinc-400">days</span>
+                      <span className="text-white/70">days</span>
                     </div>
                     <div className="flex items-center gap-2 mt-2">
                       <TrendingDown className="w-4 h-4 text-emerald-500" />
@@ -141,7 +141,7 @@ const ExecutivePerformance = () => {
 
                 <Card className="bg-zinc-900 border-zinc-800">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-zinc-400 flex items-center gap-2">
+                    <CardTitle className="text-sm font-medium text-white/70 flex items-center gap-2">
                       <Clock className="w-4 h-4" />
                       RENT Deal Cycle (Avg)
                     </CardTitle>
@@ -149,11 +149,11 @@ const ExecutivePerformance = () => {
                   <CardContent>
                     <div className="flex items-baseline gap-2">
                       <span className="text-4xl font-bold text-white">{metrics.avgDealCycleRent}</span>
-                      <span className="text-zinc-400">days</span>
+                      <span className="text-white/70">days</span>
                     </div>
                     <div className="flex items-center gap-2 mt-2">
-                      <Activity className="w-4 h-4 text-zinc-400" />
-                      <span className="text-sm text-zinc-400">Stable vs last quarter</span>
+                      <Activity className="w-4 h-4 text-white/70" />
+                      <span className="text-sm text-white/70">Stable vs last quarter</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -171,13 +171,13 @@ const ExecutivePerformance = () => {
                   {Object.entries(metrics.conversionByChannel).map(([channel, rate]) => (
                     <div key={channel}>
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-zinc-300 capitalize">{channel}</span>
+                        <span className="text-white/85 capitalize">{channel}</span>
                         <span className="text-white font-medium">{rate}%</span>
                       </div>
                       <Progress value={rate} className="h-2" />
                     </div>
                   ))}
-                  <p className="text-xs text-zinc-500 mt-4">
+                  <p className="text-xs text-white/60 mt-4">
                     Conversion rates based on 90-day rolling average
                   </p>
                 </CardContent>
@@ -198,7 +198,7 @@ const ExecutivePerformance = () => {
                     </div>
                     <span className="text-2xl font-bold text-gold">{metrics.intelligenceToolUsage}%</span>
                   </div>
-                  <p className="text-sm text-zinc-400 mt-3">
+                  <p className="text-sm text-white/70 mt-3">
                     Brokers actively using Market Intelligence tools in client conversations
                   </p>
                   <div className="flex items-center gap-2 mt-2">
@@ -215,7 +215,7 @@ const ExecutivePerformance = () => {
                     <AlertTriangle className="w-5 h-5 text-amber-500" />
                     Deal Pipeline Bottlenecks
                   </CardTitle>
-                  <p className="text-sm text-zinc-400">
+                  <p className="text-sm text-white/70">
                     Where deals slow down in the pipeline
                   </p>
                 </CardHeader>
@@ -234,12 +234,12 @@ const ExecutivePerformance = () => {
                           {stage.isBottleneck && (
                             <AlertTriangle className="w-4 h-4 text-amber-500" />
                           )}
-                          <span className={stage.isBottleneck ? "text-amber-200" : "text-zinc-300"}>
+                          <span className={stage.isBottleneck ? "text-amber-200" : "text-white/85"}>
                             {stage.stage}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className={`font-medium ${stage.isBottleneck ? "text-amber-400" : "text-zinc-400"}`}>
+                          <span className={`font-medium ${stage.isBottleneck ? "text-amber-400" : "text-white/70"}`}>
                             {stage.avgDays} days
                           </span>
                           {stage.isBottleneck && (
@@ -251,7 +251,7 @@ const ExecutivePerformance = () => {
                       </div>
                     ))}
                   </div>
-                  <p className="text-xs text-zinc-500 mt-4">
+                  <p className="text-xs text-white/60 mt-4">
                     Bottlenecks identified based on stage duration exceeding baseline thresholds
                   </p>
                 </CardContent>
@@ -259,7 +259,7 @@ const ExecutivePerformance = () => {
 
               {/* Footer */}
               <div className="mt-12 pt-6 border-t border-zinc-800 text-center">
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-white/60">
                   Performance Snapshot • Trends and patterns, not individual broker rankings
                 </p>
                 <FounderContent>

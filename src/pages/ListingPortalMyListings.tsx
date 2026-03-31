@@ -192,7 +192,7 @@ const ListingPortalMyListings = () => {
       <div className="relative py-12 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto">
-            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-zinc-500 hover:text-gold mb-4">
+            <Button variant="ghost" onClick={() => navigate('/listing-portal')} className="text-gray-500 hover:text-gold mb-4">
               <ArrowLeft className="w-4 h-4 mr-2" /> Back to Portal
             </Button>
             <div className="flex justify-between items-center mb-8">
@@ -207,22 +207,22 @@ const ListingPortalMyListings = () => {
               <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
                 <Star className="w-5 h-5 text-gold mx-auto mb-1" />
                 <p className="text-2xl font-bold text-black">{points?.points || 0}</p>
-                <p className="text-xs text-zinc-500">Points</p>
+                <p className="text-xs text-gray-500">Points</p>
               </div>
               <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
                 <Award className="w-5 h-5 text-gold mx-auto mb-1" />
                 <p className="text-sm font-bold text-black capitalize">{points?.tier || 'Starter'}</p>
-                <p className="text-xs text-zinc-500">Tier</p>
+                <p className="text-xs text-gray-500">Tier</p>
               </div>
               <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
                 <Sparkles className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
                 <p className="text-2xl font-bold text-black">{points?.free_listings_remaining ?? 3}</p>
-                <p className="text-xs text-zinc-500">Free Left</p>
+                <p className="text-xs text-gray-500">Free Left</p>
               </div>
               <div className="bg-white border-2 border-gold/20 rounded-xl p-4 text-center">
-                <Shield className={`w-5 h-5 mx-auto mb-1 ${verification?.status === 'verified' ? 'text-emerald-500' : 'text-zinc-400'}`} />
+                <Shield className={`w-5 h-5 mx-auto mb-1 ${verification?.status === 'verified' ? 'text-emerald-500' : 'text-gray-500'}`} />
                 <p className="text-sm font-bold text-black capitalize">{verification?.status || 'Not Verified'}</p>
-                <p className="text-xs text-zinc-500">Broker Status</p>
+                <p className="text-xs text-gray-500">Broker Status</p>
               </div>
             </div>
 
@@ -232,7 +232,7 @@ const ListingPortalMyListings = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <h3 className="text-black font-semibold text-sm">Broker Verification</h3>
-                    <p className="text-zinc-500 text-xs">
+                    <p className="text-gray-500 text-xs">
                       {verification?.status === 'pending' ? 'Your verification is under review' : 'Get verified to earn 2x points'}
                     </p>
                   </div>
@@ -282,7 +282,7 @@ const ListingPortalMyListings = () => {
               listings.length === 0 ? (
                 <div className="text-center py-12 bg-white/60 border-2 border-gold/20 rounded-2xl">
                   <h3 className="text-black font-semibold mb-2">No listings yet</h3>
-                  <p className="text-zinc-500 text-sm mb-4">Submit your first property listing!</p>
+                  <p className="text-gray-500 text-sm mb-4">Submit your first property listing!</p>
                   <Button onClick={() => navigate('/listing-portal/submit')} className="bg-gold hover:bg-gold/90 text-black">Submit Listing</Button>
                 </div>
               ) : (
@@ -303,7 +303,7 @@ const ListingPortalMyListings = () => {
                               <Badge className="bg-emerald-100 text-emerald-700 border-emerald-300 text-[10px]">For Sale</Badge>
                             )}
                           </div>
-                          <div className="flex items-center gap-3 text-xs text-zinc-500">
+                          <div className="flex items-center gap-3 text-xs text-gray-500">
                             <Badge className={`text-[10px] ${statusColor(listing.status)}`}>{listing.status}</Badge>
                             <span>{listing.currency} {listing.price.toLocaleString()}</span>
                             <span>{new Date(listing.created_at).toLocaleDateString()}</span>
@@ -318,10 +318,10 @@ const ListingPortalMyListings = () => {
                           </div>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="icon" variant="ghost" className="text-zinc-400 hover:text-gold" onClick={() => handleEdit(listing.id)} title="Edit listing">
+                          <Button size="icon" variant="ghost" className="text-gray-500 hover:text-gold" onClick={() => handleEdit(listing.id)} title="Edit listing">
                             <Edit className="w-4 h-4" />
                           </Button>
-                          <Button size="icon" variant="ghost" className="text-zinc-400 hover:text-red-500" onClick={() => handleDeleteClick(listing.id)} title="Delete listing">
+                          <Button size="icon" variant="ghost" className="text-gray-500 hover:text-red-500" onClick={() => handleDeleteClick(listing.id)} title="Delete listing">
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
@@ -333,9 +333,9 @@ const ListingPortalMyListings = () => {
             ) : (
               deletedListings.length === 0 ? (
                 <div className="text-center py-12 bg-white/60 border-2 border-gold/20 rounded-2xl">
-                  <Trash2 className="w-8 h-8 text-zinc-300 mx-auto mb-3" />
+                  <Trash2 className="w-8 h-8 text-gray-400 mx-auto mb-3" />
                   <h3 className="text-black font-semibold mb-2">No deleted listings</h3>
-                  <p className="text-zinc-500 text-sm">Deleted listings will appear here for restoration.</p>
+                  <p className="text-gray-500 text-sm">Deleted listings will appear here for restoration.</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -346,7 +346,7 @@ const ListingPortalMyListings = () => {
                           <Trash2 className="w-4 h-4 text-red-400" />
                           <h3 className="text-black/50 font-medium text-sm line-through">{listing.title}</h3>
                         </div>
-                        <div className="flex items-center gap-3 text-xs text-zinc-400">
+                        <div className="flex items-center gap-3 text-xs text-gray-500">
                           <span>{listing.currency} {listing.price.toLocaleString()}</span>
                           <span>Deleted {listing.deleted_at ? new Date(listing.deleted_at).toLocaleDateString() : ''}</span>
                         </div>

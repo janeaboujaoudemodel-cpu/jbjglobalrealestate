@@ -148,7 +148,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
                 {developer.description}
               </p>
             ) : (
-              <p className="text-zinc-400 text-xs italic">
+              <p className="text-gray-500 text-xs italic">
                 Premier developer in the UAE market
               </p>
             )}
@@ -169,7 +169,7 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
               </div>
             ) : null}
             {!projectCount && (!developer.completed_projects || developer.completed_projects === 0) && (
-              <span className="text-zinc-500 text-xs">View developer portfolio</span>
+              <span className="text-gray-500 text-xs">View developer portfolio</span>
             )}
           </div>
         </div>

@@ -221,12 +221,12 @@ const InvestorDashboard = () => {
               <h1 className="text-2xl font-bold text-black mb-1">
                 {profile?.full_name || 'Welcome, Investor'}
               </h1>
-              <p className="text-zinc-500 text-sm flex items-center justify-center md:justify-start gap-2">
+              <p className="text-gray-500 text-sm flex items-center justify-center md:justify-start gap-2">
                 <Mail className="h-4 w-4" />
                 {user?.email}
               </p>
               {profile?.phone && (
-                <p className="text-zinc-500 text-sm flex items-center justify-center md:justify-start gap-2 mt-1">
+                <p className="text-gray-500 text-sm flex items-center justify-center md:justify-start gap-2 mt-1">
                   <Phone className="h-4 w-4" />
                   {profile.phone}
                 </p>
@@ -266,7 +266,7 @@ const InvestorDashboard = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-black">{propertyBuy}</p>
-                <p className="text-xs text-zinc-500">Properties Bought</p>
+                <p className="text-xs text-gray-500">Properties Bought</p>
               </div>
             </div>
           </CardContent>
@@ -280,7 +280,7 @@ const InvestorDashboard = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-black">{propertySell}</p>
-                <p className="text-xs text-zinc-500">Properties Listed</p>
+                <p className="text-xs text-gray-500">Properties Listed</p>
               </div>
             </div>
           </CardContent>
@@ -294,7 +294,7 @@ const InvestorDashboard = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-black">{careerSubmitted ? '1' : '0'}</p>
-                <p className="text-xs text-zinc-500">CV Submitted</p>
+                <p className="text-xs text-gray-500">CV Submitted</p>
               </div>
             </div>
           </CardContent>
@@ -308,7 +308,7 @@ const InvestorDashboard = () => {
               </div>
               <div>
                 <p className="text-2xl font-bold text-black">{tickets.length}</p>
-                <p className="text-xs text-zinc-500">Support Tickets</p>
+                <p className="text-xs text-gray-500">Support Tickets</p>
               </div>
             </div>
           </CardContent>
@@ -389,7 +389,7 @@ const InvestorDashboard = () => {
               </CardHeader>
               <CardContent>
                 {tickets.length === 0 && ideas.length === 0 ? (
-                  <div className="text-center py-6 text-zinc-500">
+                  <div className="text-center py-6 text-gray-500">
                     <FileText className="h-10 w-10 mx-auto mb-3 opacity-30" />
                     <p>No recent activity</p>
                     <p className="text-sm mt-1">Start exploring our tools and services</p>
@@ -402,7 +402,7 @@ const InvestorDashboard = () => {
                           <MessageCircle className="h-4 w-4 text-gold" />
                           <div>
                             <p className="text-sm font-medium text-black">{ticket.subject}</p>
-                            <p className="text-xs text-zinc-500">{format(new Date(ticket.created_at), 'MMM d, yyyy')}</p>
+                            <p className="text-xs text-gray-500">{format(new Date(ticket.created_at), 'MMM d, yyyy')}</p>
                           </div>
                         </div>
                         <Badge className={getStatusColor(ticket.status)}>{ticket.status}</Badge>
@@ -414,7 +414,7 @@ const InvestorDashboard = () => {
                           <Lightbulb className="h-4 w-4 text-gold" />
                           <div>
                             <p className="text-sm font-medium text-black">Idea Submission</p>
-                            <p className="text-xs text-zinc-500">{format(new Date(idea.created_at), 'MMM d, yyyy')}</p>
+                            <p className="text-xs text-gray-500">{format(new Date(idea.created_at), 'MMM d, yyyy')}</p>
                           </div>
                         </div>
                         <Badge className={getStatusColor(idea.status)}>{idea.status}</Badge>
@@ -435,13 +435,13 @@ const InvestorDashboard = () => {
                 <MessageCircle className="h-5 w-5 text-gold" />
                 My Support Tickets
               </CardTitle>
-              <CardDescription className="text-zinc-500">
+              <CardDescription className="text-gray-500">
                 Track all your support requests and their status
               </CardDescription>
             </CardHeader>
             <CardContent>
               {tickets.length === 0 ? (
-                <div className="text-center py-12 text-zinc-500">
+                <div className="text-center py-12 text-gray-500">
                   <MessageCircle className="h-12 w-12 mx-auto mb-4 opacity-30" />
                   <p className="text-lg font-medium text-black mb-2">No Support Tickets</p>
                   <p className="text-sm mb-4">You haven't created any support tickets yet</p>
@@ -459,7 +459,7 @@ const InvestorDashboard = () => {
                         </div>
                         <div>
                           <p className="font-medium text-black">{ticket.subject}</p>
-                          <p className="text-sm text-zinc-500">
+                          <p className="text-sm text-gray-500">
                             {ticket.ticket_number} • {format(new Date(ticket.created_at), 'MMM d, yyyy')}
                           </p>
                         </div>
@@ -481,13 +481,13 @@ const InvestorDashboard = () => {
                 <Lightbulb className="h-5 w-5 text-gold" />
                 My Ideas & Suggestions
               </CardTitle>
-              <CardDescription className="text-zinc-500">
+              <CardDescription className="text-gray-500">
                 Track your submitted ideas and their status
               </CardDescription>
             </CardHeader>
             <CardContent>
               {ideas.length === 0 ? (
-                <div className="text-center py-12 text-zinc-500">
+                <div className="text-center py-12 text-gray-500">
                   <Lightbulb className="h-12 w-12 mx-auto mb-4 opacity-30" />
                   <p className="text-lg font-medium text-black mb-2">No Ideas Submitted</p>
                   <p className="text-sm mb-4">Share your ideas to help us improve</p>
@@ -505,7 +505,7 @@ const InvestorDashboard = () => {
                         </div>
                         <div>
                           <p className="font-medium text-black">Idea Submission</p>
-                          <p className="text-sm text-zinc-500">
+                          <p className="text-sm text-gray-500">
                             {idea.draw_ticket_number || 'Processing'} • {format(new Date(idea.created_at), 'MMM d, yyyy')}
                           </p>
                         </div>
@@ -578,19 +578,19 @@ const InvestorDashboard = () => {
                 ) : (
                   <>
                     <div className="flex items-center justify-between py-2 border-b border-zinc-200">
-                      <span className="text-zinc-500">Full Name</span>
+                      <span className="text-gray-500">Full Name</span>
                       <span className="font-medium text-black">{profile?.full_name || 'Not set'}</span>
                     </div>
                     <div className="flex items-center justify-between py-2 border-b border-zinc-200">
-                      <span className="text-zinc-500">Email</span>
+                      <span className="text-gray-500">Email</span>
                       <span className="font-medium text-black">{user?.email}</span>
                     </div>
                     <div className="flex items-center justify-between py-2 border-b border-zinc-200">
-                      <span className="text-zinc-500">Phone</span>
+                      <span className="text-gray-500">Phone</span>
                       <span className="font-medium text-black">{profile?.phone || 'Not set'}</span>
                     </div>
                     <div className="flex items-center justify-between py-2">
-                      <span className="text-zinc-500">Date of Birth</span>
+                      <span className="text-gray-500">Date of Birth</span>
                       <span className="font-medium text-black">{profile?.date_of_birth || 'Not set'}</span>
                     </div>
                   </>

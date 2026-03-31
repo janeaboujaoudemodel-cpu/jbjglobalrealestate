@@ -285,7 +285,7 @@ export default function JBJBrokerMessages() {
           <div className="p-4 border-b border-gold/20">
             <h2 className="font-semibold text-black mb-3">Conversations</h2>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <Input
                 placeholder="Search..."
                 value={searchQuery}
@@ -312,7 +312,7 @@ export default function JBJBrokerMessages() {
                   </Avatar>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-black truncate">{lead.name}</p>
-                    <p className="text-sm text-zinc-500 truncate">
+                    <p className="text-sm text-gray-500 truncate">
                       {lead.email || lead.phone || "No contact"}
                     </p>
                   </div>
@@ -323,7 +323,7 @@ export default function JBJBrokerMessages() {
                         ? "border-blue-500 text-blue-500"
                         : lead.status === "qualified"
                         ? "border-green-500 text-green-500"
-                        : "border-zinc-500 text-zinc-500"
+                        : "border-zinc-500 text-gray-500"
                     }
                   >
                     {lead.status}
@@ -395,7 +395,7 @@ export default function JBJBrokerMessages() {
                             await navigator.clipboard.writeText(msg.content);
                             toast.success(t('chat.messageCopied') || "Message copied");
                           }}
-                          className={`flex items-center gap-1 mt-1 text-[10px] text-zinc-500 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                          className={`flex items-center gap-1 mt-1 text-[10px] text-gray-500 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                             msg.direction === "outbound" ? "self-end mr-1" : "self-start ml-1"
                           }`}
                         >
@@ -453,7 +453,7 @@ export default function JBJBrokerMessages() {
                 <h3 className="text-lg font-medium text-black">
                   Select a conversation
                 </h3>
-                <p className="text-zinc-500">
+                <p className="text-gray-500">
                   Choose a lead from the list to start messaging
                 </p>
               </div>

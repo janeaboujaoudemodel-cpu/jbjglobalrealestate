@@ -106,7 +106,7 @@ const LeadNotesActions = ({
         {/* Follow-up Date */}
         <div className="p-3 bg-zinc-800/50 rounded-lg">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-zinc-400 flex items-center gap-2">
+            <span className="text-sm text-white/70 flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               Next Follow-up
             </span>
@@ -137,7 +137,7 @@ const LeadNotesActions = ({
         {/* Notes List */}
         <div className="space-y-2">
           {notes.length === 0 && !isAddingNote && (
-            <p className="text-sm text-zinc-500 text-center py-3">
+            <p className="text-sm text-white/60 text-center py-3">
               No notes yet. Add your first note below.
             </p>
           )}
@@ -168,9 +168,9 @@ const LeadNotesActions = ({
                 </div>
               ) : (
                 <>
-                  <p className="text-sm text-zinc-300 whitespace-pre-wrap">{note.content}</p>
+                  <p className="text-sm text-white/85 whitespace-pre-wrap">{note.content}</p>
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-xs text-zinc-500">
+                    <span className="text-xs text-white/60">
                       {format(new Date(note.created_at), "MMM d, h:mm a")}
                     </span>
                     <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -180,7 +180,7 @@ const LeadNotesActions = ({
                         className="w-6 h-6"
                         onClick={() => startEditNote(note)}
                       >
-                        <Edit2 className="w-3 h-3 text-zinc-400" />
+                        <Edit2 className="w-3 h-3 text-white/70" />
                       </Button>
                       <Button 
                         size="icon" 
@@ -227,7 +227,7 @@ const LeadNotesActions = ({
           <Button 
             onClick={() => setIsAddingNote(true)} 
             variant="outline" 
-            className="w-full border-dashed border-zinc-700 text-zinc-400 hover:text-white hover:border-gold/50"
+            className="w-full border-dashed border-zinc-700 text-white/70 hover:text-white hover:border-gold/50"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Note

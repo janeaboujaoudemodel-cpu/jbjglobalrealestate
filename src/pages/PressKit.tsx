@@ -173,13 +173,12 @@ const PressKit = () => {
             </motion.span>
             <motion.h1 
               className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
-              style={{ fontFamily: "Poppins, sans-serif" }}
               variants={fadeInUp}
             >
               Press <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-gold-light">Kit</span>
             </motion.h1>
             <motion.p 
-              className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-6"
+              className="text-gray-500 text-lg md:text-xl max-w-2xl mx-auto mb-6"
               variants={fadeInUp}
             >
               Official media resources for JBJ Global Real Estate
@@ -191,7 +190,7 @@ const PressKit = () => {
               variants={fadeInUp}
             >
               <Lock className="w-4 h-4 text-gold" />
-              <span className="text-zinc-300 text-sm">Protected Content • Contact for Access</span>
+              <span className="text-gray-400 text-sm">Protected Content • Contact for Access</span>
             </motion.div>
           </motion.div>
         </div>
@@ -219,7 +218,7 @@ const PressKit = () => {
                   </div>
                   <div>
                     <h3 className="text-black text-xl font-semibold">Official Biography</h3>
-                    <p className="text-zinc-500 text-sm">Short bio for press releases</p>
+                    <p className="text-gray-500 text-sm">Short bio for press releases</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 bg-black/10 border border-gold/30 rounded-full px-3 py-1">
@@ -257,7 +256,6 @@ const PressKit = () => {
                 <span className="text-gold text-sm uppercase tracking-[0.3em] mb-4 block">Founder Photos</span>
                 <h2 
                   className="text-white text-3xl md:text-4xl font-bold"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   Jane Bou Jaoude <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Headshots</span>
                 </h2>
@@ -302,14 +300,14 @@ const PressKit = () => {
                       <div className="text-center px-4">
                         <Shield className="w-8 h-8 text-gold mx-auto mb-2" />
                         <p className="text-white text-sm font-medium mb-1">Protected Content</p>
-                        <p className="text-zinc-400 text-xs">Contact media@JBJ.ae for access</p>
+                        <p className="text-gray-500 text-xs">Contact media@JBJ.ae for access</p>
                       </div>
                     </div>
                   </div>
                   
                   <div className="p-5">
                     <h4 className="text-black font-semibold mb-1">{asset.name}</h4>
-                    <p className="text-zinc-500 text-sm">{asset.description}</p>
+                    <p className="text-gray-500 text-sm">{asset.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -334,7 +332,6 @@ const PressKit = () => {
               <span className="text-gold text-sm uppercase tracking-[0.3em] mb-4 block">Quick Reference</span>
               <h2 
                 className="text-white text-3xl md:text-4xl font-bold"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Company <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold to-[#C4A962]">Fact Sheet</span>
               </h2>
@@ -355,23 +352,23 @@ const PressKit = () => {
                 </h4>
                 <div className="space-y-4">
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-zinc-500">Company Name</span>
+                    <span className="text-gray-500">Company Name</span>
                     <span className="text-black font-medium">JBJ GLOBAL REAL ESTATE</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-zinc-500">Founded</span>
+                    <span className="text-gray-500">Founded</span>
                     <span className="text-black font-medium">2025</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-zinc-500">Headquarters</span>
+                    <span className="text-gray-500">Headquarters</span>
                     <span className="text-black font-medium">Downtown Dubai, UAE</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-zinc-500">Industry</span>
+                    <span className="text-gray-500">Industry</span>
                     <span className="text-black font-medium">Real Estate Brokerage</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-zinc-500">Website</span>
+                    <span className="text-gray-500">Website</span>
                     <a href="https://jbj.ae" target="_blank" rel="noopener noreferrer" className="text-gold hover:underline flex items-center gap-1">
                       jbj.ae
                       <ExternalLink className="w-3 h-3" />
@@ -391,19 +388,19 @@ const PressKit = () => {
                 </h4>
                 <div className="space-y-4">
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-zinc-500">Industry Experience</span>
+                    <span className="text-gray-500">Industry Experience</span>
                     <span className="text-gold font-bold">12+ Years</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-zinc-500">Brokers Trained</span>
+                    <span className="text-gray-500">Brokers Trained</span>
                     <span className="text-gold font-bold">{`${COMPANY_STATS.brokersTrainedBy.end.toLocaleString()}${COMPANY_STATS.brokersTrainedBy.suffix}`}</span>
                   </div>
                   <div className="flex justify-between border-b border-gold/20 pb-3">
-                    <span className="text-zinc-500">Team Members</span>
+                    <span className="text-gray-500">Team Members</span>
                     <span className="text-gold font-bold">10+</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-zinc-500">Client Satisfaction</span>
+                    <span className="text-gray-500">Client Satisfaction</span>
                     <span className="text-gold font-bold">98%</span>
                   </div>
                 </div>
@@ -433,7 +430,6 @@ const PressKit = () => {
               </span>
               <h2
                 className="text-black text-3xl md:text-4xl font-bold mb-6"
-                style={{ fontFamily: "Poppins, sans-serif" }}
               >
                 Media <span className="text-gold">Contact</span>
               </h2>

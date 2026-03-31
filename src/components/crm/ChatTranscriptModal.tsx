@@ -66,20 +66,20 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
           {/* Contact Info */}
           <div className="grid grid-cols-2 gap-4 mt-4 text-sm">
             <div>
-              <p className="text-zinc-500">Contact</p>
+              <p className="text-white/60">Contact</p>
               <p className="text-white font-medium">{conversation.user_name || "Anonymous"}</p>
-              <p className="text-zinc-400">{conversation.user_email}</p>
+              <p className="text-white/70">{conversation.user_email}</p>
               {conversation.user_phone && (
-                <p className="text-zinc-400">{conversation.user_phone}</p>
+                <p className="text-white/70">{conversation.user_phone}</p>
               )}
             </div>
             <div>
-              <p className="text-zinc-500">Details</p>
-              <div className="flex items-center gap-2 text-zinc-400">
+              <p className="text-white/60">Details</p>
+              <div className="flex items-center gap-2 text-white/70">
                 <Calendar className="w-3 h-3" />
                 <span>{format(new Date(conversation.created_at), "MMM d, yyyy")}</span>
               </div>
-              <div className="flex items-center gap-2 text-zinc-400">
+              <div className="flex items-center gap-2 text-white/70">
                 <Clock className="w-3 h-3" />
                 <span>{format(new Date(conversation.created_at), "h:mm a")}</span>
               </div>
@@ -97,7 +97,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
               <Star className="w-4 h-4 text-gold" />
               <span className="text-white font-medium">{conversation.rating}/5</span>
               {conversation.rating_feedback && (
-                <span className="text-zinc-400 text-sm">- {conversation.rating_feedback}</span>
+                <span className="text-white/70 text-sm">- {conversation.rating_feedback}</span>
               )}
             </div>
           )}
@@ -107,7 +107,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
         <ScrollArea className="flex-1 h-[400px]">
           <div className="p-6 space-y-4">
             {messages.length === 0 ? (
-              <div className="text-center text-zinc-500 py-8">
+              <div className="text-center text-white/60 py-8">
                 No messages in this conversation
               </div>
             ) : (
@@ -134,7 +134,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                     {message.timestamp && (
                       <p className={`text-xs mt-1 ${
-                        message.role === "user" ? "text-black/60" : "text-zinc-500"
+                        message.role === "user" ? "text-black/60" : "text-white/60"
                       }`}>
                         {format(new Date(message.timestamp), "h:mm a")}
                       </p>
@@ -143,7 +143,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
 
                   {message.role === "user" && (
                     <div className="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center shrink-0">
-                      <User className="w-4 h-4 text-zinc-300" />
+                      <User className="w-4 h-4 text-white/85" />
                     </div>
                   )}
                 </div>
@@ -154,7 +154,7 @@ const ChatTranscriptModal = ({ isOpen, onClose, conversation }: ChatTranscriptMo
 
         {/* Footer */}
         <div className="p-4 border-t border-zinc-800 flex justify-between items-center">
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-white/60">
             {messages.length} messages • Last updated {format(new Date(conversation.updated_at), "MMM d, h:mm a")}
           </p>
           <Button onClick={onClose} variant="outline" className="border-zinc-700">

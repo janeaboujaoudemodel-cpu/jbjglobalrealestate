@@ -174,7 +174,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-2xl bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/30 shadow-2xl shadow-gold/20">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-3 text-black text-xl font-bold" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <DialogTitle className="flex items-center gap-3 text-black text-xl font-bold">
             <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center">
               <Video className="w-5 h-5 text-gold" />
             </div>
@@ -211,7 +211,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                   <div key={s} className="flex items-center gap-2">
                     <div className={cn(
                       "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all",
-                      step >= s ? "bg-gold text-black" : "bg-zinc-200 text-zinc-500"
+                      step >= s ? "bg-gold text-black" : "bg-zinc-200 text-gray-500"
                     )}>
                       {s}
                     </div>
@@ -225,7 +225,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                 <div className="space-y-4">
                   <div className="text-center mb-6">
                     <h3 className="text-lg font-semibold text-black">Your Information</h3>
-                    <p className="text-zinc-500 text-sm">Please provide accurate details for verification</p>
+                    <p className="text-gray-500 text-sm">Please provide accurate details for verification</p>
                   </div>
 
                   <FormField
@@ -363,7 +363,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                 <div className="space-y-6">
                   <div className="text-center mb-6">
                     <h3 className="text-lg font-semibold text-black">Select Date & Time</h3>
-                    <p className="text-zinc-500 text-sm">Online meetings are scheduled at least 1 day in advance</p>
+                    <p className="text-gray-500 text-sm">Online meetings are scheduled at least 1 day in advance</p>
                   </div>
 
                   <FormField
@@ -447,7 +447,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                 <div className="space-y-6">
                   <div className="text-center mb-6">
                     <h3 className="text-lg font-semibold text-black">Confirm Your Booking</h3>
-                    <p className="text-zinc-500 text-sm">Please review and accept the terms</p>
+                    <p className="text-gray-500 text-sm">Please review and accept the terms</p>
                   </div>
 
                   {/* Summary */}

@@ -38,7 +38,7 @@ const themeMap = {
     bar: 'bg-zinc-900/60 border border-zinc-700/50',
     icon: 'text-gold',
     save: 'bg-gold text-black hover:bg-gold/90',
-    newBtn: 'border-zinc-600 text-zinc-300 hover:bg-zinc-800',
+    newBtn: 'border-zinc-600 text-gray-400 hover:bg-zinc-800',
   },
 };
 

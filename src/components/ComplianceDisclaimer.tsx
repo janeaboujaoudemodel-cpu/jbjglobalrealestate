@@ -65,7 +65,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
             <h4 className="text-white font-semibold">
               {language === "ar" ? "إشعار قانوني وإخلاء مسؤولية" : "Legal Notice & Disclaimer"}
             </h4>
-            <p className="text-zinc-500 text-xs">
+            <p className="text-white/60 text-xs">
               {language === "ar" ? "جي بي جي جلوبال للعقارات | وساطة عقارية" : "JBJ Global Real Estate | Real Estate Brokerage"}
             </p>
           </div>
@@ -77,7 +77,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
               <point.icon className="w-4 h-4 text-gold flex-shrink-0 mt-1" />
               <div>
                 <p className="text-white text-sm font-medium mb-1">{point.title}</p>
-                <p className="text-zinc-400 text-sm leading-relaxed">{point.content}</p>
+                <p className="text-white/70 text-sm leading-relaxed">{point.content}</p>
               </div>
             </div>
           ))}
@@ -116,7 +116,7 @@ const ComplianceDisclaimer = ({ variant = "compact", className = "", language = 
             <p className="text-white text-sm font-medium mb-1">
               {language === "ar" ? "استشارة وساطة عقارية" : "Real Estate Brokerage Consultation"}
             </p>
-            <p className="text-zinc-400 text-xs leading-relaxed">
+            <p className="text-white/70 text-xs leading-relaxed">
               {language === "ar" 
                 ? "هذه الاستشارة لإرشادات الوساطة العقارية وتقديمات الشركاء فقط."
                 : "This consultation is for real estate brokerage guidance and partner introductions."}

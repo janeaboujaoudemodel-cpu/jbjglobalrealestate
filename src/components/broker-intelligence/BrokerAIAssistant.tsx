@@ -113,7 +113,7 @@ export function BrokerAIAssistant() {
             </TabsTrigger>
           </TabsList>
 
-          <p className="text-zinc-500 text-xs mt-2">{getTypeDescription(selectedType)}</p>
+          <p className="text-white/60 text-xs mt-2">{getTypeDescription(selectedType)}</p>
 
           {/* Common Controls */}
           <div className="grid grid-cols-2 gap-3 mt-4">
@@ -148,7 +148,7 @@ export function BrokerAIAssistant() {
               placeholder="Add context about the client's inquiry (optional)..."
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 min-h-[80px]"
+              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400 min-h-[80px]"
             />
           </TabsContent>
 
@@ -157,12 +157,12 @@ export function BrokerAIAssistant() {
               placeholder="What objection has the client raised? e.g., 'The prices seem too high'"
               value={clientObjection}
               onChange={(e) => setClientObjection(e.target.value)}
-              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 min-h-[80px]"
+              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400 min-h-[80px]"
             />
           </TabsContent>
 
           <TabsContent value="area_narrative" className="mt-3">
-            <p className="text-zinc-500 text-sm">
+            <p className="text-white/60 text-sm">
               Generate a compliant narrative for {selectedArea || "selected area"} focused on {transactionType.toUpperCase()} transactions.
             </p>
           </TabsContent>
@@ -172,7 +172,7 @@ export function BrokerAIAssistant() {
               placeholder="Describe the meeting context, e.g., 'First meeting with investor looking for rental yield'"
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 min-h-[80px]"
+              className="bg-zinc-800 border-zinc-700 text-white placeholder:text-gray-400 min-h-[80px]"
             />
           </TabsContent>
         </Tabs>
@@ -203,27 +203,27 @@ export function BrokerAIAssistant() {
             <div className="flex items-center gap-2 mb-3">
               <Bot className="w-4 h-4 text-gold" />
               <span className="text-gold text-sm font-medium">AI Response</span>
-              <Badge variant="outline" className="text-zinc-400 border-zinc-600 text-xs ml-auto">
+              <Badge variant="outline" className="text-white/70 border-zinc-600 text-xs ml-auto">
                 {new Date(aiResponse.timestamp).toLocaleTimeString()}
               </Badge>
             </div>
             
             <div className="prose prose-invert prose-sm max-w-none">
-              <div className="text-zinc-300 whitespace-pre-wrap text-sm">
+              <div className="text-white/85 whitespace-pre-wrap text-sm">
                 {aiResponse.response}
               </div>
             </div>
 
             <div className="mt-4 pt-3 border-t border-zinc-700/50 flex items-start gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-              <p className="text-zinc-500 text-xs">{aiResponse.disclaimer}</p>
+              <p className="text-white/60 text-xs">{aiResponse.disclaimer}</p>
             </div>
           </div>
         )}
 
         {/* Compliance Reminder */}
         <div className="bg-zinc-800/30 rounded-lg p-3 flex items-start gap-2">
-          <Shield className="w-4 h-4 text-zinc-500 shrink-0 mt-0.5" />
+          <Shield className="w-4 h-4 text-white/60 shrink-0 mt-0.5" />
           <p className="text-zinc-600 text-xs">
             AI guidance is descriptive only. Never use predictions, guarantees, or investment advice language with clients.
           </p>

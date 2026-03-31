@@ -86,7 +86,7 @@ export const MarketOverviewDashboard = () => {
             <span className="text-gold text-xs uppercase tracking-[0.3em] mb-4 block">
               Market Overview
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
               <span className="text-gold">Dubai</span> <span className="text-black">Real Estate Dashboard</span>
             </h2>
             <p className="text-black/70 max-w-2xl mx-auto">

@@ -74,7 +74,7 @@ export function UserTasksPopupAlert() {
       <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 rounded-2xl shadow-2xl shadow-[#B89555]/20 p-6 md:p-8 max-w-md w-[90vw] relative">
         <button
           onClick={handleDismiss}
-          className="absolute top-3 right-3 text-zinc-400 hover:text-zinc-600 transition-colors"
+          className="absolute top-3 right-3 text-gray-500 hover:text-zinc-600 transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
@@ -91,7 +91,7 @@ export function UserTasksPopupAlert() {
                   ? "Ticket Updates"
                   : "Pending Tasks"}
             </h3>
-            <p className="text-zinc-500 text-sm">
+            <p className="text-gray-500 text-sm">
               {totalAlerts} notification{totalAlerts !== 1 ? "s" : ""} for you
             </p>
           </div>

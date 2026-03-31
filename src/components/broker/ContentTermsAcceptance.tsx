@@ -43,12 +43,12 @@ export default function ContentTermsAcceptance({
           <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
           <div className="space-y-3 flex-1">
             <h4 className="font-semibold text-white">Content Protection Notice</h4>
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-white/70">
               All materials, courses, and content provided through the Broker Toolkit are 
               <span className="text-amber-400 font-medium"> exclusively licensed for your personal use</span>.
             </p>
 
-            <div className="grid gap-2 text-xs text-zinc-400">
+            <div className="grid gap-2 text-xs text-white/70">
               <div className="flex items-center gap-2">
                 <Lock className="w-4 h-4 text-gold" />
                 <span>Content is encrypted and watermarked with your unique ID</span>
@@ -74,7 +74,7 @@ export default function ContentTermsAcceptance({
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
-                className="bg-zinc-800/50 rounded-lg p-4 text-xs text-zinc-400 space-y-3 max-h-60 overflow-y-auto"
+                className="bg-zinc-800/50 rounded-lg p-4 text-xs text-white/70 space-y-3 max-h-60 overflow-y-auto"
               >
                 <h5 className="font-semibold text-white">CONTENT LICENSE AGREEMENT</h5>
                 
@@ -133,7 +133,7 @@ export default function ContentTermsAcceptance({
                 </p>
 
                 <div className="pt-3 border-t border-zinc-700">
-                  <p className="text-zinc-500">
+                  <p className="text-white/60">
                     © {new Date().getFullYear()} JBJ Global Real Estate. All rights reserved.
                     <br />
                     For copyright inquiries: LEGAL@JBJ.AE
@@ -165,7 +165,7 @@ export default function ContentTermsAcceptance({
           <span className="text-white font-medium">
             I accept the Content License Agreement
           </span>
-          <p className="text-zinc-400 mt-1">
+          <p className="text-white/70 mt-1">
             I understand that this content is for my personal use only. I agree not to share, 
             copy, or distribute any materials, and I acknowledge the legal consequences of 
             violation under UAE law.

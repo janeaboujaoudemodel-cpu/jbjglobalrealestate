@@ -498,13 +498,12 @@ const Properties = () => {
             {/* Heading */}
             <h1 
               className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-6 tracking-[-0.02em]"
-              style={{ fontFamily: "Poppins, sans-serif" }}
             >
               Curated Listings. Global Standard.
             </h1>
             
             {/* Subtitle */}
-            <p className="text-zinc-300 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
+            <p className="text-gray-400 text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
               Exclusive investment-grade properties with trusted advisory.
             </p>
           </motion.div>
@@ -623,7 +622,7 @@ const Properties = () => {
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSearch();
               }}
-              className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-zinc-500 focus:border-gold rounded-lg text-base shadow-sm w-full"
+              className="h-12 pl-12 pr-4 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 text-black placeholder:text-gray-400 focus:border-gold rounded-lg text-base shadow-sm w-full"
             />
 
           </div>
@@ -861,7 +860,7 @@ const Properties = () => {
               </DialogTrigger>
               <DialogContent className="max-w-2xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border-gold/30 text-black p-0">
                 <DialogHeader className="p-6 border-b border-gold/30 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
-                  <DialogTitle className="text-xl font-semibold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <DialogTitle className="text-xl font-semibold text-black">
                     Advanced <span className="text-gold">Filters</span>
                   </DialogTitle>
                 </DialogHeader>
@@ -942,14 +941,14 @@ const Properties = () => {
                           placeholder="Min"
                           value={filters.sizeMin || ""}
                           onChange={(e) => updateFilter("sizeMin", parseInt(e.target.value) || 0)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-zinc-500"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-400"
                         />
                         <Input
                           type="number"
                           placeholder="Max"
                           value={filters.sizeMax < 50000 ? filters.sizeMax : ""}
                           onChange={(e) => updateFilter("sizeMax", parseInt(e.target.value) || 50000)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-zinc-500"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-400"
                         />
                       </div>
                     </div>
@@ -963,14 +962,14 @@ const Properties = () => {
                           placeholder="Min"
                           value={filters.priceMin > 0 ? filters.priceMin.toLocaleString() : ""}
                           onChange={(e) => updateFilter("priceMin", parseInt(e.target.value.replace(/,/g, '')) || 0)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-zinc-500"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-400"
                         />
                         <Input
                           type="text"
                           placeholder="Max"
                           value={filters.priceMax < 500000000 ? filters.priceMax.toLocaleString() : ""}
                           onChange={(e) => updateFilter("priceMax", parseInt(e.target.value.replace(/,/g, '')) || 500000000)}
-                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-zinc-500"
+                          className="h-12 bg-[#F7F2EA] border-gold/30 text-black placeholder:text-gray-400"
                         />
                       </div>
                     </div>
@@ -1229,7 +1228,7 @@ const Properties = () => {
               {/* Header Section - Off-plan properties message */}
               {appliedFilters.transactionType === 'buy' && appliedFilters.completionStatus !== 'ready' && (
                 <div className="px-4 pt-4 pb-2">
-                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+                  <h2 className="text-2xl md:text-3xl font-bold text-black mb-2">
                     Off-plan properties for sale in Dubai
                   </h2>
                   <p className="text-black/70 text-sm md:text-base flex items-start gap-2">
@@ -1306,7 +1305,7 @@ const Properties = () => {
                         <div className="w-24 h-24 bg-gradient-to-br from-gold/20 to-gold/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30">
                           <Building2 className="w-12 h-12 text-gold" />
                         </div>
-                        <h3 className="text-2xl font-semibold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        <h3 className="text-2xl font-semibold text-black mb-3">
                           No Listings Yet for {developers.find(d => d.id === appliedFilters.developerId)?.name}
                         </h3>
                         <p className="text-zinc-600 mb-6 max-w-md mx-auto">
@@ -1341,7 +1340,7 @@ const Properties = () => {
                         <div className="w-20 h-20 bg-gradient-to-br from-[#FDFBF7] to-[#F7F2EA] rounded-full flex items-center justify-center mx-auto mb-6 border border-gold/30 shadow-[0_0_30px_rgba(200,167,102,0.3)]">
                           <Search className="w-10 h-10 text-gold drop-shadow-[0_0_8px_rgba(200,167,102,0.5)]" />
                         </div>
-                        <h3 className="text-2xl font-bold text-black mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
+                        <h3 className="text-2xl font-bold text-black mb-3">
                           We Couldn't Find an Exact Match
                         </h3>
                         <p className="text-zinc-600 mb-6 max-w-lg mx-auto">
@@ -1407,7 +1406,6 @@ const Properties = () => {
                   </div>
                   <h2 
                     className="text-2xl md:text-3xl lg:text-4xl font-bold text-black mb-4"
-                    style={{ fontFamily: "Poppins, sans-serif" }}
                   >
                     Confused About Where to <span className="text-gold">Buy or Invest</span> in Dubai?
                   </h2>

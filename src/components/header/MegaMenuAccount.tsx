@@ -313,7 +313,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
               </Link>
               <div className="min-w-0 flex-1">
                 <Link to="/profile" onClick={onClose} className="block hover:text-black transition-colors">
-                  <p className="text-black font-bold text-lg truncate" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  <p className="text-black font-bold text-lg truncate">
                     {accountDisplayName}
                   </p>
                 </Link>
@@ -759,7 +759,7 @@ const MegaMenuAccount = React.forwardRef<HTMLDivElement, MegaMenuAccountProps>((
           /* Logged Out State */
           <>
             <div className="pb-5 mb-5 border-b-2 border-gray-300">
-              <p className="text-black font-bold text-xl tracking-wide" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              <p className="text-black font-bold text-xl tracking-wide">
                 {t('nav.myAccount')}
               </p>
               <p className="text-black/60 text-sm mt-2">

@@ -420,7 +420,7 @@ export default function OwnerFeatureRegistry() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-black">Feature Registry & Audit</h1>
-                  <p className="text-zinc-500 text-sm">Jane Bou Jaoude — Complete visibility of all implemented features</p>
+                  <p className="text-gray-500 text-sm">Jane Bou Jaoude — Complete visibility of all implemented features</p>
                 </div>
               </div>
               
@@ -457,7 +457,7 @@ export default function OwnerFeatureRegistry() {
               {/* Search & Filter */}
               <div className="flex flex-wrap items-center gap-3 mb-4">
                 <div className="relative flex-1 min-w-[200px] max-w-md">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
                   <Input
                     placeholder="Search features, descriptions, paths..."
                     value={searchQuery}
@@ -527,19 +527,19 @@ export default function OwnerFeatureRegistry() {
                                   <Badge className="bg-zinc-100 text-zinc-700 text-[10px] px-1.5">Manual</Badge>
                                 )}
                               </div>
-                              <p className="text-sm text-zinc-500 mt-0.5">{feature.description}</p>
+                              <p className="text-sm text-gray-500 mt-0.5">{feature.description}</p>
                               <div className="flex items-center gap-2 mt-2 text-xs">
                                 <Badge variant="outline" className="border-gold/30 font-normal">
                                   {feature.category}
                                 </Badge>
-                                <span className="text-zinc-400">→</span>
+                                <span className="text-gray-500">→</span>
                                 <code className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
                                   {feature.navigationPath}
                                 </code>
                               </div>
                             </div>
                             
-                            <ChevronRight className="h-4 w-4 text-zinc-400 group-hover:text-gold transition-colors flex-shrink-0" />
+                            <ChevronRight className="h-4 w-4 text-gray-500 group-hover:text-gold transition-colors flex-shrink-0" />
                           </div>
                         </motion.div>
                       ))}
@@ -660,14 +660,14 @@ export default function OwnerFeatureRegistry() {
                                   <div className="text-gold">{feature.icon}</div>
                                   <div>
                                     <p className="font-medium text-black text-sm">{feature.name}</p>
-                                    <code className="text-[11px] text-zinc-500">{feature.path}</code>
+                                    <code className="text-[11px] text-gray-500">{feature.path}</code>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2">
                                   <code className="text-[11px] text-emerald-600 bg-emerald-50 px-2 py-1 rounded max-w-[300px] truncate">
                                     {feature.navigationPath}
                                   </code>
-                                  <ExternalLink className="h-3 w-3 text-zinc-400" />
+                                  <ExternalLink className="h-3 w-3 text-gray-500" />
                                 </div>
                               </div>
                             ))}
@@ -739,7 +739,7 @@ function StatsCard({
       <CardContent className="p-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-zinc-500">{label}</p>
+            <p className="text-xs text-gray-500">{label}</p>
             <p className="text-xl font-bold text-black">{value}</p>
           </div>
           <div className={`p-2 rounded-lg bg-white/50 ${iconColors[variant]}`}>

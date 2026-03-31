@@ -232,7 +232,7 @@ const DeveloperDetail = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-premium-bg via-premium-bg/60 to-black/30" />
         {/* Hero Title Overlay */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white text-center mb-4 drop-shadow-lg" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white text-center mb-4 drop-shadow-lg">
             {developer.name}
           </h1>
           <p className="text-white/80 text-lg md:text-xl text-center max-w-2xl">
@@ -270,7 +270,7 @@ const DeveloperDetail = () => {
                 loading="eager"
               />
             ) : (
-              <Building2 className="w-10 h-10 text-zinc-400" />
+              <Building2 className="w-10 h-10 text-gray-500" />
             )}
           </div>
 

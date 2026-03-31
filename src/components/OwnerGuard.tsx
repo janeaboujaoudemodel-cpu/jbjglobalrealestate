@@ -121,7 +121,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
           <div className="text-center px-6">
             <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
             <p className="text-zinc-200 font-medium">Verifying access…</p>
-            <p className="text-zinc-400 text-sm mt-2">Please wait a moment.</p>
+            <p className="text-white/70 text-sm mt-2">Please wait a moment.</p>
           </div>
         </div>
       );
@@ -134,7 +134,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
             <AlertTriangle className="w-10 h-10 text-amber-500" />
           </div>
           <h1 className="text-2xl font-bold text-white mb-3">Still verifying access</h1>
-          <p className="text-zinc-300 mb-6">The verification is taking longer than expected. You can retry now.</p>
+          <p className="text-white/85 mb-6">The verification is taking longer than expected. You can retry now.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => {
@@ -180,7 +180,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
           <div className="text-center px-6">
             <Shield className="w-12 h-12 text-gold animate-pulse mx-auto mb-4" />
             <p className="text-zinc-200 font-medium">Verifying access…</p>
-            <p className="text-zinc-400 text-sm mt-2">Retrying ({autoRetryCount.current + 1}/3)…</p>
+            <p className="text-white/70 text-sm mt-2">Retrying ({autoRetryCount.current + 1}/3)…</p>
           </div>
         </div>
       );
@@ -193,8 +193,8 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
             <AlertTriangle className="w-10 h-10 text-amber-500" />
           </div>
           <h1 className="text-2xl font-bold text-white mb-3">Verification Temporarily Unavailable</h1>
-          <p className="text-zinc-400 mb-2">We couldn't verify your access at this time.</p>
-          <p className="text-zinc-500 text-sm mb-6">Error: {ownerError}</p>
+          <p className="text-white/70 mb-2">We couldn't verify your access at this time.</p>
+          <p className="text-white/60 text-sm mb-6">Error: {ownerError}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
               onClick={() => {
@@ -245,7 +245,7 @@ const OwnerGuard = ({ children, showLoading = true }: OwnerGuardProps) => {
               <Ban className="w-10 h-10 text-red-500" />
             </div>
             <h1 className="text-2xl font-bold text-white mb-3">Access Suspended</h1>
-            <p className="text-zinc-400 mb-6">
+            <p className="text-white/70 mb-6">
               Your access has been suspended or expired by the administrator. Please contact Jane for assistance.
             </p>
             <Button

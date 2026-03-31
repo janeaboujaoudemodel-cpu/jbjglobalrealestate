@@ -144,21 +144,21 @@ const BrokerOnboardingBanner = () => {
               </div>
               <div>
                 <h3 className="text-white font-semibold text-lg">Welcome to the Broker Circle</h3>
-                <p className="text-zinc-400 text-sm">Complete your onboarding to unlock all features</p>
+                <p className="text-white/70 text-sm">Complete your onboarding to unlock all features</p>
               </div>
             </div>
             <button
               onClick={handleDismiss}
               className="p-2 rounded-lg hover:bg-zinc-800 transition-colors"
             >
-              <X className="w-5 h-5 text-zinc-500" />
+              <X className="w-5 h-5 text-white/60" />
             </button>
           </div>
 
           {/* Progress Bar */}
           <div className="mb-4">
             <div className="flex items-center justify-between text-sm mb-2">
-              <span className="text-zinc-400">Onboarding Progress</span>
+              <span className="text-white/70">Onboarding Progress</span>
               <span className="text-gold font-semibold">{completedCount}/{steps.length} Complete</span>
             </div>
             <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
@@ -189,9 +189,9 @@ const BrokerOnboardingBanner = () => {
                     {step.completed ? (
                       <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                     ) : (
-                      <Circle className="w-4 h-4 text-zinc-500" />
+                      <Circle className="w-4 h-4 text-white/60" />
                     )}
-                    <span className="text-xs text-zinc-500">Step {idx + 1}</span>
+                    <span className="text-xs text-white/60">Step {idx + 1}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Icon className={`w-4 h-4 ${step.completed ? 'text-emerald-400' : 'text-gold'}`} />
@@ -199,7 +199,7 @@ const BrokerOnboardingBanner = () => {
                       {step.title}
                     </span>
                   </div>
-                  <p className="text-xs text-zinc-500 mt-1 line-clamp-1">{step.description}</p>
+                  <p className="text-xs text-white/60 mt-1 line-clamp-1">{step.description}</p>
                 </Link>
               );
             })}

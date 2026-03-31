@@ -409,7 +409,7 @@ const CVViewer = ({
                   />
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center text-center">
-                    <FileText className="h-16 w-16 text-zinc-400 mb-4" />
+                    <FileText className="h-16 w-16 text-gray-500 mb-4" />
                     <h3 className="text-lg font-semibold text-black mb-2">CV Not Available</h3>
                     <p className="text-zinc-600 mb-4">
                       {cvUrl ? 'Unable to load CV preview. Try downloading instead.' : 'No CV file has been uploaded.'}

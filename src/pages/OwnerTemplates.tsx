@@ -215,7 +215,7 @@ export default function OwnerTemplates() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-black">Message Templates</h1>
-                  <p className="text-zinc-500 text-sm">Jane Bou Jaoude — Reusable templates for all channels</p>
+                  <p className="text-gray-500 text-sm">Jane Bou Jaoude — Reusable templates for all channels</p>
                 </div>
               </div>
               
@@ -357,7 +357,7 @@ export default function OwnerTemplates() {
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <div className="relative flex-1 min-w-[200px] max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
               <Input
                 placeholder="Search templates..."
                 value={searchQuery}
@@ -404,8 +404,8 @@ export default function OwnerTemplates() {
             <Card className="border-2 border-gold/20 bg-white/90">
               <CardContent className="p-12 text-center">
                 <FileText className="h-16 w-16 text-gold/30 mx-auto mb-4" />
-                <p className="text-zinc-500 font-medium">No templates found</p>
-                <p className="text-zinc-400 text-sm mt-1">Create your first template to get started</p>
+                <p className="text-gray-500 font-medium">No templates found</p>
+                <p className="text-gray-500 text-sm mt-1">Create your first template to get started</p>
               </CardContent>
             </Card>
           ) : (
@@ -465,7 +465,7 @@ export default function OwnerTemplates() {
                           {template.content}
                         </p>
 
-                        <div className="flex items-center justify-between text-xs text-zinc-400">
+                        <div className="flex items-center justify-between text-xs text-gray-500">
                           <div className="flex gap-1">
                             {template.channel_types.includes('whatsapp') && <MessageSquare className="h-3 w-3" />}
                             {(template.channel_types.includes('email') || template.channel_types.includes('email_gmail')) && <Mail className="h-3 w-3" />}

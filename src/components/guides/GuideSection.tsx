@@ -73,7 +73,7 @@ export const GuideSection = ({
             {subtitle && (
               <p className={cn(
                 "text-lg max-w-2xl mx-auto",
-                variant === "light" ? "text-zinc-600" : "text-zinc-400"
+                variant === "light" ? "text-zinc-600" : "text-white/70"
               )}>
                 {subtitle}
               </p>

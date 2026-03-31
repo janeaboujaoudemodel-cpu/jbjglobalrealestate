@@ -103,18 +103,17 @@ export default function MarketReportHeroBook({ className, pageSource = "homepage
 
                 <h3
                   className="text-white text-xl md:text-2xl font-bold leading-tight mb-2"
-                  style={{ fontFamily: "Poppins, sans-serif" }}
                 >
                   UAE Real Estate
                   <span className="block text-gold">Market Intelligence</span>
                 </h3>
 
                 <FounderContent fallback={null}>
-                  <p className="text-zinc-500 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p>
+                  <p className="text-white/60 text-xs mt-4">By Founder & CEO Jane Bou Jaoude</p>
                 </FounderContent>
 
                 <div className="mt-6 pt-4 border-t border-zinc-800">
-                  <p className="text-zinc-400 text-[10px] tracking-[0.3em] uppercase">JBJ Global Real Estate</p>
+                  <p className="text-white/70 text-[10px] tracking-[0.3em] uppercase">JBJ Global Real Estate</p>
                 </div>
               </div>
 

@@ -509,11 +509,11 @@ export const SecurityDashboardSummary = () => {
       {/* Header - Premium Champagne Theme */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-black text-xl font-semibold flex items-center gap-2" style={{ fontFamily: "Poppins, sans-serif" }}>
+          <h2 className="text-black text-xl font-semibold flex items-center gap-2">
             <Shield className="w-5 h-5 text-gold" />
             Security Overview
           </h2>
-          <p className="text-zinc-500 text-sm mt-1">
+          <p className="text-gray-500 text-sm mt-1">
             Real-time security monitoring and threat detection
           </p>
         </div>
@@ -537,7 +537,7 @@ export const SecurityDashboardSummary = () => {
             PDF
           </Button>
           <Badge 
-            className={`gap-1.5 cursor-pointer ${isLive ? 'bg-emerald-500/20 text-emerald-600 border-emerald-500/40' : 'bg-zinc-100 text-zinc-500 border-zinc-300'}`}
+            className={`gap-1.5 cursor-pointer ${isLive ? 'bg-emerald-500/20 text-emerald-600 border-emerald-500/40' : 'bg-zinc-100 text-gray-500 border-zinc-300'}`}
             onClick={() => setIsLive(!isLive)}
           >
             <Radio className={`w-3 h-3 ${isLive ? "animate-pulse" : ""}`} />
@@ -551,7 +551,7 @@ export const SecurityDashboardSummary = () => {
         <Card className="bg-white border-2 border-red-500/40 p-4 hover:shadow-lg hover:shadow-red-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
             <ShieldBan className="w-4 h-4 text-red-500" />
-            <span className="text-zinc-500 text-xs">Total Blocked</span>
+            <span className="text-gray-500 text-xs">Total Blocked</span>
           </div>
           <p className="text-black text-2xl font-bold">{totalBlocked}</p>
         </Card>
@@ -559,7 +559,7 @@ export const SecurityDashboardSummary = () => {
         <Card className="bg-white border-2 border-amber-500/40 p-4 hover:shadow-lg hover:shadow-amber-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
             <Zap className="w-4 h-4 text-amber-500" />
-            <span className="text-zinc-500 text-xs">Auto Blocked</span>
+            <span className="text-gray-500 text-xs">Auto Blocked</span>
           </div>
           <p className="text-black text-2xl font-bold">{autoBlocked}</p>
         </Card>
@@ -567,7 +567,7 @@ export const SecurityDashboardSummary = () => {
         <Card className="bg-white border-2 border-blue-500/40 p-4 hover:shadow-lg hover:shadow-blue-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
             <Clock className="w-4 h-4 text-blue-500" />
-            <span className="text-zinc-500 text-xs">Blocked Today</span>
+            <span className="text-gray-500 text-xs">Blocked Today</span>
           </div>
           <p className="text-black text-2xl font-bold">{blockedToday}</p>
         </Card>
@@ -575,7 +575,7 @@ export const SecurityDashboardSummary = () => {
         <Card className="bg-white border-2 border-orange-500/40 p-4 hover:shadow-lg hover:shadow-orange-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
             <Ban className="w-4 h-4 text-orange-500" />
-            <span className="text-zinc-500 text-xs">Rate Violations</span>
+            <span className="text-gray-500 text-xs">Rate Violations</span>
           </div>
           <p className="text-black text-2xl font-bold">{rateLimitViolations}</p>
         </Card>
@@ -583,7 +583,7 @@ export const SecurityDashboardSummary = () => {
         <Card className="bg-white border-2 border-emerald-500/40 p-4 hover:shadow-lg hover:shadow-emerald-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
             <Activity className="w-4 h-4 text-emerald-500" />
-            <span className="text-zinc-500 text-xs">Total Requests</span>
+            <span className="text-gray-500 text-xs">Total Requests</span>
           </div>
           <p className="text-black text-2xl font-bold">{totalRequests}</p>
         </Card>
@@ -591,7 +591,7 @@ export const SecurityDashboardSummary = () => {
         <Card className="bg-white border-2 border-purple-500/40 p-4 hover:shadow-lg hover:shadow-purple-500/10 transition-all">
           <div className="flex items-center gap-2 mb-1">
             <TrendingUp className="w-4 h-4 text-purple-500" />
-            <span className="text-zinc-500 text-xs">Unique IPs</span>
+            <span className="text-gray-500 text-xs">Unique IPs</span>
           </div>
           <p className="text-black text-2xl font-bold">{uniqueIPs}</p>
         </Card>
@@ -780,7 +780,7 @@ export const SecurityDashboardSummary = () => {
             <Activity className="w-4 h-4 text-gold" />
             Recent Security Events
           </h3>
-          <Badge variant="outline" className="text-zinc-500 border-gold/40">
+          <Badge variant="outline" className="text-gray-500 border-gold/40">
             Last 20 events
           </Badge>
         </div>
@@ -788,8 +788,8 @@ export const SecurityDashboardSummary = () => {
         {securityEvents.length === 0 ? (
           <div className="text-center py-12">
             <Shield className="w-12 h-12 text-gold/30 mx-auto mb-3" />
-            <p className="text-zinc-500">No security events recorded</p>
-            <p className="text-zinc-400 text-sm mt-1">
+            <p className="text-gray-500">No security events recorded</p>
+            <p className="text-gray-500 text-sm mt-1">
               Events will appear here when threats are detected
             </p>
           </div>
@@ -813,7 +813,7 @@ export const SecurityDashboardSummary = () => {
                         {getEventLabel(event.type)}
                       </Badge>
                       {event.function_name && (
-                        <Badge variant="outline" className="text-xs text-zinc-500 border-gold/40">
+                        <Badge variant="outline" className="text-xs text-gray-500 border-gold/40">
                           {event.function_name}
                         </Badge>
                       )}
@@ -823,13 +823,13 @@ export const SecurityDashboardSummary = () => {
                         {event.ip_address}
                       </code>
                       {event.reason && (
-                        <span className="text-zinc-500 text-sm truncate">
+                        <span className="text-gray-500 text-sm truncate">
                           — {event.reason}
                         </span>
                       )}
                     </div>
                   </div>
-                  <div className="text-right text-sm text-zinc-500 shrink-0">
+                  <div className="text-right text-sm text-gray-500 shrink-0">
                     <div>{format(new Date(event.timestamp), "HH:mm:ss")}</div>
                     <div className="text-xs">
                       {formatDistanceToNow(new Date(event.timestamp), { addSuffix: true })}

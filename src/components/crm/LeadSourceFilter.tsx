@@ -23,7 +23,7 @@ interface ImportSourceOption {
 
 // GLOBAL LEAD SOURCES - All sources must be clickable and functional
 const LEAD_SOURCES = [
-  { value: "all", label: "All Sources", icon: Database, color: "text-zinc-400" },
+  { value: "all", label: "All Sources", icon: Database, color: "text-white/70" },
   { value: "website", label: "Website", icon: Globe, color: "text-emerald-500" },
   { value: "imported", label: "Database Import", icon: Upload, color: "text-blue-500" },
   { value: "broker", label: "Broker", icon: Users, color: "text-purple-500" },
@@ -79,7 +79,7 @@ const LeadSourceFilter = ({ value, onChange }: LeadSourceFilterProps) => {
         </SelectTrigger>
         <SelectContent className="bg-zinc-800 border-zinc-700">
           {/* Main Sources - All Clickable */}
-          <div className="px-2 py-1.5 text-xs font-bold text-zinc-400 uppercase tracking-wide border-b border-zinc-700/50">
+          <div className="px-2 py-1.5 text-xs font-bold text-white/70 uppercase tracking-wide border-b border-zinc-700/50">
             Lead Sources
           </div>
           {LEAD_SOURCES.map((source) => {
@@ -101,7 +101,7 @@ const LeadSourceFilter = ({ value, onChange }: LeadSourceFilterProps) => {
           {/* Recent Imports - If Available */}
           {importOptions.length > 0 && (
             <>
-              <div className="px-2 py-1.5 text-xs font-bold text-zinc-400 uppercase tracking-wide border-t border-zinc-700/50 mt-1">
+              <div className="px-2 py-1.5 text-xs font-bold text-white/70 uppercase tracking-wide border-t border-zinc-700/50 mt-1">
                 Recent Imports
               </div>
               {importOptions.map((s) => (
@@ -112,7 +112,7 @@ const LeadSourceFilter = ({ value, onChange }: LeadSourceFilterProps) => {
                 >
                   <div className="flex items-center gap-2">
                     <Upload className="h-3 w-3 text-blue-400" />
-                    <span className="text-zinc-400">{s.source_group}</span>
+                    <span className="text-white/70">{s.source_group}</span>
                     <span>·</span>
                     <span>{s.source_name}</span>
                   </div>

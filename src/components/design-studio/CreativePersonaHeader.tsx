@@ -102,7 +102,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
 
           <div className="flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-xl font-bold text-black" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              <h2 className="text-xl font-bold text-black">
                 {persona.name}
               </h2>
               <Badge className="bg-gradient-to-r from-rose-500 to-pink-500 text-white border-0 text-xs">
@@ -147,7 +147,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
                     </Badge>
                   )}
                 </div>
-                <ChevronDown className="h-4 w-4 text-zinc-500" />
+                <ChevronDown className="h-4 w-4 text-gray-500" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -160,7 +160,7 @@ export const CreativePersonaHeader: React.FC<CreativePersonaHeaderProps> = ({
                   <div className="flex items-center gap-2">
                     <span>{lang.flag}</span>
                     <span>{lang.name}</span>
-                    <span className="text-zinc-400 text-xs">({lang.native})</span>
+                    <span className="text-gray-500 text-xs">({lang.native})</span>
                   </div>
                   {lang.translator && (
                     <Globe className="h-3 w-3 text-amber-500" />

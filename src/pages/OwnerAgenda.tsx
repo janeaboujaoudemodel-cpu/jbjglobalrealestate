@@ -206,7 +206,7 @@ export default function OwnerAgenda() {
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-black">Daily Agenda</h1>
-                  <p className="text-zinc-500 text-sm">Jane Bou Jaoude — {format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
+                  <p className="text-gray-500 text-sm">Jane Bou Jaoude — {format(new Date(), 'EEEE, MMMM d, yyyy')}</p>
                 </div>
               </div>
               
@@ -322,7 +322,7 @@ export default function OwnerAgenda() {
                       {loadingTasks ? (
                         <TasksSkeleton />
                       ) : todayTasks.length === 0 ? (
-                        <EmptyState icon={<Calendar className="h-8 w-8 text-zinc-300" />} message="No tasks due today" />
+                        <EmptyState icon={<Calendar className="h-8 w-8 text-gray-400" />} message="No tasks due today" />
                       ) : (
                         <div className="space-y-2">
                           {todayTasks.map(task => (
@@ -397,7 +397,7 @@ export default function OwnerAgenda() {
                     {loadingLeads ? (
                       <LeadsSkeleton />
                     ) : leadsNeedingAction.length === 0 ? (
-                      <EmptyState icon={<TrendingUp className="h-8 w-8 text-zinc-300" />} message="No leads need immediate action" />
+                      <EmptyState icon={<TrendingUp className="h-8 w-8 text-gray-400" />} message="No leads need immediate action" />
                     ) : (
                       <div className="space-y-2">
                         {leadsNeedingAction.map(lead => (
@@ -483,7 +483,7 @@ function SummaryCard({
       <CardContent className="p-3">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-xs text-zinc-500">{label}</p>
+            <p className="text-xs text-gray-500">{label}</p>
             <p className="text-xl font-bold text-black">{value}</p>
           </div>
           <div className={`p-2 rounded-lg bg-white/50 ${iconColors[variant]}`}>
@@ -515,10 +515,10 @@ function TaskItem({
       <div className="flex-1 min-w-0">
         <p className="font-medium text-sm text-black truncate">{task.title}</p>
         {task.lead?.full_name && (
-          <p className="text-xs text-zinc-500">Lead: {task.lead.full_name}</p>
+          <p className="text-xs text-gray-500">Lead: {task.lead.full_name}</p>
         )}
         {showDate && task.due_at && (
-          <p className={`text-xs ${isOverdue ? 'text-red-500' : 'text-zinc-400'}`}>
+          <p className={`text-xs ${isOverdue ? 'text-red-500' : 'text-gray-500'}`}>
             {format(new Date(task.due_at), 'MMM d, h:mm a')}
           </p>
         )}
@@ -553,12 +553,12 @@ function ThreadItem({ thread, onClick }: { thread: AgendaThread; onClick: () => 
         <p className="font-medium text-sm text-black truncate">
           {thread.contact_name || thread.contact_identifier}
         </p>
-        <p className="text-xs text-zinc-500 truncate">{thread.last_message_preview}</p>
+        <p className="text-xs text-gray-500 truncate">{thread.last_message_preview}</p>
       </div>
       {thread.unread_count > 0 && (
         <Badge className="bg-gold text-black text-xs">{thread.unread_count}</Badge>
       )}
-      <ChevronRight className="h-4 w-4 text-zinc-400" />
+      <ChevronRight className="h-4 w-4 text-gray-500" />
     </div>
   );
 }
@@ -574,7 +574,7 @@ function LeadItem({ lead, onClick }: { lead: AgendaLead; onClick: () => void }) 
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-medium text-sm text-black truncate">{lead.full_name}</p>
-        <div className="flex items-center gap-2 text-xs text-zinc-500">
+        <div className="flex items-center gap-2 text-xs text-gray-500">
           {lead.email_lower && <span className="truncate">{lead.email_lower}</span>}
           {lead.phone_e164 && <span>{lead.phone_e164}</span>}
         </div>
@@ -582,7 +582,7 @@ function LeadItem({ lead, onClick }: { lead: AgendaLead; onClick: () => void }) 
       <Badge variant="outline" className="text-xs border-gold/30">
         {lead.pipeline_stage || 'new'}
       </Badge>
-      <ChevronRight className="h-4 w-4 text-zinc-400" />
+      <ChevronRight className="h-4 w-4 text-gray-500" />
     </div>
   );
 }
@@ -591,7 +591,7 @@ function EmptyState({ icon, message }: { icon: React.ReactNode; message: string 
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
       {icon}
-      <p className="text-zinc-500 text-sm mt-2">{message}</p>
+      <p className="text-gray-500 text-sm mt-2">{message}</p>
     </div>
   );
 }

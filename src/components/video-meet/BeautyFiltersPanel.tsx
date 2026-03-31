@@ -69,7 +69,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
           <Sparkles className="w-5 h-5 text-gold" />
           Beauty Filters
         </CardTitle>
-        <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-zinc-400 hover:text-white">
+        <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-white/70 hover:text-white">
           <X className="h-4 w-4" />
         </Button>
       </CardHeader>
@@ -104,7 +104,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
             <TabsContent value="skin" className="space-y-4 mt-4">
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <Label className="text-zinc-300 text-sm">Skin Smoothing</Label>
+                  <Label className="text-white/85 text-sm">Skin Smoothing</Label>
                   <span className="text-xs text-gold">{settings.skinSmoothing}%</span>
                 </div>
                 <Slider
@@ -118,7 +118,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <Label className="text-zinc-300 text-sm">Brightness</Label>
+                  <Label className="text-white/85 text-sm">Brightness</Label>
                   <span className="text-xs text-gold">{settings.brightness}%</span>
                 </div>
                 <Slider
@@ -133,7 +133,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <Label className="text-zinc-300 text-sm">Contrast</Label>
+                  <Label className="text-white/85 text-sm">Contrast</Label>
                   <span className="text-xs text-gold">{settings.contrast}%</span>
                 </div>
                 <Slider
@@ -148,7 +148,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <Label className="text-zinc-300 text-sm">Warmth</Label>
+                  <Label className="text-white/85 text-sm">Warmth</Label>
                   <span className="text-xs text-gold">{settings.warmth}%</span>
                 </div>
                 <Slider
@@ -166,7 +166,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
             <TabsContent value="face" className="space-y-4 mt-4">
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <Label className="text-zinc-300 text-sm">Face Slimming</Label>
+                  <Label className="text-white/85 text-sm">Face Slimming</Label>
                   <span className="text-xs text-gold">{settings.faceSlimming}%</span>
                 </div>
                 <Slider
@@ -180,7 +180,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <Label className="text-zinc-300 text-sm">Eye Enlargement</Label>
+                  <Label className="text-white/85 text-sm">Eye Enlargement</Label>
                   <span className="text-xs text-gold">{settings.eyeEnlargement}%</span>
                 </div>
                 <Slider
@@ -194,7 +194,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <Label className="text-zinc-300 text-sm">Contour</Label>
+                  <Label className="text-white/85 text-sm">Contour</Label>
                   <span className="text-xs text-gold">{settings.contour}%</span>
                 </div>
                 <Slider
@@ -208,7 +208,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <Label className="text-zinc-300 text-sm">Blush</Label>
+                  <Label className="text-white/85 text-sm">Blush</Label>
                   <span className="text-xs text-gold">{settings.blush}%</span>
                 </div>
                 <Slider
@@ -224,7 +224,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
             {/* Makeup Tab */}
             <TabsContent value="makeup" className="space-y-4 mt-4">
               <div className="space-y-2">
-                <Label className="text-zinc-300 text-sm">Makeup Preset</Label>
+                <Label className="text-white/85 text-sm">Makeup Preset</Label>
                 <div className="grid grid-cols-3 gap-2">
                   {MAKEUP_PRESETS.map(preset => (
                     <button
@@ -233,7 +233,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                       className={`p-2 rounded-lg text-xs text-center border transition-all ${
                         settings.makeupPreset === preset.id 
                           ? 'border-gold bg-gold/20 text-white' 
-                          : 'border-zinc-700 hover:border-zinc-600 text-zinc-300'
+                          : 'border-zinc-700 hover:border-zinc-600 text-white/85'
                       }`}
                     >
                       {preset.name}
@@ -243,7 +243,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
               </div>
 
               <div className="space-y-2">
-                <Label className="text-zinc-300 text-sm">Lip Color</Label>
+                <Label className="text-white/85 text-sm">Lip Color</Label>
                 <div className="flex flex-wrap gap-2">
                   {LIP_COLORS.map(color => (
                     <button
@@ -265,7 +265,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
             {/* Hair Tab */}
             <TabsContent value="hair" className="space-y-4 mt-4">
               <div className="space-y-2">
-                <Label className="text-zinc-300 text-sm">Hair Color</Label>
+                <Label className="text-white/85 text-sm">Hair Color</Label>
                 <div className="flex flex-wrap gap-2">
                   {HAIR_COLORS.map(color => (
                     <button
@@ -290,7 +290,7 @@ const BeautyFiltersPanel = ({ settings, onChange, onClose, isOwnerOrBroker = fal
                     <Wand2 className="h-4 w-4 mr-2" />
                     AI Persona Generator
                   </Button>
-                  <p className="text-xs text-zinc-500 mt-2">
+                  <p className="text-xs text-white/60 mt-2">
                     Describe or select a persona to transform your appearance
                   </p>
                 </div>

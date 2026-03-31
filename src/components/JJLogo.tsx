@@ -41,7 +41,6 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
         <div 
           className={`flex items-center justify-center ${isFooter ? 'text-white' : 'text-foreground'} mt-2`}
           style={{ 
-            fontFamily: "Poppins, sans-serif",
             letterSpacing: '0.08em'
           }}
         >
@@ -58,7 +57,6 @@ export const JJLogo = ({ size = 'md', showText = true, className = '' }: JJLogoP
 export const JJLogoHeader = ({ className = '' }: { className?: string }) => (
   <div 
     className={`flex items-center gap-3 ${className}`}
-    style={{ fontFamily: "Poppins, sans-serif" }}
   >
     {/* JBJ Monogram */}
     <img 

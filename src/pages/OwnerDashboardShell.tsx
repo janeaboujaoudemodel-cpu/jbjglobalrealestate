@@ -139,7 +139,7 @@ const OwnerDashboardShell = () => {
             )}
             <div className="min-w-0">
               <h1 className="text-black font-semibold text-sm md:text-base tracking-wide whitespace-nowrap truncate">Founder & CEO</h1>
-              <p className="text-zinc-500 text-xs hidden md:block whitespace-nowrap">Jane Bou Jaoude — Executive Command Center</p>
+              <p className="text-gray-500 text-xs hidden md:block whitespace-nowrap">Jane Bou Jaoude — Executive Command Center</p>
             </div>
           </div>
           

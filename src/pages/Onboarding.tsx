@@ -261,7 +261,7 @@ export default function Onboarding() {
                     <p className="text-zinc-600 mb-4">
                       Thank you for your application, {application.full_name}. Our team is reviewing your submission and will get back to you soon.
                     </p>
-                    <p className="text-sm text-zinc-500">
+                    <p className="text-sm text-white/60">
                       Submitted on {new Date(application.created_at).toLocaleDateString()}
                     </p>
                   </>
@@ -276,7 +276,7 @@ export default function Onboarding() {
                         <p className="text-sm text-zinc-600">{application.rejection_reason}</p>
                       </div>
                     )}
-                    <p className="text-sm text-zinc-500">
+                    <p className="text-sm text-white/60">
                       If you have questions, please contact us at{" "}
                       <a href="mailto:CONTACT@JBJ.AE" className="text-gold hover:underline">
                         CONTACT@JBJ.AE
@@ -328,7 +328,7 @@ export default function Onboarding() {
               {companyProgress.avgScore.toFixed(0)}%
             </div>
             <Progress value={companyProgress.avgScore} className="mt-2 h-2" />
-            <p className="text-xs text-zinc-500 mt-2">
+            <p className="text-xs text-white/60 mt-2">
               {companyProgress.completed}/{companyProgress.total} modules passed (min {passThresholds.company}%)
             </p>
           </div>
@@ -345,7 +345,7 @@ export default function Onboarding() {
               {realEstateProgress.avgScore.toFixed(0)}%
             </div>
             <Progress value={realEstateProgress.avgScore} className="mt-2 h-2" />
-            <p className="text-xs text-zinc-500 mt-2">
+            <p className="text-xs text-white/60 mt-2">
               {realEstateProgress.completed}/{realEstateProgress.total} modules passed (min {passThresholds.realEstate}%)
             </p>
           </div>
@@ -362,7 +362,7 @@ export default function Onboarding() {
               {combinedAvg.toFixed(0)}%
             </div>
             <Progress value={combinedAvg} className="mt-2 h-2" />
-            <p className="text-xs text-zinc-500 mt-2">
+            <p className="text-xs text-white/60 mt-2">
               Target: {passThresholds.combined}% to complete training
             </p>
           </div>
@@ -412,7 +412,7 @@ export default function Onboarding() {
                                 {bestAttempt.passed ? " ✓ Passed" : " (needs " + passThresholds.company + "% to pass)"}
                               </p>
                             ) : (
-                              <p className="text-sm text-zinc-500">Not started</p>
+                              <p className="text-sm text-white/60">Not started</p>
                             )}
                           </div>
                         </div>
@@ -459,7 +459,7 @@ export default function Onboarding() {
                                 {bestAttempt.passed ? " ✓ Passed" : " (needs " + passThresholds.realEstate + "% to pass)"}
                               </p>
                             ) : (
-                              <p className="text-sm text-zinc-500">Not started</p>
+                              <p className="text-sm text-white/60">Not started</p>
                             )}
                           </div>
                         </div>

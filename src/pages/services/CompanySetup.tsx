@@ -133,7 +133,7 @@ const CompanySetup = () => {
               Company Setup Support
             </h1>
             
-            <p className="text-zinc-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            <p className="text-white/85 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
               Structured coordination for company setup through licensed specialists—clear steps, document readiness, and progress tracking.
             </p>
             

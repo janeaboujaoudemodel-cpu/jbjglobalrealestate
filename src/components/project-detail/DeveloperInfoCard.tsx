@@ -76,7 +76,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   className="w-full h-full object-contain"
                 />
               ) : (
-                <Building2 className="w-12 h-12 text-zinc-400" />
+                <Building2 className="w-12 h-12 text-gray-500" />
               )}
             </div>
 
@@ -102,7 +102,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                   </span>
                 )}
                 {developer.parent_company && (
-                  <span className="text-zinc-500">Part of {developer.parent_company}</span>
+                  <span className="text-gray-500">Part of {developer.parent_company}</span>
                 )}
                 {developer.website_url && (
                   <a
@@ -134,7 +134,7 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                       </div>
                       <div>
                         <span className="text-xl font-bold text-black">{stat.value}</span>
-                        <span className="text-xs text-zinc-500 ml-2 uppercase tracking-wide">{stat.label}</span>
+                        <span className="text-xs text-gray-500 ml-2 uppercase tracking-wide">{stat.label}</span>
                       </div>
                     </div>
                   ))}

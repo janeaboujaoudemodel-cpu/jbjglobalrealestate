@@ -75,7 +75,7 @@ const STATUS_COLORS: { [key: string]: string } = {
 };
 
 const TIER_COLORS: { [key: string]: string } = {
-  starter: "bg-zinc-700 text-zinc-300",
+  starter: "bg-zinc-700 text-gray-400",
   professional: "bg-gold/20 text-gold",
   enterprise: "bg-purple-500/20 text-purple-400",
 };

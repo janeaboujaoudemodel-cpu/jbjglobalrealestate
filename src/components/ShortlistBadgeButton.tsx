@@ -35,7 +35,7 @@ const badgeConfig = {
     emoji: "🥈",
     color: "bg-gradient-to-r from-zinc-300 via-slate-400 to-zinc-400 shadow-lg shadow-zinc-400/30", 
     textColor: "text-zinc-900",
-    menuColor: "text-zinc-300"
+    menuColor: "text-white/85"
   },
   top3: { 
     label: "Top 3 — Bronze", 
@@ -154,7 +154,7 @@ const ShortlistBadgeButton = ({
                 e.stopPropagation();
                 handleSetBadge(null);
               }}
-              className="text-zinc-400 hover:bg-zinc-800 cursor-pointer"
+              className="text-white/70 hover:bg-zinc-800 cursor-pointer"
             >
               <X className="w-4 h-4 mr-2" />
               Remove Badge
