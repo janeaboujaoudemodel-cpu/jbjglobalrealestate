@@ -190,7 +190,7 @@ const Index = () => {
               </p>
               
               {/* Loading shimmer line */}
-              <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
+              <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
             </div>
           )}
 
