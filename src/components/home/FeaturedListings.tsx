@@ -307,8 +307,8 @@ const FeaturedListings = () => {
               ))}
           {!isLoading && (!projects || projects.length === 0) && (
             <div className="col-span-full text-center py-12">
-              <Building2 className="w-10 h-10 text-gray-600 mx-auto mb-3" />
-              <p className="text-gray-600 text-sm">Featured projects coming soon</p>
+              <Building2 className="w-10 h-10 text-gray-700 mx-auto mb-3" />
+              <p className="text-gray-700 text-sm">Featured projects coming soon</p>
             </div>
           )}
         </div>
