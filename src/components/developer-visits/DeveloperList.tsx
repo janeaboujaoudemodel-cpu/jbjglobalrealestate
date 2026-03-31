@@ -87,7 +87,7 @@ export function DeveloperList({ onSelectDeveloper, onRequestVisit, onCheckIn }: 
               <CardContent className="p-4">
                 <div className="flex items-center gap-4">
                   {/* Logo */}
-                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-white border border-gold/20 flex items-center justify-center overflow-hidden">
+                  <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center">
                     {developer.logo_url ? (
                       <img
                         src={developer.logo_url}
