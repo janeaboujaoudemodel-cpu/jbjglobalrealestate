@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import { formatDisplayDate } from "@/utils/formatDate";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
+import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 
 interface RecommendedProjectsProps {
   currentProjectId: string;
