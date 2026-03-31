@@ -546,47 +546,49 @@ const Footer = () => {
 
             <div className="h-px bg-gray-200 mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto" />
 
-            {/* Single Premium Strip: Social + Write Us + Google + Mode + Currency/Unit */}
+            {/* Premium Utility Strip */}
             <div className="relative flex flex-col items-center gap-0">
               <div 
-                className="w-full flex flex-col md:flex-row items-stretch justify-center rounded-none overflow-hidden"
-                style={{
-                  background: '#F5F5F5',
-                  border: '1px solid rgba(0,0,0,0.06)',
-                }}
+                className="w-full rounded-xl overflow-hidden border border-gray-200"
+                style={{ background: '#FAFAFA' }}
               >
-                {/* Social Icons */}
-                <div className="flex items-center gap-4 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 whitespace-nowrap">
-                  <p className="text-gray-500 text-xs uppercase tracking-[0.15em] font-medium whitespace-nowrap">Connect</p>
-                  <SocialLinks variant="glow" iconClassName="w-6 h-6 sm:w-7 sm:h-7" />
-                </div>
-
-                {/* Write Us */}
-                <a
-                  href={getEmailUrl()}
-                  className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 hover:bg-gray-50 transition-colors whitespace-nowrap min-w-0"
-                >
-                  <Mail className="w-5 h-5 text-gray-700 shrink-0" />
-                  <div className="min-w-0">
-                    <p className="text-gray-400 text-[10px] uppercase tracking-wider whitespace-nowrap">Write Us</p>
-                    <p className="text-gray-700 text-sm font-semibold truncate">{CONTACT_INFO.email}</p>
+                {/* Row 1: Social + Write Us + Google Business */}
+                <div className="flex flex-col md:flex-row items-stretch">
+                  {/* Social Icons */}
+                  <div className="flex items-center gap-4 px-6 py-5 border-b md:border-b-0 md:border-r border-gray-200 whitespace-nowrap">
+                    <p className="text-black text-[11px] uppercase tracking-[0.18em] font-bold whitespace-nowrap">Connect</p>
+                    <SocialLinks variant="glow" iconClassName="w-6 h-6 sm:w-7 sm:h-7" />
                   </div>
-                </a>
 
-                {/* Google Business */}
-                <div className="flex items-center px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 whitespace-nowrap">
-                  <GoogleMyBusinessLink />
-                </div>
+                  {/* Write Us */}
+                  <a
+                    href={getEmailUrl()}
+                    className="flex items-center gap-3 px-6 py-5 border-b md:border-b-0 md:border-r border-gray-200 hover:bg-white transition-colors whitespace-nowrap min-w-0 group"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 group-hover:bg-gray-200 flex items-center justify-center transition-colors shrink-0">
+                      <Mail className="w-4 h-4 text-black" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-gray-500 text-[10px] uppercase tracking-[0.15em] font-semibold whitespace-nowrap mb-0.5">Write Us</p>
+                      <p className="text-black text-sm font-bold truncate">{CONTACT_INFO.email}</p>
+                    </div>
+                  </a>
 
-                {/* Mode */}
-                <div className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 whitespace-nowrap">
-                  <p className="text-gray-500 text-[10px] uppercase tracking-wider whitespace-nowrap">Mode</p>
-                  <ModeSwitcher variant="header" showForUnselected={true} />
-                </div>
+                  {/* Google Business */}
+                  <div className="flex items-center px-6 py-5 border-b md:border-b-0 md:border-r border-gray-200 whitespace-nowrap">
+                    <GoogleMyBusinessLink />
+                  </div>
 
-                {/* Currency & Unit */}
-                <div className="flex items-center px-6 py-4 whitespace-nowrap">
-                  <FooterCurrencyUnit />
+                  {/* Mode */}
+                  <div className="flex items-center gap-3 px-6 py-5 border-b md:border-b-0 md:border-r border-gray-200 whitespace-nowrap">
+                    <p className="text-gray-500 text-[10px] uppercase tracking-[0.15em] font-semibold whitespace-nowrap">Mode</p>
+                    <ModeSwitcher variant="header" showForUnselected={true} />
+                  </div>
+
+                  {/* Currency & Unit */}
+                  <div className="flex items-center px-6 py-5 whitespace-nowrap">
+                    <FooterCurrencyUnit />
+                  </div>
                 </div>
               </div>
             </div>
