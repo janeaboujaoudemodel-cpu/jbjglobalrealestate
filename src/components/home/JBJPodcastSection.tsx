@@ -179,7 +179,7 @@ const JBJPodcastSection = () => {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4">
             <T>The JBJ</T> <span className="text-gray-600"><T>Perspective</T></span>
           </h2>
-          <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
             <T>Real Estate, Power & Global Opportunity</T>
           </p>
         </motion.div>
@@ -269,7 +269,7 @@ const JBJPodcastSection = () => {
                 <h3 className="text-xl md:text-2xl font-bold text-black leading-tight">
                   <T>{selectedEpisode.title}</T>
                 </h3>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-600 mt-1">
                   <T>Featuring</T>: {selectedEpisode.characters.join(" • ")}
                 </p>
 
@@ -400,7 +400,7 @@ const JBJPodcastSection = () => {
               <div className="jj-card-inner rounded-2xl border border-gray-200 overflow-hidden h-full">
                 <div className="p-4 border-b border-gray-200">
                   <h3 className="text-lg font-semibold text-black"><T>All Episodes</T></h3>
-                  <p className="text-sm text-gray-500"><T>20 episodes available</T></p>
+                  <p className="text-sm text-gray-600"><T>20 episodes available</T></p>
                 </div>
 
                 <ScrollArea className="h-[400px] lg:h-[480px]">

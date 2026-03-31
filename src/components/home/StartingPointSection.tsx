@@ -77,7 +77,7 @@ const StartingPointSection = () => {
                   "px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide transition-all duration-300",
                   activeTab === tab.key
                     ? "bg-black text-white shadow-md"
-                    : "text-gray-500 hover:text-black hover:bg-gray-50 border border-transparent"
+                    : "text-gray-600 hover:text-black hover:bg-gray-50 border border-transparent"
                 )}
               >
                 {tab.label}
@@ -102,7 +102,7 @@ const StartingPointSection = () => {
                   </div>
                   <div className="text-center">
                     <h4 className="text-black group-hover:text-gray-700 text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
-                    <p className="text-gray-400 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
+                    <p className="text-gray-500 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
                   </div>
                 </div>
               </div>
