@@ -127,7 +127,6 @@ const StatItem = ({ end, suffix, prefix, label, icon: Icon, isVisible, language,
         {/* Counter Value */}
         <div 
           className="text-2xl md:text-3xl lg:text-4xl font-semibold text-black mb-1 min-w-[80px]"
-          style={{ fontFamily: "Poppins, sans-serif" }}
         >
           {formattedValue}
         </div>
