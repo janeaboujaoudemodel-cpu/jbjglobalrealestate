@@ -101,6 +101,7 @@ export const MarketOverviewDashboard = () => {
               value={MARKET_OVERVIEW_STATS.totalTransactions}
               change={MARKET_OVERVIEW_STATS.totalTransactionsChange}
               icon={Building2}
+              accentColor="text-emerald-600"
             />
             <StatCard
               title="Avg. Price/Sqft"
@@ -108,6 +109,7 @@ export const MarketOverviewDashboard = () => {
               change={MARKET_OVERVIEW_STATS.avgPriceChange}
               icon={DollarSign}
               prefix="AED "
+              accentColor="text-blue-600"
             />
             <StatCard
               title="Avg. Rental Yield"
