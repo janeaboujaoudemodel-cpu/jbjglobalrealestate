@@ -423,8 +423,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                       className={cn(
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverFrom.quarter === q
-                          ? "bg-gradient-to-br from-[#C8A766]/25 via-[#D4AF37]/20 to-[#C8A766]/25 border-2 border-gold text-black shadow-sm"
-                          : "bg-white/80 border border-gold/25 text-black/60 hover:bg-gold/10 hover:border-gold/50"
+                          ? "bg-black text-white border border-black shadow-sm"
+                          : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400"
                       )}
                     >
                       {q}
