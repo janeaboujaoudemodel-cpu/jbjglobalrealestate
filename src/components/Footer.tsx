@@ -743,17 +743,9 @@ const Footer = () => {
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
 
-        {/* ZONE 3: ULTRA PREMIUM Legal + Google Review Block */}
+        {/* ZONE 3: Legal + Google Review Block */}
         <div className="relative py-4">
-          <div 
-            className="w-full rounded-none overflow-hidden relative"
-            style={{
-              background: '#FFFFFF',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
-            }}
-          >
-          <div className="absolute inset-0 border border-gray-200 pointer-events-none" />
-
+          <div className="bg-white border border-gray-200 overflow-hidden">
           <div className="relative p-5 sm:p-8 md:p-10 lg:p-12">
             {/* Legal Disclaimer Section */}
             <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 md:p-8 text-center">
