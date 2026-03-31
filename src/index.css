@@ -125,14 +125,14 @@ All colors MUST be HSL.
     --jj-suit: 0 0% 90%;
     --jj-suit-dark: 0 0% 85%;
 
-    /* AI Theme — grayscale */
-    --ai-purple: 0 0% 45%;
-    --ai-purple-dark: 0 0% 30%;
-    --ai-fuchsia: 0 0% 40%;
-    --ai-cyan: 0 0% 50%;
-    --ai-emerald: 0 0% 40%;
-    --ai-amber: 0 0% 45%;
-    --ai-rose: 0 0% 40%;
+    /* AI Theme — premium purple */
+    --ai-purple: 262 83% 58%;
+    --ai-purple-dark: 263 70% 50%;
+    --ai-fuchsia: 292 84% 61%;
+    --ai-cyan: 262 60% 70%;
+    --ai-emerald: 262 50% 55%;
+    --ai-amber: 262 40% 60%;
+    --ai-rose: 280 60% 55%;
     --ai-glow: 0 0% 60%;
 
     /* Listing badges */
