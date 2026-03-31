@@ -1,68 +1,40 @@
 
 
-# Global Contrast & Typography Fix Plan
+## Logo System Fix Plan
 
-## Problem Summary
-The codebase has three systemic violations across 500+ files:
-1. **Poppins font** used in 154 files (~1,629 instances) — must be Inter
-2. **Low-contrast zinc text** (`text-zinc-400`, `text-zinc-500`, `text-zinc-300`) on dark backgrounds — 348+ files with zinc-400, 362+ with zinc-500, 177+ with zinc-300
-3. **Gold accent color** used extensively where monochrome is required (650 files) — though gold is allowed per the design system for "Solution/CTA Layer" accents, so this is lower priority
+### Problem
+The `getDeveloperLogoUrl` utility correctly extracts `logo_url` from Supabase join arrays. However, there are padding/container inconsistencies across components, and the core data extraction needs verification.
 
-## Approach: Batch-by-Category
+### Root Cause Analysis
+The logo rendering code is actually correct in most places -- it uses `getDeveloperLogoUrl()` which pulls from `logo_url`. The issue is likely:
+1. **FeaturedListings** logo container (line 157): `w-12 h-12` with NO padding class -- logo touches edges
+2. **ProjectCard** logo container (line 208): conditionally applies `p-1` only when no `logo_bg_color` -- inconsistent
+3. **RecommendedProjects** logo container (line 191): uses `p-0.5` -- too small
 
-Given the enormous scope, I'll work through files in logical batches. Each batch will apply these three rules:
+### Changes (3 files, logo containers only)
 
-### Rule 1: Remove Poppins
-- Delete all `style={{ fontFamily: "Poppins, sans-serif" }}` and similar inline Poppins references
-- Exception: `cvResumeTypes.ts` (user-selectable font options for CV builder — keep as a design choice)
+**1. `src/components/home/FeaturedListings.tsx` (line 157)**
+- Add `p-1.5` padding to the logo `div` so the logo never touches edges
+- Change: `w-12 h-12 rounded-lg shadow-lg overflow-hidden bg-white` --> `w-12 h-12 rounded-lg shadow-lg overflow-hidden bg-white p-1.5`
 
-### Rule 2: Fix Zinc Text Contrast
-Context-dependent replacements:
-- **On dark backgrounds** (`bg-zinc-900`, `bg-black`, dark overlays):
-  - `text-zinc-400` → `text-white/70` (secondary text)
-  - `text-zinc-500` → `text-white/60` (tertiary text)
-  - `text-zinc-300` → `text-white/85` (body text)
-- **On light/white backgrounds**:
-  - `text-zinc-400` → `text-gray-500` (secondary text)
-  - `text-zinc-500` → `text-gray-500` (secondary text)
-  - `text-zinc-300` → `text-gray-400` (only if on light bg — rare)
-  - `text-zinc-600` stays or becomes `text-gray-600`
+**2. `src/components/ProjectCard.tsx` (lines 206-219)**
+- Remove conditional padding logic; always apply `bg-white shadow-lg p-1.5`
+- Remove `getDeveloperLogoBgColor` conditional -- always use white container with consistent padding
+- Keep `w-12 h-12 rounded-lg` dimensions
 
-### Rule 3: CTA Buttons
-- Primary CTAs: `bg-black text-white` (already handled by button system, but many files use custom classes)
-- Secondary CTAs: `bg-transparent text-black border-gray-300`
-- On dark sections: `bg-white text-black` for maximum contrast
+**3. `src/components/ReellyProjectCard.tsx` (line 164)**
+- Change `p-1` to `p-1.5` for consistency with other cards
 
-## Implementation Batches (Priority Order)
+**4. `src/components/project-detail/RecommendedProjects.tsx` (line 191)**
+- Change `p-0.5` to `p-1.5` for consistent padding across all logo containers
 
-### Batch 1 — Public-Facing Pages (highest user visibility)
-Files: `Index.tsx`, `Properties.tsx`, `Contact.tsx`, `About.tsx`, `Services.tsx`, `AreaGuides.tsx`, `AreaDetail.tsx`, `Communities.tsx`, `CommunityDetail.tsx`, `ProjectDetail.tsx`, `DeveloperDetail.tsx`, `Developers.tsx`, `Compare.tsx`, `ThankYou.tsx`, `FAQ.tsx`, `BuyerGuide.tsx`, `SellerGuide.tsx`, `RentGuide.tsx`, `LandlordGuide.tsx`, `TenantGuide.tsx`
+### What stays untouched
+- No color changes, layout changes, or card design changes
+- No database modifications
+- The `getDeveloperLogoUrl` utility remains as-is (it correctly extracts `logo_url`)
+- Fallback behavior (Building2 icon or initial letter) remains unchanged
 
-### Batch 2 — Home Page Components
-Files: All `src/components/home/*` files, `PreFooterSeparator.tsx`, `ContinueSearching.tsx`, `LeadCapturePopup.tsx`, `WelcomeModal.tsx`, `RoleSelectionModal.tsx`, `InquiryFormModal.tsx`
-
-### Batch 3 — Service Pages
-Files: All `src/pages/services/*`, `InvestorServices.tsx`, `MarketIntelligence.tsx`, `MortgageCalculator.tsx`
-
-### Batch 4 — AI Tools & Premium Layouts
-Files: All `src/components/ai-tools/*`, all AI page files (`AI*.tsx`), `AIToolPremiumLayout.tsx`
-
-### Batch 5 — Dashboards & Admin
-Files: `Dashboard.tsx`, `BrokerDashboard.tsx`, `InvestorDashboard.tsx`, `OwnerDashboard*.tsx`, `Admin*.tsx`, `CRM*.tsx`
-
-### Batch 6 — Remaining Components
-Files: Navigation, header, footer, shared UI components, modals, remaining pages
-
-## Technical Details
-
-- Each batch will use `code--search_files` to find violations in the target files, then `code--line_replace` for surgical fixes
-- The `cvResumeTypes.ts` Poppins reference will be preserved (user font selection feature)
-- Dark-section components (intentional dark UI per design system) keep dark backgrounds but get upgraded text contrast
-- Estimate: ~6 implementation messages to cover all batches
-
-## What Will NOT Change
-- Button system (`button.tsx`) — already compliant
-- Mega-menu primitives — already monochrome
-- `text-gold` on icons — allowed per design system for accent/CTA layer
-- CV/Resume builder font options — user choice feature
+### Technical Details
+- All logo containers standardized to: `bg-white rounded-lg shadow-lg p-1.5 overflow-hidden` with `object-contain` on the image
+- This ensures equal padding on all 4 sides, centered alignment, no stretching, no cropping
 
