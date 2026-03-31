@@ -98,11 +98,11 @@ const StartingPointSection = () => {
               )}>
                 <div className="relative flex flex-col items-center gap-2 md:gap-3 w-full">
                   <div className="w-14 h-14 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shrink-0 bg-gray-100 border border-gray-200">
-                    <card.icon className="w-7 h-7 text-gray-600" strokeWidth={1.5} />
+                    <card.icon className="w-7 h-7 text-gray-800" strokeWidth={1.5} />
                   </div>
                   <div className="text-center">
-                    <h4 className="text-black group-hover:text-gray-700 text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
-                    <p className="text-gray-600 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
+                    <h4 className="text-gray-900 group-hover:text-gray-700 text-xs md:text-sm font-bold transition-colors leading-tight tracking-wide">{card.label}</h4>
+                    <p className="text-gray-500 text-[9px] md:text-[10px] mt-0.5 font-medium leading-tight">{card.sub}</p>
                   </div>
                 </div>
               </div>
