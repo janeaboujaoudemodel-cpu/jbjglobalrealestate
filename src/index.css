@@ -2076,12 +2076,27 @@ svg[class*="text-muted"],
 }
 
 /* ============================================================
+ * GLOBAL: Kill Poppins — Inter is the canonical platform font
+ * ============================================================ */
+[style*="Poppins"] {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
+}
+
+/* ============================================================
  * GLOBAL CONTRAST ENFORCEMENT
- * 1. Light surfaces → dark text
+ * 1. Light surfaces → dark text (set color on the surface itself)
  * 2. Dark surfaces → light text (uses :where() so #1 wins when nested)
  * 3. Gold accent preserved
  * 4. Hover/focus states enforced
  * ============================================================ */
+
+/* ── 0. Light surface containers: set base color so children inherit ── */
+:root:not(.dark) :is(
+  .jj-layer-2, .jj-layer-1, .bg-white, .bg-background, .bg-card,
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
+) {
+  color: hsl(var(--foreground));
+}
 
 /* ── 1. LIGHT SURFACES: force dark readable text ── */
 :root:not(.dark) :is(
