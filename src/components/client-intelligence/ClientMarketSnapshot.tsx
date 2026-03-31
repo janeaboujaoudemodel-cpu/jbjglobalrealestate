@@ -59,7 +59,7 @@ const ClientMarketSnapshot = ({
       case "down":
         return <TrendingDown className="w-4 h-4 text-amber-500" />;
       default:
-        return <Minus className="w-4 h-4 text-muted-foreground" />;
+        return <Minus className="w-4 h-4 text-blue-500" />;
     }
   };
 
