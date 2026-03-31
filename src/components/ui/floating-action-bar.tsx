@@ -104,7 +104,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
         className="relative"
       >
         {/* Main Bar — clean white */}
-        <div className="flex items-center gap-1 p-1.5 bg-white/95 backdrop-blur-xl border border-gray-200 rounded-2xl shadow-lg">
+        <div className="flex items-center gap-1 p-1.5 bg-white/95 backdrop-blur-xl border border-gray-200 rounded-2xl shadow-sm">
           <AnimatePresence mode="popLayout">
             {actions.map((action, index) => (
               <motion.button

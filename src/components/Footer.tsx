@@ -835,9 +835,7 @@ const Footer = () => {
         </div>
       </div>
       
-      {/* Bottom accent line - Enhanced */}
-      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gray-200" />
-      <div className="absolute bottom-[2px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent blur-sm" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gray-200" />
     </footer>
      </>
   );
