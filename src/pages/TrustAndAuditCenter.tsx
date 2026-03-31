@@ -94,7 +94,7 @@ const TrustAndAuditCenter = () => {
             <p className="text-lg md:text-xl text-[#C8A766] font-medium mb-6" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>
               Institutional Standards. Regulated Brokerage. Transparent Operations.
             </p>
-            <p className="text-gray-500 leading-relaxed max-w-3xl mx-auto text-[15px]">
+            <p className="text-gray-600 leading-relaxed max-w-3xl mx-auto text-[15px]">
               At JBJ Global Real Estate, trust is built through regulatory compliance, operational transparency, data protection, and ethical brokerage standards. This page outlines the internal and external safeguards that support our clients, partners, and investors.
             </p>
           </div>
@@ -115,7 +115,7 @@ const TrustAndAuditCenter = () => {
                     className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all ${
                       activeSection === item.id
                         ? "text-[#C8A766] font-semibold border-l-2 border-[#C8A766] bg-[#C8A766]/5"
-                        : "text-gray-500 hover:text-gray-400 border-l-2 border-transparent"
+                        : "text-gray-600 hover:text-gray-600 border-l-2 border-transparent"
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5 flex-shrink-0" />
@@ -236,10 +236,10 @@ const TrustAndAuditCenter = () => {
 
             {/* Footer */}
             <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
-              <p className="text-xs text-gray-500 max-w-2xl mx-auto leading-relaxed mb-4">
+              <p className="text-xs text-gray-600 max-w-2xl mx-auto leading-relaxed mb-4">
                 This Trust & Audit Framework may be updated periodically to reflect regulatory developments and operational enhancements.
               </p>
-              <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+              <p className="text-gray-600 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
                 <span className="text-gray-600">|</span>

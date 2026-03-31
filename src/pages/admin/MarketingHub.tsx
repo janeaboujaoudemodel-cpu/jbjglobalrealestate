@@ -138,7 +138,7 @@ const MarketingHub: React.FC = () => {
       case 'sending': return 'bg-amber-100 text-amber-700';
       case 'sent': return 'bg-green-100 text-green-700';
       case 'paused': return 'bg-orange-100 text-orange-700';
-      case 'archived': return 'bg-gray-200 text-gray-500';
+      case 'archived': return 'bg-gray-200 text-gray-600';
       default: return 'bg-gray-200 text-gray-700';
     }
   };

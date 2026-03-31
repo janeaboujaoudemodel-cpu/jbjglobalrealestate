@@ -52,14 +52,14 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
             <div className="flex items-center gap-3 text-left">
               <User className="w-4 h-4 text-[#C8A766] shrink-0" />
               <div className="min-w-0">
-                <p className="text-xs text-gray-500">Name</p>
+                <p className="text-xs text-gray-600">Name</p>
                 <p className="text-sm font-semibold text-black truncate">{name || 'Not provided'}</p>
               </div>
             </div>
             <div className="flex items-center gap-3 text-left">
               <Mail className="w-4 h-4 text-[#C8A766] shrink-0" />
               <div className="min-w-0">
-                <p className="text-xs text-gray-500">Email</p>
+                <p className="text-xs text-gray-600">Email</p>
                 <p className="text-sm font-semibold text-black truncate">{email}</p>
               </div>
             </div>
@@ -67,7 +67,7 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
               <div className="flex items-center gap-3 text-left">
                 <Phone className="w-4 h-4 text-[#C8A766] shrink-0" />
                 <div className="min-w-0">
-                  <p className="text-xs text-gray-500">Phone</p>
+                  <p className="text-xs text-gray-600">Phone</p>
                   <p className="text-sm font-semibold text-black truncate">{phone}</p>
                 </div>
               </div>

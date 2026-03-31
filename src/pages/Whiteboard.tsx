@@ -306,7 +306,7 @@ const Whiteboard = () => {
           <Button variant="outline" size="icon" onClick={() => setZoom(z => Math.max(0.5, z - 0.1))}>
             <ZoomOut className="w-4 h-4" />
           </Button>
-          <span className="text-sm text-gray-500 w-12 text-center">{Math.round(zoom * 100)}%</span>
+          <span className="text-sm text-gray-600 w-12 text-center">{Math.round(zoom * 100)}%</span>
           <Button variant="outline" size="icon" onClick={() => setZoom(z => Math.min(2, z + 0.1))}>
             <ZoomIn className="w-4 h-4" />
           </Button>

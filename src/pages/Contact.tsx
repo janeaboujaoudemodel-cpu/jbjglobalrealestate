@@ -303,7 +303,7 @@ END:VCARD`;
           <p className="text-white text-xl md:text-2xl font-medium max-w-3xl leading-relaxed mb-4">
             Professional Support. Clear Communication. Trusted Guidance.
           </p>
-          <p className="text-gray-400 text-base md:text-lg max-w-3xl leading-relaxed">
+          <p className="text-gray-600 text-base md:text-lg max-w-3xl leading-relaxed">
             Whether you are an investor, property owner, broker, or partner, our team is here to support you with accurate information, structured guidance, and accountable follow-up. Choose the option below that best fits your request.
           </p>
         </div>

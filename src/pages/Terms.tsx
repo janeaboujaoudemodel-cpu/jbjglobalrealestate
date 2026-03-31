@@ -84,10 +84,10 @@ const Terms = () => {
               Conditions Governing Use of Our Platform
             </p>
 
-            <p className="text-gray-400 text-base md:text-lg max-w-3xl leading-relaxed mb-2">
+            <p className="text-gray-600 text-base md:text-lg max-w-3xl leading-relaxed mb-2">
               These Terms of Service ("Terms") govern your access to and use of this website and all related services. By accessing or using the platform, you agree to be legally bound by these Terms.
             </p>
-            <p className="text-gray-500 text-base max-w-3xl leading-relaxed">
+            <p className="text-gray-600 text-base max-w-3xl leading-relaxed">
               If you do not agree, you must discontinue use immediately.
             </p>
           </motion.div>
@@ -105,7 +105,7 @@ const Terms = () => {
               <nav className="space-y-1">
                 {tocItems.map(item => (
                   <button key={item.id} onClick={() => scrollTo(item.id)}
-                    className="block w-full text-left text-sm text-gray-500 hover:text-[#C8A766] hover:bg-[#C8A766]/5 px-3 py-1.5 rounded-lg transition-colors"
+                    className="block w-full text-left text-sm text-gray-600 hover:text-[#C8A766] hover:bg-[#C8A766]/5 px-3 py-1.5 rounded-lg transition-colors"
                   >{item.label}</button>
                 ))}
               </nav>
@@ -121,7 +121,7 @@ const Terms = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                 {tocItems.map(item => (
                   <button key={item.id} onClick={() => scrollTo(item.id)}
-                    className="text-left text-sm text-gray-500 hover:text-[#C8A766] px-3 py-1.5 rounded-lg hover:bg-[#C8A766]/5 transition-colors"
+                    className="text-left text-sm text-gray-600 hover:text-[#C8A766] px-3 py-1.5 rounded-lg hover:bg-[#C8A766]/5 transition-colors"
                   >{item.label}</button>
                 ))}
               </div>
@@ -356,7 +356,7 @@ const Terms = () => {
 
             {/* Footer */}
             <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
-              <p className="text-gray-500 text-sm">
+              <p className="text-gray-600 text-sm">
                 &copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.
               </p>
               <div className="flex justify-center gap-4 mt-3 text-sm">

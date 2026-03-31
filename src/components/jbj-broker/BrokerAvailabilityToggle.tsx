@@ -124,7 +124,7 @@ export function BrokerAvailabilityToggle({
       icon: XCircle,
       label: "Offline",
       color: "bg-gray-500",
-      textColor: "text-gray-500",
+      textColor: "text-gray-600",
       borderColor: "border-gray-500",
       description: "Not receiving new leads"
     }

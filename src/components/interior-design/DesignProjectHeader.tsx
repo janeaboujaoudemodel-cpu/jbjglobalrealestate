@@ -143,7 +143,7 @@ const DesignProjectHeader = ({
               value={projectName}
               onChange={(e) => onProjectNameChange(e.target.value)}
               placeholder="e.g., Downtown Apartment Redesign"
-              className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-gray-400"
+              className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-600 focus:border-gray-400"
             />
           </div>
 
@@ -204,7 +204,7 @@ const DesignProjectHeader = ({
                 value={propertySize}
                 onChange={(e) => onPropertySizeChange(e.target.value)}
                 placeholder="e.g., 1500"
-                className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 focus:border-gray-400 flex-1"
+                className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-600 focus:border-gray-400 flex-1"
               />
               <Button
                 type="button"

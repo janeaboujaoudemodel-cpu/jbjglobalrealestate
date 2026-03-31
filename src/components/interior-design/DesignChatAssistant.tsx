@@ -249,7 +249,7 @@ What would you like to create today?`,
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Describe your dream interior..."
-              className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 min-h-[44px] max-h-[120px] resize-none flex-1 focus:border-orange-500/50"
+              className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-600 min-h-[44px] max-h-[120px] resize-none flex-1 focus:border-orange-500/50"
               disabled={isProcessing}
             />
             

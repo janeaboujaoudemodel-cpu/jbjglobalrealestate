@@ -37,7 +37,7 @@ const WhyChooseUs = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-black mb-3">
               {t('whyUs.title', 'Why Choose Us')}
             </h2>
-            <p className="text-gray-500 text-sm max-w-md mx-auto">
+            <p className="text-gray-600 text-sm max-w-md mx-auto">
               {t('whyUs.subtitle', 'We focus on what matters most—getting you results.')}
             </p>
           </div>
@@ -56,7 +56,7 @@ const WhyChooseUs = () => {
                 <h3 className="text-black font-bold text-base mb-2 group-hover:text-gray-700 transition-colors">
                   {prop.title}
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{prop.text}</p>
+                <p className="text-gray-600 text-sm leading-relaxed">{prop.text}</p>
                 <div className="flex items-center gap-1.5 mt-4">
                   <Check className="w-4 h-4 text-green-600" />
                   <span className="text-xs uppercase tracking-wider text-green-600 font-semibold">

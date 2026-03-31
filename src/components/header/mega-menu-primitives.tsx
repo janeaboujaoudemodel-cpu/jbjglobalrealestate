@@ -163,7 +163,7 @@ export function MegaMenuCTAButton({
       <span className="text-black font-bold text-base group-hover:text-black transition-colors">
         {title}
       </span>
-      <ArrowRight className="w-5 h-5 text-gray-400 ml-auto" />
+      <ArrowRight className="w-5 h-5 text-gray-600 ml-auto" />
     </Link>
   );
 }
@@ -180,7 +180,7 @@ export const MegaMenuSectionTitle = React.forwardRef<HTMLDivElement, MegaMenuSec
       <div ref={ref} className="mb-3 h-[36px] flex flex-col justify-end">
         <div className="flex items-center justify-center pb-2">
           <h4 className="text-black font-bold text-xs tracking-[0.2em] uppercase flex items-center gap-2 whitespace-nowrap">
-            <Icon className="w-4 h-4 text-gray-400 shrink-0" />
+            <Icon className="w-4 h-4 text-gray-600 shrink-0" />
             {title}
           </h4>
           {rightSlot}
@@ -236,7 +236,7 @@ export function MegaMenuIconLink({
           "transition-colors duration-300",
           emphasis
             ? "text-white w-5 h-5"
-            : "text-gray-400 group-hover:text-black",
+            : "text-gray-600 group-hover:text-black",
           !emphasis && compact ? "w-3.5 h-3.5" : !emphasis ? "w-5 h-5" : ""
         )} />
       </div>
@@ -251,7 +251,7 @@ export function MegaMenuIconLink({
           {title}
         </span>
         {description ? (
-          <span className="block text-xs text-gray-400 group-hover:text-gray-600 truncate transition-colors">
+          <span className="block text-xs text-gray-600 group-hover:text-gray-600 truncate transition-colors">
             {description}
           </span>
         ) : null}

@@ -98,7 +98,7 @@ export function BrokerNotesWidget() {
       case "meeting":
         return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs"><Clock className="w-3 h-3 mr-1" />Meeting</Badge>;
       case "general":
-        return <Badge className="bg-gray-500/20 text-gray-500 border-gray-500/30 text-xs"><Tag className="w-3 h-3 mr-1" />General</Badge>;
+        return <Badge className="bg-gray-500/20 text-gray-600 border-gray-500/30 text-xs"><Tag className="w-3 h-3 mr-1" />General</Badge>;
     }
   };
 
@@ -138,7 +138,7 @@ export function BrokerNotesWidget() {
                 placeholder="Write your note here..."
                 value={newNote.content}
                 onChange={(e) => setNewNote({ ...newNote, content: e.target.value })}
-                className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 min-h-[80px]"
+                className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 min-h-[80px]"
               />
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
@@ -164,7 +164,7 @@ export function BrokerNotesWidget() {
                     placeholder="Lead or property name"
                     value={newNote.linkedTo}
                     onChange={(e) => setNewNote({ ...newNote, linkedTo: e.target.value })}
-                    className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 h-9"
+                    className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 h-9"
                   />
                 </div>
               </div>
@@ -187,7 +187,7 @@ export function BrokerNotesWidget() {
               placeholder="Search notes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-400 pl-10"
+              className="bg-zinc-800/50 border-gray-700 text-white placeholder:text-gray-600 pl-10"
             />
           </div>
 

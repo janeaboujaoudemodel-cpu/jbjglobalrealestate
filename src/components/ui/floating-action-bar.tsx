@@ -130,7 +130,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
               'p-2 rounded-xl transition-all duration-200',
               isListening
                 ? 'bg-black text-white animate-pulse'
-                : 'text-gray-500 hover:bg-gray-100 hover:text-black'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-black'
             )}
             title="Voice Command"
           >
@@ -143,7 +143,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
               'p-2 rounded-xl transition-all duration-200',
               isExpanded
                 ? 'bg-black text-white rotate-45'
-                : 'text-gray-500 hover:bg-gray-100 hover:text-black'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-black'
             )}
           >
             <Plus className="w-4 h-4 transition-transform" />
@@ -159,7 +159,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
               className="absolute bottom-full mb-3 right-0 min-w-[200px] bg-white border border-gray-200 rounded-xl shadow-xl p-2"
             >
-              <div className="text-[10px] uppercase tracking-wider text-gray-400 font-semibold px-3 py-2">
+              <div className="text-[10px] uppercase tracking-wider text-gray-600 font-semibold px-3 py-2">
                 AI Quick Actions
               </div>
               {[
@@ -173,7 +173,7 @@ export const FloatingActionBar: React.FC<FloatingActionBarProps> = ({ className 
                   onClick={() => { item.action(); setIsExpanded(false); }}
                   className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-black hover:bg-gray-100 transition-colors"
                 >
-                  <span className="text-gray-500">{item.icon}</span>
+                  <span className="text-gray-600">{item.icon}</span>
                   <span className="text-sm font-medium">{item.label}</span>
                 </button>
               ))}

@@ -37,7 +37,7 @@ const CommunitySearchModal = ({ isOpen, onClose }: CommunitySearchModalProps) =>
             placeholder="Search communities..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-12 h-12 bg-zinc-900 border-gray-800 text-white placeholder:text-gray-400 focus:border-gold rounded-xl"
+            className="pl-12 h-12 bg-zinc-900 border-gray-800 text-white placeholder:text-gray-600 focus:border-gold rounded-xl"
           />
           {searchQuery && (
             <button

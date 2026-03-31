@@ -199,14 +199,14 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search commands, pages, or type a query..."
-            className="flex-1 border-0 bg-transparent focus-visible:ring-0 text-black placeholder:text-gray-400 text-lg"
+            className="flex-1 border-0 bg-transparent focus-visible:ring-0 text-black placeholder:text-gray-600 text-lg"
             autoFocus
           />
           <div className="flex items-center gap-1.5 px-2 py-1 rounded bg-gold/10 border border-gold/20">
             <Mic className="w-3.5 h-3.5 text-gold" />
             <span className="text-xs text-gold font-medium">Voice</span>
           </div>
-          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded bg-gray-100 text-gray-500 text-xs font-medium">
+          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded bg-gray-100 text-gray-600 text-xs font-medium">
             ESC
           </kbd>
         </div>
@@ -248,17 +248,17 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                         <div className="flex-1 text-left">
                           <div className="font-medium">{item.title}</div>
                           {item.subtitle && (
-                            <div className="text-sm text-gray-500">{item.subtitle}</div>
+                            <div className="text-sm text-gray-600">{item.subtitle}</div>
                           )}
                         </div>
                         {item.shortcut && (
-                          <kbd className="px-2 py-1 rounded bg-gray-100 text-gray-500 text-xs font-medium">
+                          <kbd className="px-2 py-1 rounded bg-gray-100 text-gray-600 text-xs font-medium">
                             {item.shortcut}
                           </kbd>
                         )}
                         <ChevronRight className={cn(
                           'w-4 h-4 transition-colors',
-                          isSelected ? 'text-gold' : 'text-gray-400'
+                          isSelected ? 'text-gold' : 'text-gray-600'
                         )} />
                       </button>
                     );
@@ -270,15 +270,15 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
             {filteredCommands.length === 0 && (
               <div className="py-12 text-center">
                 <Sparkles className="w-12 h-12 mx-auto text-gold/30 mb-4" />
-                <p className="text-gray-500">No commands found</p>
-                <p className="text-sm text-gray-500 mt-1">Try a different search term</p>
+                <p className="text-gray-600">No commands found</p>
+                <p className="text-sm text-gray-600 mt-1">Try a different search term</p>
               </div>
             )}
           </div>
         </ScrollArea>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-4 py-2.5 border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white text-xs text-gray-500">
+        <div className="flex items-center justify-between px-4 py-2.5 border-t border-gold/10 bg-gradient-to-r from-[#FDFBF7] to-white text-xs text-gray-600">
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
               <kbd className="px-1.5 py-0.5 rounded bg-gray-100 font-medium">↑↓</kbd>

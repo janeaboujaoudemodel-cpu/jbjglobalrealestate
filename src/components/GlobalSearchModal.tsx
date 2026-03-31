@@ -334,7 +334,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 </div>
               )}
               {totalResults === 0 && (
-                <p className="text-sm text-gray-500 text-center py-4">No results found for "{query}"</p>
+                <p className="text-sm text-gray-600 text-center py-4">No results found for "{query}"</p>
               )}
             </div>
           ) : (
@@ -378,7 +378,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs font-semibold text-gold/80 uppercase tracking-wider">Recent Searches</p>
-                    <button onClick={handleClearRecent} className="text-xs text-gray-500 hover:text-gray-700 transition-colors">Clear</button>
+                    <button onClick={handleClearRecent} className="text-xs text-gray-600 hover:text-gray-700 transition-colors">Clear</button>
                   </div>
                   <div className="space-y-1">
                     {recentSearches.map((search, i) => (
@@ -488,8 +488,8 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
 
                     {totalResults === 0 && (
                       <div className="p-8 text-center">
-                        <p className="text-gray-500">No results found for "{query}"</p>
-                        <p className="text-sm text-gray-500 mt-1">Try a different search term</p>
+                        <p className="text-gray-600">No results found for "{query}"</p>
+                        <p className="text-sm text-gray-600 mt-1">Try a different search term</p>
                       </div>
                     )}
                   </div>
@@ -547,7 +547,7 @@ const GlobalSearchModal = ({ isOpen, initialQuery = "", onClose, embedded = fals
                           </p>
                           <button 
                             onClick={handleClearRecent}
-                            className="flex items-center gap-1 text-xs text-gray-500 hover:text-black transition-colors"
+                            className="flex items-center gap-1 text-xs text-gray-600 hover:text-black transition-colors"
                           >
                             <Trash2 className="w-3 h-3" />
                             Clear

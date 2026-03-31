@@ -686,7 +686,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       </p>
                     </CardHeader>
                     <CardContent className="py-2 px-3 space-y-1">
-                      <div className="text-xs font-medium text-gray-500 mb-2">Core Requirements (needed for approval)</div>
+                      <div className="text-xs font-medium text-gray-600 mb-2">Core Requirements (needed for approval)</div>
                       <ChecklistItem 
                         label="Images (2+ required)" 
                         passed={testResult.checklist.hasImages} 
@@ -708,7 +708,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                         detail={testResult.checklist.hasDeveloper ? testResult.project?.developer_name : "Unknown or missing"}
                       />
                       
-                      <div className="text-xs font-medium text-gray-500 mt-3 mb-2">Extended Fields (from page-data.json + Firecrawl)</div>
+                      <div className="text-xs font-medium text-gray-600 mt-3 mb-2">Extended Fields (from page-data.json + Firecrawl)</div>
                       <ChecklistItem 
                         label="USP Bullets (2+ recommended)" 
                         passed={testResult.checklist.hasUsps} 
@@ -768,7 +768,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       {/* FAQs */}
                       {testResult.project.faqs && testResult.project.faqs.length > 0 && (
                         <div>
-                          <div className="text-xs font-medium text-gray-500 mb-2 flex items-center gap-1">
+                          <div className="text-xs font-medium text-gray-600 mb-2 flex items-center gap-1">
                             <FileText className="w-3 h-3" />
                             FAQs ({testResult.project.faqs.length})
                           </div>
@@ -788,7 +788,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       {/* Location Distances */}
                       {testResult.project.location_distances && testResult.project.location_distances.length > 0 && (
                         <div>
-                          <div className="text-xs font-medium text-gray-500 mb-2 flex items-center gap-1">
+                          <div className="text-xs font-medium text-gray-600 mb-2 flex items-center gap-1">
                             <MapPin className="w-3 h-3" />
                             Location Distances ({testResult.project.location_distances.length})
                           </div>
@@ -805,7 +805,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       {/* USP Bullets */}
                       {testResult.project.usp_bullets && testResult.project.usp_bullets.length > 0 && (
                         <div>
-                          <div className="text-xs font-medium text-gray-500 mb-2 flex items-center gap-1">
+                          <div className="text-xs font-medium text-gray-600 mb-2 flex items-center gap-1">
                             <Award className="w-3 h-3" />
                             USP Bullets ({testResult.project.usp_bullets.length})
                           </div>
@@ -817,7 +817,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                               </li>
                             ))}
                             {testResult.project.usp_bullets.length > 5 && (
-                              <li className="text-xs text-gray-500">+{testResult.project.usp_bullets.length - 5} more</li>
+                              <li className="text-xs text-gray-600">+{testResult.project.usp_bullets.length - 5} more</li>
                             )}
                           </ul>
                         </div>
@@ -826,7 +826,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                       {/* Amenities */}
                       {testResult.project.amenities_list && testResult.project.amenities_list.length > 0 && (
                         <div>
-                          <div className="text-xs font-medium text-gray-500 mb-2 flex items-center gap-1">
+                          <div className="text-xs font-medium text-gray-600 mb-2 flex items-center gap-1">
                             <Building2 className="w-3 h-3" />
                             Amenities ({testResult.project.amenities_list.length})
                           </div>
@@ -851,7 +851,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                         testResult.project.payment_breakdown.during_construction || 
                         testResult.project.payment_breakdown.on_completion) && (
                         <div>
-                          <div className="text-xs font-medium text-gray-500 mb-2 flex items-center gap-1">
+                          <div className="text-xs font-medium text-gray-600 mb-2 flex items-center gap-1">
                             <DollarSign className="w-3 h-3" />
                             Payment Breakdown
                           </div>
@@ -880,7 +880,7 @@ export function TestOneListingPanel({ onApproved, bulkExtractDisabled }: TestOne
                        (!testResult.project.location_distances || testResult.project.location_distances.length === 0) &&
                        (!testResult.project.usp_bullets || testResult.project.usp_bullets.length === 0) &&
                        (!testResult.project.amenities_list || testResult.project.amenities_list.length === 0) && (
-                        <div className="text-center py-4 text-gray-500 text-sm">
+                        <div className="text-center py-4 text-gray-600 text-sm">
                           <AlertTriangle className="w-5 h-5 mx-auto mb-2" />
                           No extended data extracted (FAQs, Distances, USPs, Amenities)
                         </div>

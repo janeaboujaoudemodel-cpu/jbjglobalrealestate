@@ -143,7 +143,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
           <Trash2 className="h-5 w-5 text-red-500" />
           Leads Management
         </CardTitle>
-        <CardDescription className="text-gray-500">
+        <CardDescription className="text-gray-600">
           Recently deleted leads — auto-purged after 30 days. Restore leads before they are permanently removed.
         </CardDescription>
       </CardHeader>
@@ -170,11 +170,11 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
 
         {/* Table */}
         {loading ? (
-          <div className="text-center py-12 text-gray-500">Loading...</div>
+          <div className="text-center py-12 text-gray-600">Loading...</div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-12">
-            <Trash2 className="h-12 w-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-500">{search ? "No matching deleted leads" : "No recently deleted leads"}</p>
+            <Trash2 className="h-12 w-12 text-gray-600 mx-auto mb-3" />
+            <p className="text-gray-600">{search ? "No matching deleted leads" : "No recently deleted leads"}</p>
           </div>
         ) : (
           <div className="overflow-auto">
@@ -202,7 +202,7 @@ export default function RecentlyDeletedLeads({ userId, onRefresh, isOwner = fals
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell className="text-gray-500 text-sm">
+                    <TableCell className="text-gray-600 text-sm">
                       <div className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
                         {formatDisplayDate(lead.deleted_at)}

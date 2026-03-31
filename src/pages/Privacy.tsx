@@ -79,8 +79,8 @@ const Privacy = () => {
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight" style={{ fontFamily: "Playfair Display, serif" }}>Privacy Policy</h1>
             <p className="text-lg md:text-xl text-[#C8A766]/80 font-medium mb-6" style={{ fontFamily: "Playfair Display, serif" }}>Your Data. Your Rights. Our Responsibility.</p>
-            <p className="text-gray-400 text-base md:text-lg max-w-3xl leading-relaxed mb-2">This Privacy Policy explains how we collect, use, process, and protect personal data when you interact with our website and services.</p>
-            <p className="text-gray-500 text-base max-w-3xl leading-relaxed">We are committed to safeguarding your information in accordance with applicable UAE data protection principles.</p>
+            <p className="text-gray-600 text-base md:text-lg max-w-3xl leading-relaxed mb-2">This Privacy Policy explains how we collect, use, process, and protect personal data when you interact with our website and services.</p>
+            <p className="text-gray-600 text-base max-w-3xl leading-relaxed">We are committed to safeguarding your information in accordance with applicable UAE data protection principles.</p>
           </motion.div>
         </div>
       </section>
@@ -92,7 +92,7 @@ const Privacy = () => {
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Contents</p>
               <nav className="space-y-1">
                 {tocItems.map(item => (
-                  <button key={item.id} onClick={() => scrollTo(item.id)} className="block w-full text-left text-sm text-gray-500 hover:text-[#C8A766] hover:bg-[#C8A766]/5 px-3 py-1.5 rounded-lg transition-colors">{item.label}</button>
+                  <button key={item.id} onClick={() => scrollTo(item.id)} className="block w-full text-left text-sm text-gray-600 hover:text-[#C8A766] hover:bg-[#C8A766]/5 px-3 py-1.5 rounded-lg transition-colors">{item.label}</button>
                 ))}
               </nav>
             </div>
@@ -102,7 +102,7 @@ const Privacy = () => {
             <div className="lg:hidden mb-10 p-5 rounded-2xl border border-[#C8A766]/20 bg-[#1a1714]/80">
               <p className="text-xs text-[#C8A766] font-semibold uppercase tracking-widest mb-4">Table of Contents</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-                {tocItems.map(item => (<button key={item.id} onClick={() => scrollTo(item.id)} className="text-left text-sm text-gray-500 hover:text-[#C8A766] px-3 py-1.5 rounded-lg hover:bg-[#C8A766]/5 transition-colors">{item.label}</button>))}
+                {tocItems.map(item => (<button key={item.id} onClick={() => scrollTo(item.id)} className="text-left text-sm text-gray-600 hover:text-[#C8A766] px-3 py-1.5 rounded-lg hover:bg-[#C8A766]/5 transition-colors">{item.label}</button>))}
               </div>
             </div>
 
@@ -189,7 +189,7 @@ const Privacy = () => {
 
             <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
               <ClauseTitle id="security" number={10}>Data Security</ClauseTitle>
-              <CCard><p className="text-gray-700 leading-relaxed mb-4">We implement:</p><BulletList items={["Secure servers","Encrypted communications","Access controls","Internal confidentiality protocols"]} /><p className="text-gray-500 text-sm mt-4 leading-relaxed">No online transmission is 100% secure, but we apply reasonable protection measures.</p></CCard>
+              <CCard><p className="text-gray-700 leading-relaxed mb-4">We implement:</p><BulletList items={["Secure servers","Encrypted communications","Access controls","Internal confidentiality protocols"]} /><p className="text-gray-600 text-sm mt-4 leading-relaxed">No online transmission is 100% secure, but we apply reasonable protection measures.</p></CCard>
             </motion.div>
             <GoldDivider />
 
@@ -233,7 +233,7 @@ const Privacy = () => {
             </motion.div>
 
             <div className="mt-16 pt-8 border-t border-[#C8A766]/15 text-center">
-              <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+              <p className="text-gray-600 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/terms" className="text-[#C8A766] hover:underline">Terms of Service</Link>
                 <span className="text-gray-600">|</span>

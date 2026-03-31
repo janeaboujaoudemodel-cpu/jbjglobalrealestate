@@ -160,7 +160,7 @@ const SellWithUs = () => {
                 <span className="text-white/40 text-4xl md:text-5xl lg:text-6xl">with Confidence</span>
               </motion.h1>
               
-              <motion.p variants={fadeInUp} className="text-lg md:text-xl text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+              <motion.p variants={fadeInUp} className="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
                 Pricing accuracy, qualified demand, and structured execution — handled by a licensed brokerage team in Dubai.
               </motion.p>
               
@@ -194,7 +194,7 @@ const SellWithUs = () => {
               <motion.h2 variants={fadeInUp} className="text-3xl md:text-4xl font-bold text-white mb-6">
                 A Selling Process Built for Clarity
               </motion.h2>
-              <motion.p variants={fadeInUp} className="text-lg text-gray-500 leading-relaxed">
+              <motion.p variants={fadeInUp} className="text-lg text-gray-600 leading-relaxed">
                 Selling isn't only about listing a property — it's about pricing correctly, positioning the asset, 
                 qualifying buyers, and coordinating from offer to transfer. Our role is to manage the process 
                 professionally and transparently.
@@ -221,7 +221,7 @@ const SellWithUs = () => {
                       <card.icon className="w-6 h-6 text-white/60 group-hover:text-white transition-colors" />
                     </div>
                     <h3 className="text-xl font-semibold text-white mb-3">{card.title}</h3>
-                    <p className="text-gray-500 leading-relaxed">{card.description}</p>
+                    <p className="text-gray-600 leading-relaxed">{card.description}</p>
                   </motion.div>
                 ))}
               </div>
@@ -255,7 +255,7 @@ const SellWithUs = () => {
                           <step.icon className="w-5 h-5 text-white/50" />
                           <h3 className="text-lg font-semibold text-white">{step.title}</h3>
                         </div>
-                        <p className="text-gray-500 text-sm leading-relaxed">{step.description}</p>
+                        <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -275,7 +275,7 @@ const SellWithUs = () => {
                   <span className="text-blue-300 text-sm font-medium">AI-Powered</span>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Instant Property Valuation</h2>
-                <p className="text-gray-500">Get an estimated market value based on DLD data and comparable transactions</p>
+                <p className="text-gray-600">Get an estimated market value based on DLD data and comparable transactions</p>
               </motion.div>
 
               <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08]">
@@ -283,11 +283,11 @@ const SellWithUs = () => {
                   <div className="space-y-5">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-gray-400 text-sm mb-1.5 block">Community *</Label>
-                        <Input value={valCommunity} onChange={(e) => setValCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-400 focus:border-blue-400" />
+                        <Label className="text-gray-600 text-sm mb-1.5 block">Community *</Label>
+                        <Input value={valCommunity} onChange={(e) => setValCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600 focus:border-blue-400" />
                       </div>
                       <div>
-                        <Label className="text-gray-400 text-sm mb-1.5 block">Property Type</Label>
+                        <Label className="text-gray-600 text-sm mb-1.5 block">Property Type</Label>
                         <Select value={valType} onValueChange={setValType}>
                           <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue /></SelectTrigger>
                           <SelectContent className="bg-zinc-900 border-gray-700">
@@ -302,11 +302,11 @@ const SellWithUs = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-gray-400 text-sm mb-1.5 block">Size (sq ft) *</Label>
-                        <Input type="number" value={valSize} onChange={(e) => setValSize(e.target.value)} placeholder="e.g., 1200" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-400 focus:border-blue-400" />
+                        <Label className="text-gray-600 text-sm mb-1.5 block">Size (sq ft) *</Label>
+                        <Input type="number" value={valSize} onChange={(e) => setValSize(e.target.value)} placeholder="e.g., 1200" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600 focus:border-blue-400" />
                       </div>
                       <div>
-                        <Label className="text-gray-400 text-sm mb-1.5 block">Bedrooms</Label>
+                        <Label className="text-gray-600 text-sm mb-1.5 block">Bedrooms</Label>
                         <Select value={valBedrooms} onValueChange={setValBedrooms}>
                           <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue /></SelectTrigger>
                           <SelectContent className="bg-zinc-900 border-gray-700">
@@ -320,22 +320,22 @@ const SellWithUs = () => {
                     <Button onClick={handleQuickValuation} disabled={isValuating} className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-6 rounded-xl">
                       {isValuating ? <><Sparkles className="w-4 h-4 mr-2 animate-pulse" />Analyzing...</> : <><Search className="w-4 h-4 mr-2" />Get Instant Valuation</>}
                     </Button>
-                    <p className="text-xs text-gray-500 text-center">Sources: DLD Public Records · RERA · JBJ Analysis Framework</p>
+                    <p className="text-xs text-gray-600 text-center">Sources: DLD Public Records · RERA · JBJ Analysis Framework</p>
                   </div>
                 ) : (
                   <div className="text-center space-y-5">
                     <p className="text-blue-400 text-sm uppercase tracking-wider">Estimated Market Value</p>
                     <div className="space-y-1">
                       <div className="flex items-center justify-center gap-3">
-                        <span className="text-xl text-gray-500">AED {valResult.estimatedValue?.low?.toLocaleString()}</span>
+                        <span className="text-xl text-gray-600">AED {valResult.estimatedValue?.low?.toLocaleString()}</span>
                         <span className="text-gray-700">—</span>
                         <span className="text-4xl font-bold text-white">AED {valResult.estimatedValue?.mid?.toLocaleString()}</span>
                         <span className="text-gray-700">—</span>
-                        <span className="text-xl text-gray-500">AED {valResult.estimatedValue?.high?.toLocaleString()}</span>
+                        <span className="text-xl text-gray-600">AED {valResult.estimatedValue?.high?.toLocaleString()}</span>
                       </div>
-                      <p className="text-gray-500 text-sm">AED {valResult.estimatedValue?.pricePerSqFt?.toLocaleString()} per sq ft</p>
+                      <p className="text-gray-600 text-sm">AED {valResult.estimatedValue?.pricePerSqFt?.toLocaleString()} per sq ft</p>
                     </div>
-                    <p className="text-sm text-gray-500 leading-relaxed max-w-lg mx-auto">{valResult.marketInsights}</p>
+                    <p className="text-sm text-gray-600 leading-relaxed max-w-lg mx-auto">{valResult.marketInsights}</p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
                       <Button asChild className="bg-white text-black hover:bg-gray-100 font-medium rounded-xl">
                         <Link to="/property-evaluator">
@@ -360,7 +360,7 @@ const SellWithUs = () => {
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="max-w-3xl mx-auto">
               <motion.div variants={fadeInUp} className="text-center mb-10">
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">List Your Property</h2>
-                <p className="text-gray-500">Submit your details and our team will handle the rest</p>
+                <p className="text-gray-600">Submit your details and our team will handle the rest</p>
               </motion.div>
 
               <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08]">
@@ -368,17 +368,17 @@ const SellWithUs = () => {
                   <div className="space-y-5">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-gray-400 text-sm mb-1.5 block">Full Name</Label>
-                        <Input value={listName} onChange={(e) => setListName(e.target.value)} placeholder="Your name" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-400" />
+                        <Label className="text-gray-600 text-sm mb-1.5 block">Full Name</Label>
+                        <Input value={listName} onChange={(e) => setListName(e.target.value)} placeholder="Your name" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600" />
                       </div>
                       <div>
-                        <Label className="text-gray-400 text-sm mb-1.5 block">Phone Number *</Label>
-                        <Input value={listPhone} onChange={(e) => setListPhone(e.target.value)} placeholder="+971 50 123 4567" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-400" />
+                        <Label className="text-gray-600 text-sm mb-1.5 block">Phone Number *</Label>
+                        <Input value={listPhone} onChange={(e) => setListPhone(e.target.value)} placeholder="+971 50 123 4567" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600" />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-gray-400 text-sm mb-1.5 block">Property Type *</Label>
+                        <Label className="text-gray-600 text-sm mb-1.5 block">Property Type *</Label>
                         <Select value={listType} onValueChange={setListType}>
                           <SelectTrigger className="bg-zinc-900/50 border-white/10 text-white"><SelectValue placeholder="Select type" /></SelectTrigger>
                           <SelectContent className="bg-zinc-900 border-gray-700">
@@ -391,18 +391,18 @@ const SellWithUs = () => {
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-gray-400 text-sm mb-1.5 block">Community *</Label>
-                        <Input value={listCommunity} onChange={(e) => setListCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-400" />
+                        <Label className="text-gray-600 text-sm mb-1.5 block">Community *</Label>
+                        <Input value={listCommunity} onChange={(e) => setListCommunity(e.target.value)} placeholder="e.g., Dubai Marina" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600" />
                       </div>
                     </div>
                     <div>
-                      <Label className="text-gray-400 text-sm mb-1.5 block">Email (optional)</Label>
-                      <Input type="email" value={listEmail} onChange={(e) => setListEmail(e.target.value)} placeholder="your@email.com" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-400" />
+                      <Label className="text-gray-600 text-sm mb-1.5 block">Email (optional)</Label>
+                      <Input type="email" value={listEmail} onChange={(e) => setListEmail(e.target.value)} placeholder="your@email.com" className="bg-zinc-900/50 border-white/10 text-white placeholder:text-gray-600" />
                     </div>
                     <Button onClick={handleListingSubmit} className="w-full bg-white text-black hover:bg-gray-100 font-semibold py-6 rounded-xl">
                       Submit Listing Request <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
-                    <p className="text-xs text-gray-500 text-center">
+                    <p className="text-xs text-gray-600 text-center">
                       Want to add photos and full details? <Link to="/listing-portal" className="text-white/70 hover:text-white underline">Go to Full Listing Portal</Link>
                     </p>
                   </div>
@@ -412,7 +412,7 @@ const SellWithUs = () => {
                       <CheckCircle className="w-8 h-8 text-emerald-400" />
                     </div>
                     <h3 className="text-2xl font-bold text-white">Request Submitted</h3>
-                    <p className="text-gray-500 max-w-md mx-auto">
+                    <p className="text-gray-600 max-w-md mx-auto">
                       Our selling advisor will contact you within 24 hours to discuss your property and next steps.
                     </p>
                     <div className="flex gap-3 justify-center pt-2">
@@ -443,7 +443,7 @@ const SellWithUs = () => {
                       <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center shrink-0 group-hover:bg-white/10 transition-colors">
                         <CheckCircle className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
                       </div>
-                      <span className="text-gray-400 group-hover:text-white transition-colors">{item}</span>
+                      <span className="text-gray-600 group-hover:text-white transition-colors">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -460,7 +460,7 @@ const SellWithUs = () => {
                 <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] text-center">
                   <MessageCircle className="w-10 h-10 text-white/40 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-white mb-2">Speak to a Selling Advisor</h3>
-                  <p className="text-gray-500 text-sm mb-6">Get personalized guidance from our licensed team</p>
+                  <p className="text-gray-600 text-sm mb-6">Get personalized guidance from our licensed team</p>
                   <Button asChild className="bg-white text-black hover:bg-gray-100 font-medium rounded-xl w-full">
                     <a href={getWhatsAppUrl("Hello, I'd like to speak with a Selling Advisor.")} target="_blank" rel="noopener noreferrer">
                       <MessageCircle className="mr-2 h-4 w-4" /> WhatsApp Us
@@ -470,7 +470,7 @@ const SellWithUs = () => {
                 <motion.div variants={fadeInUp} className="p-8 rounded-2xl backdrop-blur-xl bg-white/[0.03] border border-white/[0.08] text-center">
                   <Sparkles className="w-10 h-10 text-white/40 mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-white mb-2">Get Started Now</h3>
-                  <p className="text-gray-500 text-sm mb-6">Use our AI tools to get an instant valuation</p>
+                  <p className="text-gray-600 text-sm mb-6">Use our AI tools to get an instant valuation</p>
                   <Button onClick={() => scrollTo(valuationRef)} className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium rounded-xl w-full">
                     <Sparkles className="mr-2 h-4 w-4" /> AI Valuation
                   </Button>

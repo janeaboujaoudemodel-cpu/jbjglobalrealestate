@@ -99,7 +99,7 @@ function PricePerSqftChart({ text }: { text: string }) {
           </BarChart>
         </ResponsiveContainer>
       </div>
-      <div className="flex items-center gap-3 text-xs text-gray-500 mb-3">
+      <div className="flex items-center gap-3 text-xs text-gray-600 mb-3">
         <span className="flex items-center gap-1"><div className="w-3 h-3 rounded" style={{ backgroundColor: '#C8A766' }} /> Historical</span>
         <span className="flex items-center gap-1"><div className="w-3 h-3 rounded border-2 border-dashed" style={{ borderColor: '#C8A766', backgroundColor: '#C8A76630' }} /> Projected</span>
       </div>
@@ -108,7 +108,7 @@ function PricePerSqftChart({ text }: { text: string }) {
           {bullets.map((b, i) => <p key={i} className="text-gray-600 text-xs leading-relaxed">{b}</p>)}
         </div>
       )}
-      <p className="text-gray-500 text-[10px] mt-3 italic">* Developer-level price/sqft varies by area and project type. For area-specific trends, visit individual area pages.</p>
+      <p className="text-gray-600 text-[10px] mt-3 italic">* Developer-level price/sqft varies by area and project type. For area-specific trends, visit individual area pages.</p>
     </div>
   );
 }
@@ -277,7 +277,7 @@ function PortfolioStrengthCard({ text }: { text: string }) {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-black font-semibold text-sm truncate">{dev.name}</p>
-              {dev.projects && <p className="text-gray-500 text-xs mt-0.5 truncate">{dev.projects}</p>}
+              {dev.projects && <p className="text-gray-600 text-xs mt-0.5 truncate">{dev.projects}</p>}
             </div>
             <ArrowUpRight className="w-3.5 h-3.5 text-gold/50 flex-shrink-0 mt-1" />
           </div>
@@ -322,7 +322,7 @@ function PortfolioDonut({ overview }: { overview: string }) {
       </div>
       <div className="mt-2 space-y-1">
         {data.map(d => (
-          <div key={d.name} className="flex items-center gap-1.5 text-[10px] text-gray-500 justify-center">
+          <div key={d.name} className="flex items-center gap-1.5 text-[10px] text-gray-600 justify-center">
             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: d.fill }} />
             {d.name}
           </div>
@@ -486,7 +486,7 @@ export const DeveloperAIAnalyzer = ({
           )}
         </div>
 
-        <p className="text-gray-500 text-sm mb-6">
+        <p className="text-gray-600 text-sm mb-6">
           Comprehensive AI analysis for <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} className="text-sm" />
         </p>
 
@@ -500,7 +500,7 @@ export const DeveloperAIAnalyzer = ({
           </div>
         ) : !analysis && !isAnalyzing ? (
           <div className="text-center py-8 space-y-4">
-            <p className="text-gray-500 text-sm">AI analysis ready for <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} /></p>
+            <p className="text-gray-600 text-sm">AI analysis ready for <DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} /></p>
             <Button onClick={handleRetry} className="bg-gradient-to-r from-gold to-gold-dark text-black font-bold hover:brightness-110">
               <Brain className="w-4 h-4 mr-2" />
               Analyze {developerName}
@@ -510,7 +510,7 @@ export const DeveloperAIAnalyzer = ({
           <div className="py-8 space-y-6 px-4">
             {hasTimedOut ? (
               <div className="text-center space-y-4">
-                <p className="text-gray-500 text-sm">Analysis is taking longer than expected.</p>
+                <p className="text-gray-600 text-sm">Analysis is taking longer than expected.</p>
                 <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry Analysis
@@ -538,7 +538,7 @@ export const DeveloperAIAnalyzer = ({
                   <div className="bg-white/60 rounded-2xl p-6 h-56" />
                   <div className="bg-white/60 rounded-2xl p-6 h-56" />
                 </div>
-                <p className="text-gray-500 text-sm text-center">Loading intelligence for {developerName}...</p>
+                <p className="text-gray-600 text-sm text-center">Loading intelligence for {developerName}...</p>
               </div>
             )}
           </div>
@@ -555,7 +555,7 @@ export const DeveloperAIAnalyzer = ({
                     </div>
                     <div>
                       <h3 className="font-bold text-gold text-lg">Developer Overview</h3>
-                      <span className="text-gray-500 text-xs"><DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} className="text-xs text-gold/70" /> — Portfolio Profile</span>
+                      <span className="text-gray-600 text-xs"><DeveloperLink name={developerName} slug={developerSlug} showPrefix={false} className="text-xs text-gold/70" /> — Portfolio Profile</span>
                     </div>
                   </div>
 
@@ -567,7 +567,7 @@ export const DeveloperAIAnalyzer = ({
                           <CalendarDays className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-black">{foundedYear}</div>
-                            <div className="text-[10px] text-gray-500">Founded</div>
+                            <div className="text-[10px] text-gray-600">Founded</div>
                           </div>
                         </div>
                       )}
@@ -576,7 +576,7 @@ export const DeveloperAIAnalyzer = ({
                           <MapPin className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-black truncate">{headquarters.split(',')[0]}</div>
-                            <div className="text-[10px] text-gray-500">HQ</div>
+                            <div className="text-[10px] text-gray-600">HQ</div>
                           </div>
                         </div>
                       )}
@@ -585,7 +585,7 @@ export const DeveloperAIAnalyzer = ({
                           <Landmark className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-black">{completedProjects.toLocaleString()}+</div>
-                            <div className="text-[10px] text-gray-500">Units</div>
+                            <div className="text-[10px] text-gray-600">Units</div>
                           </div>
                         </div>
                       )}
@@ -594,7 +594,7 @@ export const DeveloperAIAnalyzer = ({
                           <Home className="w-4 h-4 text-gold flex-shrink-0" />
                           <div>
                             <div className="text-xs font-bold text-black">{activeProjects}</div>
-                            <div className="text-[10px] text-gray-500">Active</div>
+                            <div className="text-[10px] text-gray-600">Active</div>
                           </div>
                         </div>
                       )}
@@ -636,7 +636,7 @@ export const DeveloperAIAnalyzer = ({
                   </div>
                   <div className="text-gold/70 text-sm font-medium mb-2 relative z-10">Investment Rating</div>
                   {sections?.rating && (
-                    <p className="text-gray-500 text-xs leading-relaxed max-w-[200px] relative z-10">
+                    <p className="text-gray-600 text-xs leading-relaxed max-w-[200px] relative z-10">
                       {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim().slice(0, 120)}
                     </p>
                   )}
@@ -686,7 +686,7 @@ export const DeveloperAIAnalyzer = ({
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-gray-500 text-xs pt-2 flex-wrap">
+            <div className="flex items-center gap-2 text-gray-600 text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
               <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.

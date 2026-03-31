@@ -16,7 +16,7 @@ const ChatServiceSelector = ({ userFirstName, isExistingUser, onSelectService }:
         <h4 className="text-white text-lg font-semibold mb-1">
           {isExistingUser ? <T>{`Welcome back, ${userFirstName}!`}</T> : <T>{`Hi ${userFirstName}!`}</T>}
         </h4>
-        <p className="text-gray-500 text-sm">
+        <p className="text-gray-600 text-sm">
           {isExistingUser ? <T>Great to see you again! How can we help?</T> : <T>Which service are you looking for?</T>}
         </p>
       </div>
@@ -42,7 +42,7 @@ const ChatServiceSelector = ({ userFirstName, isExistingUser, onSelectService }:
         </a>
       )}
 
-      <p className="text-gray-500 text-xs text-center mb-3">
+      <p className="text-gray-600 text-xs text-center mb-3">
         {isExistingUser ? <T>Or chat with our team:</T> : <T>Select a topic to get started:</T>}
       </p>
 
@@ -59,7 +59,7 @@ const ChatServiceSelector = ({ userFirstName, isExistingUser, onSelectService }:
                 <Icon className="w-4 h-4 text-gold" />
               </div>
               <h5 className="text-white text-xs font-medium mb-0.5"><T>{service.label}</T></h5>
-              <p className="text-gray-500 text-[10px] leading-tight"><T>{service.description}</T></p>
+              <p className="text-gray-600 text-[10px] leading-tight"><T>{service.description}</T></p>
             </button>
           );
         })}

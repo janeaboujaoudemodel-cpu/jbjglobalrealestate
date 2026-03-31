@@ -247,7 +247,7 @@ const MyTickets = () => {
   const renderTicketDetail = () => {
     if (!selectedTicket) {
       return (
-        <div className="h-[450px] flex items-center justify-center text-gray-500">
+        <div className="h-[450px] flex items-center justify-center text-gray-600">
           <div className="text-center">
             <MessageSquare className="w-10 h-10 mx-auto mb-3 opacity-40" />
             <p>Select a ticket to view details</p>
@@ -281,7 +281,7 @@ const MyTickets = () => {
             )}
           </div>
           <h3 className="font-semibold text-black mt-2 truncate">{selectedTicket.subject}</h3>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-gray-600 mt-1">
             {format(new Date(selectedTicket.created_at), "MMM d, yyyy h:mm a")} · {selectedTicket.service_category}
           </p>
         </div>
@@ -309,14 +309,14 @@ const MyTickets = () => {
                   {msg.sender_type === "staff" ? "📩 Staff Reply" : "You"}
                 </p>
                 <p className="text-gray-700 text-sm whitespace-pre-wrap">{msg.message}</p>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-600 mt-1">
                   {format(new Date(msg.created_at), "MMM d, h:mm a")}
                 </p>
               </div>
             ))}
 
             {selectedTicket.messages.length === 0 && (
-              <p className="text-center text-gray-500 text-sm py-4">
+              <p className="text-center text-gray-600 text-sm py-4">
                 Waiting for staff response...
               </p>
             )}
@@ -343,7 +343,7 @@ const MyTickets = () => {
             </Button>
           )}
 
-          <p className="text-[10px] text-gray-500 mb-1 flex items-center gap-1">
+          <p className="text-[10px] text-gray-600 mb-1 flex items-center gap-1">
             <Mic className="w-3 h-3" /> Speak in any language — auto-translated
           </p>
           <div className="flex gap-2">
@@ -353,7 +353,7 @@ const MyTickets = () => {
                 onChange={(e) => setReplyMessage(e.target.value)}
                 placeholder="Type your reply..."
                 rows={2}
-                className="w-full min-h-[48px] px-3 py-2 pr-10 rounded-lg bg-white border border-gold/30 text-black text-sm placeholder:text-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50"
+                className="w-full min-h-[48px] px-3 py-2 pr-10 rounded-lg bg-white border border-gold/30 text-black text-sm placeholder:text-gray-600 resize-none focus:outline-none focus:ring-2 focus:ring-gold/50"
               />
               <div className="absolute top-2 right-2">
                 <VoiceInputButton
@@ -417,7 +417,7 @@ const MyTickets = () => {
                 <div>
                   <Label className="text-gray-700">Email Address</Label>
                   <div className="relative mt-1">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
                     <Input
                       type="email"
                       value={trackEmail}
@@ -431,7 +431,7 @@ const MyTickets = () => {
                 <div>
                   <Label className="text-gray-700">Ticket Number</Label>
                   <div className="relative mt-1">
-                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                    <Hash className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600" />
                     <Input
                       value={trackTicketNumber}
                       onChange={(e) => setTrackTicketNumber(e.target.value.toUpperCase())}
@@ -535,7 +535,7 @@ const MyTickets = () => {
                                   )}
                                 </div>
                                 <p className="text-black font-medium truncate text-sm">{ticket.subject}</p>
-                                <p className="text-gray-500 text-xs mt-1">
+                                <p className="text-gray-600 text-xs mt-1">
                                   {format(new Date(ticket.created_at), "MMM d, yyyy")}
                                 </p>
                               </button>
@@ -544,7 +544,7 @@ const MyTickets = () => {
                         </div>
                       </ScrollArea>
                     ) : (
-                      <div className="p-8 text-center text-gray-500">
+                      <div className="p-8 text-center text-gray-600">
                         <Ticket className="w-10 h-10 mx-auto mb-3 opacity-40" />
                         <p>No tickets found</p>
                       </div>
@@ -592,14 +592,14 @@ const MyTickets = () => {
                               </span>
                             </div>
                             <p className="text-sm text-gray-600 line-clamp-2">{msg.message}</p>
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-gray-600 mt-1">
                               {format(new Date(msg.created_at), "MMM d, yyyy h:mm a")}
                             </p>
                           </button>
                         ))}
                       </div>
                     ) : (
-                      <div className="p-12 text-center text-gray-500">
+                      <div className="p-12 text-center text-gray-600">
                         <Inbox className="w-10 h-10 mx-auto mb-3 opacity-40" />
                         <p>No JBJ messages yet</p>
                         <p className="text-xs mt-1">Only direct JBJ replies appear here</p>

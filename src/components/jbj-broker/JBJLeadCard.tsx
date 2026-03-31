@@ -83,20 +83,20 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
                   {lead.status}
                 </Badge>
               </div>
-              <p className="text-sm text-gray-500 truncate">
+              <p className="text-sm text-gray-600 truncate">
                 {lead.email || lead.phone || "No contact info"}
               </p>
             </div>
 
             {lead.property_interest && (
-              <div className="hidden lg:flex items-center gap-1 text-sm text-gray-500">
+              <div className="hidden lg:flex items-center gap-1 text-sm text-gray-600">
                 <Building className="h-4 w-4" />
                 <span className="truncate max-w-[150px]">{lead.property_interest}</span>
               </div>
             )}
 
             {lead.last_contact && (
-              <div className="hidden md:flex items-center gap-1 text-sm text-gray-400">
+              <div className="hidden md:flex items-center gap-1 text-sm text-gray-600">
                 <Clock className="h-4 w-4" />
                 <span>{new Date(lead.last_contact).toLocaleDateString()}</span>
               </div>
@@ -149,7 +149,7 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
             </Avatar>
             <div>
               <h3 className="font-medium text-gray-900">{lead.name}</h3>
-              <p className="text-sm text-gray-500 truncate max-w-[150px]">
+              <p className="text-sm text-gray-600 truncate max-w-[150px]">
                 {lead.email || lead.phone || "No contact"}
               </p>
             </div>
@@ -181,17 +181,17 @@ export function JBJLeadCard({ lead, viewMode, onAction }: JBJLeadCardProps) {
 
         {lead.property_interest && (
           <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-            <Building className="h-4 w-4 text-gray-400" />
+            <Building className="h-4 w-4 text-gray-600" />
             <span className="truncate">{lead.property_interest}</span>
           </div>
         )}
 
         {lead.notes && (
-          <p className="text-sm text-gray-500 mb-3 line-clamp-2">{lead.notes}</p>
+          <p className="text-sm text-gray-600 mb-3 line-clamp-2">{lead.notes}</p>
         )}
 
         {lead.last_contact && (
-          <div className="flex items-center gap-1 text-xs text-gray-400 mb-4">
+          <div className="flex items-center gap-1 text-xs text-gray-600 mb-4">
             <Clock className="h-3 w-3" />
             <span>Last contact: {new Date(lead.last_contact).toLocaleDateString()}</span>
           </div>

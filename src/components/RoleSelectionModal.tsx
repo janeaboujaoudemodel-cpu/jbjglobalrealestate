@@ -91,7 +91,7 @@ const ROLES: RoleOption[] = [
     title: 'Just Browsing',
     subtitle: 'Explore our platform first',
     icon: Eye,
-    color: 'text-gray-500',
+    color: 'text-gray-600',
     bgGradient: 'from-zinc-400/20 to-zinc-500/10',
     benefits: [
       'Browse Properties',
@@ -346,7 +346,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                         </div>
 
                         <h3 className="font-semibold text-black text-base mb-1">{role.title}</h3>
-                        <p className="text-gray-500 text-xs mb-3">{role.subtitle}</p>
+                        <p className="text-gray-600 text-xs mb-3">{role.subtitle}</p>
 
                         <div className="space-y-1">
                           {role.benefits.slice(0, 3).map((benefit, idx) => (
@@ -356,7 +356,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                             </div>
                           ))}
                           {role.benefits.length > 3 && (
-                            <p className="text-xs text-gray-400">+{role.benefits.length - 3} more</p>
+                            <p className="text-xs text-gray-600">+{role.benefits.length - 3} more</p>
                           )}
                         </div>
                       </motion.button>
@@ -543,7 +543,7 @@ const RoleSelectionModal = ({ onRoleSelected }: RoleSelectionModalProps) => {
                 </div>
 
                 {/* Change Role Hint */}
-                <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mb-6">
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-600 mb-6">
                   <Settings className="w-4 h-4" />
                   <span>Made a mistake? Change your role anytime from the <strong>Menu → Settings</strong></span>
                 </div>

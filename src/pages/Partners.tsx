@@ -114,7 +114,7 @@ const Partners = () => {
                 Build with Us. Scale with Us. Lead with Us.
               </motion.p>
 
-              <motion.p variants={fadeIn} className="text-base text-gray-500 mb-10 leading-relaxed max-w-3xl mx-auto">
+              <motion.p variants={fadeIn} className="text-base text-gray-600 mb-10 leading-relaxed max-w-3xl mx-auto">
                 We collaborate with developers, investors, private offices, brokers, legal firms, hospitality brands, and global institutions to create long-term value and high-performance real estate ecosystems.
               </motion.p>
 
@@ -373,7 +373,7 @@ const Partners = () => {
               <motion.h2 variants={fadeIn} className="text-3xl md:text-4xl font-bold text-center text-black mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
                 Partner <span className="text-gold">Portal</span>
               </motion.h2>
-              <motion.p variants={fadeIn} className="text-center text-gray-500 mb-10">
+              <motion.p variants={fadeIn} className="text-center text-gray-600 mb-10">
                 Apply for partnership, submit your proposal, and track your application status in real-time.
               </motion.p>
 

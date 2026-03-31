@@ -28,7 +28,7 @@ export default function ReferralContract({
       <div className="text-center border-b-2 border-gold pb-6 mb-8">
         <img src={jbjFullLogoLight} alt="JBJ Global Real Estate" className="h-28 mx-auto mb-4" />
         <p className="text-sm text-gray-600 mt-1">Real Estate Brokerage</p>
-        <p className="text-xs text-gray-500 mt-2">Dubai, United Arab Emirates</p>
+        <p className="text-xs text-gray-600 mt-2">Dubai, United Arab Emirates</p>
       </div>
 
       {/* Title */}
@@ -162,7 +162,7 @@ export default function ReferralContract({
         <div>
           <p className="font-semibold text-sm mb-4">For JBJ Global Real Estate:</p>
           <div className="h-20 border-b border-gray-400 mb-2 flex items-end justify-center pb-2">
-            <span className="text-gray-400 italic text-sm">Authorized Signatory</span>
+            <span className="text-gray-600 italic text-sm">Authorized Signatory</span>
           </div>
           <p className="text-sm">Name: ________________________</p>
           <p className="text-sm mt-2">Date: {format(contractDate, "dd/MM/yyyy")}</p>
@@ -173,7 +173,7 @@ export default function ReferralContract({
             {signatureDataUrl ? (
               <img src={signatureDataUrl} alt="Signature" className="h-16 max-w-full object-contain" />
             ) : (
-              <span className="text-gray-400 italic text-sm">Sign here</span>
+              <span className="text-gray-600 italic text-sm">Sign here</span>
             )}
           </div>
           <p className="text-sm">Name: {partnerName}</p>
@@ -182,7 +182,7 @@ export default function ReferralContract({
       </section>
 
       {/* Footer */}
-      <div className="mt-12 pt-4 border-t border-gray-200 text-center text-xs text-gray-500">
+      <div className="mt-12 pt-4 border-t border-gray-200 text-center text-xs text-gray-600">
         <p>JBJ Global Real Estate L.L.C. | Dubai, United Arab Emirates</p>
         <p>www.JBJ.ae | Contact@JBJ.ae</p>
         <p className="mt-2">This document is electronically generated and valid without physical stamp.</p>

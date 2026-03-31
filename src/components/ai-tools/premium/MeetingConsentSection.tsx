@@ -213,7 +213,7 @@ const MeetingConsentSection = ({
           </div>
           <div>
             <span className="font-semibold text-black text-sm">Client Recording Authorization</span>
-            <p className="text-gray-500 text-[11px]">Required before recording — for quality & review purposes</p>
+            <p className="text-gray-600 text-[11px]">Required before recording — for quality & review purposes</p>
           </div>
         </div>
 
@@ -221,7 +221,7 @@ const MeetingConsentSection = ({
         <div className="bg-white border border-gold/15 rounded-lg p-3.5 text-gray-600 text-xs leading-relaxed">
           <p className="font-semibold text-black text-xs mb-1.5">Recording Consent Agreement</p>
           {CONSENT_TEXT}
-          <p className="text-gray-500 text-[10px] mt-2">
+          <p className="text-gray-600 text-[10px] mt-2">
             Meeting: {meetingTitle || "Untitled"} · Type: {sessionType.replace(/_/g, " ")} · Participants: {participants || "N/A"}
           </p>
         </div>
@@ -275,7 +275,7 @@ const MeetingConsentSection = ({
           ) : (
             <label className="flex items-center gap-2 p-3 border border-dashed border-gold/30 rounded-lg cursor-pointer hover:bg-gold/5 transition-colors">
               <Upload className="h-4 w-4 text-gold" />
-              <span className="text-gray-500 text-xs">Upload Emirates ID or Passport photo</span>
+              <span className="text-gray-600 text-xs">Upload Emirates ID or Passport photo</span>
               <input type="file" accept="image/*" className="hidden" onChange={handleIdUpload} />
             </label>
           )}
@@ -302,12 +302,12 @@ const MeetingConsentSection = ({
             />
             {!hasSigned && (
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="text-gray-400 text-sm">Sign here</span>
+                <span className="text-gray-600 text-sm">Sign here</span>
               </div>
             )}
           </div>
           <div className="flex justify-end">
-            <Button variant="ghost" size="sm" onClick={clearSignature} className="text-xs text-gray-500 hover:text-red-600">
+            <Button variant="ghost" size="sm" onClick={clearSignature} className="text-xs text-gray-600 hover:text-red-600">
               Clear Signature
             </Button>
           </div>

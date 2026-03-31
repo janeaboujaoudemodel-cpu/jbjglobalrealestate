@@ -70,7 +70,7 @@ const Disclaimers = () => {
             </div>
             <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Disclaimer & Professional Scope</h1>
             <p className="text-lg md:text-xl text-[#C8A766] font-medium mb-6" style={{ fontFamily: "Playfair Display, Georgia, serif" }}>Licensed Real Estate Brokerage Transparency</p>
-            <p className="text-gray-500 leading-relaxed max-w-3xl mx-auto text-[15px] md:text-base">JBJ Global Real Estate operates as a licensed real estate brokerage within the United Arab Emirates. This page outlines the professional scope of services, regulatory clarifications, and user responsibilities associated with our platform and advisory services.</p>
+            <p className="text-gray-600 leading-relaxed max-w-3xl mx-auto text-[15px] md:text-base">JBJ Global Real Estate operates as a licensed real estate brokerage within the United Arab Emirates. This page outlines the professional scope of services, regulatory clarifications, and user responsibilities associated with our platform and advisory services.</p>
           </div>
         </section>
 
@@ -89,7 +89,7 @@ const Disclaimers = () => {
                     className={`w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all ${
                       activeSection === item.id
                         ? "text-[#C8A766] font-semibold border-l-2 border-[#C8A766] bg-[#C8A766]/5"
-                        : "text-gray-500 hover:text-gray-400 border-l-2 border-transparent"
+                        : "text-gray-600 hover:text-gray-600 border-l-2 border-transparent"
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5 flex-shrink-0" />
@@ -110,7 +110,7 @@ const Disclaimers = () => {
                   className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex-shrink-0 ${
                     activeSection === item.id
                       ? "bg-[#C8A766]/20 text-[#C8A766] border border-[#C8A766]/40"
-                      : "text-gray-500 hover:text-gray-400"
+                      : "text-gray-600 hover:text-gray-600"
                   }`}
                 >
                   {item.label}
@@ -255,8 +255,8 @@ const Disclaimers = () => {
             {/* Footer */}
             <GoldDivider />
             <div className="text-center pt-4">
-              <p className="text-xs text-gray-500 max-w-2xl mx-auto leading-relaxed mb-4">This Disclaimer may be updated periodically to reflect regulatory developments and operational changes.</p>
-              <p className="text-gray-500 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
+              <p className="text-xs text-gray-600 max-w-2xl mx-auto leading-relaxed mb-4">This Disclaimer may be updated periodically to reflect regulatory developments and operational changes.</p>
+              <p className="text-gray-600 text-sm">&copy; {new Date().getFullYear()} JBJ Global Real Estate. All Rights Reserved.</p>
               <div className="flex justify-center gap-4 mt-3 text-sm">
                 <Link to="/privacy" className="text-[#C8A766] hover:underline">Privacy Policy</Link>
                 <span className="text-gray-600">|</span>

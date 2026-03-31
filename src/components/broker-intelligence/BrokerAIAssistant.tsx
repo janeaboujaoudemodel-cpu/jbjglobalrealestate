@@ -148,7 +148,7 @@ export function BrokerAIAssistant() {
               placeholder="Add context about the client's inquiry (optional)..."
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 min-h-[80px]"
+              className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 min-h-[80px]"
             />
           </TabsContent>
 
@@ -157,7 +157,7 @@ export function BrokerAIAssistant() {
               placeholder="What objection has the client raised? e.g., 'The prices seem too high'"
               value={clientObjection}
               onChange={(e) => setClientObjection(e.target.value)}
-              className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 min-h-[80px]"
+              className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 min-h-[80px]"
             />
           </TabsContent>
 
@@ -172,7 +172,7 @@ export function BrokerAIAssistant() {
               placeholder="Describe the meeting context, e.g., 'First meeting with investor looking for rental yield'"
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 min-h-[80px]"
+              className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 min-h-[80px]"
             />
           </TabsContent>
         </Tabs>

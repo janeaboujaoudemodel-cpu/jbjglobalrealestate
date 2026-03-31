@@ -178,7 +178,7 @@ export function WhatsAppIntegrationPanel({
       case "pending":
         return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">Pending</Badge>;
       default:
-        return <Badge className="bg-gray-500/20 text-gray-400 border-gray-500/30">Draft</Badge>;
+        return <Badge className="bg-gray-500/20 text-gray-600 border-gray-500/30">Draft</Badge>;
     }
   };
 
@@ -193,7 +193,7 @@ export function WhatsAppIntegrationPanel({
               </div>
               <div>
                 <CardTitle className="text-white">WhatsApp Integration</CardTitle>
-                <p className="text-gray-400 text-sm mt-1">
+                <p className="text-gray-600 text-sm mt-1">
                   Send templated or custom messages
                 </p>
               </div>
@@ -216,7 +216,7 @@ export function WhatsAppIntegrationPanel({
 
           {/* Templates Overview */}
           <div className="space-y-2">
-            <h4 className="text-sm font-medium text-gray-400">Available Templates</h4>
+            <h4 className="text-sm font-medium text-gray-600">Available Templates</h4>
             <div className="grid grid-cols-2 gap-2">
               {templates.slice(0, 4).map((template) => (
                 <div
@@ -229,7 +229,7 @@ export function WhatsAppIntegrationPanel({
                     </p>
                     {getStatusBadge(template.approval_status)}
                   </div>
-                  <p className="text-gray-400 text-xs truncate">{template.content}</p>
+                  <p className="text-gray-600 text-xs truncate">{template.content}</p>
                 </div>
               ))}
             </div>
@@ -238,7 +238,7 @@ export function WhatsAppIntegrationPanel({
           {/* Recent Messages */}
           {recentMessages.length > 0 && (
             <div className="space-y-2">
-              <h4 className="text-sm font-medium text-gray-400">Recent Messages</h4>
+              <h4 className="text-sm font-medium text-gray-600">Recent Messages</h4>
               <div className="space-y-2 max-h-32 overflow-y-auto">
                 {recentMessages.map((msg) => (
                   <div
@@ -253,8 +253,8 @@ export function WhatsAppIntegrationPanel({
                       {msg.content.substring(0, 80)}...
                     </p>
                     <div className="flex items-center gap-2 mt-1">
-                      <Clock className="h-3 w-3 text-gray-500" />
-                      <span className="text-xs text-gray-500">
+                      <Clock className="h-3 w-3 text-gray-600" />
+                      <span className="text-xs text-gray-600">
                         {new Date(msg.created_at).toLocaleTimeString()}
                       </span>
                       {msg.delivery_status === "delivered" && (
@@ -271,7 +271,7 @@ export function WhatsAppIntegrationPanel({
           <div className="p-3 rounded-lg bg-zinc-800/50 border border-gray-700">
             <div className="flex items-center gap-2">
               <AlertCircle className="h-4 w-4 text-amber-400" />
-              <span className="text-sm text-gray-400">
+              <span className="text-sm text-gray-600">
                 Connect WhatsApp Business API for live messaging
               </span>
             </div>
@@ -291,13 +291,13 @@ export function WhatsAppIntegrationPanel({
           
           <div className="space-y-4">
             <div className="p-3 rounded-lg bg-zinc-800 border border-gray-700">
-              <p className="text-sm text-gray-400">Sending to:</p>
+              <p className="text-sm text-gray-600">Sending to:</p>
               <p className="text-white font-medium">{leadName || "Lead"}</p>
               <p className="text-emerald-400 text-sm">{leadPhone}</p>
             </div>
 
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">Select Template (Optional)</label>
+              <label className="text-sm text-gray-600 mb-2 block">Select Template (Optional)</label>
               <Select value={selectedTemplate} onValueChange={handleTemplateSelect}>
                 <SelectTrigger className="bg-zinc-800 border-gray-700 text-white">
                   <SelectValue placeholder="Choose a template..." />
@@ -313,14 +313,14 @@ export function WhatsAppIntegrationPanel({
             </div>
 
             <div>
-              <label className="text-sm text-gray-400 mb-2 block">Message</label>
+              <label className="text-sm text-gray-600 mb-2 block">Message</label>
               <Textarea
                 value={customMessage}
                 onChange={(e) => setCustomMessage(e.target.value)}
                 placeholder="Type your message..."
                 className="bg-zinc-800 border-gray-700 text-white min-h-[120px]"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-600 mt-1">
                 Messages are filtered for restricted content before sending
               </p>
             </div>
@@ -330,7 +330,7 @@ export function WhatsAppIntegrationPanel({
             <Button
               variant="outline"
               onClick={() => setSendDialogOpen(false)}
-              className="border-gray-700 text-gray-300"
+              className="border-gray-700 text-gray-600"
             >
               Cancel
             </Button>

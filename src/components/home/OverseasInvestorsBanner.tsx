@@ -28,7 +28,7 @@ const OverseasInvestorsBanner = () => {
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-black mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
             Invest in Dubai From Anywhere in the World
           </h2>
-          <p className="text-gray-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="text-gray-600 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
             Whether you're in Europe, Asia, the Americas, or CIS markets — Dubai offers the world's most investor-friendly environment. 
             Zero income tax, world-class infrastructure, and a 10-year Golden Visa make it the ideal destination for wealth preservation and growth.
           </p>
@@ -46,14 +46,14 @@ const OverseasInvestorsBanner = () => {
                 <item.icon className="w-5 h-5 md:w-6 md:h-6 text-gray-600" />
               </div>
               <h4 className="text-black text-xs md:text-sm font-bold mb-1">{item.label}</h4>
-              <p className="text-gray-400 text-[10px] md:text-xs leading-tight">{item.desc}</p>
+              <p className="text-gray-600 text-[10px] md:text-xs leading-tight">{item.desc}</p>
             </div>
           ))}
         </div>
 
         {/* Reassurance text */}
         <div className="max-w-3xl mx-auto text-center mb-8 animate-fade-in-up">
-          <p className="text-gray-400 text-xs md:text-sm italic leading-relaxed">
+          <p className="text-gray-600 text-xs md:text-sm italic leading-relaxed">
             "From your first inquiry to key collection — our multilingual team guides international investors through every step. 
             Property selection, legal structuring, visa processing, and ongoing asset management. You don't need to be in Dubai. We are."
           </p>

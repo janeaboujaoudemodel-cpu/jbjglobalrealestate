@@ -205,7 +205,7 @@ export const AreaMapSection = ({ areaName, areaLat, areaLng }: AreaMapSectionPro
                         </Link>
                       </div>
                       {project.developer_name && (
-                        <p className="text-[11px] text-gray-500">{t('map.by')} {project.developer_name}</p>
+                        <p className="text-[11px] text-gray-600">{t('map.by')} {project.developer_name}</p>
                       )}
                       {project.price_from && (
                         <p className="text-xs font-semibold text-amber-700 mt-1">

@@ -146,7 +146,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <Building2 className="w-10 h-10 text-gray-300" />
+                <Building2 className="w-10 h-10 text-gray-600" />
               </div>
             )}
 
@@ -187,8 +187,8 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
           <div className="p-4 flex flex-col flex-grow min-h-[140px]">
             <div className="min-h-[20px] mb-2">
               {(project.area_name || project.location) ? (
-                <div className="flex items-center gap-1.5 text-gray-500 text-xs">
-                  <MapPin className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+                <div className="flex items-center gap-1.5 text-gray-600 text-xs">
+                  <MapPin className="w-3.5 h-3.5 text-gray-600 flex-shrink-0" />
                   <span className="truncate">{project.area_name || project.location}</span>
                 </div>
               ) : (
@@ -201,7 +201,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             </h3>
             {project.developer?.slug ? (
               <span className="text-xs mb-1 block">
-                <span className="text-gray-500 font-medium">by </span>
+                <span className="text-gray-600 font-medium">by </span>
                 <Link
                   to={`/developer/${project.developer.slug}`}
                   onClick={(e) => e.stopPropagation()}
@@ -211,11 +211,11 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
                 </Link>
               </span>
             ) : project.developer_name ? (
-              <span className="text-xs font-medium mb-1 block"><span className="text-gray-500">by </span><span className="text-black">{project.developer_name}</span></span>
+              <span className="text-xs font-medium mb-1 block"><span className="text-gray-600">by </span><span className="text-black">{project.developer_name}</span></span>
             ) : null}
 
             {(project as any).description && (
-              <p className="text-gray-400 text-xs line-clamp-2 mb-2">{(project as any).description}</p>
+              <p className="text-gray-600 text-xs line-clamp-2 mb-2">{(project as any).description}</p>
             )}
 
             <hr className="border-gray-200 my-2" />
@@ -306,8 +306,8 @@ const FeaturedListings = () => {
               ))}
           {!isLoading && (!projects || projects.length === 0) && (
             <div className="col-span-full text-center py-12">
-              <Building2 className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500 text-sm">Featured projects coming soon</p>
+              <Building2 className="w-10 h-10 text-gray-600 mx-auto mb-3" />
+              <p className="text-gray-600 text-sm">Featured projects coming soon</p>
             </div>
           )}
         </div>

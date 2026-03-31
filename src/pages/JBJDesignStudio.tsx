@@ -580,7 +580,7 @@ const JBJDesignStudio: React.FC = () => {
                                 value={websiteUploadPrompt}
                                 onChange={(e) => setWebsiteUploadPrompt(e.target.value)}
                                 placeholder="e.g., Replace the book in the 'Download Free Market Report' section on the homepage with this new design. Make it 3D style."
-                                className="w-full h-32 px-3 py-2 bg-zinc-800 border border-gray-700 rounded-lg text-white placeholder:text-gray-400 resize-none"
+                                className="w-full h-32 px-3 py-2 bg-zinc-800 border border-gray-700 rounded-lg text-white placeholder:text-gray-600 resize-none"
                               />
                               <Button
                                 onClick={handleUploadToWebsite}

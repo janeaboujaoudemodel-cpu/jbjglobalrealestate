@@ -233,7 +233,7 @@ export default function ReportsManagementPanel() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-white">Reports Management</h2>
-          <p className="text-gray-400 text-sm">
+          <p className="text-gray-600 text-sm">
             View and manage all employee reports with advanced filtering
           </p>
         </div>
@@ -275,7 +275,7 @@ export default function ReportsManagementPanel() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Date From */}
             <div className="space-y-2">
-              <Label className="text-gray-300">From Date</Label>
+              <Label className="text-gray-600">From Date</Label>
               <Input
                 type="date"
                 value={filters.dateFrom}
@@ -286,7 +286,7 @@ export default function ReportsManagementPanel() {
 
             {/* Date To */}
             <div className="space-y-2">
-              <Label className="text-gray-300">To Date</Label>
+              <Label className="text-gray-600">To Date</Label>
               <Input
                 type="date"
                 value={filters.dateTo}
@@ -297,7 +297,7 @@ export default function ReportsManagementPanel() {
 
             {/* Department */}
             <div className="space-y-2">
-              <Label className="text-gray-300">Department</Label>
+              <Label className="text-gray-600">Department</Label>
               <Select
                 value={filters.department}
                 onValueChange={(v) => setFilters(f => ({ ...f, department: v }))}
@@ -315,9 +315,9 @@ export default function ReportsManagementPanel() {
 
             {/* Employee Search */}
             <div className="space-y-2">
-              <Label className="text-gray-300">Employee Name</Label>
+              <Label className="text-gray-600">Employee Name</Label>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
                 <Input
                   placeholder="Search by name..."
                   value={filters.employeeName}
@@ -329,7 +329,7 @@ export default function ReportsManagementPanel() {
 
             {/* Month Filter */}
             <div className="space-y-2">
-              <Label className="text-gray-300">Month</Label>
+              <Label className="text-gray-600">Month</Label>
               <Select
                 value={filters.month}
                 onValueChange={(v) => setFilters(f => ({ ...f, month: v }))}
@@ -350,7 +350,7 @@ export default function ReportsManagementPanel() {
 
             {/* Year Filter */}
             <div className="space-y-2">
-              <Label className="text-gray-300">Year</Label>
+              <Label className="text-gray-600">Year</Label>
               <Select
                 value={filters.year}
                 onValueChange={(v) => setFilters(f => ({ ...f, year: v }))}
@@ -369,7 +369,7 @@ export default function ReportsManagementPanel() {
 
           {/* Results Count */}
           <div className="mt-4 flex items-center justify-between">
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-600 text-sm">
               Showing <span className="text-gold font-semibold">{filteredReports.length}</span> of {reports.length} reports
             </p>
             <Button
@@ -383,7 +383,7 @@ export default function ReportsManagementPanel() {
                 month: '',
                 year: new Date().getFullYear().toString(),
               })}
-              className="text-gray-400 hover:text-white"
+              className="text-gray-600 hover:text-white"
             >
               Clear Filters
             </Button>
@@ -398,12 +398,12 @@ export default function ReportsManagementPanel() {
             <Table>
               <TableHeader>
                 <TableRow className="border-gold/20 hover:bg-transparent">
-                  <TableHead className="text-gray-400">Date & Time</TableHead>
-                  <TableHead className="text-gray-400">Employee</TableHead>
-                  <TableHead className="text-gray-400">Department</TableHead>
-                  <TableHead className="text-gray-400">Type</TableHead>
-                  <TableHead className="text-gray-400">Status</TableHead>
-                  <TableHead className="text-gray-400">Actions</TableHead>
+                  <TableHead className="text-gray-600">Date & Time</TableHead>
+                  <TableHead className="text-gray-600">Employee</TableHead>
+                  <TableHead className="text-gray-600">Department</TableHead>
+                  <TableHead className="text-gray-600">Type</TableHead>
+                  <TableHead className="text-gray-600">Status</TableHead>
+                  <TableHead className="text-gray-600">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -421,14 +421,14 @@ export default function ReportsManagementPanel() {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <User className="h-4 w-4 text-gray-400" />
+                        <User className="h-4 w-4 text-gray-600" />
                         <span className="text-white">{report.reporter_name}</span>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-gray-400" />
-                        <span className="text-gray-300">{report.department}</span>
+                        <Building2 className="h-4 w-4 text-gray-600" />
+                        <span className="text-gray-600">{report.department}</span>
                       </div>
                     </TableCell>
                     <TableCell>
@@ -470,7 +470,7 @@ export default function ReportsManagementPanel() {
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-12">
                       <FileText className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                      <p className="text-gray-400">No reports found matching your filters</p>
+                      <p className="text-gray-600">No reports found matching your filters</p>
                     </TableCell>
                   </TableRow>
                 )}
@@ -491,7 +491,7 @@ export default function ReportsManagementPanel() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setSelectedReport(null)}
-                  className="text-gray-400"
+                  className="text-gray-600"
                 >
                   ✕
                 </Button>
@@ -500,21 +500,21 @@ export default function ReportsManagementPanel() {
             <CardContent className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-gray-400">Employee</Label>
+                  <Label className="text-gray-600">Employee</Label>
                   <p className="text-white font-medium">{selectedReport.reporter_name}</p>
                 </div>
                 <div>
-                  <Label className="text-gray-400">Department</Label>
+                  <Label className="text-gray-600">Department</Label>
                   <p className="text-white">{selectedReport.department}</p>
                 </div>
                 <div>
-                  <Label className="text-gray-400">Submitted</Label>
+                  <Label className="text-gray-600">Submitted</Label>
                   <p className="text-white">
                     {format(new Date(selectedReport.submitted_at), 'MMMM dd, yyyy HH:mm')}
                   </p>
                 </div>
                 <div>
-                  <Label className="text-gray-400">Status</Label>
+                  <Label className="text-gray-600">Status</Label>
                   <p className="text-white flex items-center gap-2">
                     {selectedReport.is_flagged ? (
                       <Badge className="bg-red-500/20 text-red-400">
@@ -532,11 +532,11 @@ export default function ReportsManagementPanel() {
               </div>
 
               <div className="border-t border-gold/20 pt-4">
-                <Label className="text-gray-400">Report Content</Label>
+                <Label className="text-gray-600">Report Content</Label>
                 <div className="mt-2 bg-[#1A1A1A] rounded-lg p-4 space-y-2">
                   {Object.entries(selectedReport.content || {}).map(([key, value]) => (
                     <div key={key} className="flex justify-between">
-                      <span className="text-gray-400 capitalize">{key.replace(/_/g, ' ')}:</span>
+                      <span className="text-gray-600 capitalize">{key.replace(/_/g, ' ')}:</span>
                       <span className="text-white">{String(value)}</span>
                     </div>
                   ))}

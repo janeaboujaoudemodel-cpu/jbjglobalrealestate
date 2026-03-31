@@ -135,7 +135,7 @@ const CRMCalendar = () => {
               </div>
               <div>
                 <h1 className="text-lg font-bold text-gray-900">Calendar</h1>
-                <p className="text-xs text-gray-500">{events.length} events this month</p>
+                <p className="text-xs text-gray-600">{events.length} events this month</p>
               </div>
             </div>
           </div>
@@ -183,7 +183,7 @@ const CRMCalendar = () => {
               {/* Day Headers */}
               <div className="grid grid-cols-7 gap-1 mb-2">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                  <div key={day} className="text-center text-xs font-semibold text-gray-500 py-2">
+                  <div key={day} className="text-center text-xs font-semibold text-gray-600 py-2">
                     {day}
                   </div>
                 ))}
@@ -227,7 +227,7 @@ const CRMCalendar = () => {
                           </div>
                         ))}
                         {dayEvents.length > 2 && (
-                          <span className="text-xs text-gray-500">+{dayEvents.length - 2} more</span>
+                          <span className="text-xs text-gray-600">+{dayEvents.length - 2} more</span>
                         )}
                       </div>
                     </button>
@@ -247,8 +247,8 @@ const CRMCalendar = () => {
             <CardContent className="space-y-3">
               {todayEvents.length === 0 ? (
                 <div className="text-center py-8">
-                  <CalendarIcon className="h-10 w-10 mx-auto mb-3 text-gray-400" />
-                  <p className="text-sm text-gray-500">No events scheduled</p>
+                  <CalendarIcon className="h-10 w-10 mx-auto mb-3 text-gray-600" />
+                  <p className="text-sm text-gray-600">No events scheduled</p>
                 </div>
               ) : (
                 todayEvents.map(event => {
@@ -261,7 +261,7 @@ const CRMCalendar = () => {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-gray-900 truncate">{event.title}</p>
-                          <p className="text-xs text-gray-500">{event.time}</p>
+                          <p className="text-xs text-gray-600">{event.time}</p>
                           {event.leadName && (
                             <Badge variant="outline" className="mt-1 text-xs">
                               {event.leadName}

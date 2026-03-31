@@ -116,7 +116,7 @@ const FoundersTeamDirectory: React.FC = () => {
             </div>
             <div className="text-right">
               <p className="text-3xl font-bold text-gold">{totalTeamCount}</p>
-              <p className="text-xs text-gray-500">Total Members</p>
+              <p className="text-xs text-gray-600">Total Members</p>
             </div>
           </div>
         </CardContent>
@@ -125,12 +125,12 @@ const FoundersTeamDirectory: React.FC = () => {
       {/* Search & Filter */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-600" />
           <Input
             placeholder="Search team members..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-gray-400 shadow-[0_0_10px_rgba(200,167,102,0.1)]"
+            className="pl-10 bg-white border-2 border-gold/30 text-black placeholder:text-gray-600 shadow-[0_0_10px_rgba(200,167,102,0.1)]"
           />
         </div>
         <div className="w-full md:w-auto overflow-x-auto">
@@ -221,7 +221,7 @@ const FoundersTeamDirectory: React.FC = () => {
                                       ) : null}
                                     </div>
                                     <p className="text-sm text-gold truncate">{member.role}</p>
-                                    <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
+                                    <div className="flex items-center gap-1 mt-1 text-xs text-gray-600">
                                       <Building2 className="w-3 h-3" />
                                       Reports to: {getReportsTo(member)}
                                     </div>
@@ -288,7 +288,7 @@ const FoundersTeamDirectory: React.FC = () => {
           <CardContent className="p-8 text-center">
             <Search className="w-12 h-12 text-gold/30 mx-auto mb-4" />
             <p className="text-gray-600">No team members found</p>
-            <p className="text-sm text-gray-500 mt-1">Try adjusting your search or filter</p>
+            <p className="text-sm text-gray-600 mt-1">Try adjusting your search or filter</p>
           </CardContent>
         </Card>
       )}

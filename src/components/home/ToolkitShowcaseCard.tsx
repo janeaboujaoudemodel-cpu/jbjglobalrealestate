@@ -90,7 +90,7 @@ export function ToolkitShowcaseCard() {
               JBJ Royal Tools Hub
             </h2>
             
-            <p className="text-gray-500 text-sm md:text-base max-w-2xl">
+            <p className="text-gray-600 text-sm md:text-base max-w-2xl">
               Powerful real estate tools for property valuation, comparison, mortgage calculation, and AI-powered enhancements — all completely free to use.
             </p>
           </div>
@@ -117,7 +117,7 @@ export function ToolkitShowcaseCard() {
                       </h4>
 
                       {/* Description */}
-                      <p className="text-sm text-gray-500 mb-4 leading-relaxed flex-grow">
+                      <p className="text-sm text-gray-600 mb-4 leading-relaxed flex-grow">
                         {tool.description}
                       </p>
 

@@ -229,7 +229,7 @@ const ChatCVSubmission = ({
               placeholder="First"
               inputMode="text"
               autoComplete="off"
-              className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-400 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.firstName ? 'border-red-500' : ''}`}
+              className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-600 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.firstName ? 'border-red-500' : ''}`}
             />
             {formErrors.firstName && <p className="text-red-500 text-xs mt-0.5">{formErrors.firstName}</p>}
           </div>
@@ -241,7 +241,7 @@ const ChatCVSubmission = ({
               placeholder="Last"
               inputMode="text"
               autoComplete="off"
-              className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-400 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.lastName ? 'border-red-500' : ''}`}
+              className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-600 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.lastName ? 'border-red-500' : ''}`}
             />
             {formErrors.lastName && <p className="text-red-500 text-xs mt-0.5">{formErrors.lastName}</p>}
           </div>
@@ -257,7 +257,7 @@ const ChatCVSubmission = ({
             placeholder="your@email.com"
             inputMode="email"
             autoComplete="off"
-            className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-400 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.email ? 'border-red-500' : ''}`}
+            className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-600 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.email ? 'border-red-500' : ''}`}
           />
           {formErrors.email && <p className="text-red-500 text-xs mt-0.5">{formErrors.email}</p>}
         </div>
@@ -272,7 +272,7 @@ const ChatCVSubmission = ({
             placeholder="+971 50 123 4567"
             inputMode="tel"
             autoComplete="off"
-            className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-400 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.phone ? 'border-red-500' : ''}`}
+            className={`w-full bg-white border-2 border-gold/40 text-black placeholder:text-gray-600 h-9 text-sm rounded-xl px-4 outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold ${formErrors.phone ? 'border-red-500' : ''}`}
           />
           {formErrors.phone && <p className="text-red-500 text-xs mt-0.5">{formErrors.phone}</p>}
         </div>
@@ -307,7 +307,7 @@ const ChatCVSubmission = ({
               <>
                 <Upload className="w-6 h-6 text-gold" />
                 <span className="text-black text-sm font-medium"><T>Click to upload</T></span>
-                <span className="text-gray-500 text-xs">PDF or Word (max 5MB)</span>
+                <span className="text-gray-600 text-xs">PDF or Word (max 5MB)</span>
               </>
             )}
           </button>
@@ -339,7 +339,7 @@ const ChatCVSubmission = ({
           )}
         </Button>
 
-        <p className="text-center text-gray-500 text-xs">
+        <p className="text-center text-gray-600 text-xs">
           <T>Your information will be securely stored and reviewed by our HR team</T>
         </p>
       </div>

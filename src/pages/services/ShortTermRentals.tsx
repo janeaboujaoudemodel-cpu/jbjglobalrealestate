@@ -525,7 +525,7 @@ const ShortTermRentals = () => {
               className="bg-gradient-to-br from-[#1a1610] via-[#1e1a14] to-[#0d0b09] border border-[#C8A766]/30 rounded-2xl p-8 md:p-10 text-center"
             >
               <BarChart3 className="w-10 h-10 text-[#C8A766] mx-auto mb-6" />
-              <p className="text-gray-400 text-base mb-6">We provide:</p>
+              <p className="text-gray-600 text-base mb-6">We provide:</p>
               <ul className="space-y-3 text-left max-w-md mx-auto mb-8">
                 {[
                   "Estimated occupancy range",
@@ -534,7 +534,7 @@ const ShortTermRentals = () => {
                   "Expense ratio estimation",
                   "Net yield projection",
                 ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 text-gray-400">
+                  <li key={i} className="flex items-start gap-3 text-gray-600">
                     <CheckCircle2 className="w-4 h-4 text-[#C8A766] shrink-0 mt-1" />
                     <span className="text-sm">{item}</span>
                   </li>

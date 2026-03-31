@@ -110,7 +110,7 @@ const DeveloperPortalCTA = () => {
             <h2 className="text-2xl md:text-3xl font-bold text-black mb-1 text-center">
               Investor Opportunities
             </h2>
-            <p className="text-gray-500 text-sm mb-8 text-center">
+            <p className="text-gray-600 text-sm mb-8 text-center">
               Explore tools, insights, and exclusive access designed for smart investors.
             </p>
 
@@ -122,7 +122,7 @@ const DeveloperPortalCTA = () => {
                       <action.icon className="w-5 h-5 text-gray-700" />
                     </div>
                     <span className="text-black text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
-                    <span className="text-gray-400 text-[10px] text-center leading-tight">{action.desc}</span>
+                    <span className="text-gray-600 text-[10px] text-center leading-tight">{action.desc}</span>
                   </div>
                 </Link>
               ))}
@@ -140,7 +140,7 @@ const DeveloperPortalCTA = () => {
           <h2 className="text-2xl md:text-3xl font-bold text-black mb-1 text-center">
             Developer Center
           </h2>
-          <p className="text-gray-500 text-sm mb-8 text-center">
+          <p className="text-gray-600 text-sm mb-8 text-center">
             {showShortcuts
               ? "Your developer tools and shortcuts are ready."
               : showCongrats
@@ -155,7 +155,7 @@ const DeveloperPortalCTA = () => {
                 <h3 className="text-black text-lg font-bold mb-2">
                   Congratulations, your developer access is approved.
                 </h3>
-                <p className="text-gray-500 text-sm mb-6">
+                <p className="text-gray-600 text-sm mb-6">
                   You now have full access to submit projects, manage events, and connect with our broker network.
                 </p>
                 <Button
@@ -179,7 +179,7 @@ const DeveloperPortalCTA = () => {
                       <action.icon className="w-5 h-5 text-gray-700" />
                     </div>
                     <span className="text-black text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
-                    <span className="text-gray-400 text-[10px] text-center leading-tight">{action.desc}</span>
+                    <span className="text-gray-600 text-[10px] text-center leading-tight">{action.desc}</span>
                   </div>
                 </Link>
               ))}
@@ -191,7 +191,7 @@ const DeveloperPortalCTA = () => {
               <div className="p-8 rounded-xl border border-gray-200 bg-gray-50">
                 <Clock className="w-12 h-12 text-gray-600 mx-auto mb-4" />
                 <h3 className="text-black text-lg font-bold mb-2">Application Under Review</h3>
-                <p className="text-gray-500 text-sm mb-4">
+                <p className="text-gray-600 text-sm mb-4">
                   Your developer registration is being reviewed by our team. We'll notify you once it's approved.
                 </p>
                 <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 border border-gray-300 text-black text-xs uppercase tracking-wider font-semibold">
@@ -207,7 +207,7 @@ const DeveloperPortalCTA = () => {
               <div className="p-8 rounded-xl border border-gray-200 bg-gray-50">
                 <XCircle className="w-12 h-12 text-gray-600 mx-auto mb-4" />
                 <h3 className="text-black text-lg font-bold mb-2">Application Not Approved</h3>
-                <p className="text-gray-500 text-sm mb-4">
+                <p className="text-gray-600 text-sm mb-4">
                   Unfortunately your registration was not approved. Please contact us for more information.
                 </p>
                 <Link to="/contact">

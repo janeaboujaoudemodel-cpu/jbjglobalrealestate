@@ -101,7 +101,7 @@ export const FounderVisibilityToggle = () => {
                 <p className="font-medium text-black">
                   {isFounderVisible ? "Founder Content Visible" : "Founder Content Hidden"}
                 </p>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-600">
                   {isFounderVisible 
                     ? "All founder references, images, and names are displayed" 
                     : "Founder content is hidden across the entire website"

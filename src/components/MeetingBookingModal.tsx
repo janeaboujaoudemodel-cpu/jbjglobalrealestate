@@ -211,7 +211,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                   <div key={s} className="flex items-center gap-2">
                     <div className={cn(
                       "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-all",
-                      step >= s ? "bg-gold text-black" : "bg-gray-200 text-gray-500"
+                      step >= s ? "bg-gold text-black" : "bg-gray-200 text-gray-600"
                     )}>
                       {s}
                     </div>
@@ -225,7 +225,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                 <div className="space-y-4">
                   <div className="text-center mb-6">
                     <h3 className="text-lg font-semibold text-black">Your Information</h3>
-                    <p className="text-gray-500 text-sm">Please provide accurate details for verification</p>
+                    <p className="text-gray-600 text-sm">Please provide accurate details for verification</p>
                   </div>
 
                   <FormField
@@ -363,7 +363,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                 <div className="space-y-6">
                   <div className="text-center mb-6">
                     <h3 className="text-lg font-semibold text-black">Select Date & Time</h3>
-                    <p className="text-gray-500 text-sm">Online meetings are scheduled at least 1 day in advance</p>
+                    <p className="text-gray-600 text-sm">Online meetings are scheduled at least 1 day in advance</p>
                   </div>
 
                   <FormField
@@ -447,7 +447,7 @@ export const MeetingBookingModal = ({ open, onOpenChange }: MeetingBookingModalP
                 <div className="space-y-6">
                   <div className="text-center mb-6">
                     <h3 className="text-lg font-semibold text-black">Confirm Your Booking</h3>
-                    <p className="text-gray-500 text-sm">Please review and accept the terms</p>
+                    <p className="text-gray-600 text-sm">Please review and accept the terms</p>
                   </div>
 
                   {/* Summary */}

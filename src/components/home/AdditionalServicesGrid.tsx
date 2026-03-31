@@ -127,7 +127,7 @@ const AdditionalServicesGrid = () => {
               <p className="text-sm text-gray-600 mb-3">
                 {service.description}
               </p>
-              <span className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+              <span className="text-xs text-gray-600 font-medium uppercase tracking-wide">
                 Coming Soon
               </span>
             </div>

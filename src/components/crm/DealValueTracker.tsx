@@ -161,9 +161,9 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
       {hasNoData && (
         <Card className="border-border bg-white">
           <CardContent className="py-8 text-center">
-            <Briefcase className="h-12 w-12 mx-auto mb-4 text-gray-500" />
+            <Briefcase className="h-12 w-12 mx-auto mb-4 text-gray-600" />
             <p className="text-gray-800 font-semibold mb-1">No active data yet</p>
-            <p className="text-gray-500 text-sm">Start adding leads to see your pipeline metrics.</p>
+            <p className="text-gray-600 text-sm">Start adding leads to see your pipeline metrics.</p>
           </CardContent>
         </Card>
       )}
@@ -184,7 +184,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
             <p className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight flex-1">
               {hasNoData ? "—" : `${stats.totalPipeline} leads`}
             </p>
-            <p className="text-xs text-gray-500 mt-2">Active in pipeline</p>
+            <p className="text-xs text-gray-600 mt-2">Active in pipeline</p>
           </CardContent>
         </Card>
 
@@ -202,7 +202,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
             <p className="text-2xl md:text-3xl font-bold text-emerald-600 tracking-tight flex-1">
               {hasNoData || stats.forecastedRevenue === 0 ? "—" : formatValue(stats.forecastedRevenue, true)}
             </p>
-            <p className="text-xs text-gray-500 mt-2">Requires deal values</p>
+            <p className="text-xs text-gray-600 mt-2">Requires deal values</p>
           </CardContent>
         </Card>
 
@@ -220,7 +220,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
             <p className="text-2xl md:text-3xl font-bold text-amber-600 tracking-tight flex-1">
               {hasNoData ? "—" : `${stats.conversionRate.toFixed(1)}%`}
             </p>
-            <p className="text-xs text-gray-500 mt-2">Won vs Lost</p>
+            <p className="text-xs text-gray-600 mt-2">Won vs Lost</p>
           </CardContent>
         </Card>
 
@@ -239,7 +239,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
               <p className="text-2xl md:text-3xl font-bold text-green-600 tracking-tight">{stats.wonDeals}</p>
               <span className="text-sm text-red-500 font-medium">/ {stats.lostDeals} lost</span>
             </div>
-            <p className="text-xs text-gray-500 mt-2">Closed deals</p>
+            <p className="text-xs text-gray-600 mt-2">Closed deals</p>
           </CardContent>
         </Card>
       </div>
@@ -254,7 +254,7 @@ const DealValueTracker = ({ userId }: DealValueTrackerProps) => {
         </CardHeader>
         <CardContent>
           {stats.stageBreakdown.length === 0 ? (
-            <div className="text-center text-gray-500 py-4">
+            <div className="text-center text-gray-600 py-4">
               No active deals in pipeline
             </div>
           ) : (

@@ -89,7 +89,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         )}
       >
         {isLoading ? (
-          <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-500" />
+          <Loader2 className="w-3.5 h-3.5 animate-spin text-gray-600" />
         ) : (
           <CurrentIcon className={cn("w-3.5 h-3.5", currentConfig.color)} />
         )}
@@ -117,7 +117,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             )}
           >
             {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin text-gray-500 shrink-0" />
+              <Loader2 className="w-4 h-4 animate-spin text-gray-600 shrink-0" />
             ) : (
               <CurrentIcon className={cn("w-4 h-4 shrink-0", currentConfig.color)} />
             )}
@@ -142,7 +142,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             <p className="text-sm font-bold text-black">
               Select your mode
             </p>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-gray-600 mt-0.5">
               Choose how you want to use the platform
             </p>
           </div>
@@ -181,7 +181,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   )}>
                     {config.label}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-600">
                     {config.description}
                   </p>
                 </div>

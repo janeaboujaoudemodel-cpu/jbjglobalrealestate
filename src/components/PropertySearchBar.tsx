@@ -47,7 +47,7 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search developer..."
-              className="w-full h-9 pl-8 pr-3 bg-zinc-800 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-400 outline-none focus:border-gold"
+              className="w-full h-9 pl-8 pr-3 bg-zinc-800 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-600 outline-none focus:border-gold"
               autoFocus
             />
           </div>
@@ -127,7 +127,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-9 h-10 bg-zinc-900/80 border-gray-700/50 text-white placeholder:text-gray-400 focus:border-gold rounded-lg"
+            className="pl-9 h-10 bg-zinc-900/80 border-gray-700/50 text-white placeholder:text-gray-600 focus:border-gold rounded-lg"
           />
         </div>
         <Button onClick={handleSearch} variant="primary" className="h-10 px-4 rounded-lg">
@@ -150,7 +150,7 @@ const PropertySearchBar = ({ className = "", compact = false }: PropertySearchBa
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-10 h-12 bg-zinc-900/80 border-gray-700/50 text-white placeholder:text-gray-400 focus:border-gold rounded-lg"
+            className="pl-10 h-12 bg-zinc-900/80 border-gray-700/50 text-white placeholder:text-gray-600 focus:border-gold rounded-lg"
           />
         </div>
 

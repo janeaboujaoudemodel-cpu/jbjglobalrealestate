@@ -166,7 +166,7 @@ const About = () => {
               A Licensed Brokerage Built on Structure, Clarity, and Accountability
             </motion.p>
             <motion.p 
-              className="text-gray-400 text-base md:text-lg max-w-3xl mx-auto mb-10"
+              className="text-gray-600 text-base md:text-lg max-w-3xl mx-auto mb-10"
               style={{ lineHeight: 1.7 }}
               variants={fadeInUp}
             >

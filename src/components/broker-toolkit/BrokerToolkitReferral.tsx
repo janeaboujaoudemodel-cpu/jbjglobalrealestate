@@ -121,7 +121,7 @@ export function BrokerToolkitReferral() {
                         <span className={`font-bold text-lg ${idx % 2 === 0 ? 'text-black' : 'text-gold'}`}>{item.step}</span>
                       </div>
                       <h4 className="text-white font-semibold mb-1">{item.title}</h4>
-                      <p className="text-gray-500 text-sm">{item.desc}</p>
+                      <p className="text-gray-600 text-sm">{item.desc}</p>
                     </div>
                   ))}
                 </div>
@@ -150,7 +150,7 @@ export function BrokerToolkitReferral() {
                       </span>
                     </button>
                   </Link>
-                  <p className="text-gray-500 text-sm mt-4">Available worldwide — No license required</p>
+                  <p className="text-gray-600 text-sm mt-4">Available worldwide — No license required</p>
                 </div>
               </CardContent>
             </Card>

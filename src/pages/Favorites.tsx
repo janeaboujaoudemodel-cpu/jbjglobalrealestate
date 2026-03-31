@@ -387,7 +387,7 @@ const Favorites = () => {
               <>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 bg-white/60 rounded-xl p-4 border border-gold/20">
                   <p className="text-black/50 text-sm">
-                    Rank your top properties with badges: <span className="text-yellow-600">🥇 Gold</span>, <span className="text-gray-500">🥈 Silver</span>, <span className="text-amber-600">🥉 Bronze</span>
+                    Rank your top properties with badges: <span className="text-yellow-600">🥇 Gold</span>, <span className="text-gray-600">🥈 Silver</span>, <span className="text-amber-600">🥉 Bronze</span>
                   </p>
                   <Button onClick={() => setShareModalOpen(true)} className="bg-gradient-to-r from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] text-black hover:brightness-95 border border-gold/30">
                     <Share2 className="w-4 h-4 mr-2" /> Share My Shortlist
@@ -419,7 +419,7 @@ const Favorites = () => {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="bg-white border-gold/20">
                               <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top1')} className="text-yellow-600 cursor-pointer font-medium">🥇 Top 1 (Gold)</DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top2')} className="text-gray-500 cursor-pointer font-medium">🥈 Top 2 (Silver)</DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top2')} className="text-gray-600 cursor-pointer font-medium">🥈 Top 2 (Silver)</DropdownMenuItem>
                               <DropdownMenuItem onClick={() => handleSetBadge(project.id, 'top3')} className="text-amber-600 cursor-pointer font-medium">🥉 Top 3 (Bronze)</DropdownMenuItem>
                               {badge && (
                                 <DropdownMenuItem onClick={() => handleSetBadge(project.id, null)} className="text-black/40 cursor-pointer">
@@ -606,7 +606,7 @@ const Favorites = () => {
                   return (
                     <div key={p.id} className="flex items-center gap-2 text-sm py-1">
                       <span className="text-gold">#{i + 1}</span>
-                      {badge && <span className={`text-xs ${badge === "top1" ? "text-yellow-600" : badge === "top2" ? "text-amber-600" : "text-gray-500"}`}>{badge === "top1" ? "🥇" : badge === "top2" ? "🥉" : "🥈"}</span>}
+                      {badge && <span className={`text-xs ${badge === "top1" ? "text-yellow-600" : badge === "top2" ? "text-amber-600" : "text-gray-600"}`}>{badge === "top1" ? "🥇" : badge === "top2" ? "🥉" : "🥈"}</span>}
                       <span className="text-black">{p.name}</span>
                     </div>
                   );

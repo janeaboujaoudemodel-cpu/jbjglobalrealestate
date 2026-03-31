@@ -101,7 +101,7 @@ const MortgageCalculator = ({
           <h3 className="text-black text-2xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">
             Mortgage Calculator
           </h3>
-          <p className="text-gray-500 mt-2 md:mt-3 max-w-lg mx-auto text-sm md:text-base">
+          <p className="text-gray-600 mt-2 md:mt-3 max-w-lg mx-auto text-sm md:text-base">
             Estimate your monthly payments and explore financing options.
           </p>
         </div>
@@ -112,7 +112,7 @@ const MortgageCalculator = ({
           {/* Property Price Slider */}
           <div className="bg-white rounded-xl border border-gray-200 p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5 text-gray-600" />
                 Property Price
               </span>
@@ -126,7 +126,7 @@ const MortgageCalculator = ({
               step={100000}
               className="w-full"
             />
-            <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+            <div className="flex justify-between text-[10px] text-gray-600 mt-1">
               <span>AED 500K</span>
               <span>AED 50M</span>
             </div>
@@ -135,7 +135,7 @@ const MortgageCalculator = ({
           {/* Down Payment Slider */}
           <div className="bg-white rounded-xl border border-gray-200 p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
                 <Percent className="w-3.5 h-3.5 text-gray-600" />
                 Down Payment
               </span>
@@ -149,7 +149,7 @@ const MortgageCalculator = ({
               step={5}
               className="w-full"
             />
-            <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+            <div className="flex justify-between text-[10px] text-gray-600 mt-1">
               <span>5%</span>
               <span>80%</span>
             </div>
@@ -158,7 +158,7 @@ const MortgageCalculator = ({
           {/* Interest Rate Slider */}
           <div className="bg-white rounded-xl border border-gray-200 p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
                 <TrendingUp className="w-3.5 h-3.5 text-gray-600" />
                 Interest Rate
               </span>
@@ -172,7 +172,7 @@ const MortgageCalculator = ({
               step={0.25}
               className="w-full"
             />
-            <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+            <div className="flex justify-between text-[10px] text-gray-600 mt-1">
               <span>2%</span>
               <span>10%</span>
             </div>
@@ -181,7 +181,7 @@ const MortgageCalculator = ({
           {/* Loan Term Slider */}
           <div className="bg-white rounded-xl border border-gray-200 p-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-gray-600 uppercase tracking-wider flex items-center gap-1.5">
                 <Calendar className="w-3.5 h-3.5 text-gray-600" />
                 Loan Term
               </span>
@@ -195,7 +195,7 @@ const MortgageCalculator = ({
               step={5}
               className="w-full"
             />
-            <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+            <div className="flex justify-between text-[10px] text-gray-600 mt-1">
               <span>5 Years</span>
               <span>30 Years</span>
             </div>
@@ -215,7 +215,7 @@ const MortgageCalculator = ({
 
           {/* Down Payment */}
           <div className="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
-            <p className="text-gray-500 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Down Payment</p>
+            <p className="text-gray-600 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Down Payment</p>
             <p className="text-black font-bold text-lg sm:text-xl">
               {downPaymentPercent}%
             </p>
@@ -226,7 +226,7 @@ const MortgageCalculator = ({
 
           {/* Loan Amount */}
           <div className="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
-            <p className="text-gray-500 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Loan Amount</p>
+            <p className="text-gray-600 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Loan Amount</p>
             <p className="text-black font-bold text-lg sm:text-xl">
               {100 - downPaymentPercent}%
             </p>
@@ -237,11 +237,11 @@ const MortgageCalculator = ({
 
           {/* Total Cost */}
           <div className="bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm">
-            <p className="text-gray-500 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Total Cost</p>
+            <p className="text-gray-600 text-[10px] sm:text-xs mb-1 uppercase tracking-wider">Total Cost</p>
             <p className="text-black font-bold text-lg sm:text-xl">
               {formatCurrency(calculations.totalPayment)}
             </p>
-            <p className="text-gray-500 text-[10px] mt-0.5">Interest: {formatCurrency(calculations.totalInterest)}</p>
+            <p className="text-gray-600 text-[10px] mt-0.5">Interest: {formatCurrency(calculations.totalInterest)}</p>
           </div>
         </div>
       </div>

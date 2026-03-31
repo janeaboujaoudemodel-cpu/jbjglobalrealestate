@@ -121,7 +121,7 @@ export function BrokerCalendarWidget() {
                     placeholder="Meeting title"
                     value={quickEvent.title}
                     onChange={(e) => setQuickEvent({ ...quickEvent, title: e.target.value })}
-                    className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 h-9"
+                    className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 h-9"
                   />
                 </div>
                 <div className="space-y-1">
@@ -155,7 +155,7 @@ export function BrokerCalendarWidget() {
                     placeholder="Client name"
                     value={quickEvent.client}
                     onChange={(e) => setQuickEvent({ ...quickEvent, client: e.target.value })}
-                    className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 h-9"
+                    className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 h-9"
                   />
                 </div>
               </div>

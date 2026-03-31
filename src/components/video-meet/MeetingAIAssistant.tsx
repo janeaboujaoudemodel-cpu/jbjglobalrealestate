@@ -209,11 +209,11 @@ export function MeetingAIAssistant({
           <Badge className="bg-green-500/20 text-green-400 text-[10px]">Live</Badge>
         </div>
         <div className="flex items-center gap-1">
-          {isMinimized ? <ChevronUp className="w-4 h-4 text-gray-400" /> : (
+          {isMinimized ? <ChevronUp className="w-4 h-4 text-gray-600" /> : (
             <>
-              <ChevronDown className="w-4 h-4 text-gray-400" />
+              <ChevronDown className="w-4 h-4 text-gray-600" />
               <Button size="icon" variant="ghost" className="h-6 w-6" onClick={(e) => { e.stopPropagation(); onClose(); }}>
-                <X className="w-4 h-4 text-gray-400" />
+                <X className="w-4 h-4 text-gray-600" />
               </Button>
             </>
           )}
@@ -224,7 +224,7 @@ export function MeetingAIAssistant({
         <>
           {meetingContext && (
             <div className="px-4 py-2 bg-zinc-800/50 border-b border-gray-700 text-xs">
-              <div className="flex items-center gap-2 text-gray-400">
+              <div className="flex items-center gap-2 text-gray-600">
                 <EyeOff className="w-3 h-3" />
                 <span>Private — only you see this</span>
               </div>
@@ -236,7 +236,7 @@ export function MeetingAIAssistant({
             {messages.length === 0 ? (
               <div className="text-center py-6">
                 <Sparkles className="w-8 h-8 text-gold/50 mx-auto mb-3" />
-                <p className="text-gray-400 text-sm mb-4">AI assistant + CRM</p>
+                <p className="text-gray-600 text-sm mb-4">AI assistant + CRM</p>
                 <div className="space-y-2">
                   {[
                     { icon: Home, label: 'Find properties', prompt: 'Recommend properties for this client' },
@@ -245,7 +245,7 @@ export function MeetingAIAssistant({
                     { icon: FileText, label: 'Summarize meeting', prompt: 'Summarize our meeting' },
                   ].map(({ icon: Icon, label, prompt }) => (
                     <button key={label} onClick={() => setInput(prompt)}
-                      className="w-full p-2 text-left text-xs text-gray-400 bg-zinc-800 rounded-lg hover:bg-gray-700 flex items-center gap-2">
+                      className="w-full p-2 text-left text-xs text-gray-600 bg-zinc-800 rounded-lg hover:bg-gray-700 flex items-center gap-2">
                       <Icon className="w-3 h-3 text-gold" />
                       {label}
                     </button>
@@ -271,7 +271,7 @@ export function MeetingAIAssistant({
                   <div className="flex justify-start">
                     <div className="bg-zinc-800 rounded-lg p-3 flex items-center gap-2">
                       <Loader2 className="w-4 h-4 text-gold animate-spin" />
-                      <span className="text-gray-400 text-sm">Thinking...</span>
+                      <span className="text-gray-600 text-sm">Thinking...</span>
                     </div>
                   </div>
                 )}

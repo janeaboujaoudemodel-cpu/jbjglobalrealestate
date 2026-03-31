@@ -231,7 +231,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
             </div>
             <div>
               <h3 className="text-gold font-semibold">Amanda Clarke</h3>
-              <p className="text-gray-400 text-xs flex items-center gap-1">
+              <p className="text-gray-600 text-xs flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
                 Available 24/7
               </p>
@@ -295,7 +295,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                         await navigator.clipboard.writeText(message.content);
                         toast.success(t('chat.messageCopied') || 'Message copied');
                       }}
-                      className={`flex items-center gap-1 mt-1 text-[10px] text-gray-500 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
+                      className={`flex items-center gap-1 mt-1 text-[10px] text-gray-600 hover:text-gold transition-colors opacity-0 group-hover:opacity-100 ${
                         message.role === 'user' ? 'self-end mr-1' : 'self-start ml-1'
                       }`}
                     >
@@ -306,7 +306,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
                 </div>
                 {message.role === 'user' && (
                   <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center flex-shrink-0">
-                    <User className="w-4 h-4 text-gray-300" />
+                    <User className="w-4 h-4 text-gray-600" />
                   </div>
                 )}
               </motion.div>
@@ -330,7 +330,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask me anything..."
-              className="flex-1 bg-[#1A1A1A] border-gold/20 text-white placeholder:text-gray-500 focus:border-gold"
+              className="flex-1 bg-[#1A1A1A] border-gold/20 text-white placeholder:text-gray-600 focus:border-gold"
               disabled={isLoading}
             />
             <Button
@@ -346,7 +346,7 @@ When asked to do tasks, confirm you've understood and will handle it. For comple
               )}
             </Button>
           </div>
-          <p className="text-gray-500 text-xs text-center mt-3">
+          <p className="text-gray-600 text-xs text-center mt-3">
             <Sparkles className="w-3 h-3 inline mr-1" />
             Powered by JBJ Executive AI
           </p>

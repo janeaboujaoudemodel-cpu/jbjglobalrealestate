@@ -373,7 +373,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         value={property.buildingName}
                         onChange={(e) => updateProperty('buildingName', e.target.value)}
                         placeholder="e.g., Burj Vista Tower 1"
-                        className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-gray-400 hover:border-blue-500/50 focus:border-blue-400"
+                        className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-gray-600 hover:border-blue-500/50 focus:border-blue-400"
                       />
                       <p className="text-xs text-white/60">Official building name as registered</p>
                     </div>
@@ -386,7 +386,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         value={property.unitNumber}
                         onChange={(e) => updateProperty('unitNumber', e.target.value)}
                         placeholder="e.g., 1505 or 15-A"
-                        className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-gray-400 hover:border-blue-500/50 focus:border-blue-400"
+                        className="bg-zinc-900/50 border-blue-500/30 text-white placeholder:text-gray-600 hover:border-blue-500/50 focus:border-blue-400"
                       />
                       <p className="text-xs text-white/60">As shown on title deed</p>
                     </div>
@@ -403,7 +403,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                           value={communitySearch}
                           onChange={(e) => setCommunitySearch(e.target.value)}
                           placeholder="Search community..."
-                          className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 mb-1"
+                          className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 mb-1"
                         />
                         {communitySearch && (
                           <div className="absolute z-50 w-full max-h-48 overflow-y-auto bg-zinc-800 border border-gray-700 rounded-md shadow-xl">
@@ -438,7 +438,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         value={property.subCommunity}
                         onChange={(e) => updateProperty('subCommunity', e.target.value)}
                         placeholder="e.g., Tower 2, Phase 1"
-                        className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400"
+                        className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600"
                       />
                     </div>
                   </div>
@@ -465,7 +465,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                         value={property.developer}
                         onChange={(e) => updateProperty('developer', e.target.value)}
                         placeholder="e.g., Emaar, DAMAC, Sobha"
-                        className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400"
+                        className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600"
                       />
                     </div>
                   </div>
@@ -528,11 +528,11 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                       <Label className="text-white/70 text-sm flex items-center gap-1">
                         Internal Size (sq ft) <span className="text-blue-400">*</span>
                       </Label>
-                      <Input type="number" value={property.sizeInternal || ''} onChange={(e) => updateProperty('sizeInternal', parseInt(e.target.value) || 0)} placeholder="e.g., 1200" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400" />
+                      <Input type="number" value={property.sizeInternal || ''} onChange={(e) => updateProperty('sizeInternal', parseInt(e.target.value) || 0)} placeholder="e.g., 1200" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600" />
                     </div>
                     <div>
                       <Label className="text-white/70 text-sm">Balcony (sq ft)</Label>
-                      <Input type="number" value={property.balconySize || ''} onChange={(e) => updateProperty('balconySize', parseInt(e.target.value) || 0)} placeholder="e.g., 100" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400" />
+                      <Input type="number" value={property.balconySize || ''} onChange={(e) => updateProperty('balconySize', parseInt(e.target.value) || 0)} placeholder="e.g., 100" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600" />
                     </div>
                   </div>
 
@@ -743,7 +743,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                           value={property.renovations}
                           onChange={(e) => updateProperty('renovations', e.target.value)}
                           placeholder="e.g., Full kitchen renovation with imported Italian marble countertops..."
-                          className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 min-h-[120px] mt-2"
+                          className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 min-h-[120px] mt-2"
                         />
                       </div>
 
@@ -752,7 +752,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                           <DollarSign className="w-4 h-4" />
                           Total Investment Made (AED)
                         </Label>
-                        <Input type="number" value={property.renovationCost || ''} onChange={(e) => updateProperty('renovationCost', parseInt(e.target.value) || 0)} placeholder="e.g., 150000" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400 mt-2" />
+                        <Input type="number" value={property.renovationCost || ''} onChange={(e) => updateProperty('renovationCost', parseInt(e.target.value) || 0)} placeholder="e.g., 150000" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600 mt-2" />
                         <p className="text-xs text-white/60 mt-1">Include all costs: materials, labor, permits, and professional fees</p>
                       </div>
 
@@ -811,15 +811,15 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
               <CardContent className="space-y-4">
                 <div>
                   <Label className="text-white/70">Full Name <span className="text-blue-400">*</span></Label>
-                  <Input value={property.ownerName} onChange={(e) => updateProperty('ownerName', e.target.value)} placeholder="John Smith" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400" />
+                  <Input value={property.ownerName} onChange={(e) => updateProperty('ownerName', e.target.value)} placeholder="John Smith" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600" />
                 </div>
                 <div>
                   <Label className="text-white/70">Email <span className="text-blue-400">*</span></Label>
-                  <Input type="email" value={property.ownerEmail} onChange={(e) => updateProperty('ownerEmail', e.target.value)} placeholder="john@email.com" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400" />
+                  <Input type="email" value={property.ownerEmail} onChange={(e) => updateProperty('ownerEmail', e.target.value)} placeholder="john@email.com" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600" />
                 </div>
                 <div>
                   <Label className="text-white/70">Phone <span className="text-blue-400">*</span></Label>
-                  <Input value={property.ownerPhone} onChange={(e) => updateProperty('ownerPhone', e.target.value)} placeholder="+971 50 123 4567" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-400" />
+                  <Input value={property.ownerPhone} onChange={(e) => updateProperty('ownerPhone', e.target.value)} placeholder="+971 50 123 4567" className="bg-zinc-800 border-gray-700 text-white placeholder:text-gray-600" />
                 </div>
                 <div className="p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg mt-6">
                   <div className="flex items-start gap-3">

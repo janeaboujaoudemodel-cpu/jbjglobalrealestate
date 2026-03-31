@@ -223,7 +223,7 @@ const VirtualStagingForm = ({
           value={customNotes}
           onChange={(e) => onCustomNotesChange(e.target.value)}
           placeholder="Describe specific furniture you want: L-shaped sofa, marble coffee table, statement artwork, indoor plants..."
-          className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-400 min-h-[100px] focus:border-emerald-500/50"
+          className="bg-zinc-800/50 border-gray-600 text-white placeholder:text-gray-600 min-h-[100px] focus:border-emerald-500/50"
           maxLength={1000}
         />
       </div>
