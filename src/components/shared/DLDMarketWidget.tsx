@@ -153,8 +153,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   return (
                     <div key={area.area} className={`flex items-center justify-between ${isHighlighted ? "bg-gold/10 -mx-2 px-2 py-1 rounded-lg border border-gold/30" : ""}`}>
                       <div className="flex items-center gap-2">
-                        <span className="text-black/40 text-xs w-4">{i + 1}</span>
-                        <span className={`text-sm ${isHighlighted ? "text-gold font-semibold" : "text-black/80"}`}>{area.area}</span>
+                        <span className="text-black/70 text-xs w-4 font-bold">{i + 1}</span>
+                         <span className={`text-sm ${isHighlighted ? "text-gold font-semibold" : "text-black font-medium"}`}>{area.area}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="text-black text-xs font-medium">{area.transactions.toLocaleString()}</span>
