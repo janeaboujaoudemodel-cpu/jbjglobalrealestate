@@ -2131,102 +2131,30 @@ svg[class*="text-muted"],
 }
 
 /* ── Step 2: Dark containers — restore light text ──
-   Any element inside an explicitly dark parent keeps readable
-   light text. Covers bg-black, bg-gray-900/950, and the dark
-   HSL hero gradient used across 100+ pages. */
+   Uses :is() for compact, comprehensive coverage.
+   Dark parents: bg-black, bg-gray-900/950, dark HSL hero gradients, bg-zinc-800/900 */
 
-.bg-black, .bg-gray-900, .bg-gray-950,
+:is(.bg-black, .bg-gray-900, .bg-gray-950, .bg-zinc-900, .bg-zinc-800,
 [class*="bg-black"], [class*="bg-gray-900"], [class*="bg-gray-950"],
-[class*="from-[hsl(32,28%,13%)]"],
-[class*="bg-[hsl(32,28%,13%)]"] {
-  /* These are intentionally dark — children need light text */
-}
-
-/* Zinc on dark */
-.bg-black .text-zinc-100, .bg-black .text-zinc-200,
-.bg-black .text-zinc-300, .bg-black .text-zinc-400,
-.bg-gray-900 .text-zinc-100, .bg-gray-900 .text-zinc-200,
-.bg-gray-900 .text-zinc-300, .bg-gray-900 .text-zinc-400,
-.bg-gray-950 .text-zinc-100, .bg-gray-950 .text-zinc-200,
-.bg-gray-950 .text-zinc-300, .bg-gray-950 .text-zinc-400,
-[class*="bg-black"] .text-zinc-100, [class*="bg-black"] .text-zinc-200,
-[class*="bg-black"] .text-zinc-300, [class*="bg-black"] .text-zinc-400,
-[class*="bg-gray-900"] .text-zinc-100, [class*="bg-gray-900"] .text-zinc-200,
-[class*="bg-gray-900"] .text-zinc-300, [class*="bg-gray-900"] .text-zinc-400,
-[class*="bg-gray-950"] .text-zinc-100, [class*="bg-gray-950"] .text-zinc-200,
-[class*="bg-gray-950"] .text-zinc-300, [class*="bg-gray-950"] .text-zinc-400,
-[class*="from-[hsl(32,28%,13%)]"] .text-zinc-100,
-[class*="from-[hsl(32,28%,13%)]"] .text-zinc-200,
-[class*="from-[hsl(32,28%,13%)]"] .text-zinc-300,
-[class*="from-[hsl(32,28%,13%)]"] .text-zinc-400,
-[class*="bg-[hsl(32,28%,13%)]"] .text-zinc-100,
-[class*="bg-[hsl(32,28%,13%)]"] .text-zinc-200,
-[class*="bg-[hsl(32,28%,13%)]"] .text-zinc-300,
-[class*="bg-[hsl(32,28%,13%)]"] .text-zinc-400 {
-  color: #d4d4d4 !important;
-}
-
-/* Gray on dark */
-.bg-black .text-gray-100, .bg-black .text-gray-200,
-.bg-black .text-gray-300, .bg-black .text-gray-400,
-.bg-gray-900 .text-gray-100, .bg-gray-900 .text-gray-200,
-.bg-gray-900 .text-gray-300, .bg-gray-900 .text-gray-400,
-.bg-gray-950 .text-gray-100, .bg-gray-950 .text-gray-200,
-.bg-gray-950 .text-gray-300, .bg-gray-950 .text-gray-400,
-[class*="bg-black"] .text-gray-100, [class*="bg-black"] .text-gray-200,
-[class*="bg-black"] .text-gray-300, [class*="bg-black"] .text-gray-400,
-[class*="bg-gray-900"] .text-gray-100, [class*="bg-gray-900"] .text-gray-200,
-[class*="bg-gray-900"] .text-gray-300, [class*="bg-gray-900"] .text-gray-400,
-[class*="bg-gray-950"] .text-gray-100, [class*="bg-gray-950"] .text-gray-200,
-[class*="bg-gray-950"] .text-gray-300, [class*="bg-gray-950"] .text-gray-400,
-[class*="from-[hsl(32,28%,13%)]"] .text-gray-100,
-[class*="from-[hsl(32,28%,13%)]"] .text-gray-200,
-[class*="from-[hsl(32,28%,13%)]"] .text-gray-300,
-[class*="from-[hsl(32,28%,13%)]"] .text-gray-400,
-[class*="bg-[hsl(32,28%,13%)]"] .text-gray-100,
-[class*="bg-[hsl(32,28%,13%)]"] .text-gray-200,
-[class*="bg-[hsl(32,28%,13%)]"] .text-gray-300,
-[class*="bg-[hsl(32,28%,13%)]"] .text-gray-400 {
-  color: #d4d4d4 !important;
-}
-
-/* Slate on dark */
-.bg-black .text-slate-100, .bg-black .text-slate-200,
-.bg-black .text-slate-300, .bg-black .text-slate-400,
-.bg-gray-900 .text-slate-100, .bg-gray-900 .text-slate-200,
-.bg-gray-900 .text-slate-300, .bg-gray-900 .text-slate-400,
-.bg-gray-950 .text-slate-100, .bg-gray-950 .text-slate-200,
-.bg-gray-950 .text-slate-300, .bg-gray-950 .text-slate-400,
-[class*="bg-black"] .text-slate-100, [class*="bg-black"] .text-slate-200,
-[class*="bg-black"] .text-slate-300, [class*="bg-black"] .text-slate-400,
-[class*="bg-gray-900"] .text-slate-100, [class*="bg-gray-900"] .text-slate-200,
-[class*="bg-gray-900"] .text-slate-300, [class*="bg-gray-900"] .text-slate-400,
-[class*="bg-gray-950"] .text-slate-100, [class*="bg-gray-950"] .text-slate-200,
-[class*="bg-gray-950"] .text-slate-300, [class*="bg-gray-950"] .text-slate-400,
-[class*="from-[hsl(32,28%,13%)]"] .text-slate-100,
-[class*="from-[hsl(32,28%,13%)]"] .text-slate-200,
-[class*="from-[hsl(32,28%,13%)]"] .text-slate-300,
-[class*="from-[hsl(32,28%,13%)]"] .text-slate-400,
-[class*="bg-[hsl(32,28%,13%)]"] .text-slate-100,
-[class*="bg-[hsl(32,28%,13%)]"] .text-slate-200,
-[class*="bg-[hsl(32,28%,13%)]"] .text-slate-300,
-[class*="bg-[hsl(32,28%,13%)]"] .text-slate-400 {
+[class*="bg-zinc-900"], [class*="bg-zinc-800"],
+[class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"])
+:is(.text-zinc-100, .text-zinc-200, .text-zinc-300, .text-zinc-400, .text-zinc-500,
+    .text-gray-100, .text-gray-200, .text-gray-300, .text-gray-400, .text-gray-500,
+    .text-slate-100, .text-slate-200, .text-slate-300, .text-slate-400, .text-slate-500,
+    .text-muted, .text-muted-foreground,
+    [class~="text-zinc-100"], [class~="text-zinc-200"], [class~="text-zinc-300"], [class~="text-zinc-400"], [class~="text-zinc-500"],
+    [class~="text-gray-100"], [class~="text-gray-200"], [class~="text-gray-300"], [class~="text-gray-400"], [class~="text-gray-500"],
+    [class~="text-slate-100"], [class~="text-slate-200"], [class~="text-slate-300"], [class~="text-slate-400"], [class~="text-slate-500"],
+    [class~="text-muted"], [class~="text-muted-foreground"]) {
   color: #d4d4d4 !important;
 }
 
 /* ── Step 3: Gold text on dark backgrounds → white ── */
-.bg-black .text-gold,
-.bg-black [class*="text-gold"],
-.bg-gray-900 .text-gold,
-.bg-gray-900 [class*="text-gold"],
-.bg-gray-950 .text-gold,
-.bg-gray-950 [class*="text-gold"],
-.bg-gold .text-gold,
-.bg-gold [class*="text-gold"],
-[class*="from-[hsl(32,28%,13%)]"] .text-gold,
-[class*="from-[hsl(32,28%,13%)]"] [class*="text-gold"],
-[class*="bg-[hsl(32,28%,13%)]"] .text-gold,
-[class*="bg-[hsl(32,28%,13%)]"] [class*="text-gold"] {
+:is(.bg-black, .bg-gray-900, .bg-gray-950, .bg-gold, .bg-zinc-900, .bg-zinc-800,
+[class*="bg-black"], [class*="bg-gray-900"], [class*="bg-gray-950"],
+[class*="bg-zinc-900"], [class*="bg-zinc-800"],
+[class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"])
+:is(.text-gold, [class*="text-gold"]) {
   color: #FFFFFF !important;
 }
 
@@ -2238,23 +2166,17 @@ svg[class*="text-muted"],
 }
 
 /* ── Step 4: Buttons & links on dark backgrounds ── */
-button.bg-black,
-a.bg-black,
-button.bg-gold,
-a.bg-gold,
-button[class*="bg-gray-900"],
-a[class*="bg-gray-900"] {
+button.bg-black, a.bg-black,
+button.bg-gold, a.bg-gold,
+button[class*="bg-gray-900"], a[class*="bg-gray-900"] {
   color: #FFFFFF !important;
 }
 
-button.bg-black *,
-a.bg-black *,
-button.bg-gold *,
-a.bg-gold * {
+button.bg-black *, a.bg-black *,
+button.bg-gold *, a.bg-gold * {
   color: inherit;
 }
 
-button[class*="bg-green"],
-a[class*="bg-green"] {
+button[class*="bg-green"], a[class*="bg-green"] {
   color: #FFFFFF !important;
 }
