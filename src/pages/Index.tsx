@@ -75,7 +75,7 @@ const VerificationBanner = lazy(() => import("@/components/verification/Verifica
 
 const SectionLoader = forwardRef<HTMLDivElement>((_, ref) => (
   <div ref={ref} className="py-12 flex items-center justify-center">
-    <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+    <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
   </div>
 ));
 SectionLoader.displayName = "SectionLoader";
@@ -168,8 +168,8 @@ const Index = () => {
               className="absolute inset-0 z-[1] flex flex-col items-center justify-center pointer-events-none"
             >
               {/* Gold accent orbs */}
-              <div className="absolute top-1/4 left-10 w-64 h-64 bg-gold/5 rounded-full blur-[100px]" />
-              <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-gold/8 rounded-full blur-[120px]" />
+              <div className="absolute top-1/4 left-10 w-64 h-64 bg-white/5 rounded-full blur-[100px]" />
+              <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-white/5 rounded-full blur-[120px]" />
               
               {/* Logo — transparent monogram, no background */}
               <img 
@@ -184,14 +184,13 @@ const Index = () => {
               
               {/* Tagline */}
               <p 
-                className="mt-6 text-gold/70 text-sm md:text-base tracking-[0.25em] uppercase text-center px-6"
-                style={{ fontFamily: 'Poppins, sans-serif' }}
+                className="mt-6 text-white/60 text-sm md:text-base tracking-[0.25em] uppercase text-center px-6"
               >
                 Your Gateway to Dubai's Finest Real Estate
               </p>
               
               {/* Loading shimmer line */}
-              <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
+              <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
             </div>
           )}
 
@@ -229,13 +228,13 @@ const Index = () => {
         
         {/* Animated gold accent lines */}
         <motion.div 
-          className="absolute left-0 top-1/3 w-48 md:w-96 h-px bg-gradient-to-r from-gold/60 to-transparent"
+          className="absolute left-0 top-1/3 w-48 md:w-96 h-px bg-gradient-to-r from-white/20 to-transparent"
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 1.5, delay: 0.5 }}
         />
         <motion.div 
-          className="absolute right-0 bottom-1/3 w-48 md:w-96 h-px bg-gradient-to-l from-gold/60 to-transparent"
+          className="absolute right-0 bottom-1/3 w-48 md:w-96 h-px bg-gradient-to-l from-white/20 to-transparent"
           initial={{ x: 100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 1.5, delay: 0.7 }}
@@ -252,7 +251,7 @@ const Index = () => {
             {/* Platform tagline badge */}
             <motion.p
               variants={fadeInUp}
-              className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[hsl(var(--gold)/0.7)] mb-4"
+              className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-white/60 mb-4"
             >
               Dubai's Trusted Real Estate Technology Platform
             </motion.p>
@@ -262,10 +261,9 @@ const Index = () => {
               variants={fadeInUp}
               className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1] mb-6"
               style={{
-                background: "linear-gradient(135deg, #FFFFFF 0%, #ECE2D2 40%, #C8A766 100%)",
+                background: "linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 40%, #FFFFFF 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                fontFamily: "Poppins, sans-serif",
               }}
             >
               Your Gateway to Dubai's
@@ -282,9 +280,9 @@ const Index = () => {
                 <Link
                   key={action.label}
                   to={action.href}
-                  className="group inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-[hsl(var(--gold)/0.3)] bg-[hsl(32,28%,13%)]/40 backdrop-blur-md text-white/90 text-[10px] sm:text-xs font-medium hover:bg-[hsl(var(--gold)/0.15)] hover:border-[hsl(var(--gold)/0.6)] hover:text-gold transition-all duration-300"
+                  className="group inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-white/30 bg-black/40 backdrop-blur-md text-white/90 text-[10px] sm:text-xs font-medium hover:bg-white/15 hover:border-white/50 hover:text-white transition-all duration-300"
                 >
-                  <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold/70 group-hover:text-gold transition-colors" />
+                  <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white/70 group-hover:text-white transition-colors" />
                   {action.label}
                 </Link>
               ))}
@@ -293,14 +291,14 @@ const Index = () => {
             {/* Three pillar badges */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-3 gap-px max-w-3xl mx-auto mb-8 border border-[hsl(var(--gold)/0.2)] overflow-hidden"
+              className="grid grid-cols-3 gap-px max-w-3xl mx-auto mb-8 border border-white/20 overflow-hidden"
             >
               {pillars.map((pillar, i) => (
                 <div
                   key={pillar.title}
-                  className="bg-black/50 backdrop-blur-sm p-3 sm:p-4 text-center border-r last:border-r-0 border-[hsl(var(--gold)/0.15)]"
+                  className="bg-black/50 backdrop-blur-sm p-3 sm:p-4 text-center border-r last:border-r-0 border-white/15"
                 >
-                  <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-gold mx-auto mb-1.5" />
+                  <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/80 mx-auto mb-1.5" />
                   <h3 className="text-[10px] sm:text-xs font-semibold text-white mb-0.5">{pillar.title}</h3>
                   <p className="text-[8px] sm:text-[10px] text-zinc-400 leading-tight">{pillar.desc}</p>
                 </div>
@@ -315,7 +313,7 @@ const Index = () => {
               className="flex flex-col items-center gap-1"
             >
               <span className="text-[9px] uppercase tracking-[0.2em] text-zinc-500">Explore</span>
-              <ChevronDown className="w-4 h-4 text-[hsl(var(--gold)/0.5)] animate-bounce" />
+              <ChevronDown className="w-4 h-4 text-white/40 animate-bounce" />
             </motion.div>
           </div>
         </motion.div>
@@ -424,14 +422,7 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* AI HOME FINDER — Premium 3D Section */}
-      <section className="flex items-center justify-center py-16 md:py-24 min-h-[340px] relative overflow-hidden bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/4 rounded-full blur-[120px]" />
-          <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-gold/3 rounded-full blur-[80px]" />
-          <div className="absolute bottom-0 right-0 w-[300px] h-[300px] bg-gold/3 rounded-full blur-[80px]" />
-          <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(hsl(var(--gold) / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--gold) / 0.3) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-        </div>
-        
+      <section className="flex items-center justify-center py-16 md:py-24 min-h-[340px] relative overflow-hidden bg-gray-950">
         <div className="container mx-auto px-4 relative z-10" style={{ perspective: '1200px' }}>
           <div className="flex justify-center">
             <motion.div
@@ -443,51 +434,34 @@ const Index = () => {
               className="text-center relative max-w-2xl"
               style={{ transformStyle: 'preserve-3d' }}
             >
-            <div style={{ animation: 'jbj-float 4s ease-in-out infinite', borderRadius: '1.5rem' }}>
-              {/* Premium multi-layer glow */}
-              <div className="absolute inset-0 -m-8 md:-m-12 rounded-3xl bg-gold/12 blur-[50px]" />
-              <div className="absolute inset-0 -m-4 md:-m-6 rounded-3xl bg-gold/10 blur-2xl" />
-              
-              {/* Card with premium 3D glassmorphism */}
-              <div 
-                className="relative z-10 bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gold/60 transition-all duration-300 hover:shadow-[0_0_80px_hsl(var(--gold)_/_0.3)]"
-                style={{
-                  boxShadow: '0 0 60px hsl(var(--gold) / 0.25), 0 0 120px hsl(var(--gold) / 0.1), 0 30px 80px rgba(0,0,0,0.5), 0 4px 20px rgba(200,167,102,0.15), inset 0 1px 0 hsl(var(--gold) / 0.15), inset 0 -1px 0 rgba(0,0,0,0.3)',
-                  transform: 'translateZ(20px)',
-                }}
+              <div className="relative z-10 bg-white backdrop-blur-xl rounded-2xl px-8 md:px-14 py-8 md:py-10 border border-gray-200 transition-all duration-300 hover:shadow-2xl shadow-xl"
+                style={{ transform: 'translateZ(20px)' }}
               >
-                {/* Top shine line */}
-                <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-purple-400/30 to-transparent" />
-                {/* Bottom reflection */}
-                <div className="absolute bottom-0 left-12 right-12 h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
-                
-                {/* Gold label badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-900/10 border border-purple-800/20 text-purple-900 text-xs uppercase tracking-[0.2em] mb-5">
-                  <Sparkles className="w-3 h-3 text-purple-700" />
+                {/* Label badge */}
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gray-100 border border-gray-200 text-gray-700 text-xs uppercase tracking-[0.2em] mb-5">
+                  <Sparkles className="w-3 h-3 text-gray-600" />
                   {t('home.aiPowered', 'AI-Powered')}
                 </div>
                 <Link to="/quiz" className="block group">
                   <div className="flex items-center justify-center gap-3 mb-3">
-                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-400/10 border border-purple-400/30 flex items-center justify-center shadow-[0_0_30px_rgba(139,92,246,0.25)] group-hover:shadow-[0_0_50px_rgba(139,92,246,0.4)] transition-all duration-500">
-                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-purple-500 group-hover:text-purple-400 transition-colors" strokeWidth={1.5} />
+                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center group-hover:bg-gray-200 transition-all duration-500">
+                      <Sparkles className="w-6 h-6 md:w-7 md:h-7 text-gray-700 group-hover:text-black transition-colors" strokeWidth={1.5} />
                     </div>
                     <h2 
-                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide bg-gradient-to-r from-[#1a1a1a] via-[#2d2319] to-[#1a1a1a] bg-clip-text text-transparent group-hover:from-gold group-hover:via-gold-light group-hover:to-gold transition-all duration-500" 
-                      style={{ fontFamily: "Poppins, sans-serif" }}
+                      className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-wide text-black"
                     >
                       {t('hero.aiFinder')}
                     </h2>
-                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-stone-800 group-hover:text-gold transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 text-gray-600 group-hover:text-black transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </div>
-                  <p className="text-stone-800 text-sm md:text-base max-w-lg mx-auto">
+                  <p className="text-gray-600 text-sm md:text-base max-w-lg mx-auto">
                     {t('hero.aiFinderDesc')}
                   </p>
-                  <p className="text-stone-500 text-xs mt-3">
+                  <p className="text-gray-400 text-xs mt-3">
                     {t('home.poweredByJBJ', 'Powered by JBJ Global Real Estate')}
                   </p>
                 </Link>
               </div>
-            </div>
             </motion.div>
           </div>
         </div>
@@ -506,33 +480,29 @@ const Index = () => {
 
       <SectionDivider />
 
-      {/* MORTGAGE CALCULATOR SECTION */}
-      <section>
+      <section className="py-12 md:py-16">
         <div className="jj-layer-2">
-          <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 md:border-2 rounded-xl md:rounded-3xl p-4 md:p-12 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-24 md:w-48 h-24 md:h-48 bg-gold/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2" />
-            
+          <div className="bg-gray-50 border border-gray-200 rounded-xl md:rounded-3xl p-4 md:p-12 relative overflow-hidden">
             <div className="relative z-10">
               <Suspense fallback={<SectionLoader />}>
                 <MortgageCalculator compact />
               </Suspense>
-              <p className="text-zinc-500 text-xs text-center mt-4">
+              <p className="text-gray-500 text-xs text-center mt-4">
                 Estimates only. We connect you with independent licensed mortgage advisors for personalized guidance.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
                 <Link to="/mortgage-calculator">
-                  <Button variant="primary" size="lg" className="gap-2 px-8 py-5 text-base group">
-                    <Sparkles className="w-5 h-5 text-gold group-hover:text-black transition-colors" />
-                    <span className="whitespace-nowrap"><span className="text-black group-hover:text-gold transition-colors">{t('home.tryOurAi', 'Try Our AI')} </span><span className="text-gold group-hover:text-black transition-colors">{t('mortgage.calculator', 'Mortgage Calculator')}</span></span>
-                    <ArrowUpRight className="w-5 h-5 text-black group-hover:text-gold transition-colors" />
+                  <Button size="lg" className="gap-2 px-8 py-5 text-base bg-black text-white hover:bg-gray-800">
+                    <Sparkles className="w-5 h-5" />
+                    <span className="whitespace-nowrap">{t('home.tryOurAi', 'Try Our AI')} {t('mortgage.calculator', 'Mortgage Calculator')}</span>
+                    <ArrowUpRight className="w-5 h-5" />
                   </Button>
                 </Link>
                 
                 <Link to="/partners/mortgage">
-                  <Button variant="secondary" size="lg" className="gap-2 px-8 py-5 text-base group">
-                    <Users className="w-5 h-5 text-gold" />
+                  <Button variant="outline" size="lg" className="gap-2 px-8 py-5 text-base border-gray-300 text-black hover:bg-gray-100">
+                    <Users className="w-5 h-5 text-gray-600" />
                     <span>{t('home.connectMortgagePartners', 'Connect With Mortgage Partners')}</span>
                     <ArrowUpRight className="w-5 h-5" />
                   </Button>

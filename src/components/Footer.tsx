@@ -550,14 +550,14 @@ const Footer = () => {
             {/* Single Premium Strip: Social + Write Us + Google + Mode + Currency/Unit */}
             <div className="relative flex flex-col items-center gap-0">
               <div 
-                className="w-full flex flex-col md:flex-row items-center justify-center gap-0 rounded-none overflow-hidden"
+                className="w-full flex flex-col md:flex-row items-stretch justify-center rounded-none overflow-hidden"
                 style={{
                   background: '#F5F5F5',
                   border: '1px solid rgba(0,0,0,0.06)',
                 }}
               >
                 {/* Social Icons */}
-                <div className="flex items-center gap-4 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200">
+                <div className="flex items-center gap-4 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 whitespace-nowrap">
                   <p className="text-gray-500 text-xs uppercase tracking-[0.15em] font-medium whitespace-nowrap">Connect</p>
                   <SocialLinks variant="glow" iconClassName="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
@@ -565,28 +565,28 @@ const Footer = () => {
                 {/* Write Us */}
                 <a
                   href={getEmailUrl()}
-                  className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 hover:bg-gray-50 transition-colors whitespace-nowrap min-w-0"
                 >
-                  <Mail className="w-5 h-5 text-gray-700" />
-                  <div>
-                    <p className="text-gray-400 text-[10px] uppercase tracking-wider">Write Us</p>
-                    <p className="text-gray-700 text-sm font-semibold">{CONTACT_INFO.email}</p>
+                  <Mail className="w-5 h-5 text-gray-700 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="text-gray-400 text-[10px] uppercase tracking-wider whitespace-nowrap">Write Us</p>
+                    <p className="text-gray-700 text-sm font-semibold truncate">{CONTACT_INFO.email}</p>
                   </div>
                 </a>
 
                 {/* Google Business */}
-                <div className="flex items-center px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200">
+                <div className="flex items-center px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 whitespace-nowrap">
                   <GoogleMyBusinessLink />
                 </div>
 
                 {/* Mode */}
-                <div className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200">
+                <div className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 whitespace-nowrap">
                   <p className="text-gray-500 text-[10px] uppercase tracking-wider whitespace-nowrap">Mode</p>
                   <ModeSwitcher variant="header" showForUnselected={true} />
                 </div>
 
                 {/* Currency & Unit */}
-                <div className="flex items-center px-6 py-4">
+                <div className="flex items-center px-6 py-4 whitespace-nowrap">
                   <FooterCurrencyUnit />
                 </div>
               </div>

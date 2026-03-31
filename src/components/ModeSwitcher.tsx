@@ -61,21 +61,14 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   const { hasSelectedRole } = useUserRole();
   const [isOpen, setIsOpen] = useState(false);
 
-  // Don't show mode switcher if user hasn't selected a role yet (unless forced)
   if (!hasSelectedRole && !showForUnselected) return null;
 
   const handleModeChange = async (newMode: UserMode) => {
     await setMode(newMode);
-    
-    // Emit global event for immediate UI updates
     window.dispatchEvent(new CustomEvent('userModeChange', { detail: newMode }));
-    
-    // Show success toast
     toast.success(`Switched to ${MODE_CONFIG[newMode].label}`, {
       description: MODE_CONFIG[newMode].description
     });
-    
-    // Close dropdown after brief delay to show success state
     setTimeout(() => {
       setIsOpen(false);
     }, 400);
@@ -119,7 +112,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             className={cn(
               "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all duration-300 hover:shadow-md max-w-[220px] whitespace-nowrap shrink-0",
               currentConfig.bgColor,
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400/50",
               className
             )}
           >
@@ -141,15 +134,15 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         
         <DropdownMenuContent 
           align="end" 
-          className="w-72 mr-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 shadow-xl rounded-xl p-2 z-[10001]"
+          className="w-72 mr-3 bg-white border border-gray-200 shadow-xl rounded-xl p-2 z-[10001]"
           sideOffset={5}
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <div className="px-3 py-2.5 mb-2 rounded-lg bg-gradient-to-r from-[#F7F1E6] via-[#EDE0C8] to-[#D8C7A6] border border-gold/40">
-            <p className="text-sm font-bold text-black/80">
+          <div className="px-3 py-2.5 mb-2 rounded-lg bg-gray-50 border border-gray-200">
+            <p className="text-sm font-bold text-black">
               Select your mode
             </p>
-            <p className="text-xs text-black/50 mt-0.5">
+            <p className="text-xs text-gray-500 mt-0.5">
               Choose how you want to use the platform
             </p>
           </div>
@@ -172,12 +165,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200",
                   isActive 
                     ? `${config.bgColor} ${config.borderColor} border` 
-                    : "hover:bg-zinc-50"
+                    : "hover:bg-gray-50"
                 )}
               >
                 <div className={cn(
                   "w-8 h-8 rounded-lg flex items-center justify-center border",
-                  // Always show mode-specific colors, not just when active
                   config.bgColor, config.borderColor
                 )}>
                   <Icon className={cn("w-4 h-4", config.color)} />
@@ -185,12 +177,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                 <div className="flex-1">
                   <p className={cn(
                     "text-sm font-medium",
-                    // Always show mode-specific color for label
                     config.color
                   )}>
                     {config.label}
                   </p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-xs text-gray-500">
                     {config.description}
                   </p>
                 </div>
