@@ -333,7 +333,7 @@ const BestIdeaAward = () => {
                                   placeholder="John Doe"
                                   value={formData.fullName}
                                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                                  className="mt-1 border-zinc-300 focus:border-gold"
+                                className="mt-1 border-gray-300 focus:border-gold"
                                 />
                               </div>
                               <div>
