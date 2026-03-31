@@ -285,7 +285,7 @@ const JBJPodcastSection = () => {
               </div>
 
               {/* Audio Controls Bar - Pearl/Champagne card */}
-              <div className="mt-4 jj-card-inner rounded-xl border border-gold/30 p-4">
+              <div className="mt-4 jj-card-inner rounded-xl border border-gray-200 p-4">
                 {/* Progress Bar - 0 on LEFT, duration on RIGHT */}
                 <div className="mb-4">
                   <PodcastSlider
