@@ -249,7 +249,7 @@ const JBJPodcastSection = () => {
                       className="absolute bottom-0 left-0 right-0 px-4 pb-4 pointer-events-none"
                       data-no-translate
                     >
-                      <div className="jj-card-inner/90 backdrop-blur-sm border border-gold/30 rounded-lg px-4 py-3">
+                      <div className="jj-card-inner/90 backdrop-blur-sm border border-gray-300 rounded-lg px-4 py-3">
                         {playback.captionSpeaker ? (
                           <p className="text-[10px] uppercase tracking-[0.25em] text-black/60 mb-1">
                             {playback.captionSpeaker}
