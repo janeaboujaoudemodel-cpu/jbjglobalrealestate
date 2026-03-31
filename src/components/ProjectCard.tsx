@@ -270,7 +270,7 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
           )}
           
           {/* Top-Left: Property Type Label (if no developer logo) */}
-          {project.property_type_label && !(project.developer as any)?.logo_url && (
+          {project.property_type_label && !getDeveloperLogoUrl(project.developer) && (
             <div className="absolute top-3 left-3 z-10 bg-premium-bg/90 text-gold px-2 py-1 rounded text-xs font-semibold border border-gold/30">
               {project.property_type_label}
             </div>
