@@ -197,7 +197,7 @@ const ClientMarketSnapshot = ({
             {/* Historical Context if available */}
             {historicalData && historicalData.length > 0 && (
               <div className="mt-4 pt-3 border-t border-border/30">
-                <span className="text-xs text-muted-foreground uppercase tracking-wide block mb-2">
+                <span className="text-xs text-black/80 font-medium uppercase tracking-wide block mb-2">
                   Historical Trend
                 </span>
                 <div className="flex items-end gap-1 h-12">
