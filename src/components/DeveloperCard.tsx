@@ -104,16 +104,11 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
       {/* Logo Overlay - Top Left */}
           <div className="absolute top-3 left-3 z-10">
             {developer.logo_url && !logoError ? (
-              <div
-                className={`w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center ${
-                  needsWhiteBg ? 'bg-white shadow-lg p-1.5' : (developer.logo_bg_color ? 'shadow-lg' : '')
-                }`}
-                style={{ backgroundColor: needsWhiteBg ? '#FFFFFF' : (developer.logo_bg_color || 'transparent') }}
-              >
+              <div className="w-14 h-14 flex items-center justify-center">
                 <img
                   src={developer.logo_url}
                   alt={`${developer.name} logo`}
-                  className={`object-contain ${needsWhiteBg ? 'w-full h-full' : 'w-full h-full'}`}
+                  className="w-full h-full object-contain rounded-lg"
                   loading={isEager ? "eager" : "lazy"}
                   referrerPolicy="no-referrer"
                   onError={() => setLogoError(true)}

@@ -204,13 +204,11 @@ const ProjectCard = ({ project, showFavorite = true, showBadgeButton = true, cur
         <div className="aspect-[16/10] overflow-hidden relative">
           {/* Developer Logo Overlay - Top Left */}
           {getDeveloperLogoUrl(project.developer) && (
-            <div
-              className="absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center shadow-lg p-1.5 bg-white/90"
-            >
+            <div className="absolute top-3 left-3 z-15 w-12 h-12 flex items-center justify-center">
               <img 
                 src={getDeveloperLogoUrl(project.developer)!} 
                 alt={project.developer?.name}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain rounded-lg"
               />
             </div>
           )}
