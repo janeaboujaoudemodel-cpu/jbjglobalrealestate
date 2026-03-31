@@ -2098,51 +2098,83 @@ svg[class*="text-muted"],
   color: hsl(var(--foreground));
 }
 
-/* ── 1. LIGHT SURFACES: force dark readable text ── */
+/* ── 1. LIGHT SURFACES: enforce minimum contrast (WCAG AA) ── */
+/* 1a. Very low contrast text → bump to readable gray */
 :root:not(.dark) :is(
   .bg-white, .bg-background, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
-  .bg-zinc-50, .bg-gray-50, .bg-slate-50, .bg-neutral-50, .bg-stone-50,
-  [class*="bg-white"], [class*="bg-zinc-5"], [class*="bg-gray-5"],
-  [class*="bg-slate-5"], [class*="bg-neutral-5"], [class*="bg-stone-5"],
-  [class*="bg-gradient-to"][class*="from-gold/"],
-  [class*="bg-gold/"], [class*="from-gold/"],
-  [class*="bg-gray-100"], [class*="bg-zinc-100"],
+  .bg-gray-50, .bg-gray-100,
   .jj-layer-2, .jj-layer-1,
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
-) :is(
-  [class*="text-zinc-"], [class*="text-gray-"], [class*="text-slate-"],
-  [class*="text-stone-"], [class*="text-neutral-"],
-  [class*="text-white/"], [class*="text-black/"],
-  .text-muted-foreground, .text-foreground
-) {
-  color: hsl(var(--foreground)) !important;
+) :is(.text-gray-300, .text-gray-400, .text-zinc-300, .text-zinc-400) {
+  color: #6b7280 !important; /* gray-500 — 4.6:1 on white */
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
 }
 
-/* ── 2. DARK SURFACES: force light text ── */
+/* 1b. White text on light surfaces → force dark */
+:root:not(.dark) :is(
+  .bg-white, .bg-background, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
+  .bg-gray-50, .bg-gray-100,
+  .jj-layer-2, .jj-layer-1
+) > :is(.text-white, [class*="text-white/"]) {
+  color: hsl(var(--foreground)) !important;
+  opacity: 1 !important;
+}
+
+/* ── 2. DARK SURFACES: force light readable text ── */
+/* Dark surface selector */
 :where(
-  .dark,
   .bg-black, .bg-primary, .bg-foreground,
   .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-slate-800, .bg-slate-900, .bg-slate-950,
-  .bg-neutral-800, .bg-neutral-900, .bg-neutral-950,
-  [class*="bg-black"], [class*="bg-zinc-8"], [class*="bg-zinc-9"],
-  [class*="bg-gray-8"], [class*="bg-gray-9"],
-  [class*="bg-slate-8"], [class*="bg-slate-9"],
-  [class*="bg-neutral-8"], [class*="bg-neutral-9"],
+  [class*="bg-black"],
+  [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
+  [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
+) {
+  color: rgb(255 255 255 / 0.92);
+}
+
+/* 2a. Low-contrast grays on dark → readable white */
+:where(
+  .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900, .bg-gray-950,
+  .bg-gray-800, .bg-zinc-800, .bg-slate-900,
+  [class*="bg-black"],
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
   [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
 ) :is(
-  [class*="text-zinc-"], [class*="text-gray-"], [class*="text-slate-"],
-  [class*="text-stone-"], [class*="text-neutral-"],
-  [class*="text-white"], [class*="text-black/"],
-  .text-muted-foreground, .text-foreground, .text-muted
+  .text-gray-400, .text-gray-500, .text-zinc-400, .text-zinc-500,
+  .text-slate-400, .text-slate-500
 ) {
-  color: #fff !important;
+  color: rgb(255 255 255 / 0.78) !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
+}
+
+/* 2b. Darker grays on dark surfaces → bright white */
+:where(
+  .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900, .bg-gray-950,
+  [class*="bg-black"]
+) :is(
+  .text-gray-600, .text-gray-700, .text-gray-800, .text-gray-900,
+  .text-zinc-600, .text-zinc-700, .text-zinc-800,
+  .text-black, .text-foreground, .text-muted-foreground
+) {
+  color: rgb(255 255 255 / 0.92) !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* 2c. Borders on dark surfaces — visible */
+:where(
+  .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900, .bg-gray-950
+) :is(.border-gray-700, .border-zinc-700, .border-gray-800, .border-zinc-800) {
+  border-color: rgb(255 255 255 / 0.18) !important;
+}
+
+/* 2d. Dialogs & modals on dark backgrounds */
+.dark [role="dialog"] :is(.text-gray-400, .text-gray-500, .text-zinc-400, .text-zinc-500) {
+  color: rgb(255 255 255 / 0.78) !important;
 }
 
 /* ── 3. Gold accent text preserved on dark surfaces ── */
