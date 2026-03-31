@@ -172,14 +172,14 @@ const JBJPodcastSection = () => {
           viewport={{ once: true }}
           className="text-center mb-14"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gold/20 to-gold/10 border border-gold/40 rounded-full text-xs uppercase tracking-[0.2em] font-semibold text-gold mb-4">
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-300 rounded-full text-xs uppercase tracking-[0.2em] font-semibold text-black mb-4">
             <Radio className="w-4 h-4" />
             <T>JBJ Podcast</T>
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4" style={{ fontFamily: "Poppins, sans-serif" }}>
-            <T>The JBJ</T> <span className="text-gold"><T>Perspective</T></span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4">
+            <T>The JBJ</T> <span className="text-gray-600"><T>Perspective</T></span>
           </h2>
-          <p className="text-lg md:text-xl text-black/70 max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto">
             <T>Real Estate, Power & Global Opportunity</T>
           </p>
         </motion.div>
