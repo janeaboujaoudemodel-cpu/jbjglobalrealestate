@@ -278,7 +278,7 @@ const JBJPodcastSection = () => {
                 ) : null}
 
                 {errorMessage ? (
-                  <div className="mt-3 jj-card-inner rounded-lg border border-gold/30 px-4 py-3">
+                  <div className="mt-3 jj-card-inner rounded-lg border border-gray-200 px-4 py-3">
                     <p className="text-sm text-black/80 leading-relaxed">{errorMessage}</p>
                   </div>
                 ) : null}
