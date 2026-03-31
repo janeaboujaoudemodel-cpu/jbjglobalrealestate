@@ -76,8 +76,8 @@ const StartingPointSection = () => {
                 className={cn(
                   "px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide transition-all duration-300 border",
                   activeTab === tab.key
-                    ? "bg-black text-white border-black shadow-md"
-                    : "bg-white text-gray-900 border-gray-200 hover:bg-gray-50"
+                    ? "bg-white text-gray-900 border-gray-300 shadow-sm font-bold"
+                    : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50 hover:text-gray-900"
                 )}
               >
                 {tab.label}
