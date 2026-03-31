@@ -2026,18 +2026,32 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
 [class*="ring-gold"] { --tw-ring-color: #d4d4d4 !important; }
 
 /* ── Global icon contrast unification ──
-   All standalone icons (svg) using text-gold get solid black.
+   All icons get solid black unless inside a dark container.
    Icons inside dark containers get white. */
+
+/* Force all faded/muted icon colors to solid black */
 svg.text-gold,
 .text-gold > svg,
-[class*="text-gold"] > svg {
+[class*="text-gold"] > svg,
+svg.text-gray-400,
+svg.text-gray-500,
+svg.text-gray-600,
+svg[class*="text-muted"],
+[class*="text-gray-400"] > svg,
+[class*="text-gray-500"] > svg,
+[class*="text-gray-600"] > svg,
+[class*="text-muted"] > svg {
   color: #111111 !important;
 }
 
+/* Icons inside dark containers must be white */
 .bg-black svg,
 .bg-gray-900 svg,
 .bg-gray-950 svg,
-.bg-gold svg {
+.bg-gold svg,
+[class*="bg-black"] > svg,
+[class*="bg-gray-900"] > svg,
+[class*="bg-gray-950"] > svg {
   color: #FFFFFF !important;
 }
 
