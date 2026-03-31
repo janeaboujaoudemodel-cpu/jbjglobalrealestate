@@ -680,12 +680,12 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               key={resultsCount}
               className={cn(
                 "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all animate-in fade-in zoom-in-95 duration-300",
-                "bg-gradient-to-r from-gold/20 to-gold/10 border-2 border-gold/50 text-black shadow-sm"
+                "bg-black text-white border border-black shadow-sm"
               )}
             >
-              <Activity className="w-3.5 h-3.5 text-gold" />
+              <Activity className="w-3.5 h-3.5 text-white" />
               <span className="tabular-nums">{resultsCount.toLocaleString()}</span>
-              <span className="text-black/60 font-medium">{resultsLabel || 'Results'}</span>
+              <span className="text-white/70 font-medium">{resultsLabel || 'Results'}</span>
             </div>
           </div>
         )}
