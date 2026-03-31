@@ -229,7 +229,7 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
                 const percentages = breakdown.map((b: any) => b.percentage).filter((p: any) => typeof p === 'number');
                 if (percentages.length === 0) return <span />;
                 return (
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-600 bg-gray-100 border border-gray-300 rounded-full px-2 py-0.5">
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-300 rounded-full px-2 py-0.5">
                     <CreditCard className="w-3 h-3" />
                     {percentages.join('/')}
                   </span>
