@@ -325,7 +325,7 @@ const BestIdeaAward = () => {
                               className="space-y-4"
                             >
                               <div>
-                                <Label className="text-zinc-700 flex items-center gap-2">
+                                <Label className="text-gray-700 flex items-center gap-2">
                                   <User className="w-4 h-4 text-gold" />
                                   Full Name *
                                 </Label>
