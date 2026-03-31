@@ -440,7 +440,7 @@ const SupportTicketBox = () => {
                     </div>
                     <div>
                       <span className="text-xs uppercase tracking-[0.2em] text-red-500 font-semibold">24/7 Support</span>
-                      <h2 className="text-2xl md:text-3xl font-bold text-black" style={{ fontFamily: "Poppins, sans-serif" }}>
+                      <h2 className="text-2xl md:text-3xl font-bold text-black">
                         Need Help?
                       </h2>
                     </div>
