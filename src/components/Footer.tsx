@@ -831,8 +831,6 @@ const Footer = () => {
             {/* Google My Business Link - Relocated to Social Links section */}
           </div>
           
-          {/* Bottom Radial Glow */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-2/3 h-20 hidden pointer-events-none" />
         </div>
         </div>
       </div>
