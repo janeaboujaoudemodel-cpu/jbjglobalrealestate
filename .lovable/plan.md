@@ -1,44 +1,66 @@
 
 
-## Fix Logo Containers: Remove White Background, Keep Correct Data Extraction
+## Fix Developer Logo System Globally
 
-### Problem
-The logo data extraction (`getDeveloperLogoUrl`) is working correctly. However, a forced `bg-white` was added to all logo containers in the last fix, creating an ugly white box effect. The user wants this removed -- logos should render cleanly over the card image without an artificial white background.
+### Root Cause (TWO issues)
 
-### Root Cause
-The DeveloperCard component already has the correct pattern: it conditionally applies white bg only for specific developers that need it (Azizi, Binghatti, etc.) and uses `logo_bg_color` or transparent for others. The other 4 components were given a blanket `bg-white` which is wrong.
+**Issue 1: `logo_url` not fetched in most queries.** The developer join in most Supabase queries is `developer:developers(id, name, slug)` -- missing `logo_url`. Only `useProjectsListing` (line 369) and one other query (line 465) include it. This means `getDeveloperLogoUrl()` returns `null` because the field was never fetched, causing the logo to not render at all or fall through to a fallback.
 
-### Changes (4 files, logo container styling only)
+**Issue 2: Logo container has `bg-black/40 backdrop-blur-sm` (smoky gray).** This was introduced in the last fix. The user wants the original clean container restored.
 
-**1. `src/components/home/FeaturedListings.tsx` (line 157)**
-- Remove `bg-white` from logo container
-- Change to: `w-12 h-12 rounded-lg shadow-lg overflow-hidden p-1.5` (no bg-white)
-- Add subtle backdrop blur for visibility: `bg-black/40 backdrop-blur-sm`
+### Fix Plan
 
-**2. `src/components/ProjectCard.tsx` (line 208)**
-- Remove `bg-white` from logo container
-- Change to: `w-12 h-12 rounded-lg shadow-lg overflow-hidden p-1.5 bg-black/40 backdrop-blur-sm`
+**File 1: `src/hooks/useProjects.ts`** -- Add `logo_url` to ALL developer joins
 
-**3. `src/components/ReellyProjectCard.tsx` (line 164)**
-- Remove `bg-white` from logo container
-- Same pattern: `w-12 h-12 rounded-lg shadow-lg overflow-hidden p-1.5 bg-black/40 backdrop-blur-sm`
+- Line 262: `developer:developers(id, name, slug)` → `developer:developers(id, name, slug, logo_url)`
+- Line 282: same change
+- Line 334: same change
+- Line 417: same change
+- Line 440: same change
 
-**4. `src/components/project-detail/RecommendedProjects.tsx` (line 191)**
-- Remove `bg-white` from logo container
-- Change to: `w-10 h-10 rounded-xl overflow-hidden shadow-md border border-gold/40 p-1.5 bg-black/40 backdrop-blur-sm`
+**File 2: `src/pages/Favorites.tsx`** -- Add `logo_url` to developer joins
+
+- Line 126: `developer:developers(id, name, slug)` → `developer:developers(id, name, slug, logo_url)`
+- Line 140: same change
+
+**File 3: `src/pages/Compare.tsx`** -- Add `logo_url`
+
+- Line 134: `developer:developers(name, slug)` → `developer:developers(name, slug, logo_url)`
+
+**File 4: `src/components/ComparisonBar.tsx`** -- Add `logo_url`
+
+- Line 54: `developer:developers(name, slug)` → `developer:developers(name, slug, logo_url)`
+
+**File 5: `src/pages/Quiz.tsx` and `src/pages/QuizResults.tsx`** -- Add `logo_url` to developer joins
+
+**File 6: `src/components/home/FeaturedListings.tsx`** -- Restore clean logo container
+
+- Line 157: Remove `bg-black/40 backdrop-blur-sm`, restore to clean white container: `w-12 h-12 rounded-lg shadow-lg overflow-hidden p-1.5 bg-white/90`
+- Line 169 fallback: keep as-is (dark bg for missing logo initial is fine)
+
+**File 7: `src/components/ProjectCard.tsx`** -- Restore clean logo container
+
+- Line 208: Remove `bg-black/40 backdrop-blur-sm`, change to `w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center shadow-lg p-1.5 bg-white/90`
+
+**File 8: `src/components/ReellyProjectCard.tsx`** -- Restore clean logo container
+
+- Line 164: Same change -- remove `bg-black/40 backdrop-blur-sm`, use `bg-white/90`
+
+**File 9: `src/components/project-detail/RecommendedProjects.tsx`** -- Restore clean logo container
+
+- Line 191: Remove `bg-black/40 backdrop-blur-sm`, use `w-10 h-10 rounded-xl overflow-hidden shadow-md border border-gold/40 p-1.5 bg-white/90`
 
 ### What stays untouched
-- `getDeveloperLogoUrl` utility (correct, no changes)
-- `object-contain` on all logo images (correct)
-- DeveloperCard.tsx (already has correct conditional logic)
-- DeveloperSearchModal.tsx (separate component, already correct)
-- No color, layout, card design, border, or CTA changes
+
+- `getDeveloperLogoUrl` utility -- correct, no changes
+- `object-contain` on all logo images -- correct
+- DeveloperCard.tsx -- already has correct conditional logic
+- No layout, color, card design, border, or CTA changes
 - No database changes
 
-### Visual Result
-- Logos render over a subtle dark translucent backdrop (same as DeveloperCard's transparent approach)
-- No ugly white box
-- Logos centered with balanced p-1.5 padding
-- object-contain prevents cropping/stretching
-- Premium, clean look
+### Technical Details
+
+- Using `bg-white/90` (slightly translucent white) gives a clean, non-opaque container that doesn't look "boxed" but still ensures logo visibility over any background image
+- Adding `logo_url` to all developer joins is the critical data fix -- without it, `getDeveloperLogoUrl` has no data to return
+- This is the same field already used successfully in `useProjectsListing` (line 369)
 
