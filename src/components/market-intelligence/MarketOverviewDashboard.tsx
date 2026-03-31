@@ -192,7 +192,7 @@ export const MarketOverviewDashboard = () => {
                       <div key={prop.type} className="flex items-center justify-between py-3 border-b border-black/10 last:border-0">
                         <div>
                           <p className="text-black font-medium">{prop.type}</p>
-                          <p className="text-black/50 text-sm">{prop.volume.toLocaleString()} transactions</p>
+                          <p className="text-black/70 font-medium text-sm">{prop.volume.toLocaleString()} transactions</p>
                         </div>
                         <div className="text-right">
                           <p className="text-black font-bold">AED {prop.avgPrice.toLocaleString()}/sqft</p>
