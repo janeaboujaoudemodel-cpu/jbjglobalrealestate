@@ -601,17 +601,8 @@ const Footer = () => {
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
 
-        {/* ZONE 2: ULTRA PREMIUM Navigation + Tools + Contact Block */}
+        {/* ZONE 2: Navigation + Tools + Contact Block */}
         <div className="relative py-4">
-          <div 
-            className="w-full rounded-none overflow-hidden relative"
-            style={{
-              background: '#FFFFFF',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04)',
-            }}
-          >
-            <div className="absolute inset-0 border border-gray-200 pointer-events-none" />
-          
           <div className="bg-white border border-gray-200 overflow-hidden">
             
             {/* Navigation Grid Section - Card-Based 2-Column Layout */}
