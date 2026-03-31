@@ -74,10 +74,10 @@ const StartingPointSection = () => {
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
                 className={cn(
-                  "px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide transition-all duration-300",
+                  "px-4 md:px-6 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide transition-all duration-300 border",
                   activeTab === tab.key
-                    ? "bg-black text-white shadow-md"
-                    : "text-black hover:bg-gray-100 border border-transparent"
+                    ? "bg-black text-white border-black shadow-md"
+                    : "bg-white text-gray-900 border-gray-200 hover:bg-gray-50"
                 )}
               >
                 {tab.label}
