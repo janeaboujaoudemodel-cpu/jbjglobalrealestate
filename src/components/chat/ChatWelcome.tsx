@@ -1,6 +1,6 @@
 import { MessageCircle } from 'lucide-react';
 import { CONTACT_INFO } from '@/constants/stats';
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface ChatWelcomeProps {

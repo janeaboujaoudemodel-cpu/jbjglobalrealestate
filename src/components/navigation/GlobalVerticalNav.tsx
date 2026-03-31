@@ -17,7 +17,7 @@ import {
   Workflow, BellRing, Crown, Boxes, Store, Gem, Receipt, Banknote,
   Podcast, NotebookPen, BookText, HelpCircle, ScrollText,
 } from "lucide-react";
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRole } from "@/hooks/useUserRole";

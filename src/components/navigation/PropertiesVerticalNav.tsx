@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Building2, BarChart3, BookOpen, Briefcase, Users, Home, Tag, Key, PlusCircle, Building, Layers, Cpu, Heart, GitCompare, Calculator, Headphones, MapPin, Lightbulb, ChevronRight, Search, User, Settings, Castle, FileText, DollarSign, TrendingUp, ClipboardCheck, Shield } from "lucide-react";
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 import React, { useState, useRef, useCallback, useEffect } from "react";
 
 // Utility Components

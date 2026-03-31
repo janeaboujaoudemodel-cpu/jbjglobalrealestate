@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Mail, Loader2, ArrowRight, User, Phone } from 'lucide-react';
 import { validateEmail } from './types';
-import jbjMonogramLightBg from "@/assets/jbj-monogram-light-bg.png";
+import jbjMonogramLightBg from "@/assets/jbj-monogram-nobuffer.png";
 
 interface ChatEmailCheckProps {
   onEmailVerified: (email: string, isExisting: boolean, userData?: any) => void;
