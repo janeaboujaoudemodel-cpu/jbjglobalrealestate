@@ -2076,26 +2076,11 @@ svg[class*="text-muted"],
 }
 
 /* ============================================================
- * GLOBAL: Prevent word-breaking in small uppercase labels/badges
- * Any text ≤ 11px that is uppercase + tracked should never wrap
- * mid-word. This covers stat cards, badges, tags, etc.
- * ============================================================ */
-[class*="uppercase"][class*="tracking-"] {
-  word-break: keep-all;
-  overflow-wrap: normal;
-  hyphens: none;
-}
-
-/* Extra safety: very small text labels should never break */
-[class*="text-[8px]"],
-[class*="text-[9px]"],
-[class*="text-[10px]"],
-[class*="text-[11px]"] {
-  word-break: keep-all;
-  overflow-wrap: normal;
-}
-
- * Uses :where() on the dark rule so nested light surfaces win.
+ * GLOBAL CONTRAST ENFORCEMENT
+ * 1. Light surfaces → dark text
+ * 2. Dark surfaces → light text (uses :where() so #1 wins when nested)
+ * 3. Gold accent preserved
+ * 4. Hover/focus states enforced
  * ============================================================ */
 
 /* ── 1. LIGHT SURFACES: force dark readable text ── */
@@ -2104,8 +2089,9 @@ svg[class*="text-muted"],
   .bg-zinc-50, .bg-gray-50, .bg-slate-50, .bg-neutral-50, .bg-stone-50,
   [class*="bg-white"], [class*="bg-zinc-5"], [class*="bg-gray-5"],
   [class*="bg-slate-5"], [class*="bg-neutral-5"], [class*="bg-stone-5"],
-  [class*="bg-gradient-to"][class*="from-gold"],
-  [class*="bg-gold/"], [class*="from-gold/"]
+  [class*="bg-gradient-to"][class*="from-gold/"],
+  [class*="bg-gold/"], [class*="from-gold/"],
+  [class*="bg-gray-100"], [class*="bg-zinc-100"]
 ) :is(
   [class*="text-zinc-"], [class*="text-gray-"], [class*="text-slate-"],
   [class*="text-stone-"], [class*="text-neutral-"],
@@ -2117,9 +2103,10 @@ svg[class*="text-muted"],
   --tw-text-opacity: 1 !important;
 }
 
-/* ── 2. DARK SURFACES: force light text — uses :where() so rule 1 wins when nested ── */
+/* ── 2. DARK SURFACES: force light text ── */
 :where(
-  .dark, .bg-black, .bg-primary, .bg-foreground,
+  .dark,
+  .bg-black, .bg-primary, .bg-foreground,
   .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
   .bg-gray-800, .bg-gray-900, .bg-gray-950,
   .bg-slate-800, .bg-slate-900, .bg-slate-950,
@@ -2129,7 +2116,7 @@ svg[class*="text-muted"],
   [class*="bg-slate-8"], [class*="bg-slate-9"],
   [class*="bg-neutral-8"], [class*="bg-neutral-9"],
   [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
-  .bg-gradient-to-br
+  [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
 ) :is(
   [class*="text-zinc-"], [class*="text-gray-"], [class*="text-slate-"],
   [class*="text-stone-"], [class*="text-neutral-"],
@@ -2141,13 +2128,16 @@ svg[class*="text-muted"],
   --tw-text-opacity: 1 !important;
 }
 
-/* ── 3. Gold text preserved on dark surfaces ── */
+/* ── 3. Gold accent text preserved on dark surfaces ── */
 :where(
   .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900,
-  [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"]
-) .text-gold, :where(
+  [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
+  [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
+) .text-gold,
+:where(
   .bg-black, .bg-zinc-900, .bg-zinc-950, .bg-gray-900,
-  [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"]
+  [class*="from-[hsl(32,28%,13%)]"], [class*="bg-[hsl(32,28%,13%)]"],
+  [class*="from-[hsl(38,35%,12%)]"], [class*="bg-[hsl(38,35%,12%)]"]
 ) [class*="text-gold"] {
   color: #C8A766 !important;
 }
@@ -2171,4 +2161,17 @@ button.bg-gold *, a.bg-gold * {
 
 button[class*="bg-green"], a[class*="bg-green"] {
   color: #FFFFFF !important;
+}
+
+/* ── 6. Hover/focus contrast: ensure interactive text stays readable ── */
+a:hover, button:hover, [role="button"]:hover,
+a:focus-visible, button:focus-visible, [role="button"]:focus-visible {
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* ── 7. Muted/secondary text minimum contrast ── */
+.text-muted-foreground {
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
 }

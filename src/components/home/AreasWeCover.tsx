@@ -38,7 +38,6 @@ const AreasWeCover = () => {
           </span>
           <h2
             className="text-2xl md:text-3xl font-bold text-black"
-            style={{ fontFamily: "Poppins, sans-serif" }}
           >
             {t('areas.title', 'Areas We Cover')}
           </h2>
@@ -66,7 +65,7 @@ const AreasWeCover = () => {
                   <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
                     <span
                       className="text-6xl font-black text-black select-none"
-                      style={{ opacity: 0.1, fontFamily: "Poppins, sans-serif" }}
+                      style={{ opacity: 0.1 }}
                     >
                       JBJ
                     </span>
