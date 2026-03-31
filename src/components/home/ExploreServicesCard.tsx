@@ -294,7 +294,7 @@ const ExploreServicesCard = () => {
                 )}
               </div>
             ) : (
-              <Button variant="primary" size="default" disabled className="gap-2 px-6 py-3 rounded-lg text-sm">
+              <Button variant="default" size="default" disabled className="gap-2 px-6 py-3 rounded-lg text-sm bg-gray-200 text-gray-500 border border-gray-300 cursor-not-allowed">
                 {CTA_LABELS[currentService.id] ?? "Coming Soon"}
               </Button>
             )}
