@@ -514,12 +514,7 @@ const Footer = () => {
               Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
             </p>
 
-            {/* Premium Divider with intense glow */}
-            <div className="relative h-[2px] mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent blur-md" />
-              <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-gray-100 to-transparent blur-xl" />
-            </div>
+            <div className="h-px bg-gray-200 mb-6 sm:mb-8 md:mb-10 max-w-lg mx-auto" />
 
             {/* Stay in the Loop - Newsletter inside the 3D card */}
             {!isBackOfficeContext && (
