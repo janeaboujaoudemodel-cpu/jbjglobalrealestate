@@ -75,7 +75,7 @@ const VerificationBanner = lazy(() => import("@/components/verification/Verifica
 
 const SectionLoader = forwardRef<HTMLDivElement>((_, ref) => (
   <div ref={ref} className="py-12 flex items-center justify-center">
-    <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+    <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
   </div>
 ));
 SectionLoader.displayName = "SectionLoader";
