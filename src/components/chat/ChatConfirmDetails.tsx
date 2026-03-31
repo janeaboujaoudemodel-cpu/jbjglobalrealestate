@@ -37,7 +37,7 @@ const ChatConfirmDetails = ({ name, email, phone, onContinue, onUpdateDetails }:
         <img
           src={jbjMonogramLightBg}
           alt="JBJ Global Real Estate"
-          className="h-16 w-auto mx-auto object-contain mix-blend-multiply"
+          className="h-16 w-auto mx-auto object-contain"
         />
       </div>
 

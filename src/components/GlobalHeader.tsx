@@ -1083,7 +1083,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         <span className="text-zinc-600 text-xl">×</span>
                       </button>
                       <div className="flex justify-center mb-4">
-                        <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain mix-blend-multiply" />
+                        <img src={jbjMonogramLightBg} alt="JBJ" className="w-16 h-16 object-contain" />
                       </div>
                       <h3 className="text-black font-bold text-xl text-center mb-3" style={{ fontFamily: "Poppins, sans-serif" }}>
                         Welcome to JBJ Global Real Estate
