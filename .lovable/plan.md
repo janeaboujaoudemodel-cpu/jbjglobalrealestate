@@ -1,47 +1,47 @@
 
 
-## Fix Missing Developer Logos for Meraas and Binghatti
+## Lock Developer Logos & Fix Meraas Logo Visibility
 
-### Problem
+### What this plan does
 
-The previous database cleanup correctly removed the corrupted `habtoor_polo_villas` photo from all developers, but set Meraas and Binghatti `logo_url` to NULL because no clean sibling record existed. This causes the UI to show a fake initial letter ("M" for Meraas, "B" for Binghatti) instead of a real logo. The user considers this a violation -- every developer must show its official logo.
+1. **Lock developer logos globally** — Add a code-level lock rule that prevents any future modification to `logo_url` values, logo container styling, or fallback logic.
 
-### Root Cause
+2. **Fix Meraas logo visibility** — The Meraas logo is an SVG from `cdnlogo.com` which renders very small inside the current `w-12 h-12` / `w-14 h-14` containers. Increase container size and remove padding constraints so the Meraas wordmark is clearly readable.
 
-Meraas (4 records) and Binghatti (2 records) never had a correct `logo_url` in any database record. All copies either had the corrupt photo or NULL. The Reelly API sync cannot fix this because the API key returns 401 (expired/invalid).
+### Changes
 
-### Fix: Database Update
+**File 1: `src/config/master-lock.ts`** — Add DEVELOPER_LOGO_LOCK section
 
-Insert the correct, publicly accessible logo URLs for these developers:
+Add a new frozen config block documenting that developer logos are locked:
+- `logo_url` values in the database are read-only — no overwriting, no fake initials, no generated letters
+- Logo container styling (`bg-white/90`, `object-contain`, padding) is locked
+- Only the database source of truth may provide logos
+- Changes require explicit founder unlock
 
-| Developer | Records | Logo Source |
-|-----------|---------|-------------|
-| Meraas | `meraas`, `developed-by-meraas` | `https://static.cdnlogo.com/logos/m/18/meraas.svg` (official Meraas logo, black wordmark with icon) |
-| Binghatti | `binghatti`, `developed-by-binghatti` | `https://upload.wikimedia.org/wikipedia/commons/7/7c/Logo_Binghatti.jpg` (official Binghatti logo from Wikimedia Commons) |
+**File 2: `src/components/DeveloperCard.tsx`** — Increase logo overlay size for SVG logos
 
-Both URLs are verified as publicly accessible and match the official logos visible on meraas.com and binghatti.com respectively.
+- Line 108: Change `w-14 h-14` to `w-16 h-16` for the logo overlay container on developer cards, giving more room for wordmark-style logos like Meraas
 
-### SQL (via insert tool)
+**File 3: `src/components/home/FeaturedListings.tsx`** — Increase logo container
 
-```sql
-UPDATE developers SET logo_url = 'https://static.cdnlogo.com/logos/m/18/meraas.svg'
-WHERE slug IN ('meraas', 'developed-by-meraas');
+- Line 157: Change `w-12 h-12` to `w-14 h-14` for the developer logo container so Meraas and similar wordmark logos are visible
 
-UPDATE developers SET logo_url = 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Logo_Binghatti.jpg'
-WHERE slug IN ('binghatti', 'developed-by-binghatti');
-```
+**File 4: `src/components/ProjectCard.tsx`** — Increase logo container
 
-### Verification
+- Line 208: Change `w-12 h-12` to `w-14 h-14`
 
-After the database update, take a screenshot of the homepage to confirm:
-- Meraas projects show the real Meraas logo (black icon + wordmark)
-- Binghatti projects show the real Binghatti logo
-- No developer shows a letter initial or property photo as logo
-- Logo containers remain clean `bg-white/90`
+**File 5: `src/components/ReellyProjectCard.tsx`** — Increase logo container
+
+- Line 164: Change `w-12 h-12` to `w-14 h-14`
+
+**File 6: `src/components/project-detail/RecommendedProjects.tsx`** — Increase logo container
+
+- Line 191: Change `w-10 h-10` to `w-12 h-12`
 
 ### What stays untouched
-- All code files -- no changes needed
-- All other developer logos -- already correct
-- Logo rendering components -- working correctly
-- Logo container styling -- remains `bg-white/90`
+- No database changes — logos are correct
+- No logo URL changes — locked
+- `getDeveloperLogoUrl` utility — unchanged
+- `bg-white/90` container background — locked
+- `object-contain` on all logo images — locked
 
