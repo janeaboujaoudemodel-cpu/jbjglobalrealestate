@@ -159,17 +159,15 @@ const ReellyProjectCard = ({
          {/* Image with Carousel */}
           <div className="aspect-[16/10] overflow-hidden relative">
             {/* Developer Logo Overlay - Top Left */}
-            {(project as any).developer?.logo_url && (
+            {getDeveloperLogoUrl((project as any).developer) && (
               <div
-                className={`absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center ${
-                  (project as any).developer?.logo_bg_color ? 'shadow-lg' : ''
-                }`}
-                style={{ backgroundColor: (project as any).developer?.logo_bg_color || 'transparent' }}
+                className={`absolute top-3 left-3 z-15 w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center bg-white shadow-lg p-1`}
               >
                 <img 
-                  src={(project as any).developer.logo_url} 
+                  src={getDeveloperLogoUrl((project as any).developer)!} 
                   alt={project.developer_name || ''}
                   className="w-full h-full object-contain"
+                />
                 />
               </div>
               )}
