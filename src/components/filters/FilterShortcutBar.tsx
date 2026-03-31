@@ -232,16 +232,16 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const pillBase = "inline-flex items-center justify-center gap-1.5 px-3.5 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-[13px] font-semibold transition-all cursor-pointer whitespace-nowrap select-none overflow-hidden text-ellipsis max-w-[200px] flex-shrink-0";
   const pillInactive = isDark
     ? "bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20"
-    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/40 text-black hover:border-gold/60";
+    : "bg-white border border-gray-300 text-black hover:border-gray-400 hover:bg-gray-50";
   const pillActive = isDark
     ? "bg-white text-black border border-white shadow-lg"
-    : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black font-bold shadow-md";
+    : "bg-black text-white border border-black font-bold shadow-sm";
 
-  const popoverClass = "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[10200] shadow-xl";
+  const popoverClass = "bg-white border border-gray-200 z-[10200] shadow-xl";
 
   const togglePillBase = "px-3 py-1.5 rounded-full text-xs font-medium border transition-all cursor-pointer";
-  const togglePillOff = "border-gold/30 text-black/70 bg-white/60 hover:bg-white";
-  const togglePillOn = "border-2 border-gold bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black font-bold";
+  const togglePillOff = "border-gray-300 text-gray-700 bg-white hover:bg-gray-50";
+  const togglePillOn = "border-black bg-black text-white font-bold";
 
   const handleSaveFilter = (name: string) => {
     const saved = JSON.parse(localStorage.getItem('jbj-saved-filters') || '[]');
@@ -251,7 +251,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
 
   const CountBadge = ({ count }: { count: number }) =>
     count > 0 ? (
-      <span className="ml-1 w-5 h-5 rounded-full bg-gradient-to-r from-[#D8C7A6] to-[#C8A766] text-white text-[10px] font-bold flex items-center justify-center">
+      <span className="ml-1 w-5 h-5 rounded-full bg-black text-white text-[10px] font-bold flex items-center justify-center">
         +{count}
       </span>
     ) : null;
@@ -278,7 +278,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               {searchSlot}
             </div>
           ) : (
-            <div className="min-w-0 w-[160px] flex-shrink-0 flex items-center px-2 border border-gold/30 rounded-full bg-white/40">
+            <div className="min-w-0 w-[160px] flex-shrink-0 flex items-center px-2 border border-gray-300 rounded-full bg-white">
               <input
                 type="text"
                 value={filters.searchQuery}
@@ -313,7 +313,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     value={filters.priceMin}
                     onChange={(e) => update({ priceMin: e.target.value.replace(/[^0-9]/g, '') })}
                     placeholder="0"
-                    className="w-full h-9 px-3 pr-12 bg-white border border-gold/30 rounded-lg text-sm text-black"
+                    className="w-full h-9 px-3 pr-12 bg-white border border-gray-300 rounded-lg text-sm text-black"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-black/40 font-medium">AED</span>
                 </div>
@@ -326,7 +326,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                     value={filters.priceMax}
                     onChange={(e) => update({ priceMax: e.target.value.replace(/[^0-9]/g, '') })}
                     placeholder="Any"
-                    className="w-full h-9 px-3 pr-12 bg-white border border-gold/30 rounded-lg text-sm text-black"
+                    className="w-full h-9 px-3 pr-12 bg-white border border-gray-300 rounded-lg text-sm text-black"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-black/40 font-medium">AED</span>
                 </div>
@@ -340,8 +340,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   className={cn(
                     "px-3 py-1 rounded-full text-xs font-medium border transition-all",
                     filters.priceMax === p.value
-                      ? "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold text-black font-bold"
-                      : "bg-white/80 text-black border-gold/30 hover:border-gold"
+                      ? "bg-black text-white border-black font-bold"
+                      : "bg-white text-black border-gray-300 hover:border-gray-400"
                   )}
                 >
                   {p.label}
@@ -350,7 +350,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </div>
             <Button
               onClick={() => {}}
-              className="w-full h-9 bg-gradient-to-r from-gold to-gold-dark text-black font-bold text-xs rounded-lg hover:brightness-110"
+              className="w-full h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800"
             >
               {t('filter.applyFilter')}
             </Button>
@@ -371,7 +371,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-black/60">{t('filter.maxPreHandover')}</span>
-                  <span className="text-xs font-bold text-black bg-white/80 px-2 py-0.5 rounded border border-gold/30">{filters.paymentPlanMax}%</span>
+                  <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded border border-gray-300">{filters.paymentPlanMax}%</span>
                 </div>
                 <Slider
                   value={[filters.paymentPlanMax]}
@@ -388,7 +388,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   value={filters.afterHandover}
                   onChange={(e) => update({ afterHandover: e.target.value.replace(/[^0-9]/g, '') })}
                   placeholder="e.g. 30"
-                  className="w-full h-9 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black"
+                  className="w-full h-9 px-3 bg-white border border-gray-300 rounded-lg text-sm text-black"
                 />
               </div>
               <div className="flex items-center justify-between">
@@ -423,8 +423,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                       className={cn(
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverFrom.quarter === q
-                          ? "bg-gradient-to-br from-[#C8A766]/25 via-[#D4AF37]/20 to-[#C8A766]/25 border-2 border-gold text-black shadow-sm"
-                          : "bg-white/80 border border-gold/25 text-black/60 hover:bg-gold/10 hover:border-gold/50"
+                          ? "bg-black text-white border border-black shadow-sm"
+                          : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400"
                       )}
                     >
                       {q}
@@ -434,7 +434,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <select
                   value={filters.handoverFrom.year}
                   onChange={(e) => update({ handoverFrom: { ...filters.handoverFrom, year: e.target.value } })}
-                  className="w-full h-9 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
+                  className="w-full h-9 px-3 bg-white border border-gray-300 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
                   style={{ WebkitAppearance: 'none' }}
                 >
                   {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
@@ -450,8 +450,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                       className={cn(
                         "flex-1 h-8 rounded-lg text-xs font-bold transition-all text-center",
                         filters.handoverTo.quarter === q
-                          ? "bg-gradient-to-br from-[#C8A766]/25 via-[#D4AF37]/20 to-[#C8A766]/25 border-2 border-gold text-black shadow-sm"
-                          : "bg-white/80 border border-gold/25 text-black/60 hover:bg-gold/10 hover:border-gold/50"
+                          ? "bg-black text-white border border-black shadow-sm"
+                          : "bg-white border border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400"
                       )}
                     >
                       {q}
@@ -461,7 +461,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <select
                   value={filters.handoverTo.year}
                   onChange={(e) => update({ handoverTo: { ...filters.handoverTo, year: e.target.value } })}
-                  className="w-full h-9 px-3 bg-white border border-gold/30 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
+                  className="w-full h-9 px-3 bg-white border border-gray-300 rounded-lg text-sm text-black font-medium appearance-none cursor-pointer"
                   style={{ WebkitAppearance: 'none' }}
                 >
                   {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
@@ -489,8 +489,8 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               }}
             >
               <TabsList className="w-full mb-3 bg-white/60">
-                <TabsTrigger value="residential" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F7F2EA] data-[state=active]:to-[#EFE6D6] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">{t('filter.residential')}</TabsTrigger>
-                <TabsTrigger value="commercial" className="flex-1 text-xs data-[state=active]:bg-gradient-to-br data-[state=active]:from-[#FDFBF7] data-[state=active]:via-[#F7F2EA] data-[state=active]:to-[#EFE6D6] data-[state=active]:border-2 data-[state=active]:border-gold data-[state=active]:text-black data-[state=active]:font-bold data-[state=active]:shadow-md">{t('filter.commercial')}</TabsTrigger>
+                <TabsTrigger value="residential" className="flex-1 text-xs data-[state=active]:bg-black data-[state=active]:text-white data-[state=active]:font-bold data-[state=active]:shadow-sm">{t('filter.residential')}</TabsTrigger>
+                <TabsTrigger value="commercial" className="flex-1 text-xs data-[state=active]:bg-black data-[state=active]:text-white data-[state=active]:font-bold data-[state=active]:shadow-sm">{t('filter.commercial')}</TabsTrigger>
               </TabsList>
             </Tabs>
             <div className="flex flex-wrap gap-2">
@@ -611,7 +611,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Divider */}
-        <div className="w-px h-5 bg-gold/30 flex-shrink-0" />
+        <div className="w-px h-5 bg-gray-300 flex-shrink-0" />
 
         {/* Hide Sold Out */}
         <button
@@ -619,15 +619,15 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
           className={cn(
             pillBase, "px-3 py-1.5",
             filters.hideSoldOut
-              ? "bg-red-50 border-2 border-red-500 text-red-600 font-bold shadow-md"
-              : "bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-red-300/50 text-red-600/80 hover:border-red-400"
+              ? "bg-black text-white border border-black font-bold shadow-sm"
+              : "bg-white border border-gray-300 text-gray-600 hover:border-gray-400"
           )}
         >
           {t('filter.hideSold')}
         </button>
 
         {/* Divider */}
-        <div className="w-px h-5 bg-gold/30 flex-shrink-0" />
+        <div className="w-px h-5 bg-gray-300 flex-shrink-0" />
 
         {/* Sort pills */}
         {SORT_OPTIONS.map((opt) => (
@@ -644,7 +644,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         ))}
 
         {/* Divider */}
-        <div className="w-px h-5 bg-gold/30 flex-shrink-0" />
+        <div className="w-px h-5 bg-gray-300 flex-shrink-0" />
 
         {/* Map toggle */}
         <button
@@ -680,12 +680,12 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               key={resultsCount}
               className={cn(
                 "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all animate-in fade-in zoom-in-95 duration-300",
-                "bg-gradient-to-r from-gold/20 to-gold/10 border-2 border-gold/50 text-black shadow-sm"
+                "bg-black text-white border border-black shadow-sm"
               )}
             >
-              <Activity className="w-3.5 h-3.5 text-gold" />
+              <Activity className="w-3.5 h-3.5 text-white" />
               <span className="tabular-nums">{resultsCount.toLocaleString()}</span>
-              <span className="text-black/60 font-medium">{resultsLabel || 'Results'}</span>
+              <span className="text-white/70 font-medium">{resultsLabel || 'Results'}</span>
             </div>
           </div>
         )}
@@ -745,13 +745,13 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
   return (
     <Popover open={savedOpen} onOpenChange={setSavedOpen}>
       <PopoverTrigger asChild>
-        <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] text-black/70 hover:border-gold/60 flex-shrink-0" title="View saved filters">
+        <button className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border border-gray-300 bg-white text-black hover:border-gray-400 hover:bg-gray-50 flex-shrink-0" title="View saved filters">
           <Bookmark className="w-3.5 h-3.5 text-black fill-black" />
           <span className="hidden sm:inline">{t('filter.savedFilters')}</span>
         </button>
       </PopoverTrigger>
       <PopoverContent
-        className="w-72 p-3 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 z-[10200] shadow-xl"
+        className="w-72 p-3 bg-white border border-gray-200 z-[10200] shadow-xl"
         side="bottom"
         align="end"
         sideOffset={6}
@@ -782,7 +782,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
                     </button>
                     <button
                       onClick={() => setConfirmDeleteIndex(null)}
-                      className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-white border border-gold/40 text-black hover:bg-gold/10 transition-colors"
+                      className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-white border border-gray-300 text-black hover:bg-gray-100 transition-colors"
                     >
                       No
                     </button>
