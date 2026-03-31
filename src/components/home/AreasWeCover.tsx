@@ -69,7 +69,6 @@ const AreasWeCover = () => {
                     >
                       JBJ
                     </span>
-                    </span>
                   </div>
                 )}
 
