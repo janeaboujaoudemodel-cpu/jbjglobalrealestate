@@ -866,8 +866,8 @@ export default function BackgroundAI({ embedded = false }: BackgroundAIProps) {
               <ArrowLeft className="h-4 w-4" /><span className="text-sm">Back to Royal Tools Hub</span>
             </Link>
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold"
-              style={{ background: "rgba(184,148,62,0.12)", border: `1px solid ${C.border}`, color: C.accentText }}>
-              <Sparkles className="w-3 h-3" /> AI Powered
+              style={{ background: "#ede9fe", border: "1px solid #c4b5fd", color: "#6d28d9" }}>
+              <Sparkles className="w-3 h-3" style={{ color: '#7c3aed' }} /> AI Powered
             </div>
           </div>
         </header>

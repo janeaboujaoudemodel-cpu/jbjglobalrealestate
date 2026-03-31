@@ -68,7 +68,7 @@ export default function PropertySuite() {
                     Property Intelligence <span style={{ color: "#B8943E" }}>Suite</span>
                   </h1>
                   <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold"
-                    style={{ background: "rgba(184,148,62,0.12)", border: "1px solid rgba(184,148,62,0.3)", color: "#B8943E" }}>
+                    style={{ background: "#ede9fe", border: "1px solid #c4b5fd", color: "#6d28d9" }}>
                     <Sparkles className="w-2.5 h-2.5" /> AI Powered
                   </span>
                 </div>
