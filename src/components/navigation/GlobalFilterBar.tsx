@@ -101,7 +101,7 @@ export default function GlobalFilterBar() {
 
   return (
     <div
-      className="fixed top-[48px] right-0 z-[9996] hidden md:block transition-all duration-300 bg-gradient-to-r from-[#ECE2D2] via-[#E0D3BF] to-[#D8C7A6] border-b border-gold/20 shadow-sm [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]"
+      className="fixed top-[48px] right-0 z-[9996] hidden md:block transition-all duration-300 bg-white border-b border-gray-200 shadow-sm [body.jj-vertical-nav-active_&]:left-[200px] [body.jj-vertical-nav-collapsed_&]:left-[48px] left-[200px]"
     >
       <div className="px-3 py-1">
         <FilterShortcutBar

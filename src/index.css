@@ -2000,8 +2000,35 @@ html.project-detail-page[style*="--header-bg-opacity: 1"] header > div:first-chi
   --tw-gradient-to: #F5F5F5 !important;
 }
 
-/* Gold border overrides → gray */
+/* Gold border hex overrides → gray */
 [class*="border-[#D4AF37]"],
 [class*="border-[#C8A766]"] {
   border-color: #d4d4d4 !important;
+}
+
+/* ── Tailwind gold utility class overrides ── */
+.text-gold { color: #111111 !important; }
+.bg-gold { background-color: #111111 !important; }
+.border-gold { border-color: #d4d4d4 !important; }
+
+/* Gold opacity variants */
+[class*="bg-gold\/"] { background-color: rgba(0,0,0,0.05) !important; }
+[class*="border-gold\/"] { border-color: rgba(0,0,0,0.12) !important; }
+[class*="text-gold\/"] { color: rgba(0,0,0,0.7) !important; }
+[class*="ring-gold"] { --tw-ring-color: #d4d4d4 !important; }
+
+/* Gold gradient stops */
+[class*="via-gold"] { --tw-gradient-via: #e5e5e5 !important; }
+[class*="from-gold"] { --tw-gradient-from: #e5e5e5 !important; }
+[class*="to-gold"] { --tw-gradient-to: #d4d4d4 !important; }
+
+/* Inline style gold hex overrides */
+[style*="#D4AF37"] { color: #111 !important; border-color: #d4d4d4 !important; }
+[style*="#C8A766"] { color: #111 !important; border-color: #d4d4d4 !important; }
+[style*="#B8860B"] { color: #111 !important; border-color: #d4d4d4 !important; }
+
+/* Gold shadow overrides — remove gold-tinted shadows */
+[class*="shadow-[0_10px_40px_rgba(200,167,102"],
+[class*="shadow-[0_8px_25px_rgba(200,167,102"] {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
 }

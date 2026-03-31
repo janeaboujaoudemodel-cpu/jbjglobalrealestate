@@ -782,7 +782,7 @@ function ConnectedSavedButton({ variant, onApplySavedFilter }: { variant: 'light
                     </button>
                     <button
                       onClick={() => setConfirmDeleteIndex(null)}
-                      className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-white border border-gold/40 text-black hover:bg-gold/10 transition-colors"
+                      className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-white border border-gray-300 text-black hover:bg-gray-100 transition-colors"
                     >
                       No
                     </button>
