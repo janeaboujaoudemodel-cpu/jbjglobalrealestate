@@ -138,23 +138,31 @@ export const MarketOverviewDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {QUARTERLY_TRENDS.map((quarter, idx) => (
-                      <div key={quarter.quarter} className="flex items-center gap-4">
-                        <span className="text-black/60 text-sm w-20">{quarter.quarter}</span>
-                        <div className="flex-1 h-8 bg-white/50 rounded-lg overflow-hidden relative">
-                          <motion.div
-                            className="h-full bg-gradient-to-r from-gold/80 to-gold"
-                            initial={{ width: 0 }}
-                            whileInView={{ width: `${(quarter.transactions / 40000) * 100}%` }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.8, delay: idx * 0.1 }}
-                          />
-                          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-black text-xs font-medium">
-                            {quarter.transactions.toLocaleString()}
-                          </span>
+                    {QUARTERLY_TRENDS.map((quarter, idx) => {
+                      const qColors = [
+                        'from-emerald-500 to-emerald-400',
+                        'from-blue-500 to-blue-400',
+                        'from-amber-500 to-amber-400',
+                        'from-purple-500 to-purple-400',
+                      ];
+                      return (
+                        <div key={quarter.quarter} className="flex items-center gap-4">
+                          <span className="text-black/70 text-sm w-20 font-medium">{quarter.quarter}</span>
+                          <div className="flex-1 h-8 bg-black/5 rounded-lg overflow-hidden relative shadow-inner">
+                            <motion.div
+                              className={`h-full bg-gradient-to-r ${qColors[idx % qColors.length]}`}
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${(quarter.transactions / 40000) * 100}%` }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.8, delay: idx * 0.1 }}
+                            />
+                            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-black text-xs font-bold">
+                              {quarter.transactions.toLocaleString()}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                   <p className="text-black/50 text-xs mt-4">
                     Source: Dubai Government Open Data
