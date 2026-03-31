@@ -627,7 +627,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </button>
 
         {/* Divider */}
-        <div className="w-px h-5 bg-gold/30 flex-shrink-0" />
+        <div className="w-px h-5 bg-gray-300 flex-shrink-0" />
 
         {/* Sort pills */}
         {SORT_OPTIONS.map((opt) => (
