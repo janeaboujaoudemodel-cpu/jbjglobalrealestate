@@ -268,10 +268,10 @@ const BestIdeaAward = () => {
                             </p>
                             {!formData.isAnonymous ? (
                               <>
-                                <p className="text-zinc-600 text-sm mb-2">
+                                <p className="text-gray-600 text-sm mb-2">
                                   Your idea has been linked to your contact details. In case you are the winner, we will contact you accordingly.
                                 </p>
-                                <p className="text-zinc-600 text-sm">
+                                <p className="text-gray-600 text-sm">
                                   <Sparkles className="w-4 h-4 inline text-gold mr-1" />
                                   <span className="text-gold font-medium">Submit another unique idea</span> to get additional draw tickets!
                                 </p>
