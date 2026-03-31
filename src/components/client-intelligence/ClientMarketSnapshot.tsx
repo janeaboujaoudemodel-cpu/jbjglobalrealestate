@@ -153,7 +153,7 @@ const ClientMarketSnapshot = ({
             </div>
           </div>
           <div className="space-y-1">
-            <span className="text-xs text-muted-foreground uppercase tracking-wide">RENT Demand</span>
+            <span className="text-xs text-black/80 font-medium uppercase tracking-wide">RENT Demand</span>
             <div className="flex items-center gap-2">
               {getActivityBadge(rentDemand)}
             </div>
