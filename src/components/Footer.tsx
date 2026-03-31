@@ -27,7 +27,7 @@ import { cn } from "@/lib/utils";
 
 // Removed: AI_TOOL_COLORS and CREATIVE_TOOL_COLORS maps (no longer needed with card layout)
 
-/** Reusable footer navigation card with centered gold title and 2-column link grid */
+/** Reusable footer navigation card with centered title and 2-column link grid */
 const FooterCard = ({ title, links, viewAllHref, viewAllLabel }: {
   title: string;
   links: { label: string; href: string }[];
@@ -182,7 +182,7 @@ const FooterCurrencyUnit = () => {
           )}
         </div>
 
-        {/* Vertical gold divider */}
+        {/* Vertical divider */}
         <div className="w-px h-8 bg-gradient-to-b from-transparent via-gray-300 to-transparent" />
 
         {/* Area Unit Inline Toggle */}
@@ -632,7 +632,7 @@ const Footer = () => {
                 {/* Write Us */}
                 <a
                   href={getEmailUrl()}
-                  className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 hover:bg-gold/5 transition-colors"
+                  className="flex items-center gap-3 px-6 py-4 border-b md:border-b-0 md:border-r border-gray-200 hover:bg-gray-50 transition-colors"
                 >
                   <Mail className="w-5 h-5 text-gray-700" />
                   <div>
@@ -665,7 +665,7 @@ const Footer = () => {
         </div>
         </div>
 
-        {/* Thin inline gold divider */}
+        {/* Thin inline divider */}
         <div className="relative py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
@@ -693,7 +693,7 @@ const Footer = () => {
           
           {/* Edge-to-edge: no corner accents needed */}
           
-          {/* Premium Champagne Inner Layer - Wraps Navigation + Tools + Contact - Fills to gold border */}
+          {/* Inner Layer */}
           <div className="bg-white rounded-none border border-gray-200 m-0 overflow-hidden">
             
             {/* Navigation Grid Section - Card-Based 2-Column Layout */}
@@ -831,7 +831,7 @@ const Footer = () => {
         </div>
         </div>
 
-        {/* Thin inline gold divider */}
+        {/* Thin inline divider */}
         <div className="relative py-2">
           <div className="h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
         </div>
@@ -908,7 +908,7 @@ const Footer = () => {
               {/* Premium unified legal badge */}
               <div className="flex items-center justify-center">
                 <div 
-                  className="px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-xl relative overflow-hidden bg-zinc-900/90 border border-gold/40"
+                  className="px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 rounded-xl relative overflow-hidden bg-zinc-900/90 border border-gray-300"
                   style={{
                     boxShadow: '0 8px 25px -8px rgba(0,0,0,0.5)',
                   }}
@@ -934,9 +934,9 @@ const Footer = () => {
         </div>
       </div>
       
-      {/* Bottom gold accent line - Enhanced */}
+      {/* Bottom accent line - Enhanced */}
       <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gray-200" />
-      <div className="absolute bottom-[2px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent blur-sm" />
+      <div className="absolute bottom-[2px] left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent blur-sm" />
     </footer>
      </>
   );

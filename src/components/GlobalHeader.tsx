@@ -600,7 +600,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         }}
       />
       
-      {/* Subtle ambient gold glow at top */}
+      {/* Subtle ambient glow at top */}
       <div 
         className={`absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-24 pointer-events-none transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`}
         style={{
@@ -610,7 +610,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
       
       {/* Premium Bottom Border - 3D Effect when solid */}
       <div className="absolute bottom-0 left-0 right-0 h-[3px] z-10">
-        {/* Main gold gradient line - shown when solid */}
+        {/* Main gradient line - shown when solid */}
         <div className={`absolute inset-0 bg-gradient-to-r from-transparent via-gray-400 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
         {/* Highlight on top - shown when solid */}
         <div className={`absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-gray-500 to-transparent transition-opacity duration-300 ${isSolid ? "opacity-100" : "opacity-0"}`} />
@@ -1400,7 +1400,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                         embedded
                       />
                     </div>
-                    {/* Bottom gold accent bar */}
+                    {/* Bottom accent bar */}
                     <div className="h-[1px] bg-gray-200" />
                   </div>
                 )}
