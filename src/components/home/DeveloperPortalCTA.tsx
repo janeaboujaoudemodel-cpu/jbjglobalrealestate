@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Upload, FolderOpen, PartyPopper, ListChecks, Briefcase, FileSignature, UserCheck, CheckCircle2, Clock, XCircle, ArrowRight, Handshake, Users, MessageSquare, Rocket, Megaphone, LayoutDashboard, CalendarCheck } from "lucide-react";
+import { Upload, FolderOpen, PartyPopper, ListChecks, Briefcase, FileSignature, UserCheck, CheckCircle2, Clock, XCircle, ArrowRight, Handshake, Users, MessageSquare, Rocket, Megaphone, LayoutDashboard, CalendarCheck, TrendingUp, BarChart3, Calculator, Home, Search, PieChart } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { useUserModeContext } from "@/contexts/UserModeContext";
 
 type RegStatus = "pending" | "under_review" | "approved" | "rejected" | null;
 
@@ -26,7 +27,7 @@ function useDevRegistration() {
   });
 }
 
-const benefits = [
+const devBenefits = [
   { icon: Upload, label: "Submit projects & brochures" },
   { icon: PartyPopper, label: "Submit launch events" },
   { icon: Handshake, label: "Close more deals with brokers" },
@@ -35,6 +36,17 @@ const benefits = [
   { icon: Briefcase, label: "Get publication with our broker network" },
   { icon: Rocket, label: "Promote projects to broker community" },
   { icon: Megaphone, label: "Receive broker exposure" },
+];
+
+const investorBenefits = [
+  { icon: TrendingUp, label: "Access exclusive off-plan opportunities" },
+  { icon: BarChart3, label: "AI-powered market intelligence" },
+  { icon: Calculator, label: "ROI calculators & investment tools" },
+  { icon: Home, label: "Browse 2,400+ verified properties" },
+  { icon: Search, label: "AI Home Finder for personalized matches" },
+  { icon: PieChart, label: "Portfolio tracking & analytics" },
+  { icon: Briefcase, label: "Connect with licensed advisors" },
+  { icon: CheckCircle2, label: "Investor education & guides" },
 ];
 
 const shortcuts = [
@@ -48,9 +60,21 @@ const shortcuts = [
   { label: "Agreements", desc: "Sign & review documents", icon: FileSignature, href: "/developer-portal?tab=agreements" },
 ];
 
+const investorShortcuts = [
+  { label: "Browse Properties", desc: "Explore verified listings", icon: Home, href: "/properties" },
+  { label: "AI Home Finder", desc: "Get personalized matches", icon: Search, href: "/quiz" },
+  { label: "ROI Calculator", desc: "Analyze investment returns", icon: Calculator, href: "/ai-roi-calculator" },
+  { label: "Market Intelligence", desc: "Data-driven insights", icon: BarChart3, href: "/market-intelligence/overview" },
+  { label: "Property Evaluator", desc: "AI-powered valuations", icon: TrendingUp, href: "/property-evaluator" },
+  { label: "Investor Dashboard", desc: "Track your portfolio", icon: PieChart, href: "/investor-dashboard" },
+  { label: "Investment Advisory", desc: "Expert guidance", icon: Briefcase, href: "/services/investment-advisory" },
+  { label: "Education Hub", desc: "Guides & resources", icon: CheckCircle2, href: "/education-hub" },
+];
+
 const DeveloperPortalCTA = () => {
   const { user } = useAuth();
   const { data: status, isLoading } = useDevRegistration();
+  const { isDeveloperMode, isInvestorMode, isBrokerMode } = useUserModeContext();
 
   const isApproved = status === "approved";
   const isPending = status === "pending" || status === "under_review";
@@ -77,6 +101,38 @@ const DeveloperPortalCTA = () => {
   const showCongrats = isApproved && !hasSeenApproval;
   const showShortcuts = isApproved && hasSeenApproval;
 
+  // Investor mode — show investor opportunities instead
+  if (isInvestorMode && !isDeveloperMode) {
+    return (
+      <section className="py-12 md:py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold text-black mb-1 text-center">
+              Investor Opportunities
+            </h2>
+            <p className="text-gray-500 text-sm mb-8 text-center">
+              Explore tools, insights, and exclusive access designed for smart investors.
+            </p>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {investorShortcuts.map((action) => (
+                <Link key={action.label} to={action.href}>
+                  <div className="group flex flex-col items-center gap-2 p-5 rounded-xl border border-gray-200 hover:border-gray-400 bg-white hover:bg-gray-50 transition-all duration-300 cursor-pointer min-h-[120px] justify-center shadow-sm hover:shadow-md">
+                    <div className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <action.icon className="w-5 h-5 text-gray-700" />
+                    </div>
+                    <span className="text-black text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
+                    <span className="text-gray-400 text-[10px] text-center leading-tight">{action.desc}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-12 md:py-16 bg-white">
       <div className="container mx-auto px-4">
@@ -92,7 +148,6 @@ const DeveloperPortalCTA = () => {
               : "Join our network — submit projects, connect with brokers, and grow your business."}
           </p>
 
-          {/* ── STATE: Approved — first-time congratulations ── */}
           {showCongrats && (
             <div className="max-w-md mx-auto text-center">
               <div className="p-8 rounded-xl border border-gray-200 bg-gray-50">
@@ -115,7 +170,6 @@ const DeveloperPortalCTA = () => {
             </div>
           )}
 
-          {/* ── STATE: Approved — shortcut cards ── */}
           {showShortcuts && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {shortcuts.map((action) => (
@@ -132,7 +186,6 @@ const DeveloperPortalCTA = () => {
             </div>
           )}
 
-          {/* ── STATE: Pending ── */}
           {isPending && (
             <div className="max-w-md mx-auto text-center">
               <div className="p-8 rounded-xl border border-gray-200 bg-gray-50">
@@ -149,7 +202,6 @@ const DeveloperPortalCTA = () => {
             </div>
           )}
 
-          {/* ── STATE: Rejected ── */}
           {isRejected && (
             <div className="max-w-md mx-auto text-center">
               <div className="p-8 rounded-xl border border-gray-200 bg-gray-50">
@@ -167,11 +219,10 @@ const DeveloperPortalCTA = () => {
             </div>
           )}
 
-          {/* ── STATE: Unregistered — benefits + CTA ── */}
           {(isUnregistered || (!user && !isLoading)) && (
             <div className="max-w-2xl mx-auto">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
-                {benefits.map((b, i) => (
+                {devBenefits.map((b, i) => (
                   <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 border border-gray-200">
                     <div className="w-8 h-8 rounded-full bg-gray-100 border border-gray-300 flex items-center justify-center shrink-0">
                       <CheckCircle2 className="w-4 h-4 text-black" />

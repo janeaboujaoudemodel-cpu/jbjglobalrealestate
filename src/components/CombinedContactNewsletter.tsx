@@ -51,10 +51,7 @@ const CombinedContactNewsletter = ({
         <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 md:p-10">
           {/* Header */}
           <div className="text-center mb-8">
-            <h2
-              className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.1em] text-black"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.1em] text-black">
               {title}
             </h2>
             <p className="text-gray-500 text-sm md:text-base max-w-xl mx-auto">
@@ -92,10 +89,7 @@ const CombinedContactNewsletter = ({
 
           {/* Newsletter Section */}
           <div className="max-w-lg mx-auto text-center">
-            <h3
-              className="text-xl md:text-2xl font-bold mb-3 uppercase tracking-[0.12em] text-black"
-              style={{ fontFamily: "Poppins, sans-serif" }}
-            >
+            <h3 className="text-xl md:text-2xl font-bold mb-3 uppercase tracking-[0.12em] text-black">
               ✦ Stay in the Loop ✦
             </h3>
             <p className="text-gray-500 text-sm md:text-base mb-5">
