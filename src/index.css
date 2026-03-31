@@ -2111,12 +2111,12 @@ svg[class*="text-muted"],
   --tw-text-opacity: 1 !important;
 }
 
-/* 1b. White text on light surfaces → force dark */
+/* 1b. White text on light surfaces → force dark (but NOT inside dark-bg elements like buttons) */
 :root:not(.dark) :is(
   .bg-white, .bg-background, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
   .bg-gray-50, .bg-gray-100,
   .jj-layer-2, .jj-layer-1
-) > :is(.text-white, [class*="text-white/"]) {
+) > :is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not(button):not(a) {
   color: hsl(var(--foreground)) !important;
   opacity: 1 !important;
 }
@@ -2199,13 +2199,15 @@ svg[class*="text-muted"],
 /* ── 5. Buttons & links on dark/gold backgrounds ── */
 button.bg-black, a.bg-black,
 button.bg-gold, a.bg-gold,
-button[class*="bg-gray-900"], a[class*="bg-gray-900"] {
+button[class*="bg-gray-900"], a[class*="bg-gray-900"],
+.bg-black button, .bg-black a {
   color: #FFFFFF !important;
 }
 
 button.bg-black *, a.bg-black *,
-button.bg-gold *, a.bg-gold * {
-  color: inherit;
+button.bg-gold *, a.bg-gold *,
+button.bg-black span, a.bg-black span {
+  color: inherit !important;
 }
 
 button[class*="bg-green"], a[class*="bg-green"] {
