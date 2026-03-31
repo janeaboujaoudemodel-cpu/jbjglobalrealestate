@@ -293,7 +293,7 @@ const BestIdeaAward = () => {
                       ) : (
                         <form onSubmit={handleSubmit} className="space-y-4 py-4">
                           {/* Anonymous Toggle */}
-                          <div className="flex items-center justify-between p-4 bg-zinc-50 rounded-lg border border-zinc-200">
+                          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
                             <div className="flex items-center gap-3">
                               {formData.isAnonymous ? (
                                 <EyeOff className="w-5 h-5 text-gray-500" />
