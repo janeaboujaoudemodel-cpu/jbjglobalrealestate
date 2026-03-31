@@ -24,102 +24,85 @@ const CombinedContactNewsletter = ({
       label: "WhatsApp",
       value: CONTACT_INFO.phone,
       href: getWhatsAppUrl(),
-      iconBg: "bg-emerald-500/20",
-      iconColor: "text-emerald-500",
-      borderColor: "border-gold shadow-lg shadow-gold/20 hover:border-gold/40 hover:shadow-none",
-      shadowColor: "",
-      valueColor: "text-black group-hover:text-gold",
+      iconBg: "bg-gray-100",
+      iconColor: "text-gray-600",
     },
     {
       icon: Phone,
       label: "Call Us",
       value: CONTACT_INFO.phone,
       href: getCallUrl(),
-      iconBg: "bg-blue-500/20",
-      iconColor: "text-blue-500",
-      borderColor: "border-gold shadow-lg shadow-gold/20 hover:border-gold/40 hover:shadow-none",
-      shadowColor: "",
-      valueColor: "text-black group-hover:text-gold",
+      iconBg: "bg-gray-100",
+      iconColor: "text-gray-600",
     },
     {
       icon: Mail,
       label: "Email",
       value: CONTACT_INFO.email,
       href: `mailto:${CONTACT_INFO.email}`,
-      iconBg: "bg-gold/20",
-      iconColor: "text-gold",
-      borderColor: "border-gold hover:border-gold/40",
-      shadowColor: "shadow-lg shadow-gold/20 hover:shadow-none",
-      valueColor: "text-black group-hover:text-gold",
+      iconBg: "bg-gray-100",
+      iconColor: "text-gray-600",
     },
   ];
 
   return (
-    <section id="ready-to-get-started" className={`py-8 sm:py-12 md:py-16 bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)] ${className}`}>
-      <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark rounded-none border-y border-gold/30 shadow-[0_0_40px_rgba(200,167,102,0.18)] p-4 sm:p-6 md:p-10">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h2
-            className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.1em]"
-            style={{
-              fontFamily: "Poppins, sans-serif",
-              background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            {title}
-          </h2>
-          <p className="text-zinc-600 text-sm md:text-base max-w-xl mx-auto">
-            {subtitle}
-          </p>
-        </div>
-
-        {/* Contact Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4 max-w-2xl mx-auto mb-6 sm:mb-8">
-          {contactCards.map((card) => (
-            <a
-              key={card.label}
-              href={card.href}
-              target={card.label === "WhatsApp" ? "_blank" : undefined}
-              rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
-              className={`group flex flex-row sm:flex-col items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-none border-2 bg-white/50 hover:shadow-lg transition-all duration-300 ${card.borderColor} ${card.shadowColor}`}
+    <section id="ready-to-get-started" className={`py-8 sm:py-12 md:py-16 bg-white ${className}`}>
+      <div className="max-w-4xl mx-auto px-4 md:px-6">
+        <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 md:p-10">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h2
+              className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 uppercase tracking-[0.1em] text-black"
+              style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${card.iconBg} flex items-center justify-center flex-shrink-0`}>
-                <card.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${card.iconColor}`} />
-              </div>
-              <div className="text-left sm:text-center">
-                <p className="text-xs uppercase tracking-wider text-zinc-500 font-medium mb-0.5">{card.label}</p>
-                <p className={`text-sm font-semibold transition-colors ${card.valueColor}`}>{card.value}</p>
-              </div>
-            </a>
-          ))}
-        </div>
+              {title}
+            </h2>
+            <p className="text-gray-500 text-sm md:text-base max-w-xl mx-auto">
+              {subtitle}
+            </p>
+          </div>
 
-        {/* Divider */}
-        <div className="flex items-center gap-4 max-w-2xl mx-auto mb-8">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-          <span className="text-gold/60 text-sm">✦</span>
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent via-gold/40 to-transparent" />
-        </div>
+          {/* Contact Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 md:gap-4 max-w-2xl mx-auto mb-6 sm:mb-8">
+            {contactCards.map((card) => (
+              <a
+                key={card.label}
+                href={card.href}
+                target={card.label === "WhatsApp" ? "_blank" : undefined}
+                rel={card.label === "WhatsApp" ? "noopener noreferrer" : undefined}
+                className="group flex flex-row sm:flex-col items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl border border-gray-200 bg-white hover:border-gray-400 hover:shadow-lg transition-all duration-300"
+              >
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${card.iconBg} flex items-center justify-center flex-shrink-0`}>
+                  <card.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${card.iconColor}`} />
+                </div>
+                <div className="text-left sm:text-center">
+                  <p className="text-xs uppercase tracking-wider text-gray-400 font-medium mb-0.5">{card.label}</p>
+                  <p className="text-sm font-semibold text-black group-hover:text-gray-700 transition-colors">{card.value}</p>
+                </div>
+              </a>
+            ))}
+          </div>
 
-        {/* Newsletter Section */}
-        <div className="max-w-lg mx-auto text-center">
-          <h3
-            className="text-xl md:text-2xl font-bold mb-3 uppercase tracking-[0.12em]"
-            style={{
-              fontFamily: "Poppins, sans-serif",
-              background: 'linear-gradient(135deg, #1a1a1a 0%, #333333 30%, #D4AF37 50%, #333333 70%, #1a1a1a 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            ✦ Stay in the Loop ✦
-          </h3>
-          <p className="text-zinc-600 text-sm md:text-base mb-5">
-            Be the first to access new listings, market updates, and personalized brokerage guidance.
-          </p>
-          <NewsletterBrevo variant="compact" source="combined_cta" />
+          {/* Divider */}
+          <div className="flex items-center gap-4 max-w-2xl mx-auto mb-8">
+            <div className="flex-1 h-px bg-gray-200" />
+            <span className="text-gray-300 text-sm">✦</span>
+            <div className="flex-1 h-px bg-gray-200" />
+          </div>
+
+          {/* Newsletter Section */}
+          <div className="max-w-lg mx-auto text-center">
+            <h3
+              className="text-xl md:text-2xl font-bold mb-3 uppercase tracking-[0.12em] text-black"
+              style={{ fontFamily: "Poppins, sans-serif" }}
+            >
+              ✦ Stay in the Loop ✦
+            </h3>
+            <p className="text-gray-500 text-sm md:text-base mb-5">
+              Be the first to access new listings, market updates, and personalized brokerage guidance.
+            </p>
+            <NewsletterBrevo variant="compact" source="combined_cta" />
+          </div>
         </div>
       </div>
     </section>
