@@ -10,8 +10,8 @@ interface ChatSubmittedProps {
 const ChatSubmitted = ({ userFirstName, onStartNewChat }: ChatSubmittedProps) => {
   return (
     <div className="flex-1 p-6 flex flex-col items-center justify-center">
-      <div className="w-16 h-16 rounded-full bg-gradient-to-r from-gold/20 to-gold/10 flex items-center justify-center mb-4">
-        <CheckCircle2 className="w-8 h-8 text-gold" />
+      <div className="w-16 h-16 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center mb-4">
+        <CheckCircle2 className="w-8 h-8 text-gray-700" />
       </div>
       <h4 className="text-black text-lg font-semibold mb-2">Submitted to Our Team!</h4>
       <p className="text-zinc-600 text-sm text-center mb-6 max-w-[280px]">
