@@ -133,7 +133,7 @@ const ClientMarketSnapshot = ({
               </Tooltip>
             </TooltipProvider>
           </CardTitle>
-          <span className="text-xs text-muted-foreground">Updated {lastUpdated}</span>
+          <span className="text-xs text-black/70 font-medium">Updated {lastUpdated}</span>
         </div>
       </CardHeader>
       <CardContent className="space-y-5">
