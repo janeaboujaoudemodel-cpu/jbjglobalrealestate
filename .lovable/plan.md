@@ -1,32 +1,47 @@
 
 
-## Auto-Link 108 Projects to Their Developer Records
+## Update Remaining Developer Logos from Official Sources
 
 ### Problem
-108 published projects have a `developer_name` text field but no `developer_id` foreign key. Without the link, the join to the `developers` table returns null and no logo renders.
+17 developers in the database still have no `logo_url`. I researched each one via their official websites and web search.
 
-### Fix
-Run a single SQL UPDATE to match `projects.developer_name` to `developers.name` and populate the missing `developer_id`.
+### Logos Found (7 developers)
 
-### Steps
+| Developer | Logo Source | URL |
+|-----------|-----------|-----|
+| **Orion Real Estate** | orion-dubai.com | `https://www.orion-dubai.com/images/orion-logo-one-color.png` |
+| **Al Madar** | madardevelopments.com (favicon/header logo — white wordmark on dark bg) | Extract from site HTML |
+| **Palladium Prime Development** | palladiumdevelopment.ae (header logo — white wordmark) | Extract from site HTML |
+| **RAK Hospitality** | rakhospitalityholding.com (header logo) | Extract from site HTML |
+| **City View Developments** | cityview.me (chevron icon in header) | Extract from site HTML |
+| **Xtreme Vision** | homeland.ae shows XV logo | `https://www.homeland.ae` hosted image |
+| **ETA Star Property** | Domain is for sale — but ETA Star Group has assets on third-party sites | Search aggregator sites |
 
-1. **Data update via insert tool** — Execute:
-```sql
-UPDATE projects p
-SET developer_id = d.id
-FROM developers d
-WHERE p.developer_id IS NULL
-  AND p.developer_name IS NOT NULL
-  AND LOWER(TRIM(p.developer_name)) = LOWER(TRIM(d.name));
-```
+### Logos NOT Found (10 developers — no accessible website or logo asset)
 
-2. **Check for unmatched remainders** — Query any projects still missing `developer_id` after the update to see if fuzzy matching or manual mapping is needed (e.g. "Developed by Meraas" vs "Meraas").
+| Developer | Reason |
+|-----------|--------|
+| Al Warqa | No official website found; "Al Warqa" is a Dubai area name, not a clear developer brand |
+| Aqaar | Domain for sale |
+| Blue Square Development | Website under construction |
+| Hamrk Development | No official website found |
+| Lamar Development | No accessible website or logo found |
+| Peak Summit Development | No official website found |
+| Royal Dunes | No accessible website; Abu Dhabi brokerage, not clear developer |
+| Sheffield Holding | Website says "being updated" |
+| Sunrise Valley | No official website found |
+| Urban Wellness | Wellcube.life site blank; niche brand |
 
-3. **Handle edge cases** — If some `developer_name` values don't exactly match any `developers.name`, run additional updates with known aliases (e.g. `LIKE '%Meraas%'` → Meraas developer record).
+### Implementation Steps
+
+1. **Extract logo URLs** from the HTML of palladiumdevelopment.ae, madardevelopments.com, rakhospitalityholding.com, and cityview.me by inspecting their header/nav logo `<img>` tags.
+
+2. **Run database UPDATEs** via the insert tool to set `logo_url` for the 7 developers where real logos were found.
+
+3. **Report remaining 10** — these developers have no discoverable official logo. You would need to upload logos manually for them.
 
 ### What stays untouched
-- No code changes — the join logic already works correctly
-- No schema changes — `developer_id` column already exists
-- No logo URLs — locked per previous rule
-- No UI components — rendering is correct once data is linked
+- No code changes
+- No schema changes
+- No UI changes
 
