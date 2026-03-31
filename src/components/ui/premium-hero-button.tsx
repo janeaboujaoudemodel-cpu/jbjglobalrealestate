@@ -81,21 +81,19 @@ export const PremiumHeroButton = ({
     <>
       {iconPosition === "left" && (
         <IconComponent 
-          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors", isLight ? "text-gold" : "text-gold group-hover:text-black")}
-          style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} 
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors", isLight ? "text-gray-600" : "text-white/80 group-hover:text-black")}
         />
       )}
       <span className={cn("transition-colors", isLight ? "text-black" : "text-white group-hover:text-black")}>{children}</span>
       {iconPosition === "right" && (
         <IconComponent 
-          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-gold" : "text-gold group-hover:text-black")}
-          style={{ filter: 'drop-shadow(0 0 6px rgba(200,167,102,0.8))' }} 
+          className={cn("w-4 h-4 md:w-5 md:h-5 transition-colors group-hover:translate-x-0.5 group-hover:-translate-y-0.5", isLight ? "text-gray-600" : "text-white/80 group-hover:text-black")}
         />
       )}
-      {/* Hover fill effect - champagne gradient (only for dark-bg variant) */}
+      {/* Hover fill effect (only for dark-bg variant) */}
       {!isLight && (
         <span 
-          className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 border-2 border-gold/60" 
+          className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 border-2 border-gray-300" 
         />
       )}
     </>
