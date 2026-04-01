@@ -165,6 +165,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
   const Icon = config.icon;
   const linkTo = `${config.pathPrefix}/${item.slug}`;
   const [logoError, setLogoError] = useState(false);
+  const [imgBroken, setImgBroken] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -185,48 +186,67 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
     }
   }, [item.id, item.type, item.developerLogo, item.subtitle, patchItem]);
 
+  // Helper: fetch cover image from DB
+  const fetchCoverImage = useCallback(() => {
+    if (!item.slug) return;
+    if (item.type === "property") {
+      supabase
+        .from("projects")
+        .select("cover_image_url, images:project_images(image_url)")
+        .eq("slug", item.slug)
+        .limit(1)
+        .maybeSingle()
+        .then(({ data }) => {
+          const url = data?.cover_image_url || (data?.images as any)?.[0]?.image_url;
+          if (url) patchItem(item.id, item.type, { imageUrl: url });
+        });
+    } else if (item.type === "developer") {
+      supabase
+        .from("developers")
+        .select("logo_url, feature_image_url")
+        .eq("slug", item.slug)
+        .limit(1)
+        .maybeSingle()
+        .then(({ data }) => {
+          const url = data?.feature_image_url || data?.logo_url;
+          if (url) patchItem(item.id, item.type, { imageUrl: url });
+        });
+    } else if (item.type === "area") {
+      supabase
+        .from("areas")
+        .select("image_url, hero_image_url")
+        .eq("slug", item.slug)
+        .limit(1)
+        .maybeSingle()
+        .then(({ data }) => {
+          const url = data?.hero_image_url || data?.image_url;
+          if (url) patchItem(item.id, item.type, { imageUrl: url });
+        });
+    }
+  }, [item.id, item.type, item.slug, patchItem]);
+
   // Self-heal: fetch missing cover image for any type
   useEffect(() => {
     if (!item.imageUrl && item.slug) {
-      if (item.type === "property") {
-        supabase
-          .from("projects")
-          .select("cover_image_url, images:project_images(image_url)")
-          .eq("slug", item.slug)
-          .limit(1)
-          .maybeSingle()
-          .then(({ data }) => {
-            const url = data?.cover_image_url || (data?.images as any)?.[0]?.image_url;
-            if (url) patchItem(item.id, item.type, { imageUrl: url });
-          });
-      } else if (item.type === "developer") {
-        supabase
-          .from("developers")
-          .select("logo_url, feature_image_url")
-          .eq("slug", item.slug)
-          .limit(1)
-          .maybeSingle()
-          .then(({ data }) => {
-            const url = data?.feature_image_url || data?.logo_url;
-            if (url) patchItem(item.id, item.type, { imageUrl: url });
-          });
-      } else if (item.type === "area") {
-        supabase
-          .from("areas")
-          .select("image_url, hero_image_url")
-          .eq("slug", item.slug)
-          .limit(1)
-          .maybeSingle()
-          .then(({ data }) => {
-            const url = data?.hero_image_url || data?.image_url;
-            if (url) patchItem(item.id, item.type, { imageUrl: url });
-          });
-      }
+      fetchCoverImage();
     }
-  }, [item.id, item.type, item.imageUrl, item.slug, patchItem]);
+  }, [item.id, item.type, item.imageUrl, item.slug, fetchCoverImage]);
 
+  // Detect broken image URLs and self-heal
+  useEffect(() => {
+    if (!item.imageUrl) return;
+    const img = new Image();
+    img.onload = () => setImgBroken(false);
+    img.onerror = () => {
+      setImgBroken(true);
+      fetchCoverImage();
+    };
+    img.src = item.imageUrl;
+  }, [item.imageUrl, fetchCoverImage]);
+
+  const hasValidImage = item.imageUrl && !imgBroken;
   const showDevLogo = item.type === "property" && item.developerLogo && !logoError;
-  const showDevCardLogo = item.type === "developer" && item.imageUrl && !logoError;
+  const showDevCardLogo = item.type === "developer" && hasValidImage && !logoError;
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cardRef.current) return;
