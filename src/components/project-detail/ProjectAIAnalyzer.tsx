@@ -375,9 +375,9 @@ export const ProjectAIAnalyzer = ({
                     {/* Large price stat */}
                     <div className="mb-4">
                       <div className="text-3xl font-bold text-emerald-600">
-                        AED {areaPriceSqft?.toLocaleString()}<span className="text-base font-medium text-black/80">/sqft</span>
+                        AED {areaPriceSqft?.toLocaleString()}<span className="text-base font-medium text-black">/sqft</span>
                       </div>
-                      <div className="text-xs text-black/80 font-medium mt-0.5">{areaName} average</div>
+                      <div className="text-xs text-black/90 font-semibold mt-0.5">{areaName} average</div>
                     </div>
 
                     {/* Bar chart */}
