@@ -179,40 +179,40 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
 
             {/* Cash vs Mortgage */}
-            <div className="bg-white/[0.04] rounded-2xl p-6 border border-white/10 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
-                <Banknote className="w-4 h-4 text-blue-400" />
-                <h3 className="text-white font-semibold text-sm">Cash vs Mortgage</h3>
+                <Banknote className="w-4 h-4 text-blue-600" />
+                <h3 className="text-foreground font-semibold text-sm">Cash vs Mortgage</h3>
               </div>
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-black/40 border border-white/5">
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-stone-100 border border-stone-200">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 rounded-l-full shadow-[0_0_14px_rgba(59,130,246,0.5)] flex items-center justify-center"
+                  className="h-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 rounded-l-full shadow-[0_0_10px_rgba(59,130,246,0.4)] flex items-center justify-center"
                   style={{ width: `${cashPct}%` }}
                 >
                   <span className="text-white text-[10px] font-bold drop-shadow">{cashPct}%</span>
                 </div>
                 <div
-                  className="h-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 flex-1 rounded-r-full shadow-[0_0_14px_rgba(245,158,11,0.5)] flex items-center justify-center"
+                  className="h-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 flex-1 rounded-r-full shadow-[0_0_10px_rgba(245,158,11,0.4)] flex items-center justify-center"
                 >
                   <span className="text-white text-[10px] font-bold drop-shadow">{mortgagePct}%</span>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.6)]" />
-                    <span className="text-blue-400 text-[10px] uppercase tracking-wider font-bold">Cash</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.5)]" />
+                    <span className="text-blue-700 text-[10px] uppercase tracking-wider font-bold">Cash</span>
                   </div>
-                  <p className="text-blue-300 text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
-                  <p className="text-blue-400 text-[10px] font-medium">{cashPct}% of total</p>
+                  <p className="text-blue-600 text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
+                  <p className="text-blue-600 text-[10px] font-medium">{cashPct}% of total</p>
                 </div>
-                <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3">
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.6)]" />
-                    <span className="text-amber-400 text-[10px] uppercase tracking-wider font-bold">Mortgage</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.5)]" />
+                    <span className="text-amber-700 text-[10px] uppercase tracking-wider font-bold">Mortgage</span>
                   </div>
-                  <p className="text-amber-300 text-lg font-extrabold">{ytd2026.mortgage.toLocaleString()}</p>
-                  <p className="text-amber-400 text-[10px] font-medium">{mortgagePct}% of total</p>
+                  <p className="text-amber-600 text-lg font-extrabold">{ytd2026.mortgage.toLocaleString()}</p>
+                  <p className="text-amber-600 text-[10px] font-medium">{mortgagePct}% of total</p>
                 </div>
               </div>
             </div>
