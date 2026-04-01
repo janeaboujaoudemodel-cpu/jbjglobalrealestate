@@ -3,6 +3,7 @@ import { ImageOff } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { SafeImage } from "@/components/SafeImage";
+import { getHighResImageUrl } from "@/lib/imageUtils";
 
 type VerifiedMediaProps = {
   src?: string | null;
@@ -51,7 +52,7 @@ export function VerifiedMedia({
 
   return (
     <SafeImage
-      src={src}
+      src={getHighResImageUrl(src, "1200x800")}
       alt={alt}
       className={cn("w-full h-full", className)}
       loading={priority ? "eager" : "lazy"}

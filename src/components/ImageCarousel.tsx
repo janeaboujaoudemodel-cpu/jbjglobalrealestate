@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Download, Maximize2, X } from "lucide-react";
+import { getHighResImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -104,9 +105,10 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
         {/* Main Image - with background frame for vertical images */}
         <div className="aspect-[16/9] rounded-lg overflow-hidden bg-gradient-to-br from-muted via-muted/80 to-muted/60 relative group flex items-center justify-center">
           <img
-            src={images[currentIndex].image_url}
+            src={getHighResImageUrl(images[currentIndex].image_url)}
             alt={images[currentIndex].alt_text || "Project image"}
             className="w-full h-full object-cover"
+            loading="eager"
           />
           
           {/* Overlay Controls */}
@@ -189,9 +191,10 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                   type="button"
                 >
                   <img
-                    src={image.image_url}
+                    src={getHighResImageUrl(image.image_url, "464x312")}
                     alt={image.alt_text || `Thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                   {index === 5 && images.length > 6 && (
                     <div className="absolute inset-0 bg-background/70 backdrop-blur-sm flex items-center justify-center">
@@ -213,7 +216,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
           </VisuallyHidden.Root>
           <div className="relative w-full h-[90vh] flex items-center justify-center bg-black/95">
             <img
-              src={images[currentIndex].image_url}
+              src={getHighResImageUrl(images[currentIndex].image_url)}
               alt={images[currentIndex].alt_text || "Project image"}
               className="max-w-full max-h-full object-contain"
             />
