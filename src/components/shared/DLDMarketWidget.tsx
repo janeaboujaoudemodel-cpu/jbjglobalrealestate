@@ -324,7 +324,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-purple-300 text-lg font-extrabold">{ytd2026.gifts.toLocaleString()}</span>
-                <span className="text-purple-400/60 text-xs font-medium">{giftsPct}% of total</span>
+                <span className="text-purple-400 text-xs font-medium">{giftsPct}% of total</span>
               </div>
             </div>
           )}
