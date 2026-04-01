@@ -8,6 +8,7 @@ import { formatDisplayDate } from "@/utils/formatDate";
 import { useCurrency } from "@/hooks/useCurrency";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface RecommendedProjectsProps {
   currentProjectId: string;
@@ -188,11 +189,10 @@ export default function RecommendedProjects({
 
                   {/* Developer Logo — Bottom Left — eager loaded, rounded with no white frame */}
                   {devLogo && (
-                    <div className="absolute bottom-3 left-3 z-20 w-14 h-14 bg-white/90 rounded-lg p-1.5 shadow-sm flex items-center justify-center">
-                      <SafeImage
+                    <div className="absolute bottom-3 left-3 z-20">
+                      <DeveloperLogo
                         src={devLogo}
                         alt={project.developer?.name || "Developer"}
-                        className="w-full h-full object-contain rounded-lg"
                         loading="eager"
                       />
                     </div>

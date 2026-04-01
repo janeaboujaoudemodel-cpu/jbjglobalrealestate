@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCurrency } from "@/hooks/useCurrency";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC', 'Meraas'];
 
@@ -154,15 +155,12 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
             {/* Developer Logo */}
             {logoUrl && !logoError ? (
               <div className="absolute top-3 left-3 z-20">
-                <div className="w-14 h-14 bg-white/90 rounded-lg p-1.5 shadow-sm flex items-center justify-center">
-                  <img
-                    src={logoUrl}
-                    alt={devName}
-                    className="w-full h-full object-contain rounded-lg"
-                    loading={isAboveFold ? "eager" : "lazy"}
-                    onError={() => setLogoError(true)}
-                  />
-                </div>
+                <DeveloperLogo
+                  src={logoUrl}
+                  alt={devName}
+                  loading={isAboveFold ? "eager" : "lazy"}
+                  onError={() => setLogoError(true)}
+                />
               </div>
             ) : (
               <div className="absolute top-3 left-3 z-10">
