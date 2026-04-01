@@ -638,31 +638,29 @@ export default function ProjectDetailLayout({
           <div className="flex flex-wrap gap-4">
             {brochurePrimary ? (
               <Button 
-                variant="primary" 
+                variant="hero" 
                 size="lg"
                 onClick={() => handleDocumentDownload("brochure", brochurePrimary.url)}
-                className="hover:shadow-[0_14px_45px_rgba(200,167,102,0.35)] hover:-translate-y-0.5 transition-all"
               >
                 <Download className="w-5 h-5" />
                 Download Brochure
               </Button>
             ) : (
               <Button 
-                variant="primary" 
+                variant="hero" 
                 size="lg"
                 onClick={() => {
                   setCaptureDocType("brochure");
                   setCaptureDocUrl(undefined);
                   setLeadCaptureOpen(true);
                 }}
-                className="hover:shadow-[0_14px_45px_rgba(200,167,102,0.35)] hover:-translate-y-0.5 transition-all"
               >
                 <FileText className="w-5 h-5" />
                 Request Brochure
               </Button>
             )}
             <Button 
-              variant="primary" 
+              variant="hero" 
               size="lg"
               onClick={() => {
                 setCaptureDocType("brochure");
