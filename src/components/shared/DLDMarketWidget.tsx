@@ -86,7 +86,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   ];
 
   return (
-    <section className="py-16 overflow-hidden rounded-3xl mx-4 md:mx-8" style={{ background: 'linear-gradient(135deg, #0a1628 0%, #0d1a30 50%, #0f1f3a 100%)' }}>
+    <section className="py-16 overflow-hidden rounded-3xl mx-4 md:mx-8 bg-gradient-to-br from-white via-stone-50 to-amber-50/30 border border-gold/20 shadow-[0_8px_40px_rgba(0,0,0,0.06)]">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
 
@@ -96,10 +96,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               <Banknote className="w-4 h-4 text-gold" />
               <span className="text-gold text-xs uppercase tracking-[0.2em] font-semibold">Live Market Data</span>
             </div>
-            <h2 className="text-white text-2xl md:text-3xl font-bold mb-2">
+            <h2 className="text-foreground text-2xl md:text-3xl font-bold mb-2">
               Dubai Market Intelligence
             </h2>
-            <p className="text-gold/80 text-sm font-medium">
+            <p className="text-gold text-sm font-medium">
               DLD Transaction Data • As of {today}
             </p>
           </div>
