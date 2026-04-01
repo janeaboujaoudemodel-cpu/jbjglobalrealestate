@@ -1,32 +1,21 @@
 
 
-## Fix Logo Consistency Across All Sections
+## Restore Handpicked Logo Style & Fix Continue Searching Separately
 
 ### Problem
-The `DeveloperLogo` component uses `bg-white p-1.5` which creates a visible white border/padding around logos. On the smaller "Continue Searching" cards (160-200px wide), this white padding appears more prominent compared to the larger "Handpicked For You" cards, making them look inconsistent. The user wants logos to appear "full fit" without white borders.
+The last change replaced `object-contain p-1.5 bg-white` with `object-cover` globally. This broke the Handpicked For You logos which were already perfect with the white background style.
 
-### Root Cause
-The `bg-white` background and `p-1.5` padding in the `DeveloperLogo` component creates a white frame around every logo. Logos that already have their own white/transparent background get double whitespace, appearing smaller and with noticeable white borders.
+### Solution — Two changes
 
-### Solution
-Update `DeveloperLogo` to remove the white background and padding, making the logo image fill the container fully:
-
-**`src/components/ui/DeveloperLogo.tsx`** — Change the className from:
+**1. `src/components/ui/DeveloperLogo.tsx`** — Restore the locked default:
 ```
-w-14 h-14 rounded-xl object-contain p-1.5 bg-white shrink-0 shadow-md
+object-cover overflow-hidden  →  object-contain p-1.5 bg-white
 ```
-to:
-```
-w-14 h-14 rounded-xl object-cover overflow-hidden shrink-0 shadow-md
-```
+This restores the exact style that was correct in Handpicked For You.
 
-- `object-contain` → `object-cover`: fills the container without leaving white space
-- Remove `p-1.5`: no internal padding that creates white borders
-- Remove `bg-white`: no white background visible around the logo
-- Add `overflow-hidden`: clips content cleanly to the rounded corners
+**2. `src/components/ContinueSearching.tsx`** — Override for this section only:
+Pass `className="bg-transparent p-0 object-cover overflow-hidden"` to both `DeveloperLogo` instances so the Continue Searching cards get the full-fit look without white borders, while Handpicked and all other sections keep the white-background standard.
 
-This single change applies globally across all pages: Handpicked For You, Continue Searching, ProjectCard, DeveloperCard, RecommendedDevelopers, RecommendedProjects, etc.
-
-### Note
-Some logos with large transparent areas may get slightly cropped with `object-cover`. If the user prefers `object-contain` (no cropping) but without the white frame, the alternative is `object-contain` with `bg-transparent p-0` instead.
+### Why this works
+The `DeveloperLogo` component uses `cn()` which lets `className` overrides win. So the global default stays white-background (correct for Handpicked), and only Continue Searching gets the override.
 
