@@ -116,7 +116,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Transaction Split Bars */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="bg-white/70 rounded-xl p-5 border border-emerald-200">
-              <p className="text-black/70 text-xs uppercase tracking-wider mb-3 font-semibold">Off-Plan vs Secondary</p>
+              <p className="text-black font-semibold text-xs uppercase tracking-wider mb-3">Off-Plan vs Secondary</p>
               <div className="h-5 rounded-full overflow-hidden mb-2 flex shadow-inner">
                 <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-l-full" style={{ width: `${offPlanPct}%` }} />
                 <div className="h-full bg-gradient-to-r from-red-400 to-red-500 flex-1 rounded-r-full" />
