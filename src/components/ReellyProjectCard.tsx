@@ -267,7 +267,7 @@ const ReellyProjectCard = ({
             {project.price_from ? (
               <>
                 <span className="text-muted-foreground">Starting from </span>
-                <span className="text-gold font-bold text-lg">
+                <span className="text-price-orange font-bold text-lg">
                   {formatPriceWithCurrency(project.price_from, currency)}
                 </span>
               </>
