@@ -272,7 +272,7 @@ const ReellyProjectCard = ({
                 </span>
               </>
             ) : (
-              <span className="text-gold font-medium">Price on Request</span>
+              <span className="text-price-orange font-medium">Price on Request</span>
             )}
           </p>
            
