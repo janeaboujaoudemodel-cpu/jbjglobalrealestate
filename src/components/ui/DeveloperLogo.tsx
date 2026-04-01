@@ -36,7 +36,7 @@ export function DeveloperLogo({
         onError?.();
       }}
       className={cn(
-        "w-14 h-14 rounded-xl object-contain p-1.5 bg-white shrink-0 shadow-md",
+        "w-14 h-14 rounded-xl object-cover overflow-hidden shrink-0 shadow-md",
         className
       )}
     />
