@@ -330,7 +330,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           )}
 
           {/* Disclaimer */}
-          <p className="text-[10px] text-white/50 text-center mt-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[10px] text-gold/60 text-center mt-8 max-w-2xl mx-auto leading-relaxed">
             Sources: Dubai Land Department (DLD), RERA, DXB Interact. YTD 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
             <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
           </p>
