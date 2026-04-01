@@ -295,7 +295,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         />
 
         {/* Image / fallback */}
-        {item.imageUrl ? (
+        {hasValidImage ? (
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
             style={{ backgroundImage: `url(${item.imageUrl})` }}
