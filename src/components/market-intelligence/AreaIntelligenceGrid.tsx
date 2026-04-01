@@ -64,7 +64,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
                 <h3 className="text-black font-semibold group-hover:text-gold transition-colors">
                   {area.area}
                 </h3>
-                <p className="text-black/50 text-xs">Dubai, UAE</p>
+                <p className="text-black/80 font-medium text-xs">Dubai, UAE</p>
               </div>
             </div>
             <TrendBadge trend={area.trend} />
@@ -73,14 +73,14 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Metrics */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="bg-white/50 rounded-lg p-3">
-              <div className="flex items-center gap-1 text-black/60 text-xs mb-1">
+              <div className="flex items-center gap-1 text-black font-medium text-xs mb-1">
                 <Home className="w-3 h-3" />
                 Price Index
               </div>
               <p className="text-black font-bold text-lg">{area.priceIndex}</p>
             </div>
             <div className="bg-white/50 rounded-lg p-3">
-              <div className="flex items-center gap-1 text-black/60 text-xs mb-1">
+              <div className="flex items-center gap-1 text-black font-medium text-xs mb-1">
                 <Building2 className="w-3 h-3" />
                 Rental Index
               </div>
@@ -118,7 +118,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
           {/* YoY Change */}
           <div className="flex items-center justify-between py-3 border-t border-black/10">
-            <span className="text-black/60 text-sm">Year-over-Year</span>
+            <span className="text-black font-medium text-sm">Year-over-Year</span>
             <span className={`font-bold ${area.yoyChange >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
               {area.yoyChange >= 0 ? '+' : ''}{area.yoyChange}%
             </span>
@@ -127,7 +127,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Highlights */}
           <div className="space-y-2 mb-4">
             {area.highlights.slice(0, 2).map((highlight, idx) => (
-              <p key={idx} className="text-black/70 text-xs flex items-start gap-2">
+              <p key={idx} className="text-black/90 text-xs flex items-start gap-2">
                 <span className="text-gold mt-0.5">•</span>
                 {highlight}
               </p>
@@ -168,7 +168,7 @@ export const AreaIntelligenceGrid = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
               Market Snapshot by Location
             </h2>
-            <p className="text-black/70 max-w-2xl mx-auto">
+            <p className="text-black/90 max-w-2xl mx-auto">
               Explore aggregated market data for Dubai's most sought-after communities. 
               Data derived from official government Open Data sources.
             </p>

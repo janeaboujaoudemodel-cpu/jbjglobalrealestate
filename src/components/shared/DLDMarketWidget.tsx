@@ -90,7 +90,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <Banknote className="w-6 h-6 text-gold" />
                 Dubai Market Intelligence
               </h2>
-              <p className="text-black/70 text-sm mt-1 font-medium">DLD Transaction Data • As of {today}</p>
+              <p className="text-black/90 text-sm mt-1 font-medium">DLD Transaction Data • As of {today}</p>
             </div>
             <span className="text-emerald-600 text-xl font-bold">{ytd2026.growth}</span>
           </div>
@@ -116,7 +116,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Transaction Split Bars */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="bg-white/70 rounded-xl p-5 border border-emerald-200">
-              <p className="text-black/70 text-xs uppercase tracking-wider mb-3 font-semibold">Off-Plan vs Secondary</p>
+              <p className="text-black font-semibold text-xs uppercase tracking-wider mb-3">Off-Plan vs Secondary</p>
               <div className="h-5 rounded-full overflow-hidden mb-2 flex shadow-inner">
                 <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-l-full" style={{ width: `${offPlanPct}%` }} />
                 <div className="h-full bg-gradient-to-r from-red-400 to-red-500 flex-1 rounded-r-full" />
@@ -127,7 +127,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               </div>
             </div>
             <div className="bg-white/70 rounded-xl p-5 border border-blue-200">
-              <p className="text-black/70 text-xs uppercase tracking-wider mb-3 font-semibold">Cash vs Mortgage</p>
+              <p className="text-black font-semibold text-xs uppercase tracking-wider mb-3">Cash vs Mortgage</p>
               <div className="h-5 rounded-full overflow-hidden mb-2 flex shadow-inner">
                 <div className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-l-full" style={{ width: `${cashPct}%` }} />
                 <div className="h-full bg-gradient-to-r from-amber-400 to-amber-500 flex-1 rounded-r-full" />
@@ -202,7 +202,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           </div>
 
           {/* Disclaimer */}
-          <p className="text-[10px] text-black/60 text-center mt-6">
+          <p className="text-[10px] text-black/80 text-center mt-6">
             Sources: Dubai Land Department (DLD), RERA, DXB Interact. YTD 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
             <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
           </p>

@@ -146,7 +146,7 @@ export const AIMarketInsights = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
               Understanding the Market
             </h2>
-            <p className="text-black/70 max-w-2xl mx-auto">
+            <p className="text-black/90 max-w-2xl mx-auto">
               AI-generated explanations of market trends based on official government data. 
               These insights help contextualize the "why" behind the numbers.
             </p>
@@ -167,7 +167,7 @@ export const AIMarketInsights = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-black/70 text-sm leading-relaxed">
+                    <p className="text-black/90 text-sm leading-relaxed">
                       {insight.insight}
                     </p>
                   </CardContent>
@@ -186,7 +186,7 @@ export const AIMarketInsights = () => {
                     <h3 className="text-black text-xl font-bold mb-2">
                       Generate Market Narrative
                     </h3>
-                    <p className="text-black/70 text-sm mb-4">
+                    <p className="text-black/90 text-sm mb-4">
                       Get an AI-generated analysis based on official government Open Data.
                       Select a topic below to generate educational market insights.
                     </p>
@@ -254,7 +254,7 @@ export const AIMarketInsights = () => {
             variants={fadeInUp}
           >
             <Info className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-            <p className="text-black/70 text-xs leading-relaxed">
+            <p className="text-black/80 text-xs leading-relaxed">
               AI-generated insights are based on aggregated government Open Data and are provided for informational purposes only. 
               They do not constitute financial, investment, or legal advice. 
               AI explains data but does not predict prices or provide specific investment recommendations.

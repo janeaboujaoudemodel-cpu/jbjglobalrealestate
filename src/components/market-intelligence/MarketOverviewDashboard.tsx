@@ -153,7 +153,7 @@ export const MarketOverviewDashboard = () => {
                       ];
                       return (
                         <div key={quarter.quarter} className="flex items-center gap-4">
-                          <span className="text-black/70 text-sm w-20 font-medium">{quarter.quarter}</span>
+                          <span className="text-black font-medium text-sm w-20">{quarter.quarter}</span>
                           <div className="flex-1 h-8 bg-black/5 rounded-lg overflow-hidden relative shadow-inner">
                             <motion.div
                               className={`h-full bg-gradient-to-r ${qColors[idx % qColors.length]}`}
@@ -170,7 +170,7 @@ export const MarketOverviewDashboard = () => {
                       );
                     })}
                   </div>
-                  <p className="text-black/70 text-xs mt-4">
+                  <p className="text-black/90 text-xs mt-4">
                     Source: Dubai Government Open Data
                   </p>
                 </CardContent>
@@ -218,8 +218,8 @@ export const MarketOverviewDashboard = () => {
               <span className="text-black/80 text-sm font-medium">
                 Last updated: {new Date(MARKET_OVERVIEW_STATS.reportDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
-              <span className="text-black/50">•</span>
-              <span className="text-black/70 text-sm font-medium">
+              <span className="text-black/70">•</span>
+              <span className="text-black/90 text-sm font-medium">
                 {MARKET_OVERVIEW_STATS.dataSource}
               </span>
             </div>

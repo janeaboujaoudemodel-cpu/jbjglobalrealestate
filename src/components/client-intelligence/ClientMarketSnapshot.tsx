@@ -123,7 +123,7 @@ const ClientMarketSnapshot = ({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
-                  <Info className="w-4 h-4 text-muted-foreground" />
+                  <Info className="w-4 h-4 text-black/70" />
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs">
                   <p className="text-xs">
@@ -190,7 +190,7 @@ const ClientMarketSnapshot = ({
             )}
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-3">
-            <p className="text-sm text-black/70 leading-relaxed">
+            <p className="text-sm text-black/90 leading-relaxed">
               {getWhatThisMeans()}
             </p>
             
@@ -223,7 +223,7 @@ const ClientMarketSnapshot = ({
         </Collapsible>
 
         {/* Mandatory Disclaimer */}
-        <p className="text-[10px] text-black/60 border-t border-border/30 pt-3">
+        <p className="text-[10px] text-black/80 border-t border-border/30 pt-3">
           Insights are based on aggregated official data and are provided for informational purposes only.
           This does not constitute financial, investment, or legal advice.{" "}
           <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
