@@ -326,20 +326,20 @@ export const ProjectAIAnalyzer = ({
                   <p className="text-red-600 text-sm font-medium">Issue: Area overview data not available.</p>
                 )}
               </div>
-              <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-2xl p-6 shadow-lg border border-gold/20 flex flex-col items-center justify-center text-center">
-                <Star className="w-8 h-8 text-gold mb-2" />
+              <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-2xl p-6 shadow-lg border border-emerald-500/30 flex flex-col items-center justify-center text-center">
+                <Star className="w-8 h-8 text-emerald-400 mb-2" />
                 {ratingScore !== null ? (
                   <>
-                    <div className="text-5xl font-bold text-gold mb-1">{ratingScore}</div>
-                    <div className="text-gold text-sm font-semibold">/10 Investment Rating</div>
+                    <div className="text-5xl font-bold text-emerald-400 mb-1">{ratingScore}</div>
+                    <div className="text-emerald-300 text-sm font-semibold">/10 Investment Rating</div>
                     {sections?.rating && (
-                      <p className="text-white/80 text-xs mt-3 leading-relaxed">
-                        {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim()}
+                      <p className="text-white/90 text-xs mt-3 leading-relaxed font-medium">
+                        — {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim()}
                       </p>
                     )}
                   </>
                 ) : (
-                  <p className="text-red-400 text-xs font-medium">Rating not available.</p>
+                  <p className="text-red-400 text-xs font-medium">Issue: Rating not available.</p>
                 )}
               </div>
             </div>
