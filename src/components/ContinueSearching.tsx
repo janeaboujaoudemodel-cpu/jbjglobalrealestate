@@ -176,14 +176,23 @@ const ContinueSearching = ({
   );
 };
 
+function isUrlValid(url: string | undefined): boolean {
+  if (!url) return false;
+  if (url.includes("undefined") || url.includes("null")) return false;
+  if (!url.startsWith("http://") && !url.startsWith("https://")) return false;
+  return true;
+}
+
 function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: number; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
   const config = TYPE_CONFIG[item.type] ?? TYPE_CONFIG.property;
   const Icon = config.icon;
   const linkTo = `${config.pathPrefix}/${item.slug}`;
   const [logoError, setLogoError] = useState(false);
-  const [imgBroken, setImgBroken] = useState(false);
+  const urlValid = isUrlValid(item.imageUrl);
+  const [imgBroken, setImgBroken] = useState(!urlValid);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
+  const fetchAttempted = useRef(false);
 
   // Self-heal: fetch missing developer logo
   useEffect(() => {
@@ -202,9 +211,10 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
     }
   }, [item.id, item.type, item.developerLogo, item.subtitle, patchItem]);
 
-  // Helper: fetch cover image from DB
+  // Helper: fetch cover image from DB (once per mount)
   const fetchCoverImage = useCallback(() => {
-    if (!item.slug) return;
+    if (!item.slug || fetchAttempted.current) return;
+    fetchAttempted.current = true;
     if (item.type === "property") {
       supabase
         .from("projects")
@@ -214,7 +224,10 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         .maybeSingle()
         .then(({ data }) => {
           const url = data?.cover_image_url || (data?.images as any)?.[0]?.image_url;
-          if (url) patchItem(item.id, item.type, { imageUrl: url });
+          if (url && url !== item.imageUrl) {
+            patchItem(item.id, item.type, { imageUrl: url });
+            setImgBroken(false);
+          }
         });
     } else if (item.type === "developer") {
       supabase
@@ -225,7 +238,10 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         .maybeSingle()
         .then(({ data }) => {
           const url = data?.feature_image_url || data?.logo_url;
-          if (url) patchItem(item.id, item.type, { imageUrl: url });
+          if (url && url !== item.imageUrl) {
+            patchItem(item.id, item.type, { imageUrl: url });
+            setImgBroken(false);
+          }
         });
     } else if (item.type === "area") {
       supabase
@@ -236,10 +252,13 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         .maybeSingle()
         .then(({ data }) => {
           const url = data?.hero_image_url || data?.image_url;
-          if (url) patchItem(item.id, item.type, { imageUrl: url });
+          if (url && url !== item.imageUrl) {
+            patchItem(item.id, item.type, { imageUrl: url });
+            setImgBroken(false);
+          }
         });
     }
-  }, [item.id, item.type, item.slug, patchItem]);
+  }, [item.id, item.type, item.slug, item.imageUrl, patchItem]);
 
   // Self-heal: fetch missing cover image for any type
   useEffect(() => {
@@ -248,17 +267,21 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
     }
   }, [item.id, item.type, item.imageUrl, item.slug, fetchCoverImage]);
 
-  // Detect broken image URLs and self-heal
+  // Detect broken image URLs and self-heal (only for valid-looking URLs)
   useEffect(() => {
-    if (!item.imageUrl) return;
+    if (!urlValid) {
+      setImgBroken(true);
+      fetchCoverImage();
+      return;
+    }
     const img = new Image();
     img.onload = () => setImgBroken(false);
     img.onerror = () => {
       setImgBroken(true);
       fetchCoverImage();
     };
-    img.src = item.imageUrl;
-  }, [item.imageUrl, fetchCoverImage]);
+    img.src = item.imageUrl!;
+  }, [item.imageUrl, urlValid, fetchCoverImage]);
 
   const hasValidImage = item.imageUrl && !imgBroken;
   const showDevLogo = item.type === "property" && item.developerLogo && !logoError;
