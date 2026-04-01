@@ -49,7 +49,7 @@ export default function QuickFactsBar({
   ].filter(f => f.show);
 
   const getStatusColor = (status?: string | null) => {
-    if (!status) return "bg-muted text-muted-foreground";
+    if (!status) return "bg-red-50 text-red-600 border-red-200";
     const s = status.toLowerCase();
     if (s.includes("available") || s.includes("selling")) return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
     if (s.includes("limited") || s.includes("few")) return "bg-amber-500/20 text-amber-400 border-amber-500/30";
@@ -97,7 +97,7 @@ export default function QuickFactsBar({
           >
             <fact.icon className="w-4 h-4 text-gold flex-shrink-0" />
             <div className="flex flex-col">
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground leading-none">{fact.label}</span>
+              <span className="text-[10px] uppercase tracking-wider text-black/80 font-medium leading-none">{fact.label}</span>
               <span className="text-sm font-medium text-foreground">{fact.value}</span>
             </div>
           </div>
@@ -107,7 +107,7 @@ export default function QuickFactsBar({
         {updatedAt && (
           <>
             <div className="w-px h-6 bg-border" />
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5 text-xs text-black/70 font-medium">
               <Clock className="w-3.5 h-3.5" />
               <span>Updated: {formatDate(updatedAt)}</span>
             </div>

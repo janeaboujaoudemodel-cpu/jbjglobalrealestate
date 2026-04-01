@@ -14,7 +14,6 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
   const [activeTab, setActiveTab] = useState("details");
   const { formatPrice } = useCurrency();
 
-  // Filter documents by type - support both document_type (DB) and type (pending preview)
   const getDocType = (d: any) => (d.document_type || d.type || '').toLowerCase();
   const brochures = project.documents?.filter(d => getDocType(d).includes('brochure')) || [];
   const floorPlans = project.documents?.filter(d => getDocType(d).includes('floor_plan') || getDocType(d) === 'floorplan') || [];
@@ -25,49 +24,49 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
       <TabsList className="w-full flex flex-wrap h-auto gap-1 bg-transparent border-b border-gray-200 rounded-none p-0">
         <TabsTrigger 
           value="details" 
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-gray-600 data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
         >
           <Home className="w-4 h-4" />
           Details
         </TabsTrigger>
         <TabsTrigger 
           value="gallery"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-gray-600 data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
         >
           <ImageIcon className="w-4 h-4" />
           Gallery
         </TabsTrigger>
         <TabsTrigger 
           value="floor-plans"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-gray-600 data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
         >
           <Layers className="w-4 h-4" />
           Floor Plans
         </TabsTrigger>
         <TabsTrigger 
           value="amenities"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-gray-600 data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
         >
           <Home className="w-4 h-4" />
           Amenities
         </TabsTrigger>
         <TabsTrigger 
           value="location"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-gray-600 data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
         >
           <MapPin className="w-4 h-4" />
           Location
         </TabsTrigger>
         <TabsTrigger 
           value="payment-plan"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-gray-600 data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
         >
           <CreditCard className="w-4 h-4" />
           Payment Plan
         </TabsTrigger>
         <TabsTrigger 
           value="brochure"
-          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-gray-600 data-[state=active]:text-primary"
+          className="flex items-center gap-2 px-4 py-3 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent text-black/70 font-medium data-[state=active]:text-primary"
         >
           <FileText className="w-4 h-4" />
           Brochure
@@ -80,7 +79,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
           <div>
             <h3 className="text-xl font-semibold text-black mb-4">About {project.name}</h3>
             {project.description && (
-              <p className="text-gray-600 leading-relaxed">{project.description}</p>
+              <p className="text-black/90 leading-relaxed">{project.description}</p>
             )}
           </div>
 
@@ -88,25 +87,25 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {project.price_from && (
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-gray-600 text-sm">Starting Price</p>
+                <p className="text-black/80 text-sm font-medium">Starting Price</p>
                 <p className="text-lg font-semibold text-primary">{formatPrice(project.price_from)}</p>
               </div>
             )}
             {project.handover_date && (
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-gray-600 text-sm">Handover</p>
+                <p className="text-black/80 text-sm font-medium">Handover</p>
                 <p className="text-lg font-semibold text-black">{project.handover_date}</p>
               </div>
             )}
             {project.payment_plan && (
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-gray-600 text-sm">Payment Plan</p>
+                <p className="text-black/80 text-sm font-medium">Payment Plan</p>
                 <p className="text-lg font-semibold text-black">{project.payment_plan}</p>
               </div>
             )}
             {project.bedrooms_min && (
               <div className="bg-white p-4 rounded-lg border border-gray-200">
-                <p className="text-gray-600 text-sm">Bedrooms</p>
+                <p className="text-black/80 text-sm font-medium">Bedrooms</p>
                 <p className="text-lg font-semibold text-black">
                   {project.bedrooms_min === project.bedrooms_max 
                     ? `${project.bedrooms_min} BR` 
@@ -164,7 +163,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
                   </div>
                   {doc.file_url.endsWith('.pdf') ? (
                     <div className="aspect-[4/3] bg-gray-100 rounded flex items-center justify-center">
-                      <FileText className="w-12 h-12 text-gray-600" />
+                      <FileText className="w-12 h-12 text-black/50" />
                     </div>
                   ) : (
                     <img 
@@ -177,7 +176,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
               ))}
             </div>
           ) : (
-            <p className="text-gray-600">Floor plans coming soon.</p>
+            <p className="text-red-600 font-medium">Issue: Floor plans coming soon.</p>
           )}
         </div>
       </TabsContent>
@@ -193,12 +192,12 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                     <Home className="w-4 h-4 text-primary" />
                   </div>
-                  <span className="text-gray-700 text-sm">{amenity}</span>
+                  <span className="text-black/90 text-sm">{amenity}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-600">Amenities information coming soon.</p>
+            <p className="text-red-600 font-medium">Issue: Amenities information coming soon.</p>
           )}
         </div>
       </TabsContent>
@@ -208,7 +207,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
         <div className="space-y-4">
           <h3 className="text-xl font-semibold text-black">Location</h3>
           {project.location && (
-            <p className="text-gray-600">{project.location}, Dubai, UAE</p>
+            <p className="text-black/90">{project.location}, Dubai, UAE</p>
           )}
           <div className="rounded-xl overflow-hidden border border-gray-200">
             <ProjectLocationMap
@@ -228,7 +227,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
           {project.payment_plan && (
             <div className="bg-white p-6 rounded-lg border border-gray-200">
               <p className="text-2xl font-bold text-primary mb-2">{project.payment_plan}</p>
-              <p className="text-gray-600">Flexible payment options available. Contact us for details.</p>
+              <p className="text-black/80 font-medium">Flexible payment options available. Contact us for details.</p>
             </div>
           )}
           {paymentPlans.length > 0 && (
@@ -245,7 +244,7 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
                     <FileText className="w-5 h-5 text-primary" />
                     <span className="font-medium text-black">{doc.file_name || 'Payment Plan Document'}</span>
                   </div>
-                  <Download className="w-5 h-5 text-gray-600" />
+                  <Download className="w-5 h-5 text-black/70" />
                 </a>
               ))}
             </div>
@@ -280,8 +279,8 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
             </div>
           ) : (
             <div className="bg-white p-6 rounded-lg border border-gray-200 text-center">
-              <FileText className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-              <p className="text-gray-600">Brochure coming soon. Contact us for more information.</p>
+              <FileText className="w-12 h-12 text-black/50 mx-auto mb-3" />
+              <p className="text-red-600 font-medium">Issue: Brochure coming soon. Contact us for more information.</p>
             </div>
           )}
         </div>

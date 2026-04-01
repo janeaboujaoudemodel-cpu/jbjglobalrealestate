@@ -22,13 +22,9 @@ interface ProjectAIAnalyzerProps {
 
 function extractSection(text: string, sectionName: string): string {
   const patterns = [
-    // Format: **1. Area Overview** (number inside bold — actual AI output)
     new RegExp(`\\*\\*\\d+\\.\\s*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*\\d+\\.|$)`, 'i'),
-    // Format: 1. **Area Overview** (number outside bold)
     new RegExp(`\\d+\\.\\s*\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\d+\\.\\s*\\*\\*|$)`, 'i'),
-    // Format: ## Area Overview
     new RegExp(`##\\s*${sectionName}[:\\s]*([\\s\\S]*?)(?=##|\\d+\\.\\s*\\*\\*|$)`, 'i'),
-    // Format: **Area Overview**
     new RegExp(`\\*\\*${sectionName}\\*\\*[:\\s]*([\\s\\S]*?)(?=\\*\\*[A-Z]|\\d+\\.\\s*\\*\\*|$)`, 'i'),
   ];
   for (const pattern of patterns) {
@@ -46,7 +42,6 @@ function cleanMarkdown(text: string): string {
     .trim();
 }
 
-/** Parse bullet points from cleaned markdown text into an array of strings */
 function parseBullets(text: string): string[] {
   return cleanMarkdown(text)
     .split('\n')
@@ -54,7 +49,6 @@ function parseBullets(text: string): string[] {
     .filter(l => l.length > 3);
 }
 
-/** Extract a price/sqft number from text like "AED 1,250/sqft" or "1250 per sq ft" */
 function extractPriceSqft(text: string): number | null {
   const m = text.match(/AED\s*([\d,]+)\s*(?:\/sqft|per\s*sq\.?\s*ft)/i)
     || text.match(/([\d,]+)\s*(?:AED)?\s*(?:\/sqft|per\s*sq\.?\s*ft)/i);
@@ -62,7 +56,6 @@ function extractPriceSqft(text: string): number | null {
   return null;
 }
 
-/** Extract YoY % change from text like "+12%" or "-5% year-over-year" */
 function extractYoY(text: string): number | null {
   const m = text.match(/([+-]?\d+(?:\.\d+)?)\s*%\s*(?:year.over.year|yoy|annual|annually|growth|increase|appreciation)/i)
     || text.match(/(?:increased?|grew?|declined?|dropped?|rose?)\s*(?:by)?\s*([+-]?\d+(?:\.\d+)?)\s*%/i);
@@ -70,7 +63,6 @@ function extractYoY(text: string): number | null {
   return null;
 }
 
-/** Extract a percentage from text like "85% absorption" */
 function extractPercentage(text: string): number | null {
   const m = text.match(/(\d+(?:\.\d+)?)\s*%/);
   if (m) {
@@ -80,7 +72,6 @@ function extractPercentage(text: string): number | null {
   return null;
 }
 
-/** Extract rental yield % from investment text */
 function extractYield(text: string): number | null {
   const m = text.match(/(?:rental\s*yield|gross\s*yield|yield)[^\d]*(\d+(?:\.\d+)?)\s*%/i)
     || text.match(/(\d+(?:\.\d+)?)\s*%[^\d]*(?:rental\s*yield|gross\s*yield|yield)/i);
@@ -88,7 +79,6 @@ function extractYield(text: string): number | null {
   return null;
 }
 
-/** Extract capital appreciation % from investment text */
 function extractAppreciation(text: string): number | null {
   const m = text.match(/(?:capital\s*appreciation|price\s*appreciation|appreciation)[^\d]*(\d+(?:\.\d+)?)\s*%/i)
     || text.match(/(\d+(?:\.\d+)?)\s*%[^\d]*(?:capital\s*appreciation|price\s*appreciation|appreciation)/i);
@@ -98,7 +88,7 @@ function extractAppreciation(text: string): number | null {
 
 const GOLD = "#B8860B";
 const GOLD_LIGHT = "#D4AF37";
-const DUBAI_AVG = 1400; // AED/sqft reference benchmark
+const DUBAI_AVG = 1400;
 
 export const ProjectAIAnalyzer = ({
   projectName,
@@ -119,7 +109,6 @@ export const ProjectAIAnalyzer = ({
   const sectionRef = useRef<HTMLElement>(null);
   const hasTriggered = useRef(false);
 
-  // Quality gate: prevent AI analysis on empty/stub projects
   const hasMinimumData = Boolean(
     projectName && areaName && (developer || priceFrom || handoverDate || (amenities && amenities.length > 0))
   );
@@ -200,17 +189,15 @@ export const ProjectAIAnalyzer = ({
 
   const ratingMatch = sections?.rating?.match(/(\d+(?:\.\d+)?)\s*(?:\/|out of)\s*10/i);
   const rawRating = ratingMatch ? parseFloat(ratingMatch[1]) : null;
-  // Only Amra gets a hardcoded minimum rating of 9.0; all others use the AI's genuine evaluation
   const isAmra = projectName?.toLowerCase().includes("amra");
   const ratingScore = rawRating !== null ? (isAmra && rawRating < 9.0 ? 9.0 : rawRating) : null;
 
-  // Derived visuals
   const areaPriceSqft = sections?.pricePerSqft ? extractPriceSqft(sections.pricePerSqft) : null;
   const yoyChange = sections?.pricePerSqft ? extractYoY(sections.pricePerSqft) : null;
   const priceChartData = areaPriceSqft
     ? [
-        { name: areaName, value: areaPriceSqft, fill: GOLD_LIGHT },
-        { name: "Dubai Avg", value: DUBAI_AVG, fill: "#9CA3AF" },
+        { name: areaName, value: areaPriceSqft, fill: "#10B981" },
+        { name: "Dubai Avg", value: DUBAI_AVG, fill: "#3B82F6" },
       ]
     : null;
 
@@ -221,7 +208,6 @@ export const ProjectAIAnalyzer = ({
   const prosList = sections?.pros ? parseBullets(sections.pros) : [];
   const rawConsList = sections?.cons ? parseBullets(sections.cons) : [];
   
-  // Strict quality filter: remove vague/speculative cons
   const VAGUE_KEYWORDS = ["may", "might", "could", "potential", "possible", "uncertain", "arguably", "perhaps", "likely", "unlikely", "risk of", "can be"];
   const consList = rawConsList.filter(con => {
     const lower = con.toLowerCase();
@@ -237,9 +223,9 @@ export const ProjectAIAnalyzer = ({
             <h2 className="text-2xl font-bold text-black">JBJ AI Project Intelligence</h2>
           </div>
           <div className="bg-white/70 border border-gold/20 rounded-xl p-8 text-center">
-            <Shield className="w-10 h-10 text-gold/40 mx-auto mb-3" />
-            <p className="text-gray-600 font-medium">Insufficient Data for Analysis</p>
-            <p className="text-gray-600 text-sm mt-1">This project requires a developer, description, or pricing data before AI analysis can be generated.</p>
+            <Shield className="w-10 h-10 text-red-400 mx-auto mb-3" />
+            <p className="text-red-600 font-medium">Insufficient Data for Analysis</p>
+            <p className="text-black/80 text-sm mt-1">This project requires a developer, description, or pricing data before AI analysis can be generated.</p>
           </div>
         </div>
       </section>
@@ -256,7 +242,7 @@ export const ProjectAIAnalyzer = ({
           </h2>
         </div>
 
-        <p className="text-gray-600 text-sm mb-6">
+        <p className="text-black/80 text-sm mb-6 font-medium">
           Comprehensive AI analysis for <span className="font-semibold text-gold">{projectName}</span>
           {developer && (
             <> by {developerSlug ? (
@@ -272,7 +258,7 @@ export const ProjectAIAnalyzer = ({
         {/* AI Analysis */}
         {errorMsg ? (
           <div className="text-center py-8 space-y-4">
-            <p className="text-red-500 text-sm">{errorMsg}</p>
+            <p className="text-red-600 text-sm font-medium">{errorMsg}</p>
             <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
               <RefreshCw className="w-4 h-4 mr-2" />
               Retry Analysis
@@ -282,7 +268,7 @@ export const ProjectAIAnalyzer = ({
           <div className="text-center py-8">
             {hasTimedOut ? (
               <div className="space-y-4">
-                <p className="text-gray-600 text-sm">Analysis is taking longer than expected.</p>
+                <p className="text-red-600 text-sm font-medium">Analysis is taking longer than expected.</p>
                 <Button onClick={handleRetry} variant="outline" className="border-gold/40 text-gold hover:bg-gold/10">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Retry Analysis
@@ -300,10 +286,10 @@ export const ProjectAIAnalyzer = ({
                   }}
                 />
                 <div className="text-center space-y-2">
-                  <p className="text-sm font-medium text-gray-600">
+                  <p className="text-sm font-medium text-black/80">
                     JBJ AI is analyzing <span className="text-gold font-semibold">{projectName}</span>
                   </p>
-                  <p className="text-xs text-gray-600">Pulling market data, price trends & investment signals…</p>
+                  <p className="text-xs text-black/70">Pulling market data, price trends & investment signals…</p>
                 </div>
                 <div className="w-48 h-px overflow-hidden rounded-full bg-gray-200">
                   <div
@@ -335,9 +321,9 @@ export const ProjectAIAnalyzer = ({
                   <h3 className="font-bold text-black text-lg">Area Overview</h3>
                 </div>
                 {sections?.overview ? (
-                  <p className="text-gray-700 text-sm leading-relaxed">{cleanMarkdown(sections.overview)}</p>
+                  <p className="text-black/90 text-sm leading-relaxed">{cleanMarkdown(sections.overview)}</p>
                 ) : (
-                  <p className="text-gray-600 text-sm italic">Area overview data not available.</p>
+                  <p className="text-red-600 text-sm font-medium">Issue: Area overview data not available.</p>
                 )}
               </div>
               <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-2xl p-6 shadow-lg border border-gold/20 flex flex-col items-center justify-center text-center">
@@ -345,15 +331,15 @@ export const ProjectAIAnalyzer = ({
                 {ratingScore !== null ? (
                   <>
                     <div className="text-5xl font-bold text-gold mb-1">{ratingScore}</div>
-                    <div className="text-gold/70 text-sm font-medium">/10 Investment Rating</div>
+                    <div className="text-gold text-sm font-semibold">/10 Investment Rating</div>
                     {sections?.rating && (
-                      <p className="text-gray-600 text-xs mt-3 leading-relaxed">
+                      <p className="text-white/80 text-xs mt-3 leading-relaxed">
                         {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim()}
                       </p>
                     )}
                   </>
                 ) : (
-                  <p className="text-gray-600 text-xs">Rating not available.</p>
+                  <p className="text-red-400 text-xs font-medium">Rating not available.</p>
                 )}
               </div>
             </div>
@@ -363,7 +349,7 @@ export const ProjectAIAnalyzer = ({
               {/* Price Per Sqft */}
               <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <BarChart3 className="w-5 h-5 text-gold" />
+                  <BarChart3 className="w-5 h-5 text-emerald-600" />
                   <h3 className="font-bold text-black text-lg">Price Per Sqft</h3>
                   {yoyChange !== null && (
                     <span className={`ml-auto text-xs font-bold px-2 py-0.5 rounded-full ${
@@ -378,10 +364,10 @@ export const ProjectAIAnalyzer = ({
                   <>
                     {/* Large price stat */}
                     <div className="mb-4">
-                      <div className="text-3xl font-bold text-gold">
-                        AED {areaPriceSqft?.toLocaleString()}<span className="text-base font-normal text-gray-600">/sqft</span>
+                      <div className="text-3xl font-bold text-emerald-600">
+                        AED {areaPriceSqft?.toLocaleString()}<span className="text-base font-medium text-black/80">/sqft</span>
                       </div>
-                      <div className="text-xs text-gray-600 mt-0.5">{areaName} average</div>
+                      <div className="text-xs text-black/80 font-medium mt-0.5">{areaName} average</div>
                     </div>
 
                     {/* Bar chart */}
@@ -389,12 +375,12 @@ export const ProjectAIAnalyzer = ({
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={priceChartData} layout="vertical" margin={{ left: 0, right: 24, top: 0, bottom: 0 }}>
                           <XAxis type="number" hide domain={[0, Math.max(areaPriceSqft || 0, DUBAI_AVG) * 1.25]} />
-                          <YAxis type="category" dataKey="name" width={80} tick={{ fontSize: 11, fill: "#71717a" }} />
+                          <YAxis type="category" dataKey="name" width={80} tick={{ fontSize: 11, fill: "#111111" }} />
                           <Tooltip
                             formatter={(v: number) => [`AED ${v.toLocaleString()}/sqft`, ""]}
                             contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #e5e7eb" }}
                           />
-                          <ReferenceLine x={DUBAI_AVG} stroke={GOLD} strokeDasharray="4 3" strokeWidth={1.5} label={{ value: "Dubai Avg", position: "insideTopRight", fontSize: 10, fill: GOLD }} />
+                          <ReferenceLine x={DUBAI_AVG} stroke="#3B82F6" strokeDasharray="4 3" strokeWidth={1.5} label={{ value: "Dubai Avg", position: "insideTopRight", fontSize: 10, fill: "#3B82F6" }} />
                           <Bar dataKey="value" radius={[0, 6, 6, 0]} maxBarSize={28}>
                             {priceChartData.map((entry, i) => (
                               <Cell key={i} fill={entry.fill} />
@@ -406,14 +392,14 @@ export const ProjectAIAnalyzer = ({
 
                     {/* Detail text */}
                     {sections?.pricePerSqft && (
-                      <p className="text-gray-600 text-xs mt-3 leading-relaxed line-clamp-3">
+                      <p className="text-black/80 text-xs mt-3 leading-relaxed line-clamp-3">
                         {cleanMarkdown(sections.pricePerSqft)}
                       </p>
                     )}
                   </>
                 ) : (
-                  <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
-                    {sections?.pricePerSqft ? cleanMarkdown(sections.pricePerSqft) : <span className="text-gray-600 italic">Price data not available.</span>}
+                  <div className="text-black/90 text-sm leading-relaxed whitespace-pre-line">
+                    {sections?.pricePerSqft ? cleanMarkdown(sections.pricePerSqft) : <span className="text-red-600 font-medium">Issue: Price data not available.</span>}
                   </div>
                 )}
               </div>
@@ -421,7 +407,7 @@ export const ProjectAIAnalyzer = ({
               {/* Supply vs Demand */}
               <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <TrendingUp className="w-5 h-5 text-gold" />
+                  <TrendingUp className="w-5 h-5 text-blue-600" />
                   <h3 className="font-bold text-black text-lg">Supply vs Demand</h3>
                 </div>
 
@@ -429,29 +415,29 @@ export const ProjectAIAnalyzer = ({
                   <>
                     <div className="mb-3">
                       <div className="flex items-end gap-1 mb-1">
-                        <span className="text-3xl font-bold text-gold">{absorptionRate}%</span>
-                        <span className="text-sm text-gray-600 mb-0.5">absorption rate</span>
+                        <span className="text-3xl font-bold text-blue-600">{absorptionRate}%</span>
+                        <span className="text-sm text-black/80 font-medium mb-0.5">absorption rate</span>
                       </div>
-                      <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
+                      <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-blue-100">
                         <div
                           className="h-full rounded-full transition-all"
-                          style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #B8860B, #D4AF37)` }}
+                          style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #3B82F6, #10B981)` }}
                         />
                       </div>
-                      <div className="flex justify-between text-[10px] text-gray-600 mt-1">
+                      <div className="flex justify-between text-[10px] text-black/70 font-medium mt-1">
                         <span>Low Demand</span>
                         <span>High Demand</span>
                       </div>
                     </div>
                     {sections?.supplyDemand && (
-                      <p className="text-gray-600 text-xs leading-relaxed line-clamp-4 mt-2">
+                      <p className="text-black/80 text-xs leading-relaxed line-clamp-4 mt-2">
                         {cleanMarkdown(sections.supplyDemand)}
                       </p>
                     )}
                   </>
                 ) : (
-                  <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
-                    {sections?.supplyDemand ? cleanMarkdown(sections.supplyDemand) : <span className="text-gray-600 italic">Supply/demand data not available.</span>}
+                  <div className="text-black/90 text-sm leading-relaxed whitespace-pre-line">
+                    {sections?.supplyDemand ? cleanMarkdown(sections.supplyDemand) : <span className="text-red-600 font-medium">Issue: Supply/demand data not available.</span>}
                   </div>
                 )}
               </div>
@@ -462,7 +448,7 @@ export const ProjectAIAnalyzer = ({
               {/* Investment Metrics */}
               <div className="bg-white border border-gold/20 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <Shield className="w-5 h-5 text-gold" />
+                  <Shield className="w-5 h-5 text-emerald-600" />
                   <h3 className="font-bold text-black text-lg">Investment Metrics</h3>
                 </div>
 
@@ -470,27 +456,27 @@ export const ProjectAIAnalyzer = ({
                   <>
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       {rentalYield !== null && (
-                        <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-xl p-4 text-center border border-gold/20">
-                          <div className="text-2xl font-bold text-gold">{rentalYield}%</div>
-                          <div className="text-gold/60 text-[11px] mt-1 font-medium">Rental Yield</div>
+                        <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-xl p-4 text-center border border-blue-500/30">
+                          <div className="text-2xl font-bold text-blue-400">{rentalYield}%</div>
+                          <div className="text-white/80 text-[11px] mt-1 font-semibold">Rental Yield</div>
                         </div>
                       )}
                       {appreciation !== null && (
-                        <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-xl p-4 text-center border border-gold/20">
-                          <div className="text-2xl font-bold text-gold">{appreciation}%</div>
-                          <div className="text-gold/60 text-[11px] mt-1 font-medium">Capital Growth</div>
+                        <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-xl p-4 text-center border border-emerald-500/30">
+                          <div className="text-2xl font-bold text-emerald-400">{appreciation}%</div>
+                          <div className="text-white/80 text-[11px] mt-1 font-semibold">Capital Growth</div>
                         </div>
                       )}
                     </div>
                     {sections?.investment && (
-                      <p className="text-gray-600 text-xs leading-relaxed line-clamp-4">
+                      <p className="text-black/80 text-xs leading-relaxed line-clamp-4">
                         {cleanMarkdown(sections.investment)}
                       </p>
                     )}
                   </>
                 ) : (
-                  <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
-                    {sections?.investment ? cleanMarkdown(sections.investment) : <span className="text-gray-600 italic">Investment data not available.</span>}
+                  <div className="text-black/90 text-sm leading-relaxed whitespace-pre-line">
+                    {sections?.investment ? cleanMarkdown(sections.investment) : <span className="text-red-600 font-medium">Issue: Investment data not available.</span>}
                   </div>
                 )}
               </div>
@@ -502,11 +488,11 @@ export const ProjectAIAnalyzer = ({
                   <h3 className="font-bold text-black text-lg">Developer Landscape</h3>
                 </div>
                 {sections?.developers ? (
-                  <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
+                  <div className="text-black/90 text-sm leading-relaxed whitespace-pre-line">
                     {cleanMarkdown(sections.developers)}
                   </div>
                 ) : (
-                  <p className="text-gray-600 text-sm italic">Developer data not available.</p>
+                  <p className="text-red-600 text-sm font-medium">Issue: Developer data not available.</p>
                 )}
               </div>
             </div>
@@ -529,7 +515,7 @@ export const ProjectAIAnalyzer = ({
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-600 text-sm italic">Pros data not available.</p>
+                  <p className="text-red-600 text-sm font-medium">Issue: Pros data not available.</p>
                 )}
               </div>
 
@@ -561,10 +547,10 @@ export const ProjectAIAnalyzer = ({
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-gray-600 text-xs pt-2 flex-wrap">
+            <div className="flex items-center gap-2 text-black/80 text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
-              <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
+              <Link to="/contact" className="text-gold hover:underline font-medium">Contact our team</Link> for professional guidance.
             </div>
           </motion.div>
         )}
