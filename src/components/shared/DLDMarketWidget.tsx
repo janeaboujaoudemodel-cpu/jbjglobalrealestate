@@ -138,42 +138,42 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Transaction Split Bars — Premium */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* Off-Plan vs Secondary */}
-            <div className="bg-white/[0.04] rounded-2xl p-6 border border-white/10 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-white font-semibold text-sm">Off-Plan vs Secondary</h3>
+                <TrendingUp className="w-4 h-4 text-emerald-600" />
+                <h3 className="text-foreground font-semibold text-sm">Off-Plan vs Secondary</h3>
               </div>
               {/* Visual bar */}
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-black/40 border border-white/5">
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-stone-100 border border-stone-200">
                 <div
-                  className="h-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-400 rounded-l-full shadow-[0_0_14px_rgba(52,211,153,0.5)] flex items-center justify-center"
+                  className="h-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-400 rounded-l-full shadow-[0_0_10px_rgba(16,185,129,0.4)] flex items-center justify-center"
                   style={{ width: `${offPlanPct}%` }}
                 >
                   <span className="text-white text-[10px] font-bold drop-shadow">{offPlanPct}%</span>
                 </div>
                 <div
-                  className="h-full bg-gradient-to-r from-red-500 via-red-400 to-red-500 flex-1 rounded-r-full shadow-[0_0_14px_rgba(239,68,68,0.5)] flex items-center justify-center"
+                  className="h-full bg-gradient-to-r from-red-500 via-red-400 to-red-500 flex-1 rounded-r-full shadow-[0_0_10px_rgba(239,68,68,0.4)] flex items-center justify-center"
                 >
                   <span className="text-white text-[10px] font-bold drop-shadow">{secondaryPct}%</span>
                 </div>
               </div>
               {/* Legend with colored cards */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3">
+                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(52,211,153,0.6)]" />
-                    <span className="text-emerald-400 text-[10px] uppercase tracking-wider font-bold">Off-Plan</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
+                    <span className="text-emerald-700 text-[10px] uppercase tracking-wider font-bold">Off-Plan</span>
                   </div>
-                  <p className="text-emerald-300 text-lg font-extrabold">{ytd2026.offPlan.toLocaleString()}</p>
-                  <p className="text-emerald-400 text-[10px] font-medium">{offPlanPct}% of total</p>
+                  <p className="text-emerald-600 text-lg font-extrabold">{ytd2026.offPlan.toLocaleString()}</p>
+                  <p className="text-emerald-600 text-[10px] font-medium">{offPlanPct}% of total</p>
                 </div>
-                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)]" />
-                    <span className="text-red-400 text-[10px] uppercase tracking-wider font-bold">Secondary</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.5)]" />
+                    <span className="text-red-700 text-[10px] uppercase tracking-wider font-bold">Secondary</span>
                   </div>
-                  <p className="text-red-300 text-lg font-extrabold">{ytd2026.secondary.toLocaleString()}</p>
-                  <p className="text-red-400 text-[10px] font-medium">{secondaryPct}% of total</p>
+                  <p className="text-red-600 text-lg font-extrabold">{ytd2026.secondary.toLocaleString()}</p>
+                  <p className="text-red-600 text-[10px] font-medium">{secondaryPct}% of total</p>
                 </div>
               </div>
             </div>
