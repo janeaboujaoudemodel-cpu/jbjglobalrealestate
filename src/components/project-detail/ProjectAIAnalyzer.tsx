@@ -426,7 +426,7 @@ export const ProjectAIAnalyzer = ({
                     <div className="mb-3">
                       <div className="flex items-end gap-1 mb-1">
                         <span className="text-3xl font-bold text-blue-600">{absorptionRate}%</span>
-                        <span className="text-sm text-black/80 font-medium mb-0.5">absorption rate</span>
+                        <span className="text-sm text-black font-semibold mb-0.5">absorption rate</span>
                       </div>
                       <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-blue-100">
                         <div
