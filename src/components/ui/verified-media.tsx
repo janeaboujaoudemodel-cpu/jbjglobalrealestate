@@ -3,7 +3,7 @@ import { ImageOff } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { SafeImage } from "@/components/SafeImage";
-import { upscaleCdnImageUrl } from "@/lib/imageUtils";
+import { getHighResImageUrl } from "@/lib/imageUtils";
 
 type VerifiedMediaProps = {
   src?: string | null;
