@@ -105,15 +105,13 @@ export default function ReportIssueButton({
             <p className="text-xs text-red-300/80">Help us keep this project up-to-date</p>
           </div>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
+        <button
           onClick={() => setOpen(true)}
-          className="border-red-400/60 text-red-200 hover:bg-red-500/20 hover:text-white whitespace-nowrap"
+          className="inline-flex items-center gap-1 px-4 py-2 rounded-lg border-2 border-red-400/60 bg-red-600 text-white text-sm font-semibold hover:bg-red-500 hover:border-red-400 transition-colors whitespace-nowrap shadow-lg shadow-red-900/30"
         >
-          <AlertCircle className="w-4 h-4 mr-1" />
+          <AlertCircle className="w-4 h-4" />
           Report an issue
-        </Button>
+        </button>
       </div>
 
       {/* Report Modal */}
