@@ -551,7 +551,7 @@ export const ProjectAIAnalyzer = ({
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-black/80 text-xs pt-2 flex-wrap">
+            <div className="flex items-center gap-2 text-black/90 text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
               <Link to="/contact" className="text-gold hover:underline font-medium">Contact our team</Link> for professional guidance.
