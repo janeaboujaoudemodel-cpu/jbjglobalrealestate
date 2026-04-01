@@ -440,7 +440,7 @@ export const ProjectAIAnalyzer = ({
                       </div>
                     </div>
                     {sections?.supplyDemand && (
-                      <p className="text-black/80 text-xs leading-relaxed line-clamp-4 mt-2">
+                      <p className="text-black/90 text-xs leading-relaxed line-clamp-4 mt-2">
                         {cleanMarkdown(sections.supplyDemand)}
                       </p>
                     )}
