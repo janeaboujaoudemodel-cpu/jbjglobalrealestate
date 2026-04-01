@@ -118,7 +118,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
 
           {/* YoY Change */}
           <div className="flex items-center justify-between py-3 border-t border-black/10">
-            <span className="text-black/60 text-sm">Year-over-Year</span>
+            <span className="text-black font-medium text-sm">Year-over-Year</span>
             <span className={`font-bold ${area.yoyChange >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
               {area.yoyChange >= 0 ? '+' : ''}{area.yoyChange}%
             </span>
