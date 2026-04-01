@@ -181,7 +181,7 @@ const BestIdeaAward = () => {
                         </div>
                         <div>
                           <p className="text-gold font-bold">iPhone 16 Pro Max</p>
-                          <p className="text-white/70 text-xs">A18 Pro chip • 48MP Camera System • Titanium Design</p>
+                          <p className="text-white/90 text-xs">A18 Pro chip • 48MP Camera System • Titanium Design</p>
                         </div>
                       </div>
                     </div>
