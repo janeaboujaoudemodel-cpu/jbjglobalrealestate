@@ -479,7 +479,7 @@ export const ProjectAIAnalyzer = ({
                       )}
                     </div>
                     {sections?.investment && (
-                      <p className="text-black/80 text-xs leading-relaxed line-clamp-4">
+                      <p className="text-black/90 text-xs leading-relaxed line-clamp-4">
                         {cleanMarkdown(sections.investment)}
                       </p>
                     )}
