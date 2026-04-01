@@ -113,7 +113,7 @@ export default function RecommendedProjects({
   if (recommendedProjects.length === 0) return null;
 
   return (
-    <section className="py-12 bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark">
+    <section className="py-12 mx-4 md:mx-8 rounded-3xl bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/15 shadow-sm">
       <div className="container mx-auto px-4 md:px-8">
         {/* Section Header */}
         <div className="flex items-center justify-between mb-8">
