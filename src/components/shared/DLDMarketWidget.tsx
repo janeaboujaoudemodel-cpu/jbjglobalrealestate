@@ -77,12 +77,12 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   const giftsPct = ytd2026.gifts ? Math.round((ytd2026.gifts / ytd2026.transactions) * 100) : 0;
 
   const mainStats = [
-    { label: "YTD Volume", value: ytd2026.value, sub: "Total transaction value", icon: Banknote, color: "text-emerald-400", borderColor: "border-emerald-500/40", bgColor: "bg-emerald-500/10", glow: "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]", dotColor: "bg-emerald-500" },
-    { label: "Transactions", value: ytd2026.transactions.toLocaleString(), sub: "YTD 2026 deals", icon: Building2, color: "text-blue-400", borderColor: "border-blue-500/40", bgColor: "bg-blue-500/10", glow: "drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]", dotColor: "bg-blue-500" },
-    { label: "Off-Plan Sales", value: ytd2026.offPlan.toLocaleString(), sub: `${offPlanPct}% of total`, icon: TrendingUp, color: "text-emerald-400", borderColor: "border-emerald-500/40", bgColor: "bg-emerald-500/10", glow: "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]", dotColor: "bg-emerald-500" },
-    { label: "Secondary Sales", value: ytd2026.secondary.toLocaleString(), sub: `${secondaryPct}% of total`, icon: Activity, color: "text-red-400", borderColor: "border-red-500/40", bgColor: "bg-red-500/10", glow: "drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]", dotColor: "bg-red-500" },
-    { label: "Cash Deals", value: ytd2026.cash.toLocaleString(), sub: `${cashPct}% of total`, icon: Banknote, color: "text-blue-400", borderColor: "border-blue-500/40", bgColor: "bg-blue-500/10", glow: "drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]", dotColor: "bg-blue-500" },
-    { label: "Mortgage Deals", value: ytd2026.mortgage.toLocaleString(), sub: `${mortgagePct}% of total`, icon: BarChart3, color: "text-amber-400", borderColor: "border-amber-500/40", bgColor: "bg-amber-500/10", glow: "drop-shadow-[0_0_8px_rgba(245,158,11,0.4)]", dotColor: "bg-amber-500" },
+    { label: "YTD Volume", value: ytd2026.value, sub: "Total transaction value", icon: Banknote, color: "text-emerald-600", borderColor: "border-emerald-200", bgColor: "bg-emerald-50", glow: "drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]", dotColor: "bg-emerald-500" },
+    { label: "Transactions", value: ytd2026.transactions.toLocaleString(), sub: "YTD 2026 deals", icon: Building2, color: "text-blue-600", borderColor: "border-blue-200", bgColor: "bg-blue-50", glow: "drop-shadow-[0_0_6px_rgba(59,130,246,0.3)]", dotColor: "bg-blue-500" },
+    { label: "Off-Plan Sales", value: ytd2026.offPlan.toLocaleString(), sub: `${offPlanPct}% of total`, icon: TrendingUp, color: "text-emerald-600", borderColor: "border-emerald-200", bgColor: "bg-emerald-50", glow: "drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]", dotColor: "bg-emerald-500" },
+    { label: "Secondary Sales", value: ytd2026.secondary.toLocaleString(), sub: `${secondaryPct}% of total`, icon: Activity, color: "text-red-600", borderColor: "border-red-200", bgColor: "bg-red-50", glow: "drop-shadow-[0_0_6px_rgba(239,68,68,0.3)]", dotColor: "bg-red-500" },
+    { label: "Cash Deals", value: ytd2026.cash.toLocaleString(), sub: `${cashPct}% of total`, icon: Banknote, color: "text-blue-600", borderColor: "border-blue-200", bgColor: "bg-blue-50", glow: "drop-shadow-[0_0_6px_rgba(59,130,246,0.3)]", dotColor: "bg-blue-500" },
+    { label: "Mortgage Deals", value: ytd2026.mortgage.toLocaleString(), sub: `${mortgagePct}% of total`, icon: BarChart3, color: "text-amber-600", borderColor: "border-amber-200", bgColor: "bg-amber-50", glow: "drop-shadow-[0_0_6px_rgba(245,158,11,0.3)]", dotColor: "bg-amber-500" },
   ];
 
   return (
