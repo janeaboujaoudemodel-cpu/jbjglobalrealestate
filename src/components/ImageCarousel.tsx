@@ -216,7 +216,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
           </VisuallyHidden.Root>
           <div className="relative w-full h-[90vh] flex items-center justify-center bg-black/95">
             <img
-              src={upscaleCdnImageUrl(images[currentIndex].image_url, 1920, 1080)}
+              src={getHighResImageUrl(images[currentIndex].image_url)}
               alt={images[currentIndex].alt_text || "Project image"}
               className="max-w-full max-h-full object-contain"
             />

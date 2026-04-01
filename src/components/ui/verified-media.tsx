@@ -52,7 +52,7 @@ export function VerifiedMedia({
 
   return (
     <SafeImage
-      src={upscaleCdnImageUrl(src, 1200, 800)}
+      src={getHighResImageUrl(src, "1200x800")}
       alt={alt}
       className={cn("w-full h-full", className)}
       loading={priority ? "eager" : "lazy"}
