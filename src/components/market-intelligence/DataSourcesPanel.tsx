@@ -82,7 +82,7 @@ export const DataSourcesPanel = () => {
                       {source.dataTypes.map((type) => (
                         <span 
                           key={type}
-                          className="px-2 py-1 bg-white/50 text-black/70 text-xs rounded-md capitalize"
+                          className="px-2 py-1 bg-white/50 text-black font-medium text-xs rounded-md capitalize"
                         >
                           {type}
                         </span>
