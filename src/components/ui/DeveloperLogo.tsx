@@ -10,8 +10,10 @@ interface DeveloperLogoProps {
 }
 
 /**
- * Unified developer logo — frameless, full-fit, rounded edges.
- * Standard size: w-14 h-14. No background wrapper, no padding.
+ * LOCKED — Unified developer logo component.
+ * Style: w-14 h-14, rounded-xl, object-contain, p-1.5, bg-white, shadow-md.
+ * DO NOT MODIFY without explicit Founder authorization.
+ * See DEVELOPER_LOGO_LOCK in src/config/master-lock.ts.
  */
 export function DeveloperLogo({
   src,
