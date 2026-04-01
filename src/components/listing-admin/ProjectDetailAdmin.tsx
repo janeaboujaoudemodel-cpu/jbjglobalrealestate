@@ -160,7 +160,7 @@ export function ProjectDetailAdmin({ project, onBack, onEdit, onDelete }: Projec
                 <div className="bg-background/60 rounded-lg p-3 text-center border border-gold/20">
                   <DollarSign className="w-4 h-4 mx-auto text-muted-foreground mb-1" />
                   <p className="text-xs text-muted-foreground">Starting</p>
-                  <p className="text-sm font-bold text-gold">AED {(project.price_from / 1000000).toFixed(1)}M</p>
+                  <p className="text-sm font-bold text-price-orange">AED {(project.price_from / 1000000).toFixed(1)}M</p>
                 </div>
               )}
               {(project.bedrooms_min || project.bedrooms_max) && (
