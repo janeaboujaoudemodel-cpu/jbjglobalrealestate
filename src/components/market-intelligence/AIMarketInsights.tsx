@@ -254,7 +254,7 @@ export const AIMarketInsights = () => {
             variants={fadeInUp}
           >
             <Info className="w-5 h-5 text-gold shrink-0 mt-0.5" />
-            <p className="text-black/70 text-xs leading-relaxed">
+            <p className="text-black/80 text-xs leading-relaxed">
               AI-generated insights are based on aggregated government Open Data and are provided for informational purposes only. 
               They do not constitute financial, investment, or legal advice. 
               AI explains data but does not predict prices or provide specific investment recommendations.

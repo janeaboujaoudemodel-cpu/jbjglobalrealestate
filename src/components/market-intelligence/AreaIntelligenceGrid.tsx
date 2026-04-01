@@ -168,7 +168,7 @@ export const AreaIntelligenceGrid = () => {
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
               Market Snapshot by Location
             </h2>
-            <p className="text-black/70 max-w-2xl mx-auto">
+            <p className="text-black/90 max-w-2xl mx-auto">
               Explore aggregated market data for Dubai's most sought-after communities. 
               Data derived from official government Open Data sources.
             </p>
