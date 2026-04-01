@@ -375,9 +375,9 @@ export const ProjectAIAnalyzer = ({
                     {/* Large price stat */}
                     <div className="mb-4">
                       <div className="text-3xl font-bold text-emerald-600">
-                        AED {areaPriceSqft?.toLocaleString()}<span className="text-base font-medium text-black/80">/sqft</span>
+                        AED {areaPriceSqft?.toLocaleString()}<span className="text-base font-medium text-black">/sqft</span>
                       </div>
-                      <div className="text-xs text-black/80 font-medium mt-0.5">{areaName} average</div>
+                      <div className="text-xs text-black/90 font-semibold mt-0.5">{areaName} average</div>
                     </div>
 
                     {/* Bar chart */}
@@ -402,7 +402,7 @@ export const ProjectAIAnalyzer = ({
 
                     {/* Detail text */}
                     {sections?.pricePerSqft && (
-                      <p className="text-black/80 text-xs mt-3 leading-relaxed line-clamp-3">
+                      <p className="text-black/90 text-xs mt-3 leading-relaxed line-clamp-3">
                         {cleanMarkdown(sections.pricePerSqft)}
                       </p>
                     )}
@@ -426,7 +426,7 @@ export const ProjectAIAnalyzer = ({
                     <div className="mb-3">
                       <div className="flex items-end gap-1 mb-1">
                         <span className="text-3xl font-bold text-blue-600">{absorptionRate}%</span>
-                        <span className="text-sm text-black/80 font-medium mb-0.5">absorption rate</span>
+                        <span className="text-sm text-black font-semibold mb-0.5">absorption rate</span>
                       </div>
                       <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-blue-100">
                         <div
@@ -434,13 +434,13 @@ export const ProjectAIAnalyzer = ({
                           style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #3B82F6, #10B981)` }}
                         />
                       </div>
-                      <div className="flex justify-between text-[10px] text-black/70 font-medium mt-1">
+                      <div className="flex justify-between text-[10px] text-black/90 font-semibold mt-1">
                         <span>Low Demand</span>
                         <span>High Demand</span>
                       </div>
                     </div>
                     {sections?.supplyDemand && (
-                      <p className="text-black/80 text-xs leading-relaxed line-clamp-4 mt-2">
+                      <p className="text-black/90 text-xs leading-relaxed line-clamp-4 mt-2">
                         {cleanMarkdown(sections.supplyDemand)}
                       </p>
                     )}
@@ -466,20 +466,20 @@ export const ProjectAIAnalyzer = ({
                   <>
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       {rentalYield !== null && (
-                        <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-xl p-4 text-center border border-blue-500/30">
+                        <div className="bg-gradient-to-br from-[#0a1628] via-[#0d1a30] to-[#0a1225] rounded-xl p-4 text-center border border-blue-500/40 shadow-md">
                           <div className="text-2xl font-bold text-blue-400">{rentalYield}%</div>
-                          <div className="text-white/80 text-[11px] mt-1 font-semibold">Rental Yield</div>
+                          <div className="text-white/95 text-[11px] mt-1 font-semibold tracking-wide">Rental Yield</div>
                         </div>
                       )}
                       {appreciation !== null && (
-                        <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-xl p-4 text-center border border-emerald-500/30">
+                        <div className="bg-gradient-to-br from-[#0a1628] via-[#0d1a30] to-[#0a1225] rounded-xl p-4 text-center border border-emerald-500/40 shadow-md">
                           <div className="text-2xl font-bold text-emerald-400">{appreciation}%</div>
-                          <div className="text-white/80 text-[11px] mt-1 font-semibold">Capital Growth</div>
+                          <div className="text-white/95 text-[11px] mt-1 font-semibold tracking-wide">Capital Growth</div>
                         </div>
                       )}
                     </div>
                     {sections?.investment && (
-                      <p className="text-black/80 text-xs leading-relaxed line-clamp-4">
+                      <p className="text-black/90 text-xs leading-relaxed line-clamp-4">
                         {cleanMarkdown(sections.investment)}
                       </p>
                     )}
@@ -551,7 +551,7 @@ export const ProjectAIAnalyzer = ({
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-2 text-black/80 text-xs pt-2 flex-wrap">
+            <div className="flex items-center gap-2 text-black/90 text-xs pt-2 flex-wrap">
               <Brain className="w-4 h-4" />
               JBJ Property Analyzer — AI-generated analysis based on current market data. Does not constitute financial advice.{" "}
               <Link to="/contact" className="text-gold hover:underline font-medium">Contact our team</Link> for professional guidance.
