@@ -182,6 +182,24 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
     }
   }, [item.id, item.type, item.developerLogo, item.subtitle, patchItem]);
 
+  // Self-heal: fetch missing cover image for properties
+  useEffect(() => {
+    if (item.type === "property" && !item.imageUrl && item.slug) {
+      supabase
+        .from("projects")
+        .select("cover_image_url, images:project_images(image_url)")
+        .eq("slug", item.slug)
+        .limit(1)
+        .maybeSingle()
+        .then(({ data }) => {
+          const url = data?.cover_image_url || (data?.images as any)?.[0]?.image_url;
+          if (url) {
+            patchItem(item.id, item.type, { imageUrl: url });
+          }
+        });
+    }
+  }, [item.id, item.type, item.imageUrl, item.slug, patchItem]);
+
   const showDevLogo = item.type === "property" && item.developerLogo && !logoError;
   const showDevCardLogo = item.type === "developer" && item.imageUrl && !logoError;
 
