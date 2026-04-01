@@ -99,7 +99,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <h2 className="text-white text-2xl md:text-3xl font-bold mb-2">
               Dubai Market Intelligence
             </h2>
-            <p className="text-white/60 text-sm font-medium">
+            <p className="text-gold/80 text-sm font-medium">
               DLD Transaction Data • As of {today}
             </p>
           </div>
