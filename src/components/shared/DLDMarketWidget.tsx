@@ -105,18 +105,18 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           </div>
 
           {/* Growth Banner */}
-          <div className="bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-emerald-500/15 border border-emerald-500/30 rounded-2xl p-5 mb-8 flex items-center justify-between backdrop-blur-sm">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 mb-8 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                <ArrowUpRight className="w-5 h-5 text-emerald-400" />
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
+                <ArrowUpRight className="w-5 h-5 text-emerald-600" />
               </div>
               <div>
-                <p className="text-white/90 text-xs uppercase tracking-wider font-semibold">YTD Market Growth</p>
-                <p className="text-emerald-400/70 text-[11px]">Year-over-year volume increase</p>
+                <p className="text-foreground text-xs uppercase tracking-wider font-semibold">YTD Market Growth</p>
+                <p className="text-emerald-600 text-[11px]">Year-over-year volume increase</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-emerald-400 text-3xl md:text-4xl font-extrabold drop-shadow-[0_0_12px_rgba(52,211,153,0.5)]">{ytd2026.growth}</p>
+              <p className="text-emerald-600 text-3xl md:text-4xl font-extrabold drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">{ytd2026.growth}</p>
             </div>
           </div>
 
