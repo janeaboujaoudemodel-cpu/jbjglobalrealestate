@@ -110,7 +110,6 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
             className="w-full h-full object-cover"
             loading="eager"
           />
-          />
           
           {/* Overlay Controls */}
           <div className="absolute top-4 right-4 flex gap-2">
