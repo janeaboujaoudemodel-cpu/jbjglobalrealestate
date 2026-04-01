@@ -6,6 +6,7 @@ import FavoriteButton from "@/components/FavoriteButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface ContinueSearchingProps {
   type?: RecentItemType;
