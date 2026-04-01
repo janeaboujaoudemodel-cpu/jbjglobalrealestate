@@ -326,30 +326,26 @@ export const ProjectAIAnalyzer = ({
                   <p className="text-red-600 text-sm font-medium">Issue: Area overview data not available.</p>
                 )}
               </div>
-              <div className="relative overflow-hidden bg-gradient-to-br from-[#0a1628] via-[#122040] to-[#0d1a30] rounded-2xl p-6 shadow-2xl border border-emerald-400/40 flex flex-col items-center justify-center text-center">
-                {/* Glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 via-transparent to-blue-500/10 pointer-events-none" />
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent rounded-full" />
-                
-                <Star className="w-9 h-9 text-amber-400 mb-2 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)] relative z-10" />
+              <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-blue-50 rounded-2xl p-6 shadow-sm border border-emerald-200 flex flex-col items-center justify-center text-center">
+                <Star className="w-9 h-9 text-amber-500 mb-2 drop-shadow-[0_0_6px_rgba(245,158,11,0.4)] relative z-10" />
                 {ratingScore !== null ? (
                   <>
                     <div className="relative z-10">
-                      <span className="text-5xl font-extrabold bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 bg-clip-text text-transparent drop-shadow-lg">{ratingScore}</span>
+                      <span className="text-5xl font-extrabold text-emerald-600 drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]">{ratingScore}</span>
                     </div>
-                    <div className="text-emerald-300 text-sm font-bold tracking-wide uppercase mt-1 relative z-10">/10 Investment Rating</div>
+                    <div className="text-emerald-700 text-sm font-bold tracking-wide uppercase mt-1 relative z-10">/10 Investment Rating</div>
                     <div className="flex items-center gap-1.5 mt-2 relative z-10">
-                      <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="text-emerald-400 text-[10px] font-semibold uppercase tracking-widest">Strong Buy Signal</span>
+                      <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-emerald-600 text-[10px] font-semibold uppercase tracking-widest">Strong Buy Signal</span>
                     </div>
                     {sections?.rating && (
-                      <p className="text-blue-100/90 text-xs mt-3 leading-relaxed font-medium relative z-10">
+                      <p className="text-foreground/80 text-xs mt-3 leading-relaxed font-medium relative z-10">
                         — {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim()}
                       </p>
                     )}
                   </>
                 ) : (
-                  <p className="text-red-400 text-xs font-medium relative z-10">Issue: Rating not available.</p>
+                  <p className="text-red-600 text-xs font-medium relative z-10">Issue: Rating not available.</p>
                 )}
               </div>
             </div>
@@ -466,15 +462,15 @@ export const ProjectAIAnalyzer = ({
                   <>
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       {rentalYield !== null && (
-                        <div className="bg-gradient-to-br from-[#0a1628] via-[#0d1a30] to-[#0a1225] rounded-xl p-5 text-center border border-blue-400/50 shadow-lg shadow-blue-500/10">
-                          <div className="text-3xl font-extrabold text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.4)]">{rentalYield}%</div>
-                          <div className="text-white text-xs mt-1.5 font-semibold tracking-wide">Rental Yield</div>
+                        <div className="bg-blue-50 rounded-xl p-5 text-center border border-blue-200 shadow-sm">
+                          <div className="text-3xl font-extrabold text-blue-600 drop-shadow-[0_0_6px_rgba(59,130,246,0.3)]">{rentalYield}%</div>
+                          <div className="text-foreground text-xs mt-1.5 font-semibold tracking-wide">Rental Yield</div>
                         </div>
                       )}
                       {appreciation !== null && (
-                        <div className="bg-gradient-to-br from-[#0a1628] via-[#0d1a30] to-[#0a1225] rounded-xl p-5 text-center border border-emerald-400/50 shadow-lg shadow-emerald-500/10">
-                          <div className="text-3xl font-extrabold text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]">{appreciation}%</div>
-                          <div className="text-white text-xs mt-1.5 font-semibold tracking-wide">Capital Growth</div>
+                        <div className="bg-emerald-50 rounded-xl p-5 text-center border border-emerald-200 shadow-sm">
+                          <div className="text-3xl font-extrabold text-emerald-600 drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]">{appreciation}%</div>
+                          <div className="text-foreground text-xs mt-1.5 font-semibold tracking-wide">Capital Growth</div>
                         </div>
                       )}
                     </div>
@@ -510,17 +506,17 @@ export const ProjectAIAnalyzer = ({
             {/* Row 4: Pros & Cons — styled pill rows */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Pros */}
-              <div className="bg-gradient-to-br from-[#0a1628] via-[#0d1a30] to-[#0a1225] border border-emerald-500/40 rounded-2xl p-6 shadow-lg shadow-emerald-500/5">
+              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <ThumbsUp className="w-5 h-5 text-emerald-400" />
-                  <h3 className="font-bold text-emerald-400 text-lg">Pros</h3>
+                  <ThumbsUp className="w-5 h-5 text-emerald-600" />
+                  <h3 className="font-bold text-emerald-700 text-lg">Pros</h3>
                 </div>
                 {prosList.length > 0 ? (
                   <ul className="space-y-2.5">
                     {prosList.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2.5 bg-emerald-500/10 rounded-lg px-3 py-2.5 border border-emerald-500/20">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
-                        <span className="text-white/90 text-sm leading-snug">{item}</span>
+                      <li key={i} className="flex items-start gap-2.5 bg-white rounded-lg px-3 py-2.5 border border-emerald-200">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-foreground text-sm leading-snug">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -530,22 +526,22 @@ export const ProjectAIAnalyzer = ({
               </div>
 
               {/* Cons — only show if verified cons exist */}
-              <div className="bg-gradient-to-br from-red-950 to-red-900/90 border-2 border-red-500/40 rounded-2xl p-6 shadow-[0_4px_20px_rgba(220,38,38,0.2)]">
+              <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <ThumbsDown className="w-5 h-5 text-red-400 drop-shadow-[0_0_6px_rgba(248,113,113,0.5)]" />
-                  <h3 className="font-bold text-red-300 text-lg drop-shadow-[0_0_4px_rgba(248,113,113,0.3)]">Cons</h3>
+                  <ThumbsDown className="w-5 h-5 text-red-600" />
+                  <h3 className="font-bold text-red-700 text-lg">Cons</h3>
                 </div>
                 {consList.length > 0 ? (
                   <ul className="space-y-2">
                     {consList.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 bg-red-500/10 rounded-lg px-3 py-2 border border-red-500/20">
-                        <XCircle className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" />
-                        <span className="text-white/90 text-sm leading-snug">{item}</span>
+                      <li key={i} className="flex items-start gap-2 bg-white rounded-lg px-3 py-2 border border-red-200">
+                        <XCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-foreground text-sm leading-snug">{item}</span>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-red-400 text-sm font-semibold">No significant risks identified by AI analysis.</p>
+                  <p className="text-red-600 text-sm font-semibold">No significant risks identified by AI analysis.</p>
                 )}
               </div>
             </div>
