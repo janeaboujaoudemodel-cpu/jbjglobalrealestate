@@ -434,7 +434,7 @@ export const ProjectAIAnalyzer = ({
                           style={{ width: `${absorptionRate}%`, background: `linear-gradient(90deg, #3B82F6, #10B981)` }}
                         />
                       </div>
-                      <div className="flex justify-between text-[10px] text-black/70 font-medium mt-1">
+                      <div className="flex justify-between text-[10px] text-black/90 font-semibold mt-1">
                         <span>Low Demand</span>
                         <span>High Demand</span>
                       </div>
