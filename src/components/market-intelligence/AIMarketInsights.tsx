@@ -186,7 +186,7 @@ export const AIMarketInsights = () => {
                     <h3 className="text-black text-xl font-bold mb-2">
                       Generate Market Narrative
                     </h3>
-                    <p className="text-black/70 text-sm mb-4">
+                    <p className="text-black/90 text-sm mb-4">
                       Get an AI-generated analysis based on official government Open Data.
                       Select a topic below to generate educational market insights.
                     </p>
