@@ -1,43 +1,141 @@
 
 
-## Fix: Stable "Continue Searching" Section + Guaranteed Property Images
+# Export & Deployment Readiness Plan
 
-### Problem 1: Section disappears when no history
-Line 90-93 in `ContinueSearching.tsx` returns `null` when there are no items. The section completely unmounts, causing layout instability.
-
-### Problem 2: Broken images still show
-The `Image()` preload check in `RecentCard3D` tries to self-heal but the fetched URL may also be broken, or the fetch may fail silently, leaving a broken state.
+This is a large, enterprise-grade project (260+ edge functions, 578 migrations, 100+ components) tightly coupled to Lovable Cloud. Here is what needs to happen to make it portable.
 
 ---
 
-### Changes
+## Important Context
 
-**File: `src/components/ContinueSearching.tsx`**
+This project runs on **Lovable Cloud** (Supabase-backed). The frontend is a standard Vite/React app that can run anywhere, but the backend (database, edge functions, auth, storage) is deeply integrated with the cloud platform. Full self-hosting requires a standalone Supabase instance.
 
-1. **Always render the section** — remove the early `return null` guards. When there are no items, show an empty state: "You haven't viewed any properties yet. Start exploring now!" with a CTA link to `/properties`.
+---
 
-2. **Fallback gradient for broken images** — the current fallback (icon on dark gradient) is already in place, but the `imgBroken` state can flicker. Fix by:
-   - Defaulting `imgBroken` to `true` when `imageUrl` is falsy/invalid (contains `undefined`, `null` string, or doesn't start with `http`)
-   - Adding `onError` directly on the `background-image` div isn't possible, so keep the `Image()` preload but add a guard: if the fetched URL from DB is the same as the broken one, don't re-fetch (prevent infinite loop)
-   - Add a `fetchAttempted` ref to prevent repeated DB calls for the same item
+## Step 1: Clean Up README.md
 
-3. **Validate imageUrl before preload** — skip the `Image()` check if the URL contains `"undefined"`, `"null"`, or doesn't start with `http`.
+Replace the current boilerplate README with a comprehensive project document:
 
-### Technical Detail
+- **Project overview**: JBJ Global Real Estate — Dubai property brokerage platform
+- **Tech stack**: React 18, Vite 5, TypeScript 5, Tailwind CSS 3, Supabase (PostgreSQL + Edge Functions)
+- **Setup instructions**: Clone, install, configure env vars, run
+- **Environment variables list** (all 14 secrets + Supabase connection vars)
+- **Build/run commands**: `npm install`, `npm run dev`, `npm run build`, `npm run preview`
+- **Database setup**: How to apply migrations via `supabase db push`
+- **Edge functions**: How to deploy via `supabase functions deploy`
+- **Folder structure** explanation
 
-```text
-Current flow:
-  items.length === 0 → return null (section gone)
+---
 
-New flow:
-  items.length === 0 → render empty state card with CTA
-  items.length > 0   → render carousel as before
+## Step 2: Create .env.example
 
-Image recovery:
-  - Add fetchAttempted ref to prevent infinite re-fetch loops
-  - Validate URL format before attempting Image() preload
-  - If DB returns same URL that was broken, accept fallback gradient
+New file listing every required environment variable with placeholder values:
+
+```
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=your-anon-key
+VITE_SUPABASE_PROJECT_ID=your-project-id
+
+# Edge Function Secrets (set via supabase secrets set)
+RESEND_API_KEY=re_xxxx
+REELLY_API_KEY=xxxx
+BREVO_API_KEY=xxxx
+BREVO_LIST_ID=xxxx
+OWNER_EMAIL=owner@example.com
+LEAD_REF_HMAC_KEY=xxxx
+PERPLEXITY_API_KEY=pplx-xxxx
+VAPI_API_KEY=xxxx
+ELEVENLABS_API_KEY=xxxx
+ELEVENLABS_AGENT_ID=xxxx
+ELEVENLABS_VOICE_ID=xxxx
 ```
 
-**Single file change**: `src/components/ContinueSearching.tsx`
+---
+
+## Step 3: Update .gitignore
+
+Add entries to ensure no sensitive or unnecessary files are committed:
+
+```
+.env
+.env.local
+*.local
+tmp/
+bun.lock
+bun.lockb
+.lovable/
+.workspace/
+```
+
+---
+
+## Step 4: Create .replit Configuration
+
+New `.replit` file for Replit compatibility:
+
+```toml
+run = "npm install && npm run dev"
+entrypoint = "src/main.tsx"
+
+[nix]
+channel = "stable-24_05"
+
+[env]
+PORT = "8080"
+
+[[ports]]
+localPort = 8080
+externalPort = 80
+```
+
+Also add a `replit.nix` with Node.js 20.
+
+---
+
+## Step 5: Update vite.config.ts for Dynamic Port
+
+Change the server port to read from `process.env.PORT` for Replit/container compatibility:
+
+```typescript
+server: {
+  host: "0.0.0.0",
+  port: parseInt(process.env.PORT || "8080"),
+}
+```
+
+---
+
+## Step 6: Create Database Schema Export
+
+Generate a consolidated `schema.sql` file in a new `database/` folder by concatenating all 578 migration files in order. Add a header explaining:
+- How to create a new Supabase project
+- How to apply: `supabase db push` or `psql -f schema.sql`
+- That RLS policies are included in migrations
+
+---
+
+## Step 7: Add GitHub Deployment Guide
+
+Add `DEPLOYMENT.md` with:
+- GitHub repository setup instructions (`git remote add origin`, push)
+- Vercel/Netlify deployment steps (build command: `npm run build`, output: `dist/`)
+- Supabase self-hosting: link to Supabase docs, how to apply migrations
+- Replit import: fork/import from GitHub, configure secrets in Replit
+
+---
+
+## Files to Create/Modify
+
+| File | Action |
+|------|--------|
+| `README.md` | Rewrite with full project documentation |
+| `.env.example` | Create with all placeholder variables |
+| `.gitignore` | Add `.env`, `.lovable/`, `tmp/`, lock files |
+| `.replit` | Create for Replit compatibility |
+| `replit.nix` | Create with Node.js 20 |
+| `vite.config.ts` | Dynamic port from `process.env.PORT` |
+| `DEPLOYMENT.md` | GitHub + Replit + Vercel deployment guide |
+| `database/README.md` | Database reconnection instructions |
+
+No database migrations or edge function changes needed — these are already portable via the `supabase/` directory.
 
