@@ -583,7 +583,7 @@ export default function ProjectDetailLayout({
           {/* Starting Price - Above title */}
           {typeof project.price_from === "number" && (
             <p className="text-lg md:text-xl text-white/70 mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-              Starting from <span className="text-amber-200 font-bold text-2xl md:text-3xl drop-shadow-[0_0_12px_rgba(251,191,36,0.3)]">{formatPriceUtil(project.price_from)}</span>
+              Starting from <span className="text-price-orange font-bold text-2xl md:text-3xl drop-shadow-[0_0_12px_rgba(234,88,12,0.4)]">{formatPriceUtil(project.price_from)}</span>
             </p>
           )}
 
