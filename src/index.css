@@ -92,6 +92,10 @@ All colors MUST be HSL.
     --gold-muted: 0 0% 45%;
     --gold-foreground: 0 0% 100%;
 
+    /* Premium Orange — property prices */
+    --price-orange: 24 95% 53%;
+    --price-orange-glow: 24 95% 58%;
+
     /* Champagne replaced with light surfaces */
     --champagne-1: 0 0% 98%;
     --champagne-2: 0 0% 96%;
