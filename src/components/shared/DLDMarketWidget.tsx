@@ -204,7 +204,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     <span className="text-blue-400 text-[10px] uppercase tracking-wider font-bold">Cash</span>
                   </div>
                   <p className="text-blue-300 text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
-                  <p className="text-blue-400/60 text-[10px] font-medium">{cashPct}% of total</p>
+                  <p className="text-blue-400 text-[10px] font-medium">{cashPct}% of total</p>
                 </div>
                 <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
