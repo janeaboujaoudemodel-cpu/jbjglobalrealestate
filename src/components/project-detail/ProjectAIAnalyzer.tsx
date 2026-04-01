@@ -466,9 +466,9 @@ export const ProjectAIAnalyzer = ({
                   <>
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       {rentalYield !== null && (
-                        <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-xl p-4 text-center border border-blue-500/30">
+                        <div className="bg-gradient-to-br from-[#0a1628] via-[#0d1a30] to-[#0a1225] rounded-xl p-4 text-center border border-blue-500/40 shadow-md">
                           <div className="text-2xl font-bold text-blue-400">{rentalYield}%</div>
-                          <div className="text-white/80 text-[11px] mt-1 font-semibold">Rental Yield</div>
+                          <div className="text-white/95 text-[11px] mt-1 font-semibold tracking-wide">Rental Yield</div>
                         </div>
                       )}
                       {appreciation !== null && (
