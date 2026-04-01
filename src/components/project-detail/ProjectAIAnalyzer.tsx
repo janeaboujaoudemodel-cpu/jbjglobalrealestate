@@ -520,12 +520,12 @@ export const ProjectAIAnalyzer = ({
               </div>
 
               {/* Cons — only show if verified cons exist */}
-              {consList.length > 0 ? (
-                <div className="bg-red-50 border border-red-200 rounded-2xl p-6 shadow-sm">
-                  <div className="flex items-center gap-2 mb-4">
-                    <ThumbsDown className="w-5 h-5 text-red-500" />
-                    <h3 className="font-bold text-red-800 text-lg">Cons</h3>
-                  </div>
+              <div className="bg-red-50 border border-red-200 rounded-2xl p-6 shadow-sm">
+                <div className="flex items-center gap-2 mb-4">
+                  <ThumbsDown className="w-5 h-5 text-red-500" />
+                  <h3 className="font-bold text-red-800 text-lg">Cons</h3>
+                </div>
+                {consList.length > 0 ? (
                   <ul className="space-y-2">
                     {consList.map((item, i) => (
                       <li key={i} className="flex items-start gap-2 bg-white/70 rounded-lg px-3 py-2 border border-red-100">
@@ -534,16 +534,10 @@ export const ProjectAIAnalyzer = ({
                       </li>
                     ))}
                   </ul>
-                </div>
-              ) : (
-                <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 shadow-sm">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                    <h3 className="font-bold text-emerald-800 text-lg">No Significant Risks Identified</h3>
-                  </div>
-                  <p className="text-emerald-700 text-sm mt-2">AI analysis did not identify any verifiable market risks for this project.</p>
-                </div>
-              )}
+                ) : (
+                  <p className="text-red-700 text-sm font-medium">No significant risks identified by AI analysis.</p>
+                )}
+              </div>
             </div>
 
             {/* Footer */}
