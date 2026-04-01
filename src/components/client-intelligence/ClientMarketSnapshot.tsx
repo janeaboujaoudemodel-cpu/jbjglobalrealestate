@@ -190,7 +190,7 @@ const ClientMarketSnapshot = ({
             )}
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-3">
-            <p className="text-sm text-black/70 leading-relaxed">
+            <p className="text-sm text-black/90 leading-relaxed">
               {getWhatThisMeans()}
             </p>
             
