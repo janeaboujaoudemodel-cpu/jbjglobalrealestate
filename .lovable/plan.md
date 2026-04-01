@@ -1,21 +1,38 @@
 
 
-## Restore Handpicked Logo Style & Fix Continue Searching Separately
+## Fix Developer Logo — Remove White Background, Keep Logo Only
 
-### Problem
-The last change replaced `object-contain p-1.5 bg-white` with `object-cover` globally. This broke the Handpicked For You logos which were already perfect with the white background style.
+### What you want
+- No white background behind logos
+- Logo displayed at full fit with its original colors (e.g., Bloom in red, not on white)
+- Slightly rounded edges on the container
+- Applied globally to ALL developer logos across the entire platform
 
-### Solution — Two changes
+### Change — Single file
 
-**1. `src/components/ui/DeveloperLogo.tsx`** — Restore the locked default:
+**`src/components/ui/DeveloperLogo.tsx`**
+
+Remove `bg-white`, `p-1.5`, and `shadow-md` from the container. Keep `object-contain` so logos are never cropped. Use `rounded-md` for subtle rounding instead of `rounded-xl`.
+
+```tsx
+<div className={cn(
+  "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center",
+  className
+)}>
+  <img
+    src={src}
+    alt={alt}
+    loading={loading}
+    onError={...}
+    className="block h-full w-full rounded-md object-contain"
+  />
+</div>
 ```
-object-cover overflow-hidden  →  object-contain p-1.5 bg-white
-```
-This restores the exact style that was correct in Handpicked For You.
 
-**2. `src/components/ContinueSearching.tsx`** — Override for this section only:
-Pass `className="bg-transparent p-0 object-cover overflow-hidden"` to both `DeveloperLogo` instances so the Continue Searching cards get the full-fit look without white borders, while Handpicked and all other sections keep the white-background standard.
-
-### Why this works
-The `DeveloperLogo` component uses `cn()` which lets `className` overrides win. So the global default stays white-background (correct for Handpicked), and only Continue Searching gets the override.
+### Result
+- Transparent container — no white box behind any logo
+- Logos show in their brand colors (Bloom red, Emaar gold, etc.)
+- `object-contain` ensures full-fit, no cropping
+- Slight `rounded-md` rounding on edges
+- Applies everywhere: Handpicked, Continue Searching, Developer Cards, Recommended Developers
 
