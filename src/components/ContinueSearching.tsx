@@ -261,7 +261,6 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             <DeveloperLogo
               src={item.developerLogo}
               alt={item.subtitle || "Developer"}
-              className="w-9 h-9 rounded-xl"
               onError={() => setLogoError(true)}
             />
           ) : showDevCardLogo ? (
