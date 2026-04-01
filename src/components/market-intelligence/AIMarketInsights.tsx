@@ -167,7 +167,7 @@ export const AIMarketInsights = () => {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-black/70 text-sm leading-relaxed">
+                    <p className="text-black/90 text-sm leading-relaxed">
                       {insight.insight}
                     </p>
                   </CardContent>
