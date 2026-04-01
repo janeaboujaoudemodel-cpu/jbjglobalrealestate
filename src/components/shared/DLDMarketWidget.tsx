@@ -173,7 +173,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     <span className="text-red-400 text-[10px] uppercase tracking-wider font-bold">Secondary</span>
                   </div>
                   <p className="text-red-300 text-lg font-extrabold">{ytd2026.secondary.toLocaleString()}</p>
-                  <p className="text-red-400/60 text-[10px] font-medium">{secondaryPct}% of total</p>
+                  <p className="text-red-400 text-[10px] font-medium">{secondaryPct}% of total</p>
                 </div>
               </div>
             </div>
