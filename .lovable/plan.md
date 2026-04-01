@@ -1,98 +1,97 @@
 
 
-## Global Data Color Upgrade & Issue Highlighting
+## Fix All Remaining Faded/Gray Text Across Data Components
 
-### Problems Found
+### Issues Found
 
-1. **InvestmentMetricsSection** — Labels use `text-muted-foreground` (faded gray), cards have `hover:shadow-gold/15` (ugly gold hover), `ring-gold/10` on icons. Values like rental yield use `text-gold` which is low-contrast on light cards.
+**AreaIntelligenceGrid.tsx:**
+- Line 67: `text-black/50` on "Dubai, UAE" subtitle
+- Lines 76, 83: `text-black/60` on "Price Index" and "Rental Index" labels
+- Line 121: `text-black/60` on "Year-over-Year" label
+- Line 130: `text-black/70` on highlights text
+- Line 171: `text-black/70` on section description
 
-2. **MarketOverviewDashboard** — StatCard labels use `text-black/60` (faded), property type volume shows `text-black/50`, data attribution uses `text-black/50` and `text-black/40`. No color differentiation between property types in the list.
+**AIMarketInsights.tsx:**
+- Line 149: `text-black/70` on section description
+- Line 170: `text-black/70` on insight body text
+- Line 189: `text-black/70` on narrative generator description
+- Line 238: `text-black/80` on generated narrative text (acceptable but could be stronger)
+- Line 257: `text-black/70` on disclaimer text
 
-3. **DLDMarketWidget (full)** — Stat labels use `text-black/60`. Top Areas list uses `text-black/40` for rank numbers and `text-black/80` for names. Disclaimer is `text-black/40`.
+**MarketOverviewDashboard.tsx:**
+- Line 94: `text-black/80` on section description (borderline)
+- Line 156: `text-black/70` on quarterly trend labels
+- Line 173: `text-black/70` on source text
+- Line 195: `text-black/70` on volume text
+- Line 221: `text-black/50` on bullet separator
+- Line 222: `text-black/70` on data source text
 
-4. **DLDMarketWidget (compact)** — Uses `text-gray-600` for disclaimer, `text-white/60` and `text-white/70` (faded).
+**DLDMarketWidget.tsx:**
+- Line 93: `text-black/70` on date text
+- Line 109: `text-black/80` on stat labels
+- Line 119: `text-black/70` on section label
+- Line 130: `text-black/70` on section label
+- Line 205: `text-black/60` on disclaimer
 
-5. **ClientMarketSnapshot** — "Moderate" badge uses `text-muted-foreground` (invisible), "stable" trend icon uses `text-muted-foreground`, disclaimer uses `text-muted-foreground/60`.
+**DataSourcesPanel.tsx:**
+- Line 78: `text-black/80` on description
+- Line 85: `text-black/70` on data type tags
+- Lines 128, 131: `text-black` on trust indicators — but the section has a DARK background (`from-[hsl(32,28%,13%)]`), so black text is invisible here
 
-6. **DataSourcesPanel** — Descriptions use `text-black/60`, trust indicators use `text-black/70`.
-
-7. **No red highlighting** for issues/errors/negative data anywhere.
+**ClientMarketSnapshot.tsx:**
+- Line 126: `text-muted-foreground` on info icon
+- Line 193: `text-black/70` on explanation text
+- Line 226: `text-black/60` on disclaimer
 
 ### Plan
 
-#### Step 1: Create `src/lib/dataColors.ts` — Global Semantic Color Map
+#### File 1: `AreaIntelligenceGrid.tsx`
+- Line 67: `text-black/50` → `text-black/80 font-medium`
+- Lines 76, 83: `text-black/60` → `text-black font-medium`
+- Line 121: `text-black/60` → `text-black font-medium`
+- Line 130: `text-black/70` → `text-black/90`
+- Line 171: `text-black/70` → `text-black/90`
 
-A single source of truth for all data/chart/metric colors:
+#### File 2: `AIMarketInsights.tsx`
+- Line 149: `text-black/70` → `text-black/90`
+- Line 170: `text-black/70` → `text-black/90`
+- Line 189: `text-black/70` → `text-black/90`
+- Line 257: `text-black/70` → `text-black/80`
 
-```text
-offPlan    → emerald-500 (green)
-secondary  → red-500 (red)
-cash       → blue-500
-mortgage   → amber-500
-growth     → emerald-600
-decline    → red-600
-issue/alert → red-600 (always red)
-price      → emerald-700
-volume     → purple-600
-yield      → blue-600
-roi        → emerald-500
-rental     → blue-500
-```
+#### File 3: `MarketOverviewDashboard.tsx`
+- Line 156: `text-black/70` → `text-black font-medium`
+- Line 173: `text-black/70` → `text-black/90`
+- Line 221: `text-black/50` → `text-black/70`
 
-Plus Tailwind class constants for bars, text, backgrounds, and badges.
+#### File 4: `DLDMarketWidget.tsx`
+- Line 93: `text-black/70` → `text-black/90`
+- Line 119: `text-black/70` → `text-black font-medium`
+- Line 130: `text-black/70` → `text-black font-medium`
+- Line 205: `text-black/60` → `text-black/80`
 
-#### Step 2: Fix `InvestmentMetricsSection.tsx`
+#### File 5: `DataSourcesPanel.tsx` — Critical fix
+- Trust indicators (line 128): `text-black` → `text-white` (dark background makes black text invisible)
+- Line 131: Trust indicator text stays `text-sm` but needs `text-white`
+- Line 78: `text-black/80` → `text-black/90`
+- Line 85: `text-black/70` → `text-black font-medium`
 
-- Replace all `text-muted-foreground` labels with `text-black font-medium`
-- Change gold hover shadow to a clean `hover:shadow-lg hover:shadow-black/10`
-- Keep ROI green, yield blue (not gold), rental income blue — all with bold saturated values
-- Remove `ring-gold/10`, use `ring-emerald-200`, `ring-blue-200`, etc. matching each metric
-- Remove `border-gold/40` from metric cards, use matching semantic border colors
+#### File 6: `ClientMarketSnapshot.tsx`
+- Line 126: `text-muted-foreground` → `text-black/70`
+- Line 193: `text-black/70` → `text-black/90`
+- Line 226: `text-black/60` → `text-black/80`
 
-#### Step 3: Fix `MarketOverviewDashboard.tsx`
+#### File 7: Take screenshot to verify
 
-- StatCard labels: `text-black/60` → `text-black font-medium`
-- Property Type list: add colored dot indicators per type (Villa=emerald, Apartment=blue, Townhouse=amber, Land=purple)
-- Volume text: `text-black/50` → `text-black/70 font-medium`
-- Data attribution: `text-black/50` → `text-black/70`
-
-#### Step 4: Fix `DLDMarketWidget.tsx` (full + compact)
-
-- Stat labels: `text-black/60` → `text-black/80 font-medium`
-- Top Areas rank: `text-black/40` → `text-black/70 font-bold`
-- Compact: `text-gray-600` → `text-black/70`, `text-white/60` → `text-white/80`
-- Disclaimer: `text-black/40` → `text-black/60`
-
-#### Step 5: Fix `ClientMarketSnapshot.tsx`
-
-- "Moderate" badge: replace `text-muted-foreground` with `text-blue-600 border-blue-400 bg-blue-50`
-- "Stable" trend icon: `text-muted-foreground` → `text-blue-500`
-- All `text-muted-foreground` labels → `text-black/80 font-medium`
-- Disclaimer: `text-muted-foreground/60` → `text-black/60`
-
-#### Step 6: Fix `DataSourcesPanel.tsx`
-
-- Descriptions: `text-black/60` → `text-black/80`
-- Trust indicators: `text-black/70` → `text-black font-medium`
-
-#### Step 7: Add "Issue = Red" Global Rule
-
-- Any negative change, decline, or issue indicator MUST use `text-red-600` with a red background badge
-- Update `master-lock.ts` to add a `DATA_COLOR_LOCK` section that enforces:
-  - Positive = emerald, Negative = red (always)
-  - No gray for any data value, metric label, or chart element
-  - Issues/alerts always highlighted in red
-  - Each data category must use a distinct semantic color
+After all fixes, use browser tools to screenshot the market intelligence page and confirm no faded text remains.
 
 ### Files Modified
 
 | File | Changes |
 |------|---------|
-| `src/lib/dataColors.ts` | **NEW** — semantic color constants |
-| `src/components/project-detail/InvestmentMetricsSection.tsx` | Fix faded labels, gold hover, gold yield color |
-| `src/components/market-intelligence/MarketOverviewDashboard.tsx` | Fix faded labels, add property type color dots |
-| `src/components/shared/DLDMarketWidget.tsx` | Fix all faded text in both compact and full modes |
-| `src/components/client-intelligence/ClientMarketSnapshot.tsx` | Fix moderate badge, stable icon, all faded labels |
-| `src/components/market-intelligence/DataSourcesPanel.tsx` | Fix faded descriptions and trust indicators |
-| `src/config/master-lock.ts` | Add `DATA_COLOR_LOCK` governance section |
+| `src/components/market-intelligence/AreaIntelligenceGrid.tsx` | Bump all /50, /60, /70 opacity text to readable levels |
+| `src/components/market-intelligence/AIMarketInsights.tsx` | Bump all /70 text to /90 |
+| `src/components/market-intelligence/MarketOverviewDashboard.tsx` | Fix remaining faded labels |
+| `src/components/shared/DLDMarketWidget.tsx` | Fix remaining faded labels and disclaimer |
+| `src/components/market-intelligence/DataSourcesPanel.tsx` | Fix invisible black-on-dark trust indicators → white |
+| `src/components/client-intelligence/ClientMarketSnapshot.tsx` | Remove last muted-foreground, bump faded text |
 
