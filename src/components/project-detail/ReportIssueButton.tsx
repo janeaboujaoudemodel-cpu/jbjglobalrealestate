@@ -95,19 +95,19 @@ export default function ReportIssueButton({
   return (
     <>
       {/* Yellow Banner */}
-      <div className={`rounded-xl border-2 border-red-500/40 bg-gradient-to-r from-red-950 to-red-900/90 p-4 flex items-center justify-between gap-4 flex-wrap shadow-[0_4px_20px_rgba(220,38,38,0.15)] ${className}`}>
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 ring-2 ring-red-400/30">
-            <AlertTriangle className="w-5 h-5 text-red-400" />
+      <div className={`rounded-2xl border-2 border-red-500/50 bg-gradient-to-br from-red-950 via-red-900/95 to-red-950 p-5 flex items-center justify-between gap-4 flex-wrap shadow-[0_6px_30px_rgba(220,38,38,0.25),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-sm ${className}`}>
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 ring-2 ring-red-400/40 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
+            <AlertTriangle className="w-6 h-6 text-red-400 drop-shadow-[0_0_6px_rgba(239,68,68,0.5)]" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-white/95">Noticed something incorrect?</p>
-            <p className="text-xs text-red-300/80">Help us keep this project up-to-date</p>
+            <p className="text-sm font-bold text-white tracking-wide">Noticed something incorrect?</p>
+            <p className="text-xs text-red-300/90 mt-0.5">Help us keep this project up-to-date</p>
           </div>
         </div>
         <button
           onClick={() => setOpen(true)}
-          className="inline-flex items-center gap-1 px-4 py-2 rounded-lg border-2 border-red-400/60 bg-red-600 text-white text-sm font-semibold hover:bg-red-500 hover:border-red-400 transition-colors whitespace-nowrap shadow-lg shadow-red-900/30"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-red-400/70 bg-red-600 text-white text-sm font-bold hover:bg-red-500 hover:border-red-300 hover:shadow-[0_0_20px_rgba(239,68,68,0.4)] transition-all duration-300 whitespace-nowrap shadow-[0_4px_15px_rgba(220,38,38,0.4)]"
         >
           <AlertCircle className="w-4 h-4" />
           Report an issue
