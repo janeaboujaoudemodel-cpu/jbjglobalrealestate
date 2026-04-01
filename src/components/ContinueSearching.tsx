@@ -156,7 +156,7 @@ const ContinueSearching = ({
               {sectionTitle}
             </h2>
           </div>
-          {!isEmpty && (
+          {hasUserHistory && (
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setLeadCaptureOpen(true)}
