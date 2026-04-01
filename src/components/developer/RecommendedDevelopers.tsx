@@ -100,15 +100,12 @@ export default function RecommendedDevelopers({
                   className="group block rounded-xl border-2 border-gold/20 hover:border-gold/60 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)]"
                 >
                   {/* Logo */}
-                  <div className="h-28 flex items-center justify-center p-4 bg-white/50">
-                    {dev.logo_url ? (
-                      <SafeImage
-                        src={dev.logo_url}
-                        alt={dev.name}
-                        className="max-h-16 max-w-[120px] object-contain"
-                        loading="lazy"
-                      />
-                    ) : (
+                  <div className="h-28 flex items-center justify-center p-4">
+                    <DeveloperLogo
+                      src={dev.logo_url}
+                      alt={dev.name}
+                    />
+                    {!dev.logo_url && (
                       <Building className="w-10 h-10 text-gold/30" />
                     )}
                   </div>
