@@ -127,7 +127,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Highlights */}
           <div className="space-y-2 mb-4">
             {area.highlights.slice(0, 2).map((highlight, idx) => (
-              <p key={idx} className="text-black/70 text-xs flex items-start gap-2">
+              <p key={idx} className="text-black/90 text-xs flex items-start gap-2">
                 <span className="text-gold mt-0.5">•</span>
                 {highlight}
               </p>
