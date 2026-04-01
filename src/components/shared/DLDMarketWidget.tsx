@@ -77,16 +77,16 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   const giftsPct = ytd2026.gifts ? Math.round((ytd2026.gifts / ytd2026.transactions) * 100) : 0;
 
   const mainStats = [
-    { label: "YTD Volume", value: ytd2026.value, sub: "Total transaction value", icon: Banknote, color: "text-emerald-400", borderColor: "border-emerald-500/40", bgColor: "bg-emerald-500/10", glow: "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]", dotColor: "bg-emerald-500" },
-    { label: "Transactions", value: ytd2026.transactions.toLocaleString(), sub: "YTD 2026 deals", icon: Building2, color: "text-blue-400", borderColor: "border-blue-500/40", bgColor: "bg-blue-500/10", glow: "drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]", dotColor: "bg-blue-500" },
-    { label: "Off-Plan Sales", value: ytd2026.offPlan.toLocaleString(), sub: `${offPlanPct}% of total`, icon: TrendingUp, color: "text-emerald-400", borderColor: "border-emerald-500/40", bgColor: "bg-emerald-500/10", glow: "drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]", dotColor: "bg-emerald-500" },
-    { label: "Secondary Sales", value: ytd2026.secondary.toLocaleString(), sub: `${secondaryPct}% of total`, icon: Activity, color: "text-red-400", borderColor: "border-red-500/40", bgColor: "bg-red-500/10", glow: "drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]", dotColor: "bg-red-500" },
-    { label: "Cash Deals", value: ytd2026.cash.toLocaleString(), sub: `${cashPct}% of total`, icon: Banknote, color: "text-blue-400", borderColor: "border-blue-500/40", bgColor: "bg-blue-500/10", glow: "drop-shadow-[0_0_8px_rgba(59,130,246,0.4)]", dotColor: "bg-blue-500" },
-    { label: "Mortgage Deals", value: ytd2026.mortgage.toLocaleString(), sub: `${mortgagePct}% of total`, icon: BarChart3, color: "text-amber-400", borderColor: "border-amber-500/40", bgColor: "bg-amber-500/10", glow: "drop-shadow-[0_0_8px_rgba(245,158,11,0.4)]", dotColor: "bg-amber-500" },
+    { label: "YTD Volume", value: ytd2026.value, sub: "Total transaction value", icon: Banknote, color: "text-emerald-600", borderColor: "border-emerald-200", bgColor: "bg-emerald-50", glow: "drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]", dotColor: "bg-emerald-500" },
+    { label: "Transactions", value: ytd2026.transactions.toLocaleString(), sub: "YTD 2026 deals", icon: Building2, color: "text-blue-600", borderColor: "border-blue-200", bgColor: "bg-blue-50", glow: "drop-shadow-[0_0_6px_rgba(59,130,246,0.3)]", dotColor: "bg-blue-500" },
+    { label: "Off-Plan Sales", value: ytd2026.offPlan.toLocaleString(), sub: `${offPlanPct}% of total`, icon: TrendingUp, color: "text-emerald-600", borderColor: "border-emerald-200", bgColor: "bg-emerald-50", glow: "drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]", dotColor: "bg-emerald-500" },
+    { label: "Secondary Sales", value: ytd2026.secondary.toLocaleString(), sub: `${secondaryPct}% of total`, icon: Activity, color: "text-red-600", borderColor: "border-red-200", bgColor: "bg-red-50", glow: "drop-shadow-[0_0_6px_rgba(239,68,68,0.3)]", dotColor: "bg-red-500" },
+    { label: "Cash Deals", value: ytd2026.cash.toLocaleString(), sub: `${cashPct}% of total`, icon: Banknote, color: "text-blue-600", borderColor: "border-blue-200", bgColor: "bg-blue-50", glow: "drop-shadow-[0_0_6px_rgba(59,130,246,0.3)]", dotColor: "bg-blue-500" },
+    { label: "Mortgage Deals", value: ytd2026.mortgage.toLocaleString(), sub: `${mortgagePct}% of total`, icon: BarChart3, color: "text-amber-600", borderColor: "border-amber-200", bgColor: "bg-amber-50", glow: "drop-shadow-[0_0_6px_rgba(245,158,11,0.3)]", dotColor: "bg-amber-500" },
   ];
 
   return (
-    <section className="py-16 overflow-hidden rounded-3xl mx-4 md:mx-8" style={{ background: 'linear-gradient(135deg, #0a1628 0%, #0d1a30 50%, #0f1f3a 100%)' }}>
+    <section className="py-16 overflow-hidden rounded-3xl mx-4 md:mx-8 bg-gradient-to-br from-white via-stone-50 to-amber-50/30 border border-gold/20 shadow-[0_8px_40px_rgba(0,0,0,0.06)]">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
 
@@ -96,41 +96,41 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               <Banknote className="w-4 h-4 text-gold" />
               <span className="text-gold text-xs uppercase tracking-[0.2em] font-semibold">Live Market Data</span>
             </div>
-            <h2 className="text-white text-2xl md:text-3xl font-bold mb-2">
+            <h2 className="text-foreground text-2xl md:text-3xl font-bold mb-2">
               Dubai Market Intelligence
             </h2>
-            <p className="text-gold/80 text-sm font-medium">
+            <p className="text-gold text-sm font-medium">
               DLD Transaction Data • As of {today}
             </p>
           </div>
 
           {/* Growth Banner */}
-          <div className="bg-gradient-to-r from-emerald-500/15 via-emerald-500/10 to-emerald-500/15 border border-emerald-500/30 rounded-2xl p-5 mb-8 flex items-center justify-between backdrop-blur-sm">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 mb-8 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                <ArrowUpRight className="w-5 h-5 text-emerald-400" />
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
+                <ArrowUpRight className="w-5 h-5 text-emerald-600" />
               </div>
               <div>
-                <p className="text-white/90 text-xs uppercase tracking-wider font-semibold">YTD Market Growth</p>
-                <p className="text-emerald-400/70 text-[11px]">Year-over-year volume increase</p>
+                <p className="text-foreground text-xs uppercase tracking-wider font-semibold">YTD Market Growth</p>
+                <p className="text-emerald-600 text-[11px]">Year-over-year volume increase</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-emerald-400 text-3xl md:text-4xl font-extrabold drop-shadow-[0_0_12px_rgba(52,211,153,0.5)]">{ytd2026.growth}</p>
+              <p className="text-emerald-600 text-3xl md:text-4xl font-extrabold drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">{ytd2026.growth}</p>
             </div>
           </div>
 
           {/* 6-Metric Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {mainStats.map((stat) => (
-              <div key={stat.label} className={`${stat.bgColor} ${stat.borderColor} border rounded-xl p-5 backdrop-blur-sm relative overflow-hidden group hover:scale-[1.02] transition-transform`}>
-                <div className="absolute top-0 right-0 w-20 h-20 rounded-full bg-white/[0.03] -translate-y-1/2 translate-x-1/2" />
+              <div key={stat.label} className={`${stat.bgColor} ${stat.borderColor} border rounded-xl p-5 relative overflow-hidden group hover:scale-[1.02] transition-transform shadow-sm`}>
+                <div className="absolute top-0 right-0 w-20 h-20 rounded-full bg-black/[0.02] -translate-y-1/2 translate-x-1/2" />
                 <div className="flex items-center gap-2 mb-3">
                   <div className={`w-2 h-2 rounded-full ${stat.dotColor} shadow-[0_0_6px] shadow-current`} />
-                   <span className="text-white/90 text-[10px] uppercase tracking-[0.15em] font-semibold">{stat.label}</span>
+                   <span className="text-foreground/70 text-[10px] uppercase tracking-[0.15em] font-semibold">{stat.label}</span>
                  </div>
                  <p className={`${stat.color} text-2xl md:text-3xl font-extrabold ${stat.glow} mb-1`}>{stat.value}</p>
-                 <p className={`${stat.color} opacity-70 text-[11px] font-medium`}>{stat.sub}</p>
+                 <p className={`${stat.color} opacity-80 text-[11px] font-medium`}>{stat.sub}</p>
               </div>
             ))}
           </div>
@@ -138,81 +138,81 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Transaction Split Bars — Premium */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {/* Off-Plan vs Secondary */}
-            <div className="bg-white/[0.04] rounded-2xl p-6 border border-white/10 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-white font-semibold text-sm">Off-Plan vs Secondary</h3>
+                <TrendingUp className="w-4 h-4 text-emerald-600" />
+                <h3 className="text-foreground font-semibold text-sm">Off-Plan vs Secondary</h3>
               </div>
               {/* Visual bar */}
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-black/40 border border-white/5">
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-stone-100 border border-stone-200">
                 <div
-                  className="h-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-400 rounded-l-full shadow-[0_0_14px_rgba(52,211,153,0.5)] flex items-center justify-center"
+                  className="h-full bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-400 rounded-l-full shadow-[0_0_10px_rgba(16,185,129,0.4)] flex items-center justify-center"
                   style={{ width: `${offPlanPct}%` }}
                 >
                   <span className="text-white text-[10px] font-bold drop-shadow">{offPlanPct}%</span>
                 </div>
                 <div
-                  className="h-full bg-gradient-to-r from-red-500 via-red-400 to-red-500 flex-1 rounded-r-full shadow-[0_0_14px_rgba(239,68,68,0.5)] flex items-center justify-center"
+                  className="h-full bg-gradient-to-r from-red-500 via-red-400 to-red-500 flex-1 rounded-r-full shadow-[0_0_10px_rgba(239,68,68,0.4)] flex items-center justify-center"
                 >
                   <span className="text-white text-[10px] font-bold drop-shadow">{secondaryPct}%</span>
                 </div>
               </div>
               {/* Legend with colored cards */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3">
+                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(52,211,153,0.6)]" />
-                    <span className="text-emerald-400 text-[10px] uppercase tracking-wider font-bold">Off-Plan</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
+                    <span className="text-emerald-700 text-[10px] uppercase tracking-wider font-bold">Off-Plan</span>
                   </div>
-                  <p className="text-emerald-300 text-lg font-extrabold">{ytd2026.offPlan.toLocaleString()}</p>
-                  <p className="text-emerald-400 text-[10px] font-medium">{offPlanPct}% of total</p>
+                  <p className="text-emerald-600 text-lg font-extrabold">{ytd2026.offPlan.toLocaleString()}</p>
+                  <p className="text-emerald-600 text-[10px] font-medium">{offPlanPct}% of total</p>
                 </div>
-                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)]" />
-                    <span className="text-red-400 text-[10px] uppercase tracking-wider font-bold">Secondary</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.5)]" />
+                    <span className="text-red-700 text-[10px] uppercase tracking-wider font-bold">Secondary</span>
                   </div>
-                  <p className="text-red-300 text-lg font-extrabold">{ytd2026.secondary.toLocaleString()}</p>
-                  <p className="text-red-400 text-[10px] font-medium">{secondaryPct}% of total</p>
+                  <p className="text-red-600 text-lg font-extrabold">{ytd2026.secondary.toLocaleString()}</p>
+                  <p className="text-red-600 text-[10px] font-medium">{secondaryPct}% of total</p>
                 </div>
               </div>
             </div>
 
             {/* Cash vs Mortgage */}
-            <div className="bg-white/[0.04] rounded-2xl p-6 border border-white/10 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl p-6 border border-stone-200 shadow-sm">
               <div className="flex items-center gap-2 mb-4">
-                <Banknote className="w-4 h-4 text-blue-400" />
-                <h3 className="text-white font-semibold text-sm">Cash vs Mortgage</h3>
+                <Banknote className="w-4 h-4 text-blue-600" />
+                <h3 className="text-foreground font-semibold text-sm">Cash vs Mortgage</h3>
               </div>
-              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-black/40 border border-white/5">
+              <div className="h-8 rounded-full overflow-hidden mb-4 flex shadow-inner bg-stone-100 border border-stone-200">
                 <div
-                  className="h-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 rounded-l-full shadow-[0_0_14px_rgba(59,130,246,0.5)] flex items-center justify-center"
+                  className="h-full bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 rounded-l-full shadow-[0_0_10px_rgba(59,130,246,0.4)] flex items-center justify-center"
                   style={{ width: `${cashPct}%` }}
                 >
                   <span className="text-white text-[10px] font-bold drop-shadow">{cashPct}%</span>
                 </div>
                 <div
-                  className="h-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 flex-1 rounded-r-full shadow-[0_0_14px_rgba(245,158,11,0.5)] flex items-center justify-center"
+                  className="h-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 flex-1 rounded-r-full shadow-[0_0_10px_rgba(245,158,11,0.4)] flex items-center justify-center"
                 >
                   <span className="text-white text-[10px] font-bold drop-shadow">{mortgagePct}%</span>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.6)]" />
-                    <span className="text-blue-400 text-[10px] uppercase tracking-wider font-bold">Cash</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-[0_0_6px_rgba(59,130,246,0.5)]" />
+                    <span className="text-blue-700 text-[10px] uppercase tracking-wider font-bold">Cash</span>
                   </div>
-                  <p className="text-blue-300 text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
-                  <p className="text-blue-400 text-[10px] font-medium">{cashPct}% of total</p>
+                  <p className="text-blue-600 text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
+                  <p className="text-blue-600 text-[10px] font-medium">{cashPct}% of total</p>
                 </div>
-                <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3">
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.6)]" />
-                    <span className="text-amber-400 text-[10px] uppercase tracking-wider font-bold">Mortgage</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.5)]" />
+                    <span className="text-amber-700 text-[10px] uppercase tracking-wider font-bold">Mortgage</span>
                   </div>
-                  <p className="text-amber-300 text-lg font-extrabold">{ytd2026.mortgage.toLocaleString()}</p>
-                  <p className="text-amber-400 text-[10px] font-medium">{mortgagePct}% of total</p>
+                  <p className="text-amber-600 text-lg font-extrabold">{ytd2026.mortgage.toLocaleString()}</p>
+                  <p className="text-amber-600 text-[10px] font-medium">{mortgagePct}% of total</p>
                 </div>
               </div>
             </div>
@@ -221,10 +221,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Top Areas + Nationalities */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Top 10 Areas */}
-            <div className="bg-white/[0.04] rounded-2xl p-6 border border-gold/20 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl p-6 border border-gold/20 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <MapPin className="w-4 h-4 text-gold" />
-                <h3 className="text-white text-sm font-bold">Top 10 Areas by Transactions</h3>
+                <h3 className="text-foreground text-sm font-bold">Top 10 Areas by Transactions</h3>
               </div>
               <div className="space-y-2">
                 {topAreas2026.slice(0, 10).map((area, i) => {
@@ -239,20 +239,19 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   ];
                   return (
                     <div key={area.area} className={`relative rounded-lg overflow-hidden ${isHighlighted ? "ring-1 ring-gold/50" : ""}`}>
-                      {/* Background bar */}
-                      <div className="absolute inset-0 bg-white/[0.03] rounded-lg" />
+                      <div className="absolute inset-0 bg-stone-50 rounded-lg" />
                       <div
                         className={`absolute inset-y-0 left-0 bg-gradient-to-r ${barColors[i]} opacity-15 rounded-lg`}
                         style={{ width: `${barWidth}%` }}
                       />
                       <div className="relative flex items-center justify-between px-3 py-2.5">
                         <div className="flex items-center gap-2.5">
-                          <span className="text-gold/80 text-[10px] font-bold w-5 text-center bg-gold/10 rounded py-0.5">{i + 1}</span>
-                          <span className={`text-sm font-medium ${isHighlighted ? "text-gold" : "text-white/90"}`}>{area.area}</span>
+                          <span className="text-gold text-[10px] font-bold w-5 text-center bg-gold/10 rounded py-0.5">{i + 1}</span>
+                          <span className={`text-sm font-medium ${isHighlighted ? "text-gold" : "text-foreground"}`}>{area.area}</span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-white/80 text-xs font-bold">{area.transactions.toLocaleString()}</span>
-                          <span className="text-emerald-400 text-xs font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full">{area.change}</span>
+                          <span className="text-foreground text-xs font-bold">{area.transactions.toLocaleString()}</span>
+                          <span className="text-emerald-600 text-xs font-bold bg-emerald-50 px-2 py-0.5 rounded-full">{area.change}</span>
                         </div>
                       </div>
                     </div>
@@ -262,10 +261,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
 
             {/* Top 10 Nationalities */}
-            <div className="bg-white/[0.04] rounded-2xl p-6 border border-gold/20 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl p-6 border border-gold/20 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <Globe className="w-4 h-4 text-gold" />
-                <h3 className="text-white text-sm font-bold">Top 10 Buyer Nationalities</h3>
+                <h3 className="text-foreground text-sm font-bold">Top 10 Buyer Nationalities</h3>
               </div>
               <div className="space-y-2">
                 {topNationalities.slice(0, 10).map((nat, i) => {
@@ -276,8 +275,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     'from-indigo-500 to-indigo-400'
                   ];
                   const textColors = [
-                    'text-emerald-400', 'text-blue-400', 'text-red-400', 'text-amber-400', 'text-purple-400',
-                    'text-cyan-400', 'text-rose-400', 'text-teal-400', 'text-orange-400', 'text-indigo-400'
+                    'text-emerald-600', 'text-blue-600', 'text-red-600', 'text-amber-600', 'text-purple-600',
+                    'text-cyan-600', 'text-rose-600', 'text-teal-600', 'text-orange-600', 'text-indigo-600'
                   ];
                   const bgColors = [
                     'bg-emerald-500', 'bg-blue-500', 'bg-red-400', 'bg-amber-500', 'bg-purple-500',
@@ -288,20 +287,20 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
                   return (
                     <div key={nat.country} className="relative rounded-lg overflow-hidden">
-                      <div className="absolute inset-0 bg-white/[0.03] rounded-lg" />
+                      <div className="absolute inset-0 bg-stone-50 rounded-lg" />
                       <div
-                        className={`absolute inset-y-0 left-0 bg-gradient-to-r ${barColors[i % barColors.length]} opacity-15 rounded-lg`}
+                        className={`absolute inset-y-0 left-0 bg-gradient-to-r ${barColors[i % barColors.length]} opacity-10 rounded-lg`}
                         style={{ width: `${barWidth}%` }}
                       />
                       <div className="relative flex items-center justify-between px-3 py-2.5">
                         <div className="flex items-center gap-2.5">
                           <span className="text-lg leading-none">{nat.flag}</span>
-                          <span className="text-white/90 font-medium text-sm">{nat.country}</span>
+                          <span className="text-foreground font-medium text-sm">{nat.country}</span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <div className="w-24 h-2.5 bg-black/30 rounded-full overflow-hidden border border-white/5">
+                          <div className="w-24 h-2.5 bg-stone-200 rounded-full overflow-hidden">
                             <div
-                              className={`h-full ${bgColors[i % bgColors.length]} rounded-full shadow-[0_0_8px_rgba(255,255,255,0.15)]`}
+                              className={`h-full ${bgColors[i % bgColors.length]} rounded-full`}
                               style={{ width: `${nat.percentage * 4}%` }}
                             />
                           </div>
@@ -317,20 +316,20 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Gifts row if available */}
           {ytd2026.gifts && ytd2026.gifts > 0 && (
-            <div className="mt-6 bg-purple-500/10 border border-purple-500/30 rounded-xl p-4 flex items-center justify-between">
+            <div className="mt-6 bg-purple-50 border border-purple-200 rounded-xl p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.6)]" />
-                <span className="text-purple-400 text-xs uppercase tracking-wider font-bold">Gift Transactions</span>
+                <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.5)]" />
+                <span className="text-purple-700 text-xs uppercase tracking-wider font-bold">Gift Transactions</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-purple-300 text-lg font-extrabold">{ytd2026.gifts.toLocaleString()}</span>
-                <span className="text-purple-400 text-xs font-medium">{giftsPct}% of total</span>
+                <span className="text-purple-600 text-lg font-extrabold">{ytd2026.gifts.toLocaleString()}</span>
+                <span className="text-purple-600 text-xs font-medium">{giftsPct}% of total</span>
               </div>
             </div>
           )}
 
           {/* Disclaimer */}
-          <p className="text-[10px] text-gold/60 text-center mt-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[10px] text-foreground/50 text-center mt-8 max-w-2xl mx-auto leading-relaxed">
             Sources: Dubai Land Department (DLD), RERA, DXB Interact. YTD 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
             <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
           </p>
