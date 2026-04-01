@@ -372,12 +372,15 @@ export const DEVELOPER_LOGO_LOCK = Object.freeze({
   ]),
 
   CONTAINER_SPEC: Object.freeze({
-    LISTING_CARD: 'w-14 h-14',
-    DEVELOPER_CARD_OVERLAY: 'w-16 h-16',
-    RECOMMENDED_CARD: 'w-12 h-12',
-    BACKGROUND: 'bg-white/90',
+    DEFAULT_SIZE: 'w-14 h-14',
+    BACKGROUND: 'bg-white',
     FIT: 'object-contain',
-    BORDER_RADIUS: 'rounded-lg',
+    PADDING: 'p-1.5',
+    BORDER_RADIUS: 'rounded-xl',
+    SHADOW: 'shadow-md',
+    SHRINK: 'shrink-0',
+    COMPONENT: 'DeveloperLogo from src/components/ui/DeveloperLogo.tsx',
+    NOTE: 'ALL developer logos MUST use the DeveloperLogo component. No inline img tags for logos.',
   }),
 
   FALLBACK: Object.freeze({
