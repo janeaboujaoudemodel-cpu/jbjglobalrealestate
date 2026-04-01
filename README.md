@@ -1,73 +1,116 @@
-# Welcome to your Lovable project
+# JBJ Global Real Estate
 
-## Project info
+Enterprise-grade Dubai real estate brokerage platform with AI-powered tools, CRM, and investor dashboards.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Tech Stack
 
-## How can I edit this code?
+- **Frontend**: React 18, TypeScript 5, Vite 5, Tailwind CSS 3, Framer Motion
+- **Backend**: Supabase (PostgreSQL + PostGIS), 260+ Deno Edge Functions
+- **AI**: Gemini 2.5, GPT-5, ElevenLabs, VAPI, Perplexity
+- **Maps**: Leaflet / React Leaflet
+- **Charts**: Recharts
+- **Mobile**: Capacitor (iOS/Android)
 
-There are several ways of editing your application.
+## Quick Start
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+```bash
+# 1. Clone the repository
 git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# 2. Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 3. Configure environment variables
+cp .env.example .env
+# Edit .env with your Supabase credentials
+
+# 4. Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Commands
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server (default port 8080) |
+| `npm run build` | Production build to `dist/` |
+| `npm run preview` | Preview production build |
+| `npm run lint` | Run ESLint |
 
-**Use GitHub Codespaces**
+## Environment Variables
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Frontend (required in `.env`)
 
-## What technologies are used for this project?
+| Variable | Description |
+|----------|-------------|
+| `VITE_SUPABASE_URL` | Supabase project URL |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | Supabase anon/public key |
+| `VITE_SUPABASE_PROJECT_ID` | Supabase project reference ID |
 
-This project is built with:
+### Edge Function Secrets (set via `supabase secrets set`)
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+| Secret | Purpose |
+|--------|---------|
+| `RESEND_API_KEY` | Transactional emails |
+| `REELLY_API_KEY` | Property data sync |
+| `BREVO_API_KEY` | Email marketing |
+| `BREVO_LIST_ID` | Mailing list ID |
+| `OWNER_EMAIL` | Admin notifications |
+| `LEAD_REF_HMAC_KEY` | Referral token signing |
+| `PERPLEXITY_API_KEY` | AI search |
+| `VAPI_API_KEY` | Voice AI agents |
+| `ELEVENLABS_API_KEY` | Text-to-speech |
+| `ELEVENLABS_AGENT_ID` | ElevenLabs agent ID |
+| `ELEVENLABS_VOICE_ID` | ElevenLabs voice ID |
 
-## How can I deploy this project?
+## Project Structure
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+```
+src/
+├── components/       # React components (100+)
+├── pages/            # Route pages
+├── hooks/            # Custom React hooks
+├── integrations/     # Supabase client & types
+├── config/           # App configuration
+├── utils/            # Utility functions
+├── assets/           # Static assets
+└── styles/           # Global styles
 
-## Can I connect a custom domain to my Lovable project?
+supabase/
+├── functions/        # 260+ Deno Edge Functions
+├── migrations/       # 578 database migrations
+└── config.toml       # Supabase configuration
+```
 
-Yes, you can!
+## Database Setup
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+If self-hosting with your own Supabase instance:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+```bash
+# Install Supabase CLI
+npm install -g supabase
+
+# Link to your project
+supabase link --project-ref <your-project-ref>
+
+# Apply all migrations
+supabase db push
+
+# Deploy edge functions
+supabase functions deploy
+```
+
+See [`database/README.md`](database/README.md) for detailed instructions.
+
+## Deployment
+
+See [`DEPLOYMENT.md`](DEPLOYMENT.md) for full deployment guides covering:
+- Vercel / Netlify
+- Replit
+- Self-hosted Supabase
+- GitHub Actions CI/CD
+
+## License
+
+Proprietary — All rights reserved.
