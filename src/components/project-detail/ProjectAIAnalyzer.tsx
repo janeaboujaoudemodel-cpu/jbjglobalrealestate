@@ -466,15 +466,15 @@ export const ProjectAIAnalyzer = ({
                   <>
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       {rentalYield !== null && (
-                        <div className="bg-gradient-to-br from-[#0a1628] via-[#0d1a30] to-[#0a1225] rounded-xl p-5 text-center border border-blue-400/50 shadow-lg shadow-blue-500/10">
-                          <div className="text-3xl font-extrabold text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.4)]">{rentalYield}%</div>
-                          <div className="text-white text-xs mt-1.5 font-semibold tracking-wide">Rental Yield</div>
+                        <div className="bg-blue-50 rounded-xl p-5 text-center border border-blue-200 shadow-sm">
+                          <div className="text-3xl font-extrabold text-blue-600 drop-shadow-[0_0_6px_rgba(59,130,246,0.3)]">{rentalYield}%</div>
+                          <div className="text-foreground text-xs mt-1.5 font-semibold tracking-wide">Rental Yield</div>
                         </div>
                       )}
                       {appreciation !== null && (
-                        <div className="bg-gradient-to-br from-[#0a1628] via-[#0d1a30] to-[#0a1225] rounded-xl p-5 text-center border border-emerald-400/50 shadow-lg shadow-emerald-500/10">
-                          <div className="text-3xl font-extrabold text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.4)]">{appreciation}%</div>
-                          <div className="text-white text-xs mt-1.5 font-semibold tracking-wide">Capital Growth</div>
+                        <div className="bg-emerald-50 rounded-xl p-5 text-center border border-emerald-200 shadow-sm">
+                          <div className="text-3xl font-extrabold text-emerald-600 drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]">{appreciation}%</div>
+                          <div className="text-foreground text-xs mt-1.5 font-semibold tracking-wide">Capital Growth</div>
                         </div>
                       )}
                     </div>
