@@ -92,12 +92,15 @@ const ContinueSearching = ({
   const validItems = items.filter((i) => i && i.type && i.slug);
   if (validItems.length === 0) return null;
 
-  // Deduplicate by slug — keep only the most recently viewed instance
+  // Deduplicate properties by both slug AND id — each property appears only once
   const seenSlugs = new Set<string>();
+  const seenIds = new Set<string>();
   const uniqueItems = validItems.filter((item) => {
-    const key = `${item.type}-${item.slug}`;
-    if (seenSlugs.has(key)) return false;
-    seenSlugs.add(key);
+    const slugKey = `${item.type}-${item.slug}`;
+    const idKey = `${item.type}-${item.id}`;
+    if (seenSlugs.has(slugKey) || seenIds.has(idKey)) return false;
+    seenSlugs.add(slugKey);
+    seenIds.add(idKey);
     return true;
   });
 
