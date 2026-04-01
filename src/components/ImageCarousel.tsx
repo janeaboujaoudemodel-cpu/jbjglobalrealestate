@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Download, Maximize2, X } from "lucide-react";
+import { upscaleCdnImageUrl } from "@/lib/imageUtils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
