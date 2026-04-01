@@ -123,14 +123,14 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* 6-Metric Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {mainStats.map((stat) => (
-              <div key={stat.label} className={`${stat.bgColor} ${stat.borderColor} border rounded-xl p-5 backdrop-blur-sm relative overflow-hidden group hover:scale-[1.02] transition-transform`}>
-                <div className="absolute top-0 right-0 w-20 h-20 rounded-full bg-white/[0.03] -translate-y-1/2 translate-x-1/2" />
+              <div key={stat.label} className={`${stat.bgColor} ${stat.borderColor} border rounded-xl p-5 relative overflow-hidden group hover:scale-[1.02] transition-transform shadow-sm`}>
+                <div className="absolute top-0 right-0 w-20 h-20 rounded-full bg-black/[0.02] -translate-y-1/2 translate-x-1/2" />
                 <div className="flex items-center gap-2 mb-3">
                   <div className={`w-2 h-2 rounded-full ${stat.dotColor} shadow-[0_0_6px] shadow-current`} />
-                   <span className="text-white/90 text-[10px] uppercase tracking-[0.15em] font-semibold">{stat.label}</span>
+                   <span className="text-foreground/70 text-[10px] uppercase tracking-[0.15em] font-semibold">{stat.label}</span>
                  </div>
                  <p className={`${stat.color} text-2xl md:text-3xl font-extrabold ${stat.glow} mb-1`}>{stat.value}</p>
-                 <p className={`${stat.color} opacity-70 text-[11px] font-medium`}>{stat.sub}</p>
+                 <p className={`${stat.color} opacity-80 text-[11px] font-medium`}>{stat.sub}</p>
               </div>
             ))}
           </div>
