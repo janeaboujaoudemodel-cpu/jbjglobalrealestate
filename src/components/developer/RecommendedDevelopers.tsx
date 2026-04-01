@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Building, ArrowRight, Sparkles } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
-import { SafeImage } from "@/components/SafeImage";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 import { useUserBrowsingContext } from "@/hooks/useUserBrowsingContext";
 
 interface RecommendedDevelopersProps {
