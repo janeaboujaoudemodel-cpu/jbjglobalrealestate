@@ -56,7 +56,7 @@ export default function InvestmentMetricsSection({
             </div>
             <p className="text-xs text-black font-medium uppercase tracking-wider mb-1">Rental Yield</p>
             <p className="text-2xl font-bold text-blue-600">{rentalYieldEstimate}%</p>
-            <p className="text-xs text-black/70 mt-1">Annual returns</p>
+            <p className="text-xs text-black/80 font-medium mt-1">Annual returns</p>
           </div>
         )}
 
