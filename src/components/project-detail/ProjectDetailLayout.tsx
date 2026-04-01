@@ -609,26 +609,26 @@ export default function ProjectDetailLayout({
           {/* USPs Row - Location, Bedrooms, Size, Handover, Payment Plan */}
           <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8">
             {project.location && (
-              <div className="flex items-center gap-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                <MapPin className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-2 text-white/70 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+                <MapPin className="w-5 h-5 text-amber-300/80" />
                 <span className="text-sm md:text-base">{project.location}</span>
               </div>
             )}
             {bedroomsText && (
-              <div className="flex items-center gap-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                <Bed className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-2 text-white/70 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+                <Bed className="w-5 h-5 text-amber-300/80" />
                 <span className="text-sm md:text-base">{bedroomsText}</span>
               </div>
             )}
             {sizeText && (
-              <div className="flex items-center gap-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                <Maximize className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-2 text-white/70 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+                <Maximize className="w-5 h-5 text-amber-300/80" />
                 <span className="text-sm md:text-base">{sizeText}</span>
               </div>
             )}
             {project.handover_date && (
-              <div className="flex items-center gap-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                <Calendar className="w-5 h-5 text-white" />
+              <div className="flex items-center gap-2 text-white/70 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+                <Calendar className="w-5 h-5 text-amber-300/80" />
                 <span className="text-sm md:text-base">{formatDisplayDate(project.handover_date)}</span>
               </div>
             )}
