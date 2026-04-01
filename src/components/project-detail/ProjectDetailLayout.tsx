@@ -582,26 +582,26 @@ export default function ProjectDetailLayout({
         <div className="relative z-20 container mx-auto px-4 md:px-8 h-full flex flex-col justify-end pb-8">
           {/* Starting Price - Above title */}
           {typeof project.price_from === "number" && (
-            <p className="text-lg md:text-xl text-white/80 mb-2">
-              Starting from <span className="text-gold font-bold text-2xl md:text-3xl">{formatPriceUtil(project.price_from)}</span>
+            <p className="text-lg md:text-xl text-white mb-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+              Starting from <span className="text-white font-bold text-2xl md:text-3xl">{formatPriceUtil(project.price_from)}</span>
             </p>
           )}
 
           {/* Project Title - BIGGER */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] mb-4">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.05] mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
             {project.name}
           </h1>
 
           {/* Developer */}
           {project.developer?.name && (
-            <p className="text-lg text-white/70 mb-6">
+            <p className="text-lg text-white/90 mb-6 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
               by{" "}
               {project.developer?.slug ? (
-                <Link to={`/developer/${project.developer.slug}`} className="text-gold hover:underline font-medium">
+                <Link to={`/developer/${project.developer.slug}`} className="text-white hover:underline font-semibold">
                   {project.developer.name}
                 </Link>
               ) : (
-                <span className="text-gold font-medium">{project.developer.name}</span>
+                <span className="text-white font-semibold">{project.developer.name}</span>
               )}
             </p>
           )}
@@ -609,26 +609,26 @@ export default function ProjectDetailLayout({
           {/* USPs Row - Location, Bedrooms, Size, Handover, Payment Plan */}
           <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8">
             {project.location && (
-              <div className="flex items-center gap-2 text-white/90">
-                <MapPin className="w-5 h-5 text-gold" />
+              <div className="flex items-center gap-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+                <MapPin className="w-5 h-5 text-white" />
                 <span className="text-sm md:text-base">{project.location}</span>
               </div>
             )}
             {bedroomsText && (
-              <div className="flex items-center gap-2 text-white/90">
-                <Bed className="w-5 h-5 text-gold" />
+              <div className="flex items-center gap-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+                <Bed className="w-5 h-5 text-white" />
                 <span className="text-sm md:text-base">{bedroomsText}</span>
               </div>
             )}
             {sizeText && (
-              <div className="flex items-center gap-2 text-white/90">
-                <Maximize className="w-5 h-5 text-gold" />
+              <div className="flex items-center gap-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+                <Maximize className="w-5 h-5 text-white" />
                 <span className="text-sm md:text-base">{sizeText}</span>
               </div>
             )}
             {project.handover_date && (
-              <div className="flex items-center gap-2 text-white/90">
-                <Calendar className="w-5 h-5 text-gold" />
+              <div className="flex items-center gap-2 text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+                <Calendar className="w-5 h-5 text-white" />
                 <span className="text-sm md:text-base">{formatDisplayDate(project.handover_date)}</span>
               </div>
             )}
@@ -638,31 +638,29 @@ export default function ProjectDetailLayout({
           <div className="flex flex-wrap gap-4">
             {brochurePrimary ? (
               <Button 
-                variant="primary" 
+                variant="hero" 
                 size="lg"
                 onClick={() => handleDocumentDownload("brochure", brochurePrimary.url)}
-                className="hover:shadow-[0_14px_45px_rgba(200,167,102,0.35)] hover:-translate-y-0.5 transition-all"
               >
                 <Download className="w-5 h-5" />
                 Download Brochure
               </Button>
             ) : (
               <Button 
-                variant="primary" 
+                variant="hero" 
                 size="lg"
                 onClick={() => {
                   setCaptureDocType("brochure");
                   setCaptureDocUrl(undefined);
                   setLeadCaptureOpen(true);
                 }}
-                className="hover:shadow-[0_14px_45px_rgba(200,167,102,0.35)] hover:-translate-y-0.5 transition-all"
               >
                 <FileText className="w-5 h-5" />
                 Request Brochure
               </Button>
             )}
             <Button 
-              variant="primary" 
+              variant="hero" 
               size="lg"
               onClick={() => {
                 setCaptureDocType("brochure");
