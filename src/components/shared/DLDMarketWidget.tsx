@@ -165,7 +165,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     <span className="text-emerald-400 text-[10px] uppercase tracking-wider font-bold">Off-Plan</span>
                   </div>
                   <p className="text-emerald-300 text-lg font-extrabold">{ytd2026.offPlan.toLocaleString()}</p>
-                  <p className="text-emerald-400/60 text-[10px] font-medium">{offPlanPct}% of total</p>
+                  <p className="text-emerald-400 text-[10px] font-medium">{offPlanPct}% of total</p>
                 </div>
                 <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
