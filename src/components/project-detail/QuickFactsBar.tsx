@@ -107,7 +107,7 @@ export default function QuickFactsBar({
         {updatedAt && (
           <>
             <div className="w-px h-6 bg-border" />
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5 text-xs text-black/70 font-medium">
               <Clock className="w-3.5 h-3.5" />
               <span>Updated: {formatDate(updatedAt)}</span>
             </div>

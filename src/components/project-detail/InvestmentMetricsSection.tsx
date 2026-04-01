@@ -74,7 +74,7 @@ export default function InvestmentMetricsSection({
       </div>
 
       {/* Disclaimer */}
-      <p className="text-xs text-black/60 text-center mt-4 italic">
+      <p className="text-xs text-black/80 text-center mt-4 italic">
         * Investment metrics are estimates based on market analysis. Actual returns may vary. 
         Past performance is not indicative of future results.
       </p>
