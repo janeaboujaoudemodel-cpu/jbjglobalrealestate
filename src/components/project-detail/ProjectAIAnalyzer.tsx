@@ -530,22 +530,22 @@ export const ProjectAIAnalyzer = ({
               </div>
 
               {/* Cons — only show if verified cons exist */}
-              <div className="bg-red-50 border border-red-200 rounded-2xl p-6 shadow-sm">
+              <div className="bg-gradient-to-br from-red-950 to-red-900/90 border-2 border-red-500/40 rounded-2xl p-6 shadow-[0_4px_20px_rgba(220,38,38,0.2)]">
                 <div className="flex items-center gap-2 mb-4">
-                  <ThumbsDown className="w-5 h-5 text-red-500" />
-                  <h3 className="font-bold text-red-800 text-lg">Cons</h3>
+                  <ThumbsDown className="w-5 h-5 text-red-400 drop-shadow-[0_0_6px_rgba(248,113,113,0.5)]" />
+                  <h3 className="font-bold text-red-300 text-lg drop-shadow-[0_0_4px_rgba(248,113,113,0.3)]">Cons</h3>
                 </div>
                 {consList.length > 0 ? (
                   <ul className="space-y-2">
                     {consList.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 bg-white/70 rounded-lg px-3 py-2 border border-red-100">
+                      <li key={i} className="flex items-start gap-2 bg-red-500/10 rounded-lg px-3 py-2 border border-red-500/20">
                         <XCircle className="w-4 h-4 text-red-400 mt-0.5 flex-shrink-0" />
-                        <span className="text-red-900 text-sm leading-snug">{item}</span>
+                        <span className="text-white/90 text-sm leading-snug">{item}</span>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-red-700 text-sm font-medium">No significant risks identified by AI analysis.</p>
+                  <p className="text-red-400 text-sm font-semibold">No significant risks identified by AI analysis.</p>
                 )}
               </div>
             </div>
