@@ -261,10 +261,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </div>
 
             {/* Top 10 Nationalities */}
-            <div className="bg-white/[0.04] rounded-2xl p-6 border border-gold/20 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl p-6 border border-gold/20 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <Globe className="w-4 h-4 text-gold" />
-                <h3 className="text-white text-sm font-bold">Top 10 Buyer Nationalities</h3>
+                <h3 className="text-foreground text-sm font-bold">Top 10 Buyer Nationalities</h3>
               </div>
               <div className="space-y-2">
                 {topNationalities.slice(0, 10).map((nat, i) => {
@@ -275,8 +275,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     'from-indigo-500 to-indigo-400'
                   ];
                   const textColors = [
-                    'text-emerald-400', 'text-blue-400', 'text-red-400', 'text-amber-400', 'text-purple-400',
-                    'text-cyan-400', 'text-rose-400', 'text-teal-400', 'text-orange-400', 'text-indigo-400'
+                    'text-emerald-600', 'text-blue-600', 'text-red-600', 'text-amber-600', 'text-purple-600',
+                    'text-cyan-600', 'text-rose-600', 'text-teal-600', 'text-orange-600', 'text-indigo-600'
                   ];
                   const bgColors = [
                     'bg-emerald-500', 'bg-blue-500', 'bg-red-400', 'bg-amber-500', 'bg-purple-500',
@@ -287,20 +287,20 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
                   return (
                     <div key={nat.country} className="relative rounded-lg overflow-hidden">
-                      <div className="absolute inset-0 bg-white/[0.03] rounded-lg" />
+                      <div className="absolute inset-0 bg-stone-50 rounded-lg" />
                       <div
-                        className={`absolute inset-y-0 left-0 bg-gradient-to-r ${barColors[i % barColors.length]} opacity-15 rounded-lg`}
+                        className={`absolute inset-y-0 left-0 bg-gradient-to-r ${barColors[i % barColors.length]} opacity-10 rounded-lg`}
                         style={{ width: `${barWidth}%` }}
                       />
                       <div className="relative flex items-center justify-between px-3 py-2.5">
                         <div className="flex items-center gap-2.5">
                           <span className="text-lg leading-none">{nat.flag}</span>
-                          <span className="text-white/90 font-medium text-sm">{nat.country}</span>
+                          <span className="text-foreground font-medium text-sm">{nat.country}</span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <div className="w-24 h-2.5 bg-black/30 rounded-full overflow-hidden border border-white/5">
+                          <div className="w-24 h-2.5 bg-stone-200 rounded-full overflow-hidden">
                             <div
-                              className={`h-full ${bgColors[i % bgColors.length]} rounded-full shadow-[0_0_8px_rgba(255,255,255,0.15)]`}
+                              className={`h-full ${bgColors[i % bgColors.length]} rounded-full`}
                               style={{ width: `${nat.percentage * 4}%` }}
                             />
                           </div>
