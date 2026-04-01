@@ -49,7 +49,7 @@ export default function QuickFactsBar({
   ].filter(f => f.show);
 
   const getStatusColor = (status?: string | null) => {
-    if (!status) return "bg-muted text-muted-foreground";
+    if (!status) return "bg-red-50 text-red-600 border-red-200";
     const s = status.toLowerCase();
     if (s.includes("available") || s.includes("selling")) return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
     if (s.includes("limited") || s.includes("few")) return "bg-amber-500/20 text-amber-400 border-amber-500/30";
