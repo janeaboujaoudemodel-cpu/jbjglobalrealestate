@@ -44,7 +44,7 @@ export default function InvestmentMetricsSection({
             </div>
             <p className="text-xs text-black font-medium uppercase tracking-wider mb-1">Estimated ROI</p>
             <p className="text-2xl font-bold text-emerald-600">{roiEstimate}%</p>
-            <p className="text-xs text-black/70 mt-1">Capital appreciation</p>
+            <p className="text-xs text-black/80 font-medium mt-1">Capital appreciation</p>
           </div>
         )}
 
