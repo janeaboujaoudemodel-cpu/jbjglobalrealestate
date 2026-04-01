@@ -221,10 +221,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
           {/* Top Areas + Nationalities */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Top 10 Areas */}
-            <div className="bg-white/[0.04] rounded-2xl p-6 border border-gold/20 backdrop-blur-sm">
+            <div className="bg-white rounded-2xl p-6 border border-gold/20 shadow-sm">
               <div className="flex items-center gap-2 mb-5">
                 <MapPin className="w-4 h-4 text-gold" />
-                <h3 className="text-white text-sm font-bold">Top 10 Areas by Transactions</h3>
+                <h3 className="text-foreground text-sm font-bold">Top 10 Areas by Transactions</h3>
               </div>
               <div className="space-y-2">
                 {topAreas2026.slice(0, 10).map((area, i) => {
@@ -239,20 +239,19 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                   ];
                   return (
                     <div key={area.area} className={`relative rounded-lg overflow-hidden ${isHighlighted ? "ring-1 ring-gold/50" : ""}`}>
-                      {/* Background bar */}
-                      <div className="absolute inset-0 bg-white/[0.03] rounded-lg" />
+                      <div className="absolute inset-0 bg-stone-50 rounded-lg" />
                       <div
                         className={`absolute inset-y-0 left-0 bg-gradient-to-r ${barColors[i]} opacity-15 rounded-lg`}
                         style={{ width: `${barWidth}%` }}
                       />
                       <div className="relative flex items-center justify-between px-3 py-2.5">
                         <div className="flex items-center gap-2.5">
-                          <span className="text-gold/80 text-[10px] font-bold w-5 text-center bg-gold/10 rounded py-0.5">{i + 1}</span>
-                          <span className={`text-sm font-medium ${isHighlighted ? "text-gold" : "text-white/90"}`}>{area.area}</span>
+                          <span className="text-gold text-[10px] font-bold w-5 text-center bg-gold/10 rounded py-0.5">{i + 1}</span>
+                          <span className={`text-sm font-medium ${isHighlighted ? "text-gold" : "text-foreground"}`}>{area.area}</span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-white/80 text-xs font-bold">{area.transactions.toLocaleString()}</span>
-                          <span className="text-emerald-400 text-xs font-bold bg-emerald-500/10 px-2 py-0.5 rounded-full">{area.change}</span>
+                          <span className="text-foreground text-xs font-bold">{area.transactions.toLocaleString()}</span>
+                          <span className="text-emerald-600 text-xs font-bold bg-emerald-50 px-2 py-0.5 rounded-full">{area.change}</span>
                         </div>
                       </div>
                     </div>
