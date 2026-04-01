@@ -95,21 +95,21 @@ export default function ReportIssueButton({
   return (
     <>
       {/* Yellow Banner */}
-      <div className={`rounded-xl border border-amber-400/50 bg-gradient-to-r from-amber-50 to-amber-100/80 p-4 flex items-center justify-between gap-4 flex-wrap ${className}`}>
+      <div className={`rounded-xl border-2 border-red-500/40 bg-gradient-to-r from-red-950 to-red-900/90 p-4 flex items-center justify-between gap-4 flex-wrap shadow-[0_4px_20px_rgba(220,38,38,0.15)] ${className}`}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-amber-400/20 flex items-center justify-center flex-shrink-0">
-            <AlertTriangle className="w-5 h-5 text-amber-600" />
+          <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 ring-2 ring-red-400/30">
+            <AlertTriangle className="w-5 h-5 text-red-400" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-amber-900">Noticed something incorrect?</p>
-            <p className="text-xs text-amber-700">Help us keep this project up-to-date</p>
+            <p className="text-sm font-semibold text-white/95">Noticed something incorrect?</p>
+            <p className="text-xs text-red-300/80">Help us keep this project up-to-date</p>
           </div>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={() => setOpen(true)}
-          className="border-amber-400 text-amber-800 hover:bg-amber-200/50 whitespace-nowrap"
+          className="border-red-400/60 text-red-200 hover:bg-red-500/20 hover:text-white whitespace-nowrap"
         >
           <AlertCircle className="w-4 h-4 mr-1" />
           Report an issue
