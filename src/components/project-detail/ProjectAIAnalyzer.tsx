@@ -326,20 +326,30 @@ export const ProjectAIAnalyzer = ({
                   <p className="text-red-600 text-sm font-medium">Issue: Area overview data not available.</p>
                 )}
               </div>
-              <div className="bg-gradient-to-br from-[#1a1a1a] via-[#2a2520] to-[#1a1815] rounded-2xl p-6 shadow-lg border border-emerald-500/30 flex flex-col items-center justify-center text-center">
-                <Star className="w-8 h-8 text-emerald-400 mb-2" />
+              <div className="relative overflow-hidden bg-gradient-to-br from-[#0a1628] via-[#122040] to-[#0d1a30] rounded-2xl p-6 shadow-2xl border border-emerald-400/40 flex flex-col items-center justify-center text-center">
+                {/* Glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 via-transparent to-blue-500/10 pointer-events-none" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent rounded-full" />
+                
+                <Star className="w-9 h-9 text-amber-400 mb-2 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)] relative z-10" />
                 {ratingScore !== null ? (
                   <>
-                    <div className="text-5xl font-bold text-emerald-400 mb-1">{ratingScore}</div>
-                    <div className="text-emerald-300 text-sm font-semibold">/10 Investment Rating</div>
+                    <div className="relative z-10">
+                      <span className="text-5xl font-extrabold bg-gradient-to-r from-emerald-300 via-emerald-400 to-teal-300 bg-clip-text text-transparent drop-shadow-lg">{ratingScore}</span>
+                    </div>
+                    <div className="text-emerald-300 text-sm font-bold tracking-wide uppercase mt-1 relative z-10">/10 Investment Rating</div>
+                    <div className="flex items-center gap-1.5 mt-2 relative z-10">
+                      <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="text-emerald-400 text-[10px] font-semibold uppercase tracking-widest">Strong Buy Signal</span>
+                    </div>
                     {sections?.rating && (
-                      <p className="text-white/90 text-xs mt-3 leading-relaxed font-medium">
+                      <p className="text-blue-100/90 text-xs mt-3 leading-relaxed font-medium relative z-10">
                         — {cleanMarkdown(sections.rating).replace(/\d+(?:\.\d+)?\s*(?:\/|out of)\s*10/i, '').replace(/^[•\s.*:_-]+/g, '').trim()}
                       </p>
                     )}
                   </>
                 ) : (
-                  <p className="text-red-400 text-xs font-medium">Issue: Rating not available.</p>
+                  <p className="text-red-400 text-xs font-medium relative z-10">Issue: Rating not available.</p>
                 )}
               </div>
             </div>
