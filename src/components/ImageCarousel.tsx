@@ -191,7 +191,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                   type="button"
                 >
                   <img
-                    src={upscaleCdnImageUrl(image.image_url, 464, 312)}
+                    src={getHighResImageUrl(image.image_url, "464x312")}
                     alt={image.alt_text || `Thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"
                     loading="lazy"
