@@ -133,7 +133,9 @@ const ContinueSearching = ({
   const hasUserHistory = uniqueItems.length > 0;
   const displayItems = hasUserHistory ? uniqueItems.slice(0, limit) : popularProjects;
 
-  const sectionTitle = title || t("home.continueSearching", "Continue Searching for Your Dream Property");
+  const sectionTitle = hasUserHistory
+    ? (title || t("home.continueSearching", "Continue Searching for Your Dream Property"))
+    : "Trending Projects in Dubai";
 
   const isEmpty = displayItems.length === 0;
 
