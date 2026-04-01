@@ -122,17 +122,17 @@ const PremiumBrochureCard = ({
             `,
           }}
         >
-          {/* Dynamic project image background - subtle opacity for premium readability */}
+          {/* Dynamic project image background */}
           <div 
-            className="absolute inset-0 bg-cover bg-center opacity-30"
+            className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${projectImageUrl || BROCHURE_BG_URL})` }}
           />
           
-          {/* Rich dark overlay for premium text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/50" />
+          {/* Gradient overlay for text contrast - heavier at bottom where text lives */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/30" />
           
           {/* Premium Gold Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-gold/20 via-transparent to-gold/8" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-gold/15 via-transparent to-gold/5" />
           
           {/* Spine effect on left - book binding */}
           <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
