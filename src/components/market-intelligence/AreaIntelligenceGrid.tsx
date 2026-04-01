@@ -64,7 +64,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
                 <h3 className="text-black font-semibold group-hover:text-gold transition-colors">
                   {area.area}
                 </h3>
-                <p className="text-black/50 text-xs">Dubai, UAE</p>
+                <p className="text-black/80 font-medium text-xs">Dubai, UAE</p>
               </div>
             </div>
             <TrendBadge trend={area.trend} />
