@@ -127,7 +127,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               </div>
             </div>
             <div className="bg-white/70 rounded-xl p-5 border border-blue-200">
-              <p className="text-black/70 text-xs uppercase tracking-wider mb-3 font-semibold">Cash vs Mortgage</p>
+              <p className="text-black font-semibold text-xs uppercase tracking-wider mb-3">Cash vs Mortgage</p>
               <div className="h-5 rounded-full overflow-hidden mb-2 flex shadow-inner">
                 <div className="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-l-full" style={{ width: `${cashPct}%` }} />
                 <div className="h-full bg-gradient-to-r from-amber-400 to-amber-500 flex-1 rounded-r-full" />
