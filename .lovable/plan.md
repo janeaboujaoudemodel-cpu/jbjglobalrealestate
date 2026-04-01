@@ -1,38 +1,28 @@
 
 
-## Fix Developer Logo — Remove White Background, Keep Logo Only
+## Add White Background to Developer Logo Containers
 
 ### What you want
-- No white background behind logos
-- Logo displayed at full fit with its original colors (e.g., Bloom in red, not on white)
-- Slightly rounded edges on the container
-- Applied globally to ALL developer logos across the entire platform
+- Transparent logos (e.g., Emaar, DAMAC) get a white square background so they're visible and consistent
+- Logos that already have their own colored background (e.g., Bloom's red square) stay the same — the white won't show because the logo image fills the container
+- All logos maintain the same size box with rounded edges for visual consistency
 
 ### Change — Single file
 
 **`src/components/ui/DeveloperLogo.tsx`**
 
-Remove `bg-white`, `p-1.5`, and `shadow-md` from the container. Keep `object-contain` so logos are never cropped. Use `rounded-md` for subtle rounding instead of `rounded-xl`.
+Add `bg-white` back to the container div. Since the img uses `object-contain` and fills the full container, logos with built-in colored backgrounds (like Bloom) will cover the white completely, while transparent logos will show the white behind them.
 
 ```tsx
 <div className={cn(
-  "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center",
+  "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-white",
   className
 )}>
-  <img
-    src={src}
-    alt={alt}
-    loading={loading}
-    onError={...}
-    className="block h-full w-full rounded-md object-contain"
-  />
-</div>
 ```
 
-### Result
-- Transparent container — no white box behind any logo
-- Logos show in their brand colors (Bloom red, Emaar gold, etc.)
-- `object-contain` ensures full-fit, no cropping
-- Slight `rounded-md` rounding on edges
-- Applies everywhere: Handpicked, Continue Searching, Developer Cards, Recommended Developers
+One line change. Applies globally to all sections: Handpicked For You, Continue Searching, Developer Cards, Recommended Developers.
+
+### Technical note
+- `bg-white` is only visible when the logo PNG/WebP has transparency
+- Logos with opaque colored backgrounds (Bloom red, etc.) naturally cover the white — no conditional logic needed
 
