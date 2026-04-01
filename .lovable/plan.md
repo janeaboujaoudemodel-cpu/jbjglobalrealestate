@@ -1,97 +1,84 @@
 
 
-## Fix All Remaining Faded/Gray Text Across Data Components
+## Fix All Faded/Gray Data Colors on Project Detail & AI Intelligence
 
-### Issues Found
+### Problems Identified
 
-**AreaIntelligenceGrid.tsx:**
-- Line 67: `text-black/50` on "Dubai, UAE" subtitle
-- Lines 76, 83: `text-black/60` on "Price Index" and "Rental Index" labels
-- Line 121: `text-black/60` on "Year-over-Year" label
-- Line 130: `text-black/70` on highlights text
-- Line 171: `text-black/70` on section description
+**1. ProjectAIAnalyzer.tsx — Major Issues (the page you're viewing)**
 
-**AIMarketInsights.tsx:**
-- Line 149: `text-black/70` on section description
-- Line 170: `text-black/70` on insight body text
-- Line 189: `text-black/70` on narrative generator description
-- Line 238: `text-black/80` on generated narrative text (acceptable but could be stronger)
-- Line 257: `text-black/70` on disclaimer text
+| Location | Current | Problem |
+|----------|---------|---------|
+| Rating card (dark bg) | `text-gray-600` for rating explanation | Invisible on dark background |
+| Rating subtitle | `text-gold/70` | Faded, low contrast |
+| Price/sqft value | `text-gold` | Should be vibrant emerald |
+| Price/sqft `/sqft` label | `text-gray-600` | Gray, faded |
+| Price/sqft area average | `text-gray-600` | Gray |
+| Dubai Avg bar color | `#9CA3AF` (gray) | Must be a distinct color |
+| Y-axis tick fill | `#71717a` (gray) | Must be black |
+| Supply/Demand absorption | `text-gold` | Should be vibrant blue |
+| Supply/Demand labels | `text-gray-600` | Gray, faded |
+| Supply/Demand progress bar | Gold gradient | Should be blue-to-emerald |
+| Investment Metrics labels | `text-gold/60` | Extremely faded on dark cards |
+| Investment Metrics values | `text-gold` | Should use emerald/blue |
+| All body/detail text | `text-gray-600`, `text-gray-700` | Faded |
+| Footer disclaimer | `text-gray-600` | Faded |
+| Loading state text | `text-gray-600` | Faded |
+| "Not available" messages | `text-gray-600 italic` | Should be red (issue) |
 
-**MarketOverviewDashboard.tsx:**
-- Line 94: `text-black/80` on section description (borderline)
-- Line 156: `text-black/70` on quarterly trend labels
-- Line 173: `text-black/70` on source text
-- Line 195: `text-black/70` on volume text
-- Line 221: `text-black/50` on bullet separator
-- Line 222: `text-black/70` on data source text
+**2. ProjectDetailTabs.tsx — All labels gray**
 
-**DLDMarketWidget.tsx:**
-- Line 93: `text-black/70` on date text
-- Line 109: `text-black/80` on stat labels
-- Line 119: `text-black/70` on section label
-- Line 130: `text-black/70` on section label
-- Line 205: `text-black/60` on disclaimer
+| Location | Current | Problem |
+|----------|---------|---------|
+| Tab triggers | `text-gray-600` | Faded inactive tabs |
+| All detail labels | `text-gray-600 text-sm` | Gray labels for Starting Price, Handover, etc. |
+| Description text | `text-gray-600` | Faded |
+| All "coming soon" messages | `text-gray-600` | Should be red (issue) |
 
-**DataSourcesPanel.tsx:**
-- Line 78: `text-black/80` on description
-- Line 85: `text-black/70` on data type tags
-- Lines 128, 131: `text-black` on trust indicators — but the section has a DARK background (`from-[hsl(32,28%,13%)]`), so black text is invisible here
+**3. QuickFactsBar.tsx**
 
-**ClientMarketSnapshot.tsx:**
-- Line 126: `text-muted-foreground` on info icon
-- Line 193: `text-black/70` on explanation text
-- Line 226: `text-black/60` on disclaimer
+| Location | Current | Problem |
+|----------|---------|---------|
+| Fact labels | `text-muted-foreground` | Faded |
+| Updated date | `text-muted-foreground` | Faded |
+| No-status fallback | `bg-muted text-muted-foreground` | Gray |
 
 ### Plan
 
-#### File 1: `AreaIntelligenceGrid.tsx`
-- Line 67: `text-black/50` → `text-black/80 font-medium`
-- Lines 76, 83: `text-black/60` → `text-black font-medium`
-- Line 121: `text-black/60` → `text-black font-medium`
-- Line 130: `text-black/70` → `text-black/90`
-- Line 171: `text-black/70` → `text-black/90`
+#### File 1: `ProjectAIAnalyzer.tsx` — Complete color overhaul
 
-#### File 2: `AIMarketInsights.tsx`
-- Line 149: `text-black/70` → `text-black/90`
-- Line 170: `text-black/70` → `text-black/90`
-- Line 189: `text-black/70` → `text-black/90`
-- Line 257: `text-black/70` → `text-black/80`
+- **Rating card (dark bg):** `text-gray-600` → `text-white/80` for explanation text; `text-gold/70` → `text-gold` for subtitle
+- **Price/sqft:** Large value `text-gold` → `text-emerald-600`; `/sqft` and average labels `text-gray-600` → `text-black/80 font-medium`
+- **Dubai Avg bar:** `#9CA3AF` → `#3B82F6` (blue) to differentiate from area price
+- **Y-axis ticks:** `fill: "#71717a"` → `fill: "#111111"`
+- **Supply/Demand:** Absorption `text-gold` → `text-blue-600`; progress bar gold gradient → `linear-gradient(90deg, #3B82F6, #10B981)`; labels `text-gray-600` → `text-black/80 font-medium`
+- **Investment Metrics dark cards:** Labels `text-gold/60` → `text-white/80 font-medium`; Rental Yield value `text-gold` → `text-blue-400`; Capital Growth value `text-gold` → `text-emerald-400`
+- **All body text:** `text-gray-700` → `text-black/90`; `text-gray-600` → `text-black/80`
+- **"Not available" messages:** `text-gray-600 italic` → `text-red-600 font-medium` (issue = red)
+- **Footer:** `text-gray-600` → `text-black/80`
+- **Loading text:** `text-gray-600` → `text-black/80`
 
-#### File 3: `MarketOverviewDashboard.tsx`
-- Line 156: `text-black/70` → `text-black font-medium`
-- Line 173: `text-black/70` → `text-black/90`
-- Line 221: `text-black/50` → `text-black/70`
+#### File 2: `ProjectDetailTabs.tsx`
 
-#### File 4: `DLDMarketWidget.tsx`
-- Line 93: `text-black/70` → `text-black/90`
-- Line 119: `text-black/70` → `text-black font-medium`
-- Line 130: `text-black/70` → `text-black font-medium`
-- Line 205: `text-black/60` → `text-black/80`
+- Tab triggers: `text-gray-600` → `text-black/80`
+- All detail labels (Starting Price, Handover, etc.): `text-gray-600 text-sm` → `text-black/80 text-sm font-medium`
+- Description text: `text-gray-600` → `text-black/90`
+- "Coming soon" / empty states: `text-gray-600` → `text-red-600 font-medium`
 
-#### File 5: `DataSourcesPanel.tsx` — Critical fix
-- Trust indicators (line 128): `text-black` → `text-white` (dark background makes black text invisible)
-- Line 131: Trust indicator text stays `text-sm` but needs `text-white`
-- Line 78: `text-black/80` → `text-black/90`
-- Line 85: `text-black/70` → `text-black font-medium`
+#### File 3: `QuickFactsBar.tsx`
 
-#### File 6: `ClientMarketSnapshot.tsx`
-- Line 126: `text-muted-foreground` → `text-black/70`
-- Line 193: `text-black/70` → `text-black/90`
-- Line 226: `text-black/60` → `text-black/80`
+- Fact labels: `text-muted-foreground` → `text-black/80 font-medium`
+- Updated date: `text-muted-foreground` → `text-black/70`
+- No-status fallback: `bg-muted text-muted-foreground` → `bg-red-50 text-red-600 border-red-200`
 
-#### File 7: Take screenshot to verify
+#### File 4: `InvestmentMetricsSection.tsx` — Already mostly fixed, verify dark-card contrast
 
-After all fixes, use browser tools to screenshot the market intelligence page and confirm no faded text remains.
+- Confirm all metric labels and values use the semantic colors from the previous fix
 
 ### Files Modified
 
 | File | Changes |
 |------|---------|
-| `src/components/market-intelligence/AreaIntelligenceGrid.tsx` | Bump all /50, /60, /70 opacity text to readable levels |
-| `src/components/market-intelligence/AIMarketInsights.tsx` | Bump all /70 text to /90 |
-| `src/components/market-intelligence/MarketOverviewDashboard.tsx` | Fix remaining faded labels |
-| `src/components/shared/DLDMarketWidget.tsx` | Fix remaining faded labels and disclaimer |
-| `src/components/market-intelligence/DataSourcesPanel.tsx` | Fix invisible black-on-dark trust indicators → white |
-| `src/components/client-intelligence/ClientMarketSnapshot.tsx` | Remove last muted-foreground, bump faded text |
+| `src/components/project-detail/ProjectAIAnalyzer.tsx` | Replace all gray with vibrant semantic colors; fix dark-card contrast; issues in red |
+| `src/components/project-detail/ProjectDetailTabs.tsx` | Replace all gray labels; empty states in red |
+| `src/components/project-detail/QuickFactsBar.tsx` | Replace muted-foreground; no-status → red |
 
