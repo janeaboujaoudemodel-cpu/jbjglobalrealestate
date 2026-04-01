@@ -167,11 +167,11 @@ export default function PropertiesMapView({ projects, hoveredProjectId, onProjec
                       <p className="text-[11px] text-gray-600">{t('map.by')} {project.developer_name}</p>
                     )}
                     {project.price_from ? (
-                      <p className="text-xs font-semibold text-amber-700 mt-1">
+                      <p className="text-xs font-semibold text-orange-600 mt-1">
                         {t('map.from')} AED {Math.round(Number(project.price_from)).toLocaleString()}
                       </p>
                     ) : (
-                      <p className="text-xs font-semibold text-amber-700 mt-1">{t('map.priceOnRequest')}</p>
+                      <p className="text-xs font-semibold text-orange-600 mt-1">{t('map.priceOnRequest')}</p>
                     )}
                     <div className="flex items-center gap-2 mt-1 text-[11px] text-gray-600">
                       {(project.bedrooms_min != null || project.bedrooms_max != null) && (

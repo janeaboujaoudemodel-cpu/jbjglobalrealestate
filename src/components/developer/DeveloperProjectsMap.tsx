@@ -92,7 +92,7 @@ export function DeveloperProjectsMap({ developerId, developerName, projects }: D
           <h4 style="font-weight: 600; font-size: 14px; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${project.name}</h4>
           ${locationHtml}
           <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-weight: 700; color: #d4af37; font-size: 14px;">${formatPrice(project.price_from)}</span>
+            <span style="font-weight: 700; color: #ea580c; font-size: 14px;">${formatPrice(project.price_from)}</span>
             <a href="/project/${project.slug}" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 12px; text-decoration: none; color: #333;">
               ${t('map.view')} →
             </a>

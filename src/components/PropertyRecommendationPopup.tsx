@@ -228,7 +228,7 @@ const PropertyRecommendationPopup = () => {
                         {project.area_name}
                       </p>
                     )}
-                    <p className="text-gold text-xs font-semibold mt-0.5">{formatPrice(project.price_from)}</p>
+                    <p className="text-price-orange text-xs font-semibold mt-0.5">{formatPrice(project.price_from)}</p>
                   </div>
                   <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-gold transition-colors flex-shrink-0" />
                 </button>

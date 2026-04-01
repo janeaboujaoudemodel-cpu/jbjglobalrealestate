@@ -951,7 +951,7 @@ const ListingAdmin = () => {
                             <p className="text-muted-foreground text-sm truncate">{project.developer?.name || (project as any).developer_name || "No Developer"}</p>
                             {project.emirate && <p className="text-muted-foreground/70 text-xs">{project.emirate}</p>}
                             {project.price_from && (
-                              <p className="text-gold font-bold text-sm mt-1">
+                              <p className="text-price-orange font-bold text-sm mt-1">
                                 From AED {(project.price_from / 1000000).toFixed(1)}M
                               </p>
                             )}

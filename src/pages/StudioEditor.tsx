@@ -711,7 +711,7 @@ export default function StudioEditor() {
                           <h4 className="text-foreground font-medium truncate">{property.name}</h4>
                           <p className="text-xs text-muted-foreground truncate">{property.developer_name}</p>
                           <div className="flex items-center gap-2 mt-2">
-                            <span className="text-xs text-gold">{formatPrice(property.price_from)}</span>
+                            <span className="text-xs text-price-orange">{formatPrice(property.price_from)}</span>
                             {property.area_name && (
                               <span className="text-xs text-muted-foreground flex items-center gap-1">
                                 <MapPin className="w-3 h-3" />

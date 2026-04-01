@@ -101,7 +101,7 @@ export function ProjectPreviewModal({ project, open, onOpenChange, onEdit, onOpe
             {project.price_from && (
               <div className="bg-background/60 rounded-lg p-3 text-center border border-gold/20">
                 <p className="text-xs text-muted-foreground">Starting Price</p>
-                <p className="text-sm font-bold text-gold">{formatPrice(project.price_from)}</p>
+                <p className="text-sm font-bold text-price-orange">{formatPrice(project.price_from)}</p>
               </div>
             )}
             {(project.bedrooms_min || project.bedrooms_max) && (

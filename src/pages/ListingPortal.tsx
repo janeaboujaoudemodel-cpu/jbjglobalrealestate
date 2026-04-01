@@ -412,7 +412,7 @@ const ListingPortal = () => {
                               <MapPin className="w-3 h-3" /> {listing.location}
                             </p>
                           )}
-                          <p className="text-gold font-bold text-lg mb-3">
+                          <p className="text-price-orange font-bold text-lg mb-3">
                             {formatPrice(listing.price, listing.currency)}
                           </p>
                           <div className="flex gap-4 text-gray-600 text-xs">

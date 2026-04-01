@@ -94,6 +94,10 @@ export default {
           dark: "hsl(var(--gold-dark))",
           foreground: "hsl(var(--gold-foreground))",
         },
+        "price-orange": {
+          DEFAULT: "hsl(var(--price-orange))",
+          glow: "hsl(var(--price-orange-glow))",
+        },
         // Champagne mapped to dark surfaces
         champagne: {
           light: "hsl(var(--champagne-1))",

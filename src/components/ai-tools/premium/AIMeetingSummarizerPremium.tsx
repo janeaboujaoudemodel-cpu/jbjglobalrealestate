@@ -957,7 +957,7 @@ const AIMeetingSummarizerPremium = () => {
                                   <p className="text-black text-sm font-medium">{p.name}</p>
                                   <p className="text-gray-600 text-xs">{p.area_name} · {p.property_type_label} · {p.bedrooms_min}-{p.bedrooms_max} BR</p>
                                 </div>
-                                <Badge className="bg-gold/10 text-gold border border-gold/30 text-xs">AED {(p.price_from || 0).toLocaleString()}</Badge>
+                                <Badge className="bg-orange-500/10 text-price-orange border border-orange-500/30 text-xs">AED {(p.price_from || 0).toLocaleString()}</Badge>
                               </div>
                             </a>
                           ))}

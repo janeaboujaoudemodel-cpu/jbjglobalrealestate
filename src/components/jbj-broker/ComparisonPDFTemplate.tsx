@@ -178,7 +178,7 @@ export function ComparisonPDFTemplate({
                     </button>
                     <p className="text-white font-medium text-sm truncate">{property.name}</p>
                     <p className="text-gray-600 text-xs">{property.location}</p>
-                    <p className="text-gold text-sm font-medium mt-1">{property.price}</p>
+                    <p className="text-price-orange text-sm font-medium mt-1">{property.price}</p>
                   </div>
                 ))}
               </div>
