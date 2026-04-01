@@ -1,0 +1,3 @@
+UPDATE projects SET cover_image_url = 'https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/Aljada_Central_Business_by_Arada_Properties_in_Muwaileh_Commercial_for_Sale_58b2b283f7.webp' WHERE slug = 'in-aljada-central-business' AND (cover_image_url IS NULL OR cover_image_url LIKE '%Base64%');
+
+UPDATE project_images SET image_url = 'https://d3h330vgpwpjr8.cloudfront.net/x/1920x1080/Aljada_Central_Business_by_Arada_Properties_in_Muwaileh_Commercial_for_Sale_58b2b283f7.webp' WHERE project_id = '561610a2-56fd-4ffd-8d0d-b41aed7998d3' AND image_url LIKE '%Base64%';
