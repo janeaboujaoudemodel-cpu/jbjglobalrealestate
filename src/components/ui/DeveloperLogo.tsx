@@ -30,7 +30,7 @@ export function DeveloperLogo({
   return (
     <div
       className={cn(
-        "w-14 h-14 rounded-xl bg-white p-1.5 shrink-0 shadow-md inline-flex items-center justify-center overflow-hidden",
+        "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center",
         className
       )}
     >
@@ -42,7 +42,7 @@ export function DeveloperLogo({
           setError(true);
           onError?.();
         }}
-        className="block h-full w-full object-contain"
+        className="block h-full w-full rounded-md object-contain"
       />
     </div>
   );
