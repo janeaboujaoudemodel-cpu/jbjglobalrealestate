@@ -6,6 +6,7 @@ import FavoriteButton from "@/components/FavoriteButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import LeadCaptureModal from "@/components/project-detail/LeadCaptureModal";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface ContinueSearchingProps {
   type?: RecentItemType;
@@ -257,25 +258,19 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         {/* Top-left: Developer logo or type badge */}
         <div className="absolute top-2 left-2 z-20" style={{ transform: "translateZ(30px)" }}>
           {showDevLogo ? (
-            <div className="w-9 h-9 rounded-lg bg-white shadow-lg overflow-hidden ring-1 ring-gold/30">
-              <img
-                src={item.developerLogo}
-                alt={item.subtitle || "Developer"}
-                className="w-full h-full object-contain"
-                loading="lazy"
-                onError={() => setLogoError(true)}
-              />
-            </div>
+            <DeveloperLogo
+              src={item.developerLogo}
+              alt={item.subtitle || "Developer"}
+              className="w-9 h-9 rounded-xl"
+              onError={() => setLogoError(true)}
+            />
           ) : showDevCardLogo ? (
-            <div className="w-9 h-9 rounded-lg bg-white shadow-lg overflow-hidden ring-1 ring-gold/30">
-              <img
-                src={item.imageUrl}
-                alt={item.name}
-                className="w-full h-full object-contain"
-                loading="lazy"
-                onError={() => setLogoError(true)}
-              />
-            </div>
+            <DeveloperLogo
+              src={item.imageUrl}
+              alt={item.name}
+              className="w-9 h-9 rounded-xl"
+              onError={() => setLogoError(true)}
+            />
           ) : (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-[9px] font-semibold uppercase tracking-wider text-gold border border-gold/20">
               <Icon className="w-2.5 h-2.5" />
