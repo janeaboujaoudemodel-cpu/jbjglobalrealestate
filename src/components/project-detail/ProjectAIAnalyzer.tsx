@@ -402,7 +402,7 @@ export const ProjectAIAnalyzer = ({
 
                     {/* Detail text */}
                     {sections?.pricePerSqft && (
-                      <p className="text-black/80 text-xs mt-3 leading-relaxed line-clamp-3">
+                      <p className="text-black/90 text-xs mt-3 leading-relaxed line-clamp-3">
                         {cleanMarkdown(sections.pricePerSqft)}
                       </p>
                     )}
