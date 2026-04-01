@@ -80,7 +80,7 @@ const CommunityDetail = () => {
       </div>
 
       {/* Content - Global locked gutter */}
-      <div className="jj-layer-2 -mt-20 relative z-10 mb-12">
+      <div className="jj-layer-2 -mt-20 relative z-10 mb-12 pb-8 md:pb-12">
         {/* Layer 2: Active Champagne */}
         <div className="jj-card-inner rounded-xl p-6 md:p-8 shadow-xl">
           {/* Layer 3: Locked Champagne - Community Info Card */}

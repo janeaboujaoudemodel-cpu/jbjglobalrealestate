@@ -538,7 +538,7 @@ Requirements:
         description="Submit your property for sale with JBJ Global Real Estate. Our guided listing tool helps you provide all necessary details for a successful sale."
       />
       
-      <main className="min-h-screen bg-black pt-20 pb-0">
+      <main className="min-h-screen bg-black pt-20 pb-12 md:pb-16">
         {/* Layer 2: Active Champagne Hero Section with proper gutters */}
         <div className="bg-gradient-to-br from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6] mx-[0.125rem] md:mx-2 lg:mx-4 xl:mx-6 2xl:mx-8 rounded-t-2xl">
           <div className="container mx-auto px-4 py-12">
