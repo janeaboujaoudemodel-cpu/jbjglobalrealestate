@@ -510,17 +510,17 @@ export const ProjectAIAnalyzer = ({
             {/* Row 4: Pros & Cons — styled pill rows */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Pros */}
-              <div className="bg-gradient-to-br from-[#0a1628] via-[#0d1a30] to-[#0a1225] border border-emerald-500/40 rounded-2xl p-6 shadow-lg shadow-emerald-500/5">
+              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
-                  <ThumbsUp className="w-5 h-5 text-emerald-400" />
-                  <h3 className="font-bold text-emerald-400 text-lg">Pros</h3>
+                  <ThumbsUp className="w-5 h-5 text-emerald-600" />
+                  <h3 className="font-bold text-emerald-700 text-lg">Pros</h3>
                 </div>
                 {prosList.length > 0 ? (
                   <ul className="space-y-2.5">
                     {prosList.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2.5 bg-emerald-500/10 rounded-lg px-3 py-2.5 border border-emerald-500/20">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
-                        <span className="text-white/90 text-sm leading-snug">{item}</span>
+                      <li key={i} className="flex items-start gap-2.5 bg-white rounded-lg px-3 py-2.5 border border-emerald-200">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-foreground text-sm leading-snug">{item}</span>
                       </li>
                     ))}
                   </ul>
