@@ -45,12 +45,12 @@ const typeIcon: Record<string, React.ReactNode> = {
 };
 
 const typeGradient: Record<string, string> = {
-  brochure: "from-gold/70 to-amber-800/80",
-  fact_sheet: "from-gold/60 to-amber-700/70",
-  payment_plan: "from-emerald-700/70 to-emerald-900/80",
-  floor_plan: "from-sky-700/70 to-sky-900/80",
-  inventory: "from-violet-700/70 to-violet-900/80",
-  renders: "from-rose-700/70 to-rose-900/80",
+  brochure: "from-black/80 via-black/60 to-gold/30",
+  fact_sheet: "from-black/80 via-black/60 to-amber-700/25",
+  payment_plan: "from-black/80 via-black/60 to-emerald-700/25",
+  floor_plan: "from-black/80 via-black/60 to-sky-700/25",
+  inventory: "from-black/80 via-black/60 to-violet-700/25",
+  renders: "from-black/80 via-black/60 to-rose-700/25",
 };
 
 export default function BookStyleDocuments({
