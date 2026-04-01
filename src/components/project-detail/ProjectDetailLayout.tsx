@@ -594,14 +594,14 @@ export default function ProjectDetailLayout({
 
           {/* Developer */}
           {project.developer?.name && (
-            <p className="text-lg text-white/90 mb-6 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+            <p className="text-lg text-white/60 mb-6 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
               by{" "}
               {project.developer?.slug ? (
-                <Link to={`/developer/${project.developer.slug}`} className="text-white hover:underline font-semibold">
+                <Link to={`/developer/${project.developer.slug}`} className="text-amber-200/90 hover:text-amber-100 hover:underline font-semibold transition-colors">
                   {project.developer.name}
                 </Link>
               ) : (
-                <span className="text-white font-semibold">{project.developer.name}</span>
+                <span className="text-amber-200/90 font-semibold">{project.developer.name}</span>
               )}
             </p>
           )}
