@@ -496,7 +496,7 @@ export const AreaAIAnalyzer = ({ areaName, emirate }: AreaAIAnalyzerProps) => {
             )}
             {stats.pricePerSqft && (
               <div className="bg-white border border-gold/20 rounded-xl p-4 text-center shadow-sm">
-                <div className="text-2xl font-bold text-gold">AED {stats.pricePerSqft.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-price-orange">AED {stats.pricePerSqft.toLocaleString()}</div>
                 <div className="text-gray-600 text-xs mt-1">Est. Price/sqft</div>
               </div>
             )}

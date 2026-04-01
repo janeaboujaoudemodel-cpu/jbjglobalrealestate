@@ -1051,7 +1051,7 @@ function ProjectPreview({ extracted, onSave, isSaving }: { extracted: ExtractedD
             {extracted.priceFrom && (
               <div className="text-right">
                 <p className="text-sm text-muted-foreground">Starting from</p>
-                <p className="text-xl font-bold text-gold">AED {extracted.priceFrom.toLocaleString()}</p>
+                <p className="text-xl font-bold text-price-orange">AED {extracted.priceFrom.toLocaleString()}</p>
                 {extracted.priceTo && (
                   <p className="text-sm text-muted-foreground">to AED {extracted.priceTo.toLocaleString()}</p>
                 )}
