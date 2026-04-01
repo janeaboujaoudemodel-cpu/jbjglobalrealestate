@@ -87,10 +87,7 @@ const ContinueSearching = ({
   const { items, clearAll, patchItem } = useRecentSearches(type);
   const [leadCaptureOpen, setLeadCaptureOpen] = useState(false);
 
-  if (items.length === 0) return null;
-
   const validItems = items.filter((i) => i && i.type && i.slug);
-  if (validItems.length === 0) return null;
 
   // Deduplicate properties by both slug AND id — each property appears only once
   const seenSlugs = new Set<string>();
@@ -107,6 +104,8 @@ const ContinueSearching = ({
   const displayItems = uniqueItems.slice(0, limit);
 
   const sectionTitle = title || t("home.continueSearching", "Continue Searching for Your Dream Property");
+
+  const isEmpty = displayItems.length === 0;
 
   return (
     <section className={`py-8 md:py-12 relative overflow-hidden ${className}`}>
@@ -127,25 +126,42 @@ const ContinueSearching = ({
               {sectionTitle}
             </h2>
           </div>
-          <div className="flex items-center gap-3">
+          {!isEmpty && (
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setLeadCaptureOpen(true)}
                 className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border border-gold/30 text-black text-xs font-semibold tracking-wide hover:shadow-lg hover:shadow-gold/20 transition-all duration-300"
               >
                 Register Your Interest
               </button>
-            <button
-              onClick={clearAll}
-              className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-            >
-              <X className="w-3 h-3" />
-              Clear
-            </button>
-          </div>
+              <button
+                onClick={clearAll}
+                className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+              >
+                <X className="w-3 h-3" />
+                Clear
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Walking Strip Carousel - seamless infinite loop */}
-        <WalkingStrip items={displayItems} patchItem={patchItem} />
+        {isEmpty ? (
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center mb-4">
+              <Home className="w-8 h-8 text-gold/50" />
+            </div>
+            <p className="text-white/70 text-sm mb-1">You haven't viewed any properties yet.</p>
+            <p className="text-white/40 text-xs mb-5">Your recently viewed properties, developers, and areas will appear here.</p>
+            <Link
+              to="/properties"
+              className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-gold to-gold-light text-black text-sm font-semibold hover:shadow-lg hover:shadow-gold/30 transition-all duration-300"
+            >
+              Explore Now
+            </Link>
+          </div>
+        ) : (
+          <WalkingStrip items={displayItems} patchItem={patchItem} />
+        )}
       </div>
 
       {/* Lead Capture Modal */}
