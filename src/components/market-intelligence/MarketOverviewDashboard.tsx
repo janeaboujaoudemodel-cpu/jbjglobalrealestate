@@ -153,7 +153,7 @@ export const MarketOverviewDashboard = () => {
                       ];
                       return (
                         <div key={quarter.quarter} className="flex items-center gap-4">
-                          <span className="text-black/70 text-sm w-20 font-medium">{quarter.quarter}</span>
+                          <span className="text-black font-medium text-sm w-20">{quarter.quarter}</span>
                           <div className="flex-1 h-8 bg-black/5 rounded-lg overflow-hidden relative shadow-inner">
                             <motion.div
                               className={`h-full bg-gradient-to-r ${qColors[idx % qColors.length]}`}
