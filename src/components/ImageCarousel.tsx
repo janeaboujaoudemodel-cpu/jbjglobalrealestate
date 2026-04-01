@@ -220,7 +220,6 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
               alt={images[currentIndex].alt_text || "Project image"}
               className="max-w-full max-h-full object-contain"
             />
-            />
             
             {/* Close button */}
             <Button
