@@ -316,20 +316,20 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Gifts row if available */}
           {ytd2026.gifts && ytd2026.gifts > 0 && (
-            <div className="mt-6 bg-purple-500/10 border border-purple-500/30 rounded-xl p-4 flex items-center justify-between">
+            <div className="mt-6 bg-purple-50 border border-purple-200 rounded-xl p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.6)]" />
-                <span className="text-purple-400 text-xs uppercase tracking-wider font-bold">Gift Transactions</span>
+                <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.5)]" />
+                <span className="text-purple-700 text-xs uppercase tracking-wider font-bold">Gift Transactions</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-purple-300 text-lg font-extrabold">{ytd2026.gifts.toLocaleString()}</span>
-                <span className="text-purple-400 text-xs font-medium">{giftsPct}% of total</span>
+                <span className="text-purple-600 text-lg font-extrabold">{ytd2026.gifts.toLocaleString()}</span>
+                <span className="text-purple-600 text-xs font-medium">{giftsPct}% of total</span>
               </div>
             </div>
           )}
 
           {/* Disclaimer */}
-          <p className="text-[10px] text-gold/60 text-center mt-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[10px] text-foreground/50 text-center mt-8 max-w-2xl mx-auto leading-relaxed">
             Sources: Dubai Land Department (DLD), RERA, DXB Interact. YTD 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
             <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
           </p>
