@@ -73,7 +73,7 @@ const AreaCard = ({ area }: { area: AreaMarketSnapshot }) => {
           {/* Metrics */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <div className="bg-white/50 rounded-lg p-3">
-              <div className="flex items-center gap-1 text-black/60 text-xs mb-1">
+              <div className="flex items-center gap-1 text-black font-medium text-xs mb-1">
                 <Home className="w-3 h-3" />
                 Price Index
               </div>
