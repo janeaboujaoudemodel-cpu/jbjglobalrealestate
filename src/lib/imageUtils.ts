@@ -254,6 +254,32 @@ export function optimizeStorageImageUrl(
 }
 
 /**
+ * Upscale CloudFront CDN image URLs from low-res thumbnails to high-res.
+ * Replaces e.g. /x/464x312/ with /x/1920x1080/ for gallery views,
+ * or /x/340x252/ with the requested size.
+ * Also handles /x/{width}x{height}/ patterns in off-plan paths.
+ */
+const CLOUDFRONT_SIZE_REGEX = /\/x\/\d+x\d+\//;
+const OFFPLAN_SIZE_REGEX = /\/\d+x\d+\//g;
+
+export function upscaleCdnImageUrl(
+  url: string | null | undefined,
+  targetWidth: number = 1920,
+  targetHeight: number = 1080
+): string {
+  if (!url) return '';
+  // CloudFront CDN pattern: /x/{w}x{h}/
+  if (CLOUDFRONT_SIZE_REGEX.test(url)) {
+    return url.replace(CLOUDFRONT_SIZE_REGEX, `/x/${targetWidth}x${targetHeight}/`);
+  }
+  // Off-plan nested path pattern: /340x252/ or /464x312/
+  if (url.includes('cloudfront') && OFFPLAN_SIZE_REGEX.test(url)) {
+    return url.replace(OFFPLAN_SIZE_REGEX, `/${targetWidth}x${targetHeight}/`);
+  }
+  return url;
+}
+
+/**
  * Extract the dominant background color from a loaded image by sampling its corner pixels.
  * Uses a hidden canvas. Falls back to white on cross-origin or other errors.
  */
