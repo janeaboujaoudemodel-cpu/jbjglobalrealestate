@@ -127,10 +127,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <div className="absolute top-0 right-0 w-20 h-20 rounded-full bg-white/[0.03] -translate-y-1/2 translate-x-1/2" />
                 <div className="flex items-center gap-2 mb-3">
                   <div className={`w-2 h-2 rounded-full ${stat.dotColor} shadow-[0_0_6px] shadow-current`} />
-                  <span className="text-white/70 text-[10px] uppercase tracking-[0.15em] font-semibold">{stat.label}</span>
-                </div>
-                <p className={`${stat.color} text-2xl md:text-3xl font-extrabold ${stat.glow} mb-1`}>{stat.value}</p>
-                <p className="text-white/50 text-[11px] font-medium">{stat.sub}</p>
+                   <span className="text-white/90 text-[10px] uppercase tracking-[0.15em] font-semibold">{stat.label}</span>
+                 </div>
+                 <p className={`${stat.color} text-2xl md:text-3xl font-extrabold ${stat.glow} mb-1`}>{stat.value}</p>
+                 <p className={`${stat.color} opacity-70 text-[11px] font-medium`}>{stat.sub}</p>
               </div>
             ))}
           </div>
