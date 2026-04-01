@@ -212,7 +212,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     <span className="text-amber-400 text-[10px] uppercase tracking-wider font-bold">Mortgage</span>
                   </div>
                   <p className="text-amber-300 text-lg font-extrabold">{ytd2026.mortgage.toLocaleString()}</p>
-                  <p className="text-amber-400/60 text-[10px] font-medium">{mortgagePct}% of total</p>
+                  <p className="text-amber-400 text-[10px] font-medium">{mortgagePct}% of total</p>
                 </div>
               </div>
             </div>
