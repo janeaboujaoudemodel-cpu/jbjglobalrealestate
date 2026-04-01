@@ -105,9 +105,11 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
         {/* Main Image - with background frame for vertical images */}
         <div className="aspect-[16/9] rounded-lg overflow-hidden bg-gradient-to-br from-muted via-muted/80 to-muted/60 relative group flex items-center justify-center">
           <img
-            src={images[currentIndex].image_url}
+            src={upscaleCdnImageUrl(images[currentIndex].image_url, 1920, 1080)}
             alt={images[currentIndex].alt_text || "Project image"}
             className="w-full h-full object-cover"
+            loading="eager"
+          />
           />
           
           {/* Overlay Controls */}
