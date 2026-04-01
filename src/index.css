@@ -261,6 +261,48 @@ All colors MUST be HSL.
   }
 }
 
+/* ============================================================
+ * GLOBAL DATA CONTRAST ENFORCEMENT
+ * Eliminates all faded gray text from data/metric/label contexts.
+ * Gray is FORBIDDEN for data values, labels, chart elements.
+ * ============================================================ */
+@layer utilities {
+  /* Bump all gray-500/600/700 text to high-contrast foreground */
+  .text-gray-500,
+  .text-gray-600,
+  .text-gray-700 {
+    color: hsl(0 0% 20%) !important;
+  }
+
+  /* Bump muted-foreground to readable contrast */
+  .text-muted-foreground {
+    color: hsl(0 0% 30%) !important;
+  }
+
+  /* Fix faded gold opacity text */
+  [class*="text-gold\/6"],
+  [class*="text-gold\/7"] {
+    color: hsl(0 0% 10%) !important;
+  }
+
+  /* Fix faded black opacity text */
+  [class*="text-black\/5"],
+  [class*="text-black\/6"] {
+    color: hsl(0 0% 20%) !important;
+  }
+
+  /* Semantic data status classes */
+  .data-positive, .status-positive, .pro, .metric-up {
+    color: #16a34a !important;
+  }
+  .data-negative, .status-negative, .con, .issue, .metric-down, .empty-state {
+    color: #dc2626 !important;
+  }
+  .data-accent, .status-neutral {
+    color: #2563eb !important;
+  }
+}
+
 /* Premium sparkle animation */
 @keyframes sparkle {
   0%, 100% { opacity: 0.3; transform: scale(1); }
