@@ -90,7 +90,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <Banknote className="w-6 h-6 text-gold" />
                 Dubai Market Intelligence
               </h2>
-              <p className="text-black/70 text-sm mt-1 font-medium">DLD Transaction Data • As of {today}</p>
+              <p className="text-black/90 text-sm mt-1 font-medium">DLD Transaction Data • As of {today}</p>
             </div>
             <span className="text-emerald-600 text-xl font-bold">{ytd2026.growth}</span>
           </div>
