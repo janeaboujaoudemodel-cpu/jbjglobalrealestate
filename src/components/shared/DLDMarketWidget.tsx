@@ -99,7 +99,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             <h2 className="text-white text-2xl md:text-3xl font-bold mb-2">
               Dubai Market Intelligence
             </h2>
-            <p className="text-white/60 text-sm font-medium">
+            <p className="text-gold/80 text-sm font-medium">
               DLD Transaction Data • As of {today}
             </p>
           </div>
@@ -111,8 +111,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <ArrowUpRight className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
-                <p className="text-white/80 text-xs uppercase tracking-wider font-semibold">YTD Market Growth</p>
-                <p className="text-white/60 text-[11px]">Year-over-year volume increase</p>
+                <p className="text-white/90 text-xs uppercase tracking-wider font-semibold">YTD Market Growth</p>
+                <p className="text-emerald-400/70 text-[11px]">Year-over-year volume increase</p>
               </div>
             </div>
             <div className="text-right">
@@ -127,10 +127,10 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <div className="absolute top-0 right-0 w-20 h-20 rounded-full bg-white/[0.03] -translate-y-1/2 translate-x-1/2" />
                 <div className="flex items-center gap-2 mb-3">
                   <div className={`w-2 h-2 rounded-full ${stat.dotColor} shadow-[0_0_6px] shadow-current`} />
-                  <span className="text-white/70 text-[10px] uppercase tracking-[0.15em] font-semibold">{stat.label}</span>
-                </div>
-                <p className={`${stat.color} text-2xl md:text-3xl font-extrabold ${stat.glow} mb-1`}>{stat.value}</p>
-                <p className="text-white/50 text-[11px] font-medium">{stat.sub}</p>
+                   <span className="text-white/90 text-[10px] uppercase tracking-[0.15em] font-semibold">{stat.label}</span>
+                 </div>
+                 <p className={`${stat.color} text-2xl md:text-3xl font-extrabold ${stat.glow} mb-1`}>{stat.value}</p>
+                 <p className={`${stat.color} opacity-70 text-[11px] font-medium`}>{stat.sub}</p>
               </div>
             ))}
           </div>
@@ -165,7 +165,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     <span className="text-emerald-400 text-[10px] uppercase tracking-wider font-bold">Off-Plan</span>
                   </div>
                   <p className="text-emerald-300 text-lg font-extrabold">{ytd2026.offPlan.toLocaleString()}</p>
-                  <p className="text-emerald-400/60 text-[10px] font-medium">{offPlanPct}% of total</p>
+                  <p className="text-emerald-400 text-[10px] font-medium">{offPlanPct}% of total</p>
                 </div>
                 <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
@@ -173,7 +173,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     <span className="text-red-400 text-[10px] uppercase tracking-wider font-bold">Secondary</span>
                   </div>
                   <p className="text-red-300 text-lg font-extrabold">{ytd2026.secondary.toLocaleString()}</p>
-                  <p className="text-red-400/60 text-[10px] font-medium">{secondaryPct}% of total</p>
+                  <p className="text-red-400 text-[10px] font-medium">{secondaryPct}% of total</p>
                 </div>
               </div>
             </div>
@@ -204,7 +204,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     <span className="text-blue-400 text-[10px] uppercase tracking-wider font-bold">Cash</span>
                   </div>
                   <p className="text-blue-300 text-lg font-extrabold">{ytd2026.cash.toLocaleString()}</p>
-                  <p className="text-blue-400/60 text-[10px] font-medium">{cashPct}% of total</p>
+                  <p className="text-blue-400 text-[10px] font-medium">{cashPct}% of total</p>
                 </div>
                 <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3">
                   <div className="flex items-center gap-1.5 mb-1">
@@ -212,7 +212,7 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                     <span className="text-amber-400 text-[10px] uppercase tracking-wider font-bold">Mortgage</span>
                   </div>
                   <p className="text-amber-300 text-lg font-extrabold">{ytd2026.mortgage.toLocaleString()}</p>
-                  <p className="text-amber-400/60 text-[10px] font-medium">{mortgagePct}% of total</p>
+                  <p className="text-amber-400 text-[10px] font-medium">{mortgagePct}% of total</p>
                 </div>
               </div>
             </div>
@@ -324,13 +324,13 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-purple-300 text-lg font-extrabold">{ytd2026.gifts.toLocaleString()}</span>
-                <span className="text-purple-400/60 text-xs font-medium">{giftsPct}% of total</span>
+                <span className="text-purple-400 text-xs font-medium">{giftsPct}% of total</span>
               </div>
             </div>
           )}
 
           {/* Disclaimer */}
-          <p className="text-[10px] text-white/50 text-center mt-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[10px] text-gold/60 text-center mt-8 max-w-2xl mx-auto leading-relaxed">
             Sources: Dubai Land Department (DLD), RERA, DXB Interact. YTD 2026 data. For informational purposes only. Does not constitute financial advice.{" "}
             <Link to="/contact" className="text-gold hover:underline">Contact our team</Link> for professional guidance.
           </p>
