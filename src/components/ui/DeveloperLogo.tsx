@@ -30,7 +30,7 @@ export function DeveloperLogo({
   return (
     <div
       className={cn(
-        "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center",
+        "w-14 h-14 rounded-md shrink-0 inline-flex items-center justify-center bg-white",
         className
       )}
     >
