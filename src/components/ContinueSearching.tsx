@@ -86,6 +86,35 @@ const ContinueSearching = ({
   const { t } = useLanguage();
   const { items, clearAll, patchItem } = useRecentSearches(type);
   const [leadCaptureOpen, setLeadCaptureOpen] = useState(false);
+  const [popularProjects, setPopularProjects] = useState<RecentItem[]>([]);
+
+  // Fetch popular projects from DB when user has no browsing history
+  useEffect(() => {
+    const validCount = items.filter((i) => i && i.type && i.slug).length;
+    if (validCount > 0) return; // User has history, skip
+
+    supabase
+      .from("projects")
+      .select("id, name, slug, cover_image_url, developer_name, location, emirate")
+      .eq("is_published", true)
+      .not("cover_image_url", "is", null)
+      .order("is_featured", { ascending: false })
+      .order("created_at", { ascending: false })
+      .limit(6)
+      .then(({ data }) => {
+        if (!data?.length) return;
+        const mapped: RecentItem[] = data.map((p: any) => ({
+          id: p.id,
+          type: "property" as RecentItemType,
+          name: p.name,
+          slug: p.slug,
+          imageUrl: p.cover_image_url,
+          subtitle: [p.location, p.emirate].filter(Boolean).join(", "),
+          viewedAt: Date.now(),
+        }));
+        setPopularProjects(mapped);
+      });
+  }, [items]);
 
   const validItems = items.filter((i) => i && i.type && i.slug);
 
@@ -101,7 +130,8 @@ const ContinueSearching = ({
     return true;
   });
 
-  const displayItems = uniqueItems.slice(0, limit);
+  const hasUserHistory = uniqueItems.length > 0;
+  const displayItems = hasUserHistory ? uniqueItems.slice(0, limit) : popularProjects;
 
   const sectionTitle = title || t("home.continueSearching", "Continue Searching for Your Dream Property");
 
