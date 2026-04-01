@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCurrency } from "@/hooks/useCurrency";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC', 'Meraas'];
 

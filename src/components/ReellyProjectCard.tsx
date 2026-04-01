@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { DeveloperLink } from "@/components/ui/developer-link";
 import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 import { getDeveloperLogoUrl, getDeveloperLogoBgColor } from "@/utils/developerLogo";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
  
 interface ReellyProjectCardProps {
   project: ReellyProject;
