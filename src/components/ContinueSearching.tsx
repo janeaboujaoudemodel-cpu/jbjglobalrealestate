@@ -182,21 +182,43 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
     }
   }, [item.id, item.type, item.developerLogo, item.subtitle, patchItem]);
 
-  // Self-heal: fetch missing cover image for properties
+  // Self-heal: fetch missing cover image for any type
   useEffect(() => {
-    if (item.type === "property" && !item.imageUrl && item.slug) {
-      supabase
-        .from("projects")
-        .select("cover_image_url, images:project_images(image_url)")
-        .eq("slug", item.slug)
-        .limit(1)
-        .maybeSingle()
-        .then(({ data }) => {
-          const url = data?.cover_image_url || (data?.images as any)?.[0]?.image_url;
-          if (url) {
-            patchItem(item.id, item.type, { imageUrl: url });
-          }
-        });
+    if (!item.imageUrl && item.slug) {
+      if (item.type === "property") {
+        supabase
+          .from("projects")
+          .select("cover_image_url, images:project_images(image_url)")
+          .eq("slug", item.slug)
+          .limit(1)
+          .maybeSingle()
+          .then(({ data }) => {
+            const url = data?.cover_image_url || (data?.images as any)?.[0]?.image_url;
+            if (url) patchItem(item.id, item.type, { imageUrl: url });
+          });
+      } else if (item.type === "developer") {
+        supabase
+          .from("developers")
+          .select("logo_url, feature_image_url")
+          .eq("slug", item.slug)
+          .limit(1)
+          .maybeSingle()
+          .then(({ data }) => {
+            const url = data?.feature_image_url || data?.logo_url;
+            if (url) patchItem(item.id, item.type, { imageUrl: url });
+          });
+      } else if (item.type === "area") {
+        supabase
+          .from("areas")
+          .select("image_url, hero_image_url")
+          .eq("slug", item.slug)
+          .limit(1)
+          .maybeSingle()
+          .then(({ data }) => {
+            const url = data?.hero_image_url || data?.image_url;
+            if (url) patchItem(item.id, item.type, { imageUrl: url });
+          });
+      }
     }
   }, [item.id, item.type, item.imageUrl, item.slug, patchItem]);
 
