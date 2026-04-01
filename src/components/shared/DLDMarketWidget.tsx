@@ -111,8 +111,8 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                 <ArrowUpRight className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
-                <p className="text-white/80 text-xs uppercase tracking-wider font-semibold">YTD Market Growth</p>
-                <p className="text-white/60 text-[11px]">Year-over-year volume increase</p>
+                <p className="text-white/90 text-xs uppercase tracking-wider font-semibold">YTD Market Growth</p>
+                <p className="text-emerald-400/70 text-[11px]">Year-over-year volume increase</p>
               </div>
             </div>
             <div className="text-right">
