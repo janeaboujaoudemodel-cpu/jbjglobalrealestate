@@ -97,7 +97,7 @@ export default function QuickFactsBar({
           >
             <fact.icon className="w-4 h-4 text-gold flex-shrink-0" />
             <div className="flex flex-col">
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground leading-none">{fact.label}</span>
+              <span className="text-[10px] uppercase tracking-wider text-black/80 font-medium leading-none">{fact.label}</span>
               <span className="text-sm font-medium text-foreground">{fact.value}</span>
             </div>
           </div>
