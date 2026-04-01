@@ -196,7 +196,6 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />
-                  />
                   {index === 5 && images.length > 6 && (
                     <div className="absolute inset-0 bg-background/70 backdrop-blur-sm flex items-center justify-center">
                       <span className="text-foreground font-semibold">+{images.length - 6}</span>
