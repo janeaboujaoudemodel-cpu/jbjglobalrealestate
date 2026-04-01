@@ -168,13 +168,20 @@ export function normalizeProvidentImageUrl(url: string, size?: string): string {
 }
 
 /**
- * Get a high-resolution version of an image URL (for hero sections)
+ * Get a high-resolution version of an image URL (for hero sections, galleries)
+ * Replaces CloudFront CDN thumbnail sizes (464x312, 340x252) with full-res.
  */
-export function getHighResImageUrl(url: string): string {
+export function getHighResImageUrl(url: string, size: string = HIGH_RES_IMAGE_SIZE): string {
   if (!url) return url;
   
+  // CloudFront CDN pattern: /x/{w}x{h}/
   if (url.includes("/x/") && url.includes("cloudfront.net")) {
-    return url.replace(/\/x\/\d+x\d+\//, `/x/${HIGH_RES_IMAGE_SIZE}/`);
+    return url.replace(/\/x\/\d+x\d+\//, `/x/${size}/`);
+  }
+  
+  // Off-plan nested path with embedded size: .../340x252/...
+  if (url.includes("cloudfront") && /\/\d+x\d+\//.test(url)) {
+    return url.replace(/\/\d+x\d+\//, `/${size}/`);
   }
   
   return url;
