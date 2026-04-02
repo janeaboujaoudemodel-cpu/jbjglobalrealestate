@@ -145,6 +145,7 @@ const LeadCapturePopup = () => {
                 placeholder="Full Name *"
                 value={formData.name}
                 onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
+                className="h-12 rounded-xl border-2 border-black/20 bg-white text-black placeholder:text-black/50"
                 required
               />
               <Input
@@ -152,6 +153,7 @@ const LeadCapturePopup = () => {
                 placeholder="Email Address *"
                 value={formData.email}
                 onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
+                className="h-12 rounded-xl border-2 border-black/20 bg-white text-black placeholder:text-black/50"
                 required
               />
               <Input
@@ -159,11 +161,12 @@ const LeadCapturePopup = () => {
                 placeholder="Phone Number (optional)"
                 value={formData.phone}
                 onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
+                className="h-12 rounded-xl border-2 border-black/20 bg-white text-black placeholder:text-black/50"
               />
 
               {/* Nationality */}
               <Select value={formData.nationality} onValueChange={(v) => setFormData((p) => ({ ...p, nationality: v }))}>
-                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                <SelectTrigger className="h-12 rounded-xl border-2 border-black/20 bg-white text-black">
                   <SelectValue placeholder="Nationality (optional)" />
                 </SelectTrigger>
                 <SelectContent className="z-[20100]">
@@ -175,7 +178,7 @@ const LeadCapturePopup = () => {
 
               {/* Preferred Language */}
               <Select value={formData.language} onValueChange={(v) => setFormData((p) => ({ ...p, language: v }))}>
-                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                <SelectTrigger className="h-12 rounded-xl border-2 border-black/20 bg-white text-black">
                   <SelectValue placeholder="Preferred Language (optional)" />
                 </SelectTrigger>
                 <SelectContent className="z-[20100]">
@@ -187,7 +190,7 @@ const LeadCapturePopup = () => {
 
               {/* Preferred Contact Time */}
               <Select value={formData.contactTime} onValueChange={(v) => setFormData((p) => ({ ...p, contactTime: v }))}>
-                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                <SelectTrigger className="h-12 rounded-xl border-2 border-black/20 bg-white text-black">
                   <SelectValue placeholder="Preferred Contact Time (optional)" />
                 </SelectTrigger>
                 <SelectContent className="z-[20100]">
@@ -199,7 +202,7 @@ const LeadCapturePopup = () => {
 
               {/* Services */}
               <Select value={formData.service} onValueChange={(v) => setFormData((p) => ({ ...p, service: v }))}>
-                <SelectTrigger className="h-12 rounded-xl border-2 border-gold/40 bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]">
+                <SelectTrigger className="h-12 rounded-xl border-2 border-black/20 bg-white text-black">
                   <SelectValue placeholder="Service Interest" />
                 </SelectTrigger>
                 <SelectContent className="z-[20100]">
@@ -212,12 +215,12 @@ const LeadCapturePopup = () => {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gold hover:bg-gold/90 text-black font-bold h-12 rounded-xl text-sm"
+                className="w-full bg-black hover:bg-black/90 text-white font-bold h-12 rounded-xl text-sm"
               >
                 {isSubmitting ? "Submitting..." : "Get Full Access"}
               </Button>
 
-              <p className="text-[10px] text-gray-600 text-center">
+              <p className="text-[10px] text-black/60 text-center">
                 By submitting, you agree to our Privacy Policy.
               </p>
             </form>
