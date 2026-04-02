@@ -526,7 +526,7 @@ export const ProjectAIAnalyzer = ({
               </div>
 
               {/* Cons — only show if verified cons exist */}
-              <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-6 shadow-sm">
+              <div className="bg-red-50 border-2 border-red-300 rounded-2xl p-6 shadow-md shadow-red-100 ring-1 ring-red-200">
                 <div className="flex items-center gap-2 mb-4">
                   <ThumbsDown className="w-5 h-5 text-red-600" />
                   <h3 className="font-bold text-red-700 text-lg">Cons</h3>
