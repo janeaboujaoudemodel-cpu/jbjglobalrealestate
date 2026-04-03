@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { forwardRef } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { SquareChatIcon } from '@/components/ui/SquareChatIcon';
 
@@ -8,11 +8,12 @@ interface CollapsedChatButtonProps {
   showAttentionPulse?: boolean;
 }
 
-const CollapsedChatButton = ({ onToggle }: CollapsedChatButtonProps) => {
+const CollapsedChatButton = forwardRef<HTMLDivElement, CollapsedChatButtonProps>(({ onToggle }, ref) => {
   const { isRTL, t } = useLanguage();
 
   return (
     <div
+      ref={ref}
       className={`fixed bottom-20 ${isRTL ? 'left-4' : 'right-6'} z-[10050]`}
     >
       <div className="relative">
@@ -26,6 +27,8 @@ const CollapsedChatButton = ({ onToggle }: CollapsedChatButtonProps) => {
       </div>
     </div>
   );
-};
+});
+
+CollapsedChatButton.displayName = 'CollapsedChatButton';
 
 export default CollapsedChatButton;
