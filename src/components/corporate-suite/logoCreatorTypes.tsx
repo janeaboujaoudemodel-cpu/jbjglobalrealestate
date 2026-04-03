@@ -1,4 +1,5 @@
 import { Building2, Cpu, Palette, Heart, Briefcase, User, Scale, Sparkles, UtensilsCrossed } from "lucide-react";
+import DOMPurify from 'dompurify';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 export interface LogoData {
