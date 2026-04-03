@@ -139,3 +139,24 @@ Add `DEPLOYMENT.md` with:
 
 No database migrations or edge function changes needed — these are already portable via the `supabase/` directory.
 
+---
+
+## Step 8: Audit All API Calls — No Hardcoded Credentials
+
+Verify and document that no private API keys, tokens, or secrets appear in frontend source code:
+
+- Search all `src/` files for patterns: `sk-`, `sk_live`, `pk_live`, `ghp_`, `xoxb-`, `re_`, `pplx-`, hardcoded JWT strings, and raw email addresses used for auth bypass
+- Confirm all edge function calls use one of two safe patterns:
+  - **SDK calls** (`supabase.functions.invoke`) — anon key injected automatically
+  - **Manual fetch** — uses `session.access_token` from runtime auth, never a stored secret
+- Confirm `localStorage` stores only UI preferences (role selection, tour state, drafts), never credentials
+- Confirm `VITE_OWNER_EMAIL` has been removed from all client code (previously flagged and deleted)
+- Confirm the only `VITE_` env var containing a key is `VITE_SUPABASE_PUBLISHABLE_KEY` (public by design)
+- Create `SECURITY.md` documenting audit results and developer patterns
+
+### Files to Create/Modify (Updated)
+
+| File | Action |
+|------|--------|
+| `SECURITY.md` | Create — documents audit results and safe API call patterns |
+
