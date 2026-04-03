@@ -70,7 +70,7 @@ export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasks
   if (!loaded || dismissed || totalAlerts === 0) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div ref={ref} className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
       <div className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-[#B89555]/50 rounded-2xl shadow-2xl shadow-[#B89555]/20 p-6 md:p-8 max-w-md w-[90vw] relative">
         <button
           onClick={handleDismiss}
