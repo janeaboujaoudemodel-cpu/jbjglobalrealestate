@@ -468,8 +468,8 @@ export const ProjectAIAnalyzer = ({
                         </div>
                       )}
                       {appreciation !== null && (
-                        <div className="bg-emerald-50 rounded-xl p-5 text-center border border-emerald-200 shadow-sm">
-                          <div className="text-3xl font-extrabold text-emerald-600 drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]">{appreciation}%</div>
+                        <div className="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/60 rounded-xl p-5 text-center border border-emerald-200/80 shadow-[0_4px_20px_rgba(16,185,129,0.12)]">
+                          <div className="text-3xl font-extrabold text-emerald-600 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">{appreciation}%</div>
                           <div className="text-foreground text-xs mt-1.5 font-semibold tracking-wide">Capital Growth</div>
                         </div>
                       )}
