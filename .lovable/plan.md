@@ -1,30 +1,43 @@
 
 
-# Complete Replit Compatibility — Remaining Items
+# Security Scan Follow-Up — Fix Remaining Findings
 
-Two items from the original plan were not yet applied. Here's what will be done:
+## Current Status
 
-## 1. Add `start` script to package.json
+After the previous security scan and migrations, **2 actionable findings remain** plus some low-risk warnings.
 
-Add a fallback production preview command:
-```json
-"start": "vite preview --host 0.0.0.0 --port 8080"
+## Plan
+
+### 1. Fix SVG XSS in Logo Creator (Critical)
+
+**File:** `src/components/corporate-suite/logoCreatorTypes.tsx`
+
+Add DOMPurify sanitization before rendering SVG content via `dangerouslySetInnerHTML`. The pattern already exists in `StampSVGRenderer.tsx` — apply the same approach:
+
+```typescript
+import DOMPurify from 'dompurify';
+const clean = DOMPurify.sanitize(svgContent, {
+  USE_PROFILES: { svg: true, svgFilters: true },
+  FORBID_TAGS: ['script'],
+  FORBID_ATTR: ['onload', 'onerror', 'onclick'],
+});
 ```
 
-## 2. Add `.env` to .gitignore
+### 2. Tighten Session UPDATE Policies (Medium)
 
-Append `.env` and `.env.local` to `.gitignore` to prevent secrets from being committed.
+**Database migration** to replace permissive UPDATE policies on `user_sessions` and `visitor_sessions` with session-ownership checks. These tables currently allow any user to overwrite any session record.
 
-## 3. Expand README.md — Replit section
+### 3. Tighten Authenticated INSERT Policies (Low Priority)
 
-Add detailed Replit quick-start instructions:
-- Step-by-step import from GitHub
-- Required Secrets list with descriptions
-- Common issues and fixes (port conflicts, missing env vars, build OOM)
+For `admin_edit_log`, `best_idea_submissions`, `global_audit_events`, and `suspicious_admin_alerts` — add `user_id = auth.uid()` checks to prevent authenticated users from inserting records attributed to other users.
+
+### 4. Update Security Findings Registry
+
+Delete resolved findings and mark intentional policies as ignored in the security scanner.
 
 ---
 
-**Files to modify**: `package.json`, `.gitignore`, `README.md`
+**Files to modify:** `src/components/corporate-suite/logoCreatorTypes.tsx`, plus 1-2 database migrations
 
-No database or backend changes needed.
+**No breaking changes expected.** All fixes tighten existing access without removing legitimate functionality.
 
