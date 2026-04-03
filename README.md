@@ -111,6 +111,32 @@ See [`DEPLOYMENT.md`](DEPLOYMENT.md) for full deployment guides covering:
 - Self-hosted Supabase
 - GitHub Actions CI/CD
 
+## Replit Deployment
+
+### Quick Start on Replit
+
+1. **Import from GitHub** — Create a new Replit → Import from GitHub → paste the repo URL
+2. **Set Secrets** — In Replit's Secrets tab, add the following:
+
+| Secret | Required | Description |
+|--------|----------|-------------|
+| `VITE_SUPABASE_URL` | ✅ | Your Supabase project URL |
+| `VITE_SUPABASE_PUBLISHABLE_KEY` | ✅ | Supabase anon/public key |
+| `VITE_SUPABASE_PROJECT_ID` | ✅ | Supabase project reference ID |
+
+3. **Run** — Click the Run button. Replit uses `.replit` to execute `npm install && npm run dev`.
+
+### Common Issues
+
+| Problem | Fix |
+|---------|-----|
+| Port already in use | Vite auto-selects an available port; check the console output for the actual URL |
+| Build runs out of memory | In `.replit`, add `[env]` section with `NODE_OPTIONS="--max-old-space-size=2048"` |
+| Missing env vars at runtime | Ensure secrets are set in Replit's Secrets tab, not in a `.env` file |
+| Blank page after build | Run `npm run build && npm start` to serve the production build |
+
+---
+
 ## License
 
 Proprietary — All rights reserved.
