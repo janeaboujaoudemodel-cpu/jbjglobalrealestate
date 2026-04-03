@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, forwardRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { X, Bell, ArrowRight, CheckCircle, Headphones } from "lucide-react";
@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 
-export function UserTasksPopupAlert() {
+export const UserTasksPopupAlert = forwardRef<HTMLDivElement>(function UserTasksPopupAlert(_props, ref) {
   const { user, isOwner, ownerLoading } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
