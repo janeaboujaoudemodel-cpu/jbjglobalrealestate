@@ -2,6 +2,7 @@ import { useEffect, useRef, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { SUPABASE_URL } from "@/config/backend";
 
 interface PageEntry {
   path: string;
@@ -167,7 +168,7 @@ export function useAuditorTracking() {
       });
 
       navigator.sendBeacon?.(
-        `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/auditor_sessions?id=eq.${sessionId.current}`,
+        `${SUPABASE_URL}/rest/v1/auditor_sessions?id=eq.${sessionId.current}`,
         new Blob([payload], { type: "application/json" })
       );
     };

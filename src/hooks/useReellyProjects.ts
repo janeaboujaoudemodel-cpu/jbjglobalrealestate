@@ -68,11 +68,11 @@ export interface ReellyFilters {
    if (filters?.developerName) params.set('developer_name', filters.developerName);
 
   const response = await fetch(
-    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reelly-projects?${params.toString()}`,
+    `${SUPABASE_URL}/functions/v1/reelly-projects?${params.toString()}`,
     {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
         'Content-Type': 'application/json',
       },
     }
@@ -127,11 +127,11 @@ async function fetchReellyProjectBySlug(slug: string): Promise<ReellyProject | n
   // Search using the slug as search term (slug is derived from project name)
   const searchTerm = slug.replace(/-/g, ' ');
   const response = await fetch(
-    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/reelly-projects?limit=50&offset=0&search=${encodeURIComponent(searchTerm)}`,
+    `${SUPABASE_URL}/functions/v1/reelly-projects?limit=50&offset=0&search=${encodeURIComponent(searchTerm)}`,
     {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
         'Content-Type': 'application/json',
       },
     }
@@ -144,6 +144,7 @@ async function fetchReellyProjectBySlug(slug: string): Promise<ReellyProject | n
 }
 
 import { useQuery } from "@tanstack/react-query";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 
 export function useReellyProjectBySlug(slug: string | undefined, enabled: boolean = true) {
   return useQuery({

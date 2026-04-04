@@ -30,6 +30,7 @@ import {
 import { toast } from "sonner";
 import DocumentFieldPlacer from "@/components/e-signature/DocumentFieldPlacer";
 import DocumentPreviewSummary from "@/components/e-signature/DocumentPreviewSummary";
+import { SUPABASE_URL } from "@/config/backend";
 
 interface Recipient {
   id: string;
@@ -459,7 +460,7 @@ export default function CreateEnvelope() {
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/esign-send-for-signature`,
+        `${SUPABASE_URL}/functions/v1/esign-send-for-signature`,
         {
           method: "POST",
           headers: {

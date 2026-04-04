@@ -27,6 +27,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { audioEnhanceService, EnhanceProgress } from '@/lib/ffmpeg/audioEnhanceService';
 import { useAuth } from '@/contexts/AuthContext';
 import {
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
   BROWSER_VOICE_LIBRARY,
   speak,
   stopSpeaking,
@@ -206,12 +207,12 @@ function VoiceStudioPanel() {
       const token = session.data.session?.access_token;
       if (!token) throw new Error('Not authenticated');
 
-      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-tts`, {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/voice-studio-tts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
-          'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          'apikey': SUPABASE_ANON_KEY,
         },
         body: JSON.stringify({
           text: script,
@@ -881,9 +882,9 @@ function VoiceCloningPanel() {
       formData.append('description', 'Cloned via Voice Suite');
       recordings.forEach(blob => formData.append('files', blob, 'voice_sample.webm'));
 
-      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-clone`, {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/voice-studio-clone`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}`, 'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
+        headers: { 'Authorization': `Bearer ${token}`, 'apikey': SUPABASE_ANON_KEY },
         body: formData,
       });
 
@@ -903,9 +904,9 @@ function VoiceCloningPanel() {
       const token = session.data.session?.access_token;
       if (!token) throw new Error('Not authenticated');
 
-      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-clone`, {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/voice-studio-clone`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, 'apikey': SUPABASE_ANON_KEY },
         body: JSON.stringify({ action: 'tts_with_clone', voice_id: clonedVoiceId, text: ttsText }),
       });
 

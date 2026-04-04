@@ -3,6 +3,7 @@ import type { PodcastSegment, PodcastSpeaker } from "@/content/podcast/types";
 import { buildCaptionCues, findCaptionCueAtTime, type CaptionCue } from "@/features/podcast/podcastCaptions";
 import { translatePodcastSegments } from "@/features/podcast/podcastTranslate";
 import { createPodcastMusicController, type PodcastMusicController } from "@/features/podcast/podcastMusic";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 
 type BillingInfo = {
   /** Total characters billed by the TTS provider during this prepare cycle. */
@@ -83,13 +84,13 @@ async function fetchTtsSegmentAudio(params: {
   requireCache?: boolean;
   signal?: AbortSignal;
 }) {
-  const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-podcast-segment-tts`, {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/elevenlabs-podcast-segment-tts`, {
     method: "POST",
     signal: params.signal,
     headers: {
       "Content-Type": "application/json",
-      apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
     },
     body: JSON.stringify({
       speaker: params.speaker,

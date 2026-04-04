@@ -10,6 +10,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import { VOICE_OPTIONS, SUPPORTED_LANGUAGES } from '../types';
 import { saveVideoAdToHistory } from './VideoAdHistoryPanel';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 
 
 
@@ -249,13 +250,13 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
     setScraping(true);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/scrape-property-url`,
+        `${SUPABASE_URL}/functions/v1/scrape-property-url`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
           },
           body: JSON.stringify({ url: raw }),
         }
@@ -329,13 +330,13 @@ export function ProjectIntegrationPanel({ onCreateVideoAd }: ProjectIntegrationP
       }
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-property-video-ad`,
+        `${SUPABASE_URL}/functions/v1/ai-property-video-ad`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
           },
           body: JSON.stringify(body),
         }

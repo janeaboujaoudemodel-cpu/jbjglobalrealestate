@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 
 interface FeedbackPromptProps {
   actionType: "review" | "idea" | "ticket" | "issue" | "listing" | "general";
@@ -38,13 +39,13 @@ export const FeedbackPrompt = ({
 
       // Use REST API directly to insert feedback (table created via migration)
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/user_feedback`,
+        `${SUPABASE_URL}/rest/v1/user_feedback`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            'Authorization': `Bearer ${session.data.session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${session.data.session?.access_token || SUPABASE_ANON_KEY}`,
             'Prefer': 'return=minimal',
           },
           body: JSON.stringify({

@@ -1,4 +1,5 @@
 import type { PodcastSegment } from "@/content/podcast/types";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 
 type TranslateResponse = { translations: string[]; error?: string };
 
@@ -16,13 +17,13 @@ export async function translatePodcastSegments(params: {
 
   const texts = params.segments.map((s) => s.text);
 
-  const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/auto-translate`, {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/auto-translate`, {
     method: "POST",
     signal: params.signal,
     headers: {
       "Content-Type": "application/json",
-      apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
     },
     body: JSON.stringify({ texts, targetLang: params.targetLang }),
   });

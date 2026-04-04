@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { SUPABASE_URL } from "@/config/backend";
 
 interface ImageCarouselProps {
   images: {
@@ -58,7 +59,7 @@ const ImageCarousel = ({ images: rawImages, projectName = "project" }: ImageCaro
     const filename = `${projectName.replace(/\s+/g, "-").toLowerCase()}-${index + 1}.jpg`;
     
     // Route through download proxy for reliable Content-Disposition: attachment
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseUrl = SUPABASE_URL;
     if (supabaseUrl) {
       const proxyUrl = new URL(`${supabaseUrl}/functions/v1/download-file`);
       proxyUrl.searchParams.set("url", imageUrl);

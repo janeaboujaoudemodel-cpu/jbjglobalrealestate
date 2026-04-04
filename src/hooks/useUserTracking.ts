@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { SUPABASE_URL } from "@/config/backend";
 
 interface EventData {
   property_id?: string;
@@ -269,7 +270,7 @@ export function useUserTracking() {
 
     if (navigator.sendBeacon) {
       navigator.sendBeacon(
-        `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/user_journey_events`,
+        `${SUPABASE_URL}/rest/v1/user_journey_events`,
         new Blob([data], { type: "application/json" })
       );
     }

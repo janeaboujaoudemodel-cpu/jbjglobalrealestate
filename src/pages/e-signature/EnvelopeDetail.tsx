@@ -27,6 +27,7 @@ import {
 import { format, formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { SUPABASE_URL } from "@/config/backend";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 type RecipientStatus = 'pending' | 'sent' | 'delivered' | 'viewed' | 'signed' | 'declined';
@@ -97,7 +98,7 @@ export default function EnvelopeDetail() {
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/esign-send-reminder`,
+        `${SUPABASE_URL}/functions/v1/esign-send-reminder`,
         {
           method: "POST",
           headers: {
