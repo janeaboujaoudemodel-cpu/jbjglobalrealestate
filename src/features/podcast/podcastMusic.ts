@@ -1,3 +1,4 @@
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 type MusicType = "intro" | "outro" | "background";
 
 const musicCache = new Map<MusicType, AudioBuffer>();
@@ -6,13 +7,13 @@ async function fetchPodcastMusic(type: MusicType, ctx: AudioContext, signal?: Ab
   const cached = musicCache.get(type);
   if (cached) return cached;
 
-  const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-podcast-music`, {
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/elevenlabs-podcast-music`, {
     method: "POST",
     signal,
     headers: {
       "Content-Type": "application/json",
-      apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
     },
     body: JSON.stringify({ type }),
   });

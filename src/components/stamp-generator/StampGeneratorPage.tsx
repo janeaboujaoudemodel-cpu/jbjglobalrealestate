@@ -45,6 +45,7 @@ import { StampCanvasControls, CanvasGridOverlay } from './StampCanvasControls';
 import { StampProjectHeader } from './StampProjectHeader';
 import { StampSaveDialog } from './StampSaveDialog';
 import { useOwnerVerification } from '@/hooks/useOwnerVerification';
+import { SUPABASE_URL } from "@/config/backend";
 
 type ColorStop = 'primary' | 'secondary' | 'accent';
 
@@ -609,7 +610,7 @@ export default function StampGeneratorPage() {
     setBlocked(false);
     try {
       if (session?.access_token) {
-        const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
           body: JSON.stringify({
@@ -797,7 +798,7 @@ export default function StampGeneratorPage() {
     const conceptToRefine = concepts.find(c => c.id === selectedId) || concepts[0];
     const svgForRefine = (conceptToRefine && svgOverrides[conceptToRefine.id]) || conceptToRefine?.svgSource || '';
     try {
-      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token}` },
         body: JSON.stringify({ action: 'refine', project, projectId, instruction: msg, currentSvg: svgForRefine }),
@@ -840,7 +841,7 @@ export default function StampGeneratorPage() {
     if (!project || !session?.access_token) return;
     setVariationsLoading(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
         body: JSON.stringify({ action: 'variations', project, projectId }),
@@ -936,7 +937,7 @@ export default function StampGeneratorPage() {
     if (!refinePrompt.trim()) { toast.error('Enter a prompt'); return; }
     setRefiningImage(true);
     try {
-      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/ai-stamp-generator`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token}` },
         body: JSON.stringify({ action: 'refine-image', imageBase64: uploadedStampUrl, prompt: refinePrompt, projectId }),

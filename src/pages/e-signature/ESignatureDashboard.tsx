@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
+import { SUPABASE_URL } from "@/config/backend";
 
 type EnvelopeStatus = 'draft' | 'sent' | 'viewed' | 'partially_signed' | 'completed' | 'declined' | 'expired' | 'voided';
 
@@ -129,7 +130,7 @@ export default function ESignatureDashboard() {
   const handleSendReminder = async (id: string) => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/esign-send-reminder`,
+        `${SUPABASE_URL}/functions/v1/esign-send-reminder`,
         {
           method: "POST",
           headers: {

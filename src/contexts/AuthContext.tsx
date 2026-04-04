@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 
 /**
  * Owner verification
@@ -87,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     const attemptVerify = async (): Promise<boolean> => {
-      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-owner`;
+      const url = `${SUPABASE_URL}/functions/v1/verify-owner`;
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 15000);
 
@@ -96,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${currentSession.access_token}`,
-            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            'apikey': SUPABASE_ANON_KEY,
             'Content-Type': 'application/json',
           },
           signal: controller.signal,

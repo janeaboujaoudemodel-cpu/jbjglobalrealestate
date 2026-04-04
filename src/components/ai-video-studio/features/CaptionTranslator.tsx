@@ -11,6 +11,7 @@ import {
 import { SUPPORTED_LANGUAGES, SUBTITLE_STYLES, VOICE_OPTIONS } from '../types';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -365,10 +366,10 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
         const slice = arrayBuffer.slice(c * CHUNK_BYTES, (c + 1) * CHUNK_BYTES);
         const base64Audio = toBase64(new Uint8Array(slice));
         const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/video-transcribe`,
+          `${SUPABASE_URL}/functions/v1/video-transcribe`,
           {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, 'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
+            headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
             body: JSON.stringify({ audio: base64Audio, mimeType, language: spokenLanguage, timeOffset }),
           }
         );
@@ -405,10 +406,10 @@ export function CaptionTranslator({ subtitles, onSubtitlesUpdate, onTranscribe }
     setIsTranslating(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/auto-translate`,
+        `${SUPABASE_URL}/functions/v1/auto-translate`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY, 'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}` },
+          headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` },
           body: JSON.stringify({ texts: subtitles.map(s => s.text), targetLang: selectedLang }),
         }
       );

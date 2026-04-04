@@ -15,6 +15,7 @@ import {
 import { toast } from "sonner";
 import ESignaturePad from "@/components/e-signature/ESignaturePad";
 import { maybeProxyStorageUrl } from "@/utils/downloadProxy";
+import { SUPABASE_URL } from "@/config/backend";
 
 interface RecipientData {
   id: string;
@@ -175,7 +176,7 @@ export default function SignDocument() {
     setSubmitting(true);
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/esign-process-signature`,
+        `${SUPABASE_URL}/functions/v1/esign-process-signature`,
         {
           method: "POST",
           headers: {

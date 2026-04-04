@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 import {
   ArrowLeft, Mic, Play, Pause, Square, Download,
   Volume2, Settings2, Headphones, Globe, User, Radio,
@@ -107,12 +108,12 @@ const PodcastStudio = () => {
         const token = sessionData?.session?.access_token;
         if (!token) { setApiStatus("error"); return; }
         const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-tts`,
+          `${SUPABASE_URL}/functions/v1/voice-studio-tts`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+              apikey: SUPABASE_ANON_KEY,
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({ text: "Connection test.", voiceId: "EXAVITQu4vr4xnSDxMaL", format: "mp3" }),
@@ -150,12 +151,12 @@ const PodcastStudio = () => {
       const token = sessionData?.session?.access_token;
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-tts`,
+        `${SUPABASE_URL}/functions/v1/voice-studio-tts`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            apikey: SUPABASE_ANON_KEY,
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
@@ -233,12 +234,12 @@ const PodcastStudio = () => {
       const token = sessionData?.session?.access_token;
 
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/voice-studio-tts`,
+        `${SUPABASE_URL}/functions/v1/voice-studio-tts`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            apikey: SUPABASE_ANON_KEY,
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({

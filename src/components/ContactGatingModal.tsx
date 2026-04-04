@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Shield, Mail, Phone, User, Globe, Languages, Briefcase, CheckCircle } from 'lucide-react';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 
 interface ContactGatingModalProps {
   isOpen: boolean;
@@ -169,12 +170,12 @@ const ContactGatingModal = React.forwardRef<HTMLDivElement, ContactGatingModalPr
       
       // Use edge function for secure encrypted storage - NO PLAINTEXT PII
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/submit-contact-gating`,
+        `${SUPABASE_URL}/functions/v1/submit-contact-gating`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            'apikey': SUPABASE_ANON_KEY,
           },
           body: JSON.stringify({
             session_id: sessionId,

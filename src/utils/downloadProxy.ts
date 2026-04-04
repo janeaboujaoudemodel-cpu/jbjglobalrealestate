@@ -1,3 +1,4 @@
+import { SUPABASE_URL } from "@/config/backend";
 /**
  * Build a backend download-proxy URL for storage files.
  * This avoids client-side blockers that target /storage/v1 URLs.
@@ -9,7 +10,7 @@ interface ProxyOptions {
 }
 
 export function buildDownloadProxyUrl(originalUrl: string, options?: string | ProxyOptions) {
-  const base = import.meta.env.VITE_SUPABASE_URL;
+  const base = SUPABASE_URL;
   if (!base) return originalUrl;
 
   // Support legacy string-only filename parameter

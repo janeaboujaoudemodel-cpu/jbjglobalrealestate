@@ -24,6 +24,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { format } from 'date-fns';
 import { maybeProxyStorageUrl } from '@/utils/downloadProxy';
+import { SUPABASE_URL } from "@/config/backend";
 
 // Department categories with icons
 const DEPARTMENT_CATEGORIES = [
@@ -397,7 +398,7 @@ const CVCenter = ({ userId }: CVCenterProps) => {
     const canInlinePreview = (extension: string) => ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'gif', 'txt', 'rtf', 'svg'].includes(extension);
 
     const buildStoragePublicUrl = (bucket: string, path: string) => {
-      const base = import.meta.env.VITE_SUPABASE_URL;
+      const base = SUPABASE_URL;
       if (!base) return null;
       const encodedPath = path.split('/').map(segment => encodeURIComponent(segment)).join('/');
       return `${base}/storage/v1/object/public/${bucket}/${encodedPath}`;

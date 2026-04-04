@@ -33,6 +33,7 @@ import ChatCVConfirmation from './chat/ChatCVConfirmation';
 import ChatFeedback, { FeedbackType } from './chat/ChatFeedback';
 import ChatConversationalCollect from './chat/ChatConversationalCollect';
 import ChatConfirmDetails from './chat/ChatConfirmDetails';
+import { SUPABASE_URL } from "@/config/backend";
 
 interface AIChatWidgetProps {
   isCollapsed: boolean;
@@ -433,7 +434,7 @@ const AIChatWidget = forwardRef<HTMLDivElement, AIChatWidgetProps>(({ isCollapse
       
       if (session?.access_token) {
         // Use streaming endpoint
-        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat-stream`, {
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/ai-chat-stream`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

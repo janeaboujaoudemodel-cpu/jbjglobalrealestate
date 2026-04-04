@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import { Upload, Loader2, Check, FileText, X, Sparkles } from 'lucide-react';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 
 interface ExtractedData {
   company_name?: string;
@@ -77,11 +78,11 @@ export function StampLicenseUploader({ onExtracted }: Props) {
       // Use FileReader for safe, stack-safe base64 encoding of any file size
       base64 = await fileToBase64(file);
 
-      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-stamp-extract`, {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/ai-stamp-extract`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${session?.access_token || SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({ imageBase64: base64, mimeType }),
       });

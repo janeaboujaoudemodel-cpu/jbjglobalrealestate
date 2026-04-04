@@ -2,6 +2,7 @@ import { useEffect, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
 
 // ── Device / Browser helpers ──
 const getDeviceType = (): string => {
@@ -267,8 +268,8 @@ export const GlobalVisitorTracking = () => {
     const sessionStartTime = parseInt(sessionStorage.getItem('session_start_time') || Date.now().toString());
     const totalTimeSpent = Math.floor((Date.now() - sessionStartTime) / 1000);
 
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const supabaseUrl = SUPABASE_URL;
+    const supabaseKey = SUPABASE_ANON_KEY;
 
     if (supabaseUrl && supabaseKey) {
       // Single keepalive call to update session

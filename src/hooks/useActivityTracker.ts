@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { SUPABASE_URL } from "@/config/backend";
 
 /**
  * useActivityTracker — Tracks user session activity (login time, pages visited, actions).
@@ -60,7 +61,7 @@ export function useActivityTracker() {
     const endSession = () => {
       if (sessionIdRef.current && user?.id) {
         navigator.sendBeacon?.(
-          `${import.meta.env.VITE_SUPABASE_URL}/rest/v1/user_activity_sessions?id=eq.${sessionIdRef.current}`,
+          `${SUPABASE_URL}/rest/v1/user_activity_sessions?id=eq.${sessionIdRef.current}`,
           JSON.stringify({ session_end: new Date().toISOString(), pages_visited: pagesRef.current, actions_performed: actionsRef.current })
         );
       }
