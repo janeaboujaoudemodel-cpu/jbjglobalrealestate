@@ -11,8 +11,8 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import {
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
+import {
   ArrowLeft, Mic, Play, Pause, Square, Download,
   Volume2, Settings2, Headphones, Globe, User, Radio,
   Loader2, FileAudio, Clock, Video, Upload, Wand2,

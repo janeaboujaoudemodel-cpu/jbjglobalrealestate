@@ -5,8 +5,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { VoiceInputButton } from "@/components/ui/VoiceInputButton";
-import {
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
+import {
   Loader2,
   Play,
   Pause,
