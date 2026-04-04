@@ -26,8 +26,8 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { audioEnhanceService, EnhanceProgress } from '@/lib/ffmpeg/audioEnhanceService';
 import { useAuth } from '@/contexts/AuthContext';
-import {
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/config/backend";
+import {
   BROWSER_VOICE_LIBRARY,
   speak,
   stopSpeaking,
