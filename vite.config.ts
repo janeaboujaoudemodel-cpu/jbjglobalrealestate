@@ -5,7 +5,13 @@ import { componentTagger } from "lovable-tagger";
 // PWA plugin removed to eliminate install prompts
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode }) => {
+  // Fallback values for Lovable Cloud public credentials (safe for client-side use)
+  const supabaseUrl = process.env.VITE_SUPABASE_URL || "https://mdafrewypkkrildjgtey.supabase.co";
+  const supabaseKey = process.env.VITE_SUPABASE_PUBLISHABLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kYWZyZXd5cGtrcmlsZGpndGV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc0NTA1NzgsImV4cCI6MjA4MzAyNjU3OH0.-9fLSEsMVLS38f9ca197UVYgXQGxb8g-BPrJv4ZvTp0";
+  const supabaseProjectId = process.env.VITE_SUPABASE_PROJECT_ID || "mdafrewypkkrildjgtey";
+
+  return ({
   server: {
     host: "0.0.0.0",
     port: parseInt(process.env.PORT || "8080"),
