@@ -17,7 +17,11 @@ export default defineConfig(({ mode }) => {
     port: parseInt(process.env.PORT || "8080"),
     historyApiFallback: true,
   },
-  plugins: [
+  define: {
+    'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(supabaseUrl),
+    'import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(supabaseKey),
+    'import.meta.env.VITE_SUPABASE_PROJECT_ID': JSON.stringify(supabaseProjectId),
+  },
     react(),
     mode === "development" && componentTagger(),
     // PWA plugin completely disabled to prevent install prompts
