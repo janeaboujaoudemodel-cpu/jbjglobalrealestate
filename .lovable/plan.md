@@ -1,45 +1,49 @@
 
-Issue summary:
-- The current crash is not coming from your latest source anymore.
-- I verified the repo already contains the Vite fallback in `vite.config.ts`, so the preview error strongly suggests the failing URL is serving an older cached build or a different preview pipeline than the current project source.
-- I also confirmed the current project preview URL is a different host (`id-preview--357981e3-cd4c-4c0d-ad5b-a1a379078f50.lovable.app`) and it does not show the same boot overlay. The failing host in your screenshot is `preview--jbjglobalrealestate.lovable.app`, which points to a stale/legacy preview build.
 
-Plan:
-1. Replace client-side env dependency at the real source
-- Stop relying on raw `import.meta.env.VITE_SUPABASE_*` throughout the app.
-- Create a single frontend config module that exports hard-safe public backend values with fallback logic.
-- Update `src/integrations/supabase/client.ts` consumers indirectly by importing URL/key constants from that shared config in app code where direct fetches happen.
-- For the generated client file, avoid editing it directly; instead wrap access through a separate app-level helper if needed.
+# Data Export Plan: Lovable Cloud → Your Supabase Project
 
-2. Remove fragile direct env usage across the app
-- Replace direct `import.meta.env.VITE_SUPABASE_URL` / key references in fetch helpers, podcast tools, auth helpers, trackers, e-sign flows, and AI tools with the shared config constants.
-- This prevents boot/runtime regressions even if preview env injection fails again.
+## Overview
 
-3. Harden preview compatibility
-- Keep the existing `vite.config.ts` fallback, but treat it as backup only.
-- Ensure critical startup paths can initialize even when `import.meta.env` is empty in hosted preview.
+You have **~190,000 rows** across **51 tables** with data. I'll export all of them as CSV files you can download and then import into your new Supabase project (`akgrgepfliofvluugkje`).
 
-4. Rule out stale asset/service-worker interference
-- Review current service worker files in `public/sw.js` and `public/sw-kill.js`.
-- If needed, simplify cache-busting logic so old JS bundles cannot keep serving the broken `data-vendor-CR_EANON.js`.
+## Tables with Data (sorted by size)
 
-5. Verify the actual target host behavior
-- Compare the current project preview host and the legacy `preview--jbjglobalrealestate.lovable.app` host after the code hardening.
-- If the legacy host is still stale, the app should still survive because startup will no longer depend on missing env injection.
+| Table | Rows |
+|-------|------|
+| visitor_events | 63,609 |
+| project_images | 43,556 |
+| user_events | 32,425 |
+| visitor_sessions | 17,464 |
+| security_events | 8,794 |
+| user_points_ledger | 4,821 |
+| projects | 2,778 |
+| user_sessions | 2,643 |
+| api_security_events | 2,190 |
+| pending_project_imports | 1,944 |
+| user_activity_sessions | 1,871 |
+| market_news | 1,272 |
+| db_health_logs | 699 |
+| developers | 633 |
+| areas | 194 |
+| sync_jobs | 183 |
+| + 35 smaller tables | < 100 each |
 
-Files likely involved:
-- `vite.config.ts`
-- new shared config file such as `src/config/backend.ts`
-- files using direct backend env access, including:
-  - `src/features/podcast/podcastTranslate.ts`
-  - `src/features/podcast/podcastMusic.ts`
-  - `src/features/podcast/usePodcastPlayback.ts`
-  - `src/contexts/AuthContext.tsx`
-  - `src/utils/downloadProxy.ts`
-  - other direct fetch/helper files found in search
+## Approach
 
-Technical detail:
-- The persistent error is most likely caused by one of two things:
-  1. stale preview assets from the old `preview--jbjglobalrealestate.lovable.app` host, or
-  2. reliance on `import.meta.env` in generated/runtime code outside the exact path protected by the Vite fallback.
-- The safest permanent fix is to centralize public backend config in normal source code and have app modules import that instead of reading `import.meta.env` everywhere.
+1. **Export all 51 tables** as individual CSV files to `/mnt/documents/db-export/`
+2. **Package** them into a single ZIP for easy download
+3. **Provide import instructions** for loading into your new Supabase project
+
+## Import Process (on your side)
+
+After downloading the CSVs, you'll import them into your new Supabase using either:
+- **Supabase Dashboard** → Table Editor → Import CSV
+- **psql CLI**: `\copy table_name FROM 'file.csv' WITH CSV HEADER`
+
+## Important Notes
+
+- The schema (tables, columns, RLS policies) must be applied first via `supabase db push` before importing data
+- Tables with foreign key dependencies need to be imported in the correct order (parent tables first)
+- Encrypted PII fields will export in their encrypted form — you'll need the same encryption keys on the new instance
+- Large tables (60K+ rows) will be exported in batches due to query limits
+
