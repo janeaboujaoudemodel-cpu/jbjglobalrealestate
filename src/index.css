@@ -2137,21 +2137,24 @@ svg[class*="text-muted"],
  * ============================================================ */
 
 /* ── 0. Light surface containers: set base color so children inherit ── */
+/* NOTE: Removed .bg-background because <body> uses it, which made every
+   .text-white descendant on the page (including dark-hero buttons) get
+   force-darkened by rule 1b. Use specific containers instead. */
 :root:not(.dark) :is(
-  .jj-layer-2, .jj-layer-1, .bg-white, .bg-background, .bg-card,
+  .jj-layer-2, .jj-layer-1, .bg-white, .bg-card,
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
-) {
+):not([data-surface="dark"]) {
   color: hsl(var(--foreground));
 }
 
 /* ── 1. LIGHT SURFACES: enforce minimum contrast (WCAG AA) ── */
 /* 1a. Very low contrast text → bump to readable gray */
 :root:not(.dark) :is(
-  .bg-white, .bg-background, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
+  .bg-white, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
   .bg-gray-50, .bg-gray-100,
   .jj-layer-2, .jj-layer-1,
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
-) :is(.text-gray-300, .text-gray-400, .text-zinc-300, .text-zinc-400) {
+):not([data-surface="dark"]) :is(.text-gray-300, .text-gray-400, .text-zinc-300, .text-zinc-400) {
   color: #6b7280 !important; /* gray-500 — 4.6:1 on white */
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
@@ -2159,41 +2162,37 @@ svg[class*="text-muted"],
 
 /* 1a-bis. Medium contrast text → bump for readability */
 :root:not(.dark) :is(
-  .bg-white, .bg-background, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
+  .bg-white, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
   .bg-gray-50, .bg-gray-100,
   .jj-layer-2, .jj-layer-1,
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
-) :is(.text-gray-500, .text-zinc-500, .text-gray-600, .text-zinc-600) {
+):not([data-surface="dark"]) :is(.text-gray-500, .text-zinc-500, .text-gray-600, .text-zinc-600) {
   color: #374151 !important; /* gray-700 — 9.7:1 on white */
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
 }
 
 /* 1b. White text on LIGHT surfaces → force dark (deep descendants).
-   Excludes nodes that themselves carry a dark/gold background (buttons, badges, chips). */
+   IMPORTANT: scope ONLY to actual light containers, NEVER to body/.bg-background. */
 :root:not(.dark) :is(
-  .bg-white, .bg-background, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
+  .bg-white, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
   .bg-gray-50, .bg-gray-100, .bg-gray-200,
   .bg-champagne, .bg-champagne-1, .bg-champagne-2, .bg-champagne-3,
   .jj-layer-2, .jj-layer-1,
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"],
-  [class*="from-[#FDFBF"], [class*="from-[#FAF"], [class*="from-[#F9F"],
-  [class*="from-[#FFF"], [class*="from-[#FEF"],
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
-  [class*="bg-[#FFFFFF]"], [class*="bg-[#FFF"], [class*="bg-[#FEF"]
-)
-:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-gold):not([class*="bg-gold"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([class*="bg-zinc-8"]):not([class*="bg-zinc-9"]):not([class*="bg-slate-8"]):not([class*="bg-slate-9"]):not([class*="bg-neutral-8"]):not([class*="bg-neutral-9"]):not([style*="background"]):not([data-surface="dark"]) {
+  [class*="bg-[#FFFFFF]"]
+):not([data-surface="dark"])
+:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-gold):not([class*="bg-gold"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([data-surface="dark"]) {
   color: hsl(var(--foreground)) !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
 }
-/* Exclude descendants of [data-surface="dark"] — boost specificity to beat
-   the multi-:not() chain in rule 1b above. We stack the attribute selector
-   plus html prefix so the dark surface always wins. */
-html [data-surface="dark"][data-surface="dark"] .text-white,
-html [data-surface="dark"][data-surface="dark"] [class*="text-white/"],
-html [data-surface="dark"][data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div).text-white,
-html [data-surface="dark"][data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div)[class*="text-white/"] {
+/* Belt-and-suspenders: anything inside [data-surface="dark"] keeps white. */
+html [data-surface="dark"] .text-white,
+html [data-surface="dark"] [class*="text-white/"],
+html [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div, button).text-white,
+html [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div, button)[class*="text-white/"] {
   color: #FFFFFF !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
