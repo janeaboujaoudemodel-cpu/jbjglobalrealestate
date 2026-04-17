@@ -2182,8 +2182,19 @@ svg[class*="text-muted"],
   [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
   [class*="bg-[#FFFFFF]"], [class*="bg-[#FFF"], [class*="bg-[#FEF"]
 )
-:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-gold):not([class*="bg-gold"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([class*="bg-zinc-8"]):not([class*="bg-zinc-9"]):not([class*="bg-slate-8"]):not([class*="bg-slate-9"]):not([class*="bg-neutral-8"]):not([class*="bg-neutral-9"]):not([style*="background"]) {
+:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-gold):not([class*="bg-gold"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([class*="bg-zinc-8"]):not([class*="bg-zinc-9"]):not([class*="bg-slate-8"]):not([class*="bg-slate-9"]):not([class*="bg-neutral-8"]):not([class*="bg-neutral-9"]):not([style*="background"]):not([data-surface="dark"]) {
   color: hsl(var(--foreground)) !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+/* Exclude descendants of [data-surface="dark"] — boost specificity to beat
+   the multi-:not() chain in rule 1b above. We stack the attribute selector
+   plus html prefix so the dark surface always wins. */
+html [data-surface="dark"][data-surface="dark"] .text-white,
+html [data-surface="dark"][data-surface="dark"] [class*="text-white/"],
+html [data-surface="dark"][data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div).text-white,
+html [data-surface="dark"][data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div)[class*="text-white/"] {
+  color: #FFFFFF !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
 }
@@ -2192,6 +2203,10 @@ svg[class*="text-muted"],
 :root:not(.dark) :is(input, textarea, select, option):is(.text-white, [class*="text-white/"]) {
   color: hsl(var(--foreground)) !important;
   --tw-text-opacity: 1 !important;
+}
+/* …but not inside dark surfaces */
+html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, option):is(.text-white, [class*="text-white/"]) {
+  color: #FFFFFF !important;
 }
 
 /* 1d. Headings/labels with text-white inside light gradient hero/card overlays
@@ -2336,54 +2351,119 @@ button[style*="background"] [class*="text-gold"] {
 }
 
 /* ============================================================
-   DARK SURFACE ESCAPE HATCH
+   DARK SURFACE ESCAPE HATCH  (must be LAST in this file to win)
    Opt-in via data-surface="dark" or .on-dark on a wrapper.
    Restores readable light text inside dark hero/overlay areas
    that would otherwise be force-darkened by global rules above.
    ============================================================ */
 [data-surface="dark"],
-.on-dark {
-  color: rgb(255 255 255 / 0.92);
+[data-surface="dark"] *,
+.on-dark,
+.on-dark * {
+  /* Default text inside a dark surface is light. Specific classes below win. */
 }
 
-/* Gold/champagne accents → bright amber on dark */
-[data-surface="dark"] :is(.text-gold, [class*="text-gold/"]),
+[data-surface="dark"],
+.on-dark {
+  color: rgb(255 255 255 / 0.92) !important;
+}
+
+/* Headings, paragraphs, spans, links — default to white on dark unless explicitly colored */
+[data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, li, a, label, small, strong, em, div),
+.on-dark :is(h1, h2, h3, h4, h5, h6, p, span, li, a, label, small, strong, em) {
+  color: inherit;
+}
+
+/* White text variants — restore pure white */
+[data-surface="dark"] .text-white,
+[data-surface="dark"] [class*="text-white\/"],
+[data-surface="dark"] [class*="text-white/"],
+.on-dark .text-white,
+.on-dark [class*="text-white/"] {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* Gold / champagne / amber accents → bright amber on dark */
+[data-surface="dark"] .text-gold,
+[data-surface="dark"] [class*="text-gold\/"],
+[data-surface="dark"] [class*="text-gold/"],
 [data-surface="dark"] [class*="text-[#D4AF37]"],
 [data-surface="dark"] [class*="text-[#C8A766]"],
 [data-surface="dark"] [class*="text-[#F5E6C8]"],
 [data-surface="dark"] [class*="text-[#E8D5A8]"],
-.on-dark :is(.text-gold, [class*="text-gold/"]) {
+[data-surface="dark"] [class*="text-amber-"],
+[data-surface="dark"] [class*="text-yellow-"],
+.on-dark .text-gold,
+.on-dark [class*="text-gold/"],
+.on-dark [class*="text-amber-"] {
   color: #FDE68A !important;
   opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
 }
 
-/* Muted / gray text → readable white opacity on dark */
-[data-surface="dark"] :is(.text-muted-foreground, .text-gray-400, .text-gray-500, .text-gray-600, .text-gray-700, .text-zinc-500, .text-zinc-600, .text-zinc-700, .text-neutral-500, .text-neutral-600),
-.on-dark :is(.text-muted-foreground, .text-gray-500, .text-gray-600) {
-  color: rgb(255 255 255 / 0.78) !important;
+/* Muted / gray / neutral → readable white opacity on dark */
+[data-surface="dark"] .text-muted-foreground,
+[data-surface="dark"] [class*="text-gray-"],
+[data-surface="dark"] [class*="text-zinc-"],
+[data-surface="dark"] [class*="text-neutral-"],
+[data-surface="dark"] [class*="text-slate-"],
+[data-surface="dark"] [class*="text-stone-"],
+[data-surface="dark"] .text-foreground,
+.on-dark .text-muted-foreground,
+.on-dark [class*="text-gray-"] {
+  color: rgb(255 255 255 / 0.85) !important;
   opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
 }
 
-/* White text variants stay white on dark */
-[data-surface="dark"] :is(.text-white, [class*="text-white/"]),
-.on-dark :is(.text-white, [class*="text-white/"]) {
-  color: #FFFFFF !important;
-}
-
-/* SVG icons inherit readable colors on dark */
+/* SVG icons inside dark surfaces */
 [data-surface="dark"] svg.text-gold,
 [data-surface="dark"] svg[class*="text-gold"],
-[data-surface="dark"] svg[class*="text-amber"] {
+[data-surface="dark"] svg[class*="text-amber"],
+[data-surface="dark"] svg[class*="text-yellow"] {
   color: #FDE68A !important;
 }
 [data-surface="dark"] svg.text-muted-foreground,
-[data-surface="dark"] svg[class*="text-gray-4"],
-[data-surface="dark"] svg[class*="text-gray-5"],
-[data-surface="dark"] svg[class*="text-gray-6"] {
-  color: rgb(255 255 255 / 0.78) !important;
+[data-surface="dark"] svg[class*="text-gray-"],
+[data-surface="dark"] svg[class*="text-zinc-"],
+[data-surface="dark"] svg[class*="text-neutral-"],
+[data-surface="dark"] svg.text-white,
+[data-surface="dark"] svg[class*="text-white"] {
+  color: rgb(255 255 255 / 0.9) !important;
 }
 
-/* Foreground/background tokens inside dark surfaces */
-[data-surface="dark"] .text-foreground {
+/* ── Buttons inside dark surfaces ──
+   Override the global "button .text-gold → inherit" and dark-text rules.
+   Ensures hero CTAs (Download Brochure, Register Interest, etc.) keep white
+   text on transparent borders and amber on gold accents. */
+[data-surface="dark"] button:not(.bg-white):not([class*="bg-gold"]):not(.bg-gray-100):not(.bg-gray-50),
+[data-surface="dark"] a.btn:not(.bg-white):not([class*="bg-gold"]),
+[data-surface="dark"] [role="button"]:not(.bg-white):not([class*="bg-gold"]) {
   color: #FFFFFF !important;
+}
+
+[data-surface="dark"] button:not(.bg-white):not([class*="bg-gold"]):not(.bg-gray-100):not(.bg-gray-50) :is(span, svg, p, div),
+[data-surface="dark"] a.btn :is(span, svg) {
+  color: inherit !important;
+  opacity: 1 !important;
+}
+
+/* Hover state on dark-surface buttons (white bg → keep dark text) */
+[data-surface="dark"] button:hover.bg-white,
+[data-surface="dark"] button:hover[class*="hover:bg-white"]:hover,
+[data-surface="dark"] a:hover.bg-white {
+  color: #111111 !important;
+}
+
+/* Breadcrumb specifics — override shared component defaults inside dark hero */
+[data-surface="dark"] [data-surface="dark"] :is(a, ol, li, span) {
+  color: inherit;
+}
+
+/* Price-orange stays orange on dark */
+[data-surface="dark"] .text-price-orange,
+[data-surface="dark"] [class*="text-price-orange"] {
+  color: #FB923C !important; /* orange-400 — vivid on dark */
 }
