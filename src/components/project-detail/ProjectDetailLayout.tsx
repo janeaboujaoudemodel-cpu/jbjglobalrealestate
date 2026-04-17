@@ -594,14 +594,14 @@ export default function ProjectDetailLayout({
 
           {/* Developer */}
           {project.developer?.name && (
-            <p className="text-lg text-white/60 mb-6 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
+            <p className="text-lg mb-6 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.75)' }}>
               by{" "}
               {project.developer?.slug ? (
-                <Link to={`/developer/${project.developer.slug}`} className="text-amber-200/90 hover:text-amber-100 hover:underline font-semibold transition-colors">
+                <Link to={`/developer/${project.developer.slug}`} className="hover:underline font-semibold transition-colors" style={{ color: '#FDE68A' }}>
                   {project.developer.name}
                 </Link>
               ) : (
-                <span className="text-amber-200/90 font-semibold">{project.developer.name}</span>
+                <span className="font-semibold" style={{ color: '#FDE68A' }}>{project.developer.name}</span>
               )}
             </p>
           )}
@@ -609,26 +609,26 @@ export default function ProjectDetailLayout({
           {/* USPs Row - Location, Bedrooms, Size, Handover, Payment Plan */}
           <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8">
             {project.location && (
-              <div className="flex items-center gap-2 text-white/70 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                <MapPin className="w-5 h-5 text-amber-300/80" />
+              <div className="flex items-center gap-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
+                <MapPin className="w-5 h-5" style={{ color: '#FCD34D' }} />
                 <span className="text-sm md:text-base">{project.location}</span>
               </div>
             )}
             {bedroomsText && (
-              <div className="flex items-center gap-2 text-white/70 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                <Bed className="w-5 h-5 text-amber-300/80" />
+              <div className="flex items-center gap-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
+                <Bed className="w-5 h-5" style={{ color: '#FCD34D' }} />
                 <span className="text-sm md:text-base">{bedroomsText}</span>
               </div>
             )}
             {sizeText && (
-              <div className="flex items-center gap-2 text-white/70 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                <Maximize className="w-5 h-5 text-amber-300/80" />
+              <div className="flex items-center gap-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
+                <Maximize className="w-5 h-5" style={{ color: '#FCD34D' }} />
                 <span className="text-sm md:text-base">{sizeText}</span>
               </div>
             )}
             {project.handover_date && (
-              <div className="flex items-center gap-2 text-white/70 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]">
-                <Calendar className="w-5 h-5 text-amber-300/80" />
+              <div className="flex items-center gap-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.5)]" style={{ color: 'rgba(255,255,255,0.85)' }}>
+                <Calendar className="w-5 h-5" style={{ color: '#FCD34D' }} />
                 <span className="text-sm md:text-base">{formatDisplayDate(project.handover_date)}</span>
               </div>
             )}
