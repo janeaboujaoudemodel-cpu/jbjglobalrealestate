@@ -2187,9 +2187,13 @@ svg[class*="text-muted"],
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
 }
-/* Exclude descendants of [data-surface="dark"] (separate rule because
-   :not() cannot contain compound descendant selectors in all browsers) */
-[data-surface="dark"] :is(.text-white, [class*="text-white/"]) {
+/* Exclude descendants of [data-surface="dark"] — boost specificity to beat
+   the multi-:not() chain in rule 1b above. We stack the attribute selector
+   plus html prefix so the dark surface always wins. */
+html [data-surface="dark"][data-surface="dark"] .text-white,
+html [data-surface="dark"][data-surface="dark"] [class*="text-white/"],
+html [data-surface="dark"][data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div).text-white,
+html [data-surface="dark"][data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div)[class*="text-white/"] {
   color: #FFFFFF !important;
   opacity: 1 !important;
   --tw-text-opacity: 1 !important;
@@ -2201,7 +2205,7 @@ svg[class*="text-muted"],
   --tw-text-opacity: 1 !important;
 }
 /* …but not inside dark surfaces */
-[data-surface="dark"] :is(input, textarea, select, option):is(.text-white, [class*="text-white/"]) {
+html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, option):is(.text-white, [class*="text-white/"]) {
   color: #FFFFFF !important;
 }
 
@@ -2212,11 +2216,6 @@ svg[class*="text-muted"],
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
 ) :is(h1, h2, h3, h4, h5, h6, p, span, label):is(.text-white, [class*="text-white/"]):not([class*="bg-"]):not([style*="background"]) {
   color: hsl(var(--foreground)) !important;
-  opacity: 1 !important;
-}
-/* …but not inside dark surfaces */
-[data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, label):is(.text-white, [class*="text-white/"]) {
-  color: #FFFFFF !important;
   opacity: 1 !important;
 }
 
