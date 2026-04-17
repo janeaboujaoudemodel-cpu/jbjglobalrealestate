@@ -635,40 +635,43 @@ export default function ProjectDetailLayout({
           </div>
 
           {/* Hero CTAs - Download Brochure + Register Interest */}
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 [&_button]:!text-white [&_button_*]:!text-white">
             {brochurePrimary ? (
               <Button 
                 variant="hero" 
                 size="lg"
+                style={{ color: '#ffffff' }}
                 onClick={() => handleDocumentDownload("brochure", brochurePrimary.url)}
               >
-                <Download className="w-5 h-5" />
-                Download Brochure
+                <Download className="w-5 h-5" style={{ color: '#ffffff' }} />
+                <span style={{ color: '#ffffff' }}>Download Brochure</span>
               </Button>
             ) : (
               <Button 
                 variant="hero" 
                 size="lg"
+                style={{ color: '#ffffff' }}
                 onClick={() => {
                   setCaptureDocType("brochure");
                   setCaptureDocUrl(undefined);
                   setLeadCaptureOpen(true);
                 }}
               >
-                <FileText className="w-5 h-5" />
-                Request Brochure
+                <FileText className="w-5 h-5" style={{ color: '#ffffff' }} />
+                <span style={{ color: '#ffffff' }}>Request Brochure</span>
               </Button>
             )}
             <Button 
               variant="hero" 
               size="lg"
+              style={{ color: '#ffffff' }}
               onClick={() => {
                 setCaptureDocType("brochure");
                 setCaptureDocUrl(undefined);
                 setLeadCaptureOpen(true);
               }}
             >
-              Register Interest
+              <span style={{ color: '#ffffff' }}>Register Interest</span>
             </Button>
           </div>
 
