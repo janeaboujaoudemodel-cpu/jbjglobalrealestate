@@ -12,7 +12,7 @@ const CompanyComm = () => {
         className="container mx-auto px-4 py-6"
       >
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-white mb-2">Company Communication</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Company Communication</h1>
           <p className="text-gray-600">Connect with your team across all departments</p>
         </div>
         
