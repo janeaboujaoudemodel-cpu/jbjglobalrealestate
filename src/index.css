@@ -2334,3 +2334,56 @@ button[style*="background"] [class*="text-gold"] {
   color: #111111 !important;
   opacity: 1 !important;
 }
+
+/* ============================================================
+   DARK SURFACE ESCAPE HATCH
+   Opt-in via data-surface="dark" or .on-dark on a wrapper.
+   Restores readable light text inside dark hero/overlay areas
+   that would otherwise be force-darkened by global rules above.
+   ============================================================ */
+[data-surface="dark"],
+.on-dark {
+  color: rgb(255 255 255 / 0.92);
+}
+
+/* Gold/champagne accents → bright amber on dark */
+[data-surface="dark"] :is(.text-gold, [class*="text-gold/"]),
+[data-surface="dark"] [class*="text-[#D4AF37]"],
+[data-surface="dark"] [class*="text-[#C8A766]"],
+[data-surface="dark"] [class*="text-[#F5E6C8]"],
+[data-surface="dark"] [class*="text-[#E8D5A8]"],
+.on-dark :is(.text-gold, [class*="text-gold/"]) {
+  color: #FDE68A !important;
+  opacity: 1 !important;
+}
+
+/* Muted / gray text → readable white opacity on dark */
+[data-surface="dark"] :is(.text-muted-foreground, .text-gray-400, .text-gray-500, .text-gray-600, .text-gray-700, .text-zinc-500, .text-zinc-600, .text-zinc-700, .text-neutral-500, .text-neutral-600),
+.on-dark :is(.text-muted-foreground, .text-gray-500, .text-gray-600) {
+  color: rgb(255 255 255 / 0.78) !important;
+  opacity: 1 !important;
+}
+
+/* White text variants stay white on dark */
+[data-surface="dark"] :is(.text-white, [class*="text-white/"]),
+.on-dark :is(.text-white, [class*="text-white/"]) {
+  color: #FFFFFF !important;
+}
+
+/* SVG icons inherit readable colors on dark */
+[data-surface="dark"] svg.text-gold,
+[data-surface="dark"] svg[class*="text-gold"],
+[data-surface="dark"] svg[class*="text-amber"] {
+  color: #FDE68A !important;
+}
+[data-surface="dark"] svg.text-muted-foreground,
+[data-surface="dark"] svg[class*="text-gray-4"],
+[data-surface="dark"] svg[class*="text-gray-5"],
+[data-surface="dark"] svg[class*="text-gray-6"] {
+  color: rgb(255 255 255 / 0.78) !important;
+}
+
+/* Foreground/background tokens inside dark surfaces */
+[data-surface="dark"] .text-foreground {
+  color: #FFFFFF !important;
+}
