@@ -27,32 +27,30 @@ export function ProjectBreadcrumb({ projectName, location, surface = "light" }: 
 
   const isDark = surface === "dark";
 
-  const linkClass = isDark
-    ? "text-white/80 hover:text-white transition-colors"
-    : "text-muted-foreground hover:text-gold transition-colors";
-
-  const separatorClass = isDark ? "text-white/40" : "text-muted-foreground/50";
-
-  const currentClass = isDark
-    ? "text-amber-200 font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
-    : "text-gold font-medium";
+  const linkStyle: React.CSSProperties = isDark
+    ? { color: 'rgba(255,255,255,0.85)' }
+    : {};
+  const sepStyle: React.CSSProperties = isDark ? { color: 'rgba(255,255,255,0.45)' } : {};
+  const currentStyle: React.CSSProperties = isDark
+    ? { color: '#FDE68A', fontWeight: 500, textShadow: '0 1px 2px rgba(0,0,0,0.6)' }
+    : {};
 
   return (
     <Breadcrumb className="py-4" {...(isDark ? { "data-surface": "dark" as const } : {})}>
-      <BreadcrumbList className={isDark ? "text-white/80" : undefined}>
+      <BreadcrumbList style={isDark ? { color: 'rgba(255,255,255,0.85)' } : undefined}>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/" className={linkClass}>
+            <Link to="/" style={linkStyle} className="hover:opacity-100 transition-opacity">
               Home
             </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
 
-        <BreadcrumbSeparator className={separatorClass} />
+        <BreadcrumbSeparator style={sepStyle} />
 
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/properties" className={linkClass}>
+            <Link to="/properties" style={linkStyle} className="hover:opacity-100 transition-opacity">
               All Projects in Dubai
             </Link>
           </BreadcrumbLink>
@@ -60,10 +58,10 @@ export function ProjectBreadcrumb({ projectName, location, surface = "light" }: 
 
         {area && (
           <>
-            <BreadcrumbSeparator className={separatorClass} />
+            <BreadcrumbSeparator style={sepStyle} />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to={`/properties?area=${areaSlug}`} className={linkClass}>
+                <Link to={`/properties?area=${areaSlug}`} style={linkStyle} className="hover:opacity-100 transition-opacity">
                   {area}
                 </Link>
               </BreadcrumbLink>
@@ -71,10 +69,10 @@ export function ProjectBreadcrumb({ projectName, location, surface = "light" }: 
           </>
         )}
 
-        <BreadcrumbSeparator className={separatorClass} />
+        <BreadcrumbSeparator style={sepStyle} />
 
         <BreadcrumbItem>
-          <BreadcrumbPage className={cn(currentClass)}>
+          <BreadcrumbPage style={currentStyle} className={cn(!isDark && "text-gold font-medium")}>
             {projectName}
           </BreadcrumbPage>
         </BreadcrumbItem>
