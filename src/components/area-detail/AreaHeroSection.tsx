@@ -64,6 +64,7 @@ export const AreaHeroSection = ({ area, liveProjectCount, dldAreaData }: AreaHer
       )}
 
       <motion.div 
+        data-surface="dark"
         className="relative z-10 container mx-auto px-4 pb-12"
         initial="hidden"
         animate="visible"
