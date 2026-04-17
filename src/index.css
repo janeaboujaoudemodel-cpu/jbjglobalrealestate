@@ -2169,12 +2169,37 @@ svg[class*="text-muted"],
   --tw-text-opacity: 1 !important;
 }
 
-/* 1b. White text on light surfaces → force dark (but NOT inside dark-bg elements like buttons) */
+/* 1b. White text on LIGHT surfaces → force dark (deep descendants).
+   Excludes nodes that themselves carry a dark/gold background (buttons, badges, chips). */
 :root:not(.dark) :is(
   .bg-white, .bg-background, .bg-card, .bg-popover, .bg-muted, .bg-secondary,
-  .bg-gray-50, .bg-gray-100,
-  .jj-layer-2, .jj-layer-1
-) > :is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not(button):not(a) {
+  .bg-gray-50, .bg-gray-100, .bg-gray-200,
+  .bg-champagne, .bg-champagne-1, .bg-champagne-2, .bg-champagne-3,
+  .jj-layer-2, .jj-layer-1,
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"],
+  [class*="from-[#FDFBF"], [class*="from-[#FAF"], [class*="from-[#F9F"],
+  [class*="from-[#FFF"], [class*="from-[#FEF"],
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
+  [class*="bg-[#FFFFFF]"], [class*="bg-[#FFF"], [class*="bg-[#FEF"]
+)
+:is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"]):not(.bg-gold):not([class*="bg-gold"]):not(.bg-primary):not([class*="bg-primary"]):not([class*="bg-gray-900"]):not([class*="bg-gray-800"]):not([class*="bg-zinc-8"]):not([class*="bg-zinc-9"]):not([class*="bg-slate-8"]):not([class*="bg-slate-9"]):not([class*="bg-neutral-8"]):not([class*="bg-neutral-9"]):not([style*="background"]) {
+  color: hsl(var(--foreground)) !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* 1c. Form controls on light surfaces — text must always be dark, never white. */
+:root:not(.dark) :is(input, textarea, select, option):is(.text-white, [class*="text-white/"]) {
+  color: hsl(var(--foreground)) !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* 1d. Headings/labels with text-white inside light gradient hero/card overlays
+   (only when no inline backgroundImage/dark overlay exists on the element itself). */
+:root:not(.dark) :is(
+  .bg-champagne, [class*="bg-champagne"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
+) :is(h1, h2, h3, h4, h5, h6, p, span, label):is(.text-white, [class*="text-white/"]):not([class*="bg-"]):not([style*="background"]) {
   color: hsl(var(--foreground)) !important;
   opacity: 1 !important;
 }
