@@ -588,7 +588,7 @@ export default function ProjectDetailLayout({
           )}
 
           {/* Project Title - BIGGER */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white/95 leading-[1.05] mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold !text-white leading-[1.05] mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]" style={{ color: '#ffffff' }}>
             {project.name}
           </h1>
 
