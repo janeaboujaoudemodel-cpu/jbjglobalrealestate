@@ -77,12 +77,12 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
   const giftsPct = ytd2026.gifts ? Math.round((ytd2026.gifts / ytd2026.transactions) * 100) : 0;
 
   const mainStats = [
-    { label: "YTD Volume", value: ytd2026.value, sub: "Total transaction value", icon: Banknote, color: "text-emerald-600", borderColor: "border-emerald-200", bgColor: "bg-emerald-50", glow: "drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]", dotColor: "bg-emerald-500" },
-    { label: "Transactions", value: ytd2026.transactions.toLocaleString(), sub: "YTD 2026 deals", icon: Building2, color: "text-blue-600", borderColor: "border-blue-200", bgColor: "bg-blue-50", glow: "drop-shadow-[0_0_6px_rgba(59,130,246,0.3)]", dotColor: "bg-blue-500" },
-    { label: "Off-Plan Sales", value: ytd2026.offPlan.toLocaleString(), sub: `${offPlanPct}% of total`, icon: TrendingUp, color: "text-emerald-600", borderColor: "border-emerald-200", bgColor: "bg-emerald-50", glow: "drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]", dotColor: "bg-emerald-500" },
-    { label: "Secondary Sales", value: ytd2026.secondary.toLocaleString(), sub: `${secondaryPct}% of total`, icon: Activity, color: "text-red-600", borderColor: "border-red-200", bgColor: "bg-red-50", glow: "drop-shadow-[0_0_6px_rgba(239,68,68,0.3)]", dotColor: "bg-red-500" },
-    { label: "Cash Deals", value: ytd2026.cash.toLocaleString(), sub: `${cashPct}% of total`, icon: Banknote, color: "text-blue-600", borderColor: "border-blue-200", bgColor: "bg-blue-50", glow: "drop-shadow-[0_0_6px_rgba(59,130,246,0.3)]", dotColor: "bg-blue-500" },
-    { label: "Mortgage Deals", value: ytd2026.mortgage.toLocaleString(), sub: `${mortgagePct}% of total`, icon: BarChart3, color: "text-amber-600", borderColor: "border-amber-200", bgColor: "bg-amber-50", glow: "drop-shadow-[0_0_6px_rgba(245,158,11,0.3)]", dotColor: "bg-amber-500" },
+    { label: "YTD Volume", value: ytd2026.value, sub: "Total transaction value", icon: Banknote, gradient: "from-emerald-500 via-teal-500 to-green-600", borderColor: "border-emerald-300/70", bgColor: "bg-gradient-to-br from-emerald-50 via-white to-teal-50/60", glow: "drop-shadow-[0_2px_8px_rgba(16,185,129,0.35)]", dotColor: "bg-emerald-500", labelColor: "text-emerald-700", subColor: "text-emerald-700/80" },
+    { label: "Transactions", value: ytd2026.transactions.toLocaleString(), sub: "YTD 2026 deals", icon: Building2, gradient: "from-blue-500 via-indigo-500 to-purple-600", borderColor: "border-blue-300/70", bgColor: "bg-gradient-to-br from-blue-50 via-white to-indigo-50/60", glow: "drop-shadow-[0_2px_8px_rgba(59,130,246,0.35)]", dotColor: "bg-blue-500", labelColor: "text-blue-700", subColor: "text-blue-700/80" },
+    { label: "Off-Plan Sales", value: ytd2026.offPlan.toLocaleString(), sub: `${offPlanPct}% of total`, icon: TrendingUp, gradient: "from-emerald-500 via-green-500 to-lime-600", borderColor: "border-emerald-300/70", bgColor: "bg-gradient-to-br from-emerald-50 via-white to-lime-50/60", glow: "drop-shadow-[0_2px_8px_rgba(16,185,129,0.35)]", dotColor: "bg-emerald-500", labelColor: "text-emerald-700", subColor: "text-emerald-700/80" },
+    { label: "Secondary Sales", value: ytd2026.secondary.toLocaleString(), sub: `${secondaryPct}% of total`, icon: Activity, gradient: "from-rose-500 via-red-500 to-orange-500", borderColor: "border-rose-300/70", bgColor: "bg-gradient-to-br from-rose-50 via-white to-orange-50/60", glow: "drop-shadow-[0_2px_8px_rgba(244,63,94,0.35)]", dotColor: "bg-rose-500", labelColor: "text-rose-700", subColor: "text-rose-700/80" },
+    { label: "Cash Deals", value: ytd2026.cash.toLocaleString(), sub: `${cashPct}% of total`, icon: Banknote, gradient: "from-cyan-500 via-blue-500 to-indigo-600", borderColor: "border-cyan-300/70", bgColor: "bg-gradient-to-br from-cyan-50 via-white to-blue-50/60", glow: "drop-shadow-[0_2px_8px_rgba(6,182,212,0.35)]", dotColor: "bg-cyan-500", labelColor: "text-cyan-700", subColor: "text-cyan-700/80" },
+    { label: "Mortgage Deals", value: ytd2026.mortgage.toLocaleString(), sub: `${mortgagePct}% of total`, icon: BarChart3, gradient: "from-amber-500 via-orange-500 to-rose-500", borderColor: "border-amber-300/70", bgColor: "bg-gradient-to-br from-amber-50 via-white to-orange-50/60", glow: "drop-shadow-[0_2px_8px_rgba(245,158,11,0.35)]", dotColor: "bg-amber-500", labelColor: "text-amber-700", subColor: "text-amber-700/80" },
   ];
 
   return (
@@ -104,33 +104,33 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
             </p>
           </div>
 
-          {/* Growth Banner */}
-          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 mb-8 flex items-center justify-between">
+          {/* Growth Banner — premium gradient */}
+          <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-green-50 border-2 border-emerald-300/80 rounded-2xl p-5 mb-8 flex items-center justify-between shadow-[0_8px_30px_rgba(16,185,129,0.15)]">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-                <ArrowUpRight className="w-5 h-5 text-emerald-600" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-[0_4px_15px_rgba(16,185,129,0.4)]">
+                <ArrowUpRight className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-foreground text-xs uppercase tracking-wider font-semibold">YTD Market Growth</p>
-                <p className="text-emerald-600 text-[11px]">Year-over-year volume increase</p>
+                <p className="text-emerald-900 text-xs uppercase tracking-wider font-bold">YTD Market Growth</p>
+                <p className="text-emerald-700 text-[11px] font-medium">Year-over-year volume increase</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-emerald-600 text-3xl md:text-4xl font-extrabold drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">{ytd2026.growth}</p>
+              <p className="text-3xl md:text-5xl font-extrabold bg-gradient-to-br from-emerald-500 via-teal-500 to-green-600 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(16,185,129,0.35)]">{ytd2026.growth}</p>
             </div>
           </div>
 
           {/* 6-Metric Grid */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {mainStats.map((stat) => (
-              <div key={stat.label} className={`${stat.bgColor} ${stat.borderColor} border rounded-xl p-5 relative overflow-hidden group hover:scale-[1.02] transition-transform shadow-sm`}>
-                <div className="absolute top-0 right-0 w-20 h-20 rounded-full bg-black/[0.02] -translate-y-1/2 translate-x-1/2" />
+              <div key={stat.label} className={`${stat.bgColor} ${stat.borderColor} border-2 rounded-xl p-5 relative overflow-hidden group hover:scale-[1.03] hover:shadow-lg transition-all duration-300 shadow-sm`}>
+                <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-black/[0.02] -translate-y-1/2 translate-x-1/2" />
                 <div className="flex items-center gap-2 mb-3">
-                  <div className={`w-2 h-2 rounded-full ${stat.dotColor} shadow-[0_0_6px] shadow-current`} />
-                   <span className="text-foreground/70 text-[10px] uppercase tracking-[0.15em] font-semibold">{stat.label}</span>
-                 </div>
-                 <p className={`${stat.color} text-2xl md:text-3xl font-extrabold ${stat.glow} mb-1`}>{stat.value}</p>
-                 <p className={`${stat.color} opacity-80 text-[11px] font-medium`}>{stat.sub}</p>
+                  <div className={`w-2 h-2 rounded-full ${stat.dotColor} shadow-[0_0_8px] shadow-current animate-pulse`} />
+                  <span className={`${stat.labelColor} text-[10px] uppercase tracking-[0.15em] font-bold`}>{stat.label}</span>
+                </div>
+                <p className={`text-2xl md:text-3xl font-extrabold bg-gradient-to-br ${stat.gradient} bg-clip-text text-transparent ${stat.glow} mb-1`}>{stat.value}</p>
+                <p className={`${stat.subColor} text-[11px] font-semibold`}>{stat.sub}</p>
               </div>
             ))}
           </div>
@@ -246,12 +246,12 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                       />
                       <div className="relative flex items-center justify-between px-3 py-2.5">
                         <div className="flex items-center gap-2.5">
-                          <span className="text-gold text-[10px] font-bold w-5 text-center bg-gold/10 rounded py-0.5">{i + 1}</span>
-                          <span className={`text-sm font-medium ${isHighlighted ? "text-gold" : "text-foreground"}`}>{area.area}</span>
+                          <span className={`text-white text-[10px] font-extrabold w-6 text-center bg-gradient-to-br ${barColors[i]} rounded py-1 shadow-md`}>{i + 1}</span>
+                          <span className={`text-sm font-semibold ${isHighlighted ? "text-gold" : "text-foreground"}`}>{area.area}</span>
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="text-foreground text-xs font-bold">{area.transactions.toLocaleString()}</span>
-                          <span className="text-emerald-600 text-xs font-bold bg-emerald-50 px-2 py-0.5 rounded-full">{area.change}</span>
+                          <span className="text-emerald-700 text-xs font-extrabold bg-gradient-to-r from-emerald-100 to-green-100 border border-emerald-300 px-2 py-0.5 rounded-full">{area.change}</span>
                         </div>
                       </div>
                     </div>
@@ -295,16 +295,16 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
                       <div className="relative flex items-center justify-between px-3 py-2.5">
                         <div className="flex items-center gap-2.5">
                           <span className="text-lg leading-none">{nat.flag}</span>
-                          <span className="text-foreground font-medium text-sm">{nat.country}</span>
+                          <span className="text-foreground font-semibold text-sm">{nat.country}</span>
                         </div>
                         <div className="flex items-center gap-3">
                           <div className="w-24 h-2.5 bg-stone-200 rounded-full overflow-hidden">
                             <div
-                              className={`h-full ${bgColors[i % bgColors.length]} rounded-full`}
+                              className={`h-full bg-gradient-to-r ${barColors[i % barColors.length]} rounded-full shadow-[0_0_6px] shadow-current`}
                               style={{ width: `${nat.percentage * 4}%` }}
                             />
                           </div>
-                          <span className={`${textColors[i % textColors.length]} text-xs font-bold w-8 text-right`}>{nat.percentage}%</span>
+                          <span className={`${textColors[i % textColors.length]} text-xs font-extrabold w-8 text-right`}>{nat.percentage}%</span>
                         </div>
                       </div>
                     </div>
@@ -316,14 +316,14 @@ const DLDMarketWidget = ({ highlightArea, compact = false }: DLDMarketWidgetProp
 
           {/* Gifts row if available */}
           {ytd2026.gifts && ytd2026.gifts > 0 && (
-            <div className="mt-6 bg-purple-50 border border-purple-200 rounded-xl p-4 flex items-center justify-between">
+            <div className="mt-6 bg-gradient-to-r from-purple-50 via-fuchsia-50 to-pink-50 border-2 border-purple-300/80 rounded-xl p-4 flex items-center justify-between shadow-[0_4px_20px_rgba(168,85,247,0.15)]">
               <div className="flex items-center gap-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.5)]" />
-                <span className="text-purple-700 text-xs uppercase tracking-wider font-bold">Gift Transactions</span>
+                <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)] animate-pulse" />
+                <span className="text-purple-800 text-xs uppercase tracking-wider font-extrabold">Gift Transactions</span>
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-purple-600 text-lg font-extrabold">{ytd2026.gifts.toLocaleString()}</span>
-                <span className="text-purple-600 text-xs font-medium">{giftsPct}% of total</span>
+                <span className="text-2xl font-extrabold bg-gradient-to-br from-purple-500 via-fuchsia-500 to-pink-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(168,85,247,0.35)]">{ytd2026.gifts.toLocaleString()}</span>
+                <span className="text-purple-700 text-xs font-bold">{giftsPct}% of total</span>
               </div>
             </div>
           )}
