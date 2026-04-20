@@ -327,7 +327,7 @@ export const ProjectAIAnalyzer = ({
                 )}
               </div>
               <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-blue-50 rounded-2xl p-6 shadow-sm border border-emerald-200 flex flex-col items-center justify-center text-center">
-                <Star className="w-9 h-9 text-amber-500 mb-2 drop-shadow-[0_0_6px_rgba(245,158,11,0.4)] relative z-10" />
+                <Star className="w-9 h-9 fill-gold text-gold mb-2 drop-shadow-[0_0_8px_rgba(200,167,102,0.6)] relative z-10" />
                 {ratingScore !== null ? (
                   <>
                     <div className="relative z-10">
