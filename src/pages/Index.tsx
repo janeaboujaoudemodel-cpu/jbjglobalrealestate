@@ -175,7 +175,7 @@ const Index = () => {
               <img 
                 src={jbjMonogramLightTransparent} 
                 alt="JBJ Global Real Estate" 
-                className="w-36 h-auto md:w-52 object-contain bg-transparent"
+                className="w-44 h-auto md:w-52 object-contain bg-transparent"
                 style={{ 
                   filter: 'drop-shadow(0 0 32px rgba(200,167,102,0.4))',
                   animation: 'heroFallbackPulse 2.5s ease-in-out infinite',
@@ -184,19 +184,25 @@ const Index = () => {
               
               {/* Tagline */}
               <p 
-                className="mt-6 text-white/60 text-sm md:text-base tracking-[0.25em] uppercase text-center px-6"
+                className="mt-6 text-white/90 text-base sm:text-lg tracking-[0.25em] uppercase text-center px-6"
+                style={{ textShadow: '0 2px 12px rgba(0,0,0,0.6)' }}
               >
                 Your Gateway to Dubai's Finest Real Estate
               </p>
               
               {/* Loading shimmer line */}
-              <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
+              <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
+
+              {/* Loading micro-label */}
+              <p className="mt-4 text-white/70 text-[11px] tracking-[0.3em] uppercase">
+                Loading experience…
+              </p>
             </div>
           )}
 
           <video 
             autoPlay loop muted playsInline
-            preload="none"
+            preload="metadata"
             poster={heroFallbackDubai}
             webkit-playsinline="true"
             x-webkit-airplay="allow"
@@ -280,9 +286,9 @@ const Index = () => {
                 <Link
                   key={action.label}
                   to={action.href}
-                  className="group inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-white/30 bg-black/40 backdrop-blur-md text-white/90 text-[10px] sm:text-xs font-medium hover:bg-white/15 hover:border-white/50 hover:text-white transition-all duration-300"
+                  className="group inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-white/60 sm:border-white/30 bg-black/50 backdrop-blur-md text-white text-[11px] sm:text-xs font-medium hover:bg-white/15 hover:border-white/70 hover:text-white transition-all duration-300"
                 >
-                  <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white/70 group-hover:text-white transition-colors" />
+                  <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white group-hover:text-white transition-colors" />
                   {action.label}
                 </Link>
               ))}
@@ -298,9 +304,9 @@ const Index = () => {
                   key={pillar.title}
                   className="bg-black/50 backdrop-blur-sm p-3 sm:p-4 text-center border-r last:border-r-0 border-white/15"
                 >
-                  <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white/80 mx-auto mb-1.5" />
-                  <h3 className="text-[10px] sm:text-xs font-semibold text-white mb-0.5">{pillar.title}</h3>
-                  <p className="text-[8px] sm:text-[10px] text-white/60 leading-tight">{pillar.desc}</p>
+                  <pillar.icon className="w-4 h-4 sm:w-5 sm:h-5 text-white mx-auto mb-1.5" />
+                  <h3 className="text-[11px] sm:text-xs font-semibold text-white mb-0.5">{pillar.title}</h3>
+                  <p className="text-[10px] sm:text-[10px] text-white/85 leading-tight">{pillar.desc}</p>
                 </div>
               ))}
             </motion.div>
