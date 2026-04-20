@@ -18,31 +18,33 @@ const ROUTE_NAMES: Record<string, string> = {
 };
 
 /**
- * Persists and restores the last visited route using localStorage.
- * Also tracks recently viewed pages for the account dropdown.
+ * Tracks recently viewed pages for the account dropdown.
+ * Also resumes the Interior Design AI in-progress flow (sessionStorage).
+ *
+ * NOTE: The generic "last-route" auto-redirect has been removed — visiting `/`
+ * must always land on the homepage. Resume UX belongs behind explicit user action.
  */
 export default function RouteResume() {
   const location = useLocation();
   const navigate = useNavigate();
   const hasCheckedRef = useRef(false);
 
-  // Persist last visited route + track recent pages
+  // One-time cleanup: remove stale last-route value so returning users aren't bounced
   useEffect(() => {
     try {
-      const route = `${location.pathname}${location.search}${location.hash}`;
-      const existing = localStorage.getItem("last-route");
+      localStorage.removeItem("last-route");
+    } catch {
+      // ignore
+    }
+  }, []);
 
-      if (!hasCheckedRef.current && route === "/" && existing && existing !== "/") {
+  // Track recently viewed pages (used by the account dropdown)
+  useEffect(() => {
+    try {
+      if (location.pathname.startsWith("/auth") || location.pathname === "/403") {
         return;
       }
 
-      if (route.startsWith("/auth") || route === "/403") {
-        return;
-      }
-
-      localStorage.setItem("last-route", route);
-
-      // Track recently viewed pages
       const path = location.pathname;
       if (path.length > 1) {
         const stored = localStorage.getItem('jj_recent_pages');
@@ -57,16 +59,14 @@ export default function RouteResume() {
     }
   }, [location.pathname, location.search, location.hash]);
 
-  // Run only once per page load
+  // Interior Design AI in-progress resume — runs only once per page load
   useEffect(() => {
     if (hasCheckedRef.current) return;
     hasCheckedRef.current = true;
 
-    // If browser already loaded on the correct deep route, do nothing
     if (location.pathname !== "/") return;
 
     try {
-      // 1) Interior Design AI resume
       const step = JSON.parse(sessionStorage.getItem("interior-design-step") ?? "1");
       const showComparison = JSON.parse(
         sessionStorage.getItem("interior-design-showComparison") ?? "true"
@@ -86,13 +86,6 @@ export default function RouteResume() {
 
       if (hasInteriorProgress) {
         navigate("/interior-design-ai", { replace: true });
-        return;
-      }
-
-      // 2) Generic last-route resume from localStorage
-      const lastRoute = localStorage.getItem("last-route") || "";
-      if (lastRoute && lastRoute !== "/") {
-        navigate(lastRoute, { replace: true });
       }
     } catch {
       // ignore
@@ -101,4 +94,3 @@ export default function RouteResume() {
 
   return null;
 }
-
