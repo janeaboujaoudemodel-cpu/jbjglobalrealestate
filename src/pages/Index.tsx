@@ -182,21 +182,8 @@ const Index = () => {
                 }}
               />
               
-              {/* Tagline */}
-              <p 
-                className="mt-6 text-white/90 text-base sm:text-lg tracking-[0.25em] uppercase text-center px-6"
-                style={{ textShadow: '0 2px 12px rgba(0,0,0,0.6)' }}
-              >
-                Your Gateway to Dubai's Finest Real Estate
-              </p>
-              
               {/* Loading shimmer line */}
               <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
-
-              {/* Loading micro-label */}
-              <p className="mt-4 text-white/70 text-[11px] tracking-[0.3em] uppercase">
-                Loading experience…
-              </p>
             </div>
           )}
 
