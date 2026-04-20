@@ -46,6 +46,7 @@ import { companyProfileBook } from "@/data/bookCollections";
 
 import luxuryVillaHero from "@/assets/luxury-villa-hero.jpeg";
 import founderCompanyProfile from "@/assets/founder-company-profile.jpg";
+import { SEOHead } from "@/components/SEOHead";
 
 function SectionShell({
   children,
@@ -404,6 +405,11 @@ const CompanyProfile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <SEOHead
+        title="Company Profile | JBJ Global Real Estate"
+        description="The institutional company profile of JBJ Global Real Estate — Dubai's premier brokerage. Vision, services, leadership, awards, and full credentials."
+        canonicalPath="/company-profile"
+      />
       {/* Sticky Actions (Desktop) */}
       <div className="hidden lg:flex fixed right-6 top-1/2 -translate-y-1/2 z-50 flex-col gap-3">
         <Button onClick={handleWhatsApp} variant="primary" size="icon" className="rounded-full" aria-label="WhatsApp">

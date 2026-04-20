@@ -20,6 +20,7 @@ import RecommendedDevelopers from "@/components/developer/RecommendedDevelopers"
 import FilterShortcutBar, { type ShortcutFilterState, defaultShortcutFilters } from "@/components/filters/FilterShortcutBar";
 import { applyShortcutFilters } from "@/utils/applyShortcutFilters";
 import { Input } from "@/components/ui/input";
+import { SEOHead } from "@/components/SEOHead";
 
 // Lazy load map component to prevent boot errors from react-leaflet context issues
 const DeveloperProjectsMap = lazy(() => import("@/components/developer/DeveloperProjectsMap").then(m => ({ default: m.DeveloperProjectsMap })));
@@ -210,6 +211,12 @@ const DeveloperDetail = () => {
 
   return (
     <section className="relative w-full min-h-screen bg-premium-bg">
+      <SEOHead
+        title={`${developer.name} | UAE Property Developer`}
+        description={(developer.description || `Explore ${developer.name} property projects in Dubai and the UAE. ${developer.completed_projects ? `${developer.completed_projects.toLocaleString()}+ units delivered. ` : ""}Off-plan and ready properties on JBJ Global Real Estate.`).replace(/<[^>]+>/g, "").slice(0, 200)}
+        canonicalPath={`/developer/${slug}`}
+        ogImage={developer.feature_image_url || developer.logo_url}
+      />
       {/* Hero section - always visible */}
       <div className="relative w-full h-screen min-h-[500px] overflow-hidden">
         {developer.feature_image_url ? (
