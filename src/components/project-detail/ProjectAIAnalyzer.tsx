@@ -331,7 +331,7 @@ export const ProjectAIAnalyzer = ({
                 {ratingScore !== null ? (
                   <>
                     <div className="relative z-10">
-                      <span className="text-5xl font-extrabold text-emerald-600 drop-shadow-[0_0_6px_rgba(16,185,129,0.3)]">{ratingScore}</span>
+                      <span className="text-6xl font-extrabold bg-gradient-to-br from-emerald-500 via-teal-500 to-blue-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(16,185,129,0.4)]">{ratingScore}</span>
                     </div>
                     <div className="text-emerald-700 text-sm font-bold tracking-wide uppercase mt-1 relative z-10">/10 Investment Rating</div>
                     <div className="flex items-center gap-1.5 mt-2 relative z-10">
