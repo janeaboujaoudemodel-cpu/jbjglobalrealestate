@@ -1,60 +1,73 @@
 
-The user wants me to use the browser tool to test the contact form and audit forms across the entire site (front + back end) to find where they're breaking.
+The user is reporting that the LeadCapturePopup ("Exclusive Access") still has unreadable fields — likely white text on white background. They want a systemic fix so it never happens anywhere on the site.
 
-This is a testing/QA task. I need browser tools (not available in plan mode) plus likely fixes after.
+Looking at `LeadCapturePopup.tsx`:
+- Container: `bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6]` (LIGHT champagne)
+- Inputs: `bg-white text-black placeholder:text-black/50` — should be fine on its own
+- BUT — `src/index.css` has dark-surface rules that force `text-white` on descendants when nested under `[data-surface="dark"]` ancestors. The popup is rendered as a portal at `z-[20000]` over `bg-black/60` backdrop. If any wrapper sets `data-surface="dark"` on body/html or the portal root inherits it, the inputs flip to white-on-white.
+- The "Light Island Escape Hatch" added previously targets `.bg-white, .bg-champagne, [class*="from-[#FDFBF7]"]` — but only `bg-gradient-to-br from-[#FDFBF7]` matches via the arbitrary class, NOT `bg-white` (the inputs). The escape hatch works on the OUTER container, but the INNER inputs use `bg-white` which is matched — so it should re-assert. Need to verify why it's still failing.
+- Likely cause: the SelectContent dropdowns are portaled to `document.body` (Radix), so they escape the `from-[#FDFBF7]` parent and don't get the escape hatch. The escape hatch checks ancestor class — Radix portals break ancestry.
 
-Plan:
+Also: Select trigger value text, SelectItem text in dropdown, and placeholder visibility are all suspect.
 
 ## Goal
-Use the browser to actively test forms across the entire site, identify what's broken (visual contrast, validation, submission, errors), and fix every issue found.
+Make the "Exclusive Access" popup fully readable AND establish a global rule that prevents white-on-white anywhere — front end and back end.
 
-## Testing scope
+## Root causes to fix
+1. **LeadCapturePopup inputs/selects** — lock explicit dark text + white bg with inline styles (immune to global CSS).
+2. **Radix Select dropdowns** — portaled to body, escape the parent's "light island" scope. Fix at the primitive level (`src/components/ui/select.tsx`) so SelectContent/SelectItem always render dark text on white, regardless of ancestor.
+3. **Global safety net in `src/index.css`** — add a final rule: any `<input>`, `<textarea>`, `<select>` with `bg-white` (or no explicit bg) gets `color: #111` forced, and any element with both light bg + light text gets corrected. Also add a rule for Radix portals (`[data-radix-popper-content-wrapper]`) to default to dark-on-white.
 
-**Front end (public)**
-1. `/contact` — consultation form submission + readability
-2. `/project/tilal-al-furjan` — Register Interest + Download Brochure modals
-3. Smart Lead Capture popup (triggered by behavior)
-4. `/card` — digital business card form
-5. Action gate / sign-in modal
-6. Meeting booking modal (Amanda)
-7. Newsletter / footer subscribe (if present)
-8. Search & filter bars on `/projects`, `/resale-properties`, `/property-map`
+## Implementation steps
+1. **Patch `src/components/LeadCapturePopup.tsx`**
+   - Add `data-surface="light"` to the modal card.
+   - Lock every Input with inline `style={{ backgroundColor: '#fff', color: '#111' }}` and explicit placeholder via className.
+   - Lock SelectTrigger inline to white bg + dark text; lock SelectValue with dark color.
+   - Lock heading/subtitle/labels/privacy text explicit dark.
 
-**Back end (authenticated / owner)**
-1. `/owner` command center forms
-2. `/owner/email-client` compose
-3. `/team-chat` message composer
-4. `/admin/marketing` campaign editor
-5. CRM lead create/edit (`/owner/leads` or equivalent)
-6. `/owner/documents` editor
-7. Listing admin / Provident portal create/edit project
-8. Developer portal registration + project submission
-9. Ticket hub create ticket
-10. Settings / profile edit
+2. **Patch `src/components/ui/select.tsx`**
+   - SelectContent: force `bg-white text-[#111]` with inline fallback.
+   - SelectItem: force dark text, hover bg gray-100, selected state visible.
+   - SelectTrigger placeholder: ensure `data-[placeholder]` color is dark gray, not white.
 
-## Method (per form)
-1. Navigate, screenshot before
-2. Check label/placeholder/input contrast (must be black on light, white on dark)
-3. Try empty submit → check validation messages render readably
-4. Try valid submit → check success toast + network 2xx
-5. Check dropdowns/selects/date pickers contrast when open
-6. Check modal close button visibility
-7. Capture screenshot as proof
+3. **Patch `src/components/ui/input.tsx` and `textarea.tsx`**
+   - Already mostly OK but add a hard `text-black` and `bg-white` baseline that survives global overrides via `!` important utility or inline style fallback.
 
-## Fix-as-I-go
-For every issue found I'll:
-- Patch the component (inline color locks or `data-surface` tag)
-- If it's systemic, patch the primitive (`Input`, `Label`, `Select`, `Textarea`, `Button`)
-- Re-test and screenshot the fixed state
+4. **Patch `src/index.css`** — add the universal anti-white-on-white safety net at the very end:
+   ```css
+   /* HARD STOP: never allow white text on white/light bg anywhere */
+   :is(input, textarea, select):where(.bg-white, [class*="bg-white"]),
+   :is(input, textarea, select):not([class*="bg-"]) {
+     color: #111 !important;
+     background-color: #fff !important;
+   }
+   :is(input, textarea, select)::placeholder {
+     color: rgba(17,17,17,0.5) !important;
+   }
+   /* Radix portals default to dark-on-white */
+   [data-radix-popper-content-wrapper] [role="listbox"],
+   [data-radix-popper-content-wrapper] [role="menu"],
+   [data-radix-popper-content-wrapper] [role="dialog"] {
+     color: #111 !important;
+   }
+   [data-radix-popper-content-wrapper] [role="option"],
+   [data-radix-popper-content-wrapper] [role="menuitem"] {
+     color: #111 !important;
+   }
+   ```
+
+5. **Audit sweep** — search for any other components using `bg-white`/`bg-champagne` + Select/Input combos that might be affected: `LeadCaptureModal`, `MeetingBookingModal`, `ContactGatingModal`, `Contact.tsx`, owner forms. The primitive-level fix in step 2-4 covers them all without per-file changes.
+
+6. **Verify** — open the popup in browser, screenshot, confirm all fields readable + dropdowns readable.
+
+## Files to edit
+- `src/components/LeadCapturePopup.tsx` (explicit locks on every field)
+- `src/components/ui/select.tsx` (Radix portal dark-on-white default)
+- `src/components/ui/input.tsx` (hard baseline)
+- `src/components/ui/textarea.tsx` (hard baseline)
+- `src/index.css` (universal anti-white-on-white safety net + portal rule)
 
 ## Deliverable
-- Single audit report listing every page → form → issue found → fix applied → before/after screenshot
-- Saved to `/mnt/documents/form-audit/` and surfaced as artifacts
-- Final summary table: page, form, status (PASS / FIXED / BLOCKED)
-
-## Constraints
-- I'll skip destructive back-end actions (don't delete real CRM leads, don't send real campaigns) — I'll fill forms and verify the submit step works without final-confirming destructive ops, and note that explicitly in the report
-- If a back-end form requires data I don't have (e.g. specific IDs), I'll note it as "manual verification required"
-- If the browser fails to start, I'll do the audit by code reading and still patch issues, then report which forms need your manual click-through
-
-Once approved, I'll start with `/contact`, work through public pages, then authenticated pages, fixing readability/submission breaks as I find them and delivering screenshot proof at the end.
+- Screenshot of the popup with all 7 fields readable
+- Screenshot of an open Select dropdown showing dark-on-white items
+- Confirmation that the safety-net CSS prevents white-on-white anywhere site-wide
