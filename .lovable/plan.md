@@ -1,30 +1,45 @@
 
 
-## Fix: jbj.ae redirects to /contact instead of homepage
+## Fix: Hero overlap & ghosted "Your Gateway…" headline
 
-### Root cause
-`src/components/RouteResume.tsx` auto-redirects `/` → last visited route from `localStorage["last-route"]`. If the user last viewed `/contact` on mobile, every fresh visit to jbj.ae bounces them to `/contact`. This is unwanted behavior — visiting the root domain should always show the homepage.
+### Root cause (confirmed in `src/pages/Index.tsx`)
+Two layers render the same copy at the same vertical position:
+
+1. **Fallback layer** (lines 166–201, `z-[1]`) — shows while `videoLoaded === false`. Renders the centered monogram + the words **"Your Gateway to Dubai's Finest Real Estate"** + "Loading experience…".
+2. **Hero content layer** (lines 250+, `z-10`) — always rendered. Contains the eyebrow + the SAME headline **"Your Gateway to Dubai's Finest Real Estate"** + 5 CTA pills + 3 pillar cards.
+
+Because the fallback has no opaque cover and the gold-gradient headline is semi-transparent, the fallback's centered tagline ghosts through the live headline → the doubled "Your Gateway…" effect visible in your screenshot. The eyebrow also visually overlaps the fading monogram watermark behind it. On the 1041px viewport the 5 CTAs wrap into a tight cluster against the headline.
 
 ### Fix
 
-**`src/components/RouteResume.tsx`** — remove the generic last-route auto-redirect. Keep only:
-- The Interior Design AI in-progress resume (sessionStorage-based, intentional UX for an unfinished tool)
-- The recent-pages tracking (used by the account dropdown)
+**File: `src/pages/Index.tsx`**
 
-Specifically:
-1. Delete the block (lines ~92-96) that calls `navigate(lastRoute, { replace: true })` based on `localStorage["last-route"]`.
-2. Stop writing `last-route` to localStorage (lines ~33, 43) since nothing else consumes it. Keep the `jj_recent_pages` tracking intact.
-3. Add a one-time cleanup: `localStorage.removeItem("last-route")` so existing users with a stale value stop being redirected on their next visit.
+1. **De-duplicate the fallback** — remove the tagline and "Loading experience…" copy from the fallback layer. Keep only the pulsing monogram + shimmer line so the loading state stays branded but never collides with the real headline.
+   - Delete lines ~185–199 (tagline `<p>` + shimmer + loading micro-label)
+   - Keep the monogram (lines 175–183) and a single subtle shimmer bar
+   
+2. **Hide the fallback the moment hero content mounts** — wrap the fallback in `{!videoLoaded && ...}` (already there) AND add a fast fade-out by rendering the live hero with a slightly delayed-in opacity so users never see both stacked. Simpler fix: give the fallback `z-[1]` and ensure the real content sits on a faint backdrop blur card so any leftover bleed-through is invisible.
 
-### Why not keep it gated to certain routes?
-Root domain visits should be deterministic. "Resume where I left off" belongs behind an explicit user action (e.g. a "Continue browsing" card on the homepage, which the recent-pages list already powers), not a silent redirect that hijacks `/`.
+3. **Tighten the CTA grid on tablet (768–1100px)** — the current `sm:flex sm:flex-wrap sm:justify-center` lets the 5 buttons wrap awkwardly. Change to:
+   - Mobile: `grid grid-cols-2` (keep)
+   - Tablet (sm–lg): `grid grid-cols-3` with the 4th & 5th items spanning to center
+   - Desktop (lg+): `flex flex-wrap justify-center`
+   
+   This eliminates the "5 buttons crammed into one line under the headline" crowding visible at 1041px.
+
+4. **Add vertical breathing room** between eyebrow → headline → CTAs at the tablet breakpoint:
+   - Change `space-y-5 sm:space-y-6` to `space-y-5 sm:space-y-7 md:space-y-8`
+   - Reduce `pt-[max(14vh,96px)] sm:pt-[22vh]` slightly so the whole stack doesn't push pillars off-screen
+
+5. **Eyebrow contrast** — the "DUBAI'S TRUSTED REAL ESTATE TECHNOLOGY PLATFORM" line currently relies on `text-white` + textShadow but the giant fallback monogram glow behind it muddies it. Once step 1 removes the centered fallback elements that overlap, this becomes legible. Add a tighter `letter-spacing` and a stronger `textShadow: '0 2px 16px rgba(0,0,0,0.85)'` for safety.
 
 ### Files touched
-- `src/components/RouteResume.tsx`
+- `src/pages/Index.tsx` (hero section only, lines ~162–327)
 
 ### Deliverable
-- Visiting jbj.ae (mobile or desktop) always lands on the homepage `/`.
-- Recent-pages tracking for the account dropdown still works.
-- Interior Design AI resume flow still works.
-- Live mobile screenshot at 390×844 of jbj.ae loading the actual homepage hero, not /contact.
+- No ghosted/doubled headline at any viewport (mobile 390, tablet 1024/1041, desktop 1440)
+- No overlap between eyebrow and the monogram watermark
+- 5 CTA pills lay out cleanly at every breakpoint (no awkward 4+1 wrap on tablet)
+- Loading fallback stays branded (monogram + shimmer) but no copy that competes with the real headline
+- Live screenshots at 390×844, 1041×769, and 1440×900 confirming the fix
 
