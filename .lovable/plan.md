@@ -1,54 +1,45 @@
 
-The user approved a plan to globally audit and fix white-on-light contrast issues across the entire site, with screenshots as proof.
+The user selected the "Noticed something incorrect?" text in `ReportIssueButton.tsx`. The banner uses `backdrop-blur-sm` on a semi-transparent red gradient — but the parent section likely has its own backdrop blur, causing text to appear blurred/washed out.
 
-## Scope
-Audit every component using light surfaces (white, champagne `#FDFBF7`/`#F7F2EA`/`#EFE6D6`, gold tints) for white or near-white text on top. Fix at the root via global CSS + component primitives so no individual fix is ever needed again.
+Looking at the current code (line 81):
+```tsx
+<div className={`rounded-2xl border-2 border-red-500/50 bg-gradient-to-br from-red-950 via-red-900/95 to-red-950 p-5 ... backdrop-blur-sm ...`}>
+```
 
-## Approach
+The issue: `backdrop-blur-sm` blurs whatever is BEHIND the element. When the parent already has a blurred background (or the section has `backdrop-blur`), stacking blurs makes child text appear muddy. Also `bg-red-900/95` is semi-transparent which lets the blur bleed through.
 
-### 1. Global safety net (`src/index.css`)
-Add a final, top-priority CSS layer that mathematically prevents white-on-light:
-- Any `[data-surface="light"]` subtree → force text to `#111`, placeholders to `rgba(17,17,17,0.55)`.
-- Any element with light bg utility (`bg-white`, `bg-champagne`, `bg-[#FDFBF7]`, `bg-[#F7F2EA]`, `bg-[#EFE6D6]`, `bg-gold/*`) → force descendant text away from white/near-white. Use a CSS rule that maps any `color: rgb(255,255,255)` or `color: rgba(255,...)` descendant to `#111` via `color-mix` fallback.
-- Inputs/textareas/selects with no explicit dark bg → force `bg:#fff color:#111`.
-- Radix portals (`[data-radix-popper-content-wrapper]`) default to dark-on-white (popovers, dropdowns, selects, tooltips that render on body).
-- Toast/sonner light variants → dark text.
+## Root cause
+`backdrop-blur-*` on text-bearing containers + transparent backgrounds = blurred/illegible text overlays. This is the same family of bug as the white-on-light sweep — a global readability anti-pattern.
 
-### 2. Primitive hardening
-- `src/components/ui/input.tsx` — already mostly OK, add `data-surface="light"` baseline.
-- `src/components/ui/textarea.tsx` — already black text, keep + add baseline.
-- `src/components/ui/select.tsx` — SelectContent/SelectItem locked to `bg-white text-[#111]` regardless of ancestry (covers Radix portal escape).
-- `src/components/ui/dialog.tsx` — DialogContent gets `data-surface="light"` so all descendants inherit dark-text rule.
-- `src/components/ui/popover.tsx`, `dropdown-menu.tsx`, `command.tsx`, `tooltip.tsx` — same treatment for portaled surfaces.
+## Fix scope
 
-### 3. Component sweep (audit + fix any explicit `text-white` on light containers)
-Search across `src/**` for the anti-pattern: `text-white` siblings or descendants of `bg-white|bg-champagne|bg-gold/*|from-[#FDFBF7]|from-[#F7F2EA]|from-[#EFE6D6]`. Fix the worst offenders explicitly (forms, modals, cards, badges).
+### 1. Immediate fix — `ReportIssueButton.tsx`
+- Remove `backdrop-blur-sm` from the banner
+- Make background fully opaque: `bg-red-900` instead of `via-red-900/95`
+- Ensure text has solid contrast (no opacity tricks on the heading)
 
-Targets to verify:
-- `LeadCapturePopup.tsx` (already partially patched)
-- `LeadCaptureModal.tsx` (project-detail)
-- `MeetingBookingModal`, `ContactGatingModal`, `ActionGateModal`
-- `Contact.tsx` form
-- Owner forms (CRM, Marketing Hub, Document Editor)
-- Auth pages (login, signup, forgot password)
-- Settings/profile forms
-- Footer, header dropdowns on white surfaces
+### 2. Site-wide audit — find all `backdrop-blur` on containers holding readable text
+Search for the anti-pattern:
+- `backdrop-blur-*` combined with text content (not just decorative overlays)
+- Especially on cards/banners/modals where the parent is already blurred or has gradient overlays
 
-### 4. Visual proof
-After fixes, capture screenshots of:
-- LeadCapturePopup with all 7 fields visible + open dropdown
-- One auth form
-- One CRM/admin form
-- One contact/gating modal
-Confirm zero white-on-light remaining.
+Likely offenders to check:
+- Other report/alert banners
+- Floating cards on hero sections
+- Modal headers over blurred backdrops
+- Glass-morphism cards on project detail / property detail pages
+
+### 3. Global safety net (`src/index.css`)
+Add a rule alongside the existing white-on-light safety net:
+- Any element with `backdrop-blur-*` AND containing text should have a minimum background opacity floor (e.g., `bg-opacity ≥ 0.92`) OR remove the blur if the text would be unreadable.
+- Practically: target known patterns and force `backdrop-filter: none` on text-heavy containers nested inside already-blurred parents.
 
 ## Files to edit
-- `src/index.css` (the master safety net — the single source of truth)
-- `src/components/ui/select.tsx`, `dialog.tsx`, `popover.tsx`, `dropdown-menu.tsx`, `command.tsx`, `tooltip.tsx`, `input.tsx`, `textarea.tsx` (primitive hardening)
-- ~5–10 specific component files where `text-white` is hardcoded on light surfaces (identified via search sweep, fixed in batch)
+1. `src/components/project-detail/ReportIssueButton.tsx` — remove blur, opaque bg
+2. Sweep `src/**` for `backdrop-blur` + text combos and patch the worst offenders (banners, alerts, info cards)
+3. `src/index.css` — add a rule preventing nested `backdrop-blur` stacking on text containers
 
 ## Deliverable
-- Universal CSS rule that makes white-on-light mathematically impossible
-- Hardened Radix primitives that survive portaling
-- Screenshots of 3–4 key surfaces proving readability
-- Brief written confirmation of the global rule for future-proofing
+- Crisp, fully readable "Report an Issue" banner
+- List of other components patched
+- Global CSS rule preventing future blur-on-blur readability bugs
