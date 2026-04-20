@@ -1,4 +1,5 @@
 import { useState } from "react";
+import DOMPurify from "dompurify";
 import { Link, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -59,7 +60,14 @@ function DesignCard({ item, onRemove }: { item: { id: string; item_name: string 
     <div className="bg-white/70 rounded-xl border border-gold/20 overflow-hidden group hover:border-gold/40 transition-all">
       <div className="aspect-square bg-[#F7F2EA] flex items-center justify-center p-4 relative">
         {item.thumbnail_svg ? (
-          <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: item.thumbnail_svg.slice(0, 50000) }} />
+          <div
+            className="w-full h-full"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(item.thumbnail_svg.slice(0, 50000), {
+                USE_PROFILES: { svg: true, svgFilters: true },
+              }),
+            }}
+          />
         ) : (
           <div className="text-gold/30">{getDesignTypeIcon(item.item_type)}</div>
         )}
