@@ -469,7 +469,7 @@ export const ProjectAIAnalyzer = ({
                       )}
                       {appreciation !== null && (
                         <div className="bg-gradient-to-br from-emerald-50 via-white to-emerald-50/60 rounded-xl p-5 text-center border border-emerald-200/80 shadow-[0_4px_20px_rgba(16,185,129,0.12)]">
-                          <div className="text-3xl font-extrabold text-emerald-600 drop-shadow-[0_0_10px_rgba(16,185,129,0.35)]">{appreciation}%</div>
+                          <div className="text-4xl font-extrabold bg-gradient-to-br from-emerald-500 via-teal-500 to-green-600 bg-clip-text text-transparent drop-shadow-[0_2px_8px_rgba(16,185,129,0.35)]">{appreciation}%</div>
                           <div className="text-foreground text-xs mt-1.5 font-semibold tracking-wide">Capital Growth</div>
                         </div>
                       )}
