@@ -652,9 +652,9 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               <img 
                 src={jbjMonogramLightTransparent}
                 alt="JBJ" 
-                className={`w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 xl:w-32 xl:h-32 object-contain relative z-10 transition-transform duration-300 ${
+                className={`w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 xl:w-32 xl:h-32 object-contain relative z-10 transition-transform duration-300 ${
                   isFullyTransparent
-                    ? "scale-[1.25] md:scale-[1.3] xl:scale-[1.35]"
+                    ? "scale-100 md:scale-[1.3] xl:scale-[1.35]"
                     : "scale-100"
                 }`}
                 style={{
@@ -667,21 +667,21 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
             {/* Premium Typography */}
             <div className="flex flex-col shrink min-w-0 overflow-hidden">
               <span 
-                className={`font-bold text-[10px] sm:text-sm xl:text-base tracking-[0.12em] uppercase leading-none transition-colors duration-300 truncate`}
+                className={`font-bold text-xs sm:text-sm xl:text-base tracking-[0.12em] uppercase leading-tight transition-colors duration-300 truncate`}
                 style={isFullyTransparent ? {
                   color: '#FFFFFF',
+                  textShadow: '0 2px 8px rgba(0,0,0,0.6)',
                 } : {
                   color: '#111111',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
                 }}
               >
                 JBJ Global Real Estate
               </span>
               <span 
-                className="text-[8px] sm:text-[9px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300 truncate"
+                className="hidden sm:block text-[9px] sm:text-[9px] tracking-[0.25em] uppercase mt-1 transition-colors duration-300 truncate"
                 style={isFullyTransparent ? {
                   color: '#FFFFFF',
+                  textShadow: '0 2px 8px rgba(0,0,0,0.6)',
                 } : {
                   color: '#666666',
                 }}
@@ -698,7 +698,12 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
               {/* Mobile Menu Trigger - Hamburger / X toggle */}
               <button
                 type="button"
-                className="inline-flex h-10 w-10 items-center justify-center bg-transparent border-0 rounded-none appearance-none transition-colors duration-300 focus:outline-none group shrink-0"
+                className={cn(
+                  "inline-flex h-10 w-10 items-center justify-center border-0 appearance-none transition-all duration-300 focus:outline-none group shrink-0 rounded-full",
+                  isFullyTransparent
+                    ? "bg-white/90 shadow-md"
+                    : "bg-transparent"
+                )}
                 aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
                 data-tour-target="mobile-menu"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -706,7 +711,7 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
                 {mobileMenuOpen ? (
                   <span className="text-black text-2xl font-light">✕</span>
                 ) : (
-                  <Menu className="w-6 h-6 text-black group-hover:text-gray-900-light transition-colors" />
+                  <Menu className="w-6 h-6 text-black transition-colors" />
                 )}
               </button>
             </div>
