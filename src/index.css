@@ -2464,5 +2464,67 @@ button[style*="background"] [class*="text-gold"] {
 /* Price-orange stays orange on dark */
 [data-surface="dark"] .text-price-orange,
 [data-surface="dark"] [class*="text-price-orange"] {
-  color: #FB923C !important; /* orange-400 — vivid on dark */
+  color: #FB923C !important;
+}
+
+/* ============================================================
+   LIGHT ISLAND ESCAPE HATCH (LAST RULE — wins the cascade)
+   When a light card/form is nested inside a dark section,
+   re-assert readable dark text + readable inputs.
+   ============================================================ */
+:is(
+  .bg-white, .bg-card, .bg-popover, .bg-gray-50, .bg-gray-100,
+  .bg-champagne, [class*="bg-champagne"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"],
+  [class*="from-[#F7F1E6]"], [class*="from-[#FEFAF3]"],
+  [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"],
+  [class*="bg-[#FDFBF7]"], [class*="bg-[#F7F2EA]"], [class*="bg-[#F7F1E6]"],
+  [class*="bg-[#FFFFFF]"]
+):not([data-surface="dark"]) :is(label, h1, h2, h3, h4, h5, h6, p, span, div, button)[class*="text-black"],
+:is(
+  .bg-white, .bg-card, .bg-popover,
+  .bg-champagne, [class*="bg-champagne"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"],
+  [class*="from-[#F7F1E6]"], [class*="from-[#FEFAF3]"],
+  [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"]
+):not([data-surface="dark"]) :is(label, h1, h2, h3, h4, h5, h6) {
+  color: #111111 !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* Inputs / textareas / selects inside light islands: dark text on white */
+:is(
+  .bg-white, .bg-card, .bg-popover,
+  .bg-champagne, [class*="bg-champagne"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"],
+  [class*="from-[#F7F1E6]"], [class*="from-[#FEFAF3]"],
+  [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"]
+):not([data-surface="dark"]) :is(input, textarea, select):not([class*="bg-black"]):not([class*="bg-green"]) {
+  color: #111111 !important;
+  background-color: #FFFFFF !important;
+  border-color: rgba(0, 0, 0, 0.18) !important;
+}
+
+:is(
+  .bg-white, .bg-card, .bg-popover,
+  .bg-champagne, [class*="bg-champagne"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"],
+  [class*="from-[#F7F1E6]"], [class*="from-[#FEFAF3]"],
+  [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"]
+):not([data-surface="dark"]) :is(input, textarea)::placeholder {
+  color: rgba(0, 0, 0, 0.45) !important;
+  opacity: 1 !important;
+}
+
+/* Radix Select triggers inside light islands */
+:is(
+  .bg-white, .bg-card, .bg-popover,
+  .bg-champagne, [class*="bg-champagne"],
+  [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"],
+  [class*="from-[#F7F1E6]"], [class*="from-[#FEFAF3]"],
+  [class*="from-[#ECE2D2]"], [class*="from-[#D8C7A6]"]
+):not([data-surface="dark"]) :is([role="combobox"], [data-radix-select-trigger]):not([class*="bg-black"]) {
+  color: #111111 !important;
+  background-color: #FFFFFF !important;
 }
