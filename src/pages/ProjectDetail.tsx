@@ -366,6 +366,3 @@ const ProjectDetail = () => {
 };
 
 export default ProjectDetail;
-
-
-export default ProjectDetail;
