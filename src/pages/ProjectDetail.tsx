@@ -9,6 +9,8 @@ import { BrandedLoader } from "@/components/ui/BrandedLoader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { Button } from "@/components/ui/button";
+import { SEOHead } from "@/components/SEOHead";
+import ProjectStructuredData from "@/components/seo/ProjectStructuredData";
 
 const asStringArray = (value: unknown): string[] | null => {
   if (!Array.isArray(value)) return null;
@@ -335,8 +337,20 @@ const ProjectDetail = () => {
     );
   }
 
+  const seoTitle = `${mapped.name}${mapped.developer_name ? ` by ${mapped.developer_name}` : ""} | Dubai Properties`;
+  const seoDescription = (mapped.description || mapped.short_description || `Discover ${mapped.name}${mapped.area_name ? ` in ${mapped.area_name}` : ""}, an exclusive ${mapped.property_type || "property"} listing by JBJ Global Real Estate. Premium Dubai real estate, off-plan and ready units.`).replace(/<[^>]+>/g, "").slice(0, 200);
+  const seoImage = mapped.cover_image_url || (mapped.images && mapped.images[0]) || undefined;
+
   return (
     <>
+      <SEOHead
+        title={seoTitle}
+        description={seoDescription}
+        canonicalPath={`/project/${slug}`}
+        ogImage={seoImage}
+        ogType="product"
+      />
+      <ProjectStructuredData project={mapped} slug={slug || ""} />
       <ProjectDetailLayout project={mapped} onRequestReport={() => setShowReportModal(true)} />
 
       {project && (

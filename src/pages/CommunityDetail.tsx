@@ -6,6 +6,7 @@ import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import ProjectCard from "@/components/ProjectCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronLeft } from "lucide-react";
+import { SEOHead } from "@/components/SEOHead";
 
 const CommunityDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -57,6 +58,12 @@ const CommunityDetail = () => {
 
   return (
     <section className="relative w-full min-h-screen bg-black">
+      <SEOHead
+        title={`${community.name} Community | Dubai Properties`}
+        description={(community.description || `Discover properties for sale and rent in ${community.name}, Dubai. Browse off-plan and ready listings curated by JBJ Global Real Estate.`).replace(/<[^>]+>/g, "").slice(0, 200)}
+        canonicalPath={`/community/${slug}`}
+        ogImage={community.image_url || undefined}
+      />
       {/* Hero Image */}
       <div className="relative h-[40vh] md:h-[50vh]">
         {community.image_url ? (

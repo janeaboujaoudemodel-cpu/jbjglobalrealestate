@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { CONTACT_INFO } from "@/constants/stats";
 import ActiveLeadBanner from "@/components/crm/ActiveLeadBanner";
+import { SEOHead, pagesSEO } from "@/components/SEOHead";
 
 const advisorBenefits = [
   {
@@ -37,6 +38,7 @@ const MortgageCalculatorPage = () => {
 
   return (
     <section className="min-h-screen bg-gradient-to-br from-[hsl(32,28%,13%)] via-[hsl(33,27%,15%)] to-[hsl(33,28%,11%)]">
+      <SEOHead {...pagesSEO.mortgageCalculator} />
       {/* Hero Section - Champagne Layer */}
       <div className="relative py-16 md:py-24 bg-gradient-to-b from-[#F7F1E6] via-[#ECE2D2] to-[#D8C7A6]">
         {/* Background effects */}
