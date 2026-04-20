@@ -2528,3 +2528,55 @@ button[style*="background"] [class*="text-gold"] {
   color: #111111 !important;
   background-color: #FFFFFF !important;
 }
+
+/* ============================================================
+   UNIVERSAL ANTI-WHITE-ON-WHITE SAFETY NET (final hard stop)
+   Applies regardless of ancestor / portal / data-surface.
+   Never allow invisible form fields anywhere on the site.
+   ============================================================ */
+
+/* All form controls default to dark text on white unless explicitly dark-themed */
+input:not([type="checkbox"]):not([type="radio"]):not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([class*="bg-neutral-9"]):not([class*="bg-zinc-9"]):not([data-theme="dark"]),
+textarea:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([class*="bg-neutral-9"]):not([class*="bg-zinc-9"]):not([data-theme="dark"]),
+select:not([class*="bg-black"]):not([class*="bg-gray-9"]):not([class*="bg-gray-8"]):not([data-theme="dark"]) {
+  color: #111111 !important;
+  background-color: #FFFFFF !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(0, 0, 0, 0.5) !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Radix portals (Select, Dropdown, Popover) — always dark-on-white by default */
+[data-radix-popper-content-wrapper] [role="listbox"],
+[data-radix-popper-content-wrapper] [role="menu"],
+[data-radix-popper-popper-content-wrapper] [role="dialog"] {
+  color: #111111 !important;
+}
+[data-radix-popper-content-wrapper] [role="option"]:not([class*="bg-gray-9"]):not([class*="bg-black"]),
+[data-radix-popper-content-wrapper] [role="menuitem"]:not([class*="bg-gray-9"]):not([class*="bg-black"]) {
+  color: #111111 !important;
+}
+[data-radix-popper-content-wrapper] [role="option"][data-highlighted],
+[data-radix-popper-content-wrapper] [role="menuitem"][data-highlighted] {
+  background-color: #F3F4F6 !important;
+  color: #111111 !important;
+}
+
+/* Explicit light surface override — opt-in via data-surface="light" */
+[data-surface="light"],
+[data-surface="light"] :is(label, h1, h2, h3, h4, h5, h6, p, span, li, a):not([class*="text-white"]):not([class*="text-gold"]):not([class*="text-price"]) {
+  color: #111111 !important;
+}
+[data-surface="light"] :is(input, textarea, select) {
+  color: #111111 !important;
+  background-color: #FFFFFF !important;
+}
+[data-surface="light"] :is(input, textarea)::placeholder {
+  color: rgba(0, 0, 0, 0.5) !important;
+  -webkit-text-fill-color: rgba(0, 0, 0, 0.5) !important;
+  opacity: 1 !important;
+}
