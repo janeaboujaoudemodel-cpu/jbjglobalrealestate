@@ -1,45 +1,21 @@
 
-The user selected the "Noticed something incorrect?" text in `ReportIssueButton.tsx`. The banner uses `backdrop-blur-sm` on a semi-transparent red gradient — but the parent section likely has its own backdrop blur, causing text to appear blurred/washed out.
+This appears to be a stale/duplicate approval message — the white-on-light global audit plan was already approved and implemented earlier in this conversation (CSS safety net in `src/index.css` + hardened Radix primitives with `data-surface="light"` on dialog, popover, select, input, textarea).
 
-Looking at the current code (line 81):
-```tsx
-<div className={`rounded-2xl border-2 border-red-500/50 bg-gradient-to-br from-red-950 via-red-900/95 to-red-950 p-5 ... backdrop-blur-sm ...`}>
-```
+Since the user re-sent the same approval, I'll re-verify the implementation is intact and run a fresh sweep for any missed `text-white` on light-surface offenders, then patch them.
 
-The issue: `backdrop-blur-sm` blurs whatever is BEHIND the element. When the parent already has a blurred background (or the section has `backdrop-blur`), stacking blurs makes child text appear muddy. Also `bg-red-900/95` is semi-transparent which lets the blur bleed through.
+## Scope of this pass
 
-## Root cause
-`backdrop-blur-*` on text-bearing containers + transparent backgrounds = blurred/illegible text overlays. This is the same family of bug as the white-on-light sweep — a global readability anti-pattern.
+1. **Verify existing safety net** in `src/index.css` (the `[data-surface="light"]` rules + `bg-white/bg-champagne/bg-gold` descendant color enforcement) is still present and correct.
+2. **Verify primitive hardening** — `data-surface="light"` still applied on `dialog.tsx`, `popover.tsx`, `select.tsx`, `input.tsx`, `textarea.tsx`. Add to `dropdown-menu.tsx`, `command.tsx`, `tooltip.tsx` if missing.
+3. **Fresh component sweep** — grep `src/**` for `text-white` co-located with light surface classes (`bg-white`, `bg-champagne`, `from-[#FDFBF7]`, `from-[#F7F2EA]`, `from-[#EFE6D6]`, `bg-gold`). Patch the worst offenders (forms, modals, badges).
+4. **Visual proof** — screenshot 3 surfaces: LeadCapturePopup with open Select dropdown, one auth/contact form, one CRM modal. Confirm zero white-on-light.
 
-## Fix scope
-
-### 1. Immediate fix — `ReportIssueButton.tsx`
-- Remove `backdrop-blur-sm` from the banner
-- Make background fully opaque: `bg-red-900` instead of `via-red-900/95`
-- Ensure text has solid contrast (no opacity tricks on the heading)
-
-### 2. Site-wide audit — find all `backdrop-blur` on containers holding readable text
-Search for the anti-pattern:
-- `backdrop-blur-*` combined with text content (not just decorative overlays)
-- Especially on cards/banners/modals where the parent is already blurred or has gradient overlays
-
-Likely offenders to check:
-- Other report/alert banners
-- Floating cards on hero sections
-- Modal headers over blurred backdrops
-- Glass-morphism cards on project detail / property detail pages
-
-### 3. Global safety net (`src/index.css`)
-Add a rule alongside the existing white-on-light safety net:
-- Any element with `backdrop-blur-*` AND containing text should have a minimum background opacity floor (e.g., `bg-opacity ≥ 0.92`) OR remove the blur if the text would be unreadable.
-- Practically: target known patterns and force `backdrop-filter: none` on text-heavy containers nested inside already-blurred parents.
-
-## Files to edit
-1. `src/components/project-detail/ReportIssueButton.tsx` — remove blur, opaque bg
-2. Sweep `src/**` for `backdrop-blur` + text combos and patch the worst offenders (banners, alerts, info cards)
-3. `src/index.css` — add a rule preventing nested `backdrop-blur` stacking on text containers
+## Files likely touched
+- `src/components/ui/dropdown-menu.tsx`, `command.tsx`, `tooltip.tsx` (add `data-surface="light"` if missing)
+- 3–8 component files surfaced by the sweep
+- `src/index.css` only if a gap is found in the existing safety net
 
 ## Deliverable
-- Crisp, fully readable "Report an Issue" banner
-- List of other components patched
-- Global CSS rule preventing future blur-on-blur readability bugs
+- Confirmation the global rule is intact
+- List of additional components patched in this pass
+- 3 screenshots proving readability on light surfaces
