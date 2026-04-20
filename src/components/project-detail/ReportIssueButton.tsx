@@ -95,7 +95,7 @@ export default function ReportIssueButton({
   return (
     <>
       {/* Yellow Banner */}
-      <div className={`rounded-2xl border-2 border-red-500/50 bg-gradient-to-br from-red-950 via-red-900/95 to-red-950 p-5 flex items-center justify-between gap-4 flex-wrap shadow-[0_6px_30px_rgba(220,38,38,0.25),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-sm ${className}`}>
+      <div data-no-backdrop-blur className={`rounded-2xl border-2 border-red-500/50 bg-gradient-to-br from-red-950 via-red-900 to-red-950 p-5 flex items-center justify-between gap-4 flex-wrap shadow-[0_6px_30px_rgba(220,38,38,0.25),inset_0_1px_0_rgba(255,255,255,0.05)] ${className}`}>
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0 ring-2 ring-red-400/40 shadow-[0_0_15px_rgba(239,68,68,0.3)]">
             <AlertTriangle className="w-6 h-6 text-red-400 drop-shadow-[0_0_6px_rgba(239,68,68,0.5)]" />
