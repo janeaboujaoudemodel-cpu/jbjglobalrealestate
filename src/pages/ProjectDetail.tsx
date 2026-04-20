@@ -365,27 +365,7 @@ const ProjectDetail = () => {
   );
 };
 
-  return (
-    <>
-      <SEOHead
-        title={seoTitle}
-        description={seoDescription}
-        canonicalPath={`/project/${slug}`}
-        ogImage={seoImage}
-        ogType="product"
-      />
-      <ProjectStructuredData project={mapped} slug={slug || ""} />
-      <ProjectDetailLayout project={mapped} onRequestReport={() => setShowReportModal(true)} />
+export default ProjectDetail;
 
-      {project && (
-        <PropertyReportModal
-          open={showReportModal}
-          onOpenChange={setShowReportModal}
-          project={project}
-        />
-      )}
-    </>
-  );
-};
 
 export default ProjectDetail;
