@@ -351,6 +351,23 @@ All colors MUST be HSL.
   }
 }
 
+/* ============================================================
+ * HERO-SCOPED CONTRAST OVERRIDE (all viewports)
+ * Force eyebrow + faint copy inside the homepage hero to remain
+ * crisp regardless of the video frame underneath.
+ * ============================================================ */
+.jj-hero-fullscreen .text-white\/40,
+.jj-hero-fullscreen .text-white\/50,
+.jj-hero-fullscreen .text-white\/60,
+.jj-hero-fullscreen .text-white\/70,
+.jj-hero-fullscreen .text-white\/80,
+.jj-hero-fullscreen .text-white\/85,
+.jj-hero-fullscreen .text-white\/90 {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65) !important;
+}
+
 /* Premium sparkle animation */
 @keyframes sparkle {
   0%, 100% { opacity: 0.3; transform: scale(1); }
