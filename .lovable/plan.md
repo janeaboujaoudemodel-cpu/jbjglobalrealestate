@@ -1,54 +1,47 @@
 
-## Mobile readability & UX fix — full sweep
+## Honest verification — and the real fixes still needed
 
-The mobile experience has multiple compounding problems: faded/invisible text, broken hero loading state, mis-sized header/footer logos, and pages that look "white-on-white" on phones. This plan fixes them at the root so the entire site becomes readable on every device.
+I took live mobile screenshots (390×844). Here is the truthful state — **partial success**, not "all fixed":
 
-## Problems found
+### What the previous fix DID solve
+- Header logo is now small (~32px) and the "JBJ GLOBAL REAL ESTATE" wordmark is readable on mobile
+- Hamburger menu has the white pill background and is clearly visible
+- Project page hero (Tilal Al Furjan) — title, developer, location, brochure CTA all render crisply
 
-1. **Hero loading state on mobile** — `Index.tsx` shows a dark gold-brown gradient with a small monogram + faint white text ("Your Gateway to Dubai's Finest Real Estate" at `text-white/60`). On slow mobile networks the video takes seconds; the user sees only this washed-out placeholder, no scroll cue, no skeleton.
-2. **Header logo on mobile** — `GlobalHeader.tsx` renders the monogram at `w-20 h-20` (80px) with `scale-1.25` when transparent → effectively 100×100 on a 360px-wide screen. Combined with two text lines (`JBJ Global Real Estate` + `Excellence in Real Estate`), the header overflows and text gets truncated/mashed against the hamburger.
-3. **Footer logo on mobile** — renders at `h-28` (112px) which is oversized for a 360px viewport and dominates the footer.
-4. **Faded titles/labels everywhere on mobile** — many sections use `text-white/60`, `text-white/40`, `text-gray-400` on light/champagne backgrounds, or `text-[8px]`/`text-[9px]` micro-type that becomes illegible on small screens. The existing global safety net handles `text-white-on-light` for forms but does NOT cover the dimmed `/40` `/50` `/60` opacity text used throughout marketing sections.
-5. **Icons washed out** — gray-400/500 icons on champagne/white sections lose contrast on mobile glare.
+### What is STILL broken (visible in screenshots)
+1. **Homepage hero loading state** — the placeholder still shows only a gold "LOADING..." label on a brown gradient. The brighter tagline and "Loading experience…" line that the plan promised are **not actually rendering** on the loading state — they only appear after the video loads.
+2. **Hero content overlap when video loads** — the JBJ monogram, the "DUBAI'S TRUSTED REAL ESTATE TECHNOLOGY PLATFORM" eyebrow, the "Your Gateway to Dubai's Finest Real Estate" headline, and the 5 CTA buttons (Sell Your Property, AI Home Finder, Explore AI Tools, Create Your CV, Update Profile) are all stacked on top of each other in the same vertical band — text is unreadable through the buttons.
+3. **Faded eyebrow line** — "DUBAI'S TRUSTED REAL ESTATE TECHNOLOGY PLATFORM" is barely legible because the CSS opacity floor doesn't catch its specific class.
+4. **Pillar card descriptions** ("Premium Marketplace", "AI-Powered Tools", "Brokerage Services") render correctly in size but the supporting text under each is still very faint.
 
-## Fix plan
+## Real fixes to apply
 
-### 1. Hero loading state (`src/pages/Index.tsx`)
-- Brighten fallback tagline from `text-white/60` to `text-white/90` and bump from `text-sm` to `text-base sm:text-lg`.
-- Add a clear "Loading experience…" micro-label under the shimmer line so users know it's loading, not broken.
-- Increase mobile monogram from `w-36` to `w-44` for better presence, add subtle scale-in animation.
-- Ensure video `preload` is `metadata` (not `none`) so first frame shows faster on mobile.
+### 1. Fix homepage hero loading-state placeholder (`src/pages/Index.tsx`)
+The previous edit put the "Loading experience…" label inside a branch that only renders when the video is ready. Move the bright tagline + "Loading experience…" microcopy into the actual fallback `<div>` shown before video load, so users see real copy instead of just "LOADING…".
 
-### 2. Header (`src/components/GlobalHeader.tsx`)
-- Shrink mobile logo: `w-12 h-12 sm:w-16 sm:h-16` (was `w-20 h-20 sm:w-24 sm:h-24`), remove the `scale-1.25` blow-up on transparent state for `<sm` breakpoint.
-- Bump primary brand text on mobile: `text-xs sm:text-sm` (was `text-[10px]`), keep on one line by hiding "Excellence in Real Estate" tagline `<sm:hidden`.
-- When transparent, add a subtle text-shadow to brand text so it stays readable over any video frame.
-- Hamburger icon: stays `w-6 h-6` but ensure color contrast — add background pill `bg-white/90 rounded-full` when hero is transparent so the menu trigger is always visible.
+### 2. Fix hero stacking on mobile (`src/pages/Index.tsx`)
+On `<sm` breakpoints:
+- Hide the giant centered JBJ monogram (it's redundant — the header already shows it)
+- Add proper vertical spacing (`space-y-4`) between eyebrow → headline → CTA grid → pillar cards so nothing overlaps
+- Reduce CTA grid from 5 buttons to a 2×2 grid + "More" expansion, OR convert to a vertical stack at full width
 
-### 3. Footer (`src/components/Footer.tsx`)
-- Shrink mobile logo: `h-16 sm:h-24 md:h-32` (was `h-28 sm:h-36 md:h-40`).
-- Center alignment preserved; reduce `mb-6` to `mb-4` for tighter mobile rhythm.
+### 3. Force-readable eyebrow + faint copy on hero
+Add `.jj-hero-fullscreen .text-white\/50, .jj-hero-fullscreen .text-white\/60 { opacity: 1 !important; color: #fff !important; }` and a stronger text-shadow so the eyebrow line and pillar descriptions are crisp regardless of video frame.
 
-### 4. Global mobile readability safety net (`src/index.css`)
-Add a mobile-only `@media (max-width: 767px)` block that:
-- Bumps any `text-white/40`, `text-white/50`, `text-white/60` to minimum `0.85` opacity.
-- Bumps any `text-gray-400` / `text-gray-500` on light surfaces to `text-gray-700` equivalent.
-- Enforces minimum readable font size: any element with `text-[8px]` / `text-[9px]` / `text-[10px]` upgraded to `11px` floor on mobile.
-- Increases icon opacity floor to `0.85` on mobile.
-- Adds text-shadow to any `text-white` directly on `.jj-hero-fullscreen` to survive bright video frames.
+### 4. Pillar card description contrast (`src/pages/Index.tsx`)
+Bump pillar description text from current opacity to solid `text-white` with `text-shadow` so "2,400+ Off-Plan & Resale Properties" / "Smart Search & Investment Intelligence" / "Licensed Brokers & Expert Services" are fully legible.
 
-### 5. CTA pills + pillar badges in hero
-- Increase pill border opacity from `border-white/30` to `border-white/60` on mobile.
-- Bump pillar description from `text-[8px]` / `text-white/60` to `text-[10px]` / `text-white/85` on mobile.
-- Make pillar icons fully opaque (`text-white` not `text-white/80`).
+### 5. Re-verify with live screenshots (mandatory)
+After the fix I will take fresh 390×844 screenshots of:
+- Homepage during loading (network throttle simulated by reload)
+- Homepage hero loaded
+- Confirm no overlap, all text readable
 
-## Files touched
-- `src/pages/Index.tsx` — hero loading state + CTA pill / pillar contrast on mobile
-- `src/components/GlobalHeader.tsx` — mobile logo size + brand text + hamburger contrast
-- `src/components/Footer.tsx` — mobile logo size
-- `src/index.css` — global mobile readability safety net (opacity floor, font-size floor, hero text-shadow)
+## Files to edit
+- `src/pages/Index.tsx` — loading state copy, hero stacking, monogram hide on mobile, CTA grid layout, pillar text
+- `src/index.css` — hero-scoped opacity overrides for `.text-white/50` and `/60`
 
 ## Deliverable
-- Mobile (390×844) screenshots: home hero loading state, home hero loaded, header transparent + solid, footer, one project page (current `/project/tilal-al-furjan`).
-- Confirmation that all titles, labels, prices, icons are readable at arm's length on a phone.
-- Global rule documented so future components inherit mobile-safe defaults automatically.
+- Honest before/after screenshots in the chat (not just claims)
+- Working hero on real mobile viewport with no overlapping elements and fully readable copy
+- No false "all fixed" claim — I'll list anything that still needs another pass
