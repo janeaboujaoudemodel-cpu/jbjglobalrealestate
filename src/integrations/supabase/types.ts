@@ -27826,6 +27826,7 @@ export type Database = {
         Returns: boolean
       }
       has_verified_first_deal: { Args: { _user_id: string }; Returns: boolean }
+      hash_otp: { Args: { p_code: string }; Returns: string }
       increment_shared_card_views: {
         Args: { card_token: string }
         Returns: undefined
@@ -27980,6 +27981,10 @@ export type Database = {
           issued_at: string
           track: string
         }[]
+      }
+      verify_email_otp_secure: {
+        Args: { p_code: string; p_email: string }
+        Returns: Json
       }
     }
     Enums: {
