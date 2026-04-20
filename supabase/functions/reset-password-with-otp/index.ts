@@ -49,11 +49,15 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    // Hash the submitted OTP to match against the stored hash
+    const otpHashBuffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(otp_code));
+    const otpHash = Array.from(new Uint8Array(otpHashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
+
     const { data: verification, error: fetchError } = await supabase
       .from("email_verifications")
       .select("*")
       .eq("email", email.toLowerCase())
-      .eq("otp_code", otp_code)
+      .eq("otp_code", otpHash)
       .not("verified_at", "is", null)
       .gt("expires_at", new Date().toISOString())
       .order("verified_at", { ascending: false })

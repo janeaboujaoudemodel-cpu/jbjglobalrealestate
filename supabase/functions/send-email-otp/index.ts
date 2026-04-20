@@ -42,6 +42,10 @@ Deno.serve(async (req) => {
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
 
+    // Hash OTP before storage so live codes are never readable in the database
+    const otpHashBuffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(otpCode));
+    const otpHash = Array.from(new Uint8Array(otpHashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
+
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
     const { data: recentAttempts } = await supabase
       .from("email_verifications")
@@ -56,7 +60,7 @@ Deno.serve(async (req) => {
 
     const { error: insertError } = await supabase
       .from("email_verifications")
-      .insert({ email: email.toLowerCase(), otp_code: otpCode, expires_at: expiresAt.toISOString(), attempts: 0 });
+      .insert({ email: email.toLowerCase(), otp_code: otpHash, expires_at: expiresAt.toISOString(), attempts: 0 });
 
     if (insertError) {
       console.error("Error storing OTP:", insertError);

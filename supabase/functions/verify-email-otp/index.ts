@@ -41,6 +41,10 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+    // Hash submitted code to compare against stored hash (codes are never stored in plaintext)
+    const otpHashBuffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(otp_code));
+    const otpHash = Array.from(new Uint8Array(otpHashBuffer)).map(b => b.toString(16).padStart(2, "0")).join("");
+
     const { data: verification, error: fetchError } = await supabase
       .from("email_verifications")
       .select("*")
@@ -73,7 +77,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    if (verification.otp_code !== otp_code) {
+    if (verification.otp_code !== otpHash) {
       await supabase
         .from("email_verifications")
         .update({ attempts: verification.attempts + 1 })
