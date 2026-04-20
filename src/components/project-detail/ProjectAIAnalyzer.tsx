@@ -506,7 +506,7 @@ export const ProjectAIAnalyzer = ({
             {/* Row 4: Pros & Cons — styled pill rows */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Pros */}
-              <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 shadow-sm">
+              <div className="bg-gradient-to-br from-emerald-100 via-emerald-50 to-green-100/80 border-2 border-emerald-400 rounded-2xl p-6 shadow-md shadow-emerald-200/60 ring-1 ring-emerald-300">
                 <div className="flex items-center gap-2 mb-4">
                   <ThumbsUp className="w-5 h-5 text-emerald-600" />
                   <h3 className="font-bold text-emerald-700 text-lg">Pros</h3>
