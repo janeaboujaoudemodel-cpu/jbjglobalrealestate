@@ -253,11 +253,12 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="w-full max-w-5xl mx-auto text-center pt-[max(20vh,120px)] sm:pt-[22vh] md:pt-[24vh]">
+          <div className="w-full max-w-5xl mx-auto text-center pt-[max(14vh,96px)] sm:pt-[22vh] md:pt-[24vh] space-y-5 sm:space-y-6">
             {/* Platform tagline badge */}
             <motion.p
               variants={fadeInUp}
-              className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-white/60 mb-4"
+              className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-white font-semibold"
+              style={{ textShadow: '0 2px 10px rgba(0,0,0,0.7)' }}
             >
               Dubai's Trusted Real Estate Technology Platform
             </motion.p>
@@ -265,7 +266,7 @@ const Index = () => {
             {/* Main heading */}
             <motion.h1
               variants={fadeInUp}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1] mb-6"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1]"
               style={{
                 background: "linear-gradient(135deg, #FFFFFF 0%, #E0E0E0 40%, #FFFFFF 100%)",
                 WebkitBackgroundClip: "text",
@@ -277,19 +278,19 @@ const Index = () => {
               <span className="block sm:inline"> Finest Real Estate</span>
             </motion.h1>
 
-            {/* Quick-action CTA pills */}
+            {/* Quick-action CTA pills — 2-col grid on mobile, flex on desktop */}
             <motion.div
               variants={fadeInUp}
-              className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8"
+              className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-2 sm:gap-3 max-w-md sm:max-w-none mx-auto"
             >
               {heroActions.map((action) => (
                 <Link
                   key={action.label}
                   to={action.href}
-                  className="group inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-white/60 sm:border-white/30 bg-black/50 backdrop-blur-md text-white text-[11px] sm:text-xs font-medium hover:bg-white/15 hover:border-white/70 hover:text-white transition-all duration-300"
+                  className="group inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2.5 sm:py-2.5 rounded-full border border-white/70 sm:border-white/30 bg-black/60 backdrop-blur-md text-white text-[11px] sm:text-xs font-medium hover:bg-white/15 hover:border-white/70 hover:text-white transition-all duration-300"
                 >
-                  <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white group-hover:text-white transition-colors" />
-                  {action.label}
+                  <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white group-hover:text-white transition-colors flex-shrink-0" />
+                  <span className="truncate">{action.label}</span>
                 </Link>
               ))}
             </motion.div>
