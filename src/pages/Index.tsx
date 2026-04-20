@@ -240,12 +240,12 @@ const Index = () => {
           animate="visible"
           variants={staggerContainer}
         >
-          <div className="w-full max-w-5xl mx-auto text-center pt-[max(14vh,96px)] sm:pt-[22vh] md:pt-[24vh] space-y-5 sm:space-y-6">
+          <div className="w-full max-w-5xl mx-auto text-center pt-[max(12vh,88px)] sm:pt-[18vh] md:pt-[22vh] space-y-5 sm:space-y-7 md:space-y-8">
             {/* Platform tagline badge */}
             <motion.p
               variants={fadeInUp}
-              className="text-[11px] sm:text-xs uppercase tracking-[0.25em] text-white font-semibold"
-              style={{ textShadow: '0 2px 10px rgba(0,0,0,0.7)' }}
+              className="text-[11px] sm:text-xs uppercase tracking-[0.28em] text-white font-semibold"
+              style={{ textShadow: '0 2px 16px rgba(0,0,0,0.85)' }}
             >
               Dubai's Trusted Real Estate Technology Platform
             </motion.p>
