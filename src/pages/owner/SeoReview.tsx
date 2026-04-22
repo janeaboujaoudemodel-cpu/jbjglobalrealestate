@@ -188,21 +188,48 @@ export default function SeoReview() {
         </div>
       </div>
 
-      {/* Search */}
+      {/* Search + language filter */}
       <Card>
-        <CardContent className="p-4">
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Filter by slug, title, description, or path…"
-              className="pl-9"
-            />
+        <CardContent className="p-4 space-y-3">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Filter by slug, title, description, or path…"
+                className="pl-9"
+              />
+            </div>
+            <div className="sm:w-[280px]">
+              <Select value={langFilter} onValueChange={setLangFilter}>
+                <SelectTrigger>
+                  <Languages className="w-4 h-4 mr-2 text-muted-foreground" />
+                  <SelectValue placeholder="All languages" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">
+                    🌐 All languages ({SUPPORTED_LANGUAGES.length} + x-default)
+                  </SelectItem>
+                  {SUPPORTED_LANGUAGES.map((l) => (
+                    <SelectItem key={l.code} value={l.code}>
+                      {l.flag} {l.name} ({l.code}) + x-default
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
+          <p className="text-xs text-muted-foreground">
             Canonical origin:{" "}
             <code className="text-foreground">{CANONICAL_ORIGIN}</code>
+            {langFilter !== "all" && (
+              <>
+                {" · "}Showing hreflang targets for{" "}
+                <code className="text-foreground">{langFilter}</code> +{" "}
+                <code className="text-foreground">x-default</code> only.
+              </>
+            )}
           </p>
         </CardContent>
       </Card>
