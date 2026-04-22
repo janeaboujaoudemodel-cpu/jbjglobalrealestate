@@ -401,7 +401,8 @@ export default function SeoReview() {
 
                   <div>
                     <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-                      hreflang targets ({e.hreflangTargets.length})
+                      hreflang targets ({filterTargets(e.hreflangTargets).length}
+                      {langFilter !== "all" && ` of ${e.hreflangTargets.length}`})
                     </h4>
                     <div className="overflow-x-auto rounded border border-border">
                       <Table>
@@ -413,7 +414,7 @@ export default function SeoReview() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {e.hreflangTargets.map((t) => {
+                          {filterTargets(e.hreflangTargets).map((t) => {
                             const langInfo = SUPPORTED_LANGUAGES.find(
                               (l) => l.code === t.hreflang,
                             );
