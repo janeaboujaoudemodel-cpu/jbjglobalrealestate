@@ -321,11 +321,15 @@ All colors MUST be HSL.
     color: rgba(255, 255, 255, 0.92) !important;
   }
 
-  /* Floor opacity for dimmed white icons */
-  [class*="text-white\\/4"] svg,
-  [class*="text-white\\/5"] svg,
-  [class*="text-white\\/6"] svg {
+  /* Floor opacity for dimmed white icons (scoped — exempt .jj-icon-keep) */
+  :where(section, header, footer) [class*="text-white\\/4"]:not(.jj-icon-keep) svg,
+  :where(section, header, footer) [class*="text-white\\/5"]:not(.jj-icon-keep) svg,
+  :where(section, header, footer) [class*="text-white\\/6"]:not(.jj-icon-keep) svg {
     opacity: 0.92;
+  }
+  /* Always preserve full opacity on opt-out icons */
+  .jj-icon-keep svg {
+    opacity: 1 !important;
   }
 
   /* Minimum readable font-size floor — bump micro type to 11px */
