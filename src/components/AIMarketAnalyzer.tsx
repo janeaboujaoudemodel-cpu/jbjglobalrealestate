@@ -323,7 +323,7 @@ export const AIMarketAnalyzer = ({
             <div className="p-4 bg-white/60 rounded-xl border border-gold/20 text-center">
               <Target className="w-6 h-6 mx-auto mb-2 text-gold" />
               <p className="text-xs text-gray-600 mb-1">Area Avg/sqft</p>
-              <p className="text-lg font-bold text-black">AED {insights.avgAreaPriceSqft.toLocaleString()}</p>
+              <p className="text-lg font-bold text-price-orange">AED {insights.avgAreaPriceSqft.toLocaleString()}</p>
             </div>
             <div className="p-4 bg-white/60 rounded-xl border border-gold/20 text-center">
               {insights.priceComparisonPercent < 0 ? (

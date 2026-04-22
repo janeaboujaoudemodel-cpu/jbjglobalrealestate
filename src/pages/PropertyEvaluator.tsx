@@ -854,11 +854,11 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                   <CardContent className="pt-8 text-center">
                     <p className="text-blue-400 text-sm uppercase tracking-wider mb-2">Estimated Market Value</p>
                     <div className="flex items-center justify-center gap-3 mb-2">
-                      <span className="text-2xl text-white/70">AED {evaluation.estimatedValue.low.toLocaleString()}</span>
+                      <span className="text-2xl text-price-orange/80">AED {evaluation.estimatedValue.low.toLocaleString()}</span>
                       <span className="text-gray-600">—</span>
-                      <span className="text-5xl font-bold text-white">AED {evaluation.estimatedValue.mid.toLocaleString()}</span>
+                      <span className="text-5xl font-bold text-price-orange">AED {evaluation.estimatedValue.mid.toLocaleString()}</span>
                       <span className="text-gray-600">—</span>
-                      <span className="text-2xl text-white/70">AED {evaluation.estimatedValue.high.toLocaleString()}</span>
+                      <span className="text-2xl text-price-orange/80">AED {evaluation.estimatedValue.high.toLocaleString()}</span>
                     </div>
                     <p className="text-white/70">
                       AED {evaluation.estimatedValue.pricePerSqFt.toLocaleString()} per sq ft · Community avg: AED {evaluation.communityAverage.toLocaleString()}/sq ft
@@ -951,7 +951,7 @@ www.jbj.ae | CONTACT@JBJ.AE | +971 56 591 1000
                             <p className="text-white font-medium">{t.building}</p>
                             <p className="text-white/60 text-sm">{t.size} sq ft · {t.date}</p>
                           </div>
-                          <p className="text-blue-400 font-semibold">AED {t.price.toLocaleString()}</p>
+                          <p className="text-price-orange font-semibold">AED {t.price.toLocaleString()}</p>
                         </div>
                       ))}
                     </div>
