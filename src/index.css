@@ -96,6 +96,10 @@ All colors MUST be HSL.
     --price-orange: 24 95% 53%;
     --price-orange-glow: 24 95% 58%;
 
+    /* Premium Gold — handover dates / completion timelines */
+    --handover-gold: 38 70% 45%;
+    --handover-gold-glow: 42 85% 55%;
+
     /* Champagne replaced with light surfaces */
     --champagne-1: 0 0% 98%;
     --champagne-2: 0 0% 96%;
