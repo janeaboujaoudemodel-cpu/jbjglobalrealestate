@@ -1,7 +1,7 @@
 // Print Check edge function
 // Accepts a PDF and validates page sizes, edge content, and embedded image DPI.
 import { createClient } from "npm:@supabase/supabase-js@2";
-import { PDFDocument } from "https://esm.sh/pdf-lib@1.17.1";
+import { PDFDocument, degrees } from "https://esm.sh/pdf-lib@1.17.1";
 import { requireOwnerAuth } from "../_shared/owner-auth-middleware.ts";
 
 const MAX_AUTOFIX_ATTEMPTS = 3;
