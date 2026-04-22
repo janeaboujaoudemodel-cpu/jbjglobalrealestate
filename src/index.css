@@ -331,6 +331,58 @@ All colors MUST be HSL.
   .jj-icon-keep svg {
     opacity: 1 !important;
   }
+}
+
+/* ============================================================
+ * GLOBAL PREMIUM ICON VISIBILITY (all viewports)
+ * Guarantees every icon in the platform reads as crisp + premium.
+ * 1. Icons inside black/dark tiles always render solid white.
+ * 2. Icon-tile containers get a subtle premium ring + shadow.
+ * 3. Light-surface icons cannot fall below readable contrast.
+ * ============================================================ */
+@layer utilities {
+  /* Any SVG inside a black/near-black icon tile → solid white, full opacity */
+  .bg-black > svg,
+  .bg-neutral-900 > svg,
+  .bg-gray-900 > svg,
+  .bg-zinc-900 > svg,
+  .bg-stone-900 > svg,
+  [class*="bg-black"] > svg.lucide,
+  .jj-icon-keep > svg {
+    color: #ffffff !important;
+    stroke: currentColor !important;
+    opacity: 1 !important;
+  }
+
+  /* Premium tile finish — applied via the existing opt-in class so we don't
+     accidentally restyle decorative pills. Adds a hairline ring + soft shadow. */
+  .jj-icon-keep {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 1px 2px rgba(0, 0, 0, 0.08),
+      0 4px 12px -4px rgba(0, 0, 0, 0.18) !important;
+    transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease;
+  }
+  .jj-icon-keep:hover,
+  .group:hover > .jj-icon-keep {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.06) inset,
+      0 2px 4px rgba(0, 0, 0, 0.12),
+      0 10px 24px -6px rgba(0, 0, 0, 0.28) !important;
+  }
+
+  /* Light-surface SVG safety floor — prevents washed-out gray icons */
+  .text-gray-300.lucide,
+  .text-gray-400.lucide,
+  svg.text-gray-300,
+  svg.text-gray-400 {
+    color: hsl(0 0% 28%) !important;
+  }
+
+  /* Stroke width floor on all Lucide icons — keeps strokes crisp when scaled down */
+  svg.lucide {
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
 
   /* Minimum readable font-size floor — bump micro type to 11px */
   .text-\[8px\],
