@@ -234,7 +234,8 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
                 );
               })()}
               {project.handover_date ? (
-                <span className="text-gray-800 text-xs font-bold whitespace-nowrap">
+                <span className="jj-handover-pill">
+                  <Calendar className="w-3 h-3" />
                   {project.handover_date}
                 </span>
               ) : (
