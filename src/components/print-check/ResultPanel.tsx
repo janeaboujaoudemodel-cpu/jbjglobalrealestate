@@ -1,15 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Download, CheckCircle2, AlertTriangle, Wand2, FileDown } from "lucide-react";
+import { Download, CheckCircle2, AlertTriangle, Wand2, FileDown, ScanLine } from "lucide-react";
 
 export interface PageReport {
   page: number;
   widthMm: number;
   heightMm: number;
+  widthDeltaMm?: number;
+  heightDeltaMm?: number;
   edgeCoveragePct: number;
   minImageDpi: number | null;
+  requiredDpi?: number;
   blank: boolean;
   reasons: string[];
+  failedEdges?: { top: boolean; right: boolean; bottom: boolean; left: boolean };
   ok: boolean;
 }
 
@@ -29,6 +33,8 @@ export interface PrintCheckResult {
   attempts?: AutoFixAttempt[];
   fixedPdfUrl?: string | null;
   fixedFilename?: string | null;
+  diffPdfUrl?: string | null;
+  diffFilename?: string | null;
 }
 
 interface Props {
