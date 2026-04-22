@@ -1,15 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Download, CheckCircle2, AlertTriangle, Wand2, FileDown } from "lucide-react";
+import { Download, CheckCircle2, AlertTriangle, Wand2, FileDown, ScanLine } from "lucide-react";
 
 export interface PageReport {
   page: number;
   widthMm: number;
   heightMm: number;
+  widthDeltaMm?: number;
+  heightDeltaMm?: number;
   edgeCoveragePct: number;
   minImageDpi: number | null;
+  requiredDpi?: number;
   blank: boolean;
   reasons: string[];
+  failedEdges?: { top: boolean; right: boolean; bottom: boolean; left: boolean };
   ok: boolean;
 }
 
@@ -29,6 +33,8 @@ export interface PrintCheckResult {
   attempts?: AutoFixAttempt[];
   fixedPdfUrl?: string | null;
   fixedFilename?: string | null;
+  diffPdfUrl?: string | null;
+  diffFilename?: string | null;
 }
 
 interface Props {
@@ -62,9 +68,18 @@ export default function ResultPanel({ filename, result }: Props) {
             </div>
           </div>
         </div>
-        <Button onClick={downloadTxt} variant="outline" size="sm">
-          <Download className="h-4 w-4 mr-2" /> Download report
-        </Button>
+        <div className="flex items-center gap-2">
+          {result.diffPdfUrl && (
+            <Button asChild variant="outline" size="sm">
+              <a href={result.diffPdfUrl} target="_blank" rel="noreferrer" download={result.diffFilename ?? undefined}>
+                <ScanLine className="h-4 w-4 mr-2" /> Diff PDF
+              </a>
+            </Button>
+          )}
+          <Button onClick={downloadTxt} variant="outline" size="sm">
+            <Download className="h-4 w-4 mr-2" /> Report
+          </Button>
+        </div>
       </div>
 
       {(result.autoFixed || result.autoFixNote) && (
@@ -98,18 +113,44 @@ export default function ResultPanel({ filename, result }: Props) {
             <tr>
               <th className="p-2 font-medium">Page</th>
               <th className="p-2 font-medium">Size (mm)</th>
+              <th className="p-2 font-medium">Δ Size</th>
+              <th className="p-2 font-medium">Failed edges</th>
               <th className="p-2 font-medium">Edge %</th>
-              <th className="p-2 font-medium">Min image DPI</th>
+              <th className="p-2 font-medium">DPI (min / req)</th>
               <th className="p-2 font-medium">Status</th>
             </tr>
           </thead>
           <tbody>
-            {result.pages.map((p) => (
+            {result.pages.map((p) => {
+              const dW = p.widthDeltaMm ?? 0;
+              const dH = p.heightDeltaMm ?? 0;
+              const sizeOff = Math.abs(dW) > 2 || Math.abs(dH) > 2;
+              const edges = p.failedEdges
+                ? Object.entries(p.failedEdges).filter(([, v]) => v).map(([k]) => k)
+                : [];
+              const dpiBad = p.minImageDpi !== null && p.requiredDpi !== undefined && p.minImageDpi < p.requiredDpi;
+              const dpiDelta = p.minImageDpi !== null && p.requiredDpi !== undefined
+                ? ` (Δ ${p.minImageDpi - p.requiredDpi})`
+                : "";
+              return (
               <tr key={p.page} className="border-t">
                 <td className="p-2">{p.page}</td>
                 <td className="p-2">{p.widthMm} × {p.heightMm}</td>
+                <td className={`p-2 ${sizeOff ? "text-destructive font-medium" : "text-muted-foreground"}`}>
+                  {dW > 0 ? `+${dW}` : dW}×{dH > 0 ? `+${dH}` : dH}
+                </td>
+                <td className="p-2">
+                  {edges.length === 0
+                    ? <span className="text-muted-foreground">—</span>
+                    : edges.map((e) => (
+                        <Badge key={e} variant="destructive" className="mr-1 text-[10px] px-1.5 py-0">{e}</Badge>
+                      ))}
+                </td>
                 <td className="p-2">{p.edgeCoveragePct}%</td>
-                <td className="p-2">{p.minImageDpi ?? "—"}</td>
+                <td className={`p-2 ${dpiBad ? "text-destructive font-medium" : ""}`}>
+                  {p.minImageDpi ?? "—"}{p.requiredDpi !== undefined ? ` / ${p.requiredDpi}` : ""}
+                  {dpiBad && <span className="text-xs">{dpiDelta}</span>}
+                </td>
                 <td className="p-2">
                   {p.ok
                     ? <Badge variant="outline" className="border-foreground/30 text-foreground">OK</Badge>
@@ -117,7 +158,8 @@ export default function ResultPanel({ filename, result }: Props) {
                   {!p.ok && <div className="text-xs text-muted-foreground mt-1">{p.reasons.join("; ")}</div>}
                 </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>

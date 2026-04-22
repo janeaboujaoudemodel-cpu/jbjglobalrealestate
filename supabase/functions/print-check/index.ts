@@ -19,10 +19,14 @@ interface PageReport {
   page: number;
   widthMm: number;
   heightMm: number;
+  widthDeltaMm: number;   // measured - target (matched orientation)
+  heightDeltaMm: number;
   edgeCoveragePct: number;
   minImageDpi: number | null;
+  requiredDpi: number;
   blank: boolean;
   reasons: string[];
+  failedEdges: { top: boolean; right: boolean; bottom: boolean; left: boolean };
   ok: boolean;
 }
 
@@ -115,6 +119,8 @@ Deno.serve(async (req) => {
   const outName = autoFixed ? filename.replace(/\.pdf$/i, "") + "_AUTOFIXED.pdf" : filename;
   const pdfPath = `${baseDir}/${outName}`;
   const reportPath = `${baseDir}/${filename.replace(/\.pdf$/i, "")}_PRINT_CHECK.txt`;
+  const diffName = filename.replace(/\.pdf$/i, "") + "_DIFF.pdf";
+  const diffPath = `${baseDir}/${diffName}`;
 
   await admin.storage.from("print-checks").upload(pdfPath, bytes, {
     contentType: "application/pdf", upsert: false,
@@ -124,6 +130,23 @@ Deno.serve(async (req) => {
     new Blob([txtReport], { type: "text/plain" }),
     { contentType: "text/plain", upsert: false },
   );
+
+  // Annotated diff PDF (only meaningful when something failed)
+  let diffPdfUrl: string | null = null;
+  let diffUploaded = false;
+  if (!analysis.pass) {
+    const diffBytes = await buildAnnotatedDiff(bytes, analysis.pages, targetWmm, targetHmm);
+    if (diffBytes) {
+      const { error: diffErr } = await admin.storage.from("print-checks").upload(
+        diffPath, diffBytes, { contentType: "application/pdf", upsert: false },
+      );
+      if (!diffErr) {
+        diffUploaded = true;
+        const { data: signed } = await admin.storage.from("print-checks").createSignedUrl(diffPath, 3600);
+        diffPdfUrl = signed?.signedUrl ?? null;
+      }
+    }
+  }
 
   let fixedPdfUrl: string | null = null;
   if (autoFixed) {
@@ -141,7 +164,11 @@ Deno.serve(async (req) => {
     pass: analysis.pass,
     pdf_path: pdfPath,
     report_path: reportPath,
-    summary: { pages: analysis.pages, reasons: analysis.reasons, autoFixed, autoFixNote, attempts },
+    summary: {
+      pages: analysis.pages, reasons: analysis.reasons,
+      autoFixed, autoFixNote, attempts,
+      diffPath: diffUploaded ? diffPath : null,
+    },
   });
 
   return json({
@@ -156,6 +183,8 @@ Deno.serve(async (req) => {
     attempts,
     fixedPdfUrl,
     fixedFilename: autoFixed ? outName : null,
+    diffPdfUrl,
+    diffFilename: diffUploaded ? diffName : null,
   }, 200);
 });
 
@@ -181,24 +210,47 @@ async function analyzePdf(bytes: Uint8Array, opts: AnalyzeOpts): Promise<Analyze
     const wMm = +(wPt / PT_PER_MM).toFixed(1);
     const hMm = +(hPt / PT_PER_MM).toFixed(1);
     const pageReasons: string[] = [];
-    const matches =
-      (within(wMm, targetWmm, 2) && within(hMm, targetHmm, 2)) ||
-      (within(wMm, targetHmm, 2) && within(hMm, targetWmm, 2));
-    if (!matches) pageReasons.push(`size ${wMm}×${hMm}mm ≠ target ${targetWmm}×${targetHmm}mm`);
+    // Pick the target orientation that best matches this page
+    const sameOri = within(wMm, targetWmm, 2) && within(hMm, targetHmm, 2);
+    const rotOri = within(wMm, targetHmm, 2) && within(hMm, targetWmm, 2);
+    const matchedTargetW = rotOri && !sameOri ? targetHmm : targetWmm;
+    const matchedTargetH = rotOri && !sameOri ? targetWmm : targetHmm;
+    const widthDeltaMm = +(wMm - matchedTargetW).toFixed(1);
+    const heightDeltaMm = +(hMm - matchedTargetH).toFixed(1);
+    const matches = sameOri || rotOri;
+    const failedEdges = { top: false, right: false, bottom: false, left: false };
+    if (!matches) {
+      pageReasons.push(`size ${wMm}×${hMm}mm ≠ target ${matchedTargetW}×${matchedTargetH}mm (Δ ${fmtDelta(widthDeltaMm)}×${fmtDelta(heightDeltaMm)} mm)`);
+      // If width is short → both vertical edges (left+right) flagged; height short → top+bottom
+      if (Math.abs(widthDeltaMm) > 2) { failedEdges.left = true; failedEdges.right = true; }
+      if (Math.abs(heightDeltaMm) > 2) { failedEdges.top = true; failedEdges.bottom = true; }
+    }
     const edgeCoveragePct = estimateEdgeCoverage(bytes, p, edgeMarginMm);
-    if (edgeCoveragePct > 0.5) pageReasons.push(`content within ${edgeMarginMm}mm trim (${edgeCoveragePct.toFixed(2)}%)`);
+    if (edgeCoveragePct > 0.5) {
+      pageReasons.push(`content within ${edgeMarginMm}mm trim (${edgeCoveragePct.toFixed(2)}%)`);
+      failedEdges.top = failedEdges.right = failedEdges.bottom = failedEdges.left = true;
+    }
     const dpis = dpiByPage[i] ?? [];
     const minImageDpi = dpis.length ? Math.min(...dpis) : null;
-    if (minImageDpi !== null && minImageDpi < minDpi) pageReasons.push(`image at ${minImageDpi} DPI < ${minDpi}`);
+    if (minImageDpi !== null && minImageDpi < minDpi) {
+      pageReasons.push(`image at ${minImageDpi} DPI < ${minDpi} (Δ ${minImageDpi - minDpi} DPI)`);
+    }
     const ok = pageReasons.length === 0;
     if (!ok) for (const r of pageReasons) reasons.push(`Page ${i + 1}: ${r}`);
     pageReports.push({
       page: i + 1, widthMm: wMm, heightMm: hMm,
+      widthDeltaMm, heightDeltaMm,
       edgeCoveragePct: +edgeCoveragePct.toFixed(2),
-      minImageDpi, blank: false, reasons: pageReasons, ok,
+      minImageDpi, requiredDpi: minDpi,
+      blank: false, reasons: pageReasons,
+      failedEdges, ok,
     });
   }
   return { pass: reasons.length === 0, pages: pageReports, reasons };
+}
+
+function fmtDelta(n: number): string {
+  return n > 0 ? `+${n}` : `${n}`;
 }
 
 /**
@@ -235,6 +287,107 @@ async function autoFixPdf(bytes: Uint8Array, targetWmm: number, targetHmm: numbe
         });
       } else {
         page.drawPage(emb, { x, y, width: drawW, height: drawH });
+      }
+    }
+    return await out.save();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Build an annotated diff PDF: original pages with red translucent bands on
+ * failing edges, a header strip with measured deltas, and a target trim outline.
+ */
+async function buildAnnotatedDiff(
+  bytes: Uint8Array,
+  pageReports: PageReport[],
+  targetWmm: number,
+  targetHmm: number,
+): Promise<Uint8Array | null> {
+  try {
+    const { rgb, StandardFonts } = await import("https://esm.sh/pdf-lib@1.17.1");
+    const src = await PDFDocument.load(bytes, { updateMetadata: false });
+    const out = await PDFDocument.create();
+    const font = await out.embedFont(StandardFonts.HelveticaBold);
+    const small = await out.embedFont(StandardFonts.Helvetica);
+    const embedded = await out.embedPdf(src, src.getPageIndices());
+    const headerH = 26; // pts header strip
+    const bandPt = 18;  // edge highlight thickness
+    const red = rgb(0.86, 0.15, 0.15);
+    const amber = rgb(0.95, 0.65, 0.15);
+    const ink = rgb(0.08, 0.08, 0.08);
+    const paper = rgb(1, 1, 1);
+
+    for (let i = 0; i < embedded.length; i++) {
+      const emb = embedded[i];
+      const report = pageReports[i];
+      const pageW = emb.width;
+      const pageH = emb.height;
+      const totalH = pageH + headerH;
+      const page = out.addPage([pageW, totalH]);
+
+      // Draw the source page below the header strip
+      page.drawPage(emb, { x: 0, y: 0, width: pageW, height: pageH });
+
+      // Header strip
+      page.drawRectangle({ x: 0, y: pageH, width: pageW, height: headerH, color: paper });
+      page.drawRectangle({ x: 0, y: pageH + headerH - 0.5, width: pageW, height: 0.5, color: ink });
+
+      const status = report.ok ? "PASS" : "FAIL";
+      const statusColor = report.ok ? rgb(0.15, 0.55, 0.25) : red;
+      page.drawText(`Page ${report.page}  ·  ${status}`, {
+        x: 8, y: pageH + 8, size: 10, font, color: statusColor,
+      });
+
+      const dpiTxt = report.minImageDpi === null
+        ? "DPI: n/a"
+        : `DPI: ${report.minImageDpi}/${report.requiredDpi}`;
+      const sizeTxt = `Size: ${report.widthMm}×${report.heightMm} mm  (target ${targetWmm}×${targetHmm}, Δ ${fmtDelta(report.widthDeltaMm)}×${fmtDelta(report.heightDeltaMm)})`;
+      page.drawText(sizeTxt, {
+        x: 110, y: pageH + 8, size: 8, font: small, color: ink,
+      });
+      page.drawText(dpiTxt, {
+        x: pageW - 130, y: pageH + 8, size: 8, font: small, color:
+          report.minImageDpi !== null && report.minImageDpi < report.requiredDpi ? red : ink,
+      });
+
+      // Target trim outline (dashed amber, only if size mismatched)
+      if (Math.abs(report.widthDeltaMm) > 2 || Math.abs(report.heightDeltaMm) > 2) {
+        const tW = targetWmm * PT_PER_MM;
+        const tH = targetHmm * PT_PER_MM;
+        const tx = (pageW - tW) / 2;
+        const ty = (pageH - tH) / 2;
+        page.drawRectangle({
+          x: tx, y: ty, width: tW, height: tH,
+          borderColor: amber, borderWidth: 1.2, borderDashArray: [4, 4],
+        });
+      }
+
+      // Failed edge bands (translucent red)
+      const e = report.failedEdges;
+      const opacity = 0.32;
+      if (e.top) {
+        page.drawRectangle({ x: 0, y: pageH - bandPt, width: pageW, height: bandPt, color: red, opacity });
+      }
+      if (e.bottom) {
+        page.drawRectangle({ x: 0, y: 0, width: pageW, height: bandPt, color: red, opacity });
+      }
+      if (e.left) {
+        page.drawRectangle({ x: 0, y: 0, width: bandPt, height: pageH, color: red, opacity });
+      }
+      if (e.right) {
+        page.drawRectangle({ x: pageW - bandPt, y: 0, width: bandPt, height: pageH, color: red, opacity });
+      }
+
+      // Per-edge delta labels
+      if (e.left || e.right) {
+        const lbl = `Δ width ${fmtDelta(report.widthDeltaMm)} mm`;
+        page.drawText(lbl, { x: pageW / 2 - 40, y: 4, size: 8, font, color: red });
+      }
+      if (e.top || e.bottom) {
+        const lbl = `Δ height ${fmtDelta(report.heightDeltaMm)} mm`;
+        page.drawText(lbl, { x: 4, y: pageH / 2, size: 8, font, color: red });
       }
     }
     return await out.save();
@@ -326,8 +479,16 @@ function buildTxtReport(args: {
   lines.push("");
   for (const p of pageReports) {
     const dpi = p.minImageDpi === null ? "n/a" : `${p.minImageDpi}`;
+    const dpiDelta = p.minImageDpi === null ? "" : ` (Δ ${fmtDelta(p.minImageDpi - p.requiredDpi)})`;
+    const sizeDelta = `Δ ${fmtDelta(p.widthDeltaMm)}×${fmtDelta(p.heightDeltaMm)} mm`;
+    const edges = [
+      p.failedEdges.top && "top",
+      p.failedEdges.right && "right",
+      p.failedEdges.bottom && "bottom",
+      p.failedEdges.left && "left",
+    ].filter(Boolean).join(",") || "none";
     const status = p.ok ? "OK" : `FAIL (${p.reasons.join("; ")})`;
-    lines.push(`Page ${p.page} — ${p.widthMm} × ${p.heightMm} mm — edge coverage ${p.edgeCoveragePct}% — min image DPI ${dpi} — ${status}`);
+    lines.push(`Page ${p.page} — ${p.widthMm} × ${p.heightMm} mm [${sizeDelta}] — edges:${edges} — edge cov ${p.edgeCoveragePct}% — min DPI ${dpi}${dpiDelta} — ${status}`);
   }
   if (attempts && attempts.length > 1) {
     lines.push("");
