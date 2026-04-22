@@ -193,11 +193,11 @@ export default function SeoReview() {
         <CardHeader className="flex-row items-center justify-between space-y-0">
           <CardTitle className="text-base flex items-center gap-2">
             {checkReport.errorCount === 0 && checkReport.warningCount === 0 ? (
-              <ShieldCheck className="w-5 h-5 text-emerald-600" />
+              <ShieldCheck className="w-5 h-5 text-foreground" />
             ) : checkReport.errorCount > 0 ? (
               <ShieldAlert className="w-5 h-5 text-destructive" />
             ) : (
-              <AlertTriangle className="w-5 h-5 text-amber-600" />
+              <AlertTriangle className="w-5 h-5 text-foreground" />
             )}
             Validation checks
           </CardTitle>
@@ -205,7 +205,7 @@ export default function SeoReview() {
             <Badge variant={checkReport.errorCount > 0 ? "destructive" : "outline"}>
               {checkReport.errorCount} error{checkReport.errorCount === 1 ? "" : "s"}
             </Badge>
-            <Badge variant="outline" className={checkReport.warningCount > 0 ? "border-amber-500 text-amber-700" : ""}>
+            <Badge variant="outline" className={checkReport.warningCount > 0 ? "border-foreground/40 text-foreground" : ""}>
               {checkReport.warningCount} warning{checkReport.warningCount === 1 ? "" : "s"}
             </Badge>
             <Badge variant="outline">
