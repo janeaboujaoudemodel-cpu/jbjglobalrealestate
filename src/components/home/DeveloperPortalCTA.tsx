@@ -118,8 +118,8 @@ const DeveloperPortalCTA = () => {
               {investorShortcuts.map((action) => (
                 <Link key={action.label} to={action.href}>
                   <div className="group flex flex-col items-center gap-2 p-5 rounded-xl border border-gray-200 hover:border-gray-400 bg-white hover:bg-gray-50 transition-all duration-300 cursor-pointer min-h-[120px] justify-center shadow-sm hover:shadow-md">
-                    <div className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <action.icon className="w-5 h-5 text-gray-700" />
+                    <div className="jj-icon-keep w-11 h-11 rounded-xl bg-black flex items-center justify-center group-hover:scale-110 group-hover:bg-gray-800 transition-all">
+                      <action.icon className="w-5 h-5 text-white" style={{ color: '#fff' }} />
                     </div>
                     <span className="text-black text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
                     <span className="text-gray-600 text-[10px] text-center leading-tight">{action.desc}</span>
@@ -175,8 +175,8 @@ const DeveloperPortalCTA = () => {
               {shortcuts.map((action) => (
                 <Link key={action.label} to={action.href}>
                   <div className="group flex flex-col items-center gap-2 p-5 rounded-xl border border-gray-200 hover:border-gray-400 bg-white hover:bg-gray-50 transition-all duration-300 cursor-pointer min-h-[120px] justify-center shadow-sm hover:shadow-md">
-                    <div className="w-11 h-11 rounded-xl bg-gray-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <action.icon className="w-5 h-5 text-gray-700" />
+                    <div className="jj-icon-keep w-11 h-11 rounded-xl bg-black flex items-center justify-center group-hover:scale-110 group-hover:bg-gray-800 transition-all">
+                      <action.icon className="w-5 h-5 text-white" style={{ color: '#fff' }} />
                     </div>
                     <span className="text-black text-xs md:text-sm font-semibold text-center leading-tight">{action.label}</span>
                     <span className="text-gray-600 text-[10px] text-center leading-tight">{action.desc}</span>

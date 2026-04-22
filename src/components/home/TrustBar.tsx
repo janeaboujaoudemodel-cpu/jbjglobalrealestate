@@ -84,8 +84,8 @@ const TrustBar = () => {
             }`}
           >
             {/* Icon */}
-            <div className="w-8 h-8 md:w-11 md:h-11 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0 bg-black shadow-sm">
-              <item.icon className="w-4 h-4 md:w-5 md:h-5 text-white" />
+            <div className="jj-icon-keep w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0 bg-black shadow-sm">
+              <item.icon className="w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7 text-white" style={{ color: '#fff' }} />
             </div>
             
             {/* Text content */}
