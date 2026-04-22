@@ -1,50 +1,65 @@
 
 
-## Full responsive QA sweep + immediate icon-visibility fixes
+## Shorten & Refine Footer — Classy Corporate Edition
 
-### Confirmed root causes (from code reading)
+Reduce the footer from ~761 lines / 5 oversized zones to a compact, editorial corporate layout while **preserving every link** (No-Removal Policy). Replace ornamental flourishes (✦, serif display type, gold gradients, dotted dividers) with clean monochrome typography and a single restrained gold hairline accent.
 
-**Bug 1 — Investor Opportunities icons invisible (`src/components/home/DeveloperPortalCTA.tsx` lines 117–129)**
-The 4 investor shortcut cards render the icon as `text-gray-700` inside a `bg-gray-100` rounded square. On retina laptop/tablet displays this gray-on-gray combo washes out and looks blank — exactly what the user sees. The same pattern is reused for the Developer shortcuts (lines 173–186), so both are broken.
+### Visual direction
 
-**Bug 2 — TrustBar 8 cards (RERA Licensed / Instant Response / Verified Listings / etc.) icons faded (`src/components/home/TrustBar.tsx` lines 87–89)**
-The icons themselves are correctly `bg-black` + `text-white`, but the global mobile safety net in `src/index.css` (lines 324–329) applies `opacity: 0.92` to any svg inside an element matching `[class*="text-white\/4"]` etc. — and several parent wrappers in marketing components carry those classes, dimming nested icons. More critically, on tablet/laptop viewports the cards have no visibility issue from CSS but appear washed out because the icon container `w-8 h-8` is too small at md+ and the mb/spacing collapses on the 1041px viewport (`md:w-11 md:h-11` only kicks in at ≥768 — at 1041 it should be larger).
+- Surface: deep obsidian `#0A0908` with **one** subtle top hairline — no radial glow blobs.
+- Type: **Inter only** (drop Cormorant/Playfair display serif).
+- Accent: a single muted champagne `#C8A766` used sparingly — hairlines, hover, monogram glow only. No gold-on-gold gradients, no ✦ symbols.
+- Spacing: tighter vertical rhythm (~40% shorter overall).
+- Dividers: thin `rgba(255,255,255,0.08)` lines instead of decorative gradient bars.
 
-### Fixes to apply
+### New structure (5 → 3 zones)
 
-**1. `src/components/home/DeveloperPortalCTA.tsx`**
-- Investor & Developer shortcut cards: change icon container from `bg-gray-100` + `text-gray-700` to `bg-black` + `text-white` (matches TrustBar/site standard), with hover state `group-hover:bg-gray-800`.
-- Apply identically to both blocks (lines 117–129 and 173–186) so investor and developer modes look consistent.
+```text
+┌────────────────────────────────────────────────────────────┐
+│  [monogram]  JBJ GLOBAL REAL ESTATE                         │
+│  Excellence in Real Estate · Licensed UAE Brokerage         │
+│  ─────────────────────────────────────────────────────       │
+│  Connect: [socials] [GMB]   |   Mode · Currency · Unit       │
+└────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────┐
+│  4-column compact link grid (16 categories merged)          │
+│  Properties │ Services │ Guides │ About                     │
+│  Sell       │ Investor │ Broker │ Partners                  │
+│  Legal      │ Suites   │ Tools  │ AI / Creative / Market    │
+│  - plain text links, no card chrome, hover = champagne      │
+└────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────┐
+│  Contact strip:  📍 address  · ☎ phone · ✉ email · WhatsApp  │
+│  ─── thin hairline ───                                       │
+│  Compact legal (1 EN paragraph + 1 AR paragraph, condensed)  │
+│  © 2026 JBJ Global Real Estate · All Rights Reserved         │
+│   · Terms · Privacy · Cookies · Disclaimers                  │
+└────────────────────────────────────────────────────────────┘
+```
 
-**2. `src/components/home/TrustBar.tsx`**
-- Bump icon container responsive sizes: `w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14` and inner icon `w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7` so the icons are clearly visible on tablet (768–1280) where the user noticed the issue.
-- Add `text-white` directly on the `<item.icon>` (currently set, but add `!important`-equivalent via inline `style={{color:'#fff'}}` or a dedicated class) to bypass the mobile opacity floor that targets nested svgs.
+### Specific changes
 
-**3. `src/index.css` — tighten the mobile safety net**
-- The selector `[class*="text-white\\/4"] svg` is too broad and dims unrelated icons inside dark backgrounds. Scope it to `:where(section, header, footer) [class*="text-white\\/4"]:not(.jj-icon-keep) svg` and add a `.jj-icon-keep` opt-out used by TrustBar's icon container.
+1. **Remove ornaments**: delete every `✦`, all serif `font-family: Cormorant/Playfair`, gradient gold dots, decorative `w-10 h-px` flourishes, double hairlines. Keep one top + one bottom hairline.
+2. **Brand crown**: monogram h-16 (was h-40), single-line wordmark in Inter semibold tracking-[0.18em], one-line tagline. Removes ~30 lines of markup.
+3. **Newsletter**: move out of footer — `NewsletterBand` already renders above footer globally, so delete the duplicate inside Footer (Zone 2 newsletter block).
+4. **License + utility strip**: collapse "Licensed ✦ Buy ✦ Sell ✦ Rent" sentence into one understated line. Combine Connect / Mode / Currency / Unit into a single horizontal row, no card.
+5. **Nav grid**: replace `FooterCard` (boxed gold-bordered cards w/ hover-lift) with a clean 4-column text list. Title = uppercase tracking-[0.2em] white 11px; links = `text-white/65 hover:text-white text-[13px]`. All 16 categories preserved, just denser.
+6. **Get In Touch**: convert from boxed card → single inline contact bar with icons (no circular gold buttons, just `text-white/70` icons that turn champagne on hover).
+7. **Legal**: keep all 4 paragraphs (EN + 2 AR + IP notice) but shrink to `text-[11px] text-white/55 leading-relaxed` and stack tightly. Replace the gold "All Rights Reserved" pill with a plain centered line: `© 2026 JBJ Global Real Estate · All Rights Reserved · [Terms · Privacy · Cookies · Disclaimers · IP · AML · Accessibility · Trust]`.
+8. **`FooterCurrencyUnit`**: keep functionality, restyle buttons to flat bordered (no gold tinted backgrounds when inactive).
 
-**4. Cross-device QA pass (after fix)**
-Take live screenshots at the following viewports of the homepage + the most-trafficked pages (`/properties`, `/property-map`, `/areas`, `/contact`, `/auth`):
-- 360×800 (small Android), 390×844 (iPhone 14), 414×896 (iPhone Plus)
-- 768×1024 (iPad portrait), 820×1180 (iPad Air), 1024×768 (iPad landscape)
-- 1280×720 (small laptop), 1366×768 (HD laptop), 1536×864 (current user viewport class), 1920×1080 (desktop monitor)
+### Preservation guarantees (No-Removal Policy)
 
-For each viewport I will:
-- Verify TrustBar icons & text are crisp
-- Verify Investor Opportunities icons render (black circles, white icons)
-- Scan hero, Areas We Cover, Featured Listings, Overseas Investors, Additional Services, footer for any overlap, faded text, broken grid, or clipped content
-- Capture only the viewports where a real bug is found and list them in the deliverable
-
-**5. Honest reporting**
-After the sweep I will list, per viewport, what I checked and exactly which bugs were found and fixed vs. which remain (no false "all fixed" claim).
+- **Every link** in `propertiesLinks`, `sellLinks`, `servicesLinks`, `investorHubLinks`, `guidesLinks`, `marketIntelLinks`, `aboutLinks`, `careerLinks`, `brokerAcademyLinks`, `partnersLinks`, `legalLinks`, `businessSuitesLinks`, `productivityLinks`, `professionalTools`, AI Tools, Creative Suites, Education Hub — kept verbatim.
+- Newsletter still appears site-wide (via existing `NewsletterBand` above footer).
+- All contact methods (phone, WhatsApp, email, address, GMB), socials, ModeSwitcher, Currency + Unit switcher — preserved.
+- All legal paragraphs (EN, AR ×2, IP notice, FounderContent gating) — preserved, just compacted.
 
 ### Files to edit
-- `src/components/home/DeveloperPortalCTA.tsx` — icon container colors (investor + developer blocks)
-- `src/components/home/TrustBar.tsx` — icon size scale + opt-out class
-- `src/index.css` — scope the mobile-safety-net opacity rule + add `.jj-icon-keep` opt-out
 
-### Deliverable
-- Visible icons on TrustBar (8 cards) and Investor Opportunities (4 cards) at every viewport
-- Annotated screenshots from the QA sweep (mobile / tablet / laptop / monitor)
-- A bug list with status: `fixed` / `still-broken` for any issues discovered during the sweep — no "all clear" claim until verified
+- `src/components/Footer.tsx` — rewrite presentation layer; keep all link arrays and state hooks intact.
+
+### Memory update
+
+- Add `mem://brand/footer-corporate-standard` recording: monochrome corporate footer, Inter only, no ✦/serif display, single champagne hairline accent, 4-column dense nav, all links preserved.
 
