@@ -9,7 +9,8 @@
     "build:dev": "vite build --mode development --logLevel warn",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "vite preview --host 0.0.0.0 --port 8080"
+    "start": "vite preview --host 0.0.0.0 --port 8080",
+    "pdf:qa": "node scripts/pdf-qa/check-exports.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.1",
