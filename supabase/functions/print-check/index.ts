@@ -479,8 +479,16 @@ function buildTxtReport(args: {
   lines.push("");
   for (const p of pageReports) {
     const dpi = p.minImageDpi === null ? "n/a" : `${p.minImageDpi}`;
+    const dpiDelta = p.minImageDpi === null ? "" : ` (Δ ${fmtDelta(p.minImageDpi - p.requiredDpi)})`;
+    const sizeDelta = `Δ ${fmtDelta(p.widthDeltaMm)}×${fmtDelta(p.heightDeltaMm)} mm`;
+    const edges = [
+      p.failedEdges.top && "top",
+      p.failedEdges.right && "right",
+      p.failedEdges.bottom && "bottom",
+      p.failedEdges.left && "left",
+    ].filter(Boolean).join(",") || "none";
     const status = p.ok ? "OK" : `FAIL (${p.reasons.join("; ")})`;
-    lines.push(`Page ${p.page} — ${p.widthMm} × ${p.heightMm} mm — edge coverage ${p.edgeCoveragePct}% — min image DPI ${dpi} — ${status}`);
+    lines.push(`Page ${p.page} — ${p.widthMm} × ${p.heightMm} mm [${sizeDelta}] — edges:${edges} — edge cov ${p.edgeCoveragePct}% — min DPI ${dpi}${dpiDelta} — ${status}`);
   }
   if (attempts && attempts.length > 1) {
     lines.push("");
