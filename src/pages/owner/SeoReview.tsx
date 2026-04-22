@@ -29,7 +29,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Search, Globe, Link2, Terminal, Copy, Check, Download, ShieldAlert, ShieldCheck, AlertTriangle } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Search, Globe, Link2, Terminal, Copy, Check, Download, ShieldAlert, ShieldCheck, AlertTriangle, Languages } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/translations";
 import {
   computeServiceSeoEntries,
