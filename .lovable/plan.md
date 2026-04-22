@@ -1,45 +1,50 @@
 
 
-## Fix: Hero overlap & ghosted "Your Gateway…" headline
+## Full responsive QA sweep + immediate icon-visibility fixes
 
-### Root cause (confirmed in `src/pages/Index.tsx`)
-Two layers render the same copy at the same vertical position:
+### Confirmed root causes (from code reading)
 
-1. **Fallback layer** (lines 166–201, `z-[1]`) — shows while `videoLoaded === false`. Renders the centered monogram + the words **"Your Gateway to Dubai's Finest Real Estate"** + "Loading experience…".
-2. **Hero content layer** (lines 250+, `z-10`) — always rendered. Contains the eyebrow + the SAME headline **"Your Gateway to Dubai's Finest Real Estate"** + 5 CTA pills + 3 pillar cards.
+**Bug 1 — Investor Opportunities icons invisible (`src/components/home/DeveloperPortalCTA.tsx` lines 117–129)**
+The 4 investor shortcut cards render the icon as `text-gray-700` inside a `bg-gray-100` rounded square. On retina laptop/tablet displays this gray-on-gray combo washes out and looks blank — exactly what the user sees. The same pattern is reused for the Developer shortcuts (lines 173–186), so both are broken.
 
-Because the fallback has no opaque cover and the gold-gradient headline is semi-transparent, the fallback's centered tagline ghosts through the live headline → the doubled "Your Gateway…" effect visible in your screenshot. The eyebrow also visually overlaps the fading monogram watermark behind it. On the 1041px viewport the 5 CTAs wrap into a tight cluster against the headline.
+**Bug 2 — TrustBar 8 cards (RERA Licensed / Instant Response / Verified Listings / etc.) icons faded (`src/components/home/TrustBar.tsx` lines 87–89)**
+The icons themselves are correctly `bg-black` + `text-white`, but the global mobile safety net in `src/index.css` (lines 324–329) applies `opacity: 0.92` to any svg inside an element matching `[class*="text-white\/4"]` etc. — and several parent wrappers in marketing components carry those classes, dimming nested icons. More critically, on tablet/laptop viewports the cards have no visibility issue from CSS but appear washed out because the icon container `w-8 h-8` is too small at md+ and the mb/spacing collapses on the 1041px viewport (`md:w-11 md:h-11` only kicks in at ≥768 — at 1041 it should be larger).
 
-### Fix
+### Fixes to apply
 
-**File: `src/pages/Index.tsx`**
+**1. `src/components/home/DeveloperPortalCTA.tsx`**
+- Investor & Developer shortcut cards: change icon container from `bg-gray-100` + `text-gray-700` to `bg-black` + `text-white` (matches TrustBar/site standard), with hover state `group-hover:bg-gray-800`.
+- Apply identically to both blocks (lines 117–129 and 173–186) so investor and developer modes look consistent.
 
-1. **De-duplicate the fallback** — remove the tagline and "Loading experience…" copy from the fallback layer. Keep only the pulsing monogram + shimmer line so the loading state stays branded but never collides with the real headline.
-   - Delete lines ~185–199 (tagline `<p>` + shimmer + loading micro-label)
-   - Keep the monogram (lines 175–183) and a single subtle shimmer bar
-   
-2. **Hide the fallback the moment hero content mounts** — wrap the fallback in `{!videoLoaded && ...}` (already there) AND add a fast fade-out by rendering the live hero with a slightly delayed-in opacity so users never see both stacked. Simpler fix: give the fallback `z-[1]` and ensure the real content sits on a faint backdrop blur card so any leftover bleed-through is invisible.
+**2. `src/components/home/TrustBar.tsx`**
+- Bump icon container responsive sizes: `w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14` and inner icon `w-5 h-5 md:w-6 md:h-6 lg:w-7 lg:h-7` so the icons are clearly visible on tablet (768–1280) where the user noticed the issue.
+- Add `text-white` directly on the `<item.icon>` (currently set, but add `!important`-equivalent via inline `style={{color:'#fff'}}` or a dedicated class) to bypass the mobile opacity floor that targets nested svgs.
 
-3. **Tighten the CTA grid on tablet (768–1100px)** — the current `sm:flex sm:flex-wrap sm:justify-center` lets the 5 buttons wrap awkwardly. Change to:
-   - Mobile: `grid grid-cols-2` (keep)
-   - Tablet (sm–lg): `grid grid-cols-3` with the 4th & 5th items spanning to center
-   - Desktop (lg+): `flex flex-wrap justify-center`
-   
-   This eliminates the "5 buttons crammed into one line under the headline" crowding visible at 1041px.
+**3. `src/index.css` — tighten the mobile safety net**
+- The selector `[class*="text-white\\/4"] svg` is too broad and dims unrelated icons inside dark backgrounds. Scope it to `:where(section, header, footer) [class*="text-white\\/4"]:not(.jj-icon-keep) svg` and add a `.jj-icon-keep` opt-out used by TrustBar's icon container.
 
-4. **Add vertical breathing room** between eyebrow → headline → CTAs at the tablet breakpoint:
-   - Change `space-y-5 sm:space-y-6` to `space-y-5 sm:space-y-7 md:space-y-8`
-   - Reduce `pt-[max(14vh,96px)] sm:pt-[22vh]` slightly so the whole stack doesn't push pillars off-screen
+**4. Cross-device QA pass (after fix)**
+Take live screenshots at the following viewports of the homepage + the most-trafficked pages (`/properties`, `/property-map`, `/areas`, `/contact`, `/auth`):
+- 360×800 (small Android), 390×844 (iPhone 14), 414×896 (iPhone Plus)
+- 768×1024 (iPad portrait), 820×1180 (iPad Air), 1024×768 (iPad landscape)
+- 1280×720 (small laptop), 1366×768 (HD laptop), 1536×864 (current user viewport class), 1920×1080 (desktop monitor)
 
-5. **Eyebrow contrast** — the "DUBAI'S TRUSTED REAL ESTATE TECHNOLOGY PLATFORM" line currently relies on `text-white` + textShadow but the giant fallback monogram glow behind it muddies it. Once step 1 removes the centered fallback elements that overlap, this becomes legible. Add a tighter `letter-spacing` and a stronger `textShadow: '0 2px 16px rgba(0,0,0,0.85)'` for safety.
+For each viewport I will:
+- Verify TrustBar icons & text are crisp
+- Verify Investor Opportunities icons render (black circles, white icons)
+- Scan hero, Areas We Cover, Featured Listings, Overseas Investors, Additional Services, footer for any overlap, faded text, broken grid, or clipped content
+- Capture only the viewports where a real bug is found and list them in the deliverable
 
-### Files touched
-- `src/pages/Index.tsx` (hero section only, lines ~162–327)
+**5. Honest reporting**
+After the sweep I will list, per viewport, what I checked and exactly which bugs were found and fixed vs. which remain (no false "all fixed" claim).
+
+### Files to edit
+- `src/components/home/DeveloperPortalCTA.tsx` — icon container colors (investor + developer blocks)
+- `src/components/home/TrustBar.tsx` — icon size scale + opt-out class
+- `src/index.css` — scope the mobile-safety-net opacity rule + add `.jj-icon-keep` opt-out
 
 ### Deliverable
-- No ghosted/doubled headline at any viewport (mobile 390, tablet 1024/1041, desktop 1440)
-- No overlap between eyebrow and the monogram watermark
-- 5 CTA pills lay out cleanly at every breakpoint (no awkward 4+1 wrap on tablet)
-- Loading fallback stays branded (monogram + shimmer) but no copy that competes with the real headline
-- Live screenshots at 390×844, 1041×769, and 1440×900 confirming the fix
+- Visible icons on TrustBar (8 cards) and Investor Opportunities (4 cards) at every viewport
+- Annotated screenshots from the QA sweep (mobile / tablet / laptop / monitor)
+- A bug list with status: `fixed` / `still-broken` for any issues discovered during the sweep — no "all clear" claim until verified
 
