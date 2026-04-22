@@ -29,7 +29,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Search, Globe, Link2, Terminal, Copy, Check } from "lucide-react";
+import { Search, Globe, Link2, Terminal, Copy, Check, Download } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/translations";
 import {
   computeServiceSeoEntries,
@@ -64,6 +64,42 @@ export default function SeoReview() {
     await navigator.clipboard.writeText(payload);
     setCopiedSlug("__all__");
     setTimeout(() => setCopiedSlug(null), 1500);
+  };
+
+  const downloadCsv = () => {
+    const esc = (v: unknown) => {
+      const s = v === null || v === undefined ? "" : String(v);
+      return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const headers = [
+      "slug",
+      "file",
+      "title",
+      "description",
+      "canonicalPath",
+      "canonicalUrl",
+      "hreflangCount",
+      "hreflangTargets",
+    ];
+    const rows = entries.map((e) => [
+      e.slug,
+      e.file,
+      e.title,
+      e.description,
+      e.canonicalPath,
+      e.canonicalUrl,
+      e.hreflangTargets.length,
+      e.hreflangTargets.map((t) => `${t.hreflang}=${t.href}`).join(" | "),
+    ]);
+    const csv = [headers, ...rows].map((r) => r.map(esc).join(",")).join("\r\n");
+    // BOM so Excel detects UTF-8
+    const blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `service-seo-catalog_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -104,6 +140,15 @@ export default function SeoReview() {
             >
               <Terminal className="w-3.5 h-3.5" />
               Log to console
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={downloadCsv}
+              className="gap-2"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Export CSV
             </Button>
             <Button
               variant="outline"
