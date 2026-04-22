@@ -158,7 +158,8 @@ export default function ResultPanel({ filename, result }: Props) {
                   {!p.ok && <div className="text-xs text-muted-foreground mt-1">{p.reasons.join("; ")}</div>}
                 </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>
