@@ -2658,6 +2658,9 @@ button[style*="background"] [class*="text-gold"] {
   font-size: 0.7rem;
   white-space: nowrap;
 }
+
+/* ============================================================
+   LIGHT ISLAND ESCAPE HATCH (LAST RULE — wins the cascade)
    When a light card/form is nested inside a dark section,
    re-assert readable dark text + readable inputs.
    ============================================================ */
