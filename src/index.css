@@ -383,7 +383,10 @@ All colors MUST be HSL.
   svg.lucide {
     stroke-width: 2;
     vector-effect: non-scaling-stroke;
+  }
+}
 
+@media (max-width: 767px) {
   /* Minimum readable font-size floor — bump micro type to 11px */
   .text-\[8px\],
   .text-\[9px\],
