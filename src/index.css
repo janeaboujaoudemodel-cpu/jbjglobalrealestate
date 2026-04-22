@@ -2620,7 +2620,44 @@ button[style*="background"] [class*="text-gold"] {
 }
 
 /* ============================================================
-   LIGHT ISLAND ESCAPE HATCH (LAST RULE — wins the cascade)
+   GLOBAL HANDOVER DATE — PREMIUM GOLD
+   Applies to .jj-handover, [data-handover], .handover-date,
+   .completion-date — wherever a handover/completion date renders.
+   ============================================================ */
+.jj-handover,
+[data-handover="true"],
+.handover-date,
+.completion-date,
+.handover-pill {
+  color: hsl(var(--handover-gold)) !important;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+[data-surface="dark"] .jj-handover,
+[data-surface="dark"] [data-handover="true"],
+[data-surface="dark"] .handover-date,
+[data-surface="dark"] .completion-date,
+[data-surface="dark"] .handover-pill {
+  color: hsl(var(--handover-gold-glow)) !important;
+}
+
+/* Optional pill variant — soft gold chip */
+.jj-handover-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg,
+    hsl(var(--handover-gold) / 0.12),
+    hsl(var(--handover-gold-glow) / 0.18));
+  border: 1px solid hsl(var(--handover-gold) / 0.35);
+  color: hsl(var(--handover-gold)) !important;
+  font-weight: 700;
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
    When a light card/form is nested inside a dark section,
    re-assert readable dark text + readable inputs.
    ============================================================ */
