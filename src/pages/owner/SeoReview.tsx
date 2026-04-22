@@ -29,16 +29,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Search, Globe, Link2, Terminal, Copy, Check, Download } from "lucide-react";
+import { Search, Globe, Link2, Terminal, Copy, Check, Download, ShieldAlert, ShieldCheck, AlertTriangle } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/translations";
 import {
   computeServiceSeoEntries,
   logServiceSeoReport,
   CANONICAL_ORIGIN,
 } from "@/seo/serviceSeoCatalog";
+import { runSeoChecks } from "@/seo/seoChecks";
 
 export default function SeoReview() {
   const entries = useMemo(() => computeServiceSeoEntries(), []);
+  const checkReport = useMemo(() => runSeoChecks(entries), [entries]);
   const [query, setQuery] = useState("");
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
 
@@ -183,6 +185,66 @@ export default function SeoReview() {
             Canonical origin:{" "}
             <code className="text-foreground">{CANONICAL_ORIGIN}</code>
           </p>
+        </CardContent>
+      </Card>
+
+      {/* Validation checks */}
+      <Card>
+        <CardHeader className="flex-row items-center justify-between space-y-0">
+          <CardTitle className="text-base flex items-center gap-2">
+            {checkReport.errorCount === 0 && checkReport.warningCount === 0 ? (
+              <ShieldCheck className="w-5 h-5 text-foreground" />
+            ) : checkReport.errorCount > 0 ? (
+              <ShieldAlert className="w-5 h-5 text-destructive" />
+            ) : (
+              <AlertTriangle className="w-5 h-5 text-foreground" />
+            )}
+            Validation checks
+          </CardTitle>
+          <div className="flex gap-2 text-xs">
+            <Badge variant={checkReport.errorCount > 0 ? "destructive" : "outline"}>
+              {checkReport.errorCount} error{checkReport.errorCount === 1 ? "" : "s"}
+            </Badge>
+            <Badge variant="outline" className={checkReport.warningCount > 0 ? "border-foreground/40 text-foreground" : ""}>
+              {checkReport.warningCount} warning{checkReport.warningCount === 1 ? "" : "s"}
+            </Badge>
+            <Badge variant="outline">
+              {checkReport.affectedSlugs.size} / {entries.length} slugs flagged
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {checkReport.checks.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              All checks passed: no missing or duplicate titles/descriptions, all canonicalPaths match
+              their slug, and every entry includes x-default and all supported locales.
+            </p>
+          ) : (
+            <ul className="divide-y rounded border border-border">
+              {checkReport.checks.map((c) => (
+                <li key={c.id} className="px-3 py-2 text-sm flex items-start gap-3">
+                  <Badge
+                    variant={c.severity === "error" ? "destructive" : "outline"}
+                    className={c.severity === "warning" ? "border-foreground/40 text-foreground shrink-0" : "shrink-0"}
+                  >
+                    {c.severity}
+                  </Badge>
+                  <div className="min-w-0 flex-1">
+                    <div>{c.message}</div>
+                    {c.slugs.length > 0 && (
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {c.slugs.map((s) => (
+                          <code key={s} className="font-mono text-[11px] bg-muted px-1.5 py-0.5 rounded">
+                            /{s}
+                          </code>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </CardContent>
       </Card>
 
