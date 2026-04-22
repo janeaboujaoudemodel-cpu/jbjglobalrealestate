@@ -119,6 +119,8 @@ Deno.serve(async (req) => {
   const outName = autoFixed ? filename.replace(/\.pdf$/i, "") + "_AUTOFIXED.pdf" : filename;
   const pdfPath = `${baseDir}/${outName}`;
   const reportPath = `${baseDir}/${filename.replace(/\.pdf$/i, "")}_PRINT_CHECK.txt`;
+  const diffName = filename.replace(/\.pdf$/i, "") + "_DIFF.pdf";
+  const diffPath = `${baseDir}/${diffName}`;
 
   await admin.storage.from("print-checks").upload(pdfPath, bytes, {
     contentType: "application/pdf", upsert: false,
@@ -128,6 +130,23 @@ Deno.serve(async (req) => {
     new Blob([txtReport], { type: "text/plain" }),
     { contentType: "text/plain", upsert: false },
   );
+
+  // Annotated diff PDF (only meaningful when something failed)
+  let diffPdfUrl: string | null = null;
+  let diffUploaded = false;
+  if (!analysis.pass) {
+    const diffBytes = await buildAnnotatedDiff(bytes, analysis.pages, targetWmm, targetHmm);
+    if (diffBytes) {
+      const { error: diffErr } = await admin.storage.from("print-checks").upload(
+        diffPath, diffBytes, { contentType: "application/pdf", upsert: false },
+      );
+      if (!diffErr) {
+        diffUploaded = true;
+        const { data: signed } = await admin.storage.from("print-checks").createSignedUrl(diffPath, 3600);
+        diffPdfUrl = signed?.signedUrl ?? null;
+      }
+    }
+  }
 
   let fixedPdfUrl: string | null = null;
   if (autoFixed) {
