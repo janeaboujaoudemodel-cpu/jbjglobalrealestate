@@ -19,10 +19,14 @@ interface PageReport {
   page: number;
   widthMm: number;
   heightMm: number;
+  widthDeltaMm: number;   // measured - target (matched orientation)
+  heightDeltaMm: number;
   edgeCoveragePct: number;
   minImageDpi: number | null;
+  requiredDpi: number;
   blank: boolean;
   reasons: string[];
+  failedEdges: { top: boolean; right: boolean; bottom: boolean; left: boolean };
   ok: boolean;
 }
 
@@ -181,24 +185,47 @@ async function analyzePdf(bytes: Uint8Array, opts: AnalyzeOpts): Promise<Analyze
     const wMm = +(wPt / PT_PER_MM).toFixed(1);
     const hMm = +(hPt / PT_PER_MM).toFixed(1);
     const pageReasons: string[] = [];
-    const matches =
-      (within(wMm, targetWmm, 2) && within(hMm, targetHmm, 2)) ||
-      (within(wMm, targetHmm, 2) && within(hMm, targetWmm, 2));
-    if (!matches) pageReasons.push(`size ${wMm}×${hMm}mm ≠ target ${targetWmm}×${targetHmm}mm`);
+    // Pick the target orientation that best matches this page
+    const sameOri = within(wMm, targetWmm, 2) && within(hMm, targetHmm, 2);
+    const rotOri = within(wMm, targetHmm, 2) && within(hMm, targetWmm, 2);
+    const matchedTargetW = rotOri && !sameOri ? targetHmm : targetWmm;
+    const matchedTargetH = rotOri && !sameOri ? targetWmm : targetHmm;
+    const widthDeltaMm = +(wMm - matchedTargetW).toFixed(1);
+    const heightDeltaMm = +(hMm - matchedTargetH).toFixed(1);
+    const matches = sameOri || rotOri;
+    const failedEdges = { top: false, right: false, bottom: false, left: false };
+    if (!matches) {
+      pageReasons.push(`size ${wMm}×${hMm}mm ≠ target ${matchedTargetW}×${matchedTargetH}mm (Δ ${fmtDelta(widthDeltaMm)}×${fmtDelta(heightDeltaMm)} mm)`);
+      // If width is short → both vertical edges (left+right) flagged; height short → top+bottom
+      if (Math.abs(widthDeltaMm) > 2) { failedEdges.left = true; failedEdges.right = true; }
+      if (Math.abs(heightDeltaMm) > 2) { failedEdges.top = true; failedEdges.bottom = true; }
+    }
     const edgeCoveragePct = estimateEdgeCoverage(bytes, p, edgeMarginMm);
-    if (edgeCoveragePct > 0.5) pageReasons.push(`content within ${edgeMarginMm}mm trim (${edgeCoveragePct.toFixed(2)}%)`);
+    if (edgeCoveragePct > 0.5) {
+      pageReasons.push(`content within ${edgeMarginMm}mm trim (${edgeCoveragePct.toFixed(2)}%)`);
+      failedEdges.top = failedEdges.right = failedEdges.bottom = failedEdges.left = true;
+    }
     const dpis = dpiByPage[i] ?? [];
     const minImageDpi = dpis.length ? Math.min(...dpis) : null;
-    if (minImageDpi !== null && minImageDpi < minDpi) pageReasons.push(`image at ${minImageDpi} DPI < ${minDpi}`);
+    if (minImageDpi !== null && minImageDpi < minDpi) {
+      pageReasons.push(`image at ${minImageDpi} DPI < ${minDpi} (Δ ${minImageDpi - minDpi} DPI)`);
+    }
     const ok = pageReasons.length === 0;
     if (!ok) for (const r of pageReasons) reasons.push(`Page ${i + 1}: ${r}`);
     pageReports.push({
       page: i + 1, widthMm: wMm, heightMm: hMm,
+      widthDeltaMm, heightDeltaMm,
       edgeCoveragePct: +edgeCoveragePct.toFixed(2),
-      minImageDpi, blank: false, reasons: pageReasons, ok,
+      minImageDpi, requiredDpi: minDpi,
+      blank: false, reasons: pageReasons,
+      failedEdges, ok,
     });
   }
   return { pass: reasons.length === 0, pages: pageReports, reasons };
+}
+
+function fmtDelta(n: number): string {
+  return n > 0 ? `+${n}` : `${n}`;
 }
 
 /**
