@@ -115,6 +115,34 @@ export default function PrintCheck() {
             onDpiChange={setMinDpi}
           />
           <UploadDropzone file={file} onFile={setFile} disabled={running} />
+
+          <div className="rounded-lg border p-4 space-y-3">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <Wand2 className="h-5 w-5 mt-0.5" />
+                <div>
+                  <Label htmlFor="autofix" className="text-sm font-medium cursor-pointer">Auto-fix failing PDFs</Label>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Re-crops/resizes pages to full-bleed at the target size and re-runs the check until it passes or hits the retry limit. DPI issues cannot be auto-fixed.
+                  </p>
+                </div>
+              </div>
+              <Switch id="autofix" checked={autoFix} onCheckedChange={setAutoFix} disabled={running} />
+            </div>
+            {autoFix && (
+              <div className="flex items-center gap-3 pl-8">
+                <Label htmlFor="maxAttempts" className="text-xs text-muted-foreground">Max retries</Label>
+                <Input
+                  id="maxAttempts" type="number" min={1} max={5}
+                  value={maxAttempts}
+                  onChange={(e) => setMaxAttempts(Math.max(1, Math.min(5, parseInt(e.target.value || "3", 10))))}
+                  disabled={running}
+                  className="h-8 w-20"
+                />
+              </div>
+            )}
+          </div>
+
           {running && <Progress value={progress} />}
           <div className="flex justify-end">
             <Button onClick={run} disabled={!file || running}>
