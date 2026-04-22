@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Download, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Download, CheckCircle2, AlertTriangle, Wand2, FileDown } from "lucide-react";
 
 export interface PageReport {
   page: number;
@@ -13,11 +13,22 @@ export interface PageReport {
   ok: boolean;
 }
 
+export interface AutoFixAttempt {
+  attempt: number;
+  pass: boolean;
+  reasons: string[];
+}
+
 export interface PrintCheckResult {
   pass: boolean;
   pages: PageReport[];
   reasons: string[];
   txtReport: string;
+  autoFixed?: boolean;
+  autoFixNote?: string;
+  attempts?: AutoFixAttempt[];
+  fixedPdfUrl?: string | null;
+  fixedFilename?: string | null;
 }
 
 interface Props {
