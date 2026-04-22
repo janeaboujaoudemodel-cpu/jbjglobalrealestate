@@ -29,7 +29,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Search, Globe, Link2, Terminal, Copy, Check, Download, ShieldAlert, ShieldCheck, AlertTriangle } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Search, Globe, Link2, Terminal, Copy, Check, Download, ShieldAlert, ShieldCheck, AlertTriangle, Languages } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/translations";
 import {
   computeServiceSeoEntries,
@@ -42,7 +49,19 @@ export default function SeoReview() {
   const entries = useMemo(() => computeServiceSeoEntries(), []);
   const checkReport = useMemo(() => runSeoChecks(entries), [entries]);
   const [query, setQuery] = useState("");
+  const [langFilter, setLangFilter] = useState<string>("all");
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+
+  // When a specific language is selected, narrow each entry's hreflang targets
+  // to that language + x-default. "all" preserves the full list.
+  const filterTargets = (
+    targets: { hreflang: string; href: string }[],
+  ) => {
+    if (langFilter === "all") return targets;
+    return targets.filter(
+      (t) => t.hreflang === langFilter || t.hreflang === "x-default",
+    );
+  };
 
   // Emit console report once per mount so DevTools always has it ready.
   useEffect(() => {
@@ -169,21 +188,48 @@ export default function SeoReview() {
         </div>
       </div>
 
-      {/* Search */}
+      {/* Search + language filter */}
       <Card>
-        <CardContent className="p-4">
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Filter by slug, title, description, or path…"
-              className="pl-9"
-            />
+        <CardContent className="p-4 space-y-3">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Filter by slug, title, description, or path…"
+                className="pl-9"
+              />
+            </div>
+            <div className="sm:w-[280px]">
+              <Select value={langFilter} onValueChange={setLangFilter}>
+                <SelectTrigger>
+                  <Languages className="w-4 h-4 mr-2 text-muted-foreground" />
+                  <SelectValue placeholder="All languages" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">
+                    🌐 All languages ({SUPPORTED_LANGUAGES.length} + x-default)
+                  </SelectItem>
+                  {SUPPORTED_LANGUAGES.map((l) => (
+                    <SelectItem key={l.code} value={l.code}>
+                      {l.flag} {l.name} ({l.code}) + x-default
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-2">
+          <p className="text-xs text-muted-foreground">
             Canonical origin:{" "}
             <code className="text-foreground">{CANONICAL_ORIGIN}</code>
+            {langFilter !== "all" && (
+              <>
+                {" · "}Showing hreflang targets for{" "}
+                <code className="text-foreground">{langFilter}</code> +{" "}
+                <code className="text-foreground">x-default</code> only.
+              </>
+            )}
           </p>
         </CardContent>
       </Card>
@@ -285,7 +331,8 @@ export default function SeoReview() {
                     </TableCell>
                     <TableCell className="text-right">
                       <Badge variant="secondary">
-                        {e.hreflangTargets.length}
+                        {filterTargets(e.hreflangTargets).length}
+                        {langFilter !== "all" && ` / ${e.hreflangTargets.length}`}
                       </Badge>
                     </TableCell>
                   </TableRow>
@@ -354,7 +401,8 @@ export default function SeoReview() {
 
                   <div>
                     <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-                      hreflang targets ({e.hreflangTargets.length})
+                      hreflang targets ({filterTargets(e.hreflangTargets).length}
+                      {langFilter !== "all" && ` of ${e.hreflangTargets.length}`})
                     </h4>
                     <div className="overflow-x-auto rounded border border-border">
                       <Table>
@@ -366,7 +414,7 @@ export default function SeoReview() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {e.hreflangTargets.map((t) => {
+                          {filterTargets(e.hreflangTargets).map((t) => {
                             const langInfo = SUPPORTED_LANGUAGES.find(
                               (l) => l.code === t.hreflang,
                             );
