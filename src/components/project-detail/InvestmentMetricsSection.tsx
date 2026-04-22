@@ -67,7 +67,7 @@ export default function InvestmentMetricsSection({
               <PiggyBank className="w-6 h-6 text-purple-500" />
             </div>
             <p className="text-xs text-black font-medium uppercase tracking-wider mb-1">Est. Annual Rental</p>
-            <p className="text-2xl font-bold text-purple-600">AED {estimatedAnnualRental.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-price-orange">AED {estimatedAnnualRental.toLocaleString()}</p>
             <p className="text-xs text-black/80 font-medium mt-1">Projected income</p>
           </div>
         )}
