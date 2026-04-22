@@ -2581,10 +2581,38 @@ button[style*="background"] [class*="text-gold"] {
   color: inherit;
 }
 
-/* Price-orange stays orange on dark */
+/* ============================================================
+   GLOBAL PRICE COLOR ENFORCEMENT
+   All prices render in premium orange across the platform.
+   Applies to: .text-price-orange, .jj-price, [data-price],
+   and any element marked with class containing "price".
+   ============================================================ */
+.text-price-orange,
+[class*="text-price-orange"],
+.jj-price,
+[data-price="true"],
+[data-jj-price] {
+  color: hsl(var(--price-orange)) !important;
+}
+
+/* Price-orange stays orange on dark surfaces too */
 [data-surface="dark"] .text-price-orange,
-[data-surface="dark"] [class*="text-price-orange"] {
+[data-surface="dark"] [class*="text-price-orange"],
+[data-surface="dark"] .jj-price,
+[data-surface="dark"] [data-price="true"],
+[data-surface="dark"] [data-jj-price] {
   color: #FB923C !important;
+}
+
+/* Common price-display patterns get auto-themed.
+   Excludes badges/buttons that already use orange/amber/gradient backgrounds
+   (they have their own white-on-orange styling). */
+.price-display,
+.price-value,
+.property-price,
+.listing-price,
+.starting-price {
+  color: hsl(var(--price-orange)) !important;
 }
 
 /* ============================================================

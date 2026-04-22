@@ -129,7 +129,7 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
                         </span>
                       )}
                       {property.price_from && (
-                        <span className="flex items-center gap-1">
+                        <span className="flex items-center gap-1 text-price-orange font-semibold">
                           <DollarSign className="w-3 h-3" />
                           {formatPrice(property.price_from)}
                         </span>
