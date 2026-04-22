@@ -49,7 +49,19 @@ export default function SeoReview() {
   const entries = useMemo(() => computeServiceSeoEntries(), []);
   const checkReport = useMemo(() => runSeoChecks(entries), [entries]);
   const [query, setQuery] = useState("");
+  const [langFilter, setLangFilter] = useState<string>("all");
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+
+  // When a specific language is selected, narrow each entry's hreflang targets
+  // to that language + x-default. "all" preserves the full list.
+  const filterTargets = (
+    targets: { hreflang: string; href: string }[],
+  ) => {
+    if (langFilter === "all") return targets;
+    return targets.filter(
+      (t) => t.hreflang === langFilter || t.hreflang === "x-default",
+    );
+  };
 
   // Emit console report once per mount so DevTools always has it ready.
   useEffect(() => {
