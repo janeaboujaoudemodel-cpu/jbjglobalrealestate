@@ -331,7 +331,8 @@ export default function SeoReview() {
                     </TableCell>
                     <TableCell className="text-right">
                       <Badge variant="secondary">
-                        {e.hreflangTargets.length}
+                        {filterTargets(e.hreflangTargets).length}
+                        {langFilter !== "all" && ` / ${e.hreflangTargets.length}`}
                       </Badge>
                     </TableCell>
                   </TableRow>
