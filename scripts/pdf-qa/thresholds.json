@@ -1,0 +1,25 @@
+{
+  "defaults": {
+    "edgeMarginPt": 36,
+    "edgePixelTolerancePct": 0.5,
+    "minImageDpi": 150,
+    "minPages": 1
+  },
+  "exports": {
+    "company-profile": {
+      "edgeMarginPt": 36,
+      "edgePixelTolerancePct": 0.5,
+      "minImageDpi": 150
+    },
+    "investor-portfolio": {
+      "edgeMarginPt": 28,
+      "edgePixelTolerancePct": 0.75,
+      "minImageDpi": 150
+    },
+    "crm-client-report": {
+      "edgeMarginPt": 36,
+      "edgePixelTolerancePct": 0.5,
+      "minImageDpi": 150
+    }
+  }
+}
