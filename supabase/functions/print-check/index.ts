@@ -164,7 +164,11 @@ Deno.serve(async (req) => {
     pass: analysis.pass,
     pdf_path: pdfPath,
     report_path: reportPath,
-    summary: { pages: analysis.pages, reasons: analysis.reasons, autoFixed, autoFixNote, attempts },
+    summary: {
+      pages: analysis.pages, reasons: analysis.reasons,
+      autoFixed, autoFixNote, attempts,
+      diffPath: diffUploaded ? diffPath : null,
+    },
   });
 
   return json({
@@ -179,6 +183,8 @@ Deno.serve(async (req) => {
     attempts,
     fixedPdfUrl,
     fixedFilename: autoFixed ? outName : null,
+    diffPdfUrl,
+    diffFilename: diffUploaded ? diffName : null,
   }, 200);
 });
 
