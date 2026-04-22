@@ -144,6 +144,15 @@ export default function SeoReview() {
             <Button
               variant="outline"
               size="sm"
+              onClick={downloadCsv}
+              className="gap-2"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Export CSV
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
               onClick={copyJson}
               className="gap-2"
             >
