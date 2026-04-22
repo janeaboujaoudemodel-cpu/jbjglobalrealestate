@@ -29,13 +29,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Search, Globe, Link2, Terminal, Copy, Check, Download } from "lucide-react";
+import { Search, Globe, Link2, Terminal, Copy, Check, Download, ShieldAlert, ShieldCheck, AlertTriangle } from "lucide-react";
 import { SUPPORTED_LANGUAGES } from "@/translations";
 import {
   computeServiceSeoEntries,
   logServiceSeoReport,
   CANONICAL_ORIGIN,
 } from "@/seo/serviceSeoCatalog";
+import { runSeoChecks } from "@/seo/seoChecks";
 
 export default function SeoReview() {
   const entries = useMemo(() => computeServiceSeoEntries(), []);
