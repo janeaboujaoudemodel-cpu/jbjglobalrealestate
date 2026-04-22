@@ -225,7 +225,7 @@ export default function SeoReview() {
                 <li key={c.id} className="px-3 py-2 text-sm flex items-start gap-3">
                   <Badge
                     variant={c.severity === "error" ? "destructive" : "outline"}
-                    className={c.severity === "warning" ? "border-amber-500 text-amber-700 shrink-0" : "shrink-0"}
+                    className={c.severity === "warning" ? "border-foreground/40 text-foreground shrink-0" : "shrink-0"}
                   >
                     {c.severity}
                   </Badge>
