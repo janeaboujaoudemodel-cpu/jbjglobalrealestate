@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Home, MapPin, ArrowRight, Building2, ArrowUpRight, CreditCard, Heart, Star } from "lucide-react";
+import { Home, MapPin, ArrowRight, Building2, ArrowUpRight, CreditCard, Heart, Star, Calendar } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -234,7 +234,8 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
                 );
               })()}
               {project.handover_date ? (
-                <span className="text-gray-800 text-xs font-bold whitespace-nowrap">
+                <span className="jj-handover-pill">
+                  <Calendar className="w-3 h-3" />
                   {project.handover_date}
                 </span>
               ) : (
