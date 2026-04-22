@@ -4,19 +4,19 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <!-- ====== MAIN PAGES - Highest Priority ====== -->
   <url>
-    <loc>https://jbj.ae/</loc>
+    <loc>https://www.jbj.ae/</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://jbj.ae/" />
-    <xhtml:link rel="alternate" hreflang="ar" href="https://jbj.ae/?lang=ar" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.jbj.ae/" />
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.jbj.ae/?lang=ar" />
     <image:image>
-      <image:loc>https://jbj.ae/og-image.jpg</image:loc>
+      <image:loc>https://www.jbj.ae/og-image.jpg</image:loc>
       <image:title>JBJ Global Real Estate - Dubai Property Brokerage</image:title>
     </image:image>
   </url>
   <url>
-    <loc>https://jbj.ae/properties</loc>
+    <loc>https://www.jbj.ae/properties</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
@@ -24,31 +24,25 @@
 
   <!-- ====== BUY, SELL, RENT - Core Pages ====== -->
   <url>
-    <loc>https://jbj.ae/sell</loc>
+    <loc>https://www.jbj.ae/sell</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.93</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/rent</loc>
-    <lastmod>2026-03-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.93</priority>
-  </url>
-  <url>
-    <loc>https://jbj.ae/listing-portal</loc>
+    <loc>https://www.jbj.ae/listing-portal</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/resale-properties</loc>
+    <loc>https://www.jbj.ae/resale-properties</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/sell/valuation</loc>
+    <loc>https://www.jbj.ae/sell/valuation</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
@@ -56,61 +50,61 @@
 
   <!-- ====== GUIDES - High SEO Value ====== -->
   <url>
-    <loc>https://jbj.ae/guides</loc>
+    <loc>https://www.jbj.ae/guides</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/buyer-guide</loc>
+    <loc>https://www.jbj.ae/buyer-guide</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/seller-guide</loc>
+    <loc>https://www.jbj.ae/seller-guide</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/rent-guide</loc>
+    <loc>https://www.jbj.ae/rent-guide</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.92</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/landlord-guide</loc>
+    <loc>https://www.jbj.ae/landlord-guide</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/tenant-guide</loc>
+    <loc>https://www.jbj.ae/tenant-guide</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/golden-visa-guide</loc>
+    <loc>https://www.jbj.ae/guides/golden-visa-uae</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/relocation-guide</loc>
+    <loc>https://www.jbj.ae/relocation-guide</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/education-hub</loc>
+    <loc>https://www.jbj.ae/education-hub</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/broker-education</loc>
+    <loc>https://www.jbj.ae/broker-education</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.82</priority>
@@ -118,49 +112,49 @@
 
   <!-- ====== COMPANY PAGES ====== -->
   <url>
-    <loc>https://jbj.ae/about</loc>
+    <loc>https://www.jbj.ae/about</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/founder</loc>
+    <loc>https://www.jbj.ae/founder</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services</loc>
+    <loc>https://www.jbj.ae/services</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/contact</loc>
+    <loc>https://www.jbj.ae/contact</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/team</loc>
+    <loc>https://www.jbj.ae/team</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/company-profile</loc>
+    <loc>https://www.jbj.ae/company-profile</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/reviews</loc>
+    <loc>https://www.jbj.ae/reviews</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/press-kit</loc>
+    <loc>https://www.jbj.ae/press-kit</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
@@ -168,13 +162,13 @@
 
   <!-- ====== CAREERS ====== -->
   <url>
-    <loc>https://jbj.ae/join</loc>
+    <loc>https://www.jbj.ae/join</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/career-portal</loc>
+    <loc>https://www.jbj.ae/career-portal</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
@@ -182,25 +176,25 @@
 
   <!-- ====== COMMUNITIES & AREAS - Local SEO Gold ====== -->
   <url>
-    <loc>https://jbj.ae/communities</loc>
+    <loc>https://www.jbj.ae/communities</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/areas</loc>
+    <loc>https://www.jbj.ae/areas</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developers</loc>
+    <loc>https://www.jbj.ae/developers</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/map</loc>
+    <loc>https://www.jbj.ae/map</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.82</priority>
@@ -208,55 +202,55 @@
 
   <!-- ====== AI & TOOLS ====== -->
   <url>
-    <loc>https://jbj.ae/ai-hub</loc>
+    <loc>https://www.jbj.ae/ai-hub</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.88</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/toolkit</loc>
+    <loc>https://www.jbj.ae/toolkit</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/toolkit/corporate-suite</loc>
+    <loc>https://www.jbj.ae/toolkit/corporate-suite</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/toolkit/property-suite</loc>
+    <loc>https://www.jbj.ae/toolkit/property-suite</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/toolkit/video-suite</loc>
+    <loc>https://www.jbj.ae/toolkit/video-suite</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/toolkit/photo-suite</loc>
+    <loc>https://www.jbj.ae/toolkit/photo-suite</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/toolkit/voice-suite</loc>
+    <loc>https://www.jbj.ae/toolkit/voice-suite</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/toolkit/pdf-suite</loc>
+    <loc>https://www.jbj.ae/toolkit/pdf-suite</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/toolkit/stamp-generator</loc>
+    <loc>https://www.jbj.ae/toolkit/stamp-generator</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
@@ -264,31 +258,31 @@
 
   <!-- ====== CALCULATORS & TOOLS ====== -->
   <url>
-    <loc>https://jbj.ae/mortgage-calculator</loc>
+    <loc>https://www.jbj.ae/mortgage-calculator</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/quiz</loc>
+    <loc>https://www.jbj.ae/quiz</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/property-evaluator</loc>
+    <loc>https://www.jbj.ae/property-evaluator</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/compare</loc>
+    <loc>https://www.jbj.ae/compare</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/rental-index</loc>
+    <loc>https://www.jbj.ae/rental-index</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -296,19 +290,19 @@
 
   <!-- ====== MARKET INTELLIGENCE ====== -->
   <url>
-    <loc>https://jbj.ae/market-intelligence</loc>
+    <loc>https://www.jbj.ae/market-intelligence</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/market-report</loc>
+    <loc>https://www.jbj.ae/market-report</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/insights</loc>
+    <loc>https://www.jbj.ae/insights</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.82</priority>
@@ -316,13 +310,13 @@
 
   <!-- ====== NEWS & AWARDS ====== -->
   <url>
-    <loc>https://jbj.ae/news</loc>
+    <loc>https://www.jbj.ae/news</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.82</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/awards</loc>
+    <loc>https://www.jbj.ae/awards</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
@@ -330,85 +324,85 @@
 
   <!-- ====== SERVICE PAGES - Long-tail SEO ====== -->
   <url>
-    <loc>https://jbj.ae/services/buying-advisory</loc>
+    <loc>https://www.jbj.ae/services/buying-advisory</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/selling-advisory</loc>
+    <loc>https://www.jbj.ae/services/selling-advisory</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/rental-advisory</loc>
+    <loc>https://www.jbj.ae/services/rental-advisory</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/investment-advisory</loc>
+    <loc>https://www.jbj.ae/services/investment-advisory</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/property-management</loc>
+    <loc>https://www.jbj.ae/services/property-management</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/short-term-rentals</loc>
+    <loc>https://www.jbj.ae/services/short-term-rentals</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/architecture</loc>
+    <loc>https://www.jbj.ae/services/architecture</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/interior-design</loc>
+    <loc>https://www.jbj.ae/services/interior-design</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/fit-out</loc>
+    <loc>https://www.jbj.ae/services/fit-out</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/snagging</loc>
+    <loc>https://www.jbj.ae/services/snagging</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/law-firm</loc>
+    <loc>https://www.jbj.ae/services/law-firm</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/currency-exchange</loc>
+    <loc>https://www.jbj.ae/services/currency-exchange</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.68</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/concierge</loc>
+    <loc>https://www.jbj.ae/services/concierge</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.68</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/company-setup</loc>
+    <loc>https://www.jbj.ae/services/company-setup</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.68</priority>
@@ -416,7 +410,7 @@
 
   <!-- ====== PARTNER PAGES ====== -->
   <url>
-    <loc>https://jbj.ae/partners/mortgage</loc>
+    <loc>https://www.jbj.ae/partners/mortgage</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
@@ -424,13 +418,13 @@
 
   <!-- ====== INVESTOR PAGES ====== -->
   <url>
-    <loc>https://jbj.ae/investor-hub</loc>
+    <loc>https://www.jbj.ae/investor-hub</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.82</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/investor-education</loc>
+    <loc>https://www.jbj.ae/investor-education</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -438,19 +432,19 @@
 
   <!-- ====== PORTALS ====== -->
   <url>
-    <loc>https://jbj.ae/landlord-portal</loc>
+    <loc>https://www.jbj.ae/landlord-portal</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/ticket-hub</loc>
+    <loc>https://www.jbj.ae/ticket-hub</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/developer-portal</loc>
+    <loc>https://www.jbj.ae/developer-portal</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -458,43 +452,43 @@
 
   <!-- ====== FAQ PAGES - Rich Snippet Targets ====== -->
   <url>
-    <loc>https://jbj.ae/faq</loc>
+    <loc>https://www.jbj.ae/faq</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/buyer-faq</loc>
+    <loc>https://www.jbj.ae/buyer-faq</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/seller-faq</loc>
+    <loc>https://www.jbj.ae/seller-faq</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/investor-faq</loc>
+    <loc>https://www.jbj.ae/investor-faq</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/landlord-faq</loc>
+    <loc>https://www.jbj.ae/landlord-faq</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/tenant-faq</loc>
+    <loc>https://www.jbj.ae/tenant-faq</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/broker-faq</loc>
+    <loc>https://www.jbj.ae/broker-faq</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
@@ -502,7 +496,7 @@
 
   <!-- ====== SUPPORT & HAPPINESS ====== -->
   <url>
-    <loc>https://jbj.ae/customer-happiness</loc>
+    <loc>https://www.jbj.ae/services/customer-happiness-center</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
@@ -510,7 +504,7 @@
 
   <!-- ====== PHILANTHROPY ====== -->
   <url>
-    <loc>https://jbj.ae/philanthropy</loc>
+    <loc>https://www.jbj.ae/philanthropy</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
@@ -518,31 +512,31 @@
 
   <!-- ====== PROPERTY SEARCH WITH FILTERS - Allow Crawling ====== -->
   <url>
-    <loc>https://jbj.ae/properties?type=apartment</loc>
+    <loc>https://www.jbj.ae/properties?type=apartment</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/properties?type=villa</loc>
+    <loc>https://www.jbj.ae/properties?type=villa</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/properties?type=penthouse</loc>
+    <loc>https://www.jbj.ae/properties?type=penthouse</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.82</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/properties?type=townhouse</loc>
+    <loc>https://www.jbj.ae/properties?type=townhouse</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.82</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/properties?type=duplex</loc>
+    <loc>https://www.jbj.ae/properties?type=duplex</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
@@ -550,7 +544,7 @@
 
   <!-- ====== SELLER LISTING PAGE ====== -->
   <url>
-    <loc>https://jbj.ae/seller-listing</loc>
+    <loc>https://www.jbj.ae/seller-listing</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.82</priority>
@@ -558,31 +552,31 @@
 
   <!-- ====== ADDITIONAL SERVICE PAGES ====== -->
   <url>
-    <loc>https://jbj.ae/services/broker-certification</loc>
+    <loc>https://www.jbj.ae/services/broker-certification</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/ai-tools</loc>
+    <loc>https://www.jbj.ae/services/ai-tools</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.72</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/testimonials</loc>
+    <loc>https://www.jbj.ae/services/testimonials</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.65</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/complaint-procedures</loc>
+    <loc>https://www.jbj.ae/services/complaint-procedures</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/services/signature-collection</loc>
+    <loc>https://www.jbj.ae/services/signature-collection</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
@@ -590,7 +584,7 @@
 
   <!-- ====== PRICING ====== -->
   <url>
-    <loc>https://jbj.ae/pricing</loc>
+    <loc>https://www.jbj.ae/pricing</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.78</priority>
@@ -598,37 +592,37 @@
 
   <!-- ====== PROPERTY FILTERS BY AREA ====== -->
   <url>
-    <loc>https://jbj.ae/properties?area=downtown-dubai</loc>
+    <loc>https://www.jbj.ae/properties?area=downtown-dubai</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.82</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/properties?area=palm-jumeirah</loc>
+    <loc>https://www.jbj.ae/properties?area=palm-jumeirah</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.82</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/properties?area=dubai-marina</loc>
+    <loc>https://www.jbj.ae/properties?area=dubai-marina</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.82</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/properties?area=business-bay</loc>
+    <loc>https://www.jbj.ae/properties?area=business-bay</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/properties?area=dubai-hills</loc>
+    <loc>https://www.jbj.ae/properties?area=dubai-hills</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/properties?area=jvc-jumeirah-village-circle</loc>
+    <loc>https://www.jbj.ae/properties?area=jvc-jumeirah-village-circle</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.78</priority>
@@ -636,57 +630,137 @@
 
   <!-- ====== LEGAL & COMPLIANCE PAGES ====== -->
   <url>
-    <loc>https://jbj.ae/privacy</loc>
+    <loc>https://www.jbj.ae/privacy</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.40</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/terms</loc>
+    <loc>https://www.jbj.ae/terms</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.40</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/cookies</loc>
+    <loc>https://www.jbj.ae/cookies</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.30</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/disclaimers</loc>
+    <loc>https://www.jbj.ae/disclaimers</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.35</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/intellectual-property</loc>
+    <loc>https://www.jbj.ae/intellectual-property</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.35</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/aml-kyc</loc>
+    <loc>https://www.jbj.ae/aml-kyc</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.35</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/accessibility</loc>
+    <loc>https://www.jbj.ae/accessibility</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.35</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/trust-and-audit-center</loc>
+    <loc>https://www.jbj.ae/trust-and-audit-center</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.50</priority>
   </url>
   <url>
-    <loc>https://jbj.ae/sitemap</loc>
+    <loc>https://www.jbj.ae/sitemap</loc>
     <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.40</priority>
+  </url>
+
+  <!-- ====== Added: missing canonical category/service URLs ====== -->
+  <url>
+    <loc>https://www.jbj.ae/services/design-build</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/partners</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/partners/legal</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.72</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/partners/company-setup</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.72</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/partners/visa-services</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.72</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/brokers</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.78</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/jbj-academy</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/property-management/list</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/property-measurement</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/market-intelligence/overview</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/market-intelligence/areas</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/market-intelligence/reports</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.jbj.ae/market-intelligence/methodology</loc>
+    <lastmod>2026-04-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
   </url>
 </urlset>
