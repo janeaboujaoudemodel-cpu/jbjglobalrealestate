@@ -135,7 +135,7 @@ export default function PrintCheck() {
               {history.map((h) => (
                 <li key={h.id} className="py-2 flex items-center justify-between text-sm">
                   <div className="flex items-center gap-3 min-w-0">
-                    <Badge variant={h.pass ? "outline" : "destructive"} className={h.pass ? "border-emerald-400 text-emerald-700" : ""}>
+                    <Badge variant={h.pass ? "outline" : "destructive"} className={h.pass ? "border-foreground/30 text-foreground" : ""}>
                       {h.pass ? "PASS" : "FAIL"}
                     </Badge>
                     <span className="truncate">{h.filename}</span>

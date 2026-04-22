@@ -38,10 +38,10 @@ export default function ResultPanel({ filename, result }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className={`rounded-lg border p-4 flex items-center justify-between ${result.pass ? "border-emerald-300 bg-emerald-50 dark:bg-emerald-950/20" : "border-destructive/40 bg-destructive/5"}`}>
+      <div className={`rounded-lg border p-4 flex items-center justify-between ${result.pass ? "border-emerald-300 bg-muted/30" : "border-destructive/40 bg-destructive/5"}`}>
         <div className="flex items-center gap-3">
           {result.pass
-            ? <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+            ? <CheckCircle2 className="h-6 w-6 text-foreground" />
             : <AlertTriangle className="h-6 w-6 text-destructive" />}
           <div>
             <div className="font-semibold">{result.pass ? "PASS" : "FAIL"}</div>
@@ -76,7 +76,7 @@ export default function ResultPanel({ filename, result }: Props) {
                 <td className="p-2">{p.minImageDpi ?? "—"}</td>
                 <td className="p-2">
                   {p.ok
-                    ? <Badge variant="outline" className="border-emerald-400 text-emerald-700">OK</Badge>
+                    ? <Badge variant="outline" className="border-foreground/30 text-foreground">OK</Badge>
                     : <Badge variant="destructive">FAIL</Badge>}
                   {!p.ok && <div className="text-xs text-muted-foreground mt-1">{p.reasons.join("; ")}</div>}
                 </td>
