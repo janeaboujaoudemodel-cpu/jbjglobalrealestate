@@ -231,7 +231,7 @@ async function autoFixPdf(bytes: Uint8Array, targetWmm: number, targetHmm: numbe
       if (rotate) {
         page.drawPage(emb, {
           x: x + drawW, y, width: drawW, height: drawH,
-          rotate: { type: "degrees", angle: 90 } as any,
+          rotate: degrees(90),
         });
       } else {
         page.drawPage(emb, { x, y, width: drawW, height: drawH });
