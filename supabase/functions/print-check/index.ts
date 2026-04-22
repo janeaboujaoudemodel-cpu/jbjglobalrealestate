@@ -72,104 +72,64 @@ Deno.serve(async (req) => {
   const targetHmm = clampInt(form.get("targetHeightMm"), 50, 2000, 297);
   const minDpi = clampInt(form.get("minDpi"), 72, 1200, 300);
   const edgeMarginMm = clampInt(form.get("edgeMarginMm"), 0, 50, 4);
+  const autoFix = String(form.get("autoFix") ?? "").toLowerCase() === "true";
+  const maxAttempts = clampInt(form.get("maxAttempts"), 1, 5, MAX_AUTOFIX_ATTEMPTS);
 
-  const bytes = new Uint8Array(await file.arrayBuffer());
-
-  let pdfDoc: PDFDocument;
-  try {
-    pdfDoc = await PDFDocument.load(bytes, { updateMetadata: false });
-  } catch (e) {
-    return json({ error: `Could not parse PDF: ${(e as Error).message}` }, 400);
-  }
-
-  const pages = pdfDoc.getPages();
-  const pageReports: PageReport[] = [];
-  const reasons: string[] = [];
-
-  // Image DPI inspection via low-level PDF parse
-  const dpiByPage = inspectImageDpis(bytes, pages.length);
-
-  for (let i = 0; i < pages.length; i++) {
-    const p = pages[i];
-    const { width: wPt, height: hPt } = p.getSize();
-    const wMm = +(wPt / PT_PER_MM).toFixed(1);
-    const hMm = +(hPt / PT_PER_MM).toFixed(1);
-
-    const pageReasons: string[] = [];
-
-    // Page size check (allow 2mm tolerance, also accept rotated)
-    const matches =
-      (within(wMm, targetWmm, 2) && within(hMm, targetHmm, 2)) ||
-      (within(wMm, targetHmm, 2) && within(hMm, targetWmm, 2));
-    if (!matches) {
-      pageReasons.push(
-        `size ${wMm}×${hMm}mm ≠ target ${targetWmm}×${targetHmm}mm`,
-      );
-    }
-
-    // Edge-coverage: heuristic from text/graphics bounding via page content stream length
-    // Lightweight estimate (no rasterization in Deno): if page has any content operators
-    // outside a margin band relative to MediaBox we flag it.
-    const edgeCoveragePct = estimateEdgeCoverage(bytes, p, edgeMarginMm);
-    if (edgeCoveragePct > 0.5) {
-      pageReasons.push(
-        `content within ${edgeMarginMm}mm trim (${edgeCoveragePct.toFixed(2)}%)`,
-      );
-    }
-
-    const dpis = dpiByPage[i] ?? [];
-    const minImageDpi = dpis.length ? Math.min(...dpis) : null;
-    if (minImageDpi !== null && minImageDpi < minDpi) {
-      pageReasons.push(`image at ${minImageDpi} DPI < ${minDpi}`);
-    }
-
-    const blank = (edgeCoveragePct === 0 && dpis.length === 0 && !matches) ? false : false;
-
-    const ok = pageReasons.length === 0;
-    if (!ok) {
-      for (const r of pageReasons) reasons.push(`Page ${i + 1}: ${r}`);
-    }
-
-    pageReports.push({
-      page: i + 1,
-      widthMm: wMm,
-      heightMm: hMm,
-      edgeCoveragePct: +edgeCoveragePct.toFixed(2),
-      minImageDpi,
-      blank,
-      reasons: pageReasons,
-      ok,
-    });
-  }
-
-  const pass = reasons.length === 0;
+  let bytes = new Uint8Array(await file.arrayBuffer());
   const filename = (file.name || "document.pdf").replace(/[^\w.\-]+/g, "_");
+
+  let analysis = await analyzePdf(bytes, { targetWmm, targetHmm, minDpi, edgeMarginMm });
+  if (analysis.error) return json({ error: analysis.error }, 400);
+
+  const attempts: Array<{ attempt: number; pass: boolean; reasons: string[] }> = [
+    { attempt: 0, pass: analysis.pass, reasons: analysis.reasons },
+  ];
+  let autoFixed = false;
+  let autoFixNote = "";
+
+  if (autoFix && !analysis.pass) {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      const fixed = await autoFixPdf(bytes, targetWmm, targetHmm);
+      if (!fixed) { autoFixNote = "Auto-fix could not rebuild the PDF."; break; }
+      bytes = fixed;
+      autoFixed = true;
+      analysis = await analyzePdf(bytes, { targetWmm, targetHmm, minDpi, edgeMarginMm });
+      attempts.push({ attempt, pass: analysis.pass, reasons: analysis.reasons });
+      if (analysis.pass) { autoFixNote = `Auto-fixed on attempt ${attempt}.`; break; }
+      const onlyDpi = analysis.reasons.every((r) => /DPI/.test(r));
+      if (onlyDpi) { autoFixNote = `Stopped after attempt ${attempt}: remaining issues are DPI-related (resizing cannot fix).`; break; }
+    }
+    if (!analysis.pass && !autoFixNote) {
+      autoFixNote = `Auto-fix exhausted ${maxAttempts} attempt(s) without passing.`;
+    }
+  }
+
   const txtReport = buildTxtReport({
-    filename,
-    targetWmm,
-    targetHmm,
-    minDpi,
-    edgeMarginMm,
-    pass,
-    reasons,
-    pageReports,
+    filename, targetWmm, targetHmm, minDpi, edgeMarginMm,
+    pass: analysis.pass, reasons: analysis.reasons, pageReports: analysis.pages,
+    autoFixed, autoFixNote, attempts,
   });
 
-  // Persist artifacts
   const ts = Date.now();
   const baseDir = `${auth.userId}/${ts}`;
-  const pdfPath = `${baseDir}/${filename}`;
+  const outName = autoFixed ? filename.replace(/\.pdf$/i, "") + "_AUTOFIXED.pdf" : filename;
+  const pdfPath = `${baseDir}/${outName}`;
   const reportPath = `${baseDir}/${filename.replace(/\.pdf$/i, "")}_PRINT_CHECK.txt`;
 
   await admin.storage.from("print-checks").upload(pdfPath, bytes, {
-    contentType: "application/pdf",
-    upsert: false,
+    contentType: "application/pdf", upsert: false,
   });
   await admin.storage.from("print-checks").upload(
     reportPath,
     new Blob([txtReport], { type: "text/plain" }),
     { contentType: "text/plain", upsert: false },
   );
+
+  let fixedPdfUrl: string | null = null;
+  if (autoFixed) {
+    const { data: signed } = await admin.storage.from("print-checks").createSignedUrl(pdfPath, 3600);
+    fixedPdfUrl = signed?.signedUrl ?? null;
+  }
 
   await admin.from("print_check_runs").insert({
     user_id: auth.userId,
@@ -178,21 +138,110 @@ Deno.serve(async (req) => {
     target_h_mm: targetHmm,
     min_dpi: minDpi,
     edge_margin_mm: edgeMarginMm,
-    pass,
+    pass: analysis.pass,
     pdf_path: pdfPath,
     report_path: reportPath,
-    summary: { pages: pageReports, reasons },
+    summary: { pages: analysis.pages, reasons: analysis.reasons, autoFixed, autoFixNote, attempts },
   });
 
   return json({
-    pass,
-    pages: pageReports,
-    reasons,
+    pass: analysis.pass,
+    pages: analysis.pages,
+    reasons: analysis.reasons,
     txtReport,
     pdfPath,
     reportPath,
+    autoFixed,
+    autoFixNote,
+    attempts,
+    fixedPdfUrl,
+    fixedFilename: autoFixed ? outName : null,
   }, 200);
 });
+
+interface AnalyzeOpts { targetWmm: number; targetHmm: number; minDpi: number; edgeMarginMm: number; }
+interface AnalyzeResult { pass: boolean; pages: PageReport[]; reasons: string[]; error?: string; }
+
+async function analyzePdf(bytes: Uint8Array, opts: AnalyzeOpts): Promise<AnalyzeResult> {
+  const { targetWmm, targetHmm, minDpi, edgeMarginMm } = opts;
+  let pdfDoc: PDFDocument;
+  try {
+    pdfDoc = await PDFDocument.load(bytes, { updateMetadata: false });
+  } catch (e) {
+    return { pass: false, pages: [], reasons: [], error: `Could not parse PDF: ${(e as Error).message}` };
+  }
+  const pages = pdfDoc.getPages();
+  const pageReports: PageReport[] = [];
+  const reasons: string[] = [];
+  const dpiByPage = inspectImageDpis(bytes, pages.length);
+
+  for (let i = 0; i < pages.length; i++) {
+    const p = pages[i];
+    const { width: wPt, height: hPt } = p.getSize();
+    const wMm = +(wPt / PT_PER_MM).toFixed(1);
+    const hMm = +(hPt / PT_PER_MM).toFixed(1);
+    const pageReasons: string[] = [];
+    const matches =
+      (within(wMm, targetWmm, 2) && within(hMm, targetHmm, 2)) ||
+      (within(wMm, targetHmm, 2) && within(hMm, targetWmm, 2));
+    if (!matches) pageReasons.push(`size ${wMm}×${hMm}mm ≠ target ${targetWmm}×${targetHmm}mm`);
+    const edgeCoveragePct = estimateEdgeCoverage(bytes, p, edgeMarginMm);
+    if (edgeCoveragePct > 0.5) pageReasons.push(`content within ${edgeMarginMm}mm trim (${edgeCoveragePct.toFixed(2)}%)`);
+    const dpis = dpiByPage[i] ?? [];
+    const minImageDpi = dpis.length ? Math.min(...dpis) : null;
+    if (minImageDpi !== null && minImageDpi < minDpi) pageReasons.push(`image at ${minImageDpi} DPI < ${minDpi}`);
+    const ok = pageReasons.length === 0;
+    if (!ok) for (const r of pageReasons) reasons.push(`Page ${i + 1}: ${r}`);
+    pageReports.push({
+      page: i + 1, widthMm: wMm, heightMm: hMm,
+      edgeCoveragePct: +edgeCoveragePct.toFixed(2),
+      minImageDpi, blank: false, reasons: pageReasons, ok,
+    });
+  }
+  return { pass: reasons.length === 0, pages: pageReports, reasons };
+}
+
+/**
+ * Auto-fix: rebuild the PDF so each page is sized exactly to the target and
+ * the original page content is scaled to full-bleed (with 3mm overscan so
+ * near-edge content extends past the trim).
+ */
+async function autoFixPdf(bytes: Uint8Array, targetWmm: number, targetHmm: number): Promise<Uint8Array | null> {
+  try {
+    const src = await PDFDocument.load(bytes, { updateMetadata: false });
+    const out = await PDFDocument.create();
+    const targetWpt = targetWmm * PT_PER_MM;
+    const targetHpt = targetHmm * PT_PER_MM;
+    const overscanPt = 3 * PT_PER_MM;
+    const embedded = await out.embedPdf(src, src.getPageIndices());
+    for (const emb of embedded) {
+      const srcW = emb.width;
+      const srcH = emb.height;
+      const portrait = targetHpt >= targetWpt;
+      const srcPortrait = srcH >= srcW;
+      const rotate = portrait !== srcPortrait;
+      const useW = rotate ? srcH : srcW;
+      const useH = rotate ? srcW : srcH;
+      const scale = Math.max((targetWpt + overscanPt * 2) / useW, (targetHpt + overscanPt * 2) / useH);
+      const drawW = useW * scale;
+      const drawH = useH * scale;
+      const page = out.addPage([targetWpt, targetHpt]);
+      const x = (targetWpt - drawW) / 2;
+      const y = (targetHpt - drawH) / 2;
+      if (rotate) {
+        page.drawPage(emb, {
+          x: x + drawW, y, width: drawW, height: drawH,
+          rotate: { type: "degrees", angle: 90 } as any,
+        });
+      } else {
+        page.drawPage(emb, { x, y, width: drawW, height: drawH });
+      }
+    }
+    return await out.save();
+  } catch {
+    return null;
+  }
+}
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
