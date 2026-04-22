@@ -40,6 +40,7 @@ import { runSeoChecks } from "@/seo/seoChecks";
 
 export default function SeoReview() {
   const entries = useMemo(() => computeServiceSeoEntries(), []);
+  const checkReport = useMemo(() => runSeoChecks(entries), [entries]);
   const [query, setQuery] = useState("");
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
 
