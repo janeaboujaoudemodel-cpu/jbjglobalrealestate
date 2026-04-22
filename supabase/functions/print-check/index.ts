@@ -308,25 +308,34 @@ function buildTxtReport(args: {
   pass: boolean;
   reasons: string[];
   pageReports: PageReport[];
+  autoFixed?: boolean;
+  autoFixNote?: string;
+  attempts?: Array<{ attempt: number; pass: boolean; reasons: string[] }>;
 }): string {
-  const { filename, targetWmm, targetHmm, minDpi, edgeMarginMm, pass, reasons, pageReports } = args;
+  const { filename, targetWmm, targetHmm, minDpi, edgeMarginMm, pass, reasons, pageReports, autoFixed, autoFixNote, attempts } = args;
   const orient = targetHmm >= targetWmm ? "portrait" : "landscape";
   const lines: string[] = [];
   lines.push("JBJ Global Real Estate — Print QA Report");
   lines.push(`File: ${filename}`);
-  lines.push(
-    `Target: ${targetWmm} × ${targetHmm} mm (${orient}) · Min DPI: ${minDpi} · Edge margin: ${edgeMarginMm} mm`,
-  );
+  lines.push(`Target: ${targetWmm} × ${targetHmm} mm (${orient}) · Min DPI: ${minDpi} · Edge margin: ${edgeMarginMm} mm`);
   lines.push(`Generated: ${new Date().toISOString().replace("T", " ").slice(0, 19)} UTC`);
+  if (autoFixed) lines.push(`Auto-fix: applied — ${autoFixNote || "see attempts below"}`);
+  else if (autoFixNote) lines.push(`Auto-fix: ${autoFixNote}`);
   lines.push("");
   lines.push(`Result: ${pass ? "PASS" : `FAIL (${reasons.length} issue(s))`}`);
   lines.push("");
   for (const p of pageReports) {
     const dpi = p.minImageDpi === null ? "n/a" : `${p.minImageDpi}`;
     const status = p.ok ? "OK" : `FAIL (${p.reasons.join("; ")})`;
-    lines.push(
-      `Page ${p.page} — ${p.widthMm} × ${p.heightMm} mm — edge coverage ${p.edgeCoveragePct}% — min image DPI ${dpi} — ${status}`,
-    );
+    lines.push(`Page ${p.page} — ${p.widthMm} × ${p.heightMm} mm — edge coverage ${p.edgeCoveragePct}% — min image DPI ${dpi} — ${status}`);
+  }
+  if (attempts && attempts.length > 1) {
+    lines.push("");
+    lines.push("Auto-fix attempts:");
+    for (const a of attempts) {
+      const tag = a.attempt === 0 ? "initial" : `attempt ${a.attempt}`;
+      lines.push(`  • ${tag}: ${a.pass ? "PASS" : `FAIL (${a.reasons.length})`}`);
+    }
   }
   if (!pass) {
     lines.push("");
