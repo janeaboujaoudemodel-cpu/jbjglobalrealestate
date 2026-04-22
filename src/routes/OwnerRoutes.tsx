@@ -60,6 +60,7 @@ const EventManagementHub = lazy(() => import("@/pages/owner/EventManagementHub")
 const VerificationRequests = lazy(() => import("@/pages/owner/VerificationRequests"));
 const ExternalAccessManagement = lazy(() => import("@/pages/owner/ExternalAccessManagement"));
 const SeoReview = lazy(() => import("@/pages/owner/SeoReview"));
+const PrintCheck = lazy(() => import("@/pages/owner/PrintCheck"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -126,5 +127,6 @@ export const OwnerRoutes = () => (
     <Route path="verification-requests" element={<VerificationRequests />} />
     <Route path="external-access" element={<ExternalAccessManagement />} />
     <Route path="seo-review" element={<SeoReview />} />
+    <Route path="print-check" element={<PrintCheck />} />
   </Route>
 );

@@ -18568,6 +18568,51 @@ export type Database = {
         }
         Relationships: []
       }
+      print_check_runs: {
+        Row: {
+          created_at: string
+          edge_margin_mm: number
+          filename: string
+          id: string
+          min_dpi: number
+          pass: boolean
+          pdf_path: string | null
+          report_path: string | null
+          summary: Json | null
+          target_h_mm: number
+          target_w_mm: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          edge_margin_mm?: number
+          filename: string
+          id?: string
+          min_dpi?: number
+          pass?: boolean
+          pdf_path?: string | null
+          report_path?: string | null
+          summary?: Json | null
+          target_h_mm: number
+          target_w_mm: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          edge_margin_mm?: number
+          filename?: string
+          id?: string
+          min_dpi?: number
+          pass?: boolean
+          pdf_path?: string | null
+          report_path?: string | null
+          summary?: Json | null
+          target_h_mm?: number
+          target_w_mm?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_initials: string | null
