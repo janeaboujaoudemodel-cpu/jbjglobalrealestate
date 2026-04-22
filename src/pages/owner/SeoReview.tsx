@@ -306,41 +306,63 @@ export default function SeoReview() {
                 <TableRow>
                   <TableHead className="w-[180px]">Slug</TableHead>
                   <TableHead>Title</TableHead>
-                  <TableHead className="w-[260px]">Canonical path</TableHead>
+                  <TableHead className="w-[240px]">Canonical path</TableHead>
                   <TableHead className="w-[110px] text-right">
                     hreflang
                   </TableHead>
+                  <TableHead className="w-[90px] text-right">Inspect</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filtered.map((e) => (
-                  <TableRow key={e.slug}>
-                    <TableCell className="font-mono text-xs">
-                      {e.slug}
-                    </TableCell>
-                    <TableCell className="text-sm">{e.title}</TableCell>
-                    <TableCell className="font-mono text-xs">
-                      <a
-                        href={e.canonicalUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-primary hover:underline"
-                      >
-                        {e.canonicalPath}
-                      </a>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Badge variant="secondary">
-                        {filterTargets(e.hreflangTargets).length}
-                        {langFilter !== "all" && ` / ${e.hreflangTargets.length}`}
-                      </Badge>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {filtered.map((e) => {
+                  const inspectHref = `${e.canonicalPath}?seoHighlight=1&expectedTitle=${encodeURIComponent(e.title)}&expectedDescription=${encodeURIComponent(e.description)}`;
+                  return (
+                    <TableRow key={e.slug}>
+                      <TableCell className="font-mono text-xs">
+                        {e.slug}
+                      </TableCell>
+                      <TableCell className="text-sm">{e.title}</TableCell>
+                      <TableCell className="font-mono text-xs">
+                        <a
+                          href={e.canonicalUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-primary hover:underline"
+                        >
+                          {e.canonicalPath}
+                        </a>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Badge variant="secondary">
+                          {filterTargets(e.hreflangTargets).length}
+                          {langFilter !== "all" && ` / ${e.hreflangTargets.length}`}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="sm"
+                          className="h-7 px-2 gap-1"
+                        >
+                          <a
+                            href={inspectHref}
+                            target="_blank"
+                            rel="noreferrer"
+                            title="Open page with SEO inspector overlay"
+                          >
+                            <Search className="w-3 h-3" />
+                            View
+                          </a>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
                 {filtered.length === 0 && (
                   <TableRow>
                     <TableCell
-                      colSpan={4}
+                      colSpan={5}
                       className="text-center text-muted-foreground py-8"
                     >
                       No slugs match “{query}”.
