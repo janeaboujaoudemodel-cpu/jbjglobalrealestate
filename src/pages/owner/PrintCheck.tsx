@@ -33,6 +33,8 @@ export default function PrintCheck() {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<PrintCheckResult | null>(null);
   const [history, setHistory] = useState<RunRow[]>([]);
+  const [autoFix, setAutoFix] = useState(false);
+  const [maxAttempts, setMaxAttempts] = useState(3);
 
   const loadHistory = async () => {
     const { data } = await supabase
@@ -66,6 +68,8 @@ export default function PrintCheck() {
       form.append("targetHeightMm", String(h));
       form.append("minDpi", String(minDpi));
       form.append("edgeMarginMm", String(edgeMarginMm));
+      form.append("autoFix", String(autoFix));
+      form.append("maxAttempts", String(maxAttempts));
 
       setProgress(45);
       const { data, error } = await supabase.functions.invoke("print-check", { body: form });
@@ -75,7 +79,8 @@ export default function PrintCheck() {
       const r = data as PrintCheckResult & { error?: string };
       if (r.error) throw new Error(r.error);
       setResult(r);
-      toast[r.pass ? "success" : "error"](r.pass ? "PASS — print-ready" : `FAIL — ${r.reasons.length} issue(s)`);
+      const passToast = r.pass ? (r.autoFixed ? "PASS — auto-fixed" : "PASS — print-ready") : `FAIL — ${r.reasons.length} issue(s)`;
+      toast[r.pass ? "success" : "error"](passToast);
       await loadHistory();
     } catch (e) {
       toast.error((e as Error).message || "Print check failed");
