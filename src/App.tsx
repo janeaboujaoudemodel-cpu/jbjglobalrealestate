@@ -23,6 +23,7 @@ import SEOServiceArea from "@/components/SEOServiceArea";
 import GlobalVisitorTracking from "@/components/GlobalVisitorTracking";
 import SEOBreadcrumbs from "@/components/SEOBreadcrumbs";
 import CanonicalAndHreflang from "@/components/CanonicalAndHreflang";
+import SeoHighlightOverlay from "@/components/SeoHighlightOverlay";
 import PageLoader from "@/components/PageLoader";
 import { InlinePageLoader } from "@/components/PageLoader";
 // BrandIntroSplash disabled until further notice
@@ -82,6 +83,7 @@ const App = () => {
                   <GlobalVisitorTracking />
                   <SEOBreadcrumbs />
                   <CanonicalAndHreflang />
+                  <SeoHighlightOverlay />
                   
             {/* BrandIntroSplash disabled until further notice */}
             <Routes>
