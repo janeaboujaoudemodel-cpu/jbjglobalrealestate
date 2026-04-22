@@ -3,7 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Printer, Loader2 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Printer, Loader2, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import TargetSizePicker, { PRESETS } from "@/components/print-check/TargetSizePicker";
@@ -30,6 +33,8 @@ export default function PrintCheck() {
   const [progress, setProgress] = useState(0);
   const [result, setResult] = useState<PrintCheckResult | null>(null);
   const [history, setHistory] = useState<RunRow[]>([]);
+  const [autoFix, setAutoFix] = useState(false);
+  const [maxAttempts, setMaxAttempts] = useState(3);
 
   const loadHistory = async () => {
     const { data } = await supabase
@@ -63,6 +68,8 @@ export default function PrintCheck() {
       form.append("targetHeightMm", String(h));
       form.append("minDpi", String(minDpi));
       form.append("edgeMarginMm", String(edgeMarginMm));
+      form.append("autoFix", String(autoFix));
+      form.append("maxAttempts", String(maxAttempts));
 
       setProgress(45);
       const { data, error } = await supabase.functions.invoke("print-check", { body: form });
@@ -72,7 +79,8 @@ export default function PrintCheck() {
       const r = data as PrintCheckResult & { error?: string };
       if (r.error) throw new Error(r.error);
       setResult(r);
-      toast[r.pass ? "success" : "error"](r.pass ? "PASS — print-ready" : `FAIL — ${r.reasons.length} issue(s)`);
+      const passToast = r.pass ? (r.autoFixed ? "PASS — auto-fixed" : "PASS — print-ready") : `FAIL — ${r.reasons.length} issue(s)`;
+      toast[r.pass ? "success" : "error"](passToast);
       await loadHistory();
     } catch (e) {
       toast.error((e as Error).message || "Print check failed");
@@ -107,6 +115,34 @@ export default function PrintCheck() {
             onDpiChange={setMinDpi}
           />
           <UploadDropzone file={file} onFile={setFile} disabled={running} />
+
+          <div className="rounded-lg border p-4 space-y-3">
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <Wand2 className="h-5 w-5 mt-0.5" />
+                <div>
+                  <Label htmlFor="autofix" className="text-sm font-medium cursor-pointer">Auto-fix failing PDFs</Label>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Re-crops/resizes pages to full-bleed at the target size and re-runs the check until it passes or hits the retry limit. DPI issues cannot be auto-fixed.
+                  </p>
+                </div>
+              </div>
+              <Switch id="autofix" checked={autoFix} onCheckedChange={setAutoFix} disabled={running} />
+            </div>
+            {autoFix && (
+              <div className="flex items-center gap-3 pl-8">
+                <Label htmlFor="maxAttempts" className="text-xs text-muted-foreground">Max retries</Label>
+                <Input
+                  id="maxAttempts" type="number" min={1} max={5}
+                  value={maxAttempts}
+                  onChange={(e) => setMaxAttempts(Math.max(1, Math.min(5, parseInt(e.target.value || "3", 10))))}
+                  disabled={running}
+                  className="h-8 w-20"
+                />
+              </div>
+            )}
+          </div>
+
           {running && <Progress value={progress} />}
           <div className="flex justify-end">
             <Button onClick={run} disabled={!file || running}>

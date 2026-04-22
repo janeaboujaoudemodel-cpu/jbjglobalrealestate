@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Download, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Download, CheckCircle2, AlertTriangle, Wand2, FileDown } from "lucide-react";
 
 export interface PageReport {
   page: number;
@@ -13,11 +13,22 @@ export interface PageReport {
   ok: boolean;
 }
 
+export interface AutoFixAttempt {
+  attempt: number;
+  pass: boolean;
+  reasons: string[];
+}
+
 export interface PrintCheckResult {
   pass: boolean;
   pages: PageReport[];
   reasons: string[];
   txtReport: string;
+  autoFixed?: boolean;
+  autoFixNote?: string;
+  attempts?: AutoFixAttempt[];
+  fixedPdfUrl?: string | null;
+  fixedFilename?: string | null;
 }
 
 interface Props {
@@ -56,7 +67,32 @@ export default function ResultPanel({ filename, result }: Props) {
         </Button>
       </div>
 
+      {(result.autoFixed || result.autoFixNote) && (
+        <div className="rounded-lg border p-4 bg-muted/20 flex items-start justify-between gap-4">
+          <div className="flex items-start gap-3 min-w-0">
+            <Wand2 className="h-5 w-5 mt-0.5 shrink-0" />
+            <div className="min-w-0">
+              <div className="font-medium text-sm">Auto-fix {result.autoFixed ? "applied" : "skipped"}</div>
+              <div className="text-xs text-muted-foreground">{result.autoFixNote || "—"}</div>
+              {result.attempts && result.attempts.length > 1 && (
+                <div className="text-xs text-muted-foreground mt-1">
+                  Attempts: {result.attempts.map((a) => `${a.attempt === 0 ? "initial" : `#${a.attempt}`}=${a.pass ? "PASS" : "FAIL"}`).join(" → ")}
+                </div>
+              )}
+            </div>
+          </div>
+          {result.fixedPdfUrl && (
+            <Button asChild variant="outline" size="sm">
+              <a href={result.fixedPdfUrl} target="_blank" rel="noreferrer" download={result.fixedFilename ?? undefined}>
+                <FileDown className="h-4 w-4 mr-2" /> Fixed PDF
+              </a>
+            </Button>
+          )}
+        </div>
+      )}
+
       <div className="overflow-x-auto rounded-lg border">
+
         <table className="w-full text-sm">
           <thead className="bg-muted/40 text-left">
             <tr>
