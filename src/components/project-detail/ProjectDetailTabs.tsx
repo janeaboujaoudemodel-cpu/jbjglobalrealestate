@@ -5,6 +5,7 @@ import { Download, Image as ImageIcon, FileText, MapPin, Layers, Home, CreditCar
 import type { Project } from "@/hooks/useProjects";
 import ProjectLocationMap from "@/components/project-detail/ProjectLocationMap";
 import { useCurrency } from "@/hooks/useCurrency";
+import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 
 interface ProjectDetailTabsProps {
   project: Project;
@@ -78,9 +79,12 @@ export function ProjectDetailTabs({ project }: ProjectDetailTabsProps) {
         <div className="space-y-6">
           <div>
             <h3 className="text-xl font-semibold text-black mb-4">About {project.name}</h3>
-            {project.description && (
-              <p className="text-black/90 leading-relaxed">{project.description}</p>
-            )}
+            {project.description && (() => {
+              const cleanDesc = sanitizeForDisplay(project.description);
+              return cleanDesc ? (
+                <p className="text-black/90 leading-relaxed whitespace-pre-line">{cleanDesc}</p>
+              ) : null;
+            })()}
           </div>
 
           {/* Key Details Grid */}

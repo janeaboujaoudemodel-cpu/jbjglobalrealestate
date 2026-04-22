@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useCurrency } from "@/hooks/useCurrency";
 import { getDeveloperLogoUrl } from "@/utils/developerLogo";
 import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
+import { sanitizeForDisplay } from "@/utils/contentSanitizer";
 
 const ELITE_DEVELOPERS = ['Emaar', 'Omniyat', 'Sobha', 'ALDAR', 'Binghatti', 'Nakheel', 'Dubai Properties', 'DAMAC', 'Meraas'];
 
@@ -213,9 +214,12 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               <span className="text-xs font-medium mb-1 block"><span className="text-gray-700">by </span><span className="text-black">{project.developer_name}</span></span>
             ) : null}
 
-            {(project as any).description && (
-              <p className="text-gray-700 text-xs line-clamp-2 mb-2">{(project as any).description}</p>
-            )}
+            {(project as any).description && (() => {
+              const cleanDesc = sanitizeForDisplay((project as any).description);
+              return cleanDesc ? (
+                <p className="text-gray-700 text-xs line-clamp-2 mb-2">{cleanDesc}</p>
+              ) : null;
+            })()}
 
             <hr className="border-gray-200 my-2" />
             <div className="flex-grow" />
