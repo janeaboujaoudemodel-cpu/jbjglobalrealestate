@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useProjects, Project } from "@/hooks/useProjects";
+import { formatPrice } from "@/lib/formatPrice";
 import { toast } from "sonner";
 import type { VideoProject } from "@/pages/VideoBuilder";
 
@@ -115,7 +116,35 @@ const VideoProjectSelector = ({ project, onUpdate, onNext }: VideoProjectSelecto
                 <p className="text-sm font-medium mt-1" data-price data-price-size="sm">
                   {formatPrice(project.property.price_from)}
                 </p>
-...
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Property List */}
+        <div className="space-y-2 max-h-[400px] overflow-y-auto">
+          {isLoading ? (
+            <p className="text-center text-muted-foreground py-8">Loading properties...</p>
+          ) : filteredProjects.length === 0 ? (
+            <p className="text-center text-muted-foreground py-8">No properties found</p>
+          ) : (
+            filteredProjects.map((p) => (
+              <button
+                key={p.id}
+                onClick={() => handleSelectProject(p)}
+                className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:border-primary/50 hover:bg-primary/5 transition-colors text-left"
+              >
+                <div className="w-12 h-12 rounded bg-muted flex-shrink-0 overflow-hidden">
+                  {p.images?.[0]?.image_url ? (
+                    <img src={p.images[0].image_url} alt={p.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <ImageIcon className="w-6 h-6 m-3 text-muted-foreground" />
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-sm truncate">{p.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{p.developer?.name || p.location}</p>
+                  <div className="flex items-center gap-2 mt-1">
                     {p.price_from && (
                       <span className="text-xs font-medium text-primary" data-price data-price-size="sm">
                         {formatPrice(p.price_from)}
