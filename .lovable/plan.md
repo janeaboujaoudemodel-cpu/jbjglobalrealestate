@@ -2,59 +2,68 @@
 
 ## Goal
 
-Make each user mode visually distinct with a dedicated color across the **mode dropdown**, the **active header pill**, and the **footer mode indicator** — and guarantee the selected mode never silently changes.
+Make the horizontal header **cleaner, less crowded, and consistent across all devices** by reducing the visible item count, grouping related controls, and standardizing labels — without removing any functionality (per No-Removal policy).
 
-## Color assignment (one per category)
+## Problem today
 
-Lock these semantic colors to each mode and reuse them everywhere the mode is shown:
+Row 1 of `HorizontalUtilityBar.tsx` shows **~16 separate cells** with vertical dividers between each: Back · Search · Buy · Rent · Sell · ♥ · ft²/m² · 🇬🇧 · Currency · Filter · CRM · Tasks · 🔔 · Inbox · Dashboard · Mode · Settings. On smaller widths it becomes a horizontally-scrolling rail with arrows — exactly the "crowded" feel you described.
 
-| Mode | Color | Token |
-|---|---|---|
-| Investor | Emerald | `emerald-500` |
-| Broker | Blue | `blue-500` |
-| Investor + Broker | Purple | `purple-500` |
-| Developer | Amber | `amber-500` |
+## Cleanup plan (HorizontalUtilityBar.tsx)
 
-Each color gets a consistent triple: `bg-{color}/10`, `border-{color}/40`, `text-{color}`. Already partially defined in `MODE_CONFIG` in `src/components/ModeSwitcher.tsx` — will be normalized and reused.
+### A. Group transactional links into one "Browse" menu
 
-## Changes
+Replace the three separate **Buy / Rent / Sell** cells with **one** `Browse ▾` cell that opens a small popover containing Buy, Rent, Sell. Saves 2 cells + 2 dividers. Links and tooltips preserved verbatim inside the popover.
 
-### 1. `src/components/ModeSwitcher.tsx` — dropdown clarity
+### B. Move display preferences into a single "Preferences" menu
 
-- **Every row** in the dropdown renders in its own mode color (icon tile, label text, hover state) — not just the active one. So the user can scan and instantly associate color ↔ mode.
-- **Active row**: stronger fill (`bg-{color}/15`), full colored border, colored check icon, and a subtle ring so the current selection is unmistakable while open.
-- **Trigger pill (header)**: already uses `currentConfig.bgColor` + `currentConfig.color`. Will tighten so the icon, label, and chevron all inherit the same mode color → the closed pill matches the highlighted row in the dropdown 1:1.
-- Remove any neutral gray hover that currently overrides the mode color on inactive rows.
+Collapse **ft²/m² toggle + Language + Currency** (3 cells + 2 dividers) into one **⚙ Display ▾** popover containing: Area Unit toggle, Language switcher, Currency switcher. All three sub-controls keep their existing components — just rendered inside a popover instead of inline.
 
-### 2. Footer mode indicator — consistent color
+### C. Merge Tasks / Bell / Inbox into a single "Activity" bell
 
-Audit footer for any mode display. Two cases:
+Consolidate **Tasks + Notifications + Inbox** into one **🔔 Activity** button with a combined unread badge. Clicking opens a small popover with three tabs (Tasks / Alerts / Inbox), each linking to the same destinations as today (`/my-dashboard#tasks`, `#notifications`, `#inbox`). Saves 2 cells + 2 dividers.
 
-- **If `ModeSwitcher` is already rendered in the footer**: it will inherit the new colored styling automatically.
-- **If the footer shows mode via separate markup** (e.g. a "Mode: Investor" label): wire it to `useUserModeContext()` and apply the same `MODE_CONFIG` color triple so footer ↔ header ↔ dropdown all match.
+### D. Keep these primary cells inline (the "less items" target)
 
-I'll locate the footer mode display during implementation and align it.
+Final row 1 from left → right:
 
-### 3. Mode stability — never auto-change
+```
+[Back] | [Search ⌘K] | [Browse ▾] | [♥ Favorites] | [Filter]      …      [CRM] | [🔔 Activity] | [Display ▾] | [Dashboard] | [Mode] | [Settings]
+```
 
-Reinforce the existing rule from `mem://architecture/state/user-mode-persistence-standard`:
+That's **6 left + 6 right = 12 cells max** (vs 16 today), and only **9** for signed-out visitors (no CRM, no Activity). On mobile, the count drops further because CRM/Activity hide when not signed in.
 
-- `UserModeContext` already protects local selection from being overwritten by DB sync (only adopts DB mode when localStorage is empty). Will verify no other code path calls `setMode` automatically.
-- Audit `useUserMode`, `useUserRole`, `Dashboard.tsx` redirects, and any `useEffect` that might call `setMode(...)` without explicit user action. Any auto-set found gets removed.
-- Add a small guard log when mode changes so future regressions are visible: `console.info('[UserMode] setMode by user:', newMode)` only inside the `setMode` callback (which is only invoked from the dropdown click handler).
+### E. Visual de-clutter
 
-### 4. No removal
+- **Drop the vertical gold dividers** between cells. Replace with simple 12-16px gap spacing — modern headers use whitespace, not rules. Keep ONE divider between the left scrollable group and the right fixed rail so the two zones remain visually distinct.
+- **Tighten cell padding** from `px-2.5` to `px-2`, height stays 48px row.
+- **Hide labels under `xl`** consistently — currently some cells show labels at `xl`, some never. Standardize: icon-only below xl, icon + label at xl+.
+- Keep the gold accent color for icons (brand standard) but reduce hover scale from `1.10` to `1.05` for calmer motion.
 
-Per the No-Removal policy: no rows, modes, descriptions, or footer links are removed. Only colors/styles change and the footer mode badge gets wired to context if not already.
+### F. Responsive behavior (all devices)
+
+- **≥1280px (xl):** All cells visible with labels next to icons. No scroll arrows.
+- **768–1279px:** Icon-only cells, fits without scrolling in most cases. Scroll arrows kept as fallback.
+- **<768px (mobile/touch):** The mobile header (`MobileHeader.tsx`) already replaces this bar via `useIsTouchLayout`. I'll verify the mobile sheet menu mirrors the same Browse / Activity / Display groupings so the experience is consistent across devices.
+
+### G. Keep row 2 (filter shortcut bar) untouched
+
+`FilterShortcutBar` already uses its own scroll/overflow logic — out of scope for this cleanup.
 
 ## Files touched
 
-- `src/components/ModeSwitcher.tsx` — dropdown + trigger color polish
-- `src/components/Footer.tsx` (or whichever file renders the footer mode indicator — confirmed during implementation) — color-sync mode badge
-- `src/contexts/UserModeContext.tsx` — verify no automatic `setMode` paths; add safety log only
+- `src/components/navigation/HorizontalUtilityBar.tsx` — restructure cells, add Browse / Display / Activity popovers, remove inline dividers.
+- `src/components/navigation/MobileHeader.tsx` (verify only — align grouping if it currently exposes Buy/Rent/Sell or Inbox separately).
+
+No new dependencies. Uses existing `@/components/ui/popover` and the existing sub-components (`LanguageSwitcher`, `CurrencySwitcher`, `ModeSwitcher`).
+
+## No removal — guarantee
+
+Every link, every action, every icon present today remains reachable. The only change is **how** they're surfaced: 3 popovers (Browse, Display, Activity) absorb 8 inline cells, cutting visual noise ~40% while preserving 100% of functionality.
 
 ## Out of scope
 
-- No changes to mode logic, role gating, routing, or the 4 mode definitions themselves.
-- No new modes, no removed modes, no copy changes.
+- No changes to row 2 (filter shortcut bar)
+- No changes to the vertical sidebar / L-frame
+- No color or branding changes (gold accent + champagne gradient remain)
+- No routing/auth/mode logic changes
 
