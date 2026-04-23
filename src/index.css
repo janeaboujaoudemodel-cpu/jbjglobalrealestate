@@ -2889,3 +2889,85 @@ html[data-print-mode="1"] main {
   padding-top: 0 !important;
   padding-left: 0 !important;
 }
+
+/* ============================================================
+ * GLOBAL ICON CONTRAST ENFORCEMENT
+ * Ensures Lucide icons always inherit a contrasting `currentColor`
+ * matched to the tile/surface they sit on, in both light and dark themes.
+ * Icons that explicitly set their own color (style/attribute) keep it.
+ * ============================================================ */
+
+/* 1. Force all Lucide SVGs to use currentColor unless explicitly overridden */
+.lucide,
+svg.lucide,
+[class*="lucide-"] {
+  color: inherit;
+}
+.lucide:not([style*="color"]):not([style*="stroke"]) {
+  stroke: currentColor;
+}
+.lucide:not([style*="color"]):not([style*="fill"])[fill]:not([fill="none"]) {
+  fill: currentColor;
+}
+
+/* 2. Default icon foreground per surface — light theme */
+:root {
+  --icon-on-card: hsl(var(--card-foreground));
+  --icon-on-background: hsl(var(--foreground));
+  --icon-on-primary: hsl(var(--primary-foreground));
+  --icon-on-secondary: hsl(var(--secondary-foreground));
+  --icon-on-muted: hsl(var(--muted-foreground));
+  --icon-on-accent: hsl(var(--accent-foreground));
+  --icon-on-destructive: hsl(var(--destructive-foreground));
+}
+
+/* 3. Tile/Card surfaces: set icon color from the matching foreground token  */
+[class*="bg-card"] .lucide,
+[class*="bg-background"] .lucide,
+[class*="bg-popover"] .lucide {
+  color: hsl(var(--card-foreground));
+}
+[class*="bg-primary"] .lucide {
+  color: hsl(var(--primary-foreground));
+}
+[class*="bg-secondary"] .lucide {
+  color: hsl(var(--secondary-foreground));
+}
+[class*="bg-muted"] .lucide {
+  color: hsl(var(--muted-foreground));
+}
+[class*="bg-accent"] .lucide {
+  color: hsl(var(--accent-foreground));
+}
+[class*="bg-destructive"] .lucide {
+  color: hsl(var(--destructive-foreground));
+}
+
+/* 4. Buttons: icons follow the button's text color (always paired) */
+button .lucide,
+a .lucide,
+[role="button"] .lucide {
+  color: currentColor;
+}
+
+/* 5. Dark theme — re-bind defaults via the .dark scope so semantic tokens
+      automatically resolve to their dark counterparts (no extra rules needed
+      because the tokens themselves switch). The block below documents intent
+      and acts as a safety net for any tile that hard-codes a light bg in dark mode. */
+.dark [class*="bg-white"] .lucide,
+.dark [class*="bg-neutral-50"] .lucide,
+.dark [class*="bg-neutral-100"] .lucide {
+  color: hsl(0 0% 7%); /* dark ink on stubbornly-light surface */
+}
+:root:not(.dark) [class*="bg-black"] .lucide,
+:root:not(.dark) [class*="bg-neutral-900"] .lucide,
+:root:not(.dark) [class*="bg-neutral-950"] .lucide {
+  color: hsl(0 0% 100%); /* light ink on stubbornly-dark surface */
+}
+
+/* 6. Last-line safety: never allow an icon to inherit color: transparent */
+.lucide[style*="color: transparent"],
+.lucide[style*="color:transparent"] {
+  color: currentColor !important;
+}
+
