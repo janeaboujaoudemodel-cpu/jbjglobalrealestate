@@ -1,0 +1,15 @@
+{
+  "name": "price-color-audit",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Visual regression check that scans key pages for price elements and flags any non-orange price styles.",
+  "scripts": {
+    "audit": "node run.mjs",
+    "audit:preview": "node run.mjs --base=https://id-preview--357981e3-cd4c-4c0d-ad5b-a1a379078f50.lovable.app",
+    "audit:live": "node run.mjs --base=https://www.jbj.ae"
+  },
+  "dependencies": {
+    "playwright": "^1.47.0"
+  }
+}
