@@ -815,7 +815,7 @@ const AIHub = () => {
                 {quickBenefits.map((benefit, idx) => (
                   <motion.div
                     key={idx}
-                    className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-4 text-center shadow-sm"
+                    className="icon-tile bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] border-2 border-gold/40 rounded-xl p-4 text-center shadow-sm"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
