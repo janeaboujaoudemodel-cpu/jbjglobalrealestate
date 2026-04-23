@@ -2322,6 +2322,37 @@ html [data-surface="dark"] :is(h1, h2, h3, h4, h5, h6, p, span, a, label, div, b
   --tw-text-opacity: 1 !important;
 }
 
+/* 1b-RESCUE: White text inside ANY dark ancestor (button, badge, pill, chip)
+   must remain white, even when that ancestor sits on a light surface.
+   This overrides rule 1b for nested <span class="text-white"> patterns. */
+:root:not(.dark) :is(
+  .bg-black, [class*="bg-black"],
+  .bg-gray-800, .bg-gray-900, .bg-gray-950,
+  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-slate-800, .bg-slate-900, .bg-slate-950,
+  .bg-neutral-800, .bg-neutral-900, .bg-neutral-950,
+  .bg-primary, .bg-foreground,
+  [data-surface="dark"]
+) :is(.text-white, [class*="text-white/"]) {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+
+/* 1b-RESCUE-gold: Gold accent (icons, text) inside dark ancestors must
+   keep the gold token, overriding the global gold→black force-rule. */
+:root:not(.dark) :is(
+  .bg-black, [class*="bg-black"],
+  .bg-gray-800, .bg-gray-900, .bg-gray-950,
+  .bg-zinc-800, .bg-zinc-900, .bg-zinc-950,
+  .bg-slate-900, .bg-slate-950,
+  .bg-primary, .bg-foreground,
+  [data-surface="dark"]
+) :is(.text-gold, [class*="text-gold/"], svg.text-gold, svg[class*="text-gold"]) {
+  color: hsl(var(--gold)) !important;
+  opacity: 1 !important;
+}
+
 /* 1c. Form controls on light surfaces — text must always be dark, never white. */
 :root:not(.dark) :is(input, textarea, select, option):is(.text-white, [class*="text-white/"]) {
   color: hsl(var(--foreground)) !important;
@@ -2333,7 +2364,8 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 }
 
 /* 1d. Headings/labels with text-white inside light gradient hero/card overlays
-   (only when no inline backgroundImage/dark overlay exists on the element itself). */
+   (only when no inline backgroundImage/dark overlay exists on the element itself,
+    and no dark ancestor wraps the element). */
 :root:not(.dark) :is(
   .bg-champagne, [class*="bg-champagne"],
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
