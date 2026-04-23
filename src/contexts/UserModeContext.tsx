@@ -111,6 +111,7 @@ export function UserModeProvider({ children }: { children: ReactNode }) {
   }, [user?.id]);
 
   const setMode = useCallback(async (newMode: UserMode) => {
+    console.info('[UserMode] setMode by user:', newMode);
     // Optimistic update
     setModeState(newMode);
     localStorage.setItem(MODE_KEY, newMode);
