@@ -335,8 +335,11 @@ const Index = () => {
       {/* DIVIDER between Developer Partners and Trust Bar */}
       <SectionDivider fullWidth />
 
-      {/* TRUST BAR (8 Cards) - 4x2 Grid */}
-      <div id="trust-bar" className="py-12 md:py-16">
+      {/* TRUST BAR (8 Cards) - 4x2 Grid
+          SPACING RULE: Sections wrapped between <SectionDivider /> use no
+          vertical padding. Sections with a distinct background (colored /
+          gradient / dark) use py-8 md:py-10 for internal breathing room. */}
+      <div id="trust-bar">
         <Suspense fallback={<SectionLoader />}>
           <TrustBar />
         </Suspense>
@@ -396,7 +399,7 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* EXPLORE OUR SERVICES */}
-      <section className="py-12 md:py-20">
+      <section>
         <div className="jj-layer-2">
           <Suspense fallback={<SectionLoader />}>
             <ExploreServicesCard />
@@ -416,7 +419,7 @@ const Index = () => {
       <SectionDivider fullWidth />
 
       {/* AI HOME FINDER — Premium 3D Section */}
-      <section className="flex items-center justify-center py-16 md:py-24 min-h-[340px] relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a0a2e 0%, #2d1052 50%, #130728 100%)' }}>
+      <section className="flex items-center justify-center py-8 md:py-10 min-h-[340px] relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1a0a2e 0%, #2d1052 50%, #130728 100%)' }}>
         {/* Purple glow orbs */}
         <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full blur-3xl pointer-events-none" style={{ background: 'rgba(139, 92, 246, 0.15)' }} />
         <div className="absolute bottom-1/4 right-1/4 w-48 h-48 rounded-full blur-3xl pointer-events-none" style={{ background: 'rgba(167, 139, 250, 0.1)' }} />
@@ -483,7 +486,7 @@ const Index = () => {
 
       <SectionDivider />
 
-      <section className="py-12 md:py-16">
+      <section className="py-8 md:py-10">
         <div className="jj-layer-2">
           <div className="bg-gray-50 border border-gray-200 rounded-xl md:rounded-3xl p-4 md:p-12 relative overflow-hidden">
             <div className="relative z-10">
@@ -580,6 +583,9 @@ const Index = () => {
           <SupportTicketBox />
         </Suspense>
       </div>
+
+      {/* Final divider closes rhythm before footer */}
+      <SectionDivider fullWidth />
 
       <Suspense fallback={null}>
         <InquiryFormModal 
