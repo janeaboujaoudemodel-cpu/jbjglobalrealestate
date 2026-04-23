@@ -13353,6 +13353,48 @@ export type Database = {
         }
         Relationships: []
       }
+      icon_audit_runs: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          environment: string
+          failures: Json
+          failures_by_rule: Json
+          id: string
+          report_url: string | null
+          routes_scanned: number
+          run_label: string
+          tiles_scanned: number
+          total_failures: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          environment?: string
+          failures?: Json
+          failures_by_rule?: Json
+          id?: string
+          report_url?: string | null
+          routes_scanned?: number
+          run_label: string
+          tiles_scanned?: number
+          total_failures?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          environment?: string
+          failures?: Json
+          failures_by_rule?: Json
+          id?: string
+          report_url?: string | null
+          routes_scanned?: number
+          run_label?: string
+          tiles_scanned?: number
+          total_failures?: number
+        }
+        Relationships: []
+      }
       inbound_email_dead_letters: {
         Row: {
           created_at: string

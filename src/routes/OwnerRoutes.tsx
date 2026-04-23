@@ -62,6 +62,7 @@ const ExternalAccessManagement = lazy(() => import("@/pages/owner/ExternalAccess
 const SeoReview = lazy(() => import("@/pages/owner/SeoReview"));
 const PrintCheck = lazy(() => import("@/pages/owner/PrintCheck"));
 const BaselinePdfDashboard = lazy(() => import("@/pages/owner/BaselinePdfDashboard"));
+const IconAuditDashboard = lazy(() => import("@/pages/owner/IconAuditDashboard"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -130,5 +131,6 @@ export const OwnerRoutes = () => (
     <Route path="seo-review" element={<SeoReview />} />
     <Route path="print-check" element={<PrintCheck />} />
     <Route path="baseline-pdf" element={<BaselinePdfDashboard />} />
+    <Route path="icon-audit" element={<IconAuditDashboard />} />
   </Route>
 );

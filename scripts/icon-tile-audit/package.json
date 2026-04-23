@@ -1,0 +1,16 @@
+{
+  "name": "icon-tile-audit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Automated visual icon-tile audit for the JBJ platform.",
+  "scripts": {
+    "audit": "node run.mjs",
+    "install:browsers": "npx playwright install chromium"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "playwright": "^1.47.0",
+    "sharp": "^0.33.5"
+  }
+}
