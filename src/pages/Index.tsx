@@ -165,25 +165,11 @@ const Index = () => {
           {/* Branded fallback — renders instantly, unmounts after video loads */}
           {!videoLoaded && (
             <div 
-              className="absolute inset-0 z-[1] flex flex-col items-center justify-center pointer-events-none"
+              className="absolute inset-0 z-[1] pointer-events-none"
             >
-              {/* Gold accent orbs */}
+              {/* Gold accent orbs only — no logo to avoid overlapping headline on mobile */}
               <div className="absolute top-1/4 left-10 w-64 h-64 bg-white/5 rounded-full blur-[100px]" />
               <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-white/5 rounded-full blur-[120px]" />
-              
-              {/* Logo — transparent monogram, no background */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="JBJ Global Real Estate" 
-                className="w-44 h-auto md:w-52 object-contain bg-transparent"
-                style={{ 
-                  filter: 'drop-shadow(0 0 32px rgba(200,167,102,0.4))',
-                  animation: 'heroFallbackPulse 2.5s ease-in-out infinite',
-                }}
-              />
-              
-              {/* Loading shimmer line */}
-              <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
             </div>
           )}
 
@@ -206,17 +192,6 @@ const Index = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70 z-[3]" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 z-[3]" />
-          
-          <style>{`
-            @keyframes heroFallbackPulse {
-              0%, 100% { filter: drop-shadow(0 0 24px rgba(200,167,102,0.3)); transform: scale(1); }
-              50% { filter: drop-shadow(0 0 40px rgba(200,167,102,0.6)); transform: scale(1.02); }
-            }
-            @keyframes heroFallbackShimmer {
-              0%, 100% { opacity: 0.3; transform: scaleX(0.6); }
-              50% { opacity: 0.8; transform: scaleX(1.2); }
-            }
-          `}</style>
         </div>
         
         {/* Animated gold accent lines */}
