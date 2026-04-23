@@ -5,12 +5,11 @@ import { motion } from "framer-motion";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, Palette, FileText, UserCircle, ChevronDown } from "lucide-react";
+import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, Palette, FileText, UserCircle, ChevronDown, MessageSquareWarning } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
-import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 import { CONTACT_INFO } from "@/constants/stats";
 
 // Chunk imports — stored so we can preload them all after hero renders
@@ -101,6 +100,7 @@ const heroActions = [
   { label: "Explore AI Tools", icon: Brain, href: "/ai-hub" },
   { label: "Create Your CV", icon: FileText, href: "/toolkit/cv-builder" },
   { label: "Update Profile", icon: UserCircle, href: "/profile" },
+  { label: "Submit Complaint", icon: MessageSquareWarning, href: "/ticket-hub" },
 ];
 
 // Three pillars
@@ -165,25 +165,11 @@ const Index = () => {
           {/* Branded fallback — renders instantly, unmounts after video loads */}
           {!videoLoaded && (
             <div 
-              className="absolute inset-0 z-[1] flex flex-col items-center justify-center pointer-events-none"
+              className="absolute inset-0 z-[1] pointer-events-none"
             >
-              {/* Gold accent orbs */}
+              {/* Gold accent orbs only — no logo to avoid overlapping headline on mobile */}
               <div className="absolute top-1/4 left-10 w-64 h-64 bg-white/5 rounded-full blur-[100px]" />
               <div className="absolute bottom-1/3 right-10 w-80 h-80 bg-white/5 rounded-full blur-[120px]" />
-              
-              {/* Logo — transparent monogram, no background */}
-              <img 
-                src={jbjMonogramLightTransparent} 
-                alt="JBJ Global Real Estate" 
-                className="w-44 h-auto md:w-52 object-contain bg-transparent"
-                style={{ 
-                  filter: 'drop-shadow(0 0 32px rgba(200,167,102,0.4))',
-                  animation: 'heroFallbackPulse 2.5s ease-in-out infinite',
-                }}
-              />
-              
-              {/* Loading shimmer line */}
-              <div className="mt-8 w-24 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent" style={{ animation: 'heroFallbackShimmer 2s ease-in-out infinite' }} />
             </div>
           )}
 
@@ -206,17 +192,6 @@ const Index = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70 z-[3]" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 z-[3]" />
-          
-          <style>{`
-            @keyframes heroFallbackPulse {
-              0%, 100% { filter: drop-shadow(0 0 24px rgba(200,167,102,0.3)); transform: scale(1); }
-              50% { filter: drop-shadow(0 0 40px rgba(200,167,102,0.6)); transform: scale(1.02); }
-            }
-            @keyframes heroFallbackShimmer {
-              0%, 100% { opacity: 0.3; transform: scaleX(0.6); }
-              50% { opacity: 0.8; transform: scaleX(1.2); }
-            }
-          `}</style>
         </div>
         
         {/* Animated gold accent lines */}
@@ -265,16 +240,16 @@ const Index = () => {
               <span className="block sm:inline"> Finest Real Estate</span>
             </motion.h1>
 
-            {/* Quick-action CTA pills — responsive grid: 2col mobile, 3col tablet, flex desktop */}
+            {/* Quick-action CTA pills — balanced 6-tile grid: 3×2 mobile/tablet, single row of 6 on desktop */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-wrap lg:justify-center gap-2 sm:gap-3 max-w-md sm:max-w-2xl lg:max-w-none mx-auto"
+              className="grid grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 max-w-md sm:max-w-2xl lg:max-w-none mx-auto"
             >
-              {heroActions.map((action, idx) => (
+              {heroActions.map((action) => (
                 <Link
                   key={action.label}
                   to={action.href}
-                  className={`group inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2.5 rounded-full border border-white/70 sm:border-white/30 bg-black/60 backdrop-blur-md text-white text-[11px] sm:text-xs font-medium hover:bg-white/15 hover:border-white/70 hover:text-white transition-all duration-300 ${idx === 3 ? 'sm:col-start-1 sm:col-end-3 sm:justify-self-end lg:col-auto' : ''} ${idx === 4 ? 'sm:col-start-3 sm:col-end-4 sm:justify-self-start lg:col-auto' : ''}`}
+                  className="group inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 py-2.5 rounded-full border border-white/70 sm:border-white/30 bg-black/60 backdrop-blur-md text-white text-[11px] sm:text-xs font-medium hover:bg-white/15 hover:border-white/70 hover:text-white transition-all duration-300"
                 >
                   <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white group-hover:text-white transition-colors flex-shrink-0" />
                   <span className="truncate">{action.label}</span>
