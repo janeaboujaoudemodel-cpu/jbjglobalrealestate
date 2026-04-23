@@ -2,54 +2,65 @@
 
 ## Goal
 
-Generate an automated **visual diff report** comparing any future PDF export against the stored baseline (the Company Profile baseline PDF), with per-page pixel-level change highlighting and a single HTML summary file the user can open and share.
+Add an owner-only dashboard page at `/owner/baseline-pdf` that displays the **Company Profile baseline PDF** metadata — file size, expected DPI thresholds, SHA-256 hash, page count, last render timestamp — plus a panel linking to the most recent visual diff comparison results.
 
 ## Approach
 
-A self-contained Python pipeline (run via `code--exec`, no app changes) that:
+A single new React page, owner-gated (using existing `OwnerGuard`), backed by a new lightweight Supabase table `pdf_baseline_runs` that stores the result of each visual-diff or QA run. The page reads the baseline file's static metadata directly (HEAD request + client-side SHA-256 over the fetched bytes) and queries the runs table for the latest comparison.
 
-1. **Rasterizes** both PDFs to PNG at 150 DPI (`pdftoppm`).
-2. **Aligns** page counts (pads shorter PDF with blank pages so every page has a comparison).
-3. **Computes per-page diff** using Pillow + NumPy:
-   - Pixel-level absolute difference
-   - Changed-pixel ratio (% of pixels that differ above a small tolerance)
-   - SSIM-style "changed regions" highlighted in red over a desaturated baseline
-4. **Renders** three images per page side-by-side: `baseline | candidate | diff-overlay`.
-5. **Emits** a single self-contained HTML file embedding all images as base64, with:
-   - Top-level summary table (page #, % changed, verdict: identical / minor / major)
-   - Per-page section with the 3-up image strip + numeric stats
-   - Color-coded verdict pills
+## Changes
 
-## Inputs / outputs
+### 1. New table: `pdf_baseline_runs`
 
-- **Inputs**:
-  - Baseline: `public/documents/JBJ-Global-Real-Estate-Company-Profile.pdf` (already in repo)
-  - Candidate: same file for the first run (sanity check — should report 0% diff on every page). Future runs swap in a newer export.
-- **Output**: `/mnt/documents/company-profile-visual-diff.html` (single file, embedded images, no external assets).
+Columns:
+- `id uuid pk`
+- `export_id text` — e.g. `company-profile`
+- `baseline_sha256 text`
+- `baseline_size_bytes bigint`
+- `baseline_page_count int`
+- `candidate_label text` — free-form (e.g. filename or "baseline-vs-baseline")
+- `candidate_sha256 text`
+- `result_status text` — `pass` | `fail` | `identical` | `minor` | `moderate` | `major`
+- `pages_compared int`, `pages_changed int`, `avg_changed_pct numeric`
+- `report_url text` — optional link to the generated HTML report (e.g. uploaded artifact URL)
+- `metadata jsonb` — full per-page summary if needed
+- `created_at timestamptz default now()`
+- `created_by uuid references auth.users(id)` (nullable for CI runs)
 
-## What gets built
+RLS:
+- INSERT allowed for `is_owner_or_admin()` (re-uses existing helper).
+- SELECT restricted to `is_owner_or_admin()`.
+- No UPDATE / DELETE policies (immutable log).
 
-### 1. New helper script: `scripts/visual_diff_report.py` (committed to repo so it can be re-run)
-A CLI: `python scripts/visual_diff_report.py <baseline.pdf> <candidate.pdf> <output.html>`
-- Uses `pypdfium2` (already common) or `pdftoppm` for rasterization (whichever is available — script auto-detects).
-- Pillow + NumPy for diff math.
-- Embeds all images as base64 PNG into the HTML.
+### 2. New page: `src/pages/owner/BaselinePdfDashboard.tsx`
 
-### 2. First run — sanity check
-Run the script against `baseline vs baseline` to prove 0% diff, then deliver the resulting HTML to `/mnt/documents/`.
+Sections:
+1. **Header card** — title + "Open Clean Preview" (already exists in CompanyProfileDownload, reused as link).
+2. **Baseline metadata card** — fetches `/documents/JBJ-Global-Real-Estate-Company-Profile.pdf` once, computes SHA-256 client-side via `crypto.subtle.digest`, parses page count via PDF byte-string scan (`/Type /Page` count) — no external dep needed; falls back to "—" if not parseable.
+   - Displays: filename, size (KB / MB), SHA-256 (with copy button), page count, expected DPI floor (150 — read from a small static config), expected page count (18, hard-coded spec), and "Last fetched at" timestamp (now).
+3. **Last comparison card** — queries `pdf_baseline_runs` for the most recent row where `export_id = 'company-profile'` and shows: candidate label, status pill, pages compared / changed, avg %, link to `report_url` if present, timestamp.
+4. **Recent runs table** — last 10 rows, sortable by date.
+5. **Empty state** — friendly message if no runs yet, with one-line instructions on how to log one (the existing visual-diff script can be extended later to insert; out of scope for this task).
 
-### 3. README note in script header
-Brief usage block at the top of the script explaining how to run it for any future export.
+### 3. Route registration
+
+Add the page to the existing owner routes block (alongside other `/owner/*` routes, wrapped by `OwnerGuard`).
+
+### 4. Sidebar/menu entry (optional, low-risk)
+
+Add a single nav entry under the existing owner tools section linking to `/owner/baseline-pdf`. If the owner sidebar uses a static array, append one item; otherwise this step is skipped to avoid touching unrelated layout code.
 
 ## Files touched
 
-- `scripts/visual_diff_report.py` (new)
-- `/mnt/documents/company-profile-visual-diff.html` (generated artifact)
+- `supabase/migrations/<timestamp>_pdf_baseline_runs.sql` (new) — table + RLS
+- `src/pages/owner/BaselinePdfDashboard.tsx` (new)
+- `src/App.tsx` — register route
+- (optional) one owner-sidebar config file — single nav item
 
 ## Out of scope
 
-- No app/UI changes. No new routes, no buttons. (Owner already has "Open Clean Preview" + "Open Page Baseline" from the previous task — this report is run on demand from those exports.)
-- No database/edge-function changes.
-- No automatic CI hook — purely on-demand. (Easy to wire later if desired.)
-- No diffing of HTML pages (route renders) — only PDF↔PDF. The print-mode baseline already lets you save any route as a PDF via the browser's print-to-PDF, which then becomes a valid input to this script.
+- Wiring the visual-diff script to write rows into `pdf_baseline_runs` (the page reads runs; producers can be added later — manual SQL inserts work in the meantime).
+- Hosting / uploading the generated HTML report to storage — `report_url` is just stored if provided.
+- Comparing multiple baselines or non-Company-Profile exports (single-export dashboard for now; structure supports more by `export_id` later).
+- Sidebar restructuring or any visual redesign of existing owner pages.
 
