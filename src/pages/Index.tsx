@@ -100,6 +100,7 @@ const heroActions = [
   { label: "Explore AI Tools", icon: Brain, href: "/ai-hub" },
   { label: "Create Your CV", icon: FileText, href: "/toolkit/cv-builder" },
   { label: "Update Profile", icon: UserCircle, href: "/profile" },
+  { label: "Submit Complaint", icon: MessageSquareWarning, href: "/ticket-hub" },
 ];
 
 // Three pillars
