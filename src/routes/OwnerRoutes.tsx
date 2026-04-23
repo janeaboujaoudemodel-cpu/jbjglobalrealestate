@@ -63,6 +63,7 @@ const SeoReview = lazy(() => import("@/pages/owner/SeoReview"));
 const PrintCheck = lazy(() => import("@/pages/owner/PrintCheck"));
 const BaselinePdfDashboard = lazy(() => import("@/pages/owner/BaselinePdfDashboard"));
 const IconAuditDashboard = lazy(() => import("@/pages/owner/IconAuditDashboard"));
+const IconSizePreview = lazy(() => import("@/pages/owner/IconSizePreview"));
 
 export const OwnerRoutes = () => (
   <Route path="/owner" element={
@@ -132,5 +133,6 @@ export const OwnerRoutes = () => (
     <Route path="print-check" element={<PrintCheck />} />
     <Route path="baseline-pdf" element={<BaselinePdfDashboard />} />
     <Route path="icon-audit" element={<IconAuditDashboard />} />
+    <Route path="icon-size-preview" element={<IconSizePreview />} />
   </Route>
 );
