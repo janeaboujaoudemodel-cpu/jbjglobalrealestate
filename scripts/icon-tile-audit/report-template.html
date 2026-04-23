@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Icon Tile Audit Report</title>
+<style>
+  :root { --fg:#111; --muted:#666; --bg:#fafafa; --card:#fff; --border:#e5e5e5; --bad:#b91c1c; --ok:#15803d; }
+  * { box-sizing: border-box; }
+  body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Inter", sans-serif; background: var(--bg); color: var(--fg); margin: 0; padding: 32px; }
+  h1 { margin: 0 0 4px; font-size: 24px; }
+  .meta { color: var(--muted); margin-bottom: 24px; font-size: 13px; }
+  .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .stat .l { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
+  .stat .v { font-size: 22px; font-weight: 600; margin-top: 4px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+  .pill { padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); font-size: 12px; }
+  .pill.bad { background: #fef2f2; border-color: #fecaca; color: var(--bad); }
+  .route { background: var(--card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; overflow: hidden; }
+  .route h2 { margin: 0; padding: 12px 16px; background: #f5f5f5; font-size: 14px; border-bottom: 1px solid var(--border); }
+  .tile { display: grid; grid-template-columns: 200px 200px 1fr; gap: 16px; padding: 16px; border-bottom: 1px solid var(--border); align-items: start; }
+  .tile:last-child { border-bottom: 0; }
+  .tile img { max-width: 100%; max-height: 160px; border: 1px solid var(--border); background: #fff; border-radius: 4px; }
+  .tile .meta-col { font-size: 12px; color: var(--muted); }
+  .tile .rule { display: inline-block; background: #fef2f2; color: var(--bad); border: 1px solid #fecaca; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-bottom: 6px; }
+  .label { font-weight: 600; color: var(--fg); margin-bottom: 4px; }
+  .empty { background: var(--card); border: 1px dashed var(--border); border-radius: 8px; padding: 48px; text-align: center; color: var(--muted); }
+</style>
+</head>
+<body>
+<h1>Icon Tile Audit Report</h1>
+<div class="meta" id="meta"></div>
+<div class="summary" id="summary"></div>
+<div class="pills" id="pills"></div>
+<div id="routes"></div>
+<script>
+  const DATA = __DATA__;
+  const RULE_LABELS = {
+    missing_icon: "Missing icon",
+    clipped: "Clipped",
+    low_contrast: "Low contrast",
+    obscured: "Obscured",
+    invisible: "Invisible",
+    color_on_color: "Color-on-color",
+  };
+  document.getElementById("meta").textContent =
+    DATA.run_label + " · " + DATA.environment + " · " + new Date(DATA.created_at).toLocaleString() + " · " + DATA.base;
+
+  const stats = [
+    ["Routes scanned", DATA.routes_scanned],
+    ["Tiles scanned", DATA.tiles_scanned],
+    ["Total failures", DATA.total_failures],
+    ["Pass rate", DATA.tiles_scanned ? Math.round((DATA.tiles_scanned - DATA.total_failures) / DATA.tiles_scanned * 100) + "%" : "—"],
+  ];
+  document.getElementById("summary").innerHTML = stats.map(([l,v]) =>
+    '<div class="stat"><div class="l">' + l + '</div><div class="v">' + v + '</div></div>'
+  ).join("");
+
+  document.getElementById("pills").innerHTML = Object.entries(RULE_LABELS).map(([k,l]) => {
+    const n = DATA.failures_by_rule[k] || 0;
+    return '<span class="pill ' + (n > 0 ? 'bad' : '') + '">' + l + ': ' + n + '</span>';
+  }).join("");
+
+  const routesEl = document.getElementById("routes");
+  if (!DATA.failures.length) {
+    routesEl.innerHTML = '<div class="empty">✅ All scanned tiles passed every rule.</div>';
+  } else {
+    const byRoute = {};
+    for (const f of DATA.failures) (byRoute[f.route] = byRoute[f.route] || []).push(f);
+    routesEl.innerHTML = Object.entries(byRoute).map(([route, list]) =>
+      '<section class="route"><h2>' + route + ' — ' + list.length + ' failure(s)</h2>' +
+      list.map(f =>
+        '<div class="tile">' +
+          '<div><div class="meta-col">Default</div>' + (f.crop_default_b64 ? '<img src="data:image/png;base64,' + f.crop_default_b64 + '">' : '—') + '</div>' +
+          '<div><div class="meta-col">Failing (' + (f.state || 'default') + ')</div>' + (f.crop_failing_b64 ? '<img src="data:image/png;base64,' + f.crop_failing_b64 + '">' : '—') + '</div>' +
+          '<div class="meta-col">' +
+            '<span class="rule">' + (RULE_LABELS[f.rule] || f.rule) + '</span><br>' +
+            '<div class="label">' + (f.label || '(no label)') + '</div>' +
+            'Selector: <code>' + f.selector + '</code><br>' +
+            (f.contrast != null ? 'Contrast: ' + Number(f.contrast).toFixed(2) + '<br>' : '') +
+            (f.bbox ? 'bbox: ' + Math.round(f.bbox.x) + ',' + Math.round(f.bbox.y) + ' ' + Math.round(f.bbox.w) + '×' + Math.round(f.bbox.h) : '') +
+          '</div>' +
+        '</div>'
+      ).join("") +
+      '</section>'
+    ).join("");
+  }
+</script>
+</body>
+</html>
