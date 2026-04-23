@@ -32,11 +32,11 @@ const priceBadgeVariants = cva(
           "rounded-full border border-price-orange/40 px-2.5 py-1",
       },
       size: {
-        xs: "text-xs gap-1 [&>svg]:h-3 [&>svg]:w-3",
-        sm: "text-sm gap-1.5 [&>svg]:h-3.5 [&>svg]:w-3.5",
-        md: "text-base gap-1.5 [&>svg]:h-4 [&>svg]:w-4",
-        lg: "text-lg gap-2 [&>svg]:h-[18px] [&>svg]:w-[18px]",
-        xl: "text-2xl gap-2 [&>svg]:h-5 [&>svg]:w-5",
+        xs: "price-sm gap-1 [&>svg]:h-3 [&>svg]:w-3",
+        sm: "price-sm gap-1.5 [&>svg]:h-3.5 [&>svg]:w-3.5",
+        md: "price-md gap-1.5 [&>svg]:h-4 [&>svg]:w-4",
+        lg: "price-lg gap-2 [&>svg]:h-[18px] [&>svg]:w-[18px]",
+        xl: "price-xl gap-2 [&>svg]:h-5 [&>svg]:w-5",
       },
     },
     defaultVariants: {
