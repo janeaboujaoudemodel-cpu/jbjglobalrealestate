@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { usePropertyPicker } from '../hooks/usePropertyPicker';
+import { formatPriceShort } from '@/lib/formatPrice';
 import type { PropertySnapshot } from '../types';
 
 interface PropertyPickerProps {
@@ -41,12 +42,9 @@ export function PropertyPicker({ isOpen, onClose, onSelect, selectedPropertyId }
     onClose();
   };
 
-  const formatPrice = (price: number | null | undefined) => {
-    if (!price) return null;
-    if (price >= 1000000) return `AED ${(price / 1000000).toFixed(1)}M`;
-    if (price >= 1000) return `AED ${(price / 1000).toFixed(0)}K`;
-    return `AED ${price}`;
-  };
+  // Use the shared formatter so prices render identically across the app.
+  const formatPrice = (price: number | null | undefined) =>
+    price ? formatPriceShort(price) : null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

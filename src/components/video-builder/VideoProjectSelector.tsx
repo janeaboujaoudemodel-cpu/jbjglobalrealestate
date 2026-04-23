@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useProjects, Project } from "@/hooks/useProjects";
+import { formatPrice } from "@/lib/formatPrice";
 import { toast } from "sonner";
 import type { VideoProject } from "@/pages/VideoBuilder";
 
@@ -112,62 +113,41 @@ const VideoProjectSelector = ({ project, onUpdate, onNext }: VideoProjectSelecto
                   {project.property.location}
                 </p>
                 <p className="text-sm text-muted-foreground">{project.property.developer}</p>
-                <p className="text-sm font-medium mt-1">
-                  AED {Math.round(project.property.price_from).toLocaleString()}
+                <p className="text-sm font-medium mt-1" data-price data-price-size="sm">
+                  {formatPrice(project.property.price_from)}
                 </p>
               </div>
-              <Button variant="outline" size="sm" onClick={onNext}>
-                Continue <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
             </div>
           </div>
         )}
 
         {/* Property List */}
-        <div className="grid gap-3 max-h-[400px] overflow-y-auto pr-2">
+        <div className="space-y-2 max-h-[400px] overflow-y-auto">
           {isLoading ? (
-            <div className="text-center py-8 text-muted-foreground">
-              Loading properties...
-            </div>
+            <p className="text-center text-muted-foreground py-8">Loading properties...</p>
           ) : filteredProjects.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              No properties found
-            </div>
+            <p className="text-center text-muted-foreground py-8">No properties found</p>
           ) : (
-            filteredProjects.slice(0, 12).map((p) => (
+            filteredProjects.map((p) => (
               <button
                 key={p.id}
                 onClick={() => handleSelectProject(p)}
-                className={`flex items-center gap-4 p-3 rounded-lg border transition-all text-left ${
-                  project.property?.id === p.id
-                    ? "border-primary bg-primary/10"
-                    : "border-border hover:border-primary/50 hover:bg-accent"
-                }`}
+                className="w-full flex items-center gap-3 p-3 rounded-lg border border-border hover:border-primary/50 hover:bg-primary/5 transition-colors text-left"
               >
-                <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                <div className="w-12 h-12 rounded bg-muted flex-shrink-0 overflow-hidden">
                   {p.images?.[0]?.image_url ? (
-                    <img
-                      src={p.images[0].image_url}
-                      alt={p.name}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={p.images[0].image_url} alt={p.name} className="w-full h-full object-cover" />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Building2 className="h-6 w-6 text-muted-foreground" />
-                    </div>
+                    <ImageIcon className="w-6 h-6 m-3 text-muted-foreground" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-medium truncate">{p.name}</h4>
-                  <p className="text-sm text-muted-foreground truncate flex items-center gap-1">
-                    <MapPin className="h-3 w-3 flex-shrink-0" />
-                    {p.location || "Dubai, UAE"}
-                  </p>
+                  <p className="font-medium text-sm truncate">{p.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{p.developer?.name || p.location}</p>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-muted-foreground">{p.developer?.name}</span>
                     {p.price_from && (
-                      <span className="text-xs font-medium text-primary">
-                        AED {Math.round(p.price_from).toLocaleString()}
+                      <span className="text-xs font-medium text-primary" data-price data-price-size="sm">
+                        {formatPrice(p.price_from)}
                       </span>
                     )}
                   </div>
