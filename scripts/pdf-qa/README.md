@@ -75,6 +75,8 @@ overrides go under `exports.<id>`:
 | `edgePixelTolerancePct` | Max % of margin-band pixels allowed to be non-white.      |
 | `minImageDpi`           | Smallest acceptable embedded image DPI.                   |
 | `minPages`              | Minimum page count.                                       |
+| `maxPages`              | Maximum page count. Catches app chrome leaking into PDF.  |
+| `expectedPages`         | Exact page count required (institutional spec lock).      |
 
 ## CI
 
