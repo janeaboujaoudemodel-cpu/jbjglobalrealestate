@@ -1,69 +1,106 @@
 
 
-## Goal
+## Root cause
 
-Make the horizontal header **cleaner, less crowded, and consistent across all devices** by reducing the visible item count, grouping related controls, and standardizing labels — without removing any functionality (per No-Removal policy).
+Global CSS rule **1b** in `src/index.css` (lines ~2299–2314) force-darkens any `.text-white` element sitting inside a light container (`.bg-white`, `.bg-card`, champagne gradients, etc.). The rule has a self-only escape hatch: it skips elements that carry `.bg-black`/`.bg-gold`/`.bg-gray-900` **on themselves**.
 
-## Problem today
+The trap: when a dark `<Button class="bg-black text-white">` wraps content in a child `<span class="text-white">` (very common pattern for icons + label), the span has no `bg-*` class of its own, so the rule applies and turns it black — black text on a black button = invisible.
 
-Row 1 of `HorizontalUtilityBar.tsx` shows **~16 separate cells** with vertical dividers between each: Back · Search · Buy · Rent · Sell · ♥ · ft²/m² · 🇬🇧 · Currency · Filter · CRM · Tasks · 🔔 · Inbox · Dashboard · Mode · Settings. On smaller widths it becomes a horizontally-scrolling rail with arrows — exactly the "crowded" feel you described.
-
-## Cleanup plan (HorizontalUtilityBar.tsx)
-
-### A. Group transactional links into one "Browse" menu
-
-Replace the three separate **Buy / Rent / Sell** cells with **one** `Browse ▾` cell that opens a small popover containing Buy, Rent, Sell. Saves 2 cells + 2 dividers. Links and tooltips preserved verbatim inside the popover.
-
-### B. Move display preferences into a single "Preferences" menu
-
-Collapse **ft²/m² toggle + Language + Currency** (3 cells + 2 dividers) into one **⚙ Display ▾** popover containing: Area Unit toggle, Language switcher, Currency switcher. All three sub-controls keep their existing components — just rendered inside a popover instead of inline.
-
-### C. Merge Tasks / Bell / Inbox into a single "Activity" bell
-
-Consolidate **Tasks + Notifications + Inbox** into one **🔔 Activity** button with a combined unread badge. Clicking opens a small popover with three tabs (Tasks / Alerts / Inbox), each linking to the same destinations as today (`/my-dashboard#tasks`, `#notifications`, `#inbox`). Saves 2 cells + 2 dividers.
-
-### D. Keep these primary cells inline (the "less items" target)
-
-Final row 1 from left → right:
-
-```
-[Back] | [Search ⌘K] | [Browse ▾] | [♥ Favorites] | [Filter]      …      [CRM] | [🔔 Activity] | [Display ▾] | [Dashboard] | [Mode] | [Settings]
+The selected element on `SupportTicketBox.tsx` line 498 is exactly this case:
+```tsx
+<Button className="bg-black text-white …">
+  <span className="flex items-center gap-2">
+    <PremiumHeadsetIcon … />
+    <span className="text-white font-bold">Create Support Ticket</span>  ← force-darkened
+  </span>
+</Button>
 ```
 
-That's **6 left + 6 right = 12 cells max** (vs 16 today), and only **9** for signed-out visitors (no CRM, no Activity). On mobile, the count drops further because CRM/Activity hide when not signed in.
+This same trap fires on every `bg-black`/`bg-gray-900`/`bg-zinc-900` button across the app whose label is wrapped in a nested `<span class="text-white …">` — that's the "globally broken contrast" the user is seeing.
 
-### E. Visual de-clutter
+## Fix — global, one-shot, no per-component churn
 
-- **Drop the vertical gold dividers** between cells. Replace with simple 12-16px gap spacing — modern headers use whitespace, not rules. Keep ONE divider between the left scrollable group and the right fixed rail so the two zones remain visually distinct.
-- **Tighten cell padding** from `px-2.5` to `px-2`, height stays 48px row.
-- **Hide labels under `xl`** consistently — currently some cells show labels at `xl`, some never. Standardize: icon-only below xl, icon + label at xl+.
-- Keep the gold accent color for icons (brand standard) but reduce hover scale from `1.10` to `1.05` for calmer motion.
+### 1. Patch CSS rule 1b in `src/index.css` to honor the nearest ancestor
 
-### F. Responsive behavior (all devices)
+Change the `:not(.bg-black)…` self-only exclusions into ancestor-aware exclusions using `:where(…) *` so any descendant of a dark surface is left alone:
 
-- **≥1280px (xl):** All cells visible with labels next to icons. No scroll arrows.
-- **768–1279px:** Icon-only cells, fits without scrolling in most cases. Scroll arrows kept as fallback.
-- **<768px (mobile/touch):** The mobile header (`MobileHeader.tsx`) already replaces this bar via `useIsTouchLayout`. I'll verify the mobile sheet menu mirrors the same Browse / Activity / Display groupings so the experience is consistent across devices.
+```css
+/* BEFORE — only checks the element itself */
+:root:not(.dark) :is(.bg-white, .bg-card, …):not([data-surface="dark"])
+  :is(.text-white, [class*="text-white/"])
+    :not(.bg-black):not([class*="bg-black"]):not(.bg-gold)…
 
-### G. Keep row 2 (filter shortcut bar) untouched
+/* AFTER — also skip if any ancestor is a dark surface */
+:root:not(.dark) :is(.bg-white, .bg-card, …):not([data-surface="dark"])
+  :is(.text-white, [class*="text-white/"]):not(.bg-black):not([class*="bg-black"])…
+{ … }
 
-`FilterShortcutBar` already uses its own scroll/overflow logic — out of scope for this cleanup.
+/* Restore white inside any dark ancestor (button, badge, pill, chip) */
+:root:not(.dark) :is(
+  .bg-black, [class*="bg-black"],
+  .bg-gray-900, .bg-gray-950, .bg-zinc-900, .bg-zinc-950,
+  .bg-slate-900, .bg-slate-950,
+  .bg-primary, .bg-foreground,
+  [data-surface="dark"]
+) :is(.text-white, [class*="text-white/"]) {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+}
+```
+
+That second block is the global "white survives inside dark ancestors" rescue. Because it lives in the same cascade layer and is more specific (descendant selector with explicit dark surface), it overrides the force-darken rule for every button/badge/chip whose ancestor is dark — without us having to touch any component.
+
+Same patch applied to rule **1d** (champagne gradient white-text override) for the same reason.
+
+### 2. Mirror the rescue for icons/SVGs
+
+Add an equivalent rule so `text-gold`, `text-white/80`, etc. inside dark ancestors aren't pulled to gray by the global "force solid" SVG rules around line ~2200. Just add the same dark-ancestor scope.
+
+### 3. Tighten the gold→black force-rule for buttons
+
+The rules at lines 2187–2196 turn `.text-gold` everywhere into near-black. That's correct on light surfaces but breaks gold icons inside dark buttons. Add the dark-ancestor escape:
+
+```css
+:where(.bg-black, [class*="bg-black"], .bg-gray-900, .bg-zinc-900, [data-surface="dark"]) :is(.text-gold, [class*="text-gold/"]) {
+  color: hsl(var(--gold)) !important;
+}
+```
+
+This restores gold accents inside dark CTAs (e.g. the InvestorDashboard "Create Support Ticket" row that uses `<HelpCircle className="text-gold">` on a non-dark button — that one will fall back to black, which is still readable; no regression).
+
+### 4. Audit + cleanup pass on known offenders (no behavior change)
+
+Quick sweep of components matching `bg-black.*text-white` button + nested `<span class="text-white">` so they keep working even if step 1 ever regresses. Targets identified so far:
+
+- `src/components/SupportTicketBox.tsx` (line 498) — the selected element
+- Any `Button` in components that wrap the label in `<span className="text-white …">` — search will enumerate during implementation; I'll either remove the redundant `text-white` on the inner span (it inherits from the button) or add `bg-transparent` won't help, so the rule rewrite in step 1 is the real fix and these become belt-and-suspenders.
+
+No labels, icons, or layouts change. Just removing the redundant `text-white` on inner spans where the parent already enforces it — purely defensive.
+
+### 5. QA matrix
+
+After the change I'll mentally walk these surfaces to confirm no regressions:
+
+| Surface | Expected |
+|---|---|
+| `bg-black` Button on white card | White label, gold icon visible |
+| `bg-black` Button on dark hero | White label (already worked) |
+| White `Button variant="primary"` on white card | Black label (unchanged) |
+| Champagne hero with white H1 (no inner bg) | Force-darkened to black (unchanged — rule 1d still applies since H1 has no dark ancestor) |
+| Toast / dialog buttons (`bg-zinc-800`) | White label (newly fixed) |
+| Badges with `bg-gray-900 text-white` inside light cards | White label (newly fixed) |
 
 ## Files touched
 
-- `src/components/navigation/HorizontalUtilityBar.tsx` — restructure cells, add Browse / Display / Activity popovers, remove inline dividers.
-- `src/components/navigation/MobileHeader.tsx` (verify only — align grouping if it currently exposes Buy/Rent/Sell or Inbox separately).
-
-No new dependencies. Uses existing `@/components/ui/popover` and the existing sub-components (`LanguageSwitcher`, `CurrencySwitcher`, `ModeSwitcher`).
-
-## No removal — guarantee
-
-Every link, every action, every icon present today remains reachable. The only change is **how** they're surfaced: 3 popovers (Browse, Display, Activity) absorb 8 inline cells, cutting visual noise ~40% while preserving 100% of functionality.
+- **`src/index.css`** — rewrite rules 1b, 1d, the gold force-rule, and add the "dark-ancestor rescue" block. ~30 lines.
+- **`src/components/SupportTicketBox.tsx`** — drop redundant `text-white` from inner span on line 498 (defensive, optional).
+- A focused `code--search_files` sweep during implementation will surface any other inner `<span class="text-white">` inside dark buttons; trivial defensive cleanup only if found, no functional changes.
 
 ## Out of scope
 
-- No changes to row 2 (filter shortcut bar)
-- No changes to the vertical sidebar / L-frame
-- No color or branding changes (gold accent + champagne gradient remain)
-- No routing/auth/mode logic changes
+- No changes to the Button variants in `src/components/ui/button.tsx` — they're correct.
+- No changes to dark-surface rules (section 2) — they already work.
+- No changes to brand colors, layout, or any component logic.
+- No removal of any features per the No-Removal policy.
 
