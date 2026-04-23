@@ -195,6 +195,17 @@ async function validateExport(browser, exp) {
     failures.push(`pdfinfo failed: ${err.message}`);
   }
   if (pages < (t.minPages ?? 1)) failures.push(`page count ${pages} < ${t.minPages ?? 1}`);
+  if (t.maxPages !== undefined && pages > t.maxPages) {
+    const extra = pages - t.maxPages;
+    failures.push(
+      `page count ${pages} > ${t.maxPages} (spec max) — ${extra} extra page(s); likely app chrome (cookie banner, sidebar, header) leaked into the export`,
+    );
+  }
+  if (t.expectedPages !== undefined && pages !== t.expectedPages) {
+    failures.push(
+      `page count ${pages} ≠ ${t.expectedPages} (institutional spec); the Company Profile must be exactly ${t.expectedPages} pages`,
+    );
+  }
 
   // Edge coverage on every page
   const rasterDir = join(exportDir, "raster");
