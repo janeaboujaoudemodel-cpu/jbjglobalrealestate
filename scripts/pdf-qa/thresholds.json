@@ -9,7 +9,10 @@
     "company-profile": {
       "edgeMarginPt": 36,
       "edgePixelTolerancePct": 0.5,
-      "minImageDpi": 150
+      "minImageDpi": 150,
+      "expectedPages": 18,
+      "minPages": 18,
+      "maxPages": 18
     },
     "investor-portfolio": {
       "edgeMarginPt": 28,
