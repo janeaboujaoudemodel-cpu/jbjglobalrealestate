@@ -18568,6 +18568,39 @@ export type Database = {
         }
         Relationships: []
       }
+      print_blocker_log: {
+        Row: {
+          created_at: string
+          id: string
+          properties: Json
+          route: string | null
+          selector: string
+          selector_hash: string
+          source: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          properties?: Json
+          route?: string | null
+          selector: string
+          selector_hash: string
+          source?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          properties?: Json
+          route?: string | null
+          selector?: string
+          selector_hash?: string
+          source?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       print_check_runs: {
         Row: {
           created_at: string
