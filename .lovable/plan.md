@@ -2,58 +2,51 @@
 
 ## Goal
 
-Add a "Print Mode" baseline so the Company Profile PDF (and any printable comparison view) renders without the cookie banner, popups, or persistent header/sidebar — leaving only the document content for clean visual comparison.
+Persistently detect and log any `@media print` rules that hide content (display:none, visibility:hidden, opacity:0, etc.), store them, and automatically re-apply counter-overrides on future runs so the baseline stays clean.
 
-## Context
+## Approach
 
-The Company Profile is a static PDF served from `/documents/JBJ-Global-Real-Estate-Company-Profile.pdf` and downloaded via `src/utils/generateCompanyProfilePDF.ts`. The download itself is already overlay-free (it's a binary file). The overlay problem only applies when the user **previews** the PDF in-browser or compares it against another rendered page — the cookie banner, `PopupLayer`, header, and sidebar all sit on top.
-
-We'll introduce a global `?print=1` (alias `?baseline=1`) URL flag that suppresses all chrome and overlays for any route, then wire a "Open clean preview" action next to the existing download button.
+A small runtime engine that:
+1. **Scans** all stylesheets for `@media print` blocks containing content-suppressing rules (`display:none`, `visibility:hidden`, `opacity:0`, `height:0`, `width:0`).
+2. **Logs** discovered selectors to a Supabase table (`print_blocker_log`) once per session per selector hash.
+3. **Persists** the latest known blocker list to localStorage as a fast cache.
+4. **Reapplies** counter-overrides at boot (`@media print { selector { display: revert !important; visibility: visible !important; opacity: 1 !important; } }`) so the next baseline render is clean even if a regression reintroduces a blocker.
 
 ## Changes
 
-### 1. Global print-mode detection — `src/hooks/usePrintMode.ts` (new)
-Tiny hook reading `?print=1` / `?baseline=1` from the URL and adding `data-print-mode="1"` to `<html>` so CSS can react globally.
+### 1. New: `src/lib/printBlockerEngine.ts`
+- `scanPrintBlockers()` — walks `document.styleSheets`, parses `CSSMediaRule` whose media text contains `print`, collects rules whose style sets the suppressing properties. Returns `{ selector, properties, source }[]`.
+- `applyPrintOverrides(blockers)` — injects a single `<style id="print-blocker-overrides">` element with `@media print` overrides forcing visibility for each selector.
+- `loadCachedBlockers()` / `saveCachedBlockers()` — localStorage cache (`jbj_print_blockers_v1`).
+- `logBlockersToServer(blockers)` — best-effort insert into `print_blocker_log`, deduped by `selector_hash` per session via sessionStorage.
 
-### 2. Suppress overlays in `src/components/PopupLayer.tsx`
-Early-return `null` when print mode is active — hides cookie banner, lead capture popup, recommendation popup, mode selection modal, and task alerts.
+### 2. New: `src/components/PrintBlockerGuard.tsx`
+- 1-component mount inside `App.tsx` (next to `PrintModeBoundary`).
+- On mount: load cached blockers → apply overrides immediately → idle-callback scan → merge new blockers → re-apply → log new ones to server.
+- Re-runs on route change so SPA-injected stylesheets (lazy-loaded chunks) are caught.
 
-### 3. Hide header + sidebar in `src/components/MainLayoutWrapper.tsx`
-When print mode is active, render `<Outlet />` only (no header, no sidebar, no footer). Apply white background and remove the 88px L-frame offset.
+### 3. New migration: `print_blocker_log` table
+Columns: `id uuid pk`, `selector text`, `selector_hash text`, `properties jsonb`, `source text` (stylesheet href or `inline`), `route text`, `user_agent text`, `created_at timestamptz`.
+RLS: insert allowed for anyone (anon + authenticated); select restricted to owner (`has_role(auth.uid(), 'admin')` or owner email check via existing `is_owner()` function).
+Unique index on `(selector_hash, route)` to keep table small (use `ON CONFLICT DO NOTHING` from client).
 
-### 4. CSS print-mode reset — append to `src/index.css`
-```css
-html[data-print-mode="1"] {
-  /* hide any fixed/sticky chrome that escapes the React tree */
-  [data-chrome="header"], [data-chrome="sidebar"],
-  [data-chrome="footer"], .cookie-banner, [data-popup] { display: none !important; }
-  background: #fff !important;
-}
-html[data-print-mode="1"] body { padding: 0 !important; margin: 0 !important; }
-```
-(Also add `data-chrome` attributes to header/sidebar/footer roots as a safety net.)
+### 4. Mount in `src/App.tsx`
+Add `<PrintBlockerGuard />` next to `<PrintModeBoundary />` inside `BrowserRouter`.
 
-### 5. Wire the baseline button — `src/components/admin/CompanyProfileDownload.tsx`
-Add a secondary "Open Clean Preview" button next to the download CTA:
-- Opens `/documents/JBJ-Global-Real-Estate-Company-Profile.pdf` in a new tab (PDF is already overlay-free).
-- Plus a third "Open page baseline" button that opens the current route with `?print=1` so HTML→PDF comparisons render without chrome.
-
-### 6. Mount the hook once in `src/App.tsx`
-Add `<PrintModeBoundary />` (a 1-line component using `usePrintMode`) inside `BrowserRouter` so the flag is active on every route.
+### 5. Owner panel link (read-only viewer) — **deferred / out of scope**
+Not building a UI now. Owner can query `print_blocker_log` via existing data tools. (Mentioning so it's clear this is intentional.)
 
 ## Files touched
 
-- `src/hooks/usePrintMode.ts` (new)
-- `src/components/PrintModeBoundary.tsx` (new, 5 lines)
-- `src/components/PopupLayer.tsx` — early return when print mode
-- `src/components/MainLayoutWrapper.tsx` — skip header/sidebar/footer when print mode
-- `src/components/admin/CompanyProfileDownload.tsx` — add "Open Clean Preview" + "Open page baseline" buttons
-- `src/index.css` — print-mode reset block
-- `src/App.tsx` — mount `<PrintModeBoundary />`
+- `src/lib/printBlockerEngine.ts` (new)
+- `src/components/PrintBlockerGuard.tsx` (new)
+- `src/App.tsx` — mount guard
+- `supabase/migrations/<timestamp>_print_blocker_log.sql` (new) — table + RLS
 
 ## Out of scope
 
-- No changes to the PDF file or `generateCompanyProfilePDF.ts` (binary is already chrome-free).
-- No removal of any popup, banner, or chrome — they only hide when `?print=1` is present.
-- No changes to the corporate-suite generator (`companyProfileExport.ts`) — it already produces a self-contained PDF.
+- No UI page for browsing the log (owner uses existing tools).
+- No changes to `usePrintMode`, `MainLayoutWrapper`, `PopupLayer`, or `CompanyProfileDownload` — print mode behavior is unchanged.
+- No removal of any existing CSS — only additive `@media print` overrides.
+- No changes to the static Company Profile PDF.
 
