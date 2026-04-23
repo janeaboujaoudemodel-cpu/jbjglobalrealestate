@@ -2636,8 +2636,39 @@ button[style*="background"] [class*="text-gold"] {
 .listing-price,
 .starting-price {
   color: hsl(var(--price-orange)) !important;
-  font-variant-numeric: tabular-nums;
+  /* Unified typography — every AED amount reads identically */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  font-weight: 600 !important;
+  font-variant-numeric: tabular-nums !important;
+  font-feature-settings: 'tnum' 1, 'lnum' 1 !important;
+  letter-spacing: -0.01em !important;
+  line-height: 1.2 !important;
+  white-space: nowrap;
   text-shadow: none;
+}
+
+/* Responsive size scale — opt-in bands keep prices consistent across
+   cards, lists, hero blocks, and detail pages. */
+.price-sm,
+[data-price-size="sm"] { font-size: 0.8125rem !important; }
+.price-md,
+[data-price-size="md"] { font-size: 0.9375rem !important; }
+.price-lg,
+[data-price-size="lg"] { font-size: 1.125rem !important; }
+.price-xl,
+[data-price-size="xl"] {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+}
+@media (min-width: 768px) {
+  .price-sm,
+  [data-price-size="sm"] { font-size: 0.875rem !important; }
+  .price-md,
+  [data-price-size="md"] { font-size: 1rem !important; }
+  .price-lg,
+  [data-price-size="lg"] { font-size: 1.25rem !important; }
+  .price-xl,
+  [data-price-size="xl"] { font-size: 1.75rem !important; }
 }
 
 /* Brighter orange on dark surfaces / gradients for AA contrast */
