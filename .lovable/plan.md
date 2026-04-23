@@ -2,65 +2,112 @@
 
 ## Goal
 
-Add an owner-only dashboard page at `/owner/baseline-pdf` that displays the **Company Profile baseline PDF** metadata — file size, expected DPI thresholds, SHA-256 hash, page count, last render timestamp — plus a panel linking to the most recent visual diff comparison results.
+Build an automated visual icon-tile audit that:
+1. Captures every "icon tile" in its **default, hover, focus, and active** states.
+2. Flags any tile where the icon is **clipped, missing, low-contrast, or visually obscured**.
+3. Produces a single self-contained HTML report (sandbox script) AND surfaces the latest results inside the Owner Command Center.
 
-## Approach
+## Scope ("do the needful")
 
-A single new React page, owner-gated (using existing `OwnerGuard`), backed by a new lightweight Supabase table `pdf_baseline_runs` that stores the result of each visual-diff or QA run. The page reads the baseline file's static metadata directly (HEAD request + client-side SHA-256 over the fetched bytes) and queries the runs table for the latest comparison.
+Auto-discover any tile across the rendered app whose DOM signature matches the JBJ tile pattern:
+- A clickable container (`<a>`, `<button>`, or `[role="button"]`) **OR** a `Card` element
+- Containing exactly one Lucide-style `<svg>` glyph in its visual leading position (icon size 16–64px)
+- With a visible label `<span>`/`<h3>`/`<h4>` sibling
 
-## Changes
+Auto-crawl entry points (sandbox script):
+- `/` (homepage feature tiles)
+- `/ai-hub` (Royal Tools Hub — 61 tiles)
+- `/owner` (Owner Command Center grid)
+- `/owner/mode-hub`
+- `/owner/toolkit` → redirects to `/ai-hub` (already covered)
+- `/services`, `/properties`, `/developers` (any tile grids found)
+- Any additional route discovered in the app sitemap that contains ≥3 matching tiles
 
-### 1. New table: `pdf_baseline_runs`
+Each route is loaded headless, viewport 1440×900, dark + light theme runs.
+
+## Pass / fail rules ("do the needful" — comprehensive set)
+
+Fail a tile when **any** of:
+
+1. **Missing icon** — container matches tile signature but no `<svg>` child.
+2. **Zero-sized / clipped** — icon `getBoundingClientRect()` width or height < 12px, OR icon bbox extends outside its parent tile bbox by > 1px.
+3. **Low contrast** — WCAG contrast ratio between the icon's effective stroke/fill color and the average pixel color of the tile background directly behind the icon < **3:1** (UI component threshold).
+4. **Obscured glyph** — in hover/focus/active state, the icon's visible (non-transparent) pixel area drops by > 25% vs. default.
+5. **Invisible glyph** — icon computed `opacity` < 0.4, `visibility:hidden`, `display:none`, or all icon pixels match the background within ΔE < 5.
+6. **Color-on-color violation** — icon fill/stroke equals the tile background color exactly (common AI-generated regression).
+
+Each failure records: route, tile selector, label text, screenshot crop (default + failing state), measured contrast ratio, bbox, and rule code.
+
+## Architecture
+
+### Part A — Sandbox script (CI / on-demand)
+
+`scripts/icon-tile-audit/run.mjs` (Node + Playwright + sharp + WCAG contrast lib)
+
+Pipeline:
+1. Launch Chromium, iterate routes.
+2. On each route: `page.$$eval` to discover tile signatures → returns array of selectors + bboxes.
+3. For each tile: snapshot default state, then dispatch `mouseover` / `focus` / `mousedown` and re-snapshot. Crop with `sharp`.
+4. Sample background pixels behind icon (median color in icon bbox masked by SVG alpha) and icon ink color (median non-alpha pixel of the SVG render). Compute WCAG contrast.
+5. Apply all 6 rules → produce `results.json` + `report.html` (embedded base64 crops, summary table, per-route accordion, color-coded rule pills).
+6. Output: `/mnt/documents/icon-tile-audit.html` + machine-readable `results.json`.
+7. Optional `--insert-db` flag: writes a summary row into a new `icon_audit_runs` table for the dashboard.
+
+`scripts/icon-tile-audit/README.md` — usage + rule reference.
+
+### Part B — Owner dashboard surface
+
+New route `/owner/icon-audit` (lazy-loaded, wrapped by existing `OwnerGuard` via `/owner` shell):
+
+Page sections:
+1. **Header** — title, "How it runs" hint, link to latest report (if URL stored).
+2. **Latest run summary card** — total tiles scanned, total failures by rule, run timestamp, environment label.
+3. **Failures table** — paginated, sortable by route / rule / contrast ratio. Each row expands to show the cropped before/after screenshots (rendered from base64 stored in `metadata`).
+4. **Run history** — last 20 runs from `icon_audit_runs`, status pill (✅ pass / ⚠ minor / ❌ major), pages scanned, total failures.
+5. **Empty state** — instructions to run the script: `node scripts/icon-tile-audit/run.mjs --insert-db`.
+
+### Part C — Database (single new table)
+
+Migration: `icon_audit_runs`
 
 Columns:
 - `id uuid pk`
-- `export_id text` — e.g. `company-profile`
-- `baseline_sha256 text`
-- `baseline_size_bytes bigint`
-- `baseline_page_count int`
-- `candidate_label text` — free-form (e.g. filename or "baseline-vs-baseline")
-- `candidate_sha256 text`
-- `result_status text` — `pass` | `fail` | `identical` | `minor` | `moderate` | `major`
-- `pages_compared int`, `pages_changed int`, `avg_changed_pct numeric`
-- `report_url text` — optional link to the generated HTML report (e.g. uploaded artifact URL)
-- `metadata jsonb` — full per-page summary if needed
+- `run_label text` (e.g. `manual-2026-04-23` or commit SHA)
+- `environment text` — `local` | `preview` | `production`
+- `routes_scanned int`
+- `tiles_scanned int`
+- `total_failures int`
+- `failures_by_rule jsonb` — `{ missing_icon: n, low_contrast: n, ... }`
+- `report_url text` — optional artifact link
+- `failures jsonb` — full per-tile failure objects (route, selector, label, rule, contrast, bbox, base64 crop)
 - `created_at timestamptz default now()`
-- `created_by uuid references auth.users(id)` (nullable for CI runs)
+- `created_by uuid references auth.users(id)`
 
-RLS:
-- INSERT allowed for `is_owner_or_admin()` (re-uses existing helper).
-- SELECT restricted to `is_owner_or_admin()`.
-- No UPDATE / DELETE policies (immutable log).
+RLS: SELECT + INSERT restricted to `is_owner_or_admin(auth.uid())`. No UPDATE / DELETE (immutable log).
 
-### 2. New page: `src/pages/owner/BaselinePdfDashboard.tsx`
+### Part D — Route + sidebar
 
-Sections:
-1. **Header card** — title + "Open Clean Preview" (already exists in CompanyProfileDownload, reused as link).
-2. **Baseline metadata card** — fetches `/documents/JBJ-Global-Real-Estate-Company-Profile.pdf` once, computes SHA-256 client-side via `crypto.subtle.digest`, parses page count via PDF byte-string scan (`/Type /Page` count) — no external dep needed; falls back to "—" if not parseable.
-   - Displays: filename, size (KB / MB), SHA-256 (with copy button), page count, expected DPI floor (150 — read from a small static config), expected page count (18, hard-coded spec), and "Last fetched at" timestamp (now).
-3. **Last comparison card** — queries `pdf_baseline_runs` for the most recent row where `export_id = 'company-profile'` and shows: candidate label, status pill, pages compared / changed, avg %, link to `report_url` if present, timestamp.
-4. **Recent runs table** — last 10 rows, sortable by date.
-5. **Empty state** — friendly message if no runs yet, with one-line instructions on how to log one (the existing visual-diff script can be extended later to insert; out of scope for this task).
-
-### 3. Route registration
-
-Add the page to the existing owner routes block (alongside other `/owner/*` routes, wrapped by `OwnerGuard`).
-
-### 4. Sidebar/menu entry (optional, low-risk)
-
-Add a single nav entry under the existing owner tools section linking to `/owner/baseline-pdf`. If the owner sidebar uses a static array, append one item; otherwise this step is skipped to avoid touching unrelated layout code.
+- Register `/owner/icon-audit` in `src/routes/OwnerRoutes.tsx`.
+- No sidebar restructuring — link is reachable via the `/owner/baseline-pdf` "QA tools" pattern already established.
 
 ## Files touched
 
-- `supabase/migrations/<timestamp>_pdf_baseline_runs.sql` (new) — table + RLS
-- `src/pages/owner/BaselinePdfDashboard.tsx` (new)
-- `src/App.tsx` — register route
-- (optional) one owner-sidebar config file — single nav item
+- `scripts/icon-tile-audit/run.mjs` (new)
+- `scripts/icon-tile-audit/rules.mjs` (new — pure functions, unit-testable)
+- `scripts/icon-tile-audit/report-template.html` (new — embedded asset, base64 crops injected at run time)
+- `scripts/icon-tile-audit/README.md` (new)
+- `scripts/icon-tile-audit/package.json` (new — declares `playwright`, `sharp`, `wcag-contrast` as devDeps via the existing root package; if root install isn't desired the script self-installs into a local `node_modules` under the script folder)
+- `supabase/migrations/<timestamp>_icon_audit_runs.sql` (new — table + RLS)
+- `src/pages/owner/IconAuditDashboard.tsx` (new)
+- `src/routes/OwnerRoutes.tsx` (add lazy import + route)
+- `/mnt/documents/icon-tile-audit.html` (generated artifact — first run delivers a real report from the live preview)
 
 ## Out of scope
 
-- Wiring the visual-diff script to write rows into `pdf_baseline_runs` (the page reads runs; producers can be added later — manual SQL inserts work in the meantime).
-- Hosting / uploading the generated HTML report to storage — `report_url` is just stored if provided.
-- Comparing multiple baselines or non-Company-Profile exports (single-export dashboard for now; structure supports more by `export_id` later).
-- Sidebar restructuring or any visual redesign of existing owner pages.
+- Auto-fixing failures (this is a detector, not a remediator).
+- Screenshotting non-tile UI (typography, photos, charts) — strictly icon tiles per the discovery signature.
+- Visual diff against a baseline (covered by the existing `visual_diff_report.py` for PDF exports).
+- Sidebar redesign or changes to existing owner pages.
+- Wiring CI to run the script automatically — the script is on-demand; CI hookup can be added later.
+- Cross-browser runs — Chromium only for v1.
 
