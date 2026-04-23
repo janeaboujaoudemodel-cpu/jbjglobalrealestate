@@ -200,12 +200,14 @@ export default function BaselinePdfDashboard() {
               </div>
               <div>
                 <dt className="text-muted-foreground">Page count</dt>
-                <dd className="font-medium flex items-center gap-2">
-                  {meta.pageCount ?? "—"}{" "}
-                  {meta.pageCount !== null && (
-                    <Badge variant={pageCountOk ? "default" : "destructive"}>
-                      {pageCountOk ? "matches spec" : `expected ${EXPECTED_PAGE_COUNT}`}
-                    </Badge>
+                <dd className="font-medium flex items-center gap-2 flex-wrap">
+                  <span>{meta.pageCount ?? "—"}</span>
+                  {meta.pageCount === null ? (
+                    <Badge variant="outline">unparsed</Badge>
+                  ) : pageCountOk ? (
+                    <Badge variant="default">matches spec</Badge>
+                  ) : (
+                    <Badge variant="secondary">expected {EXPECTED_PAGE_COUNT}</Badge>
                   )}
                 </dd>
               </div>
