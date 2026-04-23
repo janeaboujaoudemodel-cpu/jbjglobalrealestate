@@ -83,7 +83,7 @@ const IconAuditDashboard: React.FC = () => {
       .limit(20);
     if (!error && data) {
       setRuns(data as unknown as RunRow[]);
-      if (data.length > 0) setSelectedRunId((data[0] as RunRow).id);
+      if (data.length > 0) setSelectedRunId((data[0] as unknown as RunRow).id);
     }
     setLoading(false);
   };
