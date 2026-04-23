@@ -57,8 +57,16 @@ async function sha256Hex(buf: ArrayBuffer): Promise<string> {
 function countPdfPages(buf: ArrayBuffer): number | null {
   try {
     const text = new TextDecoder("latin1").decode(buf);
-    const matches = text.match(/\/Type\s*\/Page(?!s)/g);
-    return matches ? matches.length : null;
+    // Strategy 1: top-level /Pages dictionary /Count N (most reliable for normal PDFs)
+    const countMatches = Array.from(text.matchAll(/\/Type\s*\/Pages\b[^>]*?\/Count\s+(\d+)/g));
+    if (countMatches.length) {
+      const max = Math.max(...countMatches.map((m) => parseInt(m[1], 10)));
+      if (Number.isFinite(max) && max > 0) return max;
+    }
+    // Strategy 2: count individual /Type /Page entries
+    const pageMatches = text.match(/\/Type\s*\/Page(?!s)/g);
+    if (pageMatches?.length) return pageMatches.length;
+    return null;
   } catch {
     return null;
   }
@@ -192,12 +200,14 @@ export default function BaselinePdfDashboard() {
               </div>
               <div>
                 <dt className="text-muted-foreground">Page count</dt>
-                <dd className="font-medium flex items-center gap-2">
-                  {meta.pageCount ?? "—"}{" "}
-                  {meta.pageCount !== null && (
-                    <Badge variant={pageCountOk ? "default" : "destructive"}>
-                      {pageCountOk ? "matches spec" : `expected ${EXPECTED_PAGE_COUNT}`}
-                    </Badge>
+                <dd className="font-medium flex items-center gap-2 flex-wrap">
+                  <span>{meta.pageCount ?? "—"}</span>
+                  {meta.pageCount === null ? (
+                    <Badge variant="outline">unparsed</Badge>
+                  ) : pageCountOk ? (
+                    <Badge variant="default">matches spec</Badge>
+                  ) : (
+                    <Badge variant="secondary">expected {EXPECTED_PAGE_COUNT}</Badge>
                   )}
                 </dd>
               </div>
