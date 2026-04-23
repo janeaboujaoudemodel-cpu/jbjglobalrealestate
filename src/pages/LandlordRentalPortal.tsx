@@ -169,7 +169,7 @@ export default function LandlordRentalPortal() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="h-full bg-white/80 backdrop-blur-sm border border-gold/30 hover:border-gold/60 transition-colors hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] rounded-2xl">
+                <Card className="icon-tile h-full bg-white/80 backdrop-blur-sm border border-gold/30 hover:border-gold/60 transition-colors hover:shadow-[0_8px_30px_rgba(200,167,102,0.3)] rounded-2xl">
                   <CardContent className="p-6">
                     <div className="w-12 h-12 rounded-xl bg-black flex items-center justify-center mb-4">
                       <benefit.icon className="h-6 w-6 text-gold" />

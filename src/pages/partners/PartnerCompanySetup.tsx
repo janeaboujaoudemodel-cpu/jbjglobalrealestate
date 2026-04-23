@@ -144,7 +144,7 @@ const PartnerCompanySetup = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                   >
-                    <Card className="h-full border-border/50 hover:border-gold/30 transition-colors">
+                    <Card className="icon-tile h-full border-border/50 hover:border-gold/30 transition-colors">
                       <CardHeader>
                         <div className="w-12 h-12 bg-gold/10 rounded-lg flex items-center justify-center mb-4">
                           <feature.icon className="w-6 h-6 text-gold" />
