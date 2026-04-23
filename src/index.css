@@ -2364,7 +2364,8 @@ html [data-surface="dark"][data-surface="dark"] :is(input, textarea, select, opt
 }
 
 /* 1d. Headings/labels with text-white inside light gradient hero/card overlays
-   (only when no inline backgroundImage/dark overlay exists on the element itself). */
+   (only when no inline backgroundImage/dark overlay exists on the element itself,
+    and no dark ancestor wraps the element). */
 :root:not(.dark) :is(
   .bg-champagne, [class*="bg-champagne"],
   [class*="from-[#FDFBF7]"], [class*="from-[#F7F2EA]"], [class*="from-[#F7F1E6]"]
