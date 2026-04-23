@@ -204,15 +204,18 @@ def main():
             print(f"  page {i+1}: {pct:.4f}% changed -> {label}")
 
         from datetime import datetime
-        head = HTML_HEAD.format(
-            baseline_name=baseline.name,
-            candidate_name=candidate.name,
-            baseline_path=str(baseline),
-            candidate_path=str(candidate),
-            dpi=DPI,
-            tol=PIXEL_TOLERANCE,
-            ts=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        )
+        replacements = {
+            "{baseline_name}": baseline.name,
+            "{candidate_name}": candidate.name,
+            "{baseline_path}": str(baseline),
+            "{candidate_path}": str(candidate),
+            "{dpi}": str(DPI),
+            "{tol}": str(PIXEL_TOLERANCE),
+            "{ts}": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        head = HTML_HEAD
+        for k, v in replacements.items():
+            head = head.replace(k, v)
 
         # Summary
         total_changed = sum(1 for r in rows if r["pct"] > 0)
