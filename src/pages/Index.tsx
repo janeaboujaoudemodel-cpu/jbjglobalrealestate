@@ -5,12 +5,11 @@ import { motion } from "framer-motion";
 import { SEOHead, pagesSEO } from "@/components/SEOHead";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useUserRole } from "@/hooks/useUserRole";
-import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, Palette, FileText, UserCircle, ChevronDown } from "lucide-react";
+import { Sparkles, ArrowUpRight, Users, Building2, Brain, Briefcase, Home, Palette, FileText, UserCircle, ChevronDown, MessageSquareWarning } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PremiumHeroButton } from "@/components/ui/premium-hero-button";
 
 import heroFallbackDubai from "@/assets/hero-fallback-dubai.jpg";
-import jbjMonogramLightTransparent from "@/assets/jbj-monogram-light-transparent.png";
 import { CONTACT_INFO } from "@/constants/stats";
 
 // Chunk imports — stored so we can preload them all after hero renders
