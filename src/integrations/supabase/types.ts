@@ -17799,6 +17799,60 @@ export type Database = {
         }
         Relationships: []
       }
+      pdf_baseline_runs: {
+        Row: {
+          avg_changed_pct: number | null
+          baseline_page_count: number | null
+          baseline_sha256: string | null
+          baseline_size_bytes: number | null
+          candidate_label: string | null
+          candidate_sha256: string | null
+          created_at: string
+          created_by: string | null
+          export_id: string
+          id: string
+          metadata: Json | null
+          pages_changed: number | null
+          pages_compared: number | null
+          report_url: string | null
+          result_status: string | null
+        }
+        Insert: {
+          avg_changed_pct?: number | null
+          baseline_page_count?: number | null
+          baseline_sha256?: string | null
+          baseline_size_bytes?: number | null
+          candidate_label?: string | null
+          candidate_sha256?: string | null
+          created_at?: string
+          created_by?: string | null
+          export_id: string
+          id?: string
+          metadata?: Json | null
+          pages_changed?: number | null
+          pages_compared?: number | null
+          report_url?: string | null
+          result_status?: string | null
+        }
+        Update: {
+          avg_changed_pct?: number | null
+          baseline_page_count?: number | null
+          baseline_sha256?: string | null
+          baseline_size_bytes?: number | null
+          candidate_label?: string | null
+          candidate_sha256?: string | null
+          created_at?: string
+          created_by?: string | null
+          export_id?: string
+          id?: string
+          metadata?: Json | null
+          pages_changed?: number | null
+          pages_compared?: number | null
+          report_url?: string | null
+          result_status?: string | null
+        }
+        Relationships: []
+      }
       pending_developer_imports: {
         Row: {
           admin_notes: string | null
