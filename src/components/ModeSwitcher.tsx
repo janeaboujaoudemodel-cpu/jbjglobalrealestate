@@ -162,10 +162,14 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                 onClick={(e) => e.stopPropagation()}
                 onPointerDown={(e) => e.stopPropagation()}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200",
-                  isActive 
-                    ? `${config.bgColor} ${config.borderColor} border` 
-                    : "hover:bg-gray-50"
+                  "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 border",
+                  // Every row carries its own mode color for instant scanning
+                  config.bgColor,
+                  isActive
+                    ? `${config.borderColor} ring-2 ring-offset-1 ring-offset-white shadow-sm`
+                    : "border-transparent hover:border-current/30 hover:brightness-105",
+                  // Drive ring color via currentColor on the active row
+                  isActive && config.color
                 )}
               >
                 <div className={cn(
@@ -176,12 +180,15 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                 </div>
                 <div className="flex-1">
                   <p className={cn(
-                    "text-sm font-medium",
+                    "text-sm font-semibold",
                     config.color
                   )}>
                     {config.label}
                   </p>
-                  <p className="text-xs text-gray-600">
+                  <p className={cn(
+                    "text-xs opacity-80",
+                    config.color
+                  )}>
                     {config.description}
                   </p>
                 </div>
