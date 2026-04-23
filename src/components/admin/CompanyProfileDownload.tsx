@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Download, FileText, Loader2 } from "lucide-react";
+import { Download, FileText, Loader2, ExternalLink, Eye } from "lucide-react";
 import { toast } from "sonner";
 import { generateCompanyProfilePDF } from "@/utils/generateCompanyProfilePDF";
 import { logExportEvent } from "@/utils/dlpExportLogger";
 
 export const CompanyProfileDownload = () => {
   const [isGenerating, setIsGenerating] = useState(false);
+  const location = useLocation();
 
   const handleDownload = async () => {
     setIsGenerating(true);
@@ -31,6 +33,17 @@ export const CompanyProfileDownload = () => {
     }
   };
 
+  const handleOpenCleanPdf = () => {
+    window.open("/documents/JBJ-Global-Real-Estate-Company-Profile.pdf", "_blank", "noopener,noreferrer");
+  };
+
+  const handleOpenPageBaseline = () => {
+    const params = new URLSearchParams(location.search);
+    params.set("print", "1");
+    const url = `${location.pathname}?${params.toString()}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <Card className="border-gold/30 bg-gradient-to-br from-champagne-light to-champagne">
       <CardHeader>
@@ -46,7 +59,7 @@ export const CompanyProfileDownload = () => {
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-2">
         <Button
           className="w-full bg-black hover:bg-gray-800 text-white"
           onClick={handleDownload}
@@ -59,6 +72,28 @@ export const CompanyProfileDownload = () => {
           )}
           Download Company Profile
         </Button>
+
+        <Button
+          variant="outline"
+          className="w-full border-black/20 text-black hover:bg-black hover:text-white"
+          onClick={handleOpenCleanPdf}
+        >
+          <Eye className="w-4 h-4 mr-2" />
+          Open Clean Preview (PDF)
+        </Button>
+
+        <Button
+          variant="outline"
+          className="w-full border-black/20 text-black hover:bg-black hover:text-white"
+          onClick={handleOpenPageBaseline}
+        >
+          <ExternalLink className="w-4 h-4 mr-2" />
+          Open Page Baseline (no chrome)
+        </Button>
+
+        <p className="text-xs text-gray-600 pt-1">
+          Baseline mode hides cookie banner, sidebar, header, and popups for clean visual comparison.
+        </p>
       </CardContent>
     </Card>
   );
