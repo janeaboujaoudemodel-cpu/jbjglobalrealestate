@@ -1,47 +1,88 @@
-# Fix: Page navigation arrow visibility & position
+# Fix Filter Popover Behavior & Performance
 
-## Root Cause
+## Problems observed
 
-The floating scroll arrows live in `src/components/PageNavigation.tsx`, mounted globally from `MainLayout`. Two problems:
+Inside `src/components/filters/FilterShortcutBar.tsx` (used globally via `GlobalFilterBar`) and tied to `src/components/navigation/GlobalFilterBar.tsx`:
 
-1. `showScrollBottom` is initialized to `true`, so the **down arrow** appears **immediately on page load** before the user has scrolled. The user expects nothing visible at first — the arrow should only appear once the user scrolls down, and it should be the **up arrow** (to go back to top).
-2. The button sits at `bottom-36` (144px), above the chat-support button at `bottom-20` (80px). The gap is there, but the user wants the arrow **closer to the chat support** without overlaying it.
+1. **Apply Filter button does nothing** — in the Price popover, the button has `onClick={() => {}}` (line 352). It does not close the popover or confirm anything.
+2. **Min/Max price inputs feel unresponsive / "won't take numbers"** — every keystroke calls `update()` → `onFilterChange` → `GlobalFilterBar.handleFilterChange`, which on non-property pages calls `navigate('/properties?...')`. That navigation re-mounts the page on every character, making the input appear frozen and swallow keystrokes.
+3. **Price preset chips (500K, 1M, 1.5M…) flicker black→white and feel broken** — clicking a preset triggers the same navigate-per-click pipeline. Combined with `transition-all` on the chip and the full tree re-render from navigation, the chip momentarily loses its active state visually.
+4. **Popovers never close after a choice** — no popover uses controlled `open` state, so Apply, presets, and selections keep the dropdown open indefinitely. On mobile this feels stuck.
+5. **General slowness** — the bar is fixed and wide; every small change (slider, toggle, input) triggers a full URL-encode + `navigate` + `CustomEvent` dispatch. That is heavy for keystrokes.
 
-## Fix
+## Goals
 
-**`src/components/PageNavigation.tsx`**
+- Typing in min/max price fields is instant on all devices.
+- Preset chips toggle cleanly without flicker and stay in their active state.
+- "Apply Filter" actually applies and closes the popover; pressing Enter in an input applies too.
+- Global navigation/URL sync only happens on Apply (or on debounce), not on every keystroke.
+- Works on mobile, tablet, desktop, RTL; no layout shift.
 
-1. Change the initial state so nothing shows on first paint:
-   - `showScrollBottom` default → `false` (not `true`).
-   - Keep `showScrollTop` default `false`.
-   - Gate both arrows behind a `hasScrolled` flag that flips `true` only after the user scrolls past ~100px. Before any scroll, render nothing.
+## Changes
 
-2. After the user scrolls:
-   - Once `scrollY > 100`, show the **up arrow** (back to top) — this matches the user's request ("once the user scrolls down, then show him go to top").
-   - The down arrow is kept only when the user is near the top AND page is scrollable — but since we now require scrolling to trigger visibility, the down arrow effectively never shows on the home idle state. Simpler: drop the down arrow entirely and only render the up arrow after scroll. This matches the explicit request.
+### 1. `src/components/filters/FilterShortcutBar.tsx`
 
-3. Tighten the vertical position so the arrow sits just above the chat launcher:
-   - Chat launcher bottom: `bottom-20` (80px), chat button height ~56px → its top edge is at ~136px.
-   - Move `PageNavigation` from `bottom-36` (144px) to `bottom-[148px]` so the arrow's bottom edge sits 148px from viewport bottom — the arrow button ends right above the chat button with a consistent ~12px gap, never overlapping.
-   - Keep the "chat medium" branch (`isChatMedium` → `bottom-56`) for the expanded-chat state.
+**Introduce local draft state for popover-scoped filters (price, payments, handover, size).**
+- Each relevant popover (`Price`, `Payments`, `Size` if present) becomes controlled: `const [priceOpen, setPriceOpen] = useState(false)` etc.
+- Inputs inside the popover bind to local draft state (`draftPriceMin`, `draftPriceMax`, `draftPaymentPlanMax`, `draftAfterHandover`, `draftPostHandoverOnly`).
+- Initialize draft from `filters` when the popover opens (`onOpenChange` → if opening, copy from `filters`).
+- On **Apply**, Enter key, or preset click + short timeout: call `onFilterChange` once with merged draft, then `setPriceOpen(false)`.
+- On **Reset** inside the popover: clear draft values only.
+- Clicking a **preset chip** sets `draftPriceMax` immediately (instant visual feedback) and optionally auto-applies after ~150 ms so the popover closes cleanly.
 
-4. Keep the existing "hide when chat is open" guard (`if (isChatOpen) return null`) so there is zero overlap when the chat is expanded.
+Result: typing is local-only → no re-renders of the page, no navigation, no flicker. The chip reflects draft state, not global state, so it can't be "stolen back" by a late re-render.
 
-## Technical Changes (single file)
-
+**Wire Apply button:**
+```tsx
+<Button
+  onClick={() => {
+    onFilterChange({ ...filters, priceMin: draftPriceMin, priceMax: draftPriceMax });
+    setPriceOpen(false);
+  }}
+>
+  {t('filter.applyFilter')}
+</Button>
 ```
-src/components/PageNavigation.tsx
-```
 
-- `const [showScrollBottom, setShowScrollBottom] = useState(false);` (was `true`)
-- Remove the down-arrow button (or keep but gate behind `hasScrolled && scrollY < 100 && isScrollable`; simpler: remove).
-- In `handleScroll`, set `showScrollTop = scrollTop > 200` as before.
-- Position classes: `isChatMedium ? "bottom-56" : "bottom-[148px]"`.
+**Submit on Enter** in both price inputs via `onKeyDown` → same handler.
 
-## Result
+**Remove `transition-all` from preset chips** (use `transition-colors` only) to stop the black/white flash during any remaining re-render.
 
-- On page load → no arrow visible anywhere on the screen.
-- User scrolls down past ~200px → up arrow fades in, sits just above (≈12px gap) the chat-support button on the right.
-- Tapping the up arrow smoothly scrolls to top.
-- Chat support button is never overlayed; when the chat is opened, the arrow is hidden entirely.
-- RTL mirroring (`left-4` vs `right-6`) is preserved.
+**Apply the same controlled-popover + draft pattern** to Payments (slider + after-handover + post-handover switch) and Size (min/max sqft/sqm). Slider commits on release via `onValueCommit` → draft update; Apply writes to global.
+
+For quick-toggle popovers (Property Type, Bedrooms, Status, Construction, Sort, Views) where a single click is the whole interaction, keep them uncontrolled but **auto-close** after selection when it makes sense (e.g., Sort: close immediately; multi-select: keep open until user clicks outside, which is current behavior — fine).
+
+### 2. `src/components/navigation/GlobalFilterBar.tsx`
+
+Currently `handleFilterChange` immediately `navigate()`s on every change when off the property page. Change to:
+
+- On property pages: continue dispatching `globalFilterChange` so the listing updates live (but because draft is now local to the popover, this only fires on Apply anyway — already a huge win).
+- Off property pages: only navigate when a filter is actually committed (Apply, preset auto-apply, chip toggle for single-choice pills, sort selection). Since `onFilterChange` is now only invoked on commit, the existing logic is already safe — no code change needed beyond confirming behavior. No debounce hack required.
+
+No changes to URL encoding/decoding logic.
+
+### 3. Minor polish
+
+- Ensure `inputMode="numeric"` and `pattern="[0-9]*"` on price/size inputs so mobile shows the numeric keypad and typing is faster.
+- Add `autoComplete="off"` to avoid browser autofill lag.
+- Ensure price inputs use `type="text"` (already) with numeric filter — keep, but prevent leading-zero state churn.
+
+## Technical notes
+
+- No backend or schema changes.
+- Only `FilterShortcutBar.tsx` is meaningfully edited; `GlobalFilterBar.tsx` behavior is unchanged by code but improved by the upstream fix.
+- No new deps.
+- RTL, dark/light variants, mobile scroll row — all preserved.
+
+## Files to edit
+
+- `src/components/filters/FilterShortcutBar.tsx`
+
+## QA checklist after implementation
+
+1. Landing page → click Price → type `500000` in Min → characters appear instantly, no page jump.
+2. Click preset `1M` → chip turns black immediately, popover closes within ~150 ms, URL updates to `/properties?priceMax=1000000`.
+3. On `/properties` page → open Price → type Min/Max → press Enter → popover closes, results update once.
+4. Payments popover: drag slider → value label updates live → release → Apply → popover closes, single URL update.
+5. Mobile (375px): numeric keypad appears for price; popovers close cleanly; no horizontal jank.
+6. RTL: popovers and Apply still work; chip active state stable (no flicker).
