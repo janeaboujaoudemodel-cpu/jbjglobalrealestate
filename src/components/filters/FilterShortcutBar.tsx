@@ -166,6 +166,12 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   // Controlled popover open state — allows Apply to close them
   const [priceOpen, setPriceOpen] = useState(false);
   const [paymentsOpen, setPaymentsOpen] = useState(false);
+  const [handoverOpen, setHandoverOpen] = useState(false);
+  const [propertyTypeOpen, setPropertyTypeOpen] = useState(false);
+  const [bedroomsOpen, setBedroomsOpen] = useState(false);
+  const [statusOpen, setStatusOpen] = useState(false);
+  const [constructionOpen, setConstructionOpen] = useState(false);
+  const [viewsOpen, setViewsOpen] = useState(false);
 
   // Local draft state for price popover (prevents per-keystroke re-render/navigation)
   const [draftPriceMin, setDraftPriceMin] = useState(filters.priceMin);
@@ -317,7 +323,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     <>
       <div className="w-full">
         {/* Single merged row: Search + Filter Popovers + Sort + Map + Saved + Reset + Results */}
-        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide w-full" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide w-full" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
           {/* Search slot or built-in search */}
           {searchSlot ? (
             <div className="min-w-0 max-w-[180px] flex-shrink-0" title="Search area, project, keyword">
@@ -490,7 +496,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Handover */}
-        <Popover>
+        <Popover open={handoverOpen} onOpenChange={setHandoverOpen}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, pillInactive)}>
               {t('filter.handover')}
@@ -559,7 +565,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Property Type */}
-        <Popover>
+        <Popover open={propertyTypeOpen} onOpenChange={setPropertyTypeOpen}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactive)}>
               {getPropertyTypeLabel()}
@@ -595,7 +601,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Bedrooms */}
-        <Popover>
+        <Popover open={bedroomsOpen} onOpenChange={setBedroomsOpen}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactive)}>
               {t('filter.bedrooms')}
@@ -615,11 +621,15 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </button>
               ))}
             </div>
+            <div className="flex gap-2 mt-3">
+              <Button type="button" variant="outline" onClick={() => update({ bedrooms: [] })} className="h-9 px-3 text-xs rounded-lg">{t('filter.reset') || 'Reset'}</Button>
+              <Button type="button" onClick={() => setBedroomsOpen(false)} className="flex-1 h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800">{t('filter.applyFilter') || 'Done'}</Button>
+            </div>
           </PopoverContent>
         </Popover>
 
         {/* Status */}
-        <Popover>
+        <Popover open={statusOpen} onOpenChange={setStatusOpen}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.statuses.length > 0 ? pillActive : pillInactive)}>
               {t('filter.status')}
@@ -644,11 +654,15 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </button>
               ))}
             </div>
+            <div className="flex gap-2 mt-3">
+              <Button type="button" variant="outline" onClick={() => update({ statuses: [] })} className="h-9 px-3 text-xs rounded-lg">{t('filter.reset') || 'Reset'}</Button>
+              <Button type="button" onClick={() => setStatusOpen(false)} className="flex-1 h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800">{t('filter.applyFilter') || 'Done'}</Button>
+            </div>
           </PopoverContent>
         </Popover>
 
         {/* Construction Status */}
-        <Popover>
+        <Popover open={constructionOpen} onOpenChange={setConstructionOpen}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactive)}>
               {t('filter.construction')}
@@ -668,11 +682,15 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </button>
               ))}
             </div>
+            <div className="flex gap-2 mt-3">
+              <Button type="button" variant="outline" onClick={() => update({ constructionStatuses: [] })} className="h-9 px-3 text-xs rounded-lg">{t('filter.reset') || 'Reset'}</Button>
+              <Button type="button" onClick={() => setConstructionOpen(false)} className="flex-1 h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800">{t('filter.applyFilter') || 'Done'}</Button>
+            </div>
           </PopoverContent>
         </Popover>
 
         {/* Views */}
-        <Popover>
+        <Popover open={viewsOpen} onOpenChange={setViewsOpen}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactive)}>
               <Eye className="w-3.5 h-3.5" />
@@ -693,6 +711,10 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                   {opt.label}
                 </button>
               ))}
+            </div>
+            <div className="flex gap-2 mt-3">
+              <Button type="button" variant="outline" onClick={() => update({ views: [] })} className="h-9 px-3 text-xs rounded-lg">{t('filter.reset') || 'Reset'}</Button>
+              <Button type="button" onClick={() => setViewsOpen(false)} className="flex-1 h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800">{t('filter.applyFilter') || 'Done'}</Button>
             </div>
           </PopoverContent>
         </Popover>

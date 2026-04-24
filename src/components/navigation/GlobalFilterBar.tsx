@@ -89,11 +89,17 @@ export default function GlobalFilterBar() {
         new CustomEvent("globalFilterChange", { detail: next })
       );
 
-      // If not already on a property listing page, navigate there
+      // If not already on a property listing page, navigate there.
+      // Defer navigation so the popover that triggered the change can
+      // finish closing before the route unmounts the bar — prevents the
+      // "stuck / frozen popover" feeling when toggling filters from the
+      // homepage or other non-property routes.
       if (!isPropertyPage) {
         const params = encodeFilters(next);
         const qs = params.toString();
-        navigate(`/properties${qs ? `?${qs}` : ""}`);
+        setTimeout(() => {
+          navigate(`/properties${qs ? `?${qs}` : ""}`);
+        }, 0);
       }
     },
     [isPropertyPage, navigate]
