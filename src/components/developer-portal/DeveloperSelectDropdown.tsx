@@ -55,7 +55,8 @@ export const DeveloperSelectDropdown: React.FC<DeveloperSelectDropdownProps> = (
   }, [open]);
 
   const getLogoUrl = (dev: typeof uniqueDevelopers[0]) => {
-    return dev.logo_url_processed || dev.logo_url || null;
+    // LOCKED: canonical logo_url is the single source of truth.
+    return dev.logo_url || null;
   };
 
   return (
