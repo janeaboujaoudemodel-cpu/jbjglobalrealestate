@@ -5,6 +5,7 @@ import { useDevelopers, useProjects, useCommunities, useTrendingAreas } from "@/
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import { Skeleton } from "@/components/ui/skeleton";
+import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 
 const formatPortfolioWorth = (value: number | null) => {
   if (!value) return null;
