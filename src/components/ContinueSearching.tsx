@@ -262,6 +262,10 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
           }
         });
     } else if (item.type === "developer") {
+      // LOCKED: developer cards must only surface brand imagery — never
+      // substitute a project/feature photo for the logo. We fetch the
+      // feature_image_url strictly for card background imagery, and the
+      // logo_url separately for the logo overlay.
       supabase
         .from("developers")
         .select("logo_url, feature_image_url")
@@ -269,10 +273,13 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
         .limit(1)
         .maybeSingle()
         .then(({ data }) => {
-          const url = data?.feature_image_url || data?.logo_url;
-          if (url && url !== item.imageUrl) {
-            patchItem(item.id, item.type, { imageUrl: url });
+          const bgUrl = data?.feature_image_url || null;
+          if (bgUrl && bgUrl !== item.imageUrl) {
+            patchItem(item.id, item.type, { imageUrl: bgUrl });
             setImgBroken(false);
+          }
+          if (data?.logo_url && data.logo_url !== item.developerLogo) {
+            patchItem(item.id, item.type, { developerLogo: data.logo_url });
           }
         });
     } else if (item.type === "area") {
@@ -317,7 +324,9 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
 
   const hasValidImage = item.imageUrl && !imgBroken;
   const showDevLogo = item.type === "property" && item.developerLogo && !logoError;
-  const showDevCardLogo = item.type === "developer" && hasValidImage && !logoError;
+  // LOCKED: developer logo slot on developer cards must use the canonical
+  // logo_url (via item.developerLogo), NEVER the card's background image.
+  const showDevCardLogo = item.type === "developer" && item.developerLogo && !logoError;
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cardRef.current) return;
@@ -400,7 +409,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             />
           ) : showDevCardLogo ? (
             <DeveloperLogo
-              src={item.imageUrl}
+              src={item.developerLogo}
               alt={item.name}
               className=""
               onError={() => setLogoError(true)}

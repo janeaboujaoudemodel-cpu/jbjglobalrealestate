@@ -350,9 +350,9 @@ const ProjectFilters = ({
               {developers && developers.map((developer) => (
                 <SelectItem key={developer.id} value={developer.id}>
                   <div className="flex items-center gap-2">
-                    {(developer.logo_url || developer.logo_url_processed) ? (
+                    {developer.logo_url ? (
                       <img
-                        src={developer.logo_url_processed || developer.logo_url || ''}
+                        src={developer.logo_url}
                         alt={developer.name}
                         className="w-5 h-5 object-contain rounded shrink-0"
                         onError={(e) => { e.currentTarget.style.display = 'none'; }}
