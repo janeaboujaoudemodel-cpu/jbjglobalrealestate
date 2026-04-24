@@ -145,6 +145,10 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
     <div
       onClick={(e) => e.stopPropagation()}
       onPointerDown={(e) => e.stopPropagation()}
+      // data-surface="light" defeats the global [data-surface="dark"]
+      // color override so mode-colored text stays legible inside the
+      // obsidian footer / dark headers.
+      data-surface="light"
     >
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen} modal={false}>
         <DropdownMenuTrigger asChild>
@@ -177,8 +181,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
 
         <DropdownMenuContent
           align="end"
+          side={side}
           className="w-80 mr-3 bg-white border border-gray-200 shadow-xl rounded-xl p-2 z-[10001]"
-          sideOffset={5}
+          sideOffset={8}
+          collisionPadding={16}
+          avoidCollisions
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
           <div className="px-3 py-2.5 mb-2 rounded-lg bg-gray-50 border border-gray-200">
