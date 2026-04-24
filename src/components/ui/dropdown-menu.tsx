@@ -72,19 +72,24 @@ const DropdownMenuContent = React.forwardRef<
 ));
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName;
 
+/**
+ * `unstyled` skips the default gold hover/focus/lift treatment so consumers
+ * (e.g. ModeSwitcher) can fully own row styling via inline styles or their
+ * own utilities without fighting class precedence or needing `!important`.
+ */
 const DropdownMenuItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
     inset?: boolean;
+    unstyled?: boolean;
   }
->(({ className, inset, ...props }, ref) => (
+>(({ className, inset, unstyled, ...props }, ref) => (
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default select-none items-center rounded-lg px-2 py-1.5 text-sm text-black outline-none transition-all duration-200 data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      // Normal: black text. Hover/Focus: gold text with 3D lift effect
-      "hover:bg-gold/15 hover:text-gold hover:shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:-translate-y-0.5",
-      "focus:bg-gold/15 focus:text-gold focus:shadow-[0_4px_15px_rgba(200,167,102,0.2)] focus:-translate-y-0.5",
+      "relative flex cursor-default select-none items-center outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      !unstyled &&
+        "rounded-lg px-2 py-1.5 text-sm text-black transition-all duration-200 hover:bg-gold/15 hover:text-gold hover:shadow-[0_4px_15px_rgba(200,167,102,0.2)] hover:-translate-y-0.5 focus:bg-gold/15 focus:text-gold focus:shadow-[0_4px_15px_rgba(200,167,102,0.2)] focus:-translate-y-0.5",
       inset && "pl-8",
       className,
     )}
