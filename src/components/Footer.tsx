@@ -35,26 +35,26 @@ const NavColumn = ({
   viewAllHref?: string;
   viewAllLabel?: string;
 }) => (
-  <div>
-    <h4 className="text-white text-[11px] font-semibold uppercase tracking-[0.2em] mb-3">
+  <div className="min-w-0">
+    <h4 className="text-white text-[10.5px] font-semibold uppercase tracking-[0.22em] mb-2.5">
       {title}
     </h4>
-    <ul className="space-y-1.5">
+    <ul className="space-y-1">
       {links.map((link) => (
         <li key={link.href}>
           <Link
             to={link.href}
-            className="text-[13px] leading-snug text-white/65 hover:text-white transition-colors"
+            className="text-[12.5px] leading-[1.45] text-white/65 hover:text-white transition-colors"
           >
             {link.label}
           </Link>
         </li>
       ))}
       {viewAllHref && (
-        <li className="pt-1">
+        <li className="pt-1.5">
           <Link
             to={viewAllHref}
-            className="text-[12px] font-semibold uppercase tracking-[0.15em] text-white/80 hover:text-white transition-colors"
+            className="text-[11px] font-semibold uppercase tracking-[0.16em] hover:text-white transition-colors"
             style={{ color: "#D9C292" }}
           >
             {viewAllLabel}
