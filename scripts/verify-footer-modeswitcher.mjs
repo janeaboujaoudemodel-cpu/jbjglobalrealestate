@@ -81,8 +81,8 @@ for (const vp of VIEWPORTS) {
   // Forcefully remove any blocking overlays that might still appear
   await page.evaluate(() => {
     document.querySelectorAll('div.fixed.inset-0').forEach((el) => {
-      const z = (el as HTMLElement).style.zIndex || getComputedStyle(el).zIndex;
-      if (parseInt(z, 10) >= 10000) (el as HTMLElement).remove();
+      const z = el.style.zIndex || getComputedStyle(el).zIndex;
+      if (parseInt(z, 10) >= 10000) el.remove();
     });
   });
   await page.waitForTimeout(200);
