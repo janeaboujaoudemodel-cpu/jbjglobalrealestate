@@ -496,7 +496,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Handover */}
-        <Popover>
+        <Popover open={handoverOpen} onOpenChange={setHandoverOpen}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, pillInactive)}>
               {t('filter.handover')}
