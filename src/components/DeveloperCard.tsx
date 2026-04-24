@@ -77,7 +77,13 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
           ) : isDamac ? (
             <div className="w-full h-full bg-black flex items-center justify-center">
               <div className="text-center">
-                <span className="text-white text-6xl font-bold tracking-tight" style={{ fontFamily: 'serif' }}>D</span>
+                <DeveloperLogo
+                  src={developer.logo_url}
+                  alt={developer.name}
+                  className="w-24 h-24 mx-auto mb-2 bg-white/95"
+                  loading={isEager ? "eager" : "lazy"}
+                  renderFallback
+                />
                 <p className="text-white/70 text-xs font-medium tracking-[0.3em] uppercase mt-2">DAMAC</p>
               </div>
             </div>
