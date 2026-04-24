@@ -527,7 +527,7 @@ const Footer = () => {
       {/* === ZONE 3 — Contact strip + compact legal === */}
       <div className="px-4 sm:px-6 md:px-8 py-6">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mb-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mb-4">
             <div className="flex items-center gap-2 text-[12px] text-white/70">
               <MapPin className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.address}</span>
