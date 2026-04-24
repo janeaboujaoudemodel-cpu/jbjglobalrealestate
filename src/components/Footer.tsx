@@ -382,6 +382,55 @@ const Footer = () => {
     { href: "/education-hub", label: "Education Hub" },
   ];
 
+  // === Premium consolidated 4-column structure ===
+  // Each column = one curated cluster of related links. View-all links route
+  // to a hub page so we never duplicate dozens of items in the footer chrome.
+  const colExplore = [
+    { label: t("footer.buyProperties") || "Buy", href: "/properties?transaction=buy" },
+    { label: t("footer.rentProperties") || "Rent", href: "/properties?transaction=rent" },
+    { label: "Resale", href: "/properties?transaction=resale" },
+    { label: "Projects", href: "/properties" },
+    { label: "Developers", href: "/developers" },
+    { label: "Communities", href: "/communities" },
+    { label: "Property Map", href: "/map" },
+    { label: "List Your Property", href: "/listing-portal" },
+  ];
+
+  const colServices = [
+    { label: "All Services", href: "/services" },
+    { label: t("footer.buyerAdvisory") || "Buyer Advisory", href: "/services/buying-advisory" },
+    { label: t("footer.sellerAdvisory") || "Seller Advisory", href: "/services/selling-advisory" },
+    { label: t("footer.investmentAdvisory") || "Investment Advisory", href: "/services/investment-advisory" },
+    { label: "Property Management", href: "/services/property-management" },
+    { label: "Snagging & Inspection", href: "/services/snagging" },
+    { label: "Concierge", href: "/services/concierge" },
+    { label: "Golden Visa Guide", href: "/guides/golden-visa-uae" },
+  ];
+
+  const colCompany = [
+    { label: t("footer.aboutJbj") || "About JBJ", href: "/about" },
+    ...(isFounderVisible
+      ? [{ label: t("footer.founderLeadership") || "Founder & Leadership", href: "/founder" }]
+      : []),
+    { label: t("footer.meetTheTeam") || "Meet the Team", href: "/team" },
+    { label: t("footer.awardsRecognition") || "Awards", href: "/awards" },
+    { label: t("footer.newsInsights") || "News & Insights", href: "/news" },
+    { label: "Reviews", href: "/reviews" },
+    { label: "Careers", href: "/join" },
+    { label: "Press Kit", href: "/press-kit" },
+  ];
+
+  const colResources = [
+    { label: "Buyer Guide", href: "/buyer-guide" },
+    { label: "Seller Guide", href: "/seller-guide" },
+    { label: "Area Guides", href: "/areas" },
+    { label: "Market Intelligence", href: "/market-intelligence/overview" },
+    { label: "Investor Hub", href: "/investor/portfolio-views" },
+    { label: "Broker Portal", href: "/broker-toolkit" },
+    { label: "AI Tools", href: "/ai-hub" },
+    { label: "Education Hub", href: "/education-hub" },
+  ];
+
   return (
     <footer
       id="site-footer"
@@ -396,11 +445,10 @@ const Footer = () => {
       {/* Top hairline — single restrained champagne accent */}
       <div className="h-px w-full" style={{ background: `linear-gradient(90deg, transparent, ${ACCENT}55, transparent)` }} />
 
-      {/* === ZONE 1 — Brand crown + utility strip === */}
-      <div className="px-4 sm:px-6 md:px-8 pt-10 pb-6">
+      {/* === ZONE 1 — Brand + utility row === */}
+      <div className="px-4 sm:px-6 md:px-8 pt-10 pb-7">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            {/* Brand */}
             <Link to="/" className="inline-flex items-center gap-3 group">
               <img
                 src={jbjMonogramNobuffer}
@@ -418,55 +466,64 @@ const Footer = () => {
               </div>
             </Link>
 
-            {/* Utility row */}
-            <div className="flex flex-wrap items-center gap-4 md:gap-5">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-3 md:gap-5">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] uppercase tracking-[0.2em] text-white/45">Connect</span>
                 <SocialLinks variant="glow" iconClassName="w-4 h-4" />
               </div>
-              <div className="hidden md:block w-px h-5" style={{ background: HAIRLINE }} />
               <GoogleMyBusinessLink />
-              <div className="hidden md:block w-px h-5" style={{ background: HAIRLINE }} />
-              <ModeSwitcher variant="header" showForUnselected={true} />
-              <div className="hidden md:block w-px h-5" style={{ background: HAIRLINE }} />
+              {/* Mode switcher opens upward inside the footer so it never
+                  overlays the page header above. */}
+              <ModeSwitcher variant="header" showForUnselected={true} side="top" />
               <FooterCurrencyUnit />
             </div>
           </div>
-
-          {/* Hairline */}
-          <div className="mt-6 h-px w-full" style={{ background: HAIRLINE }} />
         </div>
       </div>
 
-      {/* === ZONE 2 — Navigation grid (4-col compact) === */}
-      <div className="px-4 sm:px-6 md:px-8 py-8">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8">
-          <NavColumn title={t("footer.properties") || "Properties"} links={propertiesLinks} />
-          <NavColumn title={t("footer.servicesSection") || "Services"} links={servicesLinks} />
-          <NavColumn title={t("footer.guides") || "Guides"} links={guidesLinks} />
-          <NavColumn title="About & Careers" links={[...aboutLinks, ...careerLinks]} />
-          <NavColumn title="Sell" links={sellLinks} />
-          <NavColumn title="Investor Hub" links={investorHubLinks} />
-          <NavColumn title="Broker & Academy" links={brokerAcademyLinks} />
-          <NavColumn title="Partners" links={partnersLinks} />
-          <NavColumn title="Legal" links={legalLinks} />
-          <NavColumn title="Business Suites" links={businessSuitesLinks} />
-          <NavColumn title="Productivity" links={productivityLinks} />
-          <NavColumn title="Professional Tools" links={professionalTools} />
-          <NavColumn title="AI Tools" links={aiToolsLinks} viewAllHref="/ai-hub" viewAllLabel="View All 40+ →" />
-          <NavColumn title="Market Intelligence" links={marketIntelLinks} />
-          <NavColumn title="Creative Suites" links={creativeSuitesLinks} viewAllHref="/ai-hub" viewAllLabel="View All →" />
-          <NavColumn title="Education Hub" links={educationHubLinks} />
+      {/* Single premium hairline above the nav grid */}
+      <div className="px-4 sm:px-6 md:px-8">
+        <div className="max-w-7xl mx-auto h-px" style={{ background: HAIRLINE }} />
+      </div>
+
+      {/* === ZONE 2 — Premium 4-col navigation grid === */}
+      <div className="px-4 sm:px-6 md:px-8 py-10">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10">
+          <NavColumn
+            title={t("footer.properties") || "Explore"}
+            links={colExplore}
+            viewAllHref="/properties"
+            viewAllLabel="All Properties →"
+          />
+          <NavColumn
+            title={t("footer.servicesSection") || "Services"}
+            links={colServices}
+            viewAllHref="/services"
+            viewAllLabel="All Services →"
+          />
+          <NavColumn
+            title="Company"
+            links={colCompany}
+            viewAllHref="/about"
+            viewAllLabel="About JBJ →"
+          />
+          <NavColumn
+            title="Resources"
+            links={colResources}
+            viewAllHref="/ai-hub"
+            viewAllLabel="View All Tools →"
+          />
         </div>
       </div>
 
-      {/* Hairline */}
-      <div className="mx-4 sm:mx-6 md:mx-8 max-w-7xl xl:mx-auto h-px" style={{ background: HAIRLINE }} />
+      {/* Single premium hairline below the nav grid */}
+      <div className="px-4 sm:px-6 md:px-8">
+        <div className="max-w-7xl mx-auto h-px" style={{ background: HAIRLINE }} />
+      </div>
 
-      {/* === ZONE 3 — Contact strip + Legal === */}
+      {/* === ZONE 3 — Contact strip + compact legal === */}
       <div className="px-4 sm:px-6 md:px-8 py-8">
         <div className="max-w-7xl mx-auto">
-          {/* Contact strip */}
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mb-6">
             <div className="flex items-center gap-2 text-[12px] text-white/70">
               <MapPin className="w-3.5 h-3.5" style={{ color: ACCENT }} />
@@ -494,36 +551,22 @@ const Footer = () => {
             </a>
           </div>
 
-          {/* Hairline */}
-          <div className="h-px w-full mb-5" style={{ background: HAIRLINE }} />
-
-          {/* Compact legal */}
+          {/* Compact legal — single paragraph, RTL kept */}
           <div className="space-y-2 text-center max-w-4xl mx-auto">
             <p className="text-[11px] leading-relaxed text-white/55">
-              <span className="text-white/75 font-medium">JBJ Global Real Estate</span> is a Dubai mainland real estate brokerage licensed for Buy, Sell, and Rent transactions across the UAE.
-              Mortgage, legal, visa, and corporate support is provided through independent licensed partners. Operated by{" "}
-              <Link to="/about" className="text-white/75 hover:text-white underline-offset-2 hover:underline">JBJ Global Real Estate L.L.C S.O.C.</Link>
+              <span className="text-white/75 font-medium">JBJ Global Real Estate L.L.C S.O.C.</span> — Dubai mainland brokerage licensed for Buy, Sell, and Rent across the UAE.
+              Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
               <FounderContent fallback={null}>
-                {" "}· Owned & led by{" "}
+                {" "}Owned & led by{" "}
                 <Link to="/founder" className="text-white/75 hover:text-white underline-offset-2 hover:underline">Jane Bou Jaoude (جاين بو جودة)</Link>, Founder & CEO.
               </FounderContent>
             </p>
             <p className="text-[11px] leading-relaxed text-white/55" dir="rtl">
-              جي بي جي للعقارات هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار. للخدمات القانونية أو التمويل العقاري أو التأشيرات أو الخدمات المؤسسية، يمكننا ربطك بشركاء مستقلين ومرخصين.
-            </p>
-            <p className="text-[11px] leading-relaxed text-white/55" dir="rtl">
-              وساطة عقارية مرخصة للبيع والشراء والإيجار في دبي (البر الرئيسي). يتم تشغيل الموقع من قبل JBJ Global Real Estate L.L.C S.O.C.
-            </p>
-            <p className="text-[11px] leading-relaxed text-white/55">
-              All website content, branding, designs, and software are protected intellectual property of{" "}
-              <FounderContent fallback={<Link to="/about" className="text-white/75 hover:text-white underline-offset-2 hover:underline">JBJ Global Real Estate</Link>}>
-                <Link to="/founder" className="text-white/75 hover:text-white underline-offset-2 hover:underline">Jane Bou Jaoude (جاين بو جودة)</Link> and{" "}
-                <Link to="/about" className="text-white/75 hover:text-white underline-offset-2 hover:underline">JBJ Global Real Estate</Link>
-              </FounderContent>. Unauthorized copying, reuse, mirroring, or reproduction is prohibited.
+              جي بي جي للعقارات هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار.
             </p>
           </div>
 
-          {/* Copyright + legal links */}
+          {/* Copyright + legal links — premium single row */}
           <div className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center" style={{ borderColor: HAIRLINE }}>
             <span className="text-[11px] text-white/60">
               © {currentYear} JBJ Global Real Estate · All Rights Reserved
