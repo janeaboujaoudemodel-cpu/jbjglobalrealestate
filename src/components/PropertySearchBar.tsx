@@ -13,6 +13,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useDevelopers } from "@/hooks/useProjects";
 import { cn } from "@/lib/utils";
+import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 
 interface Developer {
   id: string;
