@@ -67,6 +67,24 @@ for (const vp of VIEWPORTS) {
   try { await page.waitForLoadState("networkidle", { timeout: 12_000 }); } catch {}
   await page.waitForTimeout(1500);
 
+  // Dismiss LeadCapturePopup / any blocking overlay if present
+  for (let i = 0; i < 3; i++) {
+    const overlay = page.locator('div.fixed.inset-0.z-\\[20000\\]').first();
+    if ((await overlay.count()) === 0) break;
+    try {
+      // Click top-left of the overlay (outside the form card) to trigger handleDismiss
+      const box = await overlay.boundingBox();
+      if (box) await page.mouse.click(box.x + 10, box.y + 10);
+    } catch {}
+    await page.waitForTimeout(400);
+  }
+  // Also dismiss the cookie banner if visible (it can sit above the footer)
+  const cookieBtn = page.locator('button:has-text("Accept All")').first();
+  if ((await cookieBtn.count()) > 0 && (await cookieBtn.isVisible().catch(() => false))) {
+    await cookieBtn.click().catch(() => {});
+    await page.waitForTimeout(300);
+  }
+
   // Scroll to bottom to reveal the footer
   await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }));
   await page.waitForTimeout(800);
