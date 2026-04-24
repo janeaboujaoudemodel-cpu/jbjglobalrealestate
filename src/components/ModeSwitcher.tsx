@@ -134,7 +134,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         
         <DropdownMenuContent 
           align="end" 
-          className="w-72 mr-3 bg-white border border-gray-200 shadow-xl rounded-xl p-2 z-[10001]"
+          className="w-80 mr-3 bg-white border border-gray-200 shadow-xl rounded-xl p-2 z-[10001]"
           sideOffset={5}
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
@@ -147,7 +147,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             </p>
           </div>
           
-          {Object.entries(MODE_CONFIG).map(([modeKey, config]) => {
+          {Object.entries(MODE_CONFIG).map(([modeKey, config], idx) => {
             const Icon = config.icon;
             const isActive = mode === modeKey;
             
@@ -163,22 +163,27 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                 onPointerDown={(e) => e.stopPropagation()}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 border",
-                  // Every row carries its own mode color for instant scanning
+                  // Spacing between colored tiles so they don't touch
+                  idx > 0 && "mt-1.5",
+                  // Per-mode tint must always win over shadcn's default gold focus styles
                   config.bgColor,
+                  "!text-current hover:!text-current focus:!text-current data-[highlighted]:!text-current",
+                  "hover:!bg-transparent focus:!bg-transparent data-[highlighted]:!bg-transparent",
+                  "hover:brightness-110 hover:shadow-sm hover:translate-y-0 focus:translate-y-0",
                   isActive
                     ? `${config.borderColor} ring-2 ring-offset-1 ring-offset-white shadow-sm`
-                    : "border-transparent hover:border-current/30 hover:brightness-105",
-                  // Drive ring color via currentColor on the active row
+                    : "border-transparent",
                   isActive && config.color
                 )}
+                style={{ transform: 'none' }}
               >
                 <div className={cn(
-                  "w-8 h-8 rounded-lg flex items-center justify-center border",
+                  "w-8 h-8 rounded-lg flex items-center justify-center border shrink-0",
                   config.bgColor, config.borderColor
                 )}>
                   <Icon className={cn("w-4 h-4", config.color)} />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <p className={cn(
                     "text-sm font-semibold",
                     config.color
@@ -186,14 +191,14 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     {config.label}
                   </p>
                   <p className={cn(
-                    "text-xs opacity-80",
+                    "text-xs opacity-90",
                     config.color
                   )}>
                     {config.description}
                   </p>
                 </div>
                 {isActive && (
-                  <Check className={cn("w-4 h-4", config.color)} />
+                  <Check className={cn("w-4 h-4 shrink-0", config.color)} />
                 )}
               </DropdownMenuItem>
             );

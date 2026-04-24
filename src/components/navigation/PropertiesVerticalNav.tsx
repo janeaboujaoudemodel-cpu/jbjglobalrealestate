@@ -222,14 +222,14 @@ export default function PropertiesVerticalNav() {
         <div className="p-4 border-t border-gold/20 space-y-2">
           <a
             href="mailto:info@jbjglobal.com"
-            className="flex items-center gap-2 text-sm font-bold text-gold hover:text-gold-dark transition-colors"
+            className="flex items-center gap-2 text-sm font-bold text-black hover:text-red-700 transition-colors"
           >
-            <Headphones className="w-4 h-4" />
+            <Headphones className="w-4 h-4 text-red-600" strokeWidth={2.5} />
             Contact Support
           </a>
           <a
             href="/support"
-            className="text-xs text-black/60 hover:text-gold transition-colors block pl-6"
+            className="text-xs font-semibold text-black/80 hover:text-red-700 transition-colors block pl-6"
           >
             Raise a Support Ticket
           </a>

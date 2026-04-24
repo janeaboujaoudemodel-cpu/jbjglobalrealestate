@@ -1220,16 +1220,16 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           <div className="flex gap-1.5 mb-1.5">
             <Link
               to="/contact"
-               className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-black/50 hover:text-black/80 transition-all px-1 py-[5px] rounded-lg hover:bg-black/[0.04]"
+               className="flex-1 flex items-center justify-center gap-1 text-[10px] font-semibold text-black/80 hover:text-black transition-all px-1 py-[5px] rounded-lg hover:bg-black/[0.04]"
             >
-              <Headphones className="w-3 h-3 text-red-400" />
+              <Headphones className="w-3.5 h-3.5 text-red-600" strokeWidth={2.5} />
               Contact
             </Link>
             <Link
               to="/ticket-hub"
-              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-medium text-black/50 hover:text-black/80 transition-all px-1 py-[5px] rounded-lg hover:bg-black/[0.04]"
+              className="flex-1 flex items-center justify-center gap-1 text-[10px] font-semibold text-black/80 hover:text-black transition-all px-1 py-[5px] rounded-lg hover:bg-black/[0.04]"
             >
-              <Ticket className="w-3 h-3 text-red-400" />
+              <Ticket className="w-3.5 h-3.5 text-red-600" strokeWidth={2.5} />
               Support
             </Link>
           </div>
