@@ -215,10 +215,11 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   : `linear-gradient(135deg, ${config.rowFrom} 0%, ${config.rowTo} 100%)`,
                 borderColor: config.base,
                 color: config.dark,
-                // 4px inset left accent bar in the saturated mode color +
-                // (when active) a strong outer ring that reads as "selected".
+                // 4px inset left accent bar + (when active) a single solid
+                // outer ring in the mode color (no white gap) so the border
+                // hugs the card edge cleanly.
                 boxShadow: isActive
-                  ? `inset 4px 0 0 ${config.base}, 0 0 0 2px #FFFFFF, 0 0 0 4px ${config.base}`
+                  ? `inset 4px 0 0 ${config.base}, 0 0 0 3px ${config.base}`
                   : `inset 4px 0 0 ${config.base}`,
                 transform: 'none',
               };
