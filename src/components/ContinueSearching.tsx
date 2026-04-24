@@ -409,7 +409,7 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
             />
           ) : showDevCardLogo ? (
             <DeveloperLogo
-              src={item.imageUrl}
+              src={item.developerLogo}
               alt={item.name}
               className=""
               onError={() => setLogoError(true)}
