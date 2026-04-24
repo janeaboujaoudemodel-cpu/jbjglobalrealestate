@@ -21,9 +21,13 @@ const TYPE_CONFIG: Record<RecentItemType, { icon: typeof Home; label: string; pa
   area: { icon: MapPin, label: "Areas", pathPrefix: "/area" },
 };
 
-// Walking strip that uses translateX transform like book marquee
+// Walking strip that uses translateX transform like book marquee.
+// Only animates (and only clones the list) when the unique items overflow
+// the visible viewport, so short lists never show the same card twice.
 function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (id: string, type: RecentItemType, updates: Partial<RecentItem>) => void }) {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
   // Deduplicate items by slug+type to prevent visual duplicates
   const seen = new Set<string>();
   const uniqueItems = items.filter(item => {
@@ -32,22 +36,46 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
     seen.add(key);
     return true;
   });
-  // Duplicate once for seamless loop (original + 1 copy)
-  const duplicated = [...uniqueItems, ...uniqueItems];
+
+  // Card width (200px on md+, 160px below) + gap (16px) — use the larger value
+  // for overflow measurement so we err on the side of NOT animating.
+  const CARD_STRIDE = 216;
+  const singleSetWidth = uniqueItems.length * CARD_STRIDE;
+
+  const [viewportWidth, setViewportWidth] = useState(0);
 
   useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const update = () => setViewportWidth(el.clientWidth);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    window.addEventListener('resize', update);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
+  // Only animate (and clone) when unique items would actually overflow.
+  const shouldAnimate = viewportWidth > 0 && singleSetWidth > viewportWidth + 32;
+  const rendered = shouldAnimate ? [...uniqueItems, ...uniqueItems] : uniqueItems;
+
+  useEffect(() => {
+    if (!shouldAnimate) {
+      // Reset any previous transform so the static list renders cleanly.
+      if (scrollRef.current) scrollRef.current.style.transform = 'translateX(0)';
+      return;
+    }
     const el = scrollRef.current;
     if (!el) return;
     let animId: number;
     const speed = 0.4;
-    // Card width (200px) + gap (16px) = 216px per card
-    const singleSetWidth = uniqueItems.length * 216;
-    // Start from left, scroll left-to-right (cards move rightward)
     let pos = 0;
 
     const tick = () => {
       pos -= speed;
-      // When scrolled past one full set, reset seamlessly
       if (pos <= -singleSetWidth) pos += singleSetWidth;
       el.style.transform = `translateX(${pos}px)`;
       animId = requestAnimationFrame(tick);
@@ -64,13 +92,22 @@ function WalkingStrip({ items, patchItem }: { items: RecentItem[]; patchItem: (i
       el.removeEventListener('mouseenter', pause);
       el.removeEventListener('mouseleave', resume);
     };
-  }, [uniqueItems.length]);
+  }, [shouldAnimate, singleSetWidth]);
 
   return (
-    <div className="overflow-hidden w-full">
-      <div ref={scrollRef} className="flex gap-4 will-change-transform py-2" style={{ width: 'max-content' }}>
-        {duplicated.map((item, i) => (
-          <RecentCard3D key={`${item.type}-${item.id}-${i}`} item={item} index={i % uniqueItems.length} patchItem={patchItem} />
+    <div ref={wrapperRef} className="overflow-hidden w-full">
+      <div
+        ref={scrollRef}
+        className={`flex gap-4 py-2 ${shouldAnimate ? 'will-change-transform' : 'justify-center flex-wrap md:flex-nowrap'}`}
+        style={shouldAnimate ? { width: 'max-content' } : undefined}
+      >
+        {rendered.map((item, i) => (
+          <RecentCard3D
+            key={`${item.type}-${item.id}-${i}`}
+            item={item}
+            index={i % Math.max(uniqueItems.length, 1)}
+            patchItem={patchItem}
+          />
         ))}
       </div>
     </div>
