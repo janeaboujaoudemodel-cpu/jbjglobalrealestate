@@ -1,37 +1,86 @@
 /**
- * Safely extract developer logo_url from a Supabase join result.
- * Supabase joins return arrays (not objects), so we need to handle both cases.
- * 
- * LOCKED: Developer logos must ALWAYS come from the logo_url field.
- * Never use feature_image_url, cover_image_url, or any photo as a logo substitute.
+ * Developer Logo Resolver — LOCKED SOURCE OF TRUTH.
+ *
+ * Hard rules (enforced globally — do NOT change without Founder authorization):
+ *   1. Developer logos MUST come from `developers.logo_url` only.
+ *   2. `feature_image_url`, `cover_image_url`, project photos, screenshots,
+ *      WhatsApp / convert.io files, or any other photo may NEVER be used
+ *      as a developer logo — not even as a fallback.
+ *   3. The only approved "no logo" fallback is the `Building2` icon,
+ *      rendered by the `DeveloperLogo` component. No initials, no monograms.
+ *   4. `logo_url_processed` is an internal background-removed mirror; it is
+ *      no longer preferred over the canonical `logo_url`. Canonical wins.
+ *
+ * Supabase joins can return either an array (when expanded) or an object,
+ * so this resolver handles both safely.
+ */
+
+const FORBIDDEN_LOGO_PATTERNS: RegExp[] = [
+  /screenshot/i,
+  /whatsapp/i,
+  /convert\.io/i,
+  /\/frame\+?\d/i,
+  /1080x1080/i,
+  /\/images?\.(png|jpe?g|webp)(\?|$)/i,
+  /\/[0-9]{8,}\.(jpg|jpeg|png|webp)(\?|$)/i,
+  /logo-white-1/i,
+  /logodix\.com/i,
+  /%d[01][0-9a-f]%/i, // URL-encoded cyrillic (Russian screenshots)
+  /\/projects\/\d+\/images\//i, // project photo paths
+];
+
+function isAllowedLogoUrl(url: unknown): url is string {
+  if (typeof url !== "string") return false;
+  const trimmed = url.trim();
+  if (!trimmed) return false;
+  if (!/^https?:\/\//i.test(trimmed)) return false;
+  return !FORBIDDEN_LOGO_PATTERNS.some((pat) => pat.test(trimmed));
+}
+
+function normalizeDeveloper(developer: unknown): Record<string, unknown> | null {
+  if (!developer) return null;
+  const dev = Array.isArray(developer) ? developer[0] : developer;
+  if (!dev || typeof dev !== "object") return null;
+  return dev as Record<string, unknown>;
+}
+
+/**
+ * Safely extract the canonical developer logo URL.
+ * Returns `null` if no valid, allowed logo exists (UI must render the approved
+ * `Building2` icon fallback — never a substitute photo).
  */
 export function getDeveloperLogoUrl(developer: unknown): string | null {
-  if (!developer) return null;
-  
-  // If it's an array (Supabase join), take the first element
-  const dev = Array.isArray(developer) ? developer[0] : developer;
+  const dev = normalizeDeveloper(developer);
   if (!dev) return null;
-  
-  return (dev as any).logo_url || null;
+  const url = dev.logo_url;
+  return isAllowedLogoUrl(url) ? url : null;
 }
 
 export function getDeveloperLogoBgColor(developer: unknown): string | null {
-  if (!developer) return null;
-  const dev = Array.isArray(developer) ? developer[0] : developer;
+  const dev = normalizeDeveloper(developer);
   if (!dev) return null;
-  return (dev as any).logo_bg_color || null;
+  const color = dev.logo_bg_color;
+  return typeof color === "string" && color ? color : null;
 }
 
 export function getDeveloperSlug(developer: unknown): string | null {
-  if (!developer) return null;
-  const dev = Array.isArray(developer) ? developer[0] : developer;
+  const dev = normalizeDeveloper(developer);
   if (!dev) return null;
-  return (dev as any).slug || null;
+  const slug = dev.slug;
+  return typeof slug === "string" && slug ? slug : null;
 }
 
 export function getDeveloperName(developer: unknown): string | null {
-  if (!developer) return null;
-  const dev = Array.isArray(developer) ? developer[0] : developer;
+  const dev = normalizeDeveloper(developer);
   if (!dev) return null;
-  return (dev as any).name || null;
+  const name = dev.name;
+  return typeof name === "string" && name ? name : null;
+}
+
+/**
+ * Validate any arbitrary URL against the developer-logo allow-list.
+ * Use this for direct string inputs (not joined Supabase objects).
+ */
+export function isValidDeveloperLogoUrl(url: unknown): boolean {
+  return isAllowedLogoUrl(url);
 }
