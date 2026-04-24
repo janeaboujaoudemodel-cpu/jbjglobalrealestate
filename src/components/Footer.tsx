@@ -590,7 +590,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom hairline */}
-      <div className="h-px w-full" style={{ background: `linear-gradient(90deg, transparent, ${ACCENT}55, transparent)` }} />
+      <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} />
     </footer>
   );
 };
