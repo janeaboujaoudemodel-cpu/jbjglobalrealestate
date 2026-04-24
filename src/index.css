@@ -427,6 +427,64 @@ All colors MUST be HSL.
     color: hsl(0 0% 12%) !important;
     opacity: 1 !important;
   }
+
+  /* ----------------------------------------------------------
+   * DEFENSIVE CONTRAST FLOORS (no data-surface required)
+   * Fires when components place icons/gray text directly on
+   * dark or light Tailwind bg utilities without opting into a
+   * surface wrapper. Targets the exact failure modes reported:
+   *   - white-on-white icons on light cards
+   *   - black/faded icons on dark video heroes
+   *   - gray-500/600 descriptions unreadable on dark overlays
+   * ---------------------------------------------------------- */
+
+  /* Icons inside dark tiles or dark hero sections → always white */
+  .bg-black svg.lucide,
+  .bg-gray-900 svg.lucide,
+  .bg-gray-950 svg.lucide,
+  .bg-neutral-900 svg.lucide,
+  .bg-neutral-950 svg.lucide,
+  .bg-zinc-900 svg.lucide,
+  .bg-zinc-950 svg.lucide,
+  .bg-stone-900 svg.lucide,
+  [class*="bg-[#0"] svg.lucide,
+  [style*="#0D0D0D"] svg.lucide,
+  [style*="#0A0908"] svg.lucide {
+    color: #FFFFFF !important;
+    opacity: 1 !important;
+  }
+
+  /* Icons landing on light cards that still carry text-white
+     (legacy dark-card copy/paste) → floor to near-black */
+  .bg-white svg.lucide.text-white,
+  .bg-white svg.lucide[class*="text-white/"],
+  .bg-gray-50 svg.lucide.text-white,
+  .bg-gray-50 svg.lucide[class*="text-white/"],
+  .bg-card svg.lucide.text-white,
+  .bg-card svg.lucide[class*="text-white/"],
+  .bg-background svg.lucide.text-white,
+  .bg-background svg.lucide[class*="text-white/"] {
+    color: hsl(0 0% 18%) !important;
+    opacity: 1 !important;
+  }
+
+  /* Muted gray text landing on a dark parent → lift to white/75 */
+  .bg-black .text-gray-500,
+  .bg-black .text-gray-600,
+  .bg-gray-900 .text-gray-500,
+  .bg-gray-900 .text-gray-600,
+  .bg-neutral-900 .text-gray-500,
+  .bg-neutral-900 .text-gray-600,
+  .bg-zinc-900 .text-gray-500,
+  .bg-zinc-900 .text-gray-600,
+  [class*="bg-[#0"] .text-gray-500,
+  [class*="bg-[#0"] .text-gray-600,
+  [style*="#0D0D0D"] .text-gray-500,
+  [style*="#0D0D0D"] .text-gray-600,
+  [style*="#0A0908"] .text-gray-500,
+  [style*="#0A0908"] .text-gray-600 {
+    color: rgba(255, 255, 255, 0.75) !important;
+  }
 }
 
 @media (max-width: 767px) {
