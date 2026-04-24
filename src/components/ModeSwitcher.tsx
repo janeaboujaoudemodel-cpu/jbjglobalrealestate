@@ -15,6 +15,9 @@ interface ModeSwitcherProps {
   variant?: 'header' | 'compact' | 'full';
   className?: string;
   showForUnselected?: boolean;
+  /** Which side the dropdown opens to. Use "top" inside the footer so it
+   *  flips upward instead of overlaying the page above it. */
+  side?: 'top' | 'bottom' | 'left' | 'right';
 }
 
 type ModePalette = {
@@ -88,7 +91,7 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
   },
 };
 
-export const ModeSwitcher = ({ variant = 'header', className, showForUnselected = false }: ModeSwitcherProps) => {
+export const ModeSwitcher = ({ variant = 'header', className, showForUnselected = false, side = 'bottom' }: ModeSwitcherProps) => {
   const { mode, isLoading, setMode } = useUserModeContext();
   const { hasSelectedRole } = useUserRole();
   const [isOpen, setIsOpen] = useState(false);
