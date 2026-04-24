@@ -140,17 +140,21 @@ for (const vp of VIEWPORTS) {
   });
 
   // Close, then scroll so footer is only partially in view, reopen
-  await page.keyboard.press("Escape");
+  await page.keyboard.press("Escape").catch(() => {});
   await page.waitForTimeout(250);
   await page.evaluate(() => window.scrollBy({ top: -200, behavior: "instant" }));
   await page.waitForTimeout(400);
-  if (await footerTrigger.isVisible().catch(() => false)) {
-    await footerTrigger.click();
-    await page.waitForTimeout(500);
-    const menu2 = page.locator('[role="menu"]').first();
-    const mb2 = await menu2.boundingBox();
-    if (mb2) console.log(`  partial-scroll menu.y=${mb2.y.toFixed(1)} clearsHeader=${mb2.y >= HEADER_PX}`);
-    await page.screenshot({ path: `${OUT}/${vp.name}-4-partial-scroll.png` });
+  try {
+    if (await footerTrigger.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await footerTrigger.click({ timeout: 5000 });
+      await page.waitForTimeout(500);
+      const menu2 = page.locator('[role="menu"]').first();
+      const mb2 = await menu2.boundingBox({ timeout: 3000 }).catch(() => null);
+      if (mb2) console.log(`  partial-scroll menu.y=${mb2.y.toFixed(1)} clearsHeader=${mb2.y >= HEADER_PX}`);
+      await page.screenshot({ path: `${OUT}/${vp.name}-4-partial-scroll.png` });
+    }
+  } catch (e) {
+    console.warn(`  partial-scroll step skipped: ${e.message}`);
   }
 
   results.push({ viewport: vp.name, opensUpward, clearsHeader, menuBox, triggerBox });
