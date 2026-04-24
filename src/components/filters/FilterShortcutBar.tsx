@@ -163,6 +163,52 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const { t } = useLanguage();
   const isDark = variant === 'dark';
 
+  // Controlled popover open state — allows Apply to close them
+  const [priceOpen, setPriceOpen] = useState(false);
+  const [paymentsOpen, setPaymentsOpen] = useState(false);
+
+  // Local draft state for price popover (prevents per-keystroke re-render/navigation)
+  const [draftPriceMin, setDraftPriceMin] = useState(filters.priceMin);
+  const [draftPriceMax, setDraftPriceMax] = useState(filters.priceMax);
+
+  // Local draft state for payments popover
+  const [draftPaymentPlanMax, setDraftPaymentPlanMax] = useState(filters.paymentPlanMax);
+  const [draftAfterHandover, setDraftAfterHandover] = useState(filters.afterHandover);
+  const [draftPostHandoverOnly, setDraftPostHandoverOnly] = useState(filters.postHandoverOnly);
+
+  // Sync drafts when popover opens
+  const handlePriceOpenChange = useCallback((open: boolean) => {
+    if (open) {
+      setDraftPriceMin(filters.priceMin);
+      setDraftPriceMax(filters.priceMax);
+    }
+    setPriceOpen(open);
+  }, [filters.priceMin, filters.priceMax]);
+
+  const handlePaymentsOpenChange = useCallback((open: boolean) => {
+    if (open) {
+      setDraftPaymentPlanMax(filters.paymentPlanMax);
+      setDraftAfterHandover(filters.afterHandover);
+      setDraftPostHandoverOnly(filters.postHandoverOnly);
+    }
+    setPaymentsOpen(open);
+  }, [filters.paymentPlanMax, filters.afterHandover, filters.postHandoverOnly]);
+
+  const applyPrice = useCallback(() => {
+    onFilterChange({ ...filters, priceMin: draftPriceMin, priceMax: draftPriceMax });
+    setPriceOpen(false);
+  }, [filters, onFilterChange, draftPriceMin, draftPriceMax]);
+
+  const applyPayments = useCallback(() => {
+    onFilterChange({
+      ...filters,
+      paymentPlanMax: draftPaymentPlanMax,
+      afterHandover: draftAfterHandover,
+      postHandoverOnly: draftPostHandoverOnly,
+    });
+    setPaymentsOpen(false);
+  }, [filters, onFilterChange, draftPaymentPlanMax, draftAfterHandover, draftPostHandoverOnly]);
+
   const update = useCallback((partial: Partial<ShortcutFilterState>) => {
     onFilterChange({ ...filters, ...partial });
   }, [filters, onFilterChange]);
