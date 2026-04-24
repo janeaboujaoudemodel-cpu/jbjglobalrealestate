@@ -166,6 +166,12 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   // Controlled popover open state — allows Apply to close them
   const [priceOpen, setPriceOpen] = useState(false);
   const [paymentsOpen, setPaymentsOpen] = useState(false);
+  const [handoverOpen, setHandoverOpen] = useState(false);
+  const [propertyTypeOpen, setPropertyTypeOpen] = useState(false);
+  const [bedroomsOpen, setBedroomsOpen] = useState(false);
+  const [statusOpen, setStatusOpen] = useState(false);
+  const [constructionOpen, setConstructionOpen] = useState(false);
+  const [viewsOpen, setViewsOpen] = useState(false);
 
   // Local draft state for price popover (prevents per-keystroke re-render/navigation)
   const [draftPriceMin, setDraftPriceMin] = useState(filters.priceMin);
