@@ -72,10 +72,6 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const scrollToBottom = () => {
-    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
-  };
-
   const buttonBaseClass = cn(
     "h-10 w-10 sm:h-12 sm:w-12 rounded-full",
     "bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark",
@@ -87,12 +83,9 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
     "pointer-events-auto select-none touch-manipulation cursor-pointer"
   );
 
-  const showUp = showScrollTop;
-  const showDown = !showScrollTop && showScrollBottom;
-
-  // Hide when chat is open
+  // Hide when chat is open, or when user hasn't scrolled far enough yet.
   if (isChatOpen) return null;
-  if (!showUp && !showDown) return null;
+  if (!showScrollTop) return null;
 
   const transform = dragOffset ? `translate(${dragOffset.x}px, ${dragOffset.y}px)` : undefined;
 
@@ -105,7 +98,8 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
       }}
       className={cn(
         "fixed z-[10049] flex flex-col gap-2 transform-gpu",
-        isChatMedium ? "bottom-56" : "bottom-36",
+        // Positioned just above the chat-support launcher (bottom-20 + ~56px button + ~12px gap)
+        isChatMedium ? "bottom-56" : "bottom-[148px]",
         "pointer-events-auto",
         isRTL ? "left-4" : "right-6 md:right-8"
       )}
@@ -119,27 +113,14 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
-      {showUp && (
-        <button
-          type="button"
-          onClick={(e) => { if (!dragRef.current.moved) scrollToTop(); e.stopPropagation(); }}
-          className={buttonBaseClass}
-          aria-label="Scroll to top"
-        >
-          <ArrowUp className="w-5 h-5 text-black" />
-        </button>
-      )}
-
-      {showDown && (
-        <button
-          type="button"
-          onClick={(e) => { if (!dragRef.current.moved) scrollToBottom(); e.stopPropagation(); }}
-          className={buttonBaseClass}
-          aria-label="Scroll to bottom"
-        >
-          <ArrowDown className="w-5 h-5 text-black" />
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={(e) => { if (!dragRef.current.moved) scrollToTop(); e.stopPropagation(); }}
+        className={buttonBaseClass}
+        aria-label="Scroll to top"
+      >
+        <ArrowUp className="w-5 h-5 text-black" />
+      </button>
     </div>
   );
 });
