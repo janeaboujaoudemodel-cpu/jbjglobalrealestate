@@ -240,19 +240,19 @@ const Index = () => {
               <span className="block sm:inline"> Finest Real Estate</span>
             </motion.h1>
 
-            {/* Quick-action CTA pills — balanced 6-tile grid: 3×2 mobile/tablet, single row of 6 on desktop */}
+            {/* Quick-action CTA pills — balanced 6-tile grid: 3×2 mobile/tablet, single row of 6 on desktop. Labels never truncate. */}
             <motion.div
               variants={fadeInUp}
-              className="grid grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 max-w-md sm:max-w-2xl lg:max-w-none mx-auto"
+              className="grid grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 max-w-md sm:max-w-3xl lg:max-w-none mx-auto"
             >
               {heroActions.map((action) => (
                 <Link
                   key={action.label}
                   to={action.href}
-                  className="group inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-5 py-2.5 rounded-full border border-white/70 sm:border-white/30 bg-black/60 backdrop-blur-md text-white text-[11px] sm:text-xs font-medium hover:bg-white/15 hover:border-white/70 hover:text-white transition-all duration-300"
+                  className="group flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-white/70 sm:border-white/30 bg-black/60 backdrop-blur-md text-white text-[10.5px] sm:text-xs font-medium hover:bg-white/15 hover:border-white/70 hover:text-white transition-all duration-300 min-h-[58px] sm:min-h-[44px]"
                 >
-                  <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white group-hover:text-white transition-colors flex-shrink-0" />
-                  <span className="truncate">{action.label}</span>
+                  <action.icon className="w-3.5 h-3.5 sm:w-3.5 sm:h-3.5 text-white group-hover:text-white transition-colors flex-shrink-0" />
+                  <span className="whitespace-normal break-words leading-tight text-center">{action.label}</span>
                 </Link>
               ))}
             </motion.div>
