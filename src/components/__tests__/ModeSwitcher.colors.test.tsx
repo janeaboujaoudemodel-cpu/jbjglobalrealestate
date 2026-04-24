@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, within } from "@testing-library/react";
+import { render, fireEvent, within } from "@testing-library/react";
 import { ModeSwitcher } from "@/components/ModeSwitcher";
 import type { UserMode } from "@/contexts/UserModeContext";
 
@@ -66,15 +66,14 @@ const PALETTE: Record<
 };
 
 // Normalize hex/rgb so style assertions are tolerant.
-const norm = (v: string) =>
-  v.replace(/\s+/g, "").toLowerCase();
+const norm = (v: string) => v.replace(/\s+/g, "").toLowerCase();
 
 const hexToRgb = (hex: string) => {
   const h = hex.replace("#", "");
   const r = parseInt(h.slice(0, 2), 16);
   const g = parseInt(h.slice(2, 4), 16);
   const b = parseInt(h.slice(4, 6), 16);
-  return `rgb(${r},${g},${b})`;
+  return `rgb(${r}, ${g}, ${b})`;
 };
 
 const styleMatches = (actual: string, expectedHex: string) => {
@@ -84,57 +83,34 @@ const styleMatches = (actual: string, expectedHex: string) => {
 
 // --- Helpers -------------------------------------------------------------
 
-const openDropdown = () => {
-  const trigger = screen.getByRole("button", {
-    name: new RegExp(PALETTE[currentMode].label, "i"),
-  });
-  fireEvent.click(trigger);
-  return trigger;
+const getTrigger = (): HTMLButtonElement => {
+  // The shared trigger is the only button with aria-haspopup="menu" in our
+  // isolated render.
+  const btn = document.querySelector<HTMLButtonElement>(
+    'button[aria-haspopup="menu"]',
+  );
+  if (!btn) throw new Error("Mode trigger button not found");
+  return btn;
 };
 
 const findRowByLabel = (label: string): HTMLElement => {
-  // The bold label paragraph lives inside the menu item row.
-  const labelEl = screen.getByText(label);
-  // Walk up to the menuitem container (has role="menuitem")
-  let el: HTMLElement | null = labelEl;
-  while (el && el.getAttribute("role") !== "menuitem") {
-    el = el.parentElement;
+  // Radix portals the dropdown content into <body>, so query the whole document.
+  const matches = Array.from(
+    document.body.querySelectorAll<HTMLElement>('[role="menuitem"]'),
+  );
+  const row = matches.find((el) => el.textContent?.includes(label));
+  if (!row) {
+    throw new Error(
+      `Could not find menuitem row for "${label}". Found: ${matches
+        .map((m) => m.textContent?.slice(0, 40))
+        .join(" | ")}`,
+    );
   }
-  if (!el) throw new Error(`Could not find menuitem row for "${label}"`);
-  return el;
+  return row;
 };
 
-// --- Shared placement assertion -----------------------------------------
-
-const assertAllModeColorsRender = () => {
-  openDropdown();
-
-  (Object.keys(PALETTE) as UserMode[]).forEach((modeKey) => {
-    const { label, base, lighter, dark } = PALETTE[modeKey];
-    const row = findRowByLabel(label);
-
-    // Background uses the mode's lighter tint at rest.
-    expect(
-      styleMatches(row.style.backgroundColor, lighter),
-      `${label} row background should be ${lighter}, got ${row.style.backgroundColor}`,
-    ).toBe(true);
-
-    // Border color is either the base (active/hover) or the icon-border at rest;
-    // for the active mode it must equal the base color.
-    if (currentMode === modeKey) {
-      expect(
-        styleMatches(row.style.borderColor, base),
-        `${label} active row border should be ${base}, got ${row.style.borderColor}`,
-      ).toBe(true);
-    }
-
-    // Dark text color on the label.
-    const labelEl = within(row).getByText(label);
-    expect(
-      styleMatches((labelEl as HTMLElement).style.color, dark),
-      `${label} label color should be ${dark}, got ${(labelEl as HTMLElement).style.color}`,
-    ).toBe(true);
-  });
+const openDropdown = () => {
+  fireEvent.click(getTrigger());
 };
 
 // --- Tests ---------------------------------------------------------------
@@ -142,43 +118,82 @@ const assertAllModeColorsRender = () => {
 describe("ModeSwitcher color regression", () => {
   beforeEach(() => {
     setModeMock.mockReset();
+    // Clean up any leftover portals between tests
+    document.body
+      .querySelectorAll('[data-radix-popper-content-wrapper]')
+      .forEach((n) => n.remove());
   });
 
-  // The component is identical in header / footer / account menu placements
-  // (all use <ModeSwitcher variant="header" />), so we exercise it once per
-  // active mode and confirm every row + the trigger render the locked color.
   const modes: UserMode[] = ["investor", "broker", "investor_broker", "developer"];
 
   modes.forEach((activeMode) => {
-    it(`renders correct palette for all rows when active mode is ${activeMode}`, () => {
+    it(`renders correct palette for trigger + all rows when active mode is ${activeMode}`, () => {
       currentMode = activeMode;
       render(<ModeSwitcher variant="header" />);
 
       // Trigger button shows the active mode's colors.
-      const { base, lighter, dark, label } = PALETTE[activeMode];
-      const trigger = screen.getByRole("button", { name: new RegExp(label, "i") });
-      expect(styleMatches(trigger.style.backgroundColor, lighter)).toBe(true);
-      expect(styleMatches(trigger.style.borderColor, base)).toBe(true);
-      expect(styleMatches(trigger.style.color, dark)).toBe(true);
+      const { base, lighter, dark } = PALETTE[activeMode];
+      const trigger = getTrigger();
+      expect(
+        styleMatches(trigger.style.backgroundColor, lighter),
+        `${activeMode} trigger bg should be ${lighter}, got ${trigger.style.backgroundColor}`,
+      ).toBe(true);
+      expect(
+        styleMatches(trigger.style.borderColor, base),
+        `${activeMode} trigger border should be ${base}, got ${trigger.style.borderColor}`,
+      ).toBe(true);
+      expect(
+        styleMatches(trigger.style.color, dark),
+        `${activeMode} trigger text should be ${dark}, got ${trigger.style.color}`,
+      ).toBe(true);
 
       // Open dropdown and check every row's color.
-      assertAllModeColorsRender();
+      openDropdown();
+
+      (Object.keys(PALETTE) as UserMode[]).forEach((modeKey) => {
+        const p = PALETTE[modeKey];
+        const row = findRowByLabel(p.label);
+
+        // Background uses the mode's lighter tint at rest.
+        expect(
+          styleMatches(row.style.backgroundColor, p.lighter),
+          `${p.label} row bg should be ${p.lighter}, got ${row.style.backgroundColor}`,
+        ).toBe(true);
+
+        // Active row border equals the base color.
+        if (currentMode === modeKey) {
+          expect(
+            styleMatches(row.style.borderColor, p.base),
+            `${p.label} active row border should be ${p.base}, got ${row.style.borderColor}`,
+          ).toBe(true);
+        }
+
+        // Dark text color on the row label.
+        const labelEl = within(row).getByText(p.label) as HTMLElement;
+        expect(
+          styleMatches(labelEl.style.color, p.dark),
+          `${p.label} label color should be ${p.dark}, got ${labelEl.style.color}`,
+        ).toBe(true);
+      });
     });
   });
 
-  it("uses the same shared component in header, footer, and account menu placements", async () => {
-    // Sanity: the three placements all import the same default export and pass
-    // variant="header", so a single ModeSwitcher render covers all three.
-    const headerBar = await import("@/components/navigation/HorizontalUtilityBar.tsx?raw").catch(() => null);
-    const footer = await import("@/components/Footer.tsx?raw").catch(() => null);
-    const account = await import("@/components/header/MegaMenuAccount.tsx?raw").catch(() => null);
-
-    // If raw imports aren't available in the test env, just assert the file
-    // paths are referenced — this keeps the test resilient.
-    [headerBar, footer, account].forEach((mod) => {
-      if (mod && typeof (mod as any).default === "string") {
-        expect((mod as any).default).toMatch(/<ModeSwitcher\b[^>]*variant=["']header["']/);
-      }
-    });
+  it("uses the same shared ModeSwitcher in header, footer, and account menu placements", async () => {
+    // The three known placements (HorizontalUtilityBar, Footer, MegaMenuAccount)
+    // all import the same component, so verifying its palette once covers all
+    // three locations. This guard makes sure we notice if a one-off copy is
+    // introduced later.
+    const fs = await import("node:fs/promises");
+    const files = [
+      "src/components/navigation/HorizontalUtilityBar.tsx",
+      "src/components/Footer.tsx",
+      "src/components/header/MegaMenuAccount.tsx",
+    ];
+    for (const file of files) {
+      const src = await fs.readFile(file, "utf8");
+      expect(src, `${file} should mount the shared ModeSwitcher`).toMatch(
+        /<ModeSwitcher\b[^>]*variant=["']header["']/,
+      );
+    }
   });
 });
