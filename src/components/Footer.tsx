@@ -18,7 +18,10 @@ import { SUPPORTED_CURRENCIES } from "@/components/CurrencySwitcher";
 import { cn } from "@/lib/utils";
 
 const ACCENT = "#C8A766";
-const HAIRLINE = "rgba(255,255,255,0.08)";
+// Visible on dark bg but soft — not harsh. ~14% white reads as a clean hairline.
+const HAIRLINE = "rgba(255,255,255,0.14)";
+// Champagne accent hairline — faded edges, gentle peak in the middle
+const ACCENT_HAIRLINE = `linear-gradient(90deg, transparent 0%, ${ACCENT}00 8%, ${ACCENT}66 50%, ${ACCENT}00 92%, transparent 100%)`;
 
 /** Compact column of links — plain text, no card chrome */
 const NavColumn = ({
