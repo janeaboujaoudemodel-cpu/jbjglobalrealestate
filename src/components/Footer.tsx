@@ -576,19 +576,19 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Copyright + legal links — premium single row */}
+          {/* Copyright + legal links — premium single row, bidi-safe */}
           <div className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center" style={{ borderColor: HAIRLINE }}>
-            <span className="text-[11px] text-white/60">
-              © {currentYear} JBJ Global Real Estate · All Rights Reserved
+            <span className="text-[11px] text-white/60" dir="ltr">
+              © {currentYear} <bdi>JBJ Global Real Estate</bdi> · All Rights Reserved
             </span>
-            <span className="hidden sm:inline text-white/20">·</span>
+            <span className="hidden sm:inline text-white/20" aria-hidden="true">·</span>
             <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
               {legalLinks.map((l, i) => (
                 <span key={l.href} className="flex items-center gap-3">
-                  <Link to={l.href} className="text-[11px] text-white/55 hover:text-white transition-colors">
+                  <Link to={l.href} className="text-[11px] text-white/55 hover:text-white transition-colors whitespace-nowrap">
                     {l.label}
                   </Link>
-                  {i < legalLinks.length - 1 && <span className="text-white/15">·</span>}
+                  {i < legalLinks.length - 1 && <span className="text-white/15" aria-hidden="true">·</span>}
                 </span>
               ))}
             </div>
