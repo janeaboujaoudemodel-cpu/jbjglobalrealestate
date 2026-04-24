@@ -446,7 +446,7 @@ const Footer = () => {
       }}
     >
       {/* Top hairline — single restrained champagne accent */}
-      <div className="h-px w-full" style={{ background: `linear-gradient(90deg, transparent, ${ACCENT}55, transparent)` }} />
+      <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} />
 
       {/* === ZONE 1 — Brand + utility row === */}
       <div className="px-4 sm:px-6 md:px-8 pt-10 pb-7">
