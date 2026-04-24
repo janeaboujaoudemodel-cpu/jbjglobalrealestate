@@ -570,7 +570,7 @@ const Footer = () => {
           </div>
 
           {/* Copyright + legal links — premium single row */}
-          <div className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center" style={{ borderColor: HAIRLINE }}>
+          <div className="mt-5 pt-4 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-1.5 text-center" style={{ borderColor: HAIRLINE }}>
             <span className="text-[11px] text-white/60">
               © {currentYear} JBJ Global Real Estate · All Rights Reserved
             </span>
