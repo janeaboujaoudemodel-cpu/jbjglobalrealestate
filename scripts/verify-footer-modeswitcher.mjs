@@ -72,20 +72,25 @@ for (const vp of VIEWPORTS) {
       localStorage.setItem("cookies_consent", JSON.stringify({ accepted: true, ts: Date.now() }));
       localStorage.setItem("cookiesConsent", "accepted");
     } catch {}
+    // Persistently remove any high-z fixed overlays that block pointer events
+    const killOverlays = () => {
+      document.querySelectorAll('div.fixed.inset-0').forEach((el) => {
+        const z = el.style.zIndex || getComputedStyle(el).zIndex;
+        if (parseInt(z, 10) >= 10000) el.remove();
+      });
+    };
+    const obs = new MutationObserver(killOverlays);
+    const start = () => {
+      killOverlays();
+      obs.observe(document.body, { childList: true, subtree: true });
+    };
+    if (document.body) start();
+    else document.addEventListener('DOMContentLoaded', start);
   });
 
   await page.goto(URL, { waitUntil: "domcontentloaded", timeout: 60_000 });
   try { await page.waitForLoadState("networkidle", { timeout: 12_000 }); } catch {}
   await page.waitForTimeout(1500);
-
-  // Forcefully remove any blocking overlays that might still appear
-  await page.evaluate(() => {
-    document.querySelectorAll('div.fixed.inset-0').forEach((el) => {
-      const z = el.style.zIndex || getComputedStyle(el).zIndex;
-      if (parseInt(z, 10) >= 10000) el.remove();
-    });
-  });
-  await page.waitForTimeout(200);
 
   // Scroll to bottom to reveal the footer
   await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }));
