@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Users } from "lucide-react";
 import { motion } from "framer-motion";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface AreaDevelopersBarProps {
   areaName: string;
