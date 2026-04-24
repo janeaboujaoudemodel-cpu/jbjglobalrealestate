@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Search, Building2, ChevronRight, Crown, Award, Star } from "lucide-react";
 import { useDevelopers } from "@/hooks/useProjects";
+import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 
 interface DeveloperSearchModalProps {
   isOpen: boolean;
