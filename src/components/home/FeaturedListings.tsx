@@ -150,25 +150,15 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             )}
 
-            {/* Developer Logo */}
-            {logoUrl && !logoError ? (
-              <div className="absolute top-3 left-3 z-20">
-                <DeveloperLogo
-                  src={logoUrl}
-                  alt={devName}
-                  loading={isAboveFold ? "eager" : "lazy"}
-                  onError={() => setLogoError(true)}
-                />
-              </div>
-            ) : (
-              <div className="absolute top-3 left-3 z-10">
-                <div className="w-12 h-12 rounded-lg bg-black/80 shadow-lg border border-gray-600 flex items-center justify-center backdrop-blur-sm">
-                  <span className="text-white font-bold text-lg" style={{ fontFamily: "serif" }}>
-                    {devName.charAt(0)}
-                  </span>
-                </div>
-              </div>
-            )}
+            {/* Developer Logo — canonical only; if unavailable, render approved Building2 fallback via DeveloperLogo */}
+            <div className="absolute top-3 left-3 z-20">
+              <DeveloperLogo
+                src={logoUrl}
+                alt={devName}
+                loading={isAboveFold ? "eager" : "lazy"}
+                renderFallback
+              />
+            </div>
 
             {/* Price badge */}
             {project.price_from && (
