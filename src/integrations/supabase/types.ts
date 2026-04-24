@@ -7950,9 +7950,14 @@ export type Database = {
           is_hidden: boolean | null
           license_number: string | null
           logo_bg_color: string | null
+          logo_locked: boolean
+          logo_source: string | null
           logo_url: string | null
           logo_url_dark: string | null
           logo_url_processed: string | null
+          logo_verified: boolean
+          logo_verified_at: string | null
+          logo_verified_by: string | null
           name: string
           notable_projects: string | null
           offplan_projects: number | null
@@ -7979,9 +7984,14 @@ export type Database = {
           is_hidden?: boolean | null
           license_number?: string | null
           logo_bg_color?: string | null
+          logo_locked?: boolean
+          logo_source?: string | null
           logo_url?: string | null
           logo_url_dark?: string | null
           logo_url_processed?: string | null
+          logo_verified?: boolean
+          logo_verified_at?: string | null
+          logo_verified_by?: string | null
           name: string
           notable_projects?: string | null
           offplan_projects?: number | null
@@ -8008,9 +8018,14 @@ export type Database = {
           is_hidden?: boolean | null
           license_number?: string | null
           logo_bg_color?: string | null
+          logo_locked?: boolean
+          logo_source?: string | null
           logo_url?: string | null
           logo_url_dark?: string | null
           logo_url_processed?: string | null
+          logo_verified?: boolean
+          logo_verified_at?: string | null
+          logo_verified_by?: string | null
           name?: string
           notable_projects?: string | null
           offplan_projects?: number | null
