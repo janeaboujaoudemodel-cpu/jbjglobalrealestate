@@ -66,10 +66,10 @@ function DeveloperSearchSelect({ developers, value, onChange }: { developers: De
               onClick={() => { onChange(dev.id); setOpen(false); setSearch(""); }}
               className={cn("w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors", value === dev.id ? "bg-gold/20 text-gold" : "text-white/85 hover:bg-gray-800")}
             >
-              {dev.logo_url ? (
-                <img src={dev.logo_url} alt={dev.name} className="w-5 h-5 object-contain rounded-sm flex-shrink-0 bg-white" />
+              {isValidDeveloperLogoUrl(dev.logo_url) ? (
+                <img src={dev.logo_url as string} alt={dev.name} className="w-5 h-5 object-contain rounded-sm flex-shrink-0 bg-white" />
               ) : (
-                <span className="w-5 h-5 rounded-sm bg-gold/20 flex items-center justify-center flex-shrink-0 text-[9px] font-bold text-gold">{dev.name.charAt(0)}</span>
+                <Building2 className="w-5 h-5 text-white/40 flex-shrink-0" />
               )}
               <span className="truncate">{dev.name}</span>
               {value === dev.id && <Check className="w-3.5 h-3.5 ml-auto text-gold flex-shrink-0" />}
