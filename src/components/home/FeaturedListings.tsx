@@ -126,11 +126,8 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
   const isAboveFold = index < 4;
   const imageUrl = project.cover_image_url || project.images?.[0]?.image_url;
   const devName = project.developer_name || '';
-  const rawLogoUrl = getDeveloperLogoUrl(project.developer);
-  const logoUrl = devName.toLowerCase().includes('binghatti')
-    ? '/developers/logos/binghatti-logo.webp'
-    : rawLogoUrl;
-  const [logoError, setLogoError] = useState(false);
+  // LOCKED: canonical developer logo only. No hardcoded overrides, no monograms.
+  const logoUrl = getDeveloperLogoUrl(project.developer);
 
   return (
     <div className="group h-full animate-fade-in-up">
