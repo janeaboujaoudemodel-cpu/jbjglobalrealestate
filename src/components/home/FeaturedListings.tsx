@@ -126,11 +126,8 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
   const isAboveFold = index < 4;
   const imageUrl = project.cover_image_url || project.images?.[0]?.image_url;
   const devName = project.developer_name || '';
-  const rawLogoUrl = getDeveloperLogoUrl(project.developer);
-  const logoUrl = devName.toLowerCase().includes('binghatti')
-    ? '/developers/logos/binghatti-logo.webp'
-    : rawLogoUrl;
-  const [logoError, setLogoError] = useState(false);
+  // LOCKED: canonical developer logo only. No hardcoded overrides, no monograms.
+  const logoUrl = getDeveloperLogoUrl(project.developer);
 
   return (
     <div className="group h-full animate-fade-in-up">
@@ -153,25 +150,15 @@ const ProjectCard = ({ project, formatPrice, index = 0 }: { project: FeaturedPro
               </div>
             )}
 
-            {/* Developer Logo */}
-            {logoUrl && !logoError ? (
-              <div className="absolute top-3 left-3 z-20">
-                <DeveloperLogo
-                  src={logoUrl}
-                  alt={devName}
-                  loading={isAboveFold ? "eager" : "lazy"}
-                  onError={() => setLogoError(true)}
-                />
-              </div>
-            ) : (
-              <div className="absolute top-3 left-3 z-10">
-                <div className="w-12 h-12 rounded-lg bg-black/80 shadow-lg border border-gray-600 flex items-center justify-center backdrop-blur-sm">
-                  <span className="text-white font-bold text-lg" style={{ fontFamily: "serif" }}>
-                    {devName.charAt(0)}
-                  </span>
-                </div>
-              </div>
-            )}
+            {/* Developer Logo — canonical only; if unavailable, render approved Building2 fallback via DeveloperLogo */}
+            <div className="absolute top-3 left-3 z-20">
+              <DeveloperLogo
+                src={logoUrl}
+                alt={devName}
+                loading={isAboveFold ? "eager" : "lazy"}
+                renderFallback
+              />
+            </div>
 
             {/* Price badge */}
             {project.price_from && (

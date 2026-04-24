@@ -5,6 +5,7 @@ import { useDevelopers, useProjects, useCommunities, useTrendingAreas } from "@/
 import { useFilteredProjects, defaultFilters } from "@/hooks/useProjectFilters";
 import ProjectFilters, { type FilterState } from "@/components/ProjectFilters";
 import { Skeleton } from "@/components/ui/skeleton";
+import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 
 const formatPortfolioWorth = (value: number | null) => {
   if (!value) return null;
@@ -98,9 +99,9 @@ const DeveloperGrid = () => {
               >
                 {/* Developer Logo Tile - Light background for readability */}
                 <div className="bg-card rounded-2xl p-6 md:p-8 inline-flex items-center justify-center min-w-[280px] md:min-w-[350px] h-24 md:h-32 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-[1.02] border border-gold/20">
-                  {developer.logo_url ? (
+                  {isValidDeveloperLogoUrl(developer.logo_url) ? (
                     <img 
-                      src={developer.logo_url} 
+                      src={developer.logo_url as string} 
                       alt={`${developer.name} logo`}
                       className="max-h-16 md:max-h-20 max-w-[240px] md:max-w-[300px] object-contain"
                     />

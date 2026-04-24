@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Users } from "lucide-react";
 import { motion } from "framer-motion";
+import { DeveloperLogo } from "@/components/ui/DeveloperLogo";
 
 interface AreaDevelopersBarProps {
   areaName: string;
@@ -66,20 +67,12 @@ export const AreaDevelopersBar = ({ areaName }: AreaDevelopersBarProps) => {
                   to={`/developer/${dev.slug}`}
                   className="flex items-center gap-3 px-4 py-3 bg-white border-2 border-gold/30 rounded-xl hover:border-gold hover:shadow-lg transition-all"
                 >
-                  {dev.logo_url ? (
-                    <img src={dev.logo_url} alt={dev.name} className="w-8 h-8 object-contain rounded" />
-                  ) : (
-                    <div className="w-8 h-8 bg-gold/20 rounded flex items-center justify-center text-gold font-bold text-xs">
-                      {dev.name.charAt(0)}
-                    </div>
-                  )}
+                  <DeveloperLogo src={dev.logo_url} alt={dev.name} className="w-8 h-8" renderFallback />
                   <span className="text-sm font-medium text-black">{dev.name}</span>
                 </Link>
               ) : (
                 <div className="flex items-center gap-3 px-4 py-3 bg-white border border-gold/20 rounded-xl">
-                  <div className="w-8 h-8 bg-gold/20 rounded flex items-center justify-center text-gold font-bold text-xs">
-                    {dev.name.charAt(0)}
-                  </div>
+                  <DeveloperLogo src={dev.logo_url} alt={dev.name} className="w-8 h-8" renderFallback />
                   <span className="text-sm font-medium text-gray-700">{dev.name}</span>
                 </div>
               )}
