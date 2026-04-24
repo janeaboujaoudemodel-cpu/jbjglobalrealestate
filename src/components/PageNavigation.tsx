@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useContext, forwardRef, useRef } from "react";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LanguageContext } from "@/contexts/LanguageContext";
 
