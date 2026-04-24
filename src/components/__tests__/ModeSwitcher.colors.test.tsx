@@ -110,7 +110,11 @@ const findRowByLabel = (label: string): HTMLElement => {
 };
 
 const openDropdown = () => {
-  fireEvent.click(getTrigger());
+  const trigger = getTrigger();
+  // Radix DropdownMenu opens on pointerdown (not click) and requires button=0.
+  fireEvent.pointerDown(trigger, { button: 0, pointerType: "mouse" });
+  fireEvent.pointerUp(trigger, { button: 0, pointerType: "mouse" });
+  fireEvent.click(trigger);
 };
 
 // --- Tests ---------------------------------------------------------------
