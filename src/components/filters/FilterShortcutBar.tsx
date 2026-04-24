@@ -712,8 +712,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </button>
               ))}
             </div>
+            <div className="flex gap-2 mt-3">
+              <Button type="button" variant="outline" onClick={() => update({ views: [] })} className="h-9 px-3 text-xs rounded-lg">{t('filter.reset') || 'Reset'}</Button>
+              <Button type="button" onClick={() => setViewsOpen(false)} className="flex-1 h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800">{t('filter.applyFilter') || 'Done'}</Button>
+            </div>
           </PopoverContent>
-        </Popover>
 
         {/* Divider */}
         <div className="w-px h-5 bg-gray-300 flex-shrink-0" />
