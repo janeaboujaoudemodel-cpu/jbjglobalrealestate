@@ -678,7 +678,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Views */}
-        <Popover>
+        <Popover open={viewsOpen} onOpenChange={setViewsOpen}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.views.length > 0 ? pillActive : pillInactive)}>
               <Eye className="w-3.5 h-3.5" />
