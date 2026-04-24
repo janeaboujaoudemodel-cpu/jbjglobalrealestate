@@ -200,4 +200,74 @@ describe("ModeSwitcher color regression", () => {
       );
     }
   });
+
+  it("never passes color-overriding className to ModeSwitcher in any placement", async () => {
+    // The trigger's per-mode background / border / text colors are owned by
+    // MODE_CONFIG inside ModeSwitcher.tsx. If a placement starts passing
+    // `className="bg-..."` or `className="text-..."`, those classes could
+    // shadow the inline mode styling and break per-mode color identity.
+    const fs = await import("node:fs/promises");
+    const files = [
+      "src/components/navigation/HorizontalUtilityBar.tsx",
+      "src/components/Footer.tsx",
+      "src/components/header/MegaMenuAccount.tsx",
+    ];
+    // Match any <ModeSwitcher ... /> or <ModeSwitcher ...>...</ModeSwitcher>
+    const usageRe = /<ModeSwitcher\b([^>]*?)\/?>/g;
+    // Forbidden tokens inside className that would override the trigger palette.
+    const forbidden = /className=["'`][^"'`]*\b(?:bg-|border-(?!2\b)|text-(?!xs\b|sm\b|base\b|lg\b|xl\b|left\b|center\b|right\b)|from-|to-|via-|ring-(?!2\b))/;
+
+    for (const file of files) {
+      const src = await fs.readFile(file, "utf8");
+      const matches = [...src.matchAll(usageRe)];
+      expect(matches.length, `${file} should mount ModeSwitcher`).toBeGreaterThan(0);
+      for (const m of matches) {
+        const propsStr = m[1] ?? "";
+        expect(
+          forbidden.test(propsStr),
+          `${file} passes color-overriding className to ModeSwitcher: ${m[0]}`,
+        ).toBe(false);
+      }
+    }
+  });
+
+  it("renders byte-identical trigger styles regardless of placement-passed props", () => {
+    // Simulate each placement's exact <ModeSwitcher /> usage:
+    //   - HorizontalUtilityBar: variant="header" showForUnselected
+    //   - Footer:                variant="header" showForUnselected={true}
+    //   - MegaMenuAccount:       variant="header"
+    // None pass className, so all three triggers must produce the same inline style.
+    currentMode = "broker";
+
+    const placements = [
+      { name: "HorizontalUtilityBar", node: <ModeSwitcher variant="header" showForUnselected /> },
+      { name: "Footer", node: <ModeSwitcher variant="header" showForUnselected={true} /> },
+      { name: "MegaMenuAccount", node: <ModeSwitcher variant="header" /> },
+    ];
+
+    const styles = placements.map(({ name, node }) => {
+      const { unmount } = render(node);
+      const trigger = getTrigger();
+      const snapshot = {
+        bg: trigger.style.backgroundColor,
+        border: trigger.style.borderColor,
+        color: trigger.style.color,
+      };
+      unmount();
+      return { name, snapshot };
+    });
+
+    const reference = styles[0].snapshot;
+    const { base, lighter, dark } = PALETTE.broker;
+
+    // Reference matches the locked broker palette.
+    expect(styleMatches(reference.bg, lighter)).toBe(true);
+    expect(styleMatches(reference.border, base)).toBe(true);
+    expect(styleMatches(reference.color, dark)).toBe(true);
+
+    // Every placement renders identical trigger styles.
+    for (const { name, snapshot } of styles.slice(1)) {
+      expect(snapshot, `${name} trigger style must match HorizontalUtilityBar`).toEqual(reference);
+    }
+  });
 });
