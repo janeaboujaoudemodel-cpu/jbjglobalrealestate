@@ -601,7 +601,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Bedrooms */}
-        <Popover>
+        <Popover open={bedroomsOpen} onOpenChange={setBedroomsOpen}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.bedrooms.length > 0 ? pillActive : pillInactive)}>
               {t('filter.bedrooms')}
