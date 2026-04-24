@@ -324,7 +324,9 @@ function RecentCard3D({ item, index, patchItem }: { item: RecentItem; index: num
 
   const hasValidImage = item.imageUrl && !imgBroken;
   const showDevLogo = item.type === "property" && item.developerLogo && !logoError;
-  const showDevCardLogo = item.type === "developer" && hasValidImage && !logoError;
+  // LOCKED: developer logo slot on developer cards must use the canonical
+  // logo_url (via item.developerLogo), NEVER the card's background image.
+  const showDevCardLogo = item.type === "developer" && item.developerLogo && !logoError;
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!cardRef.current) return;
