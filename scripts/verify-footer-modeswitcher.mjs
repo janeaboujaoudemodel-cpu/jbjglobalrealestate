@@ -63,27 +63,29 @@ for (const vp of VIEWPORTS) {
   const page = await ctx.newPage();
   console.log(`\n=== ${vp.name} ${vp.width}x${vp.height} ===`);
 
+  // Pre-seed storage to suppress the lead-capture popup and cookie banner
+  await page.addInitScript(() => {
+    try {
+      localStorage.setItem("smart_popup_dismissed_until", String(Date.now() + 7 * 864e5));
+      localStorage.setItem("smart_popup_shown_count", "99");
+      localStorage.setItem("smart_popup_session_shown", "1");
+      localStorage.setItem("cookies_consent", JSON.stringify({ accepted: true, ts: Date.now() }));
+      localStorage.setItem("cookiesConsent", "accepted");
+    } catch {}
+  });
+
   await page.goto(URL, { waitUntil: "domcontentloaded", timeout: 60_000 });
   try { await page.waitForLoadState("networkidle", { timeout: 12_000 }); } catch {}
   await page.waitForTimeout(1500);
 
-  // Dismiss LeadCapturePopup / any blocking overlay if present
-  for (let i = 0; i < 3; i++) {
-    const overlay = page.locator('div.fixed.inset-0.z-\\[20000\\]').first();
-    if ((await overlay.count()) === 0) break;
-    try {
-      // Click top-left of the overlay (outside the form card) to trigger handleDismiss
-      const box = await overlay.boundingBox();
-      if (box) await page.mouse.click(box.x + 10, box.y + 10);
-    } catch {}
-    await page.waitForTimeout(400);
-  }
-  // Also dismiss the cookie banner if visible (it can sit above the footer)
-  const cookieBtn = page.locator('button:has-text("Accept All")').first();
-  if ((await cookieBtn.count()) > 0 && (await cookieBtn.isVisible().catch(() => false))) {
-    await cookieBtn.click().catch(() => {});
-    await page.waitForTimeout(300);
-  }
+  // Forcefully remove any blocking overlays that might still appear
+  await page.evaluate(() => {
+    document.querySelectorAll('div.fixed.inset-0').forEach((el) => {
+      const z = (el as HTMLElement).style.zIndex || getComputedStyle(el).zIndex;
+      if (parseInt(z, 10) >= 10000) (el as HTMLElement).remove();
+    });
+  });
+  await page.waitForTimeout(200);
 
   // Scroll to bottom to reveal the footer
   await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }));
