@@ -70,9 +70,9 @@ export default function DeveloperInfoCard({ developer, projectName, projectCount
                 boxShadow: '0 4px 16px rgba(200,167,102,0.3)'
               }}
             >
-              {developer.logo_url ? (
+              {isValidDeveloperLogoUrl(developer.logo_url) ? (
                 <img 
-                  src={developer.logo_url} 
+                  src={developer.logo_url as string} 
                   alt={`${developer.name} logo`}
                   className="w-full h-full object-contain"
                 />
