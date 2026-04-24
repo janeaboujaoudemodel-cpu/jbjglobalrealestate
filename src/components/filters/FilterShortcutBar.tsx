@@ -654,7 +654,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Construction Status */}
-        <Popover>
+        <Popover open={constructionOpen} onOpenChange={setConstructionOpen}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, filters.constructionStatuses.length > 0 ? pillActive : pillInactive)}>
               {t('filter.construction')}
