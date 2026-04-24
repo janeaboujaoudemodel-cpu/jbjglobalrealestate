@@ -717,6 +717,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <Button type="button" onClick={() => setViewsOpen(false)} className="flex-1 h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800">{t('filter.applyFilter') || 'Done'}</Button>
             </div>
           </PopoverContent>
+        </Popover>
 
         {/* Divider */}
         <div className="w-px h-5 bg-gray-300 flex-shrink-0" />
