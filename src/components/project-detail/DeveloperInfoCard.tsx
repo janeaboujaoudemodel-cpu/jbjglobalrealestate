@@ -3,6 +3,7 @@ import { Building2, ExternalLink, Award, ChevronDown, ChevronUp, Calendar, Brief
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { renderMarkdownToHtml, formatReellyDescription } from "@/lib/markdownUtils";
+import { isValidDeveloperLogoUrl } from "@/utils/developerLogo";
 
 interface DeveloperInfoCardProps {
   developer: {
