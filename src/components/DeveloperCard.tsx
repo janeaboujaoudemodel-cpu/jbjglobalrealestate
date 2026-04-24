@@ -83,37 +83,27 @@ const DeveloperCard = ({ developer, projectCount = 0, index = 99 }: DeveloperCar
             </div>
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 flex items-center justify-center">
-              {developer.logo_url ? (
-                <div className="text-center">
-                  <img
-                    src={developer.logo_url}
-                    alt={developer.name}
-                    className="w-20 h-20 object-contain mx-auto mb-2 opacity-80"
-                    loading="lazy"
-                  />
-                  <span className="text-white/60 text-xs font-medium tracking-wider uppercase">{developer.name}</span>
-                </div>
-              ) : (
-                <div className="text-center">
-                  <Building2 className="w-12 h-12 text-gold/50 mx-auto mb-2" />
-                  <span className="text-white/60 text-xs font-medium tracking-wider uppercase">{developer.name}</span>
-                </div>
-              )}
+              <div className="text-center">
+                <DeveloperLogo
+                  src={developer.logo_url}
+                  alt={developer.name}
+                  className="w-20 h-20 mx-auto mb-2 bg-white/95"
+                  loading="lazy"
+                  renderFallback
+                />
+                <span className="text-white/60 text-xs font-medium tracking-wider uppercase">{developer.name}</span>
+              </div>
             </div>
           )}
           
       {/* Logo Overlay - Top Left */}
           <div className="absolute top-3 left-3 z-20">
-            {developer.logo_url && !logoError ? (
-              <DeveloperLogo
-                src={developer.logo_url}
-                alt={`${developer.name} logo`}
-                loading={isEager ? "eager" : "lazy"}
-                onError={() => setLogoError(true)}
-              />
-            ) : (
-              <Building2 className="w-8 h-8 text-white/60 drop-shadow-lg" />
-            )}
+            <DeveloperLogo
+              src={developer.logo_url}
+              alt={`${developer.name} logo`}
+              loading={isEager ? "eager" : "lazy"}
+              renderFallback
+            />
           </div>
           
           {/* Tier Badge - Top Right */}
