@@ -106,8 +106,9 @@ const ctx = await browser.newContext({ viewport: VIEWPORTS[0] });
 const page = await ctx.newPage();
 
 console.log(`→ Loading ${URL}`);
-await page.goto(URL, { waitUntil: "networkidle", timeout: 45_000 });
-await page.waitForTimeout(1500);
+await page.goto(URL, { waitUntil: "domcontentloaded", timeout: 60_000 });
+try { await page.waitForLoadState("networkidle", { timeout: 15_000 }); } catch {}
+await page.waitForTimeout(2500);
 
 const rawShots = [];
 
