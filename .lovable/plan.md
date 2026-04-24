@@ -1,52 +1,47 @@
-# Fix: Continue Searching showing the same project twice
+# Fix: Page navigation arrow visibility & position
 
 ## Root Cause
 
-The deduplication logic for the **history itself** is already correct in three places:
+The floating scroll arrows live in `src/components/PageNavigation.tsx`, mounted globally from `MainLayout`. Two problems:
 
-1. `useRecentSearches.trackView` — removes any prior entry with the same `type+slug` or `type+id` before inserting the new view (so viewing the same project twice only stores it once, with the latest `viewedAt`).
-2. `useRecentSearches.loadItems` — dedupes by `type+slug` on load.
-3. `ContinueSearching` — dedupes the hook output again by both `type+slug` AND `type+id`.
-
-So the stored history is clean — each project only appears **once**.
-
-The visible duplication comes from one place only:
-
-```ts
-// src/components/ContinueSearching.tsx — WalkingStrip
-const duplicated = [...uniqueItems, ...uniqueItems];
-```
-
-The marquee intentionally concatenates the unique list with itself to create a seamless infinite-scroll loop. When the user has only a few recently-viewed projects (e.g. 2-4), the loop wrap is visible on-screen as "Project A, Project B, Project A, Project B" — the exact same card, same photos, same developer, right next to itself. This is what the user is reporting.
+1. `showScrollBottom` is initialized to `true`, so the **down arrow** appears **immediately on page load** before the user has scrolled. The user expects nothing visible at first — the arrow should only appear once the user scrolls down, and it should be the **up arrow** (to go back to top).
+2. The button sits at `bottom-36` (144px), above the chat-support button at `bottom-20` (80px). The gap is there, but the user wants the arrow **closer to the chat support** without overlaying it.
 
 ## Fix
 
-Change the carousel behavior so an item is never visible twice at the same time:
+**`src/components/PageNavigation.tsx`**
 
-1. **Only duplicate the list when there are enough unique items to fill the viewport width.** If the unique list already exceeds the visible strip width, the second copy is off-screen during the seamless reset and the duplication is invisible. If there are fewer items than fit on screen, disable the marquee animation entirely and render a static, centered, non-scrolling row — so each project is guaranteed to appear exactly once.
+1. Change the initial state so nothing shows on first paint:
+   - `showScrollBottom` default → `false` (not `true`).
+   - Keep `showScrollTop` default `false`.
+   - Gate both arrows behind a `hasScrolled` flag that flips `true` only after the user scrolls past ~100px. Before any scroll, render nothing.
 
-2. **Pad-by-scrolling, not pad-by-cloning.** When the list is large enough to animate, keep the existing `[...uniqueItems, ...uniqueItems]` pattern (it is required for a seamless `translateX` loop) but measure the viewport width and only start animation once `singleSetWidth > viewportWidth`. This prevents the "A B A B" visible stutter on short lists.
+2. After the user scrolls:
+   - Once `scrollY > 100`, show the **up arrow** (back to top) — this matches the user's request ("once the user scrolls down, then show him go to top").
+   - The down arrow is kept only when the user is near the top AND page is scrollable — but since we now require scrolling to trigger visibility, the down arrow effectively never shows on the home idle state. Simpler: drop the down arrow entirely and only render the up arrow after scroll. This matches the explicit request.
 
-3. **Tighten duplicate detection across `type` boundaries.** Today a developer card and a property card for the same entity (e.g. "Emaar" developer + an Emaar project) can both be tracked. That is correct — they are different entities — but confirm the `type+slug` key stays the canonical dedup key and that the hook's normalization doesn't ever drop the `type` prefix.
+3. Tighten the vertical position so the arrow sits just above the chat launcher:
+   - Chat launcher bottom: `bottom-20` (80px), chat button height ~56px → its top edge is at ~136px.
+   - Move `PageNavigation` from `bottom-36` (144px) to `bottom-[148px]` so the arrow's bottom edge sits 148px from viewport bottom — the arrow button ends right above the chat button with a consistent ~12px gap, never overlapping.
+   - Keep the "chat medium" branch (`isChatMedium` → `bottom-56`) for the expanded-chat state.
 
-## Technical Changes
+4. Keep the existing "hide when chat is open" guard (`if (isChatOpen) return null`) so there is zero overlap when the chat is expanded.
 
-**`src/components/ContinueSearching.tsx` — `WalkingStrip` component**
+## Technical Changes (single file)
 
-- Add a `ResizeObserver` on the outer wrapper to track the visible width.
-- Compute `shouldAnimate = singleSetWidth > viewportWidth + 32` (small buffer).
-- If `shouldAnimate` is false: render `uniqueItems` once (no `[...x, ...x]`), center them with `justify-center`, and skip the `requestAnimationFrame` loop.
-- If `shouldAnimate` is true: keep the current duplicated loop + animation.
-- Keep the existing `seen = new Set<\`${type}-${slug}\`>` dedup.
+```
+src/components/PageNavigation.tsx
+```
 
-**No changes to:**
-- `useRecentSearches.ts` (dedup is already correct).
-- The top-level `ContinueSearching` dedup (already correct).
-- Storage format / tracking calls on project detail pages.
+- `const [showScrollBottom, setShowScrollBottom] = useState(false);` (was `true`)
+- Remove the down-arrow button (or keep but gate behind `hasScrolled && scrollY < 100 && isScrollable`; simpler: remove).
+- In `handleScroll`, set `showScrollTop = scrollTop > 200` as before.
+- Position classes: `isChatMedium ? "bottom-56" : "bottom-[148px]"`.
 
 ## Result
 
-- Viewing the same project twice still only creates one history entry (already true).
-- With 1-5 recently-viewed items, the strip renders each card exactly once, centered, non-scrolling — no visible duplicate.
-- With 6+ items that overflow the viewport, the seamless marquee continues to work, and the "second copy" used for the loop is always off-screen during the wrap.
-- A different project by the same developer still appears as its own card (the dedup key is `type+slug`, not developer name).
+- On page load → no arrow visible anywhere on the screen.
+- User scrolls down past ~200px → up arrow fades in, sits just above (≈12px gap) the chat-support button on the right.
+- Tapping the up arrow smoothly scrolls to top.
+- Chat support button is never overlayed; when the chat is opened, the arrow is hidden entirely.
+- RTL mirroring (`left-4` vs `right-6`) is preserved.

@@ -12,7 +12,6 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
   const languageContext = useContext(LanguageContext);
   const isRTL = languageContext?.isRTL ?? false;
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [showScrollBottom, setShowScrollBottom] = useState(true);
 
   // Drag state
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null);
@@ -22,12 +21,7 @@ const PageNavigation = forwardRef<HTMLDivElement, PageNavigationProps>(({ isChat
 
   const handleScroll = useCallback(() => {
     const scrollTop = window.scrollY;
-    const scrollHeight = document.documentElement.scrollHeight;
-    const clientHeight = document.documentElement.clientHeight;
-    const isScrollable = scrollHeight > clientHeight + 50;
-    
     setShowScrollTop(scrollTop > 200);
-    setShowScrollBottom(isScrollable && scrollTop + clientHeight < scrollHeight - 100);
   }, []);
 
   useEffect(() => {
