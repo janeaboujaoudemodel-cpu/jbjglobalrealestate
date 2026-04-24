@@ -163,6 +163,52 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
   const { t } = useLanguage();
   const isDark = variant === 'dark';
 
+  // Controlled popover open state — allows Apply to close them
+  const [priceOpen, setPriceOpen] = useState(false);
+  const [paymentsOpen, setPaymentsOpen] = useState(false);
+
+  // Local draft state for price popover (prevents per-keystroke re-render/navigation)
+  const [draftPriceMin, setDraftPriceMin] = useState(filters.priceMin);
+  const [draftPriceMax, setDraftPriceMax] = useState(filters.priceMax);
+
+  // Local draft state for payments popover
+  const [draftPaymentPlanMax, setDraftPaymentPlanMax] = useState(filters.paymentPlanMax);
+  const [draftAfterHandover, setDraftAfterHandover] = useState(filters.afterHandover);
+  const [draftPostHandoverOnly, setDraftPostHandoverOnly] = useState(filters.postHandoverOnly);
+
+  // Sync drafts when popover opens
+  const handlePriceOpenChange = useCallback((open: boolean) => {
+    if (open) {
+      setDraftPriceMin(filters.priceMin);
+      setDraftPriceMax(filters.priceMax);
+    }
+    setPriceOpen(open);
+  }, [filters.priceMin, filters.priceMax]);
+
+  const handlePaymentsOpenChange = useCallback((open: boolean) => {
+    if (open) {
+      setDraftPaymentPlanMax(filters.paymentPlanMax);
+      setDraftAfterHandover(filters.afterHandover);
+      setDraftPostHandoverOnly(filters.postHandoverOnly);
+    }
+    setPaymentsOpen(open);
+  }, [filters.paymentPlanMax, filters.afterHandover, filters.postHandoverOnly]);
+
+  const applyPrice = useCallback(() => {
+    onFilterChange({ ...filters, priceMin: draftPriceMin, priceMax: draftPriceMax });
+    setPriceOpen(false);
+  }, [filters, onFilterChange, draftPriceMin, draftPriceMax]);
+
+  const applyPayments = useCallback(() => {
+    onFilterChange({
+      ...filters,
+      paymentPlanMax: draftPaymentPlanMax,
+      afterHandover: draftAfterHandover,
+      postHandoverOnly: draftPostHandoverOnly,
+    });
+    setPaymentsOpen(false);
+  }, [filters, onFilterChange, draftPaymentPlanMax, draftAfterHandover, draftPostHandoverOnly]);
+
   const update = useCallback((partial: Partial<ShortcutFilterState>) => {
     onFilterChange({ ...filters, ...partial });
   }, [filters, onFilterChange]);
@@ -289,7 +335,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </div>
           )}
         {/* Price */}
-        <Popover>
+        <Popover open={priceOpen} onOpenChange={handlePriceOpenChange}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.priceMin || filters.priceMax) ? pillActive : pillInactive)}>
               {t('filter.price')}
@@ -310,10 +356,14 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <div className="relative">
                   <input
                     type="text"
-                    value={filters.priceMin}
-                    onChange={(e) => update({ priceMin: e.target.value.replace(/[^0-9]/g, '') })}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
+                    value={draftPriceMin}
+                    onChange={(e) => setDraftPriceMin(e.target.value.replace(/[^0-9]/g, ''))}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); applyPrice(); } }}
                     placeholder="0"
-                    className="w-full h-9 px-3 pr-12 bg-white border border-gray-300 rounded-lg text-sm text-black"
+                    className="w-full h-9 px-3 pr-12 bg-white border border-gray-300 rounded-lg text-sm text-black focus:border-black focus:outline-none"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-black/40 font-medium">AED</span>
                 </div>
@@ -323,10 +373,14 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <div className="relative">
                   <input
                     type="text"
-                    value={filters.priceMax}
-                    onChange={(e) => update({ priceMax: e.target.value.replace(/[^0-9]/g, '') })}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
+                    value={draftPriceMax}
+                    onChange={(e) => setDraftPriceMax(e.target.value.replace(/[^0-9]/g, ''))}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); applyPrice(); } }}
                     placeholder="Any"
-                    className="w-full h-9 px-3 pr-12 bg-white border border-gray-300 rounded-lg text-sm text-black"
+                    className="w-full h-9 px-3 pr-12 bg-white border border-gray-300 rounded-lg text-sm text-black focus:border-black focus:outline-none"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-black/40 font-medium">AED</span>
                 </div>
@@ -336,10 +390,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               {PRICE_PRESETS.map((p) => (
                 <button
                   key={p.value}
-                  onClick={() => update({ priceMax: p.value })}
+                  type="button"
+                  onClick={() => setDraftPriceMax(draftPriceMax === p.value ? '' : p.value)}
                   className={cn(
-                    "px-3 py-1 rounded-full text-xs font-medium border transition-all",
-                    filters.priceMax === p.value
+                    "px-3 py-1 rounded-full text-xs font-medium border transition-colors",
+                    draftPriceMax === p.value
                       ? "bg-black text-white border-black font-bold"
                       : "bg-white text-black border-gray-300 hover:border-gray-400"
                   )}
@@ -348,17 +403,28 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </button>
               ))}
             </div>
-            <Button
-              onClick={() => {}}
-              className="w-full h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800"
-            >
-              {t('filter.applyFilter')}
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => { setDraftPriceMin(''); setDraftPriceMax(''); }}
+                className="h-9 px-3 text-xs rounded-lg"
+              >
+                {t('filter.reset') || 'Reset'}
+              </Button>
+              <Button
+                type="button"
+                onClick={applyPrice}
+                className="flex-1 h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800"
+              >
+                {t('filter.applyFilter')}
+              </Button>
+            </div>
           </PopoverContent>
         </Popover>
 
         {/* Payments */}
-        <Popover>
+        <Popover open={paymentsOpen} onOpenChange={handlePaymentsOpenChange}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactive)}>
               {t('filter.payments')}
@@ -371,11 +437,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-black/60">{t('filter.maxPreHandover')}</span>
-                  <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded border border-gray-300">{filters.paymentPlanMax}%</span>
+                  <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded border border-gray-300">{draftPaymentPlanMax}%</span>
                 </div>
                 <Slider
-                  value={[filters.paymentPlanMax]}
-                  onValueChange={(v) => update({ paymentPlanMax: v[0] })}
+                  value={[draftPaymentPlanMax]}
+                  onValueChange={(v) => setDraftPaymentPlanMax(v[0])}
                   min={0}
                   max={100}
                   step={5}
@@ -385,18 +451,39 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <label className="text-xs text-black/60 mb-1 block">{t('filter.afterHandover')}</label>
                 <input
                   type="text"
-                  value={filters.afterHandover}
-                  onChange={(e) => update({ afterHandover: e.target.value.replace(/[^0-9]/g, '') })}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  autoComplete="off"
+                  value={draftAfterHandover}
+                  onChange={(e) => setDraftAfterHandover(e.target.value.replace(/[^0-9]/g, ''))}
+                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); applyPayments(); } }}
                   placeholder="e.g. 30"
-                  className="w-full h-9 px-3 bg-white border border-gray-300 rounded-lg text-sm text-black"
+                  className="w-full h-9 px-3 bg-white border border-gray-300 rounded-lg text-sm text-black focus:border-black focus:outline-none"
                 />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-black/70">{t('filter.postHandoverOnly')}</span>
                 <Switch
-                  checked={filters.postHandoverOnly}
-                  onCheckedChange={(v) => update({ postHandoverOnly: v })}
+                  checked={draftPostHandoverOnly}
+                  onCheckedChange={(v) => setDraftPostHandoverOnly(v)}
                 />
+              </div>
+              <div className="flex gap-2 pt-1">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => { setDraftPaymentPlanMax(100); setDraftAfterHandover(''); setDraftPostHandoverOnly(false); }}
+                  className="h-9 px-3 text-xs rounded-lg"
+                >
+                  {t('filter.reset') || 'Reset'}
+                </Button>
+                <Button
+                  type="button"
+                  onClick={applyPayments}
+                  className="flex-1 h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800"
+                >
+                  {t('filter.applyFilter')}
+                </Button>
               </div>
             </div>
           </PopoverContent>
