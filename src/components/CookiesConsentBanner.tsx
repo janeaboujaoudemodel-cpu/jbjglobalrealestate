@@ -126,20 +126,19 @@ const CookiesConsentBanner = () => {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-black font-semibold text-base sm:text-lg mb-1.5">We value your privacy</h3>
-                    <p className="text-black/70 text-xs sm:text-sm leading-relaxed mb-3">
+                    <p className="text-black/80 text-xs sm:text-sm leading-relaxed mb-3">
                       We use cookies to enhance your experience. Essential cookies are required for the website to function.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        className="bg-gold text-black font-semibold hover:brightness-110 transition-all border border-gold/50 shadow-lg px-4 sm:px-6 text-sm"
+                        className="bg-gold text-black font-semibold hover:brightness-110 transition-all border border-gold/60 shadow-md px-4 sm:px-6 text-sm"
                       >
                         Accept All
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}
-                        variant="outline"
-                        className="bg-white/80 border-black/20 text-black font-medium hover:bg-black hover:text-white transition-all px-4 sm:px-6 text-sm"
+                        className="bg-black text-white font-semibold border-2 border-black hover:bg-gray-800 hover:border-gray-800 transition-all shadow-md px-4 sm:px-6 text-sm"
                       >
                         Manage Preferences
                       </Button>

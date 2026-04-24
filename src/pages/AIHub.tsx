@@ -671,9 +671,9 @@ const AIHub = () => {
             <VideoBackground 
               src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4"
               poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
-              opacity={0.4}
+              opacity={0.3}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-[#0D0D0D]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-[#0D0D0D]" />
           </div>
           
           {/* Animated gradient orbs */}
@@ -723,7 +723,7 @@ const AIHub = () => {
               </motion.p>
 
               <motion.p 
-                className="text-gray-600 text-base max-w-xl mx-auto mb-8"
+                className="text-white/75 text-base max-w-xl mx-auto mb-8"
                 variants={fadeInUp}
               >
                 Free tools • Property analysis • Investment calculators • Productivity suite
