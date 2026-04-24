@@ -424,7 +424,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Payments */}
-        <Popover>
+        <Popover open={paymentsOpen} onOpenChange={handlePaymentsOpenChange}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.paymentPlanMax < 100 || filters.postHandoverOnly) ? pillActive : pillInactive)}>
               {t('filter.payments')}
@@ -437,11 +437,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-black/60">{t('filter.maxPreHandover')}</span>
-                  <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded border border-gray-300">{filters.paymentPlanMax}%</span>
+                  <span className="text-xs font-bold text-black bg-white px-2 py-0.5 rounded border border-gray-300">{draftPaymentPlanMax}%</span>
                 </div>
                 <Slider
-                  value={[filters.paymentPlanMax]}
-                  onValueChange={(v) => update({ paymentPlanMax: v[0] })}
+                  value={[draftPaymentPlanMax]}
+                  onValueChange={(v) => setDraftPaymentPlanMax(v[0])}
                   min={0}
                   max={100}
                   step={5}
@@ -451,18 +451,39 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <label className="text-xs text-black/60 mb-1 block">{t('filter.afterHandover')}</label>
                 <input
                   type="text"
-                  value={filters.afterHandover}
-                  onChange={(e) => update({ afterHandover: e.target.value.replace(/[^0-9]/g, '') })}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  autoComplete="off"
+                  value={draftAfterHandover}
+                  onChange={(e) => setDraftAfterHandover(e.target.value.replace(/[^0-9]/g, ''))}
+                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); applyPayments(); } }}
                   placeholder="e.g. 30"
-                  className="w-full h-9 px-3 bg-white border border-gray-300 rounded-lg text-sm text-black"
+                  className="w-full h-9 px-3 bg-white border border-gray-300 rounded-lg text-sm text-black focus:border-black focus:outline-none"
                 />
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-black/70">{t('filter.postHandoverOnly')}</span>
                 <Switch
-                  checked={filters.postHandoverOnly}
-                  onCheckedChange={(v) => update({ postHandoverOnly: v })}
+                  checked={draftPostHandoverOnly}
+                  onCheckedChange={(v) => setDraftPostHandoverOnly(v)}
                 />
+              </div>
+              <div className="flex gap-2 pt-1">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => { setDraftPaymentPlanMax(100); setDraftAfterHandover(''); setDraftPostHandoverOnly(false); }}
+                  className="h-9 px-3 text-xs rounded-lg"
+                >
+                  {t('filter.reset') || 'Reset'}
+                </Button>
+                <Button
+                  type="button"
+                  onClick={applyPayments}
+                  className="flex-1 h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800"
+                >
+                  {t('filter.applyFilter')}
+                </Button>
               </div>
             </div>
           </PopoverContent>
