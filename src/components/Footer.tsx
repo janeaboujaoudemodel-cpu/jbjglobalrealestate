@@ -35,26 +35,26 @@ const NavColumn = ({
   viewAllHref?: string;
   viewAllLabel?: string;
 }) => (
-  <div>
-    <h4 className="text-white text-[11px] font-semibold uppercase tracking-[0.2em] mb-3">
+  <div className="min-w-0">
+    <h4 className="text-white text-[10.5px] font-semibold uppercase tracking-[0.22em] mb-2.5">
       {title}
     </h4>
-    <ul className="space-y-1.5">
+    <ul className="space-y-1">
       {links.map((link) => (
         <li key={link.href}>
           <Link
             to={link.href}
-            className="text-[13px] leading-snug text-white/65 hover:text-white transition-colors"
+            className="text-[12.5px] leading-[1.45] text-white/65 hover:text-white transition-colors"
           >
             {link.label}
           </Link>
         </li>
       ))}
       {viewAllHref && (
-        <li className="pt-1">
+        <li className="pt-1.5">
           <Link
             to={viewAllHref}
-            className="text-[12px] font-semibold uppercase tracking-[0.15em] text-white/80 hover:text-white transition-colors"
+            className="text-[11px] font-semibold uppercase tracking-[0.16em] hover:text-white transition-colors"
             style={{ color: "#D9C292" }}
           >
             {viewAllLabel}
@@ -449,7 +449,7 @@ const Footer = () => {
       <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} />
 
       {/* === ZONE 1 — Brand + utility row === */}
-      <div className="px-4 sm:px-6 md:px-8 pt-10 pb-7">
+      <div className="px-4 sm:px-6 md:px-8 pt-8 pb-5">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <Link to="/" className="inline-flex items-center gap-3 group">
@@ -490,8 +490,8 @@ const Footer = () => {
       </div>
 
       {/* === ZONE 2 — Premium 4-col navigation grid === */}
-      <div className="px-4 sm:px-6 md:px-8 py-10">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10">
+      <div className="px-4 sm:px-6 md:px-8 py-7">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-7">
           <NavColumn
             title={t("footer.properties") || "Explore"}
             links={colExplore}
@@ -525,9 +525,9 @@ const Footer = () => {
       </div>
 
       {/* === ZONE 3 — Contact strip + compact legal === */}
-      <div className="px-4 sm:px-6 md:px-8 py-8">
+      <div className="px-4 sm:px-6 md:px-8 py-6">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mb-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mb-4">
             <div className="flex items-center gap-2 text-[12px] text-white/70">
               <MapPin className="w-3.5 h-3.5" style={{ color: ACCENT }} />
               <span>{CONTACT_INFO.address}</span>
@@ -570,7 +570,7 @@ const Footer = () => {
           </div>
 
           {/* Copyright + legal links — premium single row */}
-          <div className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center" style={{ borderColor: HAIRLINE }}>
+          <div className="mt-5 pt-4 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-1.5 text-center" style={{ borderColor: HAIRLINE }}>
             <span className="text-[11px] text-white/60">
               © {currentYear} JBJ Global Real Estate · All Rights Reserved
             </span>
