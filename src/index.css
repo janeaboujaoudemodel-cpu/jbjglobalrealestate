@@ -388,6 +388,45 @@ All colors MUST be HSL.
     stroke-width: 2;
     vector-effect: non-scaling-stroke;
   }
+
+  /* ----------------------------------------------------------
+   * SURFACE-AWARE ICON CONTRAST FLOORS
+   * Guarantees Lucide SVGs are always readable regardless of
+   * the parent surface, front-end or back-end.
+   * ---------------------------------------------------------- */
+
+  /* DARK surfaces → icons must be white-ish, full opacity */
+  [data-surface="dark"] svg.lucide {
+    color: #FFFFFF;
+    opacity: 1;
+  }
+  [data-surface="dark"] svg.lucide.text-gray-300,
+  [data-surface="dark"] svg.lucide.text-gray-400,
+  [data-surface="dark"] svg.lucide.text-gray-500,
+  [data-surface="dark"] svg.lucide.text-muted-foreground {
+    color: rgba(255, 255, 255, 0.92) !important;
+    opacity: 1 !important;
+  }
+
+  /* LIGHT surfaces → icons cannot drop below gray-500 (4.6:1 on white) */
+  [data-surface="light"] svg.lucide.text-white,
+  [data-surface="light"] svg.lucide[class*="text-white/"],
+  [data-surface="light"] svg.lucide.text-gray-200,
+  [data-surface="light"] svg.lucide.text-gray-100,
+  [data-surface="light"] svg.lucide.text-zinc-200,
+  [data-surface="light"] svg.lucide.text-zinc-100 {
+    color: hsl(0 0% 28%) !important;
+    opacity: 1 !important;
+  }
+
+  /* Icons sitting directly on white/very-light cards must never be white */
+  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-zinc-50, .bg-neutral-50)
+    > svg.lucide.text-white,
+  :where(.bg-white, .bg-card, .bg-background, .bg-gray-50, .bg-zinc-50, .bg-neutral-50)
+    > svg.lucide[class*="text-white/"] {
+    color: hsl(0 0% 12%) !important;
+    opacity: 1 !important;
+  }
 }
 
 @media (max-width: 767px) {
