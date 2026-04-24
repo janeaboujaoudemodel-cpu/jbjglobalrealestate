@@ -27,15 +27,15 @@ type ModePalette = {
   description: string;
   // Hard-coded hex colors so the global Tailwind grayscale remap of
   // orange/blue/green/purple cannot wash out the mode identity.
-  base: string;     // primary mode color (e.g. button border, ring)
-  light: string;    // soft tinted background for the row card
-  lighter: string;  // very soft tinted background for the trigger
+  base: string;     // primary mode color (saturated chip + accent)
+  baseDark: string; // darker mode color for gradients / rims
+  rowFrom: string;  // row card gradient start (clearly tinted)
+  rowTo: string;    // row card gradient end (slightly deeper tint)
+  rowHover: string; // row hover background
   dark: string;     // text color on light surfaces
-  iconBg: string;   // icon container background
-  iconBorder: string; // icon container border
 };
 
-// Per-mode palette per owner spec:
+// Per-mode palette (locked):
 //   Investor          -> orange
 //   Broker            -> blue
 //   Investor + Broker -> green
@@ -45,49 +45,49 @@ const MODE_CONFIG: Record<UserMode, ModePalette> = {
     label: 'Mode: Investor',
     shortLabel: 'I',
     icon: User,
-    description: 'Browse properties, access ROI tools, upload listings, explore guides & market insights',
-    base: '#F97316',      // orange-500
-    light: '#FFEDD5',     // orange-100
-    lighter: '#FFF7ED',   // orange-50
-    dark: '#9A3412',      // orange-800
-    iconBg: '#FFEDD5',
-    iconBorder: '#FDBA74',
+    description: 'Browse properties, ROI tools, listings, guides & market insights',
+    base: '#F97316',
+    baseDark: '#C2410C',
+    rowFrom: '#FFF1E0',
+    rowTo: '#FFE0BF',
+    rowHover: '#FFD0A0',
+    dark: '#7C2D12',
   },
   broker: {
     label: 'Mode: Broker',
     shortLabel: 'B',
     icon: Briefcase,
-    description: 'CRM dashboard, education hub, sell properties, upload listings, coordinate with clients & close deals',
-    base: '#2563EB',      // blue-600
-    light: '#DBEAFE',     // blue-100
-    lighter: '#EFF6FF',   // blue-50
-    dark: '#1E3A8A',      // blue-900
-    iconBg: '#DBEAFE',
-    iconBorder: '#93C5FD',
+    description: 'CRM, education hub, sell, listings, coordinate clients & close deals',
+    base: '#2563EB',
+    baseDark: '#1D4ED8',
+    rowFrom: '#E8F0FE',
+    rowTo: '#CFE0FB',
+    rowHover: '#BBD2F8',
+    dark: '#1E3A8A',
   },
   investor_broker: {
     label: 'Mode: Investor + Broker',
     shortLabel: 'I+B',
     icon: Users,
-    description: 'Full access to investor tools, broker dashboard, CRM, listings, guides & market intelligence',
-    base: '#16A34A',      // green-600
-    light: '#DCFCE7',     // green-100
-    lighter: '#F0FDF4',   // green-50
-    dark: '#14532D',      // green-900
-    iconBg: '#DCFCE7',
-    iconBorder: '#86EFAC',
+    description: 'Full investor + broker access: tools, CRM, listings, guides & insights',
+    base: '#16A34A',
+    baseDark: '#15803D',
+    rowFrom: '#E5F8EC',
+    rowTo: '#C7EFD3',
+    rowHover: '#B0E5C0',
+    dark: '#14532D',
   },
   developer: {
     label: 'Mode: Developer',
     shortLabel: 'D',
     icon: Building2,
-    description: 'Submit projects, upload terraces & documents, manage launches, marketing materials & event calendar',
-    base: '#7C3AED',      // violet-600
-    light: '#EDE9FE',     // violet-100
-    lighter: '#F5F3FF',   // violet-50
-    dark: '#4C1D95',      // violet-900
-    iconBg: '#EDE9FE',
-    iconBorder: '#C4B5FD',
+    description: 'Submit projects, upload documents, manage launches & event calendar',
+    base: '#7C3AED',
+    baseDark: '#6D28D9',
+    rowFrom: '#F1ECFE',
+    rowTo: '#DDD0FB',
+    rowHover: '#CCB9F8',
+    dark: '#4C1D95',
   },
 };
 
@@ -111,11 +111,15 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
   const currentConfig = MODE_CONFIG[mode];
   const CurrentIcon = currentConfig.icon;
 
+  // ─────────────────────────────────────────────────────────────────
+  // Closed-trigger styling: a SOLID mode-color chip (not a pastel),
+  // so the selected mode visibly "reflects" in header / footer / menu.
+  // ─────────────────────────────────────────────────────────────────
   const triggerStyle: CSSProperties = {
-    backgroundColor: currentConfig.lighter,
-    borderColor: currentConfig.base,
-    color: currentConfig.dark,
-    boxShadow: `0 1px 0 ${currentConfig.base}33`,
+    backgroundImage: `linear-gradient(135deg, ${currentConfig.base} 0%, ${currentConfig.baseDark} 100%)`,
+    borderColor: currentConfig.baseDark,
+    color: '#FFFFFF',
+    boxShadow: `0 2px 6px ${currentConfig.base}55, inset 0 1px 0 rgba(255,255,255,0.25)`,
   };
 
   if (variant === 'compact') {
@@ -125,16 +129,16 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         disabled={isLoading}
         style={triggerStyle}
         className={cn(
-          "flex items-center gap-1.5 px-2 py-1 rounded-full border-2 transition-all duration-300",
+          "flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all duration-300",
           className
         )}
       >
         {isLoading ? (
-          <Loader2 className="w-3.5 h-3.5 animate-spin" style={{ color: currentConfig.base }} />
+          <Loader2 className="w-3.5 h-3.5 animate-spin" style={{ color: '#FFFFFF' }} />
         ) : (
-          <CurrentIcon className="w-3.5 h-3.5" style={{ color: currentConfig.base }} />
+          <CurrentIcon className="w-3.5 h-3.5" style={{ color: '#FFFFFF' }} />
         )}
-        <span className="text-xs font-semibold" style={{ color: currentConfig.dark }}>
+        <span className="text-xs font-bold" style={{ color: '#FFFFFF' }}>
           {currentConfig.shortLabel}
         </span>
       </button>
@@ -146,8 +150,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
       onClick={(e) => e.stopPropagation()}
       onPointerDown={(e) => e.stopPropagation()}
       // data-surface="light" defeats the global [data-surface="dark"]
-      // color override so mode-colored text stays legible inside the
-      // obsidian footer / dark headers.
+      // color override so the trigger chip stays legible on dark surfaces.
       data-surface="light"
     >
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen} modal={false}>
@@ -156,25 +159,26 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
             disabled={isLoading}
             style={triggerStyle}
             className={cn(
-              "flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border-2 transition-all duration-300 hover:shadow-md max-w-[240px] whitespace-nowrap shrink-0",
-              "focus:outline-none focus-visible:ring-2",
+              "flex items-center gap-1.5 px-3 py-1.5 rounded-lg border transition-all duration-300 hover:brightness-110 max-w-[260px] whitespace-nowrap shrink-0",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40",
+              isOpen && "ring-2",
               className
             )}
           >
             {isLoading ? (
-              <Loader2 className="w-4 h-4 animate-spin shrink-0" style={{ color: currentConfig.base }} />
+              <Loader2 className="w-4 h-4 animate-spin shrink-0" style={{ color: '#FFFFFF' }} />
             ) : (
-              <CurrentIcon className="w-4 h-4 shrink-0" style={{ color: currentConfig.base }} />
+              <CurrentIcon className="w-4 h-4 shrink-0" style={{ color: '#FFFFFF' }} />
             )}
             <span
               className="text-xs font-bold truncate hidden sm:block"
-              style={{ color: currentConfig.dark }}
+              style={{ color: '#FFFFFF' }}
             >
               {currentConfig.label}
             </span>
             <ChevronDown
-              className={cn("w-3 h-3 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
-              style={{ color: currentConfig.base }}
+              className={cn("w-3.5 h-3.5 shrink-0 transition-transform duration-200", isOpen && "rotate-180")}
+              style={{ color: '#FFFFFF' }}
             />
           </button>
         </DropdownMenuTrigger>
@@ -182,31 +186,40 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
         <DropdownMenuContent
           align="end"
           side={side}
-          className="w-80 mr-3 bg-white border border-gray-200 shadow-xl rounded-xl p-2 z-[10001]"
-          sideOffset={8}
+          // data-surface="light" gives the portaled panel its own light-scope
+          // so dark-surface CSS can't bleed in when the trigger is in the footer.
+          data-surface="light"
+          className="w-[340px] mr-3 bg-white border border-gray-200 shadow-2xl rounded-2xl p-3 z-[10001]"
+          sideOffset={10}
           collisionPadding={16}
           avoidCollisions
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <div className="px-3 py-2.5 mb-2 rounded-lg bg-gray-50 border border-gray-200">
+          <div className="px-3 py-2.5 mb-3 rounded-xl bg-gray-50 border border-gray-200">
             <p className="text-sm font-bold text-black">Select your mode</p>
             <p className="text-xs text-gray-600 mt-0.5">
               Choose how you want to use the platform
             </p>
           </div>
 
-          {/* Stable spaced stack — colored cards never touch */}
-          <div className="flex flex-col gap-2">
+          {/* Premium spaced stack — colored cards never touch */}
+          <div className="flex flex-col gap-3">
             {(Object.entries(MODE_CONFIG) as [UserMode, ModePalette][]).map(([modeKey, config]) => {
               const Icon = config.icon;
               const isActive = mode === modeKey;
               const isHovered = hoveredMode === modeKey;
 
               const rowStyle: CSSProperties = {
-                backgroundColor: isHovered ? config.light : config.lighter,
-                borderColor: isActive || isHovered ? config.base : config.iconBorder,
+                backgroundImage: isHovered
+                  ? `linear-gradient(135deg, ${config.rowTo} 0%, ${config.rowHover} 100%)`
+                  : `linear-gradient(135deg, ${config.rowFrom} 0%, ${config.rowTo} 100%)`,
+                borderColor: config.base,
                 color: config.dark,
-                boxShadow: isActive ? `0 0 0 2px ${config.base}55` : undefined,
+                // 4px inset left accent bar in the saturated mode color +
+                // (when active) a strong outer ring that reads as "selected".
+                boxShadow: isActive
+                  ? `inset 4px 0 0 ${config.base}, 0 0 0 2px #FFFFFF, 0 0 0 4px ${config.base}`
+                  : `inset 4px 0 0 ${config.base}`,
                 transform: 'none',
               };
 
@@ -228,26 +241,49 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   unstyled
                   className={cn(
                     "mode-switcher-item",
-                    "flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-colors duration-200 border-2",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1",
+                    "relative flex items-center gap-3 pl-5 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-200 border",
+                    "focus:outline-none",
                   )}
                 >
+                  {/* Saturated icon badge with halo */}
                   <div
-                    className="w-9 h-9 rounded-lg flex items-center justify-center border-2 shrink-0"
-                    style={{ backgroundColor: config.iconBg, borderColor: config.iconBorder }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    style={{
+                      backgroundImage: `linear-gradient(135deg, ${config.base} 0%, ${config.baseDark} 100%)`,
+                      boxShadow: `0 0 0 4px ${config.base}22, 0 2px 6px ${config.base}55`,
+                    }}
                   >
-                    <Icon className="w-4 h-4" style={{ color: config.base }} />
+                    <Icon className="w-[18px] h-[18px]" style={{ color: '#FFFFFF' }} />
                   </div>
+
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold" style={{ color: config.dark }}>
+                    <p className="text-[13px] font-bold leading-tight" style={{ color: config.dark }}>
                       {config.label}
                     </p>
-                    <p className="text-[11px] leading-snug mt-0.5" style={{ color: config.dark, opacity: 0.85 }}>
+                    <p className="text-[11px] leading-snug mt-1" style={{ color: config.dark, opacity: 0.85 }}>
                       {config.description}
                     </p>
                   </div>
-                  {isActive && (
-                    <Check className="w-4 h-4 shrink-0" style={{ color: config.base }} />
+
+                  {isActive ? (
+                    <span
+                      className="ml-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0"
+                      style={{ backgroundColor: config.base, color: '#FFFFFF' }}
+                    >
+                      <Check className="w-3 h-3" style={{ color: '#FFFFFF' }} />
+                      Selected
+                    </span>
+                  ) : (
+                    <span
+                      className="ml-2 inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 border"
+                      style={{
+                        color: config.base,
+                        borderColor: config.base,
+                        backgroundColor: 'rgba(255,255,255,0.6)',
+                      }}
+                    >
+                      {config.shortLabel}
+                    </span>
                   )}
                 </DropdownMenuItem>
               );

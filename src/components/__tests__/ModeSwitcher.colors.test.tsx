@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, fireEvent, within } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import { ModeSwitcher } from "@/components/ModeSwitcher";
 import type { UserMode } from "@/contexts/UserModeContext";
 
@@ -37,37 +37,37 @@ vi.mock("sonner", () => ({
 
 const PALETTE: Record<
   UserMode,
-  { label: string; base: string; lighter: string; dark: string }
+  { label: string; base: string; rowFrom: string; dark: string }
 > = {
   investor: {
     label: "Mode: Investor",
-    base: "#F97316",     // orange
-    lighter: "#FFF7ED",
-    dark: "#9A3412",
+    base: "#F97316",       // orange chip + accent
+    rowFrom: "#FFF1E0",    // row gradient start (clearly tinted, not white)
+    dark: "#7C2D12",       // text on tinted card
   },
   broker: {
     label: "Mode: Broker",
-    base: "#2563EB",     // blue
-    lighter: "#EFF6FF",
+    base: "#2563EB",
+    rowFrom: "#E8F0FE",
     dark: "#1E3A8A",
   },
   investor_broker: {
     label: "Mode: Investor + Broker",
-    base: "#16A34A",     // green
-    lighter: "#F0FDF4",
+    base: "#16A34A",
+    rowFrom: "#E5F8EC",
     dark: "#14532D",
   },
   developer: {
     label: "Mode: Developer",
-    base: "#7C3AED",     // purple
-    lighter: "#F5F3FF",
+    base: "#7C3AED",
+    rowFrom: "#F1ECFE",
     dark: "#4C1D95",
   },
 };
 
-// Normalize hex/rgb so style assertions are tolerant.
-const norm = (v: string) => v.replace(/\s+/g, "").toLowerCase();
+// --- Helpers -------------------------------------------------------------
 
+const norm = (v: string) => v.replace(/\s+/g, "").toLowerCase();
 const hexToRgb = (hex: string) => {
   const h = hex.replace("#", "");
   const r = parseInt(h.slice(0, 2), 16);
@@ -75,43 +75,26 @@ const hexToRgb = (hex: string) => {
   const b = parseInt(h.slice(4, 6), 16);
   return `rgb(${r}, ${g}, ${b})`;
 };
-
-const styleMatches = (actual: string, expectedHex: string) => {
-  const a = norm(actual);
-  return a === norm(expectedHex) || a === norm(hexToRgb(expectedHex));
+const containsHex = (cssValue: string, hex: string) => {
+  const v = norm(cssValue);
+  return v.includes(norm(hex)) || v.includes(norm(hexToRgb(hex)));
 };
 
-// --- Helpers -------------------------------------------------------------
-
 const getTrigger = (): HTMLButtonElement => {
-  // The shared trigger is the only button with aria-haspopup="menu" in our
-  // isolated render.
-  const btn = document.querySelector<HTMLButtonElement>(
-    'button[aria-haspopup="menu"]',
-  );
+  const btn = document.querySelector<HTMLButtonElement>('button[aria-haspopup="menu"]');
   if (!btn) throw new Error("Mode trigger button not found");
   return btn;
 };
 
 const findRowByLabel = (label: string): HTMLElement => {
-  // Radix portals the dropdown content into <body>, so query the whole document.
-  const matches = Array.from(
-    document.body.querySelectorAll<HTMLElement>('[role="menuitem"]'),
-  );
+  const matches = Array.from(document.body.querySelectorAll<HTMLElement>('[role="menuitem"]'));
   const row = matches.find((el) => el.textContent?.includes(label));
-  if (!row) {
-    throw new Error(
-      `Could not find menuitem row for "${label}". Found: ${matches
-        .map((m) => m.textContent?.slice(0, 40))
-        .join(" | ")}`,
-    );
-  }
+  if (!row) throw new Error(`Could not find menuitem row for "${label}"`);
   return row;
 };
 
 const openDropdown = () => {
   const trigger = getTrigger();
-  // Radix DropdownMenu opens on pointerdown (not click) and requires button=0.
   fireEvent.pointerDown(trigger, { button: 0, pointerType: "mouse" });
   fireEvent.pointerUp(trigger, { button: 0, pointerType: "mouse" });
   fireEvent.click(trigger);
@@ -122,7 +105,6 @@ const openDropdown = () => {
 describe("ModeSwitcher color regression", () => {
   beforeEach(() => {
     setModeMock.mockReset();
-    // Clean up any leftover portals between tests
     document.body
       .querySelectorAll('[data-radix-popper-content-wrapper]')
       .forEach((n) => n.remove());
@@ -131,62 +113,68 @@ describe("ModeSwitcher color regression", () => {
   const modes: UserMode[] = ["investor", "broker", "investor_broker", "developer"];
 
   modes.forEach((activeMode) => {
-    it(`renders correct palette for trigger + all rows when active mode is ${activeMode}`, () => {
+    it(`closed trigger reflects the active mode color (${activeMode})`, () => {
       currentMode = activeMode;
       render(<ModeSwitcher variant="header" />);
 
-      // Trigger button shows the active mode's colors.
-      const { base, lighter, dark } = PALETTE[activeMode];
+      const { base } = PALETTE[activeMode];
       const trigger = getTrigger();
-      expect(
-        styleMatches(trigger.style.backgroundColor, lighter),
-        `${activeMode} trigger bg should be ${lighter}, got ${trigger.style.backgroundColor}`,
-      ).toBe(true);
-      expect(
-        styleMatches(trigger.style.borderColor, base),
-        `${activeMode} trigger border should be ${base}, got ${trigger.style.borderColor}`,
-      ).toBe(true);
-      expect(
-        styleMatches(trigger.style.color, dark),
-        `${activeMode} trigger text should be ${dark}, got ${trigger.style.color}`,
-      ).toBe(true);
 
-      // Open dropdown and check every row's color.
+      // The trigger is a SOLID mode-color chip — the gradient must contain
+      // the active mode's base hex. White text/icon for high contrast.
+      expect(
+        containsHex(trigger.style.backgroundImage, base),
+        `${activeMode} trigger gradient should contain ${base}, got ${trigger.style.backgroundImage}`,
+      ).toBe(true);
+      expect(
+        norm(trigger.style.color) === "#ffffff" || norm(trigger.style.color) === "rgb(255,255,255)",
+        `${activeMode} trigger text should be white, got ${trigger.style.color}`,
+      ).toBe(true);
+    });
+
+    it(`every dropdown row shows its own mode color when active=${activeMode}`, () => {
+      currentMode = activeMode;
+      render(<ModeSwitcher variant="header" />);
       openDropdown();
+
+      const seenBackgrounds: string[] = [];
 
       (Object.keys(PALETTE) as UserMode[]).forEach((modeKey) => {
         const p = PALETTE[modeKey];
         const row = findRowByLabel(p.label);
 
-        // Background uses the mode's lighter tint at rest.
+        // Each row's gradient must contain its own tint start color.
         expect(
-          styleMatches(row.style.backgroundColor, p.lighter),
-          `${p.label} row bg should be ${p.lighter}, got ${row.style.backgroundColor}`,
+          containsHex(row.style.backgroundImage, p.rowFrom),
+          `${p.label} row gradient should contain ${p.rowFrom}, got ${row.style.backgroundImage}`,
         ).toBe(true);
 
-        // Active row border equals the base color.
-        if (currentMode === modeKey) {
-          expect(
-            styleMatches(row.style.borderColor, p.base),
-            `${p.label} active row border should be ${p.base}, got ${row.style.borderColor}`,
-          ).toBe(true);
-        }
-
-        // Dark text color on the row label.
-        const labelEl = within(row).getByText(p.label) as HTMLElement;
+        // Border is always the saturated mode color (not pale).
         expect(
-          styleMatches(labelEl.style.color, p.dark),
-          `${p.label} label color should be ${p.dark}, got ${labelEl.style.color}`,
+          containsHex(row.style.borderColor, p.base),
+          `${p.label} row border should be ${p.base}, got ${row.style.borderColor}`,
         ).toBe(true);
+
+        // Text on the row uses the dark mode color for legibility on the tint.
+        expect(
+          containsHex(row.style.color, p.dark),
+          `${p.label} row text should be ${p.dark}, got ${row.style.color}`,
+        ).toBe(true);
+
+        seenBackgrounds.push(norm(row.style.backgroundImage));
       });
+
+      // GUARDS the original "all four cards look the same" regression:
+      // every row must have a unique background.
+      const unique = new Set(seenBackgrounds);
+      expect(
+        unique.size,
+        `Each mode row must have a unique background, got: ${seenBackgrounds.join(" | ")}`,
+      ).toBe(4);
     });
   });
 
   it("uses the same shared ModeSwitcher in header, footer, and account menu placements", async () => {
-    // The three known placements (HorizontalUtilityBar, Footer, MegaMenuAccount)
-    // all import the same component, so verifying its palette once covers all
-    // three locations. This guard makes sure we notice if a one-off copy is
-    // introduced later.
     const fs = await import("node:fs/promises");
     const files = [
       "src/components/navigation/HorizontalUtilityBar.tsx",
@@ -202,21 +190,14 @@ describe("ModeSwitcher color regression", () => {
   });
 
   it("never passes color-overriding className to ModeSwitcher in any placement", async () => {
-    // The trigger's per-mode background / border / text colors are owned by
-    // MODE_CONFIG inside ModeSwitcher.tsx. If a placement starts passing
-    // `className="bg-..."` or `className="text-..."`, those classes could
-    // shadow the inline mode styling and break per-mode color identity.
     const fs = await import("node:fs/promises");
     const files = [
       "src/components/navigation/HorizontalUtilityBar.tsx",
       "src/components/Footer.tsx",
       "src/components/header/MegaMenuAccount.tsx",
     ];
-    // Match any <ModeSwitcher ... /> or <ModeSwitcher ...>...</ModeSwitcher>
     const usageRe = /<ModeSwitcher\b([^>]*?)\/?>/g;
-    // Forbidden tokens inside className that would override the trigger palette.
     const forbidden = /className=["'`][^"'`]*\b(?:bg-|border-(?!2\b)|text-(?!xs\b|sm\b|base\b|lg\b|xl\b|left\b|center\b|right\b)|from-|to-|via-|ring-(?!2\b))/;
-
     for (const file of files) {
       const src = await fs.readFile(file, "utf8");
       const matches = [...src.matchAll(usageRe)];
@@ -232,16 +213,11 @@ describe("ModeSwitcher color regression", () => {
   });
 
   it("renders byte-identical trigger styles regardless of placement-passed props", () => {
-    // Simulate each placement's exact <ModeSwitcher /> usage:
-    //   - HorizontalUtilityBar: variant="header" showForUnselected
-    //   - Footer:                variant="header" showForUnselected={true}
-    //   - MegaMenuAccount:       variant="header"
-    // None pass className, so all three triggers must produce the same inline style.
     currentMode = "broker";
 
     const placements = [
       { name: "HorizontalUtilityBar", node: <ModeSwitcher variant="header" showForUnselected /> },
-      { name: "Footer", node: <ModeSwitcher variant="header" showForUnselected={true} /> },
+      { name: "Footer", node: <ModeSwitcher variant="header" showForUnselected={true} side="top" /> },
       { name: "MegaMenuAccount", node: <ModeSwitcher variant="header" /> },
     ];
 
@@ -249,7 +225,7 @@ describe("ModeSwitcher color regression", () => {
       const { unmount } = render(node);
       const trigger = getTrigger();
       const snapshot = {
-        bg: trigger.style.backgroundColor,
+        bgImage: trigger.style.backgroundImage,
         border: trigger.style.borderColor,
         color: trigger.style.color,
       };
@@ -258,14 +234,15 @@ describe("ModeSwitcher color regression", () => {
     });
 
     const reference = styles[0].snapshot;
-    const { base, lighter, dark } = PALETTE.broker;
+    const { base } = PALETTE.broker;
 
-    // Reference matches the locked broker palette.
-    expect(styleMatches(reference.bg, lighter)).toBe(true);
-    expect(styleMatches(reference.border, base)).toBe(true);
-    expect(styleMatches(reference.color, dark)).toBe(true);
+    // Reference reflects the active broker palette.
+    expect(containsHex(reference.bgImage, base)).toBe(true);
+    expect(
+      norm(reference.color) === "#ffffff" || norm(reference.color) === "rgb(255,255,255)",
+    ).toBe(true);
 
-    // Every placement renders identical trigger styles.
+    // Every placement renders identical trigger styles — no placement can drift.
     for (const { name, snapshot } of styles.slice(1)) {
       expect(snapshot, `${name} trigger style must match HorizontalUtilityBar`).toEqual(reference);
     }
