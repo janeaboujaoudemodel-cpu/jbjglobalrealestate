@@ -323,7 +323,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
     <>
       <div className="w-full">
         {/* Single merged row: Search + Filter Popovers + Sort + Map + Saved + Reset + Results */}
-        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide w-full" style={{ WebkitOverflowScrolling: 'touch', touchAction: 'pan-x', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide w-full" style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none', msOverflowStyle: 'none' } as React.CSSProperties}>
           {/* Search slot or built-in search */}
           {searchSlot ? (
             <div className="min-w-0 max-w-[180px] flex-shrink-0" title="Search area, project, keyword">
