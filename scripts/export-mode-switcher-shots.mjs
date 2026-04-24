@@ -63,25 +63,44 @@ const MODES = [
   { key: "developer", label: "Mode: Developer", expected: "purple (#7C3AED)" },
 ];
 
-// Find any installed chromium build (Playwright's downloader sometimes
-// installs an older version than the package expects).
+// Locate a working Chromium executable. Try, in order:
+//   1. $CHROME_PATH (explicit override)
+//   2. Playwright-managed builds in /chromium-*
+//   3. System chromium / google-chrome on PATH
+//   4. Nix-provided chromium (works in the Lovable sandbox)
 import { readdirSync, statSync } from "node:fs";
-const findChromium = () => {
-  const roots = readdirSync("/")
-    .filter((d) => d.startsWith("chromium-") || d.startsWith("chromium_headless_shell-"))
-    .map((d) => `/${d}`);
-  for (const r of roots) {
-    const candidates = [
-      `${r}/chrome-linux64/chrome`,
-      `${r}/chrome-headless-shell-linux64/chrome-headless-shell`,
-    ];
-    for (const c of candidates) {
-      try { if (statSync(c).isFile()) return c; } catch {}
-    }
+const which = (bin) => {
+  const r = spawnSync("which", [bin]);
+  const out = r.stdout?.toString().trim();
+  return out || undefined;
+};
+const tryNixChromium = () => {
+  const r = spawnSync("nix", ["build", "nixpkgs#chromium", "--print-out-paths", "--no-link"]);
+  const path = r.stdout?.toString().trim().split("\n").pop();
+  if (path) {
+    const exe = `${path}/bin/chromium`;
+    try { if (statSync(exe).isFile()) return exe; } catch {}
   }
   return undefined;
 };
+const findChromium = () => {
+  if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
+  for (const d of readdirSync("/").filter((x) => x.startsWith("chromium"))) {
+    for (const c of [
+      `/${d}/chrome-linux64/chrome`,
+      `/${d}/chrome-headless-shell-linux64/chrome-headless-shell`,
+    ]) {
+      try { if (statSync(c).isFile()) return c; } catch {}
+    }
+  }
+  for (const bin of ["chromium", "chromium-browser", "google-chrome", "chrome"]) {
+    const p = which(bin);
+    if (p) return p;
+  }
+  return tryNixChromium();
+};
 const exe = findChromium();
+if (exe) console.log(`→ Using chromium: ${exe}`);
 const browser = await chromium.launch(exe ? { executablePath: exe } : {});
 const ctx = await browser.newContext({ viewport: VIEWPORTS[0] });
 const page = await ctx.newPage();
