@@ -723,7 +723,7 @@ const AIHub = () => {
               </motion.p>
 
               <motion.p 
-                className="text-gray-600 text-base max-w-xl mx-auto mb-8"
+                className="text-white/75 text-base max-w-xl mx-auto mb-8"
                 variants={fadeInUp}
               >
                 Free tools • Property analysis • Investment calculators • Productivity suite
