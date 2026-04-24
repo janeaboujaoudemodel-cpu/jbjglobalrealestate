@@ -554,17 +554,24 @@ const Footer = () => {
             </a>
           </div>
 
-          {/* Compact legal — single paragraph, RTL kept */}
+          {/* Compact legal — bidi-isolated so LTR/RTL never break each other */}
           <div className="space-y-2 text-center max-w-4xl mx-auto">
-            <p className="text-[11px] leading-relaxed text-white/55">
-              <span className="text-white/75 font-medium">JBJ Global Real Estate L.L.C S.O.C.</span> — Dubai mainland brokerage licensed for Buy, Sell, and Rent across the UAE.
+            <p className="text-[11px] leading-relaxed text-white/55 break-words" dir="ltr">
+              <bdi className="text-white/75 font-medium">JBJ Global Real Estate L.L.C S.O.C.</bdi>
+              {" — Dubai mainland brokerage licensed for Buy, Sell, and Rent across the UAE. "}
               Mortgage, legal, visa, and corporate support is provided through independent licensed partners.
               <FounderContent fallback={null}>
                 {" "}Owned & led by{" "}
-                <Link to="/founder" className="text-white/75 hover:text-white underline-offset-2 hover:underline">Jane Bou Jaoude (جاين بو جودة)</Link>, Founder & CEO.
+                <Link to="/founder" className="text-white/75 hover:text-white underline-offset-2 hover:underline">
+                  <bdi>Jane Bou Jaoude</bdi>
+                  {" ("}
+                  <bdi>جاين بو جودة</bdi>
+                  {")"}
+                </Link>
+                {", Founder & CEO."}
               </FounderContent>
             </p>
-            <p className="text-[11px] leading-relaxed text-white/55" dir="rtl">
+            <p className="text-[11px] leading-relaxed text-white/55 break-words" dir="rtl">
               جي بي جي للعقارات هي وساطة عقارية مرخصة في دبي للبيع والشراء والإيجار.
             </p>
           </div>
