@@ -63,7 +63,26 @@ const MODES = [
   { key: "developer", label: "Mode: Developer", expected: "purple (#7C3AED)" },
 ];
 
-const browser = await chromium.launch();
+// Find any installed chromium build (Playwright's downloader sometimes
+// installs an older version than the package expects).
+import { readdirSync, statSync } from "node:fs";
+const findChromium = () => {
+  const roots = readdirSync("/")
+    .filter((d) => d.startsWith("chromium-") || d.startsWith("chromium_headless_shell-"))
+    .map((d) => `/${d}`);
+  for (const r of roots) {
+    const candidates = [
+      `${r}/chrome-linux64/chrome`,
+      `${r}/chrome-headless-shell-linux64/chrome-headless-shell`,
+    ];
+    for (const c of candidates) {
+      try { if (statSync(c).isFile()) return c; } catch {}
+    }
+  }
+  return undefined;
+};
+const exe = findChromium();
+const browser = await chromium.launch(exe ? { executablePath: exe } : {});
 const ctx = await browser.newContext({ viewport: VIEWPORTS[0] });
 const page = await ctx.newPage();
 
