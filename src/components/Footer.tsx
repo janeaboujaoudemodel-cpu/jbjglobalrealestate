@@ -449,7 +449,7 @@ const Footer = () => {
       <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} />
 
       {/* === ZONE 1 — Brand + utility row === */}
-      <div className="px-4 sm:px-6 md:px-8 pt-10 pb-7">
+      <div className="px-4 sm:px-6 md:px-8 pt-8 pb-5">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <Link to="/" className="inline-flex items-center gap-3 group">
