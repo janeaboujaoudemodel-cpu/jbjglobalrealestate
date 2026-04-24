@@ -216,10 +216,12 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   onBlur={() => setHoveredMode(null)}
                   style={rowStyle}
                   className={cn(
+                    "mode-switcher-item",
                     "flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 border-2",
-                    // Disable shadcn's gold hover/focus completely — we handle styling inline
-                    "focus:outline-none hover:!bg-transparent focus:!bg-transparent",
-                    "data-[highlighted]:!bg-transparent data-[highlighted]:!text-current",
+                    // Neutralize shadcn's gold focus/hover lift; per-mode color comes from inline style.
+                    // We use !important on the gold tint specifically so Radix's data-[highlighted] can't repaint it gold,
+                    // but we do NOT clear backgroundColor (inline style owns that).
+                    "focus:outline-none focus:!text-current data-[highlighted]:!text-current",
                     "hover:!shadow-none focus:!shadow-none hover:!translate-y-0 focus:!translate-y-0",
                   )}
                 >
