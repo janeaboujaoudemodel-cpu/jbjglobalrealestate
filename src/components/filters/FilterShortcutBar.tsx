@@ -565,7 +565,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
         </Popover>
 
         {/* Property Type */}
-        <Popover>
+        <Popover open={propertyTypeOpen} onOpenChange={setPropertyTypeOpen}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.propertyCategory || filters.propertyTypes.length > 0) ? pillActive : pillInactive)}>
               {getPropertyTypeLabel()}
