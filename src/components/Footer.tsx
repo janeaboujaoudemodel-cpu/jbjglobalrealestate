@@ -490,8 +490,8 @@ const Footer = () => {
       </div>
 
       {/* === ZONE 2 — Premium 4-col navigation grid === */}
-      <div className="px-4 sm:px-6 md:px-8 py-10">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10">
+      <div className="px-4 sm:px-6 md:px-8 py-7">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-7">
           <NavColumn
             title={t("footer.properties") || "Explore"}
             links={colExplore}
