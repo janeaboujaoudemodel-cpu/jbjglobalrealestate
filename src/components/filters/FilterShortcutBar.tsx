@@ -335,7 +335,7 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
             </div>
           )}
         {/* Price */}
-        <Popover>
+        <Popover open={priceOpen} onOpenChange={handlePriceOpenChange}>
           <PopoverTrigger asChild>
             <button className={cn(pillBase, (filters.priceMin || filters.priceMax) ? pillActive : pillInactive)}>
               {t('filter.price')}
@@ -356,10 +356,14 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <div className="relative">
                   <input
                     type="text"
-                    value={filters.priceMin}
-                    onChange={(e) => update({ priceMin: e.target.value.replace(/[^0-9]/g, '') })}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
+                    value={draftPriceMin}
+                    onChange={(e) => setDraftPriceMin(e.target.value.replace(/[^0-9]/g, ''))}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); applyPrice(); } }}
                     placeholder="0"
-                    className="w-full h-9 px-3 pr-12 bg-white border border-gray-300 rounded-lg text-sm text-black"
+                    className="w-full h-9 px-3 pr-12 bg-white border border-gray-300 rounded-lg text-sm text-black focus:border-black focus:outline-none"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-black/40 font-medium">AED</span>
                 </div>
@@ -369,10 +373,14 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 <div className="relative">
                   <input
                     type="text"
-                    value={filters.priceMax}
-                    onChange={(e) => update({ priceMax: e.target.value.replace(/[^0-9]/g, '') })}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    autoComplete="off"
+                    value={draftPriceMax}
+                    onChange={(e) => setDraftPriceMax(e.target.value.replace(/[^0-9]/g, ''))}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); applyPrice(); } }}
                     placeholder="Any"
-                    className="w-full h-9 px-3 pr-12 bg-white border border-gray-300 rounded-lg text-sm text-black"
+                    className="w-full h-9 px-3 pr-12 bg-white border border-gray-300 rounded-lg text-sm text-black focus:border-black focus:outline-none"
                   />
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-black/40 font-medium">AED</span>
                 </div>
@@ -382,10 +390,11 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
               {PRICE_PRESETS.map((p) => (
                 <button
                   key={p.value}
-                  onClick={() => update({ priceMax: p.value })}
+                  type="button"
+                  onClick={() => setDraftPriceMax(draftPriceMax === p.value ? '' : p.value)}
                   className={cn(
-                    "px-3 py-1 rounded-full text-xs font-medium border transition-all",
-                    filters.priceMax === p.value
+                    "px-3 py-1 rounded-full text-xs font-medium border transition-colors",
+                    draftPriceMax === p.value
                       ? "bg-black text-white border-black font-bold"
                       : "bg-white text-black border-gray-300 hover:border-gray-400"
                   )}
@@ -394,12 +403,23 @@ const FilterShortcutBar = ({ variant, filters, onFilterChange, isMapMode, onMapT
                 </button>
               ))}
             </div>
-            <Button
-              onClick={() => {}}
-              className="w-full h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800"
-            >
-              {t('filter.applyFilter')}
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => { setDraftPriceMin(''); setDraftPriceMax(''); }}
+                className="h-9 px-3 text-xs rounded-lg"
+              >
+                {t('filter.reset') || 'Reset'}
+              </Button>
+              <Button
+                type="button"
+                onClick={applyPrice}
+                className="flex-1 h-9 bg-black text-white font-bold text-xs rounded-lg hover:bg-gray-800"
+              >
+                {t('filter.applyFilter')}
+              </Button>
+            </div>
           </PopoverContent>
         </Popover>
 
