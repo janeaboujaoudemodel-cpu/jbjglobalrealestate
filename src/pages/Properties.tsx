@@ -390,6 +390,22 @@ const Properties = () => {
   // Apply shortcut filters (price, bedrooms, status, construction, handover, etc.) reactively
   const finalProjects = useMemo(() => applyShortcutFilters(sortedProjects, shortcutFilters), [sortedProjects, shortcutFilters]);
 
+  // Brief "filtering" skeleton state — keeps the UI responsive on slow devices
+  // when users change filters/sort so results never feel frozen.
+  const [isFiltering, setIsFiltering] = useState(false);
+  const isFirstFilterRun = useRef(true);
+  useEffect(() => {
+    if (isFirstFilterRun.current) {
+      isFirstFilterRun.current = false;
+      return;
+    }
+    setIsFiltering(true);
+    const t = setTimeout(() => setIsFiltering(false), 250);
+    return () => clearTimeout(t);
+  }, [shortcutFilters, appliedFilters, sortBy]);
+
+  const showSkeletons = isLoading || isFiltering;
+
   const updateFilter = <K extends keyof ExtendedFilterState>(key: K, value: ExtendedFilterState[K]) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
@@ -1168,7 +1184,7 @@ const Properties = () => {
 
               {/* Cards Grid - 2 columns */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3">
-                {isLoading ? (
+                {showSkeletons ? (
                   [...Array(6)].map((_, i) => (
                     <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl h-[350px] animate-pulse border-2 border-gold/30" />
                   ))
@@ -1260,7 +1276,7 @@ const Properties = () => {
               </div>
 
               {/* Projects Grid - Inside active layer - 2-3 cards per row for wider balanced layout */}
-              {isLoading ? (
+              {showSkeletons ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-2 sm:p-4">
                   {[...Array(6)].map((_, i) => (
                     <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl h-[400px] sm:h-[460px] animate-pulse border-2 border-gold/30" />
