@@ -1184,7 +1184,7 @@ const Properties = () => {
 
               {/* Cards Grid - 2 columns */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3">
-                {isLoading ? (
+                {showSkeletons ? (
                   [...Array(6)].map((_, i) => (
                     <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl h-[350px] animate-pulse border-2 border-gold/30" />
                   ))
