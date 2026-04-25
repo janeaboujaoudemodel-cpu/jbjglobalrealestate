@@ -390,6 +390,22 @@ const Properties = () => {
   // Apply shortcut filters (price, bedrooms, status, construction, handover, etc.) reactively
   const finalProjects = useMemo(() => applyShortcutFilters(sortedProjects, shortcutFilters), [sortedProjects, shortcutFilters]);
 
+  // Brief "filtering" skeleton state — keeps the UI responsive on slow devices
+  // when users change filters/sort so results never feel frozen.
+  const [isFiltering, setIsFiltering] = useState(false);
+  const isFirstFilterRun = useRef(true);
+  useEffect(() => {
+    if (isFirstFilterRun.current) {
+      isFirstFilterRun.current = false;
+      return;
+    }
+    setIsFiltering(true);
+    const t = setTimeout(() => setIsFiltering(false), 250);
+    return () => clearTimeout(t);
+  }, [shortcutFilters, appliedFilters, sortBy]);
+
+  const showSkeletons = isLoading || isFiltering;
+
   const updateFilter = <K extends keyof ExtendedFilterState>(key: K, value: ExtendedFilterState[K]) => {
     setFilters(prev => ({ ...prev, [key]: value }));
   };
