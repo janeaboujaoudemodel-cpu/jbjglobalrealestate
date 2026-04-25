@@ -1276,7 +1276,7 @@ const Properties = () => {
               </div>
 
               {/* Projects Grid - Inside active layer - 2-3 cards per row for wider balanced layout */}
-              {isLoading ? (
+              {showSkeletons ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6 p-2 sm:p-4">
                   {[...Array(6)].map((_, i) => (
                     <div key={i} className="bg-gradient-to-br from-[#FDFBF7] via-[#F7F2EA] to-[#EFE6D6] rounded-2xl h-[400px] sm:h-[460px] animate-pulse border-2 border-gold/30" />
