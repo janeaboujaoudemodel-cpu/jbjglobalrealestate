@@ -1,0 +1,20 @@
+{
+  "$schema": "Documented exceptions to the AA contrast gate. Each entry MUST include a justification.",
+  "tokens": [
+    {
+      "pair": "champagne-1/foreground",
+      "reason": "Decorative champagne surface only used behind iconography, never body text."
+    },
+    {
+      "pair": "gold-light/background",
+      "reason": "Used exclusively as a hairline divider/border (UI ≥3:1 enforced separately), not as text."
+    }
+  ],
+  "axeViolationIds": [],
+  "axeNodeSelectors": [
+    {
+      "selector": "[data-decorative='true']",
+      "reason": "Marked decorative — explicitly aria-hidden."
+    }
+  ]
+}
