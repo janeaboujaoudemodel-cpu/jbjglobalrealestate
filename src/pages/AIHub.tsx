@@ -717,16 +717,18 @@ const AIHub = () => {
                 <span className="text-white">Royal Tools Hub</span>
               </motion.h1>
 
-              {/* Subtitle */}
+              {/* Subtitle — text-shadow guarantees AA contrast over any video frame */}
               <motion.p 
-                className="text-white text-lg md:text-xl max-w-2xl mx-auto mb-4 leading-relaxed"
+                className="text-white text-lg md:text-xl max-w-2xl mx-auto mb-4 leading-relaxed font-medium"
+                style={{ textShadow: '0 2px 12px rgba(0,0,0,0.85), 0 0 4px rgba(0,0,0,0.6)' }}
                 variants={fadeInUp}
               >
                 Your Complete Tools Command Center
               </motion.p>
 
               <motion.p 
-                className="text-white/75 text-base max-w-xl mx-auto mb-8"
+                className="text-white/90 text-base max-w-xl mx-auto mb-8"
+                style={{ textShadow: '0 2px 10px rgba(0,0,0,0.85), 0 0 4px rgba(0,0,0,0.6)' }}
                 variants={fadeInUp}
               >
                 Free tools • Property analysis • Investment calculators • Productivity suite
