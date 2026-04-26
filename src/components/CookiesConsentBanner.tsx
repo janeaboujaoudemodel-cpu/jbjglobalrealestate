@@ -126,28 +126,28 @@ const CookiesConsentBanner = () => {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-black font-semibold text-base sm:text-lg mb-1.5">We value your privacy</h3>
-                    <p className="text-black/80 text-xs sm:text-sm leading-relaxed mb-3">
+                    <p className="text-black/90 text-xs sm:text-sm leading-relaxed mb-3">
                       We use cookies to enhance your experience. Essential cookies are required for the website to function.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                       <Button
                         onClick={handleAcceptAll}
-                        className="bg-gold text-black font-semibold hover:brightness-110 transition-all border border-gold/60 shadow-md px-4 sm:px-6 text-sm"
+                        className="bg-gold text-black font-semibold hover:brightness-110 transition-all border border-gold/60 shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
                       >
                         Accept All
                       </Button>
                       <Button
                         onClick={() => setShowPreferences(true)}
-                        className="bg-black text-white font-semibold border-2 border-black hover:bg-gray-800 hover:border-gray-800 transition-all shadow-md px-4 sm:px-6 text-sm"
+                        className="bg-black text-white font-semibold border-2 border-black hover:bg-gray-800 hover:border-gray-800 transition-all shadow-md px-4 sm:px-6 text-sm whitespace-nowrap"
                       >
                         Manage Preferences
                       </Button>
                     </div>
-                    <p className="text-black/50 text-[10px] sm:text-xs mt-3">
-                      <Link to="/cookies" className="text-gold hover:text-gold/80 underline underline-offset-2 font-medium">
+                    <p className="text-black/70 text-[10px] sm:text-xs mt-3">
+                      <Link to="/cookies" className="text-[#8A6F3F] hover:text-[#6F5930] underline underline-offset-2 font-semibold">
                         Cookies Policy
                       </Link>{" · "}
-                      <Link to="/privacy" className="text-gold hover:text-gold/80 underline underline-offset-2 font-medium">
+                      <Link to="/privacy" className="text-[#8A6F3F] hover:text-[#6F5930] underline underline-offset-2 font-semibold">
                         Privacy Policy
                       </Link>
                     </p>
