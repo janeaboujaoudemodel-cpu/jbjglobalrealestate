@@ -1,63 +1,45 @@
-# Footer + Mode Switcher polish
+# Premium gold treatment for vertical-sidebar mega-menus
 
-Three small premium fixes: a broader currency list with cleaner sqft/sqm separation in the footer, plus a refined Mode dropdown header and tighter row alignment.
+The vertical sidebar's pop-out panels (Properties, Sell, Rent, Developers, Areas, Insights, Guides, Services, Partners, Broker, Investor, Company, Legal, Productivity, My Account, Suites, Shortcuts) currently render with a pale cream body, a faint gold rim, and link rows that fall back to flat black-on-cream — they read as "gray" and lose the JBJ premium tone. This plan upgrades all of them in one place: `src/components/navigation/GlobalVerticalNav.tsx`, inside `renderMegaMenu()` (lines ~834–1058).
 
-## 1. Footer currency selector — add the full world set
+## What changes — visual
 
-File: `src/components/CurrencySwitcher.tsx` (`SUPPORTED_CURRENCIES` is the single source of truth used by the footer, hero, account menu, and `useCurrency`).
+1. **Panel shell — true premium frame**
+   - Crisper single-stroke gold border (`border border-gold/70`) instead of the current fuzzy `border-2 border-gold/40`.
+   - Add an inner gold halo via `shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset]` so the frame reads luxurious, not flat.
+   - Deepen the background to true champagne (`from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9]`) so it stops looking like grey paper.
+   - Add a 3px solid gold accent strip down the left edge of every panel for a "premium drawer" cue.
 
-Expand the list from 10 → ~30 major globally-traded currencies, alphabetised after the AED + USD anchors:
+2. **Panel header**
+   - Replace the half-transparent strip with a solid champagne bar (`bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]`) plus a 1px gold hairline below.
+   - Title icon (Sparkles / Building / MapPin / Zap) sits inside a 28px gold-filled badge (`bg-gradient-to-br from-gold to-gold-dark`) with a white icon — same badge language already used in ModeSwitcher.
+   - Close (X) becomes a filled gold disc with a white X (currently `bg-gold/10` with gold X — too faint).
 
-```
-AED 🇦🇪, USD 🇺🇸, EUR 🇪🇺, GBP 🇬🇧, INR 🇮🇳, SAR 🇸🇦, CNY 🇨🇳, RUB 🇷🇺,
-CAD 🇨🇦, AUD 🇦🇺, JPY 🇯🇵, CHF 🇨🇭, SGD 🇸🇬, HKD 🇭🇰, KRW 🇰🇷, TRY 🇹🇷,
-QAR 🇶🇦, KWD 🇰🇼, BHD 🇧🇭, OMR 🇴🇲, EGP 🇪🇬, ZAR 🇿🇦, BRL 🇧🇷, MXN 🇲🇽,
-NZD 🇳🇿, SEK 🇸🇪, NOK 🇳🇴, DKK 🇩🇰, PLN 🇵🇱, THB 🇹🇭, MYR 🇲🇾, IDR 🇮🇩,
-PHP 🇵🇭, PKR 🇵🇰, NGN 🇳🇬
-```
+3. **Link rows — uniform premium chip with gold border**
+   - Inactive: `bg-white/70 border border-gold/25 text-black/85`, with `hover:bg-gold/15 hover:border-gold/60`. Adds the hairline gold border the user explicitly asked for, on every row.
+   - Active: solid gold gradient `bg-gradient-to-r from-gold to-gold-dark text-white border border-gold` with white icon and white chevron — strong selected state, no more washed-out cream.
+   - Icons render in gold on inactive, white on active. Chevron mirrors the same.
+   - Standardize row geometry: `rounded-xl px-3 py-2.5` across all three branches (default, developers/areas, shortcuts) so spacing is identical everywhere.
 
-Also add matching FX entries to `CURRENCY_RATES` and `CURRENCY_SYMBOLS` in `src/hooks/useCurrency.ts` so price conversions still work. The footer dropdown already scrolls (`max-h-80 overflow-y-auto`) so no layout change needed.
+4. **Shortcut groups (the colored category pills inside the Shortcuts panel)**
+   - Keep their per-category color accents (those are intentional taxonomy colors, not "gray"), but wrap each group in `border border-gold/25 bg-white/60` so the whole panel still reads gold-framed and premium.
 
-## 2. Footer sqft / sqm — premium divider + visual distinction
+5. **"View All" CTA (developers / areas panel)**
+   - Promote from outline-only to filled gold (`bg-gradient-to-r from-gold to-gold-dark text-white border border-gold`, white icons) so it stops vanishing into the cream.
 
-File: `src/components/Footer.tsx` (lines 137–151).
+6. **Scrollbar:** already `jj-scrollbar-gold` — no change.
 
-Two refinements applied together:
+## What changes — code
 
-- Insert a 1px champagne hairline divider between the two buttons (`bg-[#D9C292]/40`) so it reads as a deliberate split, not one merged pill.
-- Give the inactive side a slightly muted tone (`text-white/55`) and the active side a soft champagne backdrop + white text, so the active selection is immediately legible.
+All edits are in `src/components/navigation/GlobalVerticalNav.tsx` inside the three branches of `renderMegaMenu()`:
+- Shortcuts branch (~lines 840–909)
+- Developers / Areas branch (~lines 912–999)
+- Default branch (~lines 1002–1057)
 
-Result:
-
-```text
-[ sq ft ] │ [ sq m ]
-   ▲ active = white text on champagne tint
-            ▲ inactive = muted white, transparent
-```
-
-## 3. ModeSwitcher dropdown — refined header + tighter rows
-
-File: `src/components/ModeSwitcher.tsx`.
-
-a. **Header polish** (lines 198–203, the "Select your mode" block the user dictated as "lecture mode"):
-   - Restyle into a true premium header: white background, single champagne-gold hairline bottom border, smaller pill-style eyebrow tag "MODE", crisp 14px black title "Select your mode", 11px gray subtitle. Removes the heavy gray box look.
-
-b. **Tighten the four category rows** (line 206 + 245):
-   - Reduce inter-card spacing from `gap-3` (12px) → `gap-1.5` (6px).
-   - Reduce row vertical padding from `py-3` → `py-2.5` and `min-h-[84px]` → `min-h-[72px]`.
-   - Apply `line-clamp-1` (instead of 2) and drop `min-h-[28px]` on the description so all four rows have identical height regardless of text length.
-   - Standardise the right-side chip width (`min-w-[78px]` → `w-[84px]`) so "Selected" and short labels align edge-to-edge across all four rows.
-
-c. **Container width**: bump `w-[340px]` → `w-[360px]` to absorb the chip width change without truncating "Investor + Broker".
-
-## Files to edit
-
-- `src/components/CurrencySwitcher.tsx` — expand `SUPPORTED_CURRENCIES`
-- `src/hooks/useCurrency.ts` — add matching `CURRENCY_RATES` and `CURRENCY_SYMBOLS` entries
-- `src/components/Footer.tsx` — sqft/sqm divider + active-state contrast
-- `src/components/ModeSwitcher.tsx` — header restyle, tighter row spacing, uniform chip width
+The same className recipe is applied in all three so the panels are visually identical except for content. No new components, no new files. Hover/active logic, click-to-close, route highlighting, and animations are preserved.
 
 ## Out of scope
 
-- Live FX feed (rates stay as the static table the platform already uses).
-- Header/account-menu mode switcher visuals stay untouched — the user's complaint is specific to the footer-triggered dropdown which uses the same component, so the fix applies everywhere automatically.
+- The sidebar rail itself (logo header, section accordion, bottom support strip) already uses the gold treatment and matches the JBJ palette — the user's complaint is about the *opened* panels, so the rail is not touched.
+- `PropertiesVerticalNav.tsx` is the map-page rail, unrelated to the global sidebar dropdowns; not modified.
+- Mega-menu *content* (which links live in which panel) is unchanged.

@@ -850,19 +850,22 @@ export default function GlobalVerticalNav() {
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
+              className="pointer-events-auto relative w-[min(560px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-gold/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#ECE2D2]/50 to-transparent">
+              <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
                 <div className="flex items-center gap-2.5">
-                  <Zap className="w-4 h-4 text-gold" />
+                  <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-sm">
+                    <Zap className="w-3.5 h-3.5 text-white" />
+                  </span>
                   <h3 className="text-sm font-bold text-black tracking-tight">{title}</h3>
                 </div>
                 <button
                   onClick={closeMegaMenu}
-                  className="w-6 h-6 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors"
+                  className="w-6 h-6 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center hover:opacity-90 transition-opacity shadow-sm"
                 >
-                  <X className="w-3 h-3 text-gold" />
+                  <X className="w-3 h-3 text-white" />
                 </button>
               </div>
               <div className="overflow-y-auto jj-scrollbar-gold p-3 pb-6 space-y-3">
@@ -873,11 +876,11 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                   isInvestor,
                   isDeveloperMode,
                 }).map((group) => (
-                  <div key={group.label} className={`border-l-4 ${group.colorBorder} rounded-lg ${group.colorBg} p-2`}>
+                  <div key={group.label} className={`border border-gold/25 border-l-4 ${group.colorBorder} rounded-xl bg-white/70 p-2`}>
                     <p className={`text-[10px] uppercase tracking-wider font-bold ${group.colorText} px-2 pb-1.5`}>
                       {group.label}
                     </p>
-                    <div className="grid grid-cols-2 gap-1">
+                    <div className="grid grid-cols-2 gap-1.5">
                       {group.items.map((link) => {
                         const Icon = link.icon;
                         const linkActive = isRouteActive(link.href);
@@ -886,15 +889,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                             key={link.href + link.label}
                             to={link.href}
                             onClick={closeMegaMenu}
-                            className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                            className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
                               linkActive
-                                ? "bg-white/80 text-black font-bold border border-gold/40 shadow-sm"
-                                : "text-black/80 hover:bg-white/60 hover:text-black"
+                                ? "bg-gradient-to-r from-gold to-gold-dark text-white font-bold border-gold shadow-sm"
+                                : "bg-white/80 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                             }`}
                           >
-                            <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-gold' : group.colorText}`} />
+                            <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold'}`} />
                             <span className="flex-1">{link.label}</span>
-                            <ChevronRight className="w-3 h-3 text-black/20 flex-shrink-0" />
+                            <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold/60'}`} />
                           </Link>
                         );
                       })}
@@ -928,26 +931,29 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
           >
             <div
-              className="pointer-events-auto w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
+              className="pointer-events-auto relative w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-gold/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 max-h-[calc(100vh-100px)]"
               onClick={(e) => e.stopPropagation()}
             >
+              <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#ECE2D2]/50 to-transparent">
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
                 <div className="flex items-center gap-2.5">
-                  <ItemIcon className="w-4 h-4 text-gold" />
+                  <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-sm">
+                    <ItemIcon className="w-3.5 h-3.5 text-white" />
+                  </span>
                   <h3 className="text-sm font-bold text-black tracking-tight">{title}</h3>
-                  <span className="text-[10px] text-black/40 font-medium">({curatedItems.length})</span>
+                  <span className="text-[10px] text-black/50 font-medium">({curatedItems.length})</span>
                 </div>
                 <button
                   onClick={closeMegaMenu}
-                  className="w-6 h-6 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors"
+                  className="w-6 h-6 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center hover:opacity-90 transition-opacity shadow-sm"
                 >
-                  <X className="w-3 h-3 text-gold" />
+                  <X className="w-3 h-3 text-white" />
                 </button>
               </div>
 
               {/* Curated list */}
-              <div className="overflow-y-auto jj-scrollbar-gold p-3 space-y-0.5">
+              <div className="overflow-y-auto jj-scrollbar-gold p-3 space-y-1">
                 {curatedItems.map((entry) => {
                   const entryHref = isDev ? `/developer/${entry.slug}` : `/area/${entry.slug}`;
                   const linkActive = isRouteActive(entryHref);
@@ -956,39 +962,39 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                       key={entry.slug}
                       to={entryHref}
                       onClick={closeMegaMenu}
-                      className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                      className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${
                         linkActive
-                          ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black font-bold border border-gold/40"
-                          : "text-black/80 hover:bg-gold/10 hover:text-black"
+                          ? "bg-gradient-to-r from-gold to-gold-dark text-white font-bold border-gold shadow-sm"
+                          : "bg-white/70 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                       }`}
                     >
-                      <ItemIcon className="w-4 h-4 text-gold flex-shrink-0" />
+                      <ItemIcon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold'}`} />
                       <span className="flex-1">{entry.name}</span>
-                      <ChevronRight className="w-3 h-3 text-black/20 flex-shrink-0" />
+                      <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold/60'}`} />
                     </Link>
                   );
                 })}
 
                 {/* Divider + View All CTA */}
-                <hr className="border-gold/20 my-2" />
+                <hr className="border-gold/30 my-2" />
                 <Link
                   to={viewAllHref}
                   onClick={closeMegaMenu}
-                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold text-gold hover:bg-gold/10 transition-all border border-gold/30"
+                  className="flex items-center gap-2.5 px-3 py-3 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-gold to-gold-dark hover:opacity-95 transition-all border border-gold shadow-sm"
                 >
-                  <Eye className="w-4 h-4 text-gold flex-shrink-0" />
+                  <Eye className="w-4 h-4 text-white flex-shrink-0" />
                   <span className="flex-1">{viewAllLabel}</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-gold" />
+                  <ChevronRight className="w-3.5 h-3.5 text-white" />
                 </Link>
                 {!isDev && (
                   <Link
                     to="/guides"
                     onClick={closeMegaMenu}
-                    className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-black/70 hover:bg-gold/10 transition-all"
+                    className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold border bg-white/70 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60 transition-all"
                   >
-                    <BookOpen className="w-4 h-4 text-gold/70 flex-shrink-0" />
+                    <BookOpen className="w-4 h-4 text-gold flex-shrink-0" />
                     <span className="flex-1">Read Area Guides</span>
-                    <ChevronRight className="w-3 h-3 text-black/20 flex-shrink-0" />
+                    <ChevronRight className="w-3 h-3 text-gold/60 flex-shrink-0" />
                   </Link>
                 )}
               </div>
@@ -1014,22 +1020,25 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
+            className={`pointer-events-auto relative w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-gold/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#ECE2D2]/50 to-transparent">
+            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
               <div className="flex items-center gap-2.5">
-                <Sparkles className="w-4 h-4 text-gold" />
+                <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-sm">
+                  <Sparkles className="w-3.5 h-3.5 text-white" />
+                </span>
                 <h3 className="text-sm font-bold text-black tracking-tight">{title}</h3>
               </div>
               <button
                 onClick={closeMegaMenu}
-                className="w-6 h-6 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors"
+                className="w-6 h-6 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center hover:opacity-90 transition-opacity shadow-sm"
               >
-                <X className="w-3 h-3 text-gold" />
+                <X className="w-3 h-3 text-white" />
               </button>
             </div>
-            <div className={`overflow-y-auto jj-scrollbar-gold p-3 ${isLargeMenu ? 'columns-2 gap-1' : 'space-y-0.5'}`}>
+            <div className={`overflow-y-auto jj-scrollbar-gold p-3 ${isLargeMenu ? 'columns-2 gap-1.5' : 'space-y-1'}`}>
               {links.map((link) => {
                 const Icon = link.icon;
                 const linkActive = isRouteActive(link.href);
@@ -1038,15 +1047,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     key={link.href + link.label}
                     to={link.href}
                     onClick={closeMegaMenu}
-                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all break-inside-avoid ${
+                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all break-inside-avoid border mb-1 ${
                       linkActive
-                        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black font-bold border border-gold/40"
-                        : "text-black/80 hover:bg-gold/10 hover:text-black"
+                        ? "bg-gradient-to-r from-gold to-gold-dark text-white font-bold border-gold shadow-sm"
+                        : "bg-white/70 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                     }`}
                   >
-                    <Icon className="w-4 h-4 text-gold flex-shrink-0" />
+                    <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold'}`} />
                     <span className="flex-1">{link.label}</span>
-                    <ChevronRight className="w-3 h-3 text-black/20 flex-shrink-0" />
+                    <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold/60'}`} />
                   </Link>
                 );
               })}
