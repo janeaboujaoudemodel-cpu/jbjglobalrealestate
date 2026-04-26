@@ -10,7 +10,15 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "vite preview --host 0.0.0.0 --port 8080",
-    "pdf:qa": "node scripts/pdf-qa/check-exports.mjs"
+    "pdf:qa": "node scripts/pdf-qa/check-exports.mjs",
+    "check:contrast:tokens": "node scripts/contrast/check-tokens.mjs",
+    "check:contrast:rendered": "node scripts/contrast/check-rendered.mjs",
+    "check:contrast": "npm run check:contrast:tokens && npm run check:contrast:rendered",
+    "prepare": "husky || true"
+  },
+  "lint-staged": {
+    "src/index.css": "node scripts/contrast/check-tokens.mjs",
+    "tailwind.config.ts": "node scripts/contrast/check-tokens.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.1",
