@@ -1020,22 +1020,25 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
 style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
         >
           <div
-            className={`pointer-events-auto w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl shadow-2xl border-2 border-gold/40 bg-gradient-to-b from-[#FDFBF7] to-[#F7F2EA] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
+            className={`pointer-events-auto relative w-[min(600px,calc(100vw-240px))] overflow-hidden mt-4 ml-3 rounded-2xl border border-gold/70 bg-gradient-to-b from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9] shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset] animate-in slide-in-from-left-2 fade-in duration-200 ${isLargeMenu ? 'max-h-[calc(100vh-100px)]' : 'max-h-[calc(100vh-160px)]'}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/20 bg-gradient-to-r from-[#ECE2D2]/50 to-transparent">
+            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-gold to-gold-dark" aria-hidden />
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-gold/40 bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]">
               <div className="flex items-center gap-2.5">
-                <Sparkles className="w-4 h-4 text-gold" />
+                <span className="w-7 h-7 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-sm">
+                  <Sparkles className="w-3.5 h-3.5 text-white" />
+                </span>
                 <h3 className="text-sm font-bold text-black tracking-tight">{title}</h3>
               </div>
               <button
                 onClick={closeMegaMenu}
-                className="w-6 h-6 rounded-full bg-gold/10 flex items-center justify-center hover:bg-gold/20 transition-colors"
+                className="w-6 h-6 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center hover:opacity-90 transition-opacity shadow-sm"
               >
-                <X className="w-3 h-3 text-gold" />
+                <X className="w-3 h-3 text-white" />
               </button>
             </div>
-            <div className={`overflow-y-auto jj-scrollbar-gold p-3 ${isLargeMenu ? 'columns-2 gap-1' : 'space-y-0.5'}`}>
+            <div className={`overflow-y-auto jj-scrollbar-gold p-3 ${isLargeMenu ? 'columns-2 gap-1.5' : 'space-y-1'}`}>
               {links.map((link) => {
                 const Icon = link.icon;
                 const linkActive = isRouteActive(link.href);
@@ -1044,15 +1047,15 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                     key={link.href + link.label}
                     to={link.href}
                     onClick={closeMegaMenu}
-                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all break-inside-avoid ${
+                    className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all break-inside-avoid border mb-1 ${
                       linkActive
-                        ? "bg-gradient-to-r from-[#F7F1E6] to-[#D8C7A6] text-black font-bold border border-gold/40"
-                        : "text-black/80 hover:bg-gold/10 hover:text-black"
+                        ? "bg-gradient-to-r from-gold to-gold-dark text-white font-bold border-gold shadow-sm"
+                        : "bg-white/70 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                     }`}
                   >
-                    <Icon className="w-4 h-4 text-gold flex-shrink-0" />
+                    <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold'}`} />
                     <span className="flex-1">{link.label}</span>
-                    <ChevronRight className="w-3 h-3 text-black/20 flex-shrink-0" />
+                    <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold/60'}`} />
                   </Link>
                 );
               })}
