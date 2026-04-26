@@ -189,21 +189,24 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
           // data-surface="light" gives the portaled panel its own light-scope
           // so dark-surface CSS can't bleed in when the trigger is in the footer.
           data-surface="light"
-          className="w-[340px] mr-3 bg-white border border-gray-200 shadow-2xl rounded-2xl p-3 z-[10001]"
+          className="w-[360px] mr-3 bg-white border border-gray-200 shadow-2xl rounded-2xl p-3 z-[10001]"
           sideOffset={10}
           collisionPadding={16}
           avoidCollisions
           onCloseAutoFocus={(e) => e.preventDefault()}
         >
-          <div className="px-3 py-2.5 mb-3 rounded-xl bg-gray-50 border border-gray-200">
-            <p className="text-sm font-bold text-black">Select your mode</p>
-            <p className="text-xs text-gray-600 mt-0.5">
+          <div className="px-3 pt-1 pb-3 mb-2 border-b border-[#D9C292]/40">
+            <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-bold tracking-[0.18em] text-[#8A7747] bg-[#D9C292]/15 border border-[#D9C292]/40">
+              MODE
+            </span>
+            <p className="text-[14px] font-bold text-black mt-1.5 leading-tight">Select your mode</p>
+            <p className="text-[11px] text-gray-500 mt-0.5 leading-snug">
               Choose how you want to use the platform
             </p>
           </div>
 
-          {/* Premium spaced stack — colored cards never touch */}
-          <div className="flex flex-col gap-3">
+          {/* Tight premium stack — uniform row height */}
+          <div className="flex flex-col gap-1.5">
             {(Object.entries(MODE_CONFIG) as [UserMode, ModePalette][]).map(([modeKey, config]) => {
               const Icon = config.icon;
               const isActive = mode === modeKey;
@@ -242,7 +245,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                   unstyled
                   className={cn(
                     "mode-switcher-item",
-                    "relative flex items-center gap-3 pl-5 pr-3 py-3 rounded-xl cursor-pointer transition-all duration-200 border w-full min-h-[84px]",
+                    "relative flex items-center gap-3 pl-5 pr-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200 border w-full min-h-[72px]",
                     "focus:outline-none",
                   )}
                 >
@@ -262,7 +265,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                       {config.label}
                     </p>
                     <p
-                      className="text-[11px] leading-snug mt-1 line-clamp-2 min-h-[28px]"
+                      className="text-[11px] leading-snug mt-0.5 line-clamp-1"
                       style={{ color: config.dark, opacity: 0.85 }}
                     >
                       {config.description}
@@ -271,7 +274,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
 
                   {isActive ? (
                     <span
-                      className="ml-2 inline-flex items-center justify-center gap-1 px-2 h-[22px] min-w-[78px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0"
+                      className="ml-2 inline-flex items-center justify-center gap-1 px-2 h-[22px] w-[84px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0"
                       style={{ backgroundColor: config.base, color: '#FFFFFF' }}
                     >
                       <Check className="w-3 h-3" style={{ color: '#FFFFFF' }} />
@@ -279,7 +282,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                     </span>
                   ) : (
                     <span
-                      className="ml-2 inline-flex items-center justify-center px-2 h-[22px] min-w-[78px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 border"
+                      className="ml-2 inline-flex items-center justify-center px-2 h-[22px] w-[84px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 border"
                       style={{
                         color: config.base,
                         borderColor: config.base,

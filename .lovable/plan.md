@@ -1,51 +1,63 @@
-# Filter bar bug fixes + Mode dropdown alignment
+# Footer + Mode Switcher polish
 
-## Problems observed
+Three small premium fixes: a broader currency list with cleaner sqft/sqm separation in the footer, plus a refined Mode dropdown header and tighter row alignment.
 
-### 1. Filter popovers (Payments, Property Type, Bedrooms, Status, Construction, Handover, Views)
-- **Stuck / won't close on outside click**: Popovers like *Payments* either don't open, take time, or stay open after outside click.
-- **Selecting an option closes/freezes the popover**: e.g. selecting "post handover only" or any pill inside an uncontrolled popover causes the bar to feel frozen.
-- **Root cause**: When `FilterShortcutBar` is mounted via `GlobalFilterBar` from a non-property page (e.g. homepage), every `update(...)` call inside an uncontrolled popover triggers `navigate('/properties?...')`. That unmounts the page → remounts the bar → tears down the open Radix popover mid-interaction. Result: popover appears "stuck" and click-outside detection misfires because the trigger element is being recreated.
-- A secondary issue: `Payments` popover only commits via the Apply button (correct), but its trigger sits inside an `overflow-x-auto` scroll container with `touchAction: 'pan-x'`, which on touch can swallow the first tap.
+## 1. Footer currency selector — add the full world set
 
-### 2. ModeSwitcher dropdown ("Mode: Investor" panel)
-- The **active row** (currently Investor) shows a visible **gap between the orange card edge and the outer orange border**. Cause: `boxShadow: inset 4px 0 0 base, 0 0 0 2px #FFFFFF, 0 0 0 4px base` adds a 2px white ring + 2px outer color ring → looks like "wide space gap".
-- The **4 rows are not uniform height**: rows use only `py-3` with no min-height, so descriptions of different lengths (1 line vs 2 lines wrap) make rows visibly different heights. The user wants all 4 (Investor, Broker, Investor+Broker, Developer) to be the **same height, same width, same padding, same chip size** across header & footer instances.
+File: `src/components/CurrencySwitcher.tsx` (`SUPPORTED_CURRENCIES` is the single source of truth used by the footer, hero, account menu, and `useCurrency`).
 
----
+Expand the list from 10 → ~30 major globally-traded currencies, alphabetised after the AED + USD anchors:
 
-## Fix plan
+```
+AED 🇦🇪, USD 🇺🇸, EUR 🇪🇺, GBP 🇬🇧, INR 🇮🇳, SAR 🇸🇦, CNY 🇨🇳, RUB 🇷🇺,
+CAD 🇨🇦, AUD 🇦🇺, JPY 🇯🇵, CHF 🇨🇭, SGD 🇸🇬, HKD 🇭🇰, KRW 🇰🇷, TRY 🇹🇷,
+QAR 🇶🇦, KWD 🇰🇼, BHD 🇧🇭, OMR 🇴🇲, EGP 🇪🇬, ZAR 🇿🇦, BRL 🇧🇷, MXN 🇲🇽,
+NZD 🇳🇿, SEK 🇸🇪, NOK 🇳🇴, DKK 🇩🇰, PLN 🇵🇱, THB 🇹🇭, MYR 🇲🇾, IDR 🇮🇩,
+PHP 🇵🇭, PKR 🇵🇰, NGN 🇳🇬
+```
 
-### A. `src/components/filters/FilterShortcutBar.tsx`
-1. **Make every popover controlled** (add `useState` for `handoverOpen`, `propertyTypeOpen`, `bedroomsOpen`, `statusOpen`, `constructionOpen`, `viewsOpen`). This guarantees Radix's outside-click + Esc handlers operate on stable React state and aren't disrupted by parent re-renders / navigation.
-2. **Defer navigation to next tick** so the popover can finish its close animation before the route changes. In `GlobalFilterBar.handleFilterChange`, wrap the `navigate(...)` call in `queueMicrotask` / `setTimeout(..., 0)` when navigating from a non-property page. This eliminates the "freeze" felt when toggling a filter pill from homepage.
-3. **Auto-close multi-select popovers on Apply, not on every click** — keep current "click pill toggles selection" behavior but add a small `Apply` row at the bottom of *Bedrooms / Status / Construction / Views / Property Type* popovers that calls `setOpen(false)`. Click-outside and Esc still close.
-4. **Touch-tap reliability**: remove `touchAction: 'pan-x'` from the outer scroll container's inline style (keep `WebkitOverflowScrolling: touch` and `scrollbarWidth: none`). `pan-x` on a horizontal scroller can swallow tap events on filter pills on touchpads / trackpads. Horizontal scrolling still works via the wheel + drag default.
-5. **Payments popover**: confirm `paymentsOpen` is bound (it already is). No additional changes beyond items 1–4.
+Also add matching FX entries to `CURRENCY_RATES` and `CURRENCY_SYMBOLS` in `src/hooks/useCurrency.ts` so price conversions still work. The footer dropdown already scrolls (`max-h-80 overflow-y-auto`) so no layout change needed.
 
-### B. `src/components/navigation/GlobalFilterBar.tsx`
-- In `handleFilterChange`, when navigating from a non-property page, defer `navigate()` with `setTimeout(..., 0)` so the popover that triggered the change can close cleanly before unmount.
+## 2. Footer sqft / sqm — premium divider + visual distinction
 
-### C. `src/components/ModeSwitcher.tsx` — dropdown row alignment
-1. **Remove the white-then-color double ring on the active row.** Replace the active `boxShadow` with a single solid 3px outer ring in the mode color, no white gap:
-   - Active: `boxShadow: 'inset 4px 0 0 ' + base + ', 0 0 0 3px ' + base`
-   - Inactive: unchanged (`inset 4px 0 0 base`).
-   This eliminates the perceived "wide space gap" between the card and the orange border.
-2. **Force all 4 rows to identical dimensions**:
-   - Add `min-h-[76px]` to every row (`DropdownMenuItem` className).
-   - Add `w-full` (already implied by stack) and ensure `pl-5 pr-3 py-3` is identical for every row (already true).
-   - Clamp the description to **exactly 2 lines** with `line-clamp-2` so single-line descriptions don't shrink the row, and longer ones don't grow past 2 lines. Add `min-h-[28px]` on the description block to lock vertical rhythm.
-   - Lock the icon badge at `w-10 h-10` (already true) and the right-side chip at a fixed `min-w-[68px] h-[22px] justify-center` so the "Selected" pill and the short-label pill take the same horizontal footprint → all rows align edge-to-edge.
-3. Apply identically to the `header` and `full` variants (single render path already covers both).
+File: `src/components/Footer.tsx` (lines 137–151).
 
----
+Two refinements applied together:
+
+- Insert a 1px champagne hairline divider between the two buttons (`bg-[#D9C292]/40`) so it reads as a deliberate split, not one merged pill.
+- Give the inactive side a slightly muted tone (`text-white/55`) and the active side a soft champagne backdrop + white text, so the active selection is immediately legible.
+
+Result:
+
+```text
+[ sq ft ] │ [ sq m ]
+   ▲ active = white text on champagne tint
+            ▲ inactive = muted white, transparent
+```
+
+## 3. ModeSwitcher dropdown — refined header + tighter rows
+
+File: `src/components/ModeSwitcher.tsx`.
+
+a. **Header polish** (lines 198–203, the "Select your mode" block the user dictated as "lecture mode"):
+   - Restyle into a true premium header: white background, single champagne-gold hairline bottom border, smaller pill-style eyebrow tag "MODE", crisp 14px black title "Select your mode", 11px gray subtitle. Removes the heavy gray box look.
+
+b. **Tighten the four category rows** (line 206 + 245):
+   - Reduce inter-card spacing from `gap-3` (12px) → `gap-1.5` (6px).
+   - Reduce row vertical padding from `py-3` → `py-2.5` and `min-h-[84px]` → `min-h-[72px]`.
+   - Apply `line-clamp-1` (instead of 2) and drop `min-h-[28px]` on the description so all four rows have identical height regardless of text length.
+   - Standardise the right-side chip width (`min-w-[78px]` → `w-[84px]`) so "Selected" and short labels align edge-to-edge across all four rows.
+
+c. **Container width**: bump `w-[340px]` → `w-[360px]` to absorb the chip width change without truncating "Investor + Broker".
 
 ## Files to edit
-- `src/components/filters/FilterShortcutBar.tsx`
-- `src/components/navigation/GlobalFilterBar.tsx`
-- `src/components/ModeSwitcher.tsx`
+
+- `src/components/CurrencySwitcher.tsx` — expand `SUPPORTED_CURRENCIES`
+- `src/hooks/useCurrency.ts` — add matching `CURRENCY_RATES` and `CURRENCY_SYMBOLS` entries
+- `src/components/Footer.tsx` — sqft/sqm divider + active-state contrast
+- `src/components/ModeSwitcher.tsx` — header restyle, tighter row spacing, uniform chip width
 
 ## Out of scope
-- No changes to filter logic / URL schema.
-- No design changes to mode colors or icons — only geometry, ring, and row-height parity.
-- No changes to mobile bottom-sheet filter UI.
+
+- Live FX feed (rates stay as the static table the platform already uses).
+- Header/account-menu mode switcher visuals stay untouched — the user's complaint is specific to the footer-triggered dropdown which uses the same component, so the fix applies everywhere automatically.
