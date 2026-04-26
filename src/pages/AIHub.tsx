@@ -666,14 +666,17 @@ const AIHub = () => {
       <section className="relative w-full min-h-screen bg-[#0D0D0D]">
         {/* HERO SECTION - With Video Background */}
         <div className="relative py-10 md:py-14 overflow-hidden">
-          {/* Video Background */}
+          {/* Video Background — Remotion-rendered luxury plate with built-in subtitle safe zone.
+              Source: remotion/src/MainVideo.tsx (re-render via `node remotion/scripts/render.mjs`). */}
           <div className="absolute inset-0 z-0">
             <VideoBackground 
-              src="https://videos.pexels.com/video-files/3571264/3571264-uhd_2560_1440_30fps.mp4"
-              poster="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1920&q=80"
-              opacity={0.3}
+              src="/video/aihub-bg.mp4"
+              poster="/video/aihub-bg-poster.jpg"
+              opacity={1}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/75 to-[#0D0D0D]" />
+            {/* Lighter scrim — the video already enforces text contrast; this just blends the
+                bottom into the page background and adds a small floor for safety. */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-[#0D0D0D]" />
           </div>
           
           {/* Animated gradient orbs */}
