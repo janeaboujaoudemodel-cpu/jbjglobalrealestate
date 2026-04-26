@@ -134,19 +134,24 @@ const FooterCurrencyUnit = () => {
         )}
       </div>
 
-      <div className="flex rounded overflow-hidden border border-white/15">
-        {(["sqft", "sqm"] as const).map((unit) => (
-          <button
-            key={unit}
-            onClick={() => handleUnit(unit)}
-            className="px-2.5 py-1.5 text-[12px] font-medium transition-colors"
-            style={{
-              background: areaUnit === unit ? "rgba(255,255,255,0.08)" : "transparent",
-              color: areaUnit === unit ? "#FFFFFF" : "rgba(255,255,255,0.7)",
-            }}
-          >
-            {unit === "sqft" ? "sq ft" : "sq m"}
-          </button>
+      <div className="flex items-stretch rounded overflow-hidden border border-white/15">
+        {(["sqft", "sqm"] as const).map((unit, idx) => (
+          <div key={unit} className="flex items-stretch">
+            {idx === 1 && (
+              <div className="w-px self-stretch bg-[#D9C292]/40" aria-hidden />
+            )}
+            <button
+              onClick={() => handleUnit(unit)}
+              className="px-2.5 py-1.5 text-[12px] font-medium transition-colors"
+              style={{
+                background:
+                  areaUnit === unit ? "rgba(217,194,146,0.18)" : "transparent",
+                color: areaUnit === unit ? "#FFFFFF" : "rgba(255,255,255,0.55)",
+              }}
+            >
+              {unit === "sqft" ? "sq ft" : "sq m"}
+            </button>
+          </div>
         ))}
       </div>
     </div>
