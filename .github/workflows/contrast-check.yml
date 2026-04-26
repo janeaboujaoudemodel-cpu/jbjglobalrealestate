@@ -1,0 +1,85 @@
+name: Contrast Regression Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  contrast:
+    name: Icon / text contrast (WCAG AA)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ---------- Layer 1: design tokens (fast, deterministic) ----------
+      - name: Check design-token contrast (WCAG AA)
+        run: npm run check:contrast:tokens
+
+      # ---------- Layer 2: rendered pages (Playwright + axe) ----------
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build app
+        run: npm run build
+
+      - name: Start preview server
+        run: |
+          npm run preview -- --host 0.0.0.0 --port 8080 &
+          for i in $(seq 1 60); do
+            curl -sf http://localhost:8080 > /dev/null && break || sleep 1
+          done
+
+      - name: Run rendered contrast sweep (axe color-contrast)
+        env:
+          PREVIEW_URL: http://localhost:8080
+        run: npm run check:contrast:rendered
+
+      - name: Upload contrast report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: contrast-report
+          path: artifacts/contrast/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Post PR summary
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const tokens = 'artifacts/contrast/tokens.json';
+            const rendered = 'artifacts/contrast/rendered.md';
+            let body = '## 🎨 Contrast Regression Check\n\n';
+            if (fs.existsSync(tokens)) {
+              const t = JSON.parse(fs.readFileSync(tokens, 'utf8'));
+              const fails = t.results.filter(r => r.status === 'fail').length;
+              const allow = t.results.filter(r => r.status === 'allowlisted').length;
+              body += `**Tokens:** ${t.results.length} pairs · ${fails} fail · ${allow} allowlisted\n\n`;
+            }
+            if (fs.existsSync(rendered)) {
+              body += fs.readFileSync(rendered, 'utf8');
+            } else {
+              body += '_Rendered sweep did not produce a report (likely failed before completion). See workflow logs._\n';
+            }
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });

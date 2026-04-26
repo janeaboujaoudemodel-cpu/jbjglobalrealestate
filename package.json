@@ -10,7 +10,15 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "vite preview --host 0.0.0.0 --port 8080",
-    "pdf:qa": "node scripts/pdf-qa/check-exports.mjs"
+    "pdf:qa": "node scripts/pdf-qa/check-exports.mjs",
+    "check:contrast:tokens": "node scripts/contrast/check-tokens.mjs",
+    "check:contrast:rendered": "node scripts/contrast/check-rendered.mjs",
+    "check:contrast": "npm run check:contrast:tokens && npm run check:contrast:rendered",
+    "prepare": "husky || true"
+  },
+  "lint-staged": {
+    "src/index.css": "node scripts/contrast/check-tokens.mjs",
+    "tailwind.config.ts": "node scripts/contrast/check-tokens.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.1",
@@ -103,10 +111,13 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react-swc": "^3.11.0",
     "autoprefixer": "^10.4.21",
+    "axe-core": "^4.11.3",
     "eslint": "^9.32.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "lovable-tagger": "^1.1.13",
     "playwright": "^1.59.1",
     "postcss": "^8.5.6",
