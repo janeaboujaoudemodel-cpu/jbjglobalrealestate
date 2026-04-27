@@ -278,7 +278,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           {children}
         </main>
       </GlobalContactGating>
-      <div className={!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:md:pl-[200px] [body.jj-vertical-nav-collapsed_&]:md:pl-[48px]" : ""}>
+      <div data-chrome="footer" className={!isBackOfficeRoute ? "[body.jj-vertical-nav-active_&]:md:pl-[200px] [body.jj-vertical-nav-collapsed_&]:md:pl-[48px]" : ""}>
         {!isBackOfficeRoute && !isToolkitGeneratorRoute && <CombinedContactNewsletter />}
         {!isBackOfficeRoute && !isToolkitGeneratorRoute && <Footer />}
       </div>
