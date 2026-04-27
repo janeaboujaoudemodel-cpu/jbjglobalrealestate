@@ -1327,7 +1327,7 @@ const CompanyProfile = () => {
       </SectionShell>
 
       {/* Mobile Sticky Actions */}
-      <div className="lg:hidden fixed bottom-4 left-4 right-4 z-50 flex gap-2">
+      <div data-chrome="floating-actions" className="lg:hidden fixed bottom-4 left-4 right-4 z-50 flex gap-2">
         <Button onClick={handleWhatsApp} variant="primary" className="flex-1 rounded-full">
           <MessageCircle className="w-5 h-5" />
           WhatsApp
