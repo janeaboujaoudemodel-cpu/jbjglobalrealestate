@@ -54,6 +54,7 @@ export default defineConfig(({ mode }) => {
     },
     optimizeDeps: {
       include: ['react', 'react-dom', 'react-router-dom', '@tanstack/react-query'],
+      entries: ['index.html', 'src/main.tsx'],
     },
   };
 });
