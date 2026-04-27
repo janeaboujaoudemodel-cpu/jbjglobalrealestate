@@ -1,45 +1,47 @@
-# Premium gold treatment for vertical-sidebar mega-menus
+## What's actually broken
 
-The vertical sidebar's pop-out panels (Properties, Sell, Rent, Developers, Areas, Insights, Guides, Services, Partners, Broker, Investor, Company, Legal, Productivity, My Account, Suites, Shortcuts) currently render with a pale cream body, a faint gold rim, and link rows that fall back to flat black-on-cream — they read as "gray" and lose the JBJ premium tone. This plan upgrades all of them in one place: `src/components/navigation/GlobalVerticalNav.tsx`, inside `renderMegaMenu()` (lines ~834–1058).
+The user opened `company-profile_baseline.pdf` (the **diff** PDF produced by `pdf_export_gate.py`) and saw red/pink everywhere across pages 1–3. That pink isn't a corrupted PDF — it's the baseline gate's diff highlighter showing everything that didn't match the locked baseline. I rasterized the baseline diff and confirmed:
 
-## What changes — visual
+- The whole left sidebar (PROPERTIES / TOOLS / INSIGHTS / COMPANY …) leaked into the print page.
+- The global filter bar (Bedrooms / Status / Construction / Newest / Map / Saved Filters) leaked in.
+- The cookie consent banner sat across the bottom of the page.
+- The `/company-profile` floating action stack (chat, phone, download FABs) showed in the upper-right.
+- All of that flagged as "shifted regions" → red diff overlay.
 
-1. **Panel shell — true premium frame**
-   - Crisper single-stroke gold border (`border border-gold/70`) instead of the current fuzzy `border-2 border-gold/40`.
-   - Add an inner gold halo via `shadow-[0_24px_60px_-18px_rgba(0,0,0,0.45),0_0_0_1px_rgba(217,194,146,0.35)_inset]` so the frame reads luxurious, not flat.
-   - Deepen the background to true champagne (`from-[#FFFCF6] via-[#F7EFDF] to-[#EFE3C9]`) so it stops looking like grey paper.
-   - Add a 3px solid gold accent strip down the left edge of every panel for a "premium drawer" cue.
+The actual served PDF (`/documents/JBJ-Global-Real-Estate-Company-Profile.pdf`) is **fine**: 18 pages, 5.1MB, renders cleanly when opened directly. Verified by rasterizing pages 1–6 — no pink, no broken layout.
 
-2. **Panel header**
-   - Replace the half-transparent strip with a solid champagne bar (`bg-gradient-to-r from-[#EADBB6] to-[#D8C7A6]`) plus a 1px gold hairline below.
-   - Title icon (Sparkles / Building / MapPin / Zap) sits inside a 28px gold-filled badge (`bg-gradient-to-br from-gold to-gold-dark`) with a white icon — same badge language already used in ModeSwitcher.
-   - Close (X) becomes a filled gold disc with a white X (currently `bg-gold/10` with gold X — too faint).
+Root cause for the diff failure: the print-mode CSS targets selectors (`[data-chrome="header"]`, `[data-chrome="sidebar"]`, `[data-chrome="footer"]`, `.cookie-banner`, `[data-popup]`) that **no component actually sets**, and the in-page floating actions on `/company-profile` aren't tagged either. `MainLayoutWrapper` already short-circuits the global chrome when `?print=1`, so the live page is mostly clean today — but the floating FAB stack inside `CompanyProfile.tsx` still leaks, the cookie banner still leaks if it portals outside the wrapper, and the existing `data-chrome` rules are dead code.
 
-3. **Link rows — uniform premium chip with gold border**
-   - Inactive: `bg-white/70 border border-gold/25 text-black/85`, with `hover:bg-gold/15 hover:border-gold/60`. Adds the hairline gold border the user explicitly asked for, on every row.
-   - Active: solid gold gradient `bg-gradient-to-r from-gold to-gold-dark text-white border border-gold` with white icon and white chevron — strong selected state, no more washed-out cream.
-   - Icons render in gold on inactive, white on active. Chevron mirrors the same.
-   - Standardize row geometry: `rounded-xl px-3 py-2.5` across all three branches (default, developers/areas, shortcuts) so spacing is identical everywhere.
+## Fixes
 
-4. **Shortcut groups (the colored category pills inside the Shortcuts panel)**
-   - Keep their per-category color accents (those are intentional taxonomy colors, not "gray"), but wrap each group in `border border-gold/25 bg-white/60` so the whole panel still reads gold-framed and premium.
+1. **Tag the in-page leaks on `/company-profile`** (`src/pages/CompanyProfile.tsx`)
+   - Add `data-chrome="floating-actions"` to the desktop FAB stack (line 414) and the mobile sticky action bar (line 1330).
 
-5. **"View All" CTA (developers / areas panel)**
-   - Promote from outline-only to filled gold (`bg-gradient-to-r from-gold to-gold-dark text-white border border-gold`, white icons) so it stops vanishing into the cream.
+2. **Make the existing print-mode CSS actually fire** — add the markers it expects:
+   - `src/components/CookiesConsentBanner.tsx`: add `cookie-banner` class to the root `motion.div`.
+   - `src/components/MainLayout.tsx`: add `data-chrome="sidebar"` to the sidebar wrapper, `data-chrome="utility-bar"` to the utility bar wrapper, `data-chrome="header"` to the mobile header wrapper, `data-chrome="footer"` to the footer wrapper. (Defense-in-depth — `MainLayoutWrapper` already hides them, but tagging means any future page that renders chrome outside the wrapper still gets cleaned up.)
+   - Extend the `index.css` print-mode rule to also hide `[data-chrome="floating-actions"]` and `[data-chrome="utility-bar"]`.
 
-6. **Scrollbar:** already `jj-scrollbar-gold` — no change.
+3. **Refresh the broken baseline**
+   - Boot Playwright against the now-clean `/company-profile?print=1`, render to PDF, replace `/mnt/documents/pdf_baselines/company-profile/baseline.pdf` and `pages/page_*.png`.
+   - Re-run the diff gate against the served `/documents/JBJ-Global-Real-Estate-Company-Profile.pdf` — the existing tolerances file (`size_tol_mm: 0.5`, `pixel_fail_pct: 3.0`, etc.) stays unchanged.
 
-## What changes — code
+4. **End-to-end QA from a user's perspective** (no code changes, just verification):
+   - **Live page**: screenshot `/company-profile` (normal) and `/company-profile?print=1` (clean), confirm both render.
+   - **Download button**: trigger the "Download Company Profile" button in headless Chromium, confirm the served file is the correct 18-page PDF.
+   - **Static PDF**: rasterize all 18 pages of `/documents/JBJ-Global-Real-Estate-Company-Profile.pdf` and visually inspect each one for clipping, overlap, or missing content. Save the QA strip to `/mnt/documents/`.
+   - **Owner export panel**: confirm the `CompanyProfileDownload` admin card's three buttons (Download / Open Clean PDF / Open Page Baseline) all resolve to the right URLs.
+   - **AI Hub**: navigate `/ai-hub` and confirm nothing in that page links to the broken `_baseline.pdf` artifact (the user said they reached the bad PDF via AI Hub → Recent — that recent list is the file picker pointing into `/mnt/documents/`, not the live site).
 
-All edits are in `src/components/navigation/GlobalVerticalNav.tsx` inside the three branches of `renderMegaMenu()`:
-- Shortcuts branch (~lines 840–909)
-- Developers / Areas branch (~lines 912–999)
-- Default branch (~lines 1002–1057)
+5. **Deliverables to `/mnt/documents/`**
+   - `company-profile_baseline_v2.pdf` — fresh clean baseline render.
+   - `company-profile_qa_strip.pdf` — all 18 pages of the live downloadable PDF, rasterized for inspection.
+   - `company-profile_print_mode.png` — screenshot proving the clean print layout.
+   - `company-profile_diff_v2.pdf` — re-run diff after the fix, expected zero red overlay.
 
-The same className recipe is applied in all three so the panels are visually identical except for content. No new components, no new files. Hover/active logic, click-to-close, route highlighting, and animations are preserved.
+## Technical notes
 
-## Out of scope
-
-- The sidebar rail itself (logo header, section accordion, bottom support strip) already uses the gold treatment and matches the JBJ palette — the user's complaint is about the *opened* panels, so the rail is not touched.
-- `PropertiesVerticalNav.tsx` is the map-page rail, unrelated to the global sidebar dropdowns; not modified.
-- Mega-menu *content* (which links live in which panel) is unchanged.
+- No data model changes, no edge function changes, no migrations.
+- `MainLayoutWrapper` already correctly short-circuits chrome on `?print=1`; this work just makes the secondary CSS-based suppression actually do something and patches the in-page floating actions that aren't part of the wrapper.
+- The 18-page served PDF is the static asset under `public/documents/` and is **not** regenerated — no risk to the official artifact.
+- The `pdf-export-qa` GitHub Action will keep validating the served PDF against `thresholds.json` on every PR.
