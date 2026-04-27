@@ -3041,7 +3041,10 @@ html[data-print-mode="1"] body {
 
 html[data-print-mode="1"] [data-chrome="header"],
 html[data-print-mode="1"] [data-chrome="sidebar"],
+html[data-print-mode="1"] [data-chrome="utility-bar"],
 html[data-print-mode="1"] [data-chrome="footer"],
+html[data-print-mode="1"] [data-chrome="floating-actions"],
+html[data-print-mode="1"] [data-chrome="cookie-banner"],
 html[data-print-mode="1"] .cookie-banner,
 html[data-print-mode="1"] [data-popup],
 html[data-print-mode="1"] [data-overlay="popup"],
