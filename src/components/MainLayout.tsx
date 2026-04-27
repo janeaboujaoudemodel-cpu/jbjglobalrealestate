@@ -249,17 +249,17 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         </Suspense>
       )}
       {/* Phone (<768): horizontal header | Tablet/Desktop (md 768px+): L-shape vertical sidebar + utility bar */}
-      <div className="md:hidden">
+      <div data-chrome="header" className="md:hidden">
         <GlobalHeader forceSolid={needsHeaderSpacing} />
       </div>
       {!isBackOfficeRoute && (
         <>
-          <div className="hidden md:block fixed left-0 top-0 h-screen z-[9997]">
+          <div data-chrome="sidebar" className="hidden md:block fixed left-0 top-0 h-screen z-[9997]">
             <Suspense fallback={null}>
               <GlobalVerticalNav />
             </Suspense>
           </div>
-          <div className="hidden md:block">
+          <div data-chrome="utility-bar" className="hidden md:block">
             <Suspense fallback={null}>
               <HorizontalUtilityBar />
             </Suspense>
