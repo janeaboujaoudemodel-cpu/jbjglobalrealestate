@@ -4947,8 +4947,13 @@ export type Database = {
           company_name: string
           created_at: string
           deal_count: number
+          emirate: string | null
+          first_contact_at: string | null
           id: string
+          last_auto_reply_at: string | null
+          last_email_synced_at: string | null
           last_interaction_at: string | null
+          next_followup_at: string | null
           notes: string | null
           office_location: string | null
           owner_id: string
@@ -4968,8 +4973,13 @@ export type Database = {
           company_name: string
           created_at?: string
           deal_count?: number
+          emirate?: string | null
+          first_contact_at?: string | null
           id?: string
+          last_auto_reply_at?: string | null
+          last_email_synced_at?: string | null
           last_interaction_at?: string | null
+          next_followup_at?: string | null
           notes?: string | null
           office_location?: string | null
           owner_id: string
@@ -4989,8 +4999,13 @@ export type Database = {
           company_name?: string
           created_at?: string
           deal_count?: number
+          emirate?: string | null
+          first_contact_at?: string | null
           id?: string
+          last_auto_reply_at?: string | null
+          last_email_synced_at?: string | null
           last_interaction_at?: string | null
+          next_followup_at?: string | null
           notes?: string | null
           office_location?: string | null
           owner_id?: string
@@ -5224,14 +5239,19 @@ export type Database = {
           created_at: string
           currency: string | null
           email: string | null
+          emirate: string | null
+          first_contact_at: string | null
           full_name: string
           id: string
           interests: Json | null
           is_company: boolean
+          last_auto_reply_at: string | null
+          last_email_synced_at: string | null
           last_interaction_at: string | null
           lifetime_value: number
           linked_lead_id: string | null
           nationality: string | null
+          next_followup_at: string | null
           notes: string | null
           owner_id: string
           phone: string | null
@@ -5254,14 +5274,19 @@ export type Database = {
           created_at?: string
           currency?: string | null
           email?: string | null
+          emirate?: string | null
+          first_contact_at?: string | null
           full_name: string
           id?: string
           interests?: Json | null
           is_company?: boolean
+          last_auto_reply_at?: string | null
+          last_email_synced_at?: string | null
           last_interaction_at?: string | null
           lifetime_value?: number
           linked_lead_id?: string | null
           nationality?: string | null
+          next_followup_at?: string | null
           notes?: string | null
           owner_id: string
           phone?: string | null
@@ -5284,14 +5309,19 @@ export type Database = {
           created_at?: string
           currency?: string | null
           email?: string | null
+          emirate?: string | null
+          first_contact_at?: string | null
           full_name?: string
           id?: string
           interests?: Json | null
           is_company?: boolean
+          last_auto_reply_at?: string | null
+          last_email_synced_at?: string | null
           last_interaction_at?: string | null
           lifetime_value?: number
           linked_lead_id?: string | null
           nationality?: string | null
+          next_followup_at?: string | null
           notes?: string | null
           owner_id?: string
           phone?: string | null
@@ -5317,13 +5347,21 @@ export type Database = {
           developer_name: string
           developer_slug: string
           documents: Json | null
+          emirate: string | null
           expiry_date: string | null
+          first_contact_at: string | null
           id: string
+          last_auto_reply_at: string | null
+          last_email_synced_at: string | null
+          last_inbound_at: string | null
+          last_inbound_subject: string | null
           last_interaction_at: string | null
           last_outreach_at: string | null
+          next_followup_at: string | null
           notes: string | null
           outreach_count: number
           owner_id: string
+          phone: string | null
           priority: string | null
           registration_date: string | null
           registration_url: string | null
@@ -5332,6 +5370,7 @@ export type Database = {
           tags: string[] | null
           uae_developer_id: string | null
           updated_at: string
+          website: string | null
         }
         Insert: {
           agency_code?: string | null
@@ -5345,13 +5384,21 @@ export type Database = {
           developer_name: string
           developer_slug: string
           documents?: Json | null
+          emirate?: string | null
           expiry_date?: string | null
+          first_contact_at?: string | null
           id?: string
+          last_auto_reply_at?: string | null
+          last_email_synced_at?: string | null
+          last_inbound_at?: string | null
+          last_inbound_subject?: string | null
           last_interaction_at?: string | null
           last_outreach_at?: string | null
+          next_followup_at?: string | null
           notes?: string | null
           outreach_count?: number
           owner_id: string
+          phone?: string | null
           priority?: string | null
           registration_date?: string | null
           registration_url?: string | null
@@ -5360,6 +5407,7 @@ export type Database = {
           tags?: string[] | null
           uae_developer_id?: string | null
           updated_at?: string
+          website?: string | null
         }
         Update: {
           agency_code?: string | null
@@ -5373,13 +5421,21 @@ export type Database = {
           developer_name?: string
           developer_slug?: string
           documents?: Json | null
+          emirate?: string | null
           expiry_date?: string | null
+          first_contact_at?: string | null
           id?: string
+          last_auto_reply_at?: string | null
+          last_email_synced_at?: string | null
+          last_inbound_at?: string | null
+          last_inbound_subject?: string | null
           last_interaction_at?: string | null
           last_outreach_at?: string | null
+          next_followup_at?: string | null
           notes?: string | null
           outreach_count?: number
           owner_id?: string
+          phone?: string | null
           priority?: string | null
           registration_date?: string | null
           registration_url?: string | null
@@ -5388,6 +5444,7 @@ export type Database = {
           tags?: string[] | null
           uae_developer_id?: string | null
           updated_at?: string
+          website?: string | null
         }
         Relationships: [
           {
@@ -6259,6 +6316,66 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_relationship_email_log: {
+        Row: {
+          body_snippet: string | null
+          cc_emails: string[] | null
+          created_at: string
+          detected_signal: string | null
+          detected_status: string | null
+          direction: string
+          entity_id: string | null
+          entity_type: string | null
+          external_message_id: string | null
+          from_email: string | null
+          id: string
+          owner_id: string
+          sent_at: string | null
+          sent_via: string | null
+          subject: string | null
+          thread_id: string | null
+          to_emails: string[] | null
+        }
+        Insert: {
+          body_snippet?: string | null
+          cc_emails?: string[] | null
+          created_at?: string
+          detected_signal?: string | null
+          detected_status?: string | null
+          direction: string
+          entity_id?: string | null
+          entity_type?: string | null
+          external_message_id?: string | null
+          from_email?: string | null
+          id?: string
+          owner_id: string
+          sent_at?: string | null
+          sent_via?: string | null
+          subject?: string | null
+          thread_id?: string | null
+          to_emails?: string[] | null
+        }
+        Update: {
+          body_snippet?: string | null
+          cc_emails?: string[] | null
+          created_at?: string
+          detected_signal?: string | null
+          detected_status?: string | null
+          direction?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          external_message_id?: string | null
+          from_email?: string | null
+          id?: string
+          owner_id?: string
+          sent_at?: string | null
+          sent_via?: string | null
+          subject?: string | null
+          thread_id?: string | null
+          to_emails?: string[] | null
+        }
+        Relationships: []
+      }
       crm_relationship_reminders: {
         Row: {
           ai_generated: boolean
@@ -6328,6 +6445,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crm_relationship_status_history: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          entity_id: string
+          entity_type: string
+          from_status: string | null
+          id: string
+          notes: string | null
+          owner_id: string
+          source: string
+          to_status: string
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          from_status?: string | null
+          id?: string
+          notes?: string | null
+          owner_id: string
+          source?: string
+          to_status: string
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          from_status?: string | null
+          id?: string
+          notes?: string | null
+          owner_id?: string
+          source?: string
+          to_status?: string
+        }
+        Relationships: []
       }
       crm_security_events: {
         Row: {
@@ -28468,6 +28624,7 @@ export type Database = {
       is_hr_admin_strict: { Args: { _user_id: string }; Returns: boolean }
       is_hr_manager: { Args: { _user_id: string }; Returns: boolean }
       is_hr_member: { Args: { _user_id: string }; Returns: boolean }
+      is_jbj_owner: { Args: { _user_id: string }; Returns: boolean }
       is_listing_admin: { Args: { _user_id: string }; Returns: boolean }
       is_org_member: {
         Args: { _org_id: string; _user_id: string }
