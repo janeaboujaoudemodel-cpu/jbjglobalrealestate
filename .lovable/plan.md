@@ -1,84 +1,79 @@
 ## Goal
 
-When you click **Send**, you should clearly see (1) the exact email being sent before it goes out, and (2) a separate organized section listing every developer that has already been emailed, with delivery status visible per row.
+Four user-reported gaps on `/owner/crm/relationships` → Developer Registry:
+
+1. Only 93 developers listed — need a comprehensive UAE developer directory (200+) with office address, phone, website, and a primary contact person per developer.
+2. The contact person (name / role / phone / email) added to a developer must be visible directly on the registry card — without opening edit.
+3. The "Send Registration" dialog is too narrow; the email column is cut off and requires scrolling right. Widen it and let the email body render fully.
+4. The "Open Pack" / Google Drive button currently shows a JBJ "JavaScript required" splash because it's pointing to the app instead of the actual Drive folder. Make it open the real Drive URL in a new tab.
 
 ---
 
 ## What changes
 
-### 1. Email preview inside the Send dialog (`BulkSendDialog.tsx`)
+### 1. Massive developer directory expansion
 
-Currently the dialog shows variant, test field, and recipient counts — but not the email body itself. Add a live preview:
+Replace the hardcoded 93-row `seed_crm_developer_registry()` SQL function with a fuller, researched UAE developer dataset (~220 rows) covering Dubai, Abu Dhabi, Sharjah, Ajman, RAK, Fujairah, UAQ. Each row carries:
 
-- Fetch the locked/draft template HTML for the chosen variant via `useEmailTemplate(variant)`.
-- Render it inside an `<iframe srcDoc={...}>` block, ~360px tall, with a header strip:
-  - **Subject:** {template.subject}
-  - **From:** noreply (your address) → **To:** {first selected developer name} (sample preview)
-  - **Variant:** New registration request / Confirm we're already registered
-  - 🔒 **Locked** badge if `locked_at` is set, otherwise ⚠️ **Draft (editable)**
-- The `{{developer_name}}` placeholder gets substituted with the first selected developer for realistic preview.
-- A small "Showing preview for: [dropdown of selected devs]" lets you spot-check how it'll look for any specific recipient.
-- The preview updates instantly when you toggle variants.
-- This is the SAME HTML the edge function will send — no divergence possible.
+- `developer_name`
+- `developer_email` (broker/channel-partner inbox)
+- `phone` (HQ switchboard)
+- `website`
+- `emirate`
+- `developer_contact` JSONB → `{ name, role, phone, email }` for the published broker-relations contact where publicly known; left empty `{}` where unknown so the user can fill it in.
 
-### 2. New "Sent History" view inside Developer Registry tab
+Sources for the new list: existing `developers` table (633 slugs already in the project), `uae_developers` table, public broker-relations directories (Dubai Land Department developer registry, Abu Dhabi DMT registry, public LinkedIn/company-website "Brokers" pages). Add common Dubai names currently missing such as Iman Developers, AYS, Sankari, Five, Wellington, Q Properties, Vincitore, Mered, Mira, Refine, Crown, ORO24, Beyond by Omniyat, GFH, Lootah, Modon, Aldar, etc., plus Northern-Emirate developers (Arada, Alef Group, Tilal Properties, Manazel, RAK Properties, Al Hamra, Eagle Hills Sharjah, Imkan, Ajmal Makan, Shurooq, Arabian Hills, Al Marjan Island, etc.).
 
-Restructure the Developer Registry tab into two sub-tabs at the top:
+The seed function will be `INSERT … ON CONFLICT (owner_id, developer_slug) DO UPDATE` — running "Pre-fill" on an account that already has rows will **enrich** existing entries (fill in missing phone/website/contact) rather than skipping them, without overwriting the user's manual edits to `notes`, `agency_code`, `status`, etc.
 
-```text
-┌─────────────────────────────────────────────────────┐
-│  [ Outreach Queue (74) ]  [ Sent History (19) ]     │
-└─────────────────────────────────────────────────────┘
-```
+### 2. Contact person visible on the registry card
 
-- **Outreach Queue** — current list, but filtered to developers with `last_outreach_at IS NULL` AND `status != 'registered'` (i.e. who still need to be contacted).
-- **Sent History** — every developer where `last_outreach_at IS NOT NULL` OR `status = 'registered'`, sorted by `last_outreach_at DESC`.
-
-Sent History row shows:
-- Developer name + status pill
-- **Last sent:** "2 days ago" (with full timestamp on hover)
-- **Total sends:** `outreach_count` (e.g. ×3)
-- **Delivery status badge** pulled from `email_send_log` joined by recipient_email + template_name:
-  - 🟢 Delivered · 🔵 Sent · 🟡 Pending · 🔴 Bounced/Failed · ⚪ Suppressed
-- **Variant used** (last one): "New registration" or "Confirm registered"
-- Quick actions: **Re-send** · **Mark as Registered** · **View email log** (opens a small dialog showing every send to this developer with timestamp + status)
-
-A search/filter bar at the top of Sent History: search by name, filter by delivery status, filter by variant.
-
-### 3. During the send loop — show what's being sent per developer
-
-In the bulk send progress UI, instead of just "Sending 3 / 12…", show:
+In `CRMRelationships.tsx` registry list (around line 713), add a second row under the email/phone/emirate strip:
 
 ```text
-Sending 3 / 12 — AAA Development (brokers@aaa.ae)
-✅ Damac Properties · sent
-✅ Emaar · sent
-⏳ AAA Development · sending…
-⚪ Sobha · queued
-⚪ Nakheel · queued
+👤 Mohammed Khan · Broker Relations Manager · +971 50 ••• ••••  ✉ m.khan@developer.ae
 ```
 
-A scrollable live list inside the dialog, each row updating as the loop progresses. After completion, the dialog stays open with a summary so you can review which ones succeeded/failed before closing.
+- Pulls from `r.developer_contact?.name / role / phone / email`.
+- Renders only when at least one field is present.
+- Phone & email are clickable (`tel:` / `mailto:`).
+- Falls back to a small grey "+ Add contact person" button that opens the existing edit dialog focused on the contact section.
 
-### 4. Delivery status sync
+### 3. Wider Send Registration dialog with readable email preview
 
-Add a hook `useEmailDeliveryStatus(recipientEmails: string[])` that queries `email_send_log` (deduplicated by `message_id`, latest per recipient + template) and returns a map. The Sent History rows use this to show real delivery status, not just "we attempted to send".
+In `BulkSendDialog.tsx`:
+
+- Change `DialogContent` from `max-w-3xl` to `max-w-6xl w-[95vw]` so on desktop the dialog uses ~1200 px instead of ~768 px.
+- Re-flow the body into a 2-column grid (`lg:grid-cols-[360px_1fr]`):
+  - **Left column**: variant picker, test field, skip-recent toggle, recipient list with live status.
+  - **Right column**: full-height iframe email preview (`min-h-[520px]`), subject line, From/To, locked badge — no horizontal scroll, full text visible.
+- The preview iframe gets `width: 100%` and `min-height: 520px` so the email renders at its natural width.
+- Mobile collapses back to a single column automatically.
+
+### 4. Fix the "Open Pack" / Google Drive link
+
+The blank "JBJ Global Real Estate — JavaScript required" page happens because the button is rendering with a relative href (or a `<button>` with no real navigation) and the SPA catches the click. Fix in `DocumentPackPanel`:
+
+- Render the open-pack button as a real `<a href={settings.drive_doc_pack_url} target="_blank" rel="noopener noreferrer">` styled like a button.
+- Validate the stored URL: if it doesn't start with `http`, show a red helper line "Paste a full https://drive.google.com/… link". 
+- Add a small "Test link" inline action that does `window.open(url, "_blank")` so the user can verify before sending.
+
+The same fix is applied wherever the doc-pack link is surfaced (the Send dialog footer note, the per-developer Send button tooltip).
 
 ---
 
 ## Files touched
 
-- `src/components/crm/BulkSendDialog.tsx` — add iframe preview, per-recipient progress list
-- `src/pages/CRMRelationships.tsx` — split DeveloperRegistryTab into Outreach Queue / Sent History sub-tabs
-- `src/components/crm/SentHistoryView.tsx` — **new** component for the history list
-- `src/components/crm/EmailLogDialog.tsx` — **new** small dialog showing per-developer send log
-- `src/hooks/useCRMRelationships.ts` — add `useEmailDeliveryStatus` hook querying `email_send_log`
+- `supabase/migrations/<new>.sql` — replace `seed_crm_developer_registry()` with the expanded ON-CONFLICT-DO-UPDATE version covering ~220 UAE developers + contact metadata. No schema changes (all columns already exist).
+- `src/pages/CRMRelationships.tsx` — add inline contact-person row on each registry card; fix Open Pack button to be a real anchor; minor "Add contact person" empty-state link.
+- `src/components/crm/BulkSendDialog.tsx` — widen dialog, switch to 2-column layout, enlarge iframe preview.
 
-No schema changes — all data already exists in `crm_developer_registry` (`last_outreach_at`, `outreach_count`, `last_variant`) and `email_send_log` (delivery status).
+No changes needed to the edge function, RLS policies, or the email template itself.
 
 ---
 
 ## Out of scope
 
-- Live webhook-based delivery updates (status refresh requires page refresh or refetch button — Resend bounce webhooks aren't wired into this project's `email_send_log` yet).
-- Per-developer custom email body — same locked template is used for everyone in the bulk send (matches your earlier "cannot change later" requirement).
+- Live scraping of every developer's website to auto-fill the broker-relations contact. We seed what is publicly known and clearly leave the rest blank for the user to enrich (matches how the registry already works).
+- Building a separate "Address book" table for multiple contacts per developer — for now we keep one primary contact in the existing `developer_contact` JSONB; multi-contact support can follow if needed.
+- Pulling delivery webhooks from Resend into `email_send_log` (already noted as future work in the previous plan).
