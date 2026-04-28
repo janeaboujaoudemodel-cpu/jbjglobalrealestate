@@ -19,7 +19,9 @@ import {
   useDeveloperRegistry, useSeedDeveloperRegistry, useUpsertDeveloperRegistry,
   useUpsertReminder,
   useOwnerSettings, useUpsertOwnerSettings, useSendDeveloperRegistration,
+  useQuickStatusUpdate,
 } from "@/hooks/useCRMRelationships";
+import { ArrowLeftRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
