@@ -1,64 +1,53 @@
-## Relationships Hub v3 — Phase 2: Email Sync, Auto-Reply & Bulk Outreach
+I found the CRM lockout cause: the active login email is being recognized in the role table, but the CRM profile/self-heal logic is still hardcoded to the old owner email only, so the CRM page can still redirect home and show the “CRM access required” toast. I will fix this so your owner identity is never blocked again.
 
-Building on Phase 1 (CRM access fix, inline status dropdowns, status history table, email log table, owner settings with Drive link), this phase wires the live email automation.
+Plan:
 
-### 1. Gmail Connector Setup
-- Link the **Gmail connector** to the project (uses owner's `infoo.jane@gmail.com` / `janeaboujaoudenails@gmail.com` mailbox via OAuth gateway).
-- Required scopes: `gmail.readonly`, `gmail.send`, `gmail.modify`.
-- All API calls go through `https://connector-gateway.lovable.dev/google_mail/gmail/v1`.
+1. Stabilize Owner access everywhere
+- Update the owner-verification backend to recognize all approved owner login emails:
+  - janeaboujaoudenails@gmail.com
+  - janeaboujaoudemodel@gmail.com
+  - infoo.jane@gmail.com
+- Keep this server-side, not in browser storage.
+- Preserve the existing role-table security model so this is not a public bypass.
 
-### 2. Auto-Reply Edge Function (`crm-developer-auto-reply`)
-- Triggered when a developer sends a registration request to the inbox.
-- Sends a branded reply containing:
-  - JBJ Global Documents folder: `https://drive.google.com/drive/folders/1EsWVmAPv6ljBzWbWNAvv07EQrHwi5drS?usp=sharing`
-  - Trade License, RERA, Passport copies, company profile.
-- Logs the outbound message in `crm_relationship_email_log` and updates `crm_developer_registry.status → 'documents_sent'`.
+2. Repair CRM access provisioning
+- Add a database migration that creates/repairs the Owner CRM profile for each approved owner account that exists.
+- Ensure those owner accounts have the correct owner role rows.
+- Update CRM profile lookup logic so the CRM accepts `isOwner` from the central auth context instead of checking only one hardcoded email.
+- Stop redirecting the owner to the homepage when the CRM profile is temporarily missing; instead it will self-heal or continue with a safe owner profile.
 
-### 3. Inbound Email Sync Cron (`crm-email-sync`)
-- Runs every 15 minutes via `pg_cron`.
-- Pulls unread messages via Gmail API (`q=is:unread newer_than:1d`).
-- Uses Lovable AI (`google/gemini-2.5-flash`) to classify each reply:
-  - "Already registered" → status `registered`
-  - "Pending review" → status `pending`
-  - "Rejected/Not accepting" → status `rejected`
-  - "Need more docs" → status `documents_requested`
-- Updates the matching brokerage/developer/client by email match, logs the change in `crm_relationship_status_history`, and marks the Gmail thread as read.
+3. Remove noisy/incorrect access popups
+- Replace repeated “CRM access required. Contact administrator.” behavior with one controlled message only for real non-owner/non-CRM users.
+- On owner verification delays, show a clean “verifying access” state instead of redirecting to the hero/home page.
+- Route denied access to the proper access page only when the account is definitively not owner/authorized.
 
-### 4. Bulk Outreach UI (`CRMRelationships.tsx`)
-- Add **"Bulk Send Registration"** button on Developers tab.
-- Pre-fills email body with Drive link + signature.
-- Sends to ALL UAE developers in `crm_developer_registry` (Emaar, DAMAC, Sobha, Ellington, Meraas, Nakheel, Aldar, Arada, Dubai Properties, Select Group, Binghatti, Azizi, Danube, Tiger, MAG, Deyaar, Union Properties, RAK Properties, Eagle Hills, Bloom, Imkan, etc. — across Dubai, Abu Dhabi, Sharjah, Ajman, RAK, UAQ, Fujairah).
-- Honors the **Reverse Primary ↔ CC** toggle from owner settings.
-- Shows live progress bar and per-recipient status.
+4. Fix email sync schema mismatch
+- The newly added Gmail sync function writes fields that do not match the current email-log table names. I will align it to the existing table columns so inbound/outbound logs actually save correctly.
+- Make message processing idempotent so the same inbox reply is not processed repeatedly.
 
-### 5. UAE Developer Seed Migration
-- Insert ~60 UAE developers across all 7 emirates into `crm_developer_registry` with pre-filled emails (sales@, info@, brokers@), location, and `status='not_started'`.
-- Skip duplicates via `ON CONFLICT (name) DO NOTHING`.
+5. Connect inbox sync for the requested addresses
+- Keep `infoo.jane@gmail.com` connected through the existing Gmail connector; it already has read/send/modify permissions.
+- Add support in the CRM settings/data model for multiple monitored inbox identities:
+  - infoo.jane@gmail.com
+  - contact@jbj.ae
+- For `contact@jbj.ae` on Hostinger, I will add a mailbox source configuration path. Because Hostinger email is not a Gmail mailbox, it cannot be read by the Gmail connector directly; it needs IMAP credentials or a forward-to-Gmail setup. I will prepare the system to support it securely, and then ask for the Hostinger mailbox credentials through Lovable’s secure secret flow if needed.
 
-### 6. UI Polish (CRM Relationships page)
-- Fix white-on-white text on hovered cards (force `text-foreground` on hover states).
-- Stretch hub edge-to-edge (remove side gutters; match cream `--background`).
-- Space "Back to CRM" and "Relationship Hub" buttons (`gap-4` instead of `gap-1`).
-- Make all status pills full-color with proper contrast (emerald/amber/red/blue mapping).
+6. Make reply/status synchronization more reliable
+- Update the email classifier to recognize phrases like “you are already registered”, “we are registered already”, “application under review”, “pending”, “send documents”, and “rejected”.
+- Match replies to developers/brokerages/clients by sender email, sender domain, previous thread/message logs, and known CRM email fields.
+- Update statuses automatically:
+  - already registered / approved -> Registered or Active Partner
+  - pending / under review -> Pending / Under Review
+  - documents requested -> Documents Required
+  - rejected -> Rejected
+- Log every automatic status change in the relationship status history.
 
-### 7. Calendar Sync
-- Auto-create entries in `crm_calendar_events` when a `next_followup_at` or document expiry date is set.
+7. Deploy and validate
+- Deploy the updated backend functions.
+- Test owner verification with the currently active owner account.
+- Run the email sync function manually once to confirm the Gmail connector works and the logs/status updates no longer fail.
 
-### Technical Components
-**New edge functions:**
-- `supabase/functions/crm-developer-auto-reply/index.ts`
-- `supabase/functions/crm-email-sync/index.ts`
-- `supabase/functions/crm-bulk-send-registration/index.ts`
-
-**New migrations:**
-- Seed UAE developers (~60 rows).
-- Schedule `crm-email-sync` cron every 15 min.
-- Add `crm_developer_registry.documents_sent_at`, `auto_reply_enabled` columns.
-
-**Files edited:**
-- `src/pages/CRMRelationships.tsx` (UI fixes + Bulk Send modal)
-- `src/hooks/useCRMRelationships.ts` (bulk send hook)
-- `src/components/crm/BulkSendModal.tsx` (new)
-
-### Approval needed
-Reply **yes** to proceed. I'll start by linking the Gmail connector (you'll get a one-click OAuth prompt), then deploy the auto-reply + sync functions and seed the UAE developer roster.
+Technical notes:
+- I will not edit generated backend client/type files.
+- Owner privilege remains server-verified and role-table backed.
+- For `contact@jbj.ae`, if it is not forwarded into Gmail, a second mailbox reader using Hostinger IMAP will require secure mailbox credentials before it can read that inbox.

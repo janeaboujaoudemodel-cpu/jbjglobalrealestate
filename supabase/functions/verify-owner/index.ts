@@ -82,7 +82,21 @@ serve(async (req) => {
       );
     }
 
-    // Check 3: Env var fallback (legacy)
+    // Check 3: Hardcoded approved owner emails (Jane's known login addresses)
+    const APPROVED_OWNER_EMAILS = [
+      "janeaboujaoudenails@gmail.com",
+      "janeaboujaoudemodel@gmail.com",
+      "infoo.jane@gmail.com",
+    ];
+    const userEmailLower = (user.email || "").toLowerCase();
+    if (APPROVED_OWNER_EMAILS.includes(userEmailLower)) {
+      return new Response(
+        JSON.stringify({ isOwner: true, source: "approved_emails" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Check 4: Env var fallback (legacy)
     const envOwnerEmail = Deno.env.get("OWNER_EMAIL");
     if (envOwnerEmail && user.email?.toLowerCase() === envOwnerEmail.toLowerCase()) {
       return new Response(

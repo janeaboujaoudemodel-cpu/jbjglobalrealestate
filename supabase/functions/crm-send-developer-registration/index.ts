@@ -188,15 +188,15 @@ serve(async (req: Request) => {
       entity_type: "developer_registry",
       entity_id: dev.id,
       direction: "outbound",
-      provider: "gmail",
-      provider_message_id: messageId,
-      provider_thread_id: threadId,
+      sent_via: "gmail",
+      external_message_id: messageId,
+      thread_id: threadId,
       from_email: replyTo,
-      to_email: recipient,
+      to_emails: [recipient],
       cc_emails: cc,
       subject: "Broker Registration Request — JBJ Global Real Estate",
-      body_preview: `Sent broker registration package to ${dev.developer_name}`,
-      status: "sent",
+      body_snippet: `Sent broker registration package to ${dev.developer_name}`,
+      sent_at: new Date().toISOString(),
     });
 
     // Status history entry

@@ -226,7 +226,7 @@ serve(async (req: Request) => {
                 to_status: newStatus,
                 source: "email_ai_sync",
                 changed_by: null,
-                metadata: { intent: ai.intent, confidence: ai.confidence, reason: ai.reason, gmail_id: m.id },
+                notes: `AI intent=${ai.intent} (${Math.round(ai.confidence*100)}%) — ${ai.reason}`,
               });
             }
           } else if (matched) {
@@ -238,22 +238,23 @@ serve(async (req: Request) => {
           }
         }
 
-        // 5. Log inbound message
+        // 5. Log inbound message (idempotent via unique external_message_id)
         if (ownerId) {
           await service.from("crm_relationship_email_log").insert({
             owner_id: ownerId,
-            entity_type: matched?.entityType || "unknown",
+            entity_type: matched?.entityType || null,
             entity_id: matched?.row?.id || null,
             direction: "inbound",
-            provider: "gmail",
-            provider_message_id: m.id,
-            provider_thread_id: detail?.threadId || null,
+            sent_via: "gmail",
+            external_message_id: m.id,
+            thread_id: detail?.threadId || null,
             from_email: fromEmail,
-            to_email: getH("To"),
+            to_emails: getH("To") ? [getH("To")] : [],
             subject,
-            body_preview: body.slice(0, 500),
-            status: "received",
-            metadata: { ai_intent: ai.intent, ai_confidence: ai.confidence, ai_reason: ai.reason, from_name: fromName },
+            body_snippet: body.slice(0, 500),
+            detected_status: newStatus || null,
+            detected_signal: ai.intent,
+            sent_at: new Date().toISOString(),
           });
         }
 
