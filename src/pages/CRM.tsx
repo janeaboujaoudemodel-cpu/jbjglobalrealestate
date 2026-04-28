@@ -58,8 +58,14 @@ interface CRMProfile {
   display_name: string | null;
 }
 
+const APPROVED_OWNER_EMAILS = [
+  "janeaboujaoudenails@gmail.com",
+  "janeaboujaoudemodel@gmail.com",
+  "infoo.jane@gmail.com",
+];
+
 const CRM = () => {
-  const { user, loading: authLoading, signOut } = useAuth();
+  const { user, loading: authLoading, signOut, isOwner: isVerifiedOwner } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
@@ -141,8 +147,17 @@ const CRM = () => {
   const checkCRMAccess = async () => {
     if (!user) return;
 
-    const ownerEmail = "janeaboujaoudenails@gmail.com";
-    const isOwnerEmail = (user.email || "").toLowerCase() === ownerEmail;
+    const userEmail = (user.email || "").toLowerCase();
+    const isApprovedOwner =
+      isVerifiedOwner || APPROVED_OWNER_EMAILS.includes(userEmail);
+
+    const ownerProfile: CRMProfile = {
+      id: user.id,
+      user_id: user.id,
+      crm_role: "owner_admin",
+      is_active: true,
+      display_name: user.user_metadata?.full_name || "Jane Bou Jaoude",
+    };
 
     try {
       const { data } = await supabase
@@ -152,29 +167,27 @@ const CRM = () => {
         .maybeSingle();
 
       // Owner override: never lock the owner out, even if profile is missing or inactive
-      if (isOwnerEmail) {
+      if (isApprovedOwner) {
         if (data) {
-          setProfile(data as CRMProfile);
+          setProfile({ ...(data as CRMProfile), crm_role: "owner_admin", is_active: true });
         } else {
           // Try to self-heal by inserting an owner profile (RLS allows owner)
-          const { data: created } = await supabase
-            .from("crm_users_profile")
-            .upsert({
-              user_id: user.id,
-              crm_role: "owner_admin",
-              is_active: true,
-              display_name: user.user_metadata?.full_name || "Jane Bou Jaoude",
-              email: user.email,
-            }, { onConflict: "user_id" })
-            .select()
-            .maybeSingle();
-          setProfile((created as CRMProfile) || {
-            id: user.id,
-            user_id: user.id,
-            crm_role: "owner_admin",
-            is_active: true,
-            display_name: "Jane Bou Jaoude",
-          });
+          try {
+            const { data: created } = await supabase
+              .from("crm_users_profile")
+              .upsert({
+                user_id: user.id,
+                crm_role: "owner_admin",
+                is_active: true,
+                display_name: ownerProfile.display_name,
+                email: user.email,
+              }, { onConflict: "user_id" })
+              .select()
+              .maybeSingle();
+            setProfile((created as CRMProfile) || ownerProfile);
+          } catch {
+            setProfile(ownerProfile);
+          }
         }
         return;
       }
@@ -195,14 +208,8 @@ const CRM = () => {
     } catch (err) {
       console.error("CRM access check failed:", err);
       // For owner, don't redirect — just give minimal profile so they can use the page
-      if (isOwnerEmail) {
-        setProfile({
-          id: user.id,
-          user_id: user.id,
-          crm_role: "owner_admin",
-          is_active: true,
-          display_name: "Jane Bou Jaoude",
-        });
+      if (isApprovedOwner) {
+        setProfile(ownerProfile);
         return;
       }
       toast.error("Failed to verify CRM access", { id: "crm-access" });
