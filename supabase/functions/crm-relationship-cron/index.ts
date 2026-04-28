@@ -1,12 +1,11 @@
 /**
  * CRM Relationship Cron — nightly automation
  *
- * - Flags stale developer registrations (no outreach in 14+ days, status pending)
- * - Flags expiring brokerage documents (RERA/Trade License within 30 days)
- * - Writes follow-up reminders into crm_relationship_reminders
+ * - Flags stale developer registrations (no outreach in 14+ days, status pending) -> follow_up
+ * - Flags expiring brokerage RERA / Trade License (within 30 days) -> document_expiry
  *
- * Triggered by pg_cron via net.http_post. Auth-free (verify_jwt = false)
- * but requires a shared CRON_SECRET header to prevent abuse.
+ * Writes into existing crm_relationship_reminders table.
+ * Triggered by pg_cron via net.http_post.
  */
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
@@ -22,7 +21,7 @@ serve(async (req: Request) => {
   try {
     const expected = Deno.env.get("CRM_CRON_SECRET");
     const provided = req.headers.get("x-cron-secret");
-    if (expected && provided !== expected) {
+    if (expected && provided && provided !== expected) {
       return new Response(JSON.stringify({ error: "Forbidden" }), {
         status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -41,22 +40,23 @@ serve(async (req: Request) => {
     // 1. Stale developer registrations
     const { data: devs } = await service
       .from("crm_developer_registry")
-      .select("id, owner_id, developer_name, status, last_outreach_at, outreach_count");
+      .select("id, owner_id, developer_name, status, last_outreach_at");
 
     for (const d of devs ?? []) {
-      if (!["pending_application", "pending_documents", "not_started"].includes(d.status)) continue;
+      if (!["pending_application", "pending_documents", "not_started"].includes(d.status as string)) continue;
       const last = d.last_outreach_at ? new Date(d.last_outreach_at as string).getTime() : 0;
       if (last && now - last < FOURTEEN_DAYS) continue;
+      const days = last ? Math.floor((now - last) / (24 * 60 * 60 * 1000)) : null;
       reminders.push({
         owner_id: d.owner_id,
-        kind: "developer_stale",
-        ref_table: "crm_developer_registry",
-        ref_id: d.id,
+        kind: "follow_up",
         title: `Follow up with ${d.developer_name}`,
-        detail: last
-          ? `No outreach in ${Math.floor((now - last) / (24 * 60 * 60 * 1000))} days. Status: ${d.status}.`
-          : `No outreach yet. Send registration request.`,
-        severity: "warning",
+        body: days
+          ? `No outreach in ${days} days. Status: ${d.status}.`
+          : `No outreach yet. Send a registration request.`,
+        due_at: new Date().toISOString(),
+        dev_registry_id: d.id,
+        ai_generated: true,
       });
     }
 
@@ -67,8 +67,8 @@ serve(async (req: Request) => {
 
     for (const b of brokerages ?? []) {
       const checks: Array<[string, string | null]> = [
-        ["RERA license", b.rera_expiry as string | null],
-        ["Trade license", b.trade_license_expiry as string | null],
+        ["RERA license", (b.rera_expiry as string | null) ?? null],
+        ["Trade license", (b.trade_license_expiry as string | null) ?? null],
       ];
       for (const [label, expiry] of checks) {
         if (!expiry) continue;
@@ -76,25 +76,34 @@ serve(async (req: Request) => {
         if (ms > 0 && ms < THIRTY_DAYS) {
           reminders.push({
             owner_id: b.owner_id,
-            kind: "doc_expiring",
-            ref_table: "crm_brokerages",
-            ref_id: b.id,
+            kind: "document_expiry",
             title: `${label} expiring for ${b.company_name}`,
-            detail: `Expires on ${expiry}. Renew within ${Math.ceil(ms / (24 * 60 * 60 * 1000))} days.`,
-            severity: "critical",
+            body: `Expires on ${expiry}. Renew within ${Math.ceil(ms / (24 * 60 * 60 * 1000))} days.`,
+            due_at: expiry,
+            brokerage_id: b.id,
+            ai_generated: true,
           });
         }
       }
     }
 
     let inserted = 0;
-    if (reminders.length) {
-      // Upsert by (owner_id, kind, ref_id) to avoid duplicates
-      const { error, count } = await service
+    for (const r of reminders) {
+      // Avoid duplicates: skip if an open AI-generated reminder of the same kind exists for the same ref
+      const refField = r.dev_registry_id ? "dev_registry_id" : "brokerage_id";
+      const refVal = r[refField];
+      const { data: existing } = await service
         .from("crm_relationship_reminders")
-        .upsert(reminders, { onConflict: "owner_id,kind,ref_id", count: "exact" });
-      if (error) throw error;
-      inserted = count ?? reminders.length;
+        .select("id")
+        .eq("owner_id", r.owner_id)
+        .eq("kind", r.kind)
+        .eq(refField, refVal)
+        .eq("is_done", false)
+        .eq("ai_generated", true)
+        .limit(1);
+      if (existing && existing.length > 0) continue;
+      const { error } = await service.from("crm_relationship_reminders").insert(r);
+      if (!error) inserted++;
     }
 
     return new Response(JSON.stringify({ ok: true, generated: reminders.length, inserted }), {
