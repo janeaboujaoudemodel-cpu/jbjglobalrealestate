@@ -582,6 +582,36 @@ const DeveloperRegistryTab = () => {
     <div className="space-y-5">
       <DocumentPackPanel />
 
+      {/* Sub-tabs: Outreach Queue vs Sent History */}
+      <div className="flex gap-1 p-1 bg-black/5 rounded-xl w-fit">
+        <button
+          type="button"
+          onClick={() => setSubTab("queue")}
+          className={`px-4 py-2 text-sm font-semibold rounded-lg transition ${
+            subTab === "queue" ? "bg-white text-black shadow-sm" : "text-black/60 hover:text-black"
+          }`}
+        >
+          Outreach Queue ({queuePool.length})
+        </button>
+        <button
+          type="button"
+          onClick={() => setSubTab("history")}
+          className={`px-4 py-2 text-sm font-semibold rounded-lg transition ${
+            subTab === "history" ? "bg-white text-black shadow-sm" : "text-black/60 hover:text-black"
+          }`}
+        >
+          Sent History ({historyPool.length})
+        </button>
+      </div>
+
+      {subTab === "history" ? (
+        <SentHistoryView
+          developers={historyPool}
+          onResend={(d) => { setSelected(new Set([d.id])); setBulkOpen(true); }}
+          onMarkRegistered={(d) => quickStatus.mutate({ entityType: "developer_registry", id: d.id, status: "registered", previousStatus: d.status })}
+        />
+      ) : (
+      <>
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
