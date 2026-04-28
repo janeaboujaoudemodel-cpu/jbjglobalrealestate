@@ -581,25 +581,51 @@ const DeveloperRegistryTab = () => {
           <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search developer" className="pl-10" />
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[200px]"><SelectValue /></SelectTrigger>
+          <SelectTrigger className="w-[180px]"><SelectValue /></SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All statuses</SelectItem>
             {STATUS_DEV.map((s) => <SelectItem key={s.v} value={s.v}>{s.label}</SelectItem>)}
           </SelectContent>
         </Select>
+        <Select value={emailFilter} onValueChange={(v: any) => setEmailFilter(v)}>
+          <SelectTrigger className="w-[170px]"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All emails</SelectItem>
+            <SelectItem value="not_sent">Not sent yet</SelectItem>
+            <SelectItem value="sent">Email sent</SelectItem>
+            <SelectItem value="registered">Confirmed registered</SelectItem>
+          </SelectContent>
+        </Select>
+        <Button variant="outline" onClick={() => setTplOpen(true)}>
+          <FileEdit className="w-4 h-4 mr-2" />
+          {tplMain?.locked_at ? <><Lock className="w-3 h-3 mr-1" />Template</> : "Edit Template"}
+        </Button>
         <Button variant="outline" onClick={() => exportCSV(filtered, `developer-registry-${Date.now()}.csv`, [
           { key: "developer_name", label: "Developer" }, { key: "status", label: "Status" },
-          { key: "agency_code", label: "Agency Code" }, { key: "registration_date", label: "Registered" },
-          { key: "expiry_date", label: "Expiry" }, { key: "developer_contact", label: "Contact" },
+          { key: "developer_email", label: "Email" }, { key: "phone", label: "Phone" },
+          { key: "emirate", label: "Emirate" }, { key: "agency_code", label: "Agency Code" },
+          { key: "registration_date", label: "Registered" }, { key: "expiry_date", label: "Expiry" },
           { key: "notes", label: "Notes" },
-        ])}><Download className="w-4 h-4 mr-2" />Export CSV</Button>
+        ])}><Download className="w-4 h-4 mr-2" />Export</Button>
         <Button variant="outline" onClick={() => seed.mutate()} disabled={seed.isPending}>
-          {seed.isPending ? "Seeding…" : "Pre-fill UAE Developers"}
+          {seed.isPending ? "Seeding…" : "Pre-fill"}
         </Button>
-        <Button variant="outline" onClick={bulkSend} disabled={bulkRunning}>
-          <Send className="w-4 h-4 mr-2" />{bulkRunning ? "Sending…" : "Bulk Send Registration"}
+        <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add</Button>
+      </div>
+
+      <div className="flex flex-wrap gap-2 items-center bg-white border border-black/10 rounded-xl p-3">
+        <div className="text-sm text-black"><strong>{selected.size}</strong> of {filtered.length} selected</div>
+        <Button size="sm" variant="outline" onClick={selectAllFiltered}>Select all filtered</Button>
+        <Button size="sm" variant="outline" onClick={clearSelection} disabled={!selected.size}>Clear</Button>
+        <div className="flex-1" />
+        <Button
+          size="sm"
+          className="bg-black text-white hover:bg-gray-800"
+          disabled={!selected.size}
+          onClick={() => setBulkOpen(true)}
+        >
+          <Send className="w-3 h-3 mr-1" />Send to Selected ({selected.size})
         </Button>
-        <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add Developer</Button>
       </div>
 
       {data.length > 0 && (
@@ -617,46 +643,95 @@ const DeveloperRegistryTab = () => {
 
       {isLoading ? <Skeleton className="h-64" /> : filtered.length === 0 ? (
         <Card><CardContent className="p-8 text-center text-gray-500">
-          No developers in registry. Click <b>Pre-fill UAE Developers</b> to load all major UAE developers.
+          No developers match. Click <b>Pre-fill</b> to seed UAE developers.
         </CardContent></Card>
       ) : (
         <div className="grid gap-2">
-          {filtered.map((r: any) => (
-            <Card key={r.id} className="bg-white text-black border border-black/10 hover:shadow-lg hover:border-black/20 transition rounded-2xl">
+          {filtered.map((r: any) => {
+            const sentDays = r.last_outreach_at
+              ? Math.floor((Date.now() - new Date(r.last_outreach_at).getTime()) / 86400000)
+              : null;
+            return (
+            <Card key={r.id} className={`bg-white text-black border ${selected.has(r.id) ? "border-black ring-1 ring-black" : "border-black/10"} hover:shadow-lg transition rounded-2xl`}>
               <CardContent className="p-3">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex-1 min-w-[200px]">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-semibold text-black">{r.developer_name}</h3>
-                      <InlineStatusSelect entityType="developer_registry" id={r.id} value={r.status} options={STATUS_DEV} />
-                      {r.agency_code && <span className="text-xs text-gray-700">Code: {r.agency_code}</span>}
-                      {r.expiry_date && <span className="text-xs text-amber-700">Expires {r.expiry_date}</span>}
-                      {r.outreach_count > 0 && <span className="text-xs text-emerald-700">Sent {r.outreach_count}×</span>}
-                    </div>
-                    {r.developer_email && (
-                      <div className="text-xs text-gray-700 mt-1 flex items-center gap-1"><Mail className="w-3 h-3" />{r.developer_email}</div>
-                    )}
-                    {r.ai_next_action && (
-                      <div className="mt-2 p-2 bg-purple-50 border border-purple-200 rounded text-xs">
-                        <Sparkles className="w-3 h-3 inline mr-1 text-purple-600" />
-                        <span className="font-medium text-purple-900">{r.ai_next_action}</span>
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <div className="flex items-start gap-3 flex-1 min-w-[260px]">
+                    <Checkbox checked={selected.has(r.id)} onCheckedChange={() => toggleSel(r.id)} className="mt-1" />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-semibold text-black">{r.developer_name}</h3>
+                        <InlineStatusSelect entityType="developer_registry" id={r.id} value={r.status} options={STATUS_DEV} />
+                        {r.status === "registered" && (
+                          <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3" />Confirmed
+                          </span>
+                        )}
+                        {sentDays !== null && r.status !== "registered" && (
+                          <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 flex items-center gap-1">
+                            <Mail className="w-3 h-3" />Email sent {sentDays === 0 ? "today" : `${sentDays}d ago`}
+                          </span>
+                        )}
+                        {r.outreach_count > 1 && <span className="text-xs text-emerald-700">×{r.outreach_count}</span>}
                       </div>
-                    )}
+                      <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-gray-700">
+                        {r.developer_email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{r.developer_email}</span>}
+                        <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{r.phone || "—"}</span>
+                        <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{r.emirate || "—"}</span>
+                        {r.agency_code && <span>Code: {r.agency_code}</span>}
+                      </div>
+                      {noteEditing === r.id ? (
+                        <div className="mt-2">
+                          <Textarea
+                            rows={2}
+                            defaultValue={r.notes || ""}
+                            autoFocus
+                            onBlur={async (e) => {
+                              if (e.target.value !== (r.notes || "")) {
+                                await upsert.mutateAsync({ id: r.id, notes: e.target.value });
+                              }
+                              setNoteEditing(null);
+                            }}
+                            className="text-xs"
+                          />
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setNoteEditing(r.id)}
+                          className="mt-1 text-xs text-left text-gray-600 hover:text-black italic block w-full"
+                        >
+                          {r.notes ? `📝 ${r.notes}` : "+ Add note"}
+                        </button>
+                      )}
+                    </div>
                   </div>
                   <div className="flex gap-1.5 flex-wrap">
-                    <Button size="sm" className="bg-black text-white hover:bg-gray-800" onClick={() => sendOne(r)} disabled={sendRegistration.isPending}>
-                      <Send className="w-3 h-3 mr-1" />Send Registration
+                    <Button size="sm" variant="outline" onClick={() => { setSelected(new Set([r.id])); setBulkOpen(true); }}>
+                      <Send className="w-3 h-3 mr-1" />Send
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => aiRecommend("developer_registry", r.id, refetch)}><Sparkles className="w-3 h-3 mr-1" />AI</Button>
                     <Button size="sm" variant="outline" onClick={() => quickReminder(r)}><Bell className="w-3 h-3 mr-1" />Remind</Button>
                     <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
                   </div>
                 </div>
+                {r.ai_next_action && (
+                  <div className="mt-2 p-2 bg-purple-50 border border-purple-200 rounded text-xs">
+                    <Sparkles className="w-3 h-3 inline mr-1 text-purple-600" />
+                    <span className="font-medium text-purple-900">{r.ai_next_action}</span>
+                  </div>
+                )}
               </CardContent>
             </Card>
-          ))}
+          );})}
         </div>
       )}
+
+      <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} />
+      <BulkSendDialog
+        open={bulkOpen}
+        onOpenChange={setBulkOpen}
+        selected={selectedDevs}
+        defaultTestEmail={ownerSettings?.cc_email || "infoo.jane@gmail.com"}
+      />
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
