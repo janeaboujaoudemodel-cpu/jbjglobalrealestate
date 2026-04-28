@@ -25,6 +25,7 @@ import {
 } from "@/hooks/useCRMRelationships";
 import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
+import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { ArrowLeftRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
