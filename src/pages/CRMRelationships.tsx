@@ -187,7 +187,7 @@ const BrokeragesTab = () => {
                   <div className="flex-1 min-w-[240px]">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-semibold text-base">{r.company_name}</h3>
-                      <StatusPill value={r.status} options={STATUS_BROKERAGE} />
+                      <InlineStatusSelect entityType="brokerage" id={r.id} value={r.status} options={STATUS_BROKERAGE} />
                     </div>
                     <div className="text-xs text-gray-600 space-y-0.5">
                       {r.rera_license && <div>RERA: {r.rera_license}</div>}
@@ -330,7 +330,7 @@ const ClientsTab = () => {
                   <div className="flex-1 min-w-[240px]">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-semibold">{r.full_name}{r.is_company && r.company_name ? ` (${r.company_name})` : ""}</h3>
-                      <StatusPill value={r.status} options={STATUS_CLIENT} />
+                      <InlineStatusSelect entityType="client" id={r.id} value={r.status} options={STATUS_CLIENT} />
                     </div>
                     <div className="text-xs text-gray-600 space-y-0.5">
                       {r.email && <div>{r.email}</div>}
@@ -592,7 +592,7 @@ const DeveloperRegistryTab = () => {
                   <div className="flex-1 min-w-[200px]">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-semibold text-black">{r.developer_name}</h3>
-                      <StatusPill value={r.status} options={STATUS_DEV} />
+                      <InlineStatusSelect entityType="developer_registry" id={r.id} value={r.status} options={STATUS_DEV} />
                       {r.agency_code && <span className="text-xs text-gray-700">Code: {r.agency_code}</span>}
                       {r.expiry_date && <span className="text-xs text-amber-700">Expires {r.expiry_date}</span>}
                       {r.outreach_count > 0 && <span className="text-xs text-emerald-700">Sent {r.outreach_count}×</span>}
