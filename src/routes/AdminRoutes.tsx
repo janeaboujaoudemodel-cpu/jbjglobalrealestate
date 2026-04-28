@@ -99,6 +99,7 @@ export const AdminRoutes = () => (
 
     {/* ── Legacy Redirects ── */}
     <Route path="/crm" element={<Navigate to="/owner/crm" replace />} />
+    <Route path="/crm/relationships" element={<Navigate to="/owner/crm/relationships" replace />} />
     <Route path="/crm/*" element={<Navigate to="/owner/crm" replace />} />
     <Route path="/listing-admin" element={<Navigate to="/owner/listing-admin" replace />} />
     <Route path="/listing-admin/preview/:id" element={<Navigate to="/owner/listing-admin" replace />} />
