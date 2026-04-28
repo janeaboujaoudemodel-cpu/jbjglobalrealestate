@@ -714,9 +714,9 @@ const CRMRelationships = () => {
 
           <Tabs value={tab} onValueChange={setTab}>
             <TabsList className="mb-6 bg-white border border-black/10 p-1 rounded-xl">
-              <TabsTrigger value="brokerages" className="data-[state=active]:bg-black data-[state=active]:text-white text-black rounded-lg px-5"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
-              <TabsTrigger value="clients" className="data-[state=active]:bg-black data-[state=active]:text-white text-black rounded-lg px-5"><Users className="w-4 h-4 mr-2" />Clients</TabsTrigger>
-              <TabsTrigger value="developers" className="data-[state=active]:bg-black data-[state=active]:text-white text-black rounded-lg px-5"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
+              <TabsTrigger value="brokerages" className="data-[state=active]:bg-black data-[state=active]:!text-white text-black hover:bg-black/5 rounded-lg px-5"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
+              <TabsTrigger value="clients" className="data-[state=active]:bg-black data-[state=active]:!text-white text-black hover:bg-black/5 rounded-lg px-5"><Users className="w-4 h-4 mr-2" />Clients</TabsTrigger>
+              <TabsTrigger value="developers" className="data-[state=active]:bg-black data-[state=active]:!text-white text-black hover:bg-black/5 rounded-lg px-5"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
             </TabsList>
             <TabsContent value="brokerages"><BrokeragesTab /></TabsContent>
             <TabsContent value="clients"><ClientsTab /></TabsContent>
