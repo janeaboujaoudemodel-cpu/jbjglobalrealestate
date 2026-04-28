@@ -120,6 +120,49 @@ export const useUpsertDeveloperRegistry = () => {
   });
 };
 
+/* ---------- Owner Settings ---------- */
+export const useOwnerSettings = () => {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ["crm-owner-settings", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("crm_owner_settings").select("*").eq("owner_id", user!.id).maybeSingle();
+      if (error) throw error;
+      return data || { owner_id: user!.id, drive_doc_pack_url: "", signature_html: "", cc_jane_enabled: true, cc_email: "info.jane@thegmail.com", reply_to_email: "contact@jbj.ae", from_name: "JBJ Global Real Estate" };
+    },
+  });
+};
+
+export const useUpsertOwnerSettings = () => {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async (payload: any) => {
+      const row = { ...payload, owner_id: user!.id };
+      const { data, error } = await supabase.from("crm_owner_settings").upsert(row, { onConflict: "owner_id" }).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["crm-owner-settings"] }); toast.success("Settings saved"); },
+    onError: (e: any) => toast.error(e.message),
+  });
+};
+
+export const useSendDeveloperRegistration = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: { developerId: string; overrideEmail?: string; overrideMessage?: string }) => {
+      const { data, error } = await supabase.functions.invoke("crm-send-developer-registration", { body: vars });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return data;
+    },
+    onSuccess: (data) => { qc.invalidateQueries({ queryKey: ["crm-dev-registry"] }); toast.success(`Email sent to ${data.recipient}`); },
+    onError: (e: any) => toast.error(e.message || "Send failed"),
+  });
+};
+
 /* ---------- Reminders ---------- */
 export const useReminders = (filters?: { brokerage_id?: string; client_id?: string; dev_registry_id?: string }) =>
   useQuery({
