@@ -30,6 +30,7 @@ const CRMCalendar = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes = lazy(() => import("@/pages/CRMNotes"));
 const CRMReminders = lazy(() => import("@/pages/CRMReminders"));
 const CRMEmployees = lazy(() => import("@/pages/CRMEmployees"));
+const CRMRelationships = lazy(() => import("@/pages/CRMRelationships"));
 const Admin = lazy(() => import("@/pages/Admin"));
 const AdminLeads = lazy(() => import("@/pages/AdminLeads"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
