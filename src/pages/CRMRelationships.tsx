@@ -761,6 +761,8 @@ const DeveloperRegistryTab = () => {
           );})}
         </div>
       )}
+      </>
+      )}
 
       <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} />
       <BulkSendDialog
