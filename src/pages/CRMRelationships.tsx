@@ -434,16 +434,31 @@ const DocumentPackPanel = () => {
             <Input value={s.from_name || ""} onChange={(e) => update({ from_name: e.target.value })} />
           </div>
           <div>
-            <Label className="text-xs text-black mb-1 block">Reply-to email</Label>
-            <Input value={s.reply_to_email || ""} onChange={(e) => update({ reply_to_email: e.target.value })} />
+            <Label className="text-xs text-black mb-1 block">Primary sender email (Reply-to)</Label>
+            <Input value={s.reply_to_email || ""} onChange={(e) => update({ reply_to_email: e.target.value })} placeholder="contact@jbj.ae" />
           </div>
           <div>
-            <Label className="text-xs text-black mb-1 block">CC email (Jane)</Label>
-            <Input value={s.cc_email || ""} onChange={(e) => update({ cc_email: e.target.value })} />
+            <Label className="text-xs text-black mb-1 block">CC email</Label>
+            <Input value={s.cc_email || ""} onChange={(e) => update({ cc_email: e.target.value })} placeholder="infoo.jane@gmail.com" />
           </div>
-          <div className="flex items-center gap-3 pt-6">
-            <Switch checked={!!s.cc_jane_enabled} onCheckedChange={(v) => update({ cc_jane_enabled: v })} />
-            <span className="text-sm text-black">Always CC this address</span>
+          <div className="flex flex-col justify-center gap-2 pt-2">
+            <div className="flex items-center gap-3">
+              <Switch checked={!!s.cc_jane_enabled} onCheckedChange={(v) => update({ cc_jane_enabled: v })} />
+              <span className="text-sm text-black">Always CC this address</span>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="self-start border-black/30 text-black hover:bg-black hover:text-white"
+              onClick={() => update({
+                reply_to_email: s.cc_email || "",
+                cc_email: s.reply_to_email || "",
+              })}
+            >
+              <ArrowLeftRight className="w-4 h-4 mr-2" />
+              Reverse Primary ↔ CC
+            </Button>
           </div>
         </div>
         {dirty && (
