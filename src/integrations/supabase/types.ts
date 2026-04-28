@@ -5523,6 +5523,36 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_email_templates: {
+        Row: {
+          html: string
+          locked_at: string | null
+          locked_by: string | null
+          subject: string
+          updated_at: string
+          updated_by: string | null
+          variant: string
+        }
+        Insert: {
+          html: string
+          locked_at?: string | null
+          locked_by?: string | null
+          subject: string
+          updated_at?: string
+          updated_by?: string | null
+          variant: string
+        }
+        Update: {
+          html?: string
+          locked_at?: string | null
+          locked_by?: string | null
+          subject?: string
+          updated_at?: string
+          updated_by?: string | null
+          variant?: string
+        }
+        Relationships: []
+      }
       crm_field_permissions: {
         Row: {
           can_edit: boolean
