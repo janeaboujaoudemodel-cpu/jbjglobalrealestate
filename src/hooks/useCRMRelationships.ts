@@ -149,10 +149,47 @@ export const useUpsertOwnerSettings = () => {
   });
 };
 
+/* ---------- Quick status updater (inline dropdown) ---------- */
+export const useQuickStatusUpdate = () => {
+  const qc = useQueryClient();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async (vars: { entityType: "brokerage" | "client" | "developer_registry"; id: string; status: string; previousStatus?: string }) => {
+      const tableMap = {
+        brokerage: "crm_brokerages",
+        client: "crm_clients",
+        developer_registry: "crm_developer_registry",
+      } as const;
+      const table = tableMap[vars.entityType];
+      const { error } = await (supabase.from(table) as any)
+        .update({ status: vars.status, last_interaction_at: new Date().toISOString() })
+        .eq("id", vars.id);
+      if (error) throw error;
+      await supabase.from("crm_relationship_status_history" as any).insert({
+        owner_id: user!.id,
+        entity_type: vars.entityType,
+        entity_id: vars.id,
+        from_status: vars.previousStatus || null,
+        to_status: vars.status,
+        source: "manual",
+        changed_by: user!.id,
+      });
+      return { ok: true };
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["crm-brokerages"] });
+      qc.invalidateQueries({ queryKey: ["crm-clients"] });
+      qc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
+      toast.success("Status updated");
+    },
+    onError: (e: any) => toast.error(e.message || "Failed to update status"),
+  });
+};
+
 export const useSendDeveloperRegistration = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (vars: { developerId: string; overrideEmail?: string; overrideMessage?: string }) => {
+    mutationFn: async (vars: { developerId: string; overrideEmail?: string; overrideMessage?: string; fromEmailOverride?: string; ccEmailOverride?: string }) => {
       const { data, error } = await supabase.functions.invoke("crm-send-developer-registration", { body: vars });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);

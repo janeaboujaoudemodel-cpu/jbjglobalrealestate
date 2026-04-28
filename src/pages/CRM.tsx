@@ -140,22 +140,53 @@ const CRM = () => {
 
   const checkCRMAccess = async () => {
     if (!user) return;
-    
+
+    const ownerEmail = "janeaboujaoudenails@gmail.com";
+    const isOwnerEmail = (user.email || "").toLowerCase() === ownerEmail;
+
     try {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("crm_users_profile")
         .select("*")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
-      if (error || !data) {
-        toast.error("Access denied. You are not registered in the CRM system.");
+      // Owner override: never lock the owner out, even if profile is missing or inactive
+      if (isOwnerEmail) {
+        if (data) {
+          setProfile(data as CRMProfile);
+        } else {
+          // Try to self-heal by inserting an owner profile (RLS allows owner)
+          const { data: created } = await supabase
+            .from("crm_users_profile")
+            .upsert({
+              user_id: user.id,
+              crm_role: "owner_admin",
+              is_active: true,
+              display_name: user.user_metadata?.full_name || "Jane Bou Jaoude",
+              email: user.email,
+            }, { onConflict: "user_id" })
+            .select()
+            .maybeSingle();
+          setProfile((created as CRMProfile) || {
+            id: user.id,
+            user_id: user.id,
+            crm_role: "owner_admin",
+            is_active: true,
+            display_name: "Jane Bou Jaoude",
+          });
+        }
+        return;
+      }
+
+      if (!data) {
+        toast.error("CRM access required. Contact the administrator.", { id: "crm-access" });
         navigate("/");
         return;
       }
 
       if (!data.is_active) {
-        toast.error("Your CRM account has been deactivated. Contact admin.");
+        toast.error("Your CRM account is inactive.", { id: "crm-access" });
         navigate("/");
         return;
       }
@@ -163,7 +194,18 @@ const CRM = () => {
       setProfile(data as CRMProfile);
     } catch (err) {
       console.error("CRM access check failed:", err);
-      toast.error("Failed to verify CRM access");
+      // For owner, don't redirect — just give minimal profile so they can use the page
+      if (isOwnerEmail) {
+        setProfile({
+          id: user.id,
+          user_id: user.id,
+          crm_role: "owner_admin",
+          is_active: true,
+          display_name: "Jane Bou Jaoude",
+        });
+        return;
+      }
+      toast.error("Failed to verify CRM access", { id: "crm-access" });
       navigate("/");
     } finally {
       setLoading(false);

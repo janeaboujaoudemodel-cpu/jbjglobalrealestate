@@ -19,7 +19,9 @@ import {
   useDeveloperRegistry, useSeedDeveloperRegistry, useUpsertDeveloperRegistry,
   useUpsertReminder,
   useOwnerSettings, useUpsertOwnerSettings, useSendDeveloperRegistration,
+  useQuickStatusUpdate,
 } from "@/hooks/useCRMRelationships";
+import { ArrowLeftRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -50,9 +52,38 @@ const STATUS_DEV = [
   { v: "expired", label: "Expired", cls: "bg-zinc-300 text-black" },
 ];
 
-const StatusPill = ({ value, options }: { value: string; options: typeof STATUS_BROKERAGE }) => {
+type StatusOption = { v: string; label: string; cls: string };
+
+const StatusPill = ({ value, options }: { value: string; options: StatusOption[] }) => {
   const o = options.find((s) => s.v === value) || options[0];
   return <Badge className={`${o.cls} border-0 font-semibold hover:${o.cls}`}>{o.label}</Badge>;
+};
+
+const InlineStatusSelect = ({
+  entityType, id, value, options,
+}: { entityType: "brokerage" | "client" | "developer_registry"; id: string; value: string; options: StatusOption[] }) => {
+  const update = useQuickStatusUpdate();
+  const current = options.find((s) => s.v === value) || options[0];
+  return (
+    <Select
+      value={value}
+      onValueChange={(v) => {
+        if (v === value) return;
+        update.mutate({ entityType, id, status: v, previousStatus: value });
+      }}
+    >
+      <SelectTrigger className={`h-8 w-auto min-w-[160px] px-3 py-1 border-0 font-semibold rounded-full ${current.cls} focus:ring-2 focus:ring-black/40`}>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent className="bg-white border border-black/10 z-50">
+        {options.map((s) => (
+          <SelectItem key={s.v} value={s.v} className="text-black">
+            <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${s.cls}`}>{s.label}</span>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
 };
 
 const exportCSV = (rows: any[], filename: string, columns: { key: string; label: string }[]) => {
@@ -156,7 +187,7 @@ const BrokeragesTab = () => {
                   <div className="flex-1 min-w-[240px]">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-semibold text-base">{r.company_name}</h3>
-                      <StatusPill value={r.status} options={STATUS_BROKERAGE} />
+                      <InlineStatusSelect entityType="brokerage" id={r.id} value={r.status} options={STATUS_BROKERAGE} />
                     </div>
                     <div className="text-xs text-gray-600 space-y-0.5">
                       {r.rera_license && <div>RERA: {r.rera_license}</div>}
@@ -299,7 +330,7 @@ const ClientsTab = () => {
                   <div className="flex-1 min-w-[240px]">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-semibold">{r.full_name}{r.is_company && r.company_name ? ` (${r.company_name})` : ""}</h3>
-                      <StatusPill value={r.status} options={STATUS_CLIENT} />
+                      <InlineStatusSelect entityType="client" id={r.id} value={r.status} options={STATUS_CLIENT} />
                     </div>
                     <div className="text-xs text-gray-600 space-y-0.5">
                       {r.email && <div>{r.email}</div>}
@@ -403,16 +434,31 @@ const DocumentPackPanel = () => {
             <Input value={s.from_name || ""} onChange={(e) => update({ from_name: e.target.value })} />
           </div>
           <div>
-            <Label className="text-xs text-black mb-1 block">Reply-to email</Label>
-            <Input value={s.reply_to_email || ""} onChange={(e) => update({ reply_to_email: e.target.value })} />
+            <Label className="text-xs text-black mb-1 block">Primary sender email (Reply-to)</Label>
+            <Input value={s.reply_to_email || ""} onChange={(e) => update({ reply_to_email: e.target.value })} placeholder="contact@jbj.ae" />
           </div>
           <div>
-            <Label className="text-xs text-black mb-1 block">CC email (Jane)</Label>
-            <Input value={s.cc_email || ""} onChange={(e) => update({ cc_email: e.target.value })} />
+            <Label className="text-xs text-black mb-1 block">CC email</Label>
+            <Input value={s.cc_email || ""} onChange={(e) => update({ cc_email: e.target.value })} placeholder="infoo.jane@gmail.com" />
           </div>
-          <div className="flex items-center gap-3 pt-6">
-            <Switch checked={!!s.cc_jane_enabled} onCheckedChange={(v) => update({ cc_jane_enabled: v })} />
-            <span className="text-sm text-black">Always CC this address</span>
+          <div className="flex flex-col justify-center gap-2 pt-2">
+            <div className="flex items-center gap-3">
+              <Switch checked={!!s.cc_jane_enabled} onCheckedChange={(v) => update({ cc_jane_enabled: v })} />
+              <span className="text-sm text-black">Always CC this address</span>
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="self-start border-black/30 text-black hover:bg-black hover:text-white"
+              onClick={() => update({
+                reply_to_email: s.cc_email || "",
+                cc_email: s.reply_to_email || "",
+              })}
+            >
+              <ArrowLeftRight className="w-4 h-4 mr-2" />
+              Reverse Primary ↔ CC
+            </Button>
           </div>
         </div>
         {dirty && (
@@ -561,7 +607,7 @@ const DeveloperRegistryTab = () => {
                   <div className="flex-1 min-w-[200px]">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="font-semibold text-black">{r.developer_name}</h3>
-                      <StatusPill value={r.status} options={STATUS_DEV} />
+                      <InlineStatusSelect entityType="developer_registry" id={r.id} value={r.status} options={STATUS_DEV} />
                       {r.agency_code && <span className="text-xs text-gray-700">Code: {r.agency_code}</span>}
                       {r.expiry_date && <span className="text-xs text-amber-700">Expires {r.expiry_date}</span>}
                       {r.outreach_count > 0 && <span className="text-xs text-emerald-700">Sent {r.outreach_count}×</span>}
