@@ -274,15 +274,15 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
 
                   {isActive ? (
                     <span
-                      className="ml-2 inline-flex items-center justify-center gap-1 px-2 h-[22px] w-[84px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0"
+                      className="ml-2 inline-flex items-center justify-center gap-1 px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap"
                       style={{ backgroundColor: config.base, color: '#FFFFFF' }}
                     >
-                      <Check className="w-3 h-3" style={{ color: '#FFFFFF' }} />
+                      <Check className="w-3 h-3 shrink-0" style={{ color: '#FFFFFF' }} />
                       Selected
                     </span>
                   ) : (
                     <span
-                      className="ml-2 inline-flex items-center justify-center px-2 h-[22px] w-[84px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 border"
+                      className="ml-2 inline-flex items-center justify-center px-2.5 h-[22px] min-w-[96px] rounded-full text-[10px] font-bold uppercase tracking-wider shrink-0 whitespace-nowrap border"
                       style={{
                         color: config.base,
                         borderColor: config.base,
