@@ -488,18 +488,35 @@ const DeveloperRegistryTab = () => {
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
   const [bulkRunning, setBulkRunning] = useState(false);
+  const [emailFilter, setEmailFilter] = useState<"all" | "not_sent" | "sent" | "registered">("all");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [tplOpen, setTplOpen] = useState(false);
+  const [noteEditing, setNoteEditing] = useState<string | null>(null);
+  const { data: tplMain } = useEmailTemplate("developer_registration");
+  const { data: ownerSettings } = useOwnerSettings();
 
   const filtered = useMemo(() => data.filter((r: any) => {
     const matchesQ = !q || r.developer_name?.toLowerCase().includes(q.toLowerCase());
     const matchesS = statusFilter === "all" || r.status === statusFilter;
-    return matchesQ && matchesS;
-  }), [data, q, statusFilter]);
+    const matchesE =
+      emailFilter === "all" ||
+      (emailFilter === "not_sent" && !r.last_outreach_at && r.status !== "registered") ||
+      (emailFilter === "sent" && !!r.last_outreach_at && r.status !== "registered") ||
+      (emailFilter === "registered" && r.status === "registered");
+    return matchesQ && matchesS && matchesE;
+  }), [data, q, statusFilter, emailFilter]);
 
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
     data.forEach((r: any) => { c[r.status] = (c[r.status] || 0) + 1; });
     return c;
   }, [data]);
+
+  const toggleSel = (id: string) => setSelected((p) => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n; });
+  const selectAllFiltered = () => setSelected(new Set(filtered.map((r: any) => r.id)));
+  const clearSelection = () => setSelected(new Set());
+  const selectedDevs = data.filter((d: any) => selected.has(d.id));
 
   const openNew = () => { setEditing({ status: "not_started", developer_contact: {}, documents: [] }); setOpen(true); };
   const openEdit = (r: any) => { setEditing(r); setOpen(true); };
