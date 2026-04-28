@@ -25,6 +25,7 @@ import {
 } from "@/hooks/useCRMRelationships";
 import { TemplateEditorDialog } from "@/components/crm/TemplateEditorDialog";
 import { BulkSendDialog } from "@/components/crm/BulkSendDialog";
+import { SentHistoryView } from "@/components/crm/SentHistoryView";
 import { ArrowLeftRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -493,10 +494,16 @@ const DeveloperRegistryTab = () => {
   const [bulkOpen, setBulkOpen] = useState(false);
   const [tplOpen, setTplOpen] = useState(false);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
+  const [subTab, setSubTab] = useState<"queue" | "history">("queue");
+  const quickStatus = useQuickStatusUpdate();
   const { data: tplMain } = useEmailTemplate("developer_registration");
   const { data: ownerSettings } = useOwnerSettings();
 
-  const filtered = useMemo(() => data.filter((r: any) => {
+  // Split base data into pools: queue (never contacted) vs history (contacted or registered)
+  const queuePool = useMemo(() => data.filter((r: any) => !r.last_outreach_at && r.status !== "registered"), [data]);
+  const historyPool = useMemo(() => data.filter((r: any) => !!r.last_outreach_at || r.status === "registered"), [data]);
+
+  const filtered = useMemo(() => queuePool.filter((r: any) => {
     const matchesQ = !q || r.developer_name?.toLowerCase().includes(q.toLowerCase());
     const matchesS = statusFilter === "all" || r.status === statusFilter;
     const matchesE =
@@ -505,7 +512,7 @@ const DeveloperRegistryTab = () => {
       (emailFilter === "sent" && !!r.last_outreach_at && r.status !== "registered") ||
       (emailFilter === "registered" && r.status === "registered");
     return matchesQ && matchesS && matchesE;
-  }), [data, q, statusFilter, emailFilter]);
+  }), [queuePool, q, statusFilter, emailFilter]);
 
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
@@ -575,6 +582,36 @@ const DeveloperRegistryTab = () => {
     <div className="space-y-5">
       <DocumentPackPanel />
 
+      {/* Sub-tabs: Outreach Queue vs Sent History */}
+      <div className="flex gap-1 p-1 bg-black/5 rounded-xl w-fit">
+        <button
+          type="button"
+          onClick={() => setSubTab("queue")}
+          className={`px-4 py-2 text-sm font-semibold rounded-lg transition ${
+            subTab === "queue" ? "bg-white text-black shadow-sm" : "text-black/60 hover:text-black"
+          }`}
+        >
+          Outreach Queue ({queuePool.length})
+        </button>
+        <button
+          type="button"
+          onClick={() => setSubTab("history")}
+          className={`px-4 py-2 text-sm font-semibold rounded-lg transition ${
+            subTab === "history" ? "bg-white text-black shadow-sm" : "text-black/60 hover:text-black"
+          }`}
+        >
+          Sent History ({historyPool.length})
+        </button>
+      </div>
+
+      {subTab === "history" ? (
+        <SentHistoryView
+          developers={historyPool}
+          onResend={(d) => { setSelected(new Set([d.id])); setBulkOpen(true); }}
+          onMarkRegistered={(d) => quickStatus.mutate({ entityType: "developer_registry", id: d.id, status: "registered", previousStatus: d.status })}
+        />
+      ) : (
+      <>
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -723,6 +760,8 @@ const DeveloperRegistryTab = () => {
             </Card>
           );})}
         </div>
+      )}
+      </>
       )}
 
       <TemplateEditorDialog open={tplOpen} onOpenChange={setTplOpen} />

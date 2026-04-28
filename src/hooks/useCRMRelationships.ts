@@ -270,6 +270,33 @@ export const useLockEmailTemplate = () => {
   });
 };
 
+/* ---------- Email Delivery Status (from email_send_log) ---------- */
+export const useEmailDeliveryStatus = (recipientEmails: string[]) =>
+  useQuery({
+    queryKey: ["crm-email-delivery", recipientEmails.sort().join(",")],
+    enabled: recipientEmails.length > 0,
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("email_send_log")
+        .select("recipient_email,status,template_name,created_at,error_message,message_id")
+        .in("recipient_email", recipientEmails)
+        .in("template_name", ["developer_registration", "developer_confirm_registered"])
+        .order("created_at", { ascending: false })
+        .limit(1000);
+      if (error) throw error;
+      // Latest status per recipient_email
+      const map = new Map<string, any>();
+      const history = new Map<string, any[]>();
+      (data || []).forEach((row: any) => {
+        if (!map.has(row.recipient_email)) map.set(row.recipient_email, row);
+        const arr = history.get(row.recipient_email) || [];
+        arr.push(row);
+        history.set(row.recipient_email, arr);
+      });
+      return { latest: map, history };
+    },
+  });
+
 /* ---------- Reminders ---------- */
 export const useReminders = (filters?: { brokerage_id?: string; client_id?: string; dev_registry_id?: string }) =>
   useQuery({

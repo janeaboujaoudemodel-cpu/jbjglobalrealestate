@@ -1,129 +1,84 @@
 ## Goal
 
-Replace the current one-by-one "Send Registration" flow with a complete bulk outreach console for the 93 developers, plus a locked branded ivory/champagne email template with two variants:
-1. **New registration request** (default)
-2. **Confirm already-registered** (for developers we're already on the books with)
-
-Editable until you click **Lock template** — after that, every send uses the locked HTML; no further edits possible.
+When you click **Send**, you should clearly see (1) the exact email being sent before it goes out, and (2) a separate organized section listing every developer that has already been emailed, with delivery status visible per row.
 
 ---
 
-## What you'll see (UI flow)
+## What changes
 
-On `/owner/crm/relationships` → **Developer Registry** tab, replace the current list with a new **Outreach Console**:
+### 1. Email preview inside the Send dialog (`BulkSendDialog.tsx`)
 
-1. **Top bar**: search, status filter, emirate filter, "Email status" filter (Not sent / Sent / Confirmed registered).
-2. **Bulk selection**: checkbox on every row + "Select all filtered" + "Select none". Counter shows `X of 93 selected`.
-3. **Per-row badge**: 
-   - `Email Sent · 2 days ago` (green) when `last_outreach_at` exists
-   - `Confirmed` (gold) when status = `registered`
-   - Nothing when never contacted
-4. **Notes**: inline expandable note field per row, autosaves to `crm_developer_registry.notes`.
-5. **Contact info**: each row shows email, phone, emirate/location (added via enrichment + manual edit).
-6. **Action buttons** (top right):
-   - **Edit Template** (disabled when locked)
-   - **Send TEST to me** → sends the chosen variant to your own inbox (`infoo.jane@gmail.com`) so you verify look first
-   - **Send to Selected (N)** → opens confirm modal showing variant + recipient count, then sends sequentially
-7. **Variant toggle** at the top of the send modal: "New registration request" vs "Confirm we're already registered".
+Currently the dialog shows variant, test field, and recipient counts — but not the email body itself. Add a live preview:
 
-After a successful send for each developer:
-- `last_outreach_at`, `outreach_count` update (already wired)
-- Status auto-bumps `not_started → pending_application` (already wired)
-- Row immediately shows the green **Email Sent** badge
-- Toast: `Email sent to AAA Development (1 / 12)…`
+- Fetch the locked/draft template HTML for the chosen variant via `useEmailTemplate(variant)`.
+- Render it inside an `<iframe srcDoc={...}>` block, ~360px tall, with a header strip:
+  - **Subject:** {template.subject}
+  - **From:** noreply (your address) → **To:** {first selected developer name} (sample preview)
+  - **Variant:** New registration request / Confirm we're already registered
+  - 🔒 **Locked** badge if `locked_at` is set, otherwise ⚠️ **Draft (editable)**
+- The `{{developer_name}}` placeholder gets substituted with the first selected developer for realistic preview.
+- A small "Showing preview for: [dropdown of selected devs]" lets you spot-check how it'll look for any specific recipient.
+- The preview updates instantly when you toggle variants.
+- This is the SAME HTML the edge function will send — no divergence possible.
 
-You can manually flip any developer's status to `registered` from the inline status pill — it's already there.
+### 2. New "Sent History" view inside Developer Registry tab
 
----
-
-## The locked email template
-
-**Style** (ivory/champagne with gold accents on black text — exactly as you described):
+Restructure the Developer Registry tab into two sub-tabs at the top:
 
 ```text
-┌────────────────────────────────────────────┐
-│  [JBJ monogram]                            │
-│  ────────── gold hairline ──────────       │
-│                                            │
-│  JBJ GLOBAL REAL ESTATE                    │  ← gold, letterspaced
-│  Broker Registration Request               │  ← black serif heading
-│                                            │
-│  Dear {Developer} Broker Relations Team,   │
-│                                            │
-│  [editable body — black on cream]          │
-│                                            │
-│  ┌──────────────────────────────────┐      │
-│  │  Open Document Pack  →           │      │  ← black button, gold border
-│  └──────────────────────────────────┘      │
-│                                            │
-│  Reply: contact@jbj.ae · CC: infoo.jane    │
-│                                            │
-│  Warm regards,                             │
-│  JBJ Team                                  │  ← gold signature
-│  ────────── gold hairline ──────────       │
-│  RERA Licensed · Dubai, UAE                │
-└────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────┐
+│  [ Outreach Queue (74) ]  [ Sent History (19) ]     │
+└─────────────────────────────────────────────────────┘
 ```
 
-Palette: background `#FAF5EA` (ivory cream), card `#FFFDF7`, text `#0a0a0a`, accent `#C9A86A` (champagne gold), divider `#E8D9B8`. Inter font.
+- **Outreach Queue** — current list, but filtered to developers with `last_outreach_at IS NULL` AND `status != 'registered'` (i.e. who still need to be contacted).
+- **Sent History** — every developer where `last_outreach_at IS NOT NULL` OR `status = 'registered'`, sorted by `last_outreach_at DESC`.
 
-**Variant 2** ("Confirm already-registered") replaces the body and CTA:
-> "Could you kindly confirm that JBJ Global Real Estate is currently active and registered as a broker partner with {Developer}? If our agency code or commission tier needs renewal, please let us know what's required."
-> CTA: `Reply to confirm` (mailto link).
+Sent History row shows:
+- Developer name + status pill
+- **Last sent:** "2 days ago" (with full timestamp on hover)
+- **Total sends:** `outreach_count` (e.g. ×3)
+- **Delivery status badge** pulled from `email_send_log` joined by recipient_email + template_name:
+  - 🟢 Delivered · 🔵 Sent · 🟡 Pending · 🔴 Bounced/Failed · ⚪ Suppressed
+- **Variant used** (last one): "New registration" or "Confirm registered"
+- Quick actions: **Re-send** · **Mark as Registered** · **View email log** (opens a small dialog showing every send to this developer with timestamp + status)
 
-**Lock workflow**: 
-- Template stored in new table `crm_email_templates` (variant, subject, html, locked_at, locked_by). 
-- `Edit Template` modal lets you tweak subject + body. 
-- **Lock template** button writes `locked_at = now()`. After that, the edit modal is read-only with a "🔒 Template locked on {date}" banner. Unlock requires deleting the row from DB (intentional — matches your "cannot change later at all" requirement).
+A search/filter bar at the top of Sent History: search by name, filter by delivery status, filter by variant.
 
----
+### 3. During the send loop — show what's being sent per developer
 
-## Contact-data enrichment
+In the bulk send progress UI, instead of just "Sending 3 / 12…", show:
 
-You said: *"Add contact details, also the number of them, including their location for all developers."* All 93 currently have only the synthetic `brokers@<domain>` email and no phone/location. To populate:
+```text
+Sending 3 / 12 — AAA Development (brokers@aaa.ae)
+✅ Damac Properties · sent
+✅ Emaar · sent
+⏳ AAA Development · sending…
+⚪ Sobha · queued
+⚪ Nakheel · queued
+```
 
-- Add a one-shot **Enrich All** button that calls existing `enrich-developer-data` edge function (already in the project) which fills `phone`, `emirate`, `website` from the linked `uae_developers` and Reelly sources where available.
-- Anything still empty stays editable inline (click the row's pencil to edit phone/emirate).
-- Will not invent phone numbers — only fills from real sources. Empty cells render as `—` so you can fill them manually.
+A scrollable live list inside the dialog, each row updating as the loop progresses. After completion, the dialog stays open with a summary so you can review which ones succeeded/failed before closing.
 
----
+### 4. Delivery status sync
 
-## Technical changes
-
-**Database migration**:
-- New table `crm_email_templates(variant text PK, subject text, html text, locked_at timestamptz, locked_by uuid, updated_at timestamptz)` with RLS owner-only.
-- Seed two rows: `developer_registration` and `developer_confirm_registered` with the ivory/champagne HTML.
-
-**Edge function** `crm-send-developer-registration/index.ts` updates:
-- Accept `variant: "developer_registration" | "developer_confirm_registered"` and `testRecipient?: string`.
-- Load HTML from `crm_email_templates` instead of hardcoded `buildHtml`. If `locked_at` is null, still allow sending but warn (`X-Template-Unlocked: true` header). If locked, use exactly the stored HTML with `{{developer_name}}` substitution.
-- When `testRecipient` provided, send to that address only and skip the registry update / log insert.
-
-**Frontend** (`src/pages/CRMRelationships.tsx` + `src/hooks/useCRMRelationships.ts`):
-- Add `useEmailTemplate(variant)`, `useUpsertEmailTemplate`, `useLockEmailTemplate` hooks.
-- New components: `<TemplateEditorDialog>`, `<BulkSendDialog>`, `<DeveloperRow>` (with checkbox, notes inline editor, sent badge, contact cells).
-- Replace existing list section (lines ~600–638) with `<DeveloperOutreachConsole>`.
-- Sequential send loop with 800ms throttle (already exists) — extend to update each row's badge in cache as it completes via `queryClient.setQueryData`.
-
-**Bulk send safety**:
-- Confirm dialog: shows count, variant, sample recipients, total cost (Gmail rate-limited at ~1/sec).
-- "Skip already-sent in last 7 days" checkbox (default ON) — filters out anyone with `last_outreach_at > now() - 7 days`.
-
----
-
-## Out of scope / honest caveats
-
-- I cannot scrape or invent phone numbers / locations that aren't in the database. The enrichment button only pulls from existing `uae_developers` + Reelly. You'll need to fill the rest manually (the UI makes that easy).
-- The "lock" is enforced in app logic + DB flag — a developer with DB access could technically override it. Hard immutability would require putting the HTML in code, which we explicitly don't want since you need to edit before locking.
-- Test send goes to `infoo.jane@gmail.com` by default (from `cc_email`). Change in Document Pack panel if you want it elsewhere.
+Add a hook `useEmailDeliveryStatus(recipientEmails: string[])` that queries `email_send_log` (deduplicated by `message_id`, latest per recipient + template) and returns a map. The Sent History rows use this to show real delivery status, not just "we attempted to send".
 
 ---
 
 ## Files touched
 
-- `supabase/migrations/<new>_crm_email_templates.sql` (new table + seed)
-- `supabase/functions/crm-send-developer-registration/index.ts` (variants, test mode, template loading)
-- `src/hooks/useCRMRelationships.ts` (template hooks, bulk send helpers)
-- `src/pages/CRMRelationships.tsx` (Developer Registry tab rewrite)
-- `src/components/crm/TemplateEditorDialog.tsx` (new)
-- `src/components/crm/BulkSendDialog.tsx` (new)
+- `src/components/crm/BulkSendDialog.tsx` — add iframe preview, per-recipient progress list
+- `src/pages/CRMRelationships.tsx` — split DeveloperRegistryTab into Outreach Queue / Sent History sub-tabs
+- `src/components/crm/SentHistoryView.tsx` — **new** component for the history list
+- `src/components/crm/EmailLogDialog.tsx` — **new** small dialog showing per-developer send log
+- `src/hooks/useCRMRelationships.ts` — add `useEmailDeliveryStatus` hook querying `email_send_log`
+
+No schema changes — all data already exists in `crm_developer_registry` (`last_outreach_at`, `outreach_count`, `last_variant`) and `email_send_log` (delivery status).
+
+---
+
+## Out of scope
+
+- Live webhook-based delivery updates (status refresh requires page refresh or refetch button — Resend bounce webhooks aren't wired into this project's `email_send_log` yet).
+- Per-developer custom email body — same locked template is used for everyone in the bulk send (matches your earlier "cannot change later" requirement).

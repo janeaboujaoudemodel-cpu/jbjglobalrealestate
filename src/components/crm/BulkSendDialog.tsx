@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Send, FlaskConical, AlertTriangle } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Send, FlaskConical, AlertTriangle, Lock, Unlock, CheckCircle2, XCircle, Clock, Eye } from "lucide-react";
 import { toast } from "sonner";
-import { useSendDeveloperRegistration, type RegistrationVariant } from "@/hooks/useCRMRelationships";
+import { useSendDeveloperRegistration, useEmailTemplate, type RegistrationVariant } from "@/hooks/useCRMRelationships";
 
 const VARIANT_LABELS: Record<RegistrationVariant, string> = {
   developer_registration: "New registration request",
@@ -14,6 +15,8 @@ const VARIANT_LABELS: Record<RegistrationVariant, string> = {
 };
 
 interface Developer { id: string; developer_name: string; developer_email?: string; last_outreach_at?: string | null; }
+
+type RowStatus = "queued" | "sending" | "ok" | "fail";
 
 export const BulkSendDialog = ({
   open, onOpenChange, selected, defaultTestEmail,
@@ -28,20 +31,43 @@ export const BulkSendDialog = ({
   const [skipRecent, setSkipRecent] = useState(true);
   const [testEmail, setTestEmail] = useState(defaultTestEmail);
   const [running, setRunning] = useState(false);
-  const [progress, setProgress] = useState({ done: 0, ok: 0, fail: 0 });
+  const [statuses, setStatuses] = useState<Record<string, { status: RowStatus; error?: string }>>({});
+  const [previewDevId, setPreviewDevId] = useState<string>("");
+  const [showPreview, setShowPreview] = useState(true);
+
+  const { data: template } = useEmailTemplate(variant);
 
   const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
-  const targets = selected.filter((d) =>
+  const targets = useMemo(() => selected.filter((d) =>
     d.developer_email && (!skipRecent || !d.last_outreach_at || new Date(d.last_outreach_at).getTime() < sevenDaysAgo)
-  );
+  ), [selected, skipRecent]);
   const skipped = selected.length - targets.length;
+
+  useEffect(() => {
+    if (!previewDevId && (targets[0] || selected[0])) {
+      setPreviewDevId((targets[0] || selected[0]).id);
+    }
+  }, [targets, selected, previewDevId]);
+
+  const previewDev = selected.find((d) => d.id === previewDevId) || selected[0];
+  const previewHtml = useMemo(() => {
+    if (!template?.html) return "<div style='padding:24px;font-family:Inter,sans-serif;color:#666'>Loading template…</div>";
+    const name = previewDev?.developer_name || "{{developer_name}}";
+    return String(template.html).replace(/\{\{developer_name\}\}/g, name);
+  }, [template, previewDev]);
+
+  const previewSubject = useMemo(() => {
+    if (!template?.subject) return "";
+    const name = previewDev?.developer_name || "{{developer_name}}";
+    return String(template.subject).replace(/\{\{developer_name\}\}/g, name);
+  }, [template, previewDev]);
 
   const sendTest = async () => {
     if (!testEmail.includes("@")) { toast.error("Enter a valid test email"); return; }
     await send.mutateAsync({
       variant,
       testRecipient: testEmail,
-      testDeveloperName: targets[0]?.developer_name || selected[0]?.developer_name,
+      testDeveloperName: previewDev?.developer_name || targets[0]?.developer_name || selected[0]?.developer_name,
     });
   };
 
@@ -49,31 +75,54 @@ export const BulkSendDialog = ({
     if (!targets.length) { toast.error("No eligible recipients"); return; }
     if (!confirm(`Send "${VARIANT_LABELS[variant]}" to ${targets.length} developer(s)?`)) return;
     setRunning(true);
-    setProgress({ done: 0, ok: 0, fail: 0 });
-    const t = toast.loading(`Sending 0 / ${targets.length}…`);
+    const init: Record<string, { status: RowStatus }> = {};
+    targets.forEach((t) => { init[t.id] = { status: "queued" }; });
+    setStatuses(init);
+
     let ok = 0, fail = 0;
     for (let i = 0; i < targets.length; i++) {
+      const t = targets[i];
+      setStatuses((p) => ({ ...p, [t.id]: { status: "sending" } }));
       try {
-        await send.mutateAsync({ developerId: targets[i].id, variant, silent: true });
+        await send.mutateAsync({ developerId: t.id, variant, silent: true });
         ok++;
-      } catch { fail++; }
-      setProgress({ done: i + 1, ok, fail });
-      toast.loading(`Sending ${i + 1} / ${targets.length}… (${ok} ok, ${fail} failed)`, { id: t });
+        setStatuses((p) => ({ ...p, [t.id]: { status: "ok" } }));
+      } catch (e: any) {
+        fail++;
+        setStatuses((p) => ({ ...p, [t.id]: { status: "fail", error: e?.message || "Failed" } }));
+      }
       await new Promise((r) => setTimeout(r, 900));
     }
-    toast.success(`Done. Sent: ${ok}, Failed: ${fail}`, { id: t });
+    toast.success(`Done. Sent: ${ok}, Failed: ${fail}`);
     setRunning(false);
+  };
+
+  const closeAndReset = () => {
+    if (running) return;
+    setStatuses({});
     onOpenChange(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={(v) => !running && onOpenChange(v)}>
-      <DialogContent className="max-w-xl bg-white">
+      <DialogContent className="max-w-3xl bg-white max-h-[92vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-black">Send Registration Email</DialogTitle>
+          <DialogTitle className="text-black flex items-center gap-2">
+            Send Registration Email
+            {template?.locked_at ? (
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
+                <Lock className="w-3 h-3" />Locked
+              </span>
+            ) : (
+              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-800 border border-zinc-300 flex items-center gap-1">
+                <Unlock className="w-3 h-3" />Draft
+              </span>
+            )}
+          </DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
+          {/* Variant */}
           <div>
             <Label className="text-xs text-black">Email variant</Label>
             <div className="grid grid-cols-2 gap-2 mt-1">
@@ -82,6 +131,7 @@ export const BulkSendDialog = ({
                   key={v}
                   type="button"
                   onClick={() => setVariant(v)}
+                  disabled={running}
                   className={`text-xs px-3 py-2 rounded-lg border-2 text-left transition ${
                     variant === v ? "bg-black text-white border-black" : "bg-white text-black border-black/10 hover:border-black/30"
                   }`}
@@ -92,18 +142,60 @@ export const BulkSendDialog = ({
             </div>
           </div>
 
+          {/* Email Preview */}
+          <div className="border border-black/10 rounded-xl bg-white">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-black/10 bg-[#FAF5EA]">
+              <div className="flex items-center gap-2 text-xs text-black">
+                <Eye className="w-4 h-4" /><strong>Email preview</strong>
+              </div>
+              <div className="flex items-center gap-2">
+                {selected.length > 0 && (
+                  <Select value={previewDevId} onValueChange={setPreviewDevId}>
+                    <SelectTrigger className="h-7 text-xs w-[200px]"><SelectValue placeholder="Preview as…" /></SelectTrigger>
+                    <SelectContent>
+                      {selected.map((d) => (
+                        <SelectItem key={d.id} value={d.id} className="text-xs">{d.developer_name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+                <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => setShowPreview((s) => !s)}>
+                  {showPreview ? "Hide" : "Show"}
+                </Button>
+              </div>
+            </div>
+            {showPreview && (
+              <>
+                <div className="px-3 py-2 text-xs border-b border-black/10 bg-white">
+                  <div className="text-black"><strong>Subject:</strong> {previewSubject}</div>
+                  <div className="text-gray-600 mt-0.5">
+                    <strong className="text-black">To:</strong> {previewDev?.developer_email || "—"} · <strong className="text-black">Variant:</strong> {VARIANT_LABELS[variant]}
+                  </div>
+                </div>
+                <iframe
+                  title="email-preview"
+                  srcDoc={previewHtml}
+                  sandbox=""
+                  className="w-full h-[360px] bg-white rounded-b-xl"
+                />
+              </>
+            )}
+          </div>
+
+          {/* Test send */}
           <div className="border border-black/10 rounded-xl p-3 bg-[#FAF5EA]">
             <div className="flex items-center gap-2 text-xs text-black mb-2">
               <FlaskConical className="w-4 h-4" /> <strong>Step 1 — Send test to yourself first</strong>
             </div>
             <div className="flex gap-2">
               <Input value={testEmail} onChange={(e) => setTestEmail(e.target.value)} placeholder="your@email" className="flex-1" />
-              <Button variant="outline" onClick={sendTest} disabled={send.isPending}>
+              <Button variant="outline" onClick={sendTest} disabled={send.isPending || running}>
                 <FlaskConical className="w-3 h-3 mr-1" />Send TEST
               </Button>
             </div>
           </div>
 
+          {/* Broadcast config */}
           <div className="space-y-2 border border-black/10 rounded-xl p-3 bg-white">
             <div className="text-xs text-black"><strong>Step 2 — Broadcast</strong></div>
             <div className="flex items-center justify-between text-sm text-black">
@@ -112,7 +204,7 @@ export const BulkSendDialog = ({
             </div>
             <div className="flex items-center justify-between text-sm">
               <span className="text-black flex items-center gap-2">
-                <Switch checked={skipRecent} onCheckedChange={setSkipRecent} />
+                <Switch checked={skipRecent} onCheckedChange={setSkipRecent} disabled={running} />
                 Skip developers contacted in last 7 days
               </span>
               {skipped > 0 && <span className="text-amber-700 text-xs flex items-center gap-1"><AlertTriangle className="w-3 h-3" />{skipped} skipped</span>}
@@ -121,16 +213,49 @@ export const BulkSendDialog = ({
               <span className="text-black font-semibold">Will send to</span>
               <span className="font-bold text-emerald-700">{targets.length}</span>
             </div>
-            {running && (
-              <div className="text-xs text-black">
-                Progress: {progress.done} / {targets.length} · ✅ {progress.ok} · ❌ {progress.fail}
-              </div>
-            )}
           </div>
+
+          {/* Per-recipient progress */}
+          {(running || Object.keys(statuses).length > 0) && (
+            <div className="border border-black/10 rounded-xl bg-white">
+              <div className="px-3 py-2 border-b border-black/10 text-xs text-black bg-[#FAF5EA]">
+                <strong>Live send progress</strong>
+              </div>
+              <div className="max-h-[260px] overflow-y-auto divide-y divide-black/5">
+                {targets.map((t) => {
+                  const s = statuses[t.id]?.status || "queued";
+                  const err = statuses[t.id]?.error;
+                  const icon =
+                    s === "ok" ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> :
+                    s === "fail" ? <XCircle className="w-4 h-4 text-red-600" /> :
+                    s === "sending" ? <Clock className="w-4 h-4 text-amber-600 animate-pulse" /> :
+                    <Clock className="w-4 h-4 text-gray-400" />;
+                  return (
+                    <div key={t.id} className="flex items-center justify-between px-3 py-2 text-xs">
+                      <div className="flex items-center gap-2 min-w-0">
+                        {icon}
+                        <span className="font-semibold text-black truncate">{t.developer_name}</span>
+                        <span className="text-gray-500 truncate">{t.developer_email}</span>
+                      </div>
+                      <span className={`uppercase tracking-wider font-bold ${
+                        s === "ok" ? "text-emerald-700" :
+                        s === "fail" ? "text-red-700" :
+                        s === "sending" ? "text-amber-700" : "text-gray-500"
+                      }`}>
+                        {s === "ok" ? "sent" : s === "fail" ? (err || "failed") : s}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={running}>Cancel</Button>
+          <Button variant="outline" onClick={closeAndReset} disabled={running}>
+            {Object.keys(statuses).length > 0 && !running ? "Close" : "Cancel"}
+          </Button>
           <Button onClick={sendAll} disabled={running || !targets.length} className="bg-black text-white hover:bg-gray-800">
             <Send className="w-3 h-3 mr-1" />{running ? `Sending…` : `Send to ${targets.length}`}
           </Button>
