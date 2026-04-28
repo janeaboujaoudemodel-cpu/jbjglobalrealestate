@@ -608,6 +608,8 @@ const DeveloperRegistryTab = () => {
                 <Field label="Commission tier"><Input value={editing.commission_tier || ""} onChange={(e) => setEditing({ ...editing, commission_tier: e.target.value })} placeholder="e.g. Gold 4%" /></Field>
                 <Field label="Registration date"><Input type="date" value={editing.registration_date || ""} onChange={(e) => setEditing({ ...editing, registration_date: e.target.value || null })} /></Field>
                 <Field label="Expiry date"><Input type="date" value={editing.expiry_date || ""} onChange={(e) => setEditing({ ...editing, expiry_date: e.target.value || null })} /></Field>
+                <Field label="Registration email (for outreach)"><Input type="email" placeholder="brokers@developer.ae" value={editing.developer_email || ""} onChange={(e) => setEditing({ ...editing, developer_email: e.target.value })} /></Field>
+                <Field label="Registration URL"><Input placeholder="https://…" value={editing.registration_url || ""} onChange={(e) => setEditing({ ...editing, registration_url: e.target.value })} /></Field>
               </div>
               <div className="border-t pt-3"><div className="text-sm font-semibold mb-2">My Contact at Developer</div>
                 <div className="grid grid-cols-2 gap-3">
@@ -647,23 +649,28 @@ const CRMRelationships = () => {
   return (
     <>
       <SEOHead title="CRM Relationships | JBJ Global" description="Manage brokerages, clients and developer registrations" canonicalPath="/crm/relationships" />
-      <div className="min-h-screen bg-white">
-        <div className="max-w-7xl mx-auto p-4 md:p-6 pt-[100px]">
-          <div className="flex items-center gap-3 mb-6">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/owner/crm")}>
-              <ArrowLeft className="w-4 h-4 mr-1" />Back to CRM
+      <div className="min-h-screen bg-[#FAF7F2]">
+        <div className="w-full px-6 md:px-10 pt-[112px] pb-12">
+          <div className="flex justify-center mb-6">
+            <Button
+              variant="outline"
+              onClick={() => navigate("/owner/crm")}
+              className="h-11 px-6 bg-white border-2 border-black/10 text-black hover:bg-white hover:border-black/30 rounded-full font-semibold"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />Back to CRM Hub
             </Button>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold">Relationships Hub</h1>
-              <p className="text-sm text-gray-600">Brokerages, clients, and developer registrations — all in one place.</p>
-            </div>
+          </div>
+
+          <div className="text-center mb-8 pb-6 border-b border-black/10">
+            <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">Relationships Hub</h1>
+            <p className="text-sm text-gray-700 mt-2">Brokerages · Clients · Developer Registrations — all in one premium workspace.</p>
           </div>
 
           <Tabs value={tab} onValueChange={setTab}>
-            <TabsList className="mb-4">
-              <TabsTrigger value="brokerages"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
-              <TabsTrigger value="clients"><Users className="w-4 h-4 mr-2" />Clients</TabsTrigger>
-              <TabsTrigger value="developers"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
+            <TabsList className="mb-6 bg-white border border-black/10 p-1 rounded-xl">
+              <TabsTrigger value="brokerages" className="data-[state=active]:bg-black data-[state=active]:text-white text-black rounded-lg px-5"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
+              <TabsTrigger value="clients" className="data-[state=active]:bg-black data-[state=active]:text-white text-black rounded-lg px-5"><Users className="w-4 h-4 mr-2" />Clients</TabsTrigger>
+              <TabsTrigger value="developers" className="data-[state=active]:bg-black data-[state=active]:text-white text-black rounded-lg px-5"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
             </TabsList>
             <TabsContent value="brokerages"><BrokeragesTab /></TabsContent>
             <TabsContent value="clients"><ClientsTab /></TabsContent>
