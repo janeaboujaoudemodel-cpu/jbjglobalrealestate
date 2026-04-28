@@ -52,9 +52,38 @@ const STATUS_DEV = [
   { v: "expired", label: "Expired", cls: "bg-zinc-300 text-black" },
 ];
 
-const StatusPill = ({ value, options }: { value: string; options: typeof STATUS_BROKERAGE }) => {
+type StatusOption = { v: string; label: string; cls: string };
+
+const StatusPill = ({ value, options }: { value: string; options: StatusOption[] }) => {
   const o = options.find((s) => s.v === value) || options[0];
   return <Badge className={`${o.cls} border-0 font-semibold hover:${o.cls}`}>{o.label}</Badge>;
+};
+
+const InlineStatusSelect = ({
+  entityType, id, value, options,
+}: { entityType: "brokerage" | "client" | "developer_registry"; id: string; value: string; options: StatusOption[] }) => {
+  const update = useQuickStatusUpdate();
+  const current = options.find((s) => s.v === value) || options[0];
+  return (
+    <Select
+      value={value}
+      onValueChange={(v) => {
+        if (v === value) return;
+        update.mutate({ entityType, id, status: v, previousStatus: value });
+      }}
+    >
+      <SelectTrigger className={`h-8 w-auto min-w-[160px] px-3 py-1 border-0 font-semibold rounded-full ${current.cls} focus:ring-2 focus:ring-black/40`}>
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent className="bg-white border border-black/10 z-50">
+        {options.map((s) => (
+          <SelectItem key={s.v} value={s.v} className="text-black">
+            <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${s.cls}`}>{s.label}</span>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
 };
 
 const exportCSV = (rows: any[], filename: string, columns: { key: string; label: string }[]) => {
