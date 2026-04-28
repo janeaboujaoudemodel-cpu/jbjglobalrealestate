@@ -5313,16 +5313,20 @@ export type Database = {
           commission_tier: string | null
           created_at: string
           developer_contact: Json | null
+          developer_email: string | null
           developer_name: string
           developer_slug: string
           documents: Json | null
           expiry_date: string | null
           id: string
           last_interaction_at: string | null
+          last_outreach_at: string | null
           notes: string | null
+          outreach_count: number
           owner_id: string
           priority: string | null
           registration_date: string | null
+          registration_url: string | null
           required_docs_complete: boolean
           status: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags: string[] | null
@@ -5337,16 +5341,20 @@ export type Database = {
           commission_tier?: string | null
           created_at?: string
           developer_contact?: Json | null
+          developer_email?: string | null
           developer_name: string
           developer_slug: string
           documents?: Json | null
           expiry_date?: string | null
           id?: string
           last_interaction_at?: string | null
+          last_outreach_at?: string | null
           notes?: string | null
+          outreach_count?: number
           owner_id: string
           priority?: string | null
           registration_date?: string | null
+          registration_url?: string | null
           required_docs_complete?: boolean
           status?: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags?: string[] | null
@@ -5361,16 +5369,20 @@ export type Database = {
           commission_tier?: string | null
           created_at?: string
           developer_contact?: Json | null
+          developer_email?: string | null
           developer_name?: string
           developer_slug?: string
           documents?: Json | null
           expiry_date?: string | null
           id?: string
           last_interaction_at?: string | null
+          last_outreach_at?: string | null
           notes?: string | null
+          outreach_count?: number
           owner_id?: string
           priority?: string | null
           registration_date?: string | null
+          registration_url?: string | null
           required_docs_complete?: boolean
           status?: Database["public"]["Enums"]["crm_dev_registration_status"]
           tags?: string[] | null
@@ -6210,6 +6222,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crm_owner_settings: {
+        Row: {
+          cc_email: string
+          cc_jane_enabled: boolean
+          created_at: string
+          drive_doc_pack_url: string | null
+          from_name: string
+          owner_id: string
+          reply_to_email: string
+          signature_html: string | null
+          updated_at: string
+        }
+        Insert: {
+          cc_email?: string
+          cc_jane_enabled?: boolean
+          created_at?: string
+          drive_doc_pack_url?: string | null
+          from_name?: string
+          owner_id: string
+          reply_to_email?: string
+          signature_html?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cc_email?: string
+          cc_jane_enabled?: boolean
+          created_at?: string
+          drive_doc_pack_url?: string | null
+          from_name?: string
+          owner_id?: string
+          reply_to_email?: string
+          signature_html?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       crm_relationship_reminders: {
         Row: {
