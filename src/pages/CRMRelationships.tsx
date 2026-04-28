@@ -367,15 +367,77 @@ const ClientsTab = () => {
 /* ===========================================================
    Developer Registry
 =========================================================== */
+const DocumentPackPanel = () => {
+  const { data: settings, isLoading } = useOwnerSettings();
+  const upsert = useUpsertOwnerSettings();
+  const [draft, setDraft] = useState<any>(null);
+  const s = draft || settings || {};
+  const dirty = !!draft;
+
+  const update = (patch: any) => setDraft({ ...(draft || settings || {}), ...patch });
+  const save = async () => { await upsert.mutateAsync(draft); setDraft(null); };
+
+  if (isLoading) return <Skeleton className="h-32" />;
+
+  return (
+    <Card className="bg-white border border-black/10 rounded-2xl">
+      <CardContent className="p-5">
+        <div className="flex items-center gap-2 mb-3">
+          <LinkIcon className="w-4 h-4 text-black" />
+          <h3 className="font-semibold text-black">Document Pack & Outreach Settings</h3>
+        </div>
+        <p className="text-xs text-gray-700 mb-4">
+          Set the Google Drive link to your Trade Licence + RERA + MOU pack once. Every "Send Registration" email will use it automatically.
+        </p>
+        <div className="grid gap-3 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <Label className="text-xs text-black mb-1 block">Google Drive document pack URL *</Label>
+            <Input
+              placeholder="https://drive.google.com/drive/folders/..."
+              value={s.drive_doc_pack_url || ""}
+              onChange={(e) => update({ drive_doc_pack_url: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label className="text-xs text-black mb-1 block">From name</Label>
+            <Input value={s.from_name || ""} onChange={(e) => update({ from_name: e.target.value })} />
+          </div>
+          <div>
+            <Label className="text-xs text-black mb-1 block">Reply-to email</Label>
+            <Input value={s.reply_to_email || ""} onChange={(e) => update({ reply_to_email: e.target.value })} />
+          </div>
+          <div>
+            <Label className="text-xs text-black mb-1 block">CC email (Jane)</Label>
+            <Input value={s.cc_email || ""} onChange={(e) => update({ cc_email: e.target.value })} />
+          </div>
+          <div className="flex items-center gap-3 pt-6">
+            <Switch checked={!!s.cc_jane_enabled} onCheckedChange={(v) => update({ cc_jane_enabled: v })} />
+            <span className="text-sm text-black">Always CC this address</span>
+          </div>
+        </div>
+        {dirty && (
+          <div className="flex justify-end gap-2 mt-4">
+            <Button variant="outline" onClick={() => setDraft(null)}>Cancel</Button>
+            <Button onClick={save} disabled={upsert.isPending}>{upsert.isPending ? "Saving…" : "Save settings"}</Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
 const DeveloperRegistryTab = () => {
   const { data = [], isLoading, refetch } = useDeveloperRegistry();
+  const { data: settings } = useOwnerSettings();
   const seed = useSeedDeveloperRegistry();
   const upsert = useUpsertDeveloperRegistry();
   const upsertReminder = useUpsertReminder();
+  const sendRegistration = useSendDeveloperRegistration();
   const [q, setQ] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
+  const [bulkRunning, setBulkRunning] = useState(false);
 
   const filtered = useMemo(() => data.filter((r: any) => {
     const matchesQ = !q || r.developer_name?.toLowerCase().includes(q.toLowerCase());
@@ -408,8 +470,44 @@ const DeveloperRegistryTab = () => {
     });
   };
 
+  const sendOne = (d: any) => {
+    if (!settings?.drive_doc_pack_url) {
+      toast.error("Add a Google Drive link in Document Pack panel first");
+      return;
+    }
+    sendRegistration.mutate({ developerId: d.id });
+  };
+
+  const bulkSend = async () => {
+    if (!settings?.drive_doc_pack_url) {
+      toast.error("Add a Google Drive link in Document Pack panel first");
+      return;
+    }
+    const targets = data.filter((d: any) =>
+      d.developer_email && (d.status === "not_started" || d.status === "documents_required")
+    );
+    if (!targets.length) { toast.error("No eligible developers (need email + not-yet-registered status)"); return; }
+    if (!confirm(`Send registration email to ${targets.length} developers?`)) return;
+    setBulkRunning(true);
+    const t = toast.loading(`Sending 0 / ${targets.length}…`);
+    let ok = 0, fail = 0;
+    for (let i = 0; i < targets.length; i++) {
+      try {
+        await sendRegistration.mutateAsync({ developerId: targets[i].id });
+        ok++;
+      } catch { fail++; }
+      toast.loading(`Sending ${i + 1} / ${targets.length}…`, { id: t });
+      await new Promise((r) => setTimeout(r, 800));
+    }
+    toast.success(`Done. Sent: ${ok}, Failed: ${fail}`, { id: t });
+    setBulkRunning(false);
+    refetch();
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
+      <DocumentPackPanel />
+
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
