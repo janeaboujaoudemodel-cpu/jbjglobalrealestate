@@ -10,47 +10,49 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ArrowLeft, Plus, Search, Sparkles, Building2, Users, FileSignature, Download, Bell, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Search, Sparkles, Building2, Users, FileSignature, Download, Bell, Trash2, Send, Mail, Settings as SettingsIcon, Link as LinkIcon } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { SEOHead } from "@/components/SEOHead";
 import {
   useBrokerages, useUpsertBrokerage, useDeleteBrokerage,
   useClients, useUpsertClient, useDeleteClient,
   useDeveloperRegistry, useSeedDeveloperRegistry, useUpsertDeveloperRegistry,
   useUpsertReminder,
+  useOwnerSettings, useUpsertOwnerSettings, useSendDeveloperRegistration,
 } from "@/hooks/useCRMRelationships";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const STATUS_BROKERAGE = [
-  { v: "prospect", label: "Prospect", cls: "bg-gray-100 text-gray-800" },
-  { v: "negotiating", label: "Negotiating", cls: "bg-amber-100 text-amber-800" },
-  { v: "active_partner", label: "Active Partner", cls: "bg-emerald-100 text-emerald-800" },
-  { v: "closed_deals", label: "Closed Deals", cls: "bg-blue-100 text-blue-800" },
-  { v: "dormant", label: "Dormant", cls: "bg-zinc-100 text-zinc-700" },
-  { v: "blacklisted", label: "Blacklisted", cls: "bg-red-100 text-red-800" },
+  { v: "prospect", label: "Prospect", cls: "bg-gray-200 text-black" },
+  { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-black" },
+  { v: "active_partner", label: "Active Partner", cls: "bg-emerald-200 text-black" },
+  { v: "closed_deals", label: "Closed Deals", cls: "bg-blue-200 text-black" },
+  { v: "dormant", label: "Dormant", cls: "bg-zinc-200 text-black" },
+  { v: "blacklisted", label: "Blacklisted", cls: "bg-red-200 text-black" },
 ];
 const STATUS_CLIENT = [
-  { v: "lead", label: "Lead", cls: "bg-gray-100 text-gray-800" },
-  { v: "qualified", label: "Qualified", cls: "bg-blue-100 text-blue-800" },
-  { v: "negotiating", label: "Negotiating", cls: "bg-amber-100 text-amber-800" },
-  { v: "vip", label: "VIP", cls: "bg-purple-100 text-purple-800" },
-  { v: "closed_won", label: "Closed Won", cls: "bg-emerald-100 text-emerald-800" },
-  { v: "closed_lost", label: "Closed Lost", cls: "bg-red-100 text-red-800" },
-  { v: "dormant", label: "Dormant", cls: "bg-zinc-100 text-zinc-700" },
+  { v: "lead", label: "Lead", cls: "bg-gray-200 text-black" },
+  { v: "qualified", label: "Qualified", cls: "bg-blue-200 text-black" },
+  { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-black" },
+  { v: "vip", label: "VIP", cls: "bg-purple-200 text-black" },
+  { v: "closed_won", label: "Closed Won", cls: "bg-emerald-200 text-black" },
+  { v: "closed_lost", label: "Closed Lost", cls: "bg-red-200 text-black" },
+  { v: "dormant", label: "Dormant", cls: "bg-zinc-200 text-black" },
 ];
 const STATUS_DEV = [
-  { v: "not_started", label: "Not Started", cls: "bg-gray-100 text-gray-800" },
-  { v: "pending_application", label: "Pending Application", cls: "bg-amber-100 text-amber-800" },
-  { v: "documents_required", label: "Documents Required", cls: "bg-orange-100 text-orange-800" },
-  { v: "under_review", label: "Under Review", cls: "bg-blue-100 text-blue-800" },
-  { v: "registered", label: "Registered", cls: "bg-emerald-100 text-emerald-800" },
-  { v: "rejected", label: "Rejected", cls: "bg-red-100 text-red-800" },
-  { v: "expired", label: "Expired", cls: "bg-zinc-200 text-zinc-800" },
+  { v: "not_started", label: "Not Started", cls: "bg-gray-200 text-black" },
+  { v: "pending_application", label: "Pending Application", cls: "bg-amber-200 text-black" },
+  { v: "documents_required", label: "Documents Required", cls: "bg-orange-200 text-black" },
+  { v: "under_review", label: "Under Review", cls: "bg-blue-200 text-black" },
+  { v: "registered", label: "Registered", cls: "bg-emerald-200 text-black" },
+  { v: "rejected", label: "Rejected", cls: "bg-red-200 text-black" },
+  { v: "expired", label: "Expired", cls: "bg-zinc-300 text-black" },
 ];
 
 const StatusPill = ({ value, options }: { value: string; options: typeof STATUS_BROKERAGE }) => {
   const o = options.find((s) => s.v === value) || options[0];
-  return <Badge className={`${o.cls} border-0 font-medium`}>{o.label}</Badge>;
+  return <Badge className={`${o.cls} border-0 font-semibold hover:${o.cls}`}>{o.label}</Badge>;
 };
 
 const exportCSV = (rows: any[], filename: string, columns: { key: string; label: string }[]) => {
@@ -148,7 +150,7 @@ const BrokeragesTab = () => {
       ) : (
         <div className="grid gap-3">
           {filtered.map((r: any) => (
-            <Card key={r.id} className="hover:shadow-md transition">
+            <Card key={r.id} className="bg-white text-black border border-black/10 hover:shadow-lg hover:border-black/20 transition rounded-2xl">
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex-1 min-w-[240px]">
@@ -291,7 +293,7 @@ const ClientsTab = () => {
       ) : (
         <div className="grid gap-3">
           {filtered.map((r: any) => (
-            <Card key={r.id} className="hover:shadow-md transition">
+            <Card key={r.id} className="bg-white text-black border border-black/10 hover:shadow-lg hover:border-black/20 transition rounded-2xl">
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex-1 min-w-[240px]">
@@ -365,15 +367,77 @@ const ClientsTab = () => {
 /* ===========================================================
    Developer Registry
 =========================================================== */
+const DocumentPackPanel = () => {
+  const { data: settings, isLoading } = useOwnerSettings();
+  const upsert = useUpsertOwnerSettings();
+  const [draft, setDraft] = useState<any>(null);
+  const s = draft || settings || {};
+  const dirty = !!draft;
+
+  const update = (patch: any) => setDraft({ ...(draft || settings || {}), ...patch });
+  const save = async () => { await upsert.mutateAsync(draft); setDraft(null); };
+
+  if (isLoading) return <Skeleton className="h-32" />;
+
+  return (
+    <Card className="bg-white border border-black/10 rounded-2xl">
+      <CardContent className="p-5">
+        <div className="flex items-center gap-2 mb-3">
+          <LinkIcon className="w-4 h-4 text-black" />
+          <h3 className="font-semibold text-black">Document Pack & Outreach Settings</h3>
+        </div>
+        <p className="text-xs text-gray-700 mb-4">
+          Set the Google Drive link to your Trade Licence + RERA + MOU pack once. Every "Send Registration" email will use it automatically.
+        </p>
+        <div className="grid gap-3 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <Label className="text-xs text-black mb-1 block">Google Drive document pack URL *</Label>
+            <Input
+              placeholder="https://drive.google.com/drive/folders/..."
+              value={s.drive_doc_pack_url || ""}
+              onChange={(e) => update({ drive_doc_pack_url: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label className="text-xs text-black mb-1 block">From name</Label>
+            <Input value={s.from_name || ""} onChange={(e) => update({ from_name: e.target.value })} />
+          </div>
+          <div>
+            <Label className="text-xs text-black mb-1 block">Reply-to email</Label>
+            <Input value={s.reply_to_email || ""} onChange={(e) => update({ reply_to_email: e.target.value })} />
+          </div>
+          <div>
+            <Label className="text-xs text-black mb-1 block">CC email (Jane)</Label>
+            <Input value={s.cc_email || ""} onChange={(e) => update({ cc_email: e.target.value })} />
+          </div>
+          <div className="flex items-center gap-3 pt-6">
+            <Switch checked={!!s.cc_jane_enabled} onCheckedChange={(v) => update({ cc_jane_enabled: v })} />
+            <span className="text-sm text-black">Always CC this address</span>
+          </div>
+        </div>
+        {dirty && (
+          <div className="flex justify-end gap-2 mt-4">
+            <Button variant="outline" onClick={() => setDraft(null)}>Cancel</Button>
+            <Button onClick={save} disabled={upsert.isPending}>{upsert.isPending ? "Saving…" : "Save settings"}</Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
 const DeveloperRegistryTab = () => {
   const { data = [], isLoading, refetch } = useDeveloperRegistry();
+  const { data: settings } = useOwnerSettings();
   const seed = useSeedDeveloperRegistry();
   const upsert = useUpsertDeveloperRegistry();
   const upsertReminder = useUpsertReminder();
+  const sendRegistration = useSendDeveloperRegistration();
   const [q, setQ] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any>(null);
+  const [bulkRunning, setBulkRunning] = useState(false);
 
   const filtered = useMemo(() => data.filter((r: any) => {
     const matchesQ = !q || r.developer_name?.toLowerCase().includes(q.toLowerCase());
@@ -406,8 +470,44 @@ const DeveloperRegistryTab = () => {
     });
   };
 
+  const sendOne = (d: any) => {
+    if (!settings?.drive_doc_pack_url) {
+      toast.error("Add a Google Drive link in Document Pack panel first");
+      return;
+    }
+    sendRegistration.mutate({ developerId: d.id });
+  };
+
+  const bulkSend = async () => {
+    if (!settings?.drive_doc_pack_url) {
+      toast.error("Add a Google Drive link in Document Pack panel first");
+      return;
+    }
+    const targets = data.filter((d: any) =>
+      d.developer_email && (d.status === "not_started" || d.status === "documents_required")
+    );
+    if (!targets.length) { toast.error("No eligible developers (need email + not-yet-registered status)"); return; }
+    if (!confirm(`Send registration email to ${targets.length} developers?`)) return;
+    setBulkRunning(true);
+    const t = toast.loading(`Sending 0 / ${targets.length}…`);
+    let ok = 0, fail = 0;
+    for (let i = 0; i < targets.length; i++) {
+      try {
+        await sendRegistration.mutateAsync({ developerId: targets[i].id });
+        ok++;
+      } catch { fail++; }
+      toast.loading(`Sending ${i + 1} / ${targets.length}…`, { id: t });
+      await new Promise((r) => setTimeout(r, 800));
+    }
+    toast.success(`Done. Sent: ${ok}, Failed: ${fail}`, { id: t });
+    setBulkRunning(false);
+    refetch();
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
+      <DocumentPackPanel />
+
       <div className="flex flex-wrap gap-2 items-center">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -428,6 +528,9 @@ const DeveloperRegistryTab = () => {
         ])}><Download className="w-4 h-4 mr-2" />Export CSV</Button>
         <Button variant="outline" onClick={() => seed.mutate()} disabled={seed.isPending}>
           {seed.isPending ? "Seeding…" : "Pre-fill UAE Developers"}
+        </Button>
+        <Button variant="outline" onClick={bulkSend} disabled={bulkRunning}>
+          <Send className="w-4 h-4 mr-2" />{bulkRunning ? "Sending…" : "Bulk Send Registration"}
         </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add Developer</Button>
       </div>
@@ -452,18 +555,19 @@ const DeveloperRegistryTab = () => {
       ) : (
         <div className="grid gap-2">
           {filtered.map((r: any) => (
-            <Card key={r.id} className="hover:shadow-md transition">
+            <Card key={r.id} className="bg-white text-black border border-black/10 hover:shadow-lg hover:border-black/20 transition rounded-2xl">
               <CardContent className="p-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex-1 min-w-[200px]">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-semibold">{r.developer_name}</h3>
+                      <h3 className="font-semibold text-black">{r.developer_name}</h3>
                       <StatusPill value={r.status} options={STATUS_DEV} />
-                      {r.agency_code && <span className="text-xs text-gray-500">Code: {r.agency_code}</span>}
+                      {r.agency_code && <span className="text-xs text-gray-700">Code: {r.agency_code}</span>}
                       {r.expiry_date && <span className="text-xs text-amber-700">Expires {r.expiry_date}</span>}
+                      {r.outreach_count > 0 && <span className="text-xs text-emerald-700">Sent {r.outreach_count}×</span>}
                     </div>
-                    {r.developer_contact?.name && (
-                      <div className="text-xs text-gray-600 mt-1">Contact: {r.developer_contact.name} {r.developer_contact.email && `· ${r.developer_contact.email}`}</div>
+                    {r.developer_email && (
+                      <div className="text-xs text-gray-700 mt-1 flex items-center gap-1"><Mail className="w-3 h-3" />{r.developer_email}</div>
                     )}
                     {r.ai_next_action && (
                       <div className="mt-2 p-2 bg-purple-50 border border-purple-200 rounded text-xs">
@@ -472,7 +576,10 @@ const DeveloperRegistryTab = () => {
                       </div>
                     )}
                   </div>
-                  <div className="flex gap-1.5">
+                  <div className="flex gap-1.5 flex-wrap">
+                    <Button size="sm" className="bg-black text-white hover:bg-gray-800" onClick={() => sendOne(r)} disabled={sendRegistration.isPending}>
+                      <Send className="w-3 h-3 mr-1" />Send Registration
+                    </Button>
                     <Button size="sm" variant="outline" onClick={() => aiRecommend("developer_registry", r.id, refetch)}><Sparkles className="w-3 h-3 mr-1" />AI</Button>
                     <Button size="sm" variant="outline" onClick={() => quickReminder(r)}><Bell className="w-3 h-3 mr-1" />Remind</Button>
                     <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
@@ -501,6 +608,8 @@ const DeveloperRegistryTab = () => {
                 <Field label="Commission tier"><Input value={editing.commission_tier || ""} onChange={(e) => setEditing({ ...editing, commission_tier: e.target.value })} placeholder="e.g. Gold 4%" /></Field>
                 <Field label="Registration date"><Input type="date" value={editing.registration_date || ""} onChange={(e) => setEditing({ ...editing, registration_date: e.target.value || null })} /></Field>
                 <Field label="Expiry date"><Input type="date" value={editing.expiry_date || ""} onChange={(e) => setEditing({ ...editing, expiry_date: e.target.value || null })} /></Field>
+                <Field label="Registration email (for outreach)"><Input type="email" placeholder="brokers@developer.ae" value={editing.developer_email || ""} onChange={(e) => setEditing({ ...editing, developer_email: e.target.value })} /></Field>
+                <Field label="Registration URL"><Input placeholder="https://…" value={editing.registration_url || ""} onChange={(e) => setEditing({ ...editing, registration_url: e.target.value })} /></Field>
               </div>
               <div className="border-t pt-3"><div className="text-sm font-semibold mb-2">My Contact at Developer</div>
                 <div className="grid grid-cols-2 gap-3">
@@ -540,23 +649,28 @@ const CRMRelationships = () => {
   return (
     <>
       <SEOHead title="CRM Relationships | JBJ Global" description="Manage brokerages, clients and developer registrations" canonicalPath="/crm/relationships" />
-      <div className="min-h-screen bg-white">
-        <div className="max-w-7xl mx-auto p-4 md:p-6 pt-[100px]">
-          <div className="flex items-center gap-3 mb-6">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/owner/crm")}>
-              <ArrowLeft className="w-4 h-4 mr-1" />Back to CRM
+      <div className="min-h-screen bg-[#FAF7F2]">
+        <div className="w-full px-6 md:px-10 pt-[112px] pb-12">
+          <div className="flex justify-center mb-6">
+            <Button
+              variant="outline"
+              onClick={() => navigate("/owner/crm")}
+              className="h-11 px-6 bg-white border-2 border-black/10 text-black hover:bg-white hover:border-black/30 rounded-full font-semibold"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />Back to CRM Hub
             </Button>
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold">Relationships Hub</h1>
-              <p className="text-sm text-gray-600">Brokerages, clients, and developer registrations — all in one place.</p>
-            </div>
+          </div>
+
+          <div className="text-center mb-8 pb-6 border-b border-black/10">
+            <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">Relationships Hub</h1>
+            <p className="text-sm text-gray-700 mt-2">Brokerages · Clients · Developer Registrations — all in one premium workspace.</p>
           </div>
 
           <Tabs value={tab} onValueChange={setTab}>
-            <TabsList className="mb-4">
-              <TabsTrigger value="brokerages"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
-              <TabsTrigger value="clients"><Users className="w-4 h-4 mr-2" />Clients</TabsTrigger>
-              <TabsTrigger value="developers"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
+            <TabsList className="mb-6 bg-white border border-black/10 p-1 rounded-xl">
+              <TabsTrigger value="brokerages" className="data-[state=active]:bg-black data-[state=active]:text-white text-black rounded-lg px-5"><Building2 className="w-4 h-4 mr-2" />Brokerages</TabsTrigger>
+              <TabsTrigger value="clients" className="data-[state=active]:bg-black data-[state=active]:text-white text-black rounded-lg px-5"><Users className="w-4 h-4 mr-2" />Clients</TabsTrigger>
+              <TabsTrigger value="developers" className="data-[state=active]:bg-black data-[state=active]:text-white text-black rounded-lg px-5"><FileSignature className="w-4 h-4 mr-2" />Developer Registry</TabsTrigger>
             </TabsList>
             <TabsContent value="brokerages"><BrokeragesTab /></TabsContent>
             <TabsContent value="clients"><ClientsTab /></TabsContent>

@@ -1,71 +1,114 @@
-# CRM Relationship Hubs — Brokerages · Clients · Developer Registrations
+## Relationships Hub v2 — Premium restyle, full UAE developer list, one-click registration emailer
 
-Add three new owner-only sections inside the CRM (`/crm`) for managing the relationships you maintain as a developer/operator: brokerage partners, end clients, and developer registrations. Each hub has full CRUD, status tracking, contact persons, notes, AI recommendations, and calendar-linked alerts. The Developers section is pre-seeded with every major UAE developer so you can mark each one as Registered / Pending / Documents Required / Not Registered.
+You reported five problems on `/owner/crm/relationships`. This plan fixes all of them and adds the developer outreach automation you asked for.
 
-## What you'll get
+---
 
-### 1. Brokerages Hub (`/crm/brokerages`)
-- Add brokerage company → fields: company name, license #, office location, website, primary contact person (name/role/email/phone/WhatsApp), secondary contact, status (Active partner · Negotiating · Closed deals · Dormant · Blacklisted), deal count, last interaction, notes timeline, documents, tags.
-- Kanban + table views, status filters, search.
-- AI panel per brokerage: "Reach out — no contact in 21 days", "Follow up on Project X proposal", suggested next action, draft message.
-- Calendar reminders ("Call Maria at XYZ Realty on Friday") sync into existing CRM calendar.
+### 1. Visual fixes (premium look)
 
-### 2. Clients Hub (`/crm/clients`)
-- Add client → individual or company, contact details, nationality, budget, interests (project/community/unit type), source, assigned broker, deal stage, lifetime value, notes, attachments.
-- Same status pipeline + AI recommendations ("VIP — birthday next week", "Hasn't replied in 14 days, send WhatsApp").
-- Linked to existing leads: option to convert a CRM lead → client.
+**Problems:**
+- Hover on brokerage cards shows white text on white background (unreadable).
+- Page is constrained inside a white box that leaves a strip touching the header.
+- Header strip and side gutters look disconnected from the rest of the app.
+- "Back to CRM" button is squished against the title and looks like an afterthought.
 
-### 3. Developer Registrations Hub (`/crm/developer-registry`)
-- **Pre-seeded** with all major UAE developers (Emaar, DAMAC, Nakheel, Meraas, Sobha, Aldar, Dubai Properties, Select Group, Ellington, Danube, Azizi, Binghatti, MAG, Deyaar, Omniyat, Tiger, Samana, Object 1, Reportage, Imtiaz, Arada, Bloom, Eagle Hills, Iman, Mira, Beyond, Imkan, Wasl, Meydan, Dubai South, Diamondz, ORO24, Sankari, etc. — full UAE list ~60 developers).
-- Each row shows registration status: **Registered · Pending Application · Documents Required · Under Review · Rejected · Not Started**.
-- Fields per developer: my company contact at the developer (name/email/phone), registration date, expiry date, broker code/agency ID, commission tier, required documents checklist (Trade License, MOU, NOC, etc.), uploaded files, internal notes.
-- Filter chips: "Show only Registered", "Pending Documents", "Expiring soon".
-- AI alerts: "Trade license expires in 30 days", "Renew MOU with Emaar", "5 developers awaiting your reply".
+**Fixes:**
+- Page background switches from `bg-white` to **creamy ivory** (`bg-[#FAF7F2]`) edge-to-edge — same warm tone used elsewhere in the executive area. No more white-on-white.
+- Remove the narrow `max-w-7xl` container so the hub spans full width with proper `px-6 md:px-10` gutters that align with the 88px L-shaped frame.
+- Cards become solid white on the cream background with a subtle border (`border-black/5`), `rounded-2xl`, soft shadow on hover, and **explicit `text-black`** on every interactive surface to kill the white-on-white hover bug.
+- All status pills repainted with the institutional palette (emerald / amber / blue / red / zinc / orange) and forced black text where contrast would otherwise fail.
+- "Back to CRM" becomes a centered, larger pill button (`h-11`, `px-6`, gap-4 from title), placed in its own row above the title — matches the rest of the founder dashboard.
+- Tabs restyled as the project-standard segmented control (high-contrast active state on light surface).
+- Subtle champagne hairline divider under the title row.
 
-## AI & automation (shared across all three hubs)
+---
 
-- **Smart reminders engine**: nightly edge function scans each record and creates calendar events + dashboard alerts for: stale relationships, expiring documents, missed follow-ups, birthdays/anniversaries.
-- **Recommendation card** on every detail page powered by Lovable AI (`google/gemini-2.5-flash`) — no API key needed.
-- **Auto-draft outreach** button: generates WhatsApp/Email message in your tone.
-- Reminders surface in existing CRM Calendar, Notes, and the Smart Notifications bell.
+### 2. Complete UAE developer list (~80, no exceptions)
 
-## Test export safeguard
+The seed currently loads ~60. We expand the canonical list to **every active UAE developer** and pre-fill each one with a registration email address.
 
-You asked it to "always save under test the export." Every section will have an **Export** button (CSV + branded PDF) and the generated file will be saved to `/mnt/documents/` so you can preview/download from the Files panel. PDFs use the existing institutional letterhead engine.
+**Added to the seed (in addition to existing):** Ellington, Meraas, Meydan, Wasl, Aldar, Bloom, Imkan, Modon, Eagle Hills, Sweid & Sweid, Iman Developers, Mira, Beyond by Omniyat, Sankari, ORO24, Diamondz by Danube, Object 1, Mered, London Gate, Pure Gold, Reportage, Rijas, Roya Lifestyle, Burtville, Sol Properties, ANAX Developments, Q Properties, Octa Properties, Symbolic, Peace Homes, Esnaad, Vincitore, Riviera Group, Range Developments, Skyline Builders, Acube Developments, plus the existing 60. Final list ~80 names.
 
-## Technical details
+**New columns on `crm_developer_registry`:** `developer_email text`, `registration_url text`, `last_outreach_at timestamptz`, `outreach_count integer default 0`. Seed pre-fills `developer_email` from a curated mapping (broker-relations / agent-onboarding inboxes where publicly known; left blank with a flag where not).
 
-**New tables (with RLS = owner only):**
-- `crm_brokerages` — company info + status + JSON contacts array
-- `crm_brokerage_notes` — timeline notes
-- `crm_clients` — client master record
-- `crm_client_notes`
-- `crm_developer_registry` — one row per UAE developer, status + my contact + docs checklist
-- `crm_relationship_reminders` — unified reminders feeding the calendar
-- All tables: `owner_id uuid`, `created_at`, `updated_at`, `ai_summary text`, `ai_next_action text`.
+A **"Refresh UAE list"** button re-runs the seed safely (idempotent — `INSERT … ON CONFLICT (owner_id, developer_slug) DO NOTHING`) so existing rows keep your statuses.
 
-**Pre-seed migration:** seeds `crm_developer_registry` with ~60 UAE developers (sourced from the existing `uae_developers` table + an authoritative supplemental list), each starting at status = `not_started` and linked by name to your `developers` / `uae_developers` table where matches exist.
+---
 
-**New routes & files:**
-- `src/pages/crm/CRMBrokerages.tsx`, `CRMBrokerageDetail.tsx`
-- `src/pages/crm/CRMClients.tsx`, `CRMClientDetail.tsx`
-- `src/pages/crm/CRMDeveloperRegistry.tsx`, `CRMDeveloperRegistryDetail.tsx`
-- `src/components/crm/relationships/` — shared StatusBadge, ContactCard, AIRecommendationPanel, RemindersPanel, DocumentsChecklist, ExportButton.
-- New tabs added to `src/pages/CRM.tsx` top nav: **Brokerages · Clients · Developer Registry** (alongside existing Leads/Pipeline/etc.).
+### 3. One-click registration emailer (Google Drive document pack)
 
-**Edge functions:**
-- `crm-relationship-ai` — generates recommendations + draft messages (Lovable AI gateway).
-- `crm-relationship-reminders-cron` — nightly scan, creates calendar events + alerts.
+A new **"Document Pack" panel** at the top of the Developer Registry tab:
 
-**Reused:**
-- Existing `CRMCalendar`, `Smart Notifications`, `generate-crm-report` (PDF), `ActivityTimeline`, monochrome design tokens, OwnerGuard auth.
+- One input: **Google Drive folder/file link** (saved per owner in a new `crm_owner_settings` table — paste once, reuse forever).
+- One input: **From signature block** (defaults to your name + `contact@jbj.ae`).
+- A toggle: "**CC `info.jane@thegmail.com`**" (on by default).
 
-**Security:** Owner-only via `requireOwnerAuth` + RLS policies using `has_role(auth.uid(), 'admin')`. All contact PII follows the existing CRM Data Protection standard (encrypted at rest, audit-logged).
+Per developer row, a new **"Send Registration"** button:
+1. Calls a new edge function `crm-send-developer-registration`.
+2. Edge function looks up the developer's pre-filled email (or any email you typed in the row's Edit dialog).
+3. Sends a branded email via Resend (already wired in the project) with:
+   - **Subject:** "Broker Registration Request — JBJ Global Real Estate"
+   - **Body:** Professional intro, JBJ company details, RERA/trade licence summary, and the Google Drive link as a prominent button.
+   - **Reply-To:** `contact@jbj.ae` (so all responses go to your shared inbox).
+   - **CC:** `info.jane@thegmail.com` (when toggle on).
+   - Footer line: *"For any questions please reply to contact@jbj.ae and CC info.jane@thegmail.com so our team can assist you further."*
+4. On success: bumps `outreach_count`, sets `last_outreach_at`, sets status to `pending_application` if currently `not_started`, logs the send to `email_send_log`, and shows a green toast.
+5. Adds an "AI draft" toggle: if on, Gemini personalises the opening line per developer brand before sending.
 
-## Out of scope (for this round)
+**Bulk action:** "Send to all not-yet-registered" button at the top — fires the same function once per row with rate limiting (1 email / 800 ms) and shows a live progress toast.
 
-- Two-way sync with developer portals (manual status updates only).
-- Automated email/WhatsApp sending (we draft only — you click send).
-- Payment/commission tracking (existing commission module remains separate).
+---
+
+### 4. More automation (scheduled + smart)
+
+**New nightly cron (`crm-relationship-cron`):** runs at 02:00 UAE time, scans every developer/brokerage/client and auto-creates `crm_relationship_reminders` rows for:
+- Document expiring in ≤30 days.
+- No outreach in ≥45 days for non-registered developers.
+- Brokerage with no interaction ≥30 days.
+- Client birthday in ≤7 days.
+- Stale `pending_application` ≥14 days → "Follow up — application pending too long".
+
+Reminders surface in the existing CRM Calendar bell + a new **Automation panel** at the top of the hub showing today's auto-generated tasks with one-click "Done / Snooze 7 days".
+
+**Quick-action menu** on every row: "Send Registration · AI Draft Email · Schedule Follow-up · Mark Registered · Add Document".
+
+---
+
+### 5. Inline status editor
+
+Status badges become **clickable** — opens a small popover with the status options. No more opening the full Edit dialog just to flip a status. Same pattern across all three tabs.
+
+---
+
+### Technical work
+
+**Database migration:**
+- Add columns: `crm_developer_registry.developer_email`, `registration_url`, `last_outreach_at`, `outreach_count`.
+- New table `crm_owner_settings` (owner_id PK, `drive_doc_pack_url`, `signature_html`, `cc_jane_enabled`, `from_email`).
+- Update `seed_crm_developer_registry()` function to insert the full ~80 developer list with pre-filled emails and become safely re-runnable.
+
+**New edge function `crm-send-developer-registration`:**
+- Validates owner auth via `requireOwnerAuth`.
+- Loads developer + owner settings.
+- Sends through Resend with `from = JBJ Global <contact@jbj.ae>`, `replyTo = contact@jbj.ae`, optional CC to `info.jane@thegmail.com`.
+- Logs to `email_send_log` and updates the registry row.
+- Returns structured success/failure for the toast.
+
+**New edge function `crm-relationship-cron`:** scheduled nightly via pg_cron, generates the auto-reminders described above.
+
+**Frontend:**
+- Restyle `src/pages/CRMRelationships.tsx` with the cream background, full-width layout, repositioned back button, fixed hover contrast, premium cards.
+- Add `DocumentPackPanel`, `SendRegistrationButton`, `BulkRegistrationButton`, `InlineStatusEditor`, `AutomationPanel` components.
+- Extend `useCRMRelationships.ts` with `useOwnerSettings`, `useSendRegistration`, `useBulkSendRegistration`.
+
+**Reused (no rewrite):** Resend integration, OwnerGuard, audit-log helpers, monochrome design tokens, existing brand palette, AI gateway (`google/gemini-2.5-flash`).
+
+---
+
+### Out of scope
+
+- Reading replies from `contact@jbj.ae` back into the CRM (separate inbox sync feature already on the roadmap).
+- Auto-uploading the Google Drive folder contents — we only embed the link you paste.
+- Per-developer custom email templates — one premium template, optionally AI-personalised opening line.
 
 Approve to build.
