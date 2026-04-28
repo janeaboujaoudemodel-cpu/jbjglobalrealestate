@@ -94,6 +94,7 @@ export const OwnerRoutes = () => (
     <Route path="crm/notes" element={<CRMNotes />} />
     <Route path="crm/reminders" element={<CRMReminders />} />
     <Route path="crm/employees" element={<CRMEmployees />} />
+    <Route path="crm/relationships" element={<CRMRelationships />} />
     <Route path="admin" element={<Admin />} />
     <Route path="admin/leads" element={<AdminLeads />} />
     <Route path="marketing-hub" element={<MarketingHub />} />
