@@ -186,17 +186,87 @@ export const useQuickStatusUpdate = () => {
   });
 };
 
+export type RegistrationVariant = "developer_registration" | "developer_confirm_registered";
+
 export const useSendDeveloperRegistration = () => {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (vars: { developerId: string; overrideEmail?: string; overrideMessage?: string; fromEmailOverride?: string; ccEmailOverride?: string }) => {
-      const { data, error } = await supabase.functions.invoke("crm-send-developer-registration", { body: vars });
+    mutationFn: async (vars: {
+      developerId?: string;
+      variant?: RegistrationVariant;
+      testRecipient?: string;
+      testDeveloperName?: string;
+      overrideEmail?: string;
+      fromEmailOverride?: string;
+      ccEmailOverride?: string;
+      silent?: boolean; // suppress per-row toast in bulk loops
+    }) => {
+      const { silent, ...payload } = vars;
+      const { data, error } = await supabase.functions.invoke("crm-send-developer-registration", { body: payload });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
+      return { ...data, silent };
+    },
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
+      if (!data?.silent) {
+        toast.success(data?.test ? `Test email sent to ${data.recipient}` : `Email sent to ${data.recipient}`);
+      }
+    },
+    onError: (e: any) => toast.error(e.message || "Send failed"),
+  });
+};
+
+/* ---------- Email Templates (locked branded HTML) ---------- */
+export const useEmailTemplate = (variant: RegistrationVariant) =>
+  useQuery({
+    queryKey: ["crm-email-template", variant],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("crm_email_templates").select("*").eq("variant", variant).maybeSingle();
+      if (error) throw error;
       return data;
     },
-    onSuccess: (data) => { qc.invalidateQueries({ queryKey: ["crm-dev-registry"] }); toast.success(`Email sent to ${data.recipient}`); },
-    onError: (e: any) => toast.error(e.message || "Send failed"),
+  });
+
+export const useUpsertEmailTemplate = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (vars: { variant: RegistrationVariant; subject: string; html: string }) => {
+      const { data, error } = await supabase
+        .from("crm_email_templates")
+        .update({ subject: vars.subject, html: vars.html })
+        .eq("variant", vars.variant)
+        .is("locked_at", null)
+        .select().maybeSingle();
+      if (error) throw error;
+      if (!data) throw new Error("Template is locked. Unlock to edit.");
+      return data;
+    },
+    onSuccess: (_d, v) => {
+      qc.invalidateQueries({ queryKey: ["crm-email-template", v.variant] });
+      toast.success("Template saved");
+    },
+    onError: (e: any) => toast.error(e.message || "Save failed"),
+  });
+};
+
+export const useLockEmailTemplate = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (variant: RegistrationVariant) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      const { error } = await supabase
+        .from("crm_email_templates")
+        .update({ locked_at: new Date().toISOString(), locked_by: user?.id })
+        .eq("variant", variant);
+      if (error) throw error;
+    },
+    onSuccess: (_d, variant) => {
+      qc.invalidateQueries({ queryKey: ["crm-email-template", variant] });
+      toast.success("Template locked. It can no longer be edited.");
+    },
+    onError: (e: any) => toast.error(e.message || "Lock failed"),
   });
 };
 
