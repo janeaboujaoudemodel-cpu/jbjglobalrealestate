@@ -529,6 +529,9 @@ const DeveloperRegistryTab = () => {
         <Button variant="outline" onClick={() => seed.mutate()} disabled={seed.isPending}>
           {seed.isPending ? "Seeding…" : "Pre-fill UAE Developers"}
         </Button>
+        <Button variant="outline" onClick={bulkSend} disabled={bulkRunning}>
+          <Send className="w-4 h-4 mr-2" />{bulkRunning ? "Sending…" : "Bulk Send Registration"}
+        </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add Developer</Button>
       </div>
 
@@ -557,13 +560,14 @@ const DeveloperRegistryTab = () => {
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex-1 min-w-[200px]">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-semibold">{r.developer_name}</h3>
+                      <h3 className="font-semibold text-black">{r.developer_name}</h3>
                       <StatusPill value={r.status} options={STATUS_DEV} />
-                      {r.agency_code && <span className="text-xs text-gray-500">Code: {r.agency_code}</span>}
+                      {r.agency_code && <span className="text-xs text-gray-700">Code: {r.agency_code}</span>}
                       {r.expiry_date && <span className="text-xs text-amber-700">Expires {r.expiry_date}</span>}
+                      {r.outreach_count > 0 && <span className="text-xs text-emerald-700">Sent {r.outreach_count}×</span>}
                     </div>
-                    {r.developer_contact?.name && (
-                      <div className="text-xs text-gray-600 mt-1">Contact: {r.developer_contact.name} {r.developer_contact.email && `· ${r.developer_contact.email}`}</div>
+                    {r.developer_email && (
+                      <div className="text-xs text-gray-700 mt-1 flex items-center gap-1"><Mail className="w-3 h-3" />{r.developer_email}</div>
                     )}
                     {r.ai_next_action && (
                       <div className="mt-2 p-2 bg-purple-50 border border-purple-200 rounded text-xs">
@@ -572,7 +576,10 @@ const DeveloperRegistryTab = () => {
                       </div>
                     )}
                   </div>
-                  <div className="flex gap-1.5">
+                  <div className="flex gap-1.5 flex-wrap">
+                    <Button size="sm" className="bg-black text-white hover:bg-gray-800" onClick={() => sendOne(r)} disabled={sendRegistration.isPending}>
+                      <Send className="w-3 h-3 mr-1" />Send Registration
+                    </Button>
                     <Button size="sm" variant="outline" onClick={() => aiRecommend("developer_registry", r.id, refetch)}><Sparkles className="w-3 h-3 mr-1" />AI</Button>
                     <Button size="sm" variant="outline" onClick={() => quickReminder(r)}><Bell className="w-3 h-3 mr-1" />Remind</Button>
                     <Button size="sm" variant="outline" onClick={() => openEdit(r)}>Edit</Button>
