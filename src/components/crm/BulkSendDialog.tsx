@@ -121,7 +121,7 @@ export const BulkSendDialog = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="grid gap-4 lg:grid-cols-[380px_1fr]"><div className="space-y-4">
           {/* Variant */}
           <div>
             <Label className="text-xs text-black">Email variant</Label>
@@ -142,7 +142,8 @@ export const BulkSendDialog = ({
             </div>
           </div>
 
-          {/* Email Preview */}
+          </div>
+          {/* Email Preview - right column */}
           <div className="border border-black/10 rounded-xl bg-white">
             <div className="flex items-center justify-between px-3 py-2 border-b border-black/10 bg-[#FAF5EA]">
               <div className="flex items-center gap-2 text-xs text-black">
@@ -176,7 +177,7 @@ export const BulkSendDialog = ({
                   title="email-preview"
                   srcDoc={previewHtml}
                   sandbox=""
-                  className="w-full h-[360px] bg-white rounded-b-xl"
+                  className="w-full h-[560px] bg-white rounded-b-xl"
                 />
               </>
             )}
