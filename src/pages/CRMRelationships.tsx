@@ -695,21 +695,21 @@ const CRMRelationships = () => {
   return (
     <>
       <SEOHead title="CRM Relationships | JBJ Global" description="Manage brokerages, clients and developer registrations" canonicalPath="/crm/relationships" />
-      <div className="min-h-screen bg-[#FAF7F2]">
-        <div className="w-full px-6 md:px-10 pt-[112px] pb-12">
-          <div className="flex justify-center mb-6">
+      <div className="min-h-screen bg-[#FAF7F2] w-full">
+        <div className="w-full px-4 md:px-8 lg:px-12 pt-[112px] pb-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8 pb-6 border-b border-black/10">
             <Button
               variant="outline"
               onClick={() => navigate("/owner/crm")}
-              className="h-11 px-6 bg-white border-2 border-black/10 text-black hover:bg-white hover:border-black/30 rounded-full font-semibold"
+              className="h-11 px-6 bg-white border-2 border-black/10 text-black hover:bg-black hover:text-white hover:border-black rounded-full font-semibold shrink-0"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />Back to CRM Hub
             </Button>
-          </div>
-
-          <div className="text-center mb-8 pb-6 border-b border-black/10">
-            <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">Relationships Hub</h1>
-            <p className="text-sm text-gray-700 mt-2">Brokerages · Clients · Developer Registrations — all in one premium workspace.</p>
+            <div className="text-center flex-1">
+              <h1 className="text-3xl md:text-4xl font-bold text-black tracking-tight">Relationships Hub</h1>
+              <p className="text-sm text-gray-700 mt-2">Brokerages · Clients · Developer Registrations — all in one premium workspace.</p>
+            </div>
+            <div className="hidden md:block w-[180px]" aria-hidden />
           </div>
 
           <Tabs value={tab} onValueChange={setTab}>
