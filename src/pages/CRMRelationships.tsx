@@ -428,11 +428,26 @@ const DocumentPackPanel = () => {
         <div className="grid gap-3 md:grid-cols-2">
           <div className="md:col-span-2">
             <Label className="text-xs text-black mb-1 block">Google Drive document pack URL *</Label>
-            <Input
-              placeholder="https://drive.google.com/drive/folders/..."
-              value={s.drive_doc_pack_url || ""}
-              onChange={(e) => update({ drive_doc_pack_url: e.target.value })}
-            />
+            <div className="flex gap-2">
+              <Input
+                placeholder="https://drive.google.com/drive/folders/..."
+                value={s.drive_doc_pack_url || ""}
+                onChange={(e) => update({ drive_doc_pack_url: e.target.value })}
+              />
+              {s.drive_doc_pack_url && /^https?:\/\//i.test(s.drive_doc_pack_url) ? (
+                <a
+                  href={s.drive_doc_pack_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-3 rounded-md border border-black/30 text-black text-sm hover:bg-black hover:text-white whitespace-nowrap"
+                >
+                  Open Pack ↗
+                </a>
+              ) : null}
+            </div>
+            {s.drive_doc_pack_url && !/^https?:\/\//i.test(s.drive_doc_pack_url) && (
+              <p className="text-xs text-red-600 mt-1">Paste a full https://drive.google.com/… link.</p>
+            )}
           </div>
           <div>
             <Label className="text-xs text-black mb-1 block">From name</Label>
