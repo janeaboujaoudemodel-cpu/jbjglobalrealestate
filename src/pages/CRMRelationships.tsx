@@ -24,35 +24,35 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const STATUS_BROKERAGE = [
-  { v: "prospect", label: "Prospect", cls: "bg-gray-100 text-gray-800" },
-  { v: "negotiating", label: "Negotiating", cls: "bg-amber-100 text-amber-800" },
-  { v: "active_partner", label: "Active Partner", cls: "bg-emerald-100 text-emerald-800" },
-  { v: "closed_deals", label: "Closed Deals", cls: "bg-blue-100 text-blue-800" },
-  { v: "dormant", label: "Dormant", cls: "bg-zinc-100 text-zinc-700" },
-  { v: "blacklisted", label: "Blacklisted", cls: "bg-red-100 text-red-800" },
+  { v: "prospect", label: "Prospect", cls: "bg-gray-200 text-black" },
+  { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-black" },
+  { v: "active_partner", label: "Active Partner", cls: "bg-emerald-200 text-black" },
+  { v: "closed_deals", label: "Closed Deals", cls: "bg-blue-200 text-black" },
+  { v: "dormant", label: "Dormant", cls: "bg-zinc-200 text-black" },
+  { v: "blacklisted", label: "Blacklisted", cls: "bg-red-200 text-black" },
 ];
 const STATUS_CLIENT = [
-  { v: "lead", label: "Lead", cls: "bg-gray-100 text-gray-800" },
-  { v: "qualified", label: "Qualified", cls: "bg-blue-100 text-blue-800" },
-  { v: "negotiating", label: "Negotiating", cls: "bg-amber-100 text-amber-800" },
-  { v: "vip", label: "VIP", cls: "bg-purple-100 text-purple-800" },
-  { v: "closed_won", label: "Closed Won", cls: "bg-emerald-100 text-emerald-800" },
-  { v: "closed_lost", label: "Closed Lost", cls: "bg-red-100 text-red-800" },
-  { v: "dormant", label: "Dormant", cls: "bg-zinc-100 text-zinc-700" },
+  { v: "lead", label: "Lead", cls: "bg-gray-200 text-black" },
+  { v: "qualified", label: "Qualified", cls: "bg-blue-200 text-black" },
+  { v: "negotiating", label: "Negotiating", cls: "bg-amber-200 text-black" },
+  { v: "vip", label: "VIP", cls: "bg-purple-200 text-black" },
+  { v: "closed_won", label: "Closed Won", cls: "bg-emerald-200 text-black" },
+  { v: "closed_lost", label: "Closed Lost", cls: "bg-red-200 text-black" },
+  { v: "dormant", label: "Dormant", cls: "bg-zinc-200 text-black" },
 ];
 const STATUS_DEV = [
-  { v: "not_started", label: "Not Started", cls: "bg-gray-100 text-gray-800" },
-  { v: "pending_application", label: "Pending Application", cls: "bg-amber-100 text-amber-800" },
-  { v: "documents_required", label: "Documents Required", cls: "bg-orange-100 text-orange-800" },
-  { v: "under_review", label: "Under Review", cls: "bg-blue-100 text-blue-800" },
-  { v: "registered", label: "Registered", cls: "bg-emerald-100 text-emerald-800" },
-  { v: "rejected", label: "Rejected", cls: "bg-red-100 text-red-800" },
-  { v: "expired", label: "Expired", cls: "bg-zinc-200 text-zinc-800" },
+  { v: "not_started", label: "Not Started", cls: "bg-gray-200 text-black" },
+  { v: "pending_application", label: "Pending Application", cls: "bg-amber-200 text-black" },
+  { v: "documents_required", label: "Documents Required", cls: "bg-orange-200 text-black" },
+  { v: "under_review", label: "Under Review", cls: "bg-blue-200 text-black" },
+  { v: "registered", label: "Registered", cls: "bg-emerald-200 text-black" },
+  { v: "rejected", label: "Rejected", cls: "bg-red-200 text-black" },
+  { v: "expired", label: "Expired", cls: "bg-zinc-300 text-black" },
 ];
 
 const StatusPill = ({ value, options }: { value: string; options: typeof STATUS_BROKERAGE }) => {
   const o = options.find((s) => s.v === value) || options[0];
-  return <Badge className={`${o.cls} border-0 font-medium`}>{o.label}</Badge>;
+  return <Badge className={`${o.cls} border-0 font-semibold hover:${o.cls}`}>{o.label}</Badge>;
 };
 
 const exportCSV = (rows: any[], filename: string, columns: { key: string; label: string }[]) => {
