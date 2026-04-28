@@ -499,7 +499,11 @@ const DeveloperRegistryTab = () => {
   const { data: tplMain } = useEmailTemplate("developer_registration");
   const { data: ownerSettings } = useOwnerSettings();
 
-  const filtered = useMemo(() => data.filter((r: any) => {
+  // Split base data into pools: queue (never contacted) vs history (contacted or registered)
+  const queuePool = useMemo(() => data.filter((r: any) => !r.last_outreach_at && r.status !== "registered"), [data]);
+  const historyPool = useMemo(() => data.filter((r: any) => !!r.last_outreach_at || r.status === "registered"), [data]);
+
+  const filtered = useMemo(() => queuePool.filter((r: any) => {
     const matchesQ = !q || r.developer_name?.toLowerCase().includes(q.toLowerCase());
     const matchesS = statusFilter === "all" || r.status === statusFilter;
     const matchesE =
@@ -508,7 +512,7 @@ const DeveloperRegistryTab = () => {
       (emailFilter === "sent" && !!r.last_outreach_at && r.status !== "registered") ||
       (emailFilter === "registered" && r.status === "registered");
     return matchesQ && matchesS && matchesE;
-  }), [data, q, statusFilter, emailFilter]);
+  }), [queuePool, q, statusFilter, emailFilter]);
 
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
