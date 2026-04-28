@@ -276,7 +276,7 @@ export const useEmailDeliveryStatus = (recipientEmails: string[]) =>
     queryKey: ["crm-email-delivery", recipientEmails.sort().join(",")],
     enabled: recipientEmails.length > 0,
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("email_send_log")
         .select("recipient_email,status,template_name,created_at,error_message,message_id")
         .in("recipient_email", recipientEmails)
