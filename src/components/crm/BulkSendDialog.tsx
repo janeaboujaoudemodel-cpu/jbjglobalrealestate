@@ -142,9 +142,6 @@ export const BulkSendDialog = ({
             </div>
           </div>
 
-          </div>
-          {/* Email Preview - right column */}
-          <div className="border border-black/10 rounded-xl bg-white">
             <div className="flex items-center justify-between px-3 py-2 border-b border-black/10 bg-[#FAF5EA]">
               <div className="flex items-center gap-2 text-xs text-black">
                 <Eye className="w-4 h-4" /><strong>Email preview</strong>
