@@ -150,7 +150,7 @@ const BrokeragesTab = () => {
       ) : (
         <div className="grid gap-3">
           {filtered.map((r: any) => (
-            <Card key={r.id} className="hover:shadow-md transition">
+            <Card key={r.id} className="bg-white text-black border border-black/10 hover:shadow-lg hover:border-black/20 transition rounded-2xl">
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex-1 min-w-[240px]">
@@ -293,7 +293,7 @@ const ClientsTab = () => {
       ) : (
         <div className="grid gap-3">
           {filtered.map((r: any) => (
-            <Card key={r.id} className="hover:shadow-md transition">
+            <Card key={r.id} className="bg-white text-black border border-black/10 hover:shadow-lg hover:border-black/20 transition rounded-2xl">
               <CardContent className="p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex-1 min-w-[240px]">
@@ -454,7 +454,7 @@ const DeveloperRegistryTab = () => {
       ) : (
         <div className="grid gap-2">
           {filtered.map((r: any) => (
-            <Card key={r.id} className="hover:shadow-md transition">
+            <Card key={r.id} className="bg-white text-black border border-black/10 hover:shadow-lg hover:border-black/20 transition rounded-2xl">
               <CardContent className="p-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex-1 min-w-[200px]">
