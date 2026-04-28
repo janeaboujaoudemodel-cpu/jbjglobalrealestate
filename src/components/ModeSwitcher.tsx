@@ -289,7 +289,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
                         backgroundColor: 'rgba(255,255,255,0.6)',
                       }}
                     >
-                      {config.shortLabel}
+                      Select
                     </span>
                   )}
                 </DropdownMenuItem>
