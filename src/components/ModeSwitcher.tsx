@@ -171,7 +171,7 @@ export const ModeSwitcher = ({ variant = 'header', className, showForUnselected 
               <CurrentIcon className="w-4 h-4 shrink-0" style={{ color: '#FFFFFF' }} />
             )}
             <span
-              className="text-xs font-bold truncate hidden sm:block"
+              className="text-[10px] font-bold whitespace-nowrap leading-none hidden sm:block"
               style={{ color: '#FFFFFF' }}
             >
               {currentConfig.label}
