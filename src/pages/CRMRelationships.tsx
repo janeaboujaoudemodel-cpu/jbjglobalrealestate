@@ -729,8 +729,19 @@ const DeveloperRegistryTab = () => {
                         {r.developer_email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" />{r.developer_email}</span>}
                         <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{r.phone || "—"}</span>
                         <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{r.emirate || "—"}</span>
+                        {r.website && <a href={r.website} target="_blank" rel="noopener noreferrer" className="underline hover:text-black" onClick={(e) => e.stopPropagation()}>Website ↗</a>}
                         {r.agency_code && <span>Code: {r.agency_code}</span>}
                       </div>
+                      {(r.developer_contact?.name || r.developer_contact?.role || r.developer_contact?.phone || r.developer_contact?.email) ? (
+                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-black bg-amber-50 border border-amber-200 rounded px-2 py-1">
+                          <span className="font-semibold">👤 {r.developer_contact?.name || "Contact"}</span>
+                          {r.developer_contact?.role && <span className="text-gray-700">· {r.developer_contact.role}</span>}
+                          {r.developer_contact?.phone && <a href={`tel:${r.developer_contact.phone}`} className="underline" onClick={(e) => e.stopPropagation()}>{r.developer_contact.phone}</a>}
+                          {r.developer_contact?.email && <a href={`mailto:${r.developer_contact.email}`} className="underline" onClick={(e) => e.stopPropagation()}>✉ {r.developer_contact.email}</a>}
+                        </div>
+                      ) : (
+                        <button onClick={() => openEdit(r)} className="mt-1 text-[11px] text-gray-500 hover:text-black italic">+ Add contact person</button>
+                      )}
                       {noteEditing === r.id ? (
                         <div className="mt-2">
                           <Textarea
