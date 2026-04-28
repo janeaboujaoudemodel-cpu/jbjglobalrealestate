@@ -30,6 +30,7 @@ const CRMCalendar = lazy(() => import("@/pages/CRMCalendar"));
 const CRMNotes = lazy(() => import("@/pages/CRMNotes"));
 const CRMReminders = lazy(() => import("@/pages/CRMReminders"));
 const CRMEmployees = lazy(() => import("@/pages/CRMEmployees"));
+const CRMRelationships = lazy(() => import("@/pages/CRMRelationships"));
 const Admin = lazy(() => import("@/pages/Admin"));
 const AdminLeads = lazy(() => import("@/pages/AdminLeads"));
 const MarketingHub = lazy(() => import("@/pages/admin/MarketingHub"));
@@ -93,6 +94,7 @@ export const OwnerRoutes = () => (
     <Route path="crm/notes" element={<CRMNotes />} />
     <Route path="crm/reminders" element={<CRMReminders />} />
     <Route path="crm/employees" element={<CRMEmployees />} />
+    <Route path="crm/relationships" element={<CRMRelationships />} />
     <Route path="admin" element={<Admin />} />
     <Route path="admin/leads" element={<AdminLeads />} />
     <Route path="marketing-hub" element={<MarketingHub />} />

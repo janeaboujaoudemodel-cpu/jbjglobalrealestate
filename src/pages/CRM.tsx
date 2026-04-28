@@ -661,6 +661,10 @@ const CRM = () => {
                   <Users className="h-4 w-4 mr-1" />
                   Team
                 </Button>
+                <Button variant="ghost" size="sm" onClick={() => navigate("/owner/crm/relationships")} className="text-black hover:text-gold hover:bg-gold/10 text-xs font-semibold">
+                  <Briefcase className="h-4 w-4 mr-1" />
+                  Relationships
+                </Button>
                 {isCRMOwner && (
                   <Button variant="ghost" size="sm" onClick={() => navigate("/automations")} className="text-gold hover:text-black hover:bg-gold/20 text-xs font-semibold">
                     <Zap className="h-4 w-4 mr-1" />

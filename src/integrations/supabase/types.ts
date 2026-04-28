@@ -4907,6 +4907,104 @@ export type Database = {
         }
         Relationships: []
       }
+      crm_brokerage_notes: {
+        Row: {
+          author_id: string
+          body: string
+          brokerage_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          brokerage_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          brokerage_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_brokerage_notes_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_brokerages: {
+        Row: {
+          ai_generated_at: string | null
+          ai_next_action: string | null
+          ai_summary: string | null
+          company_name: string
+          created_at: string
+          deal_count: number
+          id: string
+          last_interaction_at: string | null
+          notes: string | null
+          office_location: string | null
+          owner_id: string
+          primary_contact: Json | null
+          rera_license: string | null
+          secondary_contact: Json | null
+          status: Database["public"]["Enums"]["crm_brokerage_status"]
+          tags: string[] | null
+          total_deal_value: number
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          ai_generated_at?: string | null
+          ai_next_action?: string | null
+          ai_summary?: string | null
+          company_name: string
+          created_at?: string
+          deal_count?: number
+          id?: string
+          last_interaction_at?: string | null
+          notes?: string | null
+          office_location?: string | null
+          owner_id: string
+          primary_contact?: Json | null
+          rera_license?: string | null
+          secondary_contact?: Json | null
+          status?: Database["public"]["Enums"]["crm_brokerage_status"]
+          tags?: string[] | null
+          total_deal_value?: number
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          ai_generated_at?: string | null
+          ai_next_action?: string | null
+          ai_summary?: string | null
+          company_name?: string
+          created_at?: string
+          deal_count?: number
+          id?: string
+          last_interaction_at?: string | null
+          notes?: string | null
+          office_location?: string | null
+          owner_id?: string
+          primary_contact?: Json | null
+          rera_license?: string | null
+          secondary_contact?: Json | null
+          status?: Database["public"]["Enums"]["crm_brokerage_status"]
+          tags?: string[] | null
+          total_deal_value?: number
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       crm_brokers: {
         Row: {
           created_at: string
@@ -5080,6 +5178,221 @@ export type Database = {
           sender_name?: string
         }
         Relationships: []
+      }
+      crm_client_notes: {
+        Row: {
+          author_id: string
+          body: string
+          client_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          client_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          client_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_client_notes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "crm_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_clients: {
+        Row: {
+          ai_generated_at: string | null
+          ai_next_action: string | null
+          ai_summary: string | null
+          assigned_broker: string | null
+          birthday: string | null
+          budget_max: number | null
+          budget_min: number | null
+          company_name: string | null
+          created_at: string
+          currency: string | null
+          email: string | null
+          full_name: string
+          id: string
+          interests: Json | null
+          is_company: boolean
+          last_interaction_at: string | null
+          lifetime_value: number
+          linked_lead_id: string | null
+          nationality: string | null
+          notes: string | null
+          owner_id: string
+          phone: string | null
+          preferred_language: string | null
+          source: string | null
+          status: Database["public"]["Enums"]["crm_client_status"]
+          tags: string[] | null
+          updated_at: string
+          whatsapp: string | null
+        }
+        Insert: {
+          ai_generated_at?: string | null
+          ai_next_action?: string | null
+          ai_summary?: string | null
+          assigned_broker?: string | null
+          birthday?: string | null
+          budget_max?: number | null
+          budget_min?: number | null
+          company_name?: string | null
+          created_at?: string
+          currency?: string | null
+          email?: string | null
+          full_name: string
+          id?: string
+          interests?: Json | null
+          is_company?: boolean
+          last_interaction_at?: string | null
+          lifetime_value?: number
+          linked_lead_id?: string | null
+          nationality?: string | null
+          notes?: string | null
+          owner_id: string
+          phone?: string | null
+          preferred_language?: string | null
+          source?: string | null
+          status?: Database["public"]["Enums"]["crm_client_status"]
+          tags?: string[] | null
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Update: {
+          ai_generated_at?: string | null
+          ai_next_action?: string | null
+          ai_summary?: string | null
+          assigned_broker?: string | null
+          birthday?: string | null
+          budget_max?: number | null
+          budget_min?: number | null
+          company_name?: string | null
+          created_at?: string
+          currency?: string | null
+          email?: string | null
+          full_name?: string
+          id?: string
+          interests?: Json | null
+          is_company?: boolean
+          last_interaction_at?: string | null
+          lifetime_value?: number
+          linked_lead_id?: string | null
+          nationality?: string | null
+          notes?: string | null
+          owner_id?: string
+          phone?: string | null
+          preferred_language?: string | null
+          source?: string | null
+          status?: Database["public"]["Enums"]["crm_client_status"]
+          tags?: string[] | null
+          updated_at?: string
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      crm_developer_registry: {
+        Row: {
+          agency_code: string | null
+          ai_generated_at: string | null
+          ai_next_action: string | null
+          ai_summary: string | null
+          commission_tier: string | null
+          created_at: string
+          developer_contact: Json | null
+          developer_name: string
+          developer_slug: string
+          documents: Json | null
+          expiry_date: string | null
+          id: string
+          last_interaction_at: string | null
+          notes: string | null
+          owner_id: string
+          priority: string | null
+          registration_date: string | null
+          required_docs_complete: boolean
+          status: Database["public"]["Enums"]["crm_dev_registration_status"]
+          tags: string[] | null
+          uae_developer_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          agency_code?: string | null
+          ai_generated_at?: string | null
+          ai_next_action?: string | null
+          ai_summary?: string | null
+          commission_tier?: string | null
+          created_at?: string
+          developer_contact?: Json | null
+          developer_name: string
+          developer_slug: string
+          documents?: Json | null
+          expiry_date?: string | null
+          id?: string
+          last_interaction_at?: string | null
+          notes?: string | null
+          owner_id: string
+          priority?: string | null
+          registration_date?: string | null
+          required_docs_complete?: boolean
+          status?: Database["public"]["Enums"]["crm_dev_registration_status"]
+          tags?: string[] | null
+          uae_developer_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          agency_code?: string | null
+          ai_generated_at?: string | null
+          ai_next_action?: string | null
+          ai_summary?: string | null
+          commission_tier?: string | null
+          created_at?: string
+          developer_contact?: Json | null
+          developer_name?: string
+          developer_slug?: string
+          documents?: Json | null
+          expiry_date?: string | null
+          id?: string
+          last_interaction_at?: string | null
+          notes?: string | null
+          owner_id?: string
+          priority?: string | null
+          registration_date?: string | null
+          required_docs_complete?: boolean
+          status?: Database["public"]["Enums"]["crm_dev_registration_status"]
+          tags?: string[] | null
+          uae_developer_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_developer_registry_uae_developer_id_fkey"
+            columns: ["uae_developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_developer_registry_uae_developer_id_fkey"
+            columns: ["uae_developer_id"]
+            isOneToOne: false
+            referencedRelation: "uae_developers_public"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       crm_email_campaigns: {
         Row: {
@@ -5894,6 +6207,76 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "crm_vip_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_relationship_reminders: {
+        Row: {
+          ai_generated: boolean
+          body: string | null
+          brokerage_id: string | null
+          client_id: string | null
+          created_at: string
+          dev_registry_id: string | null
+          due_at: string
+          id: string
+          is_done: boolean
+          kind: Database["public"]["Enums"]["crm_reminder_kind"]
+          owner_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          ai_generated?: boolean
+          body?: string | null
+          brokerage_id?: string | null
+          client_id?: string | null
+          created_at?: string
+          dev_registry_id?: string | null
+          due_at: string
+          id?: string
+          is_done?: boolean
+          kind?: Database["public"]["Enums"]["crm_reminder_kind"]
+          owner_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          ai_generated?: boolean
+          body?: string | null
+          brokerage_id?: string | null
+          client_id?: string | null
+          created_at?: string
+          dev_registry_id?: string | null
+          due_at?: string
+          id?: string
+          is_done?: boolean
+          kind?: Database["public"]["Enums"]["crm_reminder_kind"]
+          owner_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_relationship_reminders_brokerage_id_fkey"
+            columns: ["brokerage_id"]
+            isOneToOne: false
+            referencedRelation: "crm_brokerages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_relationship_reminders_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "crm_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_relationship_reminders_dev_registry_id_fkey"
+            columns: ["dev_registry_id"]
+            isOneToOne: false
+            referencedRelation: "crm_developer_registry"
             referencedColumns: ["id"]
           },
         ]
@@ -28142,6 +28525,10 @@ export type Database = {
         Args: { p_duration_ms?: number; p_function_name: string }
         Returns: undefined
       }
+      seed_crm_developer_registry: {
+        Args: { p_owner_id: string }
+        Returns: number
+      }
       set_founder_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       set_podcast_visibility: { Args: { p_enabled: boolean }; Returns: boolean }
       trigger_emergency_lockdown: {
@@ -28296,6 +28683,21 @@ export type Database = {
         | "meeting"
         | "import"
         | "assignment"
+      crm_brokerage_status:
+        | "active_partner"
+        | "negotiating"
+        | "closed_deals"
+        | "dormant"
+        | "blacklisted"
+        | "prospect"
+      crm_client_status:
+        | "lead"
+        | "qualified"
+        | "negotiating"
+        | "closed_won"
+        | "closed_lost"
+        | "vip"
+        | "dormant"
       crm_contact_type:
         | "client"
         | "broker"
@@ -28303,6 +28705,14 @@ export type Database = {
         | "investor"
         | "vendor"
         | "other"
+      crm_dev_registration_status:
+        | "not_started"
+        | "pending_application"
+        | "documents_required"
+        | "under_review"
+        | "registered"
+        | "rejected"
+        | "expired"
       crm_import_approval_status: "pending" | "approved" | "rejected"
       crm_import_source: "csv" | "vcf" | "manual"
       crm_lead_owner_type: "company_assigned" | "broker_owned"
@@ -28316,6 +28726,13 @@ export type Database = {
         | "closed_lost"
         | "no_answer"
         | "junk"
+      crm_reminder_kind:
+        | "follow_up"
+        | "document_expiry"
+        | "birthday"
+        | "meeting"
+        | "renewal"
+        | "custom"
       crm_role:
         | "owner_admin"
         | "broker_member"
@@ -28747,6 +29164,23 @@ export const Constants = {
         "import",
         "assignment",
       ],
+      crm_brokerage_status: [
+        "active_partner",
+        "negotiating",
+        "closed_deals",
+        "dormant",
+        "blacklisted",
+        "prospect",
+      ],
+      crm_client_status: [
+        "lead",
+        "qualified",
+        "negotiating",
+        "closed_won",
+        "closed_lost",
+        "vip",
+        "dormant",
+      ],
       crm_contact_type: [
         "client",
         "broker",
@@ -28754,6 +29188,15 @@ export const Constants = {
         "investor",
         "vendor",
         "other",
+      ],
+      crm_dev_registration_status: [
+        "not_started",
+        "pending_application",
+        "documents_required",
+        "under_review",
+        "registered",
+        "rejected",
+        "expired",
       ],
       crm_import_approval_status: ["pending", "approved", "rejected"],
       crm_import_source: ["csv", "vcf", "manual"],
@@ -28768,6 +29211,14 @@ export const Constants = {
         "closed_lost",
         "no_answer",
         "junk",
+      ],
+      crm_reminder_kind: [
+        "follow_up",
+        "document_expiry",
+        "birthday",
+        "meeting",
+        "renewal",
+        "custom",
       ],
       crm_role: [
         "owner_admin",
