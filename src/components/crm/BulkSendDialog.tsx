@@ -105,7 +105,7 @@ export const BulkSendDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(v) => !running && onOpenChange(v)}>
-      <DialogContent className="max-w-3xl bg-white max-h-[92vh] overflow-y-auto">
+      <DialogContent className="max-w-6xl w-[95vw] bg-white max-h-[92vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-black flex items-center gap-2">
             Send Registration Email
