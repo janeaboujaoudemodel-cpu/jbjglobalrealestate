@@ -16,7 +16,11 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-const OWNER_EMAILS = ["janeaboujaoudenails@gmail.com", "infoo.jane@gmail.com"];
+const OWNER_EMAILS = [
+  "janeaboujaoudenails@gmail.com",
+  "janeaboujaoudemodel@gmail.com",
+  "infoo.jane@gmail.com",
+];
 const GMAIL_GATEWAY = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
 
 interface Body {
