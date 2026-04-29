@@ -1,87 +1,77 @@
-# Global UI/UX Audit — Phased Fix Plan
+# Targeted UI Fix Plan — Screenshots + Global Audit
 
-## Why phased, not "fix everything in one shot"
-
-Your project memory has hard rules I must respect:
-- **No Removal Policy** — features and content cannot be deleted during restyling.
-- **White-on-Light Contrast Guard**, **CTA System**, **Monochrome Design Standard**, **Header/Sidebar Alignment v11 (locked)**, **Premium Price Orange**, **Footer Corporate Standard**, **AI Premium Purple** — these are locked design contracts.
-- The codebase has 3,330 lines of design tokens in `index.css` and dozens of locked feature standards.
-
-A single sweeping pass risks breaking locked standards and producing more regressions than it fixes. Instead, I'll execute the audit as **5 sequential, verifiable passes**, each scoped, each globally applied, each safe to ship on its own.
-
-You approve this plan once; I then execute Pass 1 → 5 in order, reporting after each.
+Scope is limited to the bugs visible in your screenshots and the *exact same patterns* repeated elsewhere. No redesign, no removed features, no new components.
 
 ---
 
-## Pass 1 — Text contrast & label wrapping (highest impact, lowest risk)
+## 1. Pending Tasks Modal (IMG_4411 / IMG_4412)
 
-Global, token-level fixes that propagate everywhere automatically.
+**Files:** `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx`, `src/components/notifications/UserTasksPopupAlert.tsx`
 
-1. **Badge / pill word-breaking** ("Sale-s", "Partn-er")
-   - Add `whitespace-nowrap` + `min-w-fit` to the base `badge.tsx` variants.
-   - Add a global `.no-break` utility and apply to tab triggers, chips, and stage labels.
-2. **Hover-disappearing text in sidebar & menus**
-   - Audit `--sidebar-accent-foreground` and `[data-state=active]` rules in `index.css`.
-   - Ensure every hover/active pair has explicit `foreground` set (no inherited white-on-light).
-3. **White-on-Light / Black-on-Black guard**
-   - The existing runtime guard already exists (memory: white-on-light-contrast-guard). Extend its static lint patterns to also catch `text-white` on `bg-background|bg-card|bg-popover|bg-muted` and `text-foreground` on `bg-foreground|bg-primary|bg-black`.
-4. **Disabled state legibility** — set `disabled:opacity-60` (not 30) globally on `button.tsx`.
+Bugs:
+- Subtitle ("Daily action items require attention") and body line ("You have N pending items…") render too faint on the white card — the `text-muted-foreground` token reads near-light-gray on `bg-card`.
+- The `bg-muted/40` body box is so pale it looks empty.
+- The "Later" button is barely visible (outline-on-white).
+- `UserTasksPopupAlert` has the same shape but uses a champagne gradient that worsens contrast and a hard-coded `text-gray-600` close button (basically invisible on the cream gradient).
 
-## Pass 2 — Button system normalization
-
-Single source of truth = `src/components/ui/button.tsx`.
-
-- **Primary**: `bg-foreground text-background` (already correct — verify no override classes leak).
-- **Secondary**: `bg-secondary text-secondary-foreground border border-border`.
-- **Accent (gold/champagne)**: ensure no text color is gold-on-gold (Memory: CTA System Standard already forbids gold text in buttons — re-verify after migration).
-- **Ghost & outline hover**: explicit `hover:bg-accent hover:text-accent-foreground`.
-- Run a repo grep for ad-hoc `<button className="bg-white text-white …">` style mistakes and fix in place.
-
-## Pass 3 — CRM / Relationships Hub tabs & modals
-
-Targeted to the actual broken pages.
-
-1. **Tabs missing labels (icon-only)** — locate the CRM hub, restore `<span>` labels next to icons; add `sr-only` fallback only if intentionally collapsed at a breakpoint.
-2. **"Brokerages / Leads & Clients / Developer Registry"** — verify all three tabs render, active state visible (`data-state=active` styling on `tabs.tsx`).
-3. **Add buttons looking disabled** — replace muted-on-muted with primary variant.
-4. **Pending Tasks modal** — restore visible content, button borders, close button. Investigate which Dialog instance is broken (likely missing `DialogFooter` styling or `bg-background` override).
-5. **Search field** — ensure `Input` uses `bg-background border-input text-foreground placeholder:text-muted-foreground`.
-
-## Pass 4 — Layout, sidebar hover, support widget, icons
-
-1. **Sidebar hover regression**
-   - Default: `text-sidebar-foreground` on `bg-sidebar`.
-   - Hover: `bg-sidebar-accent text-sidebar-accent-foreground` (light beige + dark text).
-   - Active: `bg-sidebar-primary text-sidebar-primary-foreground` (dark + white).
-   - Icons inherit `currentColor` — fixes black-on-black automatically.
-2. **Support chat bubble position** — locate the floating widget; adjust `bottom-*` offset so it sits below any floating action bar, still bottom-right, no overlap with the cookie banner / scroll-to-top.
-3. **Page width / centering** — audit pages that have giant right-side gutters: usually a missing `max-w-screen-2xl mx-auto` on the page-level wrapper. Apply consistently without breaking the locked 88px L-shaped frame.
-4. **Footer & developer logos** — verify `DeveloperLogo.tsx` white-padded standard (memory v7-locked) is still used; replace any faded `<img>` with the component.
-
-## Pass 5 — Metrics, charts, and final QA
-
-1. **Score / metrics color hierarchy** — apply the locked Data Visualization Standard:
-   - Positive: emerald, with ↑ icon
-   - Negative: red, with ↓ icon
-   - Neutral: muted-foreground, with — icon
-   - Touch dashboard tiles, market intelligence bars, CRM stats cards.
-2. **Market Dashboard chart bars** — pass `fill="hsl(var(--primary))"` + accent series colors instead of grey defaults.
-3. **Final QA sweep** — visually walk through: CRM, Relationships Hub, Dashboard, Market Intelligence, Careers, Join, Sidebar, Header filters, Cards, Modals, Forms. Report screenshots of any remaining issues for a follow-up pass.
+Fixes:
+- Bump body text from `text-muted-foreground` → `text-gray-700` and the count line span from `text-foreground` → keep but add `font-extrabold`.
+- Replace `bg-muted/40` body card with `bg-gray-50 border-gray-200`.
+- "Later" button: change from `variant="secondary"` → keep secondary but add explicit `border-gray-300 text-black` so it's always readable.
+- Close (X) button: from `text-muted-foreground` → `text-gray-600 hover:text-black` (real contrast on white).
+- `UserTasksPopupAlert`: drop the champagne gradient, switch to the same neutral white card so both modals match. Keep all functionality (ticket alerts, View Tasks, dismissal logic).
 
 ---
 
-## What I will NOT do
+## 2. Relationships Hub layout (IMG_4413 / IMG_4414 / IMG_4415)
 
-- Add new features, pages, components, or sections.
-- Delete any existing feature, button, link, or content (No Removal Policy).
-- Touch locked surfaces (Footer Corporate Standard, AI Premium Purple, Header/Sidebar v11) beyond the contrast/hover fixes specified above.
-- Change brand colors, typography family, or the L-shaped frame geometry.
-- Migrate to a different component library or restructure routes.
+**File:** `src/pages/CRMRelationships.tsx`
 
-## Deliverable per pass
+Bugs:
+- Header uses `flex-col md:flex-row items-center justify-between` with a centered title and a 180px spacer — produces the huge dead vertical band seen in IMG_4413 between the back button and the tabs.
+- Active tab pill shows only the icon at narrow widths because the row overflows; "Brokerages" text is clipped under the active black pill (visible in IMG_4414 vs IMG_4415).
+- "Add Brokerage" CTA appears washed out — actually it's a default primary button but it sits on the same `#FAF7F2` page surface and reads weak next to the bigger Export CSV outline. It needs the locked black/white treatment with proper weight.
+- "No brokerages yet" empty card is `text-gray-500` on white — too faint.
 
-After each pass I'll report: files touched, what was fixed, anything that turned out to be already-correct (false positive), and anything that needs your decision before continuing.
+Fixes:
+- Restructure header: keep `Back to CRM Hub` flush-left, title left-aligned (not centered) with subtitle directly underneath, single row, no 180px spacer. Removes the empty band.
+- Tabs: keep both triggers, add `min-w-fit` and ensure label is always rendered (no responsive hiding). Wrap `TabsList` in `overflow-x-auto` so on narrow screens the user scrolls instead of clipping.
+- "Add Brokerage": explicit `variant="primary"` plus `shadow-md` so it's the dominant CTA in the row.
+- Empty-state copy: `text-gray-700` (matches the contrast guard already in place).
+- Reduce top padding from `pt-[112px]` to `pt-[96px]` so content sits closer to the header (still respects the 88px frame standard).
 
 ---
 
-**Approve this plan to start Pass 1.** If you'd rather I jump straight to a specific pass first (e.g., "Pass 3 CRM modal is blocking me, do that first"), tell me which pass to lead with and I'll re-order.
+## 3. Global audit — same patterns to fix everywhere they appear
+
+Run a single sweep replacing repeat offenders, no behavior changes:
+
+| Pattern | Replace with |
+|---|---|
+| `text-muted-foreground` inside modal/dialog/popover bodies on light cards | `text-gray-700` |
+| `bg-muted/40` info boxes | `bg-gray-50 border border-gray-200` |
+| `text-gray-500` empty-state messages | `text-gray-700` |
+| Hard-coded `text-gray-600 hover:text-gray-600` (no hover delta) | `text-gray-600 hover:text-black` |
+| `variant="secondary"` ghost-on-white "Later/Cancel" buttons that disappear | add `border-gray-300 text-black` class override |
+
+Files I will touch (verified by grep, only where the offending pattern is on a light surface):
+- `src/components/owner-dashboard/OwnerTasksPopupAlert.tsx`
+- `src/components/notifications/UserTasksPopupAlert.tsx`
+- `src/pages/CRMRelationships.tsx`
+- `src/components/notifications/*` (other popup alerts that mirror the same shape)
+- `src/pages/AlertsDemo.tsx` (uses the same modal pattern)
+
+I will NOT change:
+- The contrast guard in `src/index.css` (it's already correct; I'll only adjust class usage in the components above).
+- The button variant system in `src/components/ui/button.tsx`.
+- Any backend, RLS, edge function, or routing.
+- Any feature, tab, or section will be removed.
+
+---
+
+## Out of scope (per "no new features" rule)
+
+- No new dashboards, no new metrics, no AI changes, no automation rewiring.
+- No theme/token changes — all fixes use existing tokens and Tailwind utilities.
+
+After approval I'll apply the changes in one pass and report exactly which files were edited.
