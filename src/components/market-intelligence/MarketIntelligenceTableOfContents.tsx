@@ -107,15 +107,15 @@ export const MarketIntelligenceTableOfContents = ({
             exit={{ opacity: 0, x: 20 }}
             className="absolute right-full mr-4 top-0 w-64 z-50"
           >
-            <div className="bg-gradient-to-br from-champagne-light via-champagne to-champagne-dark border border-gold/30 rounded-xl p-4 shadow-xl">
+            <div className="rounded-xl p-4 shadow-xl border" style={{ backgroundColor: '#FFFFFF', borderColor: '#E5E7EB' }}>
               <div className="flex items-start gap-3 mb-3">
-                <div className="w-8 h-8 bg-gold/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <HelpCircle className="w-4 h-4 text-gold" />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#000000' }}>
+                  <HelpCircle className="w-4 h-4" style={{ color: '#ffffff' }} />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-black text-sm mb-1">Quick Navigation</h4>
-                  <p className="text-gray-600 text-xs leading-relaxed">
-                    Click any section button to jump directly to that part of the page. The active section is highlighted in gold.
+                  <h4 className="font-semibold text-sm mb-1" style={{ color: '#000000' }}>Quick Navigation</h4>
+                  <p className="text-xs leading-relaxed" style={{ color: '#4B5563' }}>
+                    Click any section button to jump directly to that part of the page. The active section is highlighted.
                   </p>
                 </div>
               </div>
