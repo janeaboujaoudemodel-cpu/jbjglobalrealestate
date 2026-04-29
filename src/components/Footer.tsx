@@ -487,7 +487,7 @@ const Footer = () => {
       />
 
       {/* Top hairline — single restrained champagne accent */}
-      <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} />
+      <div className="h-px w-full" style={{ background: accentHairline }} aria-hidden="true" />
 
       {/* === ZONE 1 — Brand + utility row === */}
       <div className="px-4 sm:px-6 md:px-8 pt-10 pb-7">
@@ -546,8 +546,7 @@ const Footer = () => {
         <div
           className="max-w-7xl mx-auto h-px"
           style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(255,255,255,0.10) 20%, rgba(200,167,102,0.35) 50%, rgba(255,255,255,0.10) 80%, transparent)",
+            background: navHairline,
           }}
         />
       </div>
@@ -587,8 +586,7 @@ const Footer = () => {
         <div
           className="max-w-7xl mx-auto h-px"
           style={{
-            background:
-              "linear-gradient(90deg, transparent, rgba(255,255,255,0.10) 20%, rgba(200,167,102,0.35) 50%, rgba(255,255,255,0.10) 80%, transparent)",
+            background: navHairline,
           }}
         />
       </div>
@@ -649,7 +647,7 @@ const Footer = () => {
           </div>
 
           {/* Copyright + legal links — premium single row, bidi-safe */}
-          <div className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center" style={{ borderColor: HAIRLINE }}>
+          <div className="mt-6 pt-5 border-t flex flex-col sm:flex-row items-center justify-center gap-x-3 gap-y-2 text-center" style={{ borderColor: `rgba(255,255,255,${hairline.white})` }}>
             <span className="text-[11px] text-white/65 tracking-[0.08em]" dir="ltr">
               © {currentYear} <bdi className="font-medium text-white/85">JBJ Global Real Estate</bdi> · All Rights Reserved
             </span>
@@ -669,7 +667,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom hairline */}
-      <div className="h-px w-full" style={{ background: ACCENT_HAIRLINE }} />
+      <div className="h-px w-full" style={{ background: accentHairline }} aria-hidden="true" />
     </footer>
   );
 };
