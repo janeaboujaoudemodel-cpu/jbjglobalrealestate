@@ -105,12 +105,8 @@ const ProfileSummaryCard = () => {
         ) : (
           <>
             <div className="flex items-center gap-4">
-              <Avatar className="w-16 h-16 border-2 border-gold/40">
-                <AvatarImage src={photoUrl || ''} alt={displayName} />
-                <AvatarFallback className="bg-gold/10 text-gold text-xl font-bold">
-                  {getInitials(displayName)}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatarPremium size="lg" nameOverride={displayName} photoOverride={photoUrl} />
+
               <div className="flex-1 min-w-0">
                 <p className="text-lg font-semibold text-foreground truncate">{displayName}</p>
                 <div className="flex flex-wrap items-center gap-2 mt-1">
