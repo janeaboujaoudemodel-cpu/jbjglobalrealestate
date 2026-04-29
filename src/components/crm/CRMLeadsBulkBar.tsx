@@ -157,6 +157,108 @@ export default function CRMLeadsBulkBar({
     }
   };
 
+  const handleDuplicate = async () => {
+    if (count === 0) return;
+    if (!confirm(`Duplicate ${count} lead(s)?`)) return;
+    setBusy(true);
+    try {
+      const { data: src, error: srcErr } = await supabase
+        .from("crm_leads")
+        .select("*")
+        .in("id", selectedIds);
+      if (srcErr) {
+        toast.error(`Duplicate failed: ${srcErr.message}`);
+        return;
+      }
+      const clones = (src ?? []).map((row: any) => {
+        const { id, created_at, updated_at, deleted_at, ...rest } = row;
+        return {
+          ...rest,
+          full_name: `${rest.full_name ?? "Lead"} (copy)`,
+          owner_user_id: userId,
+        };
+      });
+      if (clones.length === 0) return;
+      const { error } = await supabase.from("crm_leads").insert(clones as any);
+      if (error) {
+        toast.error(`Duplicate failed: ${error.message}`);
+        return;
+      }
+      toast.success(`Duplicated ${clones.length} lead(s)`);
+      onClear();
+      onSuccess();
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleBroadcast = async () => {
+    if (!broadcastMessage.trim()) {
+      toast.error("Message is required");
+      return;
+    }
+    if (broadcastChannel === "email" && !broadcastSubject.trim()) {
+      toast.error("Email subject is required");
+      return;
+    }
+    setBusy(true);
+    try {
+      const { data: leads } = await supabase
+        .from("crm_leads")
+        .select("id, full_name, phone_e164, whatsapp_e164, email_lower")
+        .in("id", selectedIds);
+
+      let sent = 0;
+      let skipped = 0;
+
+      if (broadcastChannel === "whatsapp") {
+        // Open wa.me links in new tabs (browser blocks > ~5 popups; we batch the rest as a download)
+        for (const l of leads ?? []) {
+          const phone = (l.whatsapp_e164 || l.phone_e164 || "").replace(/[^0-9]/g, "");
+          if (!phone) { skipped++; continue; }
+          const personalised = broadcastMessage.replace(/\{name\}/gi, l.full_name || "");
+          window.open(
+            `https://wa.me/${phone}?text=${encodeURIComponent(personalised)}`,
+            "_blank",
+            "noopener,noreferrer",
+          );
+          sent++;
+        }
+      } else {
+        const recipients = (leads ?? [])
+          .map((l) => l.email_lower)
+          .filter(Boolean) as string[];
+        skipped = (leads?.length ?? 0) - recipients.length;
+        if (recipients.length) {
+          const mailto = `mailto:?bcc=${recipients.join(",")}&subject=${encodeURIComponent(
+            broadcastSubject,
+          )}&body=${encodeURIComponent(broadcastMessage)}`;
+          window.location.href = mailto;
+          sent = recipients.length;
+        }
+      }
+
+      // Log activity
+      await supabase.from("crm_activities").insert(
+        (leads ?? []).map((l) => ({
+          lead_id: l.id,
+          user_id: userId,
+          activity_type: broadcastChannel === "whatsapp" ? "whatsapp" : "email",
+          metadata: { bulk: true, subject: broadcastSubject || null },
+        })) as any,
+      );
+
+      toast.success(`Broadcast: ${sent} sent, ${skipped} skipped`);
+      setShowBroadcast(false);
+      setBroadcastMessage("");
+      setBroadcastSubject("");
+      onClear();
+      onSuccess();
+    } finally {
+      setBusy(false);
+    }
+  };
+
   if (count === 0) return null;
 
   return (
