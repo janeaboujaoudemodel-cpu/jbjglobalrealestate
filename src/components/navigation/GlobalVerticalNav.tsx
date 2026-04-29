@@ -920,9 +920,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                                 : "bg-white/80 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                             }`}
                           >
-                            <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold'}`} />
+                            <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold'}`} />
                             <span className="flex-1">{link.label}</span>
-                            <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold/60'}`} />
+                            <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold/60'}`} />
                           </Link>
                         );
                       })}
@@ -993,9 +993,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                           : "bg-white/70 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                       }`}
                     >
-                      <ItemIcon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold'}`} />
+                      <ItemIcon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold'}`} />
                       <span className="flex-1">{entry.name}</span>
-                      <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold/60'}`} />
+                      <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold/60'}`} />
                     </Link>
                   );
                 })}
@@ -1078,9 +1078,9 @@ style={{ left: sidebarWidth, top: '88px', bottom: 0, right: 0 }}
                         : "bg-white/70 border-gold/25 text-black/85 hover:bg-gold/15 hover:border-gold/60"
                     }`}
                   >
-                    <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold'}`} />
+                    <Icon className={`w-4 h-4 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold'}`} />
                     <span className="flex-1">{link.label}</span>
-                    <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-white' : 'text-gold/60'}`} />
+                    <ChevronRight className={`w-3 h-3 flex-shrink-0 ${linkActive ? 'text-black' : 'text-gold/60'}`} />
                   </Link>
                 );
               })}
