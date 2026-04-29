@@ -191,7 +191,7 @@ export const AreaIntelligenceGrid = () => {
               <Link to="/areas" style={{ color: '#ffffff' }}>
                 <BarChart2 className="w-5 h-5 mr-2" style={{ color: '#ffffff' }} />
                 <span style={{ color: '#ffffff' }}>Explore All Area Guides</span>
-                <ChevronRight className="w-4 h-4 ml-1" />
+                <ChevronRight className="w-4 h-4 ml-1" style={{ color: '#ffffff' }} />
               </Link>
             </Button>
           </motion.div>
