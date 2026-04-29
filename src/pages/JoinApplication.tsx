@@ -589,17 +589,17 @@ export default function JoinApplication() {
                         }`}
                       >
                         <div className="flex items-start justify-between mb-2 gap-2">
-                          <h4 className="font-semibold text-sm text-black leading-snug">{pos.title}</h4>
+                          <h4 className="font-semibold text-sm leading-snug" style={{ color: '#000000' }}>{pos.title}</h4>
                           {pos.is_broker_role && (
-                            <Badge className="bg-black text-white border-transparent text-[10px] px-1.5 py-0 shrink-0">
-                              <Star className="w-2.5 h-2.5 mr-0.5" /> Partner
+                            <Badge className="border-transparent text-[10px] px-2 py-0.5 shrink-0 whitespace-nowrap" style={{ backgroundColor: '#000000', color: '#ffffff', minWidth: 'fit-content' }}>
+                              <Star className="w-2.5 h-2.5 mr-0.5" style={{ color: '#ffffff' }} /> <span style={{ color: '#ffffff' }}>Partner</span>
                             </Badge>
                           )}
                         </div>
-                        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-700">
-                          <Badge variant="outline" className="border-black/20 bg-gray-100 text-black text-[10px] px-1.5 py-0 font-medium">{pos.department}</Badge>
-                          {pos.is_broker_role && <span className="text-amber-700 font-semibold">Commission Basis</span>}
-                          {pos.location && <span className="flex items-center gap-0.5 text-gray-700"><MapPin className="w-2.5 h-2.5 text-black" />{pos.location}</span>}
+                        <div className="flex flex-wrap items-center gap-2 text-xs">
+                          <Badge variant="outline" className="border-black/20 bg-gray-100 text-[10px] px-2 py-0.5 font-medium whitespace-nowrap" style={{ color: '#000000' }}>{pos.department}</Badge>
+                          {pos.is_broker_role && <span className="font-semibold whitespace-nowrap" style={{ color: '#b45309' }}>Commission Basis</span>}
+                          {pos.location && <span className="flex items-center gap-0.5 whitespace-nowrap" style={{ color: '#374151' }}><MapPin className="w-2.5 h-2.5" style={{ color: '#000000' }} />{pos.location}</span>}
                         </div>
                         {pos.description && (
                           <p className="text-xs text-gray-700 mt-2 line-clamp-2 leading-relaxed">{pos.description}</p>
