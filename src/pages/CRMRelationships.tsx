@@ -17,7 +17,7 @@ import { SEOHead } from "@/components/SEOHead";
 import {
   useBrokerages, useUpsertBrokerage, useDeleteBrokerage,
   useClients, useUpsertClient, useDeleteClient,
-  useDeveloperRegistry, useSeedDeveloperRegistry, useUpsertDeveloperRegistry,
+  useDeveloperRegistry, useSeedDeveloperRegistry, useUpsertDeveloperRegistry, useImportAllDevelopersToRegistry,
   useUpsertReminder,
   useOwnerSettings, useUpsertOwnerSettings, useSendDeveloperRegistration,
   useQuickStatusUpdate,
@@ -496,6 +496,7 @@ const DeveloperRegistryTab = () => {
   const { data = [], isLoading, refetch } = useDeveloperRegistry();
   const { data: settings } = useOwnerSettings();
   const seed = useSeedDeveloperRegistry();
+  const importAll = useImportAllDevelopersToRegistry();
   const upsert = useUpsertDeveloperRegistry();
   const upsertReminder = useUpsertReminder();
   const sendRegistration = useSendDeveloperRegistration();
@@ -661,6 +662,14 @@ const DeveloperRegistryTab = () => {
         ])}><Download className="w-4 h-4 mr-2" />Export</Button>
         <Button variant="outline" onClick={() => seed.mutate()} disabled={seed.isPending}>
           {seed.isPending ? "Seeding…" : "Pre-fill"}
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => importAll.mutate()}
+          disabled={importAll.isPending}
+          title="Import every developer from the master catalog (no duplicates, never overwrites existing entries)"
+        >
+          {importAll.isPending ? "Importing…" : "Import all developers"}
         </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add</Button>
       </div>
