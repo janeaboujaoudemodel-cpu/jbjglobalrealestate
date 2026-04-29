@@ -288,6 +288,13 @@ const Index = () => {
         </motion.div>
       </div>
 
+      {/* CATEGORY SELECTOR — I'm an Investor / Broker / Developer */}
+      <div id="category-selector">
+        <Suspense fallback={<SectionLoader />}>
+          <CategorySelectorSection />
+        </Suspense>
+      </div>
+
       {/* DEVELOPER PARTNERS MARQUEE */}
       <div id="developer-partners">
         <Suspense fallback={<SectionLoader />}>
