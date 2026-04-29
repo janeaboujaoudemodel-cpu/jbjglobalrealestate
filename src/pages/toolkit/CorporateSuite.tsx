@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { AdaptiveHairline } from "@/components/ui/AdaptiveHairline";
 import {
   Stamp, CreditCard, FileText, FileEdit, Globe, Presentation,
   ArrowRight, Sparkles, ChevronRight, LayoutGrid, ImageIcon,

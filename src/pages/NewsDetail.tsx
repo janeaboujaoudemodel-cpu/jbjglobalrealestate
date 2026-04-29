@@ -80,7 +80,7 @@ function addContentBreathing(html: string): string {
   const parts = html.split("</p>");
   if (parts.length <= 3) return html;
   
-  const separator = `</p><div class="my-8 flex items-center justify-center gap-4"><div class="flex-1 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/20 to-transparent"></div><div class="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))]/30"></div><div class="flex-1 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/20 to-transparent"></div></div>`;
+  const separator = `</p><div class="my-8 flex items-center justify-center gap-4"><div class="flex-1 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/30 to-transparent"></div><div class="w-1.5 h-1.5 rounded-full bg-[hsl(var(--gold))]/45"></div><div class="flex-1 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/30 to-transparent"></div></div>`;
   
   // Extract pull quotes for inline insertion
   const pullQuotes = extractPullQuotes(html);
