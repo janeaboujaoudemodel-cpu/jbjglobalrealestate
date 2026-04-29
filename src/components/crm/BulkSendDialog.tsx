@@ -121,7 +121,8 @@ export const BulkSendDialog = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="grid gap-4 lg:grid-cols-[340px_minmax(0,1fr)]"><div className="space-y-4 min-w-0">
+        <div className="grid gap-4 lg:grid-cols-[340px_minmax(0,1fr)]">
+          <div className="space-y-4 min-w-0">
           {/* Variant */}
           <div>
             <Label className="text-xs text-black">Email variant</Label>
