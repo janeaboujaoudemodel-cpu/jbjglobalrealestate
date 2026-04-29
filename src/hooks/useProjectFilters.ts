@@ -27,6 +27,7 @@ export const defaultFilters: FilterState = {
   sizeUnit: 'sqft',
   language: 'en',
   transactionType: 'all',
+  propertyType: null,
 };
 
 // Check if a project is premium based ONLY on is_premium flag (no auto-detection)
