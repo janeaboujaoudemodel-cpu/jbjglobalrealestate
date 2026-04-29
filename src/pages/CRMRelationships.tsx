@@ -93,6 +93,90 @@ const FieldSource = ({ meta }: { meta: FieldSourceMeta }) => {
   );
 };
 
+/**
+ * Verification banner — confirms which table powers the Relationships list and
+ * shows live row counts on both sides so we can spot drift between the master
+ * catalog (`developers`) and the per-owner registry (`crm_developer_registry`).
+ *
+ * Visible to the owner only when `?debug=1` is in the URL or the env flag
+ * `VITE_REGISTRY_DEBUG` is enabled, so it never leaks into normal operation.
+ */
+const RegistryDebugBanner = ({ registryRows, isLoading }: { registryRows: number; isLoading: boolean }) => {
+  const [counts, setCounts] = useState<{ catalog: number | null; registry: number | null; error?: string }>({
+    catalog: null,
+    registry: null,
+  });
+  const [refreshing, setRefreshing] = useState(false);
+
+  const enabled = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("debug") === "1" || params.get("debug") === "true") return true;
+    try {
+      // @ts-ignore - vite env
+      return Boolean(import.meta?.env?.VITE_REGISTRY_DEBUG);
+    } catch {
+      return false;
+    }
+  }, []);
+
+  const load = async () => {
+    setRefreshing(true);
+    try {
+      const [cat, reg] = await Promise.all([
+        supabase.from("developers").select("id", { count: "exact", head: true }).or("is_hidden.is.null,is_hidden.eq.false"),
+        supabase.from("crm_developer_registry").select("id", { count: "exact", head: true }),
+      ]);
+      setCounts({
+        catalog: cat.count ?? null,
+        registry: reg.count ?? null,
+        error: cat.error?.message || reg.error?.message,
+      });
+    } catch (e: any) {
+      setCounts((c) => ({ ...c, error: e?.message || "Count query failed" }));
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  // Auto-load once when banner mounts.
+  useMemo(() => { if (enabled) load(); /* eslint-disable-line */ }, [enabled]);
+
+  if (!enabled) return null;
+
+  return (
+    <div className="rounded-xl border border-dashed border-black/30 bg-amber-50 p-4 text-sm text-black">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div className="space-y-1">
+          <div className="font-semibold flex items-center gap-2">
+            <FlaskConical className="w-4 h-4" />
+            Registry verification
+          </div>
+          <div className="text-black/80">
+            This list reads from <code className="px-1 py-0.5 bg-black/10 rounded">crm_developer_registry</code> (per-owner CRM table) — never directly from <code className="px-1 py-0.5 bg-black/10 rounded">developers</code> (the public master catalog).
+          </div>
+          <div className="text-black/80 pt-1">
+            Rendered rows in this view: <b>{isLoading ? "loading…" : registryRows.toLocaleString()}</b>
+            {" · "}
+            crm_developer_registry total: <b>{counts.registry === null ? "—" : counts.registry.toLocaleString()}</b>
+            {" · "}
+            developers catalog (visible): <b>{counts.catalog === null ? "—" : counts.catalog.toLocaleString()}</b>
+          </div>
+          {counts.error && <div className="text-red-700 pt-1">Count error: {counts.error}</div>}
+          {counts.catalog !== null && counts.registry !== null && counts.catalog > counts.registry && (
+            <div className="pt-1 text-amber-900">
+              {(counts.catalog - counts.registry).toLocaleString()} catalog developers are not yet in your registry — click <b>Import all developers</b> to sync.
+            </div>
+          )}
+        </div>
+        <Button size="sm" variant="outline" onClick={load} disabled={refreshing}>
+          {refreshing ? <Loader2 className="w-3 h-3 mr-2 animate-spin" /> : null}
+          Refresh counts
+        </Button>
+      </div>
+    </div>
+  );
+};
 
 const STATUS_BROKERAGE = [
   { v: "prospect", label: "Prospect", cls: "bg-gray-200 text-black" },
@@ -661,6 +745,7 @@ const DeveloperRegistryTab = () => {
 
   return (
     <div className="space-y-5">
+      <RegistryDebugBanner registryRows={data.length} isLoading={isLoading} />
       <DocumentPackPanel />
 
       {/* Sub-tabs: Outreach Queue vs Sent History */}
