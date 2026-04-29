@@ -736,6 +736,19 @@ const DeveloperRegistryTab = () => {
         >
           {importAll.isPending ? "Importing…" : "Import all developers"}
         </Button>
+        <Button
+          variant="outline"
+          onClick={() => {
+            if (window.confirm("Research up to 8 developers per click using master catalog + AI web research. Only fills empty fields. Continue?")) {
+              enrich.mutate({ useWeb: true });
+            }
+          }}
+          disabled={enrich.isPending}
+          title="Fill missing phone, email, office, website and point of contact via AI web research. Records the source for each field."
+        >
+          {enrich.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <BookOpen className="w-4 h-4 mr-2" />}
+          {enrich.isPending ? "Researching…" : "Research & enrich"}
+        </Button>
         <Button onClick={openNew}><Plus className="w-4 h-4 mr-2" />Add</Button>
       </div>
 
