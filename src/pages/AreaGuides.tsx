@@ -527,7 +527,7 @@ const AreaGuides = () => {
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-black text-gold font-semibold rounded-xl border-2 border-gold hover:bg-gold hover:text-black transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-semibold rounded-xl border-2 border-black hover:bg-white hover:text-black transition-all"
           >
             Contact Our Team
             <ArrowRight className="w-4 h-4" />

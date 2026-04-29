@@ -259,7 +259,7 @@ const VerificationModal = ({ open, onOpenChange }: VerificationModalProps) => {
                 <label className="text-sm font-medium text-black">Full Name (as on ID)</label>
                 <Input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Enter your full legal name" />
               </div>
-              <Button onClick={() => fullName.trim() ? setStep("id-front") : toast({ title: "Please enter your name", variant: "destructive" })} className="w-full bg-black text-[hsl(var(--gold))] font-semibold hover:bg-[hsl(var(--gold))] hover:text-black border border-[hsl(var(--gold)/0.3)]">
+              <Button onClick={() => fullName.trim() ? setStep("id-front") : toast({ title: "Please enter your name", variant: "destructive" })} className="w-full bg-black text-white font-semibold hover:bg-gray-800 border border-black">
                 Continue
               </Button>
             </div>
