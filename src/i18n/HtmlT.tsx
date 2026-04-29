@@ -15,10 +15,12 @@ import {
 } from './translateClient';
 import { LATIN_LOCKED_STRINGS } from '@/translations/proper-nouns';
 
+type HtmlTTag = 'div' | 'span' | 'section' | 'article' | 'aside' | 'p';
+
 interface HtmlTProps {
   html: string;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: HtmlTTag;
   domain?: string;
 }
 
@@ -70,11 +72,6 @@ export function HtmlT({ html, className, as: As = 'div', domain = 'content' }: H
     });
   }, [language, domain]);
 
-  return (
-    <As
-      ref={ref as any}
-      className={className}
-      data-jbj-html-block=""
-    />
-  );
+  const Tag = As as any;
+  return <Tag ref={ref} className={className} data-jbj-html-block="" />;
 }
