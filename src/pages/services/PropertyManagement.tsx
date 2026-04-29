@@ -171,15 +171,15 @@ const PropertyManagement = () => {
               <span className="text-foreground font-semibold text-[11px] uppercase tracking-[0.2em]">Property Management</span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-5 tracking-[-0.025em]">
+            <h1 className="text-[2.25rem] leading-[1.1] sm:text-5xl lg:text-6xl font-bold text-foreground mb-4 sm:mb-5 tracking-[-0.025em]">
               Property Management &<br className="hidden sm:block" /> Asset Stewardship
             </h1>
 
-            <p className="text-foreground text-lg md:text-xl font-semibold mb-3 max-w-2xl mx-auto">
+            <p className="text-foreground text-base sm:text-lg md:text-xl font-semibold mb-3 max-w-2xl mx-auto tracking-tight">
               Structured. Transparent. Performance-Driven.
             </p>
 
-            <p className="text-foreground/75 dark:text-foreground/85 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-8">
+            <p className="text-foreground/75 dark:text-foreground/85 text-[0.95rem] sm:text-base md:text-lg font-normal max-w-2xl mx-auto leading-relaxed sm:leading-[1.65] mb-8">
               Comprehensive management solutions designed to protect, optimize, and enhance the value of your real estate assets across the UAE.
             </p>
 
