@@ -19,8 +19,10 @@ const SRC = path.join(root, 'src');
 
 // Only flag SOLID light backgrounds — translucent overlays like bg-white/10
 // are typically used on dark surfaces and must not match.
+// Also flag gradient-from on clearly light hex (#F…/#E…/#D…/#C…) and the
+// champagne / gold tokens that read as light in the UI.
 const LIGHT_CLASS_RE =
-  /\b(bg-white(?!\/)|bg-pearl-[123](?!\/)|bg-cream(?!\/)|bg-champagne(?!\/)|bg-\[#F[0-9A-Fa-f]{2,5}\](?!\/)|bg-\[#FFF[0-9A-Fa-f]*\](?!\/))\b/;
+  /\b(bg-white(?!\/)|bg-pearl-[123](?!\/)|bg-cream(?!\/)|bg-champagne(?!\/)|bg-\[#F[0-9A-Fa-f]{2,5}\](?!\/)|bg-\[#FFF[0-9A-Fa-f]*\](?!\/)|from-\[#[CDEF][0-9A-Fa-f]{5}\](?!\/)|from-gold(?!-dark)\b|from-\[hsl\(var\(--gold\)\)\](?!\/))\b/;
 
 // Same — solid text-white only (not text-white/40), and exclude any
 // modifier-prefixed variant (hover:text-white, group-hover:text-white,
