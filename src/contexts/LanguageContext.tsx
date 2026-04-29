@@ -125,12 +125,14 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem(LANGUAGE_MANUAL_KEY, 'true');
     document.documentElement.lang = lang;
     document.documentElement.dir = isRTLLanguage(lang) ? 'rtl' : 'ltr';
+    syncLanguageToUrl(lang);
   }, []);
 
   useEffect(() => {
     document.documentElement.lang = language;
     document.documentElement.dir = isRTLLanguage(language) ? 'rtl' : 'ltr';
     setAutoTranslatorLanguage(language);
+    syncLanguageToUrl(language);
     // Pre-warm the curated chrome dictionary in the background.
     // First view in a non-English locale is then near-instant.
     if (language !== 'en') {
