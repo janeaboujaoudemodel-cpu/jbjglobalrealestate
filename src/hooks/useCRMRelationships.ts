@@ -190,6 +190,35 @@ export const useUpsertDeveloperRegistry = () => {
   });
 };
 
+/**
+ * Researches missing developer fields (phone, email, office, website, point of contact)
+ * via master catalog → Perplexity → Firecrawl → AI inference, and records the source
+ * for each filled field in `field_sources`.
+ */
+export const useEnrichDeveloperRegistry = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { ids?: string[]; useWeb?: boolean; batchSize?: number } = {}) => {
+      const { data, error } = await supabase.functions.invoke("enrich-developer-registry", {
+        body: input,
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      return data as { processed: number; results: Array<{ id: string; name: string; filled?: string[]; error?: string }>; message?: string };
+    },
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ["crm-dev-registry"] });
+      const filled = (data.results || []).reduce((sum, r) => sum + (r.filled?.length ?? 0), 0);
+      if (data.processed === 0) {
+        toast.success(data.message || "Nothing left to enrich");
+      } else {
+        toast.success(`Researched ${data.processed} developer${data.processed === 1 ? "" : "s"} · ${filled} field${filled === 1 ? "" : "s"} updated`);
+      }
+    },
+    onError: (e: any) => toast.error(e.message || "Enrichment failed"),
+  });
+};
+
 /* ---------- Owner Settings ---------- */
 export const useOwnerSettings = () => {
   const { user } = useAuth();
