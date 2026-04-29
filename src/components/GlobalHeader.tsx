@@ -312,9 +312,28 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
     null;
 
   // Properties dropdown (execution-only)
-  const propertiesLinks = [
+  // Supports optional `section` headers; clicking an item navigates to the
+  // canonical /properties listing page with the matching filter params.
+  const propertiesLinks: Array<
+    | { section: string }
+    | { href: string; label: string; icon: typeof Home }
+  > = [
+    { section: "Browse" },
     { href: "/properties?transaction=buy", label: t('header.buyProperties') || "Buy Properties", icon: Home },
     { href: "/properties?transaction=rent", label: t('header.rentProperties') || "Rent Properties", icon: Building2 },
+
+    { section: "By Status" },
+    { href: "/properties?transaction=buy&status=ready", label: "Ready Properties", icon: Key },
+    { href: "/properties?transaction=buy&status=off-plan", label: "Off-Plan Properties", icon: ClipboardCheck },
+
+    { section: "By Category" },
+    { href: "/properties?transaction=buy&type=apartments", label: "Apartments", icon: Building2 },
+    { href: "/properties?transaction=buy&type=villa", label: "Villas", icon: Home },
+    { href: "/properties?transaction=buy&type=townhouse", label: "Townhouses", icon: Home },
+    { href: "/properties?transaction=buy&type=penthouse", label: "Penthouses", icon: Building2 },
+    { href: "/properties?transaction=buy&type=commercial", label: "Commercial", icon: Briefcase },
+
+    { section: "More" },
     { href: "/developers", label: "Developers", icon: Building2 },
     { href: "/listing-portal", label: t('header.listProperty') || "List Your Property", icon: ClipboardCheck },
   ];
@@ -562,22 +581,32 @@ const GlobalHeader = ({ forceSolid = false }: GlobalHeaderProps) => {
         }}
       >
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-        <div className="flex flex-col gap-2 px-3">
-          {links.map((link) => (
-            <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gray-50 rounded-xl">
-              <Link to={link.href} className="flex items-center gap-4 text-gray-800 hover:text-black hover:bg-gray-50 py-3 px-4 transition-all w-full group rounded-xl">
-                <div 
-                  className="w-9 h-9 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center transition-all group-hover:bg-gray-200 group-hover:border-gray-300"
-                  style={{
-                    boxShadow: '0 2px 4px -2px rgba(0,0,0,0.06)'
-                  }}
+        <div className="flex flex-col gap-1 px-3">
+          {links.map((link, idx) => {
+            if ('section' in link) {
+              return (
+                <p
+                  key={`section-${link.section}-${idx}`}
+                  className={`px-4 text-[10px] uppercase tracking-[0.18em] font-bold text-black/50 ${idx === 0 ? 'pt-1 pb-1' : 'pt-3 pb-1'}`}
                 >
-                  <link.icon className="w-4 h-4 text-black transition-colors" />
-                </div>
-                <span className="font-semibold text-sm">{link.label}</span>
-              </Link>
-            </DropdownMenuItem>
-          ))}
+                  {link.section}
+                </p>
+              );
+            }
+            return (
+              <DropdownMenuItem key={link.href} asChild className="p-0 focus:bg-gray-50 rounded-xl">
+                <Link to={link.href} className="flex items-center gap-4 text-gray-800 hover:text-black hover:bg-gray-50 py-2.5 px-4 transition-all w-full group rounded-xl">
+                  <div
+                    className="w-9 h-9 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center transition-all group-hover:bg-gray-200 group-hover:border-gray-300"
+                    style={{ boxShadow: '0 2px 4px -2px rgba(0,0,0,0.06)' }}
+                  >
+                    <link.icon className="w-4 h-4 text-black transition-colors" />
+                  </div>
+                  <span className="font-semibold text-sm">{link.label}</span>
+                </Link>
+              </DropdownMenuItem>
+            );
+          })}
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
